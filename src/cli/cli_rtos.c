@@ -1,12 +1,11 @@
 #include "includes.h"
 #include "task.h"
 uint8_t acTaskStatusBuffer[500];
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 
 void cli_tasklist_fnt(int argc, char **argv)
 {
     taskENTER_CRITICAL();
-    ulHighFrequencyTimerTicks = xTaskGetTickCount();
+    
     printf("\r\n");
     vTaskList((char *)&acTaskStatusBuffer);
     printf("=================================================\r\n");
