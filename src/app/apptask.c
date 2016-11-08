@@ -57,7 +57,7 @@ static void vTaskLED(void *pvParameters)
     while(1)
     {
         //bsp_LedToggle(2);
-        printf("TaskLED\r\n");
+        //printf("TaskLED\r\n");
         vTaskDelay(1000);
     }
 }
@@ -76,7 +76,7 @@ static void vTaskMsgPro(void *pvParameters)
     while(1)
     {
         //bsp_LedToggle(3);
-        printf("TaskMsg\r\n");
+        //printf("TaskMsg\r\n");
         vTaskDelay(1000);
     }
 }
@@ -95,7 +95,7 @@ static void vTaskStart(void *pvParameters)
     {
         /* °´¼üÉ¨Ãè */
         //bsp_LedToggle(4);
-        printf("TaskStart\r\n");
+        //printf("TaskStart\r\n");
         vTaskDelay(1000);
     }
 }
