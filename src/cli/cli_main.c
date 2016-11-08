@@ -26,11 +26,13 @@ void cli_main(void)
     cli_init();
     while(1)
     {
+
         if(CLI_RX_STA == SET)
         {
             tinysh_char_in(aUart2RxBuffer[0]);
             CLI_RX_STA = RESET;
         }
+        //vTaskSuspend( NULL );
 //      tinysh_char_in((unsigned char)getchar());
       vTaskDelay(100);
     }
