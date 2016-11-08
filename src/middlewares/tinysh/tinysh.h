@@ -60,7 +60,7 @@ void tinysh_add_command(tinysh_cmd_t *cmd);
 void tinysh_set_prompt(char *str);
 
 /* get command argument back */
-void *tinysh_get_arg();
+void *tinysh_get_arg(void);
 
 /* provide conversion string to scalar (decimal or hexadecimal) */
 unsigned long tinysh_atoxi(char *s);
