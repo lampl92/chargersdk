@@ -146,6 +146,7 @@ to exclude the API function. */
 /* task utilities */
 #define INCLUDE_eTaskGetState                   0 
 #define INCLUDE_pcTaskGetTaskName               0 
+#define INCLUDE_xTaskGetHandle                  0 //xTaskGetHandle
 #define INCLUDE_uxTaskGetStackHighWaterMark     0 
 #define INCLUDE_xTaskGetCurrentTaskHandle       1 
 #define INCLUDE_xTaskGetIdleTaskHandle          0 
