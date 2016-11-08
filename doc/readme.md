@@ -33,6 +33,7 @@
 |FreeRTOS 		|	9.0.0		|
 |lwip			|	1.4.1		|
 |fatfs			|	0.12b		|[fatfs](http://elm-chan.org/fsw/ff/00index_e.html)
+|STemWin		|	5.32		|STM32Cube_FW_F4_V1.13.1
 |lua			|	5.3.3		|
 |jsmn			|		
 |tinysh			|	0.1.0		|
