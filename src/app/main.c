@@ -33,7 +33,7 @@ int main(void)
      * 关闭全局中断(除了NMI和HardFault), 在移植文件port.c中的
      * 函数prvStartFirstTask中会重新开启全局中断。
      */
-    __set_PRIMASK(1);
+    DISABLE_INT(); 
     
     /* 硬件初始化 */
     bsp_Init(); 
