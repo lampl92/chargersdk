@@ -10,7 +10,7 @@
 /* Private function prototypes 
 -----------------------------------------------*/
 
-static void vTaskTaskUserIF(void *pvParameters);
+static void vTaskCLI(void *pvParameters);
 static void vTaskLED(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
@@ -18,7 +18,7 @@ static void vTaskStart(void *pvParameters);
 /* Private variables 
 任务句柄-------------------------------------------------*/
 
-TaskHandle_t xHandleTaskUserIF = NULL;
+TaskHandle_t xHandleTaskCLI = NULL;
 TaskHandle_t xHandleTaskLED = NULL;
 TaskHandle_t xHandleTaskMsgPro = NULL;
 TaskHandle_t xHandleTaskStart = NULL;
@@ -31,7 +31,7 @@ TaskHandle_t xHandleTaskStart = NULL;
 */
 /* 
 ---------------------------------------------------------------------------*/
-static void vTaskTaskUserIF(void *pvParameters)
+static void vTaskCLI(void *pvParameters)
 {
 //    while(1)
 //    {
@@ -108,12 +108,12 @@ static void vTaskStart(void *pvParameters)
 ---------------------------------------------------------------------------*/
 void AppTaskCreate (void)
 {
-    xTaskCreate( vTaskTaskUserIF,       /* 任务函数  */
-                 "vTaskUserIF",         /* 任务名    */
+    xTaskCreate( vTaskCLI,       /* 任务函数  */
+                 "vTaskCLI",         /* 任务名    */
                  512,                   /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  1,                     /* 任务优先级*/
-                 &xHandleTaskUserIF );  /* 任务句柄  */
+                 &xHandleTaskCLI );  /* 任务句柄  */
     
     
     xTaskCreate( vTaskLED,          /* 任务函数  */
@@ -146,8 +146,11 @@ void AppTaskCreate (void)
 */
 /* 
 ---------------------------------------------------------------------------*/
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
+
 void vApplicationTickHook( void )
 {
+    ulHighFrequencyTimerTicks = xTaskGetTickCount();
 }
 
 /* 
