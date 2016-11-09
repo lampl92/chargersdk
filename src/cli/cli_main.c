@@ -20,6 +20,7 @@ void cli_init(void)
 
   tinysh_add_command(&cli_hello_cmd);
   tinysh_add_command(&cli_tasklist_cmd);
+  tinysh_add_command(&cli_testsdram_cmd);
 }
 void cli_main(void)
 {

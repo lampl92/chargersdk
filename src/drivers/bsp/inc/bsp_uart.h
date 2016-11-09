@@ -6,8 +6,8 @@
 * @date 2016-11-01
 */
 
-#ifndef _BSP_USART_H_
-#define _BSP_USART_H_
+#ifndef BSP_USART_H_
+#define BSP_USART_H_
 
 #include "bsp.h"
 
@@ -18,7 +18,7 @@
 #define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 
 
-void bsp_InitUart(void);
+void bsp_Uart_Init(void);
 
 
 #endif

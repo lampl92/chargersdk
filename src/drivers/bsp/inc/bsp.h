@@ -17,10 +17,10 @@
 //#define STM32F0
 #define USE_FreeRTOS
 
-
 #define USE_UART1
 #define USE_UART2
 
+#define USE_SDRAM
 
 /* NVIC PreemptPriority ------------------------------------------------------*/
 #ifdef USE_UART1
@@ -47,7 +47,7 @@
 #endif
 
 /* 这个宏仅用于调试阶段排错 */
-#define BSP_Printf      printf
+//#define BSP_Printf      printf
 //#define BSP_Printf(...)
 
 /*
@@ -77,7 +77,13 @@
 
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
+#if defined(USE_UART1) || defined(USE_UART2)
 #include "bsp_uart.h"
+#endif
+#if defined(USE_SDRAM)
+#include "bsp_sdram.h"
+#endif
+#include "bsp_dwt.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);

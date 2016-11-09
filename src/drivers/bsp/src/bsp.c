@@ -35,7 +35,10 @@ void bsp_Init(void)
     //HAL_Delay(180);
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
 
-    bsp_InitUart();   /* 初始化串口 */
+    bsp_DWT_Init();
+    bsp_Uart_Init();   /* 初始化串口 */
+    bsp_SDRAM_Init();
+    
     //bsp_InitKey();        /* 初始化按键变量 */
 
     //bsp_InitExtIO();    /* FMC总线上扩展了32位输出IO, 操作LED等外设必须初始化 */
@@ -86,6 +89,11 @@ static void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
 
+    uint32_t pllm = 25;
+    uint32_t plln = 360;
+    uint32_t pllp = RCC_PLLP_DIV2;
+    uint32_t pllq = 8;
+    
   /* Enable Power Control clock */
   __HAL_RCC_PWR_CLK_ENABLE();
   
@@ -99,10 +107,10 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 360;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 8;
+  RCC_OscInitStruct.PLL.PLLM = pllm;
+  RCC_OscInitStruct.PLL.PLLN = plln;
+  RCC_OscInitStruct.PLL.PLLP = pllp;
+  RCC_OscInitStruct.PLL.PLLQ = pllq;
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
