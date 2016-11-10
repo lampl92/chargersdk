@@ -49,7 +49,6 @@ void bsp_SDRAM_Init(void)
 //发送SDRAM初始化序列
 void SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram)
 {
-
     uint32_t temp = 0;
     //SDRAM控制器初始化完成以后还需要按照如下顺序初始化SDRAM
     SDRAM_Send_Cmd(0,FMC_SDRAM_CMD_CLK_ENABLE,1,0); //时钟配置使能
