@@ -7,7 +7,7 @@
 */
 
 #ifndef MAIN_CLI_H
-#define MIAN_CLI_H
+#define MAIN_CLI_H
 
 
 void cli_main(void);
