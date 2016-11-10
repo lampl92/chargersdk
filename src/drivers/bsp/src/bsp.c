@@ -38,6 +38,7 @@ void bsp_Init(void)
     bsp_DWT_Init();
     bsp_Uart_Init();   /* 初始化串口 */
     bsp_SDRAM_Init();
+    bsp_LTDC_Init();
     
     //bsp_InitKey();        /* 初始化按键变量 */
 

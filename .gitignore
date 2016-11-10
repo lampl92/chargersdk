@@ -2,3 +2,4 @@ build/Keil/output/
 build/SO/
 src/drivers/bsp/inc/no_use/
 src/drivers/bsp/src/not use/
+*.h~
