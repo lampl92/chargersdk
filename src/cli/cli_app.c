@@ -46,10 +46,6 @@ void fsmc_sdram_test()
 
 void cli_testsdram_fnt(int argc, char **argv)
 {
-    u32 ts=0;
-    u32 i;
-
-
     taskENTER_CRITICAL();
     fsmc_sdram_test();
     taskEXIT_CRITICAL();
