@@ -84,6 +84,7 @@
 #include "bsp_sdram.h"
 #endif
 #include "bsp_dwt.h"
+#include "bsp_ltdc.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);

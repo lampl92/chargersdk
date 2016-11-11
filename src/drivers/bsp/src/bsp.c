@@ -30,9 +30,7 @@ void bsp_Init(void)
     /* 优先级分组设置为4，可配置0-15级抢占式优先级，0级子优先级，即不存在子优先级。*/
     
     HAL_Init();
-    //Stm32_Clock_Init(360,25,2,8);
     SystemClock_Config(); //系统始终配置为180MHz
-    //HAL_Delay(180);
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
 
     bsp_DWT_Init();
@@ -81,7 +79,9 @@ void bsp_Init(void)
   *            得到:Fvco=25*(360/25)=360Mhz
   *                 SYSCLK=360/2=180Mhz
   *                 Fusb=360/8=45Mhz
-  *      
+  *
+  *       *** 如果要使用USB,N要设置为384, Fusb = 48Mhz ***
+  *
   * @param  None
   * @retval None
   */
@@ -91,7 +91,7 @@ static void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct;
 
     uint32_t pllm = 25;
-    uint32_t plln = 360;
+    uint32_t plln = 384;//plln = 384时,sysclk = 192Mhz, plln = 360,180Mhz,  
     uint32_t pllp = RCC_PLLP_DIV2;
     uint32_t pllq = 8;
     

@@ -7,11 +7,12 @@ void bsp_SDRAM_Init(void)
 {
     FMC_SDRAM_TimingTypeDef SDRAM_Timing;
     
-     /* STM32F429 的时钟频率为 180Mhz，那么一个 SDRAM 的时钟频率为90M，一个周期为11.1ns */
+     /* STM32F429 的时钟频率为 192Mhz，那么一个 SDRAM 的时钟频率为96M，一个周期为10.4ns */
+     
     uint32_t tRSC = 2;  // 2个时钟周期          // 加载模式寄存器命令和激活或刷新命令之间的延迟
-    uint32_t tXSR = 7;  // 72ns,7个时钟周期     // 从发出自刷新命令到发出激活命令之间的延迟
-    uint32_t tRAS = 6;  // 60ns                 // 自刷新周期 
-    uint32_t tRC  = 6;  // 60ns                 // 刷新命令和激活命令之间的延迟
+    uint32_t tXSR = 8;  // 72ns,需要8个时钟周期 // 从发出自刷新命令到发出激活命令之间的延迟
+    uint32_t tRAS = 7;  // 60ns                 // 自刷新周期 
+    uint32_t tRC  = 7;  // 60ns                 // 刷新命令和激活命令之间的延迟
     uint32_t tWR  = 2;  // 2个时钟周期          // 写命令和预充电命令之间的延迟
     uint32_t tRP  = 2;  // 15ns,2个时钟周期     // 预充电命令与其它命令之间的延迟
     uint32_t tRCD = 2;  // 15ns,2个时钟周期     // 激活命令与读/写命令之间的延迟
@@ -43,7 +44,9 @@ void bsp_SDRAM_Init(void)
 	//COUNT=SDRAM刷新周期/行数-20=SDRAM刷新周期(us)*SDCLK频率(Mhz)/行数
     //我们使用的SDRAM刷新周期为64ms,SDCLK=180/2=90Mhz,行数为8192(2^13).
 	//所以,COUNT=64*1000*90/8192-20=683
-	HAL_SDRAM_ProgramRefreshRate(&SDRAM_Handler,683);//设置刷新频率
+	
+	// COUNT=64*1000*96/8192-20=730 @192Mhz
+	HAL_SDRAM_ProgramRefreshRate(&SDRAM_Handler,730);//设置刷新频率
 
 }
 //发送SDRAM初始化序列

@@ -50,8 +50,8 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
-          <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <DebugInformation>0</DebugInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -548,6 +548,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\bsp\src\bsp_dwt.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_ltdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\drivers\bsp\src\bsp_ltdc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -632,6 +637,11 @@
               <FileName>stm32f4xx_hal_dma2d.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rcc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c</FilePath>
             </File>
           </Files>
         </Group>
