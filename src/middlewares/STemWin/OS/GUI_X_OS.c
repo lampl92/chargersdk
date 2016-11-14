@@ -132,12 +132,12 @@ void GUI_X_InitOS(void)
 { 
   /* Create Mutex lock */
   osMutexDef(MUTEX);
-  
-  /* Create the Mutex used by the two threads */
-  osMutex = osMutexCreate(osMutex(MUTEX));
-  
+
   /* Create Semaphore lock */
   osSemaphoreDef(SEM);
+    
+  /* Create the Mutex used by the two threads */
+  osMutex = osMutexCreate(osMutex(MUTEX));
   
   /* Create the Semaphore used by the two threads */
   osSemaphore= osSemaphoreCreate(osSemaphore(SEM), 1);  

@@ -23,6 +23,7 @@
 |HAL					|	version		|ref|
 |---------------		|---------------|---|
 |CMSIS					|				|STM32Cube_FW_F4_V1.13.1
+|CMSIS_RTOS				|				|STM32Cube_FW_F4_V1.13.1\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS
 |STM32F4xx_HAL_Driver	|				|STM32Cube_FW_F4_V1.13.1
 
 
