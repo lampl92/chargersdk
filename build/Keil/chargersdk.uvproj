@@ -50,7 +50,7 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
+          <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -371,9 +371,9 @@
             <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F429xx,DEBUG</Define>
+              <Define>OS_SUPPORT,USE_HAL_DRIVER,STM32F429xx,DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh</IncludePath>
+              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS_RTOS;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh;..\..\src\middlewares\STemWin\inc;..\..\src\middlewares\STemWin\Config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -468,55 +468,46 @@
               <FileName>GUIConf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\middlewares\STemWin\Config\GUIConf.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+            </File>
+            <File>
+              <FileName>GUIConf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\Config\GUIConf.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\Config\LCDConf.h</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDRV_LTDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\Config\GUIDRV_LTDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf_ATK_7016.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\Config\LCDConf_ATK_7016.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emwin\gui_x</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_X_FreeRTOS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emwin\lib</GroupName>
+          <Files>
+            <File>
+              <FileName>STemWin532_CM4_OS_Keil.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_Keil.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -553,6 +544,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\bsp\src\bsp_ltdc.c</FilePath>
             </File>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\drivers\bsp\src\malloc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -567,6 +563,82 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hal\cmsis-rtos</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>2</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>0</v6Lto>
+                <v6WtE>0</v6WtE>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>cmsis_os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c</FilePath>
             </File>
           </Files>
         </Group>
