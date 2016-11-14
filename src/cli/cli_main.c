@@ -7,7 +7,7 @@
 
 uint16_t CLI_RX_STA = RESET;
 
-extern uint8_t aUart2RxBuffer[uart2RXBUFFERSIZE];
+extern uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
 void tinysh_char_out(unsigned char c)
 {
   putchar((int)c);
@@ -30,7 +30,7 @@ void cli_main(void)
 
         if(CLI_RX_STA == SET)
         {
-            tinysh_char_in(aUart2RxBuffer[0]);
+            tinysh_char_in(aCliRxBuffer[0]);
             CLI_RX_STA = RESET;
         }
         //vTaskSuspend( NULL );

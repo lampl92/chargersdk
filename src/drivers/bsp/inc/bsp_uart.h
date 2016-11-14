@@ -11,7 +11,7 @@
 
 #include "bsp.h"
 
-#define uart2RXBUFFERSIZE   1
+#define cliRXBUFFERSIZE   1
 
 
 /* Exported macro ------------------------------------------------------------*/
