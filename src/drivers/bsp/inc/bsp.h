@@ -17,20 +17,15 @@
 //#define STM32F0
 #define USE_FreeRTOS
 
-#define USE_UART1
-#define USE_UART2
-
-#define USE_SDRAM
 
 /* NVIC PreemptPriority ------------------------------------------------------*/
-#ifdef USE_UART1
+
 #define bspUSART1_PreemptPriority       3
 #define bspUSART1_SubPriority           0
-#endif
-#ifdef USE_UART2
+
 #define bspUSART2_PreemptPriority       4
 #define bspUSART2_SubPriority           0
-#endif
+
 
 
 
@@ -46,9 +41,6 @@
     #define DISABLE_INT()   __set_PRIMASK(1)    /* 禁止全局中断 */
 #endif
 
-/* 这个宏仅用于调试阶段排错 */
-//#define BSP_Printf      printf
-//#define BSP_Printf(...)
 
 /*
     EXTI9_5_IRQHandler 的中断服务程序分散在几个独立的 bsp文件中。
@@ -77,12 +69,9 @@
 
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
-#if defined(USE_UART1) || defined(USE_UART2)
+
 #include "bsp_uart.h"
-#endif
-#if defined(USE_SDRAM)
 #include "bsp_sdram.h"
-#endif
 #include "bsp_dwt.h"
 #include "bsp_ltdc.h"
 

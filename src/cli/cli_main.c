@@ -5,9 +5,9 @@
 #include "cli_app.h"
 #include "cli_rtos.h"
 
-uint16_t CLI_RX_STA = RESET;
-
 extern uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
+extern uint16_t CLI_RX_STA;
+
 void tinysh_char_out(unsigned char c)
 {
   putchar((int)c);
@@ -27,7 +27,6 @@ void cli_main(void)
     cli_init();
     while(1)
     {
-
         if(CLI_RX_STA == SET)
         {
             tinysh_char_in(aCliRxBuffer[0]);
