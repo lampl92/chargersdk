@@ -37,7 +37,13 @@ int main(void)
     
     /* 硬件初始化 */
     bsp_Init(); 
-    printf("hello charger\n\r");
+    my_mem_init(SRAMIN);
+    my_mem_init(SRAMEX);		    //初始化SDRAM
+    my_mem_init(SRAMCCM);
+    /* Activate the use of memory device feature */
+    //WM_SetCreateFlags(WM_CF_MEMDEV);
+    //GUI_Init();
+    printf("\nhello charger\n\r");
     /* 创建任务 */
     AppTaskCreate();
     

@@ -26,6 +26,8 @@
 #define bspUSART2_PreemptPriority       4
 #define bspUSART2_SubPriority           0
 
+#define bspLTDC_PreemptPriority         15
+#define bspLTDC_SubPriority             0
 
 
 
@@ -73,7 +75,8 @@
 #include "bsp_uart.h"
 #include "bsp_sdram.h"
 #include "bsp_dwt.h"
-#include "bsp_ltdc.h"
+//#include "bsp_ltdc.h"
+#include "malloc.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);

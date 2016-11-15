@@ -38,6 +38,10 @@ typedef struct
 }_ltdc_dev; 
 
 void bsp_LTDC_Init(void);
+void LTDC_Draw_Point(u16 x,u16 y,u32 color);
+u32 LTDC_Read_Point(u16 x,u16 y);
+void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color);
+
 
 
 #endif

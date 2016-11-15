@@ -11,7 +11,7 @@
 -----------------------------------------------*/
 
 static void vTaskCLI(void *pvParameters);
-static void vTaskLED(void *pvParameters);
+static void vTaskGUI(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 
@@ -19,7 +19,7 @@ static void vTaskStart(void *pvParameters);
 任务句柄-------------------------------------------------*/
 
 TaskHandle_t xHandleTaskCLI = NULL;
-TaskHandle_t xHandleTaskLED = NULL;
+TaskHandle_t xHandleTaskGUI = NULL;
 TaskHandle_t xHandleTaskMsgPro = NULL;
 TaskHandle_t xHandleTaskStart = NULL;
 /* 
@@ -52,12 +52,11 @@ static void vTaskCLI(void *pvParameters)
 */
 /* 
 ---------------------------------------------------------------------------*/
-static void vTaskLED(void *pvParameters)
+static void vTaskGUI(void *pvParameters)
 {
     while(1)
     {
-        //bsp_LedToggle(2);
-        //printf("TaskLED\r\n");
+        //GUIDEMO_Main();
         vTaskDelay(1000);
     }
 }
@@ -116,12 +115,12 @@ void AppTaskCreate (void)
                  &xHandleTaskCLI );  /* 任务句柄  */
     
     
-    xTaskCreate( vTaskLED,          /* 任务函数  */
-                 "vTaskLED",        /* 任务名    */
+    xTaskCreate( vTaskGUI,          /* 任务函数  */
+                 "vTaskGUI",        /* 任务名    */
                  512,               /* 任务栈大小，单位word，也就是4字节 */
                  NULL,              /* 任务参数  */
                  2,                 /* 任务优先级*/
-                 &xHandleTaskLED ); /* 任务句柄  */
+                 &xHandleTaskGUI ); /* 任务句柄  */
     
     xTaskCreate( vTaskMsgPro,           /* 任务函数  */
                  "vTaskMsgPro",         /* 任务名    */

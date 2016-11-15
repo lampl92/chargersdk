@@ -214,7 +214,7 @@ static void LTDC_Display_Dir(u8 dir)
 	}
 }
 
-void LCD_BackLight(int onoff)
+void LCD_BackLight(int OnOff)
 {
     if(onoff == 1)
     {

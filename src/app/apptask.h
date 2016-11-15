@@ -5,7 +5,7 @@
 #include "cli_main.h"
 
 extern TaskHandle_t xHandleTaskCLI ;
-extern TaskHandle_t xHandleTaskLED ;
+extern TaskHandle_t xHandleTaskGUI ;
 extern TaskHandle_t xHandleTaskMsgPro ;
 extern TaskHandle_t xHandleTaskStart ;
 

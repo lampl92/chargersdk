@@ -32,13 +32,13 @@
 
 void cli_hello_fnt(int argc, char **argv)
 {
-    int i;
     printf("\nhello world\n");
     printf("HCLK = SYSCLK = %dMHz\n", SystemCoreClock/1000000);
     printf("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock/1000000/1);
     printf("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock/1000000/4);
     printf("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock/1000000/2);
 
+#if 0
         for(i = 0; i < 12; i++)
 		{
 		switch(i){
@@ -57,7 +57,7 @@ void cli_hello_fnt(int argc, char **argv)
           }
             bsp_DelayMS(500);
 		}
-            
+#endif
 }
 
 tinysh_cmd_t cli_hello_cmd={
