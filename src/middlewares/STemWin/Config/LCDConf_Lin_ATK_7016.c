@@ -111,8 +111,8 @@
 #endif
 
 
-#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)
-#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)
+#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)//0xC0000000~0xC02FFFFF
+#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)//0xC0300000~0xC05FFFFF
 
 
 #define rccPLLSAIN          396
@@ -655,7 +655,6 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
 static void LCD_LL_Init(void) 
 {
     _ltdc_dev lcdltdc;                      //管理LCD LTDC的重要参数
-    
     static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
 
     lcdltdc.pwidth=1024;            //面板宽度,单位:像素
