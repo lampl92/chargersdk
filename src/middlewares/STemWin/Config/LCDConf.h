@@ -46,7 +46,7 @@
 
 typedef struct
 {
-  int32_t      address;          
+  uint32_t      address;          
   __IO int32_t pending_buffer;   
   int32_t      buffer_index;     
   int32_t      xSize;            
