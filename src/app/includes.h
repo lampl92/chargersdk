@@ -39,8 +39,7 @@
 
 
 #include "GUI.h"
-//#include "WM.h"
-#include "GUIDEMO.h"
+#include "WM.h"
 
 
 

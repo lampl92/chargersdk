@@ -6,6 +6,7 @@
 * @date 2016-11-03
 */
 #include "includes.h"
+#include "GUIDEMO.h"
 
 /* Private function prototypes 
 -----------------------------------------------*/
@@ -56,7 +57,7 @@ static void vTaskGUI(void *pvParameters)
 {
     while(1)
     {
-        //GUIDEMO_Main();
+        GUIDEMO_Main();
         vTaskDelay(1000);
     }
 }
