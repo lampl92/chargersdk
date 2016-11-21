@@ -81,14 +81,14 @@
 #define YSIZE_PHYS 600
 
 #define NUM_BUFFERS  3 // Number of multiple buffers to be used
-#define NUM_VSCREENS 2 // Number of virtual screens to be used
+#define NUM_VSCREENS 1 // Number of virtual screens to be used
 
 #define BK_COLOR GUI_DARKBLUE
 
 #undef  GUI_NUM_LAYERS
-#define GUI_NUM_LAYERS 2
+#define GUI_NUM_LAYERS 1
 
-#define COLOR_CONVERSION_0 GUICC_565
+#define COLOR_CONVERSION_0 GUICC_M565
 #define DISPLAY_DRIVER_0   GUIDRV_LIN_16
 
 #if (GUI_NUM_LAYERS > 1)
@@ -109,7 +109,9 @@
     #error At least one screeen needs to be defined!
   #endif
 #endif
-
+#if (NUM_VSCREENS > 1) && (NUM_BUFFERS > 1)
+  #error Virtual screens and multiple buffers are not allowed!
+#endif
 
 #define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)//0xC0000000~0xC02FFFFF
 #define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)//0xC0300000~0xC05FFFFF
@@ -191,7 +193,7 @@ static void LCD_MixColorsBulk(U32 * pFG, U32 * pBG, U32 * pDst, unsigned OffFG, 
 
 DEFINEDMA2D_COLORCONVERSION(M8888I, LTDC_PIXEL_FORMAT_ARGB8888)
 DEFINEDMA2D_COLORCONVERSION(M888,   LTDC_PIXEL_FORMAT_ARGB8888)
-DEFINEDMA2D_COLORCONVERSION(M565,   LTDC_PIXEL_FORMAT_RGB565)
+//DEFINEDMA2D_COLORCONVERSION(M565,   LTDC_PIXEL_FORMAT_RGB565)
 DEFINEDMA2D_COLORCONVERSION(M1555I, LTDC_PIXEL_FORMAT_ARGB1555)
 DEFINEDMA2D_COLORCONVERSION(M4444I, LTDC_PIXEL_FORMAT_ARGB4444)
 
@@ -469,7 +471,7 @@ void LCD_X_Config(void)
     
     /* Set up custom color conversion using DMA2D, works only for direct color modes because of missing LUT for DMA2D destination */
     GUICC_M1555I_SetCustColorConv(Color2IndexBulk_M1555IDMA2D, Index2ColorBulk_M1555IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB1555 */
-    GUICC_M565_SetCustColorConv  (Color2IndexBulk_M565DMA2D,   Index2ColorBulk_M565DMA2D);   /* Set up custom bulk color conversion using DMA2D for RGB565 */
+    //GUICC_M565_SetCustColorConv  (Color2IndexBulk_M565DMA2D,   Index2ColorBulk_M565DMA2D);   /* Set up custom bulk color conversion using DMA2D for RGB565 */
     GUICC_M4444I_SetCustColorConv(Color2IndexBulk_M4444IDMA2D, Index2ColorBulk_M4444IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB4444 */
     GUICC_M888_SetCustColorConv  (Color2IndexBulk_M888DMA2D,   Index2ColorBulk_M888DMA2D);   /* Set up custom bulk color conversion using DMA2D for RGB888 */
     GUICC_M8888I_SetCustColorConv(Color2IndexBulk_M8888IDMA2D, Index2ColorBulk_M8888IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB8888 */
