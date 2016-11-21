@@ -32,7 +32,8 @@ void bsp_Init(void)
     HAL_Init();
     SystemClock_Config(); //系统始终配置为180MHz
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
-
+    /* Enable the CRC Module */
+    __HAL_RCC_CRC_CLK_ENABLE();	//
     bsp_DWT_Init();
     bsp_Uart_Init();   /* 初始化串口 */
     bsp_SDRAM_Init();
