@@ -10,17 +10,18 @@ extern uint16_t CLI_RX_STA;
 
 void tinysh_char_out(unsigned char c)
 {
-  putchar((int)c);
+    putchar((int)c);
 }
 
 void cli_init(void)
 {
-  /* change the prompt */
-  tinysh_set_prompt("\n[Charger]$ ");
+    /* change the prompt */
+    tinysh_set_prompt("\n[Charger]$ ");
 
-  tinysh_add_command(&cli_hello_cmd);
-  tinysh_add_command(&cli_tasklist_cmd);
-  tinysh_add_command(&cli_testsdram_cmd);
+    tinysh_add_command(&cli_hello_cmd);
+    tinysh_add_command(&cli_systemdate_cmd);
+    tinysh_add_command(&cli_tasklist_cmd);
+    tinysh_add_command(&cli_testsdram_cmd);
 }
 void cli_main(void)
 {
@@ -34,7 +35,7 @@ void cli_main(void)
         }
         //vTaskSuspend( NULL );
 //      tinysh_char_in((unsigned char)getchar());
-      vTaskDelay(100);
+        vTaskDelay(100);
     }
 }
 
