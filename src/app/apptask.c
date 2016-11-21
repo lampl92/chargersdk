@@ -118,7 +118,7 @@ void AppTaskCreate (void)
     
     xTaskCreate( vTaskGUI,          /* 任务函数  */
                  "vTaskGUI",        /* 任务名    */
-                 512,               /* 任务栈大小，单位word，也就是4字节 */
+                 1024,               /* 任务栈大小，单位word，也就是4字节 */
                  NULL,              /* 任务参数  */
                  2,                 /* 任务优先级*/
                  &xHandleTaskGUI ); /* 任务句柄  */
