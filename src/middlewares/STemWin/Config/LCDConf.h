@@ -38,11 +38,10 @@
   *
   ******************************************************************************
   */
-#include "GUIDRV_Lin.h"
-
 #ifndef LCDCONF_H
 #define LCDCONF_H
 
+#include "GUIDRV_Lin.h"
 
 typedef struct
 {
@@ -73,7 +72,6 @@ typedef struct
 	uint16_t height;			//LCD高度
 	uint32_t pixsize;		//每个像素所占字节数
 }_ltdc_dev; 
-
 
 #endif /* LCDCONF_H */
 

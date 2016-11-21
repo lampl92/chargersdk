@@ -216,11 +216,11 @@ static void LTDC_Display_Dir(u8 dir)
 
 void LCD_BackLight(int OnOff)
 {
-    if(onoff == 1)
+    if(OnOff == 1)
     {
         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
     }
-    if(onoff == 0)
+    if(OnOff == 0)
     {
         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
     }
@@ -346,8 +346,8 @@ void bsp_LTDC_Init(void)
     HAL_LTDC_Init(&LTDC_Handler);
  	
 	//层配置
-	// LTDC_PIXEL_FORMAT_RGB565 时 BF1 = 0x100, BF2 = 0x101
-	LTDC_Layer_Parameter_Config(LTDC_LAYER_1,(u32)ltdc_framebuf[0],LTDC_PIXEL_FORMAT,255,0,0x100,0x101,0X000000);//层参数配置
+	// LTDC_PIXEL_FORMAT_RGB565 时 BF1 = 100b, BF2 = 101b
+	LTDC_Layer_Parameter_Config(LTDC_LAYER_1,(u32)ltdc_framebuf[0],LTDC_PIXEL_FORMAT,255,0,4,5,0X000000);//层参数配置
 	LTDC_Layer_Window_Config(LTDC_LAYER_1,0,0,lcdltdc.pwidth,lcdltdc.pheight);	//层窗口配置,以LCD面板坐标系为基准,不要随便修改!
 	
  	LTDC_Display_Dir(1);			    //横屏

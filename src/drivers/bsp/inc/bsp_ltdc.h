@@ -7,7 +7,7 @@
 */
 #ifndef BSP_LTDC_H
 #define BSP_LTDC_H
-
+#include "includes.h"
 
 #define LCD_PIXEL_FORMAT_ARGB8888       0x00
 #define LCD_PIXEL_FORMAT_RGB888         0X01    
@@ -38,9 +38,9 @@ typedef struct
 }_ltdc_dev; 
 
 void bsp_LTDC_Init(void);
-void LTDC_Draw_Point(u16 x,u16 y,u32 color);
-u32 LTDC_Read_Point(u16 x,u16 y);
-void LTDC_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color);
+void LTDC_Draw_Point(uint16_t x,uint16_t y,uint32_t color);
+uint32_t LTDC_Read_Point(uint16_t x,uint16_t y);
+void LTDC_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint32_t color);
 
 
 
