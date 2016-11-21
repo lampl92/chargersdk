@@ -43,6 +43,7 @@ int main(void)
     /* Activate the use of memory device feature */
     WM_SetCreateFlags(WM_CF_MEMDEV);
     GUI_Init();
+    WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
     printf("\nhello charger\n\r");
     /* 创建任务 */
     AppTaskCreate();
