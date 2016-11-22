@@ -155,7 +155,7 @@ void cli_systemtime_fnt(int argc, char **argv)
         taskENTER_CRITICAL();
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf("%s\n", tbuf);
+        printf("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
         sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
         printf("%s\n", tbuf);
@@ -166,7 +166,8 @@ void cli_systemtime_fnt(int argc, char **argv)
     else if(strcmp(argv[1], "-s") == 0)
     {
         char *str = argv[2];
-
+        //argv[2]: "2016-09-12 15:04:00"
+        //str:     ^
         taskENTER_CRITICAL();
         if(str[0] != '\"' && str[strlen(str) - 1] != '\"')
         {
@@ -175,9 +176,7 @@ void cli_systemtime_fnt(int argc, char **argv)
             taskEXIT_CRITICAL();
             return ;
         }
-        //argv[2]: "2016-09-12 15:04:00"
-        //str:     ^
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:        ^
@@ -220,7 +219,7 @@ void cli_systemtime_fnt(int argc, char **argv)
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf("%s\n", tbuf);
+        printf("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
         sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
         printf("%s\n", tbuf);
