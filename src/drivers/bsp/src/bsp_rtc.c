@@ -20,10 +20,26 @@ RTC_HandleTypeDef RTC_Handler;  //RTC句柄
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
 //返回值:SUCEE(1),成功
 //       ERROR(0),进入初始化模式失败
-HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec, u8 ampm)
+HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec)
 {
     RTC_TimeTypeDef RTC_TimeStructure;
-
+    u8 ampm;
+    if(RTC_Handler.Init.HourFormat == RTC_HOURFORMAT_24)
+    {
+        if(hour <= 12)
+        {
+            ampm = RTC_HOURFORMAT12_AM;
+        }
+        else if(hour > 12 && hour < 23)
+        {
+            ampm = RTC_HOURFORMAT12_PM;
+        }
+    }
+    else if(RTC_Handler.Init.HourFormat == RTC_HOURFORMAT_12)
+    {
+        //TODO: 不设置12小时制,进行错误处理
+        while(1);
+    }
     RTC_TimeStructure.Hours = hour;
     RTC_TimeStructure.Minutes = min;
     RTC_TimeStructure.Seconds = sec;
@@ -38,22 +54,20 @@ HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec, u8 ampm)
 //week:星期(1~7,0,非法!)
 //返回值:SUCEE(1),成功
 //       ERROR(0),进入初始化模式失败
-HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date, u8 week)
+HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
 {
     RTC_DateTypeDef RTC_DateStructure;
     int y, m, d, w;
     y = year;
     m = month;
     d = date;
+    //基姆拉尔森计算公式, w=0 时为 星期一
     if(m == 1 || m == 2)
     {
             m += 12;
             y--;
     }
-    //w=0 星期一
     w = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7;
-
-
 
     RTC_DateStructure.WeekDay = w+1;
     RTC_DateStructure.Month = month;
@@ -83,8 +97,8 @@ u8 bsp_RTC_Init(void)
 
     if(HAL_RTCEx_BKUPRead(&RTC_Handler, RTC_BKP_DR0) != 0X5050) //是否第一次配置
     {
-        RTC_Set_Time(9, 34, 56, RTC_HOURFORMAT12_PM);       //设置时间 ,根据实际时间修改
-        RTC_Set_Date(16, 11, 21, 7);                        //设置日期
+        RTC_Set_Time(9, 34, 56);       //设置时间 ,根据实际时间修改
+        RTC_Set_Date(16, 11, 21);                        //设置日期
         HAL_RTCEx_BKUPWrite(&RTC_Handler, RTC_BKP_DR0, 0X5050); //标记已经初始化过了
     }
     return 0;

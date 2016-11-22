@@ -760,6 +760,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\bsp\src\bsp_rtc.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_user_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\drivers\bsp\src\bsp_user_lib.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

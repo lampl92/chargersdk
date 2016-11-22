@@ -13,6 +13,7 @@ void tinysh_char_out(unsigned char c)
     putchar((int)c);
 }
 
+
 void cli_init(void)
 {
     /* change the prompt */
@@ -22,6 +23,20 @@ void cli_init(void)
     tinysh_add_command(&cli_systemdate_cmd);
     tinysh_add_command(&cli_tasklist_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
+    
+    /* add the foo command 
+*/
+  tinysh_add_command(&myfoocmd);
+
+/* add sub commands
+ */
+  tinysh_add_command(&ctxcmd);
+  tinysh_add_command(&item1);
+  tinysh_add_command(&item2);
+    
+  /* add atoxi support test command */
+  tinysh_add_command(&atoxi_cmd);
+    
 }
 void cli_main(void)
 {
