@@ -65,9 +65,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "includes.h"
-
+#include <stdint.h>
 
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
@@ -77,6 +75,7 @@
 #include "bsp_dwt.h"
 #include "bsp_rtc.h"
 //#include "bsp_ltdc.h"
+#include "bsp_user_lib.h"
 #include "malloc.h"
 
 /* Public function prototypes ------------------------------------------------*/
