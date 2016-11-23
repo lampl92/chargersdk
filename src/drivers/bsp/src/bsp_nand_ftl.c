@@ -390,7 +390,7 @@ u8 FTL_CreateLUT(u8 mode)
     for(i = 0; i < nand_dev.block_totalnum; i++)
     {
         NAND_ReadSpare(i * nand_dev.block_pagenum, 0, buf, 4); //读取4个字节
-        if(buf[0] == 0XFF && mode)
+        if((buf[0] == 0XFF) && mode)
         {
             NAND_ReadSpare(i * nand_dev.block_pagenum + 1, 0, buf, 1);    //好块,且需要检查2次坏块标记
         }
