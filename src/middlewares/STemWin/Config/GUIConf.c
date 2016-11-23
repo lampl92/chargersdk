@@ -64,7 +64,6 @@ Purpose     : Display controller initialization
 // Define the available number of bytes available for the GUI
 // 
 #define GUI_NUMBYTES  (8*1024*1024)
-#define USE_EXRAM  1	//使用SDRAM
 #define GUI_BLOCKSIZE 0X80  //块大小
 
 /*********************************************************************8*
