@@ -15,11 +15,11 @@
 
 //内存池(32字节对齐)
 __align(32) u8 mem1base[MEM1_MAX_SIZE];													//内部SRAM内存池
-__align(32) u8 mem2base[MEM2_MAX_SIZE] __attribute__((at(0XC0600000)));					//外部SDRAM内存池,前面6M给LTDC用了
+__align(32) u8 mem2base[MEM2_MAX_SIZE] __attribute__((at(MEM2_BASE)));					//外部SDRAM内存池
 __align(32) u8 mem3base[MEM3_MAX_SIZE] __attribute__((at(0X10000000)));					//内部CCM内存池
 //内存管理表
 u32 mem1mapbase[MEM1_ALLOC_TABLE_SIZE];													//内部SRAM内存池MAP
-u32 mem2mapbase[MEM2_ALLOC_TABLE_SIZE] __attribute__((at(0XC0600000+MEM2_MAX_SIZE)));	//外部SRAM内存池MAP
+u32 mem2mapbase[MEM2_ALLOC_TABLE_SIZE] __attribute__((at(MEM2_BASE+MEM2_MAX_SIZE)));	//外部SRAM内存池MAP
 u32 mem3mapbase[MEM3_ALLOC_TABLE_SIZE] __attribute__((at(0X10000000+MEM3_MAX_SIZE)));	//内部CCM内存池MAP
 //内存管理参数	   
 const u32 memtblsize[SRAMBANK]={MEM1_ALLOC_TABLE_SIZE,MEM2_ALLOC_TABLE_SIZE,MEM3_ALLOC_TABLE_SIZE};	//内存表大小
