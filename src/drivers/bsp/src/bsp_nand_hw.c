@@ -244,15 +244,14 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
     //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
     //TODO:如果发现nand错误, 将下面的等待RB换成延时函数
-
-    bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     /*
     res=NAND_WaitRB(0);         //等待RB=0
     if(res)return NSTA_TIMEOUT; //超时退出
     //下面2行代码是真正判断NAND是否准备好的
     res=NAND_WaitRB(1);         //等待RB=1
     if(res)return NSTA_TIMEOUT; //超时退出
-    */
+    */    
+    bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
     {
         //读取NAND FLASH中的值
