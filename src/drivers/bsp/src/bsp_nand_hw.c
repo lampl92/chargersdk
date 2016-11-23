@@ -199,7 +199,6 @@ u8 NAND_WaitRB(vu8 rb)
     vu16 time = 0;
     while(time < 20)
     {
-        bsp_DelayUS(5);
         time++;
         if(NAND_RB == rb)
         {
