@@ -41,10 +41,6 @@ void bsp_Init(void)
     FTL_Init();
     //bsp_LTDC_Init();//在GUI中初始化
     
-    //bsp_InitKey();        /* 初始化按键变量 */
-
-    //bsp_InitExtIO();    /* FMC总线上扩展了32位输出IO, 操作LED等外设必须初始化 */
-    //bsp_InitLed();        /* 初始LED指示灯端口 */
 }
 
 /**
