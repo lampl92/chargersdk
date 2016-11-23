@@ -32,9 +32,9 @@ u8 FTL_Init(void)
     }
     if(nand_dev.lut)
     {
-        myfree(SRAMIN, nand_dev.lut);
+        myfree(SRAMEX, nand_dev.lut);
     }
-    nand_dev.lut = mymalloc(SRAMIN, (nand_dev.block_totalnum) * 2); //给LUT表申请内存
+    nand_dev.lut = mymalloc(SRAMEX, (nand_dev.block_totalnum) * 2); //给LUT表申请内存
     memset(nand_dev.lut, 0, nand_dev.block_totalnum * 2);       //全部清理
     if(!nand_dev.lut)
     {
@@ -475,7 +475,7 @@ u32 FTL_SearchBadBlock(void)
     u8 res;
     u32 i, j;
     u32 goodblock = 0;
-    blktbl = mymalloc(SRAMIN, nand_dev.block_totalnum); //申请block坏块表内存,对应项:0,好块;1,坏块;
+    blktbl = mymalloc(SRAMEX, nand_dev.block_totalnum); //申请block坏块表内存,对应项:0,好块;1,坏块;
     NAND_EraseChip();                       //全片擦除
     for(i = 0; i < nand_dev.block_totalnum; i++) //第一阶段检查,检查全1
     {
