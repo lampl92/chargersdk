@@ -103,7 +103,6 @@ void HAL_SDRAM_MspInit(SDRAM_HandleTypeDef *hsdram)
     GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_15;              
     HAL_GPIO_Init(GPIOG,&GPIO_Initure);      //初始化PG0,1,2,4,5,8,15 
 }
-
 //向SDRAM发送命令
 //bankx:0,向BANK5上面的SDRAM发送指令
 //      1,向BANK6上面的SDRAM发送指令
@@ -128,7 +127,7 @@ uint8_t SDRAM_Send_Cmd(uint8_t bankx,uint8_t cmd,uint8_t refresh,uint16_t regval
     }
     else return 1;    
 }
-
+#if 0
 //在指定地址(WriteAddr+Bank5_SDRAM_ADDR)开始,连续写入n个字节.
 //pBuffer:字节指针
 //WriteAddr:要写入的地址
@@ -155,3 +154,4 @@ void FMC_SDRAM_ReadBuffer(uint8_t *pBuffer,uint32_t ReadAddr,uint32_t n)
 		ReadAddr++;
 	}
 }
+#endif
