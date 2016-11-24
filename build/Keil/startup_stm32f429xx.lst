@@ -100,23 +100,23 @@ ARM Macro Assembler    Page 2
    56 00000A00         ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
    57 00000A00         ; </h>
    58 00000A00         
-   59 00000A00 00000200 
+   59 00000A00 00000000 
                        Heap_Size
-                               EQU              0x00000200
+                               EQU              0x00000000
    60 00000A00         
    61 00000A00                 AREA             HEAP, NOINIT, READWRITE, ALIGN=
 3
    62 00000000         __heap_base
    63 00000000         Heap_Mem
                                SPACE            Heap_Size
-   64 00000200         __heap_limit
-   65 00000200         
-   66 00000200                 PRESERVE8
-   67 00000200                 THUMB
-   68 00000200         
-   69 00000200         
-   70 00000200         ; Vector Table Mapped to Address 0 at Reset
-   71 00000200                 AREA             RESET, DATA, READONLY
+   64 00000000         __heap_limit
+   65 00000000         
+   66 00000000                 PRESERVE8
+   67 00000000                 THUMB
+   68 00000000         
+   69 00000000         
+   70 00000000         ; Vector Table Mapped to Address 0 at Reset
+   71 00000000                 AREA             RESET, DATA, READONLY
    72 00000000                 EXPORT           __Vectors
    73 00000000                 EXPORT           __Vectors_End
    74 00000000                 EXPORT           __Vectors_Size
@@ -900,8 +900,8 @@ ARM Macro Assembler    Page 14
   452 0000001C         
   453 0000001C 4804            LDR              R0, =  Heap_Mem
   454 0000001E 4905            LDR              R1, =(Stack_Mem + Stack_Size)
-  455 00000020 4A05            LDR              R2, = (Heap_Mem +  Heap_Size)
-  456 00000022 4B06            LDR              R3, = Stack_Mem
+  455 00000020 4A03            LDR              R2, = (Heap_Mem +  Heap_Size)
+  456 00000022 4B05            LDR              R3, = Stack_Mem
   457 00000024 4770            BX               LR
   458 00000026         
   459 00000026 00 00           ALIGN
@@ -919,7 +919,6 @@ ARM Macro Assembler    Page 15
               00000000 
               00000000 
               00000A00 
-              00000200 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\output\debug\startup_stm32f429xx.d -o.\output\debug\startup_s
@@ -1002,7 +1001,7 @@ Symbol: __heap_base
    Uses
       None
 Comment: __heap_base unused
-__heap_limit 00000200
+__heap_limit 00000000
 
 Symbol: __heap_limit
    Definitions
@@ -2413,7 +2412,7 @@ Comment: __user_initial_stackheap used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
-Heap_Size 00000200
+Heap_Size 00000000
 
 Symbol: Heap_Size
    Definitions

@@ -176,7 +176,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -349,7 +349,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>0</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>OS_SUPPORT,USE_HAL_DRIVER,STM32F429xx,DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS_RTOS;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh;..\..\src\middlewares\STemWin\inc;..\..\src\middlewares\STemWin\Config;..\..\src\middlewares\STemWin\Demo</IncludePath>
+              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS_RTOS;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh;..\..\src\middlewares\STemWin\inc;..\..\src\middlewares\STemWin\Config;..\..\src\middlewares\STemWin\Demo;..\..\src\middlewares\fatfs\src;..\..\src\middlewares\fatfs\diskdrv</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -459,6 +459,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\cli\cli_rtos.c</FilePath>
             </File>
+            <File>
+              <FileName>cli_fatfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\cli\cli_fatfs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -483,114 +488,6 @@
               <FileName>LCDConf.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\src\middlewares\STemWin\Config\LCDConf.h</FilePath>
-            </File>
-            <File>
-              <FileName>GUIDRV_LTDC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\middlewares\STemWin\Config\GUIDRV_LTDC.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>LCDConf_ATK_7016.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\middlewares\STemWin\Config\LCDConf_ATK_7016.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
           </Files>
         </Group>
@@ -695,60 +592,6 @@
               <FileName>bsp_dwt.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\drivers\bsp\src\bsp_dwt.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_ltdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\drivers\bsp\src\bsp_ltdc.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>malloc.c</FileName>
@@ -1358,6 +1201,36 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>middlewares\fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\fatfs\src\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\fatfs\src\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>cc936.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\fatfs\src\option\cc936.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff_gen_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>nand_diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\fatfs\diskdrv\nand_diskio.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,5 +1,7 @@
 #include "bsp.h"
 
+#define USE_WAITRB 0
+#define BSP_DELAY_US_VAL    20
 NAND_HandleTypeDef NAND_Handler;    //NAND FLASH句柄
 nand_attriute nand_dev;             //nand重要参数结构体
 
@@ -244,14 +246,17 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
     //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
     //TODO:如果发现nand错误, 将下面的等待RB换成延时函数
-    /*
-    res=NAND_WaitRB(0);         //等待RB=0
-    if(res)return NSTA_TIMEOUT; //超时退出
-    //下面2行代码是真正判断NAND是否准备好的
-    res=NAND_WaitRB(1);         //等待RB=1
-    if(res)return NSTA_TIMEOUT; //超时退出
-    */    
-    bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
+    #if USE_WAITRB
+        res=NAND_WaitRB(0);         //等待RB=0
+        if(res)return NSTA_TIMEOUT; //超时退出
+        //下面2行代码是真正判断NAND是否准备好的
+        res=NAND_WaitRB(1);         //等待RB=1
+        if(res)return NSTA_TIMEOUT; //超时退出
+    #else
+        bsp_DelayUS(BSP_DELAY_US_VAL);
+    #endif
+   
+    //bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
     {
         //读取NAND FLASH中的值
@@ -325,7 +330,9 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
 u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16 *NumByteEqual)
 {
     u16 i = 0;
+#if USE_WAITRB
     u8 res = 0;
+#endif
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
     //发送地址
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
@@ -339,17 +346,15 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
     //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
     //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
     //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    res = NAND_WaitRB(0);       //等待RB=0
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
-    //下面2行代码是真正判断NAND是否准备好的
-    res = NAND_WaitRB(1);       //等待RB=1
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
+    #if USE_WAITRB
+        res=NAND_WaitRB(0);         //等待RB=0
+        if(res)return NSTA_TIMEOUT; //超时退出
+        //下面2行代码是真正判断NAND是否准备好的
+        res=NAND_WaitRB(1);         //等待RB=1
+        if(res)return NSTA_TIMEOUT; //超时退出
+    #else
+        bsp_DelayUS(BSP_DELAY_US_VAL);
+    #endif
     for(i = 0; i < NumByteToRead; i++) //读取数据,每次读4字节
     {
         if(*(vu32 *)NAND_ADDRESS != CmpVal)
@@ -468,7 +473,9 @@ u8 NAND_WritePageConst(u32 PageNum, u16 ColNum, u32 cval, u16 NumByteToWrite)
 //    其他,错误代码
 u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
 {
+#if USE_WAITRB
     u8 res = 0;
+#endif
     u16 source_block = 0, dest_block = 0;
     //判断源页和目的页是否在同一个plane中
     source_block = Source_PageNum / nand_dev.block_pagenum;
@@ -490,17 +497,15 @@ u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
     //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
     //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
     //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    res = NAND_WaitRB(0);       //等待RB=0
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
-    //下面2行代码是真正判断NAND是否准备好的
-    res = NAND_WaitRB(1);       //等待RB=1
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
+    #if USE_WAITRB
+        res=NAND_WaitRB(0);         //等待RB=0
+        if(res)return NSTA_TIMEOUT; //超时退出
+        //下面2行代码是真正判断NAND是否准备好的
+        res=NAND_WaitRB(1);         //等待RB=1
+        if(res)return NSTA_TIMEOUT; //超时退出
+    #else
+        bsp_DelayUS(BSP_DELAY_US_VAL);
+    #endif
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
     //发送目的页地址
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
@@ -553,17 +558,15 @@ u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *
     //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
     //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
     //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    res = NAND_WaitRB(0);       //等待RB=0
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
-    //下面2行代码是真正判断NAND是否准备好的
-    res = NAND_WaitRB(1);       //等待RB=1
-    if(res)
-    {
-        return NSTA_TIMEOUT;    //超时退出
-    }
+    #if USE_WAITRB
+        res=NAND_WaitRB(0);         //等待RB=0
+        if(res)return NSTA_TIMEOUT; //超时退出
+        //下面2行代码是真正判断NAND是否准备好的
+        res=NAND_WaitRB(1);         //等待RB=1
+        if(res)return NSTA_TIMEOUT; //超时退出
+    #else
+        bsp_DelayUS(BSP_DELAY_US_VAL);
+    #endif
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
     //发送目的页地址
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
