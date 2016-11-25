@@ -12,6 +12,8 @@
 #ifndef __BSP_USER_LIB_H
 #define __BSP_USER_LIB_H
 
+#include "stm32f4xx.h"
+
 int str_len(char *_str);
 void str_cpy(char *_tar, char *_src);
 int str_cmp(char * s1, char * s2);
