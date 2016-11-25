@@ -131,32 +131,32 @@ static void cli_fatfs_fnt(int argc, char **argv)
 {
     FRESULT res;                                          /* FatFs function common result code */
     uint32_t byteswritten, bytesread;                     /* File write/read counts */
-    uint8_t wtext[] = "This is SYSTEM working with FatFs"; /* File write buffer */
-    uint8_t rtext[100];                                   /* File read buffer */
-
+    uint8_t wtext[30] = "This is z working with FatFs"; /* File write buffer */
+    uint8_t *rtext;                                   /* File read buffer */
+    rtext = mymalloc(SRAMIN,2000);
     /*##-4- Create and Open a new text file object with write access #####*/
-    if(f_open(&MyFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+//    if(f_open(&MyFile, "test.xml", FA_OPEN_APPEND | FA_WRITE) != FR_OK)
+//    {
+//        /* 'STM32.TXT' file Open for write Error */
+//        Error_Handler();
+//    }
+//    else
     {
-        /* 'STM32.TXT' file Open for write Error */
-        Error_Handler();
-    }
-    else
-    {
-        /*##-5- Write data to the text file ################################*/
-        res = f_write(&MyFile, wtext, sizeof(wtext), (void *)&byteswritten);
+//        /*##-5- Write data to the text file ################################*/
+//        res = f_write(&MyFile, wtext, sizeof(wtext), (void *)&byteswritten);
 
-        if((byteswritten == 0) || (res != FR_OK))
-        {
-            /* 'STM32.TXT' file Write or EOF Error */
-            Error_Handler();
-        }
-        else
+//        if((byteswritten == 0) || (res != FR_OK))
+//        {
+//            /* 'STM32.TXT' file Write or EOF Error */
+//            Error_Handler();
+//        }
+//        else
         {
             /*##-6- Close the open text file #################################*/
             f_close(&MyFile);
 
             /*##-7- Open the text file object with read access ###############*/
-            if(f_open(&MyFile, "STM32.TXT", FA_READ) != FR_OK)
+            if(f_open(&MyFile, "test.xml", FA_READ) != FR_OK)
             {
                 /* 'STM32.TXT' file Open for read Error */
                 Error_Handler();
@@ -164,7 +164,7 @@ static void cli_fatfs_fnt(int argc, char **argv)
             else
             {
                 /*##-8- Read data from the text file ###########################*/
-                res = f_read(&MyFile, rtext, sizeof(rtext), (void *)&bytesread);
+                res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
 
                 if((bytesread == 0) || (res != FR_OK))
                 {
@@ -175,14 +175,16 @@ static void cli_fatfs_fnt(int argc, char **argv)
                 {
                     /*##-9- Close the open text file #############################*/
                     f_close(&MyFile);
+                    taskENTER_CRITICAL();
                     printf("%s\n", rtext);
+                        taskEXIT_CRITICAL();
                     /*##-10- Compare read data with the expected data ############*/
-                    if ((bytesread != byteswritten))
-                    {
-                        /* Read data is different from the expected data */
-                        Error_Handler();
-                    }
-                    else
+//                    if ((bytesread != byteswritten))
+//                    {
+//                        /* Read data is different from the expected data */
+//                        Error_Handler();
+//                    }
+//                    else
                     {
                         /* Success of the demo: no error occurrence */
                         //BSP_LED_On(LED3);
@@ -191,6 +193,7 @@ static void cli_fatfs_fnt(int argc, char **argv)
             }
         }
     }
+
 }
 
 tinysh_cmd_t cli_fatfs_cmd = {0, "testfatfs", "fatfs ≤‚ ‘", "[args]",

@@ -38,3 +38,4 @@
 |lua			|	5.3.3		|
 |jsmn			|		
 |tinysh			|	0.1.0		|
+|sqlite			|	3.15.1		|
