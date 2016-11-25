@@ -9,6 +9,7 @@
 #include "includes.h"
 #include "bsp.h"
 
+
 /* private function prototypes -----------------------------------------------*/
 static void SystemClock_Config(void);
 void Stm32_Clock_Init(uint32_t plln,uint32_t pllm,uint32_t pllp,uint32_t pllq);
@@ -38,8 +39,9 @@ void bsp_Init(void)
     bsp_DWT_Init();
     bsp_Uart_Init();   /* 初始化串口 */
     bsp_SDRAM_Init();
-    FTL_Init();
+    //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
+    
     
 }
 

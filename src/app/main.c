@@ -35,20 +35,11 @@ int main(void)
      */
     DISABLE_INT(); 
     
-    /* 硬件初始化 */
-    bsp_Init(); 
-    my_mem_init(SRAMIN);
-    my_mem_init(SRAMEX);		    //初始化SDRAM
-    my_mem_init(SRAMCCM);
-    /* Activate the use of memory device feature */
-    WM_SetCreateFlags(WM_CF_MEMDEV);
-    GUI_Init();
-    WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
-    printf("\nhello charger\n\r");
-    /* 创建任务 */
+    bsp_Init();
+    sys_Init();
+
     AppTaskCreate();
     
-    /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 
     /* 
