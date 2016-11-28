@@ -5,6 +5,7 @@
 #include "cli_app.h"
 #include "cli_rtos.h"
 #include "cli_fatfs.h"
+#include "cli_xml.h"
 
 extern uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
 extern uint16_t CLI_RX_STA;
@@ -31,6 +32,7 @@ void cli_init(void)
 
     /************œµÕ≥≤‚ ‘****************/
     tinysh_add_command(&cli_fatfs_cmd);
+    tinysh_add_command(&cli_testxml_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
     
     /* add the foo command

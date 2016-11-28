@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>OS_SUPPORT,USE_HAL_DRIVER,STM32F429xx,DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS_RTOS;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh;..\..\src\middlewares\STemWin\inc;..\..\src\middlewares\STemWin\Config;..\..\src\middlewares\STemWin\Demo;..\..\src\middlewares\fatfs\src;..\..\src\middlewares\fatfs\diskdrv;..\..\src\middlewares\sqlite;..\..\src\middlewares\ezxml</IncludePath>
+              <IncludePath>..\..\src\drivers\hal\CMSIS\Include;..\..\src\drivers\hal\CMSIS_RTOS;..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\src\os\FreeRTOS\Source\include;..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\src\os;..\..\src\drivers\bsp\inc;..\..\src\app;..\..\src\cli;..\..\src\middlewares\tinysh;..\..\src\middlewares\STemWin\inc;..\..\src\middlewares\STemWin\Config;..\..\src\middlewares\STemWin\Demo;..\..\src\middlewares\fatfs\src;..\..\src\middlewares\fatfs\diskdrv;..\..\src\middlewares\sqlite;..\..\src\middlewares\ezxml;..\..\src\middlewares\mxml-2.10</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -468,6 +468,11 @@
               <FileName>cli_fatfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\cli\cli_fatfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>cli_xml.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\cli\cli_xml.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1366,7 +1371,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>2</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -1388,7 +1393,7 @@
                     <PlainCh>2</PlainCh>
                     <Ropi>2</Ropi>
                     <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
+                    <wLevel>1</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
