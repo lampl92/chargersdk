@@ -25,15 +25,18 @@
 #ifndef _EZXML_H
 #define _EZXML_H
 
+#define EZXML_NOMMAP
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
+    
 #define EZXML_BUFSIZE 1024 // size of internal memory buffers
 #define EZXML_NAMEM   0x80 // name is malloced
 #define EZXML_TXTM    0x40 // txt is malloced
@@ -70,7 +73,8 @@ ezxml_t ezxml_parse_file(const char *file);
 // Wrapper for ezxml_parse_str() that accepts a file stream. Reads the entire
 // stream into memory and then parses it. For xml files, use ezxml_parse_file()
 // or ezxml_parse_fd()
-ezxml_t ezxml_parse_fp(FILE *fp);
+
+ezxml_t ezxml_parse_fp(FIL *fp);
 
 // returns the first child tag (one level deeper) with the given name or NULL
 // if not found

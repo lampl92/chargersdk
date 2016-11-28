@@ -28,6 +28,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "ff.h"
+#include "FreeRTOS.h"
 #include "ezxml.h"
 
 #define EZXML_WS   "\t\r\n "  // whitespace
@@ -50,6 +52,20 @@ struct ezxml_root {       // additional data for the root tag
 };
 
 char *EZXML_NIL[] = { NULL }; // empty, null terminated array of strings
+
+//#define ezxml_mem_malloc    malloc
+//#define ezxml_mem_free      free
+//#define ezxml_mem_realloc   realoc
+#define strdup              ezxml_mem_strdup
+/*rgw 2016.11.28*/
+char *ezxml_mem_strdup(const char *s)
+{
+	char *result = (char *)malloc(strlen(s) + 1);
+	if (result == NULL)
+		return NULL;
+	strcpy(result, s);
+	return result;
+}
 
 // returns the first child tag with the given name or NULL if not found
 ezxml_t ezxml_child(ezxml_t xml, const char *name)
@@ -204,7 +220,7 @@ char *ezxml_decode(char *s, char **ent, char t)
 
     if (t == '*') { // normalize spaces for non-cdata attributes
         for (s = r; *s; s++) {
-            if ((l = strspn(s, " "))) memmove(s, s + l, strlen(s + l) + 1);
+            if ((l = strspn(s, " ")) != 0) memmove(s, s + l, strlen(s + l) + 1);
             while (*s && *s != ' ') s++;
         }
         if (--s >= r && *s == ' ') *s = '\0'; // trim any trailing space
@@ -597,7 +613,7 @@ ezxml_t ezxml_parse_str(char *s, size_t len)
 // Wrapper for ezxml_parse_str() that accepts a file stream. Reads the entire
 // stream into memory and then parses it. For xml files, use ezxml_parse_file()
 // or ezxml_parse_fd()
-ezxml_t ezxml_parse_fp(FILE *fp)
+ezxml_t ezxml_parse_fp(FIL *fp)
 {
     ezxml_root_t root;
     size_t l, len = 0;
@@ -605,7 +621,8 @@ ezxml_t ezxml_parse_fp(FILE *fp)
 
     if (! (s = malloc(EZXML_BUFSIZE))) return NULL;
     do {
-        len += (l = fread((s + len), 1, EZXML_BUFSIZE, fp));
+        f_read(fp,(s + len),EZXML_BUFSIZE,&l);
+        len += l;
         if (l == EZXML_BUFSIZE) s = realloc(s, len + EZXML_BUFSIZE);
     } while (s && l == EZXML_BUFSIZE);
 
@@ -615,45 +632,18 @@ ezxml_t ezxml_parse_fp(FILE *fp)
     return &root->xml;
 }
 
-// A wrapper for ezxml_parse_str() that accepts a file descriptor. First
-// attempts to mem map the file. Failing that, reads the file into memory.
-// Returns NULL on failure.
-ezxml_t ezxml_parse_fd(int fd)
-{
-    ezxml_root_t root;
-    struct stat st;
-    size_t l;
-    void *m;
-
-    if (fd < 0) return NULL;
-    fstat(fd, &st);
-
-#ifndef EZXML_NOMMAP
-    l = (st.st_size + sysconf(_SC_PAGESIZE) - 1) & ~(sysconf(_SC_PAGESIZE) -1);
-    if ((m = mmap(NULL, l, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) !=
-        MAP_FAILED) {
-        madvise(m, l, MADV_SEQUENTIAL); // optimize for sequential access
-        root = (ezxml_root_t)ezxml_parse_str(m, st.st_size);
-        madvise(m, root->len = l, MADV_NORMAL); // put it back to normal
-    }
-    else { // mmap failed, read file into memory
-#endif // EZXML_NOMMAP
-        l = read(fd, m = malloc(st.st_size), st.st_size);
-        root = (ezxml_root_t)ezxml_parse_str(m, l);
-        root->len = -1; // so we know to free s in ezxml_free()
-#ifndef EZXML_NOMMAP
-    }
-#endif // EZXML_NOMMAP
-    return &root->xml;
-}
 
 // a wrapper for ezxml_parse_fd that accepts a file name
 ezxml_t ezxml_parse_file(const char *file)
 {
-    int fd = open(file, O_RDONLY, 0);
-    ezxml_t xml = ezxml_parse_fd(fd);
+    FIL fp;
+    FRESULT res;
+    ezxml_t xml;
+    res = f_open(&fp, file, FA_READ);
+
+    xml = ezxml_parse_fp(&fp);
     
-    if (fd >= 0) close(fd);
+    if (res == FR_OK) f_close(&fp);
     return xml;
 }
 
@@ -848,8 +838,8 @@ ezxml_t ezxml_insert(ezxml_t xml, ezxml_t dest, size_t off)
     xml->next = xml->sibling = xml->ordered = NULL;
     xml->off = off;
     xml->parent = dest;
-
-    if ((head = dest->child)) { // already have sub tags
+    head = dest->child;
+    if (head) { // already have sub tags
         if (head->off <= off) { // not first subtag
             for (cur = head; cur->ordered && cur->ordered->off <= off;
                  cur = cur->ordered);
