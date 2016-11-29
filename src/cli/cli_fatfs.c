@@ -133,7 +133,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     uint8_t wtext[200] = "This is z working with FatFs"; /* File write buffer */
     uint8_t *rtext;                                   /* File read buffer */
     rtext = mymalloc(SRAMEX, 200);
-    memset(rtext, 0, 30);
+    memset(rtext, 0, 200);
     /*##-4- Create and Open a new text file object with write access #####*/
     if(f_open(&MyFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
     {
