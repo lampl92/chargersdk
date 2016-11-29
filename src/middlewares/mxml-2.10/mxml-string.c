@@ -411,7 +411,7 @@ _mxml_vsnprintf(char       *buffer,	/* O - Output buffer */
   */
 
   *bufptr = '\0';
-
+    size=size;
   return (bytes);
 }
 #endif /* !HAVE_VSNPRINTF */
