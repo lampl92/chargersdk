@@ -130,10 +130,10 @@ static void cli_testfatfs_fnt(int argc, char **argv)
 {
     FRESULT res;                                          /* FatFs function common result code */
     uint32_t byteswritten, bytesread;                     /* File write/read counts */
-    uint8_t wtext[30] = "This is z working with FatFs"; /* File write buffer */
+    uint8_t wtext[200] = "This is z working with FatFs"; /* File write buffer */
     uint8_t *rtext;                                   /* File read buffer */
-    rtext = mymalloc(SRAMEX, 2000);
-    memset(rtext, 0, 2000);
+    rtext = mymalloc(SRAMEX, 200);
+    memset(rtext, 0, 30);
     /*##-4- Create and Open a new text file object with write access #####*/
     if(f_open(&MyFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
     {
@@ -145,13 +145,20 @@ static void cli_testfatfs_fnt(int argc, char **argv)
         /*##-5- Write data to the text file ################################*/
         res = f_write(&MyFile, wtext, sizeof(wtext), (void *)&byteswritten);
 
-        if((byteswritten == 0) || (res != FR_OK))
+//        if((byteswritten == 0) || (res != FR_OK))
+//        {
+//            /* 'STM32.TXT' file Write or EOF Error */
+//            Error_Handler();
+//        }
+//        else
         {
-            /* 'STM32.TXT' file Write or EOF Error */
-            Error_Handler();
-        }
-        else
-        {
+        f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
             /*##-6- Close the open text file #################################*/
             f_close(&MyFile);
 
@@ -166,12 +173,12 @@ static void cli_testfatfs_fnt(int argc, char **argv)
                 /*##-8- Read data from the text file ###########################*/
                 res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
 
-                if((bytesread == 0) || (res != FR_OK))
+                //if((bytesread == 0) || (res != FR_OK))
                 {
                     /* 'STM32.TXT' file Read or EOF Error */
-                    Error_Handler();
+                    //Error_Handler();
                 }
-                else
+                //else
                 {
                     /*##-9- Close the open text file #############################*/
                     f_close(&MyFile);
@@ -180,16 +187,16 @@ static void cli_testfatfs_fnt(int argc, char **argv)
                     myfree(SRAMEX, rtext);
                     taskEXIT_CRITICAL();
                     /*##-10- Compare read data with the expected data ############*/
-                    if ((bytesread != byteswritten))
-                    {
-                        /* Read data is different from the expected data */
-                        Error_Handler();
-                    }
-                    else
-                    {
-                        /* Success of the demo: no error occurrence */
-                        //BSP_LED_On(LED3);
-                    }
+//                    if ((bytesread != byteswritten))
+//                    {
+//                        /* Read data is different from the expected data */
+//                        Error_Handler();
+//                    }
+//                    else
+//                    {
+//                        /* Success of the demo: no error occurrence */
+//                        //BSP_LED_On(LED3);
+//                    }
                 }
             }
         }
@@ -202,36 +209,46 @@ static void cli_cat_fnt(int argc, char **argv)
     uint32_t bytesread;                     /* File write/read counts */
 
     uint8_t *rtext;                                   /* File read buffer */
+    taskENTER_CRITICAL();
     rtext = mymalloc(SRAMEX, 2000);
     memset(rtext, 0, 2000);
-
-    /*##-7- Open the text file object with read access ###############*/
-    if(f_open(&MyFile, argv[1], FA_READ) != FR_OK)
+    if(argc == 2)
     {
-        /* 'STM32.TXT' file Open for read Error */
-        Error_Handler();
-    }
-    else
-    {
-        /*##-8- Read data from the text file ###########################*/
-        res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
-
-        if((bytesread == 0) || (res != FR_OK))
+        /*##-7- Open the text file object with read access ###############*/
+        if(f_open(&MyFile, argv[1], FA_READ) != FR_OK)
         {
-            /* 'STM32.TXT' file Read or EOF Error */
-            Error_Handler();
+            /* 'STM32.TXT' file Open for read Error */
+            //Error_Handler();
+            printf("Error file\n");
         }
         else
         {
-            /*##-9- Close the open text file #############################*/
-            f_close(&MyFile);
-            taskENTER_CRITICAL();
-            printf("%s\n", rtext);
-            myfree(SRAMEX, rtext);
-            taskEXIT_CRITICAL();
+            /*##-8- Read data from the text file ###########################*/
+            res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
 
+            if((bytesread == 0) || (res != FR_OK))
+            {
+                /* 'STM32.TXT' file Read or EOF Error */
+                Error_Handler();
+            }
+            else
+            {
+                /*##-9- Close the open text file #############################*/
+                f_close(&MyFile);
+
+                printf("%s\n", rtext);
+                myfree(SRAMEX, rtext);
+
+
+            }
         }
     }
+    else
+    {
+        printf("no file input\n");
+        myfree(SRAMEX, rtext);
+    }
+    taskEXIT_CRITICAL();
 }
 
 tinysh_cmd_t cli_cat_cmd = {0, "cat", "fatfs ÎÄ¼þÏÔÊ¾", "[file]",
