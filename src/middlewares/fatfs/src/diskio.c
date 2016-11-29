@@ -103,13 +103,3 @@ DWORD get_fattime (void)
 {
   return 0;
 }
-
-void *ff_memalloc (UINT size)			
-{
-	return (void*)mymalloc(SRAMEX,size);
-}
-
-void ff_memfree (void* mf)		 
-{
-	myfree(SRAMEX,mf);
-}

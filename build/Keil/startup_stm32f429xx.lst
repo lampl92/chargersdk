@@ -920,13 +920,12 @@ ARM Macro Assembler    Page 15
               00000000 
               00000A00 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\output\debug\startup_stm32f429xx.d -o.\output\debug\startup_s
-tm32f429xx.o -I"D:\Program Files (x86)\Keil_v5\ARM\RV31\INC" -I"D:\Program File
-s (x86)\Keil_v5\ARM\CMSIS\Include" -I"D:\Program Files (x86)\Keil_v5\ARM\Inc\ST
-\STM32F4xx" --predefine="__UVISION_VERSION SETA 520" --list=.\startup_stm32f429
-xx.lst ..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\sta
-rtup_stm32f429xx.s
+Command Line: --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=interwork -
+-depend=.\output\debug\startup_stm32f429xx.d -o.\output\debug\startup_stm32f429
+xx.o -IC:\Keil_v5\ARM\RV31\INC -IC:\Keil_v5\ARM\CMSIS\Include -IC:\Keil_v5\ARM\
+Inc\ST\STM32F4xx --predefine="__UVISION_VERSION SETA 520" --list=.\startup_stm3
+2f429xx.lst ..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\ar
+m\startup_stm32f429xx.s
 
 
 
