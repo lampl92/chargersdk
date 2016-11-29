@@ -29,10 +29,12 @@ void cli_init(void)
     tinysh_add_command(&cli_mkfs_cmd);
     tinysh_add_command(&cli_mount_cmd);
     tinysh_add_command(&cli_umount_cmd);
+    tinysh_add_command(&cli_cat_cmd);
 
     /************œµÕ≥≤‚ ‘****************/
     tinysh_add_command(&cli_fatfs_cmd);
     tinysh_add_command(&cli_testxml_cmd);
+    tinysh_add_command(&cli_testxml_create_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
     
     /* add the foo command
