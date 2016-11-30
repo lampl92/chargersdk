@@ -23,7 +23,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
-#include "malloc.h"
 
 /*
  * Version number...
@@ -90,9 +89,6 @@ extern int	_mxml_vsnprintf(char *, size_t, const char *, va_list);
 #    define vsnprintf _mxml_vsnprintf
 #  endif /* !HAVE_VSNPRINTF */
 
-#define malloc(a)      mymalloc(SRAMEX,a)
-#define free(a)        myfree(SRAMEX,a)
-#define realloc(a,b)     myrealloc(SRAMEX,a,b)
 
 /*
  * End of "$Id: config.h.in 451 2014-01-04 21:50:06Z msweet $".

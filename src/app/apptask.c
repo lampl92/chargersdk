@@ -57,7 +57,7 @@ static void vTaskGUI(void *pvParameters)
 {
     while(1)
     {
-        //GUIDEMO_Main();
+        GUIDEMO_Main();
         vTaskDelay(1000);
     }
 }

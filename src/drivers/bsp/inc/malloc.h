@@ -36,7 +36,7 @@
 //mem2内存参数设定.mem2的内存池处于外部SDRAM里面
 #define MEM2_BASE               ((uint32_t)0xC0600000U)          //前面6M给LTDC用了
 #define MEM2_BLOCK_SIZE         64                              //内存块大小为64字节
-#define MEM2_MAX_SIZE           24*1024 *1024                   //最大管理内存26624K //2层帧缓冲用掉前6M,剩余26M*1024=26624K
+#define MEM2_MAX_SIZE           10*1024 *1024                   //最大管理内存26624K //2层帧缓冲用掉前6M,剩余26M*1024=26624K
                                                                 //TODO:设置26后会进入HardFault,不明所以
 #define MEM2_ALLOC_TABLE_SIZE   MEM2_MAX_SIZE/MEM2_BLOCK_SIZE   //内存表大小
 

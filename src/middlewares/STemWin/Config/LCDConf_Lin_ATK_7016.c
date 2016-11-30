@@ -113,6 +113,9 @@
 #error Virtual screens and multiple buffers are not allowed!
 #endif
 
+#define LCD_LAYER0_FRAME_BUFFER_SIZE  (3*1024*1024)
+#define LCD_LAYER1_FRAME_BUFFER_SIZE  (3*1024*1024)
+
 #define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)//0xC0000000~0xC02FFFFF
 #define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)//0xC0300000~0xC05FFFFF
 
@@ -440,10 +443,9 @@ void LCD_X_Config(void)
 #endif
 
     /*Initialize GUI Layer structure */
-//TODO 宏定义地址在调试正常后修改为mymalloc分配
-    layer_prop[0].address = LCD_LAYER0_FRAME_BUFFER;
+    layer_prop[0].address = LCD_LAYER0_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER0_FRAME_BUFFER_SIZE);
 #if (GUI_NUM_LAYERS > 1)
-    layer_prop[1].address = LCD_LAYER1_FRAME_BUFFER;
+    layer_prop[1].address = LCD_LAYER0_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER1_FRAME_BUFFER_SIZE);
 #endif
 
     /* Setting up VRam address and custom functions for CopyBuffer-, CopyRect- and FillRect operations */

@@ -46,6 +46,7 @@ void bsp_SDRAM_Init(void)
 	//所以,COUNT=64*1000*90/8192-20=683
 	
 	// COUNT=64*1000*96/8192-20=730 @192Mhz
+    // COUNT=64*1000*64/8192-20=480 @192Mhz 3分频
 	HAL_SDRAM_ProgramRefreshRate(&SDRAM_Handler,730);//设置刷新频率
 
 }

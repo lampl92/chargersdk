@@ -51,8 +51,8 @@ Purpose     : Display controller initialization
   ******************************************************************************
   */
 
+#include <stdlib.h>
 #include "GUI.h"
-#include "malloc.h"
 
 /*********************************************************************
 *
@@ -71,6 +71,7 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
+U32 aMemory[GUI_NUMBYTES / 4] __attribute__ ((at(0XC0300000)));//~0XC0AFFFFF
 /*********************************************************************
 *
 *       GUI_X_Config
@@ -83,8 +84,8 @@ void GUI_X_Config(void) {
   //
   // 32 bit aligned memory area
   //
-  U32 *aMemory = mymalloc(SRAMEX,GUI_NUMBYTES);
-  //static U32 aMemory[GUI_NUMBYTES / 4];
+  
+  //U32 *aMemory = malloc(GUI_NUMBYTES);
   //
   // Assign memory to emWin
   //

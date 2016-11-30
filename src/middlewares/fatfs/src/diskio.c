@@ -9,7 +9,6 @@
 
 #include "diskio.h"     /* FatFs lower layer API */
 #include "ff_gen_drv.h"
-#include "malloc.h"
 extern Disk_drvTypeDef  disk;
 
 /*-----------------------------------------------------------------------*/

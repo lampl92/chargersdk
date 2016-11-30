@@ -3,7 +3,7 @@
 #include "nand_diskio.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
-uint8_t *ucHeap[ configTOTAL_HEAP_SIZE ];//used by heap_4.c
+uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
 #endif
 
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
@@ -16,23 +16,6 @@ static void Error_Handler()
 
 void sys_Init(void)
 {
-/*
-*********************************************************************************************************
-*                                        内存管理初始化
-*********************************************************************************************************
-*/
-    my_mem_init(SRAMIN);
-    my_mem_init(SRAMEX);
-    my_mem_init(SRAMCCM);
-
-/*
-*********************************************************************************************************
-*                                        FreeRTOS栈初始化
-*********************************************************************************************************
-*/
-#if configAPPLICATION_ALLOCATED_HEAP == 1
-    *ucHeap = mymalloc(SRAMEX,configTOTAL_HEAP_SIZE);
-#endif
 /*
 *********************************************************************************************************
 *                                        FATFS初始化

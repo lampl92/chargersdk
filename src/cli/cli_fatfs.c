@@ -132,7 +132,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     uint32_t byteswritten, bytesread;                     /* File write/read counts */
     uint8_t wtext[200] = "This is z working with FatFs"; /* File write buffer */
     uint8_t *rtext;                                   /* File read buffer */
-    rtext = mymalloc(SRAMEX, 200);
+    rtext = malloc(200);
     memset(rtext, 0, 200);
     /*##-4- Create and Open a new text file object with write access #####*/
     if(f_open(&MyFile, "STM32.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
@@ -183,7 +183,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
                     f_close(&MyFile);
                     taskENTER_CRITICAL();
                     printf("%s\n", rtext);
-                    myfree(SRAMEX, rtext);
+                    free(rtext);
                     taskEXIT_CRITICAL();
                     /*##-10- Compare read data with the expected data ############*/
 //                    if ((bytesread != byteswritten))
@@ -209,7 +209,7 @@ static void cli_cat_fnt(int argc, char **argv)
 
     uint8_t *rtext;                                   /* File read buffer */
     taskENTER_CRITICAL();
-    rtext = mymalloc(SRAMEX, 2000);
+    rtext = malloc(2000);
     memset(rtext, 0, 2000);
     if(argc == 2)
     {
@@ -236,16 +236,14 @@ static void cli_cat_fnt(int argc, char **argv)
                 f_close(&MyFile);
 
                 printf("%s\n", rtext);
-                myfree(SRAMEX, rtext);
-
-
+                free(rtext);
             }
         }
     }
     else
     {
         printf("no file input\n");
-        myfree(SRAMEX, rtext);
+        free(rtext);
     }
     taskEXIT_CRITICAL();
 }

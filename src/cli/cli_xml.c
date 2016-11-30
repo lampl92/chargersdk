@@ -10,15 +10,35 @@ static void cli_testxml_create_fnt(int argc, char **argv)
     uint32_t len = 0;
     ezxml_t xmlroot, xmlchild;
     xmlroot = ezxml_new("充电记录");
-    xmlchild = ezxml_add_child(xmlroot, "充电时间", 4);
+    xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
     ezxml_set_txt(xmlchild, "2016.11.29");
+    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
+    ezxml_set_txt(xmlchild, "100.25");
+        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
+    ezxml_set_txt(xmlchild, "2016.11.29");
+    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
+    ezxml_set_txt(xmlchild, "100.25");
+        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
+    ezxml_set_txt(xmlchild, "2016.11.29");
+    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
+    ezxml_set_txt(xmlchild, "100.25");
+        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
+    ezxml_set_txt(xmlchild, "2016.11.29");
+    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
+    ezxml_set_txt(xmlchild, "100.25");
+        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
+    ezxml_set_txt(xmlchild, "2016.11.29");
+    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
+    ezxml_set_txt(xmlchild, "100.25");
     xml = ezxml_toxml(xmlroot);
     f_open(&xmlfile, "chargelog.xml", FA_CREATE_ALWAYS | FA_WRITE);
     f_write (&xmlfile, xml, strlen(xml), &len);
     f_close(&xmlfile);
+    ezxml_free(xmlroot);
     free(xml);
 #endif
-    FIL *fp;
+#if 1
+    FIL fp;
     //mxml_node_t *tree;
     mxml_node_t *xml;    /* <?xml ... ?> */
     mxml_node_t *data;   /* <data> */
@@ -52,10 +72,12 @@ static void cli_testxml_create_fnt(int argc, char **argv)
 
 
 
-    f_open(fp,"testmxml.xml", FA_CREATE_ALWAYS | FA_WRITE);
-    mxmlSaveFile(xml, fp, MXML_NO_CALLBACK);
-    f_close(fp);
-
+    f_open(&fp,"testmxml.xml", FA_CREATE_ALWAYS | FA_WRITE);
+    mxmlSaveFile(xml, &fp, MXML_NO_CALLBACK);
+    f_close(&fp);
+    mxmlDelete(xml);
+    
+    #endif
 }
 
 

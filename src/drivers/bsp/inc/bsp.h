@@ -76,7 +76,6 @@
 #include "bsp_rtc.h"
 //#include "bsp_ltdc.h"
 #include "bsp_user_lib.h"
-#include "malloc.h"
 #include "bsp_nand_hw.h"
 #include "bsp_nand_ftl.h"
 

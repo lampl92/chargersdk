@@ -3,9 +3,8 @@
 /* (C)ChaN, 2014                                                          */
 /*------------------------------------------------------------------------*/
 
-
+#include <stdlib.h>
 #include "../ff.h"
-#include "malloc.h"
 
 #if _FS_REENTRANT
 /*------------------------------------------------------------------------*/
@@ -133,8 +132,7 @@ void* ff_memalloc (	/* Returns pointer to the allocated memory block */
 	UINT msize		/* Number of bytes to allocate */
 )
 {
-	//return malloc(msize);	/* Allocate a new memory block with POSIX API */
-    return (void*)mymalloc(SRAMEX,msize);
+	return malloc(msize);	/* Allocate a new memory block with POSIX API */
 }
 
 
@@ -146,8 +144,7 @@ void ff_memfree (
 	void* mblock	/* Pointer to the memory block to free */
 )
 {
-	//free(mblock);	/* Discard the memory block with POSIX API */
-    myfree(SRAMEX,mblock);
+	free(mblock);	/* Discard the memory block with POSIX API */
 }
 
 #endif
