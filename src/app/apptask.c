@@ -110,7 +110,7 @@ void AppTaskCreate (void)
 {
     xTaskCreate( vTaskCLI,       /* 任务函数  */
                  "vTaskCLI",         /* 任务名    */
-                 512,                   /* 任务栈大小，单位word，也就是4字节 */
+                 1024,                   /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  1,                     /* 任务优先级*/
                  &xHandleTaskCLI );  /* 任务句柄  */
