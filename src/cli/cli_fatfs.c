@@ -143,8 +143,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     else
     {
         /*##-5- Write data to the text file ################################*/
-        res = f_write(&MyFile, wtext, sizeof(wtext), (void *)&byteswritten);
-
+        res = f_write(&MyFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
 //        if((byteswritten == 0) || (res != FR_OK))
 //        {
 //            /* 'STM32.TXT' file Write or EOF Error */
@@ -152,7 +151,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
 //        }
 //        else
         {
-        f_putc('A',&MyFile);
+            f_putc('A',&MyFile);
             f_putc('A',&MyFile);
             f_putc('A',&MyFile);
             f_putc('A',&MyFile);
