@@ -666,8 +666,8 @@ static void LCD_LL_Init(void)
 
     lcdltdc.pwidth = XSIZE_PHYS;          //面板宽度,单位:像素
     lcdltdc.pheight = YSIZE_PHYS;          //面板高度,单位:像素
-    lcdltdc.hsw = 1;               //水平同步宽度
-    lcdltdc.vsw = 1;                //垂直同步宽度
+    lcdltdc.hsw = 40;               //水平同步宽度
+    lcdltdc.vsw = 20;                //垂直同步宽度
     lcdltdc.hbp = 46;              //水平后廊
     lcdltdc.vbp = 23;               //垂直后廊
     lcdltdc.hfp = 210;              //水平前廊
@@ -698,10 +698,10 @@ static void LCD_LL_Init(void)
     /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAIR = 396/2 = 198 MHz */
     /* LTDC clock frequency = PLLLCDCLK / LTDC_PLLSAI_DIVR_4 = 198/4 = 49.5 MHz */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-    PeriphClkInitStruct.PLLSAI.PLLSAIN = 368;
+    PeriphClkInitStruct.PLLSAI.PLLSAIN = 320;
     PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
     PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);//设置像素时钟  33MHz(26.4 ~ 46.8MHz)
+    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);//设置像素时钟  46MHz(26.4 ~ 46.8MHz)
 
     /* Polarity */
     hltdc.Init.HSPolarity = LTDC_HSPOLARITY_AL;
