@@ -17,11 +17,11 @@ static void Error_Handler()
 
 void sys_Init(void)
 {
-    
+#if configAPPLICATION_ALLOCATED_HEAP == 0
     my_mem_init(SRAMIN);		    //初始化内部内存池
 	my_mem_init(SRAMEX);		    //初始化外部内存池
 	my_mem_init(SRAMCCM);		    //初始化CCM内存池
-    
+#endif
 /*
 *********************************************************************************************************
 *                                        FATFS初始化

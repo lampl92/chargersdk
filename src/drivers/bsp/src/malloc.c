@@ -178,20 +178,20 @@ void *mycalloc(uint8_t memx, size_t count, size_t size)
   }
   return p;
 }
-/* malloc / free hookups */
-void *malloc(size_t size)
-{
-    return(mymalloc(SRAMEX, size ));
-}
-void free(void *ptr)
-{
-    myfree(SRAMEX, ptr );
-}
-void *realloc(void *ptr, size_t size)
-{
-    return(myrealloc(SRAMEX, ptr, size ));
-}
-void *calloc(size_t nelem, size_t elsize)
-{
-    return(mycalloc(SRAMEX, nelem, elsize ));
-}
+///* malloc / free hookups */
+//void *malloc(size_t size)
+//{
+//    return(mymalloc(SRAMEX, size ));
+//}
+//void free(void *ptr)
+//{
+//    myfree(SRAMEX, ptr );
+//}
+//void *realloc(void *ptr, size_t size)
+//{
+//    return(myrealloc(SRAMEX, ptr, size ));
+//}
+//void *calloc(size_t nelem, size_t elsize)
+//{
+//    return(mycalloc(SRAMEX, nelem, elsize ));
+//}
