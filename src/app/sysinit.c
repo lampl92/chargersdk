@@ -1,9 +1,10 @@
 #include "includes.h"
 #include "ff_gen_drv.h"
 #include "nand_diskio.h"
+#include "malloc.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
-uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
+uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0300000)));//used by heap_4.c
 #endif
 
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
@@ -16,6 +17,11 @@ static void Error_Handler()
 
 void sys_Init(void)
 {
+    
+    my_mem_init(SRAMIN);		    //初始化内部内存池
+	my_mem_init(SRAMEX);		    //初始化外部内存池
+	my_mem_init(SRAMCCM);		    //初始化CCM内存池
+    
 /*
 *********************************************************************************************************
 *                                        FATFS初始化

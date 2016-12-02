@@ -1,4 +1,5 @@
-#include "malloc.h"	   
+#include "malloc.h"
+#include "includes.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32开发板
@@ -165,15 +166,32 @@ void *myrealloc(u8 memx,void *ptr,u32 size)
         return (void*)((u32)mallco_dev.membase[memx]+offset);  				//返回新内存首地址
     }  
 }
+void *mycalloc(uint8_t memx, size_t count, size_t size)
+{
+  void *p;
 
-
-
-
-
-
-
-
-
-
-
-
+  /* allocate 'count' objects of size 'size' */
+  p = mymalloc(memx, count * size);
+  if (p) {
+    /* zero the memory */
+    memset(p, 0, count * size);
+  }
+  return p;
+}
+/* malloc / free hookups */
+void *malloc(size_t size)
+{
+    return(mymalloc(SRAMEX, size ));
+}
+void free(void *ptr)
+{
+    myfree(SRAMEX, ptr );
+}
+void *realloc(void *ptr, size_t size)
+{
+    return(myrealloc(SRAMEX, ptr, size ));
+}
+void *calloc(size_t nelem, size_t elsize)
+{
+    return(mycalloc(SRAMEX, nelem, elsize ));
+}

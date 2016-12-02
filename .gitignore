@@ -5,3 +5,4 @@ src/drivers/bsp/src/not use/
 *.h~
 *.c#
 *.TMP
+build/Keil/chargersdk.bin

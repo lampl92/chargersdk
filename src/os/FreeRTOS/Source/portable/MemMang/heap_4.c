@@ -507,24 +507,7 @@ void *pvPortCalloc(size_t count, size_t size)
   }
   return p;
 }
-void *realloc(void *ptr, size_t nbytes) __attribute__((alias("pvPortRealloc")));
-void *calloc(size_t count, size_t nbytes) __attribute__((alias("pvPortCalloc")));
-void *malloc(size_t nbytes) __attribute__((alias("pvPortMalloc")));
-void free(void *ptr) __attribute__((alias("vPortFree")));
-///* malloc / free hookups */
-//void *malloc(size_t size)
-//{
-//    return(pvPortMalloc( size ));
-//}
-//void free(void *ptr)
-//{
-//    vPortFree( ptr );
-//}
-//void *realloc(void *ptr, size_t size)
-//{
-//    return(pvPortRealloc( ptr, size ));
-//}
-//void *calloc(size_t nelem, size_t elsize)
-//{
-//    return(pvPortCalloc( nelem, elsize ));
-//}
+//void *realloc(void *ptr, size_t nbytes) __attribute__((alias("pvPortRealloc")));
+//void *calloc(size_t count, size_t nbytes) __attribute__((alias("pvPortCalloc")));
+//void *malloc(size_t nbytes) __attribute__((alias("pvPortMalloc")));
+//void free(void *ptr) __attribute__((alias("vPortFree")));

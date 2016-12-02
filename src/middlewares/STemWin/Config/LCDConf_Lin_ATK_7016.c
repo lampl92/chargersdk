@@ -77,8 +77,8 @@
 //#define LCD_SWAP_XY  1
 //#define LCD_MIRROR_Y 1
 
-#define XSIZE_PHYS 1024
-#define YSIZE_PHYS 600
+#define XSIZE_PHYS 800
+#define YSIZE_PHYS 480
 
 #define NUM_BUFFERS  3 // Number of multiple buffers to be used
 #define NUM_VSCREENS 1 // Number of virtual screens to be used
@@ -445,7 +445,7 @@ void LCD_X_Config(void)
     /*Initialize GUI Layer structure */
     layer_prop[0].address = LCD_LAYER0_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER0_FRAME_BUFFER_SIZE);
 #if (GUI_NUM_LAYERS > 1)
-    layer_prop[1].address = LCD_LAYER0_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER1_FRAME_BUFFER_SIZE);
+    layer_prop[1].address = LCD_LAYER1_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER1_FRAME_BUFFER_SIZE);
 #endif
 
     /* Setting up VRam address and custom functions for CopyBuffer-, CopyRect- and FillRect operations */
