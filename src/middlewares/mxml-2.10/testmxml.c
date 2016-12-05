@@ -25,14 +25,6 @@
 
 #include "config.h"
 #include "mxml.h"
-#ifndef WIN32
-#  include <unistd.h>
-#endif /* !WIN32 */
-#include <fcntl.h>
-#ifndef O_BINARY
-#  define O_BINARY 0
-#endif /* !O_BINARY */
-
 
 /*
  * Globals...
@@ -55,12 +47,14 @@ const char	*whitespace_cb(mxml_node_t *node, int where);
  */
 
 int					/* O - Exit status */
-main(int  argc,				/* I - Number of command-line args */
+testmxml_entry(int  argc,				/* I - Number of command-line args */
      char *argv[])			/* I - Command-line args */
 {
   int			i;		/* Looping var */
-  FILE			*fp;		/* File to read */
-  int			fd;		/* File descriptor */
+  FIL			fil;		/* File to read */
+  FIL           fstdout2xml;
+  FIL           fstderr2xml;
+  FRESULT res;
   mxml_node_t		*tree,		/* XML tree */
 			*node;		/* Node which should be in test.xml */
   mxml_index_t		*ind;		/* XML index */
@@ -456,7 +450,7 @@ main(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     tree = mxmlLoadString(NULL, argv[1], MXML_NO_CALLBACK);
-  else if ((fp = fopen(argv[1], "rb")) == NULL)
+  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
   {
     perror(argv[1]);
     return (1);
@@ -467,9 +461,9 @@ main(int  argc,				/* I - Number of command-line args */
     * Read the file...
     */
 
-    tree = mxmlLoadFile(NULL, fp, MXML_NO_CALLBACK);
+    tree = mxmlLoadFile(NULL, &fil, MXML_NO_CALLBACK);
 
-    fclose(fp);
+    f_close(&fil);
   }
 
   if (!tree)
@@ -497,7 +491,7 @@ main(int  argc,				/* I - Number of command-line args */
     if (node->type != MXML_TEXT)
     {
       fputs("No child node of group/option/keyword.\n", stderr);
-      mxmlSaveFile(tree, stderr, MXML_NO_CALLBACK);
+      //mxmlSaveFile(tree, &fstderr2xml, MXML_NO_CALLBACK);
       mxmlDelete(tree);
       return (1);
     }
@@ -518,7 +512,7 @@ main(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     tree = mxmlLoadString(NULL, argv[1], type_cb);
-  else if ((fp = fopen(argv[1], "rb")) == NULL)
+  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
   {
     perror(argv[1]);
     return (1);
@@ -529,9 +523,9 @@ main(int  argc,				/* I - Number of command-line args */
     * Read the file...
     */
 
-    tree = mxmlLoadFile(NULL, fp, type_cb);
+    tree = mxmlLoadFile(NULL, &fil, type_cb);
 
-    fclose(fp);
+    f_close(&fil);
   }
 
   if (!tree)
@@ -567,7 +561,7 @@ main(int  argc,				/* I - Number of command-line args */
   * Print the XML tree...
   */
 
-  mxmlSaveFile(tree, stdout, whitespace_cb);
+  //mxmlSaveFile(tree, &fstdout2xml, whitespace_cb);
 
  /*
   * Save the XML tree to a string and print it...
@@ -577,9 +571,9 @@ main(int  argc,				/* I - Number of command-line args */
   {
     if (argc == 3)
     {
-      fp = fopen(argv[2], "w");
-      fputs(buffer, fp);
-      fclose(fp);
+      res = f_open(&fil, argv[2], FA_OPEN_ALWAYS | FA_WRITE);
+      f_puts(buffer, &fil);
+      f_close(&fil);
     }
   }
 
@@ -590,58 +584,6 @@ main(int  argc,				/* I - Number of command-line args */
   mxmlDelete(tree);
 
  /*
-  * Read from/write to file descriptors...
-  */
-
-  if (argv[1][0] != '<')
-  {
-   /*
-    * Open the file again...
-    */
-
-    if ((fd = open(argv[1], O_RDONLY | O_BINARY)) < 0)
-    {
-      perror(argv[1]);
-      return (1);
-    }
-
-   /*
-    * Read the file...
-    */
-
-    tree = mxmlLoadFd(NULL, fd, type_cb);
-
-    close(fd);
-
-   /*
-    * Create filename.xmlfd...
-    */
-
-    snprintf(buffer, sizeof(buffer), "%sfd", argv[1]);
-
-    if ((fd = open(buffer, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666)) < 0)
-    {
-      perror(buffer);
-      mxmlDelete(tree);
-      return (1);
-    }
-
-   /*
-    * Write the file...
-    */
-
-    mxmlSaveFd(tree, fd, whitespace_cb);
-
-    close(fd);
-
-   /*
-    * Delete the tree...
-    */
-
-    mxmlDelete(tree);
-  }
-
- /*
   * Test SAX methods...
   */
 
@@ -649,7 +591,7 @@ main(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     mxmlSAXLoadString(NULL, argv[1], type_cb, sax_cb, NULL);
-  else if ((fp = fopen(argv[1], "rb")) == NULL)
+  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
   {
     perror(argv[1]);
     return (1);
@@ -660,9 +602,9 @@ main(int  argc,				/* I - Number of command-line args */
     * Read the file...
     */
 
-    mxmlSAXLoadFile(NULL, fp, type_cb, sax_cb, NULL);
+    mxmlSAXLoadFile(NULL, &fil, type_cb, sax_cb, NULL);
 
-    fclose(fp);
+    f_close(&fil);
   }
 
   if (!strcmp(argv[1], "test.xml"))
