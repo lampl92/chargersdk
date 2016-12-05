@@ -3,41 +3,8 @@
 
 static void cli_testxml_create_fnt(int argc, char **argv)
 {
-#if 0
-    char *xml;
-    FIL xmlfile;
-    uint32_t len = 0;
-    ezxml_t xmlroot, xmlchild;
-    xmlroot = ezxml_new("充电记录");
-    xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
-    ezxml_set_txt(xmlchild, "2016.11.29");
-    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
-    ezxml_set_txt(xmlchild, "100.25");
-        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
-    ezxml_set_txt(xmlchild, "2016.11.29");
-    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
-    ezxml_set_txt(xmlchild, "100.25");
-        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
-    ezxml_set_txt(xmlchild, "2016.11.29");
-    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
-    ezxml_set_txt(xmlchild, "100.25");
-        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
-    ezxml_set_txt(xmlchild, "2016.11.29");
-    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
-    ezxml_set_txt(xmlchild, "100.25");
-        xmlchild = ezxml_add_child(xmlroot, "充电时间", 0);
-    ezxml_set_txt(xmlchild, "2016.11.29");
-    xmlchild = ezxml_add_child(xmlroot, "充电金额", 0);
-    ezxml_set_txt(xmlchild, "100.25");
-    xml = ezxml_toxml(xmlroot);
-    f_open(&xmlfile, "chargelog.xml", FA_CREATE_ALWAYS | FA_WRITE);
-    f_write (&xmlfile, xml, strlen(xml), &len);
-    f_close(&xmlfile);
-    ezxml_free(xmlroot);
-    free(xml);
-#endif
-#if 1
     FIL fp;
+    int i;
     //mxml_node_t *tree;
     mxml_node_t *xml;    /* <?xml ... ?> */
     mxml_node_t *data;   /* <data> */
@@ -47,46 +14,50 @@ static void cli_testxml_create_fnt(int argc, char **argv)
     xml = mxmlNewXML("1.0");
 
     data = mxmlNewElement(xml, "data");
+    for (i = 0; i < 100; i++)
+    {
+        node = mxmlNewElement(data, "node");
+        mxmlNewText(node, 0, "val1");
+        node = mxmlNewElement(data, "node");
+        mxmlNewText(node, 0, "val2");
+        node = mxmlNewElement(data, "node");
+        mxmlNewText(node, 0, "val3");
 
-    node = mxmlNewElement(data, "node");
-    mxmlNewText(node, 0, "val1");
-    node = mxmlNewElement(data, "node");
-    mxmlNewText(node, 0, "val2");
-    node = mxmlNewElement(data, "node");
-    mxmlNewText(node, 0, "val3");
+        group = mxmlNewElement(data, "group");
 
-    group = mxmlNewElement(data, "group");
+        node = mxmlNewElement(group, "node");
+        mxmlNewText(node, 0, "val4");
+        node = mxmlNewElement(group, "node");
+        mxmlNewText(node, 0, "val5");
+        node = mxmlNewElement(group, "node");
+        mxmlNewText(node, 0, "val6");
 
-    node = mxmlNewElement(group, "node");
-    mxmlNewText(node, 0, "val4");
-    node = mxmlNewElement(group, "node");
-    mxmlNewText(node, 0, "val5");
-    node = mxmlNewElement(group, "node");
-    mxmlNewText(node, 0, "val6");
+        node = mxmlNewElement(data, "node");
+        mxmlNewText(node, 0, "val7");
+        node = mxmlNewElement(data, "node");
+        mxmlNewText(node, 0, "val8");
+        if(i % 10 == 0)
+        {
+            printf("i = %d\n", i);
+        }
+    }
 
-    node = mxmlNewElement(data, "node");
-    mxmlNewText(node, 0, "val7");
-    node = mxmlNewElement(data, "node");
-    mxmlNewText(node, 0, "val8");
-
-
-
-    f_open(&fp,"testmxml.xml", FA_CREATE_ALWAYS | FA_WRITE);
+    f_open(&fp, "testmxml.xml", FA_CREATE_ALWAYS | FA_WRITE);
     mxmlSaveFile(xml, &fp, MXML_NO_CALLBACK);
     f_close(&fp);
     mxmlDelete(xml);
-    
-    #endif
+
 }
-
-
-static void cli_testxml_fnt(int argc, char **argv)
+extern int testmxml_entry(int, char **);
+static void cli_testmxml_fnt(int argc, char **argv)
 {
-
+    taskENTER_CRITICAL();
+    testmxml_entry(argc, argv);
+    taskEXIT_CRITICAL();
 }
 
-tinysh_cmd_t cli_testxml_cmd = {0, "testxml", "xml解析测试", "[args]",
-                                cli_testxml_fnt, 0, 0, 0
+tinysh_cmd_t cli_testxml_cmd = {0, "testmxml", "xml解析测试", "[args]",
+                                cli_testmxml_fnt, 0, 0, 0
                                };
 
 tinysh_cmd_t cli_testxml_create_cmd = {0, "testxmlcreate", "xml创建测试", "[args]",

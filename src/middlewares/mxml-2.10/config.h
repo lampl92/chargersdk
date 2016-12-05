@@ -24,6 +24,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+#undef DEBUG
+
 /*
  * Version number...
  */

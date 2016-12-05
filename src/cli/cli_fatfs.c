@@ -142,109 +142,74 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     }
     else
     {
-        /*##-5- Write data to the text file ################################*/
+
         res = f_write(&MyFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
-//        if((byteswritten == 0) || (res != FR_OK))
-//        {
-//            /* 'STM32.TXT' file Write or EOF Error */
-//            Error_Handler();
-//        }
-//        else
+
+        f_close(&MyFile);
+
+        if(f_open(&MyFile, "STM32.TXT", FA_READ) != FR_OK)
         {
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            f_putc('A',&MyFile);
-            /*##-6- Close the open text file #################################*/
-            f_close(&MyFile);
+            Error_Handler();
+        }
+        else
+        {
+            res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
 
-            /*##-7- Open the text file object with read access ###############*/
-            if(f_open(&MyFile, "STM32.TXT", FA_READ) != FR_OK)
             {
-                /* 'STM32.TXT' file Open for read Error */
-                Error_Handler();
-            }
-            else
-            {
-                /*##-8- Read data from the text file ###########################*/
-                res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
-
-                //if((bytesread == 0) || (res != FR_OK))
-                {
-                    /* 'STM32.TXT' file Read or EOF Error */
-                    //Error_Handler();
-                }
-                //else
-                {
-                    /*##-9- Close the open text file #############################*/
-                    f_close(&MyFile);
-                    taskENTER_CRITICAL();
-                    printf("%s\n", rtext);
-                    free(rtext);
-                    taskEXIT_CRITICAL();
-                    /*##-10- Compare read data with the expected data ############*/
-//                    if ((bytesread != byteswritten))
-//                    {
-//                        /* Read data is different from the expected data */
-//                        Error_Handler();
-//                    }
-//                    else
-//                    {
-//                        /* Success of the demo: no error occurrence */
-//                        //BSP_LED_On(LED3);
-//                    }
-                }
+                f_close(&MyFile);
+                taskENTER_CRITICAL();
+                printf("%s\n", rtext);
+                free(rtext);
+                taskEXIT_CRITICAL();
             }
         }
     }
-
 }
+
+
 static void cli_cat_fnt(int argc, char **argv)
 {
     FRESULT res;                                          /* FatFs function common result code */
-    uint32_t bytesread;                     /* File write/read counts */
-
+    FILINFO fno;
     uint8_t *rtext;                                   /* File read buffer */
     taskENTER_CRITICAL();
-    rtext = malloc(2000);
-    memset(rtext, 0, 2000);
     if(argc == 2)
     {
-        /*##-7- Open the text file object with read access ###############*/
-        if(f_open(&MyFile, argv[1], FA_READ) != FR_OK)
+        res = f_stat(argv[1], &fno);
+        switch(res)
         {
-            /* 'STM32.TXT' file Open for read Error */
-            //Error_Handler();
+            case FR_OK:
+                rtext = (uint8_t *)calloc(fno.fsize, sizeof(uint8_t));
+                break;
+            default:
+                return;
+        }
+    }
+
+    if(res == FR_OK)
+    {
+        if((res = f_open(&MyFile, argv[1], FA_READ)) != FR_OK)
+        {
             printf("Error file\n");
         }
         else
         {
-            /*##-8- Read data from the text file ###########################*/
-            res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
+            f_gets((TCHAR *)rtext, fno.fsize, &MyFile);
 
-            if((bytesread == 0) || (res != FR_OK))
+            if(f_eof(&MyFile) == EOF)
             {
-                /* 'STM32.TXT' file Read or EOF Error */
-                Error_Handler();
+                printf("end of the file.\n");
             }
-            else
-            {
-                /*##-9- Close the open text file #############################*/
-                f_close(&MyFile);
+            f_close(&MyFile);
 
-                printf("%s\n", rtext);
-                free(rtext);
-            }
+            printf("%s\n", rtext);
         }
     }
     else
     {
         printf("no file input\n");
-        free(rtext);
     }
+    free(rtext);
     taskEXIT_CRITICAL();
 }
 

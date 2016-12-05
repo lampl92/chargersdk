@@ -530,7 +530,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
                int  *encoding)		/* IO - Encoding */
 {
   int	ch,				/* Character from file */
-	temp;				/* Temporary character */
+	temp,				/* Temporary character */
+    iseof;
   FIL	*fp;				/* Pointer to file */
 
  /*
@@ -538,9 +539,10 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
   */
 
   fp = (FIL *)p;
-    ch = f_eof(fp);
+  f_gets((TCHAR *)&ch, 1, fp);
+  iseof = f_eof(fp);
 
-  if (ch == EOF)
+  if (iseof == EOF)
     return (EOF);
 
   switch (*encoding)
@@ -571,7 +573,7 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * UTF-16 big-endian BOM?
 	  */
 
-        ch = f_eof(fp); 
+        f_gets((TCHAR *)&ch, 1, fp); 
 	  if (ch != 0xff)
 	    return (EOF);
 
@@ -585,7 +587,7 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * UTF-16 little-endian BOM?
 	  */
 
-        ch = f_eof(fp); 
+        f_gets((TCHAR *)&ch, 1, fp); 
 	  if (ch != 0xfe)
 	    return (EOF);
 
@@ -598,7 +600,9 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Two-byte value...
 	  */
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if (iseof == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x1f) << 6) | (temp & 0x3f);
@@ -614,13 +618,15 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Three-byte value...
 	  */
-
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if (iseof == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x0f) << 6) | (temp & 0x3f);
-
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if (iseof == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
@@ -643,18 +649,21 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Four-byte value...
 	  */
-
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if ((iseof == EOF) || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x07) << 6) | (temp & 0x3f);
-
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if ((iseof == EOF) || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
-
-	  if ((temp = f_eof(fp)) == EOF || (temp & 0xc0) != 0x80)
+      f_gets((TCHAR *)&temp, 1, fp);
+      iseof = f_eof(fp);
+	  if (iseof == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
@@ -673,8 +682,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
        /*
         * Read UTF-16 big-endian char...
 	*/
-
-	ch = (ch << 8) | f_eof(fp);
+    f_gets((TCHAR *)&ch, 1, fp);
+	ch = (ch << 8) | ch;
 
 	if (mxml_bad_char(ch))
 	{
@@ -688,8 +697,10 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * Multi-word UTF-16 char...
 	  */
 
-          int lch = f_eof(fp);
-          lch = (lch << 8) | f_eof(fp);
+          int lch,lchtemp;
+          f_gets((TCHAR *)&lch, 1, fp);
+          f_gets((TCHAR *)&lchtemp, 1, fp);
+          lch = (lch << 8) | lchtemp;
 
           if (lch < 0xdc00 || lch >= 0xdfff)
 	    return (EOF);
@@ -702,8 +713,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
        /*
         * Read UTF-16 little-endian char...
 	*/
-
-	ch |= (f_eof(fp) << 8);
+    f_gets((TCHAR *)&iseof, 1, fp);
+	ch |= (iseof << 8);
 
         if (mxml_bad_char(ch))
 	{
@@ -717,8 +728,10 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * Multi-word UTF-16 char...
 	  */
 
-          int lch = f_eof(fp);
-          lch |= (f_eof(fp) << 8);
+          int lch,lchtemp;
+          f_gets((TCHAR *)&lch, 1, fp);
+          f_gets((TCHAR *)&lchtemp, 1, fp);
+          lch |= (lchtemp << 8);
 
           if (lch < 0xdc00 || lch >= 0xdfff)
 	    return (EOF);
