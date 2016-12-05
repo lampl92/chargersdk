@@ -77,8 +77,8 @@
 //#define LCD_SWAP_XY  1
 //#define LCD_MIRROR_Y 1
 
-#define XSIZE_PHYS 800
-#define YSIZE_PHYS 480
+#define XSIZE_PHYS 1024
+#define YSIZE_PHYS 600
 
 #define NUM_BUFFERS  3 // Number of multiple buffers to be used
 #define NUM_VSCREENS 1 // Number of virtual screens to be used
