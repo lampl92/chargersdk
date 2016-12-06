@@ -100,5 +100,13 @@ DRESULT disk_ioctl (
 //15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2)     
 DWORD get_fattime (void)
 {
-  return 0;
+	/* ???????,?????????????. ?????2013-01-01 00:00:00 */
+    
+
+	return	  ((DWORD)(2013 - 1980) << 25)	/* Year = 2013 */
+			| ((DWORD)1 << 21)				/* Month = 1 */
+			| ((DWORD)1 << 16)				/* Day_m = 1*/
+			| ((DWORD)0 << 11)				/* Hour = 0 */
+			| ((DWORD)0 << 5)				/* Min = 0 */
+			| ((DWORD)0 >> 1);				/* Sec = 0 */
 }
