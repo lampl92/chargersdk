@@ -52,9 +52,6 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
 {
   int			i;		/* Looping var */
   FIL			fil;		/* File to read */
-  FIL           fstdout2xml;
-  FIL           fstderr2xml;
-  FRESULT res;
   mxml_node_t		*tree,		/* XML tree */
 			*node;		/* Node which should be in test.xml */
   mxml_index_t		*ind;		/* XML index */
@@ -450,7 +447,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     tree = mxmlLoadString(NULL, argv[1], MXML_NO_CALLBACK);
-  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
+  else if ((f_open(&fil, argv[1], FA_READ)) != FR_OK)
   {
     perror(argv[1]);
     return (1);
@@ -491,7 +488,9 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
     if (node->type != MXML_TEXT)
     {
       fputs("No child node of group/option/keyword.\n", stderr);
+        
       //mxmlSaveFile(tree, &fstderr2xml, MXML_NO_CALLBACK);
+      
       mxmlDelete(tree);
       return (1);
     }
@@ -512,7 +511,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     tree = mxmlLoadString(NULL, argv[1], type_cb);
-  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
+  else if (f_open(&fil, argv[1], FA_READ) != FR_OK)
   {
     perror(argv[1]);
     return (1);
@@ -560,9 +559,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
  /*
   * Print the XML tree...
   */
-
-  //mxmlSaveFile(tree, &fstdout2xml, whitespace_cb);
-
+  //mxmlSaveFile(tree, stdout, whitespace_cb);
  /*
   * Save the XML tree to a string and print it...
   */
@@ -571,9 +568,10 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
   {
     if (argc == 3)
     {
-      res = f_open(&fil, argv[2], FA_OPEN_ALWAYS | FA_WRITE);
+      f_open(&fil, argv[2], FA_OPEN_ALWAYS | FA_WRITE);
       f_puts(buffer, &fil);
       f_close(&fil);
+      printf("%s", buffer);
     }
   }
 
@@ -591,7 +589,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
 
   if (argv[1][0] == '<')
     mxmlSAXLoadString(NULL, argv[1], type_cb, sax_cb, NULL);
-  else if ((res = f_open(&fil, argv[1], FA_READ)) != FR_OK)
+  else if ((f_open(&fil, argv[1], FA_READ)) != FR_OK)
   {
     perror(argv[1]);
     return (1);

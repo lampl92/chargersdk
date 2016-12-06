@@ -128,7 +128,6 @@ static void cli_umount_fnt(int argc, char **argv)
 
 static void cli_testfatfs_fnt(int argc, char **argv)
 {
-    FRESULT res;                                          /* FatFs function common result code */
     uint32_t byteswritten, bytesread;                     /* File write/read counts */
     uint8_t wtext[200] = "This is z working with FatFs"; /* File write buffer */
     uint8_t *rtext;                                   /* File read buffer */
@@ -143,7 +142,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     else
     {
 
-        res = f_write(&MyFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
+        f_write(&MyFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
 
         f_close(&MyFile);
 
@@ -153,7 +152,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
         }
         else
         {
-            res = f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
+            f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
 
             {
                 f_close(&MyFile);
@@ -166,50 +165,45 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     }
 }
 
-
+extern int f_getc( FIL *fp);
 static void cli_cat_fnt(int argc, char **argv)
 {
     FRESULT res;                                          /* FatFs function common result code */
-    FILINFO fno;
-    uint8_t *rtext;                                   /* File read buffer */
+    int c;
     taskENTER_CRITICAL();
+
     if(argc == 2)
     {
-        res = f_stat(argv[1], &fno);
-        switch(res)
-        {
-            case FR_OK:
-                rtext = (uint8_t *)calloc(fno.fsize, sizeof(uint8_t));
-                break;
-            default:
-                return;
-        }
-    }
-
-    if(res == FR_OK)
-    {
-        if((res = f_open(&MyFile, argv[1], FA_READ)) != FR_OK)
+        res = f_open(&MyFile, argv[1], FA_READ);
+        if(res != FR_OK)
         {
             printf("Error file\n");
         }
         else
         {
-            f_gets((TCHAR *)rtext, fno.fsize, &MyFile);
-
-            if(f_eof(&MyFile) == EOF)
+            c = f_getc(&MyFile);
+            while(c != EOF)
             {
-                printf("end of the file.\n");
+                printf("%c", c);
+                c = f_getc(&MyFile);
             }
-            f_close(&MyFile);
-
-            printf("%s\n", rtext);
+            if (f_eof(&MyFile) != 0)
+            {
+                printf("\n End of file reached.\n");
+            }
+            else
+            {
+                printf("\n Something went wrong.\n");
+            }
         }
     }
     else
     {
         printf("no file input\n");
     }
-    free(rtext);
+
+
+
     taskEXIT_CRITICAL();
 }
 

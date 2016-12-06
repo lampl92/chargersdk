@@ -17,9 +17,15 @@
 /*
  * Include necessary headers...
  */
-#include "stm32f4xx.h"
+
 #include "ff.h"
+#include "ff_ex.h"
 #include "mxml-private.h"
+
+
+#define FILE    FIL
+#define getc    f_getc
+#define putc    f_putc
 
 
 /*
@@ -37,20 +43,13 @@
 
 #define mxml_bad_char(ch) ((ch) < ' ' && (ch) != '\n' && (ch) != '\r' && (ch) != '\t')
 
+
 /*
  * Types and structures...
  */
 
 typedef int (*_mxml_getc_cb_t)(void *, int *);
 typedef int (*_mxml_putc_cb_t)(int, void *);
-
-typedef struct _mxml_fdbuf_s		/**** File descriptor buffer ****/
-{
-  int		fd;			/* File descriptor */
-  unsigned char	*current,		/* Current position in buffer */
-		*end,			/* End of buffer */
-		buffer[8192];		/* Character buffer */
-} _mxml_fdbuf_t;
 
 
 /*
@@ -91,6 +90,7 @@ static int		mxml_write_ws(mxml_node_t *node, void *p,
 				      int col, _mxml_putc_cb_t putc_cb);
 
 
+
 /*
  * 'mxmlLoadFile()' - Load a file into an XML node tree.
  *
@@ -108,7 +108,7 @@ static int		mxml_write_ws(mxml_node_t *node, void *p,
 
 mxml_node_t *				/* O - First node or NULL if the file could not be read. */
 mxmlLoadFile(mxml_node_t    *top,	/* I - Top node */
-             FIL           *fp,	/* I - File to read from */
+             FILE           *fp,	/* I - File to read from */
              mxml_load_cb_t cb)		/* I - Callback function or MXML_NO_CALLBACK */
 {
  /*
@@ -223,7 +223,7 @@ mxmlSaveAllocString(
 
 int					/* O - 0 on success, -1 on error. */
 mxmlSaveFile(mxml_node_t    *node,	/* I - Node to write */
-             FIL           *fp,	/* I - File to write to */
+             FILE           *fp,	/* I - File to write to */
 	     mxml_save_cb_t cb)		/* I - Whitespace callback or MXML_NO_CALLBACK */
 {
   int	col;				/* Final column */
@@ -239,7 +239,7 @@ mxmlSaveFile(mxml_node_t    *node,	/* I - Node to write */
     return (-1);
 
   if (col > 0)
-    if (f_putc('\n', fp) < 0)
+    if (putc('\n', fp) < 0)
       return (-1);
 
  /*
@@ -331,7 +331,7 @@ mxmlSaveString(mxml_node_t    *node,	/* I - Node to write */
 mxml_node_t *				/* O - First node or NULL if the file could not be read. */
 mxmlSAXLoadFile(
     mxml_node_t    *top,		/* I - Top node */
-    FIL           *fp,			/* I - File to read from */
+    FILE           *fp,			/* I - File to read from */
     mxml_load_cb_t cb,			/* I - Callback function or MXML_NO_CALLBACK */
     mxml_sax_cb_t  sax_cb,		/* I - SAX callback or MXML_NO_CALLBACK */
     void           *sax_data)		/* I - SAX user data */
@@ -530,19 +530,18 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
                int  *encoding)		/* IO - Encoding */
 {
   int	ch,				/* Character from file */
-	temp,				/* Temporary character */
-    iseof;
-  FIL	*fp;				/* Pointer to file */
+	temp;				/* Temporary character */
+  FILE	*fp;				/* Pointer to file */
+
 
  /*
   * Read a character from the file and see if it is EOF or ASCII...
   */
 
-  fp = (FIL *)p;
-  f_gets((TCHAR *)&ch, 1, fp);
-  iseof = f_eof(fp);
+  fp = (FILE *)p;
+  ch = getc(fp);
 
-  if (iseof == EOF)
+  if (ch == EOF)
     return (EOF);
 
   switch (*encoding)
@@ -573,7 +572,7 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * UTF-16 big-endian BOM?
 	  */
 
-        f_gets((TCHAR *)&ch, 1, fp); 
+          ch = getc(fp);
 	  if (ch != 0xff)
 	    return (EOF);
 
@@ -587,7 +586,7 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * UTF-16 little-endian BOM?
 	  */
 
-        f_gets((TCHAR *)&ch, 1, fp); 
+          ch = getc(fp);
 	  if (ch != 0xfe)
 	    return (EOF);
 
@@ -600,9 +599,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Two-byte value...
 	  */
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if (iseof == EOF || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x1f) << 6) | (temp & 0x3f);
@@ -618,15 +616,13 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Three-byte value...
 	  */
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if (iseof == EOF || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x0f) << 6) | (temp & 0x3f);
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if (iseof == EOF || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
@@ -649,21 +645,18 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	 /*
 	  * Four-byte value...
 	  */
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if ((iseof == EOF) || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = ((ch & 0x07) << 6) | (temp & 0x3f);
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if ((iseof == EOF) || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
-      f_gets((TCHAR *)&temp, 1, fp);
-      iseof = f_eof(fp);
-	  if (iseof == EOF || (temp & 0xc0) != 0x80)
+
+	  if ((temp = getc(fp)) == EOF || (temp & 0xc0) != 0x80)
 	    return (EOF);
 
 	  ch = (ch << 6) | (temp & 0x3f);
@@ -682,8 +675,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
        /*
         * Read UTF-16 big-endian char...
 	*/
-    f_gets((TCHAR *)&ch, 1, fp);
-	ch = (ch << 8) | ch;
+
+	ch = (ch << 8) | getc(fp);
 
 	if (mxml_bad_char(ch))
 	{
@@ -697,10 +690,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * Multi-word UTF-16 char...
 	  */
 
-          int lch,lchtemp;
-          f_gets((TCHAR *)&lch, 1, fp);
-          f_gets((TCHAR *)&lchtemp, 1, fp);
-          lch = (lch << 8) | lchtemp;
+          int lch = getc(fp);
+          lch = (lch << 8) | getc(fp);
 
           if (lch < 0xdc00 || lch >= 0xdfff)
 	    return (EOF);
@@ -713,8 +704,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
        /*
         * Read UTF-16 little-endian char...
 	*/
-    f_gets((TCHAR *)&iseof, 1, fp);
-	ch |= (iseof << 8);
+
+	ch |= (getc(fp) << 8);
 
         if (mxml_bad_char(ch))
 	{
@@ -728,10 +719,8 @@ mxml_file_getc(void *p,			/* I  - Pointer to file */
 	  * Multi-word UTF-16 char...
 	  */
 
-          int lch,lchtemp;
-          f_gets((TCHAR *)&lch, 1, fp);
-          f_gets((TCHAR *)&lchtemp, 1, fp);
-          lch |= (lchtemp << 8);
+          int lch = getc(fp);
+          lch |= (getc(fp) << 8);
 
           if (lch < 0xdc00 || lch >= 0xdfff)
 	    return (EOF);
@@ -757,7 +746,7 @@ static int				/* O - 0 on success, -1 on failure */
 mxml_file_putc(int  ch,			/* I - Character to write */
                void *p)			/* I - Pointer to file */
 {
-  return (f_putc(ch, (FIL *)p) == EOF ? -1 : 0);
+  return (putc(ch, (FILE *)p) == EOF ? -1 : 0);
 }
 
 
@@ -2513,7 +2502,6 @@ mxml_write_ws(mxml_node_t     *node,	/* I - Current node */
 
   return (col);
 }
-
 
 /*
  * End of "$Id: mxml-file.c 467 2016-06-13 00:51:16Z msweet $".
