@@ -13,7 +13,7 @@
 
 static void vTaskCLI(void *pvParameters);
 static void vTaskGUI(void *pvParameters);
-static void vTaskMsgPro(void *pvParameters);
+static void vTaskTouch(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 
 /* Private variables
@@ -21,7 +21,7 @@ static void vTaskStart(void *pvParameters);
 
 TaskHandle_t xHandleTaskCLI = NULL;
 TaskHandle_t xHandleTaskGUI = NULL;
-TaskHandle_t xHandleTaskMsgPro = NULL;
+TaskHandle_t xHandleTaskTouch = NULL;
 TaskHandle_t xHandleTaskStart = NULL;
 /*
 ---------------------------------------------------------------------------*/
@@ -55,11 +55,8 @@ static void vTaskCLI(void *pvParameters)
 ---------------------------------------------------------------------------*/
 static void vTaskGUI(void *pvParameters)
 {
-    while(1)
-    {
-        GUIDEMO_Main();
+    MainTask();
         vTaskDelay(1000);
-    }
 }
 
 /*
@@ -71,12 +68,11 @@ static void vTaskGUI(void *pvParameters)
 */
 /*
 ---------------------------------------------------------------------------*/
-static void vTaskMsgPro(void *pvParameters)
+static void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-        //bsp_LedToggle(3);
-        //printf("TaskMsg\r\n");
+        GUI_TOUCH_Exec();
         vTaskDelay(1000);
     }
 }
@@ -123,12 +119,12 @@ void AppTaskCreate (void)
                  2,                 /* 任务优先级*/
                  &xHandleTaskGUI ); /* 任务句柄  */
 
-    xTaskCreate( vTaskMsgPro,           /* 任务函数  */
-                 "vTaskMsgPro",         /* 任务名    */
+    xTaskCreate( vTaskTouch,           /* 任务函数  */
+                 "vTaskTouch",         /* 任务名    */
                  512,                   /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  3,                     /* 任务优先级*/
-                 &xHandleTaskMsgPro );  /* 任务句柄  */
+                 &xHandleTaskTouch );  /* 任务句柄  */
 
 
     xTaskCreate( vTaskStart,            /* 任务函数  */
