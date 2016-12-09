@@ -149,6 +149,8 @@ LTDC_HandleTypeDef          hltdc;
 static DMA2D_HandleTypeDef  hdma2d;
 static LCD_LayerPropTypedef layer_prop[GUI_NUM_LAYERS];
 
+static _ltdc_dev lcdltdc;                      //管理LCD LTDC的重要参数
+
 static const LCD_API_COLOR_CONV *apColorConvAPI[] =
 {
     COLOR_CONVERSION_0,
@@ -421,6 +423,8 @@ void LCD_X_Config(void)
         LCD_SetSizeEx (0, XSIZE_PHYS, YSIZE_PHYS);
         LCD_SetVSizeEx(0, XSIZE_PHYS, YSIZE_PHYS * NUM_VSCREENS);
     }
+//    GUI_TOUCH_Calibrate(GUI_COORD_X,0,lcdltdc.pwidth,0,lcdltdc.pwidth-1);   
+//    GUI_TOUCH_Calibrate(GUI_COORD_Y,0,lcdltdc.pheight,0,lcdltdc.pheight-1);
 
 #if (GUI_NUM_LAYERS > 1)
     /* Set display driver and color conversion for 2nd layer */
@@ -659,9 +663,10 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
   * @param  LayerIndex : layer Index.
   * @retval None
   */
+
 static void LCD_LL_Init(void)
 {
-    _ltdc_dev lcdltdc;                      //管理LCD LTDC的重要参数
+    
     static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
 
     lcdltdc.pwidth = XSIZE_PHYS;          //面板宽度,单位:像素

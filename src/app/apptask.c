@@ -70,10 +70,11 @@ static void vTaskGUI(void *pvParameters)
 ---------------------------------------------------------------------------*/
 static void vTaskTouch(void *pvParameters)
 {
-    while(1)
+    //while(1)
     {
-        GUI_TOUCH_Exec();
-        vTaskDelay(1000);
+        //GUI_TOUCH_Exec();
+        TouchTask();
+        //vTaskDelay(10);
     }
 }
 /*

@@ -71,7 +71,7 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-//U32 aMemory[GUI_NUMBYTES / 4] __attribute__ ((at(0XC0300000)));//~0XC0AFFFFF
+U32 aMemory[GUI_NUMBYTES / 4] __attribute__ ((at(0XC0300000)));//~0XC0AFFFFF
 /*********************************************************************
 *
 *       GUI_X_Config
@@ -84,8 +84,9 @@ void GUI_X_Config(void) {
   //
   // 32 bit aligned memory area
   //
-  
-  U32 *aMemory = malloc(GUI_NUMBYTES);
+    
+
+  //U32 *aMemory = malloc(GUI_NUMBYTES);
   //
   // Assign memory to emWin
   //

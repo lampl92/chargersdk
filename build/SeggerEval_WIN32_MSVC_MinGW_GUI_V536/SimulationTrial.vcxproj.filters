@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Application">
+      <UniqueIdentifier>{f69f2c7d-f78e-4d7f-9d50-fba8182746d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{70ee17ad-22de-4920-84a8-605c273bf24a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Include">
+      <UniqueIdentifier>{6435a70a-6791-4c19-9865-323742f4ef0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Library">
+      <UniqueIdentifier>{04bc60b0-7ef5-4a6c-8522-a4a83cc1efc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simulation">
+      <UniqueIdentifier>{b7811d35-8b2b-4ce1-938c-85e6d2976744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="emwin%255cConfig">
+      <UniqueIdentifier>{8aea65c1-5bb8-4065-adbf-f592b3bf9970}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Simulation\WinMain.c">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_AntialiasedText.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Automotive.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_BarGraph.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Bitmap.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_ColorBar.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Conf.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Cursor.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Fading.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Graph.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_IconView.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_ImageFlow.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Intro.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Listview.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_RadialMenu.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Resource.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Skinning.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Speed.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Speedometer.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Start.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_TransparentDialog.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_Treeview.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_VScreen.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_WashingMachine.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO_ZoomAndRotate.c">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\GUIConf.c">
+      <Filter>emwin%255cConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\LCDConf.c">
+      <Filter>emwin%255cConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\SIMConf.c">
+      <Filter>emwin%255cConfig</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GUI\Include\BUTTON.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\CALENDAR.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\CHECKBOX.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\CHOOSECOLOR.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\CHOOSEFILE.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\DIALOG.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\DIALOG_Intern.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\DROPDOWN.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\EDIT.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\EDIT_Private.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\FRAMEWIN.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\Global.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GRAPH.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_ARRAY.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_ConfDefaults.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_Debug.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_FontIntern.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_HOOK.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_Private.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_SetOrientation.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_SetOrientationCX.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_SIM_Win32.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_Type.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_Version.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\GUI_VNC.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\HEADER.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\ICONVIEW.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\IMAGE.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\KNOB.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LCD.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LCD_ConfDefaults.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LCD_Private.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LCD_Protected.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LCD_SIM.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LISTBOX.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LISTVIEW.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\LISTWHEEL.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\MENU.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\MESSAGEBOX.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\MULTIEDIT.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\MULTIPAGE.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\PROGBAR.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\RADIO.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\SCROLLBAR.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\SIM.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\SIM_GetRegions.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\SLIDER.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\SPINBOX.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\TEXT.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\TREEVIEW.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\WIDGET.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\WM.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\WM_GUI.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Include\WM_Intern.h">
+      <Filter>GUI\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Program Files\Microsoft Visual Studio\VC98\Include\BASETSD.H">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\middlewares\STemWin\Demo\GUIDEMO.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\GUIConf.h">
+      <Filter>emwin%255cConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\LCDConf.h">
+      <Filter>emwin%255cConfig</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="GUI\Library\GUI.lib">
+      <Filter>GUI\Library</Filter>
+    </Library>
+    <Library Include="Simulation\GUISim.lib">
+      <Filter>Simulation</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Simulation\Simulation.res">
+      <Filter>Simulation</Filter>
+    </Resource>
+  </ItemGroup>
+</Project>

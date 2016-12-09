@@ -1,0 +1,107 @@
+﻿生成启动时间为 2016/12/9 9:21:28。
+     1>项目“D:\Documents\Projects\chargersdk\build\SeggerEval_WIN32_MSVC_MinGW_GUI_V536\SimulationTrial.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IGUI\Include /IConfig /ZI /nologo /W3 /WX- /Od /Oy- /D _DEBUG /D TARGET_1375_C8_137X /D WIN32 /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Output\Debug\\" /Fd".\Output\Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\..\src\middlewares\STemWin\Demo\GUIDEMO.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_AntialiasedText.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Automotive.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_BarGraph.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Bitmap.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_ColorBar.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Conf.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Cursor.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Fading.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Graph.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_IconView.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_ImageFlow.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Intro.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Listview.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_RadialMenu.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Resource.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Skinning.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Speed.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Speedometer.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Start.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_TransparentDialog.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_Treeview.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_VScreen.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_WashingMachine.c ..\..\src\middlewares\STemWin\Demo\GUIDEMO_ZoomAndRotate.c Config\GUIConf.c Config\LCDConf.c Config\SIMConf.c Simulation\WinMain.c
+         WinMain.c
+         SIMConf.c
+         LCDConf.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIConf.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_ZoomAndRotate.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_WashingMachine.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_VScreen.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Treeview.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_TransparentDialog.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Start.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Speedometer.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Speed.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Skinning.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Resource.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_RadialMenu.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Listview.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Intro.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_ImageFlow.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_IconView.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Graph.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         正在生成代码...
+         正在编译...
+         GUIDEMO_Fading.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Cursor.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Conf.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_ColorBar.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Bitmap.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_BarGraph.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_Automotive.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO_AntialiasedText.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         GUIDEMO.c
+     1>d:\documents\projects\chargersdk\build\seggereval_win32_msvc_mingw_gui_v536\gui\include\gui_type.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         正在生成代码...
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1137,5): warning MSB8012: TargetPath(D:\Documents\Projects\chargersdk\build\SeggerEval_WIN32_MSVC_MinGW_GUI_V536\.\Output\Debug\SimulationTrial.exe) does not match the Linker's OutputFile property value (D:\Documents\Projects\chargersdk\build\SeggerEval_WIN32_MSVC_MinGW_GUI_V536\Exe\GUISimulationDebug.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppBuild.targets(1139,5): warning MSB8012: TargetName(SimulationTrial) does not match the Linker's OutputFile property value (GUISimulationDebug). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Exe/GUISimulationDebug.exe" /INCREMENTAL /NOLOGO winmm.lib libcmt.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Output\Debug\SimulationTrial.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Output\Debug\SimulationTrial.lib" /MACHINE:X86 /SAFESEH /SAFESEH:NO .\Output\Debug\GUIDEMO.obj
+         .\Output\Debug\GUIDEMO_AntialiasedText.obj
+         .\Output\Debug\GUIDEMO_Automotive.obj
+         .\Output\Debug\GUIDEMO_BarGraph.obj
+         .\Output\Debug\GUIDEMO_Bitmap.obj
+         .\Output\Debug\GUIDEMO_ColorBar.obj
+         .\Output\Debug\GUIDEMO_Conf.obj
+         .\Output\Debug\GUIDEMO_Cursor.obj
+         .\Output\Debug\GUIDEMO_Fading.obj
+         .\Output\Debug\GUIDEMO_Graph.obj
+         .\Output\Debug\GUIDEMO_IconView.obj
+         .\Output\Debug\GUIDEMO_ImageFlow.obj
+         .\Output\Debug\GUIDEMO_Intro.obj
+         .\Output\Debug\GUIDEMO_Listview.obj
+         .\Output\Debug\GUIDEMO_RadialMenu.obj
+         .\Output\Debug\GUIDEMO_Resource.obj
+         .\Output\Debug\GUIDEMO_Skinning.obj
+         .\Output\Debug\GUIDEMO_Speed.obj
+         .\Output\Debug\GUIDEMO_Speedometer.obj
+         .\Output\Debug\GUIDEMO_Start.obj
+         .\Output\Debug\GUIDEMO_TransparentDialog.obj
+         .\Output\Debug\GUIDEMO_Treeview.obj
+         .\Output\Debug\GUIDEMO_VScreen.obj
+         .\Output\Debug\GUIDEMO_WashingMachine.obj
+         .\Output\Debug\GUIDEMO_ZoomAndRotate.obj
+         .\Output\Debug\GUIConf.obj
+         .\Output\Debug\LCDConf.obj
+         .\Output\Debug\SIMConf.obj
+         .\Output\Debug\WinMain.obj
+         GUI\Library\GUI.lib
+         Simulation\GUISim.lib
+         Simulation\Simulation.res
+         SimulationTrial.vcxproj -> D:\Documents\Projects\chargersdk\build\SeggerEval_WIN32_MSVC_MinGW_GUI_V536\.\Output\Debug\SimulationTrial.exe
+       PostBuildEvent:
+         EXE\GUISimulationDebug.exe
+         :VCEnd
+     1>已完成生成项目“D:\Documents\Projects\chargersdk\build\SeggerEval_WIN32_MSVC_MinGW_GUI_V536\SimulationTrial.vcxproj”(Rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:01:17.37

@@ -4,7 +4,7 @@
 #include "malloc.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
-uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0300000)));//used by heap_4.c
+uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
 #endif
 
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
