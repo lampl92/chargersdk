@@ -246,13 +246,14 @@ WM_HWIN CreateFramewin(void) {
 *       MainTask 
 */ 
 void MainTask(void)  
-{ 
-  CreateFramewin(); 
+{
+	GUI_Init();
+	CreateFramewin(); 
  
-  while(1) 
-  { 
-    GUI_Delay(10); 
-  } 
+	while(1) 
+	{ 
+		GUI_Delay(10); 
+	} 
 } 
 // USER END
 
