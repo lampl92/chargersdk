@@ -45,9 +45,7 @@ Purpose     : Config / System dependent externals for GUI
 #include "GUI.h"
 #include "bsp.h"
 
-//默认为touchtype=0的数据.
-extern u8 CMD_RDX ;
-extern u8 CMD_RDY ;
+static u16 adc_x,adc_y;
 
 void GUI_TOUCH_X_ActivateX(void) {
 }
@@ -56,11 +54,12 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-  return TP_Read_XOY(CMD_RDX);
+    TP_Scan(&adc_x, &adc_y);
+  return adc_x;
 }
 
 int  GUI_TOUCH_X_MeasureY(void) {
-  return TP_Read_XOY(CMD_RDY);
+  return adc_y;
 }
 
 

@@ -53,7 +53,7 @@ u16 TP_Read_AD(u8 CMD)
         TCLK = 1;
         if(DOUT)
         {
-            Num|=1;
+            Num |= 1;
         }
     }
     Num >>= 4;  //只有高12位有效.
@@ -151,22 +151,44 @@ u8 TP_Read_XY2(u16 *x, u16 *y)
 //tp:0,屏幕坐标;1,物理坐标(校准等特殊场合用)
 //返回值:当前触屏状态.
 //0,触屏无触摸;1,触屏有触摸
-u8 TP_Scan(u8 tp)
+void TP_Scan(u16 *adc_x, u16 *adc_y)
 {
-   return 0;
+    u8 tp_pressed;
+    u8 invalid_count = 0;
+    tp_pressed = PEN ? 0 : 1;
+    //      1, 触摸屏按下
+    //      0, 触摸屏释放
+    if(tp_pressed == 1)
+    {
+        while(TP_Read_XY2(adc_x, adc_y) != 1 && invalid_count < 20)
+        {
+            invalid_count++;
+        }
+        if(invalid_count >= 20)
+        {
+            *adc_x = 0xffff;
+            *adc_y = 0xffff;
+        }
+
+    }
+    else
+    {
+        *adc_x = 0xffff;
+        *adc_y = 0xffff;
+    }
 }
 
 //保存校准参数
 void TP_Save_Adjdata(void)
 {
-    
+
 }
 //得到保存在EEPROM里面的校准值
 //返回值：1，成功获取数据
 //        0，获取失败，要重新校准
 u8 TP_Get_Adjdata(void)
 {
-   
+
     return 0;
 }
 
@@ -176,31 +198,31 @@ u8 TP_Get_Adjdata(void)
 u8 bsp_Touch_Init(void)
 {
     GPIO_InitTypeDef GPIO_Initure;
-    
 
-        __HAL_RCC_GPIOH_CLK_ENABLE();           //开启GPIOH时钟
-        __HAL_RCC_GPIOI_CLK_ENABLE();           //开启GPIOI时钟
-        __HAL_RCC_GPIOG_CLK_ENABLE();           //开启GPIOG时钟
 
-        //PH6   T_SCK
-        GPIO_Initure.Pin = GPIO_PIN_6;          //PH6
-        GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
-        GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
-        GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
-        HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
+    __HAL_RCC_GPIOH_CLK_ENABLE();           //开启GPIOH时钟
+    __HAL_RCC_GPIOI_CLK_ENABLE();           //开启GPIOI时钟
+    __HAL_RCC_GPIOG_CLK_ENABLE();           //开启GPIOG时钟
 
-        //PI3,8   T_MOSI/T_CS
-        GPIO_Initure.Pin = GPIO_PIN_3 | GPIO_PIN_8; //PI3,8
-        HAL_GPIO_Init(GPIOI, &GPIO_Initure);    //初始化
+    //PH6   T_SCK
+    GPIO_Initure.Pin = GPIO_PIN_6;          //PH6
+    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
+    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
+    HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
 
-        //PH7  T_PEN
-        GPIO_Initure.Pin = GPIO_PIN_7;          //PH7
-        GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-        HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
+    //PI3,8   T_MOSI/T_CS
+    GPIO_Initure.Pin = GPIO_PIN_3 | GPIO_PIN_8; //PI3,8
+    HAL_GPIO_Init(GPIOI, &GPIO_Initure);    //初始化
 
-        //PG3  TMISO
-        GPIO_Initure.Pin = GPIO_PIN_3;          //PG3
-        HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
+    //PH7  T_PEN
+    GPIO_Initure.Pin = GPIO_PIN_7;          //PH7
+    GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
+    HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
+
+    //PG3  TMISO
+    GPIO_Initure.Pin = GPIO_PIN_3;          //PG3
+    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
 
     return 1;
 }

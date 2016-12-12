@@ -23,7 +23,7 @@ u8 TP_Get_Adjdata(void);						//读取校准参数
 void TP_Adjust(void);							//触摸屏校准
 void TP_Adj_Info_Show(u16 x0,u16 y0,u16 x1,u16 y1,u16 x2,u16 y2,u16 x3,u16 y3,u16 fac);//显示校准信息
 //电阻屏/电容屏 共用函数
-u8 TP_Scan(u8 tp);								//扫描
+void TP_Scan(u16 *adc_x, u16 *adc_y);								//扫描
 u8 bsp_Touch_Init(void);								//初始化
  
 #endif
