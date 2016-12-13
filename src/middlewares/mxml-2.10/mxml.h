@@ -311,6 +311,14 @@ extern mxml_type_t	mxml_real_cb(mxml_node_t *node);
 
 
 /*
+ * Local functions...
+ */
+
+void		sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data);
+mxml_type_t	type_cb(mxml_node_t *node);
+const char	*whitespace_cb(mxml_node_t *node, int where);
+
+/*
  * C++ support...
  */
 
