@@ -34,13 +34,6 @@ TaskHandle_t xHandleTaskStart = NULL;
 ---------------------------------------------------------------------------*/
 static void vTaskCLI(void *pvParameters)
 {
-//    while(1)
-//    {
-//        //bsp_LedToggle(1);
-//        printf("TaskUserIF\n\r");
-//
-//        vTaskDelay(100);
-//    }
     cli_main();
 }
 
@@ -55,8 +48,7 @@ static void vTaskCLI(void *pvParameters)
 ---------------------------------------------------------------------------*/
 static void vTaskGUI(void *pvParameters)
 {
-    MainTask();
-    vTaskDelay(1000);
+    Touch_Calibrate();
 }
 
 /*
