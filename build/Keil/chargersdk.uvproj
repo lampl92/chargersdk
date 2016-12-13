@@ -349,7 +349,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -445,11 +445,6 @@
               <FileName>includes.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\src\app\includes.h</FilePath>
-            </File>
-            <File>
-              <FileName>TOUCH_Calibrate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\middlewares\emWin\Sample\Tutorial\TOUCH_Calibrate.c</FilePath>
             </File>
             <File>
               <FileName>XEye.c</FileName>
@@ -559,64 +554,30 @@
                 </FileArmAds>
               </FileOption>
             </File>
-            <File>
-              <FileName>FramewinDLG.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\app\FramewinDLG.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>app_framework</GroupName>
+        </Group>
+        <Group>
+          <GroupName>hmi</GroupName>
+          <Files>
+            <File>
+              <FileName>TOUCH_Calibrate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hmi\TOUCH_Calibrate.c</FilePath>
+            </File>
+            <File>
+              <FileName>HMI_Start.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hmi\HMI_Start.c</FilePath>
+            </File>
+            <File>
+              <FileName>EVSEDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hmi\EVSEDLG.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>cli</GroupName>
@@ -1783,6 +1744,11 @@
               <FileName>config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\src\middlewares\mxml-2.10\config.h</FilePath>
+            </File>
+            <File>
+              <FileName>mxml-cb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\middlewares\mxml-2.10\mxml-cb.c</FilePath>
             </File>
           </Files>
         </Group>
