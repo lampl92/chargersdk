@@ -56,7 +56,7 @@ static void vTaskCLI(void *pvParameters)
 static void vTaskGUI(void *pvParameters)
 {
     MainTask();
-        vTaskDelay(1000);
+    vTaskDelay(1000);
 }
 
 /*
@@ -73,7 +73,6 @@ static void vTaskTouch(void *pvParameters)
     while(1)
     {
         GUI_TOUCH_Exec();
-        //TouchTask();
         vTaskDelay(10);
     }
 }
