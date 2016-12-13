@@ -2,7 +2,6 @@
 #include "stdlib.h"
 #include "math.h"
 
-
 u8 CMD_RDX = 0XD0;
 u8 CMD_RDY = 0X90;
 //SPI写数据
@@ -103,20 +102,35 @@ u16 TP_Read_XOY(u8 xy)
 //返回值:0,失败;1,成功。
 u8 TP_Read_XY(u16 *x, u16 *y)
 {
-    u16 xtemp, ytemp;
+    u16 xtemp, ytemp, z1;
+    float pressure;
+    float xTPr = 738, yTPr = 222;
+    z1 = TP_Read_XOY(0xB4);
     xtemp = TP_Read_XOY(CMD_RDX);
     ytemp = TP_Read_XOY(CMD_RDY);
-    //if(xtemp<100||ytemp<100)return 0;//读数失败
+
+    if(xtemp < 100 || ytemp < 100)
+    {
+        return 0;    //读数失败
+    }
     *x = xtemp;
     *y = ytemp;
-    return 1;//读数成功
+    pressure = (xTPr * (float)xtemp) / 4096.0f * (4096.0f / (float)z1 - 1) - yTPr * (1 - (float)ytemp / 4096.0f);
+    if(pressure < 400 || pressure > 800)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;    //读数成功
+    }
 }
 //连续2次读取触摸屏IC,且这两次的偏差不能超过
 //ERR_RANGE,满足条件,则认为读数正确,否则读数错误.
 //该函数能大大提高准确度
 //x,y:读取到的坐标值
 //返回值:0,失败;1,成功。
-#define ERR_RANGE 50 //误差范围 
+#define ERR_RANGE 100 //误差范围 
 u8 TP_Read_XY2(u16 *x, u16 *y)
 {
     u16 x1, y1;
@@ -145,6 +159,15 @@ u8 TP_Read_XY2(u16 *x, u16 *y)
     }
 }
 
+u8 TP_Read_Pressure(float *pressure)
+{
+    u16 x, y, z1;
+    float xTPr = 738, yTPr = 222;
+    z1 = TP_Read_XOY(0xB4);
+    TP_Read_XY2(&x, &y);
+    *pressure = (xTPr * (float)x) / 4096.0f * (4096.0f / (float)z1 - 1) - yTPr * (1 - (float)y / 4096.0f);
+    return 0;
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //触摸按键扫描
