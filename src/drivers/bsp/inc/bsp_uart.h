@@ -14,6 +14,7 @@
 
 
 #define CLI_USARTx_BASE                             USART2
+#define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler(USARTx)               void ##USARTx##_IRQHandler(void)
 
 

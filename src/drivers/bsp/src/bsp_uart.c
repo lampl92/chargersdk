@@ -36,7 +36,7 @@ void bsp_Uart_Init(void)
 
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
-    CLI_UARTx_Handler.Init.BaudRate = 115200;
+    CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
     CLI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
     CLI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
     CLI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
