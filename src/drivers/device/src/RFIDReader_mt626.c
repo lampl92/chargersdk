@@ -3,7 +3,10 @@
 #include "RFIDReader_mt626.h"
 #include "bsp_uart.h"
 
-extern UART_HandleTypeDef CLI_UARTx_Handler;
+extern UART_HandleTypeDef RFID_UARTx_Handler;
+extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+extern HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+
 static uint8_t verifBCC(uint8_t *data, uint8_t n)
 {
     uint8_t out;
@@ -18,11 +21,10 @@ static int sendCommand(void *pObj,uint8_t ucSendID, uint8_t ucSendLength)
 {
     uint8_t *pucSendBuffer;
     MT626COM_t *pMT626COMObj;
-    int i;
     
     pucSendBuffer = pMT626COMObj ->pucSendBuffer;
 
-    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&pucSendBuffer, ucSendLength, 0xFFFF);
+    HAL_UART_Transmit(&RFID_UARTx_Handler, (uint8_t *)&pucSendBuffer, ucSendLength, 0xFFFF);
     
     return 0;
 }
@@ -108,7 +110,7 @@ void deleteCOM(void *pObj)
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
 }
-MT626COM_t *MT626COMCreate(void)//后续是否应添加参数, 参数包括UART实例
+MT626COM_t *MT626COMCreate(void)//后续是否应添加参数, 参数包括UART实例,以初始化串口号与波特率
 {
     int i;
     MT626COM_t *pMT626 = (MT626COM_t *)malloc(sizeof(MT626COM_t));
@@ -117,16 +119,16 @@ MT626COM_t *MT626COMCreate(void)//后续是否应添加参数, 参数包括UART实例
     {
         pMT626->pMT626CMD[i] = NULL;
     }
-    pMT626->pMT626CMD[MT626_FIND_CMD]       = MT626CMDCreate(0x30, 2, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_READ_UID_CMD]   = MT626CMDCreate(0x31, 2, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_AUTH_KEYA_CMD]  = MT626CMDCreate(0x32, 9, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_AUTH_KEYB_CMD]  = MT626CMDCreate(0x39, 9, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_READ_CMD]       = MT626CMDCreate(0x33, 4, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_FIND_CMD]       = MT626CMDCreate(0x30, 0x02, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_READ_UID_CMD]   = MT626CMDCreate(0x31, 0x02, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_AUTH_KEYA_CMD]  = MT626CMDCreate(0x32, 0x09, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_AUTH_KEYB_CMD]  = MT626CMDCreate(0x39, 0x09, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_READ_CMD]       = MT626CMDCreate(0x33, 0x04, makeStCmd,analyStRes);
     pMT626->pMT626CMD[MT626_WRITE_CMD]      = MT626CMDCreate(0x34, 0x14, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_CHANGE_KEY_CMD] = MT626CMDCreate(0x35, 9, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_INC_CMD]        = MT626CMDCreate(0x37, 8, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_DEC_CMD]        = MT626CMDCreate(0x38, 8, makeStCmd,analyStRes);
-    pMT626->pMT626CMD[MT626_INIT_CMD]       = MT626CMDCreate(0x36, 8, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_CHANGE_KEY_CMD] = MT626CMDCreate(0x35, 0x09, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_INC_CMD]        = MT626CMDCreate(0x37, 0x08, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_DEC_CMD]        = MT626CMDCreate(0x38, 0x08, makeStCmd,analyStRes);
+    pMT626->pMT626CMD[MT626_INIT_CMD]       = MT626CMDCreate(0x36, 0x08, makeStCmd,analyStRes);
 
     pMT626 ->recvResponse = recvResponse;
     pMT626 ->sendCommand = sendCommand;
