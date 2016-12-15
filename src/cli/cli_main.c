@@ -7,7 +7,7 @@
 #include "cli_fatfs.h"
 #include "cli_xml.h"
 
-extern uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
+extern uint8_t aCliRxBuffer[1];
 extern uint16_t CLI_RX_STA;
 
 void tinysh_char_out(unsigned char c)
@@ -53,12 +53,15 @@ void cli_init(void)
 }
 void cli_main(void)
 {
+    uint8_t ch;
+    int8_t res;
     cli_init();
     while(1)
     {
-        if(CLI_RX_STA == SET)
+        res = uart_read(&ch, 100);
+        if(res == 0)
         {
-            tinysh_char_in(aCliRxBuffer[0]);
+            tinysh_char_in(ch);
             CLI_RX_STA = RESET;
         }
 //      tinysh_char_in((unsigned char)getchar());
