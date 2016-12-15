@@ -7,6 +7,12 @@ extern UART_HandleTypeDef RFID_UARTx_Handler;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 
+static void MT626DelayMS(uint32_t ms)
+{
+    vTaskDelay(ms);
+}
+    
+
 static uint8_t verifBCC(uint8_t *data, uint8_t n)
 {
     uint8_t out;
