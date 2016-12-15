@@ -51,7 +51,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -1710,11 +1710,6 @@
               <FileName>userlib_list.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\middlewares\userlib\src\userlib_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>testmain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\middlewares\userlib\testmain.c</FilePath>
             </File>
           </Files>
         </Group>

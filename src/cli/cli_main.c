@@ -58,7 +58,7 @@ void cli_main(void)
     cli_init();
     while(1)
     {
-        res = uart_read(&ch, 100);
+        res = cli_recv_read(&ch, 100);
         if(res == 0)
         {
             tinysh_char_in(ch);

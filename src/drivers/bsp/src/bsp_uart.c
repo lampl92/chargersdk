@@ -20,13 +20,12 @@ uint16_t CLI_RX_STA = RESET;
 uart_recv_t cli_recv;
 uart_recv_t rfid_recv;
 
-int8_t uart_read(uint8_t *recv, uint16_t time_out)  
+int8_t cli_recv_read(uint8_t *recv, uint16_t time_out)
 {
     while(time_out)  
     {  
         if(cli_recv.front != cli_recv.rear)  
         {  
-            
             *recv=*cli_recv.front;  
           
             cli_recv.front++;  
@@ -117,78 +116,12 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 }
 CLI_USARTx_IRQHandler
 {
-    uint32_t timeout;
-    #ifdef USE_FreeRTOS
-    UBaseType_t uxSavedInterruptStatus;
-    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-	{
-    #endif
-        HAL_UART_IRQHandler(&CLI_UARTx_Handler);
-
-        timeout=0;
-        while (HAL_UART_GetState(&CLI_UARTx_Handler) != HAL_UART_STATE_READY)
-        {
-            timeout++;
-            if(timeout > HAL_MAX_DELAY)
-            {
-                break;
-            }
-        }
-        timeout=0;
-        while(HAL_UART_Receive_IT(&CLI_UARTx_Handler, cli_recv.rear, 1) != HAL_OK)
-        {
-            timeout++; 
-            if(timeout > HAL_MAX_DELAY) 
-            {
-                break; 
-            }
-        }
-        cli_recv.rear++;
-        if(cli_recv.rear >= (CLI_RX_Buffer + CLI_BUFFER_SIZE))  
-           cli_recv.rear = CLI_RX_Buffer; 
-
-    #ifdef USE_FreeRTOS
-    }
-    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus ); 
-    #endif
+    HAL_UART_IRQHandler(&CLI_UARTx_Handler);
 }
 
 RFID_USARTx_IRQHandler
 {
-    uint32_t timeout;
-    #ifdef USE_FreeRTOS
-    UBaseType_t uxSavedInterruptStatus;
-    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-	{
-    #endif
-        HAL_UART_IRQHandler(&RFID_UARTx_Handler);
-
-        timeout=0;
-        while (HAL_UART_GetState(&RFID_UARTx_Handler) != HAL_UART_STATE_READY)
-        {
-            timeout++;
-            if(timeout > HAL_MAX_DELAY)
-            {
-                break;
-            }
-        }
-        timeout=0;
-        while(HAL_UART_Receive_IT(&RFID_UARTx_Handler, rfid_recv.rear, 1) != HAL_OK)
-        { 
-            timeout++; 
-            if(timeout > HAL_MAX_DELAY) 
-            {
-                break; 
-            }
-        }
-        rfid_recv.rear++;
-        if(rfid_recv.rear >= (RFID_RX_Buffer + RFID_BUFFER_SIZE))  
-           rfid_recv.rear = RFID_RX_Buffer; 
-
-    #ifdef USE_FreeRTOS
-    }
-    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus ); 
-    #endif
+    HAL_UART_IRQHandler(&RFID_UARTx_Handler);
 }
 /**
   * @brief  Tx Transfer completed callback
@@ -213,15 +146,36 @@ and
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static uint8_t Old_Rx_Count;
+    uint32_t cli_timeout,rfid_timeout;
     if(huart->Instance == CLI_USARTx_BASE)
     {
-	    CLI_RX_STA = SET;
+        cli_timeout = 0;
+	    while(HAL_UART_Receive_IT(&CLI_UARTx_Handler, cli_recv.rear, 1) != HAL_OK)
+        {
+            cli_timeout++; 
+            if(cli_timeout > HAL_MAX_DELAY) 
+            {
+                break; 
+            }
+        }
+        cli_recv.rear++;
+        if(cli_recv.rear >= (CLI_RX_Buffer + CLI_BUFFER_SIZE))  
+           cli_recv.rear = CLI_RX_Buffer; 
     }
     if(huart->Instance == RFID_USARTx_BASE)
-    {
-         
-        
+    { 
+        rfid_timeout = 0;
+        while(HAL_UART_Receive_IT(&RFID_UARTx_Handler, rfid_recv.rear, 1) != HAL_OK)
+        { 
+            rfid_timeout++; 
+            if(rfid_timeout > HAL_MAX_DELAY) 
+            {
+                break; 
+            }
+        }
+        rfid_recv.rear++;
+        if(rfid_recv.rear >= (RFID_RX_Buffer + RFID_BUFFER_SIZE))  
+           rfid_recv.rear = RFID_RX_Buffer; 
     }
 }
 
