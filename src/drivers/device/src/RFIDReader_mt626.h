@@ -5,7 +5,13 @@
 #include "stm32f4xx.h"
 
 #define MT626_CMD_MAX 10
+#define MT626_SENDBUFF_MAX      100
+#define MT626_RECVBUFF_MAX      100
 
+
+#define MT626_CMD_STX                   0x02
+#define MT626_CMD_ETX                   0x03
+#define MT626_CMD_TYPE                  0x34
 
 #define MT626_FIND_CMD                  0   //#0  —∞ø®
 #define MT626_READ_UID_CMD              1   //#1  ªÒ»°UID       
@@ -47,30 +53,33 @@ typedef enum
     */
 }MT_RESULT;
 
-typedef    int (*MT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t *pOptionData,uint8_t ucOptionLen);
-typedef    int (*MT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen);
-    
+typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData,uint8_t ucOptionLen,uint8_t *pucSendLength);
+typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen);
+
 
 typedef struct _MT626CMD
 {
     uint8_t     ucParam;
     uint16_t    usLenght;
     
-    MT626_MAKE_PROC  makeProc;
-    MT626_ANALY_PROC analyProc;
-//    int (*makeProc)  (void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t *pOptionData,uint8_t ucOptionLen);
-//    int (*analyProc) (void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen);
-//    
+    pMT626_MAKE_PROC  makeProc;
+    pMT626_ANALY_PROC analyProc;
+    
 }MT626CMD_t;
 
 typedef struct _MT626COM
 {
     MT626CMD_t *pMT626CMD[MT626_CMD_MAX];
-    int (*sendCommand)(uint8_t ucSendID, uint16_t ucLenght, uint8_t *pError);
-    int (*recvResponse)(uint8_t ucSendID, uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen, uint8_t *pError);
-    int (*makeStCmd) (void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t *pOptionData,uint8_t ucOptionLen);
-    int (*analyStRes)(void *pObj, uint8_t ucSendID, uint8_t ucParam,uint16_t ucLenght,uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen);
+    uint8_t *pucSendBuffer;
+    uint8_t *pucRecvBuffer;
+    int (*sendCommand)(void *pObj,uint8_t ucSendID, uint8_t ucSendLenght);
+    int (*recvResponse)(uint8_t ucSendID, uint8_t ucState,uint8_t *pRcvData, uint8_t ucRecvLen);
+    pMT626_MAKE_PROC makeStCmd;
+    pMT626_ANALY_PROC analyStRes;
+    void (*deleteCOM)(void *pObj);
 }MT626COM_t;
 
+
+MT626COM_t *MT626COMCreate(void);
 
 #endif
