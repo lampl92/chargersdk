@@ -34,7 +34,7 @@ void bsp_Uart_Init(void)
     HAL_UART_Init(&UART1_Handler);
 
 
-    CLI_UARTx_Handler.Instance = USART2;
+    CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
     CLI_UARTx_Handler.Init.BaudRate = 115200;
     CLI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
     CLI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
@@ -45,8 +45,6 @@ void bsp_Uart_Init(void)
     HAL_UART_Init(&CLI_UARTx_Handler);
 
     HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)aCliRxBuffer, cliRXBUFFERSIZE);
-
-
 }
 
 
