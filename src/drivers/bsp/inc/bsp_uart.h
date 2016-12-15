@@ -15,18 +15,20 @@
 
 #define CLI_USARTx_BASE                             USART2
 #define CLI_USARTx_BAUDRATE                         115200
-#define CLI_USARTx_IRQHandler(USARTx)               void ##USARTx##_IRQHandler(void)
+#define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)
+#define CLI_BUFFER_SIZE                             10
+
+#define RFID_USARTx_BASE                            USART1
+#define RFID_USARTx_BAUDRATE                        115200
+#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
+#define RFID_BUFFER_SIZE                            100
 
 
-
-
-
-
-
-
-
-#define cliRXBUFFERSIZE   1
-
+typedef struct
+{
+    uint8_t *front;
+    uint8_t *rear;
+}uart_recv_t;
 
 /* Exported macro ------------------------------------------------------------*/
 #define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))

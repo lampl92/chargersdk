@@ -9,31 +9,52 @@
 #include "bsp.h"
 #include "cli_main.h"
 
-
-
-
-UART_HandleTypeDef UART1_Handler;
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 
-uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
+uint8_t CLI_RX_Buffer[CLI_BUFFER_SIZE];
+uint8_t RFID_RX_Buffer[RFID_BUFFER_SIZE];
+
 uint16_t CLI_RX_STA = RESET;
 
+uart_recv_t cli_recv;
+uart_recv_t rfid_recv;
 
+int8_t uart_read(uint8_t *recv, uint16_t time_out)  
+{
+    while(time_out)  
+    {  
+        if(cli_recv.front != cli_recv.rear)  
+        {  
+            
+            *recv=*cli_recv.front;  
+          
+            cli_recv.front++;  
+  
+            if (cli_recv.front >= (CLI_RX_Buffer+CLI_BUFFER_SIZE))  
+                cli_recv.front = CLI_RX_Buffer;  
+  
+            return 0;  
+        }  
+        time_out--;  
+    }  
+    return (int8_t)-1;  
+}  
 
 void bsp_Uart_Init(void)
 {
-
-    UART1_Handler.Instance = USART1;
-    UART1_Handler.Init.BaudRate = 115200;
-    UART1_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    UART1_Handler.Init.StopBits = UART_STOPBITS_1;
-    UART1_Handler.Init.Parity = UART_PARITY_NONE;
-    UART1_Handler.Init.Mode = UART_MODE_TX_RX;
-    UART1_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    UART1_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&UART1_Handler);
-
+    RFID_UARTx_Handler.Instance = RFID_USARTx_BASE;
+    RFID_UARTx_Handler.Init.BaudRate = RFID_USARTx_BAUDRATE;
+    RFID_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+    RFID_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+    RFID_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+    RFID_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+    RFID_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&RFID_UARTx_Handler);
+    HAL_UART_Receive_IT(&RFID_UARTx_Handler, RFID_RX_Buffer, 1);
+    rfid_recv.front = RFID_RX_Buffer;
+    rfid_recv.rear = RFID_RX_Buffer;
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
     CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
@@ -44,8 +65,9 @@ void bsp_Uart_Init(void)
     CLI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     CLI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&CLI_UARTx_Handler);
-
-    HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)aCliRxBuffer, cliRXBUFFERSIZE);
+    HAL_UART_Receive_IT(&CLI_UARTx_Handler, CLI_RX_Buffer, 1);
+    cli_recv.front = CLI_RX_Buffer;
+    cli_recv.rear = CLI_RX_Buffer;
 }
 
 
@@ -59,10 +81,10 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 		__HAL_RCC_USART1_CLK_ENABLE();
 	
 		GPIO_InitStruct.Pin = GPIO_PIN_9;//PIN_TX
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;       ///
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pull = GPIO_PULLUP;	        
 		GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-		GPIO_InitStruct.Alternate = GPIO_AF7_USART1;  ///
+		GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
 		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 		GPIO_InitStruct.Pin = GPIO_PIN_10;//PIN_RX
@@ -78,10 +100,10 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 		__HAL_RCC_USART2_CLK_ENABLE();
 	
 		GPIO_InitStruct.Pin = GPIO_PIN_2;//PIN_TX
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;       ///
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pull = GPIO_PULLUP;	        
 		GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-		GPIO_InitStruct.Alternate = GPIO_AF7_USART2;  ///
+		GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
 		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 		GPIO_InitStruct.Pin = GPIO_PIN_3;//PIN_RX
@@ -93,8 +115,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 
 
 }
-
-CLI_USARTx_IRQHandler(CLI_USARTx_BASE)
+CLI_USARTx_IRQHandler
 {
     uint32_t timeout;
     #ifdef USE_FreeRTOS
@@ -114,7 +135,7 @@ CLI_USARTx_IRQHandler(CLI_USARTx_BASE)
             }
         }
         timeout=0;
-        while(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)aCliRxBuffer, cliRXBUFFERSIZE) != HAL_OK)
+        while(HAL_UART_Receive_IT(&CLI_UARTx_Handler, cli_recv.rear, 1) != HAL_OK)
         {
             timeout++; 
             if(timeout > HAL_MAX_DELAY) 
@@ -122,6 +143,9 @@ CLI_USARTx_IRQHandler(CLI_USARTx_BASE)
                 break; 
             }
         }
+        cli_recv.rear++;
+        if(cli_recv.rear >= (CLI_RX_Buffer + CLI_BUFFER_SIZE))  
+           cli_recv.rear = CLI_RX_Buffer; 
 
     #ifdef USE_FreeRTOS
     }
@@ -129,7 +153,43 @@ CLI_USARTx_IRQHandler(CLI_USARTx_BASE)
     #endif
 }
 
+RFID_USARTx_IRQHandler
+{
+    uint32_t timeout;
+    #ifdef USE_FreeRTOS
+    UBaseType_t uxSavedInterruptStatus;
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+	{
+    #endif
+        HAL_UART_IRQHandler(&RFID_UARTx_Handler);
 
+        timeout=0;
+        while (HAL_UART_GetState(&RFID_UARTx_Handler) != HAL_UART_STATE_READY)
+        {
+            timeout++;
+            if(timeout > HAL_MAX_DELAY)
+            {
+                break;
+            }
+        }
+        timeout=0;
+        while(HAL_UART_Receive_IT(&RFID_UARTx_Handler, rfid_recv.rear, 1) != HAL_OK)
+        { 
+            timeout++; 
+            if(timeout > HAL_MAX_DELAY) 
+            {
+                break; 
+            }
+        }
+        rfid_recv.rear++;
+        if(rfid_recv.rear >= (RFID_RX_Buffer + RFID_BUFFER_SIZE))  
+           rfid_recv.rear = RFID_RX_Buffer; 
+
+    #ifdef USE_FreeRTOS
+    }
+    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus ); 
+    #endif
+}
 /**
   * @brief  Tx Transfer completed callback
   * @param  UartHandle: UART handler. 
@@ -153,9 +213,15 @@ and
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+    static uint8_t Old_Rx_Count;
     if(huart->Instance == CLI_USARTx_BASE)
     {
 	    CLI_RX_STA = SET;
+    }
+    if(huart->Instance == RFID_USARTx_BASE)
+    {
+         
+        
     }
 }
 
@@ -172,8 +238,6 @@ can
    
 }
 
-
-#if 1
 
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
@@ -237,7 +301,5 @@ void _sys_exit(int x)
     x = x; 
 }
 
-
-#endif
 
 
