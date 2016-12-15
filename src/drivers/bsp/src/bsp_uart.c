@@ -14,6 +14,7 @@
 
 UART_HandleTypeDef UART1_Handler;
 UART_HandleTypeDef CLI_UARTx_Handler;
+UART_HandleTypeDef RFID_UARTx_Handler;
 
 uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
 uint16_t CLI_RX_STA = RESET;
