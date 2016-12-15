@@ -13,7 +13,7 @@
 
 
 UART_HandleTypeDef UART1_Handler;
-UART_HandleTypeDef UART2_Handler;
+UART_HandleTypeDef CLI_UARTx_Handler;
 
 uint8_t aCliRxBuffer[cliRXBUFFERSIZE];
 uint16_t CLI_RX_STA = RESET;
@@ -34,15 +34,15 @@ void bsp_Uart_Init(void)
     HAL_UART_Init(&UART1_Handler);
 
 
-    UART2_Handler.Instance = USART2;
-    UART2_Handler.Init.BaudRate = 115200;
-    UART2_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    UART2_Handler.Init.StopBits = UART_STOPBITS_1;
-    UART2_Handler.Init.Parity = UART_PARITY_NONE;
-    UART2_Handler.Init.Mode = UART_MODE_TX_RX;
-    UART2_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    UART2_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&UART2_Handler);
+    CLI_UARTx_Handler.Instance = USART2;
+    CLI_UARTx_Handler.Init.BaudRate = 115200;
+    CLI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+    CLI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+    CLI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+    CLI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+    CLI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    CLI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&CLI_UARTx_Handler);
 
     HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)aCliRxBuffer, cliRXBUFFERSIZE);
 
@@ -95,8 +95,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 
 }
 
-
-CLI_USARTx_IRQHandler_PROTOTYPE
+CLI_USARTx_IRQHandler(CLI_USARTx_BASE)
 {
     uint32_t timeout;
     #ifdef USE_FreeRTOS

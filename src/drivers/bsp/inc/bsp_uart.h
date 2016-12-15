@@ -11,19 +11,18 @@
 
 #include "bsp.h"
 
-#define     CLI_USE_USART2
 
-#ifdef CLI_USE_USART1
-#define CLI_USARTx_BASE                     USART1
-#define CLI_USARTx_IRQHandler_PROTOTYPE     void USART1_IRQHandler(void)
-#define CLI_UARTx_Handler                   UART1_Handler
-#endif
 
-#ifdef CLI_USE_USART2
-#define CLI_USARTx_BASE                     USART2
-#define CLI_USARTx_IRQHandler_PROTOTYPE     void USART2_IRQHandler(void)
-#define CLI_UARTx_Handler                   UART2_Handler
-#endif
+#define CLI_USARTx_BASE                             USART2
+#define CLI_USARTx_IRQHandler(USARTx)               void ##USARTx##_IRQHandler(void)
+
+
+
+
+
+
+
+
 
 #define cliRXBUFFERSIZE   1
 
