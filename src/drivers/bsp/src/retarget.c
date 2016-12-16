@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "bsp.h"
 
 extern UART_HandleTypeDef CLI_UARTx_Handler;
