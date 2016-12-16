@@ -4,8 +4,8 @@
 #include "bsp_uart.h"
 
 extern UART_HandleTypeDef RFID_UARTx_Handler;
+extern Queue *pRfidRecvQue;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
-extern HAL_StatusTypeDef HAL_UART_Receive(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
 
@@ -14,35 +14,37 @@ static int MT626DelayMS(uint32_t ms)
     vTaskDelay(ms);
     return 1;
 }
-    
-static uint8_t verifBCC(uint8_t *data, uint8_t n)
+
+static uint8_t verifBCC(uint8_t *data, uint32_t len)
 {
     uint8_t out;
-    uint8_t i;
-    for(i = 0; i < n; i++)
+    uint32_t i;
+    for(i = 0; i < len; i++)
     {
         out ^= data[i];
     }
     return out;
 }
-static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint8_t ucSendLength)
+static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength)
 {
-    const uint32_t ucTimeOutMS =5000,uiTryTimes = 3;
+    const uint32_t ucTimeOutMS = 1000, uiTryTimes = 3;
     uint32_t ucFailedCounts;
     uint8_t *pucSendBuffer;
     MT626COM_t *pMT626COMObj;
     HAL_StatusTypeDef hal_res;
-    
+
     ucFailedCounts = 0;
     pucSendBuffer = pMT626COMObj ->pucSendBuffer;
-    do{
+    do
+    {
         hal_res = HAL_UART_Transmit(&RFID_UARTx_Handler, pucSendBuffer, ucSendLength, 0xFFFF);
         if(hal_res != HAL_OK)
         {
             ucFailedCounts++;
-            MT626DelayMS(1000);
+            MT626DelayMS(ucTimeOutMS);
         }
-    }while(hal_res != HAL_OK && ucFailedCounts < uiTryTimes);
+    }
+    while(hal_res != HAL_OK && ucFailedCounts < uiTryTimes);
     if(hal_res != HAL_OK || ucFailedCounts == uiTryTimes)
     {
         return MT_COM_FAIL;
@@ -63,43 +65,126 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint8_t ucSendLength)
 #define MT626_INC_CMD                   7   //#8  增值
 #define MT626_DEC_CMD                   8   //#9  减值
 #define MT626_INIT_CMD                  9   //#10 初始化
-static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint8_t *pucRecvdLen)
+
+static MT_RESULT recvReadEx(void *pObj, uint32_t *pucRecvdLen)
 {
-    const uint32_t ucTimeOutMS = 5000;
+    uint8_t ch;
+    uint32_t i;
+    MT626COM_t *pMT626COM;
+
+    pMT626COM = (MT626COM_t *)pObj;
+    ch = 0;
+    i = 0;
+
+    while(readRecvQue(pRfidRecvQue, &ch, 1) == 0)
+    {
+        pMT626COM->pucRecvBuffer[i] = ch;
+        i++;
+    }
+    *pucRecvdLen = i;
+    return MT_SUCCEED;
+}
+
+static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLen)
+{
     uint8_t *pucRecvBuffer;
-    HAL_StatusTypeDef hal_res;
+    uint8_t ucRecvdBCC, ucCalcBCC;
+    MT_RESULT res;
+
+    ucRecvdBCC = 0;
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
-    while()
+
+    recvReadEx(pObj, pucRecvdLen);
+    if(*pucRecvdLen == 0)
     {
-        MT626DelayMS(ucTimeOutMS);
+        return MT_COM_FAIL;
     }
-    pucRecvBuffer = 
-    
+
     switch(ucSendID)
     {
-        case MT626_FIND_CMD:
-        do
-        {
-            hal_res = HAL_UART_Receive(&RFID_UARTx_Handler, pucRecvBuffer, 8, 1000);
+        case MT626_FIND_CMD:                        //#0  寻卡
+            if(*pucRecvdLen == 8)
+            {
+                res = MT_SUCCEED;
+            }
+            else
+            {
+                res = MT_COM_FAIL;
+            }
+            break;
+        case MT626_READ_UID_CMD:                    //#1  获取UID
+            if(*pucRecvdLen == 12)
+            {
+                res = MT_SUCCEED;
+            }
+            else
+            {
+                res = MT_COM_FAIL;
+            }
+            break;
+        case MT626_AUTH_KEYA_CMD:                   //#3  验证KeyA
+        case MT626_AUTH_KEYB_CMD:                   //#4  验证KeyB
+        case MT626_CHANGE_KEY_CMD:                  //#7  更改密码
+            if(*pucRecvdLen == 9)
+            {
+                res = MT_SUCCEED;
+            }
+            else
+            {
+                res = MT_COM_FAIL;
+            }
+            break;
+        case MT626_READ_CMD:                        //#5  读扇区块数据
+        case MT626_WRITE_CMD:                       //#6  写扇区块数据
+            if(*pucRecvdLen == 26)
+            {
+                res = MT_SUCCEED;
+            }
+            else if(*pucRecvdLen == 10)
+            {
+                res = MT_SUCCEED;
+            }
+            else
+            {
+                res = MT_COM_FAIL;
+            }
+            break;
 
-            MT626DelayMS(ucTimeOutMS);
-        }while(hal_res != HAL_OK );
-        if(hal_res != HAL_OK)
+        case MT626_INC_CMD:                         //#8  增值
+        case MT626_DEC_CMD:                         //#9  减值
+        case MT626_INIT_CMD:                        //#10 初始化
+            if(*pucRecvdLen == 10)
+            {
+                res = MT_SUCCEED;
+            }
+            else
+            {
+                res = MT_COM_FAIL;
+            }
+            break;
+    }
+    if(res == MT_SUCCEED)
+    {
+        ucRecvdBCC = pucRecvBuffer[*pucRecvdLen - 1];
+        ucCalcBCC = verifBCC(pucRecvBuffer, *pucRecvdLen - 1);
+        if(ucRecvdBCC == ucCalcBCC)
+        {
+            return MT_SUCCEED;
+        }
+        else
         {
             return MT_COM_FAIL;
         }
-        pucRecvBuffer[]
     }
-    
-//    if()
-//    {
-//        MT
-//    }
-    return 0;
+    else
+    {
+        return MT_COM_FAIL;
+    }
+
 }
 
-static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint8_t ucOptionLen, uint8_t *pucSendLength)
+static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t ucOptionLen, uint32_t *pucSendLength)
 {
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
@@ -148,24 +233,25 @@ static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint8_t
 //    return 0;
 //}
 //Inc,dec,err,init
-static int analyStRes(void *pObj, uint8_t ucSendID, uint8_t ucRecvLen)
+static int analyStRes(void *pObj, uint8_t ucSendID, uint32_t ucRecvLen)
 {
+    
     return 0;
 }
 
 
 
-int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint8_t ucOptionLen)
+int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t ucOptionLen)
 {
-    const uint32_t ucTimeOutMS =5000,uiTryTimes = 3;
+    const uint32_t ucTimeOutMS = 5000, uiTryTimes = 3;
     uint32_t ucFailedCounts;
     MT626COM_t *pMT626COMObj;
     MT626CMD_t *pMT626CMDObj;
-    uint8_t ucSendLength, ucRcvdLength;
+    uint32_t ucSendLength, ucRcvdLength;
     MT_RESULT res ;
-    
+
     ucFailedCounts = 0;
-    
+
     pMT626COMObj = (MT626COM_t *)pObj;
     pMT626CMDObj = pMT626COMObj->pMT626CMD[ucSendID];
 
@@ -177,21 +263,22 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint8_t u
         {
             return MT_COM_FAIL;
         }
-        
+
         res = pMT626COMObj ->recvResponse(pMT626COMObj, ucSendID, &ucRcvdLength);
         if(res != MT_SUCCEED)
         {
             ucFailedCounts++;
             MT626DelayMS(ucTimeOutMS);
         }
-    }while(res != MT_SUCCEED && ucFailedCounts < uiTryTimes);
+    }
+    while(res != MT_SUCCEED && ucFailedCounts < uiTryTimes);
     if(res != MT_SUCCEED || ucFailedCounts == uiTryTimes)
     {
         return MT_COM_FAIL;
     }
 
     return pMT626CMDObj->analyProc(pMT626COMObj, ucSendID, ucRcvdLength);
-    
+
 }
 static MT626CMD_t *MT626CMDCreate(uint8_t ucParam, uint16_t usLenght, pMT626_MAKE_PROC makeProc, pMT626_ANALY_PROC analyProc)
 {

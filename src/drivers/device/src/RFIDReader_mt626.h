@@ -3,9 +3,9 @@
 
 #include "stm32f4xx.h"
 
-#define MT626_CMD_MAX 10
-#define MT626_SENDBUFF_MAX      100
-#define MT626_RECVBUFF_MAX      100
+#define MT626_CMD_MAX                   10
+#define MT626_SENDBUFF_MAX              100
+#define MT626_RECVBUFF_MAX              100
 
 
 #define MT626_CMD_STX                   0x02
@@ -24,6 +24,12 @@
 #define MT626_INIT_CMD                  9   //#10 初始化
 
 
+#define MT_STATE_Y                      0x59    //'Y'
+#define MT_STATE_N                      0x4E    //'N' 寻卡失败/获取UID失败
+#define MT_STATE_AUTH_ERR               0x33    //'3' 验证密码错误
+#define MT_STATE_SECTOR_ERR             0x31    //'1' 操作扇区号错误(不是验证密码后的扇区)  
+#define MT_STATE_DATA_ERR               0x34    //'4' 读/写数据失败,更改密码失败,增/减/初始化失败
+
 
 typedef enum
 {
@@ -40,8 +46,8 @@ typedef enum
     MT_FAIL
 } MT_RESULT;
 
-typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint8_t ucOptionLen, uint8_t *pucSendLength);
-typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint8_t ucRecvLen);
+typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t ucOptionLen, uint32_t *pucSendLength);
+typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint32_t ucRecvLen);
 
 
 typedef struct _MT626CMD
@@ -59,8 +65,8 @@ typedef struct _MT626COM
     MT626CMD_t *pMT626CMD[MT626_CMD_MAX];
     uint8_t *pucSendBuffer;
     uint8_t *pucRecvBuffer;
-    MT_RESULT (*sendCommand)(void *pObj, uint8_t ucSendID, uint8_t ucSendLenght);
-    MT_RESULT (*recvResponse)(void *pObj, uint8_t ucSendID, uint8_t *pucRecvdLen);
+    MT_RESULT (*sendCommand)(void *pObj, uint8_t ucSendID, uint32_t ucSendLenght);
+    MT_RESULT (*recvResponse)(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLen);
     void (*deleteCOM)(void *pObj);
 } MT626COM_t;
 
