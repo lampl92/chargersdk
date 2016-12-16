@@ -37,8 +37,8 @@ void bsp_Init(void)
     __HAL_RCC_CRC_CLK_ENABLE();	//
     bsp_RTC_Init();
     bsp_DWT_Init();
-    bsp_Uart_Init();   /* 初始化串口 */
     bsp_SDRAM_Init();
+    bsp_Uart_Init();   /* 初始化串口 */
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
     bsp_Touch_Init();

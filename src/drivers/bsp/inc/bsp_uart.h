@@ -10,8 +10,7 @@
 #define BSP_USART_H_
 
 #include "bsp.h"
-
-
+#include "userlib_queue.h"
 
 #define CLI_USARTx_BASE                             USART2
 #define CLI_USARTx_BAUDRATE                         115200
@@ -24,18 +23,12 @@
 #define RFID_BUFFER_SIZE                            100
 
 
-typedef struct
-{
-    uint8_t *front;
-    uint8_t *rear;
-}uart_recv_t;
-
 /* Exported macro ------------------------------------------------------------*/
 #define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 
 
 void bsp_Uart_Init(void);
-
+int8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
 
 #endif
 

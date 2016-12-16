@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include "includes.h"
 #include "tinysh.h"
@@ -6,7 +5,8 @@
 #include "cli_rtos.h"
 #include "cli_fatfs.h"
 #include "cli_xml.h"
-
+#include "bsp_uart.h"
+#include "userlib_queue.h"
 extern uint8_t aCliRxBuffer[1];
 extern uint16_t CLI_RX_STA;
 
@@ -25,7 +25,7 @@ void cli_init(void)
     tinysh_add_command(&cli_tasklist_cmd);
 
     /************¥≈≈Ãπ‹¿Ì****************/
-    
+
     tinysh_add_command(&cli_mkfs_cmd);
     tinysh_add_command(&cli_mount_cmd);
     tinysh_add_command(&cli_umount_cmd);
@@ -36,7 +36,7 @@ void cli_init(void)
     tinysh_add_command(&cli_testxml_cmd);
     tinysh_add_command(&cli_testxml_create_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
-    
+
     /* add the foo command
     */
     tinysh_add_command(&myfoocmd);
@@ -51,6 +51,7 @@ void cli_init(void)
     tinysh_add_command(&atoxi_cmd);
 
 }
+extern Queue *pCliRecvQue;
 void cli_main(void)
 {
     uint8_t ch;
@@ -58,14 +59,13 @@ void cli_main(void)
     cli_init();
     while(1)
     {
-        res = cli_recv_read(&ch, 100);
+        res = readRecvQue(pCliRecvQue, &ch, 1);
         if(res == 0)
         {
             tinysh_char_in(ch);
-            CLI_RX_STA = RESET;
         }
 //      tinysh_char_in((unsigned char)getchar());
-        vTaskDelay(100);
+        vTaskDelay(200);
     }
 }
 
