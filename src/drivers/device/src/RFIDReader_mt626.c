@@ -1,3 +1,10 @@
+/**
+* @file RFIDReader_mt626.c
+* @brief MT626 com driver
+* @author rgw
+* @version v1.0
+* @date 2016-12-14
+*/
 #include <stdlib.h>
 #include <string.h>
 #include "RFIDReader_mt626.h"
@@ -269,12 +276,22 @@ static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
     }
     for(i = 0; i < pMT626CMDObj->uiRecvdOptLen; i++)
     {
-        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(uiRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[uiRecvLen -2 - pMT626CMDObj->uiRecvdOptLen]ÎªÊý¾ÝÇøÆðÊ¼ÏÂ±êê
+        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(uiRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[uiRecvLen -2 - pMT626CMDObj->uiRecvdOptLen]ÎªÊý¾ÝÇøÆðÊ¼ÏÂ±ê?
     }
 
     return ucState;
 }
 
+/**
+* @brief 
+*
+* @param pObj
+* @param ucSendID
+* @param pucOptionData
+* @param uiOptionLen
+*
+* @return 
+*/
 int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen)
 {
     const uint32_t ucTimeOutMS = 5000, uiTryTimes = 3;
