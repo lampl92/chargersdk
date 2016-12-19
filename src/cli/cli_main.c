@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "includes.h"
+#include "xprintf.h"
 #include "tinysh.h"
 #include "cli_app.h"
 #include "cli_rtos.h"
@@ -12,7 +12,7 @@ extern uint16_t CLI_RX_STA;
 
 void tinysh_char_out(unsigned char c)
 {
-    putchar((int)c);
+    xputc((int)c);
 }
 
 
