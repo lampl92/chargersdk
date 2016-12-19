@@ -8,11 +8,9 @@ extern Queue *pRfidRecvQue;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
-
-static int MT626DelayMS(uint32_t ms)
+static void MT626DelayMS(uint32_t ms)
 {
     vTaskDelay(ms);
-    return 1;
 }
 
 static uint8_t verifBCC(uint8_t *data, uint32_t len)
@@ -55,16 +53,6 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
     }
 
 }
-#define MT626_FIND_CMD                  0   //#0  Ñ°¿¨
-#define MT626_READ_UID_CMD              1   //#1  »ñÈ¡UID       
-#define MT626_AUTH_KEYA_CMD             2   //#3  ÑéÖ¤KeyA
-#define MT626_AUTH_KEYB_CMD             3   //#4  ÑéÖ¤KeyB
-#define MT626_READ_CMD                  4   //#5  ¶ÁÉÈÇø¿éÊý¾Ý
-#define MT626_WRITE_CMD                 5   //#6  Ð´ÉÈÇø¿éÊý¾Ý
-#define MT626_CHANGE_KEY_CMD            6   //#7  ¸ü¸ÄÃÜÂë
-#define MT626_INC_CMD                   7   //#8  ÔöÖµ
-#define MT626_DEC_CMD                   8   //#9  ¼õÖµ
-#define MT626_INIT_CMD                  9   //#10 ³õÊ¼»¯
 
 static MT_RESULT recvReadEx(void *pObj, uint32_t *pucRecvdLen)
 {
@@ -181,10 +169,9 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLe
     {
         return MT_COM_FAIL;
     }
-
 }
 
-static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t ucOptionLen, uint32_t *pucSendLength)
+static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t uiOptionLen, uint32_t *pucSendLength)
 {
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
@@ -199,9 +186,9 @@ static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_
     pucSendBuffer[ucOffset++] = (uint8_t)(pMT626CMDObj -> usLenght);
     pucSendBuffer[ucOffset++] = MT626_CMD_TYPE;
     pucSendBuffer[ucOffset++] = pMT626CMDObj ->ucParam;
-    if(ucOptionLen > 0)
+    if(uiOptionLen > 0)
     {
-        for(i = 0; i < ucOptionLen; i++)
+        for(i = 0; i < uiOptionLen; i++)
         {
             pucSendBuffer[ucOffset++] = pOptionData[i];
         }
@@ -214,34 +201,81 @@ static int makeStCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_
 
     return 0;
 }
-//static int analyFindRes(void *pObj, uint8_t ucSendID, uint8_t ucRecvLen)
-//{
-//    return 0;
-//}
-//static int analyReadUIDRes(void *pObj, uint8_t ucSendID, uint8_t ucRecvLen)
-//{
-//    return 0;
-//}
 
-//static int analyKeyRes(void *pObj, uint8_t ucSendID, uint8_t ucRecvLen)
-//{
-//    return 0;
-//}
-////r,w
-//static int analyRWDataRes(void *pObj, uint8_t ucSendID, uint8_t ucRecvLen)
-//{
-//    return 0;
-//}
-//Inc,dec,err,init
-static int analyStRes(void *pObj, uint8_t ucSendID, uint32_t ucRecvLen)
+static int analyStdRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
 {
+    uint8_t *pucRecvdCMD;
+    uint8_t ucState;
+
+    pucRecvdCMD = ((MT626COM_t *)pObj)->pucRecvBuffer;
+    ucState = MT_STATE_N;
     
-    return 0;
+    switch(ucSendID)
+    {
+        case MT626_FIND_CMD:
+            ucState = pucRecvdCMD[5];
+            break;
+
+        case MT626_AUTH_KEYA_CMD:
+        case MT626_AUTH_KEYB_CMD:
+        case MT626_CHANGE_KEY_CMD:
+            ucState = pucRecvdCMD[6];
+            break;
+
+        case MT626_INC_CMD:
+        case MT626_DEC_CMD:
+        case MT626_INIT_CMD:
+            ucState = pucRecvdCMD[7];
+            break;
+        default:
+            break;
+    }
+
+    return ucState;
 }
 
+static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
+{
+    MT626COM_t *pMT626COMObj;
+    MT626CMD_t *pMT626CMDObj;
+    uint8_t *pucRecvdCMD;
+    uint8_t ucState;
+    uint32_t i;
 
+    pMT626COMObj = (MT626COM_t *)pObj;
+    pMT626CMDObj = pMT626COMObj->pMT626CMD[ucSendID];
+    pucRecvdCMD = pMT626COMObj->pucRecvBuffer;
 
-int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t ucOptionLen)
+    switch(ucSendID)
+    {
+        case MT626_READ_UID_CMD:
+            ucState = pucRecvdCMD[5];
+            pMT626CMDObj->uiRecvdOptLen = 4;
+            break;
+        case MT626_READ_CMD:
+        case MT626_WRITE_CMD:
+            ucState = pucRecvdCMD[7];
+            if(ucState == MT_STATE_Y)
+            {
+                pMT626CMDObj->uiRecvdOptLen = 16;
+            }
+            else // ¶ÁÐ´ÉÈÇø´íÎó
+            {
+                return ucState;
+            }
+            break;
+        default:
+            return ucState;
+    }
+    for(i = 0; i < pMT626CMDObj->uiRecvdOptLen; i++)
+    {
+        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(uiRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[uiRecvLen -2 - pMT626CMDObj->uiRecvdOptLen]ÎªÊý¾ÝÇøÆðÊ¼ÏÂ±êê
+    }
+
+    return ucState;
+}
+
+int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen)
 {
     const uint32_t ucTimeOutMS = 5000, uiTryTimes = 3;
     uint32_t ucFailedCounts;
@@ -255,7 +289,7 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t 
     pMT626COMObj = (MT626COM_t *)pObj;
     pMT626CMDObj = pMT626COMObj->pMT626CMD[ucSendID];
 
-    pMT626CMDObj ->makeProc(pMT626COMObj, ucSendID, pucOptionData, ucOptionLen, &ucSendLength);
+    pMT626CMDObj ->makeProc(pMT626COMObj, ucSendID, pucOptionData, uiOptionLen, &ucSendLength);
     do
     {
         res = pMT626COMObj ->sendCommand(pMT626COMObj, ucSendID, ucSendLength);
@@ -278,17 +312,23 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t 
     }
 
     return pMT626CMDObj->analyProc(pMT626COMObj, ucSendID, ucRcvdLength);
-
 }
+
 static MT626CMD_t *MT626CMDCreate(uint8_t ucParam, uint16_t usLenght, pMT626_MAKE_PROC makeProc, pMT626_ANALY_PROC analyProc)
 {
     MT626CMD_t *pMT626CMD = (MT626CMD_t *)malloc(sizeof(MT626CMD_t));
+    if(pMT626CMD == NULL)
+    {
+        return NULL;
+    }
     pMT626CMD->ucParam = ucParam;
     pMT626CMD->usLenght = usLenght;
     pMT626CMD->makeProc = makeProc;
     pMT626CMD->analyProc = analyProc;
+
     return pMT626CMD;
 }
+
 void deleteCOM(void *pObj)
 {
     int i;
@@ -303,6 +343,7 @@ void deleteCOM(void *pObj)
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
 }
+
 MT626COM_t *MT626COMCreate(void)//ºóÐøÊÇ·ñÓ¦Ìí¼Ó²ÎÊý, ²ÎÊý°üÀ¨UARTÊµÀý,ÒÔ³õÊ¼»¯´®¿ÚºÅÓë²¨ÌØÂÊ
 {
     int i;
@@ -316,16 +357,16 @@ MT626COM_t *MT626COMCreate(void)//ºóÐøÊÇ·ñÓ¦Ìí¼Ó²ÎÊý, ²ÎÊý°üÀ¨UARTÊµÀý,ÒÔ³õÊ¼»¯´
     {
         pMT626->pMT626CMD[i] = NULL;
     }
-    pMT626->pMT626CMD[MT626_FIND_CMD]       = MT626CMDCreate(0x30, 0x02, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_READ_UID_CMD]   = MT626CMDCreate(0x31, 0x02, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_AUTH_KEYA_CMD]  = MT626CMDCreate(0x32, 0x09, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_AUTH_KEYB_CMD]  = MT626CMDCreate(0x39, 0x09, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_READ_CMD]       = MT626CMDCreate(0x33, 0x04, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_WRITE_CMD]      = MT626CMDCreate(0x34, 0x14, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_CHANGE_KEY_CMD] = MT626CMDCreate(0x35, 0x09, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_INC_CMD]        = MT626CMDCreate(0x37, 0x08, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_DEC_CMD]        = MT626CMDCreate(0x38, 0x08, makeStCmd, analyStRes);
-    pMT626->pMT626CMD[MT626_INIT_CMD]       = MT626CMDCreate(0x36, 0x08, makeStCmd, analyStRes);
+    pMT626->pMT626CMD[MT626_FIND_CMD]       = MT626CMDCreate(0x30, 0x02, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_READ_UID_CMD]   = MT626CMDCreate(0x31, 0x02, makeStdCmd, analyRWRes);
+    pMT626->pMT626CMD[MT626_AUTH_KEYA_CMD]  = MT626CMDCreate(0x32, 0x09, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_AUTH_KEYB_CMD]  = MT626CMDCreate(0x39, 0x09, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_READ_CMD]       = MT626CMDCreate(0x33, 0x04, makeStdCmd, analyRWRes);
+    pMT626->pMT626CMD[MT626_WRITE_CMD]      = MT626CMDCreate(0x34, 0x14, makeStdCmd, analyRWRes);
+    pMT626->pMT626CMD[MT626_CHANGE_KEY_CMD] = MT626CMDCreate(0x35, 0x09, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_INC_CMD]        = MT626CMDCreate(0x37, 0x08, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_DEC_CMD]        = MT626CMDCreate(0x38, 0x08, makeStdCmd, analyStdRes);
+    pMT626->pMT626CMD[MT626_INIT_CMD]       = MT626CMDCreate(0x36, 0x08, makeStdCmd, analyStdRes);
 
     pMT626 ->recvResponse = recvResponse;
     pMT626 ->sendCommand = sendCommand;
@@ -337,15 +378,4 @@ MT626COM_t *MT626COMCreate(void)//ºóÐøÊÇ·ñÓ¦Ìí¼Ó²ÎÊý, ²ÎÊý°üÀ¨UARTÊµÀý,ÒÔ³õÊ¼»¯´
     memset(pMT626->pucRecvBuffer, 0, MT626_RECVBUFF_MAX);
 
     return pMT626;
-}
-MT_RESULT mt626_find(void)
-{
-    return MT_SUCCEED;
-}
-
-MT_RESULT mt626_ReadUID(uint8_t *pUID)
-{
-
-    pUID[0] = 0xAB;
-    return MT_SUCCEED;
 }

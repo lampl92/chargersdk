@@ -3,9 +3,9 @@
 
 #include "stm32f4xx.h"
 
-#define MT626_CMD_MAX                   10
-#define MT626_SENDBUFF_MAX              100
-#define MT626_RECVBUFF_MAX              100
+#define MT626_CMD_MAX                   10  //命令数量
+#define MT626_SENDBUFF_MAX              100 //发送缓冲长度
+#define MT626_RECVBUFF_MAX              100 //接收缓冲长度
 
 
 #define MT626_CMD_STX                   0x02
@@ -24,7 +24,7 @@
 #define MT626_INIT_CMD                  9   //#10 初始化
 
 
-#define MT_STATE_Y                      0x59    //'Y'
+#define MT_STATE_Y                      0x59    //'Y' 成功
 #define MT_STATE_N                      0x4E    //'N' 寻卡失败/获取UID失败
 #define MT_STATE_AUTH_ERR               0x33    //'3' 验证密码错误
 #define MT_STATE_SECTOR_ERR             0x31    //'1' 操作扇区号错误(不是验证密码后的扇区)  
@@ -46,18 +46,25 @@ typedef enum
     MT_FAIL
 } MT_RESULT;
 
-typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t ucOptionLen, uint32_t *pucSendLength);
-typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint32_t ucRecvLen);
+//typedef union _byteword
+//{
+//	uint8_t	 byte[2];
+//	uint16_t word;
+//} BYTEWORD, *PBYTEWORD;
 
+typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t uiOptionLen, uint32_t *pucSendLength);
+typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint32_t uiRecvLen);
 
 typedef struct _MT626CMD
 {
     uint8_t     ucParam;
     uint16_t    usLenght;
-
+    uint8_t     ucRecvdOptData[16];//最长16个数据
+    uint32_t    uiRecvdOptLen;
+    
     pMT626_MAKE_PROC  makeProc;
     pMT626_ANALY_PROC analyProc;
-
+    
 } MT626CMD_t;
 
 typedef struct _MT626COM
