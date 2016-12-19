@@ -7,3 +7,4 @@ src/drivers/bsp/src/not use/
 *.TMP
 build/Keil/chargersdk.bin
 build/EmBitz/obj/
+build/EmBitz/bin/
