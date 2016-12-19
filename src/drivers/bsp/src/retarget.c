@@ -1,8 +1,22 @@
-#include <stdio.h>
 #include "bsp.h"
+#include "xprintf.h"
 
 extern UART_HandleTypeDef CLI_UARTx_Handler;
 
+void myputc(uint8_t ch)
+{
+    __set_PRIMASK(1);    //å¢åŠ å…³é—­ä¸­æ–­åŠŸèƒ½,é˜²æ­¢ä¸²å£åœ¨ä½¿ç”¨æ—¶å‡ºç°å†²çª
+    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
+    __set_PRIMASK(0);
+}
+void retarget_init(void)
+{
+    xdev_out(myputc);
+}
+
+
+
+#if 0
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -18,19 +32,19 @@ FILE __stdout;
 FILE __stdin;
 FILE __stderr;
 /**
-  * @brief  ÖØ¶¨Ïò±ê×¼¿âº¯Êıprintf¶ÔÓ¦µÄ»ù´¡¿âº¯Êı.
+  * @brief  é‡å®šå‘æ ‡å‡†åº“å‡½æ•°printfå¯¹åº”çš„åŸºç¡€åº“å‡½æ•°.
   * @param  None
   * @retval None
   */
 PUTCHAR_PROTOTYPE
 {
     /*
-    ÓÉÓÚWindowsÖĞÖÕ¶Ë»»ĞĞÊÇ"\r\n", ¶øtinyshÖĞÈ«²¿ÓÃµÄÊÇ'\n'½áÎ²,ÎŞ·¨Íê³É»»ĞĞ,
-    ÔÚ´Ë½øĞĞ¼æÈİ
+    ç”±äºWindowsä¸­ç»ˆç«¯æ¢è¡Œæ˜¯"\r\n", è€Œtinyshä¸­å…¨éƒ¨ç”¨çš„æ˜¯'\n'ç»“å°¾,æ— æ³•å®Œæˆæ¢è¡Œ,
+    åœ¨æ­¤è¿›è¡Œå…¼å®¹
     */
 
     int tempch = ch;
-    __set_PRIMASK(1);    //Ôö¼Ó¹Ø±ÕÖĞ¶Ï¹¦ÄÜ,·ÀÖ¹´®¿ÚÔÚÊ¹ÓÃÊ±³öÏÖ³åÍ»
+    __set_PRIMASK(1);    //å¢åŠ å…³é—­ä¸­æ–­åŠŸèƒ½,é˜²æ­¢ä¸²å£åœ¨ä½¿ç”¨æ—¶å‡ºç°å†²çª
     if(tempch == '\n')
     {
         ch = '\r';
@@ -48,11 +62,10 @@ int fgetc(FILE *f)
     return ch;
 }
 
-
-int ferror(FILE *f)
-{
-    return EOF;
-}
+//int ferror(FILE *f)
+//{
+//    return EOF;
+//}
 
 void _ttywrch(int ch)
 {
@@ -64,3 +77,26 @@ void _sys_exit(int x)
 {
     x = x;
 }
+#if 0
+void  safe_printf(char *format, ...)
+{
+    char  buf_str[200 + 1];
+    va_list   v_args;
+
+
+    va_start(v_args, format);
+   (void)vsnprintf((char       *)&buf_str[0],
+                   (size_t      ) sizeof(buf_str),
+                   (char const *) format,
+                                  v_args);
+    va_end(v_args);
+
+	/* Â»Â¥Â³Ã¢ÃÃ…ÂºÃ…ÃÂ¿ */
+	xSemaphoreTake(xMutex, portMAX_DELAY);
+
+    printf("%s", buf_str);
+
+   	xSemaphoreGive(xMutex);
+}
+#endif
+#endif
