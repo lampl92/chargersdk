@@ -65,7 +65,7 @@ void cli_main(void)
             tinysh_char_in(ch);
         }
 //      tinysh_char_in((unsigned char)getchar());
-        vTaskDelay(200);
+        vTaskDelay(100);
     }
 }
 
