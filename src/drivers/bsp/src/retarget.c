@@ -1,22 +1,29 @@
 #include "bsp.h"
-#include "xprintf.h"
 
 extern UART_HandleTypeDef CLI_UARTx_Handler;
 
+
 void myputc(uint8_t ch)
 {
+    int tempch = ch;
     __set_PRIMASK(1);    //增加关闭中断功能,防止串口在使用时出现冲突
-    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
+    if(tempch == '\n')
+    {
+        ch = '\r';
+        HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
+    }
+    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&tempch, 1, 0xFFFF);
     __set_PRIMASK(0);
 }
+#if 0
 void retarget_init(void)
 {
     xdev_out(myputc);
 }
 
+#endif
 
 
-#if 0
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -27,45 +34,58 @@ void retarget_init(void)
 
 #pragma import(__use_no_semihosting_swi)
 
-struct __FILE { int handle; };
+struct __FILE
+{
+    int handle;
+};
 FILE __stdout;
 FILE __stdin;
 FILE __stderr;
+#ifdef __GNUC__
+int _write (int fd, char *ptr, int len)
+{
+    int i = 0;
+    uint8_t ch;
+    while (*ptr && (i < len))
+    {
+        myputc(*ptr);
+        i++;
+        ptr++;
+    }
+    return i;
+}
+#else
 /**
   * @brief  重定向标准库函数printf对应的基础库函数.
   * @param  None
   * @retval None
   */
-PUTCHAR_PROTOTYPE
+int fputc(int ch, FILE *f)
 {
     /*
     由于Windows中终端换行是"\r\n", 而tinysh中全部用的是'\n'结尾,无法完成换行,
     在此进行兼容
     */
 
-    int tempch = ch;
-    __set_PRIMASK(1);    //增加关闭中断功能,防止串口在使用时出现冲突
-    if(tempch == '\n')
-    {
-        ch = '\r';
-        HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
-    }
-    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&tempch, 1, 0xFFFF);
-    __set_PRIMASK(0);
+    myputc(ch);
+
     return ch;
 }
 
 int fgetc(FILE *f)
 {
     int ch;
-    HAL_UART_Receive(&CLI_UARTx_Handler,(uint8_t *)&ch, 1, 1000);
+    HAL_UART_Receive(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 1000);
     return ch;
 }
 
-//int ferror(FILE *f)
-//{
-//    return EOF;
-//}
+int ferror(FILE *f)
+{
+    return EOF;
+}
+#endif
+
+
 
 void _ttywrch(int ch)
 {
@@ -77,26 +97,4 @@ void _sys_exit(int x)
 {
     x = x;
 }
-#if 0
-void  safe_printf(char *format, ...)
-{
-    char  buf_str[200 + 1];
-    va_list   v_args;
 
-
-    va_start(v_args, format);
-   (void)vsnprintf((char       *)&buf_str[0],
-                   (size_t      ) sizeof(buf_str),
-                   (char const *) format,
-                                  v_args);
-    va_end(v_args);
-
-	/* »¥³âÐÅºÅÁ¿ */
-	xSemaphoreTake(xMutex, portMAX_DELAY);
-
-    printf("%s", buf_str);
-
-   	xSemaphoreGive(xMutex);
-}
-#endif
-#endif
