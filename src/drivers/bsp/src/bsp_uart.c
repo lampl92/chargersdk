@@ -60,10 +60,7 @@ void bsp_Uart_Init(void)
     RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&RFID_UARTx_Handler);
     HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1);
-
-
 }
-
 
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {

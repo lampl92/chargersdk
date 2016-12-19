@@ -6,8 +6,8 @@
 * @date 2016-10-27
 */
 
-#ifndef MINUNIT_H
-#define MINUNIT_H
+#ifndef __MINUNIT_H
+#define __MINUNIT_H
 
 /* ---------------------------------------------------------------------------*/
 /**
