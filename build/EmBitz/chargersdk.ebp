@@ -14,7 +14,6 @@
 				<Option compiler="armgcc_eb" />
 				<Option projectDeviceOptionsRelation="0" />
 				<Compiler>
-					<Add option="-Wall" />
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
@@ -97,10 +96,13 @@
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 		</Linker>
-		<Unit filename="src\startup_stm32f429x.S">
+		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\apptask.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\FramewinDLG.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\main.c">
@@ -305,9 +307,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\userlib_queue.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\userlib\src\xprintf.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\os\FreeRTOS\Source\croutine.c">

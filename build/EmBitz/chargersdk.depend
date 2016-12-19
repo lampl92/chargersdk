@@ -455,7 +455,7 @@
 1482126098 source:d:\documents\projects\chargersdk\build\embitz\src\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1481611618 source:d:\documents\projects\chargersdk\src\app\apptask.c
+1482153679 source:d:\documents\projects\chargersdk\src\app\apptask.c
 	"includes.h"
 	"GUIDEMO.h"
 
@@ -902,7 +902,7 @@
 	"ff_gen_drv.h"
 	"nand_diskio.h"
 
-1482150771 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
+1482153257 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
 	"includes.h"
 	"tinysh.h"
 	"cli_app.h"
@@ -928,7 +928,7 @@
 	"includes.h"
 	"mxml.h"
 
-1482147014 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
+1482153205 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
 	"includes.h"
 	"bsp.h"
 
@@ -976,9 +976,8 @@
 1478673966 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1482152960 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
+1482153156 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
 	"bsp.h"
-	"xprintf.h"
 
 1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal.c
 	"stm32f4xx_hal.h"
@@ -1267,4 +1266,194 @@
 	<stdarg.h>
 
 1307542742 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\xprintf.h
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_antialiasedtext.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_automotive.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_bargraph.c
+	"GUI.h"
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_bitmap.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_colorbar.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_conf.c
+	"GUI.h"
+	"GUIDEMO.h"
+	"GUI_VNC.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_vnc.h
+	"GUI_Private.h"
+	"GUI_Type.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_cursor.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_fading.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_graph.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_iconview.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_imageflow.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_intro.c
+	<string.h>
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_listview.c
+	"GUIDEMO.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_radialmenu.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_resource.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_skinning.c
+	"GUIDEMO.h"
+	<string.h>
+	"DIALOG.h"
+	"MESSAGEBOX.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\dialog.h
+	"WM.h"
+	"BUTTON.h"
+	"CALENDAR.h"
+	"CHECKBOX.h"
+	"CHOOSECOLOR.h"
+	"CHOOSEFILE.h"
+	"DROPDOWN.h"
+	"EDIT.h"
+	"FRAMEWIN.h"
+	"GRAPH.h"
+	"HEADER.h"
+	"ICONVIEW.h"
+	"IMAGE.h"
+	"LISTBOX.h"
+	"LISTVIEW.h"
+	"LISTWHEEL.h"
+	"MENU.h"
+	"MULTIEDIT.h"
+	"MULTIPAGE.h"
+	"PROGBAR.h"
+	"RADIO.h"
+	"SCROLLBAR.h"
+	"SLIDER.h"
+	"SPINBOX.h"
+	"TEXT.h"
+	"TREEVIEW.h"
+	"KNOB.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\calendar.h
+	"WM.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\choosecolor.h
+	"WM.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\choosefile.h
+	"WM.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\dropdown.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"LISTBOX.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\listbox.h
+	"WM.h"
+	"WIDGET.h"
+	"DIALOG_Intern.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\edit.h
+	"WM.h"
+	"DIALOG_Intern.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\image.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\listwheel.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\menu.h
+	"WM.h"
+	"WIDGET.h"
+	"DIALOG_Intern.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\multiedit.h
+	"WM.h"
+	"DIALOG_Intern.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\multipage.h
+	"WM.h"
+	"DIALOG.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\radio.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\spinbox.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+	"GUI_Debug.h"
+	"EDIT.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\knob.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+	"GUI_Debug.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\messagebox.h
+	"WM.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_speed.c
+	"GUIDEMO.h"
+	<stdlib.h>
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_speedometer.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_start.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_transparentdialog.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_treeview.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_vscreen.c
+	"GUIDEMO.h"
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_washingmachine.c
+	"GUIDEMO.h"
+	<math.h>
+
+1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_zoomandrotate.c
+	"GUIDEMO.h"
+
+1481636475 source:d:\documents\projects\chargersdk\src\app\framewindlg.c
+	"DIALOG.h"
 
