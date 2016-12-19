@@ -1,0 +1,1270 @@
+# depslib dependency file v1.0
+1482126098 source:d:\documents\projects\chargersdk\build\embitz\src\main.c
+	"stm32f4xx.h"
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f4xx.h
+	"stm32f405xx.h"
+	"stm32f415xx.h"
+	"stm32f407xx.h"
+	"stm32f417xx.h"
+	"stm32f427xx.h"
+	"stm32f437xx.h"
+	"stm32f429xx.h"
+	"stm32f439xx.h"
+	"stm32f401xc.h"
+	"stm32f401xe.h"
+	"stm32f410tx.h"
+	"stm32f410cx.h"
+	"stm32f410rx.h"
+	"stm32f411xe.h"
+	"stm32f446xx.h"
+	"stm32f469xx.h"
+	"stm32f479xx.h"
+	"stm32f412cx.h"
+	"stm32f412zx.h"
+	"stm32f412rx.h"
+	"stm32f412vx.h"
+	"stm32f4xx_hal.h"
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f405xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\core_cm4.h
+	<stdint.h>
+	"core_cmInstr.h"
+	"core_cmFunc.h"
+	"core_cmSimd.h"
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\core_cminstr.h
+	"cmsis_armcc.h"
+	"cmsis_armcc_V6.h"
+	"cmsis_gcc.h"
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+	<cmsis_csm.h>
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\cmsis_armcc.h
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\cmsis_armcc_v6.h
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\cmsis_gcc.h
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\core_cmfunc.h
+	"cmsis_armcc.h"
+	"cmsis_armcc_V6.h"
+	"cmsis_gcc.h"
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+	<cmsis_csm.h>
+
+1467008358 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\include\core_cmsimd.h
+	"cmsis_armcc.h"
+	"cmsis_armcc_V6.h"
+	"cmsis_gcc.h"
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+	<cmsis_csm.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\system_stm32f4xx.h
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f415xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f407xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f417xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f427xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f437xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f429xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f439xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f401xc.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f401xe.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f410tx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f410cx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f410rx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f411xe.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f446xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f469xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f479xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f412cx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f412zx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f412rx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1467101040 d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\include\stm32f412vx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal.h
+	"stm32f4xx_hal_conf.h"
+
+1479819708 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_conf.h
+	"stm32f4xx_hal_rcc.h"
+	"stm32f4xx_hal_gpio.h"
+	"stm32f4xx_hal_dma.h"
+	"stm32f4xx_hal_cortex.h"
+	"stm32f4xx_hal_adc.h"
+	"stm32f4xx_hal_can.h"
+	"stm32f4xx_hal_crc.h"
+	"stm32f4xx_hal_cryp.h"
+	"stm32f4xx_hal_dma2d.h"
+	"stm32f4xx_hal_dac.h"
+	"stm32f4xx_hal_dcmi.h"
+	"stm32f4xx_hal_eth.h"
+	"stm32f4xx_hal_flash.h"
+	"stm32f4xx_hal_sram.h"
+	"stm32f4xx_hal_nor.h"
+	"stm32f4xx_hal_nand.h"
+	"stm32f4xx_hal_pccard.h"
+	"stm32f4xx_hal_sdram.h"
+	"stm32f4xx_hal_hash.h"
+	"stm32f4xx_hal_i2c.h"
+	"stm32f4xx_hal_i2s.h"
+	"stm32f4xx_hal_iwdg.h"
+	"stm32f4xx_hal_ltdc.h"
+	"stm32f4xx_hal_pwr.h"
+	"stm32f4xx_hal_rng.h"
+	"stm32f4xx_hal_rtc.h"
+	"stm32f4xx_hal_sai.h"
+	"stm32f4xx_hal_sd.h"
+	"stm32f4xx_hal_spi.h"
+	"stm32f4xx_hal_tim.h"
+	"stm32f4xx_hal_uart.h"
+	"stm32f4xx_hal_usart.h"
+	"stm32f4xx_hal_irda.h"
+	"stm32f4xx_hal_smartcard.h"
+	"stm32f4xx_hal_wwdg.h"
+	"stm32f4xx_hal_pcd.h"
+	"stm32f4xx_hal_hcd.h"
+	"stm32f4xx_hal_dsi.h"
+	"stm32f4xx_hal_qspi.h"
+	"stm32f4xx_hal_cec.h"
+	"stm32f4xx_hal_fmpi2c.h"
+	"stm32f4xx_hal_spdifrx.h"
+	"stm32f4xx_hal_dfsdm.h"
+	"stm32f4xx_hal_lptim.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rcc.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_rcc_ex.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_def.h
+	"stm32f4xx.h"
+	"Legacy/stm32_hal_legacy.h"
+	<stdio.h>
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\legacy\stm32_hal_legacy.h
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rcc_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_gpio.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_gpio_ex.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_gpio_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dma.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_dma_ex.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dma_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_cortex.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_adc.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_adc_ex.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_adc_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_can.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_crc.h
+	"stm32f4xx_hal_def.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_cryp.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_cryp_ex.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_cryp_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dma2d.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dac.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_dac_ex.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dac_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dcmi.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_dcmi_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dcmi_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_eth.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_flash.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_flash_ex.h"
+	"stm32f4xx_hal_flash_ramfunc.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_flash_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_flash_ramfunc.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_sram.h
+	"stm32f4xx_ll_fsmc.h"
+	"stm32f4xx_ll_fmc.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_ll_fsmc.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_ll_fmc.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_nor.h
+	"stm32f4xx_ll_fsmc.h"
+	"stm32f4xx_ll_fmc.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_nand.h
+	"stm32f4xx_ll_fsmc.h"
+	"stm32f4xx_ll_fmc.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pccard.h
+	"stm32f4xx_ll_fsmc.h"
+	"stm32f4xx_ll_fmc.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_sdram.h
+	"stm32f4xx_ll_fmc.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_hash.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_hash_ex.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_hash_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_i2c.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_i2c_ex.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_i2c_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_i2s.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_i2s_ex.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_i2s_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_iwdg.h
+	"stm32f4xx_hal_def.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_ltdc.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_ltdc_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_ltdc_ex.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_dsi.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dsi.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pwr.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_pwr_ex.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pwr_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rng.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rtc.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_rtc_ex.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rtc_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_sai.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_sai_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_sai_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_sd.h
+	"stm32f4xx_ll_sdmmc.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_ll_sdmmc.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_spi.h
+	"stm32f4xx_hal_def.h"
+
+1474539192 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_tim.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_tim_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_tim_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_uart.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_usart.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_irda.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_smartcard.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_wwdg.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pcd.h
+	"stm32f4xx_ll_usb.h"
+	"stm32f4xx_hal_pcd_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_ll_usb.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pcd_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_hcd.h
+	"stm32f4xx_ll_usb.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_qspi.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_cec.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_fmpi2c.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_fmpi2c_ex.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_fmpi2c_ex.h
+	"stm32f4xx_hal_def.h"
+
+1474539196 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_spdifrx.h
+	"stm32f4xx_hal_def.h"
+
+1474539202 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_dfsdm.h
+	"stm32f4xx_hal_def.h"
+
+1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_lptim.h
+	"stm32f4xx_hal_def.h"
+
+1482129119 source:d:\documents\projects\chargersdk\build\embitz\src\startup_stm32f429x.s
+
+1482126098 source:d:\documents\projects\chargersdk\build\embitz\src\system_stm32f4xx.c
+	"stm32f4xx.h"
+
+1481611618 source:d:\documents\projects\chargersdk\src\app\apptask.c
+	"includes.h"
+	"GUIDEMO.h"
+
+1482139643 d:\documents\projects\chargersdk\src\app\includes.h
+	<stdarg.h>
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<stdint.h>
+	"stm32f4xx.h"
+	"FreeRTOS.h"
+	"task.h"
+	"queue.h"
+	"croutine.h"
+	"GUI.h"
+	"WM.h"
+	"ff.h"
+	"sysinit.h"
+	"apptask.h"
+	"bsp.h"
+	"tinysh.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\freertos.h
+	<stddef.h>
+	<stdint.h>
+	"FreeRTOSConfig.h"
+	"projdefs.h"
+	"portable.h"
+	<reent.h>
+
+1481865411 d:\documents\projects\chargersdk\src\os\freertosconfig.h
+	<stdint.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\projdefs.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\portable.h
+	"deprecated_definitions.h"
+	"portmacro.h"
+	"mpu_wrappers.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\deprecated_definitions.h
+	"..\..\Source\portable\owatcom\16bitdos\pc\portmacro.h"
+	"..\..\Source\portable\owatcom\16bitdos\flsh186\portmacro.h"
+	"../portable/GCC/ATMega323/portmacro.h"
+	"../portable/IAR/ATMega323/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC24_dsPIC/portmacro.h"
+	"../../Source/portable/MPLAB/PIC18F/portmacro.h"
+	"../../Source/portable/MPLAB/PIC32MX/portmacro.h"
+	"libFreeRTOS/Include/portmacro.h"
+	"../../Source/portable/SDCC/Cygnal/portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC2000/portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/GCC/ARM7_LPC23xx/portmacro.h"
+	"..\..\Source\portable\IAR\MSP430\portmacro.h"
+	"../../Source/portable/GCC/MSP430F449/portmacro.h"
+	"../../Source/portable/Rowley/MSP430F449/portmacro.h"
+	"..\..\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91SAM7S/portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM7S64\portmacro.h"
+	"..\..\Source\portable\IAR\AtmelSAM9XE\portmacro.h"
+	"..\..\Source\portable\IAR\LPC2000\portmacro.h"
+	"..\..\Source\portable\IAR\STR71x\portmacro.h"
+	"..\..\Source\portable\IAR\STR75x\portmacro.h"
+	"..\..\Source\portable\GCC\STR75x\portmacro.h"
+	"..\..\Source\portable\IAR\STR91x\portmacro.h"
+	"../../Source/portable/GCC/H8S2329/portmacro.h"
+	"../../Source/portable/GCC/ARM7_AT91FR40008/portmacro.h"
+	"../../Source/portable/RVDS/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/GCC/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/IAR/ARM_CM3/portmacro.h"
+	"../../Source/portable/CodeWarrior/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MicroBlaze/portmacro.h"
+	"..\..\Source\portable\Paradigm\Tern_EE\small\portmacro.h"
+	"../../Source/portable/GCC/HCS12/portmacro.h"
+	"../../Source/portable/GCC/MCF5235/portmacro.h"
+	"../../../Source/portable/GCC/ColdFire_V2/portmacro.h"
+	"../../Source/portable/CodeWarrior/ColdFire_V2/portmacro.h"
+	"../../Source/portable/GCC/PPC405_Xilinx/portmacro.h"
+	"../../Source/portable/GCC/PPC440_Xilinx/portmacro.h"
+	"..\..\Source\portable\Softune\MB96340\portmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\PC\prtmacro.h"
+	"frconfig.h"
+	"..\portable\BCC\16BitDOS\flsh186\prtmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/V850ES/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+	"../../Source/portable/IAR/78K0R/portmacro.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\owatcom\16bitdos\pc\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\owatcom\16bitdos\flsh186\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\atmega323\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\atmega323\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\mplab\pic24_dspic\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\mplab\pic18f\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\mplab\pic32mx\portmacro.h
+	<xc.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\sdcc\cygnal\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm7_lpc2000\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm_cm4f\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm7_lpc23xx\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\msp430\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\msp430f449\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\rowley\msp430f449\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\rvds\arm7_lpc21xx\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm7_at91sam7s\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\atmelsam7s64\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\atmelsam9xe\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\lpc2000\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\str71x\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\str75x\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\str75x\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\str91x\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\h8s2329\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm7_at91fr40008\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\rvds\arm_cm3\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm_cm3\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\arm_cm3\portmacro.h
+	<intrinsics.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\codewarrior\hcs12\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\microblaze\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\paradigm\tern_ee\small\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\hcs12\portmacro.h
+
+1388953968 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\mcf5235\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\codewarrior\coldfire_v2\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\ppc405_xilinx\portmacro.h
+	"xexception_l.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\ppc440_xilinx\portmacro.h
+	"xexception_l.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\softune\mb96340\portmacro.h
+	<stddef.h>
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\bcc\16bitdos\pc\prtmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\bcc\16bitdos\flsh186\prtmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\v850es\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\portable\iar\78k0r\portmacro.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\mpu_wrappers.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\task.h
+	"list.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\list.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\queue.h
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\croutine.h
+	"list.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui.h
+	"GUI_ConfDefaults.h"
+	"GUI_Type.h"
+	"GUI_Version.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_confdefaults.h
+	"GUIConf.h"
+
+1481190760 d:\documents\projects\chargersdk\src\middlewares\stemwin\config\guiconf.h
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_type.h
+	"LCD.h"
+	"GUIConf.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\lcd.h
+	"GUI_ConfDefaults.h"
+	"Global.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\global.h
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_version.h
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\wm.h
+	"GUI_ConfDefaults.h"
+	"GUI_Type.h"
+	"WM_GUI.h"
+	"GUI.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\wm_gui.h
+
+1481012811 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ff.h
+	"integer.h"
+	"ffconf.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\integer.h
+	<windows.h>
+	<tchar.h>
+
+1481013520 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ffconf.h
+	"FreeRTOS.h"
+	"semphr.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\semphr.h
+	"queue.h"
+
+1481627336 d:\documents\projects\chargersdk\src\app\sysinit.h
+
+1481190735 d:\documents\projects\chargersdk\src\app\apptask.h
+	"includes.h"
+	"cli_main.h"
+
+1478761966 d:\documents\projects\chargersdk\src\cli\cli_main.h
+
+1481773481 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<stdint.h>
+	"bsp_uart.h"
+	"bsp_sdram.h"
+	"bsp_dwt.h"
+	"bsp_rtc.h"
+	"bsp_user_lib.h"
+	"bsp_nand_hw.h"
+	"bsp_nand_ftl.h"
+	"bsp_touch_2046.h"
+
+1481871946 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
+	"bsp.h"
+	"userlib_queue.h"
+
+1481867978 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\userlib_queue.h
+
+1478666404 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_sdram.h
+	"bsp.h"
+
+1478674849 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_dwt.h
+
+1481773481 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_rtc.h
+	"includes.h"
+
+1480053803 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_user_lib.h
+	"stm32f4xx.h"
+
+1479826861 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_hw.h
+	"bsp.h"
+
+1479826913 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_ftl.h
+	"bsp.h"
+
+1481520237 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_touch_2046.h
+	"bsp.h"
+
+1478573796 d:\documents\projects\chargersdk\src\middlewares\tinysh\tinysh.h
+
+1481190760 d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo.h
+	"GUI.h"
+	"WM.h"
+	"CHECKBOX.h"
+	"FRAMEWIN.h"
+	"PROGBAR.h"
+	"TEXT.h"
+	"BUTTON.h"
+	"SLIDER.h"
+	"HEADER.h"
+	"GRAPH.h"
+	"ICONVIEW.h"
+	"LISTVIEW.h"
+	"TREEVIEW.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\checkbox.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\dialog_intern.h
+	"WM.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\widget.h
+	"WM_Intern.h"
+	"SCROLLBAR.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\wm_intern.h
+	"WM.h"
+	"GUI_Private.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_private.h
+	"GUI.h"
+	"LCD_Protected.h"
+	"GUI_Debug.h"
+	"WM_GUI.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\lcd_protected.h
+	"LCD.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\gui_debug.h
+	<stddef.h>
+	"GUI.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\scrollbar.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\framewin.h
+	"WM.h"
+	"WIDGET.h"
+	"DIALOG_Intern.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\progbar.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\text.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+	"GUI_Debug.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\button.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\slider.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\header.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\graph.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\iconview.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\listview.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"ICONVIEW.h"
+	"HEADER.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\treeview.h
+	"WM.h"
+	"DIALOG_Intern.h"
+	"WIDGET.h"
+
+1481620032 source:d:\documents\projects\chargersdk\src\app\main.c
+	"includes.h"
+
+1478672850 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
+	"stm32f4xx_it.h"
+
+1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
+	"stm32f4xx.h"
+
+1482151220 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+	"includes.h"
+	"ff_gen_drv.h"
+	"nand_diskio.h"
+	"malloc.h"
+	"mxml.h"
+
+1480044329 d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\ff_gen_drv.h
+	"diskio.h"
+	"ff.h"
+	"stm32f4xx.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\diskio.h
+	"integer.h"
+
+1479980441 d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\nand_diskio.h
+
+1480643745 d:\documents\projects\chargersdk\src\drivers\bsp\inc\malloc.h
+	<stdlib.h>
+	"stm32f4xx.h"
+
+1481620746 d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<errno.h>
+	"ff.h"
+
+1482139723 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
+	"includes.h"
+
+1480993551 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
+	"includes.h"
+	"ff.h"
+	"ff_gen_drv.h"
+	"nand_diskio.h"
+
+1482150771 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
+	"includes.h"
+	"tinysh.h"
+	"cli_app.h"
+	"cli_rtos.h"
+	"cli_fatfs.h"
+	"cli_xml.h"
+	"bsp_uart.h"
+	"userlib_queue.h"
+
+1479781709 d:\documents\projects\chargersdk\src\cli\cli_app.h
+
+1478503234 d:\documents\projects\chargersdk\src\cli\cli_rtos.h
+
+1480392560 d:\documents\projects\chargersdk\src\cli\cli_fatfs.h
+
+1480391775 d:\documents\projects\chargersdk\src\cli\cli_xml.h
+
+1480489202 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
+	"includes.h"
+	"task.h"
+
+1480917681 source:d:\documents\projects\chargersdk\src\cli\cli_xml.c
+	"includes.h"
+	"mxml.h"
+
+1482147014 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
+	"includes.h"
+	"bsp.h"
+
+1478674937 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_dwt.c
+	"bsp.h"
+
+1480490224 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_ftl.c
+	"bsp.h"
+
+1479999476 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_hw.c
+	"bsp.h"
+
+1481773481 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_rtc.c
+	"bsp.h"
+
+1480481259 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_sdram.c
+	"bsp.h"
+
+1481593953 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_touch_2046.c
+	"bsp.h"
+	"stdlib.h"
+	"math.h"
+
+1482118225 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
+	"bsp.h"
+	"cli_main.h"
+	"userlib_queue.h"
+
+1480053786 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_user_lib.c
+	"bsp.h"
+	<ctype.h>
+	<string.h>
+
+1482126627 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
+	<stdlib.h>
+	<string.h>
+	"RFIDReader_mt626.h"
+	"bsp_uart.h"
+
+1482118618 d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.h
+	"stm32f4xx.h"
+
+1467101038 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\gcc\startup_stm32f429xx.s
+
+1478673966 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
+	"stm32f4xx.h"
+
+1482152960 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
+	"bsp.h"
+	"xprintf.h"
+
+1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cortex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_crc.c
+	"stm32f4xx_hal.h"
+
+1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma2d.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma_ex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_gpio.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_ltdc.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_ltdc_ex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_nand.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr_ex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc_ex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sdram.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_uart.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_usart.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_ll_fmc.c
+	"stm32f4xx_hal.h"
+
+1481635947 source:d:\documents\projects\chargersdk\src\hmi\touch_calibrate.c
+	"GUI.h"
+	"mxml.h"
+	"includes.h"
+
+1479958577 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\ff_gen_drv.c
+	"ff_gen_drv.h"
+
+1479992565 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\nand_diskio.c
+	<string.h>
+	"ff_gen_drv.h"
+	"bsp_nand_ftl.h"
+
+1481016545 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\diskio.c
+	"diskio.h"
+	"ff_gen_drv.h"
+
+1480991217 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ff.c
+	"ff.h"
+	"diskio.h"
+	<stdarg.h>
+
+1481009500 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ff_ex.c
+	"ff.h"
+
+1480494543 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\syscall.c
+	<stdlib.h>
+	"../ff.h"
+
+1472996464 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\unicode.c
+	"../ff.h"
+	"cc932.c"
+	"cc936.c"
+	"cc949.c"
+	"cc950.c"
+	"ccsbcs.c"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\cc932.c
+	"../ff.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\cc936.c
+	"../ff.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\cc949.c
+	"../ff.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\cc950.c
+	"../ff.h"
+
+1472996464 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\option\ccsbcs.c
+	"../ff.h"
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-attr.c
+	"config.h"
+	"mxml.h"
+
+1480656556 d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\config.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdarg.h>
+	<ctype.h>
+
+1481627657 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-cb.c
+	"config.h"
+	"mxml.h"
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-entity.c
+	"mxml-private.h"
+
+1388872206 d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-private.h
+	"config.h"
+	"mxml.h"
+
+1482147952 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-file-fatfs.c
+	"ff.h"
+	"ff_ex.h"
+	"mxml-private.h"
+
+1481009625 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ff_ex.h
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-get.c
+	"config.h"
+	"mxml.h"
+
+1482147939 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-index.c
+	"config.h"
+	"mxml.h"
+
+1465678310 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-node.c
+	"config.h"
+	"mxml.h"
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-private.c
+	"mxml-private.h"
+	<pthread.h>
+	<windows.h>
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-search.c
+	"config.h"
+	"mxml.h"
+
+1388872206 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-set.c
+	"config.h"
+	"mxml.h"
+
+1480465400 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-string.c
+	"config.h"
+
+1481620863 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\testmxml.c
+	"config.h"
+	"mxml.h"
+
+1482151053 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\config\guiconf.c
+	<stdlib.h>
+	"GUI.h"
+
+1481678712 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\config\lcdconf_lin_at070.c
+	"includes.h"
+	"LCDConf.h"
+	"GUI_Private.h"
+
+1481246466 d:\documents\projects\chargersdk\src\middlewares\stemwin\config\lcdconf.h
+	"GUIDRV_Lin.h"
+
+1481190762 d:\documents\projects\chargersdk\src\middlewares\stemwin\inc\guidrv_lin.h
+
+1481615320 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\gui_x\gui_x_freertos.c
+	"GUI.h"
+	"FreeRTOS.h"
+	"task.h"
+	"timers.h"
+	"semphr.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\timers.h
+	"task.h"
+
+1481520387 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\gui_x\gui_x_touch_analog.c
+	"GUI.h"
+	"bsp.h"
+
+1479798522 source:d:\documents\projects\chargersdk\src\middlewares\tinysh\tinysh.c
+	"tinysh.h"
+
+1481697662 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\observer.c
+	<stdlib.h>
+	<string.h>
+	"observer.h"
+
+1481697686 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\observer.h
+	<string.h>
+	"userlib_list.h"
+
+1481697685 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\userlib_list.h
+
+1481697712 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\userlib_list.c
+	"userlib_list.h"
+	<stdlib.h>
+
+1481867952 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\userlib_queue.c
+	"../inc/userlib_queue.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\croutine.c
+	"FreeRTOS.h"
+	"task.h"
+	"croutine.h"
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\event_groups.c
+	<stdlib.h>
+	"FreeRTOS.h"
+	"task.h"
+	"timers.h"
+	"event_groups.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\event_groups.h
+	"timers.h"
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\list.c
+	<stdlib.h>
+	"FreeRTOS.h"
+	"list.h"
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\portable\gcc\arm_cm4f\port.c
+	"FreeRTOS.h"
+	"task.h"
+
+1482151359 source:d:\documents\projects\chargersdk\src\os\freertos\source\portable\memmang\heap_4.c
+	<stdlib.h>
+	<string.h>
+	"FreeRTOS.h"
+	"task.h"
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\queue.c
+	<stdlib.h>
+	<string.h>
+	"FreeRTOS.h"
+	"task.h"
+	"queue.h"
+	"croutine.h"
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\tasks.c
+	<stdlib.h>
+	<string.h>
+	"FreeRTOS.h"
+	"task.h"
+	"timers.h"
+	"StackMacros.h"
+	<stdio.h>
+	"tasks_test_access_functions.h"
+
+1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\stackmacros.h
+
+1463761430 source:d:\documents\projects\chargersdk\src\os\freertos\source\timers.c
+	<stdlib.h>
+	"FreeRTOS.h"
+	"task.h"
+	"queue.h"
+	"timers.h"
+
+1482145834 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\xprintf.c
+	"xprintf.h"
+	<stdarg.h>
+
+1307542742 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\xprintf.h
+
