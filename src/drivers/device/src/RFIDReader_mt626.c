@@ -10,19 +10,33 @@
 #include "RFIDReader_mt626.h"
 #include "bsp_uart.h"
 
+/** @note (rgw#1#): 调用的外部变量与函数, 如在其他系统中使用应实现对应的函数. */
 extern UART_HandleTypeDef RFID_UARTx_Handler;
 extern Queue *pRfidRecvQue;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
+/** @brief 延时函数,用于命令传输过程中等待
+ *
+ * @param ms uint32_t 延时时间,单位:毫秒
+ * @return void
+ *
+ */
 static void MT626DelayMS(uint32_t ms)
 {
     vTaskDelay(ms);
 }
 
+/** @brief 异或计算
+ *
+ * @param data uint8_t* 传递待计算数组指针
+ * @param len uint32_t  待计算数组长度
+ * @return uint8_t      返回异或值
+ *
+ */
 static uint8_t verifBCC(uint8_t *data, uint32_t len)
 {
-    uint8_t out;
+    uint8_t out = 0;
     uint32_t i;
     for(i = 0; i < len; i++)
     {
@@ -30,6 +44,15 @@ static uint8_t verifBCC(uint8_t *data, uint32_t len)
     }
     return out;
 }
+
+/** @brief 发送命令函数
+ *
+ * @param pObj void*            传递待发送命令的实例
+ * @param ucSendID uint8_t      发送命令号
+ * @param ucSendLength uint32_t 发送命令长度
+ * @return MT_RESULT            返回通讯状态
+ *
+ */
 static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength)
 {
     const uint32_t ucTimeOutMS = 1000, uiTryTimes = 3;
@@ -61,7 +84,14 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
 
 }
 
-static MT_RESULT recvReadEx(void *pObj, uint32_t *pucRecvdLen)
+/** @brief 通过串口接收队列读取命令
+ *
+ * @param pObj void*            MT626实例
+ * @param puiRecvdLen uint32_t* 返回接收到的命令长度指针
+ * @return MT_RESULT            返回通讯状态
+ *
+ */
+static MT_RESULT recvReadEx(void *pObj, uint32_t *puiRecvdLen)
 {
     uint8_t ch;
     uint32_t i;
@@ -76,11 +106,19 @@ static MT_RESULT recvReadEx(void *pObj, uint32_t *pucRecvdLen)
         pMT626COM->pucRecvBuffer[i] = ch;
         i++;
     }
-    *pucRecvdLen = i;
+    *puiRecvdLen = i;
     return MT_SUCCEED;
 }
 
-static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLen)
+/** @brief 对接收到的数据分析是否正确
+ *
+ * @param pObj void*            MT626通讯实例
+ * @param ucSendID uint8_t      命令号,定义详见头文件
+ * @param puiRecvdLen uint32_t* 返回接收到命令的长度
+ * @return MT_RESULT            返回通讯状态
+ *
+ */
+static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *puiRecvdLen)
 {
     uint8_t *pucRecvBuffer;
     uint8_t ucRecvdBCC, ucCalcBCC;
@@ -90,79 +128,79 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLe
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
 
-    recvReadEx(pObj, pucRecvdLen);
-    if(*pucRecvdLen == 0)
+    recvReadEx(pObj, puiRecvdLen);
+    if(*puiRecvdLen == 0)
     {
         return MT_COM_FAIL;
     }
 
     switch(ucSendID)
     {
-        case MT626_FIND_CMD:                        //#0  寻卡
-            if(*pucRecvdLen == 8)
-            {
-                res = MT_SUCCEED;
-            }
-            else
-            {
-                res = MT_COM_FAIL;
-            }
-            break;
-        case MT626_READ_UID_CMD:                    //#1  获取UID
-            if(*pucRecvdLen == 12)
-            {
-                res = MT_SUCCEED;
-            }
-            else
-            {
-                res = MT_COM_FAIL;
-            }
-            break;
-        case MT626_AUTH_KEYA_CMD:                   //#3  验证KeyA
-        case MT626_AUTH_KEYB_CMD:                   //#4  验证KeyB
-        case MT626_CHANGE_KEY_CMD:                  //#7  更改密码
-            if(*pucRecvdLen == 9)
-            {
-                res = MT_SUCCEED;
-            }
-            else
-            {
-                res = MT_COM_FAIL;
-            }
-            break;
-        case MT626_READ_CMD:                        //#5  读扇区块数据
-        case MT626_WRITE_CMD:                       //#6  写扇区块数据
-            if(*pucRecvdLen == 26)
-            {
-                res = MT_SUCCEED;
-            }
-            else if(*pucRecvdLen == 10)
-            {
-                res = MT_SUCCEED;
-            }
-            else
-            {
-                res = MT_COM_FAIL;
-            }
-            break;
+    case MT626_FIND_CMD:                        //#0  寻卡
+        if(*puiRecvdLen == 8)
+        {
+            res = MT_SUCCEED;
+        }
+        else
+        {
+            res = MT_COM_FAIL;
+        }
+        break;
+    case MT626_READ_UID_CMD:                    //#1  获取UID
+        if(*puiRecvdLen == 12)
+        {
+            res = MT_SUCCEED;
+        }
+        else
+        {
+            res = MT_COM_FAIL;
+        }
+        break;
+    case MT626_AUTH_KEYA_CMD:                   //#3  验证KeyA
+    case MT626_AUTH_KEYB_CMD:                   //#4  验证KeyB
+    case MT626_CHANGE_KEY_CMD:                  //#7  更改密码
+        if(*puiRecvdLen == 9)
+        {
+            res = MT_SUCCEED;
+        }
+        else
+        {
+            res = MT_COM_FAIL;
+        }
+        break;
+    case MT626_READ_CMD:                        //#5  读扇区块数据
+    case MT626_WRITE_CMD:                       //#6  写扇区块数据
+        if(*puiRecvdLen == 26)
+        {
+            res = MT_SUCCEED;
+        }
+        else if(*puiRecvdLen == 10)
+        {
+            res = MT_SUCCEED;
+        }
+        else
+        {
+            res = MT_COM_FAIL;
+        }
+        break;
 
-        case MT626_INC_CMD:                         //#8  增值
-        case MT626_DEC_CMD:                         //#9  减值
-        case MT626_INIT_CMD:                        //#10 初始化
-            if(*pucRecvdLen == 10)
-            {
-                res = MT_SUCCEED;
-            }
-            else
-            {
-                res = MT_COM_FAIL;
-            }
-            break;
+    case MT626_INC_CMD:                         //#8  增值
+    case MT626_DEC_CMD:                         //#9  减值
+    case MT626_INIT_CMD:                        //#10 初始化
+        if(*puiRecvdLen == 10)
+        {
+            res = MT_SUCCEED;
+        }
+        else
+        {
+            res = MT_COM_FAIL;
+        }
+        break;
     }
     if(res == MT_SUCCEED)
     {
-        ucRecvdBCC = pucRecvBuffer[*pucRecvdLen - 1];
-        ucCalcBCC = verifBCC(pucRecvBuffer, *pucRecvdLen - 1);
+        ucRecvdBCC = pucRecvBuffer[*puiRecvdLen - 1];
+        ucCalcBCC = verifBCC(pucRecvBuffer, *puiRecvdLen - 1);
         if(ucRecvdBCC == ucCalcBCC)
         {
             return MT_SUCCEED;
@@ -178,7 +216,17 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLe
     }
 }
 
-static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t uiOptionLen, uint32_t *pucSendLength)
+/** @brief 制作命令
+ *
+ * @param pObj void*                MT626通讯实例
+ * @param ucSendID uint8_t          命令号,定义详见头文件
+ * @param pucOptionData uint8_t*    发送命令可选数据
+ * @param uiOptionLen uint32_t      发送命令可选数据长度
+ * @param pucSendLength uint32_t*   返回制作的命令长度的指针
+ * @return int                      无
+ *
+ */
+static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen, uint32_t *pucSendLength)
 {
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
@@ -193,11 +241,11 @@ static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32
     pucSendBuffer[ucOffset++] = (uint8_t)(pMT626CMDObj -> usLenght);
     pucSendBuffer[ucOffset++] = MT626_CMD_TYPE;
     pucSendBuffer[ucOffset++] = pMT626CMDObj ->ucParam;
-    if(uiOptionLen > 0)
+    if(uiOptionLen > 0 && pucOptionData != NULL)
     {
         for(i = 0; i < uiOptionLen; i++)
         {
-            pucSendBuffer[ucOffset++] = pOptionData[i];
+            pucSendBuffer[ucOffset++] = pucOptionData[i];
         }
     }
     pucSendBuffer[ucOffset++] = MT626_CMD_ETX;
@@ -209,6 +257,14 @@ static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32
     return 0;
 }
 
+/** @brief 解析寻卡\验证KeyA\验证KeyB\修改KeyB\增值\减值\初始化命令
+ *
+ * @param pObj void*            MT626通讯实例
+ * @param ucSendID uint8_t      命令号,定义详见头文件
+ * @param uiRecvLen uint32_t    需要解析的命令长度
+ * @return int                  命令状态
+ *
+ */
 static int analyStdRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
 {
     uint8_t *pucRecvdCMD;
@@ -216,31 +272,39 @@ static int analyStdRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
 
     pucRecvdCMD = ((MT626COM_t *)pObj)->pucRecvBuffer;
     ucState = MT_STATE_N;
-    
+
     switch(ucSendID)
     {
-        case MT626_FIND_CMD:
-            ucState = pucRecvdCMD[5];
-            break;
+    case MT626_FIND_CMD:
+        ucState = pucRecvdCMD[5];
+        break;
 
-        case MT626_AUTH_KEYA_CMD:
-        case MT626_AUTH_KEYB_CMD:
-        case MT626_CHANGE_KEY_CMD:
-            ucState = pucRecvdCMD[6];
-            break;
+    case MT626_AUTH_KEYA_CMD:
+    case MT626_AUTH_KEYB_CMD:
+    case MT626_CHANGE_KEY_CMD:
+        ucState = pucRecvdCMD[6];
+        break;
 
-        case MT626_INC_CMD:
-        case MT626_DEC_CMD:
-        case MT626_INIT_CMD:
-            ucState = pucRecvdCMD[7];
-            break;
-        default:
-            break;
+    case MT626_INC_CMD:
+    case MT626_DEC_CMD:
+    case MT626_INIT_CMD:
+        ucState = pucRecvdCMD[7];
+        break;
+    default:
+        break;
     }
 
     return ucState;
 }
 
+/** @brief 解析读写命令
+ *
+ * @param pObj void*            MT626通讯实例
+ * @param ucSendID uint8_t      命令号,定义详见头文件
+ * @param uiRecvLen uint32_t    需要解析的命令长度
+ * @return int                  命令状态
+ *
+ */
 static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
 {
     MT626COM_t *pMT626COMObj;
@@ -255,43 +319,42 @@ static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t uiRecvLen)
 
     switch(ucSendID)
     {
-        case MT626_READ_UID_CMD:
-            ucState = pucRecvdCMD[5];
-            pMT626CMDObj->uiRecvdOptLen = 4;
-            break;
-        case MT626_READ_CMD:
-        case MT626_WRITE_CMD:
-            ucState = pucRecvdCMD[7];
-            if(ucState == MT_STATE_Y)
-            {
-                pMT626CMDObj->uiRecvdOptLen = 16;
-            }
-            else // 读写扇区错误
-            {
-                return ucState;
-            }
-            break;
-        default:
+    case MT626_READ_UID_CMD:
+        ucState = pucRecvdCMD[5];
+        pMT626CMDObj->uiRecvdOptLen = 4;
+        break;
+    case MT626_READ_CMD:
+    case MT626_WRITE_CMD:
+        ucState = pucRecvdCMD[7];
+        if(ucState == MT_STATE_Y)
+        {
+            pMT626CMDObj->uiRecvdOptLen = 16;
+        }
+        else // 读写扇区错误
+        {
             return ucState;
+        }
+        break;
+    default:
+        return ucState;
     }
     for(i = 0; i < pMT626CMDObj->uiRecvdOptLen; i++)
     {
-        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(uiRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[uiRecvLen -2 - pMT626CMDObj->uiRecvdOptLen]为数据区起始下标?
+        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(uiRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[uiRecvLen -2 - pMT626CMDObj->uiRecvdOptLen]为数据区起始下标
     }
 
     return ucState;
 }
 
-/**
-* @brief 
-*
-* @param pObj
-* @param ucSendID
-* @param pucOptionData
-* @param uiOptionLen
-*
-* @return 
-*/
+/** @brief MT626通讯函数
+ *
+ * @param pObj void*                MT626通讯实例指针
+ * @param ucSendID uint8_t          命令号,定义详见头文件
+ * @param pucOptionData uint8_t*    发送命令可选数据
+ * @param uiOptionLen uint32_t      发送命令可选数据长度
+ * @return int                      命令状态
+ *
+ */
 int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen)
 {
     const uint32_t ucTimeOutMS = 5000, uiTryTimes = 3;
@@ -331,6 +394,15 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t 
     return pMT626CMDObj->analyProc(pMT626COMObj, ucSendID, ucRcvdLength);
 }
 
+/** @brief 构造MT626命令
+ *
+ * @param ucParam uint8_t               命令参数
+ * @param usLenght uint16_t             命令长度(命令字+命令参数+数据包)
+ * @param makeProc pMT626_MAKE_PROC     制作命令函数指针
+ * @param analyProc pMT626_ANALY_PROC   解析命令函数指针
+ * @return MT626CMD_t*                  命令实例指针
+ *
+ */
 static MT626CMD_t *MT626CMDCreate(uint8_t ucParam, uint16_t usLenght, pMT626_MAKE_PROC makeProc, pMT626_ANALY_PROC analyProc)
 {
     MT626CMD_t *pMT626CMD = (MT626CMD_t *)malloc(sizeof(MT626CMD_t));
@@ -346,6 +418,12 @@ static MT626CMD_t *MT626CMDCreate(uint8_t ucParam, uint16_t usLenght, pMT626_MAK
     return pMT626CMD;
 }
 
+/** @brief 析构MT626通讯实例
+ *
+ * @param pObj void* MT626通讯实例
+ * @return void
+ *
+ */
 void deleteCOM(void *pObj)
 {
     int i;
@@ -361,7 +439,13 @@ void deleteCOM(void *pObj)
     free(pMT626COMObj);
 }
 
-MT626COM_t *MT626COMCreate(void)//后续是否应添加参数, 参数包括UART实例,以初始化串口号与波特率
+/** @brief 构造MT626通讯实例
+ *
+ * @param void
+ * @return MT626COM_t* 返回MT626通讯实例指针
+ *
+ */
+MT626COM_t *MT626COMCreate(void)
 {
     int i;
     MT626COM_t *pMT626 = (MT626COM_t *)malloc(sizeof(MT626COM_t));

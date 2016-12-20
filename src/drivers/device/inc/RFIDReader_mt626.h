@@ -13,7 +13,7 @@
 #define MT626_CMD_TYPE                  0x34
 
 #define MT626_FIND_CMD                  0   //#0  寻卡
-#define MT626_READ_UID_CMD              1   //#1  获取UID       
+#define MT626_READ_UID_CMD              1   //#1  获取UID
 #define MT626_AUTH_KEYA_CMD             2   //#3  验证KeyA
 #define MT626_AUTH_KEYB_CMD             3   //#4  验证KeyB
 #define MT626_READ_CMD                  4   //#5  读扇区块数据
@@ -27,7 +27,7 @@
 #define MT_STATE_Y                      0x59    //'Y' 成功
 #define MT_STATE_N                      0x4E    //'N' 寻卡失败/获取UID失败
 #define MT_STATE_AUTH_ERR               0x33    //'3' 验证密码错误
-#define MT_STATE_SECTOR_ERR             0x31    //'1' 操作扇区号错误(不是验证密码后的扇区)  
+#define MT_STATE_SECTOR_ERR             0x31    //'1' 操作扇区号错误(不是验证密码后的扇区)
 #define MT_STATE_DATA_ERR               0x34    //'4' 读/写数据失败,更改密码失败,增/减/初始化失败
 
 
@@ -61,10 +61,10 @@ typedef struct _MT626CMD
     uint16_t    usLenght;
     uint8_t     ucRecvdOptData[16];//最长16个数据
     uint32_t    uiRecvdOptLen;
-    
+
     pMT626_MAKE_PROC  makeProc;
     pMT626_ANALY_PROC analyProc;
-    
+
 } MT626CMD_t;
 
 typedef struct _MT626COM
@@ -77,7 +77,7 @@ typedef struct _MT626COM
     void (*deleteCOM)(void *pObj);
 } MT626COM_t;
 
-
+int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen);
 MT626COM_t *MT626COMCreate(void);
 
 #endif
