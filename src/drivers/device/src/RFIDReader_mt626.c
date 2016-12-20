@@ -60,11 +60,11 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
     MT626COM_t *pMT626COMObj;
     uint8_t *pucSendBuffer;
     HAL_StatusTypeDef hal_res;
-    
+
     ucFailedCounts = 0;
     pMT626COMObj = (MT626COM_t *)pObj;
     pucSendBuffer = pMT626COMObj ->pucSendBuffer;
-    
+
     do
     {
         hal_res = HAL_UART_Transmit(&RFID_UARTx_Handler, pucSendBuffer, ucSendLength, 0xFFFF);
@@ -108,8 +108,16 @@ static MT_RESULT recvReadEx(void *pObj, uint32_t *puiRecvdLen)
         pMT626COM->pucRecvBuffer[i] = ch;
         i++;
     }
-    *puiRecvdLen = i;
-    return MT_SUCCEED;
+    if(i > 0)
+    {
+        *puiRecvdLen = i;
+        return MT_SUCCEED;
+    }
+    else
+    {
+        return MT_FAIL;
+    }
+
 }
 
 /** @brief 对接收到的数据分析是否正确
@@ -481,4 +489,75 @@ MT626COM_t *MT626COMCreate(void)
     memset(pMT626->pucRecvBuffer, 0, MT626_RECVBUFF_MAX);
 
     return pMT626;
+}
+
+void testmt626(void)
+{
+    MT626COM_t *pmt626com;
+    int state, i;
+    uint8_t *precvdData;
+    uint8_t ucSendData[16] = {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                1, 2, 3, 4, 5, 6
+                             };
+    uint32_t uiRecvdOptLen;
+
+    pmt626com = MT626COMCreate();
+    precvdData = NULL;
+    uiRecvdOptLen = 0;
+
+    while(1)
+    {
+        //eg. 无发送数据,无返回数据
+        state = TransToMT626(pmt626com, MT626_FIND_CMD, NULL, 0);
+        if(state == MT_STATE_Y)
+        {
+            // do something...
+        }
+        else if(state == MT_STATE_N)
+        {
+            // do something...
+        }
+
+        //eg. 无发送数据,有返回数据
+        state = TransToMT626(pmt626com, MT626_READ_UID_CMD, NULL, 0);
+        if(state == MT_STATE_Y)
+        {
+            // do something...
+            uiRecvdOptLen = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->uiRecvdOptLen;
+            precvdData = (uint8_t *)malloc(uiRecvdOptLen * sizeof(uint8_t));
+            for(i = 0; i < uiRecvdOptLen; i++)
+            {
+                precvdData[i] = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData[i];
+            }
+            // use precvdData to do sth...
+            // then...
+            free(precvdData);
+        }
+        else if(state == MT_STATE_N)
+        {
+            //do something...
+        }
+
+        //eg. 有发送数据,有返回数据
+        state = TransToMT626(pmt626com, MT626_WRITE_CMD, ucSendData, sizeof(ucSendData));
+        if(state == MT_STATE_Y)
+        {
+            // do something...
+            uiRecvdOptLen = pmt626com->pMT626CMD[MT626_WRITE_CMD]->uiRecvdOptLen;
+            precvdData = (uint8_t *)malloc(uiRecvdOptLen * sizeof(uint8_t));
+            for(i = 0; i < uiRecvdOptLen; i++)
+            {
+                precvdData[i] = pmt626com->pMT626CMD[MT626_WRITE_CMD]->ucRecvdOptData[i];
+            }
+            // use precvdData to do sth...
+            // then...
+            free(precvdData);
+        }
+        else if(state == MT_STATE_N)
+        {
+            //do something...
+        }
+        //vTaskDelay(1000); //任务调度
+    }
+    pmt626com->deleteCOM(pmt626com);
 }
