@@ -57,12 +57,14 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
 {
     const uint32_t ucTimeOutMS = 1000, uiTryTimes = 3;
     uint32_t ucFailedCounts;
-    uint8_t *pucSendBuffer;
     MT626COM_t *pMT626COMObj;
+    uint8_t *pucSendBuffer;
     HAL_StatusTypeDef hal_res;
-
+    
     ucFailedCounts = 0;
+    pMT626COMObj = (MT626COM_t *)pObj;
     pucSendBuffer = pMT626COMObj ->pucSendBuffer;
+    
     do
     {
         hal_res = HAL_UART_Transmit(&RFID_UARTx_Handler, pucSendBuffer, ucSendLength, 0xFFFF);
