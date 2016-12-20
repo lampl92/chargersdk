@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "GUIDEMO.h"
+#include "RFIDReader_mt626.h"
 
 /* Private function prototypes
 -----------------------------------------------*/
@@ -23,43 +24,35 @@ TaskHandle_t xHandleTaskCLI = NULL;
 TaskHandle_t xHandleTaskGUI = NULL;
 TaskHandle_t xHandleTaskTouch = NULL;
 TaskHandle_t xHandleTaskStart = NULL;
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief 用户接口优先级1  (数值越小优先级越低，这个跟uCOS相反)
-*
-* @param pvParameters
-*/
-/*
----------------------------------------------------------------------------*/
+
+/** @brief CLI任务,优先级1
+ *
+ * @param pvParameters void*
+ * @return void
+ *
+ */
 static void vTaskCLI(void *pvParameters)
 {
     cli_main();
 }
 
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief 优先级2
-*
-* @param pvParameters
-*/
-/*
----------------------------------------------------------------------------*/
+/** @brief GUI任务,优先级2
+ *
+ * @param pvParameters void*
+ * @return void
+ *
+ */
 static void vTaskGUI(void *pvParameters)
 {
     Touch_Calibrate();
 }
 
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief 优先级3
-*
-* @param pvParameters 是在创建该任务时传递的形参
-*/
-/*
----------------------------------------------------------------------------*/
+/** @brief 触摸屏任务,优先级3
+ *
+ * @param pvParameters void* 创建该任务时传递的形参
+ * @return void
+ *
+ */
 static void vTaskTouch(void *pvParameters)
 {
     while(1)
@@ -68,22 +61,17 @@ static void vTaskTouch(void *pvParameters)
         vTaskDelay(10);
     }
 }
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief 优先级4
-*
-* @param pvParameters
-*/
-/*
----------------------------------------------------------------------------*/
+
+/** @brief 优先级4
+ *
+ * @param pvParameters void*
+ * @return void
+ *
+ */
 static void vTaskStart(void *pvParameters)
 {
     while(1)
     {
-        /* 按键扫描 */
-        //bsp_LedToggle(4);
-        //printf("TaskStart\r\n");
         vTaskDelay(1000);
     }
 }

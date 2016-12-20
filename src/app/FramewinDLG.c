@@ -56,17 +56,18 @@
 *
 *       _aDialogCreate
 */
-static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
-  { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 535, 88, 80, 60, 0, 0x0, 0 },
-  { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 253, 169, 200, 100, 0, 0x0, 0 },
-  { HEADER_CreateIndirect, "Header", ID_HEADER_0, 122, 81, 50, 30, 0, 0x0, 0 },
-  { DROPDOWN_CreateIndirect, "Dropdown", ID_DROPDOWN_0, 119, 231, 80, 18, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 263, 50, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 421, 53, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 30, 60, 80, 20, 0, 0x0, 0 },
-  // USER START (Optionally insert additional widgets)
-  // USER END
+static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
+{
+    { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 535, 88, 80, 60, 0, 0x0, 0 },
+    { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 253, 169, 200, 100, 0, 0x0, 0 },
+    { HEADER_CreateIndirect, "Header", ID_HEADER_0, 122, 81, 50, 30, 0, 0x0, 0 },
+    { DROPDOWN_CreateIndirect, "Dropdown", ID_DROPDOWN_0, 119, 231, 80, 18, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 263, 50, 80, 20, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 421, 53, 80, 20, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 30, 60, 80, 20, 0, 0x0, 0 },
+    // USER START (Optionally insert additional widgets)
+    // USER END
 };
 
 /*********************************************************************
@@ -83,143 +84,152 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *
 *       _cbDialog
 */
-static void _cbDialog(WM_MESSAGE * pMsg) {
-  WM_HWIN hItem;
-  int     NCode;
-  int     Id;
-  // USER START (Optionally insert additional variables)
-  // USER END
+static void _cbDialog(WM_MESSAGE *pMsg)
+{
+    WM_HWIN hItem;
+    int     NCode;
+    int     Id;
+    // USER START (Optionally insert additional variables)
+    // USER END
 
-  switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
-    //
-    // Initialization of 'Framewin'
-    //
-    hItem = pMsg->hWin;
-    FRAMEWIN_SetFont(hItem, GUI_FONT_13_1);
-    FRAMEWIN_SetText(hItem, "1111");
-    //
-    // Initialization of 'Listview'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-    LISTVIEW_AddColumn(hItem, 30, "Col 0", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 30, "Col 1", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 30, "Col 2", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddRow(hItem, NULL);
-    LISTVIEW_SetGridVis(hItem, 1);
-    // USER START (Optionally insert additional code for further widget initialization)
-    // USER END
-    break;
-  case WM_NOTIFY_PARENT:
-    Id    = WM_GetId(pMsg->hWinSrc);
-    NCode = pMsg->Data.v;
-    switch(Id) {
-    case ID_LISTVIEW_0: // Notifications sent by 'Listview'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        //
+        // Initialization of 'Framewin'
+        //
+        hItem = pMsg->hWin;
+        FRAMEWIN_SetFont(hItem, GUI_FONT_13_1);
+        FRAMEWIN_SetText(hItem, "1111");
+        //
+        // Initialization of 'Listview'
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+        LISTVIEW_AddColumn(hItem, 30, "Col 0", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 30, "Col 1", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(hItem, 30, "Col 2", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddRow(hItem, NULL);
+        LISTVIEW_SetGridVis(hItem, 1);
+        // USER START (Optionally insert additional code for further widget initialization)
         // USER END
         break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch(Id)
+        {
+        case ID_LISTVIEW_0: // Notifications sent by 'Listview'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_SEL_CHANGED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_HEADER_0: // Notifications sent by 'Header'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_MOVED_OUT:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_DROPDOWN_0: // Notifications sent by 'Dropdown'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_SEL_CHANGED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_0: // Notifications sent by 'Button'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_1: // Notifications sent by 'Button'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_2: // Notifications sent by 'Button'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+            // USER START (Optionally insert additional code for further Ids)
+            // USER END
+        }
         break;
-      case WM_NOTIFICATION_SEL_CHANGED:
-        // USER START (Optionally insert code for reacting on notification message)
+        // USER START (Optionally insert additional message handling)
         // USER END
+    default:
+        WM_DefaultProc(pMsg);
         break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_HEADER_0: // Notifications sent by 'Header'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_MOVED_OUT:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_DROPDOWN_0: // Notifications sent by 'Dropdown'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_SEL_CHANGED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_BUTTON_0: // Notifications sent by 'Button'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_BUTTON_1: // Notifications sent by 'Button'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    case ID_BUTTON_2: // Notifications sent by 'Button'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      case WM_NOTIFICATION_RELEASED:
-        // USER START (Optionally insert code for reacting on notification message)
-        // USER END
-        break;
-      // USER START (Optionally insert additional code for further notification handling)
-      // USER END
-      }
-      break;
-    // USER START (Optionally insert additional code for further Ids)
-    // USER END
     }
-    break;
-  // USER START (Optionally insert additional message handling)
-  // USER END
-  default:
-    WM_DefaultProc(pMsg);
-    break;
-  }
 }
 
 /*********************************************************************
@@ -233,28 +243,29 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 *       CreateFramewin
 */
 WM_HWIN CreateFramewin(void);
-WM_HWIN CreateFramewin(void) {
-  WM_HWIN hWin;
+WM_HWIN CreateFramewin(void)
+{
+    WM_HWIN hWin;
 
-  hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-  return hWin;
+    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    return hWin;
 }
 
 // USER START (Optionally insert additional public code)
-/********************************************************************* 
-* 
-*       MainTask 
-*/ 
-void MainTask(void)  
+/*********************************************************************
+*
+*       MainTask
+*/
+void MainTask(void)
 {
-	GUI_Init();
-	CreateFramewin(); 
- 
-	while(1) 
-	{ 
-		GUI_Delay(10); 
-	} 
-} 
+    GUI_Init();
+    CreateFramewin();
+
+    while(1)
+    {
+        GUI_Delay(10);
+    }
+}
 // USER END
 
 /*************************** End of file ****************************/
