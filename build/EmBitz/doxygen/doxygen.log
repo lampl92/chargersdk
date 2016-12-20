@@ -1,0 +1,35 @@
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:161: warning: end of file while inside a group
+
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:59: warning: missing title after \defgroup STEMWIN_LIBRARY
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:64: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_TypesDefinitions
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:71: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_Defines
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:128: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_Macros
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:145: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_Variables
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:171: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_FunctionPrototypes
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:206: warning: missing title after \defgroup STEMWIN_LIBRARY_Private_Functions
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:1400: warning: end of file while inside a group
+
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:59: warning: Refusing to add group STEMWIN_LIBRARY to itself
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:3: warning: the name `Project/STM32F4xx_StdPeriph_Template/stm32f4xx_it.c' supplied as the second argument in the \file statement is not an input file
+D:/Documents/Projects/chargersdk/src/drivers/bsp/src/bsp_uart.c:2: warning: the name `bsp_usart.c' supplied as the second argument in the \file statement is not an input file
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:3: warning: the name `lcdconf.c' supplied as the second argument in the \file statement is not an input file
+D:/Documents/Projects/chargersdk/src/drivers/bsp/src/bsp.c:3: warning: explicit link request to 'include' could not be resolved
+D:/Documents/Projects/chargersdk/src/drivers/bsp/src/bsp.c:3: warning: explicit link request to 'include' could not be resolved
+D:/Documents/Projects/chargersdk/src/middlewares/fatfs/diskdrv/ff_gen_drv.c:122: warning: argument 'None' of command @param is not found in the argument list of FATFS_GetAttachedDriversNbr(void)
+D:/Documents/Projects/chargersdk/src/drivers/device/src/RFIDReader_mt626.c:442: warning: argument 'void' of command @param is not found in the argument list of MT626COMCreate(void)
+D:/Documents/Projects/chargersdk/src/middlewares/STemWin/Config/LCDConf_Lin_AT070.c:393: warning: argument 'None' of command @param is not found in the argument list of LCD_X_Config(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:78: warning: argument 'None' of command @param is not found in the argument list of BusFault_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:113: warning: argument 'None' of command @param is not found in the argument list of DebugMon_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:113: warning: argument 'None' of command @param is not found in the argument list of DebugMon_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:152: warning: argument 'None' of command @param is not found in the argument list of EXTI15_10_IRQHandler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:142: warning: argument 'None' of command @param is not found in the argument list of EXTI9_5_IRQHandler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:142: warning: argument 'None' of command @param is not found in the argument list of EXTI9_5_IRQHandler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:142: warning: argument 'None' of command @param is not found in the argument list of EXTI9_5_IRQHandler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:52: warning: argument 'None' of command @param is not found in the argument list of HardFault_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:65: warning: argument 'None' of command @param is not found in the argument list of MemManage_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:43: warning: argument 'None' of command @param is not found in the argument list of NMI_Handler(void)
+D:/Documents/Projects/chargersdk/src/app/stm32f4xx_it.c:91: warning: argument 'None' of command @param is not found in the argument list of UsageFault_Handler(void)
+D:/Documents/Projects/chargersdk/src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c:207: warning: argument 'None' of command @param is not found in the argument list of SystemCoreClockUpdate(void)
+D:/Documents/Projects/chargersdk/src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c:163: warning: argument 'None' of command @param is not found in the argument list of SystemInit(void)
+<D:/Documents/Projects/chargersdk/src/drivers/bsp/src/>:1: warning: explicit link request to 'include' could not be resolved
+D:/Documents/Projects/chargersdk/src/drivers/bsp/src/bsp.c:3: warning: explicit link request to 'include' could not be resolved

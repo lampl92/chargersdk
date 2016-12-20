@@ -8,3 +8,4 @@ src/drivers/bsp/src/not use/
 build/Keil/chargersdk.bin
 build/EmBitz/obj/
 build/EmBitz/bin/
+build/EmBitz/doxygen/html/

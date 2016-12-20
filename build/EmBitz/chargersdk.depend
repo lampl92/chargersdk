@@ -455,9 +455,10 @@
 1482126098 source:d:\documents\projects\chargersdk\build\embitz\src\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1482153679 source:d:\documents\projects\chargersdk\src\app\apptask.c
+1482218581 source:d:\documents\projects\chargersdk\src\app\apptask.c
 	"includes.h"
 	"GUIDEMO.h"
+	"RFIDReader_mt626.h"
 
 1482139643 d:\documents\projects\chargersdk\src\app\includes.h
 	<stdarg.h>
@@ -726,7 +727,7 @@
 	"bsp_nand_ftl.h"
 	"bsp_touch_2046.h"
 
-1481871946 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
+1482211678 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
 	"bsp.h"
 	"userlib_queue.h"
 
@@ -952,7 +953,7 @@
 	"stdlib.h"
 	"math.h"
 
-1482118225 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
+1482211360 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
@@ -962,7 +963,7 @@
 	<ctype.h>
 	<string.h>
 
-1482126627 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
+1482216346 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
 	<stdlib.h>
 	<string.h>
 	"RFIDReader_mt626.h"
@@ -1454,8 +1455,11 @@
 1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo_zoomandrotate.c
 	"GUIDEMO.h"
 
-1481636475 source:d:\documents\projects\chargersdk\src\app\framewindlg.c
+1482206526 source:d:\documents\projects\chargersdk\src\app\framewindlg.c
 	"DIALOG.h"
 
 1482129119 source:d:\documents\projects\chargersdk\build\embitz\startup\startup_stm32f429x.s
+
+1482212617 d:\documents\projects\chargersdk\src\drivers\device\inc\rfidreader_mt626.h
+	"stm32f4xx.h"
 

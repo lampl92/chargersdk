@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBitz_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="..\..\src\app\apptask.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="startup\startup_stm32f429x.S" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1303" topLine="27" />
+			<Cursor1 position="7697" topLine="142" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\FramewinDLG.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="version.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1312" topLine="231" />
+			<Cursor1 position="227" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\app\apptask.c" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1425" topLine="68" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\app\FramewinDLG.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8489" topLine="64" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\app\main.c" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -16,12 +26,17 @@
 			<Cursor1 position="929" topLine="25" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\sysinit.c" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\stm32f4xx_it.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="613" topLine="0" />
+			<Cursor1 position="2408" topLine="40" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\cli\cli_app.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\sysinit.c" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4300" topLine="78" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\cli\cli_app.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1161" topLine="23" />
 		</Cursor>
@@ -51,14 +66,24 @@
 			<Cursor1 position="19831" topLine="456" />
 		</Cursor>
 	</File>
+	<File name="..\..\src\drivers\bsp\src\bsp_uart.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="105" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="..\..\src\drivers\bsp\src\retarget.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1530" topLine="48" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\drivers\device\src\RFIDReader_mt626.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\drivers\device\src\RFIDReader_mt626.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7129" topLine="261" />
+			<Cursor1 position="0" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\middlewares\fatfs\src\diskio.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="633" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\middlewares\fatfs\src\ff.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -86,9 +111,9 @@
 			<Cursor1 position="17714" topLine="484" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\os\FreeRTOS\Source\tasks.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\os\FreeRTOS\Source\tasks.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="107177" topLine="3136" />
+			<Cursor1 position="106207" topLine="3202" />
 		</Cursor>
 	</File>
 </EmBitz_layout_file>
