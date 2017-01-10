@@ -442,7 +442,10 @@ void deleteCOM(void *pObj)
     pMT626COMObj = (MT626COM_t *)pObj;
     for(i = 0; i < MT626_CMD_MAX; i++)
     {
-        free(pMT626COMObj->pMT626CMD[i]);
+        if(pMT626COMObj->pMT626CMD[i] != NULL)
+        {
+            free(pMT626COMObj->pMT626CMD[i]);
+        }
     }
     free(pMT626COMObj ->pucRecvBuffer);
     free(pMT626COMObj ->pucSendBuffer);

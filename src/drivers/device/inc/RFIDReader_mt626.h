@@ -1,5 +1,3 @@
-#ifndef __RFIDREADER_MT626_H
-#define __RFIDREADER_MT626_H
 /**
 * @file RFIDReader_mt626.h
 * @brief MT626 com driver
@@ -7,6 +5,9 @@
 * @version v1.0
 * @date 2016-12-14
 */
+#ifndef __RFIDREADER_MT626_H
+#define __RFIDREADER_MT626_H
+
 #include "stm32f4xx.h"
 
 /* 命令相关变量 */
