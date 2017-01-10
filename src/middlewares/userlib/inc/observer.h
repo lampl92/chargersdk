@@ -11,19 +11,17 @@ typedef struct _Subject
     void (*Detach)(void *pSubject, void *pObserver);
     void (*Notify)(void *pSubject);
     void (*Delete)(void *pSubject);
-}Subject;
+}Subject_t;
 
 //³éÏñ¹Û²ìÕß
 typedef struct _Observer
 {
     char *Name;
-    Subject *pSub;
+    Subject_t *pSub;
     void (*Update)(void *pObserver);
     void (*Delete)(void *pObserver);
-}Observer;
+}Observer_t;
 
-
-
-Observer *ObserverCreate(char *Name, void *pSub, size_t Size);
-Subject *SubjectCreate(size_t Size);
+Observer_t *ObserverCreate(char *Name, void *pSub, size_t Size);
+Subject_t *SubjectCreate(size_t Size);
 #endif
