@@ -6,7 +6,7 @@ extern UART_HandleTypeDef CLI_UARTx_Handler;
 void myputc(uint8_t ch)
 {
     int tempch = ch;
-    __set_PRIMASK(1);    //å¢åŠ å…³é—­ä¸­æ–­åŠŸèƒ½,é˜²æ­¢ä¸²å£åœ¨ä½¿ç”¨æ—¶å‡ºç°å†²çª
+    __set_PRIMASK(1);    //Ôö¼Ó¹Ø±ÕÖĞ¶Ï¹¦ÄÜ,·ÀÖ¹´®¿ÚÔÚÊ¹ÓÃÊ±³öÏÖ³åÍ»
     if(tempch == '\n')
     {
         ch = '\r';
@@ -56,15 +56,15 @@ int _write (int fd, char *ptr, int len)
 }
 #else
 /**
-  * @brief  é‡å®šå‘æ ‡å‡†åº“å‡½æ•°printfå¯¹åº”çš„åŸºç¡€åº“å‡½æ•°.
+  * @brief  ÖØ¶¨Ïò±ê×¼¿âº¯Êıprintf¶ÔÓ¦µÄ»ù´¡¿âº¯Êı.
   * @param  None
   * @retval None
   */
 int fputc(int ch, FILE *f)
 {
     /*
-    ç”±äºWindowsä¸­ç»ˆç«¯æ¢è¡Œæ˜¯"\r\n", è€Œtinyshä¸­å…¨éƒ¨ç”¨çš„æ˜¯'\n'ç»“å°¾,æ— æ³•å®Œæˆæ¢è¡Œ,
-    åœ¨æ­¤è¿›è¡Œå…¼å®¹
+    ÓÉÓÚWindowsÖĞÖÕ¶Ë»»ĞĞÊÇ"\r\n", ¶øtinyshÖĞÈ«²¿ÓÃµÄÊÇ'\n'½áÎ²,ÎŞ·¨Íê³É»»ĞĞ,
+    ÔÚ´Ë½øĞĞ¼æÈİ
     */
 
     myputc(ch);
