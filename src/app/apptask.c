@@ -70,10 +70,9 @@ static void vTaskTouch(void *pvParameters)
  */
 static void vTaskStart(void *pvParameters)
 {
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
+
+    testobserver();
+
 }
 /*
 ---------------------------------------------------------------------------*/
@@ -84,27 +83,27 @@ static void vTaskStart(void *pvParameters)
 ---------------------------------------------------------------------------*/
 void AppTaskCreate (void)
 {
-    xTaskCreate( vTaskCLI,       /* 任务函数  */
-                 "vTaskCLI",         /* 任务名    */
-                 1024,                   /* 任务栈大小，单位word，也就是4字节 */
+    xTaskCreate( vTaskCLI,              /* 任务函数  */
+                 "vTaskCLI",            /* 任务名    */
+                 1024,                  /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  1,                     /* 任务优先级*/
-                 &xHandleTaskCLI );  /* 任务句柄  */
+                 &xHandleTaskCLI );     /* 任务句柄  */
 
 
-    xTaskCreate( vTaskGUI,          /* 任务函数  */
-                 "vTaskGUI",        /* 任务名    */
-                 1024,               /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,              /* 任务参数  */
-                 2,                 /* 任务优先级*/
-                 &xHandleTaskGUI ); /* 任务句柄  */
+    xTaskCreate( vTaskGUI,              /* 任务函数  */
+                 "vTaskGUI",            /* 任务名    */
+                 1024,                  /* 任务栈大小，单位word，也就是4字节 */
+                 NULL,                  /* 任务参数  */
+                 2,                     /* 任务优先级*/
+                 &xHandleTaskGUI );     /* 任务句柄  */
 
-    xTaskCreate( vTaskTouch,           /* 任务函数  */
-                 "vTaskTouch",         /* 任务名    */
+    xTaskCreate( vTaskTouch,            /* 任务函数  */
+                 "vTaskTouch",          /* 任务名    */
                  512,                   /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  3,                     /* 任务优先级*/
-                 &xHandleTaskTouch );  /* 任务句柄  */
+                 &xHandleTaskTouch );   /* 任务句柄  */
 
 
     xTaskCreate( vTaskStart,            /* 任务函数  */

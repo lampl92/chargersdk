@@ -2,6 +2,8 @@
 #define __OBSERVER_H__
 #include <string.h>
 #include "userlib_list.h"
+
+
 //抽像通知者接口
 typedef struct _Subject
 {
@@ -21,6 +23,24 @@ typedef struct _Observer
     void (*Update)(void *pObserver);
     void (*Delete)(void *pObserver);
 }Observer_t;
+
+typedef struct _Boss
+{
+    Subject_t mSubject;
+    List *ObserverList;
+    char *Action;
+}Boss_t;
+
+//看股票的同事
+typedef struct _StockObserver
+{
+    Observer_t mObserver;
+} StockObserver_t;
+//看NBA的同事
+typedef struct _NBAObserver
+{
+    Observer_t mObserver;
+} NBAObserver_t;
 
 Observer_t *ObserverCreate(char *Name, void *pSub, size_t Size);
 Subject_t *SubjectCreate(size_t Size);

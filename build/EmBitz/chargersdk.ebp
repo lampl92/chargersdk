@@ -90,6 +90,7 @@
 			<Add directory="..\..\src\middlewares\fatfs\diskdrv" />
 			<Add directory="..\..\src\middlewares\mxml-2.10" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
+			<Add directory="..\..\src\middlewares\libcstl-2.3.0" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -103,16 +104,25 @@
 		<Unit filename="..\..\src\app\apptask.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\checksubject.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\FramewinDLG.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\monitor.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\sysinit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\testobserver.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
@@ -250,6 +260,16 @@
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\unicode.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gdebug.h" />
+		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\glib-object.h" />
+		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gmacros.h" />
+		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gtypes.h" />
+		<Unit filename="..\..\src\middlewares\libcstl-2.3.0\src\cstl_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\libcstl-2.3.0\src\cstl_queue.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\middlewares\mxml-2.10\mxml-attr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -301,7 +321,7 @@
 		<Unit filename="..\..\src\middlewares\tinysh\tinysh.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\userlib\src\observer.c">
+		<Unit filename="..\..\src\middlewares\userlib\src\libobserver.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\userlib_list.c">
