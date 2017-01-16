@@ -31,7 +31,7 @@ int8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
         }
         time_out--;
     }
-    return (int8_t) - 1;
+    return (int8_t) -1;
 }
 
 void bsp_Uart_Init(void)
@@ -102,6 +102,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 
         HAL_NVIC_EnableIRQ(USART2_IRQn);
         HAL_NVIC_SetPriority(USART2_IRQn, bspUSART2_PreemptPriority, bspUSART2_SubPriority);
+    }
+    if(huart->Instance == USART3)
+    {
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        __HAL_RCC_USART3_CLK_ENABLE();
+
+        GPIO_InitStruct.Pin = GPIO_PIN_10;//PIN_TX
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+        GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_11;//PIN_RX
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        HAL_NVIC_EnableIRQ(USART3_IRQn);
+        HAL_NVIC_SetPriority(USART3_IRQn, bspUSART3_PreemptPriority, bspUSART3_SubPriority);
     }
 }
 CLI_USARTx_IRQHandler
