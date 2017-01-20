@@ -8,6 +8,8 @@
 #ifndef  __CHARGEPOINT_H
 #define  __CHARGEPOINT_H
 
+#include "stm32f4xx.h"
+
 typedef enum
 {
     POINT_NO_ERR = 0,
@@ -21,11 +23,11 @@ typedef enum
     POINT_CC_PE,
     POINT_CC_NO,
     //
-    POINT_LOCK;
+    POINT_LOCK,
     POINT_UNLOCK
 
 
-}PointStateType //Charge point error number
+}PointStateType; //Charge point error number
 
 typedef struct _ChargePoint
 {

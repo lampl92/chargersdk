@@ -101,6 +101,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
+		<Unit filename="..\..\src\app\chargepoint.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\chargepoint.h" />
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -110,18 +114,35 @@
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\monitor.c">
+		<Unit filename="..\..\src\app\remotecomm.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\remotecomm.h" />
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\systask.c">
+		<Unit filename="..\..\src\app\taskcard.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\taskcard.h" />
+		<Unit filename="..\..\src\app\taskcharge.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskcharge.h" />
+		<Unit filename="..\..\src\app\taskcreate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskdata.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskdata.h" />
+		<Unit filename="..\..\src\app\taskmonitor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskmonitor.h" />
 		<Unit filename="..\..\src\app\testobserver.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />
@@ -172,6 +193,7 @@
 		<Unit filename="..\..\src\drivers\bsp\src\retarget.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\device\inc\RFIDReader_mt626.h" />
 		<Unit filename="..\..\src\drivers\device\src\RFIDReader_mt626.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -262,10 +284,6 @@
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\unicode.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gdebug.h" />
-		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\glib-object.h" />
-		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gmacros.h" />
-		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gtypes.h" />
 		<Unit filename="..\..\src\middlewares\mxml-2.10\mxml-attr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -352,6 +370,7 @@
 		<Unit filename="..\..\src\os\FreeRTOS\Source\timers.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\os\FreeRTOSConfig.h" />
 		<Extensions>
 			<code_completion />
 			<debugger>

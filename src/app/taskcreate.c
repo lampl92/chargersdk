@@ -8,80 +8,80 @@
 #include "includes.h"
 #include "RFIDReader_mt626.h"
 
-#define defSTACK_TaskCLI                        512
-#define defSTACK_TaskGUI                        1024
-#define defSTACK_TaskTouch                      128
+//创建任务Todolist 对照表
+//1. 定义STACK大小
+//2. 定义PRIORITY
+//3. 声明任务
+//4. 定义任务句柄
+//5. 任务入口
+//6. 创建任务
 
-#define defSTACK_TaskEVSERemoteComm            512
-#define defSTACK_TaskEVSECard                  512
-#define defSTACK_TaskEVSECharge                512
-#define defSTACK_TaskEVSEMonitor               512
-#define defSTACK_TaskEVSEErrorHandle           512
-#define defSTACK_TaskEVSEDataHandle            512
+//系统
+#define defSTACK_TaskCLI                    512
+#define defSTACK_TaskGUI                    1024
+#define defSTACK_TaskTouch                  128
+#define defSTACK_TaskOTA                    512
+//APP
+#define defSTACK_TaskEVSERemoteComm         512
+#define defSTACK_TaskEVSECard               512
+#define defSTACK_TaskEVSECharge             512
+#define defSTACK_TaskEVSEMonitor            512
+#define defSTACK_TaskEVSEError              512
+#define defSTACK_TaskEVSEData               512
 
-#define defPRIORITY_TaskCLI                     1
-#define defPRIORITY_TaskGUI                     1
-#define defPRIORITY_TaskTouch                   1
 
-#define defPRIORITY_TaskEVSERemoteComm           1
-#define defPRIORITY_TaskEVSECard                 1
-#define defPRIORITY_TaskEVSECharge               1
-#define defPRIORITY_TaskEVSEMonitor              1
-#define defPRIORITY_TaskEVSEErrorHandle          1
-#define defPRIORITY_TaskEVSEDataHandle           1
+//优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+//系统
+#define defPRIORITY_TaskCLI                 1
+#define defPRIORITY_TaskGUI                 1
+#define defPRIORITY_TaskTouch               1
+#define defPRIORITY_TaskOTA                 15 //最高
+//APP
+#define defPRIORITY_TaskEVSERemoteComm      3
+#define defPRIORITY_TaskEVSECard            3
+#define defPRIORITY_TaskEVSECharge          5
+#define defPRIORITY_TaskEVSEMonitor         7
+#define defPRIORITY_TaskEVSEError           9
+#define defPRIORITY_TaskEVSEData            1
+
+
 //系统任务
 static void vTaskCLI(void *pvParameters);
 static void vTaskGUI(void *pvParameters);
 static void vTaskTouch(void *pvParameters);
+static void vTaskOTA(void *pvParameters);               //在线升级
 //APP任务
-static void vTaskStart(void *pvParameters);
 static void vTaskEVSERemoteComm(void *pvParameters);    //远程通信
 static void vTaskEVSECard(void *pvParameters);          //刷卡
 static void vTaskEVSECharge(void *pvParameters);        //充电
 static void vTaskEVSEMonitor(void *pvParameters);       //监控
-static void vTaskEVSEErrorHandle(void *pvParameters);   //错误处理
-static void vTaskEVSEDataHandle(void *pvParameters);    //数据处理
+static void vTaskEVSEError(void *pvParameters);   //错误处理
+static void vTaskEVSEData(void *pvParameters);    //数据处理
+static void vTaskOTA(void *pvParameters);               //在线升级
 
 //系统任务句柄
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
+static TaskHandle_t xHandleTaskOTA = NULL;
 //APP任务句柄
 static TaskHandle_t xHandleTaskEVSERemoteComm = NULL;
 static TaskHandle_t xHandleTaskEVSECard = NULL;
 static TaskHandle_t xHandleTaskEVSECharge = NULL;
 static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
-static TaskHandle_t xHandleTaskEVSEErrorHandler = NULL;
-static TaskHandle_t xHandleTaskEVSEDataHandler = NULL;
+static TaskHandle_t xHandleTaskEVSEError = NULL;
+static TaskHandle_t xHandleTaskEVSEData = NULL;
 
-/** @brief CLI任务,优先级1
- *
- * @param pvParameters void*
- * @return void
- *
- */
 static void vTaskCLI(void *pvParameters)
 {
     cli_main();
 }
 
-/** @brief GUI任务,优先级2
- *
- * @param pvParameters void*
- * @return void
- *
- */
 static void vTaskGUI(void *pvParameters)
 {
     Touch_Calibrate();
 }
 
-/** @brief 触摸屏任务,优先级3
- *
- * @param pvParameters void* 创建该任务时传递的形参
- * @return void
- *
- */
 static void vTaskTouch(void *pvParameters)
 {
     while(1)
@@ -90,67 +90,95 @@ static void vTaskTouch(void *pvParameters)
         vTaskDelay(10);
     }
 }
+static void vTaskOTA(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
 
-/** @brief 优先级4
- *
- * @param pvParameters void*
- * @return void
- *
- */
-static void vTaskAppStart(void *pvParameters)
+static void vTaskStart(void *pvParameters)
 {
 
     //testobserver();
     testmt626();
     APPTaskCreate();
 }
+static void vTaskEVSERemoteComm(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+static void vTaskEVSECard(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+static void vTaskEVSECharge(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+static void vTaskEVSEMonitor(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+static void vTaskEVSEError(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+static void vTaskEVSEData(void *pvParameters)
+{
+    TaskHandle_t xTaskHandle = xTaskGetCurrentTaskHandle();
+    while(1)
+    {
+        printf("%s\n", pcTaskGetName( xTaskHandle ));
+        vTaskDelay(1000);
+    }
+}
+
 
 void SysTaskCreate (void)
 {
-    xTaskCreate( vTaskCLI, "vTaskCLI", defSTACK_TASKCLI, NULL, defPRIORITY_TASKCLI, &xHandleTaskCLI );
-    xTaskCreate( vTaskGUI, "vTaskGUI", defSTACK_TASKGUI, NULL, defPRIORITY_TASKGUI, &xHandleTaskGUI );
-    xTaskCreate( vTaskTouch, "vTaskTouch", defSTACK_TASKTOUCH, NULL, defPRIORITY_TASKTOUCH, &xHandleTaskTouch );
-
-
-    xTaskCreate( vTaskAppStart,            /* 任务函数  */
-                 "vTaskAppStart",          /* 任务名    */
-                 512,                   /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,                  /* 任务参数  */
-                 4,                     /* 任务优先级*/
-                 &xHandleTaskStart );   /* 任务句柄  */
+    xTaskCreate( vTaskCLI, "vTaskCLI", defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
+    xTaskCreate( vTaskGUI, "vTaskGUI", defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
+    xTaskCreate( vTaskTouch, "vTaskTouch", defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
+    xTaskCreate( vTaskOTA, "vTaskOTA", defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 }
 
 void AppTaskCreate (void)
 {
-    xTaskCreate( vTaskCLI,              /* 任务函数  */
-                 "vTaskCLI",            /* 任务名    */
-                 1024,                  /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,                  /* 任务参数  */
-                 1,                     /* 任务优先级*/
-                 &xHandleTaskCLI );     /* 任务句柄  */
-
-
-    xTaskCreate( vTaskGUI,              /* 任务函数  */
-                 "vTaskGUI",            /* 任务名    */
-                 1024,                  /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,                  /* 任务参数  */
-                 2,                     /* 任务优先级*/
-                 &xHandleTaskGUI );     /* 任务句柄  */
-
-    xTaskCreate( vTaskTouch,            /* 任务函数  */
-                 "vTaskTouch",          /* 任务名    */
-                 512,                   /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,                  /* 任务参数  */
-                 3,                     /* 任务优先级*/
-                 &xHandleTaskTouch );   /* 任务句柄  */
-
-
-    xTaskCreate( vTaskAppStart,            /* 任务函数  */
-                 "vTaskAppStart",          /* 任务名    */
-                 512,                   /* 任务栈大小，单位word，也就是4字节 */
-                 NULL,                  /* 任务参数  */
-                 4,                     /* 任务优先级*/
-                 &xHandleTaskStart );   /* 任务句柄  */
+    xTaskCreate( vTaskEVSERemoteComm, "vTaskEVSERemoteComm", defSTACK_TaskEVSERemoteComm, NULL, defPRIORITY_TaskEVSERemoteComm, &xHandleTaskEVSERemoteComm );
+    xTaskCreate( vTaskEVSECard, "vTaskEVSECard", defSTACK_TaskEVSECard, NULL, defPRIORITY_TaskEVSECard, &xHandleTaskEVSECard );
+    xTaskCreate( vTaskEVSECharge, "vTaskEVSECharge", defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
+    xTaskCreate( vTaskEVSEMonitor, "vTaskEVSEMonitor", defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
+    xTaskCreate( vTaskEVSEError, "vTaskEVSEError", defSTACK_TaskEVSEError, NULL, defPRIORITY_TaskEVSEError, &xHandleTaskEVSEError );
+    xTaskCreate( vTaskEVSEData, "vTaskEVSEData", defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 
