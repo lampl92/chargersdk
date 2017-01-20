@@ -455,12 +455,12 @@
 1482126098 source:d:\documents\projects\chargersdk\build\embitz\src\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1484127600 source:d:\documents\projects\chargersdk\src\app\apptask.c
+1484531540 source:d:\documents\projects\chargersdk\src\app\apptask.c
 	"includes.h"
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1482139643 d:\documents\projects\chargersdk\src\app\includes.h
+1484620095 d:\documents\projects\chargersdk\src\app\includes.h
 	<stdarg.h>
 	<stdio.h>
 	<stdlib.h>
@@ -475,7 +475,7 @@
 	"WM.h"
 	"ff.h"
 	"sysinit.h"
-	"apptask.h"
+	"systask.h"
 	"bsp.h"
 	"tinysh.h"
 
@@ -713,7 +713,7 @@
 
 1478761966 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
-1481773481 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
+1484532225 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -727,7 +727,7 @@
 	"bsp_nand_ftl.h"
 	"bsp_touch_2046.h"
 
-1484128264 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
+1484531456 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
 	"bsp.h"
 	"userlib_queue.h"
 
@@ -953,7 +953,7 @@
 	"stdlib.h"
 	"math.h"
 
-1482211360 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
+1484536444 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
@@ -963,7 +963,7 @@
 	<ctype.h>
 	<string.h>
 
-1484037203 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
+1484539119 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
 	<stdlib.h>
 	<string.h>
 	"RFIDReader_mt626.h"
@@ -977,7 +977,7 @@
 1478673966 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1482153156 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
+1484292441 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
 	"bsp.h"
 
 1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal.c
@@ -1471,7 +1471,7 @@
 	<stdlib.h>
 	"observer.h"
 
-1484190445 source:d:\documents\projects\chargersdk\src\app\testobserver.c
+1484268701 source:d:\documents\projects\chargersdk\src\app\testobserver.c
 	<stdio.h>
 	<stdlib.h>
 	"observer.h"
@@ -1651,4 +1651,13 @@
 1390613438 d:\documents\projects\chargersdk\src\middlewares\libcstl-2.3.0\cstl\cstl_priority_queue_private.h
 
 1390613438 d:\documents\projects\chargersdk\src\middlewares\libcstl-2.3.0\cstl\cstl_priority_queue.h
+
+1484620072 d:\documents\projects\chargersdk\src\app\systask.h
+	"includes.h"
+	"cli_main.h"
+
+1484531540 source:d:\documents\projects\chargersdk\src\app\systask.c
+	"includes.h"
+	"GUIDEMO.h"
+	"RFIDReader_mt626.h"
 

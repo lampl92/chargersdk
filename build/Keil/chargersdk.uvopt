@@ -182,12 +182,12 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>(MT626COM_t *)pObj</ItemText>
+          <ItemText>pucSendBuffer</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>pucSendBuffer</ItemText>
+          <ItemText>puiRecvdLen</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

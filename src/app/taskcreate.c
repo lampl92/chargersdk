@@ -1,29 +1,58 @@
 /**
-* @file apptask.c
+* @file taskcreate.c
 * @brief
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
 */
 #include "includes.h"
-#include "GUIDEMO.h"
 #include "RFIDReader_mt626.h"
 
-/* Private function prototypes
------------------------------------------------*/
+#define defSTACK_TaskCLI                        512
+#define defSTACK_TaskGUI                        1024
+#define defSTACK_TaskTouch                      128
 
+#define defSTACK_TaskEVSERemoteComm            512
+#define defSTACK_TaskEVSECard                  512
+#define defSTACK_TaskEVSECharge                512
+#define defSTACK_TaskEVSEMonitor               512
+#define defSTACK_TaskEVSEErrorHandle           512
+#define defSTACK_TaskEVSEDataHandle            512
+
+#define defPRIORITY_TaskCLI                     1
+#define defPRIORITY_TaskGUI                     1
+#define defPRIORITY_TaskTouch                   1
+
+#define defPRIORITY_TaskEVSERemoteComm           1
+#define defPRIORITY_TaskEVSECard                 1
+#define defPRIORITY_TaskEVSECharge               1
+#define defPRIORITY_TaskEVSEMonitor              1
+#define defPRIORITY_TaskEVSEErrorHandle          1
+#define defPRIORITY_TaskEVSEDataHandle           1
+//系统任务
 static void vTaskCLI(void *pvParameters);
 static void vTaskGUI(void *pvParameters);
 static void vTaskTouch(void *pvParameters);
+//APP任务
 static void vTaskStart(void *pvParameters);
+static void vTaskEVSERemoteComm(void *pvParameters);    //远程通信
+static void vTaskEVSECard(void *pvParameters);          //刷卡
+static void vTaskEVSECharge(void *pvParameters);        //充电
+static void vTaskEVSEMonitor(void *pvParameters);       //监控
+static void vTaskEVSEErrorHandle(void *pvParameters);   //错误处理
+static void vTaskEVSEDataHandle(void *pvParameters);    //数据处理
 
-/* Private variables
-任务句柄-------------------------------------------------*/
-
-TaskHandle_t xHandleTaskCLI = NULL;
-TaskHandle_t xHandleTaskGUI = NULL;
-TaskHandle_t xHandleTaskTouch = NULL;
-TaskHandle_t xHandleTaskStart = NULL;
+//系统任务句柄
+static TaskHandle_t xHandleTaskCLI = NULL;
+static TaskHandle_t xHandleTaskGUI = NULL;
+static TaskHandle_t xHandleTaskTouch = NULL;
+//APP任务句柄
+static TaskHandle_t xHandleTaskEVSERemoteComm = NULL;
+static TaskHandle_t xHandleTaskEVSECard = NULL;
+static TaskHandle_t xHandleTaskEVSECharge = NULL;
+static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
+static TaskHandle_t xHandleTaskEVSEErrorHandler = NULL;
+static TaskHandle_t xHandleTaskEVSEDataHandler = NULL;
 
 /** @brief CLI任务,优先级1
  *
@@ -68,19 +97,29 @@ static void vTaskTouch(void *pvParameters)
  * @return void
  *
  */
-static void vTaskStart(void *pvParameters)
+static void vTaskAppStart(void *pvParameters)
 {
 
-    testobserver();
-
+    //testobserver();
+    testmt626();
+    APPTaskCreate();
 }
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief 创建应用任务
-*/
-/*
----------------------------------------------------------------------------*/
+
+void SysTaskCreate (void)
+{
+    xTaskCreate( vTaskCLI, "vTaskCLI", defSTACK_TASKCLI, NULL, defPRIORITY_TASKCLI, &xHandleTaskCLI );
+    xTaskCreate( vTaskGUI, "vTaskGUI", defSTACK_TASKGUI, NULL, defPRIORITY_TASKGUI, &xHandleTaskGUI );
+    xTaskCreate( vTaskTouch, "vTaskTouch", defSTACK_TASKTOUCH, NULL, defPRIORITY_TASKTOUCH, &xHandleTaskTouch );
+
+
+    xTaskCreate( vTaskAppStart,            /* 任务函数  */
+                 "vTaskAppStart",          /* 任务名    */
+                 512,                   /* 任务栈大小，单位word，也就是4字节 */
+                 NULL,                  /* 任务参数  */
+                 4,                     /* 任务优先级*/
+                 &xHandleTaskStart );   /* 任务句柄  */
+}
+
 void AppTaskCreate (void)
 {
     xTaskCreate( vTaskCLI,              /* 任务函数  */
@@ -106,21 +145,13 @@ void AppTaskCreate (void)
                  &xHandleTaskTouch );   /* 任务句柄  */
 
 
-    xTaskCreate( vTaskStart,            /* 任务函数  */
-                 "vTaskStart",          /* 任务名    */
+    xTaskCreate( vTaskAppStart,            /* 任务函数  */
+                 "vTaskAppStart",          /* 任务名    */
                  512,                   /* 任务栈大小，单位word，也就是4字节 */
                  NULL,                  /* 任务参数  */
                  4,                     /* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
-
-/*
----------------------------------------------------------------------------*/
-/**
-* @brief
-*/
-/*
----------------------------------------------------------------------------*/
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 
 void vApplicationTickHook( void )

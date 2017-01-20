@@ -387,7 +387,7 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t 
         {
             return MT_COM_FAIL;
         }
-        vTaskDelay(50);
+        vTaskDelay(100);
         res = pMT626COMObj ->recvResponse(pMT626COMObj, ucSendID, &ucRcvdLength);
         if(res != MT_SUCCEED)
         {
@@ -515,7 +515,7 @@ void testmt626(void)
         if(state == MT_STATE_Y)
         {
             // do something...
-            printf("Find card,UID = ");
+            printf("Find card.\n ");
         }
         else if(state == MT_STATE_N)
         {
@@ -535,6 +535,7 @@ void testmt626(void)
                 precvdData[i] = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData[i];
             }
             // use precvdData to do sth...
+            printf("UID = ");
             for(i = 0; i < uiRecvdOptLen; i++)
             {
                 printf("%x",precvdData[i]);
@@ -548,7 +549,6 @@ void testmt626(void)
             //do something...
         }
 #if 0
-
         //eg. 有发送数据,有返回数据
         state = TransToMT626(pmt626com, MT626_WRITE_CMD, ucSendData, sizeof(ucSendData));
         if(state == MT_STATE_Y)
@@ -568,7 +568,7 @@ void testmt626(void)
         {
             //do something...
         }
-#endif
+        #endif
         vTaskDelay(500); //任务调度
     }
     pmt626com->deleteCOM(pmt626com);

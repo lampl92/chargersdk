@@ -99,7 +99,7 @@
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 20*1024 * 1024 ) )
 #define configMAX_TASK_NAME_LEN			( 16 )
-#define configUSE_TRACE_FACILITY		1             
+#define configUSE_TRACE_FACILITY		1
 #define configUSE_16_BIT_TICKS			0
 #define configIDLE_SHOULD_YIELD			1
 #define configUSE_MUTEXES				1
@@ -109,6 +109,8 @@
 #define configUSE_MALLOC_FAILED_HOOK	1
 #define configUSE_APPLICATION_TASK_TAG	0
 #define configUSE_COUNTING_SEMAPHORES	1
+
+#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS	3 /* FreeRTOS+FAT requires 2 pointers if a CWD is supported. */
 
@@ -139,27 +141,27 @@
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
 /* task creation */
-#define INCLUDE_vTaskDelete                     1 
+#define INCLUDE_vTaskDelete                     1
 /* task control */
-#define INCLUDE_uxTaskPriorityGet               1 
-#define INCLUDE_vTaskDelay                      1 
-#define INCLUDE_vTaskDelayUntil                 1 
-#define INCLUDE_vTaskPrioritySet                1 
-#define INCLUDE_vTaskSuspend                    1 
-#define INCLUDE_xResumeFromISR                  1 
+#define INCLUDE_uxTaskPriorityGet               1
+#define INCLUDE_vTaskDelay                      1
+#define INCLUDE_vTaskDelayUntil                 1
+#define INCLUDE_vTaskPrioritySet                1
+#define INCLUDE_vTaskSuspend                    1
+#define INCLUDE_xResumeFromISR                  1
 /* task utilities */
-#define INCLUDE_eTaskGetState                   0 
-#define INCLUDE_pcTaskGetTaskName               0 
+#define INCLUDE_eTaskGetState                   0
+#define INCLUDE_pcTaskGetTaskName               0
 #define INCLUDE_xTaskGetHandle                  0 //xTaskGetHandle
-#define INCLUDE_uxTaskGetStackHighWaterMark     0 
-#define INCLUDE_xTaskGetCurrentTaskHandle       1 
-#define INCLUDE_xTaskGetIdleTaskHandle          0 
-#define INCLUDE_xTaskGetSchedulerState          1 
+#define INCLUDE_uxTaskGetStackHighWaterMark     0
+#define INCLUDE_xTaskGetCurrentTaskHandle       1
+#define INCLUDE_xTaskGetIdleTaskHandle          0
+#define INCLUDE_xTaskGetSchedulerState          1
 /* software timers */
-#define INCLUDE_xTimerGetTimerDaemonTaskHandle  0 
-#define INCLUDE_xTimerPendFunctionCall          1 
+#define INCLUDE_xTimerGetTimerDaemonTaskHandle  0
+#define INCLUDE_xTimerPendFunctionCall          1
 /* events */
-#define INCLUDE_xEventGroupSetBitFromISR        1 
+#define INCLUDE_xEventGroupSetBitFromISR        1
 
 
 
@@ -187,11 +189,11 @@ to all Cortex-M ports, and do not rely on any particular library functions. */
 /* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY 	( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
-	
+
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
-#define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }	
-	
+#define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
+
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
 #define vPortSVCHandler SVC_Handler

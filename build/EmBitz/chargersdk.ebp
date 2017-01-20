@@ -101,9 +101,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
-		<Unit filename="..\..\src\app\apptask.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -122,8 +119,13 @@
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\systask.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\testobserver.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
 			<Option compilerVar="CC" />
@@ -264,12 +266,6 @@
 		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\glib-object.h" />
 		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gmacros.h" />
 		<Unit filename="..\..\src\middlewares\glib-2.3.6\glib\gtypes.h" />
-		<Unit filename="..\..\src\middlewares\libcstl-2.3.0\src\cstl_list.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\libcstl-2.3.0\src\cstl_queue.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\middlewares\mxml-2.10\mxml-attr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -323,6 +319,8 @@
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\libobserver.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\userlib_list.c">
 			<Option compilerVar="CC" />
@@ -357,7 +355,7 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="ST-link">
+				<target_debugging_settings target="Debug" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -374,7 +372,7 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Debug" active_interface="ST-link">
+				<target_debugging_settings target="Release" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
