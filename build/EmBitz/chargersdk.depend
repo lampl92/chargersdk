@@ -856,7 +856,7 @@
 	"DIALOG_Intern.h"
 	"WIDGET.h"
 
-1484621108 source:d:\documents\projects\chargersdk\src\app\main.c
+1485051797 source:d:\documents\projects\chargersdk\src\app\main.c
 	"includes.h"
 
 1478672850 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
@@ -1661,16 +1661,23 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1484621357 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1485051333 d:\documents\projects\chargersdk\src\app\taskcreate.h
+	"includes.h"
 
-1484815610 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
+1485053878 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
+	"taskcreate.h"
 	"remotecomm.h"
 
 1484815578 d:\documents\projects\chargersdk\src\app\remotecomm.h
 
-1484818116 source:d:\documents\projects\chargersdk\src\app\taskcard.c
+1485054453 source:d:\documents\projects\chargersdk\src\app\taskcard.c
+	"taskcreate.h"
+	"taskcard.h"
+	"RFIDReader_mt626.h"
 
-1484813990 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1485053878 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+	"taskcreate.h"
+	"taskcharge.h"
 
 1484880940 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
 	"chargepoint.h"
@@ -1678,14 +1685,34 @@
 1484880889 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 
-1484816795 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1485053920 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+	"taskcreate.h"
+	"taskdata.h"
 
-1484815831 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1485053878 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+	"taskcreate.h"
 	"taskmonitor.h"
 
 1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1484882644 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1485054046 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
-	"RFIDReader_mt626.h"
+
+1485050389 d:\documents\projects\chargersdk\src\app\taskcard.h
+
+1484813988 d:\documents\projects\chargersdk\src\app\taskcharge.h
+
+1484816826 d:\documents\projects\chargersdk\src\app\taskdata.h
+
+1485053878 source:d:\documents\projects\chargersdk\src\app\taskerror.c
+	"taskcreate.h"
+	"taskerror.h"
+
+1485048287 d:\documents\projects\chargersdk\src\app\taskerror.h
+
+1485054103 source:d:\documents\projects\chargersdk\src\app\taskota.c
+	"taskcreate.h"
+	"taskOTA.h"
+
+1485051725 d:\documents\projects\chargersdk\src\app\taskota.h
 

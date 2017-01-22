@@ -1,5 +1,5 @@
-#ifndef __SYS_H
-#define __SYS_H
+#ifndef __SYSINIT_H
+#define __SYSINIT_H
 
 typedef struct
 {
@@ -7,7 +7,7 @@ typedef struct
     uint16_t ad_bottom;
     uint16_t ad_left;
     uint16_t ad_right;
-    
+
 }sysconf_t;
 
 extern sysconf_t   sysconf_param;

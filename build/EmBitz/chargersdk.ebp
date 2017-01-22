@@ -108,9 +108,17 @@
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\EVSEinit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\EVSEinit.h" />
 		<Unit filename="..\..\src\app\FramewinDLG.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\globals.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\globals.h" />
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -139,10 +147,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskdata.h" />
+		<Unit filename="..\..\src\app\taskerror.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskerror.h" />
 		<Unit filename="..\..\src\app\taskmonitor.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskmonitor.h" />
+		<Unit filename="..\..\src\app\taskOTA.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskOTA.h" />
 		<Unit filename="..\..\src\app\testobserver.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />

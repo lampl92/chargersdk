@@ -1,10 +1,6 @@
 /**
 * @file main.c
 * @brief 1. 初始化外设.
-*        2. 创建任务.
-*           1\ vTaskFailureHandle  对运行中的各种数据进行故障检测，发生故障时启动
-*           故障流程
-*           2\ vTaskCharger
 *
 * @author rgw
 * @version v1.0

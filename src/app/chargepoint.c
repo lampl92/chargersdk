@@ -7,8 +7,6 @@
 */
 #include "chargepoint.h"
 
-
-
 ChargePoint_t *ChargePointCreate(uint8_t ucPointID )
 {
     ChargePoint_t *pChargePoint;
