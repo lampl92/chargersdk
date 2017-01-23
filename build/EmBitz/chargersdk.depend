@@ -705,7 +705,7 @@
 1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\semphr.h
 	"queue.h"
 
-1481627336 d:\documents\projects\chargersdk\src\app\sysinit.h
+1485055193 d:\documents\projects\chargersdk\src\app\sysinit.h
 
 1481190735 d:\documents\projects\chargersdk\src\app\apptask.h
 	"includes.h"
@@ -713,7 +713,7 @@
 
 1478761966 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
-1484532225 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
+1485140606 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -865,7 +865,7 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1482151220 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1485054925 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -1670,7 +1670,8 @@
 
 1484815578 d:\documents\projects\chargersdk\src\app\remotecomm.h
 
-1485054453 source:d:\documents\projects\chargersdk\src\app\taskcard.c
+1485162863 source:d:\documents\projects\chargersdk\src\app\taskcard.c
+	"includes.h"
 	"taskcreate.h"
 	"taskcard.h"
 	"RFIDReader_mt626.h"
@@ -1689,7 +1690,7 @@
 	"taskcreate.h"
 	"taskdata.h"
 
-1485053878 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1485084642 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 
@@ -1698,11 +1699,11 @@
 1485054046 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
 
-1485050389 d:\documents\projects\chargersdk\src\app\taskcard.h
+1485157108 d:\documents\projects\chargersdk\src\app\taskcard.h
 
 1484813988 d:\documents\projects\chargersdk\src\app\taskcharge.h
 
-1484816826 d:\documents\projects\chargersdk\src\app\taskdata.h
+1485162863 d:\documents\projects\chargersdk\src\app\taskdata.h
 
 1485053878 source:d:\documents\projects\chargersdk\src\app\taskerror.c
 	"taskcreate.h"
@@ -1715,4 +1716,40 @@
 	"taskOTA.h"
 
 1485051725 d:\documents\projects\chargersdk\src\app\taskota.h
+
+1485136167 source:d:\documents\projects\chargersdk\src\app\connector.c
+	"Connector.h"
+
+1485136170 d:\documents\projects\chargersdk\src\app\connector.h
+	"stm32f4xx.h"
+
+1485057291 source:d:\documents\projects\chargersdk\src\app\evseinit.c
+
+1485057154 source:d:\documents\projects\chargersdk\src\app\globals.c
+
+1485138983 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_gpio.c
+
+1485140012 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_timer.c
+
+1485141036 source:d:\documents\projects\chargersdk\src\drivers\device\src\buzzer.c
+	"bsp.h"
+	"buzzer.h"
+
+1485140851 d:\documents\projects\chargersdk\src\drivers\device\inc\buzzer.h
+
+1485140751 source:d:\documents\projects\chargersdk\src\drivers\device\src\led.c
+	"bsp.h"
+	"led.h"
+
+1485140783 d:\documents\projects\chargersdk\src\drivers\device\inc\led.h
+
+1168500296 source:d:\documents\projects\chargersdk\src\middlewares\camellia-bsd-1.2.0\camellia.c
+	<string.h>
+	<stdlib.h>
+	"camellia.h"
+
+1168500294 d:\documents\projects\chargersdk\src\middlewares\camellia-bsd-1.2.0\camellia.h
+
+1485163137 source:d:\documents\projects\chargersdk\src\drivers\device\src\card_m1.c
+	"includes.h"
 

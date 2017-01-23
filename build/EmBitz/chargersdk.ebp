@@ -101,13 +101,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
-		<Unit filename="..\..\src\app\chargepoint.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\app\chargepoint.h" />
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\connector.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\connector.h" />
 		<Unit filename="..\..\src\app\EVSEinit.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -119,6 +119,8 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\globals.h" />
+		<Unit filename="..\..\src\app\includes.h" />
+		<Unit filename="..\..\src\app\libpowershare\ps_globals.h" />
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -179,10 +181,16 @@
 		<Unit filename="..\..\src\cli\cli_xml.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\inc\bsp.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\bsp_gpio.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
 		<Unit filename="..\..\src\drivers\bsp\src\bsp.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_dwt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\bsp_gpio.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
@@ -197,6 +205,9 @@
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_sdram.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\bsp_timer.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_touch_2046.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -209,13 +220,26 @@
 		<Unit filename="..\..\src\drivers\bsp\src\retarget.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\device\inc\buzzer.h" />
+		<Unit filename="..\..\src\drivers\device\inc\card_m1.h" />
+		<Unit filename="..\..\src\drivers\device\inc\led.h" />
 		<Unit filename="..\..\src\drivers\device\inc\RFIDReader_mt626.h" />
+		<Unit filename="..\..\src\drivers\device\src\buzzer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\device\src\card_m1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\device\src\led.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\drivers\device\src\RFIDReader_mt626.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_conf.h" />
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -279,6 +303,10 @@
 		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\camellia-BSD-1.2.0\camellia.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\camellia-BSD-1.2.0\camellia.h" />
 		<Unit filename="..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c">
 			<Option compilerVar="CC" />
 		</Unit>

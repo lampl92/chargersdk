@@ -5,6 +5,7 @@
 * @version v1.0
 * @date 2017-01-19
 */
+#include "includes.h"
 #include "taskcreate.h"
 #include "taskcard.h"
 #include "RFIDReader_mt626.h"
@@ -23,11 +24,8 @@ int *GetUID(MT626COM_t *pmt626com, uint8_t *pUID)
     if(state == MT_STATE_Y)
     {
         uiRecvdOptLen = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->uiRecvdOptLen;
-
-        for(i = 0; i < uiRecvdOptLen; i++)
-        {
-            precvdData[i] = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData[i];
-        }
+        memmove(precvdData, pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData, uiRecvdOptLen);
+        memset(pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData,0,uiRecvdOptLen);
     }
     return state;
 }

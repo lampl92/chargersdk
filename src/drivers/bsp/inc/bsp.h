@@ -72,7 +72,6 @@
 
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
-
 #include "bsp_uart.h"
 #include "bsp_sdram.h"
 #include "bsp_dwt.h"
