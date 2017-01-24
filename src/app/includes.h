@@ -53,6 +53,7 @@
 *                                        APP / BSP
 *********************************************************************************************************
 */
+#include "globals.h"
 #include "sysinit.h"
 #include "taskcreate.h"
 #include "bsp.h"
