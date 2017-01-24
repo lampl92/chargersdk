@@ -180,7 +180,7 @@ void RTC_Alarm_IRQHandler(void)
 //RTC闹钟A中断处理回调函数
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    printf("ALARM A!\r\n");
+    xprintf("ALARM A!\r\n");
 }
 
 //RTC WAKE UP中断服务函数

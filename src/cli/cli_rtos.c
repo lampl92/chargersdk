@@ -6,22 +6,22 @@ void cli_tasklist_fnt(int argc, char **argv)
 {
     u16 FreeBytesRemaining=0;
     u16 memused;
-    u8 paddr[20];				//??P Addr:+p???ASCII?
+    u8 paddr[20];
     taskENTER_CRITICAL();
-    
-    printf("\r\n");
+
+    xprintf("\r\n");
     vTaskList((char *)&acTaskStatusBuffer);
-    printf("=================================================\r\n");
-	printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
-	printf("%s\r\n", acTaskStatusBuffer);
-	printf("\r\n任务名       运行计数         使用率\r\n");
+    xprintf("=================================================\r\n");
+	xprintf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
+	xprintf("%s\r\n", acTaskStatusBuffer);
+	xprintf("\r\n任务名       运行计数         使用率\r\n");
 	vTaskGetRunTimeStats((char *)&acTaskStatusBuffer);
-    printf("%s\r\n", acTaskStatusBuffer);
-    
+    xprintf("%s\r\n", acTaskStatusBuffer);
+
     FreeBytesRemaining=xPortGetFreeHeapSize();
     memused = (configTOTAL_HEAP_SIZE-FreeBytesRemaining) * 100 / configTOTAL_HEAP_SIZE;
-	sprintf((char*)paddr,"%d.%01d%%",memused/10,memused%10);
-    printf("SDRAM 使用率: %s\n",paddr);
+	xsprintf((char*)paddr,"%d.%01d%%",memused/10,memused%10);
+    xprintf("SDRAM 使用率: %s\n",paddr);
     taskEXIT_CRITICAL();
 }
 

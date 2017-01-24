@@ -515,11 +515,11 @@ void testmt626(void)
         if(state == MT_STATE_Y)
         {
             // do something...
-            printf("Find card.\n ");
+            xprintf("Find card.\n ");
         }
         else if(state == MT_STATE_N)
         {
-            printf("No card.\n");
+            xprintf("No card.\n");
             // do something...
         }
 
@@ -535,12 +535,12 @@ void testmt626(void)
                 precvdData[i] = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData[i];
             }
             // use precvdData to do sth...
-            printf("UID = ");
+            xprintf("UID = ");
             for(i = 0; i < uiRecvdOptLen; i++)
             {
-                printf("%x",precvdData[i]);
+                xprintf("%x",precvdData[i]);
             }
-            printf("\n");
+            xprintf("\n");
             // then...
             free(precvdData);
         }

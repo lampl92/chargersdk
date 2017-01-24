@@ -255,7 +255,7 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-   
+
     //bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
     {
@@ -298,9 +298,9 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
         {
             if(nand_dev.ecc_rdbuf[i + eccstart] != nand_dev.ecc_hdbuf[i + eccstart]) //不相等,需要校正
             {
-                printf("err hd,rd:0x%x,0x%x\r\n", nand_dev.ecc_hdbuf[i + eccstart], nand_dev.ecc_rdbuf[i + eccstart]);
-                printf("eccnum,eccstart:%d,%d\r\n", eccnum, eccstart);
-                printf("PageNum,ColNum:%d,%d\r\n", PageNum, ColNum);
+                xprintf("err hd,rd:0x%x,0x%x\r\n", nand_dev.ecc_hdbuf[i + eccstart], nand_dev.ecc_rdbuf[i + eccstart]);
+                xprintf("eccnum,eccstart:%d,%d\r\n", eccnum, eccstart);
+                xprintf("PageNum,ColNum:%d,%d\r\n", PageNum, ColNum);
                 res = NAND_ECC_Correction(p + NAND_ECC_SECTOR_SIZE * i, nand_dev.ecc_rdbuf[i + eccstart], nand_dev.ecc_hdbuf[i + eccstart]); //ECC校验
                 if(res)
                 {
@@ -695,7 +695,7 @@ void NAND_EraseChip(void)
         status = NAND_EraseBlock(i);
         if(status)
         {
-            printf("Erase %d block fail!!，错误码为%d\r\n", i, status);    //擦除失败
+            xprintf("Erase %d block fail!!，错误码为%d\r\n", i, status);    //擦除失败
         }
     }
 }
@@ -740,13 +740,13 @@ u8 NAND_ECC_Correction(u8 *data_buf, u32 eccrd, u32 ecccl)
     if(eccchk == 0XFFF) //全1,说明只有1bit ECC错误
     {
         errorpos = eccrdo ^ eccclo;
-        printf("errorpos:%d\r\n", errorpos);
+        xprintf("errorpos:%d\r\n", errorpos);
         bytepos = errorpos / 8;
         data_buf[bytepos] ^= 1 << (errorpos % 8);
     }
     else                //不是全1,说明至少有2bit ECC错误,无法修复
     {
-        printf("2bit ecc error or more\r\n");
+        xprintf("2bit ecc error or more\r\n");
         return 1;
     }
     return 0;

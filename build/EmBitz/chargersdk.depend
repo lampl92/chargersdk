@@ -460,7 +460,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1484880801 d:\documents\projects\chargersdk\src\app\includes.h
+1485236969 d:\documents\projects\chargersdk\src\app\includes.h
 	<stdarg.h>
 	<stdio.h>
 	<stdlib.h>
@@ -478,6 +478,7 @@
 	"taskcreate.h"
 	"bsp.h"
 	"tinysh.h"
+	"xprintf.h"
 
 1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\freertos.h
 	<stddef.h>
@@ -865,7 +866,7 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1485054925 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1485236969 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -894,10 +895,10 @@
 	<errno.h>
 	"ff.h"
 
-1482139723 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
+1485238894 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
 	"includes.h"
 
-1480993551 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
+1485238845 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
 	"includes.h"
 	"ff.h"
 	"ff_gen_drv.h"
@@ -921,11 +922,11 @@
 
 1480391775 d:\documents\projects\chargersdk\src\cli\cli_xml.h
 
-1480489202 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
+1485237071 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
 	"includes.h"
 	"task.h"
 
-1480917681 source:d:\documents\projects\chargersdk\src\cli\cli_xml.c
+1485238894 source:d:\documents\projects\chargersdk\src\cli\cli_xml.c
 	"includes.h"
 	"mxml.h"
 
@@ -936,13 +937,13 @@
 1478674937 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_dwt.c
 	"bsp.h"
 
-1480490224 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_ftl.c
+1485239004 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_ftl.c
 	"bsp.h"
 
-1479999476 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_hw.c
+1485239004 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_nand_hw.c
 	"bsp.h"
 
-1481773481 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_rtc.c
+1485239004 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_rtc.c
 	"bsp.h"
 
 1480481259 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_sdram.c
@@ -963,7 +964,7 @@
 	<ctype.h>
 	<string.h>
 
-1484539119 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
+1485239004 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
 	<stdlib.h>
 	<string.h>
 	"RFIDReader_mt626.h"
@@ -977,8 +978,9 @@
 1478673966 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1484292441 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
+1485236969 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
 	"bsp.h"
+	"xprintf.h"
 
 1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal.c
 	"stm32f4xx_hal.h"
@@ -1149,7 +1151,7 @@
 1480465400 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\mxml-string.c
 	"config.h"
 
-1481620863 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\testmxml.c
+1485239051 source:d:\documents\projects\chargersdk\src\middlewares\mxml-2.10\testmxml.c
 	"config.h"
 	"mxml.h"
 
@@ -1199,7 +1201,7 @@
 	"userlib_list.h"
 	<stdlib.h>
 
-1481867952 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\userlib_queue.c
+1485239004 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\userlib_queue.c
 	"../inc/userlib_queue.h"
 	<stdio.h>
 	<stdlib.h>
@@ -1262,11 +1264,11 @@
 	"queue.h"
 	"timers.h"
 
-1482145834 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\xprintf.c
+1307542740 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\xprintf.c
 	"xprintf.h"
 	<stdarg.h>
 
-1307542742 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\xprintf.h
+1485237319 d:\documents\projects\chargersdk\src\middlewares\userlib\inc\xprintf.h
 
 1481190760 source:d:\documents\projects\chargersdk\src\middlewares\stemwin\demo\guidemo.c
 	"GUIDEMO.h"
@@ -1664,19 +1666,19 @@
 1485051333 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 
-1485053878 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
 	"taskcreate.h"
 	"remotecomm.h"
 
 1484815578 d:\documents\projects\chargersdk\src\app\remotecomm.h
 
-1485162863 source:d:\documents\projects\chargersdk\src\app\taskcard.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskcard.c
 	"includes.h"
 	"taskcreate.h"
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1485053878 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 
@@ -1686,11 +1688,11 @@
 1484880889 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 
-1485053920 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"taskcreate.h"
 	"taskdata.h"
 
-1485084642 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 
@@ -1705,13 +1707,13 @@
 
 1485162863 d:\documents\projects\chargersdk\src\app\taskdata.h
 
-1485053878 source:d:\documents\projects\chargersdk\src\app\taskerror.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskerror.c
 	"taskcreate.h"
 	"taskerror.h"
 
 1485048287 d:\documents\projects\chargersdk\src\app\taskerror.h
 
-1485054103 source:d:\documents\projects\chargersdk\src\app\taskota.c
+1485238845 source:d:\documents\projects\chargersdk\src\app\taskota.c
 	"taskcreate.h"
 	"taskOTA.h"
 

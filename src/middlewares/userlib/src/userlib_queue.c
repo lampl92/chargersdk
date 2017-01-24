@@ -79,7 +79,7 @@ void testqueue()
     for(i = 0; i < 128; i++)
     {
         q->DeElem(q, &ch);
-        printf("%d\n", ch);
+        xprintf("%d\n", ch);
     }
     q->Delete(q);
 }

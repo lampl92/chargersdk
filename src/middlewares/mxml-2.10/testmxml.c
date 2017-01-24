@@ -479,9 +479,9 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
     if (node->type != MXML_TEXT)
     {
       fputs("No child node of group/option/keyword.\n", stderr);
-        
+
       //mxmlSaveFile(tree, &fstderr2xml, MXML_NO_CALLBACK);
-      
+
       mxmlDelete(tree);
       return (1);
     }
@@ -562,7 +562,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
       f_open(&fil, argv[2], FA_OPEN_ALWAYS | FA_WRITE);
       f_puts(buffer, &fil);
       f_close(&fil);
-      printf("%s", buffer);
+      xprintf("%s", buffer);
     }
   }
 

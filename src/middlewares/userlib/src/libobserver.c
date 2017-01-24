@@ -22,17 +22,17 @@ typedef struct _subject_t
 
 void update_form(int data)
 {
-    printf("update form~~~\n");
+    xprintf("update form~~~\n");
 }
 
 void update_cylinder(int data)
 {
-    printf("update cylinder~~~\n");
+    xprintf("update cylinder~~~\n");
 }
 
 void update_percent(int data)
 {
-    printf("update percent~~~ yeah rgw!!!\n");
+    xprintf("update percent~~~ yeah rgw!!!\n");
 }
 
 void init_observer(observer_t *observer, void (*update)(int))

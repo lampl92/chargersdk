@@ -18,7 +18,7 @@
 //GUI??é?
 
 #define DARKBLUE         0X01CF //é?à?é?
-#define LIGHTBLUE        0X7D7C //?3à?é?  
+#define LIGHTBLUE        0X7D7C //?3à?é?
 #define GRAYBLUE         0X5458 //?òà?é?
 //ò?é?èyé??aPANELμ???é?
 
@@ -32,11 +32,11 @@
 
 void cli_hello_fnt(int argc, char **argv)
 {
-    printf("\nhello world\n");
-    printf("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
-    printf("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
-    printf("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
-    printf("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
+    xprintf("\nhello world\n");
+    xprintf("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
+    xprintf("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
+    xprintf("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
+    xprintf("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
 
 
 #if 0
@@ -103,7 +103,7 @@ void fsmc_sdram_test()
     u32 i = 0;
     u32 temp = 0;
     u32 sval = 0; //在地址0读到的数据
-    printf("每隔16K字节,写入一个数据,总共写入2048个数据,刚好是32M字节\n");
+    xprintf("每隔16K字节,写入一个数据,总共写入2048个数据,刚好是32M字节\n");
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         *(vu32 *)(Bank5_SDRAM_ADDR + i) = temp;
@@ -116,16 +116,16 @@ void fsmc_sdram_test()
         sval = *(vu32 *)(Bank5_SDRAM_ADDR + i);
         if(temp == sval)
         {
-            printf("[@0x%x]=OK!\n", Bank5_SDRAM_ADDR | i);
+            xprintf("[@0x%x]=OK!\n", Bank5_SDRAM_ADDR | i);
         }
         else
         {
-            printf("[@0x%x]=ERR!\n", Bank5_SDRAM_ADDR | i);
+            xprintf("[@0x%x]=ERR!\n", Bank5_SDRAM_ADDR | i);
             break;
         }
         temp++;
     }
-    printf("SDRAM 容量:%dMB\r\n", i / 1024 / 1024); //打印SDRAM容量
+    xprintf("SDRAM 容量:%dMB\r\n", i / 1024 / 1024); //打印SDRAM容量
 }
 
 
@@ -154,13 +154,13 @@ void cli_systemtime_fnt(int argc, char **argv)
     {
         taskENTER_CRITICAL();
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf("\n%s\n", tbuf);
+        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        xprintf("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        printf("%s\n", tbuf);
-        sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        printf("%s\n", tbuf);
+        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+        xprintf("%s\n", tbuf);
+        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+        xprintf("%s\n", tbuf);
         taskEXIT_CRITICAL();
     }
     else if(strcmp(argv[1], "-s") == 0)
@@ -172,7 +172,7 @@ void cli_systemtime_fnt(int argc, char **argv)
         if(str[0] != '\"' && str[strlen(str) - 1] != '\"')
         {
             taskENTER_CRITICAL();
-            printf("\nWrong command! please date --help\n");
+            xprintf("\nWrong command! please date --help\n");
             taskEXIT_CRITICAL();
             return ;
         }
@@ -182,13 +182,13 @@ void cli_systemtime_fnt(int argc, char **argv)
         //str:        ^
         strncpy((char *)tbuf, str, 2);//"16"->tbuf
         RTC_DateStruct.Year = (uint8_t)atoi((char *)tbuf);
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:           ^
         strncpy((char *)tbuf, str, 2);
         RTC_DateStruct.Month = (uint8_t)atoi((char *)tbuf);
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:              ^
@@ -196,19 +196,19 @@ void cli_systemtime_fnt(int argc, char **argv)
         RTC_DateStruct.Date = (uint8_t)atoi((char *)tbuf);
 
         RTC_Set_Date(RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                 ^
         strncpy((char *)tbuf, str, 2);
         RTC_TimeStruct.Hours = (uint8_t)atoi((char *)tbuf);
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                    ^
         strncpy((char *)tbuf, str, 2);
         RTC_TimeStruct.Minutes = (uint8_t)atoi((char *)tbuf);
-        
+
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                       ^
@@ -218,20 +218,20 @@ void cli_systemtime_fnt(int argc, char **argv)
         RTC_Set_Time(RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf("\n%s\n", tbuf);
+        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        xprintf("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        printf("%s\n", tbuf);
-        sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        printf("%s\n", tbuf);
+        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+        xprintf("%s\n", tbuf);
+        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+        xprintf("%s\n", tbuf);
         taskEXIT_CRITICAL();
 
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
         taskENTER_CRITICAL();
-        printf("\neg:date -s \"2016-09-12 15:04:00\"\n");
+        xprintf("\neg:date -s \"2016-09-12 15:04:00\"\n");
         taskEXIT_CRITICAL();
     }
 
@@ -251,13 +251,13 @@ static void display_args(int argc, char **argv)
     int i;
     for(i = 0; i < argc; i++)
     {
-        printf("argv[%d]=\"%s\"\n", i, argv[i]);
+        xprintf("argv[%d]=\"%s\"\n", i, argv[i]);
     }
 }
 
 static void foo_fnt(int argc, char **argv)
 {
-    printf("foo command called\n");
+    xprintf("foo command called\n");
     display_args(argc, argv);
 }
 
@@ -267,7 +267,7 @@ tinysh_cmd_t myfoocmd = {0, "foo", "foo command", "[args]",
 
 static void item_fnt(int argc, char **argv)
 {
-    printf("item%d command called\n", (int)tinysh_get_arg());
+    xprintf("item%d command called\n", (int)tinysh_get_arg());
     display_args(argc, argv);
 }
 
@@ -288,7 +288,7 @@ static void atoxi_fnt(int argc, char **argv)
 
     for(i = 1; i < argc; i++)
     {
-        printf("\"%s\"-->%u (0x%x)\n",
+        xfprintf("\"%s\"-->%u (0x%x)\n",
                argv[i], tinysh_atoxi(argv[i]), tinysh_atoxi(argv[i]));
     }
 }

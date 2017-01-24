@@ -176,6 +176,7 @@ uint8_t read_sysconf_xml(void)
 
 void sys_Init(void)
 {
+    retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
     my_mem_init(SRAMIN);            //初始化内部内存池
     my_mem_init(SRAMEX);            //初始化外部内存池
@@ -210,6 +211,6 @@ void sys_Init(void)
     GUI_Init();
     WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
 
-    printf("\nsystem initialized\n\r");
-    printf("\nhello charger\n\r");
+    xprintf("\nsystem initialized\n\r");
+    xprintf("\nhello charger\n\r");
 }

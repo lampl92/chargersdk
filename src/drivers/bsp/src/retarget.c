@@ -1,7 +1,6 @@
 #include "bsp.h"
-
+#include "xprintf.h"
 extern UART_HandleTypeDef CLI_UARTx_Handler;
-
 
 void myputc(uint8_t ch)
 {
@@ -15,7 +14,7 @@ void myputc(uint8_t ch)
     HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&tempch, 1, 0xFFFF);
     __set_PRIMASK(0);
 }
-#if 0
+#if 1
 void retarget_init(void)
 {
     xdev_out(myputc);
@@ -23,7 +22,7 @@ void retarget_init(void)
 
 #endif
 
-
+#if 0
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -98,3 +97,4 @@ void _sys_exit(int x)
     x = x;
 }
 
+#endif

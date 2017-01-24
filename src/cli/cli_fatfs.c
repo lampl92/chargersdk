@@ -54,22 +54,22 @@ static void cli_mkfs_fnt(int argc, char **argv)
         }
         else
         {
-            printf("\n格式化完成,当前文件系统%s\n", argv[2]);
+            xprintf("\n格式化完成,当前文件系统%s\n", argv[2]);
         }
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
 
-        printf("\nformat: FAT,FAT32,exFAT,ANY,SFD\n");
+        xprintf("\nformat: FAT,FAT32,exFAT,ANY,SFD\n");
 
-        printf("\neg:mkfs -t FAT nand\n");
+        xprintf("\neg:mkfs -t FAT nand\n");
 
     }
     else
     {
-        printf("\nerror input\n");
-        printf("format: FAT,FAT32,exFAT,ANY,SFD\n");
-        printf("eg:mkfs -t FAT nand\n");
+        xprintf("\nerror input\n");
+        xprintf("format: FAT,FAT32,exFAT,ANY,SFD\n");
+        xprintf("eg:mkfs -t FAT nand\n");
     }
     taskEXIT_CRITICAL();
 }
@@ -87,13 +87,13 @@ static void cli_mount_fnt(int argc, char **argv)
         }
         else
         {
-            printf("\nmount ok.\n");
+            xprintf("\nmount ok.\n");
         }
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
 
-        printf("\neg:mount nand\n");
+        xprintf("\neg:mount nand\n");
 
     }
     taskEXIT_CRITICAL();
@@ -111,13 +111,13 @@ static void cli_umount_fnt(int argc, char **argv)
         }
         else
         {
-            printf("\numount ok.\n");
+            xprintf("\numount ok.\n");
         }
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
 
-        printf("\neg:umount nand\n");
+        xprintf("\neg:umount nand\n");
 
     }
     taskEXIT_CRITICAL();
@@ -157,7 +157,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
             {
                 f_close(&MyFile);
                 taskENTER_CRITICAL();
-                printf("%s\n", rtext);
+                xprintf("%s\n", rtext);
                 free(rtext);
                 taskEXIT_CRITICAL();
             }
@@ -177,29 +177,29 @@ static void cli_cat_fnt(int argc, char **argv)
         res = f_open(&MyFile, argv[1], FA_READ);
         if(res != FR_OK)
         {
-            printf("Error file\n");
+            xprintf("Error file\n");
         }
         else
         {
             c = f_getc(&MyFile);
             while(c != EOF)
             {
-                printf("%c", c);
+                xprintf("%c", c);
                 c = f_getc(&MyFile);
             }
             if (f_eof(&MyFile) != 0)
             {
-                printf("\n End of file reached.\n");
+                xprintf("\n End of file reached.\n");
             }
             else
             {
-                printf("\n Something went wrong.\n");
+                xprintf("\n Something went wrong.\n");
             }
         }
     }
     else
     {
-        printf("no file input\n");
+        xprintf("no file input\n");
     }
 
 

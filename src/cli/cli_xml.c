@@ -38,7 +38,7 @@ static void cli_testxml_create_fnt(int argc, char **argv)
         mxmlNewText(node, 0, "val8");
         if(i % 10 == 0)
         {
-            printf("i = %d\n", i);
+            xprintf("i = %d\n", i);
         }
     }
 

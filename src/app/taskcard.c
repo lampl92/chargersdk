@@ -43,19 +43,19 @@ void vTaskEVSECard(void *pvParameters)
         state = GetUID(pmt626com, cardUID);
         if(state == MT_STATE_Y)
         {
-            printf("UID = ");
+            xprintf("UID = ");
             for(i = 0; i < 4; i++)
             {
-                printf("%x", cardUID[i]);
+                xprintf("%x", cardUID[i]);
             }
-            printf("\n");
+            xprintf("\n");
         }
         else
         {
-            printf("No card.\n");
+            xprintf("No card.\n");
         }
 
-        //printf("%s\n", TASKNAME_EVSECard);
+        //xprintf("%s\n", TASKNAME_EVSECard);
         vTaskDelay(500);
     }
 }
