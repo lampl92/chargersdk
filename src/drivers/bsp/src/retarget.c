@@ -2,18 +2,13 @@
 #include "xprintf.h"
 extern UART_HandleTypeDef CLI_UARTx_Handler;
 
+SemaphoreHandle_t  xprintfMutex = NULL;
+
 void myputc(uint8_t ch)
 {
-    int tempch = ch;
-
     __set_PRIMASK(1);    //增加关闭中断功能,防止串口在使用时出现冲突
     xSemaphoreTake(xprintfMutex, portMAX_DELAY);
-    if(tempch == '\n')
-    {
-        ch = '\r';
-        HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
-    }
-    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&tempch, 1, 0xFFFF);
+    HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
     xSemaphoreGive(xprintfMutex);
     __set_PRIMASK(0);
 

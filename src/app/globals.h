@@ -8,5 +8,4 @@
 #ifndef  __GLOBALS_H
 #define  __GLOBALS_H
 
-extern SemaphoreHandle_t  xprintfMutex;
 #endif

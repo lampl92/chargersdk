@@ -6,13 +6,10 @@
 #include "cli_xml.h"
 #include "bsp_uart.h"
 #include "userlib_queue.h"
-extern uint8_t aCliRxBuffer[1];
-extern uint16_t CLI_RX_STA;
 
-extern void myputc(uint8_t ch);
 void tinysh_char_out(unsigned char c)
 {
-    myputc(c);
+    xputc(c);
 }
 
 

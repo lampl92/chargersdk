@@ -7,4 +7,4 @@
 */
 #include "includes.h"
 
-SemaphoreHandle_t  xprintfMutex = NULL;
+
