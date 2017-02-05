@@ -43,7 +43,7 @@ void vTaskEVSECard(void *pvParameters)
         state = GetUID(pmt626com, cardUID);
         if(state == MT_STATE_Y)
         {
-            #ifdef RFID_DEBUG
+            #ifdef DEBUG_RFID
             xprintf("UID = ");
             for(i = 0; i < 4; i++)
             {
@@ -54,7 +54,7 @@ void vTaskEVSECard(void *pvParameters)
         }
         else
         {
-            #ifdef RFID_DEBUG
+            #ifdef DEBUG_RFID
             xprintf("No card.\n");
             #endif
         }
