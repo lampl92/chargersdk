@@ -125,6 +125,12 @@ void AppTaskCreate (void)
     xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
+/** @brief 创建任务通信机制。（信号量，软件定时器创建与启动）
+ */
+void AppObjCreate (void)
+{
+
+}
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
 {
