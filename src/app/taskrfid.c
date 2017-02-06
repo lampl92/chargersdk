@@ -15,7 +15,7 @@ void vTaskEVSERFID(void *pvParameters)
     uint8_t cardUID[4];
     int state, i;
     void *pRFIDDev;
-
+    EventBits_t uxBits;
     pRFIDDev = CreateRFIDDev();
 
     while(1)
@@ -31,7 +31,7 @@ void vTaskEVSERFID(void *pvParameters)
             }
             xprintf("\n");
             #endif
-
+        uxBits = xEventGroupSetBits(xHandleEventGroupRFID, defEventBitGETUID);
         }
         else
         {

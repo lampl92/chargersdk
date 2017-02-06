@@ -21,7 +21,7 @@
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
 
-#define defSTACK_TaskEVSERemoteComm         512
+#define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               1024
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
@@ -37,7 +37,7 @@
 #define defPRIORITY_TaskTouch               1
 #define defPRIORITY_TaskOTA                 15 /* 最高*/
 
-#define defPRIORITY_TaskEVSERemoteComm      3
+#define defPRIORITY_TaskEVSERemote          3
 #define defPRIORITY_TaskEVSERFID            3
 #define defPRIORITY_TaskEVSECharge          5
 #define defPRIORITY_TaskEVSEMonitor         7
@@ -51,7 +51,7 @@ const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
-const char *TASKNAME_EVSERemoteComm = "TaskEVSERemoteComm";
+const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
 const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
 const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
 const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
@@ -66,7 +66,7 @@ void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);                  //在线升级
 
-void vTaskEVSERemoteComm(void *pvParameters);       //远程通信
+void vTaskEVSERemote(void *pvParameters);       //远程通信
 void vTaskEVSERFID(void *pvParameters);             //刷卡
 void vTaskEVSECharge(void *pvParameters);           //充电
 void vTaskEVSEMonitor(void *pvParameters);          //监控
@@ -81,12 +81,16 @@ static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
 
-static TaskHandle_t xHandleTaskEVSERemoteComm = NULL;
+static TaskHandle_t xHandleTaskEVSERemote = NULL;
 static TaskHandle_t xHandleTaskEVSERFID = NULL;
 static TaskHandle_t xHandleTaskEVSECharge = NULL;
 static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEError = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
+/*---------------------------------------------------------------------------/
+/ 任务通信
+/---------------------------------------------------------------------------*/
+EventGroupHandle_t xHandleEventGroupRFID;
 
 void vTaskCLI(void *pvParameters)
 {
@@ -117,7 +121,7 @@ void SysTaskCreate (void)
 
 void AppTaskCreate (void)
 {
-    xTaskCreate( vTaskEVSERemoteComm, TASKNAME_EVSERemoteComm, defSTACK_TaskEVSERemoteComm, NULL, defPRIORITY_TaskEVSERemoteComm, &xHandleTaskEVSERemoteComm );
+    xTaskCreate( vTaskEVSERemote, TASKNAME_EVSERemote, defSTACK_TaskEVSERemote, NULL, defPRIORITY_TaskEVSERemote, &xHandleTaskEVSERemote );
     xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
     xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
     xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
@@ -129,7 +133,7 @@ void AppTaskCreate (void)
  */
 void AppObjCreate (void)
 {
-
+    xHandleEventGroupRFID = xEventGroupCreate();
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
@@ -188,7 +192,7 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     taskDISABLE_INTERRUPTS();
     for( ;; );
 }
-
+#if 0
 void vAssertCalled( const char * pcFile,
                     unsigned long ulLine )
 {
@@ -203,3 +207,4 @@ volatile unsigned long ul = 0;
     }
     taskEXIT_CRITICAL();
 }
+#endif

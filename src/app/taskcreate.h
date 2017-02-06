@@ -21,7 +21,10 @@ extern const char *TASKNAME_EVSEMonitor;
 extern const char *TASKNAME_EVSEError;
 extern const char *TASKNAME_EVSEData;
 
+extern EventGroupHandle_t xHandleEventGroupRFID;
+
 void SysTaskCreate (void);
 void AppTaskCreate (void);
+void AppObjCreate(void);
 
 #endif

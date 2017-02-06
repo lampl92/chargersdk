@@ -117,6 +117,15 @@
 		</Unit>
 		<Unit filename="..\..\src\app\globals.h" />
 		<Unit filename="..\..\src\app\includes.h" />
+		<Unit filename="..\..\src\app\interface_charge.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\interface_monitor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\interface_remote.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\interface_rfid.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -125,10 +134,6 @@
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\remotecomm.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\app\remotecomm.h" />
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -158,6 +163,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskOTA.h" />
+		<Unit filename="..\..\src\app\taskremote.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskremote.h" />
 		<Unit filename="..\..\src\app\taskrfid.c">
 			<Option compilerVar="CC" />
 		</Unit>

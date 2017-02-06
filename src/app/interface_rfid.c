@@ -16,6 +16,7 @@ void *CreateRFIDDev(void)
 {
     MT626COM_t *pmt626com;
     pmt626com = MT626COMCreate();
+
     return (void *)pmt626com;
 }
 int GetUID(void *pRFIDDev, uint8_t *pUID)

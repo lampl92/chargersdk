@@ -23,7 +23,7 @@ int main(void)
 
     SysTaskCreate();
     AppTaskCreate();
-
+    AppObjCreate();
     vTaskStartScheduler();
 
     /*
