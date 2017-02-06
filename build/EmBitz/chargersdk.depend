@@ -460,7 +460,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1485239796 d:\documents\projects\chargersdk\src\app\includes.h
+1486348722 d:\documents\projects\chargersdk\src\app\includes.h
 	<stdarg.h>
 	<stdio.h>
 	<stdlib.h>
@@ -489,7 +489,8 @@
 	"portable.h"
 	<reent.h>
 
-1484625140 d:\documents\projects\chargersdk\src\os\freertosconfig.h
+1486359234 d:\documents\projects\chargersdk\src\os\freertosconfig.h
+	"assert.h"
 	<stdint.h>
 
 1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\projdefs.h
@@ -713,7 +714,7 @@
 	"includes.h"
 	"cli_main.h"
 
-1478761966 d:\documents\projects\chargersdk\src\cli\cli_main.h
+1486348332 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
 1485140606 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdio.h>
@@ -858,7 +859,7 @@
 	"DIALOG_Intern.h"
 	"WIDGET.h"
 
-1485051797 source:d:\documents\projects\chargersdk\src\app\main.c
+1486348722 source:d:\documents\projects\chargersdk\src\app\main.c
 	"includes.h"
 
 1478672850 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
@@ -867,7 +868,7 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1485236969 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1486348006 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -896,7 +897,7 @@
 	<errno.h>
 	"ff.h"
 
-1485238894 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
+1486348281 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
 	"includes.h"
 
 1485238845 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
@@ -965,7 +966,7 @@
 	<ctype.h>
 	<string.h>
 
-1485239004 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
+1486358934 source:d:\documents\projects\chargersdk\src\drivers\device\src\rfidreader_mt626.c
 	<stdlib.h>
 	<string.h>
 	"RFIDReader_mt626.h"
@@ -1664,10 +1665,10 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1485051333 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1486344538 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
+1486347791 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
 	"taskcreate.h"
 	"remotecomm.h"
 
@@ -1679,7 +1680,7 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1486347846 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 
@@ -1689,18 +1690,19 @@
 1484880889 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1486347929 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"taskcreate.h"
 	"taskdata.h"
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1486347955 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 
 1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1485241403 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1486358265 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
+	"cli_main.h"
 
 1485157108 d:\documents\projects\chargersdk\src\app\taskcard.h
 
@@ -1708,19 +1710,20 @@
 
 1485162863 d:\documents\projects\chargersdk\src\app\taskdata.h
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\taskerror.c
+1486347942 source:d:\documents\projects\chargersdk\src\app\taskerror.c
 	"taskcreate.h"
 	"taskerror.h"
 
 1485048287 d:\documents\projects\chargersdk\src\app\taskerror.h
 
-1485238845 source:d:\documents\projects\chargersdk\src\app\taskota.c
+1486347967 source:d:\documents\projects\chargersdk\src\app\taskota.c
 	"taskcreate.h"
 	"taskOTA.h"
 
 1485051725 d:\documents\projects\chargersdk\src\app\taskota.h
 
-1485136167 source:d:\documents\projects\chargersdk\src\app\connector.c
+1486347695 source:d:\documents\projects\chargersdk\src\app\connector.c
+	<stdlib.h>
 	"Connector.h"
 
 1485136170 d:\documents\projects\chargersdk\src\app\connector.h
@@ -1758,4 +1761,27 @@
 	"includes.h"
 
 1485240257 d:\documents\projects\chargersdk\src\app\globals.h
+
+1486345644 source:d:\documents\projects\chargersdk\src\app\interface_card.c
+
+1486362732 d:\documents\projects\chargersdk\src\app\interface_rfid.h
+	"RFIDReader_mt626.h"
+
+1486362731 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
+	"includes.h"
+	"taskcreate.h"
+	"taskrfid.h"
+	"interface_rfid.h"
+
+1485157108 d:\documents\projects\chargersdk\src\app\taskrfid.h
+
+1486362256 source:d:\documents\projects\chargersdk\src\app\interface_rfid.c
+	<string.h>
+	"interface_rfid.h"
+
+1481616089 source:d:\documents\projects\chargersdk\src\hmi\evsedlg.c
+	"DIALOG.h"
+
+1481614666 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
+	"GUI.h"
 

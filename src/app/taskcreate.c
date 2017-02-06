@@ -6,13 +6,13 @@
 *        3. 声明任务
 *        4. 定义任务句柄
 *        5. 任务入口
-*        6. 创建任务创建任务Todolist 对照表
+*        6. 创建任务
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
 */
 #include "includes.h"
-
+#include "cli_main.h"
 /*---------------------------------------------------------------------------/
 / 任务栈定义
 /---------------------------------------------------------------------------*/
@@ -22,7 +22,7 @@
 #define defSTACK_TaskOTA                    512
 
 #define defSTACK_TaskEVSERemoteComm         512
-#define defSTACK_TaskEVSECard               512
+#define defSTACK_TaskEVSERFID               1024
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
 #define defSTACK_TaskEVSEError              512
@@ -38,7 +38,7 @@
 #define defPRIORITY_TaskOTA                 15 /* 最高*/
 
 #define defPRIORITY_TaskEVSERemoteComm      3
-#define defPRIORITY_TaskEVSECard            3
+#define defPRIORITY_TaskEVSERFID            3
 #define defPRIORITY_TaskEVSECharge          5
 #define defPRIORITY_TaskEVSEMonitor         7
 #define defPRIORITY_TaskEVSEError           9
@@ -52,7 +52,7 @@ const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
 const char *TASKNAME_EVSERemoteComm = "TaskEVSERemoteComm";
-const char *TASKNAME_EVSECard       = "TaskEVSECard";
+const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
 const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
 const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
 const char *TASKNAME_EVSEError      = "TaskEVSEError";
@@ -67,7 +67,7 @@ void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);                  //在线升级
 
 void vTaskEVSERemoteComm(void *pvParameters);       //远程通信
-void vTaskEVSECard(void *pvParameters);             //刷卡
+void vTaskEVSERFID(void *pvParameters);             //刷卡
 void vTaskEVSECharge(void *pvParameters);           //充电
 void vTaskEVSEMonitor(void *pvParameters);          //监控
 void vTaskEVSEError(void *pvParameters);            //错误处理
@@ -82,7 +82,7 @@ static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
 
 static TaskHandle_t xHandleTaskEVSERemoteComm = NULL;
-static TaskHandle_t xHandleTaskEVSECard = NULL;
+static TaskHandle_t xHandleTaskEVSERFID = NULL;
 static TaskHandle_t xHandleTaskEVSECharge = NULL;
 static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEError = NULL;
@@ -95,7 +95,7 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    Touch_Calibrate();
+    MainTask();
 }
 
 void vTaskTouch(void *pvParameters)
@@ -118,7 +118,7 @@ void SysTaskCreate (void)
 void AppTaskCreate (void)
 {
     xTaskCreate( vTaskEVSERemoteComm, TASKNAME_EVSERemoteComm, defSTACK_TaskEVSERemoteComm, NULL, defPRIORITY_TaskEVSERemoteComm, &xHandleTaskEVSERemoteComm );
-    xTaskCreate( vTaskEVSECard, TASKNAME_EVSECard, defSTACK_TaskEVSECard, NULL, defPRIORITY_TaskEVSECard, &xHandleTaskEVSECard );
+    xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
     xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
     xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
     xTaskCreate( vTaskEVSEError, TASKNAME_EVSEError, defSTACK_TaskEVSEError, NULL, defPRIORITY_TaskEVSEError, &xHandleTaskEVSEError );
@@ -189,3 +189,17 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     for( ;; );
 }
 
+void vAssertCalled( const char * pcFile,
+                    unsigned long ulLine )
+{
+volatile unsigned long ul = 0;
+
+    taskENTER_CRITICAL();
+    {
+        while( ul == 0 )
+        {
+            portNOP();
+        }
+    }
+    taskEXIT_CRITICAL();
+}

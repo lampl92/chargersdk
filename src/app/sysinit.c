@@ -173,7 +173,7 @@ uint8_t read_sysconf_xml(void)
             return FALSE;
     }
 }
-
+extern void retarget_init(void);
 void sys_Init(void)
 {
     retarget_init();

@@ -434,7 +434,7 @@ static MT626CMD_t *MT626CMDCreate(uint8_t ucParam, uint16_t usLenght, pMT626_MAK
  * @return void
  *
  */
-void deleteCOM(void *pObj)
+static void deleteCOM(void *pObj)
 {
     int i;
     MT626COM_t *pMT626COMObj;

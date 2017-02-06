@@ -13,7 +13,9 @@ void vTaskEVSEMonitor(void *pvParameters)
     /* ≤Â«πºÏ≤‚*/
     while(1)
     {
-        //xprintf("%s\n", TASKNAME_EVSEMonitor);
+#if DEBUG_TASK
+        xprintf("%s\n", TASKNAME_EVSEMonitor);
+#endif
         vTaskDelay(1000);
     }
 }

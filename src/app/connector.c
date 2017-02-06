@@ -5,6 +5,7 @@
 * @version v1.0
 * @date 2017-01-18
 */
+#include <stdlib.h>
 #include "Connector.h"
 
 Connector_t *ConnectorCreate(uint8_t ucConnectorID )

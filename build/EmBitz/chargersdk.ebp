@@ -112,14 +112,15 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\EVSEinit.h" />
-		<Unit filename="..\..\src\app\FramewinDLG.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\app\globals.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\globals.h" />
 		<Unit filename="..\..\src\app\includes.h" />
+		<Unit filename="..\..\src\app\interface_rfid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\interface_rfid.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_globals.h" />
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
@@ -134,10 +135,6 @@
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\taskcard.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\app\taskcard.h" />
 		<Unit filename="..\..\src\app\taskcharge.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -161,6 +158,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskOTA.h" />
+		<Unit filename="..\..\src\app\taskrfid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\taskrfid.h" />
 		<Unit filename="..\..\src\app\testobserver.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />
@@ -175,6 +176,7 @@
 		<Unit filename="..\..\src\cli\cli_main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\cli\cli_main.h" />
 		<Unit filename="..\..\src\cli\cli_rtos.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -298,6 +300,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\EVSEDLG.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\HMI_Start.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">

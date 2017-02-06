@@ -11,7 +11,9 @@ void vTaskOTA(void *pvParameters)
 {
     while(1)
     {
-        //xprintf("%s\n", pcTaskGetName( xTaskHandle ));
+#if DEBUG_TASK
+        xprintf("%s\n", TASKNAME_OTA);
+#endif
         vTaskDelay(1000);
     }
 }

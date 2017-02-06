@@ -288,7 +288,7 @@ static void atoxi_fnt(int argc, char **argv)
 
     for(i = 1; i < argc; i++)
     {
-        xfprintf("\"%s\"-->%u (0x%x)\n",
+        xprintf("\"%s\"-->%u (0x%x)\n",
                argv[i], tinysh_atoxi(argv[i]), tinysh_atoxi(argv[i]));
     }
 }

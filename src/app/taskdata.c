@@ -12,7 +12,9 @@ void vTaskEVSEData(void *pvParameters)
 {
     while(1)
     {
-        //xprintf("%s\n", TASKNAME_EVSEData);
+#if DEBUG_TASK
+        xprintf("%s\n", TASKNAME_EVSEData);
+#endif
         vTaskDelay(1000);
     }
 }

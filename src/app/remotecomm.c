@@ -12,7 +12,9 @@ void vTaskEVSERemoteComm(void *pvParameters)
 {
     while(1)
     {
-        //xprintf("%s\n", TASKNAME_EVSERemoteComm);
+#if DEBUG_TASK
+        xprintf("%s\n", TASKNAME_EVSERemoteComm);
+#endif
         vTaskDelay(1000);
     }
 }
