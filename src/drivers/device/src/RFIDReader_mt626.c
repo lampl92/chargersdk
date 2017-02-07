@@ -387,7 +387,7 @@ int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t 
         {
             return MT_COM_FAIL;
         }
-        vTaskDelay(100);
+        MT626DelayMS(100);
         res = pMT626COMObj ->recvResponse(pMT626COMObj, ucSendID, &ucRcvdLength);
         if(res != MT_SUCCEED)
         {
