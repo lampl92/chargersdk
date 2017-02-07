@@ -6,11 +6,11 @@ SemaphoreHandle_t  xprintfMutex = NULL;
 
 void myputc(uint8_t ch)
 {
-    __set_PRIMASK(1);    //增加关闭中断功能,防止串口在使用时出现冲突
-    xSemaphoreTake(xprintfMutex, portMAX_DELAY);
+    //__set_PRIMASK(1);    //增加关闭中断功能,防止串口在使用时出现冲突
+    //xSemaphoreTake(xprintfMutex, portMAX_DELAY);
     HAL_UART_Transmit(&CLI_UARTx_Handler, (uint8_t *)&ch, 1, 0xFFFF);
-    xSemaphoreGive(xprintfMutex);
-    __set_PRIMASK(0);
+    //xSemaphoreGive(xprintfMutex);
+    //__set_PRIMASK(0);
 
 }
 #if 1
@@ -18,12 +18,33 @@ void retarget_init(void)
 {
     xprintfMutex = xSemaphoreCreateMutex();
 
-	if(xprintfMutex == NULL)
+    if(xprintfMutex == NULL)
     {
 
     }
     xdev_out(myputc);
 }
+
+void  printf_safe(char *format, ...)
+{
+    char  buf_str[200 + 1];
+    va_list   v_args;
+
+
+    va_start(v_args, format);
+    (void)vsnprintf((char *)&buf_str[0],
+                    (size_t      ) sizeof(buf_str),
+                    (char const *) format,
+                    v_args);
+    va_end(v_args);
+
+    xSemaphoreTake(xprintfMutex, portMAX_DELAY);
+
+    xprintf("%s", buf_str);
+
+    xSemaphoreGive(xprintfMutex);
+}
+
 
 #endif
 
