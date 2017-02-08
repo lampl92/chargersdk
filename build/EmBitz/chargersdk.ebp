@@ -16,7 +16,7 @@
 				<Compiler>
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-O0" />
+					<Add option="-Os" />
 					<Add option="-g3" />
 				</Compiler>
 				<Cpp>
@@ -68,7 +68,6 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-fno-strict-aliasing" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -101,13 +100,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
+		<Unit filename="..\..\src\app\chargepoint.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\chargepoint.h" />
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\connector.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\app\connector.h" />
 		<Unit filename="..\..\src\app\EVSEinit.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -120,6 +119,7 @@
 		<Unit filename="..\..\src\app\interface_charge.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\interface_charge.h" />
 		<Unit filename="..\..\src\app\interface_monitor.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -396,12 +396,8 @@
 		<Unit filename="..\..\src\middlewares\tinysh\tinysh.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\userlib\inc\userlib_list.h" />
 		<Unit filename="..\..\src\middlewares\userlib\inc\xprintf.h" />
-		<Unit filename="..\..\src\middlewares\userlib\src\libobserver.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\userlib_list.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -423,6 +419,7 @@
 		<Unit filename="..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\portmacro.h" />
 		<Unit filename="..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
 			<Option compilerVar="CC" />
 		</Unit>

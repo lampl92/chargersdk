@@ -5,6 +5,7 @@
 * @version v1.0
 * @date 2017-01-18
 */
+#include "includes.h"
 #include "taskcreate.h"
 #include "taskremote.h"
 
@@ -13,14 +14,15 @@ void vTaskEVSERemote(void *pvParameters)
     EventBits_t uxBits = 0;
     while(1)
     {
-        uxBits = xEventGroupWaitBits(xHandleEventGroupRFID, defEventBitGETUID, pdTRUE, pdTRUE, 100);
+        uxBits = xEventGroupWaitBits(xHandleEventGroupRFID, defEventBitGETUID, pdTRUE, pdTRUE, 0);
         if((uxBits & defEventBitGETUID) != 0)
         {
-            xprintf("find card\n");
+            printf_safe("im remote,find card, :)\n");
         }
+        //printf_safe("im remote,no card.\n");
 #if DEBUG_TASK
-        xprintf("%s\n", TASKNAME_EVSERemote);
+        printf_safe("%s\n", TASKNAME_EVSERemote);
 #endif
-        vTaskDelay(1000);
+        vTaskDelay(100);
     }
 }

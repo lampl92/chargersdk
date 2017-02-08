@@ -14,7 +14,7 @@ extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
 extern const char *TASKNAME_Touch;
 extern const char *TASKNAME_OTA;
-extern const char *TASKNAME_EVSERemoteComm;
+extern const char *TASKNAME_EVSERemote;
 extern const char *TASKNAME_EVSERFID;
 extern const char *TASKNAME_EVSECharge;
 extern const char *TASKNAME_EVSEMonitor;

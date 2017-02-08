@@ -24,6 +24,7 @@ int main(void)
     SysTaskCreate();
     AppTaskCreate();
     AppObjCreate();
+    EVSEinit();
     vTaskStartScheduler();
 
     /*

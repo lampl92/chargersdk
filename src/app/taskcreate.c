@@ -22,7 +22,7 @@
 #define defSTACK_TaskOTA                    512
 
 #define defSTACK_TaskEVSERemote             512
-#define defSTACK_TaskEVSERFID               1024
+#define defSTACK_TaskEVSERFID               512
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
 #define defSTACK_TaskEVSEError              512
@@ -38,7 +38,7 @@
 #define defPRIORITY_TaskOTA                 15 /* 最高*/
 
 #define defPRIORITY_TaskEVSERemote          3
-#define defPRIORITY_TaskEVSERFID            3
+#define defPRIORITY_TaskEVSERFID            4
 #define defPRIORITY_TaskEVSECharge          5
 #define defPRIORITY_TaskEVSEMonitor         7
 #define defPRIORITY_TaskEVSEError           9
@@ -66,7 +66,7 @@ void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);                  //在线升级
 
-void vTaskEVSERemote(void *pvParameters);       //远程通信
+void vTaskEVSERemote(void *pvParameters);           //远程通信
 void vTaskEVSERFID(void *pvParameters);             //刷卡
 void vTaskEVSECharge(void *pvParameters);           //充电
 void vTaskEVSEMonitor(void *pvParameters);          //监控

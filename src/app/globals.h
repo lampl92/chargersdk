@@ -8,6 +8,9 @@
 #ifndef  __GLOBALS_H
 #define  __GLOBALS_H
 
+//#include "includes.h"
+#include "userlib_list.h"
+
 #define BIT_0  ( 1 << 0 )
 #define BIT_1  ( 1 << 1 )
 #define BIT_2  ( 1 << 2 )
@@ -44,7 +47,19 @@
 /*---------------------------------------------------------------------------/
 / xEventGroup
 /---------------------------------------------------------------------------*/
-//xRFIDEventGroup
-#define defEventBitGETUID  BIT_0
+//xHandleEventGroupRFID
+#define defEventBitGETUID       BIT_0
+//xHandleEventGroupStartCharge
+#define defEventBitAuthed       BIT_0
+#define defEventBitLocked       BIT_1
+#define defEventBitVoltOK       BIT_2
+#define defEventBitCurrOK       BIT_3
+#define defEventBitCPOK         BIT_4
+#define defEventBitCCOK         BIT_5
+#define defEventBitConnTempOK   BIT_6
+#define defEventBitACTempOK     BIT_7
+#define defEventBit             BIT_8
+
+extern UserList_t *pListChargePoint;
 
 #endif

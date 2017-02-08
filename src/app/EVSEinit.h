@@ -12,5 +12,6 @@
 typedef struct _EVSEState
 {
 
-}EVSEState_t
+}EVSEState_t;
+void EVSEinit(void);
 #endif

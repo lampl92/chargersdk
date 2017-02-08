@@ -5,6 +5,6 @@
 * @version v1.0
 * @date 2017-01-22
 */
-#include "includes.h"
+#include "userlib_list.h"
 
-
+UserList_t *pListChargePoint;

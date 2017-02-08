@@ -7,12 +7,19 @@
 */
 #include "taskcreate.h"
 #include "taskmonitor.h"
+#include "chargepoint.h"
 
 void vTaskEVSEMonitor(void *pvParameters)
 {
-    /* ≤Â«πºÏ≤‚*/
+    double dChargingVoltage, dChargingCurrent;
+
+    ((ChargePoint_t *)(pListChargePoint->pListPointArray[0]))->uiCPState = 1;
     while(1)
     {
+        dChargingVoltage = GetChargingVoltage();
+        dChargingCurrent = GetChargingCurrent();
+        //≤Â«πºÏ≤‚
+
 #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_EVSEMonitor);
 #endif

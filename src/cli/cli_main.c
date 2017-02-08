@@ -9,7 +9,8 @@
 
 void tinysh_char_out(unsigned char c)
 {
-    xputc(c);
+    //xputc(c);
+    printf_safe("%c",c);//为确保线程安全，不要直接使用串口输出。
 }
 
 
@@ -49,6 +50,7 @@ void cli_init(void)
 
 }
 extern Queue *pCliRecvQue;
+/** @note (rgw#1#): 应该是tinysh本身性能的问题，连续输入"?"会造成tinysh死机。 */
 void cli_main(void)
 {
     uint8_t ch;

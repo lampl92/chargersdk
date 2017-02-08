@@ -188,5 +188,7 @@ typedef __I uint8_t vuc8;
 #define PKout(n)   BIT_ADDR(GPIOK_ODR_Addr,n)  // ‰≥ˆ
 #define PKin(n)    BIT_ADDR(GPIOK_IDR_Addr,n)  // ‰»Î
 
+void  printf_safe(char *format, ...);
+
 #endif
 

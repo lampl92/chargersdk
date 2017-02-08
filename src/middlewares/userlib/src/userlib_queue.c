@@ -58,6 +58,7 @@ Queue *QueueCreate(int len)
     memset(pQueue->elem, 0, pQueue->length);
     pQueue->front = 0;
     pQueue->rear = 0;
+    pQueue->xHandleMutexQue = xSemaphoreCreateMutex();
     pQueue->isEmpty = isEmpty;
     pQueue->isFull = isEmpty;
     pQueue->EnElem = EnElem;

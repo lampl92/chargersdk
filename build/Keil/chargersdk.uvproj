@@ -349,7 +349,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -467,11 +467,6 @@
               <FilePath>..\..\src\app\monitor.c</FilePath>
             </File>
             <File>
-              <FileName>remotecomm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\app\remotecomm.c</FilePath>
-            </File>
-            <File>
               <FileName>taskcharge.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\app\taskcharge.c</FilePath>
@@ -564,6 +559,11 @@
               <FileName>interface_rfid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\app\interface_rfid.c</FilePath>
+            </File>
+            <File>
+              <FileName>taskremote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\app\taskremote.c</FilePath>
             </File>
           </Files>
         </Group>

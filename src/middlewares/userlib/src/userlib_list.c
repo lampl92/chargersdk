@@ -4,14 +4,14 @@
 //List类的析构函数
 static void ListDelete(void *pList)
 {
-    if(((List *)pList)->pListPointArray != NULL)     //先释放指针数组
+    if(((UserList_t *)pList)->pListPointArray != NULL)     //先释放指针数组
     {
-        free(((List *)pList)->pListPointArray);
+        free(((UserList_t *)pList)->pListPointArray);
     }
     free(pList);                                     //再释放整个List类
 }
 //元素增加函数
-static void ListAdd(List *pList, void *pListPoint)
+static void ListAdd(UserList_t *pList, void *pListPoint)
 {
     void **tListPointArray = malloc(sizeof(int *) * (pList->Total + 1));     //申请比原来大一个存储单元的内存
     int pListIndex;
@@ -33,7 +33,7 @@ static void ListAdd(List *pList, void *pListPoint)
     pList->pListPointArray = tListPointArray;                                            //将新的句柄替换原句柄
 }
 //元素移除函数
-static void ListRemove(List *pList, void *pListPoint)
+static void ListRemove(UserList_t *pList, void *pListPoint)
 {
     int pListIndex, tListIndex;
     void **tListPointArray;
@@ -68,9 +68,9 @@ static void ListRemove(List *pList, void *pListPoint)
     pList->pListPointArray = SavePointArray;                //保留该保留的
 }
 //List构造函数
-List *ListCreate(void)
+UserList_t *UserListCreate(void)
 {
-    List *pList = (List *)malloc(sizeof(List));
+    UserList_t *pList = (UserList_t *)malloc(sizeof(UserList_t));
     pList->Total = 0;
     pList->pListPointArray = NULL;
     pList->Add = ListAdd;

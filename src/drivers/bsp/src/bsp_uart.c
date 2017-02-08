@@ -21,16 +21,18 @@ Queue *pRfidRecvQue;
 
 int8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
 {
+    xSemaphoreTake(q->xHandleMutexQue, 100);
     while(time_out)
     {
         if((q->isEmpty(q)) != QUE_TRUE)
         {
             q->DeElem(q, ch);
-
+            xSemaphoreGive(q->xHandleMutexQue);
             return 0;
         }
         time_out--;
     }
+    xSemaphoreGive(q->xHandleMutexQue);
     return (int8_t) -1;
 }
 
@@ -159,18 +161,26 @@ and
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+    BaseType_t xHigherPriorityTaskWokenCli = pdFALSE;
+    BaseType_t xHigherPriorityTaskWokenRfid = pdFALSE;
     if(huart->Instance == CLI_USARTx_BASE)
     {
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
+            xSemaphoreTakeFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
+            xSemaphoreGiveFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
+            portYIELD_FROM_ISR( xHigherPriorityTaskWokenCli );
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)
     {
         if(HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1) == HAL_OK)
         {
+            xSemaphoreTakeFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
             pRfidRecvQue->EnElem(pRfidRecvQue, RFID_RX_Buffer[0]);
+            xSemaphoreGiveFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
+            portYIELD_FROM_ISR( xHigherPriorityTaskWokenRfid );
         }
     }
 }
