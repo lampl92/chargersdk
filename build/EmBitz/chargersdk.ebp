@@ -116,13 +116,18 @@
 		</Unit>
 		<Unit filename="..\..\src\app\globals.h" />
 		<Unit filename="..\..\src\app\includes.h" />
+		<Unit filename="..\..\src\app\interface.h" />
 		<Unit filename="..\..\src\app\interface_charge.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_charge.h" />
+		<Unit filename="..\..\src\app\interface_error.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\interface_monitor.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\interface_monitor.h" />
 		<Unit filename="..\..\src\app\interface_remote.c">
 			<Option compilerVar="CC" />
 		</Unit>

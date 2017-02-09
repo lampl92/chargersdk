@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "globals.h"
 #include "userlib_list.h"
-#include "chargepoint.h"
+#include "interface.h"
 
 void EVSEinit(void)
 {

@@ -7,3 +7,14 @@
 */
 #include "bsp.h"
 #include "led.h"
+
+
+void LedOn()
+{
+
+}
+
+void LedOff()
+{
+
+}

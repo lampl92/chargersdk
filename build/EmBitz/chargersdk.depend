@@ -1685,17 +1685,16 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1486548136 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1486620838 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
-	"chargepoint.h"
-	"interface_charge.h"
+	"interface.h"
 
-1486535043 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
+1486619077 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
 	<stdlib.h>
 	"chargepoint.h"
 
-1486537916 d:\documents\projects\chargersdk\src\app\chargepoint.h
+1486619637 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
@@ -1704,10 +1703,10 @@
 	"taskcreate.h"
 	"taskdata.h"
 
-1486547940 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1486611515 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
-	"chargepoint.h"
+	"interface.h"
 
 1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
@@ -1742,11 +1741,11 @@
 	"FreeRTOS.h"
 	"event_groups.h"
 
-1486548351 source:d:\documents\projects\chargersdk\src\app\evseinit.c
+1486619637 source:d:\documents\projects\chargersdk\src\app\evseinit.c
 	"includes.h"
 	"globals.h"
 	"userlib_list.h"
-	"chargepoint.h"
+	"interface.h"
 
 1486545678 source:d:\documents\projects\chargersdk\src\app\globals.c
 	"userlib_list.h"
@@ -1803,10 +1802,12 @@
 1481614666 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
 	"GUI.h"
 
-1486541442 source:d:\documents\projects\chargersdk\src\app\interface_charge.c
+1486607994 source:d:\documents\projects\chargersdk\src\app\interface_charge.c
 	"includes.h"
 
-1486371642 source:d:\documents\projects\chargersdk\src\app\interface_monitor.c
+1486611576 source:d:\documents\projects\chargersdk\src\app\interface_monitor.c
+	"includes.h"
+	"interface.h"
 
 1486432934 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
 
@@ -1820,4 +1821,12 @@
 1486541459 d:\documents\projects\chargersdk\src\app\interface_charge.h
 
 1486548266 d:\documents\projects\chargersdk\src\app\evseinit.h
+
+1486611512 d:\documents\projects\chargersdk\src\app\interface.h
+	"chargepoint.h"
+	"interface_monitor.h"
+	"interface_charge.h"
+	"interface_rfid.h"
+
+1486619314 d:\documents\projects\chargersdk\src\app\interface_monitor.h
 

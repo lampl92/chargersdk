@@ -7,8 +7,7 @@
 */
 #include "taskcreate.h"
 #include "taskcharge.h"
-#include "chargepoint.h"
-#include "interface_charge.h"
+#include "interface.h"
 
 void vTaskEVSECharge(void *pvParameters)
 {
@@ -18,7 +17,7 @@ void vTaskEVSECharge(void *pvParameters)
 
     if(((ChargePoint_t *)(pListChargePoint->pListPointArray[0]))->uiCPState == 1)
     {
-        printf_safe("CP = 1\n");
+        //printf_safe("CP = 1\n");
     }
 
         #if DEBUG_TASK

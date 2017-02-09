@@ -34,19 +34,23 @@ typedef struct _ChargePoint
     uint8_t  ucChargePointID;           // Ç¹ºÅ
     ChargePointStateType uiCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     ChargePointStateType uiCCState;     // ¼ì²âµã4 CC state --PE
-    //EventGroupHandle_t xHandleEventGroupConn
     EventGroupHandle_t xHandleEventGroupStartCharge;
     EventGroupHandle_t xHandleEventGroupStopCharge;
     ChargePointStateType (*GetCPState)(uint8_t  ucChargePointID);
     ChargePointStateType (*GetCCState)(uint8_t  ucChargePointID);
-    uint32_t (*GetACLTemp)(uint8_t  ucChargePointID);
-    uint32_t (*GetACNTemp)(uint8_t  ucChargePointID);
-    uint32_t (*GetBTypeChargePointTemp1)(uint8_t  ucChargePointID);
-    uint32_t (*GetBTypeChargePointTemp2)(uint8_t  ucChargePointID);
-    ChargePointStateType (*LockBTypeChargePoint)(uint8_t  ucChargePointID);
-    ChargePointStateType (*GetBTypeChargePointState)(uint8_t  ucChargePointID); //lock unlock
+    double (*GetACLTemp)(uint8_t  ucChargePointID);
+    double (*GetACNTemp)(uint8_t  ucChargePointID);
+    double (*GetBTypeConnectorTemp1)(uint8_t  ucChargePointID);
+    double (*GetBTypeConnectorTemp2)(uint8_t  ucChargePointID);
+    ChargePointStateType (*SetBTypeConnectorLock)(uint8_t  ucChargePointID);
+    ChargePointStateType (*GetBTypeConnectorLock)(uint8_t  ucChargePointID); //lock unlock
     ChargePointStateType (*StartCharge)(uint8_t  ucChargePointID);
     ChargePointStateType (*StopCharge)(uint8_t  ucChargePointID);
+
+
+
+
 } ChargePoint_t;
 
+ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID );
 #endif
