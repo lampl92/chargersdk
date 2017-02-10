@@ -29,13 +29,24 @@ typedef enum __ChargePointStateType
     UNLOCK
 }ChargePointStateType;
 
+typedef struct _ChargePointStatus
+{
+    ChargePointStateType uiCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
+    ChargePointStateType uiCCState;     // ¼ì²âµã4 CC state --PE
+    double ACLTemp;
+    double ACNTemp;
+    double BTypeConnectorTemp1;
+    double BTypeConnectorTemp2;
+    ChargePointStateType BTypeConnectorLockState; //lock unlock
+    EventGroupHandle_t xHandleEventGroupStartCharge;
+    EventGroupHandle_t xHandleEventGroupStopCharge;
+}ChargePointStatus;
+
 typedef struct _ChargePoint
 {
     uint8_t  ucChargePointID;           // Ç¹ºÅ
-    ChargePointStateType uiCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
-    ChargePointStateType uiCCState;     // ¼ì²âµã4 CC state --PE
-    EventGroupHandle_t xHandleEventGroupStartCharge;
-    EventGroupHandle_t xHandleEventGroupStopCharge;
+    ChargePointStatus status;
+
     ChargePointStateType (*GetCPState)(uint8_t  ucChargePointID);
     ChargePointStateType (*GetCCState)(uint8_t  ucChargePointID);
     double (*GetACLTemp)(uint8_t  ucChargePointID);
@@ -46,9 +57,6 @@ typedef struct _ChargePoint
     ChargePointStateType (*GetBTypeConnectorLock)(uint8_t  ucChargePointID); //lock unlock
     ChargePointStateType (*StartCharge)(uint8_t  ucChargePointID);
     ChargePointStateType (*StopCharge)(uint8_t  ucChargePointID);
-
-
-
 
 } ChargePoint_t;
 

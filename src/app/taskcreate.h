@@ -10,6 +10,9 @@
 
 #include "includes.h"
 
+#define defTIMERID_Temp            0
+#define defTIMERID_LockState       1
+
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
 extern const char *TASKNAME_Touch;

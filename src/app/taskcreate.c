@@ -91,6 +91,9 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务通信
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventGroupRFID;
+//软件定时器
+TimerHandle_t xHandleTimerTemp;
+TimerHandle_t xHandleTimerLockState;
 
 void vTaskCLI(void *pvParameters)
 {
@@ -131,11 +134,16 @@ void AppTaskCreate (void)
 
 /** @brief 创建任务通信机制。（信号量，软件定时器创建与启动）
  */
+extern void vTimerCallback(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
+    xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vTimerCallback);
+    xHandleTimerLockState =xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vTimerCallback);
+    xTimerStart(xHandleTimerTemp, 100);
+    xTimerStart(xHandleTimerLockState, 100);
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
+    volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
 {
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
@@ -193,10 +201,10 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     for( ;; );
 }
 #if 0
-void vAssertCalled( const char * pcFile,
+void vAssertCalled( const char *pcFile,
                     unsigned long ulLine )
 {
-volatile unsigned long ul = 0;
+    volatile unsigned long ul = 0;
 
     taskENTER_CRITICAL();
     {

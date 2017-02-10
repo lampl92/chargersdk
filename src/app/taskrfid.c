@@ -32,6 +32,7 @@ void vTaskEVSERFID(void *pvParameters)
             xprintf("\n");
             #endif
             uxBits = xEventGroupSetBits(xHandleEventGroupRFID, defEventBitGETUID);
+
         }
         else
         {

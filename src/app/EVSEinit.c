@@ -12,10 +12,12 @@
 
 void EVSEinit(void)
 {
-
     pListChargePoint = UserListCreate();
-    ChargePoint_t *pchargepoint_0;
-    pchargepoint_0 = ChargePointCreate(0);
-
-    pListChargePoint->Add(pListChargePoint, pchargepoint_0);
+    ChargePoint_t *pchargepoint[2];
+    int i;
+    for(i = 0; i < 2; i++)
+    {
+        pchargepoint[i] = ChargePointCreate(i);
+        pListChargePoint->Add(pListChargePoint, pchargepoint[i]);
+    }
 }

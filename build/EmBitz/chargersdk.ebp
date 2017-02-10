@@ -14,9 +14,10 @@
 				<Option compiler="armgcc_eb" />
 				<Option projectDeviceOptionsRelation="0" />
 				<Compiler>
+					<Add option="-std=c11" />
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-Os" />
+					<Add option="-O0" />
 					<Add option="-g3" />
 				</Compiler>
 				<Cpp>
@@ -89,7 +90,7 @@
 			<Add directory="..\..\src\middlewares\fatfs\diskdrv" />
 			<Add directory="..\..\src\middlewares\mxml-2.10" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
-			<Add directory="..\..\src\middlewares\libcstl-2.3.0" />
+			<Add directory="..\..\src\middlewares\klib" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -180,6 +181,9 @@
 			<Option compilerVar="CC" />
 			<Option compile="0" />
 			<Option link="0" />
+		</Unit>
+		<Unit filename="..\..\src\app\timercallback.c">
+			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
 			<Option compilerVar="CC" />
@@ -466,7 +470,7 @@
 						</family_options>
 					</debug_interface>
 					<debug_interface interface_id="OpenOCD" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="" gdb_before_conn="" gdb_after_conn="" />
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
 							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />

@@ -93,8 +93,8 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     }
     pChargePoint->ucChargePointID = ucChargePointID;
 
-    pChargePoint->xHandleEventGroupStartCharge = xEventGroupCreate();
-    pChargePoint->xHandleEventGroupStopCharge = xEventGroupCreate();
+    pChargePoint->status.xHandleEventGroupStartCharge = xEventGroupCreate();
+    pChargePoint->status.xHandleEventGroupStopCharge = xEventGroupCreate();
     pChargePoint->GetCPState = GetCPState;
     pChargePoint->GetCCState = GetCCState;
     pChargePoint->GetBTypeConnectorLock = GetBTypeConnectorLock;

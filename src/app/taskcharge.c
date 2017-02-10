@@ -11,14 +11,20 @@
 
 void vTaskEVSECharge(void *pvParameters)
 {
-
+    uint32_t ulTotalPoint = pListChargePoint->Total;
+    ChargePoint_t *pPoint[ulTotalPoint];
+    int i;
+    for(i = 0; i < ulTotalPoint; i++)
+    {
+        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
+    }
     while(1)
     {
+        if(pPoint[0]->status.uiCPState == 1)
+        {
 
-    if(((ChargePoint_t *)(pListChargePoint->pListPointArray[0]))->uiCPState == 1)
-    {
-        //printf_safe("CP = 1\n");
-    }
+            //printf_safe("CP = 1\n");
+        }
 
         #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_EVSECharge);

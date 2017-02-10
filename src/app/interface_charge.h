@@ -8,8 +8,4 @@
 #ifndef  __INTERFACE_CHARGE_H
 #define  __INTERFACE_CHARGE_H
 
-double GetChargingVoltage(void);
-double GetChargingCurrent(void);
-double GetChargingFrequence(void);
-
 #endif
