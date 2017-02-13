@@ -9,51 +9,6 @@
 #include "interface.h"
 
 
-/** @brief 获取充电电压，检测精度 +/-0.1V
- *
- * @param void
- * @return double 有符号型，返回实际电压
- *
- */
-double GetChargingVoltage(ChargePoint_t *pPoint)
-{
-    uint8_t ucPointID = pPoint->ucChargePointID;
-    /** @todo (rgw#1#): 获取电能表电压 */
-    double tmpVolt;
-    tmpVolt = 0;
-    return tmpVolt;
-}
-
-/** @brief 获取充电电流，检测精度+/-0.1A
- *
- * @param void
- * @return double 有符号型，返回实际电流
- *
- */
-double GetChargingCurrent(ChargePoint_t *pPoint)
-{
-    uint8_t ucPointID = pPoint->ucChargePointID;
-    /** @todo (rgw#1#): 获取电能表电流 */
-    double tmpCurr;
-    tmpCurr = 0;
-    return tmpCurr;
-}
-
-/** @brief 获取电源频率
- *
- * @param void
- * @return double
- *
- */
-double GetChargingFrequence(ChargePoint_t *pPoint)
-{
-    uint8_t ucPointID = pPoint->ucChargePointID;
-/** @todo (rgw#1#): 从电表获取 */
-    double tmpFreq;
-    tmpFreq = 0;
-    return tmpFreq;
-}
-
 /** @brief 获得急停状态
  *
  * @param void
@@ -104,22 +59,6 @@ uint32_t GetPEState(void)
     /** @todo (rgw#1#): 实现代码 */
 
     return tmpPEState;
-}
-
-/** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
- *
- * @param pPoint ChargePoint_t*
- * @return uint32_t 0 无插枪
- *                  1 有插枪
- *
- */
-uint32_t GetPlugState(ChargePoint_t *pPoint)
-{
-    uint8_t ucPointID = pPoint->ucChargePointID;
-    uint32_t tmpPlugState;
-    tmpPlugState = 0;
-
-    return tmpPlugState;
 }
 
 /** @brief 获取掉电状态

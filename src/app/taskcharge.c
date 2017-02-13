@@ -20,7 +20,7 @@ void vTaskEVSECharge(void *pvParameters)
     }
     while(1)
     {
-        if(pPoint[0]->status.uiCPState == 1)
+        if(pPoint[0]->status.ulCPState == 1)
         {
 
             //printf_safe("CP = 1\n");

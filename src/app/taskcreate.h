@@ -10,8 +10,11 @@
 
 #include "includes.h"
 
-#define defTIMERID_Temp            0
-#define defTIMERID_LockState       1
+#define defTIMERID_Temp             0
+#define defTIMERID_LockState        1
+#define defTIMERID_CPCCState        2
+#define defTIMERID_ChargingData     3
+#define defTIMERID_EVSEState        4
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;

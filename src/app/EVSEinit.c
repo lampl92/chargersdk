@@ -12,8 +12,8 @@
 
 void EVSEinit(void)
 {
+    static ChargePoint_t *pchargepoint[2];  //在堆中定义
     pListChargePoint = UserListCreate();
-    ChargePoint_t *pchargepoint[2];
     int i;
     for(i = 0; i < 2; i++)
     {

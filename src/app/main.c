@@ -10,6 +10,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "includes.h"
 /* Private functions ---------------------------------------------------------*/
+
 int main(void)
 {
     /**
@@ -24,7 +25,9 @@ int main(void)
     SysTaskCreate();
     AppTaskCreate();
     AppObjCreate();
+
     EVSEinit();
+
     vTaskStartScheduler();
 
     /*

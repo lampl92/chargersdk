@@ -8,9 +8,56 @@
 #include <stdlib.h>
 #include "chargepoint.h"
 
+
+
+/** @brief 获取充电电压，检测精度 +/-0.1V
+ *
+ * @param void
+ * @return double 有符号型，返回实际电压
+ *
+ */
+double GetChargingVoltage(ChargePoint_t *pPoint)
+{
+    uint8_t ucPointID = pPoint->ucChargePointID;
+    /** @todo (rgw#1#): 获取电能表电压 */
+    double tmpVolt;
+    tmpVolt = 0;
+    return tmpVolt;
+}
+
+/** @brief 获取充电电流，检测精度+/-0.1A
+ *
+ * @param void
+ * @return double 有符号型，返回实际电流
+ *
+ */
+double GetChargingCurrent(ChargePoint_t *pPoint)
+{
+    uint8_t ucPointID = pPoint->ucChargePointID;
+    /** @todo (rgw#1#): 获取电能表电流 */
+    double tmpCurr;
+    tmpCurr = 0;
+    return tmpCurr;
+}
+
+/** @brief 获取电源频率
+ *
+ * @param void
+ * @return double
+ *
+ */
+double GetChargingFrequence(ChargePoint_t *pPoint)
+{
+    uint8_t ucPointID = pPoint->ucChargePointID;
+/** @todo (rgw#1#): 从电表获取 */
+    double tmpFreq;
+    tmpFreq = 0;
+    return tmpFreq;
+}
+
 /** @note (rgw#1#): 注意不同ID对硬件的不同操作 */
 
-static ChargePointStateType GetCPState(uint8_t  ucChargePointID)
+ChargePointStateType GetCPState(ChargePoint_t *pPoint)
 {
     ChargePointStateType xCPState;
     xCPState = CP_12V;
@@ -18,7 +65,7 @@ static ChargePointStateType GetCPState(uint8_t  ucChargePointID)
     /** @todo (rgw#1#):  */
     return xCPState;
 }
-static ChargePointStateType GetCCState(uint8_t  ucChargePointID)
+ChargePointStateType GetCCState(ChargePoint_t *pPoint)
 {
     ChargePointStateType xCCState;
     xCCState = CC_NO;
@@ -27,7 +74,23 @@ static ChargePointStateType GetCCState(uint8_t  ucChargePointID)
     return xCCState;
 }
 
-static ChargePointStateType GetBTypeConnectorLock(uint8_t  ucChargePointID) //lock unlock
+/** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
+ *
+ * @param pPoint ChargePoint_t*
+ * @return uint32_t 0 无插枪
+ *                  1 有插枪
+ *
+ */
+uint32_t GetPlugState(ChargePoint_t *pPoint)
+{
+    uint8_t ucPointID = pPoint->ucChargePointID;
+    uint32_t tmpPlugState;
+    tmpPlugState = 0;
+
+    return tmpPlugState;
+}
+
+ChargePointStateType GetBTypeConnectorLock(ChargePoint_t *pPoint) //lock unlock
 {
     ChargePointStateType xLockState;
     xLockState = LOCK;
@@ -36,16 +99,16 @@ static ChargePointStateType GetBTypeConnectorLock(uint8_t  ucChargePointID) //lo
     return xLockState;
 }
 
-static ChargePointStateType SetBTypeConnectorLock(uint8_t  ucChargePointID)
+ChargePointStateType SetBTypeConnectorLock(ChargePoint_t *pPoint)
 {
     ChargePointStateType xLockState;
     xLockState = UNLOCK;
     /** @todo (rgw#1#): 执行锁止动作 */
-    xLockState = GetBTypeConnectorLock(ucChargePointID);
+    xLockState = GetBTypeConnectorLock(pPoint);
     return xLockState;
 }
 
-static double GetACLTemp(uint8_t  ucChargePointID)
+double GetACLTemp(ChargePoint_t *pPoint)
 {
     double  tmpACLTemp;
     tmpACLTemp = 0;
@@ -53,22 +116,22 @@ static double GetACLTemp(uint8_t  ucChargePointID)
 
     return tmpACLTemp;
 }
-static double GetACNTemp(uint8_t  ucChargePointID)
+double GetACNTemp(ChargePoint_t *pPoint)
 {
     /** @todo (rgw#1#):  */
     return 0;
 }
-static double GetBTypeConnectorTemp1(uint8_t  ucChargePointID)
+double GetBTypeConnectorTemp1(ChargePoint_t *pPoint)
 {
     /** @todo (rgw#1#):  */
     return 0;
 }
-static double GetBTypeConnectorTemp2(uint8_t  ucChargePointID)
+double GetBTypeConnectorTemp2(ChargePoint_t *pPoint)
 {
     /** @todo (rgw#1#):  */
     return 0;
 }
-static ChargePointStateType StartCharge(uint8_t  ucChargePointID)
+ChargePointStateType StartCharge(ChargePoint_t *pPoint)
 {
     ChargePointStateType xChargeStatus;
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
@@ -76,7 +139,7 @@ static ChargePointStateType StartCharge(uint8_t  ucChargePointID)
     return xChargeStatus;
 
 }
-static ChargePointStateType StopCharge(uint8_t  ucChargePointID)
+ChargePointStateType StopCharge(ChargePoint_t *pPoint)
 {
     ChargePointStateType xChargeStatus;
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
@@ -95,12 +158,4 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
 
     pChargePoint->status.xHandleEventGroupStartCharge = xEventGroupCreate();
     pChargePoint->status.xHandleEventGroupStopCharge = xEventGroupCreate();
-    pChargePoint->GetCPState = GetCPState;
-    pChargePoint->GetCCState = GetCCState;
-    pChargePoint->GetBTypeConnectorLock = GetBTypeConnectorLock;
-    pChargePoint->SetBTypeConnectorLock = SetBTypeConnectorLock;
-    pChargePoint->GetACLTemp = GetACLTemp;
-    pChargePoint->GetACNTemp = GetACNTemp;
-    pChargePoint->GetBTypeConnectorTemp1 = GetBTypeConnectorTemp1;
-    pChargePoint->GetBTypeConnectorTemp2 = GetBTypeConnectorTemp2;
 }

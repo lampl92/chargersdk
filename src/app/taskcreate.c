@@ -92,8 +92,12 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventGroupRFID;
 //软件定时器
-TimerHandle_t xHandleTimerTemp;
+TimerHandle_t xHandleTimerTemp; //4个温度
 TimerHandle_t xHandleTimerLockState;
+TimerHandle_t xHandleTimerGetChargePoint;
+TimerHandle_t xHandleTimerCPCCState;
+TimerHandle_t xHandleTimerChargingData;
+TimerHandle_t xHandleTimerEVSEState;
 
 void vTaskCLI(void *pvParameters)
 {
@@ -139,11 +143,17 @@ void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vTimerCallback);
-    xHandleTimerLockState =xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vTimerCallback);
-    xTimerStart(xHandleTimerTemp, 100);
-    xTimerStart(xHandleTimerLockState, 100);
+    xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vTimerCallback);
+    xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vTimerCallback);
+    xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vTimerCallback);
+    xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vTimerCallback);
+    xTimerStart(xHandleTimerTemp, 0);
+    xTimerStart(xHandleTimerLockState, 0);
+    xTimerStart(xHandleTimerCPCCState, 0);
+    xTimerStart(xHandleTimerChargingData, 0);
+    xTimerStart(xHandleTimerEVSEState, 0);
 }
-    volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
 {
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
