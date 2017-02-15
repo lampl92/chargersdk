@@ -12,6 +12,9 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 
+#define defConnectorTypeB   0x0B
+#define defConnectorTypeC   0x0C
+
 typedef enum __ChargePointStateType
 {
     NO_ERR = 0,
@@ -32,7 +35,17 @@ typedef enum __ChargePointStateType
     UNLOCK
 }ChargePointStateType;
 
-typedef struct _ChargePointStatus
+typedef struct _ChargePointInfo
+{
+    uint8_t ucChargePointID;           // Ç¹ºÅ
+    uint8_t ucConnectorType;           //0x0B 0x0C
+    uint32_t ulVolatageUpperLimits;
+    uint32_t ulVolatageLowerLimits;
+    uint32_t ulCurrent;
+    uint32_t ulPower;
+}ChargePointInfo_t;
+
+typedef struct _ChargePointState
 {
     ChargePointStateType ulCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     ChargePointStateType ulCCState;     // ¼ì²âµã4 CC state --PE
@@ -47,12 +60,12 @@ typedef struct _ChargePointStatus
     double dChargingFrequence;
     EventGroupHandle_t xHandleEventGroupStartCharge;
     EventGroupHandle_t xHandleEventGroupStopCharge;
-}ChargePointStatus;
+}ChargePointState_t;
 
 typedef struct _ChargePoint
 {
-    uint8_t  ucChargePointID;           // Ç¹ºÅ
-    ChargePointStatus status;
+    ChargePointInfo_t info;
+    ChargePointState_t state;
 
 } ChargePoint_t;
 

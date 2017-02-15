@@ -18,7 +18,7 @@
  */
 double GetChargingVoltage(ChargePoint_t *pPoint)
 {
-    uint8_t ucPointID = pPoint->ucChargePointID;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
     /** @todo (rgw#1#): 获取电能表电压 */
     double tmpVolt;
     tmpVolt = 0;
@@ -33,7 +33,7 @@ double GetChargingVoltage(ChargePoint_t *pPoint)
  */
 double GetChargingCurrent(ChargePoint_t *pPoint)
 {
-    uint8_t ucPointID = pPoint->ucChargePointID;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
     /** @todo (rgw#1#): 获取电能表电流 */
     double tmpCurr;
     tmpCurr = 0;
@@ -48,7 +48,7 @@ double GetChargingCurrent(ChargePoint_t *pPoint)
  */
 double GetChargingFrequence(ChargePoint_t *pPoint)
 {
-    uint8_t ucPointID = pPoint->ucChargePointID;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
 /** @todo (rgw#1#): 从电表获取 */
     double tmpFreq;
     tmpFreq = 0;
@@ -83,7 +83,7 @@ ChargePointStateType GetCCState(ChargePoint_t *pPoint)
  */
 uint32_t GetPlugState(ChargePoint_t *pPoint)
 {
-    uint8_t ucPointID = pPoint->ucChargePointID;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
     uint32_t tmpPlugState;
     tmpPlugState = 0;
 
@@ -154,8 +154,8 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     {
         return NULL;
     }
-    pChargePoint->ucChargePointID = ucChargePointID;
+    pChargePoint->info.ucChargePointID = ucChargePointID;
 
-    pChargePoint->status.xHandleEventGroupStartCharge = xEventGroupCreate();
-    pChargePoint->status.xHandleEventGroupStopCharge = xEventGroupCreate();
+    pChargePoint->state.xHandleEventGroupStartCharge = xEventGroupCreate();
+    pChargePoint->state.xHandleEventGroupStopCharge = xEventGroupCreate();
 }

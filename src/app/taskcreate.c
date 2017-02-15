@@ -138,15 +138,16 @@ void AppTaskCreate (void)
 
 /** @brief 创建任务通信机制。（信号量，软件定时器创建与启动）
  */
-extern void vTimerCallback(TimerHandle_t xTimer);
+extern void vEVSETimerCB(TimerHandle_t xTimer);
+extern void vChargePointTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
-    xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vTimerCallback);
-    xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vTimerCallback);
-    xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vTimerCallback);
-    xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vTimerCallback);
-    xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vTimerCallback);
+    xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
+    xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
+    xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vChargePointTimerCB);
+    xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
+    xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerCPCCState, 0);

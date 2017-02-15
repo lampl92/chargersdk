@@ -9,6 +9,7 @@
 #define __INTERFACE_H
 
 #include "chargepoint.h"
+#include "EVSEinit.h"
 #include "interface_monitor.h"
 #include "interface_charge.h"
 #include "interface_rfid.h"
