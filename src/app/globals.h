@@ -8,7 +8,7 @@
 #ifndef  __GLOBALS_H
 #define  __GLOBALS_H
 
-//#include "includes.h"
+#include "interface.h"
 #include "userlib_list.h"
 
 #define BIT_0  ( 1 << 0 )
@@ -60,6 +60,7 @@
 #define defEventBitACTempOK     BIT_7
 #define defEventBit             BIT_8
 
+extern EVSE_t *pEVSE;
 extern UserList_t *pListChargePoint;
 
 #endif
