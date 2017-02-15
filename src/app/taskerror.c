@@ -10,11 +10,22 @@
 
 void vTaskEVSEError(void *pvParameters)
 {
+    BaseType_t xResult;
+    ErrorCode_t errcode;
+
+    xResult = pdFALSE;
+    errcode = ERR_NO;
     while(1)
     {
+        xResult = xQueueReceive(xHandleQueueErrorCode, &errcode, 50);
+        if(xResult == pdTRUE)
+        {
+            printf_safe("error = %d:%s", errcode, strErrorCode[errcode]);
+        }
+
 #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_EVSEError);
 #endif
-        vTaskDelay(1000);
+//        vTaskDelay(1000);
     }
 }
