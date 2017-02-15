@@ -6,9 +6,9 @@
 * @date 2017-02-13
 */
 #include "includes.h"
+#include "interface.h"
 
-
-/** 定时器在taskcreate中创建
+/** 定时器在taskcreate中定义和创建
  */
 
 void vChargePointTimerCB(TimerHandle_t xTimer)
@@ -26,14 +26,13 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            pPoint[i]->state.dACLTemp = GetACLTemp(pPoint[i]);
-            pPoint[i]->state.dACNTemp = GetACNTemp(pPoint[i]);
+            THROW_ERROR(GetACLTemp(pPoint[i]));
+            THROW_ERROR(GetACNTemp(pPoint[i]));
             if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
             {
-                pPoint[i]->state.dBTypeConnectorTemp1 = GetBTypeConnectorTemp1(pPoint[i]);
-                pPoint[i]->state.dBTypeConnectorTemp2 = GetBTypeConnectorTemp2(pPoint[i]);
+                THROW_ERROR(GetBTypeConnectorTemp1(pPoint[i]));
+                THROW_ERROR(GetBTypeConnectorTemp2(pPoint[i]));
             }
-
 //            printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
         }
     }
@@ -41,16 +40,19 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            pPoint[i]->state.BTypeConnectorLockState = GetBTypeConnectorLock(pPoint[i]);
+            if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
+            {
+                THROW_ERROR(GetBTypeConnectorLock(pPoint[i]));
 //            printf_safe("num = %d, ulIntervalOfGetLock\n", i);
+            }
         }
     }
     if(uxTimerID == defTIMERID_CPCCState)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            pPoint[i]->state.ulCCState = GetCCState(pPoint[i]);
-            pPoint[i]->state.ulCPState = GetCPState(pPoint[i]);
+            THROW_ERROR(GetCCState(pPoint[i]));
+            THROW_ERROR(GetCPState(pPoint[i]));
 //            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
         }
     }
@@ -58,9 +60,9 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            pPoint[i]->state.dChargingVoltage = GetChargingVoltage(pPoint[i]);
-            pPoint[i]->state.dChargingCurrent = GetChargingCurrent(pPoint[i]);
-            pPoint[i]->state.dChargingFrequence = GetChargingFrequence(pPoint[i]);
+            THROW_ERROR(GetChargingVoltage(pPoint[i]));
+            THROW_ERROR(GetChargingCurrent(pPoint[i]));
+            THROW_ERROR(GetChargingFrequence(pPoint[i]));
         }
     }
 
@@ -73,11 +75,12 @@ void vEVSETimerCB(TimerHandle_t xTimer)
 
     if(uxTimerID == defTIMERID_EVSEState)
     {
-        pEVSE->state.ulScramState = GetScramState();
-        pEVSE->state.ulPEState = GetPEState();
-        pEVSE->state.ulKnockState = GetKnockState();
-        pEVSE->state.ulArresterState = GetArresterState();
-        pEVSE->state.ulPowerOffState = GetPowerOffState();
+        THROW_ERROR(GetScramState(pEVSE));
+        THROW_ERROR(GetPEState(pEVSE));
+        THROW_ERROR(GetKnockState(pEVSE));
+        THROW_ERROR(GetArresterState(pEVSE));
+        THROW_ERROR(GetPowerOffState(pEVSE));
+        //printf_safe("EVSE State,TimerTicks = %d\n",ulHighFrequencyTimerTicks);
     }
 }
 
