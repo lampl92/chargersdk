@@ -80,7 +80,7 @@ void testqueue()
     for(i = 0; i < 128; i++)
     {
         q->DeElem(q, &ch);
-        xprintf("%d\n", ch);
+        printf_safe("%d\n", ch);
     }
     q->Delete(q);
 }

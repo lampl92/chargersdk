@@ -562,7 +562,7 @@ testmxml_entry(int  argc,				/* I - Number of command-line args */
       f_open(&fil, argv[2], FA_OPEN_ALWAYS | FA_WRITE);
       f_puts(buffer, &fil);
       f_close(&fil);
-      xprintf("%s", buffer);
+      printf_safe("%s", buffer);
     }
   }
 
