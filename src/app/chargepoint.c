@@ -8,70 +8,104 @@
 #include <stdlib.h>
 #include "chargepoint.h"
 
-
+/** @note (rgw#1#): 注意不同ID对硬件的不同操作 */
 
 /** @brief 获取充电电压，检测精度 +/-0.1V
  *
- * @param void
- * @return double 有符号型，返回实际电压
+ * @param pPoint ChargePoint_t*
+ * @return ErrorCode_t
  *
  */
-double GetChargingVoltage(ChargePoint_t *pPoint)
+ErrorCode_t GetChargingVoltage(ChargePoint_t *pPoint)
 {
     uint8_t ucPointID = pPoint->info.ucChargePointID;
-    /** @todo (rgw#1#): 获取电能表电压 */
     double tmpVolt;
+    ErrorCode_t errcode;
+
     tmpVolt = 0;
-    return tmpVolt;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 获取电能表电压 */
+
+    pPoint->state.dChargingVoltage = tmpVolt;
+
+    return errcode;
 }
 
 /** @brief 获取充电电流，检测精度+/-0.1A
  *
- * @param void
- * @return double 有符号型，返回实际电流
+ * @param pPoint ChargePoint_t*
+ * @return ErrorCode_t
  *
  */
-double GetChargingCurrent(ChargePoint_t *pPoint)
+ErrorCode_t GetChargingCurrent(ChargePoint_t *pPoint)
 {
     uint8_t ucPointID = pPoint->info.ucChargePointID;
-    /** @todo (rgw#1#): 获取电能表电流 */
+
     double tmpCurr;
+    ErrorCode_t errcode;
+
     tmpCurr = 0;
-    return tmpCurr;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 获取电能表电流 */
+
+    pPoint->state.dChargingCurrent = tmpCurr;
+
+    return errcode;
 }
 
 /** @brief 获取电源频率
  *
- * @param void
- * @return double
+ * @param pPoint ChargePoint_t*
+ * @return ErrorCode_t
  *
  */
-double GetChargingFrequence(ChargePoint_t *pPoint)
+ErrorCode_t GetChargingFrequence(ChargePoint_t *pPoint)
 {
     uint8_t ucPointID = pPoint->info.ucChargePointID;
-/** @todo (rgw#1#): 从电表获取 */
     double tmpFreq;
+    ErrorCode_t errcode;
+
     tmpFreq = 0;
-    return tmpFreq;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从电表获取 */
+
+    pPoint->state.dChargingFrequence = tmpFreq;
+
+    return errcode;
 }
 
-/** @note (rgw#1#): 注意不同ID对硬件的不同操作 */
-
-ChargePointStateType GetCPState(ChargePoint_t *pPoint)
+ErrorCode_t GetCPState(ChargePoint_t *pPoint)
 {
-    ChargePointStateType xCPState;
-    xCPState = CP_12V;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ChargePointStateType tmpCPState;
+    ErrorCode_t errcode;
+
+    tmpCPState = CP_12V;
+    errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-    return xCPState;
+
+    pPoint->state.xCPState = tmpCPState;
+
+    return errcode;
 }
-ChargePointStateType GetCCState(ChargePoint_t *pPoint)
+ErrorCode_t GetCCState(ChargePoint_t *pPoint)
 {
-    ChargePointStateType xCCState;
-    xCCState = CC_NO;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ChargePointStateType tmpCCState;
+    ErrorCode_t errcode;
+
+    tmpCCState = CC_NO;
+    errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-    return xCCState;
+
+    pPoint->state.xCCState = tmpCCState;
+
+    return errcode;
 }
 
 /** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
@@ -81,69 +115,138 @@ ChargePointStateType GetCCState(ChargePoint_t *pPoint)
  *                  1 有插枪
  *
  */
-uint32_t GetPlugState(ChargePoint_t *pPoint)
+ErrorCode_t GetPlugState(ChargePoint_t *pPoint)
 {
     uint8_t ucPointID = pPoint->info.ucChargePointID;
     uint32_t tmpPlugState;
+    ErrorCode_t errcode;
+
     tmpPlugState = 0;
+    errcode = ERR_NO;
 
-    return tmpPlugState;
-}
-
-ChargePointStateType GetBTypeConnectorLock(ChargePoint_t *pPoint) //lock unlock
-{
-    ChargePointStateType xLockState;
-    xLockState = LOCK;
     /** @todo (rgw#1#):  */
 
-    return xLockState;
+    pPoint->state.xPlugState = tmpPlugState;
+
+    return errcode;
 }
 
-ChargePointStateType SetBTypeConnectorLock(ChargePoint_t *pPoint)
+ErrorCode_t GetBTypeConnectorLock(ChargePoint_t *pPoint) //lock unlock
 {
-    ChargePointStateType xLockState;
-    xLockState = UNLOCK;
-    /** @todo (rgw#1#): 执行锁止动作 */
-    xLockState = GetBTypeConnectorLock(pPoint);
-    return xLockState;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ChargePointStateType tmpLockState;
+    ErrorCode_t errcode;
+
+    tmpLockState = LOCK;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#):  */
+
+    pPoint->state.xBTypeConnectorLockState = tmpLockState;
+
+    return errcode;
 }
 
-double GetACLTemp(ChargePoint_t *pPoint)
+ErrorCode_t SetBTypeConnectorLock(ChargePoint_t *pPoint)
 {
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ChargePointStateType tmpLockState;
+    ErrorCode_t errcode;
+
+    tmpLockState = UNLOCK;
+    errcode = ERR_NO;
+
+    if(pPoint->state.xBTypeConnectorLockState == UNLOCK)
+    {
+        /** @todo (rgw#1#): 执行锁止动作 */
+    }
+    THROW_ERROR(GetBTypeConnectorLock(pPoint));
+
+    return errcode;
+}
+
+ErrorCode_t GetACLTemp(ChargePoint_t *pPoint)
+{
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
     double  tmpACLTemp;
+    ErrorCode_t errcode;
+
     tmpACLTemp = 0;
+    errcode = ERR_NO;
+
     /** @todo (rgw#1#):  */
 
-    return tmpACLTemp;
+    pPoint->state.dACLTemp = tmpACLTemp;
+
+    return errcode;
 }
-double GetACNTemp(ChargePoint_t *pPoint)
+ErrorCode_t GetACNTemp(ChargePoint_t *pPoint)
 {
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    double tmpACNTemp;
+    ErrorCode_t errcode;
+
+    tmpACNTemp = 0;
+    errcode = ERR_NO;
+
     /** @todo (rgw#1#):  */
-    return 0;
+
+    pPoint->state.dACNTemp = tmpACNTemp;
+
+    return errcode;
 }
-double GetBTypeConnectorTemp1(ChargePoint_t *pPoint)
+ErrorCode_t GetBTypeConnectorTemp1(ChargePoint_t *pPoint)
 {
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    double tmpTemp;
+    ErrorCode_t errcode;
+
+    tmpTemp = 0;
+    errcode = ERR_NO;
+
     /** @todo (rgw#1#):  */
-    return 0;
+
+    pPoint->state.dBTypeConnectorTemp1 = tmpTemp;
+
+    return errcode;
 }
-double GetBTypeConnectorTemp2(ChargePoint_t *pPoint)
+ErrorCode_t GetBTypeConnectorTemp2(ChargePoint_t *pPoint)
 {
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    double tmpTemp;
+    ErrorCode_t errcode;
+
+    tmpTemp = 0;
+    errcode = ERR_NO;
+
     /** @todo (rgw#1#):  */
-    return 0;
+
+    pPoint->state.dBTypeConnectorTemp2 = tmpTemp;
+
+    return errcode;
 }
-ChargePointStateType StartCharge(ChargePoint_t *pPoint)
+ErrorCode_t StartCharge(ChargePoint_t *pPoint)
 {
-    ChargePointStateType xChargeStatus;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ErrorCode_t errcode;
+    ChargePointStateType tmpChargeStatus;
+
+    errcode = ERR_NO;
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
 
-    return xChargeStatus;
+    return errcode;
 
 }
-ChargePointStateType StopCharge(ChargePoint_t *pPoint)
+ErrorCode_t StopCharge(ChargePoint_t *pPoint)
 {
-    ChargePointStateType xChargeStatus;
+    uint8_t ucPointID = pPoint->info.ucChargePointID;
+    ErrorCode_t errcode;
+    ChargePointStateType tmpChargeStatus;
+
+    errcode = ERR_NO;
+
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
-    return xChargeStatus;
+    return errcode;
 }
 
 ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )

@@ -11,6 +11,7 @@
 #include "stm32f4xx.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
+#include "errorcode.h"
 
 #define defConnectorTypeB   0x0B
 #define defConnectorTypeC   0x0C
@@ -47,14 +48,14 @@ typedef struct _ChargePointInfo
 
 typedef struct _ChargePointState
 {
-    ChargePointStateType ulCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
-    ChargePointStateType ulCCState;     // ¼ì²âµã4 CC state --PE
-    ChargePointStateType ulPlugState;
+    ChargePointStateType xCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
+    ChargePointStateType xCCState;     // ¼ì²âµã4 CC state --PE
+    ChargePointStateType xPlugState;
     double dACLTemp;
     double dACNTemp;
     double dBTypeConnectorTemp1;
     double dBTypeConnectorTemp2;
-    ChargePointStateType BTypeConnectorLockState; //lock unlock
+    ChargePointStateType xBTypeConnectorLockState; //lock unlock
     double dChargingVoltage;
     double dChargingCurrent;
     double dChargingFrequence;
@@ -69,21 +70,21 @@ typedef struct _ChargePoint
 
 } ChargePoint_t;
 
-double GetChargingVoltage(ChargePoint_t *pPoint);
-double GetChargingCurrent(ChargePoint_t *pPoint);
-double GetChargingFrequence(ChargePoint_t *pPoint);
+ErrorCode_t GetChargingVoltage(ChargePoint_t *pPoint);
+ErrorCode_t GetChargingCurrent(ChargePoint_t *pPoint);
+ErrorCode_t GetChargingFrequence(ChargePoint_t *pPoint);
 
-ChargePointStateType GetCPState(ChargePoint_t *pPoint);
-ChargePointStateType GetCCState(ChargePoint_t *pPoint);
-uint32_t GetPlugState(ChargePoint_t *pPoint);
-ChargePointStateType GetBTypeConnectorLock(ChargePoint_t *pPoint); //lock unlock
-ChargePointStateType SetBTypeConnectorLock(ChargePoint_t *pPoint);
-double GetACLTemp(ChargePoint_t *pPoint);
-double GetACNTemp(ChargePoint_t *pPoint);
-double GetBTypeConnectorTemp1(ChargePoint_t *pPoint);
-double GetBTypeConnectorTemp2(ChargePoint_t *pPoint);
-ChargePointStateType StartCharge(ChargePoint_t *pPoint);
-ChargePointStateType StopCharge(ChargePoint_t *pPoint);
+ErrorCode_t GetCPState(ChargePoint_t *pPoint);
+ErrorCode_t GetCCState(ChargePoint_t *pPoint);
+ErrorCode_t GetPlugState(ChargePoint_t *pPoint);
+ErrorCode_t GetBTypeConnectorLock(ChargePoint_t *pPoint); //lock unlock
+ErrorCode_t SetBTypeConnectorLock(ChargePoint_t *pPoint);
+ErrorCode_t GetACLTemp(ChargePoint_t *pPoint);
+ErrorCode_t GetACNTemp(ChargePoint_t *pPoint);
+ErrorCode_t GetBTypeConnectorTemp1(ChargePoint_t *pPoint);
+ErrorCode_t GetBTypeConnectorTemp2(ChargePoint_t *pPoint);
+ErrorCode_t StartCharge(ChargePoint_t *pPoint);
+ErrorCode_t StopCharge(ChargePoint_t *pPoint);
 
 ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID );
 #endif
