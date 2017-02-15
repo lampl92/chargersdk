@@ -7,11 +7,12 @@
 */
 #include "taskcreate.h"
 #include "taskdata.h"
-
+#include "errorcode.h"
 void vTaskEVSEData(void *pvParameters)
 {
     while(1)
     {
+
 #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_EVSEData);
 #endif

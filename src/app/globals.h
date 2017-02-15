@@ -8,7 +8,7 @@
 #ifndef  __GLOBALS_H
 #define  __GLOBALS_H
 
-#include "interface.h"
+#include "EVSE.h"
 #include "userlib_list.h"
 
 #define BIT_0  ( 1 << 0 )
@@ -47,9 +47,9 @@
 /*---------------------------------------------------------------------------/
 / xEventGroup
 /---------------------------------------------------------------------------*/
-//xHandleEventGroupRFID
+//定义xHandleEventGroupRFID
 #define defEventBitGETUID       BIT_0
-//xHandleEventGroupStartCharge
+//定义xHandleEventGroupStartCharge
 #define defEventBitAuthed       BIT_0
 #define defEventBitLocked       BIT_1
 #define defEventBitVoltOK       BIT_2

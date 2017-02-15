@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
-
+#include <string.h>
 
 
 /*
@@ -57,12 +57,12 @@
 */
 #include "globals.h"
 #include "sysinit.h"
-#include "EVSEinit.h"
+#include "EVSE.h"
 #include "taskcreate.h"
 #include "bsp.h"
 #include "tinysh.h"
 #include "xprintf.h"
-
+#include "errorcode.h"
 
 
 #endif

@@ -14,7 +14,6 @@
 				<Option compiler="armgcc_eb" />
 				<Option projectDeviceOptionsRelation="0" />
 				<Compiler>
-					<Add option="-std=c11" />
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
@@ -108,10 +107,14 @@
 		<Unit filename="..\..\src\app\checksubject.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\EVSEinit.c">
+		<Unit filename="..\..\src\app\errorcode.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\EVSEinit.h" />
+		<Unit filename="..\..\src\app\errorcode.h" />
+		<Unit filename="..\..\src\app\EVSE.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\EVSE.h" />
 		<Unit filename="..\..\src\app\globals.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -122,6 +125,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_charge.h" />
+		<Unit filename="..\..\src\app\interface_data.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\interface_data.h" />
 		<Unit filename="..\..\src\app\interface_error.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -204,6 +211,7 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_gpio.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
 		<Unit filename="..\..\src\drivers\bsp\src\bsp.c">
 			<Option compilerVar="CC" />
 		</Unit>

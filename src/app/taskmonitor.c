@@ -10,12 +10,32 @@
 #include "interface.h"
 void vTaskEVSEMonitor(void *pvParameters)
 {
+    uint32_t ulTotalPoint = pListChargePoint->Total;
+    ChargePoint_t *pPoint[ulTotalPoint];
+    int i;
+    uint8_t ucCurrentId;
+    for(i = 0; i < ulTotalPoint; i++)
+    {
+        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
+    }
+    ucCurrentId = 0;
     while(1)
     {
+        /** �ж�ǹ״̬ */
+        do
+        {
+            if(pPoint[ucCurrentId]->state.xBTypeConnectorLockState == LOCK)
+            {
 
+            }
+            //if(pPoint[ucCurrentId]->state.dACLTemp)
+            ucCurrentId++;
+        }while(ucCurrentId < ulTotalPoint);
+        ucCurrentId = 0;
+        /** end of �ж�ǹ״̬ */
 
 #if DEBUG_TASK
-        xprintf("%s\n", TASKNAME_EVSEMonitor);
+            xprintf("%s\n", TASKNAME_EVSEMonitor);
 #endif
         vTaskDelay(50);
     }
