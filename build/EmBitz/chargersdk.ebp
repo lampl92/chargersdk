@@ -104,9 +104,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\chargepoint.h" />
-		<Unit filename="..\..\src\app\checksubject.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\app\errorcode.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -184,11 +181,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskrfid.h" />
-		<Unit filename="..\..\src\app\testobserver.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
 		<Unit filename="..\..\src\app\timercallback.c">
 			<Option compilerVar="CC" />
 		</Unit>
