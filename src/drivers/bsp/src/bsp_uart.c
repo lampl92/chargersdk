@@ -33,7 +33,7 @@ int8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
         time_out--;
     }
     xSemaphoreGive(q->xHandleMutexQue);
-    return (int8_t) -1;
+    return (int8_t) - 1;
 }
 
 void bsp_Uart_Init(void)
@@ -136,7 +136,12 @@ CLI_USARTx_IRQHandler
 
 RFID_USARTx_IRQHandler
 {
+    UBaseType_t uxSavedInterruptStatus;
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+
     HAL_UART_IRQHandler(&RFID_UARTx_Handler);
+
+    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
 }
 /**
   * @brief  Tx Transfer completed callback
