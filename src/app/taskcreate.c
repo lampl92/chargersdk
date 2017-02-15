@@ -91,6 +91,7 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务通信
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventGroupRFID;
+QueueHandle_t xHandleQueueErrorCode;
 //软件定时器
 TimerHandle_t xHandleTimerTemp; //4个温度
 TimerHandle_t xHandleTimerLockState;
@@ -143,6 +144,8 @@ extern void vChargePointTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
+    xHandleQueueErrorCode = xQueueCreate(100, sizeof(ERR_NO));
+
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
     xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vChargePointTimerCB);
@@ -208,6 +211,7 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     /* Run time stack overflow checking is performed if
     configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
     function is called if a stack overflow is detected. */
+    printf_safe("stackoverflow!! task = %s\n",pcTaskName);
     taskDISABLE_INTERRUPTS();
     for( ;; );
 }
