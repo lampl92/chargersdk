@@ -8,10 +8,6 @@
 #ifndef  __INTERFACE_MONITOR_H
 #define  __INTERFACE_MONITOR_H
 
-uint32_t GetScramState(void);
-uint32_t GetKnockState(void);
-uint32_t GetPEState(void);
-uint32_t GetPowerOffState(void);
-uint32_t GetArresterState(void);
+
 
 #endif
