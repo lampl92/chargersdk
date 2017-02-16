@@ -11,15 +11,29 @@
 //
 //  一定要保证code的 顺序 与头文件定义一致
 //
-const uint8_t *strErrorCode[100]=
+const uint8_t *strErrorCode[100] =
 {
-    "No Error\n",     //ERR_NO
-    "急停发生故障\n",   //ERR_SCRAM
-    "其他错误\n"      //ERR_OTHER
+    "No Error",
+    "急停发生故障",
+    "其他错误",
+    "读卡器串口奇偶校验错误",
+    "读卡器串口噪声错误",
+    "读卡器串口帧错误",
+    "读卡器串口超载",
+    "读卡器串口DMA传输错误"
+    "网络模块串口奇偶校验错误",
+    "网络模块串口噪声错误",
+    "网络模块串口帧错误",
+    "网络模块串口超载",
+    "网络模块串口DMA传输错误"
 };
 
-void ThrowErrorCode(ErrorCode_t errcode)
+void ThrowErrorCode(ErrorCode_t errcode, ErrorLevel_t errlevel)
 {
-    //printf_safe("%s",strErrorCode[errcode]);
-    xQueueSend(xHandleQueueErrorCode, (void *)&errcode, 0);
+    ErrorPackage_t package;
+
+    package.code = errcode;
+    package.level = errlevel;
+
+    xQueueSend(xHandleQueueErrorCode, (void *)&package, 0);
 }
