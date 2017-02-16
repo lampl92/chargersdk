@@ -17,7 +17,7 @@ void vTaskEVSEError(void *pvParameters)
 
     while(1)
     {
-        xResult = xQueueReceive(xHandleQueueErrorCode, &errpack, 50);
+        xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 50);
         if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
         {
             printf_safe("%s(code: %d,level: %d)\n", strErrorCode[errpack.code], errpack.code, errpack.level);

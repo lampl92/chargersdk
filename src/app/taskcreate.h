@@ -28,7 +28,7 @@ extern const char *TASKNAME_EVSEError;
 extern const char *TASKNAME_EVSEData;
 
 extern EventGroupHandle_t xHandleEventGroupRFID;
-extern QueueHandle_t xHandleQueueErrorCode;
+extern QueueHandle_t xHandleQueueErrorPackage;
 
 void SysTaskCreate (void);
 void AppTaskCreate (void);

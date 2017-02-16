@@ -26,12 +26,12 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetACLTemp(pPoint[i]), ERR_LEVEL_TIPS);
-            THROW_ERROR(GetACNTemp(pPoint[i]), ERR_LEVEL_TIPS);
+            THROW_ERROR(GetACLTemp(pPoint[i]), ERR_LEVEL_WARNING);
+            THROW_ERROR(GetACNTemp(pPoint[i]), ERR_LEVEL_WARNING);
             if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
             {
-                THROW_ERROR(GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_TIPS);
-                THROW_ERROR(GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_TIPS);
+                THROW_ERROR(GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_WARNING);
+                THROW_ERROR(GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_WARNING);
             }
 //            printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
         }
@@ -42,8 +42,8 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
         {
             if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
             {
-                THROW_ERROR(GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_TIPS);
-//            printf_safe("num = %d, ulIntervalOfGetLock\n", i);
+                THROW_ERROR(GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_WARNING);
+//              printf_safe("num = %d, ulIntervalOfGetLock\n", i);
             }
         }
     }
@@ -51,8 +51,8 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetCCState(pPoint[i]), ERR_LEVEL_TIPS);
-            THROW_ERROR(GetCPState(pPoint[i]), ERR_LEVEL_TIPS);
+            THROW_ERROR(GetCCState(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(GetCPState(pPoint[i]), ERR_LEVEL_CRITICAL);
 //            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
         }
     }
@@ -60,12 +60,11 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetChargingVoltage(pPoint[i]), ERR_LEVEL_TIPS);
-            THROW_ERROR(GetChargingCurrent(pPoint[i]), ERR_LEVEL_TIPS);
-            THROW_ERROR(GetChargingFrequence(pPoint[i]), ERR_LEVEL_TIPS);
+            THROW_ERROR(GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
         }
     }
-
 }
 void vEVSETimerCB(TimerHandle_t xTimer)
 {

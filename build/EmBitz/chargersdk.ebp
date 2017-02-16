@@ -136,6 +136,7 @@
 		<Unit filename="..\..\src\app\interface_remote.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\interface_remote.h" />
 		<Unit filename="..\..\src\app\interface_rfid.c">
 			<Option compilerVar="CC" />
 		</Unit>

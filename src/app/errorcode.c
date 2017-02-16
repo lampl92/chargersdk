@@ -14,7 +14,7 @@
 const uint8_t *strErrorCode[100] =
 {
     "No Error",
-    "¼±Í£·¢Éú¹ÊÕÏ",
+    "¼±Í£¼ì²â¹ÊÕÏ",
     "ÆäËû´íÎó",
     "¶Á¿¨Æ÷´®¿ÚÆæÅ¼Ğ£Ñé´íÎó",
     "¶Á¿¨Æ÷´®¿ÚÔëÉù´íÎó",
@@ -35,5 +35,5 @@ void ThrowErrorCode(ErrorCode_t errcode, ErrorLevel_t errlevel)
     package.code = errcode;
     package.level = errlevel;
 
-    xQueueSend(xHandleQueueErrorCode, (void *)&package, 0);
+    xQueueSend(xHandleQueueErrorPackage, (void *)&package, 0);
 }

@@ -91,7 +91,7 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务通信
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventGroupRFID;
-QueueHandle_t xHandleQueueErrorCode;
+QueueHandle_t xHandleQueueErrorPackage;
 //软件定时器
 TimerHandle_t xHandleTimerTemp; //4个温度
 TimerHandle_t xHandleTimerLockState;
@@ -144,7 +144,7 @@ extern void vChargePointTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
-    xHandleQueueErrorCode = xQueueCreate(100, sizeof(ErrorPackage_t));
+    xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);

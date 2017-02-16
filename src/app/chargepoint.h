@@ -43,7 +43,7 @@ typedef struct _ChargePointInfo
     uint32_t ulVolatageUpperLimits;
     uint32_t ulVolatageLowerLimits;
     uint32_t ulCurrent;
-    uint32_t ulPower;
+    double dPower;                      //保留一位小数
 }ChargePointInfo_t;
 
 typedef struct _ChargePointState

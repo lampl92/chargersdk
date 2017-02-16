@@ -12,7 +12,11 @@
 #include "errorcode.h"
 typedef struct _EVSEInfo
 {
-    uint8_t id[12];
+    uint8_t ucSN[24]; //设备唯一序列号
+    uint8_t ucID[24]; //平台分配ID
+    uint8_t ucType;   //1：直流设备 2：交流设备 3：交直流一体设备 4：无线设备 5：其他
+    double dLng;      //经度，保留后六位
+    double dLat;      //纬度，保留后六位
 }EVSEInfo_t;
 typedef struct _EVSEState
 {

@@ -10,6 +10,102 @@
 #include "userlib_list.h"
 #include "interface.h"
 
+
+/** @brief 设备唯一序列号
+ *
+ * @param pEVSE EVSE_t*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t GetEVSESN(EVSE_t *pEVSE, uint8_t *pLength)
+{
+    uint8_t tmpSN[24];
+    uint8_t tmpLength;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    memset(tmpSN, 0, 24);
+    tmpLength = 0;
+
+/** @todo (rgw#1#): 从文件获取SN 并获取SN长度*/
+
+    memmove(pEVSE->info.ucSN, tmpSN, *pLength);
+
+    return errcode;
+}
+
+/** @brief 平台分配ID
+ *
+ * @param pEVSE EVSE_t*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t GetEVSEID(EVSE_t *pEVSE, uint8_t *pLenght)
+{
+    uint8_t tmpID[24];
+    uint8_t tmpLength;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    memset(tmpID, 0, 24);
+    tmpLength = 0;
+
+/** @todo (rgw#1#): 从文件获取ID 并获取ID长度*/
+
+    memmove(pEVSE->info.ucID, tmpID, *pLength);
+
+    return errcode;
+}
+
+/** @brief 充电设备类型
+ *         1：直流设备
+ *         2：交流设备
+ *         3：交直流一体设备
+ *         4：无线设备
+ *         5：其他
+ *
+ * @param pEVSE EVSE_t*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t GetEVSEType(EVSE_t *pEVSE)
+{
+    uint8_t tmpType;
+    ErrorCode_t errcode;
+
+    tmpType = 0;
+    errcode = ERR_NO;
+
+/** @todo (rgw#1#):  */
+
+    pEVSE->info.ucType = tmpType;
+
+    return errcode;
+}
+
+/** @brief 经纬度，保留后六位
+ *
+ * @param pEVSE EVSE_t*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t GetEVSELngLat(EVSE_t *pEVSE)
+{
+    double tmpLng,tmpLat;
+    ErrorCode_t errcode;
+
+    tmpLng = 0;
+    tmpLat = 0;
+    errcode = ERR_NO;
+
+/** @todo (rgw#1#):  */
+
+    pEVSE->info.dLng = tmpLng;
+    pEVSE->info.dLat = tmpLng;
+
+    return errcode;
+}
+
 /** @brief 获得急停状态
  *          0 无急停
  *          1 有急停
@@ -122,6 +218,18 @@ EVSE_t *EVSECreate(void)
 {
     EVSE_t *pEVSE;
     pEVSE = (EVSE_t *)malloc(sizeof(EVSE_t));
+
+    memset(pEVSE->info.ucSN, 0, 24);
+    memset(pEVSE->info.ucID, 0, 24);
+    pEVSE->info.ucType = 2;
+    pEVSE->info.dLng = 116.275833;
+    pEVSE->info.dLat = 39.831944;
+
+    pEVSE->state.ulArresterState = 0;
+    pEVSE->state.ulKnockState = 0;
+    pEVSE->state.ulPEState = 0;
+    pEVSE->state.ulPowerOffState = 0;
+    pEVSE->state.ulScramState = 0;
 
     return pEVSE;
 }

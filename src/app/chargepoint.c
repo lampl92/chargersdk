@@ -235,7 +235,6 @@ ErrorCode_t StartCharge(ChargePoint_t *pPoint)
     /** @todo (rgw#1#): ²Ù×÷Êä³ö¼ÌµçÆ÷£¬·µ»Ø¼ÌµçÆ÷×´Ì¬ */
 
     return errcode;
-
 }
 ErrorCode_t StopCharge(ChargePoint_t *pPoint)
 {
@@ -258,7 +257,16 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
         return NULL;
     }
     pChargePoint->info.ucChargePointID = ucChargePointID;
+    pChargePoint->info.ucConnectorType = defConnectorTypeB;
+    pChargePoint->info.ulVolatageUpperLimits = 0;
+    pChargePoint->info.ulVolatageLowerLimits = 0;
+    pChargePoint->info.ulCurrent = 0;
+    pChargePoint->info.dPower = 0;
+
+
 
     pChargePoint->state.xHandleEventGroupStartCharge = xEventGroupCreate();
     pChargePoint->state.xHandleEventGroupStopCharge = xEventGroupCreate();
+
+    return pChargePoint;
 }
