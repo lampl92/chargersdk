@@ -144,7 +144,7 @@ extern void vChargePointTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventGroupRFID = xEventGroupCreate();
-    xHandleQueueErrorCode = xQueueCreate(100, sizeof(ERR_NO));
+    xHandleQueueErrorCode = xQueueCreate(100, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);

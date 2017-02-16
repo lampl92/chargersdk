@@ -160,7 +160,7 @@ ErrorCode_t SetBTypeConnectorLock(ChargePoint_t *pPoint)
     {
         /** @todo (rgw#1#): Ö´ÐÐËøÖ¹¶¯×÷ */
     }
-    THROW_ERROR(GetBTypeConnectorLock(pPoint));
+    THROW_ERROR(GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
 
     return errcode;
 }

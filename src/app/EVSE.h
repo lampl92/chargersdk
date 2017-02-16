@@ -10,7 +10,10 @@
 
 #include "stm32f4xx.h"
 #include "errorcode.h"
-
+typedef struct _EVSEInfo
+{
+    uint8_t id[12];
+}EVSEInfo_t;
 typedef struct _EVSEState
 {
     uint32_t ulScramState;
@@ -22,6 +25,7 @@ typedef struct _EVSEState
 
 typedef struct _EVSE
 {
+    EVSEInfo_t info;
     EVSEState_t state;
 }EVSE_t;
 

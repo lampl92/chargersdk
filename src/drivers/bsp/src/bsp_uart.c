@@ -38,8 +38,8 @@ int8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
 
 void bsp_Uart_Init(void)
 {
-    pCliRecvQue = QueueCreate(10);
-    pRfidRecvQue = QueueCreate(100);
+    pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
+    pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
     CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
@@ -198,7 +198,18 @@ can
   *         add your own implementation.
   * @retval None
   */
+#define THROW_USART_ERR(DEV, ERR, LEVEL)    if(huart->Instance == DEV##_USARTx_BASE)            \
+                                            {                                                   \
+                                                if(huart->ErrorCode == HAL_USART_ERROR_##ERR)   \
+                                                {                                               \
+                                                    ThrowErrorCode(ERR_##DEV##_##ERR, LEVEL);   \
+                                                }                                               \
+                                            }
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-
+    THROW_USART_ERR(RFID, PE, ERR_LEVEL_TIPS);
+    THROW_USART_ERR(RFID, NE, ERR_LEVEL_TIPS);
+    THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);
+    THROW_USART_ERR(RFID, ORE, ERR_LEVEL_TIPS);
+    THROW_USART_ERR(RFID, DMA, ERR_LEVEL_TIPS);
 }

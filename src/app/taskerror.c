@@ -11,16 +11,16 @@
 void vTaskEVSEError(void *pvParameters)
 {
     BaseType_t xResult;
-    ErrorCode_t errcode;
+    ErrorPackage_t errpack;
 
     xResult = pdFALSE;
-    errcode = ERR_NO;
+
     while(1)
     {
-        xResult = xQueueReceive(xHandleQueueErrorCode, &errcode, 50);
-        if(xResult == pdTRUE)
+        xResult = xQueueReceive(xHandleQueueErrorCode, &errpack, 50);
+        if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
         {
-            printf_safe("error = %d:%s", errcode, strErrorCode[errcode]);
+            printf_safe("%s(code: %d,level: %d)\n", strErrorCode[errpack.code], errpack.code, errpack.level);
         }
 
 #if DEBUG_TASK

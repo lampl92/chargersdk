@@ -13,5 +13,6 @@
 #include "interface_monitor.h"
 #include "interface_charge.h"
 #include "interface_rfid.h"
+#include "interface_data.h"
 
 #endif /* __INTERFACE_H */

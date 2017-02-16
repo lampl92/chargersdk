@@ -1,4 +1,4 @@
-cscope 15 D:\Documents\Projects\chargersdk\build\EmBitz"               0000982289
+cscope 15 D:\Documents\Projects\chargersdk\build\EmBitz"               0000996458
 	@D:\Documents\Projects\chargersdk\build\EmBitz\startup\startup_stm32f429x.S
 
 3 .
@@ -1565,7 +1565,7 @@ VERSION_H
 
 5 
 	#DATE
- "08"
+ "16"
 
 	)
 
@@ -1607,53 +1607,53 @@ VERSION_H
 
 16 
 	#MINOR
- 1
+ 3
 
 	)
 
 17 
 	#BUILD
- 166
+ 376
 
 	)
 
 18 
 	#REVISION
- 933
+ 2056
 
 	)
 
 21 
 	#BUILDS_COUNT
- 372
+ 675
 
 	)
 
 22 
 	#RC_FILEVERSION
- 1,1,166,933
+ 1,3,376,2056
 
 	)
 
 23 
 	#RC_FILEVERSION_STRING
- "1, 1, 166, 933\0"
+ "1, 3, 376, 2056\0"
 
 	)
 
 24 
 	#FULLVERSION_STRING
- "1.1.166.933"
+ "1.3.376.2056"
 
 	)
 
 27 
 	#BUILD_HISTORY
- 66
+ 76
 
 	)
 
-	@D:\Documents\Projects\chargersdk\src\app\EVSEinit.c
+	@D:\Documents\Projects\chargersdk\src\app\EVSE.c
 
 8 
 	~"ö˛udes.h
@@ -1667,39 +1667,509 @@ VERSION_H
 	~"u£æib_li°.h
 "
 
-12 
-	$EVSEöô
-()
+11 
+	~"öãrÁ˚.h
+"
 
-14 
-pLi°Ch¨gePoöt
+20 
+Eº‹Code_t
+ 
+	$GëS¸amSèã
+(
+EVSE_t
+ *
+pEVSE
+)
+
+22 
+uöt32_t
+ 
+tmpS¸amSèã
+;
+
+23 
+Eº‹Code_t
+ 
+îrcode
+;
+
+26 
+îrcode
  = 
-	`Li°Cª©e
-();
+ERR_NO
+;
 
-16 
+27 
+tmpS¸amSèã
+ = 0;
+
+31 
+pEVSE
+->
+°©e
+.
+ulS¸amSèã
+ = 
+tmpS¸amSèã
+;
+
+33  
+îrcode
+;
+
+34 
 	}
 }
 
-	@D:\Documents\Projects\chargersdk\src\app\EVSEinit.h
+43 
+Eº‹Code_t
+ 
+	$GëKnockSèã
+(
+EVSE_t
+ *
+pEVSE
+)
+
+45 
+uöt32_t
+ 
+tmpKnockSèã
+;
+
+46 
+Eº‹Code_t
+ 
+îrcode
+;
+
+48 
+îrcode
+ = 
+ERR_NO
+;
+
+49 
+tmpKnockSèã
+ = 0;
+
+53 
+pEVSE
+->
+°©e
+.
+ulKnockSèã
+ = 
+tmpKnockSèã
+;
+
+55  
+îrcode
+;
+
+56 
+	}
+}
+
+65 
+Eº‹Code_t
+ 
+	$GëPESèã
+(
+EVSE_t
+ *
+pEVSE
+)
+
+67 
+uöt32_t
+ 
+tmpPESèã
+;
+
+68 
+Eº‹Code_t
+ 
+îrcode
+;
+
+70 
+îrcode
+ = 
+ERR_NO
+;
+
+71 
+tmpPESèã
+ = 0;
+
+75 
+pEVSE
+->
+°©e
+.
+ulPESèã
+ = 
+tmpPESèã
+;
+
+77  
+îrcode
+;
+
+78 
+	}
+}
+
+87 
+Eº‹Code_t
+ 
+	$GëPowîOffSèã
+(
+EVSE_t
+ *
+pEVSE
+)
+
+89 
+uöt32_t
+ 
+tmpOffSèã
+;
+
+90 
+Eº‹Code_t
+ 
+îrcode
+;
+
+92 
+îrcode
+ = 
+ERR_NO
+;
+
+93 
+tmpOffSèã
+ = 0;
+
+97 
+pEVSE
+->
+°©e
+.
+ulPowîOffSèã
+ = 
+tmpOffSèã
+;
+
+99  
+îrcode
+;
+
+100 
+	}
+}
+
+110 
+Eº‹Code_t
+ 
+	$GëAºe°îSèã
+(
+EVSE_t
+ *
+pEVSE
+)
+
+112 
+uöt32_t
+ 
+tmpAºe°îSèã
+;
+
+113 
+Eº‹Code_t
+ 
+îrcode
+;
+
+115 
+îrcode
+ = 
+ERR_NO
+;
+
+116 
+tmpAºe°îSèã
+ = 0;
+
+117 
+pEVSE
+->
+°©e
+.
+ulAºe°îSèã
+ = 
+tmpAºe°îSèã
+;
+
+118  
+îrcode
+;
+
+119 
+	}
+}
+
+121 
+EVSE_t
+ *
+	$EVSECª©e
+()
+
+123 
+EVSE_t
+ *
+pEVSE
+;
+
+124 
+pEVSE
+ = (
+EVSE_t
+ *)
+	`mÆloc
+((EVSE_t));
+
+126  
+pEVSE
+;
+
+127 
+	}
+}
+
+129 
+	$EVSEöô
+()
+
+131 
+Ch¨gePoöt_t
+ *
+pch¨gïoöt
+[2];
+
+132 
+uöt8_t
+ 
+ucTŸÆ
+;
+
+134 
+	`THROW_ERROR
+(
+	`GëTŸÆCh¨gePoöt
+(&
+ucTŸÆ
+), 
+ERR_LEVEL_WARNING
+);
+
+135 
+pEVSE
+ = 
+	`EVSECª©e
+();
+
+136 
+pLi°Ch¨gePoöt
+ = 
+	`U£rLi°Cª©e
+();
+
+137 
+i
+;
+
+138 
+i
+ = 0; i < 
+ucTŸÆ
+; i++)
+
+140 
+pch¨gïoöt
+[
+i
+] = 
+	`Ch¨gePoötCª©e
+(i);
+
+141 
+pLi°Ch¨gePoöt
+->
+	`Add
+’Li°Ch¨gePoöt, 
+pch¨gïoöt
+[
+i
+]);
+
+143 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\app\EVSE.h
 
 8 #i‚de‡ 
-__EVSEINIT_H
+__EVSE_H
 
 
 9 
-	#__EVSEINIT_H
+	#__EVSE_H
 
 
 	)
 
-12 
+11 
+	~"°m32f4xx.h
+"
+
+12 
+	~"îr‹code.h
+"
+
+13 
+	s_EVSEInfo
+
+
+15 
+uöt8_t
+ 
+	mid
+[12];
+
+16 }
+	tEVSEInfo_t
+;
+
+17 
 	s_EVSESèã
 
 
-15 }
-	gEVSESèã_t
+19 
+uöt32_t
+ 
+	mulS¸amSèã
+;
 
+20 
+uöt32_t
+ 
+	mulKnockSèã
+;
+
+21 
+uöt32_t
+ 
+	mulPESèã
+;
+
+22 
+uöt32_t
+ 
+	mulPowîOffSèã
+;
+
+23 
+uöt32_t
+ 
+	mulAºe°îSèã
+;
+
+24 }
+	tEVSESèã_t
+;
+
+26 
+	s_EVSE
+
+
+28 
+EVSEInfo_t
+ 
+	möfo
+;
+
+29 
+EVSESèã_t
+ 
+	m°©e
+;
+
+30 }
+	tEVSE_t
+;
+
+32 
+Eº‹Code_t
+ 
+GëS¸amSèã
+(
+EVSE_t
+ *
+pEVSE
+);
+
+33 
+Eº‹Code_t
+ 
+GëKnockSèã
+(
+EVSE_t
+ *
+pEVSE
+);
+
+34 
+Eº‹Code_t
+ 
+GëPESèã
+(
+EVSE_t
+ *
+pEVSE
+);
+
+35 
+Eº‹Code_t
+ 
+GëPowîOffSèã
+(
+EVSE_t
+ *
+pEVSE
+);
+
+36 
+Eº‹Code_t
+ 
+GëAºe°îSèã
+(
+EVSE_t
+ *
+pEVSE
+);
+
+37 
+EVSE_t
+ *
+EVSECª©e
+();
+
+38 
+EVSEöô
+();
 
 	@D:\Documents\Projects\chargersdk\src\app\chargepoint.c
 
@@ -1711,7 +2181,851 @@ __EVSEINIT_H
 	~"ch¨gïoöt.h
 "
 
-11 
+19 
+Eº‹Code_t
+ 
+	$GëCh¨gögVﬁège
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+21 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+22 
+tmpVﬁt
+;
+
+23 
+Eº‹Code_t
+ 
+îrcode
+;
+
+25 
+tmpVﬁt
+ = 0;
+
+26 
+îrcode
+ = 
+ERR_NO
+;
+
+30 
+pPoöt
+->
+°©e
+.
+dCh¨gögVﬁège
+ = 
+tmpVﬁt
+;
+
+32  
+îrcode
+;
+
+33 
+	}
+}
+
+41 
+Eº‹Code_t
+ 
+	$GëCh¨gögCuºít
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+43 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+45 
+tmpCuº
+;
+
+46 
+Eº‹Code_t
+ 
+îrcode
+;
+
+48 
+tmpCuº
+ = 0;
+
+49 
+îrcode
+ = 
+ERR_NO
+;
+
+53 
+pPoöt
+->
+°©e
+.
+dCh¨gögCuºít
+ = 
+tmpCuº
+;
+
+55  
+îrcode
+;
+
+56 
+	}
+}
+
+64 
+Eº‹Code_t
+ 
+	$GëCh¨gögFªquí˚
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+66 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+67 
+tmpFªq
+;
+
+68 
+Eº‹Code_t
+ 
+îrcode
+;
+
+70 
+tmpFªq
+ = 0;
+
+71 
+îrcode
+ = 
+ERR_NO
+;
+
+75 
+pPoöt
+->
+°©e
+.
+dCh¨gögFªquí˚
+ = 
+tmpFªq
+;
+
+77  
+îrcode
+;
+
+78 
+	}
+}
+
+80 
+Eº‹Code_t
+ 
+	$GëCPSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+82 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+83 
+Ch¨gePoötSèãTy≥
+ 
+tmpCPSèã
+;
+
+84 
+Eº‹Code_t
+ 
+îrcode
+;
+
+86 
+tmpCPSèã
+ = 
+CP_12V
+;
+
+87 
+îrcode
+ = 
+ERR_NO
+;
+
+91 
+pPoöt
+->
+°©e
+.
+xCPSèã
+ = 
+tmpCPSèã
+;
+
+93  
+îrcode
+;
+
+94 
+	}
+}
+
+95 
+Eº‹Code_t
+ 
+	$GëCCSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+97 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+98 
+Ch¨gePoötSèãTy≥
+ 
+tmpCCSèã
+;
+
+99 
+Eº‹Code_t
+ 
+îrcode
+;
+
+101 
+tmpCCSèã
+ = 
+CC_NO
+;
+
+102 
+îrcode
+ = 
+ERR_NO
+;
+
+106 
+pPoöt
+->
+°©e
+.
+xCCSèã
+ = 
+tmpCCSèã
+;
+
+108  
+îrcode
+;
+
+109 
+	}
+}
+
+118 
+Eº‹Code_t
+ 
+	$GëPlugSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+120 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+121 
+uöt32_t
+ 
+tmpPlugSèã
+;
+
+122 
+Eº‹Code_t
+ 
+îrcode
+;
+
+124 
+tmpPlugSèã
+ = 0;
+
+125 
+îrcode
+ = 
+ERR_NO
+;
+
+129 
+pPoöt
+->
+°©e
+.
+xPlugSèã
+ = 
+tmpPlugSèã
+;
+
+131  
+îrcode
+;
+
+132 
+	}
+}
+
+134 
+Eº‹Code_t
+ 
+	$GëBTy≥C⁄√˘‹Lock
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+136 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+137 
+Ch¨gePoötSèãTy≥
+ 
+tmpLockSèã
+;
+
+138 
+Eº‹Code_t
+ 
+îrcode
+;
+
+140 
+tmpLockSèã
+ = 
+LOCK
+;
+
+141 
+îrcode
+ = 
+ERR_NO
+;
+
+145 
+pPoöt
+->
+°©e
+.
+xBTy≥C⁄√˘‹LockSèã
+ = 
+tmpLockSèã
+;
+
+147  
+îrcode
+;
+
+148 
+	}
+}
+
+150 
+Eº‹Code_t
+ 
+	$SëBTy≥C⁄√˘‹Lock
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+152 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+153 
+Ch¨gePoötSèãTy≥
+ 
+tmpLockSèã
+;
+
+154 
+Eº‹Code_t
+ 
+îrcode
+;
+
+156 
+tmpLockSèã
+ = 
+UNLOCK
+;
+
+157 
+îrcode
+ = 
+ERR_NO
+;
+
+159 if(
+pPoöt
+->
+°©e
+.
+xBTy≥C⁄√˘‹LockSèã
+ =
+UNLOCK
+)
+
+163 
+	`THROW_ERROR
+(
+	`GëBTy≥C⁄√˘‹Lock
+(
+pPoöt
+), 
+ERR_LEVEL_WARNING
+);
+
+165  
+îrcode
+;
+
+166 
+	}
+}
+
+168 
+Eº‹Code_t
+ 
+	$GëACLTemp
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+170 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+171 
+tmpACLTemp
+;
+
+172 
+Eº‹Code_t
+ 
+îrcode
+;
+
+174 
+tmpACLTemp
+ = 0;
+
+175 
+îrcode
+ = 
+ERR_NO
+;
+
+179 
+pPoöt
+->
+°©e
+.
+dACLTemp
+ = 
+tmpACLTemp
+;
+
+181  
+îrcode
+;
+
+182 
+	}
+}
+
+183 
+Eº‹Code_t
+ 
+	$GëACNTemp
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+185 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+186 
+tmpACNTemp
+;
+
+187 
+Eº‹Code_t
+ 
+îrcode
+;
+
+189 
+tmpACNTemp
+ = 0;
+
+190 
+îrcode
+ = 
+ERR_NO
+;
+
+194 
+pPoöt
+->
+°©e
+.
+dACNTemp
+ = 
+tmpACNTemp
+;
+
+196  
+îrcode
+;
+
+197 
+	}
+}
+
+198 
+Eº‹Code_t
+ 
+	$GëBTy≥C⁄√˘‹Temp1
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+200 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+201 
+tmpTemp
+;
+
+202 
+Eº‹Code_t
+ 
+îrcode
+;
+
+204 
+tmpTemp
+ = 0;
+
+205 
+îrcode
+ = 
+ERR_NO
+;
+
+209 
+pPoöt
+->
+°©e
+.
+dBTy≥C⁄√˘‹Temp1
+ = 
+tmpTemp
+;
+
+211  
+îrcode
+;
+
+212 
+	}
+}
+
+213 
+Eº‹Code_t
+ 
+	$GëBTy≥C⁄√˘‹Temp2
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+215 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+216 
+tmpTemp
+;
+
+217 
+Eº‹Code_t
+ 
+îrcode
+;
+
+219 
+tmpTemp
+ = 0;
+
+220 
+îrcode
+ = 
+ERR_NO
+;
+
+224 
+pPoöt
+->
+°©e
+.
+dBTy≥C⁄√˘‹Temp2
+ = 
+tmpTemp
+;
+
+226  
+îrcode
+;
+
+227 
+	}
+}
+
+228 
+Eº‹Code_t
+ 
+	$SèπCh¨ge
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+230 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+231 
+Eº‹Code_t
+ 
+îrcode
+;
+
+232 
+Ch¨gePoötSèãTy≥
+ 
+tmpCh¨geSètus
+;
+
+234 
+îrcode
+ = 
+ERR_NO
+;
+
+237  
+îrcode
+;
+
+239 
+	}
+}
+
+240 
+Eº‹Code_t
+ 
+	$St›Ch¨ge
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+242 
+uöt8_t
+ 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+243 
+Eº‹Code_t
+ 
+îrcode
+;
+
+244 
+Ch¨gePoötSèãTy≥
+ 
+tmpCh¨geSètus
+;
+
+246 
+îrcode
+ = 
+ERR_NO
+;
+
+249  
+îrcode
+;
+
+250 
+	}
+}
+
+252 
 Ch¨gePoöt_t
  *
 	$Ch¨gePoötCª©e
@@ -1721,13 +3035,13 @@ uöt8_t
 ucCh¨gePoötID
  )
 
-13 
+254 
 Ch¨gePoöt_t
  *
 pCh¨gePoöt
 ;
 
-14 
+255 
 pCh¨gePoöt
  = (
 Ch¨gePoöt_t
@@ -1735,39 +3049,45 @@ Ch¨gePoöt_t
 	`mÆloc
 ((ChargePoint_t));
 
-15 if(
+256 if(
 pCh¨gePoöt
  =
 NULL
 )
 
-17  
+258  
 NULL
 ;
 
-20 
+260 
 pCh¨gePoöt
 ->
+öfo
+.
 ucCh¨gePoötID
  = ucChargePointID;
 
-22 
+262 
 pCh¨gePoöt
 ->
+°©e
+.
 xH™dÀEvítGroupSèπCh¨ge
  = 
 	`xEvítGroupCª©e
 ();
 
-23 
+263 
 pCh¨gePoöt
 ->
+°©e
+.
 xH™dÀEvítGroupSt›Ch¨ge
  = 
 	`xEvítGroupCª©e
 ();
 
-24 
+264 
 	}
 }
 
@@ -1795,202 +3115,592 @@ __CHARGEPOINT_H
 	~"evít_groups.h
 "
 
-15 
+14 
+	~"îr‹code.h
+"
+
+16 
+	#defC⁄√˘‹Ty≥B
+ 0x0B
+
+	)
+
+17 
+	#defC⁄√˘‹Ty≥C
+ 0x0C
+
+	)
+
+19 
 	e__Ch¨gePoötSèãTy≥
 
 
-17 
+21 
 	mNO_ERR
  = 0,
 
-19 
+23 
 	mCP_ERR
 ,
 
-20 
+24 
 	mCP_12V
 ,
 
-21 
+25 
 	mCP_9V
 ,
 
-22 
+26 
 	mCP_9V_PWM
 ,
 
-23 
+27 
 	mCP_6V_PWM
 ,
 
-25 
+29 
 	mCC_PE
 ,
 
-26 
+30 
 	mCC_NO
 ,
 
-28 
+32 
+	mPLUG
+,
+
+33 
+	mUNPLUG
+,
+
+35 
 	mLOCK
 ,
 
-29 
+36 
 	mUNLOCK
 
 
-30 }
+37 }
 	tCh¨gePoötSèãTy≥
 ;
 
-32 
-	s_Ch¨gePoöt
+39 
+	s_Ch¨gePoötInfo
 
 
-34 
+41 
 uöt8_t
  
 	mucCh¨gePoötID
 ;
 
-35 
-Ch¨gePoötSèãTy≥
+42 
+uöt8_t
  
-	muiCPSèã
+	mucC⁄√˘‹Ty≥
 ;
 
-36 
-Ch¨gePoötSèãTy≥
+43 
+uöt32_t
  
-	muiCCSèã
+	mulVﬁ©ageUµîLimôs
 ;
 
-38 
+44 
+uöt32_t
+ 
+	mulVﬁ©ageLowîLimôs
+;
+
+45 
+uöt32_t
+ 
+	mulCuºít
+;
+
+46 
+uöt32_t
+ 
+	mulPowî
+;
+
+47 }
+	tCh¨gePoötInfo_t
+;
+
+49 
+	s_Ch¨gePoötSèã
+
+
+51 
+Ch¨gePoötSèãTy≥
+ 
+	mxCPSèã
+;
+
+52 
+Ch¨gePoötSèãTy≥
+ 
+	mxCCSèã
+;
+
+53 
+Ch¨gePoötSèãTy≥
+ 
+	mxPlugSèã
+;
+
+54 
+	mdACLTemp
+;
+
+55 
+	mdACNTemp
+;
+
+56 
+	mdBTy≥C⁄√˘‹Temp1
+;
+
+57 
+	mdBTy≥C⁄√˘‹Temp2
+;
+
+58 
+Ch¨gePoötSèãTy≥
+ 
+	mxBTy≥C⁄√˘‹LockSèã
+;
+
+59 
+	mdCh¨gögVﬁège
+;
+
+60 
+	mdCh¨gögCuºít
+;
+
+61 
+	mdCh¨gögFªquí˚
+;
+
+62 
 EvítGroupH™dÀ_t
  
 	mxH™dÀEvítGroupSèπCh¨ge
 ;
 
-39 
+63 
 EvítGroupH™dÀ_t
  
 	mxH™dÀEvítGroupSt›Ch¨ge
 ;
 
-40 
-Ch¨gePoötSèãTy≥
- (*
-GëCPSèã
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
+64 }
+	tCh¨gePoötSèã_t
+;
 
-41 
-Ch¨gePoötSèãTy≥
- (*
-GëCCSèã
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
+66 
+	s_Ch¨gePoöt
 
-42 
-uöt32_t
- (*
-GëACLTemp
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
 
-43 
-uöt32_t
- (*
-GëACNTemp
-)(
-uöt8_t
+68 
+Ch¨gePoötInfo_t
  
-	mucCh¨gePoötID
-);
+	möfo
+;
 
-44 
-uöt32_t
- (*
-GëBTy≥Ch¨gePoötTemp1
-)(
-uöt8_t
+69 
+Ch¨gePoötSèã_t
  
-	mucCh¨gePoötID
-);
+	m°©e
+;
 
-45 
-uöt32_t
- (*
-GëBTy≥Ch¨gePoötTemp2
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
-
-46 
-Ch¨gePoötSèãTy≥
- (*
-LockBTy≥Ch¨gePoöt
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
-
-47 
-Ch¨gePoötSèãTy≥
- (*
-GëBTy≥Ch¨gePoötSèã
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
-
-48 
-Ch¨gePoötSèãTy≥
- (*
-SèπCh¨ge
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
-
-49 
-Ch¨gePoötSèãTy≥
- (*
-St›Ch¨ge
-)(
-uöt8_t
- 
-	mucCh¨gePoötID
-);
-
-50 } 
+71 } 
 	tCh¨gePoöt_t
 ;
 
-	@D:\Documents\Projects\chargersdk\src\app\checksubject.c
+73 
+Eº‹Code_t
+ 
+GëCh¨gögVﬁège
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
 
-	@D:\Documents\Projects\chargersdk\src\app\globals.c
+74 
+Eº‹Code_t
+ 
+GëCh¨gögCuºít
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+75 
+Eº‹Code_t
+ 
+GëCh¨gögFªquí˚
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+77 
+Eº‹Code_t
+ 
+GëCPSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+78 
+Eº‹Code_t
+ 
+GëCCSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+79 
+Eº‹Code_t
+ 
+GëPlugSèã
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+80 
+Eº‹Code_t
+ 
+GëBTy≥C⁄√˘‹Lock
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+81 
+Eº‹Code_t
+ 
+SëBTy≥C⁄√˘‹Lock
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+82 
+Eº‹Code_t
+ 
+GëACLTemp
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+83 
+Eº‹Code_t
+ 
+GëACNTemp
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+84 
+Eº‹Code_t
+ 
+GëBTy≥C⁄√˘‹Temp1
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+85 
+Eº‹Code_t
+ 
+GëBTy≥C⁄√˘‹Temp2
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+86 
+Eº‹Code_t
+ 
+SèπCh¨ge
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+87 
+Eº‹Code_t
+ 
+St›Ch¨ge
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+);
+
+89 
+Ch¨gePoöt_t
+ *
+Ch¨gePoötCª©e
+(
+uöt8_t
+ 
+ucCh¨gePoötID
+ );
+
+	@D:\Documents\Projects\chargersdk\src\app\errorcode.c
 
 8 
 	~"ö˛udes.h
 "
 
-10 
-Li°_t
+9 
+	~"îr‹code.h
+"
+
+14 c⁄° 
+uöt8_t
+ *
+	g°rEº‹Code
+[100] =
+
+31 
+	$ThrowEº‹Code
+(
+Eº‹Code_t
+ 
+îrcode
+, 
+Eº‹Levñ_t
+ 
+îæevñ
+)
+
+33 
+Eº‹Package_t
+ 
+∑ckage
+;
+
+35 
+∑ckage
+.
+code
+ = 
+îrcode
+;
+
+36 
+∑ckage
+.
+Àvñ
+ = 
+îæevñ
+;
+
+38 
+	`xQueueSíd
+(
+xH™dÀQueueEº‹Code
+, (*)&
+∑ckage
+, 0);
+
+39 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\app\errorcode.h
+
+8 #i‚de‡ 
+__ERRORCODE_H
+
+
+9 
+	#__ERRORCODE_H
+
+
+	)
+
+11 
+	#THROW_ERROR
+(
+îrcode
+,
+îæevñ
+Ëif”ºcodê!
+ERR_NO
+Ë{
+	`ThrowEº‹Code
+”ºcode,îæevñ);}
+
+	)
+
+13 
+	e_Eº‹Code
+
+
+15 
+	mERR_NO
+,
+
+16 
+	mERR_SCRAM
+,
+
+17 
+	mERR_OTHER
+,
+
+18 
+	mERR_RFID_PE
+,
+
+19 
+	mERR_RFID_NE
+,
+
+20 
+	mERR_RFID_FE
+,
+
+21 
+	mERR_RFID_ORE
+,
+
+22 
+	mERR_RFID_DMA
+,
+
+23 
+	mERR_NETMODULE_PE
+,
+
+24 
+	mERR_NETMODULE_NE
+,
+
+25 
+	mERR_NETMODULE_FE
+,
+
+26 
+	mERR_NETMODULE_ORE
+,
+
+27 
+	mERR_NETMODULE_DMA
+,
+
+28 } 
+	tEº‹Code_t
+;
+
+30 
+	e_Eº‹Levñ
+
+
+32 
+	mERR_LEVEL_TIPS
+,
+
+33 
+	mERR_LEVEL_WARNING
+,
+
+34 
+	mERR_LEVEL_CRITICAL
+,
+
+35 
+	mERR_LEVEL_CLEAR
+
+
+36 } 
+	tEº‹Levñ_t
+;
+
+38 
+	s_Eº‹Package
+
+
+40 
+Eº‹Code_t
+ 
+	mcode
+;
+
+41 
+Eº‹Levñ_t
+ 
+	mÀvñ
+;
+
+42 }
+	tEº‹Package_t
+;
+
+44 c⁄° 
+uöt8_t
+ *
+°rEº‹Code
+[];
+
+46 
+ThrowEº‹Code
+(
+Eº‹Code_t
+ 
+îrcode
+, 
+Eº‹Levñ_t
+ 
+îæevñ
+);
+
+	@D:\Documents\Projects\chargersdk\src\app\globals.c
+
+8 
+	~"EVSE.h
+"
+
+9 
+	~"u£æib_li°.h
+"
+
+11 
+EVSE_t
+ *
+	gpEVSE
+;
+
+12 
+U£rLi°_t
  *
 	gpLi°Ch¨gePoöt
 ;
@@ -2007,199 +3717,207 @@ __GLOBALS_H
 
 	)
 
-11 
+11 
+	~"EVSE.h
+"
+
+12 
+	~"u£æib_li°.h
+"
+
+14 
 	#BIT_0
  ( 1 << 0 )
 
 	)
 
-12 
+15 
 	#BIT_1
  ( 1 << 1 )
 
 	)
 
-13 
+16 
 	#BIT_2
  ( 1 << 2 )
 
 	)
 
-14 
+17 
 	#BIT_3
  ( 1 << 3 )
 
 	)
 
-15 
+18 
 	#BIT_4
  ( 1 << 4 )
 
 	)
 
-16 
+19 
 	#BIT_5
  ( 1 << 5 )
 
 	)
 
-17 
+20 
 	#BIT_6
  ( 1 << 6 )
 
 	)
 
-18 
+21 
 	#BIT_7
  ( 1 << 7 )
 
 	)
 
-19 
+22 
 	#BIT_8
  ( 1 << 8 )
 
 	)
 
-20 
+23 
 	#BIT_9
  ( 1 << 9 )
 
 	)
 
-21 
+24 
 	#BIT_10
  ( 1 << 10 )
 
 	)
 
-22 
+25 
 	#BIT_11
  ( 1 << 11 )
 
 	)
 
-23 
+26 
 	#BIT_12
  ( 1 << 12 )
 
 	)
 
-24 
+27 
 	#BIT_13
  ( 1 << 13 )
 
 	)
 
-25 
+28 
 	#BIT_14
  ( 1 << 14 )
 
 	)
 
-26 
+29 
 	#BIT_15
  ( 1 << 15 )
 
 	)
 
-27 
+30 
 	#BIT_16
  ( 1 << 16 )
 
 	)
 
-28 
+31 
 	#BIT_17
  ( 1 << 17 )
 
 	)
 
-29 
+32 
 	#BIT_18
  ( 1 << 18 )
 
 	)
 
-30 
+33 
 	#BIT_19
  ( 1 << 19 )
 
 	)
 
-31 
+34 
 	#BIT_20
  ( 1 << 20 )
 
 	)
 
-32 
+35 
 	#BIT_21
  ( 1 << 21 )
 
 	)
 
-33 
+36 
 	#BIT_22
  ( 1 << 22 )
 
 	)
 
-34 
+37 
 	#BIT_23
  ( 1 << 23 )
 
 	)
 
-35 
+38 
 	#BIT_24
  ( 1 << 24 )
 
 	)
 
-36 
+39 
 	#BIT_25
  ( 1 << 25 )
 
 	)
 
-37 
+40 
 	#BIT_26
  ( 1 << 26 )
 
 	)
 
-38 
+41 
 	#BIT_27
  ( 1 << 27 )
 
 	)
 
-39 
+42 
 	#BIT_28
  ( 1 << 28 )
 
 	)
 
-40 
+43 
 	#BIT_29
  ( 1 << 29 )
 
 	)
 
-41 
+44 
 	#BIT_30
  ( 1 << 30 )
 
 	)
 
-42 
+45 
 	#BIT_31
  ( 1 << 31 )
 
 	)
 
-48 
+51 
 	#defEvítBôGETUID
  
 BIT_0
@@ -2207,7 +3925,7 @@ BIT_0
 
 	)
 
-50 
+53 
 	#defEvítBôAuthed
  
 BIT_0
@@ -2215,7 +3933,7 @@ BIT_0
 
 	)
 
-51 
+54 
 	#defEvítBôLocked
  
 BIT_1
@@ -2223,7 +3941,7 @@ BIT_1
 
 	)
 
-52 
+55 
 	#defEvítBôVﬁtOK
  
 BIT_2
@@ -2231,7 +3949,7 @@ BIT_2
 
 	)
 
-53 
+56 
 	#defEvítBôCuºOK
  
 BIT_3
@@ -2239,7 +3957,7 @@ BIT_3
 
 	)
 
-54 
+57 
 	#defEvítBôCPOK
  
 BIT_4
@@ -2247,7 +3965,7 @@ BIT_4
 
 	)
 
-55 
+58 
 	#defEvítBôCCOK
  
 BIT_5
@@ -2255,7 +3973,7 @@ BIT_5
 
 	)
 
-56 
+59 
 	#defEvítBôC⁄nTempOK
  
 BIT_6
@@ -2263,7 +3981,7 @@ BIT_6
 
 	)
 
-57 
+60 
 	#defEvítBôACTempOK
  
 BIT_7
@@ -2271,7 +3989,7 @@ BIT_7
 
 	)
 
-58 
+61 
 	#defEvítBô
  
 BIT_8
@@ -2279,8 +3997,14 @@ BIT_8
 
 	)
 
-60 
-Li°_t
+63 
+EVSE_t
+ *
+pEVSE
+;
+
+64 
+U£rLi°_t
  *
 pLi°Ch¨gePoöt
 ;
@@ -2317,64 +4041,112 @@ __INCLUDES_H__
 	~<°döt.h
 >
 
-21 
+14 
+	~<°rög.h
+>
+
+22 
 	~"°m32f4xx.h
 "
 
-28 
+29 
 	~"FªeRTOS.h
 "
 
-29 
+30 
 	~"èsk.h
 "
 
-30 
+31 
 	~"queue.h
 "
 
-31 
-	~"¸outöe.h
+32 
+	~"timîs.h
 "
 
-32 
+33 
 	~"evít_groups.h
 "
 
-42 
+43 
 	~"GUI.h
 "
 
-43 
+44 
 	~"WM.h
 "
 
-50 
+51 
 	~"ff.h
 "
 
-57 
+58 
 	~"globÆs.h
 "
 
-58 
+59 
 	~"sysöô.h
 "
 
-59 
-	~"èsk¸óã.h
-"
-
 60 
-	~"b•.h
+	~"EVSE.h
 "
 
 61 
-	~"töysh.h
+	~"èsk¸óã.h
 "
 
 62 
+	~"b•.h
+"
+
+63 
+	~"töysh.h
+"
+
+64 
 	~"x¥ötf.h
+"
+
+65 
+	~"îr‹code.h
+"
+
+	@D:\Documents\Projects\chargersdk\src\app\interface.h
+
+8 #i‚de‡
+__INTERFACE_H
+
+
+9 
+	#__INTERFACE_H
+
+
+	)
+
+11 
+	~"ch¨gïoöt.h
+"
+
+12 
+	~"EVSE.h
+"
+
+13 
+	~"öãrÁ˚_m⁄ô‹.h
+"
+
+14 
+	~"öãrÁ˚_ch¨ge.h
+"
+
+15 
+	~"öãrÁ˚_rfid.h
+"
+
+16 
+	~"öãrÁ˚_d©a.h
 "
 
 	@D:\Documents\Projects\chargersdk\src\app\interface_charge.c
@@ -2382,66 +4154,6 @@ __INCLUDES_H__
 8 
 	~"ö˛udes.h
 "
-
-16 
-	$GëCh¨gögVﬁège
-()
-
-19 
-tmpVﬁt
-;
-
-20 
-tmpVﬁt
- = 0;
-
-21  
-tmpVﬁt
-;
-
-22 
-	}
-}
-
-30 
-	$GëCh¨gögCuºít
-()
-
-33 
-tmpCuº
-;
-
-34 
-tmpCuº
- = 0;
-
-35  
-tmpCuº
-;
-
-36 
-	}
-}
-
-44 
-	$GëCh¨gögFªquí˚
-()
-
-47 
-tmpFªq
-;
-
-48 
-tmpFªq
- = 0;
-
-49  
-tmpFªq
-;
-
-50 
-	}
-}
 
 	@D:\Documents\Projects\chargersdk\src\app\interface_charge.h
 
@@ -2455,19 +4167,205 @@ __INTERFACE_CHARGE_H
 
 	)
 
-11 
-GëCh¨gögVﬁège
-();
+	@D:\Documents\Projects\chargersdk\src\app\interface_data.c
 
-12 
-GëCh¨gögCuºít
-();
+8 
+	~"ö˛udes.h
+"
 
-13 
-GëCh¨gögFªquí˚
-();
+9 
+	~"îr‹code.h
+"
+
+16 
+Eº‹Code_t
+ 
+	$GëTŸÆCh¨gePoöt
+(
+uöt8_t
+ *
+gëVÆ
+)
+
+18 
+Eº‹Code_t
+ 
+îrcode
+;
+
+19 
+îrcode
+ = 
+ERR_NO
+;
+
+21 *
+gëVÆ
+ = 2;
+
+23  
+îrcode
+;
+
+24 
+	}
+}
+
+31 
+Eº‹Code_t
+ 
+	$GëVﬁ©ageUµîLimôs
+(
+uöt8_t
+ 
+id
+, 
+uöt32_t
+ *
+gëVÆ
+)
+
+34 
+	}
+}
+
+42 
+Eº‹Code_t
+ 
+	$SëVﬁ©ageUµîLimôs
+(
+uöt8_t
+ 
+id
+, 
+uöt32_t
+ 
+£tVÆ
+)
+
+45 
+	}
+}
+
+47 
+Eº‹Code_t
+ 
+	$GëVﬁ©ageLowîLimôs
+(
+uöt8_t
+ 
+id
+)
+
+50 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\app\interface_data.h
+
+8 #i‚de‡ 
+__INTERFACE_DATA_H
+
+
+9 
+	#__INTERFACE_DATA_H
+
+
+	)
+
+11 
+Eº‹Code_t
+ 
+GëTŸÆCh¨gePoöt
+(
+uöt8_t
+ *
+gëVÆ
+);
+
+	@D:\Documents\Projects\chargersdk\src\app\interface_error.c
+
+8 
+	~"öãrÁ˚.h
+"
+
+10 
+	$H™dÀAºe°îEº‹
+()
+
+13 
+	}
+}
+
+14 
+	$H™dÀVﬁègeEº‹
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+17 
+	}
+}
+
+18 
+	$H™dÀCuºítEº‹
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+21 
+	}
+}
+
+22 
+	$H™dÀTempEº‹
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+25 
+	}
+}
+
+26 
+	$H™dÀRñayEº‹
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+)
+
+29 
+	}
+}
 
 	@D:\Documents\Projects\chargersdk\src\app\interface_monitor.c
+
+8 
+	~"ö˛udes.h
+"
+
+9 
+	~"öãrÁ˚.h
+"
+
+	@D:\Documents\Projects\chargersdk\src\app\interface_monitor.h
+
+8 #i‚de‡ 
+__INTERFACE_MONITOR_H
+
+
+9 
+	#__INTERFACE_MONITOR_H
+
+
+	)
 
 	@D:\Documents\Projects\chargersdk\src\app\interface_remote.c
 
@@ -2809,39 +4707,43 @@ Ch¨geSegmít_t
 	~"ö˛udes.h
 "
 
-13 
+14 
 	$maö
 ()
 
-19 
+20 
 	`DISABLE_INT
 ();
 
-21 
+22 
 	`b•_Inô
 ();
 
-22 
+23 
 	`sys_Inô
 ();
 
-24 
+25 
 	`SysTaskCª©e
 ();
 
-25 
+26 
 	`AµTaskCª©e
 ();
 
-26 
+27 
 	`AµObjCª©e
 ();
 
-27 
+29 
+	`EVSEöô
+();
+
+31 
 	`vTaskSèπScheduÀr
 ();
 
-36 
+40 
 	}
 }
 
@@ -3902,7 +5804,7 @@ __TASKOTA_H
 "
 
 10 
-	~"öãrÁ˚_ch¨ge.h
+	~"öãrÁ˚.h
 "
 
 12 
@@ -3911,39 +5813,69 @@ __TASKOTA_H
 pvP¨amëîs
 )
 
-14 
-dCh¨gögVﬁège
-, 
-dCh¨gögCuºít
+14 
+uöt32_t
+ 
+ulTŸÆPoöt
+ = 
+pLi°Ch¨gePoöt
+->
+TŸÆ
 ;
 
-17 
-dCh¨gögVﬁège
- = 
-	`GëCh¨gögVﬁège
-();
+15 
+Ch¨gePoöt_t
+ *
+pPoöt
+[
+ulTŸÆPoöt
+];
 
-18 
-dCh¨gögCuºít
- = 
-	`GëCh¨gögCuºít
-();
+16 
+i
+;
 
-20 #i‡
+17 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+19 
+pPoöt
+[
+i
+] = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[i]);
+
+23 if(
+pPoöt
+[0]->
+°©e
+.
+xCPSèã
+ == 1)
+
+29 #i‡
 DEBUG_TASK
 
 
-21 
+30 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSECh¨ge
 );
 
-23 
+32 
 	`vTaskDñay
 (10);
 
-25 
+34 
 	}
 }
 
@@ -4275,57 +6207,99 @@ EvítGroupH™dÀ_t
 	gxH™dÀEvítGroupRFID
 ;
 
-95 
+94 
+QueueH™dÀ_t
+ 
+	gxH™dÀQueueEº‹Code
+;
+
+96 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîTemp
+;
+
+97 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîLockSèã
+;
+
+98 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîGëCh¨gePoöt
+;
+
+99 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîCPCCSèã
+;
+
+100 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîCh¨gögD©a
+;
+
+101 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîEVSESèã
+;
+
+103 
 	$vTaskCLI
 (*
 pvP¨amëîs
 )
 
-97 
+105 
 	`˛i_maö
 ();
 
-98 
+106 
 	}
 }
 
-100 
+108 
 	$vTaskGUI
 (*
 pvP¨amëîs
 )
 
-102 
+110 
 	`MaöTask
 ();
 
-103 
+111 
 	}
 }
 
-105 
+113 
 	$vTaskTouch
 (*
 pvP¨amëîs
 )
 
-109 
+117 
 	`GUI_TOUCH_Exec
 ();
 
-110 
+118 
 	`vTaskDñay
 (10);
 
-112 
+120 
 	}
 }
 
-114 
+122 
 	$SysTaskCª©e
  ()
 
-116 
+124 
 	`xTaskCª©e
 –
 vTaskCLI
@@ -4341,7 +6315,7 @@ defPRIORITY_TaskCLI
 xH™dÀTaskCLI
  );
 
-117 
+125 
 	`xTaskCª©e
 –
 vTaskGUI
@@ -4357,7 +6331,7 @@ defPRIORITY_TaskGUI
 xH™dÀTaskGUI
  );
 
-118 
+126 
 	`xTaskCª©e
 –
 vTaskTouch
@@ -4373,7 +6347,7 @@ defPRIORITY_TaskTouch
 xH™dÀTaskTouch
  );
 
-119 
+127 
 	`xTaskCª©e
 –
 vTaskOTA
@@ -4389,27 +6363,15 @@ defPRIORITY_TaskOTA
 xH™dÀTaskOTA
  );
 
-120 
+128 
 	}
 }
 
-122 
+130 
 	$AµTaskCª©e
  ()
 
-124 
-Ch¨gePoöt_t
- *
-pch¨gïoöt_1
-;
-
-125 *
-pch¨gïoöt_1
- = 
-	`Ch¨gePoötCª©e
-(1);
-
-126 
+132 
 	`xTaskCª©e
 –
 vTaskEVSERemŸe
@@ -4425,7 +6387,7 @@ defPRIORITY_TaskEVSERemŸe
 xH™dÀTaskEVSERemŸe
  );
 
-127 
+133 
 	`xTaskCª©e
 –
 vTaskEVSERFID
@@ -4441,7 +6403,7 @@ defPRIORITY_TaskEVSERFID
 xH™dÀTaskEVSERFID
  );
 
-128 
+134 
 	`xTaskCª©e
 –
 vTaskEVSECh¨ge
@@ -4450,14 +6412,14 @@ TASKNAME_EVSECh¨ge
 , 
 defSTACK_TaskEVSECh¨ge
 , 
-pch¨gïoöt_1
+NULL
 , 
 defPRIORITY_TaskEVSECh¨ge
 , &
 xH™dÀTaskEVSECh¨ge
  );
 
-129 
+135 
 	`xTaskCª©e
 –
 vTaskEVSEM⁄ô‹
@@ -4473,7 +6435,7 @@ defPRIORITY_TaskEVSEM⁄ô‹
 xH™dÀTaskEVSEM⁄ô‹
  );
 
-130 
+136 
 	`xTaskCª©e
 –
 vTaskEVSEEº‹
@@ -4489,7 +6451,7 @@ defPRIORITY_TaskEVSEEº‹
 xH™dÀTaskEVSEEº‹
  );
 
-131 
+137 
 	`xTaskCª©e
 –
 vTaskEVSED©a
@@ -4505,65 +6467,179 @@ defPRIORITY_TaskEVSED©a
 xH™dÀTaskEVSED©a
  );
 
-132 
+138 
 	}
 }
 
-136 
+142 
+vEVSETimîCB
+(
+TimîH™dÀ_t
+ 
+xTimî
+);
+
+143 
+vCh¨gePoötTimîCB
+(
+TimîH™dÀ_t
+ 
+xTimî
+);
+
+144 
 	$AµObjCª©e
  ()
 
-138 
+146 
 xH™dÀEvítGroupRFID
  = 
 	`xEvítGroupCª©e
 ();
 
-139 
+147 
+xH™dÀQueueEº‹Code
+ = 
+	`xQueueCª©e
+(100, (
+Eº‹Package_t
+));
+
+149 
+xH™dÀTimîTemp
+ = 
+	`xTimîCª©e
+("TimîTemp", 5000, 
+pdTRUE
+, (*)
+defTIMERID_Temp
+, 
+vCh¨gePoötTimîCB
+);
+
+150 
+xH™dÀTimîLockSèã
+ = 
+	`xTimîCª©e
+("TimîLockSèã", 1000, 
+pdTRUE
+, (*)
+defTIMERID_LockSèã
+, 
+vCh¨gePoötTimîCB
+);
+
+151 
+xH™dÀTimîCPCCSèã
+ = 
+	`xTimîCª©e
+("TimîCPCCSèã", 50, 
+pdTRUE
+, (*)
+defTIMERID_CPCCSèã
+, 
+vCh¨gePoötTimîCB
+);
+
+152 
+xH™dÀTimîCh¨gögD©a
+ = 
+	`xTimîCª©e
+("TimîCh¨gögD©a", 50, 
+pdTRUE
+, (*)
+defTIMERID_Ch¨gögD©a
+, 
+vCh¨gePoötTimîCB
+);
+
+153 
+xH™dÀTimîEVSESèã
+ = 
+	`xTimîCª©e
+("TimîEVSESèã", 50, 
+pdTRUE
+, (*)
+defTIMERID_EVSESèã
+, 
+vEVSETimîCB
+);
+
+154 
+	`xTimîSèπ
+(
+xH™dÀTimîTemp
+, 0);
+
+155 
+	`xTimîSèπ
+(
+xH™dÀTimîLockSèã
+, 0);
+
+156 
+	`xTimîSèπ
+(
+xH™dÀTimîCPCCSèã
+, 0);
+
+157 
+	`xTimîSèπ
+(
+xH™dÀTimîCh¨gögD©a
+, 0);
+
+158 
+	`xTimîSèπ
+(
+xH™dÀTimîEVSESèã
+, 0);
+
+159 
 	}
 }
 
-140 vﬁ©ûê
+160 vﬁ©ûê
 uöt32_t
  
 	gulHighFªquícyTimîTicks
  = 0UL;
 
-141 
+161 
 	$vAµliˇti⁄TickHook
 ( )
 
-143 
+163 
 ulHighFªquícyTimîTicks
  = 
 	`xTaskGëTickCou¡
 ();
 
-144 
+164 
 	}
 }
 
-158 
+178 
 	$vAµliˇti⁄MÆlocFaûedHook
 ( )
 
-160 
+180 
 	`èskDISABLE_INTERRUPTS
 ();
 
-162 
+182 
 	}
 }
 
-176 
+196 
 	$vAµliˇti⁄IdÀHook
 ( )
 
-178 
+198 
 	}
 }
 
-186 
+206 
 	$vAµliˇti⁄SèckOvîÊowHook
 –
 TaskH™dÀ_t
@@ -4573,53 +6649,59 @@ pxTask
 pcTaskName
  )
 
-188 –Ë
+208 –Ë
 pcTaskName
 ;
 
-189 –Ë
+209 –Ë
 pxTask
 ;
 
-194 
+214 
+	`¥ötf_ß„
+("°ackovîÊow!!Åask = %s\n",
+pcTaskName
+);
+
+215 
 	`èskDISABLE_INTERRUPTS
 ();
 
-196 
+217 
 	}
 }
 
-198 
+219 
 	$vAs£πCÆÀd
-–c⁄° * 
+–c⁄° *
 pcFûe
 ,
 
-199 
+220 
 ulLöe
  )
 
-201 vﬁ©ûê
+222 vﬁ©ûê
 ul
  = 0;
 
-203 
+224 
 	`èskENTER_CRITICAL
 ();
 
-205  
+226  
 ul
  == 0 )
 
-207 
+228 
 	`p‹tNOP
 ();
 
-210 
+231 
 	`èskEXIT_CRITICAL
 ();
 
-211 
+232 
 	}
 }
 
@@ -4633,27 +6715,31 @@ ul
 	~"èskd©a.h
 "
 
+10 
+	~"îr‹code.h
+"
+
 11 
 	$vTaskEVSED©a
 (*
 pvP¨amëîs
 )
 
-15 #i‡
+16 #i‡
 DEBUG_TASK
 
 
-16 
+17 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSED©a
 );
 
-18 
+19 
 	`vTaskDñay
 (1000);
 
-20 
+21 
 	}
 }
 
@@ -4685,21 +6771,69 @@ __TASKDATA_H
 pvP¨amëîs
 )
 
-15 #i‡
+13 
+Ba£Ty≥_t
+ 
+xResu…
+;
+
+14 
+Eº‹Package_t
+ 
+îΩack
+;
+
+16 
+xResu…
+ = 
+pdFALSE
+;
+
+20 
+xResu…
+ = 
+	`xQueueRe˚ive
+(
+xH™dÀQueueEº‹Code
+, &
+îΩack
+, 50);
+
+21 if(
+xResu…
+ =
+pdTRUE
+ && 
+îΩack
+.
+Àvñ
+ =
+ERR_LEVEL_CRITICAL
+)
+
+23 
+	`¥ötf_ß„
+("%s(code: %d,Àvñ: %d)\n", 
+°rEº‹Code
+[
+îΩack
+.
+code
+],Éº∑ck.code,Éº∑ck.
+Àvñ
+);
+
+26 #i‡
 DEBUG_TASK
 
 
-16 
+27 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSEEº‹
 );
 
-18 
-	`vTaskDñay
-(1000);
-
-20 
+31 
 	}
 }
 
@@ -4725,27 +6859,107 @@ __TASKERROR_H
 	~"èskm⁄ô‹.h
 "
 
+10 
+	~"öãrÁ˚.h
+"
+
 11 
 	$vTaskEVSEM⁄ô‹
 (*
 pvP¨amëîs
 )
 
-16 #i‡
+13 
+uöt32_t
+ 
+ulTŸÆPoöt
+ = 
+pLi°Ch¨gePoöt
+->
+TŸÆ
+;
+
+14 
+Ch¨gePoöt_t
+ *
+pPoöt
+[
+ulTŸÆPoöt
+];
+
+15 
+i
+;
+
+16 
+uöt8_t
+ 
+ucCuºítId
+;
+
+17 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+19 
+pPoöt
+[
+i
+] = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[i]);
+
+21 
+ucCuºítId
+ = 0;
+
+27 if(
+pPoöt
+[
+ucCuºítId
+]->
+°©e
+.
+xBTy≥C⁄√˘‹LockSèã
+ =
+LOCK
+)
+
+32 
+ucCuºítId
+++;
+
+33 }
+ucCuºítId
+ < 
+ulTŸÆPoöt
+);
+
+34 
+ucCuºítId
+ = 0;
+
+37 #i‡
 DEBUG_TASK
 
 
-17 
+38 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSEM⁄ô‹
 );
 
-19 
+40 
 	`vTaskDñay
-(1000);
+(50);
 
-21 
+42 
 	}
 }
 
@@ -4941,19 +7155,19 @@ xH™dÀEvítGroupRFID
 defEvítBôGETUID
 );
 
-38 #ifde‡
+39 #ifde‡
 DEBUG_RFID
 
 
-39 
+40 
 	`x¥ötf
 ("No card.\n");
 
-44 
+45 
 	`vTaskDñay
 (500);
 
-46 
+47 
 	}
 }
 
@@ -4969,147 +7183,357 @@ __TASKCARD_H
 
 	)
 
-	@D:\Documents\Projects\chargersdk\src\app\testobserver.c
+	@D:\Documents\Projects\chargersdk\src\app\timercallback.c
 
-1 
-	~<°dio.h
->
-
-2 
-	~<°dlib.h
->
-
-3 
-	~"ob£rvî.h
+8 
+	~"ö˛udes.h
 "
 
-6 
-	$Ob£rvîModñ
-()
+9 
+	~"öãrÁ˚.h
+"
 
-8 
-Boss_t
- *
-huhaßn
+14 
+	$vCh¨gePoötTimîCB
+(
+TimîH™dÀ_t
+ 
+xTimî
+)
+
+16 
+uöt32_t
+ 
+ulTŸÆPoöt
  = 
-	`BossCª©e
-((Boss_t));
+pLi°Ch¨gePoöt
+->
+TŸÆ
+;
 
-9 
-StockOb£rvî_t
+17 
+Ch¨gePoöt_t
  *
-t⁄gshi1
- = 
-	`StockOb£rvîCª©e
-("–°√˜", 
-huhaßn
-, (StockObserver_t));
+pPoöt
+[
+ulTŸÆPoöt
+];
 
-10 
-NBAOb£rvî_t
- *
-t⁄gshi2
- = 
-	`NBAOb£rvîCª©e
-("Jack", 
-huhaßn
-, (NBAObserver_t));
+18 
+uöt32_t
+ 
+uxTimîID
+;
 
-11 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`Aâach
-(huhaßn, 
-t⁄gshi1
+19 
+i
+;
+
+20 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+22 
+pPoöt
+[
+i
+] = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[i]);
+
+24 
+uxTimîID
+ = (
+uöt32_t
+)
+	`pvTimîGëTimîID
+(
+xTimî
 );
 
-12 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`Aâach
-(huhaßn, 
-t⁄gshi2
+25 if(
+uxTimîID
+ =
+defTIMERID_Temp
+)
+
+27 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+29 
+	`THROW_ERROR
+(
+	`GëACLTemp
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
 );
 
-13 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`SëSubje˘Sèã
-(huhasan, "(Boss comming......)");
-
-14 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`NŸify
-(huhasan);
-
-15 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`Dëach
-(huhaßn, 
-t⁄gshi2
+30 
+	`THROW_ERROR
+(
+	`GëACNTemp
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
 );
 
-16 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`NŸify
-(huhasan);
+31 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
 
-18 ((
-Subje˘_t
- *)
-huhaßn
-)->
-	`Dñëe
-(huhasan);
+33 
+	`THROW_ERROR
+(
+	`GëBTy≥C⁄√˘‹Temp1
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
 
-19 ((
-Ob£rvî_t
- *)
-t⁄gshi1
-)->
-	`Dñëe
-(tongshi1);
+34 
+	`THROW_ERROR
+(
+	`GëBTy≥C⁄√˘‹Temp2
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
 
-20 ((
-Ob£rvî_t
- *)
-t⁄gshi2
-)->
-	`Dñëe
-(tongshi2);
+39 if(
+uxTimîID
+ =
+defTIMERID_LockSèã
+)
 
-21 
+41 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+43 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+45 
+	`THROW_ERROR
+(
+	`GëBTy≥C⁄√˘‹Lock
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+50 if(
+uxTimîID
+ =
+defTIMERID_CPCCSèã
+)
+
+52 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+54 
+	`THROW_ERROR
+(
+	`GëCCSèã
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+55 
+	`THROW_ERROR
+(
+	`GëCPSèã
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+59 if(
+uxTimîID
+ =
+defTIMERID_Ch¨gögD©a
+)
+
+61 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+63 
+	`THROW_ERROR
+(
+	`GëCh¨gögVﬁège
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+64 
+	`THROW_ERROR
+(
+	`GëCh¨gögCuºít
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+65 
+	`THROW_ERROR
+(
+	`GëCh¨gögFªquí˚
+(
+pPoöt
+[
+i
+]), 
+ERR_LEVEL_TIPS
+);
+
+69 
 	}
 }
 
-23 
-	$ã°ob£rvî
-()
+70 
+	$vEVSETimîCB
+(
+TimîH™dÀ_t
+ 
+xTimî
+)
 
-27 
-	`Ob£rvîModñ
-();
+72 
+uöt32_t
+ 
+uxTimîID
+;
 
-28 
-	`vTaskDñay
-(1000);
+74 
+uxTimîID
+ = (
+uöt32_t
+)
+	`pvTimîGëTimîID
+(
+xTimî
+);
 
-30 
+76 if(
+uxTimîID
+ =
+defTIMERID_EVSESèã
+)
+
+78 
+	`THROW_ERROR
+(
+	`GëS¸amSèã
+(
+pEVSE
+), 
+ERR_LEVEL_CRITICAL
+);
+
+79 
+	`THROW_ERROR
+(
+	`GëPESèã
+(
+pEVSE
+), 
+ERR_LEVEL_TIPS
+);
+
+80 
+	`THROW_ERROR
+(
+	`GëKnockSèã
+(
+pEVSE
+), 
+ERR_LEVEL_TIPS
+);
+
+81 
+	`THROW_ERROR
+(
+	`GëAºe°îSèã
+(
+pEVSE
+), 
+ERR_LEVEL_TIPS
+);
+
+82 
+	`THROW_ERROR
+(
+	`GëPowîOffSèã
+(
+pEVSE
+), 
+ERR_LEVEL_TIPS
+);
+
+85 
 	}
 }
 
@@ -7491,6 +9915,10 @@ FALSE
 	~<°döt.h
 >
 
+73 
+	~"îr‹code.h
+"
+
 76 
 	~"b•_u¨t.h
 "
@@ -8168,6 +10596,112 @@ __BSP_TIMER_H
 
 
 	)
+
+	@D:\Documents\Projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
+
+9 #i‚de‡
+BSP_USART_H_
+
+
+10 
+	#BSP_USART_H_
+
+
+	)
+
+12 
+	~"b•.h
+"
+
+13 
+	~"u£æib_queue.h
+"
+
+15 
+	#CLI_USARTx_BASE
+ 
+USART2
+
+
+	)
+
+16 
+	#CLI_USARTx_BAUDRATE
+ 115200
+
+	)
+
+17 
+	#CLI_USARTx_IRQH™dÀr
+ 
+	`USART2_IRQH™dÀr
+()
+
+	)
+
+18 
+	#CLI_QUEUE_SIZE
+ 10
+
+	)
+
+20 
+	#RFID_USARTx_BASE
+ 
+USART3
+
+
+	)
+
+21 
+	#RFID_USARTx_BAUDRATE
+ 115200
+
+	)
+
+22 
+	#RFID_USARTx_IRQH™dÀr
+ 
+	`USART3_IRQH™dÀr
+()
+
+	)
+
+23 
+	#RFID_QUEUE_SIZE
+ 100
+
+	)
+
+27 
+	#COUNTOF
+(
+__BUFFER__
+Ë((__BUFFER__Ë/ (*(__BUFFER__)))
+
+	)
+
+30 
+b•_U¨t_Inô
+();
+
+31 
+öt8_t
+ 
+ªadRecvQue
+(
+Queue
+ *
+q
+, 
+uöt8_t
+ *
+ch
+, 
+uöt16_t
+ 
+time_out
+);
 
 	@D:\Documents\Projects\chargersdk\src\drivers\bsp\src\bsp.c
 
@@ -16069,7 +18603,7 @@ xH™dÀMuãxQue
 
 36  (
 öt8_t
-) -1;
+) - 1;
 
 37 
 	}
@@ -16083,13 +18617,17 @@ xH™dÀMuãxQue
 pCliRecvQue
  = 
 	`QueueCª©e
-(10);
+(
+CLI_QUEUE_SIZE
+);
 
 42 
 pRfidRecvQue
  = 
 	`QueueCª©e
-(100);
+(
+RFID_QUEUE_SIZE
+);
 
 44 
 CLI_UARTx_H™dÀr
@@ -16622,12 +19160,30 @@ uxSavedI¡îru±Sètus
 
 
 139 
+UBa£Ty≥_t
+ 
+	guxSavedI¡îru±Sètus
+;
+
+140 
+	guxSavedI¡îru±Sètus
+ = 
+èskENTER_CRITICAL_FROM_ISR
+();
+
+142 
 HAL_UART_IRQH™dÀr
 (&
 RFID_UARTx_H™dÀr
 );
 
-149 
+144 
+èskEXIT_CRITICAL_FROM_ISR
+–
+uxSavedI¡îru±Sètus
+ );
+
+154 
 	$HAL_UART_TxC∂tCÆlback
 (
 UART_H™dÀTy≥Def
@@ -16635,11 +19191,11 @@ UART_H™dÀTy≥Def
 hu¨t
 )
 
-151 
+156 
 	}
 }
 
-162 
+167 
 	$HAL_UART_RxC∂tCÆlback
 (
 UART_H™dÀTy≥Def
@@ -16647,7 +19203,7 @@ UART_H™dÀTy≥Def
 hu¨t
 )
 
-164 
+169 
 Ba£Ty≥_t
  
 xHighîPri‹ôyTaskWokíCli
@@ -16655,7 +19211,7 @@ xHighîPri‹ôyTaskWokíCli
 pdFALSE
 ;
 
-165 
+170 
 Ba£Ty≥_t
  
 xHighîPri‹ôyTaskWokíRfid
@@ -16663,7 +19219,7 @@ xHighîPri‹ôyTaskWokíRfid
 pdFALSE
 ;
 
-166 if(
+171 if(
 hu¨t
 ->
 In°™˚
@@ -16671,7 +19227,7 @@ In°™˚
 CLI_USARTx_BASE
 )
 
-168 if(
+173 if(
 	`HAL_UART_Re˚ive_IT
 (&
 CLI_UARTx_H™dÀr
@@ -16683,7 +19239,7 @@ CLI_RX_Buf„r
 HAL_OK
 )
 
-170 
+175 
 	`xSem≠h‹eTakeFromISR
 (
 pCliRecvQue
@@ -16693,7 +19249,7 @@ xH™dÀMuãxQue
 xHighîPri‹ôyTaskWokíCli
 );
 
-171 
+176 
 pCliRecvQue
 ->
 	`EnEÀm
@@ -16701,7 +19257,7 @@ pCliRecvQue
 CLI_RX_Buf„r
 [0]);
 
-172 
+177 
 	`xSem≠h‹eGiveFromISR
 (
 pCliRecvQue
@@ -16711,13 +19267,13 @@ xH™dÀMuãxQue
 xHighîPri‹ôyTaskWokíCli
 );
 
-173 
+178 
 	`p‹tYIELD_FROM_ISR
 –
 xHighîPri‹ôyTaskWokíCli
  );
 
-176 if(
+181 if(
 hu¨t
 ->
 In°™˚
@@ -16725,7 +19281,7 @@ In°™˚
 RFID_USARTx_BASE
 )
 
-178 if(
+183 if(
 	`HAL_UART_Re˚ive_IT
 (&
 RFID_UARTx_H™dÀr
@@ -16737,7 +19293,7 @@ RFID_RX_Buf„r
 HAL_OK
 )
 
-180 
+185 
 	`xSem≠h‹eTakeFromISR
 (
 pRfidRecvQue
@@ -16747,7 +19303,7 @@ xH™dÀMuãxQue
 xHighîPri‹ôyTaskWokíRfid
 );
 
-181 
+186 
 pRfidRecvQue
 ->
 	`EnEÀm
@@ -16755,7 +19311,7 @@ pRfidRecvQue
 RFID_RX_Buf„r
 [0]);
 
-182 
+187 
 	`xSem≠h‹eGiveFromISR
 (
 pRfidRecvQue
@@ -16765,17 +19321,61 @@ xH™dÀMuãxQue
 xHighîPri‹ôyTaskWokíRfid
 );
 
-183 
+188 
 	`p‹tYIELD_FROM_ISR
 –
 xHighîPri‹ôyTaskWokíRfid
  );
 
-186 
+191 
 	}
 }
 
-196 
+201 
+	#THROW_USART_ERR
+(
+DEV
+, 
+ERR
+, 
+LEVEL
+Ëif(
+hu¨t
+->
+In°™˚
+ =DEV##
+_USARTx_BASE
+) \
+
+203 if(
+hu¨t
+->
+Eº‹Code
+ =
+HAL_USART_ERROR_
+##
+ERR
+) \
+
+205 
+	`ThrowEº‹Code
+(
+ERR_
+##
+DEV
+##
+_
+##
+ERR
+, 
+LEVEL
+); \
+
+207 }
+
+	)
+
+208 
 	$HAL_UART_Eº‹CÆlback
 (
 UART_H™dÀTy≥Def
@@ -16783,7 +19383,57 @@ UART_H™dÀTy≥Def
 hu¨t
 )
 
-199 
+210 
+	`THROW_USART_ERR
+(
+RFID
+, 
+PE
+, 
+ERR_LEVEL_TIPS
+);
+
+211 
+	`THROW_USART_ERR
+(
+RFID
+, 
+NE
+, 
+ERR_LEVEL_TIPS
+);
+
+212 
+	`THROW_USART_ERR
+(
+RFID
+, 
+FE
+, 
+ERR_LEVEL_TIPS
+);
+
+213 
+	`THROW_USART_ERR
+(
+RFID
+, 
+ORE
+, 
+ERR_LEVEL_TIPS
+);
+
+214 
+	`THROW_USART_ERR
+(
+RFID
+, 
+DMA
+, 
+ERR_LEVEL_TIPS
+);
+
+215 
 	}
 }
 
@@ -17711,63 +20361,67 @@ uöt8_t
 ch
 )
 
-11 
-	`HAL_UART_Tønsmô
-(&
-CLI_UARTx_H™dÀr
-, (
-uöt8_t
- *)&
-ch
-, 1, 0xFFFF);
+15 (
+CLI_USARTx_BASE
+->
+SR
+&0X40)==0);
 
-15 
+16 
+CLI_USARTx_BASE
+->
+DR
+ = 
+ch
+;
+
+17 
 	}
 }
 
-17 
+19 
 	$ªèrgë_öô
 ()
 
-19 
+21 
 x¥ötfMuãx
  = 
 	`xSem≠h‹eCª©eMuãx
 ();
 
-21 if(
+23 if(
 x¥ötfMuãx
  =
 NULL
 )
 
-25 
+27 
 	`xdev_out
 (
 myputc
 );
 
-26 
+28 
 	}
 }
 
-28 
+30 
 	$¥ötf_ß„
 (*
 f‹m©
 , ...)
 
-30 
+32 
 buf_°r
 [200 + 1];
 
-31 
+33 
 va_li°
  
 v_¨gs
 ;
 
-34 
+36 
 	`va_°¨t
 (
 v_¨gs
@@ -17775,33 +20429,33 @@ v_¨gs
 f‹m©
 );
 
-35 ()
+37 ()
 	`v¢¥ötf
 ((*)&
 buf_°r
 [0],
 
-36 (
+38 (
 size_t
  ) (
 buf_°r
 ),
 
-37 (c⁄° *Ë
+39 (c⁄° *Ë
 f‹m©
 ,
 
-38 
+40 
 v_¨gs
 );
 
-39 
+41 
 	`va_íd
 (
 v_¨gs
 );
 
-41 
+43 
 	`xSem≠h‹eTake
 (
 x¥ötfMuãx
@@ -17809,7 +20463,7 @@ x¥ötfMuãx
 p‹tMAX_DELAY
 );
 
-43 
+44 
 	`x¥ötf
 ("%s", 
 buf_°r
@@ -20338,6 +22992,22 @@ uöt64_t
 9 
 	~"Àd.h
 "
+
+12 
+	$LedOn
+()
+
+15 
+	}
+}
+
+17 
+	$LedOff
+()
+
+20 
+	}
+}
 
 	@D:\Documents\Projects\chargersdk\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 
@@ -136350,7 +139020,7 @@ fû
 );
 
 565 
-	`x¥ötf
+	`¥ötf_ß„
 ("%s", 
 buf„r
 );
@@ -138707,7 +141377,7 @@ __USER_LIB_LIST_H
 	mpLi°PoötAºay
 ;
 
-7 
+7 
 	mTŸÆ
 ;
 
@@ -138744,7 +141414,7 @@ _U£rLi°_t
 12 
 U£rLi°_t
  *
-Cª©eU£rLi°
+U£rLi°Cª©e
 ();
 
 	@D:\Documents\Projects\chargersdk\src\middlewares\userlib\inc\xprintf.h
@@ -139218,7 +141888,7 @@ SavePoötAºay
 71 
 U£rLi°_t
  *
-	$Cª©eU£rLi°
+	$U£rLi°Cª©e
 ()
 
 73 
@@ -139640,7 +142310,7 @@ ch
 );
 
 83 
-	`x¥ötf
+	`¥ötf_ß„
 ("%d\n", 
 ch
 );
@@ -165439,21 +168109,27 @@ xRëu∫
 1
 .
 0
-131
-9066
+138
+9462
 D:\Documents\Projects\chargersdk\build\EmBitz\startup\startup_stm32f429x.S
 D:\Documents\Projects\chargersdk\build\EmBitz\version.h
-D:\Documents\Projects\chargersdk\src\app\EVSEinit.c
-D:\Documents\Projects\chargersdk\src\app\EVSEinit.h
+D:\Documents\Projects\chargersdk\src\app\EVSE.c
+D:\Documents\Projects\chargersdk\src\app\EVSE.h
 D:\Documents\Projects\chargersdk\src\app\chargepoint.c
 D:\Documents\Projects\chargersdk\src\app\chargepoint.h
-D:\Documents\Projects\chargersdk\src\app\checksubject.c
+D:\Documents\Projects\chargersdk\src\app\errorcode.c
+D:\Documents\Projects\chargersdk\src\app\errorcode.h
 D:\Documents\Projects\chargersdk\src\app\globals.c
 D:\Documents\Projects\chargersdk\src\app\globals.h
 D:\Documents\Projects\chargersdk\src\app\includes.h
+D:\Documents\Projects\chargersdk\src\app\interface.h
 D:\Documents\Projects\chargersdk\src\app\interface_charge.c
 D:\Documents\Projects\chargersdk\src\app\interface_charge.h
+D:\Documents\Projects\chargersdk\src\app\interface_data.c
+D:\Documents\Projects\chargersdk\src\app\interface_data.h
+D:\Documents\Projects\chargersdk\src\app\interface_error.c
 D:\Documents\Projects\chargersdk\src\app\interface_monitor.c
+D:\Documents\Projects\chargersdk\src\app\interface_monitor.h
 D:\Documents\Projects\chargersdk\src\app\interface_remote.c
 D:\Documents\Projects\chargersdk\src\app\interface_rfid.c
 D:\Documents\Projects\chargersdk\src\app\interface_rfid.h
@@ -165476,7 +168152,7 @@ D:\Documents\Projects\chargersdk\src\app\taskremote.c
 D:\Documents\Projects\chargersdk\src\app\taskremote.h
 D:\Documents\Projects\chargersdk\src\app\taskrfid.c
 D:\Documents\Projects\chargersdk\src\app\taskrfid.h
-D:\Documents\Projects\chargersdk\src\app\testobserver.c
+D:\Documents\Projects\chargersdk\src\app\timercallback.c
 D:\Documents\Projects\chargersdk\src\cli\cli_app.c
 D:\Documents\Projects\chargersdk\src\cli\cli_fatfs.c
 D:\Documents\Projects\chargersdk\src\cli\cli_main.c
@@ -165486,6 +168162,7 @@ D:\Documents\Projects\chargersdk\src\cli\cli_xml.c
 D:\Documents\Projects\chargersdk\src\drivers\bsp\inc\bsp.h
 D:\Documents\Projects\chargersdk\src\drivers\bsp\inc\bsp_gpio.h
 D:\Documents\Projects\chargersdk\src\drivers\bsp\inc\bsp_timer.h
+D:\Documents\Projects\chargersdk\src\drivers\bsp\inc\bsp_uart.h
 D:\Documents\Projects\chargersdk\src\drivers\bsp\src\bsp.c
 D:\Documents\Projects\chargersdk\src\drivers\bsp\src\bsp_dwt.c
 D:\Documents\Projects\chargersdk\src\drivers\bsp\src\bsp_gpio.c

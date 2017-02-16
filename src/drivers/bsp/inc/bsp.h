@@ -70,7 +70,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-
+#include "errorcode.h"
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
 #include "bsp_uart.h"

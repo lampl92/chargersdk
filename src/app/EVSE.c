@@ -22,7 +22,8 @@ ErrorCode_t GetScramState(EVSE_t *pEVSE)
     uint32_t tmpScramState;
     ErrorCode_t errcode;
 
-    errcode = ERR_SCRAM;
+    //errcode = ERR_SCRAM;
+    errcode = ERR_NO;
     tmpScramState = 0;
 
     /** @todo (rgw#1#): 实现代码 */
@@ -130,7 +131,7 @@ void EVSEinit(void)
     static ChargePoint_t *pchargepoint[2];  //在堆中定义
     uint8_t ucTotal;
 
-    THROW_ERROR(GetTotalChargePoint(&ucTotal));
+    THROW_ERROR(GetTotalChargePoint(&ucTotal), ERR_LEVEL_WARNING);
     pEVSE = EVSECreate();
     pListChargePoint = UserListCreate();
     int i;
