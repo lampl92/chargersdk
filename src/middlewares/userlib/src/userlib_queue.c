@@ -66,7 +66,7 @@ Queue *QueueCreate(int len)
     pQueue->Delete = DeleteQue;
     return pQueue;
 }
-
+#if 0
 void testqueue()
 {
     Queue *q;
@@ -84,3 +84,4 @@ void testqueue()
     }
     q->Delete(q);
 }
+#endif

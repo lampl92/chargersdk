@@ -26,12 +26,12 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetACLTemp(pPoint[i]), ERR_LEVEL_WARNING);
-            THROW_ERROR(GetACNTemp(pPoint[i]), ERR_LEVEL_WARNING);
+            THROW_ERROR(pPoint[i]->state.GetACLTemp(pPoint[i]), ERR_LEVEL_WARNING);
+            THROW_ERROR(pPoint[i]->state.GetACNTemp(pPoint[i]), ERR_LEVEL_WARNING);
             if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
             {
-                THROW_ERROR(GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_WARNING);
-                THROW_ERROR(GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_WARNING);
+                THROW_ERROR(pPoint[i]->state.GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_WARNING);
+                THROW_ERROR(pPoint[i]->state.GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_WARNING);
             }
 //            printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
         }
@@ -42,7 +42,7 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
         {
             if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
             {
-                THROW_ERROR(GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_WARNING);
+                THROW_ERROR(pPoint[i]->state.GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_WARNING);
 //              printf_safe("num = %d, ulIntervalOfGetLock\n", i);
             }
         }
@@ -51,8 +51,8 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetCCState(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(GetCPState(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(pPoint[i]->state.GetCCState(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(pPoint[i]->state.GetCPState(pPoint[i]), ERR_LEVEL_CRITICAL);
 //            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
         }
     }
@@ -60,9 +60,9 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
-            THROW_ERROR(GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(pPoint[i]->state.GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(pPoint[i]->state.GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(pPoint[i]->state.GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
         }
     }
 }
@@ -74,11 +74,11 @@ void vEVSETimerCB(TimerHandle_t xTimer)
 
     if(uxTimerID == defTIMERID_EVSEState)
     {
-        THROW_ERROR(GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
-        THROW_ERROR(GetPEState(pEVSE), ERR_LEVEL_TIPS);
-        THROW_ERROR(GetKnockState(pEVSE), ERR_LEVEL_TIPS);
-        THROW_ERROR(GetArresterState(pEVSE), ERR_LEVEL_TIPS);
-        THROW_ERROR(GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
+        THROW_ERROR(pEVSE->state.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(pEVSE->state.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(pEVSE->state.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
+        THROW_ERROR(pEVSE->state.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
+        THROW_ERROR(pEVSE->state.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
         //printf_safe("EVSE State,TimerTicks = %d\n",ulHighFrequencyTimerTicks);
     }
 }

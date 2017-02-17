@@ -494,7 +494,7 @@ MT626COM_t *MT626COMCreate(void)
 
     return pMT626;
 }
-
+#if 0
 void testmt626(void)
 {
     MT626COM_t *pmt626com;
@@ -574,3 +574,4 @@ void testmt626(void)
     }
     pmt626com->deleteCOM(pmt626com);
 }
+#endif
