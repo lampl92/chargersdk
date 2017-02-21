@@ -24,7 +24,7 @@ void vTaskEVSEMonitor(void *pvParameters)
         /** �ж�ǹ״̬ */
         do
         {
-            if(pPoint[ucCurrentId]->state.xBTypeConnectorLockState == LOCK)
+            if(pPoint[ucCurrentId]->status.xBTypeConnectorLockState == LOCK)
             {
 
             }
