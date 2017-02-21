@@ -23,7 +23,7 @@ static ErrorCode_t GetConnectorType(void *pvPoint)
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpType = 0;
+    tmpType = defConnectorTypeB;
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */
