@@ -28,7 +28,8 @@ typedef struct _EVSEInfo
     pEVSE_ft GetType;
     pEVSE_ft GetLngLat;
 }EVSEInfo_t;
-typedef struct _EVSEState
+
+typedef struct _EVSEStatus
 {
     uint32_t ulScramState;
     uint32_t ulKnockState;
@@ -41,12 +42,12 @@ typedef struct _EVSEState
     pEVSE_ft GetPEState;
     pEVSE_ft GetPowerOffState;
     pEVSE_ft GetArresterState;
-}EVSEState_t;
+}EVSEStatus_t;
 
 typedef struct _EVSE
 {
     EVSEInfo_t info;
-    EVSEState_t state;
+    EVSEStatus_t status;
 }EVSE_t;
 
 EVSE_t *EVSECreate(void);

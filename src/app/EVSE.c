@@ -6,20 +6,23 @@
 * @date 2017-01-22
 */
 #include "includes.h"
-#include "globals.h"
+#include "evse_globals.h"
 #include "userlib_list.h"
 #include "interface.h"
 
 
-    /*---------------------------------------------------------------------------/
-    /                               从文件获取充电桩信息
-    /---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------/
+/                               从文件获取充电桩信息
+/---------------------------------------------------------------------------*/
 
 
 /** @brief 设备唯一序列号,和长度
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *                     ERR_NO
+ *                     ERR_FILE_RW
+ *                     ERR_FILE_NO
  *
  */
 static ErrorCode_t GetSN(void *pvEVSE)
@@ -34,7 +37,11 @@ static ErrorCode_t GetSN(void *pvEVSE)
     memset(tmpSN, 0, 24);
     tmpLength = 0;
 
-/** @todo (rgw#1#): 从文件获取SN 并获取SN长度*/
+    /** @todo (rgw#1#): 从文件获取SN 并获取SN长度*/
+
+    //...
+
+    /*********************/
     pEVSE->info.ucSNLength = tmpLength;
     memmove(pEVSE->info.ucSN, tmpSN, 24);
 
@@ -45,6 +52,9 @@ static ErrorCode_t GetSN(void *pvEVSE)
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *                     ERR_NO
+ *                     ERR_FILE_RW
+ *                     ERR_FILE_NO
  *
  */
 static ErrorCode_t GetID(void *pvEVSE)
@@ -59,7 +69,12 @@ static ErrorCode_t GetID(void *pvEVSE)
     memset(tmpID, 0, 24);
     tmpLength = 0;
 
-/** @todo (rgw#1#): 从文件获取ID 并获取ID长度*/
+    /** @todo (rgw#1#): 从文件获取ID 并获取ID长度*/
+
+    //...
+
+    /*********************/
+
     pEVSE->info.ucIDLenght = tmpLength;
     memmove(pEVSE->info.ucID, tmpID, 24);
 
@@ -75,6 +90,9 @@ static ErrorCode_t GetID(void *pvEVSE)
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *                     ERR_NO
+ *                     ERR_FILE_RW
+ *                     ERR_FILE_NO
  *
  */
 static ErrorCode_t GetType(void *pvEVSE)
@@ -87,7 +105,11 @@ static ErrorCode_t GetType(void *pvEVSE)
     tmpType = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pEVSE->info.ucType = tmpType;
 
@@ -98,11 +120,14 @@ static ErrorCode_t GetType(void *pvEVSE)
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *                     ERR_NO
+ *                     ERR_FILE_RW
+ *                     ERR_FILE_NO
  *
  */
 static ErrorCode_t GetLngLat(void *pvEVSE)
 {
-    double tmpLng,tmpLat;
+    double tmpLng, tmpLat;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
 
@@ -111,7 +136,11 @@ static ErrorCode_t GetLngLat(void *pvEVSE)
     tmpLat = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pEVSE->info.dLng = tmpLng;
     pEVSE->info.dLat = tmpLng;
@@ -120,9 +149,9 @@ static ErrorCode_t GetLngLat(void *pvEVSE)
 }
 
 
-    /*---------------------------------------------------------------------------/
-    /                               从驱动获取充电桩状态
-    /---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------/
+/                               从驱动获取充电桩状态
+/---------------------------------------------------------------------------*/
 
 
 /** @brief 获得急停状态
@@ -130,6 +159,8 @@ static ErrorCode_t GetLngLat(void *pvEVSE)
  *          1 有急停
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *             ERR_NO
+ *             ERR_SCRAM_FAULT
  *
  */
 static ErrorCode_t GetScramState(void *pvEVSE)
@@ -139,13 +170,17 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     EVSE_t *pEVSE;
 
     pEVSE = (EVSE_t *)pvEVSE;
-    //errcode = ERR_SCRAM;
+    //errcode = ERR_SCRAM_FAULT;
     errcode = ERR_NO;
     tmpScramState = 0;
 
     /** @todo (rgw#1#): 实现代码 */
 
-    pEVSE->state.ulScramState = tmpScramState;
+    //...
+
+    /*********************/
+
+    pEVSE->status.ulScramState = tmpScramState;
 
     return errcode;
 }
@@ -155,6 +190,8 @@ static ErrorCode_t GetScramState(void *pvEVSE)
  *          1 有撞击
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *             ERR_NO
+ *             ERR_GSENSOR_FAULT
  *
  */
 static ErrorCode_t GetKnockState(void *pvEVSE)
@@ -167,9 +204,13 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     errcode = ERR_NO;
     tmpKnockState = 0;
 
-    /** @todo (rgw#1#): 实现代码 */
+    /** @todo (rgw#1#): 获取重力加速度传感器 */
 
-    pEVSE->state.ulKnockState = tmpKnockState;
+    //...
+
+    /*********************/
+
+    pEVSE->status.ulKnockState = tmpKnockState;
 
     return  errcode;
 }
@@ -179,6 +220,8 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
  *          1 异常
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *             ERR_NO
+ *             ERR_PE_FAULT
  *
  */
 static ErrorCode_t GetPEState(void *pvEVSE)
@@ -193,7 +236,11 @@ static ErrorCode_t GetPEState(void *pvEVSE)
 
     /** @todo (rgw#1#): 实现代码 */
 
-    pEVSE->state.ulPEState = tmpPEState;
+    //...
+
+    /*********************/
+
+    pEVSE->status.ulPEState = tmpPEState;
 
     return errcode;
 }
@@ -203,6 +250,8 @@ static ErrorCode_t GetPEState(void *pvEVSE)
  *          1 掉电
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *             ERR_NO
+ *             ERR_POWEROFF_DECT_FAULT
  *
  */
 static ErrorCode_t GetPowerOffState(void *pvEVSE)
@@ -217,7 +266,11 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
 
     /** @todo (rgw#1#): 实现代码 */
 
-    pEVSE->state.ulPowerOffState = tmpOffState;
+    //...
+
+    /*********************/
+
+    pEVSE->status.ulPowerOffState = tmpOffState;
 
     return errcode;
 }
@@ -228,6 +281,8 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
+ *             ERR_NO
+ *             ERR_ARRESTER_FAULT
  *
  */
 static ErrorCode_t GetArresterState(void *pvEVSE)
@@ -239,7 +294,7 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     tmpArresterState = 0;
-    pEVSE->state.ulArresterState = tmpArresterState;
+    pEVSE->status.ulArresterState = tmpArresterState;
     return errcode;
 }
 
@@ -259,17 +314,17 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.GetType = GetType;
     pEVSE->info.GetLngLat = GetLngLat;
 
-    pEVSE->state.ulArresterState = 0;
-    pEVSE->state.ulKnockState = 0;
-    pEVSE->state.ulPEState = 0;
-    pEVSE->state.ulPowerOffState = 0;
-    pEVSE->state.ulScramState = 0;
+    pEVSE->status.ulArresterState = 0;
+    pEVSE->status.ulKnockState = 0;
+    pEVSE->status.ulPEState = 0;
+    pEVSE->status.ulPowerOffState = 0;
+    pEVSE->status.ulScramState = 0;
 
-    pEVSE->state.GetArresterState = GetArresterState;
-    pEVSE->state.GetKnockState = GetKnockState;
-    pEVSE->state.GetPEState = GetPEState;
-    pEVSE->state.GetPowerOffState = GetPowerOffState;
-    pEVSE->state.GetScramState = GetScramState;
+    pEVSE->status.GetArresterState = GetArresterState;
+    pEVSE->status.GetKnockState = GetKnockState;
+    pEVSE->status.GetPEState = GetPEState;
+    pEVSE->status.GetPowerOffState = GetPowerOffState;
+    pEVSE->status.GetScramState = GetScramState;
 
     return pEVSE;
 }
@@ -286,11 +341,13 @@ static void ChargePointInit(void)
     for(i = 0; i < ucTotal; i++)
     {
         pchargepoint[i] = ChargePointCreate(i);
+
         THROW_ERROR(pchargepoint[i]->info.GetConnectorType(pchargepoint[i]), ERR_LEVEL_WARNING);
         THROW_ERROR(pchargepoint[i]->info.GetVolatageUpperLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
         THROW_ERROR(pchargepoint[i]->info.GetVolatageLowerLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
         THROW_ERROR(pchargepoint[i]->info.GetRatedCurrent(pchargepoint[i]), ERR_LEVEL_WARNING);
         THROW_ERROR(pchargepoint[i]->info.GetRatedPower(pchargepoint[i]), ERR_LEVEL_WARNING);
+
         pListChargePoint->Add(pListChargePoint, pchargepoint[i]);
     }
 }

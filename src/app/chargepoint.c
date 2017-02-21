@@ -26,7 +26,11 @@ static ErrorCode_t GetConnectorType(void *pvPoint)
     tmpType = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pPoint->info.ucConnectorType = tmpType;
 
@@ -44,7 +48,11 @@ static ErrorCode_t GetVolatageUpperLimits(void *pvPoint)
     tmpVoltUpLim = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pPoint->info.ulVolatageUpperLimits = tmpVoltUpLim;
 
@@ -62,7 +70,11 @@ static ErrorCode_t GetVolatageLowerLimits(void *pvPoint)
     tmpVoltLowLim = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pPoint->info.ulVolatageLowerLimits = tmpVoltLowLim;
 
@@ -80,7 +92,11 @@ static ErrorCode_t GetRatedCurrent(void *pvPoint)
     tmpCurr = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pPoint->info.ulRatedCurrent = tmpCurr;
 
@@ -98,7 +114,11 @@ static ErrorCode_t GetRatedPower(void *pvPoint)
     tmpPow = 0;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 从文件获取 */
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
 
     pPoint->info.dRatedPower = tmpPow;
 
@@ -116,6 +136,8 @@ static ErrorCode_t GetRatedPower(void *pvPoint)
  *
  * @param pPoint ChargePoint_t*
  * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_METER_FAULT
  *
  */
 static ErrorCode_t GetChargingVoltage(void *pvPoint)
@@ -132,7 +154,11 @@ static ErrorCode_t GetChargingVoltage(void *pvPoint)
 
     /** @todo (rgw#1#): 获取电能表电压 */
 
-    pPoint->state.dChargingVoltage = tmpVolt;
+    //...
+
+    /*********************/
+
+    pPoint->status.dChargingVoltage = tmpVolt;
 
     return errcode;
 }
@@ -141,6 +167,8 @@ static ErrorCode_t GetChargingVoltage(void *pvPoint)
  *
  * @param pPoint ChargePoint_t*
  * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_METER_FAULT
  *
  */
 static ErrorCode_t GetChargingCurrent(void *pvPoint)
@@ -157,7 +185,11 @@ static ErrorCode_t GetChargingCurrent(void *pvPoint)
 
     /** @todo (rgw#1#): 获取电能表电流 */
 
-    pPoint->state.dChargingCurrent = tmpCurr;
+    //...
+
+    /*********************/
+
+    pPoint->status.dChargingCurrent = tmpCurr;
 
     return errcode;
 }
@@ -166,6 +198,8 @@ static ErrorCode_t GetChargingCurrent(void *pvPoint)
  *
  * @param pPoint ChargePoint_t*
  * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_METER_FAULT
  *
  */
 static ErrorCode_t GetChargingFrequence(void *pvPoint)
@@ -182,11 +216,23 @@ static ErrorCode_t GetChargingFrequence(void *pvPoint)
 
     /** @todo (rgw#1#): 从电表获取 */
 
-    pPoint->state.dChargingFrequence = tmpFreq;
+    //...
+
+    /*********************/
+
+    pPoint->status.dChargingFrequence = tmpFreq;
 
     return errcode;
 }
 
+/** @brief 获取CP状态
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_CP_FAULT
+ *
+ */
 static ErrorCode_t GetCPState(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -201,10 +247,22 @@ static ErrorCode_t GetCPState(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.xCPState = tmpCPState;
+    //...
+
+    /*********************/
+
+    pPoint->status.xCPState = tmpCPState;
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_CC_FAULT
+ *
+ */
 static ErrorCode_t GetCCState(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -219,23 +277,28 @@ static ErrorCode_t GetCCState(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.xCCState = tmpCCState;
+    //...
+
+    /*********************/
+
+    pPoint->status.xCCState = tmpCCState;
 
     return errcode;
 }
 
 /** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
  *
- * @param pPoint ChargePoint_t*
- * @return uint32_t 0 无插枪
- *                  1 有插枪
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_PLUG_FAULT
  *
  */
 static ErrorCode_t GetPlugState(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    uint32_t tmpPlugState;
+    uint32_t tmpPlugState; //0 无插枪  1 有插枪
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
@@ -245,16 +308,28 @@ static ErrorCode_t GetPlugState(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.xPlugState = tmpPlugState;
+    //...
+
+    /*********************/
+
+    pPoint->status.xPlugState = tmpPlugState;
 
     return errcode;
 }
 
-static ErrorCode_t GetBTypeConnectorLock(void *pvPoint) //lock unlock
+/** @brief B型连接枪锁状态
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_B_LOCK_FAULT
+ *
+ */
+static ErrorCode_t GetBTypeConnectorLock(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    ChargePointStateType tmpLockState;
+    ChargePointStateType tmpLockState; //lock unlock
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
@@ -264,11 +339,24 @@ static ErrorCode_t GetBTypeConnectorLock(void *pvPoint) //lock unlock
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.xBTypeConnectorLockState = tmpLockState;
+    //...
+
+    /*********************/
+
+
+    pPoint->status.xBTypeConnectorLockState = tmpLockState;
 
     return errcode;
 }
 
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_CANT_LOCK
+ *
+ */
 static ErrorCode_t SetBTypeConnectorLock(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -281,15 +369,28 @@ static ErrorCode_t SetBTypeConnectorLock(void *pvPoint)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    if(pPoint->state.xBTypeConnectorLockState == UNLOCK)
+    if(pPoint->status.xBTypeConnectorLockState == UNLOCK)
     {
         /** @todo (rgw#1#): 执行锁止动作 */
+
+        //...
+
+        /*********************/
+
     }
     THROW_ERROR(GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
 
     return errcode;
 }
 
+/** @brief 获取L进线温度
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_ACLTEMP_DECT_FAULT
+ *
+ */
 static ErrorCode_t GetACLTemp(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -304,10 +405,22 @@ static ErrorCode_t GetACLTemp(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.dACLTemp = tmpACLTemp;
+    //...
+
+    /*********************/
+
+    pPoint->status.dACLTemp = tmpACLTemp;
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_ACNTEMP_DECT_FAULT
+ *
+ */
 static ErrorCode_t GetACNTemp(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -322,10 +435,22 @@ static ErrorCode_t GetACNTemp(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.dACNTemp = tmpACNTemp;
+    //...
+
+    /*********************/
+
+    pPoint->status.dACNTemp = tmpACNTemp;
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_BTEMP1_DECT_FAULT
+ *
+ */
 static ErrorCode_t GetBTypeConnectorTemp1(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -340,10 +465,21 @@ static ErrorCode_t GetBTypeConnectorTemp1(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.dBTypeConnectorTemp1 = tmpTemp;
+    //...
+
+    /*********************/
+
+    pPoint->status.dBTypeConnectorTemp1 = tmpTemp;
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_BTEMP2_DECT_FAULT
+ */
 static ErrorCode_t GetBTypeConnectorTemp2(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -358,10 +494,22 @@ static ErrorCode_t GetBTypeConnectorTemp2(void *pvPoint)
 
     /** @todo (rgw#1#):  */
 
-    pPoint->state.dBTypeConnectorTemp2 = tmpTemp;
+    //...
+
+    /*********************/
+
+    pPoint->status.dBTypeConnectorTemp2 = tmpTemp;
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_STARTCHARGE
+ *
+ */
 static ErrorCode_t StartCharge(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -374,8 +522,19 @@ static ErrorCode_t StartCharge(void *pvPoint)
     errcode = ERR_NO;
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
 
+    //...
+
+    /*********************/
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_STOPCHARGE
+ *
+ */
 static ErrorCode_t StopCharge(void *pvPoint)
 {
     ChargePoint_t *pPoint;
@@ -388,6 +547,10 @@ static ErrorCode_t StopCharge(void *pvPoint)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
+
+    //...
+
+    /*********************/
     return errcode;
 }
 
@@ -412,35 +575,36 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->info.GetRatedCurrent = GetRatedCurrent;
     pChargePoint->info.GetRatedPower = GetRatedPower;
 
-    pChargePoint->state.dACLTemp = 0;
-    pChargePoint->state.dACNTemp = 0;
-    pChargePoint->state.dBTypeConnectorTemp1 = 0;
-    pChargePoint->state.dBTypeConnectorTemp2 = 0;
-    pChargePoint->state.dChargingCurrent = 0;
-    pChargePoint->state.dChargingFrequence = 0;
-    pChargePoint->state.dChargingVoltage = 0;
-    pChargePoint->state.xBTypeConnectorLockState = 0;
-    pChargePoint->state.xCCState = 0;
-    pChargePoint->state.xCPState = 0;
-    pChargePoint->state.xPlugState = 0;
-    pChargePoint->state.xHandleEventGroupStartCharge = xEventGroupCreate();
-    pChargePoint->state.xHandleEventGroupStopCharge = xEventGroupCreate();
+    pChargePoint->status.dACLTemp = 0;
+    pChargePoint->status.dACNTemp = 0;
+    pChargePoint->status.dBTypeConnectorTemp1 = 0;
+    pChargePoint->status.dBTypeConnectorTemp2 = 0;
+    pChargePoint->status.dChargingCurrent = 0;
+    pChargePoint->status.dChargingFrequence = 0;
+    pChargePoint->status.dChargingVoltage = 0;
+    pChargePoint->status.xBTypeConnectorLockState = 0;
+    pChargePoint->status.xCCState = 0;
+    pChargePoint->status.xCPState = 0;
+    pChargePoint->status.xPlugState = 0;
+    pChargePoint->status.xHandleEventGroupStartCharge = xEventGroupCreate();
+    pChargePoint->status.xHandleEventGroupStopCharge = xEventGroupCreate();
 
-    pChargePoint->state.GetChargingVoltage = GetChargingVoltage;
-    pChargePoint->state.GetChargingCurrent = GetChargingCurrent;
-    pChargePoint->state.GetChargingFrequence = GetChargingFrequence;
+    pChargePoint->status.GetChargingVoltage = GetChargingVoltage;
+    pChargePoint->status.GetChargingCurrent = GetChargingCurrent;
+    pChargePoint->status.GetChargingFrequence = GetChargingFrequence;
 
-    pChargePoint->state.GetCPState = GetCPState;
-    pChargePoint->state.GetCCState = GetCCState;
-    pChargePoint->state.GetPlugState = GetPlugState;
-    pChargePoint->state.GetBTypeConnectorLock = GetBTypeConnectorLock;
-    pChargePoint->state.SetBTypeConnectorLock = SetBTypeConnectorLock;
-    pChargePoint->state.GetACLTemp = GetACLTemp;
-    pChargePoint->state.GetACNTemp = GetACNTemp;
-    pChargePoint->state.GetBTypeConnectorTemp1 = GetBTypeConnectorTemp1;
-    pChargePoint->state.GetBTypeConnectorTemp2 = GetBTypeConnectorTemp2;
-    pChargePoint->state.StartCharge = StartCharge;
-    pChargePoint->state.StopCharge = StopCharge;
+    pChargePoint->status.GetCPState = GetCPState;
+    pChargePoint->status.GetCCState = GetCCState;
+    pChargePoint->status.GetPlugState = GetPlugState;
+    pChargePoint->status.GetBTypeConnectorLock = GetBTypeConnectorLock;
+    pChargePoint->status.SetBTypeConnectorLock = SetBTypeConnectorLock;
+    pChargePoint->status.GetACLTemp = GetACLTemp;
+    pChargePoint->status.GetACNTemp = GetACNTemp;
+    pChargePoint->status.GetBTypeConnectorTemp1 = GetBTypeConnectorTemp1;
+    pChargePoint->status.GetBTypeConnectorTemp2 = GetBTypeConnectorTemp2;
+    pChargePoint->status.StartCharge = StartCharge;
+    pChargePoint->status.StopCharge = StopCharge;
 
+    pChargePoint->state = POINT_IDLE;
     return pChargePoint;
 }

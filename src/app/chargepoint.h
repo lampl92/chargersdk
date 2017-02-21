@@ -54,7 +54,7 @@ typedef struct _ChargePointInfo
     pChargePoint_ft GetRatedPower;
 }ChargePointInfo_t;
 
-typedef struct _ChargePointState
+typedef struct _ChargePointStatus
 {
     ChargePointStateType xCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     ChargePointStateType xCCState;     // ¼ì²âµã4 CC state --PE
@@ -86,11 +86,21 @@ typedef struct _ChargePointState
     pChargePoint_ft StartCharge;
     pChargePoint_ft StopCharge;
 
+}ChargePointStatus_t;
+
+typedef enum _ChargePointState
+{
+    POINT_IDLE,
+    POINT_PRECONTRACT,
+    POINT_CHARGING,
+    POINT_ERROR
 }ChargePointState_t;
+
 
 typedef struct _ChargePoint
 {
     ChargePointInfo_t info;
+    ChargePointStatus_t status;
     ChargePointState_t state;
 } ChargePoint_t;
 
