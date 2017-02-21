@@ -1797,7 +1797,7 @@
 	"RFIDReader_mt626.h"
 	"errorcode.h"
 
-1487657691 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
+1487666252 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
 	"includes.h"
 	"taskcreate.h"
 	"taskrfid.h"

@@ -28,7 +28,7 @@ void vTaskEVSERFID(void *pvParameters)
     while(1)
     {
         uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGETUID, pdTRUE, pdTRUE, portMAX_DELAY);
-        if((uxBits & defEventBitGETUID) == defEventBitGETUID)
+        if((uxBits & defEventBitGETUID) == defEventBitGETUID)//1. ¼ì²âµ½¿¨
         {
 #ifdef DEBUG_RFID
             printf_safe("im rfid task,find card, :)\n");
@@ -39,15 +39,18 @@ void vTaskEVSERFID(void *pvParameters)
             }
             printf_safe("\n");
 #endif
-            for(i = 0; i < ucTotal; i++)
+            for(i = 0; i < ucTotal; i++)  //2.ÅÐ¶Ï¿¨ÊÇ·ñË¢¹ý
             {
                 if(memcmp(pPoint[i]->status.ucHeldCardUID, pRFIDDev->status.ucUID, defUIDLength) == 0)
                 {
                     //´Ë¿¨ÒÑË¢
+                    printf_safe("ÒÑË¢\n");
                 }
                 else
                 {
                     //Î´Ë¢¹ý¿¨
+                    printf_safe("point %dÎ´Ë¢\n",i);
+                    memmove(pPoint[i]->status.ucHeldCardUID, pRFIDDev->status.ucUID, defUIDLength);
 
                 }
             }

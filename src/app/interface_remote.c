@@ -1,6 +1,6 @@
 /**
 * @file interface_remote.c
-* @brief
+* @brief 通讯层，云平台调用，
 * @author rgw
 * @version v1.0
 * @date 2017-02-06
@@ -34,4 +34,9 @@ ErrorCode_t CloseRemote()
 {
 
 }
+
+ErrorCode_t RecvRemote()
+{}
+ErrorCode_t SendRemote()
+{}
 
