@@ -8,36 +8,49 @@
 #include "includes.h"
 #include "taskcreate.h"
 #include "taskrfid.h"
-#include "interface_rfid.h"
+#include "interface.h"
 
 void vTaskEVSERFID(void *pvParameters)
 {
+
     uint8_t cardUID[4];
-    int state, i;
-    void *pRFIDDev;
+    int i;
+    RFIDDev_t *pRFIDDev;
+
     EventBits_t uxBits;
-    pRFIDDev = CreateRFIDDev();
+    ErrorCode_t errcode;
+
+//    uint32_t ulTotalPoint = pListChargePoint->Total;
+//    ChargePoint_t *pPoint[ulTotalPoint];
+//    uint32_t uxTimerID;
+//    int i;
+//    for(i = 0; i < ulTotalPoint; i++)
+//    {
+//        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
+//    }
+
+    pRFIDDev = RFIDDevCreate();
+    errcode = ERR_NO;
 
     while(1)
     {
-        state = GetUID(pRFIDDev, cardUID);
-        if(state == MT_STATE_Y)
+        THROW_ERROR(errcode = pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
+        if(pRFIDDev->status.ucFoundCard == 1)
         {
             #ifdef DEBUG_RFID
-            xprintf("UID = ");
+            printf_safe("UID = ");
             for(i = 0; i < 4; i++)
             {
-                xprintf("%x", cardUID[i]);
+                printf_safe("%x", pRFIDDev->status.ucUID[i]);
             }
-            xprintf("\n");
+            printf_safe("\n");
             #endif
             uxBits = xEventGroupSetBits(xHandleEventGroupRFID, defEventBitGETUID);
-
         }
         else
         {
             #ifdef DEBUG_RFID
-            xprintf("No card.\n");
+            printf_safe("No card.\n");
             #endif
         }
 

@@ -5,38 +5,46 @@
 * @version v1.0
 * @date 2017-02-06
 */
-#include <string.h>
-#include "interface_rfid.h"
+#include "includes.h"
+#include "interface.h"
 
-void Init_RFIDDev(void *pRFIDDev)
+static ErrorCode_t MT626GetUID(void *pvmt626)
 {
-    pRFIDDev = (void *)MT626COMCreate();
-}
-void *CreateRFIDDev(void)
-{
-    MT626COM_t *pmt626com;
-    pmt626com = MT626COMCreate();
-
-    return (void *)pmt626com;
-}
-int GetUID(void *pRFIDDev, uint8_t *pUID)
-{
-    MT626COM_t *pmt626com;
-    uint8_t *precvdData;
-    uint32_t uiRecvdOptLen;
+    RFIDDev_t *pmt626;
+    MT626CMD_t *pmt626cmd;
+    uint32_t ulRecvdOptLen;
     int state;
+    ErrorCode_t errcode;
 
-    pmt626com = (MT626COM_t *)pRFIDDev;
-    precvdData = pUID;
-    uiRecvdOptLen = 0;
+    pmt626 = (RFIDDev_t *)pvmt626;
+    pmt626cmd = ((MT626COM_t *)(pmt626->com))->pMT626CMD[MT626_READ_UID_CMD];
     state = MT_STATE_N;
+    errcode = ERR_NO;
 
-    state = TransToMT626(pmt626com, MT626_READ_UID_CMD, NULL, 0);
+    state = TransToMT626(pmt626->com, MT626_READ_UID_CMD, NULL, 0);
     if(state == MT_STATE_Y)
     {
-        uiRecvdOptLen = pmt626com->pMT626CMD[MT626_READ_UID_CMD]->uiRecvdOptLen;
-        memmove(precvdData, pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData, uiRecvdOptLen);
-        memset(pmt626com->pMT626CMD[MT626_READ_UID_CMD]->ucRecvdOptData,0,uiRecvdOptLen);
+        ulRecvdOptLen = pmt626cmd->uiRecvdOptLen;
+        memmove(pmt626->status.ucUID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
+        memset(pmt626cmd->ucRecvdOptData, 0, ulRecvdOptLen);
+        pmt626->status.ucFoundCard = 1;
     }
-    return state;
+    else if(state == MT_COM_FAIL)
+    {
+        errcode = ERR_RFID_FAULT;
+    }
+    return errcode;
+}
+
+RFIDDev_t *RFIDDevCreate(void)
+{
+    RFIDDev_t *pRFID;
+
+    pRFID = (RFIDDev_t *)malloc(sizeof(RFIDDev_t));
+    pRFID->status.ucFoundCard = 0;
+    memset(pRFID->status.ucUID, 0 , 4);
+    pRFID->com = (void *)MT626COMCreate();
+    pRFID->status.GetUID = MT626GetUID;
+
+    return pRFID;
 }
