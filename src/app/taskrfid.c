@@ -12,49 +12,35 @@
 
 void vTaskEVSERFID(void *pvParameters)
 {
-
-    uint8_t cardUID[4];
     int i;
-    RFIDDev_t *pRFIDDev;
-
     EventBits_t uxBits;
     ErrorCode_t errcode;
+    ChargePoint_t *pPoint[2];
 
-//    uint32_t ulTotalPoint = pListChargePoint->Total;
-//    ChargePoint_t *pPoint[ulTotalPoint];
-//    uint32_t uxTimerID;
-//    int i;
-//    for(i = 0; i < ulTotalPoint; i++)
-//    {
-//        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
-//    }
-
-    pRFIDDev = RFIDDevCreate();
+    for(i = 0; i < pEVSE->info.ucTotalPoint; i++)
+    {
+        pPoint[i] =  ChargePointGetHandle(i);
+    }
+    uxBits = 0;
     errcode = ERR_NO;
-
     while(1)
     {
-        THROW_ERROR(errcode = pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
-        if(pRFIDDev->status.ucFoundCard == 1)
+        uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGETUID, pdTRUE, pdTRUE, portMAX_DELAY);
+        if((uxBits & defEventBitGETUID) != 0)
         {
-            #ifdef DEBUG_RFID
+#ifdef DEBUG_RFID
+            printf_safe("im rfid task,find card, :)\n");
             printf_safe("UID = ");
             for(i = 0; i < 4; i++)
             {
                 printf_safe("%x", pRFIDDev->status.ucUID[i]);
             }
             printf_safe("\n");
-            #endif
-            uxBits = xEventGroupSetBits(xHandleEventGroupRFID, defEventBitGETUID);
-        }
-        else
-        {
-            #ifdef DEBUG_RFID
-            printf_safe("No card.\n");
-            #endif
+#endif
         }
 
+
         //xprintf("%s\n", TASKNAME_EVSECard);
-        vTaskDelay(500);
+        //vTaskDelay(500);
     }
 }

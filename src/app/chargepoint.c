@@ -6,6 +6,7 @@
 * @date 2017-01-18
 */
 #include <stdlib.h>
+#include "evse_globals.h"
 #include "chargepoint.h"
 
 
@@ -553,7 +554,14 @@ static ErrorCode_t StopCharge(void *pvPoint)
     /*********************/
     return errcode;
 }
+ChargePoint_t *ChargePointGetHandle(uint8_t ucChargePointID)
+{
+    ChargePoint_t *pPoint;
 
+    pPoint =  (ChargePoint_t *)(pListChargePoint->pListPointArray[ucChargePointID]);
+
+    return pPoint;
+}
 ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
 {
     ChargePoint_t *pChargePoint;
@@ -575,6 +583,7 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->info.GetRatedCurrent = GetRatedCurrent;
     pChargePoint->info.GetRatedPower = GetRatedPower;
 
+    memset(pChargePoint->status.ucCardUID, 0, 4);
     pChargePoint->status.dACLTemp = 0;
     pChargePoint->status.dACNTemp = 0;
     pChargePoint->status.dBTypeConnectorTemp1 = 0;

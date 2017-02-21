@@ -5,9 +5,10 @@
 * @version v1.0
 * @date 2017-01-22
 */
-#include "EVSE.h"
+#include "interface.h"
 #include "userlib_list.h"
 
 
 EVSE_t *pEVSE;
 UserList_t *pListChargePoint;
+RFIDDev_t *pRFIDDev;

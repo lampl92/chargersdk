@@ -56,6 +56,7 @@ typedef struct _ChargePointInfo
 
 typedef struct _ChargePointStatus
 {
+    uint8_t ucCardUID[4];
     ChargePointStateType xCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     ChargePointStateType xCCState;     // ¼ì²âµã4 CC state --PE
     ChargePointStateType xPlugState;
@@ -104,6 +105,6 @@ typedef struct _ChargePoint
     ChargePointState_t state;
 } ChargePoint_t;
 
-
 ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID );
+ChargePoint_t *ChargePointGetHandle(uint8_t ucChargePointID);
 #endif

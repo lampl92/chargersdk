@@ -18,6 +18,7 @@
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
 					<Add option="-g3" />
+					<Add symbol="DEBUG_RFID" />
 				</Compiler>
 				<Cpp>
 					<Add option="-Wall" />
@@ -112,10 +113,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\EVSE.h" />
-		<Unit filename="..\..\src\app\globals.c">
+		<Unit filename="..\..\src\app\evse_globals.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\globals.h" />
+		<Unit filename="..\..\src\app\evse_globals.h" />
 		<Unit filename="..\..\src\app\includes.h" />
 		<Unit filename="..\..\src\app\interface.h" />
 		<Unit filename="..\..\src\app\interface_charge.c">

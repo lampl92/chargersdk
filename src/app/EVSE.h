@@ -20,12 +20,14 @@ typedef struct _EVSEInfo
     uint8_t ucID[24]; //平台分配ID
     uint8_t ucIDLenght;
     uint8_t ucType;   //1：直流设备 2：交流设备 3：交直流一体设备 4：无线设备 5：其他
+    uint8_t ucTotalPoint; //一共有多少枪
     double dLng;      //经度，保留后六位
     double dLat;      //纬度，保留后六位
 
     pEVSE_ft GetSN;
     pEVSE_ft GetID;
     pEVSE_ft GetType;
+    pEVSE_ft GetTotalPoint;
     pEVSE_ft GetLngLat;
 }EVSEInfo_t;
 

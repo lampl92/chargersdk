@@ -9,7 +9,4 @@
 #define  __INTERFACE_DATA_H
 
 
-ErrorCode_t GetTotalChargePoint(uint8_t *getVal);
-
-
 #endif

@@ -15,6 +15,7 @@
 #define defTIMERID_CPCCState        2
 #define defTIMERID_ChargingData     3
 #define defTIMERID_EVSEState        4
+#define defTIMERID_RFID             5
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
@@ -29,6 +30,8 @@ extern const char *TASKNAME_EVSEData;
 
 extern EventGroupHandle_t xHandleEventGroupRFID;
 extern QueueHandle_t xHandleQueueErrorPackage;
+
+extern SemaphoreHandle_t xHandleMutexRFID;
 
 void SysTaskCreate (void);
 void AppTaskCreate (void);

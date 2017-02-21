@@ -22,7 +22,7 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
         pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
     }
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
-    if(uxTimerID == defTIMERID_Temp)
+    if(uxTimerID == defTIMERID_Temp)    //5000 ms
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
@@ -36,7 +36,7 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
 //            printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
         }
     }
-    if(uxTimerID == defTIMERID_LockState)
+    if(uxTimerID == defTIMERID_LockState)   //1000ms
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
@@ -47,7 +47,7 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
             }
         }
     }
-    if(uxTimerID == defTIMERID_CPCCState)
+    if(uxTimerID == defTIMERID_CPCCState)   //50ms
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
@@ -56,7 +56,7 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
 //            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
         }
     }
-    if(uxTimerID == defTIMERID_ChargingData)
+    if(uxTimerID == defTIMERID_ChargingData) //50ms
     {
         for(i = 0; i < ulTotalPoint; i++)
         {
@@ -72,7 +72,7 @@ void vEVSETimerCB(TimerHandle_t xTimer)
 
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
 
-    if(uxTimerID == defTIMERID_EVSEState)
+    if(uxTimerID == defTIMERID_EVSEState) //50ms
     {
         THROW_ERROR(pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
         THROW_ERROR(pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
@@ -83,3 +83,16 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     }
 }
 
+void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
+{
+    int i;
+    THROW_ERROR(pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
+//    if(pRFIDDev->status.ucFoundCard == 1)
+//    {
+//
+//    }
+//    else
+//    {
+//
+//    }
+}

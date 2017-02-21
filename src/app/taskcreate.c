@@ -90,15 +90,17 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务通信
 /---------------------------------------------------------------------------*/
-EventGroupHandle_t xHandleEventGroupRFID;
-QueueHandle_t xHandleQueueErrorPackage;
+
+QueueHandle_t xHandleQueueErrorPackage = NULL;
 //软件定时器
-TimerHandle_t xHandleTimerTemp; //4个温度
-TimerHandle_t xHandleTimerLockState;
-TimerHandle_t xHandleTimerGetChargePoint;
-TimerHandle_t xHandleTimerCPCCState;
-TimerHandle_t xHandleTimerChargingData;
-TimerHandle_t xHandleTimerEVSEState;
+TimerHandle_t xHandleTimerTemp = NULL; //4个温度
+TimerHandle_t xHandleTimerLockState = NULL;
+TimerHandle_t xHandleTimerGetChargePoint = NULL;
+TimerHandle_t xHandleTimerCPCCState = NULL;
+TimerHandle_t xHandleTimerChargingData = NULL;
+TimerHandle_t xHandleTimerEVSEState = NULL;
+TimerHandle_t xHandleTimerRFID = NULL;
+//Mutex
 
 void vTaskCLI(void *pvParameters)
 {
@@ -141,9 +143,10 @@ void AppTaskCreate (void)
  */
 extern void vEVSETimerCB(TimerHandle_t xTimer);
 extern void vChargePointTimerCB(TimerHandle_t xTimer);
+extern void vRFIDTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
-    xHandleEventGroupRFID = xEventGroupCreate();
+
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
@@ -151,11 +154,16 @@ void AppObjCreate (void)
     xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vChargePointTimerCB);
     xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
+    xHandleTimerRFID = xTimerCreate("TimerRFID", 500, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerCPCCState, 0);
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
+    xTimerStart(xHandleTimerRFID, 0);
+
+
+
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )

@@ -115,6 +115,32 @@ static ErrorCode_t GetType(void *pvEVSE)
 
     return errcode;
 }
+/** @brief
+ *
+ * @param void
+ * @return uint8_t 枪的数量，2代表两把枪
+ *
+ */
+static ErrorCode_t GetTotalPoint(void *pvEVSE)
+{
+    uint8_t tmpTotal;
+    ErrorCode_t errcode;
+    EVSE_t *pEVSE;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    tmpTotal = 2;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
+
+    pEVSE->info.ucTotalPoint = tmpTotal;
+
+    return errcode;
+}
 
 /** @brief 经纬度，保留后六位
  *
@@ -306,12 +332,14 @@ EVSE_t *EVSECreate(void)
     memset(pEVSE->info.ucSN, 0, 24);
     memset(pEVSE->info.ucID, 0, 24);
     pEVSE->info.ucType = 2;
+    pEVSE->info.ucTotalPoint = 2;
     pEVSE->info.dLng = 116.275833;
     pEVSE->info.dLat = 39.831944;
 
     pEVSE->info.GetSN = GetSN;
     pEVSE->info.GetID = GetID;
     pEVSE->info.GetType = GetType;
+    pEVSE->info.GetTotalPoint = GetTotalPoint;
     pEVSE->info.GetLngLat = GetLngLat;
 
     pEVSE->status.ulArresterState = 0;
@@ -332,13 +360,10 @@ EVSE_t *EVSECreate(void)
 static void ChargePointInit(void)
 {
     static ChargePoint_t *pchargepoint[2];  //在堆中定义
-    uint8_t ucTotal;
-
-    THROW_ERROR(GetTotalChargePoint(&ucTotal), ERR_LEVEL_WARNING);
 
     pListChargePoint = UserListCreate();
     int i;
-    for(i = 0; i < ucTotal; i++)
+    for(i = 0; i < pEVSE->info.ucTotalPoint; i++)
     {
         pchargepoint[i] = ChargePointCreate(i);
 
@@ -358,7 +383,10 @@ void EVSEinit(void)
     THROW_ERROR(pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
 
     ChargePointInit();
+
+    pRFIDDev = RFIDDevCreate();
 }
