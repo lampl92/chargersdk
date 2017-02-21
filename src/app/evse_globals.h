@@ -1,5 +1,5 @@
 /**
-* @file globals.h
+* @file evse_globals.h
 * @brief
 * @author rgw
 * @version v1.0
@@ -59,6 +59,9 @@
 #define defEventBitConnTempOK   BIT_6
 #define defEventBitACTempOK     BIT_7
 #define defEventBit             BIT_8
+
+
+
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListChargePoint;
