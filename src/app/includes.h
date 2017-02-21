@@ -55,7 +55,7 @@
 *                                        APP / BSP
 *********************************************************************************************************
 */
-#include "globals.h"
+#include "evse_globals.h"
 #include "sysinit.h"
 #include "EVSE.h"
 #include "taskcreate.h"
