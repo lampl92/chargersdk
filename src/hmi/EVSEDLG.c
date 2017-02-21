@@ -51,7 +51,7 @@
 *       _aDialogCreate
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "EVSE", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x0, 0 },
+  { FRAMEWIN_CreateIndirect, "EVSE", ID_FRAMEWIN_0, 0, 0, 1024, 600, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "У׼", ID_BUTTON_0, 605, 87, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END

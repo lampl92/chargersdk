@@ -90,7 +90,7 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务通信
 /---------------------------------------------------------------------------*/
-
+EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //软件定时器
 TimerHandle_t xHandleTimerTemp = NULL; //4个温度
@@ -110,6 +110,7 @@ void vTaskCLI(void *pvParameters)
 void vTaskGUI(void *pvParameters)
 {
     MainTask();
+//    Touch_Calibrate();
 }
 
 void vTaskTouch(void *pvParameters)
@@ -162,6 +163,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
 
+    xHandleEventTimerCBNotify = xEventGroupCreate();
 
 
 }

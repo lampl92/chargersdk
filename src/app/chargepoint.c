@@ -583,7 +583,7 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->info.GetRatedCurrent = GetRatedCurrent;
     pChargePoint->info.GetRatedPower = GetRatedPower;
 
-    memset(pChargePoint->status.ucCardUID, 0, 4);
+    memset(pChargePoint->status.ucHeldCardUID, 0, defUIDLength);
     pChargePoint->status.dACLTemp = 0;
     pChargePoint->status.dACNTemp = 0;
     pChargePoint->status.dBTypeConnectorTemp1 = 0;

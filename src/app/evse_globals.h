@@ -60,6 +60,13 @@
 #define defEventBitConnTempOK   BIT_6
 #define defEventBitACTempOK     BIT_7
 #define defEventBit             BIT_8
+//∂®“ÂxHandleEventTimerCBNotify
+#define defEventBitTimerCBTemp              BIT_0
+#define defEventBitTimerCBLockState         BIT_1
+#define defEventBitTimerCBCPCCState         BIT_2
+#define defEventBitTimerCBChargingData      BIT_3
+#define defEventBitTimerCBEVSEState         BIT_4
+#define defEventBitTimerCBRFID              BIT_5
 
 
 

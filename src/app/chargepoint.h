@@ -12,6 +12,7 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "errorcode.h"
+#include "interface_rfid.h"
 
 #define defConnectorTypeB   0x0B
 #define defConnectorTypeC   0x0C
@@ -56,7 +57,7 @@ typedef struct _ChargePointInfo
 
 typedef struct _ChargePointStatus
 {
-    uint8_t ucCardUID[4];
+    uint8_t ucHeldCardUID[defUIDLength];
     ChargePointStateType xCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     ChargePointStateType xCCState;     // ¼ì²âµã4 CC state --PE
     ChargePointStateType xPlugState;

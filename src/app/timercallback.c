@@ -13,57 +13,25 @@
 
 void vChargePointTimerCB(TimerHandle_t xTimer)
 {
-    uint32_t ulTotalPoint = pListChargePoint->Total;
-    ChargePoint_t *pPoint[ulTotalPoint];
     uint32_t uxTimerID;
-    int i;
-    for(i = 0; i < ulTotalPoint; i++)
-    {
-        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
-    }
+
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
+
     if(uxTimerID == defTIMERID_Temp)    //5000 ms
     {
-        for(i = 0; i < ulTotalPoint; i++)
-        {
-            THROW_ERROR(pPoint[i]->status.GetACLTemp(pPoint[i]), ERR_LEVEL_WARNING);
-            THROW_ERROR(pPoint[i]->status.GetACNTemp(pPoint[i]), ERR_LEVEL_WARNING);
-            if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
-            {
-                THROW_ERROR(pPoint[i]->status.GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_WARNING);
-                THROW_ERROR(pPoint[i]->status.GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_WARNING);
-            }
-//            printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
-        }
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp);
     }
     if(uxTimerID == defTIMERID_LockState)   //1000ms
     {
-        for(i = 0; i < ulTotalPoint; i++)
-        {
-            if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
-            {
-                THROW_ERROR(pPoint[i]->status.GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_WARNING);
-//              printf_safe("num = %d, ulIntervalOfGetLock\n", i);
-            }
-        }
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState);
     }
     if(uxTimerID == defTIMERID_CPCCState)   //50ms
     {
-        for(i = 0; i < ulTotalPoint; i++)
-        {
-            THROW_ERROR(pPoint[i]->status.GetCCState(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(pPoint[i]->status.GetCPState(pPoint[i]), ERR_LEVEL_CRITICAL);
-//            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
-        }
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBCPCCState);
     }
     if(uxTimerID == defTIMERID_ChargingData) //50ms
     {
-        for(i = 0; i < ulTotalPoint; i++)
-        {
-            THROW_ERROR(pPoint[i]->status.GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(pPoint[i]->status.GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(pPoint[i]->status.GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
-        }
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData);
     }
 }
 void vEVSETimerCB(TimerHandle_t xTimer)
@@ -74,25 +42,11 @@ void vEVSETimerCB(TimerHandle_t xTimer)
 
     if(uxTimerID == defTIMERID_EVSEState) //50ms
     {
-        THROW_ERROR(pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
-        THROW_ERROR(pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
-        THROW_ERROR(pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
-        THROW_ERROR(pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
-        THROW_ERROR(pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
-        //printf_safe("EVSE State,TimerTicks = %d\n",ulHighFrequencyTimerTicks);
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState);
     }
 }
 
 void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
 {
-    int i;
-    THROW_ERROR(pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
-//    if(pRFIDDev->status.ucFoundCard == 1)
-//    {
-//
-//    }
-//    else
-//    {
-//
-//    }
+    xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID);
 }

@@ -28,6 +28,7 @@ extern const char *TASKNAME_EVSEMonitor;
 extern const char *TASKNAME_EVSEError;
 extern const char *TASKNAME_EVSEData;
 
+extern EventGroupHandle_t xHandleEventTimerCBNotify;
 extern EventGroupHandle_t xHandleEventGroupRFID;
 extern QueueHandle_t xHandleQueueErrorPackage;
 

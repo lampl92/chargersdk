@@ -397,6 +397,10 @@
 		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c">
 			<Option compilerVar="CC" />
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_ATK_7016.c">
+			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c">
 			<Option compilerVar="CC" />

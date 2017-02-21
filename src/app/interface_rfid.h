@@ -14,10 +14,12 @@
 #include "RFIDReader_mt626.h"
 #include "errorcode.h"
 
+#define defUIDLength        4
+
 typedef struct _RFIDDevStatus
 {
     uint8_t ucFoundCard;
-    uint8_t ucUID[4];
+    uint8_t ucUID[defUIDLength];
 
     ErrorCode_t (*GetUID)(void *pvRFIDDev);
 }RFIDDevStatus_t;

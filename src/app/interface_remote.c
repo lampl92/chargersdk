@@ -8,6 +8,7 @@
 
 #include <time.h>
 #include "includes.h"
+#include "bsp.h"
 
 ErrorCode_t GetRemoteTime(struct tm *pTimeBlock)
 {
@@ -16,9 +17,21 @@ ErrorCode_t GetRemoteTime(struct tm *pTimeBlock)
 
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 获取服务器时间 */
+    /** @todo (rgw#1#): 获取服务器时间 */
+
 
     *pTimeBlock = tmpTimeBlock;
 
     return errcode;
 }
+
+ErrorCode_t OpenRemote()
+{
+
+}
+
+ErrorCode_t CloseRemote()
+{
+
+}
+
