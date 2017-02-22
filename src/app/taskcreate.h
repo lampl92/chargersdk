@@ -16,6 +16,7 @@
 #define defTIMERID_ChargingData     3
 #define defTIMERID_EVSEState        4
 #define defTIMERID_RFID             5
+#define defTIMERID_DATAREFRESH      6
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;

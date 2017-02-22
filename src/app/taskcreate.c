@@ -100,6 +100,7 @@ TimerHandle_t xHandleTimerCPCCState = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
+TimerHandle_t xHandleTimerDataRefresh = NULL;
 //Mutex
 
 void vTaskCLI(void *pvParameters)
@@ -156,12 +157,14 @@ void AppObjCreate (void)
     xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xHandleTimerRFID = xTimerCreate("TimerRFID", 500, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
+    xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", 1000, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerCPCCState, 0);
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
+    xTimerStart(xHandleTimerDataRefresh, 0);
 
     xHandleEventTimerCBNotify = xEventGroupCreate();
 

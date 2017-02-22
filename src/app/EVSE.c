@@ -9,8 +9,6 @@
 #include "evse_globals.h"
 #include "userlib_list.h"
 #include "interface.h"
-
-
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -115,10 +113,11 @@ static ErrorCode_t GetType(void *pvEVSE)
 
     return errcode;
 }
-/** @brief
+
+/** @brief 枪的数量
  *
- * @param void
- * @return uint8_t 枪的数量，2代表两把枪
+ * @param pvEVSE void*
+ * @return ErrorCode_t
  *
  */
 static ErrorCode_t GetTotalPoint(void *pvEVSE)
@@ -128,7 +127,7 @@ static ErrorCode_t GetTotalPoint(void *pvEVSE)
     EVSE_t *pEVSE;
 
     pEVSE = (EVSE_t *)pvEVSE;
-    tmpTotal = 2;
+    tmpTotal = 2;//枪的数量，2代表两把枪
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */

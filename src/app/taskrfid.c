@@ -51,7 +51,7 @@ void vTaskEVSERFID(void *pvParameters)
                     //Î´Ë¢¹ý¿¨
                     printf_safe("point %dÎ´Ë¢\n",i);
                     memmove(pPoint[i]->status.ucHeldCardUID, pRFIDDev->status.ucUID, defUIDLength);
-
+                    //Get
                 }
             }
         }

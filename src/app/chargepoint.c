@@ -6,6 +6,7 @@
 * @date 2017-01-18
 */
 #include <stdlib.h>
+#include <string.h>
 #include "evse_globals.h"
 #include "chargepoint.h"
 

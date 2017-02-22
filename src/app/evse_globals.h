@@ -5,8 +5,8 @@
 * @version v1.0
 * @date 2017-01-22
 */
-#ifndef  __GLOBALS_H
-#define  __GLOBALS_H
+#ifndef  __EVSE_GLOBALS_H
+#define  __EVSE_GLOBALS_H
 
 #include "EVSE.h"
 #include "interface_rfid.h"
@@ -59,7 +59,7 @@
 #define defEventBitCCOK         BIT_5
 #define defEventBitConnTempOK   BIT_6
 #define defEventBitACTempOK     BIT_7
-#define defEventBit             BIT_8
+//#define defEventBit             BIT_8
 //∂®“ÂxHandleEventTimerCBNotify
 #define defEventBitTimerCBTemp              BIT_0
 #define defEventBitTimerCBLockState         BIT_1
@@ -67,6 +67,7 @@
 #define defEventBitTimerCBChargingData      BIT_3
 #define defEventBitTimerCBEVSEState         BIT_4
 #define defEventBitTimerCBRFID              BIT_5
+#define defEventBitTimerCBDataRefresh       BIT_6
 
 
 

@@ -19,6 +19,7 @@
 					<Add option="-O0" />
 					<Add option="-g3" />
 					<Add symbol="DEBUG_RFID" />
+					<Add symbol="DEBUG_DATA" />
 				</Compiler>
 				<Cpp>
 					<Add option="-Wall" />
@@ -142,7 +143,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_rfid.h" />
+		<Unit filename="..\..\src\app\libpowershare\ps_err.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\libpowershare\ps_globals.h" />
+		<Unit filename="..\..\src\app\libpowershare\ps_transportlayer.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
