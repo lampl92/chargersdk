@@ -56,6 +56,7 @@
 *********************************************************************************************************
 */
 #include "evse_globals.h"
+#include "evse_config.h"
 #include "sysinit.h"
 #include "EVSE.h"
 #include "taskcreate.h"

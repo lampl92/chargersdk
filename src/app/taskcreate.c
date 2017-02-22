@@ -25,7 +25,7 @@
 #define defSTACK_TaskEVSERFID               512
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEError              512
+#define defSTACK_TaskEVSEDiag              512
 #define defSTACK_TaskEVSEData               512
 
 /*---------------------------------------------------------------------------/
@@ -41,7 +41,7 @@
 #define defPRIORITY_TaskEVSERFID            4
 #define defPRIORITY_TaskEVSECharge          5
 #define defPRIORITY_TaskEVSEMonitor         7
-#define defPRIORITY_TaskEVSEError           9
+#define defPRIORITY_TaskEVSEDiag           9
 #define defPRIORITY_TaskEVSEData            1
 
 /*---------------------------------------------------------------------------/
@@ -55,7 +55,7 @@ const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
 const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
 const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
 const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
-const char *TASKNAME_EVSEError      = "TaskEVSEError";
+const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
 
 /*---------------------------------------------------------------------------/
@@ -70,7 +70,7 @@ void vTaskEVSERemote(void *pvParameters);           //远程通信
 void vTaskEVSERFID(void *pvParameters);             //刷卡
 void vTaskEVSECharge(void *pvParameters);           //充电
 void vTaskEVSEMonitor(void *pvParameters);          //监控
-void vTaskEVSEError(void *pvParameters);            //错误处理
+void vTaskEVSEDiag(void *pvParameters);             //诊断处理
 void vTaskEVSEData(void *pvParameters);             //数据处理
 
 /*---------------------------------------------------------------------------/
@@ -85,7 +85,7 @@ static TaskHandle_t xHandleTaskEVSERemote = NULL;
 static TaskHandle_t xHandleTaskEVSERFID = NULL;
 static TaskHandle_t xHandleTaskEVSECharge = NULL;
 static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
-static TaskHandle_t xHandleTaskEVSEError = NULL;
+static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务通信
@@ -137,7 +137,7 @@ void AppTaskCreate (void)
     xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
     xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
     xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
-    xTaskCreate( vTaskEVSEError, TASKNAME_EVSEError, defSTACK_TaskEVSEError, NULL, defPRIORITY_TaskEVSEError, &xHandleTaskEVSEError );
+    xTaskCreate( vTaskEVSEDiag, TASKNAME_EVSEDiag, defSTACK_TaskEVSEDiag, NULL, defPRIORITY_TaskEVSEDiag, &xHandleTaskEVSEDiag );
     xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 

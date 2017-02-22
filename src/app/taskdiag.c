@@ -6,9 +6,9 @@
 * @date 2017-01-22
 */
 #include "taskcreate.h"
-#include "taskerror.h"
+#include "taskdiag.h"
 
-void vTaskEVSEError(void *pvParameters)
+void vTaskEVSEDiag(void *pvParameters)
 {
     BaseType_t xResult;
     ErrorPackage_t errpack;
@@ -23,8 +23,8 @@ void vTaskEVSEError(void *pvParameters)
             printf_safe("%s(code: %d,level: %d)\n", strErrorCode[errpack.code], errpack.code, errpack.level);
         }
 
-#if DEBUG_TASK
-        xprintf("%s\n", TASKNAME_EVSEError);
+#if DEBUG_DIAG
+        printf_safe("%s\n", TASKNAME_EVSEDiag);
 #endif
 //        vTaskDelay(1000);
     }

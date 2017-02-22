@@ -13,9 +13,7 @@
 #include "event_groups.h"
 #include "RFIDReader_mt626.h"
 #include "errorcode.h"
-
-#define defUIDLength        4
-
+#include "evse_config.h"
 typedef struct _RFIDDevStatus
 {
     uint8_t ucFoundCard;

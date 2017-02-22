@@ -460,7 +460,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1487555497 d:\documents\projects\chargersdk\src\app\includes.h
+1487727462 d:\documents\projects\chargersdk\src\app\includes.h
 	<stdarg.h>
 	<stdio.h>
 	<stdlib.h>
@@ -477,6 +477,7 @@
 	"WM.h"
 	"ff.h"
 	"evse_globals.h"
+	"evse_config.h"
 	"sysinit.h"
 	"EVSE.h"
 	"taskcreate.h"
@@ -1673,7 +1674,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1487670638 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1487729731 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 
 1486347791 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
@@ -1712,14 +1713,14 @@
 	"taskdata.h"
 	"interface.h"
 
-1487665156 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1487729071 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 	"interface.h"
 
 1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1487726197 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1487729702 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
 	"cli_main.h"
 
@@ -1792,12 +1793,13 @@
 
 1486345644 source:d:\documents\projects\chargersdk\src\app\interface_card.c
 
-1487656967 d:\documents\projects\chargersdk\src\app\interface_rfid.h
+1487727614 d:\documents\projects\chargersdk\src\app\interface_rfid.h
 	"FreeRTOS.h"
 	"semphr.h"
 	"event_groups.h"
 	"RFIDReader_mt626.h"
 	"errorcode.h"
+	"evse_config.h"
 
 1487726311 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
 	"includes.h"
@@ -1824,7 +1826,7 @@
 	"includes.h"
 	"interface.h"
 
-1487667642 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
+1487728364 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
 	<time.h>
 	"includes.h"
 	"bsp.h"
@@ -1878,7 +1880,8 @@
 
 1487642199 d:\documents\projects\chargersdk\src\app\errorcode.h
 
-1487726078 d:\documents\projects\chargersdk\src\app\interface_data.h
+1487728229 d:\documents\projects\chargersdk\src\app\interface_data.h
+	"includes.h"
 
 1487725570 d:\documents\projects\chargersdk\src\app\evse_globals.h
 	"EVSE.h"
@@ -1902,4 +1905,12 @@
 1487668623 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_transportlayer.c
 
 1487669293 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.c
+
+1487727943 d:\documents\projects\chargersdk\src\app\evse_config.h
+
+1487729702 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
+	"taskcreate.h"
+	"taskdiag.h"
+
+1487729702 d:\documents\projects\chargersdk\src\app\taskdiag.h
 

@@ -25,6 +25,8 @@ void vTaskEVSEMonitor(void *pvParameters)
     uxBits = 0;
     while(1)
     {
+        /** »ñÈ¡EVSEºÍChargePoint×´Ì¬ */
+
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp, pdTRUE, pdFALSE, 0);
         if((uxBits & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
         {
@@ -37,7 +39,6 @@ void vTaskEVSEMonitor(void *pvParameters)
                     THROW_ERROR(pPoint[i]->status.GetBTypeConnectorTemp1(pPoint[i]), ERR_LEVEL_WARNING);
                     THROW_ERROR(pPoint[i]->status.GetBTypeConnectorTemp2(pPoint[i]), ERR_LEVEL_WARNING);
                 }
-                //printf_safe("num = %d, ulIntervalOfGetTemp\n", i);
             }
         }
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState, pdTRUE, pdFALSE, 0);
@@ -48,7 +49,6 @@ void vTaskEVSEMonitor(void *pvParameters)
                 if(pPoint[i]->info.ucConnectorType == defConnectorTypeB)
                 {
                     THROW_ERROR(pPoint[i]->status.GetBTypeConnectorLock(pPoint[i]), ERR_LEVEL_WARNING);
-//              printf_safe("num = %d, ulIntervalOfGetLock\n", i);
                 }
             }
         }
@@ -59,7 +59,6 @@ void vTaskEVSEMonitor(void *pvParameters)
             {
                 THROW_ERROR(pPoint[i]->status.GetCCState(pPoint[i]), ERR_LEVEL_CRITICAL);
                 THROW_ERROR(pPoint[i]->status.GetCPState(pPoint[i]), ERR_LEVEL_CRITICAL);
-//            printf_safe("num = %d, defTIMERID_CPCCState\n", i);
             }
         }
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
@@ -80,7 +79,6 @@ void vTaskEVSEMonitor(void *pvParameters)
             THROW_ERROR(pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
             THROW_ERROR(pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
             THROW_ERROR(pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
-            //printf_safe("EVSE State,TimerTicks = %d\n",ulHighFrequencyTimerTicks);
         }
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBits & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
@@ -88,18 +86,8 @@ void vTaskEVSEMonitor(void *pvParameters)
             THROW_ERROR(pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
         }
 
-//        /** ÅÐ¶ÏÇ¹×´Ì¬ */
-//        do
-//        {
-//            if(pPoint[ucCurrentId]->status.xBTypeConnectorLockState == LOCK)
-//            {
-//
-//            }
-//            //if(pPoint[ucCurrentId]->state.dACLTemp)
-//            ucCurrentId++;
-//        }while(ucCurrentId < ulTotalPoint);
-//        ucCurrentId = 0;
-        /** end of ÅÐ¶ÏÇ¹×´Ì¬ */
+        /** end of »ñÈ¡EVSEºÍChargePoint×´Ì¬ */
+
 
 #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_EVSEMonitor);

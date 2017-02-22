@@ -26,7 +26,7 @@ extern const char *TASKNAME_EVSERemote;
 extern const char *TASKNAME_EVSERFID;
 extern const char *TASKNAME_EVSECharge;
 extern const char *TASKNAME_EVSEMonitor;
-extern const char *TASKNAME_EVSEError;
+extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
 extern EventGroupHandle_t xHandleEventTimerCBNotify;

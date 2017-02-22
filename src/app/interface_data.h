@@ -8,10 +8,14 @@
 #ifndef  __INTERFACE_DATA_H
 #define  __INTERFACE_DATA_H
 
-typedef struct _
+#include "includes.h"
+
+
+
+typedef struct _FileDataType
 {
 
-}Update;
+}FileDataType_t;
 
 
 
