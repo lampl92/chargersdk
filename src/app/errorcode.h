@@ -8,14 +8,13 @@
 #ifndef  __ERRORCODE_H
 #define  __ERRORCODE_H
 
-#define THROW_ERROR(_errcode,_errlevel)   {                                           \
+#define THROW_ERROR(_dev, _errcode,_errlevel)   {                                           \
                                             ErrorCode_t _macro_errcode = _errcode;         \
                                             if(_macro_errcode != ERR_NO)                  \
                                             {                                       \
-                                                ThrowErrorCode(_macro_errcode,_errlevel);  \
+                                                ThrowErrorCode(_dev, _macro_errcode,_errlevel);  \
                                             }                                       \
                                         }
-
 typedef enum _ErrorCode
 {
     ERR_NO,                 //No Error
@@ -25,31 +24,18 @@ typedef enum _ErrorCode
     ERR_POWEROFF_DECT_FAULT,//掉电状态检测器发生故障
     ERR_ARRESTER_FAULT,     //避雷器发生故障
 
-    ERR_POINT1_METER_FAULT,        //电表通信故障
-    ERR_POINT1_CP_FAULT,           //检测CP故障
-    ERR_POINT1_CC_FAULT,           //检测CC故障
-    ERR_POINT1_PLUG_FAULT,         //插枪状态检测器发生故障
-    ERR_POINT1_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
-    ERR_POINT1_CANT_LOCK,          //B型连接枪锁无法锁止
-    ERR_POINT1_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
-    ERR_POINT1_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
-    ERR_POINT1_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
-    ERR_POINT1_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
-    ERR_POINT1_STARTCHARGE,        //开始充电错误
-    ERR_POINT1_STOPCHARGE,         //结束充电错误
-
-    ERR_POINT2_METER_FAULT,        //电表通信故障
-    ERR_POINT2_CP_FAULT,           //检测CP故障
-    ERR_POINT2_CC_FAULT,           //检测CC故障
-    ERR_POINT2_PLUG_FAULT,         //插枪状态检测器发生故障
-    ERR_POINT2_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
-    ERR_POINT2_CANT_LOCK,          //B型连接枪锁无法锁止
-    ERR_POINT2_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
-    ERR_POINT2_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
-    ERR_POINT2_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
-    ERR_POINT2_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
-    ERR_POINT2_STARTCHARGE,        //开始充电错误
-    ERR_POINT2_STOPCHARGE,         //结束充电错误
+    ERR_POINT_METER_FAULT,        //电表通信故障
+    ERR_POINT_CP_FAULT,           //检测CP故障
+    ERR_POINT_CC_FAULT,           //检测CC故障
+    ERR_POINT_PLUG_FAULT,         //插枪状态检测器发生故障
+    ERR_POINT_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
+    ERR_POINT_CANT_LOCK,          //B型连接枪锁无法锁止
+    ERR_POINT_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
+    ERR_POINT_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
+    ERR_POINT_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
+    ERR_POINT_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
+    ERR_POINT_STARTCHARGE,        //开始充电错误
+    ERR_POINT_STOPCHARGE,         //结束充电错误
 
     ERR_FILE_RW,            //文件读写错误
     ERR_FILE_NO,            //无目标文件
@@ -65,10 +51,14 @@ typedef enum _ErrorCode
     ERR_NETMODULE_FE,       //网络模块串口帧错误
     ERR_NETMODULE_ORE,      //网络模块串口超载
     ERR_NETMODULE_DMA,      //网络模块串口DMA传输错误
+
+    ERR_NONET               //网络通信故障
+
 } ErrorCode_t;
 
 typedef enum _ErrorLevel
 {
+    ERR_LEVEL_OK,
     ERR_LEVEL_TIPS,
     ERR_LEVEL_WARNING,
     ERR_LEVEL_CRITICAL,
@@ -77,13 +67,21 @@ typedef enum _ErrorLevel
 
 typedef struct _ErrorPackage
 {
+    uint32_t ulDevID;
     ErrorCode_t code;
     ErrorLevel_t level;
-    uint8_t *str;
 }ErrorPackage_t;
+
+//充电枪ID从小到大定义，其他设备从大小定义
+//DevID 0~? 充电枪ID
+#define defDevID_FILE       0xFC
+#define defDevID_RFID       0xFE
+#define defDevID_NetMoudle  0xFD
+#define defDevID_EVSE       0xFF
+
 
 extern const uint8_t *strErrorCode[];
 
-void ThrowErrorCode(ErrorCode_t errcode, ErrorLevel_t errlevel);
+void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel);
 
 #endif
