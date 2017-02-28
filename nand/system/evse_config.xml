@@ -1,0 +1,13 @@
+<?xml version="1.0"  encoding="gb2312" ?>
+<Config>
+    <!-- EVSE配置 -->
+    <EVSE>
+
+        <SN>0001</SN>
+        <ID>0001</ID>
+        <Type>B</Type>
+        <TotalPoint>2</TotalPoint>
+
+    </EVSE>
+
+</Config>

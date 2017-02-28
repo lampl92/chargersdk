@@ -12,6 +12,7 @@
 * @date 2016-11-03
 */
 #include "includes.h"
+#include "interface.h"
 #include "cli_main.h"
 /*---------------------------------------------------------------------------/
 / 任务栈定义
@@ -41,7 +42,7 @@
 #define defPRIORITY_TaskEVSERFID            4
 #define defPRIORITY_TaskEVSECharge          5
 #define defPRIORITY_TaskEVSEMonitor         7
-#define defPRIORITY_TaskEVSEDiag           9
+#define defPRIORITY_TaskEVSEDiag            9
 #define defPRIORITY_TaskEVSEData            1
 
 /*---------------------------------------------------------------------------/
@@ -91,12 +92,21 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务通信
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
+EventGroupHandle_t xHandleEventData = NULL;
+EventGroupHandle_t xHandleEventRemote = NULL;
+EventGroupHandle_t xHandleEventException = NULL;
+//下面的事件定义在各个结构体中
+//pRFIDDev->xHandleEventGroupRFID
+//pChargePoint->status.xHandleEventStartCondition;
+//pChargePoint->status.xHandleEventStopCondition;
+//队列
+QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //软件定时器
 TimerHandle_t xHandleTimerTemp = NULL; //4个温度
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerGetChargePoint = NULL;
-TimerHandle_t xHandleTimerCPCCState = NULL;
+TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
@@ -148,26 +158,28 @@ extern void vChargePointTimerCB(TimerHandle_t xTimer);
 extern void vRFIDTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
+    xHandleEventTimerCBNotify = xEventGroupCreate();
+    xHandleEventData = xEventGroupCreate();
+    xHandleEventRemote = xEventGroupCreate();
+    xHandleEventException = xEventGroupCreate();
 
+    xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
-    xHandleTimerCPCCState = xTimerCreate("TimerCPCCState", 50, pdTRUE, (void *)defTIMERID_CPCCState, vChargePointTimerCB);
+    xHandleTimerPlugState = xTimerCreate("TimerPlugState", 50, pdTRUE, (void *)defTIMERID_PlugState, vChargePointTimerCB);
     xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xHandleTimerRFID = xTimerCreate("TimerRFID", 500, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
     xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", 1000, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
-    xTimerStart(xHandleTimerCPCCState, 0);
+    xTimerStart(xHandleTimerPlugState, 0);
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-
-    xHandleEventTimerCBNotify = xEventGroupCreate();
-
 
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用

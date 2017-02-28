@@ -25,9 +25,9 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState);
     }
-    if(uxTimerID == defTIMERID_CPCCState)   //50ms
+    if(uxTimerID == defTIMERID_PlugState)   //50ms
     {
-        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBCPCCState);
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState);
     }
     if(uxTimerID == defTIMERID_ChargingData) //50ms
     {

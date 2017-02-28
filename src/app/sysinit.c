@@ -1,7 +1,6 @@
 #include "includes.h"
 #include "ff_gen_drv.h"
 #include "nand_diskio.h"
-#include "malloc.h"
 #include "mxml.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1

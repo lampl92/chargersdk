@@ -17,7 +17,6 @@
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
-					<Add option="-g3" />
 					<Add symbol="DEBUG_RFID" />
 					<Add symbol="DEBUG_DATA" />
 				</Compiler>
@@ -102,6 +101,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
+		<Unit filename="..\..\nand\system\evse_config.xml" />
+		<Unit filename="..\..\nand\system\order.xml" />
+		<Unit filename="..\..\nand\system\public_info.xml" />
 		<Unit filename="..\..\src\app\chargepoint.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -129,7 +131,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_data.h" />
-		<Unit filename="..\..\src\app\interface_error.c">
+		<Unit filename="..\..\src\app\interface_diag.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_monitor.c">
@@ -147,7 +149,11 @@
 		<Unit filename="..\..\src\app\libpowershare\ps_err.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\libpowershare\ps_err.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_globals.h" />
+		<Unit filename="..\..\src\app\libpowershare\ps_protocol.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\libpowershare\ps_transportlayer.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -358,6 +364,7 @@
 		<Unit filename="..\..\src\middlewares\fatfs\src\ff_ex.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\fatfs\src\ffconf.h" />
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\syscall.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -403,6 +410,7 @@
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c">
 			<Option compilerVar="CC" />
 			<Option target="&lt;{~None~}&gt;" />

@@ -877,11 +877,10 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1486348006 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1487832229 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
-	"malloc.h"
 	"mxml.h"
 
 1480044329 d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\ff_gen_drv.h
@@ -1674,7 +1673,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1487729731 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1487912599 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 
 1486347791 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
@@ -1689,25 +1688,25 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1487561508 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1487921111 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 	"interface.h"
 
-1487669271 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
+1487927382 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
 	"chargepoint.h"
 
-1487657691 d:\documents\projects\chargersdk\src\app\chargepoint.h
+1487927067 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
 	"errorcode.h"
 	"interface_rfid.h"
 
-1487726793 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1487903744 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
@@ -1720,8 +1719,9 @@
 
 1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1487729702 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1487908857 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
+	"interface.h"
 	"cli_main.h"
 
 1485157108 d:\documents\projects\chargersdk\src\app\taskcard.h
@@ -1801,7 +1801,7 @@
 	"errorcode.h"
 	"evse_config.h"
 
-1487726311 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
+1487921400 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
 	"includes.h"
 	"taskcreate.h"
 	"taskrfid.h"
@@ -1809,7 +1809,7 @@
 
 1485157108 d:\documents\projects\chargersdk\src\app\taskrfid.h
 
-1487656967 source:d:\documents\projects\chargersdk\src\app\interface_rfid.c
+1487899504 source:d:\documents\projects\chargersdk\src\app\interface_rfid.c
 	"includes.h"
 	"interface.h"
 
@@ -1826,13 +1826,14 @@
 	"includes.h"
 	"interface.h"
 
-1487728364 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
+1487913518 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
 	<time.h>
 	"includes.h"
 	"bsp.h"
 
-1487648701 source:d:\documents\projects\chargersdk\src\app\taskremote.c
+1487913603 source:d:\documents\projects\chargersdk\src\app\taskremote.c
 	"includes.h"
+	"interface.h"
 	"taskcreate.h"
 	"taskremote.h"
 
@@ -1843,13 +1844,14 @@
 1487122631 d:\documents\projects\chargersdk\src\app\evseinit.h
 	"interface.h"
 
-1487212243 d:\documents\projects\chargersdk\src\app\interface.h
+1487912750 d:\documents\projects\chargersdk\src\app\interface.h
 	"chargepoint.h"
 	"EVSE.h"
 	"interface_monitor.h"
 	"interface_charge.h"
 	"interface_rfid.h"
 	"interface_data.h"
+	"interface_remote.h"
 
 1487124505 d:\documents\projects\chargersdk\src\app\interface_monitor.h
 
@@ -1860,35 +1862,37 @@
 	"includes.h"
 	"interface.h"
 
-1487655343 d:\documents\projects\chargersdk\src\app\evse.h
+1487908128 d:\documents\projects\chargersdk\src\app\evse.h
 	"stm32f4xx.h"
+	"evse_config.h"
 	"errorcode.h"
 
-1487725469 source:d:\documents\projects\chargersdk\src\app\evse.c
+1487811965 source:d:\documents\projects\chargersdk\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
 	"interface.h"
 
-1487655588 source:d:\documents\projects\chargersdk\src\app\interface_data.c
+1487908619 source:d:\documents\projects\chargersdk\src\app\interface_data.c
 	"includes.h"
 	"interface.h"
+	"mxml.h"
 
-1487572680 source:d:\documents\projects\chargersdk\src\app\errorcode.c
+1487732522 source:d:\documents\projects\chargersdk\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
-1487642199 d:\documents\projects\chargersdk\src\app\errorcode.h
+1487732600 d:\documents\projects\chargersdk\src\app\errorcode.h
 
-1487728229 d:\documents\projects\chargersdk\src\app\interface_data.h
+1487902830 d:\documents\projects\chargersdk\src\app\interface_data.h
 	"includes.h"
 
-1487725570 d:\documents\projects\chargersdk\src\app\evse_globals.h
+1487920132 d:\documents\projects\chargersdk\src\app\evse_globals.h
 	"EVSE.h"
 	"interface_rfid.h"
 	"userlib_list.h"
 
-1487645305 source:d:\documents\projects\chargersdk\src\app\evse_globals.c
+1487901688 source:d:\documents\projects\chargersdk\src\app\evse_globals.c
 	"interface.h"
 	"userlib_list.h"
 
@@ -1902,15 +1906,26 @@
 	"LCDConf.h"
 	"GUI_Private.h"
 
-1487668623 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_transportlayer.c
+1487908736 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_transportlayer.c
+	"libpowershare/ps_err.h"
 
-1487669293 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.c
+1487731090 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.c
 
-1487727943 d:\documents\projects\chargersdk\src\app\evse_config.h
+1487819298 d:\documents\projects\chargersdk\src\app\evse_config.h
 
-1487729702 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
+1487729937 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
 	"taskcreate.h"
 	"taskdiag.h"
 
 1487729702 d:\documents\projects\chargersdk\src\app\taskdiag.h
+
+1487837612 source:d:\documents\projects\chargersdk\src\app\interface_diag.c
+	"interface.h"
+
+1487756901 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_protocol.c
+
+1487924155 d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.h
+
+1487913628 d:\documents\projects\chargersdk\src\app\interface_remote.h
+	<time.h>
 

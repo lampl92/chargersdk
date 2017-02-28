@@ -14,21 +14,39 @@ void vTaskEVSECharge(void *pvParameters)
     uint32_t ulTotalPoint = pListChargePoint->Total;
     ChargePoint_t *pPoint[ulTotalPoint];
     int i;
+    EventBits_t uxBits;
     for(i = 0; i < ulTotalPoint; i++)
     {
         pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
     }
     while(1)
     {
-        if(pPoint[0]->status.xCPState == 1)
+        for(i = 0; i < ulTotalPoint; i++)
         {
+            switch(pPoint[i]->state)
+            {
+            case POINT_IDLE:
+            case POINT_PRECONTRACT:
+                uxBits = xEventGroupWaitBits(pPoint[i]->status.xHandleEventStartCondition,
+                                             defEventBitStdALL,
+                                             pdFALSE, pdTRUE, 0);
+                if((uxBits & defEventBitStdALL) == defEventBitStdALL)
+                {
+                    pPoint[i]->status.StartCharge(pPoint[i]);
+                    pPoint[i]->state = POINT_CHARGING;
+                    xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdOK);
+                }
+                break;
+                case POINT_CHARGING:
+                break;
 
-            //printf_safe("CP = 1\n");
+            }
         }
 
-        #if DEBUG_TASK
+
+#if DEBUG_CHARGE
         xprintf("%s\n", TASKNAME_EVSECharge);
-        #endif
+#endif
         vTaskDelay(10);
     }
 }

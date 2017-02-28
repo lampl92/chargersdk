@@ -30,10 +30,12 @@ extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
 extern EventGroupHandle_t xHandleEventTimerCBNotify;
-extern EventGroupHandle_t xHandleEventGroupRFID;
-extern QueueHandle_t xHandleQueueErrorPackage;
+extern EventGroupHandle_t xHandleEventData;
+extern EventGroupHandle_t xHandleEventRemote;
+extern EventGroupHandle_t xHandleEventMonitor;
 
-extern SemaphoreHandle_t xHandleMutexRFID;
+extern QueueHandle_t xHandleQueueOrders;
+extern QueueHandle_t xHandleQueueErrorPackage;
 
 void SysTaskCreate (void);
 void AppTaskCreate (void);
