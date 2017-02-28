@@ -348,7 +348,7 @@ static ErrorCode_t GetCPState(void *pvPoint)
 /** @brief 控制S1开关
  *
  * @param pvPoint void*
- * @param cmd uint8_t   传递开关控制命令，1-on，0-off
+ * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *
  */
@@ -496,7 +496,7 @@ static ErrorCode_t GetBTypeConnectorLock(void *pvPoint)
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpLockState = LOCK;
+    tmpLockState = LOCK;    //fixme,完成驱动后需要修改为unlock
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
@@ -514,12 +514,13 @@ static ErrorCode_t GetBTypeConnectorLock(void *pvPoint)
 /** @brief
  *
  * @param pvPoint void*
+ * @param cmd uint8_t   开关控制，SWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *                  ERR_NO
  *                  ERR_CANT_LOCK
  *
  */
-static ErrorCode_t SetBTypeConnectorLock(void *pvPoint)
+static ErrorCode_t SetBTypeConnectorLock(void *pvPoint, uint8_t cmd)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
@@ -682,7 +683,7 @@ static ErrorCode_t StartCharge(void *pvPoint)
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
     errcode = ERR_NO;
-    /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
+    /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
     //...
 
@@ -708,11 +709,42 @@ static ErrorCode_t StopCharge(void *pvPoint)
     ucPointID = pPoint->info.ucChargePointID;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 操作输出继电器，返回继电器状态 */
+    /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
     //...
 
     /*********************/
+    return errcode;
+}
+/** @brief 获取输出继电器状态
+ *
+ * @param pvPoint void*
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t GetRelayState(void *pvPoint)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    uint8_t tmpLStat;
+    uint8_t tmpNStat;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpLStat = SWITCH_OFF;
+    tmpNStat = SWITCH_OFF;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#):  */
+
+    //...
+
+    /*********************/
+
+    pPoint->status.ucRelayLState = tmpLStat;
+    pPoint->status.ucRelayNState = tmpNStat;
+
     return errcode;
 }
 ChargePoint_t *ChargePointGetHandle(uint8_t ucChargePointID)
@@ -773,6 +805,7 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.GetChargingFrequence = GetChargingFrequence;
 
     pChargePoint->status.GetCPState = GetCPState;
+    pChargePoint->status.SetCPSwitch = SetCPSwitch;
     pChargePoint->status.GetCCState = GetCCState;
     pChargePoint->status.GetPlugState = GetPlugState;
     pChargePoint->status.GetBTypeConnectorLock = GetBTypeConnectorLock;

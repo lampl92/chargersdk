@@ -80,32 +80,38 @@ typedef struct _ChargePointStatus
     double dChargingFrequence;
     EventGroupHandle_t xHandleEventStartCondition;
     EventGroupHandle_t xHandleEventException;
+    uint8_t ucRelayLState;
+    uint8_t ucRelayNState;
 
     pChargePoint_ft GetChargingVoltage;
     pChargePoint_ft GetChargingCurrent;
     pChargePoint_ft GetChargingFrequence;
 
     pChargePoint_ft GetCPState;
-    //pChargePoint_ft GetLoadPercent;
+    ErrorCode_t (*SetCPSwitch)(void *pvPoint, uint8_t cmd);
     ErrorCode_t (*SetLoadPercent)(void *pvPoint, uint8_t ucLoadPercent);
     pChargePoint_ft GetCCState;
     pChargePoint_ft GetPlugState;
     pChargePoint_ft GetBTypeConnectorLock;
-    pChargePoint_ft SetBTypeConnectorLock;
+    ErrorCode_t (*SetBTypeConnectorLock)(void *pvPoint, uint8_t cmd);
     pChargePoint_ft GetACLTemp;
     pChargePoint_ft GetACNTemp;
     pChargePoint_ft GetBTypeConnectorTemp1;
     pChargePoint_ft GetBTypeConnectorTemp2;
     pChargePoint_ft StartCharge;
     pChargePoint_ft StopCharge;
+    pChargePoint_ft GetRelayState;
 
 }ChargePointStatus_t;
 
 typedef enum _ChargePointState
 {
     POINT_IDLE,
+    POINT_PLUGED,
     POINT_PRECONTRACT,
+    POINT_STARTCHARGE,
     POINT_CHARGING,
+    POINT_CHARGING_HALFLOAD,
     POINT_ERROR
 }ChargePointState_t;
 

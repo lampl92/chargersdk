@@ -93,8 +93,9 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
+EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
-EventGroupHandle_t xHandleEventException = NULL;
+
 //下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
 //pChargePoint->status.xHandleEventStartCondition;
@@ -160,8 +161,9 @@ void AppObjCreate (void)
 {
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
+    xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
-    xHandleEventException = xEventGroupCreate();
+
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));

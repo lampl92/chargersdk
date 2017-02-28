@@ -12,6 +12,10 @@
 #include "interface_rfid.h"
 #include "userlib_list.h"
 
+
+#define SWITCH_ON   1
+#define SWITCH_OFF  0
+
 #define BIT_0  ( 1 << 0 )
 #define BIT_1  ( 1 << 1 )
 #define BIT_2  ( 1 << 2 )
@@ -59,12 +63,14 @@
 #define defEventBitAddOrderOK           BIT_1
 //xHandleEventRemote
 #define defEventBitRemote
+//xHandleEventDiag
+#define defEventBitDiagTempW            BIT_0               //温度报警
 //定义pChargePoint->status.xHandleEventException
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
 #define defEventBitExceptionCurr        BIT_3
-#define defEventBitException
+#define defEventBitExceptionCritical    defEventBitExceptionTempC
 
 //定义pChargePoint->status.xHandleEventStartCondition
 #define defEventBitStdAuthed       BIT_0
@@ -76,7 +82,12 @@
 #define defEventBitStdConnTempOK   BIT_6
 #define defEventBitStdACTempOK     BIT_7
 #define defEventBitStdPlugOK       BIT_8
-#define defEventBitStdALL           0xFF //上面8个，如果增加需要修改本定义
+#define defEventBitCPSwitchCondition    defEventBitStdLocked |      \
+                                        defEventBitStdVoltOK |      \
+                                        defEventBitStdConnTempOK |  \
+                                        defEventBitStdACTempOK |    \
+                                        defEventBitStdPlugOK
+//#define defEventBitChargeCondition defEventBitS1SwitchCondition | defEventBitStdCurrOK
 #define defEventBitStdOK            BIT_9
 //定义xHandleEventTimerCBNotify
 #define defEventBitTimerCBTemp              BIT_0

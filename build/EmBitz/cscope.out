@@ -1,4 +1,4 @@
-cscope 15 D:\Documents\Projects\chargersdk\build\EmBitz"               0000996458
+cscope 15 D:\Documents\Projects\chargersdk\build\EmBitz"               0001064153
 	@D:\Documents\Projects\chargersdk\build\EmBitz\startup\startup_stm32f429x.S
 
 3 .
@@ -1565,7 +1565,7 @@ VERSION_H
 
 5 
 	#DATE
- "16"
+ "24"
 
 	)
 
@@ -1607,51 +1607,583 @@ VERSION_H
 
 16 
 	#MINOR
- 3
+ 5
 
 	)
 
 17 
 	#BUILD
- 376
+ 533
 
 	)
 
 18 
 	#REVISION
- 2056
+ 2892
 
 	)
 
 21 
 	#BUILDS_COUNT
- 675
+ 894
 
 	)
 
 22 
 	#RC_FILEVERSION
- 1,3,376,2056
+ 1,5,533,2892
 
 	)
 
 23 
 	#RC_FILEVERSION_STRING
- "1, 3, 376, 2056\0"
+ "1, 5, 533, 2892\0"
 
 	)
 
 24 
 	#FULLVERSION_STRING
- "1.3.376.2056"
+ "1.5.533.2892"
 
 	)
 
 27 
 	#BUILD_HISTORY
- 76
+ 33
 
 	)
+
+	@D:\Documents\Projects\chargersdk\nand\system\evse_config.xml
+
+1 <?
+xml
+ 
+	gvîsi⁄
+="1.0" 
+ícodög
+="gb2312" ?>
+
+2 <
+C⁄fig
+>
+
+3 <!-- 
+EVSE
+≈‰÷√ -->
+
+4 <
+EVSE
+>
+
+6 <
+SN
+>0001</SN>
+
+7 <
+ID
+>0001</ID>
+
+8 <
+Ty≥
+>
+B
+</Type>
+
+9 <
+TŸÆPoöt
+>2</TotalPoint>
+
+11 </
+EVSE
+>
+
+13 </
+C⁄fig
+>
+
+	@D:\Documents\Projects\chargersdk\nand\system\public_info.xml
+
+1 <?
+xml
+ 
+	gvîsi⁄
+="1.0" 
+ícodög
+="gb2312"?>
+
+2 <
+O≥øt‹Info
+> <!-- ª˘¥°…Ë ©‘À––…Ã–≈œ¢ -->
+
+3 <!-- ‘À”™…Ã
+ID
+ 9◊÷∑˚ -->
+
+4 <
+O≥øt‹ID
+>0001</OperatorID>
+
+6 <
+O≥øt‹Name
+>±±æ©∂Ø¡¶‘¥</OperatorName>
+
+8 <
+O≥øt‹Tñ1
+>010-83682266</OperatorTel1>
+
+9 <
+O≥øt‹Tñ2
+>
+
+10 </
+O≥øt‹Tñ2
+>
+
+12 <
+O≥øt‹RegAddªss
+>
+
+14 </
+O≥øt‹RegAddªss
+>
+
+16 <
+O≥øt‹NŸe
+>
+
+17 
+www
+.
+dpc
+.
+com
+.
+˙
+
+
+18 </
+O≥øt‹NŸe
+>
+
+19 </
+O≥øt‹Info
+>
+
+22 <
+Sèti⁄Info
+>
+
+24 <
+Sèti⁄ID
+>0001</StationID>
+
+25 <!-- ‘À––…Ã
+ID
+ 9◊÷∑˚-->
+
+26 <
+O≥øt‹ID
+>0001</OperatorID>
+
+28 <
+EquùmítOw√rID
+>0001</EquipmentOwnerID>
+
+30 <
+Sèti⁄Name
+>∂Ø¡¶‘¥Õ£≥µ≥°</StationName>
+
+32 <
+Cou¡ryCode
+>
+CN
+</CountryCode>
+
+34 <
+AªaCode
+>010</AreaCode>
+
+36 <
+Addªss
+>
+
+38 </
+Addªss
+>
+
+40 <
+Sèti⁄Tñ
+>
+
+42 </
+Sèti⁄Tñ
+>
+
+44 <
+Sîvi˚Tñ
+>
+
+46 </
+Sîvi˚Tñ
+>
+
+54 <
+Sèti⁄Ty≥
+>
+
+56 </
+Sèti⁄Ty≥
+>
+
+62 <
+Sèti⁄Sètus
+>
+
+64 </
+Sèti⁄Sètus
+>
+
+66 <
+P¨kNums
+>
+
+68 </
+P¨kNums
+>
+
+70 <
+Sèti⁄Lng
+>
+
+72 </
+Sèti⁄Lng
+>
+
+74 <
+Sèti⁄L©
+>
+
+76 </
+Sèti⁄L©
+>
+
+78 <
+SôeGuide
+>
+
+80 </
+SôeGuide
+>
+
+82 <
+C⁄°ru˘i⁄
+>
+
+84 </
+C⁄°ru˘i⁄
+>
+
+86 <
+Pi˘uªs
+>
+
+87 
+hâp
+:
+
+88 </
+Pi˘uªs
+>
+
+90 <
+	gM©chC¨s
+>
+
+92 </
+	gM©chC¨s
+>
+
+94 <
+	gP¨kInfo
+>
+
+96 </
+	gP¨kInfo
+>
+
+98 <
+	gBusöessHours
+>
+
+100 </
+	gBusöessHours
+>
+
+102 <
+	gEÀ˘ricôyFì
+>
+
+103 <
+	gSegmítFì
+>1.00</SegmentFee>
+
+104 <
+	gSegmítSèπ
+>01:00</
+SegmítSèπ
+>
+
+105 <
+SegmítEnd
+>03:59</SegmentEnd>
+
+106 </
+EÀ˘ricôyFì
+>
+
+108 <
+Sîvi˚Fì
+>
+
+110 </
+Sîvi˚Fì
+>
+
+112 <
+P¨kFì
+>
+
+114 </
+P¨kFì
+>
+
+115 <!-- ÷ß∏∂∑Ω Ω£∫À¢ø®/œﬂ…œ/œ÷Ω°£∆‰÷–µÁ◊”«Æ∞¸¿‡ø®Œ™À¢ø®£¨…Ì∑›º¯»®ø®£¨Œ¢–≈/÷ß∏∂±¶£¨
+APP
+Œ™œﬂ…œ -->
+
+116 <
+Paymít
+>
+
+118 </
+Paymít
+>
+
+120 <
+Suµ‹tOrdî
+>
+
+122 </
+Suµ‹tOrdî
+>
+
+124 <
+Rem¨k
+>
+
+126 </
+Rem¨k
+>
+
+127 </
+Sèti⁄Info
+>
+
+130 <
+EquùmítInfos
+>
+
+132 <
+EquùmítID
+>
+
+134 </
+EquùmítID
+>
+
+136 <
+M™uÁ˘uªrID
+>
+
+138 </
+M™uÁ˘uªrID
+>
+
+139 <
+M™uÁ˘uªrName
+>
+
+141 </
+M™uÁ˘uªrName
+>
+
+143 <
+EquùmítModñ
+>
+
+144 
+AC7kW
+
+
+145 </
+EquùmítModñ
+>
+
+147 <
+Produ˘i⁄D©e
+>
+
+148 
+YYYY
+-
+MM
+-
+DD
+
+
+149 </
+Produ˘i⁄D©e
+>
+
+155 <
+EquùmítTy≥
+>
+
+157 </
+EquùmítTy≥
+>
+
+158 <
+C⁄√˘‹Infos
+>
+
+159 </
+C⁄√˘‹Infos
+>
+
+160 <
+EquùmítLng
+>
+
+161 </
+EquùmítLng
+>
+
+162 <
+EquùmítL©
+>
+
+163 </
+EquùmítL©
+>
+
+164 <
+Powî
+>
+
+166 </
+Powî
+>
+
+167 <
+EquùmítName
+>
+
+169 </
+EquùmítName
+>
+
+170 </
+EquùmítInfos
+>
+
+172 <
+C⁄√˘‹Infos
+>
+
+174 <
+C⁄√˘‹ID
+>
+
+176 </
+C⁄√˘‹ID
+>
+
+178 <
+C⁄√˘‹Ty≥
+>
+
+179 </
+C⁄√˘‹Ty≥
+>
+
+181 <!-- ∂Ó∂®µÁ—π…œœﬁ µ•Œª£∫
+V
+ -->
+
+182 <
+Vﬁ©ageUµîLimôs
+>
+
+184 </
+Vﬁ©ageUµîLimôs
+>
+
+185 <!-- ∂Ó∂®µÁ—πœ¬œﬁ µ•Œª£∫
+V
+ -->
+
+186 <
+Vﬁ©ageLowîLimôs
+>
+
+188 </
+Vﬁ©ageLowîLimôs
+>
+
+189 <!-- ∂Ó∂®µÁ¡˜ µ•Œª£∫
+A
+ -->
+
+190 <
+Cuºít
+>
+
+192 </
+Cuºít
+>
+
+193 <!-- ∂Ó∂®π¶¬  µ•Œª£∫
+kW
+-->
+
+194 <
+Powî
+>
+
+196 </
+Powî
+>
+
+198 <
+P¨kNo
+>
+
+199 </
+P¨kNo
+>
+
+201 <
+N©i⁄ÆSènd¨d
+>
+
+203 </
+N©i⁄ÆSènd¨d
+>
+
+204 </
+C⁄√˘‹Infos
+>
 
 	@D:\Documents\Projects\chargersdk\src\app\EVSE.c
 
@@ -1660,7 +2192,7 @@ VERSION_H
 "
 
 9 
-	~"globÆs.h
+	~"ev£_globÆs.h
 "
 
 10 
@@ -1671,269 +2203,713 @@ VERSION_H
 	~"öãrÁ˚.h
 "
 
-20 
+26 
 Eº‹Code_t
  
-	$GëS¸amSèã
-(
-EVSE_t
- *
-pEVSE
+	$GëSN
+(*
+pvEVSE
 )
 
-22 
-uöt32_t
+28 
+uöt8_t
  
-tmpS¸amSèã
+tmpSN
+[
+defEVSESNLígth
+];
+
+29 
+uöt8_t
+ 
+tmpLígth
 ;
 
-23 
+30 
 Eº‹Code_t
  
 îrcode
 ;
 
-26 
+31 
+EVSE_t
+ *
+pEVSE
+;
+
+33 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+34 
 îrcode
  = 
 ERR_NO
 ;
 
-27 
+35 
+	`mem£t
+(
+tmpSN
+, 0, 
+defEVSESNLígth
+);
+
+36 
+tmpLígth
+ = 0;
+
+43 
+pEVSE
+->
+öfo
+.
+ucSNLígth
+ = 
+tmpLígth
+;
+
+44 
+	`memmove
+(
+pEVSE
+->
+öfo
+.
+ucSN
+, 
+tmpSN
+, 
+defEVSESNLígth
+);
+
+46  
+îrcode
+;
+
+47 
+	}
+}
+
+58 
+Eº‹Code_t
+ 
+	$GëID
+(*
+pvEVSE
+)
+
+60 
+uöt8_t
+ 
+tmpID
+[
+defEVSEIDLígth
+];
+
+61 
+uöt8_t
+ 
+tmpLígth
+;
+
+62 
+Eº‹Code_t
+ 
+îrcode
+;
+
+63 
+EVSE_t
+ *
+pEVSE
+;
+
+65 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+66 
+îrcode
+ = 
+ERR_NO
+;
+
+67 
+	`mem£t
+(
+tmpID
+, 0, 
+defEVSEIDLígth
+);
+
+68 
+tmpLígth
+ = 0;
+
+76 
+pEVSE
+->
+öfo
+.
+ucIDLíght
+ = 
+tmpLígth
+;
+
+77 
+	`memmove
+(
+pEVSE
+->
+öfo
+.
+ucID
+, 
+tmpID
+, 
+defEVSEIDLígth
+);
+
+79  
+îrcode
+;
+
+80 
+	}
+}
+
+96 
+Eº‹Code_t
+ 
+	$GëTy≥
+(*
+pvEVSE
+)
+
+98 
+uöt8_t
+ 
+tmpTy≥
+;
+
+99 
+Eº‹Code_t
+ 
+îrcode
+;
+
+100 
+EVSE_t
+ *
+pEVSE
+;
+
+102 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+103 
+tmpTy≥
+ = 0;
+
+104 
+îrcode
+ = 
+ERR_NO
+;
+
+112 
+pEVSE
+->
+öfo
+.
+ucTy≥
+ = 
+tmpTy≥
+;
+
+114  
+îrcode
+;
+
+115 
+	}
+}
+
+123 
+Eº‹Code_t
+ 
+	$GëTŸÆPoöt
+(*
+pvEVSE
+)
+
+125 
+uöt8_t
+ 
+tmpTŸÆ
+;
+
+126 
+Eº‹Code_t
+ 
+îrcode
+;
+
+127 
+EVSE_t
+ *
+pEVSE
+;
+
+129 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+130 
+tmpTŸÆ
+ = 2;
+
+131 
+îrcode
+ = 
+ERR_NO
+;
+
+139 
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
+ = 
+tmpTŸÆ
+;
+
+141  
+îrcode
+;
+
+142 
+	}
+}
+
+153 
+Eº‹Code_t
+ 
+	$GëLngL©
+(*
+pvEVSE
+)
+
+155 
+tmpLng
+, 
+tmpL©
+;
+
+156 
+Eº‹Code_t
+ 
+îrcode
+;
+
+157 
+EVSE_t
+ *
+pEVSE
+;
+
+159 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+160 
+tmpLng
+ = 0;
+
+161 
+tmpL©
+ = 0;
+
+162 
+îrcode
+ = 
+ERR_NO
+;
+
+170 
+pEVSE
+->
+öfo
+.
+dLng
+ = 
+tmpLng
+;
+
+171 
+pEVSE
+->
+öfo
+.
+dL©
+ = 
+tmpLng
+;
+
+173  
+îrcode
+;
+
+174 
+	}
+}
+
+191 
+Eº‹Code_t
+ 
+	$GëS¸amSèã
+(*
+pvEVSE
+)
+
+193 
+uöt32_t
+ 
+tmpS¸amSèã
+;
+
+194 
+Eº‹Code_t
+ 
+îrcode
+;
+
+195 
+EVSE_t
+ *
+pEVSE
+;
+
+197 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+199 
+îrcode
+ = 
+ERR_NO
+;
+
+200 
 tmpS¸amSèã
  = 0;
 
-31 
+208 
 pEVSE
 ->
-°©e
+°©us
 .
 ulS¸amSèã
  = 
 tmpS¸amSèã
 ;
 
-33  
+210  
 îrcode
 ;
 
-34 
+211 
 	}
 }
 
-43 
+222 
 Eº‹Code_t
  
 	$GëKnockSèã
-(
-EVSE_t
- *
-pEVSE
+(*
+pvEVSE
 )
 
-45 
+224 
 uöt32_t
  
 tmpKnockSèã
 ;
 
-46 
+225 
 Eº‹Code_t
  
 îrcode
 ;
 
-48 
+226 
+EVSE_t
+ *
+pEVSE
+;
+
+228 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+229 
 îrcode
  = 
 ERR_NO
 ;
 
-49 
+230 
 tmpKnockSèã
  = 0;
 
-53 
+238 
 pEVSE
 ->
-°©e
+°©us
 .
 ulKnockSèã
  = 
 tmpKnockSèã
 ;
 
-55  
+240  
 îrcode
 ;
 
-56 
+241 
 	}
 }
 
-65 
+252 
 Eº‹Code_t
  
 	$GëPESèã
-(
-EVSE_t
- *
-pEVSE
+(*
+pvEVSE
 )
 
-67 
+254 
 uöt32_t
  
 tmpPESèã
 ;
 
-68 
+255 
 Eº‹Code_t
  
 îrcode
 ;
 
-70 
+256 
+EVSE_t
+ *
+pEVSE
+;
+
+258 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+259 
 îrcode
  = 
 ERR_NO
 ;
 
-71 
+260 
 tmpPESèã
  = 0;
 
-75 
+268 
 pEVSE
 ->
-°©e
+°©us
 .
 ulPESèã
  = 
 tmpPESèã
 ;
 
-77  
+270  
 îrcode
 ;
 
-78 
+271 
 	}
 }
 
-87 
+282 
 Eº‹Code_t
  
 	$GëPowîOffSèã
-(
-EVSE_t
- *
-pEVSE
+(*
+pvEVSE
 )
 
-89 
+284 
 uöt32_t
  
 tmpOffSèã
 ;
 
-90 
+285 
 Eº‹Code_t
  
 îrcode
 ;
 
-92 
+286 
+EVSE_t
+ *
+pEVSE
+;
+
+288 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+289 
 îrcode
  = 
 ERR_NO
 ;
 
-93 
+290 
 tmpOffSèã
  = 0;
 
-97 
+298 
 pEVSE
 ->
-°©e
+°©us
 .
 ulPowîOffSèã
  = 
 tmpOffSèã
 ;
 
-99  
+300  
 îrcode
 ;
 
-100 
+301 
 	}
 }
 
-110 
+313 
 Eº‹Code_t
  
 	$GëAºe°îSèã
-(
-EVSE_t
- *
-pEVSE
+(*
+pvEVSE
 )
 
-112 
+315 
 uöt32_t
  
 tmpAºe°îSèã
 ;
 
-113 
+316 
 Eº‹Code_t
  
 îrcode
 ;
 
-115 
+317 
+EVSE_t
+ *
+pEVSE
+;
+
+319 
+pEVSE
+ = (
+EVSE_t
+ *)
+pvEVSE
+;
+
+320 
 îrcode
  = 
 ERR_NO
 ;
 
-116 
+321 
 tmpAºe°îSèã
  = 0;
 
-117 
+322 
 pEVSE
 ->
-°©e
+°©us
 .
 ulAºe°îSèã
  = 
 tmpAºe°îSèã
 ;
 
-118  
+323  
 îrcode
 ;
 
-119 
+324 
 	}
 }
 
-121 
+326 
 EVSE_t
  *
 	$EVSECª©e
 ()
 
-123 
+328 
 EVSE_t
  *
 pEVSE
 ;
 
-124 
+329 
 pEVSE
  = (
 EVSE_t
@@ -1941,63 +2917,221 @@ EVSE_t
 	`mÆloc
 ((EVSE_t));
 
-126  
+331 
+	`mem£t
+(
+pEVSE
+->
+öfo
+.
+ucSN
+, 0, 
+defEVSESNLígth
+);
+
+332 
+	`mem£t
+(
+pEVSE
+->
+öfo
+.
+ucID
+, 0, 
+defEVSEIDLígth
+);
+
+333 
+pEVSE
+->
+öfo
+.
+ucTy≥
+ = 2;
+
+334 
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
+ = 2;
+
+335 
+pEVSE
+->
+öfo
+.
+dLng
+ = 116.275833;
+
+336 
+pEVSE
+->
+öfo
+.
+dL©
+ = 39.831944;
+
+338 
+pEVSE
+->
+öfo
+.
+GëSN
+ = GetSN;
+
+339 
+pEVSE
+->
+öfo
+.
+GëID
+ = GetID;
+
+340 
+pEVSE
+->
+öfo
+.
+GëTy≥
+ = GetType;
+
+341 
+pEVSE
+->
+öfo
+.
+GëTŸÆPoöt
+ = GetTotalPoint;
+
+342 
+pEVSE
+->
+öfo
+.
+GëLngL©
+ = GetLngLat;
+
+344 
+pEVSE
+->
+°©us
+.
+ulAºe°îSèã
+ = 0;
+
+345 
+pEVSE
+->
+°©us
+.
+ulKnockSèã
+ = 0;
+
+346 
+pEVSE
+->
+°©us
+.
+ulPESèã
+ = 0;
+
+347 
+pEVSE
+->
+°©us
+.
+ulPowîOffSèã
+ = 0;
+
+348 
+pEVSE
+->
+°©us
+.
+ulS¸amSèã
+ = 0;
+
+350 
+pEVSE
+->
+°©us
+.
+GëAºe°îSèã
+ = GetArresterState;
+
+351 
+pEVSE
+->
+°©us
+.
+GëKnockSèã
+ = GetKnockState;
+
+352 
+pEVSE
+->
+°©us
+.
+GëPESèã
+ = GetPEState;
+
+353 
+pEVSE
+->
+°©us
+.
+GëPowîOffSèã
+ = GetPowerOffState;
+
+354 
+pEVSE
+->
+°©us
+.
+GëS¸amSèã
+ = GetScramState;
+
+356  
 pEVSE
 ;
 
-127 
+357 
 	}
 }
 
-129 
-	$EVSEöô
+359 
+	$Ch¨gePoötInô
 ()
 
-131 
+361 
 Ch¨gePoöt_t
  *
 pch¨gïoöt
 [2];
 
-132 
-uöt8_t
- 
-ucTŸÆ
-;
-
-134 
-	`THROW_ERROR
-(
-	`GëTŸÆCh¨gePoöt
-(&
-ucTŸÆ
-), 
-ERR_LEVEL_WARNING
-);
-
-135 
-pEVSE
- = 
-	`EVSECª©e
-();
-
-136 
+363 
 pLi°Ch¨gePoöt
  = 
 	`U£rLi°Cª©e
 ();
 
-137 
+364 
 i
 ;
 
-138 
+365 
 i
  = 0; i < 
-ucTŸÆ
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
 ; i++)
 
-140 
+367 
 pch¨gïoöt
 [
 i
@@ -2005,7 +3139,77 @@ i
 	`Ch¨gePoötCª©e
 (i);
 
-141 
+369 
+	`THROW_ERROR
+(
+i
+, 
+pch¨gïoöt
+[i]->
+öfo
+.
+	`GëC⁄√˘‹Ty≥
+’ch¨gïoöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+370 
+	`THROW_ERROR
+(
+i
+, 
+pch¨gïoöt
+[i]->
+öfo
+.
+	`GëVﬁ©ageUµîLimôs
+’ch¨gïoöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+371 
+	`THROW_ERROR
+(
+i
+, 
+pch¨gïoöt
+[i]->
+öfo
+.
+	`GëVﬁ©ageLowîLimôs
+’ch¨gïoöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+372 
+	`THROW_ERROR
+(
+i
+, 
+pch¨gïoöt
+[i]->
+öfo
+.
+	`GëR©edCuºít
+’ch¨gïoöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+373 
+	`THROW_ERROR
+(
+i
+, 
+pch¨gïoöt
+[i]->
+öfo
+.
+	`GëR©edPowî
+’ch¨gïoöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+375 
 pLi°Ch¨gePoöt
 ->
 	`Add
@@ -2015,7 +3219,101 @@ pch¨gïoöt
 i
 ]);
 
-143 
+377 
+	}
+}
+
+378 
+	$EVSEöô
+()
+
+380 
+pEVSE
+ = 
+	`EVSECª©e
+();
+
+382 
+	`THROW_ERROR
+(
+defDevID_FILE
+, 
+pEVSE
+->
+öfo
+.
+	`GëSN
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+383 
+	`THROW_ERROR
+(
+defDevID_FILE
+, 
+pEVSE
+->
+öfo
+.
+	`GëID
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+384 
+	`THROW_ERROR
+(
+defDevID_FILE
+, 
+pEVSE
+->
+öfo
+.
+	`GëTy≥
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+385 
+	`THROW_ERROR
+(
+defDevID_FILE
+, 
+pEVSE
+->
+öfo
+.
+	`GëTŸÆPoöt
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+386 
+	`THROW_ERROR
+(
+defDevID_FILE
+, 
+pEVSE
+->
+öfo
+.
+	`GëLngL©
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+388 
+	`Ch¨gePoötInô
+();
+
+390 
+pRFIDDev
+ = 
+	`RFIDDevCª©e
+();
+
+391 
 	}
 }
 
@@ -2036,139 +3334,203 @@ __EVSE_H
 "
 
 12 
+	~"ev£_c⁄fig.h
+"
+
+13 
 	~"îr‹code.h
 "
 
-13 
+15 
+	$Eº‹Code_t
+ (*
+	tpEVSE_·
+)(*
+	tpvEVSE
+);
+
+17 
 	s_EVSEInfo
 
 
-15 
+19 
 uöt8_t
  
-	mid
-[12];
-
-16 }
-	tEVSEInfo_t
-;
-
-17 
-	s_EVSESèã
-
-
-19 
-uöt32_t
- 
-	mulS¸amSèã
-;
+ucSN
+[
+defEVSESNLígth
+];
 
 20 
-uöt32_t
+uöt8_t
  
-	mulKnockSèã
+ucSNLígth
 ;
 
 21 
-uöt32_t
+uöt8_t
  
-	mulPESèã
-;
+ucID
+[
+defEVSEIDLígth
+];
 
 22 
-uöt32_t
+uöt8_t
  
-	mulPowîOffSèã
+ucIDLíght
 ;
 
 23 
-uöt32_t
+uöt8_t
  
-	mulAºe°îSèã
+ucTy≥
 ;
 
-24 }
-	tEVSESèã_t
+24 
+uöt8_t
+ 
+ucTŸÆPoöt
 ;
 
-26 
-	s_EVSE
+25 
+dLng
+;
 
+26 
+dL©
+;
 
 28 
-EVSEInfo_t
+pEVSE_·
  
-	möfo
+GëSN
 ;
 
 29 
-EVSESèã_t
+pEVSE_·
  
-	m°©e
+GëID
 ;
 
-30 }
-	tEVSE_t
+30 
+pEVSE_·
+ 
+GëTy≥
+;
+
+31 
+pEVSE_·
+ 
+GëTŸÆPoöt
 ;
 
 32 
-Eº‹Code_t
+pEVSE_·
  
-GëS¸amSèã
-(
-EVSE_t
- *
-pEVSE
-);
+GëLngL©
+;
 
-33 
-Eº‹Code_t
- 
-GëKnockSèã
-(
-EVSE_t
- *
-pEVSE
-);
+33 }
+	tEVSEInfo_t
+;
 
-34 
-Eº‹Code_t
- 
-GëPESèã
-(
-EVSE_t
- *
-pEVSE
-);
+35 
+	s_EVSESètus
 
-35 
-Eº‹Code_t
- 
-GëPowîOffSèã
-(
-EVSE_t
- *
-pEVSE
-);
-
-36 
-Eº‹Code_t
- 
-GëAºe°îSèã
-(
-EVSE_t
- *
-pEVSE
-);
 
 37 
+uöt32_t
+ 
+ulS¸amSèã
+;
+
+38 
+uöt32_t
+ 
+ulKnockSèã
+;
+
+39 
+uöt32_t
+ 
+ulPESèã
+;
+
+40 
+uöt32_t
+ 
+ulPowîOffSèã
+;
+
+41 
+uöt32_t
+ 
+ulAºe°îSèã
+;
+
+43 
+pEVSE_·
+ 
+GëS¸amSèã
+;
+
+44 
+pEVSE_·
+ 
+GëKnockSèã
+;
+
+45 
+pEVSE_·
+ 
+GëPESèã
+;
+
+46 
+pEVSE_·
+ 
+GëPowîOffSèã
+;
+
+47 
+pEVSE_·
+ 
+GëAºe°îSèã
+;
+
+48 }
+	tEVSESètus_t
+;
+
+50 
+	s_EVSE
+
+
+52 
+EVSEInfo_t
+ 
+öfo
+;
+
+53 
+EVSESètus_t
+ 
+°©us
+;
+
+54 }
+	tEVSE_t
+;
+
+56 
 EVSE_t
  *
-EVSECª©e
+	`EVSECª©e
 ();
 
-38 
-EVSEöô
+57 
+	`EVSEöô
 ();
 
 	@D:\Documents\Projects\chargersdk\src\app\chargepoint.c
@@ -2178,22 +3540,58 @@ EVSEöô
 >
 
 9 
+	~<°rög.h
+>
+
+10 
+	~"ev£_globÆs.h
+"
+
+11 
 	~"ch¨gïoöt.h
 "
 
-19 
+19 
 Eº‹Code_t
  
-	$GëCh¨gögVﬁège
-(
-Ch¨gePoöt_t
- *
-pPoöt
+	$GëC⁄√˘‹Ty≥
+(*
+pvPoöt
 )
 
 21 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+22 
 uöt8_t
  
+ucPoötID
+;
+
+23 
+uöt8_t
+ 
+tmpTy≥
+;
+
+24 
+Eº‹Code_t
+ 
+îrcode
+;
+
+26 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+27 
 ucPoötID
  = 
 pPoöt
@@ -2203,68 +3601,58 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-22 
-tmpVﬁt
+28 
+tmpTy≥
+ = 
+defC⁄√˘‹Ty≥B
 ;
 
-23 
-Eº‹Code_t
- 
-îrcode
-;
-
-25 
-tmpVﬁt
- = 0;
-
-26 
+29 
 îrcode
  = 
 ERR_NO
 ;
 
-30 
-pPoöt
-->
-°©e
-.
-dCh¨gögVﬁège
- = 
-tmpVﬁt
-;
-
-32  
-îrcode
-;
-
-33 
-	}
-}
-
-41 
-Eº‹Code_t
- 
-	$GëCh¨gögCuºít
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-43 
-uöt8_t
- 
-ucPoötID
- = 
+37 
 pPoöt
 ->
 öfo
 .
-ucCh¨gePoötID
+ucC⁄√˘‹Ty≥
+ = 
+tmpTy≥
+;
+
+39  
+îrcode
+;
+
+40 
+	}
+}
+
+41 
+Eº‹Code_t
+ 
+	$GëVﬁ©ageUµîLimôs
+(*
+pvPoöt
+)
+
+43 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+44 
+uöt8_t
+ 
+ucPoötID
 ;
 
 45 
-tmpCuº
+tmpVﬁtUpLim
 ;
 
 46 
@@ -2274,46 +3662,14 @@ Eº‹Code_t
 ;
 
 48 
-tmpCuº
- = 0;
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
 
 49 
-îrcode
- = 
-ERR_NO
-;
-
-53 
-pPoöt
-->
-°©e
-.
-dCh¨gögCuºít
- = 
-tmpCuº
-;
-
-55  
-îrcode
-;
-
-56 
-	}
-}
-
-64 
-Eº‹Code_t
- 
-	$GëCh¨gögFªquí˚
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-66 
-uöt8_t
- 
 ucPoötID
  = 
 pPoöt
@@ -2323,8 +3679,56 @@ pPoöt
 ucCh¨gePoötID
 ;
 
+50 
+tmpVﬁtUpLim
+ = 250;
+
+51 
+îrcode
+ = 
+ERR_NO
+;
+
+59 
+pPoöt
+->
+öfo
+.
+dVﬁ©ageUµîLimôs
+ = 
+tmpVﬁtUpLim
+;
+
+61  
+îrcode
+;
+
+62 
+	}
+}
+
+63 
+Eº‹Code_t
+ 
+	$GëVﬁ©ageLowîLimôs
+(*
+pvPoöt
+)
+
+65 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+66 
+uöt8_t
+ 
+ucPoötID
+;
+
 67 
-tmpFªq
+tmpVﬁtLowLim
 ;
 
 68 
@@ -2334,46 +3738,14 @@ Eº‹Code_t
 ;
 
 70 
-tmpFªq
- = 0;
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
 
 71 
-îrcode
- = 
-ERR_NO
-;
-
-75 
-pPoöt
-->
-°©e
-.
-dCh¨gögFªquí˚
- = 
-tmpFªq
-;
-
-77  
-îrcode
-;
-
-78 
-	}
-}
-
-80 
-Eº‹Code_t
- 
-	$GëCPSèã
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-82 
-uöt8_t
- 
 ucPoötID
  = 
 pPoöt
@@ -2383,125 +3755,149 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-83 
-Ch¨gePoötSèãTy≥
- 
-tmpCPSèã
+72 
+tmpVﬁtLowLim
+ = 190;
+
+73 
+îrcode
+ = 
+ERR_NO
+;
+
+81 
+pPoöt
+->
+öfo
+.
+dVﬁ©ageLowîLimôs
+ = 
+tmpVﬁtLowLim
+;
+
+83  
+îrcode
 ;
 
 84 
+	}
+}
+
+85 
+Eº‹Code_t
+ 
+	$GëACTempUµîLimôs
+(*
+pvPoöt
+)
+
+87 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+88 
+uöt8_t
+ 
+ucPoötID
+;
+
+89 
+tmpACTempUµîLim
+;
+
+90 
 Eº‹Code_t
  
 îrcode
 ;
 
-86 
-tmpCPSèã
- = 
-CP_12V
+92 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
 ;
 
-87 
-îrcode
+93 
+ucPoötID
  = 
-ERR_NO
-;
-
-91 
 pPoöt
 ->
-°©e
+öfo
 .
-xCPSèã
- = 
-tmpCPSèã
-;
-
-93  
-îrcode
+ucCh¨gePoötID
 ;
 
 94 
-	}
-}
+tmpACTempUµîLim
+ = 105;
 
 95 
-Eº‹Code_t
- 
-	$GëCCSèã
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-97 
-uöt8_t
- 
-ucPoötID
+îrcode
  = 
+ERR_NO
+;
+
+103 
 pPoöt
 ->
 öfo
 .
-ucCh¨gePoötID
-;
-
-98 
-Ch¨gePoötSèãTy≥
- 
-tmpCCSèã
-;
-
-99 
-Eº‹Code_t
- 
-îrcode
-;
-
-101 
-tmpCCSèã
+dACTempUµîLimôs
  = 
-CC_NO
+tmpACTempUµîLim
 ;
 
-102 
+105  
 îrcode
- = 
-ERR_NO
 ;
 
 106 
-pPoöt
-->
-°©e
-.
-xCCSèã
- = 
-tmpCCSèã
-;
-
-108  
-îrcode
-;
-
-109 
 	}
 }
 
-118 
+107 
 Eº‹Code_t
  
-	$GëPlugSèã
-(
+	$GëACTempLowîLimôs
+(*
+pvPoöt
+)
+
+109 
 Ch¨gePoöt_t
  *
 pPoöt
-)
+;
 
-120 
+110 
 uöt8_t
  
+ucPoötID
+;
+
+111 
+tmpACTempLowîLim
+;
+
+112 
+Eº‹Code_t
+ 
+îrcode
+;
+
+114 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+115 
 ucPoötID
  = 
 pPoöt
@@ -2511,197 +3907,149 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-121 
-uöt32_t
- 
-tmpPlugSèã
-;
+116 
+tmpACTempLowîLim
+ = -40;
 
-122 
-Eº‹Code_t
- 
-îrcode
-;
-
-124 
-tmpPlugSèã
- = 0;
-
-125 
+117 
 îrcode
  = 
 ERR_NO
 ;
 
-129 
+125 
 pPoöt
 ->
-°©e
+öfo
 .
-xPlugSèã
+dACTempLowîLimôs
  = 
-tmpPlugSèã
+tmpACTempLowîLim
 ;
 
-131  
+127  
 îrcode
 ;
 
-132 
+128 
 	}
 }
+
+129 
+Eº‹Code_t
+ 
+	$GëC⁄√˘‹TempUµîLimôs
+(*
+pvPoöt
+)
+
+131 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+132 
+uöt8_t
+ 
+ucPoötID
+;
+
+133 
+tmpC⁄√˘‹TempUµîLim
+;
 
 134 
 Eº‹Code_t
  
-	$GëBTy≥C⁄√˘‹Lock
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
+îrcode
+;
 
 136 
-uöt8_t
- 
-ucPoötID
- = 
 pPoöt
-->
-öfo
-.
-ucCh¨gePoötID
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
 ;
 
 137 
-Ch¨gePoötSèãTy≥
- 
-tmpLockSèã
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
 ;
 
 138 
-Eº‹Code_t
- 
-îrcode
-;
+tmpC⁄√˘‹TempUµîLim
+ = 105;
 
-140 
-tmpLockSèã
- = 
-LOCK
-;
-
-141 
+139 
 îrcode
  = 
 ERR_NO
 ;
 
-145 
-pPoöt
-->
-°©e
-.
-xBTy≥C⁄√˘‹LockSèã
- = 
-tmpLockSèã
-;
-
-147  
-îrcode
-;
-
-148 
-	}
-}
-
-150 
-Eº‹Code_t
- 
-	$SëBTy≥C⁄√˘‹Lock
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-152 
-uöt8_t
- 
-ucPoötID
- = 
+147 
 pPoöt
 ->
 öfo
 .
-ucCh¨gePoötID
+dC⁄√˘‹TempUµîLimôs
+ = 
+tmpC⁄√˘‹TempUµîLim
 ;
 
-153 
-Ch¨gePoötSèãTy≥
+149  
+îrcode
+;
+
+150 
+	}
+}
+
+151 
+Eº‹Code_t
  
-tmpLockSèã
+	$GëC⁄√˘‹TempLowîLimôs
+(*
+pvPoöt
+)
+
+153 
+Ch¨gePoöt_t
+ *
+pPoöt
 ;
 
 154 
-Eº‹Code_t
+uöt8_t
  
-îrcode
+ucPoötID
+;
+
+155 
+tmpC⁄√˘‹TempLowîLim
 ;
 
 156 
-tmpLockSèã
- = 
-UNLOCK
-;
-
-157 
-îrcode
- = 
-ERR_NO
-;
-
-159 if(
-pPoöt
-->
-°©e
-.
-xBTy≥C⁄√˘‹LockSèã
- =
-UNLOCK
-)
-
-163 
-	`THROW_ERROR
-(
-	`GëBTy≥C⁄√˘‹Lock
-(
-pPoöt
-), 
-ERR_LEVEL_WARNING
-);
-
-165  
-îrcode
-;
-
-166 
-	}
-}
-
-168 
 Eº‹Code_t
  
-	$GëACLTemp
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
+îrcode
+;
 
-170 
-uöt8_t
- 
+158 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+159 
 ucPoötID
  = 
 pPoöt
@@ -2711,117 +4059,149 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-171 
-tmpACLTemp
+160 
+tmpC⁄√˘‹TempLowîLim
+ = -40;
+
+161 
+îrcode
+ = 
+ERR_NO
+;
+
+169 
+pPoöt
+->
+öfo
+.
+dC⁄√˘‹TempLowîLimôs
+ = 
+tmpC⁄√˘‹TempLowîLim
+;
+
+171  
+îrcode
 ;
 
 172 
+	}
+}
+
+173 
+Eº‹Code_t
+ 
+	$GëR©edCuºít
+(*
+pvPoöt
+)
+
+175 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+176 
+uöt8_t
+ 
+ucPoötID
+;
+
+177 
+tmpCuº
+;
+
+178 
 Eº‹Code_t
  
 îrcode
 ;
 
-174 
-tmpACLTemp
- = 0;
-
-175 
-îrcode
- = 
-ERR_NO
+180 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
 ;
 
-179 
+181 
+ucPoötID
+ = 
 pPoöt
 ->
-°©e
+öfo
 .
-dACLTemp
- = 
-tmpACLTemp
-;
-
-181  
-îrcode
+ucCh¨gePoötID
 ;
 
 182 
-	}
-}
+tmpCuº
+ = 32;
 
 183 
-Eº‹Code_t
- 
-	$GëACNTemp
-(
-Ch¨gePoöt_t
- *
-pPoöt
-)
-
-185 
-uöt8_t
- 
-ucPoötID
- = 
-pPoöt
-->
-öfo
-.
-ucCh¨gePoötID
-;
-
-186 
-tmpACNTemp
-;
-
-187 
-Eº‹Code_t
- 
-îrcode
-;
-
-189 
-tmpACNTemp
- = 0;
-
-190 
 îrcode
  = 
 ERR_NO
 ;
 
-194 
+191 
 pPoöt
 ->
-°©e
+öfo
 .
-dACNTemp
+dR©edCuºít
  = 
-tmpACNTemp
+tmpCuº
 ;
 
-196  
+193  
 îrcode
 ;
 
-197 
+194 
 	}
 }
 
-198 
+195 
 Eº‹Code_t
  
-	$GëBTy≥C⁄√˘‹Temp1
-(
+	$GëR©edPowî
+(*
+pvPoöt
+)
+
+197 
 Ch¨gePoöt_t
  *
 pPoöt
-)
+;
 
-200 
+198 
 uöt8_t
  
+ucPoötID
+;
+
+199 
+tmpPow
+;
+
+200 
+Eº‹Code_t
+ 
+îrcode
+;
+
+202 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+203 
 ucPoötID
  = 
 pPoöt
@@ -2831,19 +4211,9 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-201 
-tmpTemp
-;
-
-202 
-Eº‹Code_t
- 
-îrcode
-;
-
 204 
-tmpTemp
- = 0;
+tmpPow
+ = 7;
 
 205 
 îrcode
@@ -2851,37 +4221,1181 @@ tmpTemp
 ERR_NO
 ;
 
-209 
+213 
 pPoöt
 ->
-°©e
+öfo
+.
+dR©edPowî
+ = 
+tmpPow
+;
+
+215  
+îrcode
+;
+
+216 
+	}
+}
+
+233 
+Eº‹Code_t
+ 
+	$GëCh¨gögVﬁège
+(*
+pvPoöt
+)
+
+235 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+236 
+uöt8_t
+ 
+ucPoötID
+;
+
+237 
+tmpVﬁt
+;
+
+238 
+Eº‹Code_t
+ 
+îrcode
+;
+
+240 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+241 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+242 
+tmpVﬁt
+ = 0;
+
+243 
+îrcode
+ = 
+ERR_NO
+;
+
+251 
+pPoöt
+->
+°©us
+.
+dCh¨gögVﬁège
+ = 
+tmpVﬁt
+;
+
+253  
+îrcode
+;
+
+254 
+	}
+}
+
+264 
+Eº‹Code_t
+ 
+	$GëCh¨gögCuºít
+(*
+pvPoöt
+)
+
+266 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+267 
+uöt8_t
+ 
+ucPoötID
+;
+
+268 
+tmpCuº
+;
+
+269 
+Eº‹Code_t
+ 
+îrcode
+;
+
+271 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+272 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+273 
+tmpCuº
+ = 0;
+
+274 
+îrcode
+ = 
+ERR_NO
+;
+
+282 
+pPoöt
+->
+°©us
+.
+dCh¨gögCuºít
+ = 
+tmpCuº
+;
+
+284  
+îrcode
+;
+
+285 
+	}
+}
+
+295 
+Eº‹Code_t
+ 
+	$GëCh¨gögFªquí˚
+(*
+pvPoöt
+)
+
+297 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+298 
+uöt8_t
+ 
+ucPoötID
+;
+
+299 
+tmpFªq
+;
+
+300 
+Eº‹Code_t
+ 
+îrcode
+;
+
+302 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+303 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+304 
+tmpFªq
+ = 0;
+
+305 
+îrcode
+ = 
+ERR_NO
+;
+
+313 
+pPoöt
+->
+°©us
+.
+dCh¨gögFªquí˚
+ = 
+tmpFªq
+;
+
+315  
+îrcode
+;
+
+316 
+	}
+}
+
+326 
+Eº‹Code_t
+ 
+	$GëCPSèã
+(*
+pvPoöt
+)
+
+328 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+329 
+uöt8_t
+ 
+ucPoötID
+;
+
+330 
+Ch¨gePoötSèãTy≥
+ 
+tmpCPSèã
+;
+
+331 
+Eº‹Code_t
+ 
+îrcode
+;
+
+333 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+334 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+335 
+tmpCPSèã
+ = 
+CP_12V
+;
+
+336 
+îrcode
+ = 
+ERR_NO
+;
+
+344 
+pPoöt
+->
+°©us
+.
+xCPSèã
+ = 
+tmpCPSèã
+;
+
+346  
+îrcode
+;
+
+347 
+	}
+}
+
+355 
+Eº‹Code_t
+ 
+	$SëCPSwôch
+(*
+pvPoöt
+, 
+uöt8_t
+ 
+cmd
+)
+
+357 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+358 
+uöt8_t
+ 
+ucPoötID
+;
+
+359 
+Eº‹Code_t
+ 
+îrcode
+;
+
+361 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+362 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+363 
+îrcode
+ = 
+ERR_NO
+;
+
+371  
+îrcode
+;
+
+372 
+	}
+}
+
+382 
+Eº‹Code_t
+ 
+	$SëLﬂdPî˚¡
+(*
+pvPoöt
+, 
+uöt8_t
+ 
+ucLﬂdPî˚¡
+)
+
+384 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+385 
+uöt8_t
+ 
+ucPoötID
+;
+	`SëCPSwôch
+(*
+pvPoöt
+, uöt8_à
+cmd
+)
+
+386 
+uöt8_t
+ 
+tmpCPPWM
+;
+
+387 
+Eº‹Code_t
+ 
+îrcode
+;
+
+389 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+390 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+391 
+tmpCPPWM
+ = 53;
+
+392 
+îrcode
+ = 
+ERR_NO
+;
+
+400 
+pPoöt
+->
+°©us
+.
+ucLﬂdPî˚¡
+ = ucLoadPercent;
+
+402  
+îrcode
+;
+
+403 
+	}
+}
+
+412 
+Eº‹Code_t
+ 
+	$GëCCSèã
+(*
+pvPoöt
+)
+
+414 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+415 
+uöt8_t
+ 
+ucPoötID
+;
+
+416 
+Ch¨gePoötSèãTy≥
+ 
+tmpCCSèã
+;
+
+417 
+Eº‹Code_t
+ 
+îrcode
+;
+
+419 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+420 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+421 
+tmpCCSèã
+ = 
+CC_NO
+;
+
+422 
+îrcode
+ = 
+ERR_NO
+;
+
+430 
+pPoöt
+->
+°©us
+.
+xCCSèã
+ = 
+tmpCCSèã
+;
+
+432  
+îrcode
+;
+
+433 
+	}
+}
+
+443 
+Eº‹Code_t
+ 
+	$GëPlugSèã
+(*
+pvPoöt
+)
+
+445 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+446 
+uöt8_t
+ 
+ucPoötID
+;
+
+447 
+uöt32_t
+ 
+tmpPlugSèã
+;
+
+448 
+Eº‹Code_t
+ 
+îrcode
+;
+
+450 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+451 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+452 
+tmpPlugSèã
+ = 
+UNPLUG
+;
+
+453 
+îrcode
+ = 
+ERR_NO
+;
+
+457 if(
+pPoöt
+->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+459 
+	`THROW_ERROR
+(
+ucPoötID
+, 
+	`GëCCSèã
+(
+pvPoöt
+), 
+ERR_LEVEL_CRITICAL
+);
+
+460 
+	`THROW_ERROR
+(
+ucPoötID
+, 
+	`GëCPSèã
+(
+pvPoöt
+), 
+ERR_LEVEL_CRITICAL
+);
+
+461 if(
+pPoöt
+->
+°©us
+.
+xCCSèã
+ =
+CC_PE
+ &&ÖPoöt->°©us.
+xCPSèã
+ !
+CP_12V
+ &&ÖPoöt->°©us.xCPSèã !
+CP_ERR
+)
+
+463 
+tmpPlugSèã
+ = 
+PLUG
+;
+
+466 if(
+pPoöt
+->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥C
+)
+
+468 
+	`THROW_ERROR
+(
+ucPoötID
+, 
+	`GëCPSèã
+(
+pvPoöt
+), 
+ERR_LEVEL_CRITICAL
+);
+
+469 if(
+pPoöt
+->
+°©us
+.
+xCPSèã
+ !
+CP_12V
+ &&ÖPoöt->°©us.xCPSèã !
+CP_ERR
+)
+
+471 
+tmpPlugSèã
+ = 
+PLUG
+;
+
+477 
+pPoöt
+->
+°©us
+.
+xPlugSèã
+ = 
+tmpPlugSèã
+;
+
+479  
+îrcode
+;
+
+480 
+	}
+}
+
+490 
+Eº‹Code_t
+ 
+	$GëBTy≥C⁄√˘‹Lock
+(*
+pvPoöt
+)
+
+492 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+493 
+uöt8_t
+ 
+ucPoötID
+;
+
+494 
+Ch¨gePoötSèãTy≥
+ 
+tmpLockSèã
+;
+
+495 
+Eº‹Code_t
+ 
+îrcode
+;
+
+497 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+498 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+499 
+tmpLockSèã
+ = 
+LOCK
+;
+
+500 
+îrcode
+ = 
+ERR_NO
+;
+
+509 
+pPoöt
+->
+°©us
+.
+xBTy≥C⁄√˘‹LockSèã
+ = 
+tmpLockSèã
+;
+
+511  
+îrcode
+;
+
+512 
+	}
+}
+
+523 
+Eº‹Code_t
+ 
+	$SëBTy≥C⁄√˘‹Lock
+(*
+pvPoöt
+, 
+uöt8_t
+ 
+cmd
+)
+
+525 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+526 
+uöt8_t
+ 
+ucPoötID
+;
+
+527 
+Ch¨gePoötSèãTy≥
+ 
+tmpLockSèã
+;
+
+528 
+Eº‹Code_t
+ 
+îrcode
+;
+
+530 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+531 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+532 
+tmpLockSèã
+ = 
+UNLOCK
+;
+
+533 
+îrcode
+ = 
+ERR_NO
+;
+
+535 if(
+pPoöt
+->
+°©us
+.
+xBTy≥C⁄√˘‹LockSèã
+ =
+UNLOCK
+)
+
+544 
+	`THROW_ERROR
+(
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+, 
+	`GëBTy≥C⁄√˘‹Lock
+’Poöt), 
+ERR_LEVEL_WARNING
+);
+
+546  
+îrcode
+;
+
+547 
+	}
+}
+
+557 
+Eº‹Code_t
+ 
+	$GëACLTemp
+(*
+pvPoöt
+)
+
+559 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+560 
+uöt8_t
+ 
+ucPoötID
+;
+
+561 
+tmpACLTemp
+;
+
+562 
+Eº‹Code_t
+ 
+îrcode
+;
+
+564 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+565 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+566 
+tmpACLTemp
+ = 0;
+
+567 
+îrcode
+ = 
+ERR_NO
+;
+
+575 
+pPoöt
+->
+°©us
+.
+dACLTemp
+ = 
+tmpACLTemp
+;
+
+577  
+îrcode
+;
+
+578 
+	}
+}
+
+587 
+Eº‹Code_t
+ 
+	$GëACNTemp
+(*
+pvPoöt
+)
+
+589 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+590 
+uöt8_t
+ 
+ucPoötID
+;
+
+591 
+tmpACNTemp
+;
+
+592 
+Eº‹Code_t
+ 
+îrcode
+;
+
+594 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+595 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+596 
+tmpACNTemp
+ = 0;
+
+597 
+îrcode
+ = 
+ERR_NO
+;
+
+605 
+pPoöt
+->
+°©us
+.
+dACNTemp
+ = 
+tmpACNTemp
+;
+
+607  
+îrcode
+;
+
+608 
+	}
+}
+
+617 
+Eº‹Code_t
+ 
+	$GëBTy≥C⁄√˘‹Temp1
+(*
+pvPoöt
+)
+
+619 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+620 
+uöt8_t
+ 
+ucPoötID
+;
+
+621 
+tmpTemp
+;
+
+622 
+Eº‹Code_t
+ 
+îrcode
+;
+
+624 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+625 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+626 
+tmpTemp
+ = 0;
+
+627 
+îrcode
+ = 
+ERR_NO
+;
+
+635 
+pPoöt
+->
+°©us
 .
 dBTy≥C⁄√˘‹Temp1
  = 
 tmpTemp
 ;
 
-211  
+637  
 îrcode
 ;
 
-212 
+638 
 	}
 }
 
-213 
+646 
 Eº‹Code_t
  
 	$GëBTy≥C⁄√˘‹Temp2
-(
+(*
+pvPoöt
+)
+
+648 
 Ch¨gePoöt_t
  *
 pPoöt
-)
+;
 
-215 
+649 
 uöt8_t
  
+ucPoötID
+;
+
+650 
+tmpTemp
+;
+
+651 
+Eº‹Code_t
+ 
+îrcode
+;
+
+653 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+654 
 ucPoötID
  = 
 pPoöt
@@ -2891,57 +5405,75 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-216 
-tmpTemp
-;
-
-217 
-Eº‹Code_t
- 
-îrcode
-;
-
-219 
+655 
 tmpTemp
  = 0;
 
-220 
+656 
 îrcode
  = 
 ERR_NO
 ;
 
-224 
+664 
 pPoöt
 ->
-°©e
+°©us
 .
 dBTy≥C⁄√˘‹Temp2
  = 
 tmpTemp
 ;
 
-226  
+666  
 îrcode
 ;
 
-227 
+667 
 	}
 }
 
-228 
+676 
 Eº‹Code_t
  
 	$SèπCh¨ge
-(
+(*
+pvPoöt
+)
+
+678 
 Ch¨gePoöt_t
  *
 pPoöt
-)
+;
 
-230 
+679 
 uöt8_t
  
+ucPoötID
+;
+
+680 
+Ch¨gePoötSèãTy≥
+ 
+tmpCh¨geSètus
+;
+
+681 
+Eº‹Code_t
+ 
+îrcode
+;
+
+683 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+684 
 ucPoötID
  = 
 pPoöt
@@ -2951,45 +5483,61 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-231 
-Eº‹Code_t
- 
-îrcode
-;
-
-232 
-Ch¨gePoötSèãTy≥
- 
-tmpCh¨geSètus
-;
-
-234 
+685 
 îrcode
  = 
 ERR_NO
 ;
 
-237  
+691  
 îrcode
 ;
 
-239 
+692 
 	}
 }
 
-240 
+701 
 Eº‹Code_t
  
 	$St›Ch¨ge
-(
+(*
+pvPoöt
+)
+
+703 
 Ch¨gePoöt_t
  *
 pPoöt
-)
+;
 
-242 
+704 
 uöt8_t
  
+ucPoötID
+;
+
+705 
+Ch¨gePoötSèãTy≥
+ 
+tmpCh¨geSètus
+;
+
+706 
+Eº‹Code_t
+ 
+îrcode
+;
+
+708 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+709 
 ucPoötID
  = 
 pPoöt
@@ -2999,33 +5547,159 @@ pPoöt
 ucCh¨gePoötID
 ;
 
-243 
-Eº‹Code_t
- 
-îrcode
-;
-
-244 
-Ch¨gePoötSèãTy≥
- 
-tmpCh¨geSètus
-;
-
-246 
+710 
 îrcode
  = 
 ERR_NO
 ;
 
-249  
+717  
 îrcode
 ;
 
-250 
+718 
 	}
 }
 
-252 
+725 
+Eº‹Code_t
+ 
+	$GëRñaySèã
+(*
+pvPoöt
+)
+
+727 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+728 
+uöt8_t
+ 
+ucPoötID
+;
+
+729 
+uöt8_t
+ 
+tmpLSèt
+;
+
+730 
+uöt8_t
+ 
+tmpNSèt
+;
+
+731 
+Eº‹Code_t
+ 
+îrcode
+;
+
+733 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)
+pvPoöt
+;
+
+734 
+ucPoötID
+ = 
+pPoöt
+->
+öfo
+.
+ucCh¨gePoötID
+;
+
+735 
+tmpLSèt
+ = 
+SWITCH_OFF
+;
+
+736 
+tmpNSèt
+ = 
+SWITCH_OFF
+;
+
+737 
+îrcode
+ = 
+ERR_NO
+;
+
+745 
+pPoöt
+->
+°©us
+.
+ucRñayLSèã
+ = 
+tmpLSèt
+;
+
+746 
+pPoöt
+->
+°©us
+.
+ucRñayNSèã
+ = 
+tmpNSèt
+;
+
+748  
+îrcode
+;
+
+749 
+	}
+}
+
+750 
+Ch¨gePoöt_t
+ *
+	$Ch¨gePoötGëH™dÀ
+(
+uöt8_t
+ 
+ucCh¨gePoötID
+)
+
+752 
+Ch¨gePoöt_t
+ *
+pPoöt
+;
+
+754 
+pPoöt
+ = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[
+ucCh¨gePoötID
+]);
+
+756  
+pPoöt
+;
+
+757 
+	}
+}
+
+758 
 Ch¨gePoöt_t
  *
 	$Ch¨gePoötCª©e
@@ -3035,13 +5709,13 @@ uöt8_t
 ucCh¨gePoötID
  )
 
-254 
+760 
 Ch¨gePoöt_t
  *
 pCh¨gePoöt
 ;
 
-255 
+761 
 pCh¨gePoöt
  = (
 Ch¨gePoöt_t
@@ -3049,17 +5723,17 @@ Ch¨gePoöt_t
 	`mÆloc
 ((ChargePoint_t));
 
-256 if(
+762 if(
 pCh¨gePoöt
  =
 NULL
 )
 
-258  
+764  
 NULL
 ;
 
-260 
+766 
 pCh¨gePoöt
 ->
 öfo
@@ -3067,27 +5741,413 @@ pCh¨gePoöt
 ucCh¨gePoötID
  = ucChargePointID;
 
-262 
+767 
 pCh¨gePoöt
 ->
-°©e
+öfo
 .
-xH™dÀEvítGroupSèπCh¨ge
+ucC⁄√˘‹Ty≥
+ = 
+defC⁄√˘‹Ty≥B
+;
+
+768 
+pCh¨gePoöt
+->
+öfo
+.
+dVﬁ©ageUµîLimôs
+ = 0;
+
+769 
+pCh¨gePoöt
+->
+öfo
+.
+dVﬁ©ageLowîLimôs
+ = 0;
+
+770 
+pCh¨gePoöt
+->
+öfo
+.
+dACTempUµîLimôs
+ = 0;
+
+771 
+pCh¨gePoöt
+->
+öfo
+.
+dACTempLowîLimôs
+ = 0;
+
+772 
+pCh¨gePoöt
+->
+öfo
+.
+dC⁄√˘‹TempUµîLimôs
+ = 0;
+
+773 
+pCh¨gePoöt
+->
+öfo
+.
+dC⁄√˘‹TempLowîLimôs
+ = 0;
+
+774 
+pCh¨gePoöt
+->
+öfo
+.
+dR©edCuºít
+ = 0;
+
+775 
+pCh¨gePoöt
+->
+öfo
+.
+dR©edPowî
+ = 0;
+
+777 
+pCh¨gePoöt
+->
+öfo
+.
+GëC⁄√˘‹Ty≥
+ = GetConnectorType;
+
+778 
+pCh¨gePoöt
+->
+öfo
+.
+GëVﬁ©ageUµîLimôs
+ = GetVolatageUpperLimits;
+
+779 
+pCh¨gePoöt
+->
+öfo
+.
+GëVﬁ©ageLowîLimôs
+ = GetVolatageLowerLimits;
+
+780 
+pCh¨gePoöt
+->
+öfo
+.
+GëACTempUµîLimôs
+ = GetACTempUpperLimits;
+
+781 
+pCh¨gePoöt
+->
+öfo
+.
+GëACTempLowîLimôs
+ = GetACTempLowerLimits;
+
+782 
+pCh¨gePoöt
+->
+öfo
+.
+GëC⁄√˘‹TempUµîLimôs
+ = GetConnectorTempUpperLimits;
+
+783 
+pCh¨gePoöt
+->
+öfo
+.
+GëC⁄√˘‹TempLowîLimôs
+ = GetConnectorTempLowerLimits;
+
+784 
+pCh¨gePoöt
+->
+öfo
+.
+GëR©edCuºít
+ = GetRatedCurrent;
+
+785 
+pCh¨gePoöt
+->
+öfo
+.
+GëR©edPowî
+ = GetRatedPower;
+
+787 
+	`mem£t
+(
+pCh¨gePoöt
+->
+°©us
+.
+ucHñdC¨dUID
+, 0, 
+defUIDLígth
+);
+
+788 
+pCh¨gePoöt
+->
+°©us
+.
+dACLTemp
+ = 0;
+
+789 
+pCh¨gePoöt
+->
+°©us
+.
+dACNTemp
+ = 0;
+
+790 
+pCh¨gePoöt
+->
+°©us
+.
+dBTy≥C⁄√˘‹Temp1
+ = 0;
+
+791 
+pCh¨gePoöt
+->
+°©us
+.
+dBTy≥C⁄√˘‹Temp2
+ = 0;
+
+792 
+pCh¨gePoöt
+->
+°©us
+.
+dCh¨gögCuºít
+ = 0;
+
+793 
+pCh¨gePoöt
+->
+°©us
+.
+dCh¨gögFªquí˚
+ = 0;
+
+794 
+pCh¨gePoöt
+->
+°©us
+.
+dCh¨gögVﬁège
+ = 0;
+
+795 
+pCh¨gePoöt
+->
+°©us
+.
+xBTy≥C⁄√˘‹LockSèã
+ = 0;
+
+796 
+pCh¨gePoöt
+->
+°©us
+.
+xCCSèã
+ = 0;
+
+797 
+pCh¨gePoöt
+->
+°©us
+.
+xCPSèã
+ = 0;
+
+798 
+pCh¨gePoöt
+->
+°©us
+.
+ucLﬂdPî˚¡
+ = 100;
+
+799 
+pCh¨gePoöt
+->
+°©us
+.
+xPlugSèã
+ = 0;
+
+800 
+pCh¨gePoöt
+->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
  = 
 	`xEvítGroupCª©e
 ();
 
-263 
+801 
 pCh¨gePoöt
 ->
-°©e
+°©us
 .
-xH™dÀEvítGroupSt›Ch¨ge
+xH™dÀEvítEx˚±i⁄
  = 
 	`xEvítGroupCª©e
 ();
 
-264 
+803 
+pCh¨gePoöt
+->
+°©us
+.
+GëCh¨gögVﬁège
+ = GetChargingVoltage;
+
+804 
+pCh¨gePoöt
+->
+°©us
+.
+GëCh¨gögCuºít
+ = GetChargingCurrent;
+
+805 
+pCh¨gePoöt
+->
+°©us
+.
+GëCh¨gögFªquí˚
+ = GetChargingFrequence;
+
+807 
+pCh¨gePoöt
+->
+°©us
+.
+GëCPSèã
+ = GetCPState;
+
+808 
+pCh¨gePoöt
+->
+°©us
+.
+SëCPSwôch
+ = SetCPSwitch;
+
+809 
+pCh¨gePoöt
+->
+°©us
+.
+GëCCSèã
+ = GetCCState;
+
+810 
+pCh¨gePoöt
+->
+°©us
+.
+GëPlugSèã
+ = GetPlugState;
+
+811 
+pCh¨gePoöt
+->
+°©us
+.
+GëBTy≥C⁄√˘‹Lock
+ = GetBTypeConnectorLock;
+
+812 
+pCh¨gePoöt
+->
+°©us
+.
+SëBTy≥C⁄√˘‹Lock
+ = SetBTypeConnectorLock;
+
+813 
+pCh¨gePoöt
+->
+°©us
+.
+GëACLTemp
+ = GetACLTemp;
+
+814 
+pCh¨gePoöt
+->
+°©us
+.
+GëACNTemp
+ = GetACNTemp;
+
+815 
+pCh¨gePoöt
+->
+°©us
+.
+GëBTy≥C⁄√˘‹Temp1
+ = GetBTypeConnectorTemp1;
+
+816 
+pCh¨gePoöt
+->
+°©us
+.
+GëBTy≥C⁄√˘‹Temp2
+ = GetBTypeConnectorTemp2;
+
+817 
+pCh¨gePoöt
+->
+°©us
+.
+SèπCh¨ge
+ = StartCharge;
+
+818 
+pCh¨gePoöt
+->
+°©us
+.
+St›Ch¨ge
+ = StopCharge;
+
+820 
+pCh¨gePoöt
+->
+°©e
+ = 
+POINT_IDLE
+;
+
+821  
+pCh¨gePoöt
+;
+
+822 
 	}
 }
 
@@ -3119,359 +6179,491 @@ __CHARGEPOINT_H
 	~"îr‹code.h
 "
 
-16 
-	#defC⁄√˘‹Ty≥B
- 0x0B
-
-	)
+15 
+	~"öãrÁ˚_rfid.h
+"
 
 17 
-	#defC⁄√˘‹Ty≥C
- 0x0C
+	#defC⁄√˘‹Ty≥B
+ 'B'
 
 	)
 
-19 
+18 
+	#defC⁄√˘‹Ty≥C
+ 'C'
+
+	)
+
+20 
 	e__Ch¨gePoötSèãTy≥
 
 
-21 
+22 
 	mNO_ERR
  = 0,
 
-23 
+24 
 	mCP_ERR
 ,
 
-24 
+25 
 	mCP_12V
 ,
 
-25 
+26 
 	mCP_9V
 ,
 
-26 
+27 
 	mCP_9V_PWM
 ,
 
-27 
+28 
 	mCP_6V_PWM
 ,
 
-29 
+30 
 	mCC_PE
 ,
 
-30 
+31 
 	mCC_NO
 ,
 
-32 
+33 
 	mPLUG
 ,
 
-33 
+34 
 	mUNPLUG
 ,
 
-35 
+36 
 	mLOCK
 ,
 
-36 
+37 
 	mUNLOCK
 
 
-37 }
+38 }
 	tCh¨gePoötSèãTy≥
 ;
 
-39 
+40 
+	$Eº‹Code_t
+ (*
+	tpCh¨gePoöt_·
+)(*
+	tpvPoöt
+);
+
+42 
 	s_Ch¨gePoötInfo
 
 
-41 
-uöt8_t
- 
-	mucCh¨gePoötID
-;
-
-42 
-uöt8_t
- 
-	mucC⁄√˘‹Ty≥
-;
-
-43 
-uöt32_t
- 
-	mulVﬁ©ageUµîLimôs
-;
-
 44 
-uöt32_t
+uöt8_t
  
-	mulVﬁ©ageLowîLimôs
+ucCh¨gePoötID
 ;
 
 45 
-uöt32_t
+uöt8_t
  
-	mulCuºít
+ucC⁄√˘‹Ty≥
 ;
 
-46 
-uöt32_t
+46 
+dVﬁ©ageUµîLimôs
+;
+
+47 
+dVﬁ©ageLowîLimôs
+;
+
+48 
+dACTempUµîLimôs
+;
+
+49 
+dACTempLowîLimôs
+;
+
+50 
+dC⁄√˘‹TempUµîLimôs
+;
+
+51 
+dC⁄√˘‹TempLowîLimôs
+;
+
+52 
+dR©edCuºít
+;
+
+53 
+dR©edPowî
+;
+
+55 
+pCh¨gePoöt_·
  
-	mulPowî
+GëC⁄√˘‹Ty≥
 ;
 
-47 }
-	tCh¨gePoötInfo_t
-;
-
-49 
-	s_Ch¨gePoötSèã
-
-
-51 
-Ch¨gePoötSèãTy≥
+56 
+pCh¨gePoöt_·
  
-	mxCPSèã
+GëVﬁ©ageUµîLimôs
 ;
 
-52 
-Ch¨gePoötSèãTy≥
+57 
+pCh¨gePoöt_·
  
-	mxCCSèã
-;
-
-53 
-Ch¨gePoötSèãTy≥
- 
-	mxPlugSèã
-;
-
-54 
-	mdACLTemp
-;
-
-55 
-	mdACNTemp
-;
-
-56 
-	mdBTy≥C⁄√˘‹Temp1
-;
-
-57 
-	mdBTy≥C⁄√˘‹Temp2
+GëVﬁ©ageLowîLimôs
 ;
 
 58 
-Ch¨gePoötSèãTy≥
+pCh¨gePoöt_·
  
-	mxBTy≥C⁄√˘‹LockSèã
+GëACTempUµîLimôs
 ;
 
-59 
-	mdCh¨gögVﬁège
+59 
+pCh¨gePoöt_·
+ 
+GëACTempLowîLimôs
 ;
 
-60 
-	mdCh¨gögCuºít
+60 
+pCh¨gePoöt_·
+ 
+GëC⁄√˘‹TempUµîLimôs
 ;
 
-61 
-	mdCh¨gögFªquí˚
+61 
+pCh¨gePoöt_·
+ 
+GëC⁄√˘‹TempLowîLimôs
 ;
 
 62 
-EvítGroupH™dÀ_t
+pCh¨gePoöt_·
  
-	mxH™dÀEvítGroupSèπCh¨ge
+GëR©edCuºít
 ;
 
 63 
-EvítGroupH™dÀ_t
+pCh¨gePoöt_·
  
-	mxH™dÀEvítGroupSt›Ch¨ge
+GëR©edPowî
 ;
 
 64 }
-	tCh¨gePoötSèã_t
+	tCh¨gePoötInfo_t
 ;
 
 66 
-	s_Ch¨gePoöt
+	s_Ch¨gePoötSètus
 
 
 68 
-Ch¨gePoötInfo_t
+uöt8_t
  
-	möfo
-;
+ucHñdC¨dUID
+[
+defUIDLígth
+];
 
 69 
-Ch¨gePoötSèã_t
+Ch¨gePoötSèãTy≥
  
-	m°©e
+xCPSèã
 ;
 
-71 } 
+70 
+uöt8_t
+ 
+ucLﬂdPî˚¡
+;
+
+71 
+Ch¨gePoötSèãTy≥
+ 
+xCCSèã
+;
+
+72 
+Ch¨gePoötSèãTy≥
+ 
+xPlugSèã
+;
+
+73 
+dACLTemp
+;
+
+74 
+dACNTemp
+;
+
+75 
+dBTy≥C⁄√˘‹Temp1
+;
+
+76 
+dBTy≥C⁄√˘‹Temp2
+;
+
+77 
+Ch¨gePoötSèãTy≥
+ 
+xBTy≥C⁄√˘‹LockSèã
+;
+
+78 
+dCh¨gögVﬁège
+;
+
+79 
+dCh¨gögCuºít
+;
+
+80 
+dCh¨gögFªquí˚
+;
+
+81 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítSèπC⁄dôi⁄
+;
+
+82 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítEx˚±i⁄
+;
+
+83 
+uöt8_t
+ 
+ucRñayLSèã
+;
+
+84 
+uöt8_t
+ 
+ucRñayNSèã
+;
+
+86 
+pCh¨gePoöt_·
+ 
+GëCh¨gögVﬁège
+;
+
+87 
+pCh¨gePoöt_·
+ 
+GëCh¨gögCuºít
+;
+
+88 
+pCh¨gePoöt_·
+ 
+GëCh¨gögFªquí˚
+;
+
+90 
+pCh¨gePoöt_·
+ 
+GëCPSèã
+;
+
+91 
+	`Eº‹Code_t
+ (*
+SëCPSwôch
+)(*
+pvPoöt
+, 
+uöt8_t
+ 
+cmd
+);
+
+92 
+	`Eº‹Code_t
+ (*
+SëLﬂdPî˚¡
+)(*
+pvPoöt
+, 
+uöt8_t
+ 
+ucLﬂdPî˚¡
+);
+
+93 
+pCh¨gePoöt_·
+ 
+GëCCSèã
+;
+
+94 
+pCh¨gePoöt_·
+ 
+GëPlugSèã
+;
+
+95 
+pCh¨gePoöt_·
+ 
+GëBTy≥C⁄√˘‹Lock
+;
+
+96 
+	`Eº‹Code_t
+ (*
+SëBTy≥C⁄√˘‹Lock
+)(*
+pvPoöt
+, 
+uöt8_t
+ 
+cmd
+);
+
+97 
+pCh¨gePoöt_·
+ 
+GëACLTemp
+;
+
+98 
+pCh¨gePoöt_·
+ 
+GëACNTemp
+;
+
+99 
+pCh¨gePoöt_·
+ 
+GëBTy≥C⁄√˘‹Temp1
+;
+
+100 
+pCh¨gePoöt_·
+ 
+GëBTy≥C⁄√˘‹Temp2
+;
+
+101 
+pCh¨gePoöt_·
+ 
+SèπCh¨ge
+;
+
+102 
+pCh¨gePoöt_·
+ 
+St›Ch¨ge
+;
+
+103 
+pCh¨gePoöt_·
+ 
+GëRñaySèã
+;
+
+105 }
+	tCh¨gePoötSètus_t
+;
+
+107 
+	e_Ch¨gePoötSèã
+
+
+109 
+POINT_IDLE
+,
+
+110 
+POINT_PLUGED
+,
+
+111 
+POINT_PRECONTRACT
+,
+
+112 
+POINT_STARTCHARGE
+,
+
+113 
+POINT_CHARGING
+,
+
+114 
+POINT_CHARGING_HALFLOAD
+,
+
+115 
+POINT_ERROR
+
+
+116 }
+	tCh¨gePoötSèã_t
+;
+
+119 
+	s_Ch¨gePoöt
+
+
+121 
+Ch¨gePoötInfo_t
+ 
+öfo
+;
+
+122 
+Ch¨gePoötSètus_t
+ 
+°©us
+;
+
+123 
+Ch¨gePoötSèã_t
+ 
+°©e
+;
+
+124 } 
 	tCh¨gePoöt_t
 ;
 
-73 
-Eº‹Code_t
- 
-GëCh¨gögVﬁège
-(
+126 
 Ch¨gePoöt_t
  *
-pPoöt
-);
-
-74 
-Eº‹Code_t
- 
-GëCh¨gögCuºít
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-75 
-Eº‹Code_t
- 
-GëCh¨gögFªquí˚
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-77 
-Eº‹Code_t
- 
-GëCPSèã
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-78 
-Eº‹Code_t
- 
-GëCCSèã
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-79 
-Eº‹Code_t
- 
-GëPlugSèã
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-80 
-Eº‹Code_t
- 
-GëBTy≥C⁄√˘‹Lock
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-81 
-Eº‹Code_t
- 
-SëBTy≥C⁄√˘‹Lock
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-82 
-Eº‹Code_t
- 
-GëACLTemp
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-83 
-Eº‹Code_t
- 
-GëACNTemp
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-84 
-Eº‹Code_t
- 
-GëBTy≥C⁄√˘‹Temp1
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-85 
-Eº‹Code_t
- 
-GëBTy≥C⁄√˘‹Temp2
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-86 
-Eº‹Code_t
- 
-SèπCh¨ge
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-87 
-Eº‹Code_t
- 
-St›Ch¨ge
-(
-Ch¨gePoöt_t
- *
-pPoöt
-);
-
-89 
-Ch¨gePoöt_t
- *
-Ch¨gePoötCª©e
+	`Ch¨gePoötCª©e
 (
 uöt8_t
  
 ucCh¨gePoötID
  );
+
+127 
+Ch¨gePoöt_t
+ *
+	`Ch¨gePoötGëH™dÀ
+(
+uöt8_t
+ 
+ucCh¨gePoötID
+);
 
 	@D:\Documents\Projects\chargersdk\src\app\errorcode.c
 
@@ -3489,9 +6681,13 @@ uöt8_t
 	g°rEº‹Code
 [100] =
 
-31 
+53 
 	$ThrowEº‹Code
 (
+uöt32_t
+ 
+ulDevID
+, 
 Eº‹Code_t
  
 îrcode
@@ -3501,13 +6697,19 @@ Eº‹Levñ_t
 îæevñ
 )
 
-33 
+55 
 Eº‹Package_t
  
 ∑ckage
 ;
 
-35 
+57 
+∑ckage
+.
+ulDevID
+ = ulDevID;
+
+58 
 ∑ckage
 .
 code
@@ -3515,7 +6717,7 @@ code
 îrcode
 ;
 
-36 
+59 
 ∑ckage
 .
 Àvñ
@@ -3523,15 +6725,15 @@ code
 îæevñ
 ;
 
-38 
+61 
 	`xQueueSíd
 (
-xH™dÀQueueEº‹Code
+xH™dÀQueueEº‹Package
 , (*)&
 ∑ckage
 , 0);
 
-39 
+62 
 	}
 }
 
@@ -3550,130 +6752,272 @@ __ERRORCODE_H
 11 
 	#THROW_ERROR
 (
-îrcode
+_dev
+, 
+_îrcode
 ,
-îæevñ
-Ëif”ºcodê!
+_îæevñ
+) { \
+
+12 
+Eº‹Code_t
+ 
+_ma¸o_îrcode
+ = 
+_îrcode
+; \
+
+13 if(
+_ma¸o_îrcode
+ !
 ERR_NO
-Ë{
+) \
+
+15 
 	`ThrowEº‹Code
-”ºcode,îæevñ);}
+(
+_dev
+, 
+_ma¸o_îrcode
+,
+_îæevñ
+); \
+
+17 }
 
 	)
 
-13 
+18 
 	e_Eº‹Code
 
 
-15 
+20 
 	mERR_NO
 ,
 
-16 
-	mERR_SCRAM
-,
-
-17 
-	mERR_OTHER
-,
-
-18 
-	mERR_RFID_PE
-,
-
-19 
-	mERR_RFID_NE
-,
-
-20 
-	mERR_RFID_FE
-,
-
 21 
-	mERR_RFID_ORE
+	mERR_SCRAM_FAULT
 ,
 
 22 
-	mERR_RFID_DMA
+	mERR_GSENSOR_FAULT
 ,
 
 23 
-	mERR_NETMODULE_PE
+	mERR_PE_FAULT
 ,
 
 24 
-	mERR_NETMODULE_NE
+	mERR_POWEROFF_DECT_FAULT
 ,
 
 25 
-	mERR_NETMODULE_FE
-,
-
-26 
-	mERR_NETMODULE_ORE
+	mERR_ARRESTER_FAULT
 ,
 
 27 
-	mERR_NETMODULE_DMA
+	mERR_POINT_METER_FAULT
 ,
 
-28 } 
-	tEº‹Code_t
-;
+28 
+	mERR_POINT_CP_FAULT
+,
 
-30 
-	e_Eº‹Levñ
+29 
+	mERR_POINT_CC_FAULT
+,
 
+30 
+	mERR_POINT_PLUG_FAULT
+,
+
+31 
+	mERR_POINT_B_LOCK_FAULT
+,
 
 32 
-	mERR_LEVEL_TIPS
+	mERR_POINT_CANT_LOCK
 ,
 
 33 
-	mERR_LEVEL_WARNING
+	mERR_POINT_ACLTEMP_DECT_FAULT
 ,
 
 34 
-	mERR_LEVEL_CRITICAL
+	mERR_POINT_ACNTEMP_DECT_FAULT
 ,
 
 35 
+	mERR_POINT_BTEMP1_DECT_FAULT
+,
+
+36 
+	mERR_POINT_BTEMP2_DECT_FAULT
+,
+
+37 
+	mERR_POINT_STARTCHARGE
+,
+
+38 
+	mERR_POINT_STOPCHARGE
+,
+
+40 
+	mERR_FILE_RW
+,
+
+41 
+	mERR_FILE_NO
+,
+
+42 
+	mERR_OTHER
+,
+
+43 
+	mERR_RFID_FAULT
+,
+
+44 
+	mERR_RFID_PE
+,
+
+45 
+	mERR_RFID_NE
+,
+
+46 
+	mERR_RFID_FE
+,
+
+47 
+	mERR_RFID_ORE
+,
+
+48 
+	mERR_RFID_DMA
+,
+
+49 
+	mERR_NETMODULE_PE
+,
+
+50 
+	mERR_NETMODULE_NE
+,
+
+51 
+	mERR_NETMODULE_FE
+,
+
+52 
+	mERR_NETMODULE_ORE
+,
+
+53 
+	mERR_NETMODULE_DMA
+,
+
+55 
+	mERR_NONET
+
+
+57 } 
+	tEº‹Code_t
+;
+
+59 
+	e_Eº‹Levñ
+
+
+61 
+	mERR_LEVEL_OK
+,
+
+62 
+	mERR_LEVEL_TIPS
+,
+
+63 
+	mERR_LEVEL_WARNING
+,
+
+64 
+	mERR_LEVEL_CRITICAL
+,
+
+65 
 	mERR_LEVEL_CLEAR
 
 
-36 } 
+66 } 
 	tEº‹Levñ_t
 ;
 
-38 
+68 
 	s_Eº‹Package
 
 
-40 
+70 
+uöt32_t
+ 
+	mulDevID
+;
+
+71 
 Eº‹Code_t
  
 	mcode
 ;
 
-41 
+72 
 Eº‹Levñ_t
  
 	mÀvñ
 ;
 
-42 }
+73 }
 	tEº‹Package_t
 ;
 
-44 c⁄° 
+77 
+	#defDevID_FILE
+ 0xFC
+
+	)
+
+78 
+	#defDevID_RFID
+ 0xFE
+
+	)
+
+79 
+	#defDevID_NëMoudÀ
+ 0xFD
+
+	)
+
+80 
+	#defDevID_EVSE
+ 0xFF
+
+	)
+
+83 c⁄° 
 uöt8_t
  *
 °rEº‹Code
 [];
 
-46 
+85 
 ThrowEº‹Code
 (
+uöt32_t
+ 
+ulDevID
+, 
 Eº‹Code_t
  
 îrcode
@@ -3683,36 +7027,90 @@ Eº‹Levñ_t
 îæevñ
 );
 
-	@D:\Documents\Projects\chargersdk\src\app\globals.c
+	@D:\Documents\Projects\chargersdk\src\app\evse_config.h
+
+8 #i‚de‡
+__EVSE_CONFIG_H
+
+
+9 
+	#__EVSE_CONFIG_H
+
+
+	)
+
+11 
+	#defTŸÆPoöt
+ 2
+
+	)
+
+12 
+	#defUIDLígth
+ 4
+
+	)
+
+13 
+	#defEVSESNLígth
+ 24
+
+	)
+
+14 
+	#defEVSEIDLígth
+ 24
+
+	)
+
+15 
+	#defFûeNameLígth
+ 64
+
+	)
+
+16 
+	#defNodeNameLígth
+ 64
+
+	)
+
+	@D:\Documents\Projects\chargersdk\src\app\evse_globals.c
 
 8 
-	~"EVSE.h
+	~"öãrÁ˚.h
 "
 
 9 
 	~"u£æib_li°.h
 "
 
-11 
+12 
 EVSE_t
  *
 	gpEVSE
 ;
 
-12 
+13 
 U£rLi°_t
  *
 	gpLi°Ch¨gePoöt
 ;
 
-	@D:\Documents\Projects\chargersdk\src\app\globals.h
+14 
+RFIDDev_t
+ *
+	gpRFIDDev
+;
+
+	@D:\Documents\Projects\chargersdk\src\app\evse_globals.h
 
 8 #i‚de‡ 
-__GLOBALS_H
+__EVSE_GLOBALS_H
 
 
 9 
-	#__GLOBALS_H
+	#__EVSE_GLOBALS_H
 
 
 	)
@@ -3722,291 +7120,485 @@ __GLOBALS_H
 "
 
 12 
+	~"öãrÁ˚_rfid.h
+"
+
+13 
 	~"u£æib_li°.h
 "
 
-14 
+16 
+	#SWITCH_ON
+ 1
+
+	)
+
+17 
+	#SWITCH_OFF
+ 0
+
+	)
+
+19 
 	#BIT_0
  ( 1 << 0 )
 
 	)
 
-15 
+20 
 	#BIT_1
  ( 1 << 1 )
 
 	)
 
-16 
+21 
 	#BIT_2
  ( 1 << 2 )
 
 	)
 
-17 
+22 
 	#BIT_3
  ( 1 << 3 )
 
 	)
 
-18 
+23 
 	#BIT_4
  ( 1 << 4 )
 
 	)
 
-19 
+24 
 	#BIT_5
  ( 1 << 5 )
 
 	)
 
-20 
+25 
 	#BIT_6
  ( 1 << 6 )
 
 	)
 
-21 
+26 
 	#BIT_7
  ( 1 << 7 )
 
 	)
 
-22 
+27 
 	#BIT_8
  ( 1 << 8 )
 
 	)
 
-23 
+28 
 	#BIT_9
  ( 1 << 9 )
 
 	)
 
-24 
+29 
 	#BIT_10
  ( 1 << 10 )
 
 	)
 
-25 
+30 
 	#BIT_11
  ( 1 << 11 )
 
 	)
 
-26 
+31 
 	#BIT_12
  ( 1 << 12 )
 
 	)
 
-27 
+32 
 	#BIT_13
  ( 1 << 13 )
 
 	)
 
-28 
+33 
 	#BIT_14
  ( 1 << 14 )
 
 	)
 
-29 
+34 
 	#BIT_15
  ( 1 << 15 )
 
 	)
 
-30 
+35 
 	#BIT_16
  ( 1 << 16 )
 
 	)
 
-31 
+36 
 	#BIT_17
  ( 1 << 17 )
 
 	)
 
-32 
+37 
 	#BIT_18
  ( 1 << 18 )
 
 	)
 
-33 
+38 
 	#BIT_19
  ( 1 << 19 )
 
 	)
 
-34 
+39 
 	#BIT_20
  ( 1 << 20 )
 
 	)
 
-35 
+40 
 	#BIT_21
  ( 1 << 21 )
 
 	)
 
-36 
+41 
 	#BIT_22
  ( 1 << 22 )
 
 	)
 
-37 
+42 
 	#BIT_23
  ( 1 << 23 )
 
 	)
 
-38 
+43 
 	#BIT_24
  ( 1 << 24 )
 
 	)
 
-39 
+44 
 	#BIT_25
  ( 1 << 25 )
 
 	)
 
-40 
+45 
 	#BIT_26
  ( 1 << 26 )
 
 	)
 
-41 
+46 
 	#BIT_27
  ( 1 << 27 )
 
 	)
 
-42 
+47 
 	#BIT_28
  ( 1 << 28 )
 
 	)
 
-43 
+48 
 	#BIT_29
  ( 1 << 29 )
 
 	)
 
-44 
+49 
 	#BIT_30
  ( 1 << 30 )
 
 	)
 
-45 
+50 
 	#BIT_31
  ( 1 << 31 )
 
 	)
 
-51 
-	#defEvítBôGETUID
+56 
+	#defEvítBôGŸUIDtoRFID
+ 
+BIT_0
+
+
+57 
+	#defEvítBôGŸUIDtoHMI
+ 
+BIT_1
+
+
+58 
+	#defEvítBôIsNewUID
+ 
+BIT_2
+
+
+59 
+	#defEvítBôGëAccou¡Sètus
+ 
+BIT_3
+
+
+60 
+
+	)
+
+62 
+	#defEvítBôAddOrdî
  
 BIT_0
 
 
 	)
 
-53 
-	#defEvítBôAuthed
- 
-BIT_0
-
-
-	)
-
-54 
-	#defEvítBôLocked
+63 
+	#defEvítBôAddOrdîOK
  
 BIT_1
 
 
 	)
 
-55 
-	#defEvítBôVﬁtOK
+65 
+	#defEvítBôRemŸe
+
+
+	)
+
+67 
+	#defEvítBôDügTempW
+ 
+BIT_0
+
+
+69 
+	#defEvítBôEx˚±i⁄TempW
+ 
+BIT_0
+
+
+70 
+	#defEvítBôEx˚±i⁄TempC
+ 
+BIT_1
+
+
+71 
+	#defEvítBôEx˚±i⁄Vﬁt
  
 BIT_2
 
 
 	)
 
-56 
-	#defEvítBôCuºOK
+72 
+	#defEvítBôEx˚±i⁄Cuº
  
 BIT_3
 
 
 	)
 
-57 
-	#defEvítBôCPOK
+73 
+	#defEvítBôEx˚±i⁄Crôiˇl
+ 
+defEvítBôEx˚±i⁄TempC
+
+
+	)
+
+76 
+	#defEvítBôStdAuthed
+ 
+BIT_0
+
+
+	)
+
+77 
+	#defEvítBôStdLocked
+ 
+BIT_1
+
+
+	)
+
+78 
+	#defEvítBôStdVﬁtOK
+ 
+BIT_2
+
+
+	)
+
+79 
+	#defEvítBôStdCuºOK
+ 
+BIT_3
+
+
+	)
+
+80 
+	#defEvítBôStdCPOK
  
 BIT_4
 
 
 	)
 
-58 
-	#defEvítBôCCOK
+81 
+	#defEvítBôStdCCOK
  
 BIT_5
 
 
 	)
 
-59 
-	#defEvítBôC⁄nTempOK
+82 
+	#defEvítBôStdC⁄nTempOK
  
 BIT_6
 
 
 	)
 
-60 
-	#defEvítBôACTempOK
+83 
+	#defEvítBôStdACTempOK
  
 BIT_7
 
 
 	)
 
-61 
-	#defEvítBô
+84 
+	#defEvítBôStdPlugOK
  
 BIT_8
 
 
 	)
 
-63 
+85 
+	#defEvítBôCPSwôchC⁄dôi⁄
+ 
+defEvítBôStdLocked
+ | \
+
+86 
+defEvítBôStdVﬁtOK
+ | \
+
+87 
+defEvítBôStdC⁄nTempOK
+ | \
+
+88 
+defEvítBôStdACTempOK
+ | \
+
+89 
+defEvítBôStdPlugOK
+
+
+	)
+
+91 
+	#defEvítBôStdOK
+ 
+BIT_9
+
+
+	)
+
+93 
+	#defEvítBôTimîCBTemp
+ 
+BIT_0
+
+
+	)
+
+94 
+	#defEvítBôTimîCBLockSèã
+ 
+BIT_1
+
+
+	)
+
+95 
+	#defEvítBôTimîCBPlugSèã
+ 
+BIT_2
+
+
+	)
+
+96 
+	#defEvítBôTimîCBCh¨gögD©a
+ 
+BIT_3
+
+
+	)
+
+97 
+	#defEvítBôTimîCBEVSESèã
+ 
+BIT_4
+
+
+	)
+
+98 
+	#defEvítBôTimîCBRFID
+ 
+BIT_5
+
+
+	)
+
+99 
+	#defEvítBôTimîCBD©aRe‰esh
+ 
+BIT_6
+
+
+	)
+
+104 
 EVSE_t
  *
 pEVSE
 ;
 
-64 
+105 
 U£rLi°_t
  *
 pLi°Ch¨gePoöt
+;
+
+106 
+RFIDDev_t
+ *
+pRFIDDev
 ;
 
 	@D:\Documents\Projects\chargersdk\src\app\includes.h
@@ -4082,34 +7674,38 @@ __INCLUDES_H__
 "
 
 58 
-	~"globÆs.h
+	~"ev£_globÆs.h
 "
 
 59 
-	~"sysöô.h
+	~"ev£_c⁄fig.h
 "
 
 60 
-	~"EVSE.h
+	~"sysöô.h
 "
 
 61 
-	~"èsk¸óã.h
+	~"EVSE.h
 "
 
 62 
-	~"b•.h
+	~"èsk¸óã.h
 "
 
 63 
-	~"töysh.h
+	~"b•.h
 "
 
 64 
-	~"x¥ötf.h
+	~"töysh.h
 "
 
 65 
+	~"x¥ötf.h
+"
+
+66 
 	~"îr‹code.h
 "
 
@@ -4149,6 +7745,10 @@ __INTERFACE_H
 	~"öãrÁ˚_d©a.h
 "
 
+17 
+	~"öãrÁ˚_ªmŸe.h
+"
+
 	@D:\Documents\Projects\chargersdk\src\app\interface_charge.c
 
 8 
@@ -4174,90 +7774,254 @@ __INTERFACE_CHARGE_H
 "
 
 9 
-	~"îr‹code.h
+	~"öãrÁ˚.h
 "
 
-16 
+10 
+	~"mxml.h
+"
+
+11 
 Eº‹Code_t
  
-	$GëTŸÆCh¨gePoöt
-(
-uöt8_t
- *
-gëVÆ
-)
+	$Cª©eOrdîXML
+()
 
-18 
+13 
+FRESULT
+ 
+ªs
+;
+
+14 
 Eº‹Code_t
  
 îrcode
 ;
 
-19 
+15 
+FIL
+ 
+fû
+;
+
+16 
+mxml_node_t
+ *
+‹dî_roŸ
+, *
+‹dî_node
+;
+
+17 
+ªs
+ = 
+	`f_›í
+(&
+fû
+, "‹dî/‹dî.xml", 
+FA_CREATE_NEW
+ | 
+FA_WRITE
+);
+
+18 
+ªs
+)
+
+20 
+FR_OK
+:
+
+21 
+‹dî_roŸ
+ = 
+	`mxmlNewXML
+("1.0");
+
+22 
+‹dî_node
+ = 
+	`mxmlNewEÀmít
+(
+‹dî_roŸ
+, "Orders");
+
+23 
+	`mxmlSaveFûe
+(
+‹dî_roŸ
+, &
+fû
+, 
+whôe•a˚_cb
+);
+
+24 
+	`f_˛o£
+(&
+fû
+);
+
+25 
+	`mxmlDñëe
+(
+‹dî_roŸ
+);
+
+26 
 îrcode
  = 
 ERR_NO
 ;
 
-21 *
-gëVÆ
- = 2;
+29 
+îrcode
+ = 
+ERR_FILE_RW
+;
 
-23  
+32  
 îrcode
 ;
 
-24 
-	}
-}
-
-31 
-Eº‹Code_t
- 
-	$GëVﬁ©ageUµîLimôs
-(
-uöt8_t
- 
-id
-, 
-uöt32_t
- *
-gëVÆ
-)
-
-34 
+33 
 	}
 }
 
 42 
 Eº‹Code_t
  
-	$SëVﬁ©ageUµîLimôs
+	$D©aAddOrdî
 (
-uöt8_t
- 
-id
-, 
 uöt32_t
- 
-£tVÆ
+ *
+pulIndex
 )
 
+44 
+Eº‹Code_t
+ 
+îrcode
+;
+
 45 
+îrcode
+ = 
+ERR_NO
+;
+
+56 *
+pulIndex
+ = 1;
+
+58  
+îrcode
+;
+
+59 
 	}
 }
 
-47 
+69 
 Eº‹Code_t
  
-	$GëVﬁ©ageLowîLimôs
-(
-uöt8_t
+	$D©aGëOrdî
+–
+uöt32_t
  
-id
+ulIndex
+, 
+uöt8_t
+ *
+°rNode
+, *
+pvGëVÆ
 )
 
-50 
+71 
+Eº‹Code_t
+ 
+îrcode
+;
+
+72 
+îrcode
+ = 
+ERR_NO
+;
+
+79  
+îrcode
+;
+
+80 
+	}
+}
+
+81 
+Eº‹Code_t
+ 
+	$D©aSëOrdî
+–
+uöt32_t
+ 
+ulIndex
+, 
+uöt8_t
+ *
+°rNode
+, *
+pvGëVÆ
+)
+
+83 
+Eº‹Code_t
+ 
+îrcode
+;
+
+84 
+îrcode
+ = 
+ERR_NO
+;
+
+86  
+îrcode
+;
+
+87 
+	}
+}
+
+88 
+Eº‹Code_t
+ 
+	$D©aDñOrdî
+(
+uöt32_t
+ 
+ulIndex
+)
+
+90 
+Eº‹Code_t
+ 
+îrcode
+;
+
+91 
+îrcode
+ = 
+ERR_NO
+;
+
+92  
+îrcode
+;
+
+93 
 	}
 }
 
@@ -4273,17 +8037,65 @@ __INTERFACE_DATA_H
 
 	)
 
-11 
+11 
+	~"ö˛udes.h
+"
+
+13 
+	s_OrdîD©a
+
+
+16 
+uöt8_t
+ 
+	mucUID
+[
+defUIDLígth
+];
+
+17 
+uöt8_t
+ 
+	mucAccou¡Sètus
+;
+
+18 
+	mdBÆ™˚
+;
+
+19 
+uöt8_t
+ 
+	mucPoötID
+;
+
+20 
+uöt8_t
+ 
+	mucEVSESN
+[
+defEVSEIDLígth
+];
+
+22 }
+	tOrdîD©a_t
+;
+
+24 
+	s_FûeD©aTy≥
+
+
+27 }
+	gFûeD©aTy≥_t
+;
+
+29 
 Eº‹Code_t
  
-GëTŸÆCh¨gePoöt
-(
-uöt8_t
- *
-gëVÆ
-);
+Cª©eOrdîXML
+();
 
-	@D:\Documents\Projects\chargersdk\src\app\interface_error.c
+	@D:\Documents\Projects\chargersdk\src\app\interface_diag.c
 
 8 
 	~"öãrÁ˚.h
@@ -4369,175 +8181,483 @@ __INTERFACE_MONITOR_H
 
 	@D:\Documents\Projects\chargersdk\src\app\interface_remote.c
 
-	@D:\Documents\Projects\chargersdk\src\app\interface_rfid.c
-
-8 
-	~<°rög.h
+9 
+	~<time.h
 >
 
-9 
-	~"öãrÁ˚_rfid.h
+10 
+	~"ö˛udes.h
 "
 
-11 
-	$Inô_RFIDDev
-(*
-pRFIDDev
-)
+11 
+	~"b•.h
+"
 
 13 
-pRFIDDev
- = (*)
-	`MT626COMCª©e
-();
-
-14 
-	}
-}
-
-15 *
-	$Cª©eRFIDDev
-()
-
-17 
-MT626COM_t
+Eº‹Code_t
+ 
+	$RemŸeGëTime
+(
+tm
  *
-pmt626com
+pTimeBlock
+)
+
+15 
+tm
+ 
+tmpTimeBlock
+;
+
+16 
+Eº‹Code_t
+ 
+îrcode
 ;
 
 18 
-pmt626com
+îrcode
  = 
-	`MT626COMCª©e
-();
-
-20  (*)
-pmt626com
+ERR_NO
 ;
 
-21 
-	}
-}
-
-22 
-	$GëUID
-(*
-pRFIDDev
-, 
-uöt8_t
- *
-pUID
-)
-
-24 
-MT626COM_t
- *
-pmt626com
+23 *
+pTimeBlock
+ = 
+tmpTimeBlock
 ;
 
-25 
-uöt8_t
- *
-¥ecvdD©a
+25  
+îrcode
 ;
 
 26 
-uöt32_t
+	}
+}
+
+34 
+Eº‹Code_t
  
-uiRecvdO±Lí
+	$RemŸeRegi°
+(
+EVSE_t
+ *
+pEVSE
+, 
+uöt8_t
+ *
+ucRëVÆ
+ )
+
+36 
+Eº‹Code_t
+ 
+îrcode
 ;
 
-27 
+38 
+îrcode
+ = 
+ERR_NO
+;
+
+42 *
+ucRëVÆ
+ = 0;
+
+43  
+îrcode
+;
+
+44 
+	}
+}
+
+55 
+Eº‹Code_t
+ 
+	$RemŸeGëBÆ™˚
+(
+uöt8_t
+ *
+pucUID
+, uöt8_à
+ucUIDLígth
+, uöt8_à*
+pucAccou¡Sètus
+, *
+pdBÆ™˚
+)
+
+57 
+tmpBÆ™˚
+;
+
+58 
+uöt8_t
+ 
+tmpAccou¡Sèt
+;
+
+59 
+Eº‹Code_t
+ 
+îrcode
+;
+
+61 
+tmpAccou¡Sèt
+ = 1;
+
+62 
+tmpBÆ™˚
+ = 88888.88;
+
+63 
+îrcode
+ = 
+ERR_NO
+;
+
+67 *
+pucAccou¡Sètus
+ = 
+tmpAccou¡Sèt
+;
+
+68 *
+pdBÆ™˚
+ = 
+tmpBÆ™˚
+;
+
+70  
+îrcode
+;
+
+71 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\app\interface_remote.h
+
+8 #i‚de‡ 
+__INTERFACE_REMOTE_H
+
+
+9 
+	#__INTERFACE_REMOTE_H
+
+
+	)
+
+11 
+	~<time.h
+>
+
+13 
+Eº‹Code_t
+ 
+RemŸeGëTime
+(
+tm
+ *
+pTimeBlock
+);
+
+14 
+Eº‹Code_t
+ 
+RemŸeGëBÆ™˚
+(
+uöt8_t
+ *
+pucUID
+, uöt8_à
+ucUIDLígth
+, uöt8_à*
+pucAccou¡Sètus
+, *
+pdBÆ™˚
+);
+
+	@D:\Documents\Projects\chargersdk\src\app\interface_rfid.c
+
+8 
+	~"ö˛udes.h
+"
+
+9 
+	~"öãrÁ˚.h
+"
+
+11 
+Eº‹Code_t
+ 
+	$MT626GëUID
+(*
+pvRfid
+)
+
+13 
+RFIDDev_t
+ *
+pRfid
+;
+
+14 
+MT626CMD_t
+ *
+pmt626cmd
+;
+
+15 
+uöt32_t
+ 
+ulRecvdO±Lí
+;
+
+16 
 °©e
 ;
 
-29 
-pmt626com
+17 
+Eº‹Code_t
+ 
+îrcode
+;
+
+19 
+pRfid
  = (
-MT626COM_t
+RFIDDev_t
  *)
-pRFIDDev
+pvRfid
 ;
 
-30 
-¥ecvdD©a
- = 
-pUID
-;
+20 
+pmt626cmd
+ = ((
+MT626COM_t
+ *)(
+pRfid
+->
+com
+))->
+pMT626CMD
+[
+MT626_READ_UID_CMD
+];
 
-31 
-uiRecvdO±Lí
- = 0;
-
-32 
+21 
 °©e
  = 
 MT_STATE_N
 ;
 
-34 
+22 
+îrcode
+ = 
+ERR_NO
+;
+
+24 
+	`xSem≠h‹eTake
+(
+pRfid
+->
+xH™dÀMuãxRFID
+, 
+p‹tMAX_DELAY
+);
+
+26 
 °©e
  = 
 	`TønsToMT626
 (
-pmt626com
+pRfid
+->
+com
 , 
 MT626_READ_UID_CMD
 , 
 NULL
 , 0);
 
-35 if(
+27 if(
 °©e
  =
 MT_STATE_Y
 )
 
-37 
-uiRecvdO±Lí
+29 
+ulRecvdO±Lí
  = 
-pmt626com
+pmt626cmd
 ->
-pMT626CMD
-[
-MT626_READ_UID_CMD
-]->uiRecvdOptLen;
-
-38 
-	`memmove
-(
-¥ecvdD©a
-, 
-pmt626com
-->
-pMT626CMD
-[
-MT626_READ_UID_CMD
-]->
-ucRecvdO±D©a
-, 
 uiRecvdO±Lí
-);
-
-39 
-	`mem£t
-(
-pmt626com
-->
-pMT626CMD
-[
-MT626_READ_UID_CMD
-]->
-ucRecvdO±D©a
-,0,
-uiRecvdO±Lí
-);
-
-41  
-°©e
 ;
 
+30 
+	`memmove
+(
+pRfid
+->
+°©us
+.
+ucUID
+, 
+pmt626cmd
+->
+ucRecvdO±D©a
+, 
+ulRecvdO±Lí
+);
+
+31 
+	`mem£t
+(
+pmt626cmd
+->
+ucRecvdO±D©a
+, 0, 
+ulRecvdO±Lí
+);
+
+33 
+	`xEvítGroupSëBôs
+(
+pRfid
+->
+xH™dÀEvítGroupRFID
+, 
+defEvítBôGŸUIDtoRFID
+);
+
+35 if(
+°©e
+ =
+MT_STATE_N
+)
+
+37 
+	`xEvítGroupCÀ¨Bôs
+(
+pRfid
+->
+xH™dÀEvítGroupRFID
+, 
+defEvítBôGŸUIDtoRFID
+);
+
+40 if(
+°©e
+ =
+MT_COM_FAIL
+)
+
 42 
+îrcode
+ = 
+ERR_RFID_FAULT
+;
+
+45 
+	`xSem≠h‹eGive
+(
+pRfid
+->
+xH™dÀMuãxRFID
+);
+
+47  
+îrcode
+;
+
+48 
+	}
+}
+
+50 
+RFIDDev_t
+ *
+	$RFIDDevCª©e
+()
+
+52 
+RFIDDev_t
+ *
+pRFID
+;
+
+54 
+pRFID
+ = (
+RFIDDev_t
+ *)
+	`mÆloc
+((RFIDDev_t));
+
+55 
+pRFID
+->
+°©us
+.
+ucFoundC¨d
+ = 0;
+
+56 
+	`mem£t
+(
+pRFID
+->
+°©us
+.
+ucUID
+, 0 , 
+defUIDLígth
+);
+
+57 
+pRFID
+->
+com
+ = (*)
+	`MT626COMCª©e
+();
+
+58 
+pRFID
+->
+°©us
+.
+GëUID
+ = 
+MT626GëUID
+;
+
+59 
+pRFID
+->
+xH™dÀMuãxRFID
+ = 
+	`xSem≠h‹eCª©eMuãx
+();
+
+60 
+pRFID
+->
+xH™dÀEvítGroupRFID
+ = 
+	`xEvítGroupCª©e
+();
+
+62  
+pRFID
+;
+
+63 
 	}
 }
 
@@ -4554,22 +8674,124 @@ __INTERFACE_RFID_H
 	)
 
 11 
+	~"FªeRTOS.h
+"
+
+12 
+	~"£mphr.h
+"
+
+13 
+	~"evít_groups.h
+"
+
+14 
 	~"RFIDRódî_mt626.h
 "
 
-13 *
-Cª©eRFIDDev
+15 
+	~"îr‹code.h
+"
+
+16 
+	~"ev£_c⁄fig.h
+"
+
+17 
+	s_RFIDDevSètus
+
+
+19 
+uöt8_t
+ 
+	mucFoundC¨d
+;
+
+20 
+uöt8_t
+ 
+	mucUID
+[
+defUIDLígth
+];
+
+22 
+Eº‹Code_t
+ (*
+GëUID
+)(*
+	mpvRFIDDev
+);
+
+23 }
+	tRFIDDevSètus_t
+;
+
+25 
+	s_RFIDDev
+
+
+27 
+RFIDDevSètus_t
+ 
+	m°©us
+;
+
+28 *
+	mcom
+;
+
+29 
+Sem≠h‹eH™dÀ_t
+ 
+	mxH™dÀMuãxRFID
+;
+
+30 
+EvítGroupH™dÀ_t
+ 
+	mxH™dÀEvítGroupRFID
+;
+
+31 }
+	tRFIDDev_t
+;
+
+33 
+RFIDDev_t
+ *
+RFIDDevCª©e
 ();
 
-14 
-GëUID
-(*
-RFIDDev
-, 
-uöt8_t
- *
-pUID
-);
+	@D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_err.c
+
+	@D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_err.h
+
+8 #i‚de‡ 
+__PS_ERR_H
+
+
+9 
+	#__PS_ERR_H
+
+
+	)
+
+11 
+	eps_Eº‹Code
+
+
+13 
+	mERR_PS_NO
+,
+
+14 
+	mERR_PS_OTHER
+
+
+15 }
+	tps_Eº‹Code_t
+;
 
 	@D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_globals.h
 
@@ -4700,6 +8922,54 @@ Ch¨geSegmít_t
 34 }
 	tOrdî_t
 
+
+	@D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_protocol.c
+
+	@D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_transportlayer.c
+
+8 
+	~"libpowîsh¨e/ps_îr.h
+"
+
+9 
+ps_Eº‹Code_t
+ 
+	$O≥nRemŸe
+()
+
+12 
+	}
+}
+
+14 
+ps_Eº‹Code_t
+ 
+	$Clo£RemŸe
+()
+
+17 
+	}
+}
+
+19 
+ps_Eº‹Code_t
+ 
+	$RecvRemŸe
+()
+
+22 
+	}
+}
+
+23 
+ps_Eº‹Code_t
+ 
+	$SídRemŸe
+()
+
+26 
+	}
+}
 
 	@D:\Documents\Projects\chargersdk\src\app\main.c
 
@@ -4832,108 +9102,104 @@ Ch¨geSegmít_t
 "
 
 4 
-	~"mÆloc.h
-"
-
-5 
 	~"mxml.h
 "
 
-7 #i‡
+6 #i‡
 c⁄figAPPLICATION_ALLOCATED_HEAP
  == 1
 
-9 
+8 
 uöt8_t
  *
 	gucHóp
  = (uint8_t *)(0XC0B00000);
 
-12 
+11 
 sysc⁄f_t
  
 	gsysc⁄f_∑øm
 ;
 
-14 
+13 
 FATFS
  
 	gNANDDISKF©Fs
 ;
 
-15 
+14 
 	gNANDDISKP©h
 [4];
 
-17 
+16 
 	$Eº‹_H™dÀr
 ()
 
-20 
+19 
 	}
 }
 
-22 
+21 
 uöt8_t
  
 	$¸óã_sy°em_dú
 ()
 
-24 
+23 
 FRESULT
  
 ªs
 ;
 
-25 
+24 
 ªs
  = 
 	`f_mkdú
 ("system");
 
-26 
+25 
 ªs
 )
 
-28 
+27 
 FR_OK
 :
 
-29 
+28 
 FR_EXIST
 :
 
-30  
+29  
 TRUE
 ;
 
-32  
+31  
 FALSE
 ;
 
-34 
+33 
 	}
 }
 
-35 
+34 
 uöt8_t
  
 	$¸óã_sysc⁄f_xml
 ()
 
-37 
+36 
 FRESULT
  
 ªs
 ;
 
-38 
+37 
 FIL
  
 fû
 ;
 
-39 
+38 
 mxml_node_t
  *
 sysc⁄f_åì
@@ -4945,7 +9211,7 @@ sysc⁄f_node
 d©a_node
 ;
 
-40 
+39 
 ªs
  = 
 	`f_›í
@@ -4957,21 +9223,21 @@ FA_CREATE_NEW
 FA_WRITE
 );
 
-41 
+40 
 ªs
 )
 
-43 
+42 
 FR_OK
 :
 
-44 
+43 
 sysc⁄f_åì
  = 
 	`mxmlNewXML
 ("1.0");
 
-45 
+44 
 sysc⁄f_node
  = 
 	`mxmlNewEÀmít
@@ -4979,7 +9245,7 @@ sysc⁄f_node
 sysc⁄f_åì
 , "sysconf");
 
-46 
+45 
 ç_ˇlibøã_node
  = 
 	`mxmlNewEÀmít
@@ -4987,7 +9253,7 @@ sysc⁄f_åì
 sysc⁄f_node
 , "tp_calibrate");
 
-47 
+46 
 d©a_node
  = 
 	`mxmlNewEÀmít
@@ -4995,13 +9261,13 @@ d©a_node
 ç_ˇlibøã_node
 , "AD_TOP");
 
-48 
+47 
 	`mxmlNewI¡egî
 (
 d©a_node
 , 270);
 
-49 
+48 
 d©a_node
  = 
 	`mxmlNewEÀmít
@@ -5009,13 +9275,13 @@ d©a_node
 ç_ˇlibøã_node
 , "AD_BOTTOM");
 
-50 
+49 
 	`mxmlNewI¡egî
 (
 d©a_node
 , 3865);
 
-51 
+50 
 d©a_node
  = 
 	`mxmlNewEÀmít
@@ -5023,13 +9289,13 @@ d©a_node
 ç_ˇlibøã_node
 , "AD_LEFT");
 
-52 
+51 
 	`mxmlNewI¡egî
 (
 d©a_node
 , 100);
 
-53 
+52 
 d©a_node
  = 
 	`mxmlNewEÀmít
@@ -5037,13 +9303,13 @@ d©a_node
 ç_ˇlibøã_node
 , "AD_RIGHT");
 
-54 
+53 
 	`mxmlNewI¡egî
 (
 d©a_node
 , 3964);
 
-55 
+54 
 	`mxmlSaveFûe
 (
 sysc⁄f_åì
@@ -5053,57 +9319,57 @@ fû
 whôe•a˚_cb
 );
 
-56 
+55 
 	`f_˛o£
 (&
 fû
 );
 
-57 
+56 
 	`mxmlDñëe
 (
 sysc⁄f_åì
 );
 
-58  
+57  
 TRUE
 ;
 
-59 
+58 
 FR_EXIST
 :
 
-60  
+59  
 FALSE
 ;
 
-62  
+61  
 FALSE
 ;
 
-64 
+63 
 	}
 }
 
-65 
+64 
 uöt8_t
  
 	$wrôe_sysc⁄f_xml
 ()
 
-67 
+66 
 FRESULT
  
 ªs
 ;
 
-68 
+67 
 FIL
  
 fû
 ;
 
-69 
+68 
 mxml_node_t
  *
 sysc⁄f_åì
@@ -5115,7 +9381,7 @@ sysc⁄f_node
 d©a_node
 ;
 
-70 
+69 
 ªs
  = 
 	`f_›í
@@ -5129,15 +9395,15 @@ FA_READ
 FA_WRITE
 );
 
-71 
+70 
 ªs
 )
 
-73 
+72 
 FR_OK
 :
 
-74 
+73 
 sysc⁄f_åì
  = 
 	`mxmlLﬂdFûe
@@ -5149,13 +9415,13 @@ fû
 MXML_INTEGER_CALLBACK
 );
 
-75 if(
+74 if(
 sysc⁄f_åì
  !
 NULL
 )
 
-77 
+76 
 sysc⁄f_node
  = 
 	`mxmlFödEÀmít
@@ -5167,17 +9433,17 @@ NULL
 MXML_DESCEND
 );
 
-78 if(
+77 if(
 sysc⁄f_node
  =
 NULL
 )
 
-80  
+79  
 FALSE
 ;
 
-82 
+81 
 ç_ˇlibøã_node
  = 
 	`mxmlFödEÀmít
@@ -5191,17 +9457,17 @@ NULL
 MXML_DESCEND
 );
 
-83 if(
+82 if(
 ç_ˇlibøã_node
  =
 NULL
 )
 
-85  
+84  
 FALSE
 ;
 
-87 
+86 
 d©a_node
  = 
 	`mxmlFödEÀmít
@@ -5215,17 +9481,17 @@ NULL
 MXML_DESCEND
 );
 
-88 if(
+87 if(
 d©a_node
  =
 NULL
 )
 
-90  
+89  
 FALSE
 ;
 
-92 
+91 
 	`mxmlSëI¡egî
  (
 d©a_node
@@ -5235,7 +9501,7 @@ sysc⁄f_∑øm
 ad_t›
 );
 
-93 
+92 
 d©a_node
  = 
 	`mxmlFödEÀmít
@@ -5249,17 +9515,17 @@ NULL
 MXML_DESCEND
 );
 
-94 if(
+93 if(
 d©a_node
  =
 NULL
 )
 
-96  
+95  
 FALSE
 ;
 
-98 
+97 
 	`mxmlSëI¡egî
  (
 d©a_node
@@ -5269,7 +9535,7 @@ sysc⁄f_∑øm
 ad_bŸtom
 );
 
-99 
+98 
 d©a_node
  = 
 	`mxmlFödEÀmít
@@ -5283,17 +9549,17 @@ NULL
 MXML_DESCEND
 );
 
-100 if(
+99 if(
 d©a_node
  =
 NULL
 )
 
-102  
+101  
 FALSE
 ;
 
-104 
+103 
 	`mxmlSëI¡egî
  (
 d©a_node
@@ -5303,7 +9569,7 @@ sysc⁄f_∑øm
 ad_À·
 );
 
-105 
+104 
 d©a_node
  = 
 	`mxmlFödEÀmít
@@ -5317,17 +9583,17 @@ NULL
 MXML_DESCEND
 );
 
-106 if(
+105 if(
 d©a_node
  =
 NULL
 )
 
-108  
+107  
 FALSE
 ;
 
-110 
+109 
 	`mxmlSëI¡egî
  (
 d©a_node
@@ -5337,13 +9603,13 @@ sysc⁄f_∑øm
 ad_right
 );
 
-111 
+110 
 	`f_l£ek
 (&
 fû
 ,0);
 
-112 
+111 
 	`mxmlSaveFûe
 (
 sysc⁄f_åì
@@ -5353,49 +9619,49 @@ fû
 whôe•a˚_cb
 );
 
-113 
+112 
 	`f_˛o£
 (&
 fû
 );
 
-114 
+113 
 	`mxmlDñëe
 (
 sysc⁄f_åì
 );
 
-115  
+114  
 TRUE
 ;
 
-118  
+117  
 FALSE
 ;
 
-120 
+119 
 	}
 }
 
-122 
+121 
 uöt8_t
  
 	$ªad_sysc⁄f_xml
 ()
 
-124 
+123 
 FRESULT
  
 ªs
 ;
 
-125 
+124 
 FIL
  
 fû
 ;
 
-126 
+125 
 mxml_node_t
  *
 sysc⁄f_åì
@@ -5407,7 +9673,7 @@ sysc⁄f_node
 node
 ;
 
-127 
+126 
 ªs
  = 
 	`f_›í
@@ -5419,15 +9685,15 @@ FA_OPEN_EXISTING
 FA_READ
 );
 
-128 
+127 
 ªs
 )
 
-130 
+129 
 FR_OK
 :
 
-131 
+130 
 sysc⁄f_åì
  = 
 	`mxmlLﬂdFûe
@@ -5439,13 +9705,13 @@ fû
 MXML_INTEGER_CALLBACK
 );
 
-132 if(
+131 if(
 sysc⁄f_åì
  !
 NULL
 )
 
-134 
+133 
 sysc⁄f_node
  = 
 	`mxmlFödEÀmít
@@ -5457,17 +9723,17 @@ NULL
 MXML_DESCEND
 );
 
-135 if(
+134 if(
 sysc⁄f_node
  =
 NULL
 )
 
-137  
+136  
 FALSE
 ;
 
-139 
+138 
 ç_ˇlibøã_node
  = 
 	`mxmlFödEÀmít
@@ -5481,17 +9747,17 @@ NULL
 MXML_DESCEND
 );
 
-140 if(
+139 if(
 ç_ˇlibøã_node
  =
 NULL
 )
 
-142  
+141  
 FALSE
 ;
 
-144 
+143 
 node
  = 
 	`mxmlFödEÀmít
@@ -5505,17 +9771,17 @@ NULL
 MXML_DESCEND
 );
 
-145 if(
+144 if(
 node
  =
 NULL
 )
 
-147  
+146  
 FALSE
 ;
 
-149 
+148 
 sysc⁄f_∑øm
 .
 ad_t›
@@ -5525,7 +9791,7 @@ ad_t›
 node
 );
 
-150 
+149 
 node
  = 
 	`mxmlFödEÀmít
@@ -5539,17 +9805,17 @@ NULL
 MXML_DESCEND
 );
 
-151 if(
+150 if(
 node
  =
 NULL
 )
 
-153  
+152  
 FALSE
 ;
 
-155 
+154 
 sysc⁄f_∑øm
 .
 ad_bŸtom
@@ -5559,7 +9825,7 @@ ad_bŸtom
 node
 );
 
-156 
+155 
 node
  = 
 	`mxmlFödEÀmít
@@ -5573,17 +9839,17 @@ NULL
 MXML_DESCEND
 );
 
-157 if(
+156 if(
 node
  =
 NULL
 )
 
-159  
+158  
 FALSE
 ;
 
-161 
+160 
 sysc⁄f_∑øm
 .
 ad_À·
@@ -5593,7 +9859,7 @@ ad_À·
 node
 );
 
-162 
+161 
 node
  = 
 	`mxmlFödEÀmít
@@ -5607,17 +9873,17 @@ NULL
 MXML_DESCEND
 );
 
-163 if(
+162 if(
 node
  =
 NULL
 )
 
-165  
+164  
 FALSE
 ;
 
-167 
+166 
 sysc⁄f_∑øm
 .
 ad_right
@@ -5627,65 +9893,65 @@ ad_right
 node
 );
 
-168 
+167 
 	`f_˛o£
 (&
 fû
 );
 
-169 
+168 
 	`mxmlDñëe
 (
 sysc⁄f_åì
 );
 
-170  
+169  
 TRUE
 ;
 
-173  
+172  
 FALSE
 ;
 
-175 
+174 
 	}
 }
 
-176 
+175 
 ªèrgë_öô
 ();
 
-177 
+176 
 	$sys_Inô
 ()
 
-179 
+178 
 	`ªèrgë_öô
 ();
 
-180 #i‡
+179 #i‡
 c⁄figAPPLICATION_ALLOCATED_HEAP
  == 0
 
-181 
+180 
 	`my_mem_öô
 (
 SRAMIN
 );
 
-182 
+181 
 	`my_mem_öô
 (
 SRAMEX
 );
 
-183 
+182 
 	`my_mem_öô
 (
 SRAMCCM
 );
 
-190 if(
+189 if(
 	`FATFS_LökDrivî
 (&
 NANDDISK_Drivî
@@ -5693,7 +9959,7 @@ NANDDISK_Drivî
 NANDDISKP©h
 ) == 0)
 
-193 if(
+192 if(
 	`f_mou¡
 (&
 NANDDISKF©Fs
@@ -5705,45 +9971,45 @@ NANDDISKP©h
 FR_OK
 )
 
-196 
+195 
 	`Eº‹_H™dÀr
 ();
 
-203 
+202 
 	`¸óã_sy°em_dú
 ();
 
-204 
+203 
 	`¸óã_sysc⁄f_xml
 ();
 
-205 
+204 
 	`ªad_sysc⁄f_xml
 ();
 
-210 
+209 
 	`WM_SëCª©eFœgs
 (
 WM_CF_MEMDEV
 );
 
-211 
+210 
 	`GUI_Inô
 ();
 
-212 
+211 
 	`WM_MULTIBUF_E«bÀ
 (1);
 
-214 
+213 
 	`x¥ötf
 ("\nsystem initialized\n\r");
 
-215 
+214 
 	`x¥ötf
 ("\nhello charger\n\r");
 
-216 
+215 
 	}
 }
 
@@ -5835,13 +10101,19 @@ ulTŸÆPoöt
 i
 ;
 
-17 
+17 
+EvítBôs_t
+ 
+uxBôs
+;
+
+18 
 i
  = 0; i < 
 ulTŸÆPoöt
 ; i++)
 
-19 
+20 
 pPoöt
 [
 i
@@ -5853,29 +10125,341 @@ pLi°Ch¨gePoöt
 pLi°PoötAºay
 [i]);
 
-23 if(
+24 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+26 
 pPoöt
-[0]->
+[
+i
+]->
 °©e
+)
+
+28 
+POINT_IDLE
+:
+
+29 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+i
+]->
+°©us
 .
-xCPSèã
- == 1)
-
-29 #i‡
-DEBUG_TASK
-
+xH™dÀEvítSèπC⁄dôi⁄
+,
 
 30 
+defEvítBôStdPlugOK
+,
+
+31 
+pdFALSE
+,ÖdFALSE, 0);
+
+32 if((
+uxBôs
+ & 
+defEvítBôStdPlugOK
+) == defEventBitStdPlugOK)
+
+36 
+pPoöt
+[
+i
+]->
+°©e
+ = 
+POINT_PLUGED
+;
+
+38 
+POINT_PLUGED
+:
+
+39 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+41 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+,
+
+42 
+defEvítBôStdLocked
+,
+
+43 
+pdFALSE
+,ÖdFALSE, 0);
+
+44 if((
+uxBôs
+ & 
+defEvítBôStdLocked
+) == defEventBitStdLocked)
+
+50 
+pPoöt
+[
+i
+]->
+°©us
+.
+	`SëBTy≥C⁄√˘‹Lock
+’Poöt[i], 
+SWITCH_ON
+);
+
+53 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+,
+
+54 
+defEvítBôCPSwôchC⁄dôi⁄
+,
+
+55 
+pdFALSE
+, 
+pdTRUE
+, 100);
+
+56 if((
+uxBôs
+ & 
+defEvítBôCPSwôchC⁄dôi⁄
+) == defEventBitCPSwitchCondition)
+
+58 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`SëCPSwôch
+’Poöt[i], 
+SWITCH_ON
+), 
+ERR_LEVEL_CRITICAL
+);
+
+59 
+	`vTaskDñay
+(100);
+
+65 if(
+pPoöt
+[
+i
+]->
+°©us
+.
+xCPSèã
+ =
+CP_9V_PWM
+ ||ÖPoöt[i]->°©us.xCPSèã =
+CP_6V_PWM
+)
+
+67 
+pPoöt
+[
+i
+]->
+°©e
+ = 
+POINT_PRECONTRACT
+;
+
+70 
+POINT_PRECONTRACT
+:
+
+71 if(
+pPoöt
+[
+i
+]->
+°©us
+.
+xCPSèã
+ =
+CP_6V_PWM
+)
+
+73 
+pPoöt
+[
+i
+]->
+°©e
+ = 
+POINT_STARTCHARGE
+;
+
+76 
+POINT_STARTCHARGE
+:
+
+77 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`SèπCh¨ge
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+78 if(
+pPoöt
+[
+i
+]->
+°©us
+.
+ucRñayLSèã
+ =
+SWITCH_ON
+ &&
+
+79 
+pPoöt
+[
+i
+]->
+°©us
+.
+ucRñayNSèã
+ =
+SWITCH_ON
+)
+
+81 
+pPoöt
+[
+i
+]->
+°©e
+ = 
+POINT_CHARGING
+;
+
+84 
+POINT_CHARGING
+:
+
+85 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+,
+
+86 
+defEvítBôEx˚±i⁄Crôiˇl
+
+
+87 
+pdFALSE
+,ÖdFALSE, 0);
+
+88 if((
+uxBôs
+ & 
+defEvítBôEx˚±i⁄Crôiˇl
+) != 0)
+
+90 
+pPoöt
+[
+i
+]->
+°©us
+.
+	`St›Ch¨ge
+(pPoint[i]);
+
+91 
+pPoöt
+[
+i
+]->
+°©e
+ = 
+POINT_ERROR
+;
+
+95 
+POINT_ERROR
+:
+
+102 #i‡
+DEBUG_CHARGE
+
+
+103 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSECh¨ge
 );
 
-32 
+105 
 	`vTaskDñay
 (10);
 
-34 
+107 
 	}
 }
 
@@ -5898,230 +10482,234 @@ __TASKCHARGE_H
 "
 
 15 
+	~"öãrÁ˚.h
+"
+
+16 
 	~"˛i_maö.h
 "
 
-19 
+20 
 	#defSTACK_TaskCLI
  512
 
 	)
 
-20 
+21 
 	#defSTACK_TaskGUI
  1024
 
 	)
 
-21 
+22 
 	#defSTACK_TaskTouch
  128
 
 	)
 
-22 
+23 
 	#defSTACK_TaskOTA
  512
 
 	)
 
-24 
+25 
 	#defSTACK_TaskEVSERemŸe
  512
 
 	)
 
-25 
+26 
 	#defSTACK_TaskEVSERFID
  512
 
 	)
 
-26 
+27 
 	#defSTACK_TaskEVSECh¨ge
  512
 
 	)
 
-27 
+28 
 	#defSTACK_TaskEVSEM⁄ô‹
  512
 
 	)
 
-28 
-	#defSTACK_TaskEVSEEº‹
+29 
+	#defSTACK_TaskEVSEDüg
  512
 
 	)
 
-29 
+30 
 	#defSTACK_TaskEVSED©a
  512
 
 	)
 
-35 
+36 
 	#defPRIORITY_TaskCLI
  1
 
 	)
 
-36 
+37 
 	#defPRIORITY_TaskGUI
  1
 
 	)
 
-37 
+38 
 	#defPRIORITY_TaskTouch
  1
 
 	)
 
-38 
+39 
 	#defPRIORITY_TaskOTA
  15
 
 	)
 
-40 
+41 
 	#defPRIORITY_TaskEVSERemŸe
  3
 
 	)
 
-41 
+42 
 	#defPRIORITY_TaskEVSERFID
  4
 
 	)
 
-42 
+43 
 	#defPRIORITY_TaskEVSECh¨ge
  5
 
 	)
 
-43 
+44 
 	#defPRIORITY_TaskEVSEM⁄ô‹
  7
 
 	)
 
-44 
-	#defPRIORITY_TaskEVSEEº‹
+45 
+	#defPRIORITY_TaskEVSEDüg
  9
 
 	)
 
-45 
+46 
 	#defPRIORITY_TaskEVSED©a
  1
 
 	)
 
-50 c⁄° *
+51 c⁄° *
 	gTASKNAME_CLI
  = "TaskCLI";
 
-51 c⁄° *
+52 c⁄° *
 	gTASKNAME_GUI
  = "TaskGUI";
 
-52 c⁄° *
+53 c⁄° *
 	gTASKNAME_Touch
  = "TaskTouch";
 
-53 c⁄° *
+54 c⁄° *
 	gTASKNAME_OTA
  = "TaskOTA";
 
-54 c⁄° *
+55 c⁄° *
 	gTASKNAME_EVSERemŸe
  = "TaskEVSERemote";
 
-55 c⁄° *
+56 c⁄° *
 	gTASKNAME_EVSERFID
  = "TaskEVSERFID";
 
-56 c⁄° *
+57 c⁄° *
 	gTASKNAME_EVSECh¨ge
  = "TaskEVSECharge";
 
-57 c⁄° *
+58 c⁄° *
 	gTASKNAME_EVSEM⁄ô‹
  = "TaskEVSEMonitor";
 
-58 c⁄° *
-	gTASKNAME_EVSEEº‹
- = "TaskEVSEError";
-
 59 c⁄° *
+	gTASKNAME_EVSEDüg
+ = "TaskEVSEDiag";
+
+60 c⁄° *
 	gTASKNAME_EVSED©a
  = "TaskEVSEData";
 
-64 
+65 
 vTaskCLI
 (*
 pvP¨amëîs
 );
 
-65 
+66 
 vTaskGUI
 (*
 pvP¨amëîs
 );
 
-66 
+67 
 vTaskTouch
 (*
 pvP¨amëîs
 );
 
-67 
+68 
 vTaskOTA
 (*
 pvP¨amëîs
 );
 
-69 
+70 
 vTaskEVSERemŸe
 (*
 pvP¨amëîs
 );
 
-70 
+71 
 vTaskEVSERFID
 (*
 pvP¨amëîs
 );
 
-71 
+72 
 vTaskEVSECh¨ge
 (*
 pvP¨amëîs
 );
 
-72 
+73 
 vTaskEVSEM⁄ô‹
 (*
 pvP¨amëîs
 );
 
-73 
-vTaskEVSEEº‹
+74 
+vTaskEVSEDüg
 (*
 pvP¨amëîs
 );
 
-74 
+75 
 vTaskEVSED©a
 (*
 pvP¨amëîs
 );
 
-79 
+80 
 TaskH™dÀ_t
  
 	gxH™dÀTaskCLI
@@ -6129,7 +10717,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-80 
+81 
 TaskH™dÀ_t
  
 	gxH™dÀTaskGUI
@@ -6137,7 +10725,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-81 
+82 
 TaskH™dÀ_t
  
 	gxH™dÀTaskTouch
@@ -6145,7 +10733,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-82 
+83 
 TaskH™dÀ_t
  
 	gxH™dÀTaskOTA
@@ -6153,7 +10741,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-84 
+85 
 TaskH™dÀ_t
  
 	gxH™dÀTaskEVSERemŸe
@@ -6161,7 +10749,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-85 
+86 
 TaskH™dÀ_t
  
 	gxH™dÀTaskEVSERFID
@@ -6169,7 +10757,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-86 
+87 
 TaskH™dÀ_t
  
 	gxH™dÀTaskEVSECh¨ge
@@ -6177,7 +10765,7 @@ TaskH™dÀ_t
 NULL
 ;
 
-87 
+88 
 TaskH™dÀ_t
  
 	gxH™dÀTaskEVSEM⁄ô‹
@@ -6185,15 +10773,15 @@ TaskH™dÀ_t
 NULL
 ;
 
-88 
+89 
 TaskH™dÀ_t
  
-	gxH™dÀTaskEVSEEº‹
+	gxH™dÀTaskEVSEDüg
  = 
 NULL
 ;
 
-89 
+90 
 TaskH™dÀ_t
  
 	gxH™dÀTaskEVSED©a
@@ -6201,105 +10789,169 @@ TaskH™dÀ_t
 NULL
 ;
 
-93 
+94 
 EvítGroupH™dÀ_t
  
-	gxH™dÀEvítGroupRFID
+	gxH™dÀEvítTimîCBNŸify
+ = 
+NULL
 ;
 
-94 
-QueueH™dÀ_t
+95 
+EvítGroupH™dÀ_t
  
-	gxH™dÀQueueEº‹Code
+	gxH™dÀEvítD©a
+ = 
+NULL
 ;
 
 96 
-TimîH™dÀ_t
+EvítGroupH™dÀ_t
  
-	gxH™dÀTimîTemp
+	gxH™dÀEvítDüg
+ = 
+NULL
 ;
 
 97 
+EvítGroupH™dÀ_t
+ 
+	gxH™dÀEvítRemŸe
+ = 
+NULL
+;
+
+104 
+QueueH™dÀ_t
+ 
+	gxH™dÀQueueOrdîs
+ = 
+NULL
+;
+
+105 
+QueueH™dÀ_t
+ 
+	gxH™dÀQueueEº‹Package
+ = 
+NULL
+;
+
+107 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîTemp
+ = 
+NULL
+;
+
+108 
 TimîH™dÀ_t
  
 	gxH™dÀTimîLockSèã
+ = 
+NULL
 ;
 
-98 
+109 
 TimîH™dÀ_t
  
 	gxH™dÀTimîGëCh¨gePoöt
+ = 
+NULL
 ;
 
-99 
+110 
 TimîH™dÀ_t
  
-	gxH™dÀTimîCPCCSèã
+	gxH™dÀTimîPlugSèã
+ = 
+NULL
 ;
 
-100 
+111 
 TimîH™dÀ_t
  
 	gxH™dÀTimîCh¨gögD©a
+ = 
+NULL
 ;
 
-101 
+112 
 TimîH™dÀ_t
  
 	gxH™dÀTimîEVSESèã
+ = 
+NULL
 ;
 
-103 
+113 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîRFID
+ = 
+NULL
+;
+
+114 
+TimîH™dÀ_t
+ 
+	gxH™dÀTimîD©aRe‰esh
+ = 
+NULL
+;
+
+117 
 	$vTaskCLI
 (*
 pvP¨amëîs
 )
 
-105 
+119 
 	`˛i_maö
 ();
-
-106 
-	}
-}
-
-108 
-	$vTaskGUI
-(*
-pvP¨amëîs
-)
-
-110 
-	`MaöTask
-();
-
-111 
-	}
-}
-
-113 
-	$vTaskTouch
-(*
-pvP¨amëîs
-)
-
-117 
-	`GUI_TOUCH_Exec
-();
-
-118 
-	`vTaskDñay
-(10);
 
 120 
 	}
 }
 
 122 
+	$vTaskGUI
+(*
+pvP¨amëîs
+)
+
+124 
+	`MaöTask
+();
+
+126 
+	}
+}
+
+128 
+	$vTaskTouch
+(*
+pvP¨amëîs
+)
+
+132 
+	`GUI_TOUCH_Exec
+();
+
+133 
+	`vTaskDñay
+(10);
+
+135 
+	}
+}
+
+137 
 	$SysTaskCª©e
  ()
 
-124 
+139 
 	`xTaskCª©e
 –
 vTaskCLI
@@ -6315,7 +10967,7 @@ defPRIORITY_TaskCLI
 xH™dÀTaskCLI
  );
 
-125 
+140 
 	`xTaskCª©e
 –
 vTaskGUI
@@ -6331,7 +10983,7 @@ defPRIORITY_TaskGUI
 xH™dÀTaskGUI
  );
 
-126 
+141 
 	`xTaskCª©e
 –
 vTaskTouch
@@ -6347,7 +10999,7 @@ defPRIORITY_TaskTouch
 xH™dÀTaskTouch
  );
 
-127 
+142 
 	`xTaskCª©e
 –
 vTaskOTA
@@ -6363,15 +11015,15 @@ defPRIORITY_TaskOTA
 xH™dÀTaskOTA
  );
 
-128 
+143 
 	}
 }
 
-130 
+145 
 	$AµTaskCª©e
  ()
 
-132 
+147 
 	`xTaskCª©e
 –
 vTaskEVSERemŸe
@@ -6387,7 +11039,7 @@ defPRIORITY_TaskEVSERemŸe
 xH™dÀTaskEVSERemŸe
  );
 
-133 
+148 
 	`xTaskCª©e
 –
 vTaskEVSERFID
@@ -6403,7 +11055,7 @@ defPRIORITY_TaskEVSERFID
 xH™dÀTaskEVSERFID
  );
 
-134 
+149 
 	`xTaskCª©e
 –
 vTaskEVSECh¨ge
@@ -6419,7 +11071,7 @@ defPRIORITY_TaskEVSECh¨ge
 xH™dÀTaskEVSECh¨ge
  );
 
-135 
+150 
 	`xTaskCª©e
 –
 vTaskEVSEM⁄ô‹
@@ -6435,23 +11087,23 @@ defPRIORITY_TaskEVSEM⁄ô‹
 xH™dÀTaskEVSEM⁄ô‹
  );
 
-136 
+151 
 	`xTaskCª©e
 –
-vTaskEVSEEº‹
+vTaskEVSEDüg
 , 
-TASKNAME_EVSEEº‹
+TASKNAME_EVSEDüg
 , 
-defSTACK_TaskEVSEEº‹
+defSTACK_TaskEVSEDüg
 , 
 NULL
 , 
-defPRIORITY_TaskEVSEEº‹
+defPRIORITY_TaskEVSEDüg
 , &
-xH™dÀTaskEVSEEº‹
+xH™dÀTaskEVSEDüg
  );
 
-137 
+152 
 	`xTaskCª©e
 –
 vTaskEVSED©a
@@ -6467,11 +11119,11 @@ defPRIORITY_TaskEVSED©a
 xH™dÀTaskEVSED©a
  );
 
-138 
+153 
 	}
 }
 
-142 
+157 
 vEVSETimîCB
 (
 TimîH™dÀ_t
@@ -6479,7 +11131,7 @@ TimîH™dÀ_t
 xTimî
 );
 
-143 
+158 
 vCh¨gePoötTimîCB
 (
 TimîH™dÀ_t
@@ -6487,25 +11139,59 @@ TimîH™dÀ_t
 xTimî
 );
 
-144 
+159 
+vRFIDTimîCB
+(
+TimîH™dÀ_t
+ 
+xTimî
+);
+
+160 
 	$AµObjCª©e
  ()
 
-146 
-xH™dÀEvítGroupRFID
+162 
+xH™dÀEvítTimîCBNŸify
  = 
 	`xEvítGroupCª©e
 ();
 
-147 
-xH™dÀQueueEº‹Code
+163 
+xH™dÀEvítD©a
+ = 
+	`xEvítGroupCª©e
+();
+
+164 
+xH™dÀEvítDüg
+ = 
+	`xEvítGroupCª©e
+();
+
+165 
+xH™dÀEvítRemŸe
+ = 
+	`xEvítGroupCª©e
+();
+
+168 
+xH™dÀQueueOrdîs
+ = 
+	`xQueueCª©e
+(2, (
+OrdîD©a_t
+));
+
+169 
+xH™dÀQueueEº‹Package
  = 
 	`xQueueCª©e
 (100, (
 Eº‹Package_t
 ));
 
-149 
+171 
 xH™dÀTimîTemp
  = 
 	`xTimîCª©e
@@ -6517,7 +11203,7 @@ defTIMERID_Temp
 vCh¨gePoötTimîCB
 );
 
-150 
+172 
 xH™dÀTimîLockSèã
  = 
 	`xTimîCª©e
@@ -6529,19 +11215,19 @@ defTIMERID_LockSèã
 vCh¨gePoötTimîCB
 );
 
-151 
-xH™dÀTimîCPCCSèã
+173 
+xH™dÀTimîPlugSèã
  = 
 	`xTimîCª©e
-("TimîCPCCSèã", 50, 
+("TimîPlugSèã", 50, 
 pdTRUE
 , (*)
-defTIMERID_CPCCSèã
+defTIMERID_PlugSèã
 , 
 vCh¨gePoötTimîCB
 );
 
-152 
+174 
 xH™dÀTimîCh¨gögD©a
  = 
 	`xTimîCª©e
@@ -6553,7 +11239,7 @@ defTIMERID_Ch¨gögD©a
 vCh¨gePoötTimîCB
 );
 
-153 
+175 
 xH™dÀTimîEVSESèã
  = 
 	`xTimîCª©e
@@ -6565,81 +11251,117 @@ defTIMERID_EVSESèã
 vEVSETimîCB
 );
 
-154 
+176 
+xH™dÀTimîRFID
+ = 
+	`xTimîCª©e
+("TimîRFID", 500, 
+pdTRUE
+, (*)
+defTIMERID_RFID
+, 
+vRFIDTimîCB
+);
+
+177 
+xH™dÀTimîD©aRe‰esh
+ = 
+	`xTimîCª©e
+("TimîD©aRe‰esh", 1000, 
+pdTRUE
+, (*)
+defTIMERID_DATAREFRESH
+, 
+vEVSETimîCB
+);
+
+178 
 	`xTimîSèπ
 (
 xH™dÀTimîTemp
 , 0);
 
-155 
+179 
 	`xTimîSèπ
 (
 xH™dÀTimîLockSèã
 , 0);
 
-156 
+180 
 	`xTimîSèπ
 (
-xH™dÀTimîCPCCSèã
+xH™dÀTimîPlugSèã
 , 0);
 
-157 
+181 
 	`xTimîSèπ
 (
 xH™dÀTimîCh¨gögD©a
 , 0);
 
-158 
+182 
 	`xTimîSèπ
 (
 xH™dÀTimîEVSESèã
 , 0);
 
-159 
+183 
+	`xTimîSèπ
+(
+xH™dÀTimîRFID
+, 0);
+
+184 
+	`xTimîSèπ
+(
+xH™dÀTimîD©aRe‰esh
+, 0);
+
+186 
 	}
 }
 
-160 vﬁ©ûê
+187 vﬁ©ûê
 uöt32_t
  
 	gulHighFªquícyTimîTicks
  = 0UL;
 
-161 
+188 
 	$vAµliˇti⁄TickHook
 ( )
 
-163 
+190 
 ulHighFªquícyTimîTicks
  = 
 	`xTaskGëTickCou¡
 ();
 
-164 
+191 
 	}
 }
 
-178 
+205 
 	$vAµliˇti⁄MÆlocFaûedHook
 ( )
 
-180 
+207 
 	`èskDISABLE_INTERRUPTS
 ();
 
-182 
+209 
 	}
 }
 
-196 
+223 
 	$vAµliˇti⁄IdÀHook
 ( )
 
-198 
+225 
 	}
 }
 
-206 
+233 
 	$vAµliˇti⁄SèckOvîÊowHook
 –
 TaskH™dÀ_t
@@ -6649,97 +11371,465 @@ pxTask
 pcTaskName
  )
 
-208 –Ë
+235 –Ë
 pcTaskName
 ;
 
-209 –Ë
+236 –Ë
 pxTask
 ;
 
-214 
+241 
 	`¥ötf_ß„
 ("°ackovîÊow!!Åask = %s\n",
 pcTaskName
 );
 
-215 
+242 
 	`èskDISABLE_INTERRUPTS
 ();
 
-217 
+244 
 	}
 }
 
-219 
+246 
 	$vAs£πCÆÀd
 –c⁄° *
 pcFûe
 ,
 
-220 
+247 
 ulLöe
  )
 
-222 vﬁ©ûê
+249 vﬁ©ûê
 ul
  = 0;
 
-224 
+251 
 	`èskENTER_CRITICAL
 ();
 
-226  
+253  
 ul
  == 0 )
 
-228 
+255 
 	`p‹tNOP
 ();
 
-231 
+258 
 	`èskEXIT_CRITICAL
 ();
 
-232 
+259 
 	}
 }
+
+	@D:\Documents\Projects\chargersdk\src\app\taskcreate.h
+
+8 #i‚de‡ 
+__TASKCREATE_H
+
+
+9 
+	#__TASKCREATE_H
+
+
+	)
+
+11 
+	~"ö˛udes.h
+"
+
+13 
+	#defTIMERID_Temp
+ 0
+
+	)
+
+14 
+	#defTIMERID_LockSèã
+ 1
+
+	)
+
+15 
+	#defTIMERID_CPCCSèã
+ 2
+
+	)
+
+16 
+	#defTIMERID_Ch¨gögD©a
+ 3
+
+	)
+
+17 
+	#defTIMERID_EVSESèã
+ 4
+
+	)
+
+18 
+	#defTIMERID_RFID
+ 5
+
+	)
+
+19 
+	#defTIMERID_DATAREFRESH
+ 6
+
+	)
+
+21 c⁄° *
+TASKNAME_CLI
+;
+
+22 c⁄° *
+TASKNAME_GUI
+;
+
+23 c⁄° *
+TASKNAME_Touch
+;
+
+24 c⁄° *
+TASKNAME_OTA
+;
+
+25 c⁄° *
+TASKNAME_EVSERemŸe
+;
+
+26 c⁄° *
+TASKNAME_EVSERFID
+;
+
+27 c⁄° *
+TASKNAME_EVSECh¨ge
+;
+
+28 c⁄° *
+TASKNAME_EVSEM⁄ô‹
+;
+
+29 c⁄° *
+TASKNAME_EVSEDüg
+;
+
+30 c⁄° *
+TASKNAME_EVSED©a
+;
+
+32 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítTimîCBNŸify
+;
+
+33 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítD©a
+;
+
+34 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítDüg
+;
+
+35 
+EvítGroupH™dÀ_t
+ 
+xH™dÀEvítRemŸe
+;
+
+38 
+QueueH™dÀ_t
+ 
+xH™dÀQueueOrdîs
+;
+
+39 
+QueueH™dÀ_t
+ 
+xH™dÀQueueEº‹Package
+;
+
+41 
+SysTaskCª©e
+ ();
+
+42 
+AµTaskCª©e
+ ();
+
+43 
+AµObjCª©e
+();
 
 	@D:\Documents\Projects\chargersdk\src\app\taskdata.c
 
 8 
-	~"èsk¸óã.h
+	~"ö˛udes.h
 "
 
 9 
-	~"èskd©a.h
+	~"èsk¸óã.h
 "
 
 10 
-	~"îr‹code.h
+	~"èskd©a.h
 "
 
-11 
+11 
+	~"öãrÁ˚.h
+"
+
+12 
 	$vTaskEVSED©a
 (*
 pvP¨amëîs
 )
 
-16 #i‡
-DEBUG_TASK
+14 
+uöt32_t
+ 
+ulTŸÆPoöt
+ = 
+pLi°Ch¨gePoöt
+->
+TŸÆ
+;
 
+15 
+Ch¨gePoöt_t
+ *
+pPoöt
+[
+ulTŸÆPoöt
+];
+
+16 
+i
+;
 
 17 
-	`x¥ötf
+EvítBôs_t
+ 
+uxBôs
+;
+
+19 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+21 
+pPoöt
+[
+i
+] = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[i]);
+
+23 
+uxBôs
+ = 0;
+
+25 
+	`THROW_ERROR
+(
+	`Cª©eOrdîXML
+(), 
+ERR_LEVEL_WARNING
+);
+
+29 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBD©aRe‰esh
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+30 if((
+uxBôs
+ & 
+defEvítBôTimîCBD©aRe‰esh
+) == defEventBitTimerCBDataRefresh)
+
+32 
+	`THROW_ERROR
+(
+pEVSE
+->
+öfo
+.
+	`GëSN
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+33 
+	`THROW_ERROR
+(
+pEVSE
+->
+öfo
+.
+	`GëID
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+34 
+	`THROW_ERROR
+(
+pEVSE
+->
+öfo
+.
+	`GëTy≥
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+35 
+	`THROW_ERROR
+(
+pEVSE
+->
+öfo
+.
+	`GëTŸÆPoöt
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+36 
+	`THROW_ERROR
+(
+pEVSE
+->
+öfo
+.
+	`GëLngL©
+’EVSE), 
+ERR_LEVEL_WARNING
+);
+
+37 
+i
+ = 0; i < 
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
+; i++)
+
+39 
+	`THROW_ERROR
+(
+pPoöt
+[
+i
+]->
+öfo
+.
+	`GëC⁄√˘‹Ty≥
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+40 
+	`THROW_ERROR
+(
+pPoöt
+[
+i
+]->
+öfo
+.
+	`GëVﬁ©ageUµîLimôs
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+41 
+	`THROW_ERROR
+(
+pPoöt
+[
+i
+]->
+öfo
+.
+	`GëVﬁ©ageLowîLimôs
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+42 
+	`THROW_ERROR
+(
+pPoöt
+[
+i
+]->
+öfo
+.
+	`GëR©edCuºít
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+43 
+	`THROW_ERROR
+(
+pPoöt
+[
+i
+]->
+öfo
+.
+	`GëR©edPowî
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+55 #i‡
+DEBUG_DATA
+
+
+56 
+	`¥ötf_ß„
 ("%s\n", 
 TASKNAME_EVSED©a
 );
 
-19 
+58 
 	`vTaskDñay
-(1000);
+(100);
 
-21 
+60 
 	}
 }
 
@@ -6755,116 +11845,18 @@ __TASKDATA_H
 
 	)
 
-	@D:\Documents\Projects\chargersdk\src\app\taskerror.c
+	@D:\Documents\Projects\chargersdk\src\app\taskdiag.c
 
 8 
 	~"èsk¸óã.h
 "
 
 9 
-	~"èskîr‹.h
+	~"èskdüg.h
 "
 
 11 
-	$vTaskEVSEEº‹
-(*
-pvP¨amëîs
-)
-
-13 
-Ba£Ty≥_t
- 
-xResu…
-;
-
-14 
-Eº‹Package_t
- 
-îΩack
-;
-
-16 
-xResu…
- = 
-pdFALSE
-;
-
-20 
-xResu…
- = 
-	`xQueueRe˚ive
-(
-xH™dÀQueueEº‹Code
-, &
-îΩack
-, 50);
-
-21 if(
-xResu…
- =
-pdTRUE
- && 
-îΩack
-.
-Àvñ
- =
-ERR_LEVEL_CRITICAL
-)
-
-23 
-	`¥ötf_ß„
-("%s(code: %d,Àvñ: %d)\n", 
-°rEº‹Code
-[
-îΩack
-.
-code
-],Éº∑ck.code,Éº∑ck.
-Àvñ
-);
-
-26 #i‡
-DEBUG_TASK
-
-
-27 
-	`x¥ötf
-("%s\n", 
-TASKNAME_EVSEEº‹
-);
-
-31 
-	}
-}
-
-	@D:\Documents\Projects\chargersdk\src\app\taskerror.h
-
-8 #i‚de‡ 
-__TASKERROR_H
-
-
-9 
-	#__TASKERROR_H
-
-
-	)
-
-	@D:\Documents\Projects\chargersdk\src\app\taskmonitor.c
-
-8 
-	~"èsk¸óã.h
-"
-
-9 
-	~"èskm⁄ô‹.h
-"
-
-10 
-	~"öãrÁ˚.h
-"
-
-11 
-	$vTaskEVSEM⁄ô‹
+	$vTaskEVSEDüg
 (*
 pvP¨amëîs
 )
@@ -6892,18 +11884,36 @@ i
 ;
 
 16 
-uöt8_t
+EvítBôs_t
  
-ucCuºítId
+uxBôs
 ;
 
-17 
+17 
+Ba£Ty≥_t
+ 
+xResu…
+;
+
+18 
+Eº‹Package_t
+ 
+îΩack
+;
+
+20 
+xResu…
+ = 
+pdFALSE
+;
+
+21 
 i
  = 0; i < 
 ulTŸÆPoöt
 ; i++)
 
-19 
+23 
 pPoöt
 [
 i
@@ -6915,51 +11925,1331 @@ pLi°Ch¨gePoöt
 pLi°PoötAºay
 [i]);
 
-21 
+29 
+xResu…
+ = 
+	`xQueueRe˚ive
+(
+xH™dÀQueueEº‹Package
+, &
+îΩack
+, 0);
+
+30 if(
+xResu…
+ =
+pdTRUE
+ && 
+îΩack
+.
+Àvñ
+ =
+ERR_LEVEL_CRITICAL
+)
+
+32 #ifde‡
+DEBUG_DIAG
+
+
+33 
+	`¥ötf_ß„
+("%s(code: %d,Àvñ: %d)\n", 
+°rEº‹Code
+[
+îΩack
+.
+code
+],Éº∑ck.code,Éº∑ck.
+Àvñ
+);
+
+39 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+41 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+,
+pdTRUE
+,
+pdFALSE
+,0);
+
+42 if((
+uxBôs
+ & 
+defEvítBôEx˚±i⁄TempW
+) == defEventBitExceptionTempW)
+
+44 
+pPoöt
+[
+i
+]->
+°©us
+.
+	`SëLﬂdPî˚¡
+(pPoint[i], 50);
+
+50 #i‡
+DEBUG_DIAG
+
+
+51 
+	`¥ötf_ß„
+("%s\n", 
+TASKNAME_EVSEDüg
+);
+
+53 
+	`vTaskDñay
+(10);
+
+55 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\app\taskdiag.h
+
+8 #i‚de‡ 
+__TASKDIAG_H
+
+
+9 
+	#__TASKDIAG_H
+
+
+	)
+
+	@D:\Documents\Projects\chargersdk\src\app\taskmonitor.c
+
+8 
+	~"èsk¸óã.h
+"
+
+9 
+	~"èskm⁄ô‹.h
+"
+
+10 
+	~"öãrÁ˚.h
+"
+
+12 
+Eº‹Levñ_t
+ 
+	$H™dÀTemp
+(
+Ch¨gePoöt_t
+ *
+pPoöt
+, 
+ãmp
+, 
+lowî
+, 
+uµî
+)
+
+14 
+Eº‹Levñ_t
+ 
+îæevñ
+;
+
+15 if(
+ãmp
+ >
+lowî
+ ||Åem∞<
+uµî
+ )
+
+17 if(
+ãmp
+ >
+uµî
+ - 10)
+
+19 
+îæevñ
+ = 
+ERR_LEVEL_WARNING
+;
+
+23 
+îæevñ
+ = 
+ERR_LEVEL_OK
+;
+
+26 if(
+ãmp
+ > 
+uµî
+)
+
+28 
+îæevñ
+ = 
+ERR_LEVEL_CRITICAL
+;
+
+30 if(
+ãmp
+ < 
+lowî
+)
+
+34  
+îæevñ
+;
+
+35 
+	}
+}
+
+37 
+	$vTaskEVSEM⁄ô‹
+(*
+pvP¨amëîs
+)
+
+39 
+uöt32_t
+ 
+ulTŸÆPoöt
+ = 
+pLi°Ch¨gePoöt
+->
+TŸÆ
+;
+
+40 
+Ch¨gePoöt_t
+ *
+pPoöt
+[
+ulTŸÆPoöt
+];
+
+41 
+i
+;
+
+42 
+uöt8_t
+ 
+ucCuºítId
+;
+
+43 
+EvítBôs_t
+ 
+uxBôs
+;
+
+44 
+Eº‹Levñ_t
+ 
+îæevñ
+;
+
+45 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+47 
+pPoöt
+[
+i
+] = (
+Ch¨gePoöt_t
+ *)(
+pLi°Ch¨gePoöt
+->
+pLi°PoötAºay
+[i]);
+
+49 
 ucCuºítId
  = 0;
 
-27 if(
+50 
+uxBôs
+ = 0;
+
+55 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBTemp
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+56 if((
+uxBôs
+ & 
+defEvítBôTimîCBTemp
+) == defEventBitTimerCBTemp)
+
+58 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+60 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëACLTemp
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+61 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëACNTemp
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+62 if(
 pPoöt
 [
-ucCuºítId
+i
 ]->
-°©e
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+64 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëBTy≥C⁄√˘‹Temp1
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+65 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëBTy≥C⁄√˘‹Temp2
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+69 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBLockSèã
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+70 if((
+uxBôs
+ & 
+defEvítBôTimîCBLockSèã
+) == defEventBitTimerCBLockState)
+
+72 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+74 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+76 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëBTy≥C⁄√˘‹Lock
+’Poöt[i]), 
+ERR_LEVEL_WARNING
+);
+
+80 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBPlugSèã
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+81 if((
+uxBôs
+ & 
+defEvítBôTimîCBPlugSèã
+) == defEventBitTimerCBPlugState)
+
+83 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+85 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëPlugSèã
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+88 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBCh¨gögD©a
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+89 if((
+uxBôs
+ & 
+defEvítBôTimîCBCh¨gögD©a
+) == defEventBitTimerCBChargingData)
+
+91 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+93 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëCh¨gögVﬁège
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+94 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëCh¨gögCuºít
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+95 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëCh¨gögFªquí˚
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+96 
+	`THROW_ERROR
+(
+i
+, 
+pPoöt
+[i]->
+°©us
+.
+	`GëRñaySèã
+’Poöt[i]), 
+ERR_LEVEL_CRITICAL
+);
+
+99 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBEVSESèã
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+100 if((
+uxBôs
+ & 
+defEvítBôTimîCBEVSESèã
+) == defEventBitTimerCBEVSEState)
+
+102 
+	`THROW_ERROR
+(
+defDevID_EVSE
+, 
+pEVSE
+->
+°©us
+.
+	`GëS¸amSèã
+’EVSE), 
+ERR_LEVEL_CRITICAL
+);
+
+103 
+	`THROW_ERROR
+(
+defDevID_EVSE
+, 
+pEVSE
+->
+°©us
+.
+	`GëPESèã
+’EVSE), 
+ERR_LEVEL_CRITICAL
+);
+
+104 
+	`THROW_ERROR
+(
+defDevID_EVSE
+, 
+pEVSE
+->
+°©us
+.
+	`GëKnockSèã
+’EVSE), 
+ERR_LEVEL_TIPS
+);
+
+105 
+	`THROW_ERROR
+(
+defDevID_EVSE
+, 
+pEVSE
+->
+°©us
+.
+	`GëAºe°îSèã
+’EVSE), 
+ERR_LEVEL_TIPS
+);
+
+106 
+	`THROW_ERROR
+(
+defDevID_EVSE
+, 
+pEVSE
+->
+°©us
+.
+	`GëPowîOffSèã
+’EVSE), 
+ERR_LEVEL_TIPS
+);
+
+108 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBRFID
+, 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+109 if((
+uxBôs
+ & 
+defEvítBôTimîCBRFID
+) == defEventBitTimerCBRFID)
+
+111 
+	`THROW_ERROR
+(
+defDevID_RFID
+, 
+pRFIDDev
+->
+°©us
+.
+	`GëUID
+’RFIDDev), 
+ERR_LEVEL_CRITICAL
+);
+
+117 if((
+uxBôs
+ & 
+defEvítBôTimîCBTemp
+) == defEventBitTimerCBTemp)
+
+119 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+122 
+îæevñ
+ = 
+	`H™dÀTemp
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+dACLTemp
+,
+
+123 
+pPoöt
+[
+i
+]->
+öfo
+.
+dACTempLowîLimôs
+,
+
+124 
+pPoöt
+[
+i
+]->
+öfo
+.
+dACTempUµîLimôs
+);
+
+125 
+îæevñ
+)
+
+127 
+ERR_LEVEL_OK
+:
+
+128 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+);
+
+129 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+131 
+ERR_LEVEL_WARNING
+:
+
+132 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+);
+
+133 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+135 
+ERR_LEVEL_CRITICAL
+:
+
+137 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+138 
+	`ThrowEº‹Code
+(
+i
+, 
+ERR_POINT_ACLTEMP_DECT_FAULT
+, 
+ERR_LEVEL_CRITICAL
+);
+
+143 
+îæevñ
+ = 
+	`H™dÀTemp
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+dACNTemp
+,
+
+144 
+pPoöt
+[
+i
+]->
+öfo
+.
+dACTempLowîLimôs
+,
+
+145 
+pPoöt
+[
+i
+]->
+öfo
+.
+dACTempUµîLimôs
+);
+
+146 
+îæevñ
+)
+
+148 
+ERR_LEVEL_OK
+:
+
+149 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+151 
+ERR_LEVEL_WARNING
+:
+
+152 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+);
+
+153 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+155 
+ERR_LEVEL_CRITICAL
+:
+
+157 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdACTempOK
+);
+
+158 
+	`ThrowEº‹Code
+(
+i
+, 
+ERR_POINT_ACNTEMP_DECT_FAULT
+, 
+ERR_LEVEL_CRITICAL
+);
+
+162 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+165 
+îæevñ
+ = 
+	`H™dÀTemp
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+dBTy≥C⁄√˘‹Temp1
+,
+
+166 
+pPoöt
+[
+i
+]->
+öfo
+.
+dC⁄√˘‹TempLowîLimôs
+,
+
+167 
+pPoöt
+[
+i
+]->
+öfo
+.
+dC⁄√˘‹TempUµîLimôs
+);
+
+168 
+îæevñ
+)
+
+170 
+ERR_LEVEL_OK
+:
+
+171 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+173 
+ERR_LEVEL_WARNING
+:
+
+175 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+);
+
+176 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+178 
+ERR_LEVEL_CRITICAL
+:
+
+180 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+181 
+	`ThrowEº‹Code
+(
+i
+, 
+ERR_POINT_BTEMP1_DECT_FAULT
+, 
+ERR_LEVEL_CRITICAL
+);
+
+186 
+îæevñ
+ = 
+	`H™dÀTemp
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+dBTy≥C⁄√˘‹Temp2
+,
+
+187 
+pPoöt
+[
+i
+]->
+öfo
+.
+dC⁄√˘‹TempLowîLimôs
+,
+
+188 
+pPoöt
+[
+i
+]->
+öfo
+.
+dC⁄√˘‹TempUµîLimôs
+);
+
+189 
+îæevñ
+)
+
+191 
+ERR_LEVEL_OK
+:
+
+192 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+194 
+ERR_LEVEL_WARNING
+:
+
+196 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítEx˚±i⁄
+, 
+defEvítBôEx˚±i⁄TempW
+);
+
+197 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+199 
+ERR_LEVEL_CRITICAL
+:
+
+201 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdC⁄nTempOK
+);
+
+202 
+	`ThrowEº‹Code
+(
+i
+, 
+ERR_POINT_BTEMP2_DECT_FAULT
+, 
+ERR_LEVEL_CRITICAL
+);
+
+208 if((
+uxBôs
+ & 
+defEvítBôTimîCBLockSèã
+) == defEventBitTimerCBLockState)
+
+210 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+212 if(
+pPoöt
+[
+i
+]->
+öfo
+.
+ucC⁄√˘‹Ty≥
+ =
+defC⁄√˘‹Ty≥B
+)
+
+214 if(
+pPoöt
+[
+i
+]->
+°©us
 .
 xBTy≥C⁄√˘‹LockSèã
  =
 LOCK
 )
 
-32 
-ucCuºítId
-++;
-
-33 }
-ucCuºítId
- < 
-ulTŸÆPoöt
+216 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdLocked
 );
 
-34 
-ucCuºítId
- = 0;
+220 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdLocked
+);
 
-37 #i‡
+226 if((
+uxBôs
+ & 
+defEvítBôTimîCBPlugSèã
+) == defEventBitTimerCBPlugState)
+
+228 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+230 if(
+pPoöt
+[
+i
+]->
+°©us
+.
+xPlugSèã
+ =
+PLUG
+)
+
+232 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdPlugOK
+);
+
+234 if(
+pPoöt
+[
+i
+]->
+°©us
+.
+xPlugSèã
+ =
+UNPLUG
+)
+
+236 
+	`xEvítGroupCÀ¨Bôs
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdPlugOK
+);
+
+240 if((
+uxBôs
+ & 
+defEvítBôTimîCBCh¨gögD©a
+) == defEventBitTimerCBChargingData)
+
+242 
+i
+ = 0; i < 
+ulTŸÆPoöt
+; i++)
+
+249 if((
+uxBôs
+ & 
+defEvítBôTimîCBEVSESèã
+) == defEventBitTimerCBEVSEState)
+
+260 #i‡
 DEBUG_TASK
 
 
-38 
+261 
 	`x¥ötf
 ("%s\n", 
 TASKNAME_EVSEM⁄ô‹
 );
 
-40 
+263 
 	`vTaskDñay
 (50);
 
-42 
+265 
 	}
 }
 
@@ -6982,62 +13272,154 @@ __TASKMONITOR_H
 "
 
 9 
-	~"èsk¸óã.h
+	~"öãrÁ˚.h
 "
 
 10 
+	~"èsk¸óã.h
+"
+
+11 
 	~"èskªmŸe.h
 "
 
-12 
+13 
 	$vTaskEVSERemŸe
 (*
 pvP¨amëîs
 )
 
-14 
+15 
 EvítBôs_t
  
 uxBôs
  = 0;
 
+16 
+OrdîD©a_t
+ 
+OrdîD©a
+;
+
 17 
+Eº‹Code_t
+ 
+îrcode
+;
+
+19 
+uxBôs
+ = 0;
+
+20 
+OrdîD©a
+.
+ucAccou¡Sètus
+ = 0;
+
+21 
+OrdîD©a
+.
+dBÆ™˚
+ = 0;
+
+22 
+îrcode
+ = 0;
+
+26 
 uxBôs
  = 
 	`xEvítGroupWaôBôs
 (
+pRFIDDev
+->
 xH™dÀEvítGroupRFID
-, 
-defEvítBôGETUID
-, 
-pdTRUE
-,ÖdTRUE, 0);
+,
 
-18 if((
+27 
+defEvítBôIsNewUID
+,
+
+28 
+pdTRUE
+, 
+pdFALSE
+, 0);
+
+29 if((
 uxBôs
  & 
-defEvítBôGETUID
-) != 0)
+defEvítBôIsNewUID
+) == defEventBitIsNewUID)
 
-20 
-	`¥ötf_ß„
-("imÑemote,find card, :)\n");
+31 
+	`xQueueRe˚ive
+(
+xH™dÀQueueOrdîs
+, &
+OrdîD©a
+, 1000);
 
-23 #i‡
-DEBUG_TASK
+32 
+	`THROW_ERROR
+(
+îrcode
+ = 
+	`RemŸeGëBÆ™˚
+(
+OrdîD©a
+.
+ucUID
+, 
+defUIDLígth
+, &OrdîD©a.
+ucAccou¡Sètus
+, &OrdîD©a.
+dBÆ™˚
+), 
+ERR_LEVEL_CRITICAL
+);
+
+33 if(
+îrcode
+ = 
+ERR_NO
+)
+
+35 
+	`xQueueSíd
+(
+xH™dÀQueueOrdîs
+, &
+OrdîD©a
+, 0);
+
+36 
+	`xEvítGroupSëBôs
+(
+pRFIDDev
+->
+xH™dÀEvítGroupRFID
+,
+defEvítBôGëAccou¡Sètus
+);
+
+39 #i‡
+DEBUG_REMOTE
 
 
-24 
+40 
 	`¥ötf_ß„
 ("%s\n", 
 TASKNAME_EVSERemŸe
 );
 
-26 
+42 
 	`vTaskDñay
 (100);
 
-28 
+44 
 	}
 }
 
@@ -7068,106 +13450,578 @@ __TASKREMOTE_H
 "
 
 11 
-	~"öãrÁ˚_rfid.h
+	~"öãrÁ˚.h
 "
 
-13 
+13 
+	e_RFIDSèã
+
+
+15 
+	mSTATE_NOUID
+,
+
+16 
+	mSTATE_GOTUID
+,
+
+17 
+	mSTATE_OLDUID
+,
+
+18 
+	mSTATE_NEWUID
+,
+
+19 
+	mSTATE_GOODCARD
+,
+
+20 
+	mSTATE_BADCARD
+,
+
+21 
+	mSTATE_OWE
+,
+
+22 
+	mSTATE_PRECONTRACT
+
+
+23 } 
+	tRFIDSèã_t
+;
+
+24 
+	$OrdîInôD©a
+(
+OrdîD©a_t
+ *
+‹dî
+)
+
+26 
+‹dî
+->
+dBÆ™˚
+ = 0;
+
+27 
+‹dî
+->
+ucAccou¡Sètus
+ = 0;
+
+28 
+	`memmove
+(
+‹dî
+->
+ucEVSESN
+, 
+pEVSE
+->
+öfo
+.
+ucSN
+, 
+defEVSESNLígth
+);
+
+29 
+‹dî
+->
+ucPoötID
+ = 0;
+
+30 
+	`mem£t
+(
+‹dî
+->
+ucUID
+, 0, 
+defUIDLígth
+);
+
+31 
+	}
+}
+
+32 
 	$vTaskEVSERFID
 (*
 pvP¨amëîs
 )
 
-15 
-uöt8_t
- 
-ˇrdUID
-[4];
-
-16 
-°©e
-, 
+34 
 i
 ;
 
-17 *
-pRFIDDev
-;
-
-18 
+35 
 EvítBôs_t
  
 uxBôs
 ;
 
-19 
-pRFIDDev
- = 
-	`Cª©eRFIDDev
-();
+36 
+Eº‹Code_t
+ 
+îrcode
+;
 
-23 
-°©e
- = 
-	`GëUID
-(
-pRFIDDev
-, 
-ˇrdUID
+37 
+Ch¨gePoöt_t
+ *
+pPoöt
+[2];
+
+38 
+uöt8_t
+ 
+ucTŸÆ
+;
+
+39 
+OrdîD©a_t
+ 
+OrdîD©a
+;
+
+40 
+RFIDSèã_t
+ 
+RFIDSèã
+;
+
+42 
+	`OrdîInôD©a
+(&
+OrdîD©a
 );
 
-24 if(
-°©e
- =
-MT_STATE_Y
+43 
+ucTŸÆ
+ = 
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
+;
+
+44 
+i
+ = 0; i < 
+ucTŸÆ
+; i++)
+
+46 
+pPoöt
+[
+i
+] = 
+	`Ch¨gePoötGëH™dÀ
+(i);
+
+48 
+uxBôs
+ = 0;
+
+49 
+îrcode
+ = 
+ERR_NO
+;
+
+50 
+RFIDSèã
+ = 
+STATE_NOUID
+;
+
+53 
+RFIDSèã
 )
 
-26 #ifde‡
+55 
+STATE_NOUID
+:
+
+56 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pRFIDDev
+->
+xH™dÀEvítGroupRFID
+,
+
+57 
+defEvítBôGŸUIDtoRFID
+,
+
+58 
+pdTRUE
+, 
+pdFALSE
+, 
+p‹tMAX_DELAY
+);
+
+59 if((
+uxBôs
+ & 
+defEvítBôGŸUIDtoRFID
+) == defEventBitGotUIDtoRFID)
+
+61 
+	`memmove
+(
+OrdîD©a
+.
+ucUID
+, 
+pRFIDDev
+->
+°©us
+.ucUID, 
+defUIDLígth
+);
+
+62 
+RFIDSèã
+ = 
+STATE_GOTUID
+;
+
+65 
+STATE_GOTUID
+:
+
+66 #ifde‡
 DEBUG_RFID
 
 
-27 
-	`x¥ötf
+67 
+	`¥ötf_ß„
+("imÑfidÅask,find card, :)\n");
+
+68 
+	`¥ötf_ß„
 ("UID = ");
 
-28 
+69 
 i
- = 0; i < 4; i++)
+ = 0; i < 
+defUIDLígth
+; i++)
 
-30 
-	`x¥ötf
+71 
+	`¥ötf_ß„
 ("%x", 
-ˇrdUID
+OrdîD©a
+.
+ucUID
 [
 i
 ]);
 
-32 
-	`x¥ötf
+73 
+	`¥ötf_ß„
 ("\n");
 
-34 
-uxBôs
- = 
-	`xEvítGroupSëBôs
-(
-xH™dÀEvítGroupRFID
-, 
-defEvítBôGETUID
-);
+75 
+i
+ = 0; i < 
+pEVSE
+->
+öfo
+.
+ucTŸÆPoöt
+; i++)
 
-39 #ifde‡
+77 if(
+	`memcmp
+(
+pPoöt
+[
+i
+]->
+°©us
+.
+ucHñdC¨dUID
+, 
+OrdîD©a
+.
+ucUID
+, 
+defUIDLígth
+) == 0)
+
+80 #ifde‡
 DEBUG_RFID
 
 
-40 
-	`x¥ötf
-("No card.\n");
+81 
+	`¥ötf_ß„
+("poöà%d ¥Àø®“—À¢\n", 
+i
+);
 
-45 
-	`vTaskDñay
-(500);
+83 
+RFIDSèã
+ = 
+STATE_OLDUID
+;
 
-47 
+89 #ifde‡
+DEBUG_RFID
+
+
+90 
+	`¥ötf_ß„
+("poöà%d Œ¥À¢\n", 
+i
+);
+
+92 
+RFIDSèã
+ = 
+STATE_NEWUID
+;
+
+96 
+STATE_NEWUID
+:
+
+97 
+	`xQueueSíd
+(
+xH™dÀQueueOrdîs
+, &
+OrdîD©a
+, 0);
+
+98 
+uxBôs
+ = 
+	`xEvítGroupSync
+(
+pRFIDDev
+->
+xH™dÀEvítGroupRFID
+,
+
+99 
+defEvítBôIsNewUID
+,
+
+100 
+defEvítBôGëAccou¡Sètus
+,
+
+102 if((
+uxBôs
+ & 
+defEvítBôGëAccou¡Sètus
+) == defEventBitGetAccountStatus)
+
+104 
+	`xQueueRe˚ive
+(
+xH™dÀQueueOrdîs
+, &
+OrdîD©a
+, 1000);
+
+105 if(
+OrdîD©a
+.
+ucAccou¡Sètus
+ !0 && OrdîD©a.
+dBÆ™˚
+ > 0)
+
+107 
+RFIDSèã
+ = 
+STATE_GOODCARD
+;
+
+109 if(
+OrdîD©a
+.
+ucAccou¡Sètus
+ == 0)
+
+111 
+RFIDSèã
+ = 
+STATE_BADCARD
+;
+
+113 if(
+OrdîD©a
+.
+dBÆ™˚
+ < 0)
+
+115 
+RFIDSèã
+ = 
+STATE_OWE
+;
+
+119 
+STATE_OLDUID
+:
+
+120 
+	`OrdîInôD©a
+(&
+OrdîD©a
+);
+
+121 
+RFIDSèã
+ = 
+STATE_NOUID
+;
+
+123 
+STATE_GOODCARD
+:
+
+127 
+OrdîD©a
+.
+ucPoötID
+ = 0;
+
+128 
+pPoöt
+[
+OrdîD©a
+.
+ucPoötID
+]->
+°©e
+ = 
+POINT_PRECONTRACT
+;
+
+129 
+	`memmove
+(
+pPoöt
+[
+OrdîD©a
+.
+ucPoötID
+]->
+°©us
+.
+ucHñdC¨dUID
+, OrdîD©a.
+ucUID
+, 
+defUIDLígth
+);
+
+130 
+	`xEvítGroupSëBôs
+(
+pPoöt
+[
+OrdîD©a
+.
+ucPoötID
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+, 
+defEvítBôStdAuthed
+);
+
+131 
+RFIDSèã
+ = 
+STATE_PRECONTRACT
+;
+
+133 
+STATE_BADCARD
+:
+
+137 
+	`OrdîInôD©a
+(&
+OrdîD©a
+);
+
+138 
+RFIDSèã
+ = 
+STATE_NOUID
+;
+
+140 
+STATE_OWE
+:
+
+144 
+	`OrdîInôD©a
+(&
+OrdîD©a
+);
+
+145 
+RFIDSèã
+ = 
+STATE_NOUID
+;
+
+147 
+STATE_PRECONTRACT
+:
+
+148 
+uxBôs
+ = 
+	`xEvítGroupWaôBôs
+(
+pPoöt
+[
+OrdîD©a
+.
+ucPoötID
+]->
+°©us
+.
+xH™dÀEvítSèπC⁄dôi⁄
+,
+
+149 
+defEvítBôStdOK
+,
+
+150 
+pdTRUE
+, 
+pdFALSE
+, 1000);
+
+151 if((
+uxBôs
+ & 
+defEvítBôStdOK
+) == defEventBitStdOK)
+
+160 
 	}
 }
 
@@ -7204,50 +14058,10 @@ xTimî
 16 
 uöt32_t
  
-ulTŸÆPoöt
- = 
-pLi°Ch¨gePoöt
-->
-TŸÆ
-;
-
-17 
-Ch¨gePoöt_t
- *
-pPoöt
-[
-ulTŸÆPoöt
-];
-
-18 
-uöt32_t
- 
 uxTimîID
 ;
 
-19 
-i
-;
-
-20 
-i
- = 0; i < 
-ulTŸÆPoöt
-; i++)
-
-22 
-pPoöt
-[
-i
-] = (
-Ch¨gePoöt_t
- *)(
-pLi°Ch¨gePoöt
-->
-pLi°PoötAºay
-[i]);
-
-24 
+18 
 uxTimîID
  = (
 uöt32_t
@@ -7257,203 +14071,67 @@ uöt32_t
 xTimî
 );
 
-25 if(
+20 if(
 uxTimîID
  =
 defTIMERID_Temp
 )
 
-27 
-i
- = 0; i < 
-ulTŸÆPoöt
-; i++)
-
-29 
-	`THROW_ERROR
+22 
+	`xEvítGroupSëBôs
 (
-	`GëACLTemp
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBTemp
 );
 
-30 
-	`THROW_ERROR
-(
-	`GëACNTemp
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-31 if(
-pPoöt
-[
-i
-]->
-öfo
-.
-ucC⁄√˘‹Ty≥
- =
-defC⁄√˘‹Ty≥B
-)
-
-33 
-	`THROW_ERROR
-(
-	`GëBTy≥C⁄√˘‹Temp1
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-34 
-	`THROW_ERROR
-(
-	`GëBTy≥C⁄√˘‹Temp2
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-39 if(
+24 if(
 uxTimîID
  =
 defTIMERID_LockSèã
 )
 
-41 
-i
- = 0; i < 
-ulTŸÆPoöt
-; i++)
-
-43 if(
-pPoöt
-[
-i
-]->
-öfo
-.
-ucC⁄√˘‹Ty≥
- =
-defC⁄√˘‹Ty≥B
-)
-
-45 
-	`THROW_ERROR
+26 
+	`xEvítGroupSëBôs
 (
-	`GëBTy≥C⁄√˘‹Lock
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBLockSèã
 );
 
-50 if(
+28 if(
 uxTimîID
  =
-defTIMERID_CPCCSèã
+defTIMERID_PlugSèã
 )
 
-52 
-i
- = 0; i < 
-ulTŸÆPoöt
-; i++)
-
-54 
-	`THROW_ERROR
+30 
+	`xEvítGroupSëBôs
 (
-	`GëCCSèã
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBPlugSèã
 );
 
-55 
-	`THROW_ERROR
-(
-	`GëCPSèã
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-59 if(
+32 if(
 uxTimîID
  =
 defTIMERID_Ch¨gögD©a
 )
 
-61 
-i
- = 0; i < 
-ulTŸÆPoöt
-; i++)
-
-63 
-	`THROW_ERROR
+34 
+	`xEvítGroupSëBôs
 (
-	`GëCh¨gögVﬁège
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBCh¨gögD©a
 );
 
-64 
-	`THROW_ERROR
-(
-	`GëCh¨gögCuºít
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-65 
-	`THROW_ERROR
-(
-	`GëCh¨gögFªquí˚
-(
-pPoöt
-[
-i
-]), 
-ERR_LEVEL_TIPS
-);
-
-69 
+36 
 	}
 }
 
-70 
+37 
 	$vEVSETimîCB
 (
 TimîH™dÀ_t
@@ -7461,13 +14139,13 @@ TimîH™dÀ_t
 xTimî
 )
 
-72 
+39 
 uöt32_t
  
 uxTimîID
 ;
 
-74 
+41 
 uxTimîID
  = (
 uöt32_t
@@ -7477,63 +14155,55 @@ uöt32_t
 xTimî
 );
 
-76 if(
+43 if(
 uxTimîID
  =
 defTIMERID_EVSESèã
 )
 
-78 
-	`THROW_ERROR
+45 
+	`xEvítGroupSëBôs
 (
-	`GëS¸amSèã
-(
-pEVSE
-), 
-ERR_LEVEL_CRITICAL
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBEVSESèã
 );
 
-79 
-	`THROW_ERROR
+47 if(
+uxTimîID
+ =
+defTIMERID_DATAREFRESH
+)
+
+49 
+	`xEvítGroupSëBôs
 (
-	`GëPESèã
-(
-pEVSE
-), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBD©aRe‰esh
 );
 
-80 
-	`THROW_ERROR
+51 
+	}
+}
+
+53 
+	$vRFIDTimîCB
 (
-	`GëKnockSèã
+TimîH™dÀ_t
+ 
+xTimî
+)
+
+55 
+	`xEvítGroupSëBôs
 (
-pEVSE
-), 
-ERR_LEVEL_TIPS
+xH™dÀEvítTimîCBNŸify
+, 
+defEvítBôTimîCBRFID
 );
 
-81 
-	`THROW_ERROR
-(
-	`GëAºe°îSèã
-(
-pEVSE
-), 
-ERR_LEVEL_TIPS
-);
-
-82 
-	`THROW_ERROR
-(
-	`GëPowîOffSèã
-(
-pEVSE
-), 
-ERR_LEVEL_TIPS
-);
-
-85 
+56 
 	}
 }
 
@@ -19360,6 +26030,8 @@ ERR
 205 
 	`ThrowEº‹Code
 (
+defDevID_RFID
+, 
 ERR_
 ##
 DEV
@@ -20361,13 +27033,13 @@ uöt8_t
 ch
 )
 
-15 (
+9 (
 CLI_USARTx_BASE
 ->
 SR
 &0X40)==0);
 
-16 
+10 
 CLI_USARTx_BASE
 ->
 DR
@@ -20375,53 +27047,53 @@ DR
 ch
 ;
 
-17 
+11 
 	}
 }
 
-19 
+13 
 	$ªèrgë_öô
 ()
 
-21 
+15 
 x¥ötfMuãx
  = 
 	`xSem≠h‹eCª©eMuãx
 ();
 
-23 if(
+17 if(
 x¥ötfMuãx
  =
 NULL
 )
 
-27 
+21 
 	`xdev_out
 (
 myputc
 );
 
-28 
+22 
 	}
 }
 
-30 
+24 
 	$¥ötf_ß„
 (*
 f‹m©
 , ...)
 
-32 
+26 
 buf_°r
 [200 + 1];
 
-33 
+27 
 va_li°
  
 v_¨gs
 ;
 
-36 
+30 
 	`va_°¨t
 (
 v_¨gs
@@ -20429,33 +27101,33 @@ v_¨gs
 f‹m©
 );
 
-37 ()
+31 ()
 	`v¢¥ötf
 ((*)&
 buf_°r
 [0],
 
-38 (
+32 (
 size_t
  ) (
 buf_°r
 ),
 
-39 (c⁄° *Ë
+33 (c⁄° *Ë
 f‹m©
 ,
 
-40 
+34 
 v_¨gs
 );
 
-41 
+35 
 	`va_íd
 (
 v_¨gs
 );
 
-43 
+37 
 	`xSem≠h‹eTake
 (
 x¥ötfMuãx
@@ -20463,27 +27135,27 @@ x¥ötfMuãx
 p‹tMAX_DELAY
 );
 
-44 
+38 
 	`x¥ötf
 ("%s", 
 buf_°r
 );
 
-45 
+39 
 	`xSem≠h‹eGive
 (
 x¥ötfMuãx
 );
 
-46 
+40 
 	}
 }
 
-52 #ifde‡
+46 #ifde‡
 __GNUC__
 
 
-55 
+49 
 	#PUTCHAR_PROTOTYPE
  
 	`__io_putch¨
@@ -20493,7 +27165,7 @@ ch
 
 	)
 
-57 
+51 
 	#PUTCHAR_PROTOTYPE
  
 	`Âutc
@@ -20507,43 +27179,43 @@ f
 
 	)
 
-60 #¥agm®
+54 #¥agm®
 imp‹t
 (
 __u£_no_£miho°ög_swi
 )
 
-62 
+56 
 	s__FILE
 
 
-64 
+58 
 	mh™dÀ
 ;
 
-66 
+60 
 FILE
  
 	g__°dout
 ;
 
-67 
+61 
 FILE
  
 	g__°dö
 ;
 
-68 
+62 
 FILE
  
 	g__°dîr
 ;
 
-69 #ifde‡
+63 #ifde‡
 __GNUC__
 
 
-70 
+64 
 	$_wrôe
  (
 fd
@@ -20553,17 +27225,17 @@ fd
 Àn
 )
 
-72 
+66 
 i
  = 0;
 
-73 
+67 
 uöt8_t
  
 ch
 ;
 
-74 *
+68 *
 ±r
  && (
 i
@@ -20571,29 +27243,29 @@ i
 Àn
 ))
 
-76 
+70 
 	`myputc
 (*
 ±r
 );
 
-77 
+71 
 i
 ++;
 
-78 
+72 
 ±r
 ++;
 
-80  
+74  
 i
 ;
 
-81 
+75 
 	}
 }
 
-88 
+82 
 	$Âutc
 (
 ch
@@ -20603,21 +27275,21 @@ FILE
 f
 )
 
-95 
+89 
 	`myputc
 (
 ch
 );
 
-97  
+91  
 ch
 ;
 
-98 
+92 
 	}
 }
 
-100 
+94 
 	$fgëc
 (
 FILE
@@ -20625,11 +27297,11 @@ FILE
 f
 )
 
-102 
+96 
 ch
 ;
 
-103 
+97 
 	`HAL_UART_Re˚ive
 (&
 CLI_UARTx_H™dÀr
@@ -20639,15 +27311,15 @@ uöt8_t
 ch
 , 1, 1000);
 
-104  
+98  
 ch
 ;
 
-105 
+99 
 	}
 }
 
-107 
+101 
 	$„º‹
 (
 FILE
@@ -20655,27 +27327,27 @@ FILE
 f
 )
 
-109  
+103  
 EOF
 ;
 
-110 
+104 
 	}
 }
 
-115 
+109 
 	$_âywrch
 (
 ch
 )
 
-117 
+111 
 ãmpch
  = 
 ch
 ;
 
-118 
+112 
 	`HAL_UART_Tønsmô
 (&
 CLI_UARTx_H™dÀr
@@ -20685,21 +27357,21 @@ uöt8_t
 ãmpch
 , 1, 0xFFFF);
 
-119 
+113 
 	}
 }
 
-121 
+115 
 	$_sys_exô
 (
 x
 )
 
-123 
+117 
 x
  = x;
 
-124 
+118 
 	}
 }
 
@@ -79653,7 +86325,7 @@ GUI_WIDGET_CREATE_INFO
 FRAMEWIN_Cª©eIndúe˘
 , "EVSE", 
 ID_FRAMEWIN_0
-, 0, 0, 800, 480, 0, 0x0, 0 },
+, 0, 0, 1024, 600, 0, 0x0, 0 },
 
 55 { 
 BUTTON_Cª©eIndúe˘
@@ -80456,6 +87128,88 @@ GUI_FONT_6X8
 103 
 	}
 }
+
+	@D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\GUIConf.h
+
+54 #i‚de‡
+GUICONF_H
+
+
+55 
+	#GUICONF_H
+
+
+	)
+
+61 
+	#GUI_NUM_LAYERS
+ 2
+
+62 
+
+	)
+
+67 #ifde‡
+OS_SUPPORT
+
+
+68 
+	#GUI_OS
+ (1)
+
+69 #ñ£
+
+	)
+
+70 
+	#GUI_OS
+ (0)
+
+	)
+
+77 #i‚de‡ 
+GUI_SUPPORT_TOUCH
+
+
+78 
+	#GUI_SUPPORT_TOUCH
+ (1)
+
+80 
+
+	)
+
+85 
+	#GUI_DEFAULT_FONT
+ &
+GUI_F⁄t6x8
+
+
+	)
+
+91 
+	#GUI_SUPPORT_MOUSE
+ (1Ë
+
+	)
+
+92 
+	#GUI_WINSUPPORT
+ (1Ë
+
+	)
+
+93 
+	#GUI_SUPPORT_MEMDEV
+ (1Ë
+
+	)
+
+94 
+	#GUI_SUPPORT_DEVICES
+ (1Ë
+
+	)
 
 	@D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c
 
@@ -84956,6 +91710,4496 @@ ySize
 );
 
 1398 
+	}
+}
+
+	@D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\LCDConf_Lin_ATK_7016.c
+
+49 
+	~"ö˛udes.h
+"
+
+50 
+	~"LCDC⁄f.h
+"
+
+51 
+	~"GUI_Priv©e.h
+"
+
+80 
+	#XSIZE_PHYS
+ 1024
+
+	)
+
+81 
+	#YSIZE_PHYS
+ 600
+
+	)
+
+83 
+	#NUM_BUFFERS
+ 3
+
+84 
+	#NUM_VSCREENS
+ 1
+
+85 
+
+	)
+
+86 
+	#BK_COLOR
+ 
+GUI_DARKBLUE
+
+
+	)
+
+88 #unde‡
+GUI_NUM_LAYERS
+
+
+89 
+	#GUI_NUM_LAYERS
+ 1
+
+	)
+
+91 
+	#COLOR_CONVERSION_0
+ 
+GUICC_M565
+
+
+	)
+
+92 
+	#DISPLAY_DRIVER_0
+ 
+GUIDRV_LIN_16
+
+
+	)
+
+94 #i‡(
+GUI_NUM_LAYERS
+ > 1)
+
+95 
+	#COLOR_CONVERSION_1
+ 
+GUICC_M1555I
+
+
+	)
+
+96 
+	#DISPLAY_DRIVER_1
+ 
+GUIDRV_LIN_16
+
+
+	)
+
+99 #i‚de‡ 
+XSIZE_PHYS
+
+
+100 #îr‹ 
+Physiˇl
+ 
+X
+ 
+size
+ 
+of
+ 
+di•œy
+ 
+is
+ 
+nŸ
+ 
+deföed
+!
+
+102 #i‚de‡ 
+YSIZE_PHYS
+
+
+103 #îr‹ 
+Physiˇl
+ 
+Y
+ 
+size
+ 
+of
+ 
+di•œy
+ 
+is
+ 
+nŸ
+ 
+deföed
+!
+
+105 #i‚de‡ 
+NUM_VSCREENS
+
+
+106 
+	#NUM_VSCREENS
+ 1
+
+	)
+
+108 #i‡(
+NUM_VSCREENS
+ <= 0)
+
+109 #îr‹ 
+At
+ 
+Àa°
+ 
+⁄e
+ 
+s¸ìí
+ 
+√eds
+ 
+to
+ 
+be
+ 
+deföed
+!
+
+112 #i‡(
+NUM_VSCREENS
+ > 1Ë&& (
+NUM_BUFFERS
+ > 1)
+
+113 #îr‹ 
+VútuÆ
+ 
+s¸ìns
+ 
+™d
+ 
+mu…ùÀ
+ 
+buf„rs
+ 
+¨e
+ 
+nŸ
+ 
+Ælowed
+!
+
+116 
+	#LCD_LAYER0_FRAME_BUFFER_SIZE
+ (3*1024*1024)
+
+	)
+
+117 
+	#LCD_LAYER1_FRAME_BUFFER_SIZE
+ (3*1024*1024)
+
+	)
+
+119 
+	#LCD_LAYER0_FRAME_BUFFER
+ ((
+uöt32_t
+)0xC0000000)
+
+120 
+	#LCD_LAYER1_FRAME_BUFFER
+ ((
+uöt32_t
+)0xC0300000)
+
+121 
+
+	)
+
+123 
+	#rccPLLSAIN
+ 396
+
+	)
+
+124 
+	#rccPLLSAIR
+ 2
+
+	)
+
+125 
+	#rccPLLSAIDivR
+ 
+RCC_PLLSAIDIVR_4
+
+
+	)
+
+136 
+	#DEFINEDMA2D_COLORCONVERSION
+(
+PFIX
+, 
+PIXELFORMAT
+) \
+
+137 
+Cﬁ‹2IndexBulk_
+##
+PFIX
+##
+	`DMA2D
+(
+LCD_COLOR
+ * 
+pCﬁ‹
+, * 
+pIndex
+, 
+U32
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+) { \
+
+138 
+	`DMA2D_Cﬁ‹2IndexBulk
+(
+pCﬁ‹
+, 
+pIndex
+, 
+NumIãms
+, 
+SizeOfIndex
+, 
+PIXELFORMAT
+); \
+
+140 
+Index2Cﬁ‹Bulk_
+##
+PFIX
+##
+	`DMA2D
+(* 
+pIndex
+, 
+LCD_COLOR
+ * 
+pCﬁ‹
+, 
+U32
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+) { \
+
+141 
+	`DMA2D_Index2Cﬁ‹Bulk
+(
+pIndex
+, 
+pCﬁ‹
+, 
+NumIãms
+, 
+SizeOfIndex
+, 
+PIXELFORMAT
+); \
+
+142 }
+
+	)
+
+152 
+LTDC_H™dÀTy≥Def
+ 
+	gh…dc
+;
+
+153 
+DMA2D_H™dÀTy≥Def
+ 
+	ghdma2d
+;
+
+154 
+LCD_LayîPr›Ty≥def
+ 
+	gœyî_¥›
+[
+GUI_NUM_LAYERS
+];
+
+156 c⁄° 
+LCD_API_COLOR_CONV
+ *
+	g≠Cﬁ‹C⁄vAPI
+[] =
+
+158 
+COLOR_CONVERSION_0
+,
+
+159 #i‡
+GUI_NUM_LAYERS
+ > 1
+
+160 
+COLOR_CONVERSION_1
+,
+
+164 
+U32
+ 
+	gaBuf„rDMA2D
+ [
+XSIZE_PHYS
+ * (U32)];
+
+165 
+U32
+ 
+	gaBuf„r_FG
+ [
+XSIZE_PHYS
+ * (U32)];
+
+166 
+U32
+ 
+	gaBuf„r_BG
+ [
+XSIZE_PHYS
+ * (U32)];
+
+176 
+uöt32_t
+ 
+LCD_LL_GëPixñf‹m©
+(uöt32_à
+LayîIndex
+);
+
+177 
+DMA2D_C›yBuf„r
+(
+uöt32_t
+ 
+LayîIndex
+, *
+pSrc
+, *
+pD°
+, uöt32_à
+xSize
+, uöt32_à
+ySize
+, uöt32_à
+OffLöeSrc
+, uöt32_à
+OffLöeD°
+);
+
+178 
+DMA2D_FûlBuf„r
+(
+uöt32_t
+ 
+LayîIndex
+, *
+pD°
+, uöt32_à
+xSize
+, uöt32_à
+ySize
+, uöt32_à
+OffLöe
+, uöt32_à
+Cﬁ‹Index
+);
+
+179 
+LCD_LL_Inô
+();
+
+180 
+LCD_LL_LayîInô
+(
+uöt32_t
+ 
+LayîIndex
+);
+
+182 
+CUSTOM_C›yBuf„r
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+IndexSrc
+, i¡32_à
+IndexD°
+);
+
+183 
+CUSTOM_C›yRe˘
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x0
+, i¡32_à
+y0
+, i¡32_à
+x1
+, i¡32_à
+y1
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+);
+
+184 
+CUSTOM_FûlRe˘
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x0
+, i¡32_à
+y0
+, i¡32_à
+x1
+, i¡32_à
+y1
+, 
+uöt32_t
+ 
+PixñIndex
+);
+
+186 
+DMA2D_Index2Cﬁ‹Bulk
+(*
+pIndex
+, 
+LCD_COLOR
+ *
+pCﬁ‹
+, 
+uöt32_t
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+, uöt32_à
+PixñF‹m©
+);
+
+187 
+DMA2D_Cﬁ‹2IndexBulk
+(
+LCD_COLOR
+ *
+pCﬁ‹
+, *
+pIndex
+, 
+uöt32_t
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+, uöt32_à
+PixñF‹m©
+);
+
+189 
+BSP_LCD_DøwBôm≠8bµ
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x
+, i¡32_à
+y
+, 
+U8
+ c⁄° *
+p
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+, i¡32_à
+ByãsPîLöe
+);
+
+190 
+BSP_LCD_DøwBôm≠16bµ
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x
+, i¡32_à
+y
+, 
+U16
+ c⁄° *
+p
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+, i¡32_à
+ByãsPîLöe
+);
+
+191 
+DMA2D_AÕhaBÀndögBulk
+(
+LCD_COLOR
+ *
+pCﬁ‹FG
+, LCD_COLOR *
+pCﬁ‹BG
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+U32
+ 
+NumIãms
+);
+
+192 
+DMA2D_AÕhaBÀndög
+(
+LCD_COLOR
+ *
+pCﬁ‹FG
+, LCD_COLOR *
+pCﬁ‹BG
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+U32
+ 
+NumIãms
+);
+
+193 
+LCD_PIXELINDEX
+ *
+_LCD_GëpPÆC⁄vTabÀ
+(c⁄° 
+LCD_LOGPALETTE
+ 
+GUI_UNI_PTR
+ *
+pLogPÆ
+, c⁄° 
+GUI_BITMAP
+ GUI_UNI_PTR *
+pBôm≠
+, 
+LayîIndex
+);
+
+194 
+LCD_COLOR
+ 
+DMA2D_MixCﬁ‹s
+(LCD_COLOR 
+Cﬁ‹
+, LCD_COLOR 
+BkCﬁ‹
+, 
+U8
+ 
+I¡ís
+);
+
+195 
+LCD_MixCﬁ‹sBulk
+(
+U32
+ *
+pFG
+, U32 *
+pBG
+, U32 *
+pD°
+, 
+OffFG
+, 
+OffBG
+, 
+OffDe°
+, 
+xSize
+, 
+ySize
+, 
+U8
+ 
+I¡ís
+);
+
+197 
+	$DEFINEDMA2D_COLORCONVERSION
+(
+M8888I
+, 
+LTDC_PIXEL_FORMAT_ARGB8888
+)
+
+198 
+	$DEFINEDMA2D_COLORCONVERSION
+(
+M888
+, 
+LTDC_PIXEL_FORMAT_ARGB8888
+)
+
+200 
+	$DEFINEDMA2D_COLORCONVERSION
+(
+M1555I
+, 
+LTDC_PIXEL_FORMAT_ARGB1555
+)
+
+201 
+	$DEFINEDMA2D_COLORCONVERSION
+(
+M4444I
+, 
+LTDC_PIXEL_FORMAT_ARGB4444
+)
+
+203 
+uöt32_t
+ 
+	`GëBuf„rSize
+(uöt32_à
+LayîIndex
+);
+
+217 
+	$LTDC_IRQH™dÀr
+()
+
+219 
+	`HAL_LTDC_IRQH™dÀr
+(&
+h…dc
+);
+
+220 
+	}
+}
+
+222 
+	$LCD_BackLight
+(
+OnOff
+)
+
+224 if(
+OnOff
+ == 1)
+
+226 
+	`HAL_GPIO_WrôePö
+(
+GPIOB
+, 
+GPIO_PIN_5
+, 
+GPIO_PIN_SET
+);
+
+228 if(
+OnOff
+ == 0)
+
+230 
+	`HAL_GPIO_WrôePö
+(
+GPIOB
+, 
+GPIO_PIN_5
+, 
+GPIO_PIN_RESET
+);
+
+232 
+	}
+}
+
+243 
+	$HAL_DMA2D_M•Inô
+(
+DMA2D_H™dÀTy≥Def
+ *
+hdma2d
+)
+
+246 
+	`__HAL_RCC_DMA2D_CLK_ENABLE
+();
+
+247 
+	}
+}
+
+256 
+	$HAL_DMA2D_M•DeInô
+(
+DMA2D_H™dÀTy≥Def
+ *
+hdma2d
+)
+
+259 
+	`__HAL_RCC_DMA2D_FORCE_RESET
+();
+
+262 
+	`__HAL_RCC_DMA2D_RELEASE_RESET
+();
+
+263 
+	}
+}
+
+273 
+	$HAL_LTDC_M•Inô
+(
+LTDC_H™dÀTy≥Def
+ *
+h…dc
+)
+
+275 
+GPIO_InôTy≥Def
+ 
+GPIO_Inô_Såu˘uª
+;
+
+279 
+	`__HAL_RCC_LTDC_CLK_ENABLE
+();
+
+282 
+	`__HAL_RCC_GPIOB_CLK_ENABLE
+();
+
+283 
+	`__HAL_RCC_GPIOF_CLK_ENABLE
+();
+
+284 
+	`__HAL_RCC_GPIOG_CLK_ENABLE
+();
+
+285 
+	`__HAL_RCC_GPIOH_CLK_ENABLE
+();
+
+286 
+	`__HAL_RCC_GPIOI_CLK_ENABLE
+();
+
+304 
+GPIO_Inô_Såu˘uª
+.
+Pö
+ = 
+GPIO_PIN_5
+;
+
+305 
+GPIO_Inô_Såu˘uª
+.
+Mode
+ = 
+GPIO_MODE_OUTPUT_PP
+;
+
+306 
+GPIO_Inô_Såu˘uª
+.
+PuŒ
+ = 
+GPIO_PULLUP
+;
+
+307 
+GPIO_Inô_Såu˘uª
+.
+S≥ed
+ = 
+GPIO_SPEED_HIGH
+;
+
+308 
+	`HAL_GPIO_Inô
+(
+GPIOB
+, &
+GPIO_Inô_Såu˘uª
+);
+
+311 
+GPIO_Inô_Såu˘uª
+.
+Pö
+ = 
+GPIO_PIN_10
+;
+
+312 
+GPIO_Inô_Såu˘uª
+.
+Mode
+ = 
+GPIO_MODE_AF_PP
+;
+
+313 
+GPIO_Inô_Såu˘uª
+.
+PuŒ
+ = 
+GPIO_NOPULL
+;
+
+314 
+GPIO_Inô_Såu˘uª
+.
+S≥ed
+ = 
+GPIO_SPEED_HIGH
+;
+
+315 
+GPIO_Inô_Såu˘uª
+.
+A…î«ã
+ = 
+GPIO_AF14_LTDC
+;
+
+316 
+	`HAL_GPIO_Inô
+(
+GPIOF
+, &
+GPIO_Inô_Såu˘uª
+);
+
+319 
+GPIO_Inô_Såu˘uª
+.
+Pö
+ = 
+GPIO_PIN_6
+ | 
+GPIO_PIN_7
+ | 
+GPIO_PIN_11
+;
+
+320 
+	`HAL_GPIO_Inô
+(
+GPIOG
+, &
+GPIO_Inô_Såu˘uª
+);
+
+323 
+GPIO_Inô_Såu˘uª
+.
+Pö
+ = 
+GPIO_PIN_9
+ | 
+GPIO_PIN_10
+ | 
+GPIO_PIN_11
+ | \
+
+324 
+GPIO_PIN_12
+ | 
+GPIO_PIN_13
+ | 
+GPIO_PIN_14
+ | 
+GPIO_PIN_15
+;
+
+325 
+	`HAL_GPIO_Inô
+(
+GPIOH
+, &
+GPIO_Inô_Såu˘uª
+);
+
+328 
+GPIO_Inô_Såu˘uª
+.
+Pö
+ = 
+GPIO_PIN_0
+ | 
+GPIO_PIN_1
+ | 
+GPIO_PIN_2
+ | 
+GPIO_PIN_4
+ | 
+GPIO_PIN_5
+ | \
+
+329 
+GPIO_PIN_6
+ | 
+GPIO_PIN_7
+ | 
+GPIO_PIN_9
+ | 
+GPIO_PIN_10
+;
+
+330 
+	`HAL_GPIO_Inô
+(
+GPIOI
+, &
+GPIO_Inô_Såu˘uª
+);
+
+333 
+	`HAL_NVIC_SëPri‹ôy
+(
+LTDC_IRQn
+, 
+b•LTDC_Pªem±Pri‹ôy
+, 
+b•LTDC_SubPri‹ôy
+);
+
+336 
+	`HAL_NVIC_E«bÀIRQ
+(
+LTDC_IRQn
+);
+
+339 
+	`LCD_BackLight
+(1);
+
+340 
+	}
+}
+
+349 
+	$HAL_LTDC_M•DeInô
+(
+LTDC_H™dÀTy≥Def
+ *
+h…dc
+)
+
+353 
+	`__HAL_RCC_LTDC_FORCE_RESET
+();
+
+356 
+	`__HAL_RCC_LTDC_RELEASE_RESET
+();
+
+357 
+	}
+}
+
+365 
+	$HAL_LTDC_LöeEvíCÆlback
+(
+LTDC_H™dÀTy≥Def
+ *
+h…dc
+)
+
+367 
+uöt32_t
+ 
+Addr
+;
+
+368 
+uöt32_t
+ 
+œyî
+;
+
+370 
+œyî
+ = 0;Üayî < 
+GUI_NUM_LAYERS
+;Üayer++)
+
+372 i‡(
+œyî_¥›
+[
+œyî
+].
+≥ndög_buf„r
+ >= 0)
+
+375 
+Addr
+ = 
+œyî_¥›
+[
+œyî
+].
+addªss
+ +Üayî_¥›[œyî].
+xSize
+ *Üayî_¥›[œyî].
+ySize
+ *Üayî_¥›[œyî].
+≥ndög_buf„r
+ *Üayî_¥›[œyî].
+ByãsPîPixñ
+;
+
+376 
+	`HAL_LTDC_SëAddªss
+(
+h…dc
+, 
+Addr
+, 
+œyî
+);
+
+378 
+	`__HAL_LTDC_RELOAD_CONFIG
+(
+h…dc
+);
+
+381 
+	`GUI_MULTIBUF_C⁄fúmEx
+(
+œyî
+, 
+œyî_¥›
+[œyî].
+≥ndög_buf„r
+);
+
+384 
+œyî_¥›
+[
+œyî
+].
+≥ndög_buf„r
+ = -1;
+
+388 
+	`HAL_LTDC_ProgømLöeEvít
+(
+h…dc
+, 0);
+
+389 
+	}
+}
+
+400 
+	$LCD_X_C⁄fig
+()
+
+402 
+uöt32_t
+ 
+i
+;
+
+404 
+	`LCD_LL_Inô
+();
+
+407 #i‡(
+NUM_BUFFERS
+ > 1)
+
+408 
+i
+ = 0; i < 
+GUI_NUM_LAYERS
+; i++)
+
+410 
+	`GUI_MULTIBUF_C⁄figEx
+(
+i
+, 
+NUM_BUFFERS
+);
+
+415 
+	`GUI_DEVICE_Cª©eAndLök
+(
+DISPLAY_DRIVER_0
+, 
+COLOR_CONVERSION_0
+, 0, 0);
+
+418 i‡(
+	`LCD_GëSw≠XYEx
+(0))
+
+420 
+	`LCD_SëSizeEx
+ (0, 
+YSIZE_PHYS
+, 
+XSIZE_PHYS
+);
+
+421 
+	`LCD_SëVSizeEx
+(0, 
+YSIZE_PHYS
+ * 
+NUM_VSCREENS
+, 
+XSIZE_PHYS
+);
+
+425 
+	`LCD_SëSizeEx
+ (0, 
+XSIZE_PHYS
+, 
+YSIZE_PHYS
+);
+
+426 
+	`LCD_SëVSizeEx
+(0, 
+XSIZE_PHYS
+, 
+YSIZE_PHYS
+ * 
+NUM_VSCREENS
+);
+
+429 #i‡(
+GUI_NUM_LAYERS
+ > 1)
+
+431 
+	`GUI_DEVICE_Cª©eAndLök
+(
+DISPLAY_DRIVER_1
+, 
+COLOR_CONVERSION_1
+, 0, 1);
+
+433 i‡(
+	`LCD_GëSw≠XYEx
+(1))
+
+435 
+	`LCD_SëSizeEx
+ (1, 
+YSIZE_PHYS
+, 
+XSIZE_PHYS
+);
+
+436 
+	`LCD_SëVSizeEx
+(1, 
+YSIZE_PHYS
+ * 
+NUM_VSCREENS
+, 
+XSIZE_PHYS
+);
+
+440 
+	`LCD_SëSizeEx
+ (1, 
+XSIZE_PHYS
+, 
+YSIZE_PHYS
+);
+
+441 
+	`LCD_SëVSizeEx
+(1, 
+XSIZE_PHYS
+, 
+YSIZE_PHYS
+ * 
+NUM_VSCREENS
+);
+
+446 
+œyî_¥›
+[0].
+addªss
+ = 
+LCD_LAYER0_FRAME_BUFFER
+;
+
+447 #i‡(
+GUI_NUM_LAYERS
+ > 1)
+
+448 
+œyî_¥›
+[1].
+addªss
+ = 
+LCD_LAYER1_FRAME_BUFFER
+;
+
+452 
+i
+ = 0; i < 
+GUI_NUM_LAYERS
+; i++)
+
+454 
+œyî_¥›
+[
+i
+].
+pCﬁ‹C⁄vAPI
+ = (
+LCD_API_COLOR_CONV
+ *)
+≠Cﬁ‹C⁄vAPI
+[i];
+
+456 
+œyî_¥›
+[
+i
+].
+≥ndög_buf„r
+ = -1;
+
+459 
+	`LCD_SëVRAMAddrEx
+(
+i
+, (*)(
+œyî_¥›
+[i].
+addªss
+));
+
+462 
+œyî_¥›
+[
+i
+].
+ByãsPîPixñ
+ = 
+	`LCD_GëBôsPîPixñEx
+(i) >> 3;
+
+465 
+	`LCD_SëDevFunc
+(
+i
+, 
+LCD_DEVFUNC_COPYBUFFER
+, ((*)())
+CUSTOM_C›yBuf„r
+);
+
+466 
+	`LCD_SëDevFunc
+(
+i
+, 
+LCD_DEVFUNC_COPYRECT
+, ((*)())
+CUSTOM_C›yRe˘
+);
+
+469 i‡(
+	`LCD_LL_GëPixñf‹m©
+(
+i
+Ë<
+LTDC_PIXEL_FORMAT_ARGB4444
+)
+
+471 
+	`LCD_SëDevFunc
+(
+i
+, 
+LCD_DEVFUNC_FILLRECT
+, ((*)())
+CUSTOM_FûlRe˘
+);
+
+472 
+	`LCD_SëDevFunc
+(
+i
+, 
+LCD_DEVFUNC_DRAWBMP_8BPP
+, ((*)())
+BSP_LCD_DøwBôm≠8bµ
+);
+
+476 i‡(
+	`LCD_LL_GëPixñf‹m©
+(
+i
+Ë=
+LTDC_PIXEL_FORMAT_RGB565
+)
+
+478 
+	`LCD_SëDevFunc
+(
+i
+, 
+LCD_DEVFUNC_DRAWBMP_16BPP
+, ((*)())
+BSP_LCD_DøwBôm≠16bµ
+);
+
+482 
+	`GUICC_M1555I_SëCu°Cﬁ‹C⁄v
+(
+Cﬁ‹2IndexBulk_M1555IDMA2D
+, 
+Index2Cﬁ‹Bulk_M1555IDMA2D
+);
+
+484 
+	`GUICC_M4444I_SëCu°Cﬁ‹C⁄v
+(
+Cﬁ‹2IndexBulk_M4444IDMA2D
+, 
+Index2Cﬁ‹Bulk_M4444IDMA2D
+);
+
+485 
+	`GUICC_M888_SëCu°Cﬁ‹C⁄v
+ (
+Cﬁ‹2IndexBulk_M888DMA2D
+, 
+Index2Cﬁ‹Bulk_M888DMA2D
+);
+
+486 
+	`GUICC_M8888I_SëCu°Cﬁ‹C⁄v
+(
+Cﬁ‹2IndexBulk_M8888IDMA2D
+, 
+Index2Cﬁ‹Bulk_M8888IDMA2D
+);
+
+489 
+	`GUI_SëFuncAÕhaBÀndög
+(
+DMA2D_AÕhaBÀndög
+);
+
+493 
+	`GUI_SëFuncGëpPÆC⁄vTabÀ
+(
+_LCD_GëpPÆC⁄vTabÀ
+);
+
+496 
+	`GUI_SëFuncMixCﬁ‹s
+(
+DMA2D_MixCﬁ‹s
+);
+
+499 
+	`GUI_SëFuncMixCﬁ‹sBulk
+(
+LCD_MixCﬁ‹sBulk
+);
+
+501 
+	}
+}
+
+514 
+	$LCD_X_Di•œyDrivî
+(
+LayîIndex
+, 
+Cmd
+, *
+pD©a
+)
+
+516 
+öt32_t
+ 
+r
+ = 0;
+
+517 
+uöt32_t
+ 
+addr
+;
+
+518 
+öt32_t
+ 
+xPos
+, 
+yPos
+;
+
+519 
+uöt32_t
+ 
+Cﬁ‹
+;
+
+521 
+Cmd
+)
+
+523 
+LCD_X_INITCONTROLLER
+:
+
+524 
+	`LCD_LL_LayîInô
+(
+LayîIndex
+);
+
+527 
+LCD_X_SETORG
+:
+
+528 
+addr
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + ((
+LCD_X_SETORG_INFO
+ *)
+pD©a
+)->
+yPos
+ *Üayî_¥›[LayîIndex].
+xSize
+ *Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+529 
+	`HAL_LTDC_SëAddªss
+(&
+h…dc
+, 
+addr
+, 
+LayîIndex
+);
+
+532 
+LCD_X_SHOWBUFFER
+:
+
+533 
+œyî_¥›
+[
+LayîIndex
+].
+≥ndög_buf„r
+ = ((
+LCD_X_SHOWBUFFER_INFO
+ *)
+pD©a
+)->
+Index
+;
+
+536 
+LCD_X_SETLUTENTRY
+:
+
+537 
+	`HAL_LTDC_C⁄figCLUT
+(&
+h…dc
+, (
+uöt32_t
+ *Ë& (((
+LCD_X_SETLUTENTRY_INFO
+ *)
+pD©a
+)->
+Cﬁ‹
+), 1, 
+LayîIndex
+);
+
+540 
+LCD_X_ON
+:
+
+541 
+	`__HAL_LTDC_ENABLE
+(&
+h…dc
+);
+
+544 
+LCD_X_OFF
+:
+
+545 
+	`__HAL_LTDC_DISABLE
+(&
+h…dc
+);
+
+548 
+LCD_X_SETVIS
+:
+
+549 if(((
+LCD_X_SETVIS_INFO
+ *)
+pD©a
+)->
+OnOff
+ =
+ENABLE
+ )
+
+551 
+	`__HAL_LTDC_LAYER_ENABLE
+(&
+h…dc
+, 
+LayîIndex
+);
+
+555 
+	`__HAL_LTDC_LAYER_DISABLE
+(&
+h…dc
+, 
+LayîIndex
+);
+
+557 
+	`__HAL_LTDC_RELOAD_CONFIG
+(&
+h…dc
+);
+
+560 
+LCD_X_SETPOS
+:
+
+561 
+	`HAL_LTDC_SëWödowPosôi⁄
+(&
+h…dc
+,
+
+562 ((
+LCD_X_SETPOS_INFO
+ *)
+pD©a
+)->
+xPos
+,
+
+563 ((
+LCD_X_SETPOS_INFO
+ *)
+pD©a
+)->
+yPos
+,
+
+564 
+LayîIndex
+);
+
+567 
+LCD_X_SETSIZE
+:
+
+568 
+	`GUI_GëLayîPosEx
+(
+LayîIndex
+, (*)&
+xPos
+, (*)&
+yPos
+);
+
+569 
+œyî_¥›
+[
+LayîIndex
+].
+xSize
+ = ((
+LCD_X_SETSIZE_INFO
+ *)
+pD©a
+)->xSize;
+
+570 
+œyî_¥›
+[
+LayîIndex
+].
+ySize
+ = ((
+LCD_X_SETSIZE_INFO
+ *)
+pD©a
+)->ySize;
+
+571 
+	`HAL_LTDC_SëWödowPosôi⁄
+(&
+h…dc
+, 
+xPos
+, 
+yPos
+, 
+LayîIndex
+);
+
+574 
+LCD_X_SETALPHA
+:
+
+575 
+	`HAL_LTDC_SëAÕha
+(&
+h…dc
+, ((
+LCD_X_SETALPHA_INFO
+ *)
+pD©a
+)->
+AÕha
+, 
+LayîIndex
+);
+
+578 
+LCD_X_SETCHROMAMODE
+:
+
+579 if(((
+LCD_X_SETCHROMAMODE_INFO
+ *)
+pD©a
+)->
+ChromaMode
+ != 0)
+
+581 
+	`HAL_LTDC_E«bÀCﬁ‹Keyög
+(&
+h…dc
+, 
+LayîIndex
+);
+
+585 
+	`HAL_LTDC_DißbÀCﬁ‹Keyög
+(&
+h…dc
+, 
+LayîIndex
+);
+
+589 
+LCD_X_SETCHROMA
+:
+
+591 
+Cﬁ‹
+ = ((((
+LCD_X_SETCHROMA_INFO
+ *)
+pD©a
+)->
+ChromaMö
+ & 0xFF0000) >> 16) | \
+
+592 (((
+LCD_X_SETCHROMA_INFO
+ *)
+pD©a
+)->
+ChromaMö
+ & 0x00FF00) | \
+
+593 ((((
+LCD_X_SETCHROMA_INFO
+ *)
+pD©a
+)->
+ChromaMö
+ & 0x0000FF) << 16);
+
+595 
+	`HAL_LTDC_C⁄figCﬁ‹Keyög
+(&
+h…dc
+, 
+Cﬁ‹
+, 
+LayîIndex
+);
+
+599 
+r
+ = -1;
+
+601  
+r
+;
+
+602 
+	}
+}
+
+612 
+	$LCD_LL_LayîInô
+(
+uöt32_t
+ 
+LayîIndex
+)
+
+614 
+uöt32_t
+ 
+i
+;
+
+615 
+uöt32_t
+ 
+LUT
+[256];
+
+616 
+LTDC_LayîCfgTy≥Def
+ 
+œyî_cfg
+;
+
+618 i‡(
+LayîIndex
+ < 
+GUI_NUM_LAYERS
+)
+
+621 
+œyî_cfg
+.
+WödowX0
+ = 0;
+
+622 
+œyî_cfg
+.
+WödowX1
+ = 
+XSIZE_PHYS
+;
+
+623 
+œyî_cfg
+.
+WödowY0
+ = 0;
+
+624 
+œyî_cfg
+.
+WödowY1
+ = 
+YSIZE_PHYS
+;
+
+625 
+œyî_cfg
+.
+PixñF‹m©
+ = 
+	`LCD_LL_GëPixñf‹m©
+(
+LayîIndex
+);
+
+626 
+œyî_cfg
+.
+FBSèπAdªss
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+;
+
+627 
+œyî_cfg
+.
+AÕha
+ = 255;
+
+628 
+œyî_cfg
+.
+AÕha0
+ = 0;
+
+629 
+œyî_cfg
+.
+Backcﬁ‹
+.
+Blue
+ = 0;
+
+630 
+œyî_cfg
+.
+Backcﬁ‹
+.
+Gªí
+ = 0;
+
+631 
+œyî_cfg
+.
+Backcﬁ‹
+.
+Red
+ = 0;
+
+632 
+œyî_cfg
+.
+BÀndögFa˘‹1
+ = 
+LTDC_BLENDING_FACTOR1_PAxCA
+;
+
+633 
+œyî_cfg
+.
+BÀndögFa˘‹2
+ = 
+LTDC_BLENDING_FACTOR2_PAxCA
+;
+
+634 
+œyî_cfg
+.
+ImageWidth
+ = 
+XSIZE_PHYS
+;
+
+635 
+œyî_cfg
+.
+ImageHeight
+ = 
+YSIZE_PHYS
+;
+
+636 
+	`HAL_LTDC_C⁄figLayî
+(&
+h…dc
+, &
+œyî_cfg
+, 
+LayîIndex
+);
+
+639 i‡(
+	`LCD_GëBôsPîPixñEx
+(
+LayîIndex
+) <= 8)
+
+642 
+	`HAL_LTDC_E«bÀCLUT
+(&
+h…dc
+, 
+LayîIndex
+);
+
+647 i‡(
+œyî_¥›
+[
+LayîIndex
+].
+pCﬁ‹C⁄vAPI
+ =
+GUICC_88666I
+)
+
+649 
+	`HAL_LTDC_E«bÀCLUT
+(&
+h…dc
+, 
+LayîIndex
+);
+
+651 
+i
+ = 0; i < 256; i++)
+
+653 
+LUT
+[
+i
+] = 
+LCD_API_Cﬁ‹C⁄v_8666
+.
+	`pfIndex2Cﬁ‹
+(i);
+
+655 
+	`HAL_LTDC_C⁄figCLUT
+(&
+h…dc
+, 
+LUT
+, 256, 
+LayîIndex
+);
+
+659 
+	}
+}
+
+666 
+	$LCD_LL_Inô
+()
+
+668 
+_…dc_dev
+ 
+lcd…dc
+;
+
+669 
+RCC_PîùhCLKInôTy≥Def
+ 
+PîùhClkInôSåu˘
+;
+
+671 
+lcd…dc
+.
+pwidth
+ = 
+XSIZE_PHYS
+;
+
+672 
+lcd…dc
+.
+pheight
+ = 
+YSIZE_PHYS
+;
+
+673 
+lcd…dc
+.
+hsw
+ = 20;
+
+674 
+lcd…dc
+.
+vsw
+ = 3;
+
+675 
+lcd…dc
+.
+hbp
+ = 140;
+
+676 
+lcd…dc
+.
+vbp
+ = 20;
+
+677 
+lcd…dc
+.
+hÂ
+ = 160;
+
+678 
+lcd…dc
+.
+vÂ
+ = 12;
+
+681 
+	`HAL_LTDC_DeInô
+(&
+h…dc
+);
+
+684 
+h…dc
+.
+Inô
+.
+H‹iz⁄èlSync
+ = 
+lcd…dc
+.
+hsw
+ - 1;
+
+685 
+h…dc
+.
+Inô
+.
+VîtiˇlSync
+ = 
+lcd…dc
+.
+vsw
+ - 1;
+
+686 
+h…dc
+.
+Inô
+.
+AccumuœãdHBP
+ = 
+lcd…dc
+.
+hsw
+ +Ücd…dc.
+hbp
+ - 1;
+
+687 
+h…dc
+.
+Inô
+.
+AccumuœãdVBP
+ = 
+lcd…dc
+.
+vsw
+ +Ücd…dc.
+vbp
+ - 1;
+
+688 
+h…dc
+.
+Inô
+.
+AccumuœãdA˘iveW
+ = 
+lcd…dc
+.
+hsw
+ +Ücd…dc.
+hbp
+ +Ücd…dc.
+pwidth
+ - 1;
+
+689 
+h…dc
+.
+Inô
+.
+AccumuœãdA˘iveH
+ = 
+lcd…dc
+.
+vsw
+ +Ücd…dc.
+vbp
+ +Ücd…dc.
+pheight
+ - 1;
+
+690 
+h…dc
+.
+Inô
+.
+TŸÆWidth
+ = 
+lcd…dc
+.
+hsw
+ +Ücd…dc.
+hbp
+ +Ücd…dc.
+pwidth
+ +Ücd…dc.
+hÂ
+ - 1;
+
+691 
+h…dc
+.
+Inô
+.
+TŸÆHeigh
+ = 
+lcd…dc
+.
+vsw
+ +Ücd…dc.
+vbp
+ +Ücd…dc.
+pheight
+ +Ücd…dc.
+vÂ
+ - 1;
+
+695 
+h…dc
+.
+Inô
+.
+Backcﬁ‹
+.
+Blue
+ = 0;
+
+696 
+h…dc
+.
+Inô
+.
+Backcﬁ‹
+.
+Gªí
+ = 0;
+
+697 
+h…dc
+.
+Inô
+.
+Backcﬁ‹
+.
+Red
+ = 0;
+
+704 
+PîùhClkInôSåu˘
+.
+PîùhClockSñe˘i⁄
+ = 
+RCC_PERIPHCLK_LTDC
+;
+
+705 
+PîùhClkInôSåu˘
+.
+PLLSAI
+.
+PLLSAIN
+ = 396;
+
+706 
+PîùhClkInôSåu˘
+.
+PLLSAI
+.
+PLLSAIR
+ = 2;
+
+707 
+PîùhClkInôSåu˘
+.
+PLLSAIDivR
+ = 
+RCC_PLLSAIDIVR_4
+;
+
+708 
+	`HAL_RCCEx_PîùhCLKC⁄fig
+(&
+PîùhClkInôSåu˘
+);
+
+711 
+h…dc
+.
+Inô
+.
+HSPﬁ¨ôy
+ = 
+LTDC_HSPOLARITY_AL
+;
+
+712 
+h…dc
+.
+Inô
+.
+VSPﬁ¨ôy
+ = 
+LTDC_VSPOLARITY_AL
+;
+
+713 
+h…dc
+.
+Inô
+.
+DEPﬁ¨ôy
+ = 
+LTDC_DEPOLARITY_AL
+;
+
+714 
+h…dc
+.
+Inô
+.
+PCPﬁ¨ôy
+ = 
+LTDC_PCPOLARITY_IPC
+;
+
+715 
+h…dc
+.
+In°™˚
+ = 
+LTDC
+;
+
+717 
+	`HAL_LTDC_Inô
+(&
+h…dc
+);
+
+718 
+	`HAL_LTDC_ProgømLöeEvít
+(&
+h…dc
+, 0);
+
+721 
+hdma2d
+.
+Inô
+.
+Mode
+ = 
+DMA2D_R2M
+;
+
+722 
+hdma2d
+.
+Inô
+.
+Cﬁ‹Mode
+ = 
+DMA2D_RGB565
+;
+
+723 
+hdma2d
+.
+Inô
+.
+OuçutOff£t
+ = 0x0;
+
+725 
+hdma2d
+.
+In°™˚
+ = 
+DMA2D
+;
+
+727 if(
+	`HAL_DMA2D_Inô
+(&
+hdma2d
+Ë!
+HAL_OK
+)
+
+731 
+	}
+}
+
+738 
+uöt32_t
+ 
+	$LCD_LL_GëPixñf‹m©
+(
+uöt32_t
+ 
+LayîIndex
+)
+
+740 c⁄° 
+LCD_API_COLOR_CONV
+ *
+pCﬁ‹C⁄vAPI
+;
+
+742 i‡(
+LayîIndex
+ >
+GUI_NUM_LAYERS
+)
+
+746 
+pCﬁ‹C⁄vAPI
+ = 
+œyî_¥›
+[
+LayîIndex
+].pColorConvAPI;
+
+748 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_M8888I
+)
+
+750  
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+752 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_M888
+)
+
+754  
+LTDC_PIXEL_FORMAT_RGB888
+;
+
+756 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_M565
+)
+
+758  
+LTDC_PIXEL_FORMAT_RGB565
+;
+
+760 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_M1555I
+)
+
+762  
+LTDC_PIXEL_FORMAT_ARGB1555
+;
+
+764 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_M4444I
+)
+
+766  
+LTDC_PIXEL_FORMAT_ARGB4444
+;
+
+768 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_8666
+)
+
+770  
+LTDC_PIXEL_FORMAT_L8
+;
+
+772 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_1616I
+)
+
+774  
+LTDC_PIXEL_FORMAT_AL44
+;
+
+776 i‡(
+pCﬁ‹C⁄vAPI
+ =
+GUICC_88666I
+)
+
+778  
+LTDC_PIXEL_FORMAT_AL88
+;
+
+781 
+	}
+}
+
+787 
+	$DMA2D_C›yBuf„r
+(
+uöt32_t
+ 
+LayîIndex
+, *
+pSrc
+, *
+pD°
+, uöt32_à
+xSize
+, uöt32_à
+ySize
+, uöt32_à
+OffLöeSrc
+, uöt32_à
+OffLöeD°
+)
+
+789 
+uöt32_t
+ 
+PixñF‹m©
+;
+
+791 
+PixñF‹m©
+ = 
+	`LCD_LL_GëPixñf‹m©
+(
+LayîIndex
+);
+
+792 
+DMA2D
+->
+CR
+ = 0x00000000UL | (1 << 9);
+
+795 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)
+pSrc
+;
+
+796 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pD°
+;
+
+797 
+DMA2D
+->
+FGOR
+ = 
+OffLöeSrc
+;
+
+798 
+DMA2D
+->
+OOR
+ = 
+OffLöeD°
+;
+
+801 
+DMA2D
+->
+FGPFCCR
+ = 
+PixñF‹m©
+;
+
+804 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+xSize
+ << 16Ë| (
+U16
+)
+ySize
+;
+
+806 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+809 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+812 
+	}
+}
+
+818 
+	$DMA2D_FûlBuf„r
+(
+uöt32_t
+ 
+LayîIndex
+, *
+pD°
+, uöt32_à
+xSize
+, uöt32_à
+ySize
+, uöt32_à
+OffLöe
+, uöt32_à
+Cﬁ‹Index
+)
+
+820 
+uöt32_t
+ 
+PixñF‹m©
+;
+
+822 
+PixñF‹m©
+ = 
+	`LCD_LL_GëPixñf‹m©
+(
+LayîIndex
+);
+
+825 
+DMA2D
+->
+CR
+ = 0x00030000UL | (1 << 9);
+
+826 
+DMA2D
+->
+OCOLR
+ = 
+Cﬁ‹Index
+;
+
+829 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pD°
+;
+
+832 
+DMA2D
+->
+OOR
+ = 
+OffLöe
+;
+
+835 
+DMA2D
+->
+OPFCCR
+ = 
+PixñF‹m©
+;
+
+838 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+xSize
+ << 16Ë| (
+U16
+)
+ySize
+;
+
+840 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+843 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+846 
+	}
+}
+
+853 
+uöt32_t
+ 
+	$GëBuf„rSize
+(
+uöt32_t
+ 
+LayîIndex
+)
+
+855 
+uöt32_t
+ 
+Buf„rSize
+;
+
+857 
+Buf„rSize
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+xSize
+ *Üayî_¥›[LayîIndex].
+ySize
+ *Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+858  
+Buf„rSize
+;
+
+859 
+	}
+}
+
+865 
+	$CUSTOM_C›yBuf„r
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+IndexSrc
+, i¡32_à
+IndexD°
+)
+
+867 
+uöt32_t
+ 
+Buf„rSize
+, 
+AddrSrc
+, 
+AddrD°
+;
+
+869 
+Buf„rSize
+ = 
+	`GëBuf„rSize
+(
+LayîIndex
+);
+
+870 
+AddrSrc
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + 
+Buf„rSize
+ * 
+IndexSrc
+;
+
+871 
+AddrD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + 
+Buf„rSize
+ * 
+IndexD°
+;
+
+872 
+	`DMA2D_C›yBuf„r
+(
+LayîIndex
+, (*)
+AddrSrc
+, (*)
+AddrD°
+, 
+œyî_¥›
+[LayîIndex].
+xSize
+,Üayî_¥›[LayîIndex].
+ySize
+, 0, 0);
+
+873 
+œyî_¥›
+[
+LayîIndex
+].
+buf„r_ödex
+ = 
+IndexD°
+;
+
+874 
+	}
+}
+
+891 
+	$CUSTOM_C›yRe˘
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x0
+, i¡32_à
+y0
+, i¡32_à
+x1
+, i¡32_à
+y1
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+)
+
+893 
+U32
+ 
+AddrSrc
+, 
+AddrD°
+;
+
+895 
+AddrSrc
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + (
+y0
+ *Üayî_¥›[LayîIndex].
+xSize
+ + 
+x0
+Ë*Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+896 
+AddrD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + (
+y1
+ *Üayî_¥›[LayîIndex].
+xSize
+ + 
+x1
+Ë*Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+897 
+	`DMA2D_C›yBuf„r
+(
+LayîIndex
+, (*)
+AddrSrc
+, (*)
+AddrD°
+, 
+xSize
+, 
+ySize
+, 
+œyî_¥›
+[LayerIndex].xSize - xSize,Üayer_prop[LayerIndex].xSize - xSize);
+
+898 
+	}
+}
+
+904 
+	$CUSTOM_FûlRe˘
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x0
+, i¡32_à
+y0
+, i¡32_à
+x1
+, i¡32_à
+y1
+, 
+uöt32_t
+ 
+PixñIndex
+)
+
+906 
+uöt32_t
+ 
+Buf„rSize
+, 
+AddrD°
+;
+
+907 
+öt32_t
+ 
+xSize
+, 
+ySize
+;
+
+909 i‡(
+	`GUI_GëDøwMode
+(Ë=
+GUI_DM_XOR
+)
+
+911 
+	`LCD_SëDevFunc
+(
+LayîIndex
+, 
+LCD_DEVFUNC_FILLRECT
+, 
+NULL
+);
+
+912 
+	`LCD_FûlRe˘
+(
+x0
+, 
+y0
+, 
+x1
+, 
+y1
+);
+
+913 
+	`LCD_SëDevFunc
+(
+LayîIndex
+, 
+LCD_DEVFUNC_FILLRECT
+, ((*)())
+CUSTOM_FûlRe˘
+);
+
+917 
+xSize
+ = 
+x1
+ - 
+x0
+ + 1;
+
+918 
+ySize
+ = 
+y1
+ - 
+y0
+ + 1;
+
+919 
+Buf„rSize
+ = 
+	`GëBuf„rSize
+(
+LayîIndex
+);
+
+920 
+AddrD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + 
+Buf„rSize
+ *Üayî_¥›[LayîIndex].
+buf„r_ödex
+ + (
+y0
+ *Üayî_¥›[LayîIndex].
+xSize
+ + 
+x0
+Ë*Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+921 
+	`DMA2D_FûlBuf„r
+(
+LayîIndex
+, (*)
+AddrD°
+, 
+xSize
+, 
+ySize
+, 
+œyî_¥›
+[LayîIndex].xSizê- xSize, 
+PixñIndex
+);
+
+923 
+	}
+}
+
+931 
+	$DMA2D_LﬂdLUT
+(
+LCD_COLOR
+ *
+pCﬁ‹
+, 
+uöt32_t
+ 
+NumIãms
+)
+
+933 
+DMA2D
+->
+FGCMAR
+ = (
+uöt32_t
+)
+pCﬁ‹
+;
+
+936 
+DMA2D
+->
+FGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_RGB888
+
+
+937 | ((
+NumIãms
+ - 1) & 0xFF) << 8;
+
+938 
+DMA2D
+->
+FGPFCCR
+ |= (1 << 5);
+
+939 
+	}
+}
+
+948 
+	$InvîtAÕha_Sw≠RB
+(
+LCD_COLOR
+ *
+pCﬁ‹Src
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+uöt32_t
+ 
+NumIãms
+)
+
+950 
+uöt32_t
+ 
+Cﬁ‹
+;
+
+953 
+Cﬁ‹
+ = *
+pCﬁ‹Src
+++;
+
+954 *
+pCﬁ‹D°
+++ = ((
+Cﬁ‹
+ & 0x000000FF) << 16)
+
+955 | (
+Cﬁ‹
+ & 0x0000FF00)
+
+956 | ((
+Cﬁ‹
+ & 0x00FF0000) >> 16)
+
+957 | ((
+Cﬁ‹
+ & 0xFF000000) ^ 0xFF000000);
+
+959 --
+NumIãms
+);
+
+960 
+	}
+}
+
+970 
+	$InvîtAÕha
+(
+LCD_COLOR
+ *
+pCﬁ‹Src
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+uöt32_t
+ 
+NumIãms
+)
+
+972 
+uöt32_t
+ 
+Cﬁ‹
+;
+
+976 
+Cﬁ‹
+ = *
+pCﬁ‹Src
+++;
+
+977 *
+pCﬁ‹D°
+++ = 
+Cﬁ‹
+ ^ 0xFF000000;
+
+979 --
+NumIãms
+);
+
+980 
+	}
+}
+
+990 
+	$DMA2D_AÕhaBÀndögBulk
+(
+LCD_COLOR
+ *
+pCﬁ‹FG
+, LCD_COLOR *
+pCﬁ‹BG
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+U32
+ 
+NumIãms
+)
+
+993 
+DMA2D
+->
+CR
+ = 0x00020000UL | (1 << 9);
+
+996 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)
+pCﬁ‹FG
+;
+
+997 
+DMA2D
+->
+BGMAR
+ = (
+uöt32_t
+)
+pCﬁ‹BG
+;
+
+998 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pCﬁ‹D°
+;
+
+1001 
+DMA2D
+->
+FGOR
+ = 0;
+
+1002 
+DMA2D
+->
+BGOR
+ = 0;
+
+1003 
+DMA2D
+->
+OOR
+ = 0;
+
+1006 
+DMA2D
+->
+FGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+1007 
+DMA2D
+->
+BGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+1008 
+DMA2D
+->
+OPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+1011 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+NumIãms
+ << 16) | 1;
+
+1015 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+1017 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+1020 
+	}
+}
+
+1022 #i‡
+deföed
+ (
+__GNUC__
+)
+
+1023 #¥agm®
+GCC
+ 
+›timize
+ ("O0")
+
+1034 
+LCD_COLOR
+ 
+	$DMA2D_MixCﬁ‹s
+(
+LCD_COLOR
+ 
+Cﬁ‹
+, LCD_COLOR 
+BkCﬁ‹
+, 
+U8
+ 
+I¡ís
+)
+
+1036 
+uöt32_t
+ 
+Cﬁ‹FG
+, 
+Cﬁ‹BG
+, 
+Cﬁ‹D°
+;
+
+1038 i‡((
+BkCﬁ‹
+ & 0xFF000000) == 0xFF000000)
+
+1040  
+Cﬁ‹
+;
+
+1042 
+Cﬁ‹FG
+ = 
+Cﬁ‹
+ ^ 0xFF000000;
+
+1043 
+Cﬁ‹BG
+ = 
+BkCﬁ‹
+ ^ 0xFF000000;
+
+1046 
+DMA2D
+->
+CR
+ = 0x00020000UL | (1 << 9);
+
+1049 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)&
+Cﬁ‹FG
+;
+
+1050 
+DMA2D
+->
+BGMAR
+ = (
+uöt32_t
+)&
+Cﬁ‹BG
+;
+
+1051 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)&
+Cﬁ‹D°
+;
+
+1054 
+DMA2D
+->
+FGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+
+
+1056 | ((
+uöt32_t
+)
+I¡ís
+ << 24);
+
+1057 
+DMA2D
+->
+BGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+
+
+1059 | ((
+uöt32_t
+)(255 - 
+I¡ís
+) << 24);
+
+1060 
+DMA2D
+->
+OPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+1063 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(1 << 16) | 1;
+
+1066 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+1069 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+1073  (
+Cﬁ‹D°
+ ^ 0xFF000000);
+
+1074 
+	}
+}
+
+1085 
+	$DMA2D_C⁄vîtCﬁ‹
+(*
+pSrc
+, *
+pD°
+, 
+uöt32_t
+ 
+PixñF‹m©Src
+, uöt32_à
+PixñF‹m©D°
+, uöt32_à
+NumIãms
+)
+
+1089 
+DMA2D
+->
+CR
+ = 0x00010000UL | (1 << 9);
+
+1092 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)
+pSrc
+;
+
+1093 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pD°
+;
+
+1096 
+DMA2D
+->
+FGOR
+ = 0;
+
+1097 
+DMA2D
+->
+OOR
+ = 0;
+
+1100 
+DMA2D
+->
+FGPFCCR
+ = 
+PixñF‹m©Src
+;
+
+1101 
+DMA2D
+->
+OPFCCR
+ = 
+PixñF‹m©D°
+;
+
+1104 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+NumIãms
+ << 16) | 1;
+
+1107 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+1109 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+1112 
+	}
+}
+
+1124 
+LCD_PIXELINDEX
+ *
+	$_LCD_GëpPÆC⁄vTabÀ
+(c⁄° 
+LCD_LOGPALETTE
+ 
+GUI_UNI_PTR
+ *
+pLogPÆ
+, c⁄° 
+GUI_BITMAP
+ GUI_UNI_PTR *
+pBôm≠
+, 
+LayîIndex
+)
+
+1126 (* 
+pFunc
+)();
+
+1127 
+öt32_t
+ 
+DoDeÁu…
+ = 0;
+
+1130 i‡(
+pBôm≠
+->
+BôsPîPixñ
+ == 8)
+
+1132 
+pFunc
+ = 
+	`LCD_GëDevFunc
+(
+LayîIndex
+, 
+LCD_DEVFUNC_DRAWBMP_8BPP
+);
+
+1133 i‡(
+pFunc
+)
+
+1135 i‡(
+pBôm≠
+->
+pPÆ
+)
+
+1137 i‡(
+pBôm≠
+->
+pPÆ
+->
+HasTøns
+)
+
+1139 
+DoDeÁu…
+ = 1;
+
+1144 
+DoDeÁu…
+ = 1;
+
+1149 
+DoDeÁu…
+ = 1;
+
+1154 
+DoDeÁu…
+ = 1;
+
+1158 i‡(
+DoDeÁu…
+)
+
+1162  
+	`LCD_GëpPÆC⁄vTabÀ
+(
+pLogPÆ
+);
+
+1166 
+	`InvîtAÕha_Sw≠RB
+((
+U32
+ *)
+pLogPÆ
+->
+pPÆE¡rõs
+, 
+aBuf„rDMA2D
+,ÖLogPÆ->
+NumE¡rõs
+);
+
+1169 
+	`DMA2D_LﬂdLUT
+(
+aBuf„rDMA2D
+, 
+pLogPÆ
+->
+NumE¡rõs
+);
+
+1172  
+aBuf„rDMA2D
+;
+
+1173 
+	}
+}
+
+1184 
+	$DMA2D_MixCﬁ‹sBulk
+(
+LCD_COLOR
+ *
+pCﬁ‹FG
+, LCD_COLOR *
+pCﬁ‹BG
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+U8
+ 
+I¡ís
+, 
+uöt32_t
+ 
+NumIãms
+)
+
+1187 
+DMA2D
+->
+CR
+ = 0x00020000UL | (1 << 9);
+
+1190 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)
+pCﬁ‹FG
+;
+
+1191 
+DMA2D
+->
+BGMAR
+ = (
+uöt32_t
+)
+pCﬁ‹BG
+;
+
+1192 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pCﬁ‹D°
+;
+
+1195 
+DMA2D
+->
+FGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+
+
+1197 | ((
+uöt32_t
+)
+I¡ís
+ << 24);
+
+1198 
+DMA2D
+->
+BGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+
+
+1200 | ((
+uöt32_t
+)(255 - 
+I¡ís
+) << 24);
+
+1201 
+DMA2D
+->
+OPFCCR
+ = 
+LTDC_PIXEL_FORMAT_ARGB8888
+;
+
+1204 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+NumIãms
+ << 16) | 1;
+
+1207 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+1209 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+1212 
+	}
+}
+
+1222 
+	$DMA2D_AÕhaBÀndög
+(
+LCD_COLOR
+ *
+pCﬁ‹FG
+, LCD_COLOR *
+pCﬁ‹BG
+, LCD_COLOR *
+pCﬁ‹D°
+, 
+U32
+ 
+NumIãms
+)
+
+1225 
+	`InvîtAÕha
+(
+pCﬁ‹FG
+, 
+aBuf„r_FG
+, 
+NumIãms
+);
+
+1226 
+	`InvîtAÕha
+(
+pCﬁ‹BG
+, 
+aBuf„r_BG
+, 
+NumIãms
+);
+
+1229 
+	`DMA2D_AÕhaBÀndögBulk
+(
+aBuf„r_FG
+, 
+aBuf„r_BG
+, 
+aBuf„rDMA2D
+, 
+NumIãms
+);
+
+1232 
+	`InvîtAÕha
+(
+aBuf„rDMA2D
+, 
+pCﬁ‹D°
+, 
+NumIãms
+);
+
+1233 
+	}
+}
+
+1247 
+	$DMA2D_Index2Cﬁ‹Bulk
+(*
+pIndex
+, 
+LCD_COLOR
+ *
+pCﬁ‹
+, 
+uöt32_t
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+, uöt32_à
+PixñF‹m©
+)
+
+1250 
+	`DMA2D_C⁄vîtCﬁ‹
+(
+pIndex
+, 
+aBuf„rDMA2D
+, 
+PixñF‹m©
+, 
+LTDC_PIXEL_FORMAT_ARGB8888
+, 
+NumIãms
+);
+
+1253 
+	`InvîtAÕha_Sw≠RB
+(
+aBuf„rDMA2D
+, 
+pCﬁ‹
+, 
+NumIãms
+);
+
+1254 
+	}
+}
+
+1268 
+	$DMA2D_Cﬁ‹2IndexBulk
+(
+LCD_COLOR
+ *
+pCﬁ‹
+, *
+pIndex
+, 
+uöt32_t
+ 
+NumIãms
+, 
+U8
+ 
+SizeOfIndex
+, uöt32_à
+PixñF‹m©
+)
+
+1271 
+	`InvîtAÕha_Sw≠RB
+(
+pCﬁ‹
+, 
+aBuf„rDMA2D
+, 
+NumIãms
+);
+
+1274 
+	`DMA2D_C⁄vîtCﬁ‹
+(
+aBuf„rDMA2D
+, 
+pIndex
+, 
+LTDC_PIXEL_FORMAT_ARGB8888
+, 
+PixñF‹m©
+, 
+NumIãms
+);
+
+1275 
+	}
+}
+
+1290 
+	$LCD_MixCﬁ‹sBulk
+(
+U32
+ *
+pFG
+, U32 *
+pBG
+, U32 *
+pD°
+, 
+OffFG
+, 
+OffBG
+, 
+OffDe°
+, 
+xSize
+, 
+ySize
+, 
+U8
+ 
+I¡ís
+)
+
+1292 
+öt32_t
+ 
+y
+;
+
+1294 
+	`GUI_USE_PARA
+(
+OffFG
+);
+
+1295 
+	`GUI_USE_PARA
+(
+OffDe°
+);
+
+1296 
+y
+ = 0; y < 
+ySize
+; y++)
+
+1299 
+	`InvîtAÕha
+(
+pFG
+, 
+aBuf„r_FG
+, 
+xSize
+);
+
+1300 
+	`InvîtAÕha
+(
+pBG
+, 
+aBuf„r_BG
+, 
+xSize
+);
+
+1302 
+	`DMA2D_MixCﬁ‹sBulk
+(
+aBuf„r_FG
+, 
+aBuf„r_BG
+, 
+aBuf„rDMA2D
+, 
+I¡ís
+, 
+xSize
+);
+
+1304 
+	`InvîtAÕha
+(
+aBuf„rDMA2D
+, 
+pD°
+, 
+xSize
+);
+
+1305 
+pFG
+ +
+xSize
+ + 
+OffFG
+;
+
+1306 
+pBG
+ +
+xSize
+ + 
+OffBG
+;
+
+1307 
+pD°
+ +
+xSize
+ + 
+OffDe°
+;
+
+1309 
+	}
+}
+
+1322 
+	$DMA2D_DøwBôm≠L8
+(*
+pSrc
+, *
+pD°
+, 
+uöt32_t
+ 
+OffSrc
+, uöt32_à
+OffD°
+, uöt32_à
+PixñF‹m©D°
+, uöt32_à
+xSize
+, uöt32_à
+ySize
+)
+
+1325 
+DMA2D
+->
+CR
+ = 0x00010000UL | (1 << 9);
+
+1328 
+DMA2D
+->
+FGMAR
+ = (
+uöt32_t
+)
+pSrc
+;
+
+1329 
+DMA2D
+->
+OMAR
+ = (
+uöt32_t
+)
+pD°
+;
+
+1332 
+DMA2D
+->
+FGOR
+ = 
+OffSrc
+;
+
+1333 
+DMA2D
+->
+OOR
+ = 
+OffD°
+;
+
+1336 
+DMA2D
+->
+FGPFCCR
+ = 
+LTDC_PIXEL_FORMAT_L8
+;
+
+1337 
+DMA2D
+->
+OPFCCR
+ = 
+PixñF‹m©D°
+;
+
+1340 
+DMA2D
+->
+NLR
+ = (
+uöt32_t
+)(
+xSize
+ << 16Ë| 
+ySize
+;
+
+1343 
+DMA2D
+->
+CR
+ |
+DMA2D_CR_START
+;
+
+1346 
+DMA2D
+->
+CR
+ & 
+DMA2D_CR_START
+)
+
+1349 
+	}
+}
+
+1362 
+	$BSP_LCD_DøwBôm≠16bµ
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x
+, i¡32_à
+y
+, 
+U16
+ c⁄° *
+p
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+, i¡32_à
+ByãsPîLöe
+)
+
+1364 
+uöt32_t
+ 
+Buf„rSize
+, 
+AddrD°
+;
+
+1365 
+öt32_t
+ 
+OffLöeSrc
+, 
+OffLöeD°
+;
+
+1367 
+Buf„rSize
+ = 
+	`GëBuf„rSize
+(
+LayîIndex
+);
+
+1368 
+AddrD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + 
+Buf„rSize
+ *Üayî_¥›[LayîIndex].
+buf„r_ödex
+ + (
+y
+ *Üayî_¥›[LayîIndex].
+xSize
+ + 
+x
+Ë*Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+1369 
+OffLöeSrc
+ = (
+ByãsPîLöe
+ / 2Ë- 
+xSize
+;
+
+1370 
+OffLöeD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+xSize
+ - xSize;
+
+1371 
+	`DMA2D_C›yBuf„r
+(
+LayîIndex
+, (*)
+p
+, (*)
+AddrD°
+, 
+xSize
+, 
+ySize
+, 
+OffLöeSrc
+, 
+OffLöeD°
+);
+
+1372 
+	}
+}
+
+1385 
+	$BSP_LCD_DøwBôm≠8bµ
+(
+öt32_t
+ 
+LayîIndex
+, i¡32_à
+x
+, i¡32_à
+y
+, 
+U8
+ c⁄° *
+p
+, i¡32_à
+xSize
+, i¡32_à
+ySize
+, i¡32_à
+ByãsPîLöe
+)
+
+1387 
+uöt32_t
+ 
+Buf„rSize
+, 
+AddrD°
+;
+
+1388 
+öt32_t
+ 
+OffLöeSrc
+, 
+OffLöeD°
+;
+
+1389 
+uöt32_t
+ 
+PixñF‹m©
+;
+
+1391 
+Buf„rSize
+ = 
+	`GëBuf„rSize
+(
+LayîIndex
+);
+
+1392 
+AddrD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+addªss
+ + 
+Buf„rSize
+ *Üayî_¥›[LayîIndex].
+buf„r_ödex
+ + (
+y
+ *Üayî_¥›[LayîIndex].
+xSize
+ + 
+x
+Ë*Üayî_¥›[LayîIndex].
+ByãsPîPixñ
+;
+
+1393 
+OffLöeSrc
+ = 
+ByãsPîLöe
+ - 
+xSize
+;
+
+1394 
+OffLöeD°
+ = 
+œyî_¥›
+[
+LayîIndex
+].
+xSize
+ - xSize;
+
+1395 
+PixñF‹m©
+ = 
+	`LCD_LL_GëPixñf‹m©
+(
+LayîIndex
+);
+
+1396 
+	`DMA2D_DøwBôm≠L8
+((*)
+p
+, (*)
+AddrD°
+, 
+OffLöeSrc
+, 
+OffLöeD°
+, 
+PixñF‹m©
+, 
+xSize
+, 
+ySize
+);
+
+1397 
 	}
 }
 
@@ -122490,6 +133734,246 @@ c
 22 
 	}
 }
+
+	@D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\ffconf.h
+
+5 
+	#_FFCONF
+ 68020
+
+	)
+
+11 
+	#_FS_READONLY
+ 0
+
+	)
+
+18 
+	#_FS_MINIMIZE
+ 0
+
+	)
+
+28 
+	#_USE_STRFUNC
+ 1
+
+29 
+
+	)
+
+37 
+	#_USE_FIND
+ 0
+
+	)
+
+42 
+	#_USE_MKFS
+ 1
+
+43 
+
+	)
+
+46 
+	#_USE_FASTSEEK
+ 1
+
+47 
+
+	)
+
+50 
+	#_USE_EXPAND
+ 0
+
+	)
+
+54 
+	#_USE_CHMOD
+ 0
+
+	)
+
+59 
+	#_USE_LABEL
+ 1
+
+60 
+
+	)
+
+64 
+	#_USE_FORWARD
+ 0
+
+	)
+
+72 
+	#_CODE_PAGE
+ 936
+
+73 
+
+	)
+
+101 
+	#_USE_LFN
+ 3
+
+102 
+	#_MAX_LFN
+ 255
+
+	)
+
+119 
+	#_LFN_UNICODE
+ 0
+
+	)
+
+125 
+	#_STRF_ENCODE
+ 3
+
+	)
+
+137 
+	#_FS_RPATH
+ 0
+
+	)
+
+150 
+	#_VOLUMES
+ 2
+
+151 
+
+	)
+
+154 
+	#_STR_VOLUME_ID
+ 0
+
+	)
+
+155 
+	#_VOLUME_STRS
+ "RAM","NAND","CF","SD","SD2","USB","USB2","USB3"
+
+	)
+
+163 
+	#_MULTI_PARTITION
+ 0
+
+	)
+
+172 
+	#_MIN_SS
+ 512
+
+	)
+
+173 
+	#_MAX_SS
+ 512
+
+	)
+
+182 
+	#_USE_TRIM
+ 0
+
+	)
+
+188 
+	#_FS_NOFSINFO
+ 0
+
+	)
+
+205 
+	#_FS_TINY
+ 0
+
+	)
+
+212 
+	#_FS_EXFAT
+ 1
+
+213 
+
+	)
+
+218 
+	#_FS_NORTC
+ 0
+
+	)
+
+219 
+	#_NORTC_MON
+ 1
+
+	)
+
+220 
+	#_NORTC_MDAY
+ 1
+
+	)
+
+221 
+	#_NORTC_YEAR
+ 2016
+
+	)
+
+232 
+	#_FS_LOCK
+ 1
+
+	)
+
+244 
+	#_FS_REENTRANT
+ 1
+
+	)
+
+245 
+	#_FS_TIMEOUT
+ 1000
+
+	)
+
+246 
+	#_SYNC_t
+ 
+xSem≠h‹eH™dÀ
+
+
+247 
+
+	)
+
+264 #i‡
+_FS_REENTRANT
+
+
+265 
+	~"FªeRTOS.h
+"
+
+266 
+	~"£mphr.h
+"
 
 	@D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\option\syscall.c
 
@@ -168109,31 +179593,39 @@ xRëu∫
 1
 .
 0
-138
-9462
+150
+10261
 D:\Documents\Projects\chargersdk\build\EmBitz\startup\startup_stm32f429x.S
 D:\Documents\Projects\chargersdk\build\EmBitz\version.h
+D:\Documents\Projects\chargersdk\nand\system\evse_config.xml
+D:\Documents\Projects\chargersdk\nand\system\public_info.xml
 D:\Documents\Projects\chargersdk\src\app\EVSE.c
 D:\Documents\Projects\chargersdk\src\app\EVSE.h
 D:\Documents\Projects\chargersdk\src\app\chargepoint.c
 D:\Documents\Projects\chargersdk\src\app\chargepoint.h
 D:\Documents\Projects\chargersdk\src\app\errorcode.c
 D:\Documents\Projects\chargersdk\src\app\errorcode.h
-D:\Documents\Projects\chargersdk\src\app\globals.c
-D:\Documents\Projects\chargersdk\src\app\globals.h
+D:\Documents\Projects\chargersdk\src\app\evse_config.h
+D:\Documents\Projects\chargersdk\src\app\evse_globals.c
+D:\Documents\Projects\chargersdk\src\app\evse_globals.h
 D:\Documents\Projects\chargersdk\src\app\includes.h
 D:\Documents\Projects\chargersdk\src\app\interface.h
 D:\Documents\Projects\chargersdk\src\app\interface_charge.c
 D:\Documents\Projects\chargersdk\src\app\interface_charge.h
 D:\Documents\Projects\chargersdk\src\app\interface_data.c
 D:\Documents\Projects\chargersdk\src\app\interface_data.h
-D:\Documents\Projects\chargersdk\src\app\interface_error.c
+D:\Documents\Projects\chargersdk\src\app\interface_diag.c
 D:\Documents\Projects\chargersdk\src\app\interface_monitor.c
 D:\Documents\Projects\chargersdk\src\app\interface_monitor.h
 D:\Documents\Projects\chargersdk\src\app\interface_remote.c
+D:\Documents\Projects\chargersdk\src\app\interface_remote.h
 D:\Documents\Projects\chargersdk\src\app\interface_rfid.c
 D:\Documents\Projects\chargersdk\src\app\interface_rfid.h
+D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_err.c
+D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_err.h
 D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_globals.h
+D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_protocol.c
+D:\Documents\Projects\chargersdk\src\app\libpowershare\ps_transportlayer.c
 D:\Documents\Projects\chargersdk\src\app\main.c
 D:\Documents\Projects\chargersdk\src\app\stm32f4xx_it.c
 D:\Documents\Projects\chargersdk\src\app\sysinit.c
@@ -168142,10 +179634,11 @@ D:\Documents\Projects\chargersdk\src\app\taskOTA.h
 D:\Documents\Projects\chargersdk\src\app\taskcharge.c
 D:\Documents\Projects\chargersdk\src\app\taskcharge.h
 D:\Documents\Projects\chargersdk\src\app\taskcreate.c
+D:\Documents\Projects\chargersdk\src\app\taskcreate.h
 D:\Documents\Projects\chargersdk\src\app\taskdata.c
 D:\Documents\Projects\chargersdk\src\app\taskdata.h
-D:\Documents\Projects\chargersdk\src\app\taskerror.c
-D:\Documents\Projects\chargersdk\src\app\taskerror.h
+D:\Documents\Projects\chargersdk\src\app\taskdiag.c
+D:\Documents\Projects\chargersdk\src\app\taskdiag.h
 D:\Documents\Projects\chargersdk\src\app\taskmonitor.c
 D:\Documents\Projects\chargersdk\src\app\taskmonitor.h
 D:\Documents\Projects\chargersdk\src\app\taskremote.c
@@ -168209,7 +179702,9 @@ D:\Documents\Projects\chargersdk\src\hmi\EVSEDLG.c
 D:\Documents\Projects\chargersdk\src\hmi\HMI_Start.c
 D:\Documents\Projects\chargersdk\src\hmi\TOUCH_Calibrate.c
 D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\GUIConf.c
+D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\GUIConf.h
 D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c
+D:\Documents\Projects\chargersdk\src\middlewares\STemWin\Config\LCDConf_Lin_ATK_7016.c
 D:\Documents\Projects\chargersdk\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c
 D:\Documents\Projects\chargersdk\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c
 D:\Documents\Projects\chargersdk\src\middlewares\camellia-BSD-1.2.0\camellia.c
@@ -168219,6 +179714,7 @@ D:\Documents\Projects\chargersdk\src\middlewares\fatfs\diskdrv\nand_diskio.c
 D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\diskio.c
 D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\ff.c
 D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\ff_ex.c
+D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\ffconf.h
 D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\option\syscall.c
 D:\Documents\Projects\chargersdk\src\middlewares\fatfs\src\option\unicode.c
 D:\Documents\Projects\chargersdk\src\middlewares\mxml-2.10\mxml-attr.c

@@ -9,29 +9,28 @@
 #include "taskmonitor.h"
 #include "interface.h"
 
-static ErrorLevel_t HandleTemp(uint8_t i, double temp, double lower, double upper)
+static ErrorLevel_t HandleTemp(ChargePoint_t *pPoint, double temp, double lower, double upper)
 {
     ErrorLevel_t errlevel;
-    if(temp >= lower ||  temp <= upper )//-40~105
+    if(temp >= lower ||  temp <= upper )    //-40~105
     {
-        if(temp >= upper - 10)//95~105
+        if(temp >= upper - 10)      //95~105
         {
             errlevel = ERR_LEVEL_WARNING;
         }
-        else//-40~95
+        else                        //-40~95
         {
             errlevel = ERR_LEVEL_OK;
         }
     }
-    else if(temp > upper)//105~...
+    else if(temp > upper)                   //>105
     {
         errlevel = ERR_LEVEL_CRITICAL;
     }
-    else if(temp < lower)
+    else if(temp < lower)                   //<-40
     {
         //...
     }
-
     return errlevel;
 }
 
@@ -94,6 +93,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                 THROW_ERROR(i, pPoint[i]->status.GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
                 THROW_ERROR(i, pPoint[i]->status.GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
                 THROW_ERROR(i, pPoint[i]->status.GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pPoint[i]->status.GetRelayState(pPoint[i]), ERR_LEVEL_CRITICAL);
             }
         }
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
@@ -125,17 +125,16 @@ void vTaskEVSEMonitor(void *pvParameters)
                 switch(errlevel)
                 {
                 case ERR_LEVEL_OK:
+                    xEventGroupClearBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW);
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
                     break;
                 case ERR_LEVEL_WARNING:
-                    pPoint[i]->status.SetLoadPercent(pPoint[i], 50);
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW);
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
                     break;
                 case ERR_LEVEL_CRITICAL:
                     //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
                     xEventGroupClearBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
-                    xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTemp);
                     ThrowErrorCode(i, ERR_POINT_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
                 }
                 /** end of ACLTemp */
@@ -150,14 +149,12 @@ void vTaskEVSEMonitor(void *pvParameters)
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
                     break;
                 case ERR_LEVEL_WARNING:
-                    pPoint[i]->status.SetLoadPercent(pPoint[i], 50);
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW);
                     xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
                     break;
                 case ERR_LEVEL_CRITICAL:
                     //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
                     xEventGroupClearBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdACTempOK);
-                    xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempC);
                     ThrowErrorCode(i, ERR_POINT_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
                 }
                 /** end of ACNTemp */
@@ -174,14 +171,13 @@ void vTaskEVSEMonitor(void *pvParameters)
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
                         break;
                     case ERR_LEVEL_WARNING:
-                        pPoint[i]->status.SetLoadPercent(pPoint[i], 50);
+
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW);
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
                         break;
                     case ERR_LEVEL_CRITICAL:
                         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
                         xEventGroupClearBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
-                        xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempC);
                         ThrowErrorCode(i, ERR_POINT_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL);
                     }
                     /** end of ConnectorTemp1 */
@@ -196,14 +192,13 @@ void vTaskEVSEMonitor(void *pvParameters)
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
                         break;
                     case ERR_LEVEL_WARNING:
-                        pPoint[i]->status.SetLoadPercent(pPoint[i], 50);
+
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW);
                         xEventGroupSetBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
                         break;
                     case ERR_LEVEL_CRITICAL:
                         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
                         xEventGroupClearBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdConnTempOK);
-                        xEventGroupSetBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempC);
                         ThrowErrorCode(i, ERR_POINT_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL);
                     }
                     /** end of ConnectorTemp2 */
@@ -240,30 +235,27 @@ void vTaskEVSEMonitor(void *pvParameters)
                 {
                     xEventGroupClearBits(pPoint[i]->status.xHandleEventStartCondition, defEventBitStdPlugOK);
                 }
-                switch(pPoint[i]->status.xCPState)
-                {
-                case CP_12V:
 
-                }
-
+                /** @note (rgw#1#):  CC和CP状态已经在GetPlugState中获取，在TaskCharge中判断*/
             }
         }
         if((uxBits & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
             for(i = 0; i < ulTotalPoint; i++)
             {
-                THROW_ERROR(pPoint[i]->status.GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(pPoint[i]->status.GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(pPoint[i]->status.GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
+                if()
+//                THROW_ERROR(pPoint[i]->status.GetChargingVoltage(pPoint[i]), ERR_LEVEL_CRITICAL);
+//                THROW_ERROR(pPoint[i]->status.GetChargingCurrent(pPoint[i]), ERR_LEVEL_CRITICAL);
+//                THROW_ERROR(pPoint[i]->status.GetChargingFrequence(pPoint[i]), ERR_LEVEL_CRITICAL);
             }
         }
         if((uxBits & defEventBitTimerCBEVSEState) == defEventBitTimerCBEVSEState)
         {
-            THROW_ERROR(pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
-            THROW_ERROR(pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
-            THROW_ERROR(pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
+//            THROW_ERROR(pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
+//            THROW_ERROR(pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
+//            THROW_ERROR(pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
+//            THROW_ERROR(pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
+//            THROW_ERROR(pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
         }
         /** end of 判断状态 */
 

@@ -9,3 +9,4 @@ build/Keil/chargersdk.bin
 build/EmBitz/obj/
 build/EmBitz/bin/
 build/EmBitz/doxygen/html/
+*.save
