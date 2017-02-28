@@ -14,8 +14,8 @@
 #include "errorcode.h"
 #include "interface_rfid.h"
 
-#define defConnectorTypeB   0x0B
-#define defConnectorTypeC   0x0C
+#define defConnectorTypeB   'B'
+#define defConnectorTypeC   'C'
 
 typedef enum __ChargePointStateType
 {
@@ -43,14 +43,22 @@ typedef struct _ChargePointInfo
 {
     uint8_t ucChargePointID;           // 枪号
     uint8_t ucConnectorType;           //0x0B 0x0C
-    uint32_t ulVolatageUpperLimits;
-    uint32_t ulVolatageLowerLimits;
-    uint32_t ulRatedCurrent;
+    double dVolatageUpperLimits;
+    double dVolatageLowerLimits;
+    double dACTempUpperLimits;
+    double dACTempLowerLimits;
+    double dConnectorTempUpperLimits;
+    double dConnectorTempLowerLimits;
+    double dRatedCurrent;
     double dRatedPower;                      //保留一位小数
 
     pChargePoint_ft GetConnectorType;
     pChargePoint_ft GetVolatageUpperLimits;
     pChargePoint_ft GetVolatageLowerLimits;
+    pChargePoint_ft GetACTempUpperLimits;
+    pChargePoint_ft GetACTempLowerLimits;
+    pChargePoint_ft GetConnectorTempUpperLimits;
+    pChargePoint_ft GetConnectorTempLowerLimits;
     pChargePoint_ft GetRatedCurrent;
     pChargePoint_ft GetRatedPower;
 }ChargePointInfo_t;
@@ -59,6 +67,7 @@ typedef struct _ChargePointStatus
 {
     uint8_t ucHeldCardUID[defUIDLength];
     ChargePointStateType xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM
+    uint8_t ucLoadPercent;             // 负载百分比
     ChargePointStateType xCCState;     // 检测点4 CC state --PE
     ChargePointStateType xPlugState;
     double dACLTemp;
@@ -69,14 +78,16 @@ typedef struct _ChargePointStatus
     double dChargingVoltage;
     double dChargingCurrent;
     double dChargingFrequence;
-    EventGroupHandle_t xHandleEventGroupStartCharge;
-    EventGroupHandle_t xHandleEventGroupStopCharge;
+    EventGroupHandle_t xHandleEventStartCondition;
+    EventGroupHandle_t xHandleEventException;
 
     pChargePoint_ft GetChargingVoltage;
     pChargePoint_ft GetChargingCurrent;
     pChargePoint_ft GetChargingFrequence;
 
     pChargePoint_ft GetCPState;
+    //pChargePoint_ft GetLoadPercent;
+    ErrorCode_t (*SetLoadPercent)(void *pvPoint, uint8_t ucLoadPercent);
     pChargePoint_ft GetCCState;
     pChargePoint_ft GetPlugState;
     pChargePoint_ft GetBTypeConnectorLock;

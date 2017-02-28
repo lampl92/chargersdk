@@ -11,9 +11,9 @@
 #include "chargepoint.h"
 
 
-    /*---------------------------------------------------------------------------/
-    /                               从文件获取充电接口信息
-    /---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------/
+/                               从文件获取充电接口信息
+/---------------------------------------------------------------------------*/
 
 
 static ErrorCode_t GetConnectorType(void *pvPoint)
@@ -42,12 +42,12 @@ static ErrorCode_t GetVolatageUpperLimits(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    uint32_t tmpVoltUpLim;
+    double tmpVoltUpLim;
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpVoltUpLim = 0;
+    tmpVoltUpLim = 250;//(V)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */
@@ -56,7 +56,7 @@ static ErrorCode_t GetVolatageUpperLimits(void *pvPoint)
 
     /*********************/
 
-    pPoint->info.ulVolatageUpperLimits = tmpVoltUpLim;
+    pPoint->info.dVolatageUpperLimits = tmpVoltUpLim;
 
     return  errcode;
 }
@@ -64,12 +64,12 @@ static ErrorCode_t GetVolatageLowerLimits(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    uint32_t tmpVoltLowLim;
+    double tmpVoltLowLim;
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpVoltLowLim = 0;
+    tmpVoltLowLim = 190;//(V)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */
@@ -78,7 +78,95 @@ static ErrorCode_t GetVolatageLowerLimits(void *pvPoint)
 
     /*********************/
 
-    pPoint->info.ulVolatageLowerLimits = tmpVoltLowLim;
+    pPoint->info.dVolatageLowerLimits = tmpVoltLowLim;
+
+    return  errcode;
+}
+static ErrorCode_t GetACTempUpperLimits(void *pvPoint)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    double tmpACTempUpperLim;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpACTempUpperLim = 105;//(℃)
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
+
+    pPoint->info.dACTempUpperLimits = tmpACTempUpperLim;
+
+    return  errcode;
+}
+static ErrorCode_t GetACTempLowerLimits(void *pvPoint)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    double tmpACTempLowerLim;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpACTempLowerLim = -40;//(℃)
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
+
+    pPoint->info.dACTempLowerLimits = tmpACTempLowerLim;
+
+    return  errcode;
+}
+static ErrorCode_t GetConnectorTempUpperLimits(void *pvPoint)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    double tmpConnectorTempUpperLim;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpConnectorTempUpperLim = 105;//(℃)
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
+
+    pPoint->info.dConnectorTempUpperLimits = tmpConnectorTempUpperLim;
+
+    return  errcode;
+}
+static ErrorCode_t GetConnectorTempLowerLimits(void *pvPoint)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    double tmpConnectorTempLowerLim;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpConnectorTempLowerLim = -40;//(℃)
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 从文件获取 */
+
+    //...
+
+    /*********************/
+
+    pPoint->info.dConnectorTempLowerLimits = tmpConnectorTempLowerLim;
 
     return  errcode;
 }
@@ -86,12 +174,12 @@ static ErrorCode_t GetRatedCurrent(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    uint32_t tmpCurr;
+    double tmpCurr;
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpCurr = 0;
+    tmpCurr = 32;//(A)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */
@@ -100,7 +188,7 @@ static ErrorCode_t GetRatedCurrent(void *pvPoint)
 
     /*********************/
 
-    pPoint->info.ulRatedCurrent = tmpCurr;
+    pPoint->info.dRatedCurrent = tmpCurr;
 
     return  errcode;
 }
@@ -113,7 +201,7 @@ static ErrorCode_t GetRatedPower(void *pvPoint)
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpPow = 0;
+    tmpPow = 7;//(kW)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从文件获取 */
@@ -127,9 +215,9 @@ static ErrorCode_t GetRatedPower(void *pvPoint)
     return  errcode;
 }
 
-    /*---------------------------------------------------------------------------/
-    /                               从驱动获取充电接口状态
-    /---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------/
+/                               从驱动获取充电接口状态
+/---------------------------------------------------------------------------*/
 
 
 /** @note (rgw#1#): 注意不同ID对硬件的不同操作 */
@@ -257,6 +345,62 @@ static ErrorCode_t GetCPState(void *pvPoint)
 
     return errcode;
 }
+/** @brief 控制S1开关
+ *
+ * @param pvPoint void*
+ * @param cmd uint8_t   传递开关控制命令，1-on，0-off
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetCPSwitch(void *pvPoint, uint8_t cmd)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#):  */
+
+    //...
+
+    /*********************/
+
+    return errcode;
+}
+/** @brief 获取PWM占空比 详情请看18487.1-2015 P22
+ *
+ * @param pvPoint void*
+ * @param ucLoadPercent uint8_t 负载百分比
+ *                              负载100%时，PWM=53
+                                负载50%时，PWM= 27
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetLoadPercent(void *pvPoint, uint8_t ucLoadPercent)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+    uint8_t tmpCPPWM;
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    tmpCPPWM = 53;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#):  */
+
+    //PWM
+
+    /*********************/
+
+    pPoint->status.ucLoadPercent = ucLoadPercent;
+
+    return errcode;
+}
 /** @brief
  *
  * @param pvPoint void*
@@ -300,17 +444,33 @@ static ErrorCode_t GetPlugState(void *pvPoint)
 {
     ChargePoint_t *pPoint;
     uint8_t ucPointID;
-    uint32_t tmpPlugState; //0 无插枪  1 有插枪
+    uint32_t tmpPlugState; //    PLUG,  UNPLUG,
     ErrorCode_t errcode;
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpPlugState = 0;
+    tmpPlugState = UNPLUG;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 检测插枪状态驱动接口  */
 
-    //...
+    if(pPoint->info.ucConnectorType == defConnectorTypeB)
+    {
+        THROW_ERROR(ucPointID, GetCCState(pvPoint), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(ucPointID, GetCPState(pvPoint), ERR_LEVEL_CRITICAL);
+        if(pPoint->status.xCCState == CC_PE && pPoint->status.xCPState != CP_12V && pPoint->status.xCPState != CP_ERR)
+        {
+            tmpPlugState = PLUG;
+        }
+    }
+    else if(pPoint->info.ucConnectorType == defConnectorTypeC)
+    {
+        THROW_ERROR(ucPointID, GetCPState(pvPoint), ERR_LEVEL_CRITICAL);
+        if(pPoint->status.xCPState != CP_12V && pPoint->status.xCPState != CP_ERR)
+        {
+            tmpPlugState = PLUG;
+        }
+    }
 
     /*********************/
 
@@ -380,7 +540,7 @@ static ErrorCode_t SetBTypeConnectorLock(void *pvPoint)
         /*********************/
 
     }
-    THROW_ERROR(GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
+    THROW_ERROR(pPoint->info.ucChargePointID, GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
 
     return errcode;
 }
@@ -573,14 +733,22 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     }
     pChargePoint->info.ucChargePointID = ucChargePointID;
     pChargePoint->info.ucConnectorType = defConnectorTypeB;
-    pChargePoint->info.ulVolatageUpperLimits = 0;
-    pChargePoint->info.ulVolatageLowerLimits = 0;
-    pChargePoint->info.ulRatedCurrent = 0;
+    pChargePoint->info.dVolatageUpperLimits = 0;
+    pChargePoint->info.dVolatageLowerLimits = 0;
+    pChargePoint->info.dACTempUpperLimits = 0;
+    pChargePoint->info.dACTempLowerLimits = 0;
+    pChargePoint->info.dConnectorTempUpperLimits = 0;
+    pChargePoint->info.dConnectorTempLowerLimits = 0;
+    pChargePoint->info.dRatedCurrent = 0;
     pChargePoint->info.dRatedPower = 0;
 
     pChargePoint->info.GetConnectorType = GetConnectorType;
     pChargePoint->info.GetVolatageUpperLimits = GetVolatageUpperLimits;
     pChargePoint->info.GetVolatageLowerLimits = GetVolatageLowerLimits;
+    pChargePoint->info.GetACTempUpperLimits = GetACTempUpperLimits;
+    pChargePoint->info.GetACTempLowerLimits = GetACTempLowerLimits;
+    pChargePoint->info.GetConnectorTempUpperLimits = GetConnectorTempUpperLimits;
+    pChargePoint->info.GetConnectorTempLowerLimits = GetConnectorTempLowerLimits;
     pChargePoint->info.GetRatedCurrent = GetRatedCurrent;
     pChargePoint->info.GetRatedPower = GetRatedPower;
 
@@ -595,9 +763,10 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.xBTypeConnectorLockState = 0;
     pChargePoint->status.xCCState = 0;
     pChargePoint->status.xCPState = 0;
+    pChargePoint->status.ucLoadPercent = 100;//(%)
     pChargePoint->status.xPlugState = 0;
-    pChargePoint->status.xHandleEventGroupStartCharge = xEventGroupCreate();
-    pChargePoint->status.xHandleEventGroupStopCharge = xEventGroupCreate();
+    pChargePoint->status.xHandleEventStartCondition = xEventGroupCreate();
+    pChargePoint->status.xHandleEventException = xEventGroupCreate();
 
     pChargePoint->status.GetChargingVoltage = GetChargingVoltage;
     pChargePoint->status.GetChargingCurrent = GetChargingCurrent;
