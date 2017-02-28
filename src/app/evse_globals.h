@@ -48,22 +48,40 @@
 /*---------------------------------------------------------------------------/
 / xEventGroup
 /---------------------------------------------------------------------------*/
-//定义xHandleEventGroupRFID
-#define defEventBitGETUID       BIT_0
-//定义xHandleEventGroupStartCharge
-#define defEventBitAuthed       BIT_0
-#define defEventBitLocked       BIT_1
-#define defEventBitVoltOK       BIT_2
-#define defEventBitCurrOK       BIT_3
-#define defEventBitCPOK         BIT_4
-#define defEventBitCCOK         BIT_5
-#define defEventBitConnTempOK   BIT_6
-#define defEventBitACTempOK     BIT_7
-//#define defEventBit             BIT_8
+//定义pRFIDDev->xHandleEventGroupRFID
+#define defEventBitGotUIDtoRFID         BIT_0             //获取到UID，发送到RFID任务
+#define defEventBitGotUIDtoHMI          BIT_1               //获取到UID，发送到HMI
+#define defEventBitIsNewUID             BIT_2             //此卡在本桩没有刷过
+#define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
+
+//xHandleEventData
+#define defEventBitAddOrder             BIT_0
+#define defEventBitAddOrderOK           BIT_1
+//xHandleEventRemote
+#define defEventBitRemote
+//定义pChargePoint->status.xHandleEventException
+#define defEventBitExceptionTempW       BIT_0   //Warning
+#define defEventBitExceptionTempC       BIT_1   //Critical
+#define defEventBitExceptionVolt        BIT_2
+#define defEventBitExceptionCurr        BIT_3
+#define defEventBitException
+
+//定义pChargePoint->status.xHandleEventStartCondition
+#define defEventBitStdAuthed       BIT_0
+#define defEventBitStdLocked       BIT_1
+#define defEventBitStdVoltOK       BIT_2
+#define defEventBitStdCurrOK       BIT_3
+#define defEventBitStdCPOK         BIT_4
+#define defEventBitStdCCOK         BIT_5
+#define defEventBitStdConnTempOK   BIT_6
+#define defEventBitStdACTempOK     BIT_7
+#define defEventBitStdPlugOK       BIT_8
+#define defEventBitStdALL           0xFF //上面8个，如果增加需要修改本定义
+#define defEventBitStdOK            BIT_9
 //定义xHandleEventTimerCBNotify
 #define defEventBitTimerCBTemp              BIT_0
 #define defEventBitTimerCBLockState         BIT_1
-#define defEventBitTimerCBCPCCState         BIT_2
+#define defEventBitTimerCBPlugState         BIT_2
 #define defEventBitTimerCBChargingData      BIT_3
 #define defEventBitTimerCBEVSEState         BIT_4
 #define defEventBitTimerCBRFID              BIT_5

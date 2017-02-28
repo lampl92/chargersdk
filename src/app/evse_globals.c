@@ -12,3 +12,4 @@
 EVSE_t *pEVSE;
 UserList_t *pListChargePoint;
 RFIDDev_t *pRFIDDev;
+
