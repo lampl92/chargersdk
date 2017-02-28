@@ -1,5 +1,5 @@
 /**
-* @file interface_error.c
+* @file interface_diag.c
 * @brief
 * @author rgw
 * @version v1.0

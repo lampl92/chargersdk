@@ -1,5 +1,5 @@
 /**
-* @file D:\Documents\Projects\chargersdk\src\app\interface_remote.h
+* @file interface_remote.h
 * @brief
 * @author rgw
 * @version v1.0
@@ -8,6 +8,9 @@
 #ifndef  __INTERFACE_REMOTE_H
 #define  __INTERFACE_REMOTE_H
 
-ErrorCode_t GetRemoteTime(struct tm *pTimeBlock);
+#include <time.h>
+
+ErrorCode_t RemoteGetTime(struct tm *pTimeBlock);
+ErrorCode_t RemoteGetBalance(uint8_t *pucUID, uint8_t ucUIDLength, uint8_t *pucAccountStatus, double *pdBalance);
 
 #endif

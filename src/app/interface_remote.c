@@ -1,6 +1,6 @@
 /**
 * @file interface_remote.c
-* @brief 与通讯模块接口，云平台调用，
+* @brief 云平台接口
 * @author rgw
 * @version v1.0
 * @date 2017-02-06
@@ -10,7 +10,7 @@
 #include "includes.h"
 #include "bsp.h"
 
-ErrorCode_t GetRemoteTime(struct tm *pTimeBlock)
+ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
 {
     struct tm tmpTimeBlock;
     ErrorCode_t errcode;
@@ -25,22 +25,47 @@ ErrorCode_t GetRemoteTime(struct tm *pTimeBlock)
     return errcode;
 }
 
-ErrorCode_t OpenRemote()
+/** @brief
+ *
+ * @param ucRetVal uint8_t*     0注册成功  1注册失败
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteRegist(EVSE_t *pEVSE, uint8_t *ucRetVal )
 {
+    ErrorCode_t errcode;
 
+    errcode = ERR_NO;
+
+/** @todo (rgw#1#): 调用平台注册接口 */
+
+    *ucRetVal = 0;
+    return errcode;
 }
 
-ErrorCode_t CloseRemote()
+/** @brief
+ *
+ * @param pucUID uint8_t*
+ * @param ucUIDLength uint8_t
+ * @param pucAccountStatus uint8_t*     0 未注册 、1 注册
+ * @param pdBalance double*             帐户余额
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteGetBalance(uint8_t *pucUID, uint8_t ucUIDLength, uint8_t *pucAccountStatus, double *pdBalance)
 {
+    double tmpBalance;
+    uint8_t tmpAccountStat;
+    ErrorCode_t errcode;
 
+    tmpAccountStat = 1;
+    tmpBalance = 88888.88;
+    errcode = ERR_NO;
+
+    /** @todo (rgw#1#): 调用云平台接口 */
+
+    *pucAccountStatus = tmpAccountStat;
+    *pdBalance = tmpBalance;
+
+    return errcode;
 }
-
-ErrorCode_t RecvRemote()
-{
-
-}
-ErrorCode_t SendRemote()
-{
-
-}
-
