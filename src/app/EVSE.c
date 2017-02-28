@@ -25,14 +25,14 @@
  */
 static ErrorCode_t GetSN(void *pvEVSE)
 {
-    uint8_t tmpSN[24];
+    uint8_t tmpSN[defEVSESNLength];
     uint8_t tmpLength;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
-    memset(tmpSN, 0, 24);
+    memset(tmpSN, 0, defEVSESNLength);
     tmpLength = 0;
 
     /** @todo (rgw#1#): 从文件获取SN 并获取SN长度*/
@@ -41,7 +41,7 @@ static ErrorCode_t GetSN(void *pvEVSE)
 
     /*********************/
     pEVSE->info.ucSNLength = tmpLength;
-    memmove(pEVSE->info.ucSN, tmpSN, 24);
+    memmove(pEVSE->info.ucSN, tmpSN, defEVSESNLength);
 
     return errcode;
 }
@@ -57,14 +57,14 @@ static ErrorCode_t GetSN(void *pvEVSE)
  */
 static ErrorCode_t GetID(void *pvEVSE)
 {
-    uint8_t tmpID[24];
+    uint8_t tmpID[defEVSEIDLength];
     uint8_t tmpLength;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
-    memset(tmpID, 0, 24);
+    memset(tmpID, 0, defEVSEIDLength);
     tmpLength = 0;
 
     /** @todo (rgw#1#): 从文件获取ID 并获取ID长度*/
@@ -74,7 +74,7 @@ static ErrorCode_t GetID(void *pvEVSE)
     /*********************/
 
     pEVSE->info.ucIDLenght = tmpLength;
-    memmove(pEVSE->info.ucID, tmpID, 24);
+    memmove(pEVSE->info.ucID, tmpID, defEVSEIDLength);
 
     return errcode;
 }
@@ -328,8 +328,8 @@ EVSE_t *EVSECreate(void)
     EVSE_t *pEVSE;
     pEVSE = (EVSE_t *)malloc(sizeof(EVSE_t));
 
-    memset(pEVSE->info.ucSN, 0, 24);
-    memset(pEVSE->info.ucID, 0, 24);
+    memset(pEVSE->info.ucSN, 0, defEVSESNLength);
+    memset(pEVSE->info.ucID, 0, defEVSEIDLength);
     pEVSE->info.ucType = 2;
     pEVSE->info.ucTotalPoint = 2;
     pEVSE->info.dLng = 116.275833;
@@ -366,11 +366,11 @@ static void ChargePointInit(void)
     {
         pchargepoint[i] = ChargePointCreate(i);
 
-        THROW_ERROR(pchargepoint[i]->info.GetConnectorType(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(pchargepoint[i]->info.GetVolatageUpperLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(pchargepoint[i]->info.GetVolatageLowerLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(pchargepoint[i]->info.GetRatedCurrent(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(pchargepoint[i]->info.GetRatedPower(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pchargepoint[i]->info.GetConnectorType(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pchargepoint[i]->info.GetVolatageUpperLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pchargepoint[i]->info.GetVolatageLowerLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pchargepoint[i]->info.GetRatedCurrent(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pchargepoint[i]->info.GetRatedPower(pchargepoint[i]), ERR_LEVEL_WARNING);
 
         pListChargePoint->Add(pListChargePoint, pchargepoint[i]);
     }
@@ -379,11 +379,11 @@ void EVSEinit(void)
 {
     pEVSE = EVSECreate();
 
-    THROW_ERROR(pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_FILE, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_FILE, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_FILE, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_FILE, pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_FILE, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
 
     ChargePointInit();
 

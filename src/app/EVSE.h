@@ -9,15 +9,16 @@
 #define  __EVSE_H
 
 #include "stm32f4xx.h"
+#include "evse_config.h"
 #include "errorcode.h"
 
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 
 typedef struct _EVSEInfo
 {
-    uint8_t ucSN[24]; //设备唯一序列号
+    uint8_t ucSN[defEVSESNLength]; //设备唯一序列号
     uint8_t ucSNLength;
-    uint8_t ucID[24]; //平台分配ID
+    uint8_t ucID[defEVSEIDLength]; //平台分配ID
     uint8_t ucIDLenght;
     uint8_t ucType;   //1：直流设备 2：交流设备 3：交直流一体设备 4：无线设备 5：其他
     uint8_t ucTotalPoint; //一共有多少枪
