@@ -21,8 +21,11 @@ void vTaskEVSEData(void *pvParameters)
         pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
     }
     uxBits = 0;
+
+    THROW_ERROR(CreateOrderXML(), ERR_LEVEL_WARNING);//创建order.xml
     while(1)
     {
+        /* 读取文件配置 */
         uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh, pdTRUE, pdFALSE, 0);
         if((uxBits & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
@@ -40,6 +43,15 @@ void vTaskEVSEData(void *pvParameters)
                 THROW_ERROR(pPoint[i]->info.GetRatedPower(pPoint[i]), ERR_LEVEL_WARNING);
             }
         }
+        /* end of 读取文件配置 */
+
+//        uxBits = xEventGroupWaitBits(xHandleEventData, defEventBitAddOrder, pdTRUE, pdFALSE, 0);
+//        if((uxBits & defEventBitAddOrder) == defEventBitAddOrder)
+//        {
+//            DataAddOrder();
+//            xEventGroupSetBits(xHandleEventData, defEventBitAddOrderOK);
+//        }
+
 #if DEBUG_DATA
         printf_safe("%s\n", TASKNAME_EVSEData);
 #endif
