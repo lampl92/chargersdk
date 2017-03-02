@@ -74,7 +74,8 @@ typedef struct _ErrorPackage
 
 //充电枪ID从小到大定义，其他设备从大小定义
 //DevID 0~? 充电枪ID
-#define defDevID_FILE       0xFC
+#define defDevID_Cloud      0xFB
+#define defDevID_File       0xFC
 #define defDevID_RFID       0xFE
 #define defDevID_NetMoudle  0xFD
 #define defDevID_EVSE       0xFF

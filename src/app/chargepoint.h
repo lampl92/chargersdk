@@ -37,6 +37,16 @@ typedef enum __ChargePointStateType
     UNLOCK
 }ChargePointStateType;
 
+typedef enum
+{
+    STATE_VOLT_OK,
+    STATE_VOLT_UPPER_Dummy,
+    STATE_VOLT_UPPER,  //นýัน
+    STATE_VOLT_LOWER_Dummy,
+    STATE_VOLT_LOWER,   //วทัน
+    STATE_VOLT_OK_Dummy
+}VoltState_t;
+
 typedef ErrorCode_t (*pChargePoint_ft)(void *pvPoint);
 
 typedef struct _ChargePointInfo
@@ -78,14 +88,16 @@ typedef struct _ChargePointStatus
     double dChargingVoltage;
     double dChargingCurrent;
     double dChargingFrequence;
-    EventGroupHandle_t xHandleEventStartCondition;
+    EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventException;
+    TimerHandle_t xHandleTimerVolt;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
 
     pChargePoint_ft GetChargingVoltage;
     pChargePoint_ft GetChargingCurrent;
     pChargePoint_ft GetChargingFrequence;
+    VoltState_t xVoltStat;
 
     pChargePoint_ft GetCPState;
     ErrorCode_t (*SetCPSwitch)(void *pvPoint, uint8_t cmd);
@@ -101,6 +113,7 @@ typedef struct _ChargePointStatus
     pChargePoint_ft StartCharge;
     pChargePoint_ft StopCharge;
     pChargePoint_ft GetRelayState;
+    ErrorCode_t (*SetRelay)(void *pvPoint, uint8_t cmd);
 
 }ChargePointStatus_t;
 
@@ -111,7 +124,7 @@ typedef enum _ChargePointState
     POINT_PRECONTRACT,
     POINT_STARTCHARGE,
     POINT_CHARGING,
-    POINT_CHARGING_HALFLOAD,
+    POINT_STOPCHARGE,
     POINT_ERROR
 }ChargePointState_t;
 

@@ -379,11 +379,11 @@ void EVSEinit(void)
 {
     pEVSE = EVSECreate();
 
-    THROW_ERROR(defDevID_FILE, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_FILE, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_FILE, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_FILE, pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_FILE, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
 
     ChargePointInit();
 

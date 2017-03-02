@@ -29,8 +29,10 @@ void vTaskEVSERemote(void *pvParameters)
         if((uxBits & defEventBitIsNewUID) == defEventBitIsNewUID)
         {
             xQueueReceive(xHandleQueueOrders, &OrderData, 1000);
-            THROW_ERROR(errcode = RemoteGetBalance(OrderData.ucUID, defUIDLength, &OrderData.ucAccountStatus, &OrderData.dBalance), ERR_LEVEL_CRITICAL);
-            if(errcode = ERR_NO)
+            THROW_ERROR(defDevID_Cloud,
+                        errcode = RemoteGetBalance(OrderData.ucUID, defUIDLength, &OrderData.ucAccountStatus, &OrderData.dBalance),
+                        ERR_LEVEL_CRITICAL);
+            if(errcode == ERR_NO)
             {
                 xQueueSend(xHandleQueueOrders, &OrderData, 0);
                 xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGetAccountStatus);

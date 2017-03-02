@@ -868,7 +868,7 @@
 	"DIALOG_Intern.h"
 	"WIDGET.h"
 
-1486952676 source:d:\documents\projects\chargersdk\src\app\main.c
+1488445114 source:d:\documents\projects\chargersdk\src\app\main.c
 	"includes.h"
 
 1478672850 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
@@ -964,7 +964,7 @@
 	"stdlib.h"
 	"math.h"
 
-1487215076 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
+1488173517 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
@@ -1673,7 +1673,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1487912599 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1488442441 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 
 1486347791 source:d:\documents\projects\chargersdk\src\app\remotecomm.c
@@ -1688,38 +1688,38 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1487921111 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1488455217 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 	"interface.h"
 
-1487927382 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
+1488454049 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
 	"chargepoint.h"
 
-1487927067 d:\documents\projects\chargersdk\src\app\chargepoint.h
+1488426462 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
 	"errorcode.h"
 	"interface_rfid.h"
 
-1487903744 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1488442724 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
 	"interface.h"
 
-1487729071 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1488454086 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 	"interface.h"
 
-1484815808 d:\documents\projects\chargersdk\src\app\taskmonitor.h
+1488163129 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1487908857 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1488354925 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
 	"interface.h"
 	"cli_main.h"
@@ -1801,7 +1801,7 @@
 	"errorcode.h"
 	"evse_config.h"
 
-1487921400 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
+1488455191 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
 	"includes.h"
 	"taskcreate.h"
 	"taskrfid.h"
@@ -1831,7 +1831,7 @@
 	"includes.h"
 	"bsp.h"
 
-1487913603 source:d:\documents\projects\chargersdk\src\app\taskremote.c
+1488454818 source:d:\documents\projects\chargersdk\src\app\taskremote.c
 	"includes.h"
 	"interface.h"
 	"taskcreate.h"
@@ -1858,7 +1858,7 @@
 1486626084 source:d:\documents\projects\chargersdk\src\app\interface_error.c
 	"interface.h"
 
-1487671103 source:d:\documents\projects\chargersdk\src\app\timercallback.c
+1488441687 source:d:\documents\projects\chargersdk\src\app\timercallback.c
 	"includes.h"
 	"interface.h"
 
@@ -1867,7 +1867,7 @@
 	"evse_config.h"
 	"errorcode.h"
 
-1487811965 source:d:\documents\projects\chargersdk\src\app\evse.c
+1488442724 source:d:\documents\projects\chargersdk\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
@@ -1878,16 +1878,16 @@
 	"interface.h"
 	"mxml.h"
 
-1487732522 source:d:\documents\projects\chargersdk\src\app\errorcode.c
+1488442867 source:d:\documents\projects\chargersdk\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
-1487732600 d:\documents\projects\chargersdk\src\app\errorcode.h
+1488442710 d:\documents\projects\chargersdk\src\app\errorcode.h
 
 1487902830 d:\documents\projects\chargersdk\src\app\interface_data.h
 	"includes.h"
 
-1487920132 d:\documents\projects\chargersdk\src\app\evse_globals.h
+1488442332 d:\documents\projects\chargersdk\src\app\evse_globals.h
 	"EVSE.h"
 	"interface_rfid.h"
 	"userlib_list.h"
@@ -1913,9 +1913,10 @@
 
 1487819298 d:\documents\projects\chargersdk\src\app\evse_config.h
 
-1487729937 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
+1488442603 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
 	"taskcreate.h"
 	"taskdiag.h"
+	"interface.h"
 
 1487729702 d:\documents\projects\chargersdk\src\app\taskdiag.h
 

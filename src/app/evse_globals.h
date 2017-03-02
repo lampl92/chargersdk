@@ -13,8 +13,8 @@
 #include "userlib_list.h"
 
 
-#define SWITCH_ON   1
-#define SWITCH_OFF  0
+#define SWITCH_ON   (1)
+#define SWITCH_OFF  (0)
 
 #define BIT_0  ( 1 << 0 )
 #define BIT_1  ( 1 << 1 )
@@ -71,24 +71,40 @@
 #define defEventBitExceptionVolt        BIT_2
 #define defEventBitExceptionCurr        BIT_3
 #define defEventBitExceptionCritical    defEventBitExceptionTempC
+#define defEventBitExceptionVoltTimer   BIT_4
+//定义pChargePoint->status.xHandleEventCharge
+#define defEventBitPointAuthed      BIT_0
+#define defEventBitPointLocked      BIT_1
+#define defEventBitPointVoltOK      BIT_2
+#define defEventBitPointCurrOK      BIT_3
+#define defEventBitPointCPOK        BIT_4
+#define defEventBitPointCCOK        BIT_5
+#define defEventBitPointConnTempOK  BIT_6
+#define defEventBitPointACTempOK    BIT_7
+#define defEventBitPointPlugOK      BIT_8
+#define defEventBitPointStartOK     BIT_9
+#define defEventBitPointStopOK      BIT_10
+#define defEventBitEVSEScramOK      BIT_11
+#define defEventBitEVSEPEOK         BIT_12
+#define defEventBitEVSEKnockOK      BIT_13
+#define defEventBitEVSEArresterOK   BIT_14
+#define defEventBitEVSEPowerOffOK   BIT_15
 
-//定义pChargePoint->status.xHandleEventStartCondition
-#define defEventBitStdAuthed       BIT_0
-#define defEventBitStdLocked       BIT_1
-#define defEventBitStdVoltOK       BIT_2
-#define defEventBitStdCurrOK       BIT_3
-#define defEventBitStdCPOK         BIT_4
-#define defEventBitStdCCOK         BIT_5
-#define defEventBitStdConnTempOK   BIT_6
-#define defEventBitStdACTempOK     BIT_7
-#define defEventBitStdPlugOK       BIT_8
-#define defEventBitCPSwitchCondition    defEventBitStdLocked |      \
-                                        defEventBitStdVoltOK |      \
-                                        defEventBitStdConnTempOK |  \
-                                        defEventBitStdACTempOK |    \
-                                        defEventBitStdPlugOK
-//#define defEventBitChargeCondition defEventBitS1SwitchCondition | defEventBitStdCurrOK
-#define defEventBitStdOK            BIT_9
+#define defEventBitEVSEReady        defEventBitEVSEScramOK |    \
+                                    defEventBitEVSEPEOK |       \
+                                    defEventBitEVSEKnockOK |    \
+                                    defEventBitEVSEArresterOK | \
+                                    defEventBitEVSEPowerOffOK
+
+#define defEventBitCPSwitchCondition    defEventBitPointLocked |      \
+                                        defEventBitPointVoltOK |      \
+                                        defEventBitPointConnTempOK |  \
+                                        defEventBitPointACTempOK |    \
+                                        defEventBitPointPlugOK | \
+                                        defEventBitEVSEReady
+
+#define defEventBitStopCondition defEventBitCPSwitchCondition
+
 //定义xHandleEventTimerCBNotify
 #define defEventBitTimerCBTemp              BIT_0
 #define defEventBitTimerCBLockState         BIT_1
@@ -97,6 +113,7 @@
 #define defEventBitTimerCBEVSEState         BIT_4
 #define defEventBitTimerCBRFID              BIT_5
 #define defEventBitTimerCBDataRefresh       BIT_6
+
 
 
 

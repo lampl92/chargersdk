@@ -7,45 +7,43 @@
 */
 #include "taskcreate.h"
 #include "taskdiag.h"
-
+#include "interface.h"
 void vTaskEVSEDiag(void *pvParameters)
 {
-    uint32_t ulTotalPoint = pListChargePoint->Total;
-    ChargePoint_t *pPoint[ulTotalPoint];
+    ChargePoint_t *pPoint = NULL;
+    uint32_t ulTotalPoint;
     int i;
     EventBits_t uxBits;
     BaseType_t xResult;
     ErrorPackage_t errpack;
 
+    ulTotalPoint = pListChargePoint->Total;
+    uxBits = 0;
     xResult = pdFALSE;
-    for(i = 0; i < ulTotalPoint; i++)
-    {
-        pPoint[i] =  (ChargePoint_t *)(pListChargePoint->pListPointArray[i]);
-    }
 
     while(1)
     {
-        /** 处理系统失效故障 */
+        /* 处理系统失效故障 */
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
         {
-            #ifdef DEBUG_DIAG
+#ifdef DEBUG_DIAG
             printf_safe("%s(code: %d,level: %d)\n", strErrorCode[errpack.code], errpack.code, errpack.level);
-            #endif
+#endif
         }
-        /** end of 处理系统失效故障 */
+        /* end of 处理系统失效故障 */
 
-        /** 处理系统报警 */
+        /* 处理系统报警 */
         for(i = 0; i < ulTotalPoint; i++)
         {
-            uxBits = xEventGroupWaitBits(pPoint[i]->status.xHandleEventException, defEventBitExceptionTempW,pdTRUE,pdFALSE,0);
+            pPoint = ChargePointGetHandle(i);
+            uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
             if((uxBits & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
-                pPoint[i]->status.SetLoadPercent(pPoint[i], 50);
+                pPoint->status.SetLoadPercent(pPoint, 50);
             }
         }
-
-        /** end of 处理系统报警 */
+        /* end of 处理系统报警 */
 
 #if DEBUG_DIAG
         printf_safe("%s\n", TASKNAME_EVSEDiag);

@@ -9,7 +9,7 @@
 #include "errorcode.h"
 
 //
-//  一定要保证code的 顺序 与头文件定义一致
+//  一定要保证code的 **顺序** 与头文件定义一致
 //
 const uint8_t *strErrorCode[100] =
 {

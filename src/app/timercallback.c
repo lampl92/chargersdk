@@ -54,3 +54,21 @@ void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
 {
     xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID);
 }
+
+void vVoltTimerCB(TimerHandle_t xTimer)
+{
+    uint32_t uxTimerID;
+    uint32_t ulTotalPoint = pListChargePoint->Total;
+    ChargePoint_t *pPoint = NULL;
+    uint32_t i;
+
+    uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
+
+    for(i = 0; i < ulTotalPoint; i++)
+    {
+        if(uxTimerID == i)
+        {   pPoint = ChargePointGetHandle(i);
+            xEventGroupSetBits(pPoint->status.xHandleEventException, defEventBitExceptionVoltTimer);
+        }
+    }
+}

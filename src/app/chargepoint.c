@@ -747,6 +747,41 @@ static ErrorCode_t GetRelayState(void *pvPoint)
 
     return errcode;
 }
+/** @brief
+ *
+ * @param pvPoint void*
+ * @param cmd uint8_t SWITCH_ON SWITCH_OFF
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetRelay(void *pvPoint, uint8_t cmd)
+{
+    ChargePoint_t *pPoint;
+    uint8_t ucPointID;
+
+    ErrorCode_t errcode;
+
+    pPoint = (ChargePoint_t *)pvPoint;
+    ucPointID = pPoint->info.ucChargePointID;
+    errcode = ERR_NO;
+
+
+        /** @todo (rgw#1#): ²Ù×÷K1,K2Êä³ö¼ÌµçÆ÷ */
+
+        if(cmd == SWITCH_OFF)
+        {
+        //...
+        }
+        else if(cmd == SWITCH_ON)
+        {
+        //...
+        }
+
+        /*********************/
+
+    THROW_ERROR(pPoint->info.ucChargePointID, GetRelayState(pPoint), ERR_LEVEL_CRITICAL);
+    return errcode;
+}
 ChargePoint_t *ChargePointGetHandle(uint8_t ucChargePointID)
 {
     ChargePoint_t *pPoint;
@@ -797,15 +832,17 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.xCPState = 0;
     pChargePoint->status.ucLoadPercent = 100;//(%)
     pChargePoint->status.xPlugState = 0;
-    pChargePoint->status.xHandleEventStartCondition = xEventGroupCreate();
+    pChargePoint->status.xHandleEventCharge = xEventGroupCreate();
     pChargePoint->status.xHandleEventException = xEventGroupCreate();
-
+    pChargePoint->status.xHandleTimerVolt = NULL;
     pChargePoint->status.GetChargingVoltage = GetChargingVoltage;
     pChargePoint->status.GetChargingCurrent = GetChargingCurrent;
     pChargePoint->status.GetChargingFrequence = GetChargingFrequence;
+    pChargePoint->status.xVoltStat = STATE_VOLT_OK;
 
     pChargePoint->status.GetCPState = GetCPState;
     pChargePoint->status.SetCPSwitch = SetCPSwitch;
+    pChargePoint->status.SetLoadPercent = SetLoadPercent;
     pChargePoint->status.GetCCState = GetCCState;
     pChargePoint->status.GetPlugState = GetPlugState;
     pChargePoint->status.GetBTypeConnectorLock = GetBTypeConnectorLock;
@@ -816,6 +853,8 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.GetBTypeConnectorTemp2 = GetBTypeConnectorTemp2;
     pChargePoint->status.StartCharge = StartCharge;
     pChargePoint->status.StopCharge = StopCharge;
+    pChargePoint->status.GetRelayState = GetRelayState;
+    pChargePoint->status.SetRelay = SetRelay;
 
     pChargePoint->state = POINT_IDLE;
     return pChargePoint;

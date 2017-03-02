@@ -31,23 +31,21 @@ void OrderInitData(OrderData_t *order)
 }
 void vTaskEVSERFID(void *pvParameters)
 {
+    ChargePoint_t *pPoint = NULL;
+    uint32_t ulTotalPoint;
     int i;
     EventBits_t uxBits;
     ErrorCode_t errcode;
-    ChargePoint_t *pPoint[2];
-    uint8_t ucTotal;
     OrderData_t OrderData;
     RFIDState_t RFIDState;
 
-    OrderInitData(&OrderData);
-    ucTotal = pEVSE->info.ucTotalPoint;
-    for(i = 0; i < ucTotal; i++)
-    {
-        pPoint[i] =  ChargePointGetHandle(i);
-    }
+
+    ulTotalPoint = pListChargePoint->Total;
     uxBits = 0;
     errcode = ERR_NO;
     RFIDState = STATE_NOUID;
+    OrderInitData(&OrderData);
+
     while(1)
     {
         switch(RFIDState)
@@ -72,9 +70,10 @@ void vTaskEVSERFID(void *pvParameters)
             }
             printf_safe("\n");
 #endif
-            for(i = 0; i < pEVSE->info.ucTotalPoint; i++)  //2.判断卡是否刷过
+            for(i = 0; i < ulTotalPoint; i++)  //2.判断卡是否刷过
             {
-                if(memcmp(pPoint[i]->status.ucHeldCardUID, OrderData.ucUID, defUIDLength) == 0)
+                pPoint =  ChargePointGetHandle(i);
+                if(memcmp(pPoint->status.ucHeldCardUID, OrderData.ucUID, defUIDLength) == 0)
                 {
                     //此卡已刷
 #ifdef DEBUG_RFID
@@ -125,9 +124,10 @@ void vTaskEVSERFID(void *pvParameters)
                                     HMI填充好选择的枪后，发送回Order队列*/
 
             OrderData.ucPointID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID */
-            pPoint[OrderData.ucPointID]->state = POINT_PRECONTRACT;
-            memmove(pPoint[OrderData.ucPointID]->status.ucHeldCardUID, OrderData.ucUID, defUIDLength);
-            xEventGroupSetBits(pPoint[OrderData.ucPointID]->status.xHandleEventStartCondition, defEventBitStdAuthed);
+            pPoint = ChargePointGetHandle(OrderData.ucPointID);
+            //pPoint->state = POINT_PRECONTRACT;
+            memmove(pPoint->status.ucHeldCardUID, OrderData.ucUID, defUIDLength);
+            xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointAuthed);
             RFIDState = STATE_PRECONTRACT;
             break;
         case STATE_BADCARD:
@@ -145,16 +145,17 @@ void vTaskEVSERFID(void *pvParameters)
             RFIDState = STATE_NOUID;
             break;
         case STATE_PRECONTRACT:
-            uxBits = xEventGroupWaitBits(pPoint[OrderData.ucPointID]->status.xHandleEventStartCondition,
-                                         defEventBitStdOK,
+            pPoint = ChargePointGetHandle(OrderData.ucPointID);
+            uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
+                                         defEventBitPointStartOK,
                                          pdTRUE, pdFALSE, 1000);
-            if((uxBits & defEventBitStdOK) == defEventBitStdOK)
+            if((uxBits & defEventBitPointStartOK) == defEventBitPointStartOK)
             {
-
+                RFIDState = STATE_NOUID;
             }
             break;
         default:
             break;
-        }
-    }
+        }/* switch(RFIDState)*/
+    }/* while*/
 }
