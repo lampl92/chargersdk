@@ -126,22 +126,22 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 }
 CLI_USARTx_IRQHandler
 {
-    UBaseType_t uxSavedInterruptStatus;
-    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+    //UBaseType_t uxSavedInterruptStatus;
+    //uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
 
     HAL_UART_IRQHandler(&CLI_UARTx_Handler);
 
-    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    //taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
 }
 
 RFID_USARTx_IRQHandler
 {
-    UBaseType_t uxSavedInterruptStatus;
-    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+    //UBaseType_t uxSavedInterruptStatus;
+    //uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
 
     HAL_UART_IRQHandler(&RFID_UARTx_Handler);
 
-    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    //taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
 }
 /**
   * @brief  Tx Transfer completed callback
@@ -166,26 +166,26 @@ and
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    BaseType_t xHigherPriorityTaskWokenCli = pdFALSE;
-    BaseType_t xHigherPriorityTaskWokenRfid = pdFALSE;
+    //BaseType_t xHigherPriorityTaskWokenCli = pdFALSE;
+    //BaseType_t xHigherPriorityTaskWokenRfid = pdFALSE;
     if(huart->Instance == CLI_USARTx_BASE)
     {
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
-            xSemaphoreTakeFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
+            //xSemaphoreTakeFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
-            xSemaphoreGiveFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
-            portYIELD_FROM_ISR( xHigherPriorityTaskWokenCli );
+            //xSemaphoreGiveFromISR(pCliRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenCli);
+            //portYIELD_FROM_ISR( xHigherPriorityTaskWokenCli );
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)
     {
         if(HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1) == HAL_OK)
         {
-            xSemaphoreTakeFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
+            //xSemaphoreTakeFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
             pRfidRecvQue->EnElem(pRfidRecvQue, RFID_RX_Buffer[0]);
-            xSemaphoreGiveFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
-            portYIELD_FROM_ISR( xHigherPriorityTaskWokenRfid );
+            //xSemaphoreGiveFromISR(pRfidRecvQue->xHandleMutexQue, &xHigherPriorityTaskWokenRfid);
+            //portYIELD_FROM_ISR( xHigherPriorityTaskWokenRfid );
         }
     }
 }

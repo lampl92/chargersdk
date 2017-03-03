@@ -10,3 +10,5 @@ build/EmBitz/obj/
 build/EmBitz/bin/
 build/EmBitz/doxygen/html/
 *.save
+build/EmBitz/cscope.out
+build/EmBitz/chargersdk.cscope_file_list

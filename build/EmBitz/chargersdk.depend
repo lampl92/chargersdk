@@ -932,7 +932,7 @@
 
 1480391775 d:\documents\projects\chargersdk\src\cli\cli_xml.h
 
-1488513416 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
+1488513583 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
 	"includes.h"
 	"task.h"
 
@@ -964,7 +964,7 @@
 	"stdlib.h"
 	"math.h"
 
-1488173517 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
+1488519757 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
