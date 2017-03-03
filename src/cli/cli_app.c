@@ -32,58 +32,11 @@
 
 void cli_hello_fnt(int argc, char **argv)
 {
-    xprintf("\nhello world\n");
-    xprintf("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
-    xprintf("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
-    xprintf("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
-    xprintf("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
-
-
-#if 0
-    for(i = 0; i < 12; i++)
-    {
-        switch(i)
-        {
-            case 0:
-                LTDC_Clear(WHITE);
-                break;
-            case 1:
-                LTDC_Clear(BLACK);
-                break;
-            case 2:
-                LTDC_Clear(BLUE);
-                break;
-            case 3:
-                LTDC_Clear(RED);
-                break;
-            case 4:
-                LTDC_Clear(MAGENTA);
-                break;
-            case 5:
-                LTDC_Clear(GREEN);
-                break;
-            case 6:
-                LTDC_Clear(CYAN);
-                break;
-            case 7:
-                LTDC_Clear(YELLOW);
-                break;
-            case 8:
-                LTDC_Clear(BRRED);
-                break;
-            case 9:
-                LTDC_Clear(GRAY);
-                break;
-            case 10:
-                LTDC_Clear(LGRAY);
-                break;
-            case 11:
-                LTDC_Clear(BROWN);
-                break;
-        }
-        bsp_DelayMS(500);
-    }
-#endif
+    printf_safe("\nhello world\n");
+    printf_safe("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
+    printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
+    printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
+    printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
 }
 
 tinysh_cmd_t cli_hello_cmd =
@@ -103,7 +56,7 @@ void fsmc_sdram_test()
     u32 i = 0;
     u32 temp = 0;
     u32 sval = 0; //在地址0读到的数据
-    xprintf("每隔16K字节,写入一个数据,总共写入2048个数据,刚好是32M字节\n");
+    printf_safe("每隔16K字节,写入一个数据,总共写入2048个数据,刚好是32M字节\n");
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         *(vu32 *)(Bank5_SDRAM_ADDR + i) = temp;
@@ -116,16 +69,16 @@ void fsmc_sdram_test()
         sval = *(vu32 *)(Bank5_SDRAM_ADDR + i);
         if(temp == sval)
         {
-            xprintf("[@0x%x]=OK!\n", Bank5_SDRAM_ADDR | i);
+            printf_safe("[@0x%x]=OK!\n", Bank5_SDRAM_ADDR | i);
         }
         else
         {
-            xprintf("[@0x%x]=ERR!\n", Bank5_SDRAM_ADDR | i);
+            printf_safe("[@0x%x]=ERR!\n", Bank5_SDRAM_ADDR | i);
             break;
         }
         temp++;
     }
-    xprintf("SDRAM 容量:%dMB\r\n", i / 1024 / 1024); //打印SDRAM容量
+    printf_safe("SDRAM 容量:%dMB\r\n", i / 1024 / 1024); //打印SDRAM容量
 }
 
 
@@ -155,12 +108,12 @@ void cli_systemtime_fnt(int argc, char **argv)
         taskENTER_CRITICAL();
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        xprintf("\n%s\n", tbuf);
+        printf_safe("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        xprintf("%s\n", tbuf);
+        printf_safe("%s\n", tbuf);
         xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        xprintf("%s\n", tbuf);
+        printf_safe("%s\n", tbuf);
         taskEXIT_CRITICAL();
     }
     else if(strcmp(argv[1], "-s") == 0)
@@ -172,7 +125,7 @@ void cli_systemtime_fnt(int argc, char **argv)
         if(str[0] != '\"' && str[strlen(str) - 1] != '\"')
         {
             taskENTER_CRITICAL();
-            xprintf("\nWrong command! please date --help\n");
+            printf_safe("\nWrong command! please date --help\n");
             taskEXIT_CRITICAL();
             return ;
         }
@@ -219,19 +172,19 @@ void cli_systemtime_fnt(int argc, char **argv)
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        xprintf("\n%s\n", tbuf);
+        printf_safe("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        xprintf("%s\n", tbuf);
+        printf_safe("%s\n", tbuf);
         xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        xprintf("%s\n", tbuf);
+        printf_safe("%s\n", tbuf);
         taskEXIT_CRITICAL();
 
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
         taskENTER_CRITICAL();
-        xprintf("\neg:date -s \"2016-09-12 15:04:00\"\n");
+        printf_safe("\neg:date -s \"2016-09-12 15:04:00\"\n");
         taskEXIT_CRITICAL();
     }
 
@@ -251,13 +204,13 @@ static void display_args(int argc, char **argv)
     int i;
     for(i = 0; i < argc; i++)
     {
-        xprintf("argv[%d]=\"%s\"\n", i, argv[i]);
+        printf_safe("argv[%d]=\"%s\"\n", i, argv[i]);
     }
 }
 
 static void foo_fnt(int argc, char **argv)
 {
-    xprintf("foo command called\n");
+    printf_safe("foo command called\n");
     display_args(argc, argv);
 }
 
@@ -267,7 +220,7 @@ tinysh_cmd_t myfoocmd = {0, "foo", "foo command", "[args]",
 
 static void item_fnt(int argc, char **argv)
 {
-    xprintf("item%d command called\n", (int)tinysh_get_arg());
+    printf_safe("item%d command called\n", (int)tinysh_get_arg());
     display_args(argc, argv);
 }
 
@@ -288,7 +241,7 @@ static void atoxi_fnt(int argc, char **argv)
 
     for(i = 1; i < argc; i++)
     {
-        xprintf("\"%s\"-->%u (0x%x)\n",
+        printf_safe("\"%s\"-->%u (0x%x)\n",
                argv[i], tinysh_atoxi(argv[i]), tinysh_atoxi(argv[i]));
     }
 }

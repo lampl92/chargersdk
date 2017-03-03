@@ -95,7 +95,7 @@ void vTaskEVSEMonitor(void *pvParameters)
 
 
 #if DEBUG_MONITOR
-        xprintf("%s\n", TASKNAME_EVSEMonitor);
+        printf_safe("%s\n", TASKNAME_EVSEMonitor);
 #endif
         vTaskDelay(20);//要比timer中的检测周期快
     }/* end of while(1)*/
