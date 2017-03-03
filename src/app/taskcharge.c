@@ -14,10 +14,12 @@ void vTaskEVSECharge(void *pvParameters)
     ChargePoint_t *pPoint = NULL;
     uint32_t ulTotalPoint;
     int i;
-    EventBits_t uxBits;
+    EventBits_t uxBitsCharge;
+    EventBits_t uxBitsException;
 
     ulTotalPoint = pListChargePoint->Total;
-    uxBits = 0;
+    uxBitsCharge = 0;
+    uxBitsException = 0;
 
     while(1)
     {
@@ -28,10 +30,10 @@ void vTaskEVSECharge(void *pvParameters)
             switch(pPoint->state)
             {
             case POINT_IDLE:
-                uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
+                uxBitsCharge = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
                                              defEventBitPointPlugOK,
                                              pdFALSE, pdFALSE, 0);
-                if((uxBits & defEventBitPointPlugOK) == defEventBitPointPlugOK)
+                if((uxBitsCharge & defEventBitPointPlugOK) == defEventBitPointPlugOK)
                 {
                     /** @todo (rgw#1#): HMI */
 
@@ -41,10 +43,10 @@ void vTaskEVSECharge(void *pvParameters)
             case POINT_PLUGED:
                 if(pPoint->info.ucConnectorType == defConnectorTypeB)
                 {
-                    uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
+                    uxBitsCharge = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
                                                  defEventBitPointLocked,
                                                  pdFALSE, pdFALSE, 0);
-                    if((uxBits & defEventBitPointLocked) == defEventBitPointLocked)
+                    if((uxBitsCharge & defEventBitPointLocked) == defEventBitPointLocked)
                     {
                         /** @todo (rgw#1#): HMI */
                     }
@@ -53,10 +55,10 @@ void vTaskEVSECharge(void *pvParameters)
                         pPoint->status.SetBTypeConnectorLock(pPoint, SWITCH_ON);
                     }
                 }
-                uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
+                uxBitsCharge = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
                                              defEventBitCPSwitchCondition,
                                              pdFALSE, pdTRUE, 100);
-                if((uxBits & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
+                if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
                     THROW_ERROR(i, pPoint->status.SetCPSwitch(pPoint, SWITCH_ON), ERR_LEVEL_CRITICAL);
                     vTaskDelay(100);
@@ -85,17 +87,17 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case POINT_CHARGING:
-                uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventException,
+                uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
                                              defEventBitExceptionCritical,
                                              pdFALSE, pdFALSE, 0);
-                if((uxBits & defEventBitExceptionCritical) != 0)
+                if((uxBitsException & defEventBitExceptionCritical) != 0)
                 {
                     pPoint->state = POINT_ERROR;
                 }
-                uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
+                uxBitsCharge = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
                                              defEventBitStopCondition,
                                              pdFALSE, pdFALSE, 0);
-                if((uxBits & defEventBitStopCondition) != 0)
+                if((uxBitsCharge & defEventBitStopCondition) != 0)
                 {
                     THROW_ERROR(i, pPoint->status.StopCharge(pPoint), ERR_LEVEL_CRITICAL);
                     vTaskDelay(500);

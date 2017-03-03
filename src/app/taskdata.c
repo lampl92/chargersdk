@@ -14,17 +14,17 @@ void vTaskEVSEData(void *pvParameters)
     ChargePoint_t *pPoint = NULL;
     uint32_t ulTotalPoint;
     int i;
-    EventBits_t uxBits;
+    EventBits_t uxBitsTimer;
 
     ulTotalPoint = pListChargePoint->Total;
-    uxBits = 0;
+    uxBitsTimer = 0;
 
     THROW_ERROR(defDevID_File, CreateOrderXML(), ERR_LEVEL_WARNING);//创建order.xml
     while(1)
     {
         /* 读取文件配置 */
-        uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh, pdTRUE, pdFALSE, 0);
-        if((uxBits & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
+        uxBitsTimer = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh, pdTRUE, pdFALSE, 0);
+        if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
             THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
             THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
@@ -51,7 +51,7 @@ void vTaskEVSEData(void *pvParameters)
 //        }
 
 #if DEBUG_DATA
-        printf_safe("%s\n", TASKNAME_EVSEData);
+        //printf_safe("%s\n", TASKNAME_EVSEData);
 #endif
         vTaskDelay(100);
     }

@@ -245,6 +245,14 @@ static ErrorCode_t GetChargingVoltage(void *pvPoint)
     /** @todo (rgw#1#): 获取电能表电压 */
 
     //...
+    if(ucPointID == 0)
+    {
+        tmpVolt = 220;
+    }
+    if(ucPointID == 1)
+    {
+        tmpVolt = 110;
+    }
 
     /*********************/
 

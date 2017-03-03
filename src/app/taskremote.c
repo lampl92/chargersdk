@@ -12,21 +12,21 @@
 
 void vTaskEVSERemote(void *pvParameters)
 {
-    EventBits_t uxBits = 0;
+    EventBits_t uxBitsRFID = 0;
     OrderData_t OrderData;
     ErrorCode_t errcode;
 
-    uxBits = 0;
+    uxBitsRFID = 0;
     OrderData.ucAccountStatus = 0;
     OrderData.dBalance = 0;
     errcode = 0;
 
     while(1)
     {
-        uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
+        uxBitsRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                      defEventBitIsNewUID,
                                      pdTRUE, pdFALSE, 0);
-        if((uxBits & defEventBitIsNewUID) == defEventBitIsNewUID)
+        if((uxBitsRFID & defEventBitIsNewUID) == defEventBitIsNewUID)
         {
             xQueueReceive(xHandleQueueOrders, &OrderData, 1000);
             THROW_ERROR(defDevID_Cloud,

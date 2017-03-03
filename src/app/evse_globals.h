@@ -64,7 +64,12 @@
 //xHandleEventRemote
 #define defEventBitRemote
 //xHandleEventDiag
-#define defEventBitDiagTempW            BIT_0               //温度报警
+#define defEventBitDiagTempW            BIT_0              //温度报警
+#define defEventBitDiagTemp              BIT_1
+#define defEventBitDiagLockState         BIT_2
+#define defEventBitDiagPlugState         BIT_3
+#define defEventBitDiagChargingData      BIT_4
+#define defEventBitDiagEVSEState         BIT_5
 //定义pChargePoint->status.xHandleEventException
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
