@@ -20,7 +20,7 @@ static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
     ErrorLevel_t templevel;
     if(temp >= lower &&  temp <= upper )    //-40~105
     {
-        if(temp >= upper - 10)      //95~105
+        if(temp >= upper - defMonitorTempPeriod)      //95~105
         {
             templevel = ERR_LEVEL_WARNING;
         }
@@ -261,13 +261,13 @@ void vTaskEVSEDiag(void *pvParameters)
                         break;
                     case VOLT_LOWER:
                         xsprintf(strTimerName, "TimerPoint%d_VoltLow_Dummy", i);
-                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, 3000, pdFALSE, (void *)i, vVoltTimerCB);
+                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, defDiagVoltDummyCyc, pdFALSE, (void *)i, vVoltTimerCB);
                         xTimerStart(pPoint->status.xHandleTimerVolt, 0);
                         pPoint->status.xVoltStat = STATE_VOLT_LOWER_Dummy;
                         break;
                     case VOLT_UPPER:
                         xsprintf(strTimerName, "TimerPoint%d_VoltUp_Dummy", i);
-                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, 3000, pdFALSE, (void *)i, vVoltTimerCB);
+                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, defDiagVoltDummyCyc, pdFALSE, (void *)i, vVoltTimerCB);
                         xTimerStart(pPoint->status.xHandleTimerVolt, 0);
                         pPoint->status.xVoltStat = STATE_VOLT_UPPER_Dummy;
                         break;
@@ -331,13 +331,13 @@ void vTaskEVSEDiag(void *pvParameters)
                 case STATE_VOLT_LOWER:
                 case STATE_VOLT_UPPER:
                     voltstat = HandleVolt(pPoint->status.dChargingVoltage,
-                                          pPoint->info.dVolatageLowerLimits + 10,
-                                          pPoint->info.dVolatageUpperLimits - 10);
+                                          pPoint->info.dVolatageLowerLimits + defMonitorVoltPeriod,
+                                          pPoint->info.dVolatageUpperLimits - defMonitorVoltPeriod);
                     switch(voltstat)
                     {
                     case VOLT_OK://200~240
                         xsprintf(strTimerName, "TimerPoint%d_VoltOK_Dummy", i);
-                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, 5000, pdFALSE, (void *)i, vVoltTimerCB);
+                        pPoint->status.xHandleTimerVolt = xTimerCreate(strTimerName, defDiagVoltRecoverCyc, pdFALSE, (void *)i, vVoltTimerCB);
                         xTimerStart(pPoint->status.xHandleTimerVolt, 0);
                         pPoint->status.xVoltStat = STATE_VOLT_OK_Dummy;
                         break;
@@ -368,8 +368,8 @@ void vTaskEVSEDiag(void *pvParameters)
                     else
                     {
                         voltstat = HandleVolt(pPoint->status.dChargingVoltage,
-                                              pPoint->info.dVolatageLowerLimits + 10,
-                                              pPoint->info.dVolatageUpperLimits - 10);
+                                              pPoint->info.dVolatageLowerLimits + defMonitorVoltPeriod,
+                                              pPoint->info.dVolatageUpperLimits - defMonitorVoltPeriod);
                         switch(voltstat)
                         {
                         case VOLT_OK://200~240

@@ -37,7 +37,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                     THROW_ERROR(i, pPoint->status.GetBTypeConnectorTemp2(pPoint), ERR_LEVEL_WARNING);
                 }
             }
-            xEventGroupSetBits(xHandleEventDiag,defEventBitDiagTemp);
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTemp);
         }
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBLockState) == defEventBitTimerCBLockState)
@@ -50,7 +50,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                     THROW_ERROR(i, pPoint->status.GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
                 }
             }
-            xEventGroupSetBits(xHandleEventDiag,defEventBitDiagLockState);
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
         }
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBPlugState) == defEventBitTimerCBPlugState)
@@ -60,7 +60,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                 pPoint = ChargePointGetHandle(i);
                 THROW_ERROR(i, pPoint->status.GetPlugState(pPoint), ERR_LEVEL_CRITICAL);//在GetPlugState中获取了CC与CP状态
             }
-            xEventGroupSetBits(xHandleEventDiag,defEventBitDiagPlugState);
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
@@ -73,7 +73,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                 THROW_ERROR(i, pPoint->status.GetChargingFrequence(pPoint), ERR_LEVEL_CRITICAL);
                 THROW_ERROR(i, pPoint->status.GetRelayState(pPoint), ERR_LEVEL_CRITICAL);
             }
-            xEventGroupSetBits(xHandleEventDiag,defEventBitDiagChargingData);
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBEVSEState) == defEventBitTimerCBEVSEState)
@@ -83,7 +83,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
-            xEventGroupSetBits(xHandleEventDiag,defEventBitDiagEVSEState);
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagEVSEState);
         }
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
@@ -92,7 +92,6 @@ void vTaskEVSEMonitor(void *pvParameters)
         }
 
         /* end of 获取EVSE和ChargePoint状态 */
-
 
 #if DEBUG_MONITOR
         printf_safe("%s\n", TASKNAME_EVSEMonitor);

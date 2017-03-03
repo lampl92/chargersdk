@@ -169,13 +169,13 @@ void AppObjCreate (void)
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
-    xHandleTimerTemp = xTimerCreate("TimerTemp", 5000, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
-    xHandleTimerLockState = xTimerCreate("TimerLockState", 1000, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
-    xHandleTimerPlugState = xTimerCreate("TimerPlugState", 50, pdTRUE, (void *)defTIMERID_PlugState, vChargePointTimerCB);
-    xHandleTimerChargingData = xTimerCreate("TimerChargingData", 50, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
-    xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", 50, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
-    xHandleTimerRFID = xTimerCreate("TimerRFID", 500, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
-    xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", 1000, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
+    xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
+    xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
+    xHandleTimerPlugState = xTimerCreate("TimerPlugState", defMonitorPlugStateCyc, pdTRUE, (void *)defTIMERID_PlugState, vChargePointTimerCB);
+    xHandleTimerChargingData = xTimerCreate("TimerChargingData", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
+    xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", defMonitorEVSEStateCyc, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
+    xHandleTimerRFID = xTimerCreate("TimerRFID", defMonitorRFIDCyc, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
+    xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", defMonitorDataRefreshCyc, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
 
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
@@ -184,8 +184,6 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //xHandleTimer3S在需要时启动
-    //xHandleTimer5S
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
