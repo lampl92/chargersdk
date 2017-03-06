@@ -504,7 +504,7 @@ static ErrorCode_t GetBTypeConnectorLock(void *pvPoint)
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpLockState = LOCK;    //fixme,完成驱动后需要修改为unlock
+    tmpLockState = LOCK;/** @fixme (rgw#1#): 完成驱动后需要修改为unlock */
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
