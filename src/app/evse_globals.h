@@ -108,7 +108,11 @@
                                         defEventBitPointPlugOK | \
                                         defEventBitEVSEReady
 
-#define defEventBitStopCondition defEventBitCPSwitchCondition
+#define defEventBitChargeCondition   defEventBitCPSwitchCondition | \
+                                    defEventBitPointCurrOK | \
+                                    defEventBitPointCPOK
+
+
 
 //∂®“ÂxHandleEventTimerCBNotify
 #define defEventBitTimerCBTemp              BIT_0
