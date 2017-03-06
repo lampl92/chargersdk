@@ -88,15 +88,15 @@ void vTaskEVSEDiag(void *pvParameters)
         /* end of 处理系统失效故障 */
 
         /* 处理系统报警 */
-//        for(i = 0; i < ulTotalPoint; i++)
-//        {
-//            pPoint = ChargePointGetHandle(i);
-//            uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
-//            if((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
-//            {
-//                pPoint->status.SetLoadPercent(pPoint, 50);
-//            }
-//        }
+        for(i = 0; i < ulTotalPoint; i++)
+        {
+            pPoint = ChargePointGetHandle(i);
+            uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
+            if((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
+            {
+                pPoint->status.SetLoadPercent(pPoint, 50);
+            }
+        }
         /* end of 处理系统报警 */
 
         /* 判断各状态 */
