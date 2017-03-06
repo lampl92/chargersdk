@@ -80,6 +80,7 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case POINT_STARTCHARGE:
                 THROW_ERROR(i, pPoint->status.StartCharge(pPoint), ERR_LEVEL_CRITICAL);
+                vTaskDelay(500);
                 if(pPoint->status.ucRelayLState == SWITCH_ON &&
                         pPoint->status.ucRelayNState == SWITCH_ON)
                 {
