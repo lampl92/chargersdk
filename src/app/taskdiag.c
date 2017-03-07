@@ -439,7 +439,7 @@ void vTaskEVSEDiag(void *pvParameters)
                 }/* end of switch(pPoint->status.xVoltStat) */
                 /* end of 电压判断 */
 
-                /* 电流判断 北汽需求 P9 (c过流保护 */
+                /* 电流判断 GB/T 18487.1-2015 A3.10.7 P24 */
 //                if(pPoint->state == STATE_POINT_CHARGING)
                 {
                     currstat = HandleCurr(pPoint->status.dChargingCurrent,
@@ -485,6 +485,10 @@ void vTaskEVSEDiag(void *pvParameters)
                         if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
                         {
                             xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                            THROW_ERROR(i, pPoint->status.SetLoadPercent(pPoint, 80), ERR_LEVEL_WARNING);
+                            xsprintf(strTimerName, "TimerPoint%d_CurrUp_Fix", i);
+                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                            xTimerStart(pPoint->status.xHandleTimerCurr, 0);
                             pPoint->status.xCurrStat = STATE_CURR_UPPER_Fix;
                         }
                         else
@@ -503,30 +507,25 @@ void vTaskEVSEDiag(void *pvParameters)
                         }
                         break;
                     case STATE_CURR_UPPER_Fix:
-                        /** @fixme (rgw#1#): 当前处理办法比较粗暴，后续改正，
-                                            比如递减10%或者PID调整脉宽。*/
-                        THROW_ERROR(i, pPoint->status.SetLoadPercent(pPoint, 80), ERR_LEVEL_WARNING);
-                        xsprintf(strTimerName, "TimerPoint%d_CurrUp_Fix", i);
-                        pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
-                        xTimerStart(pPoint->status.xHandleTimerCurr, 0);
-                        pPoint->status.xCurrStat = STATE_CURR_UPPER_FixProc;
-                        break;
-                    case STATE_CURR_UPPER_FixProc:
                         uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
                                                               defEventBitExceptionCurrTimer,
                                                               pdTRUE, pdFALSE, 0);
                         if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
                         {
                             xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                            /** @todo (rgw#1#): 电流错误，HMI提示拔枪重新操作 */
+                            xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointCurrOK);
+                            pPoint->status.xCurrStat = STATE_CURR_ERROR;
+                        }
+                        else
+                        {
                             switch(currstat)
                             {
                             case CURR_OK:
+                                xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
                                 pPoint->status.xCurrStat = STATE_CURR_OK;
                                 break;
                             case CURR_UPPER:
-                                /** @todo (rgw#1#): 电流错误，提示拔枪重新操作 */
-                                xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointCurrOK);
-                                pPoint->status.xCurrStat = STATE_CURR_ERROR;
                                 break;
                             default:
                                 break;
@@ -555,9 +554,8 @@ void vTaskEVSEDiag(void *pvParameters)
                 /* end of 电流判断 */
 
                 /* 频率判断 */
-
                 if(pPoint->status.dChargingFrequence >= defMonitorFreqLower - defMonitorFreqPeriod &&
-                   pPoint->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
+                        pPoint->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
                 {
                     xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointFreqOK);
                 }
@@ -565,7 +563,6 @@ void vTaskEVSEDiag(void *pvParameters)
                 {
                     xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointFreqOK);
                 }
-
                 /* end of 频率判断 */
 
             } /* end of for(i = 0; i < ulTotalPoint; i++) */
