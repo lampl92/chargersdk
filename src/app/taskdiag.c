@@ -439,8 +439,8 @@ void vTaskEVSEDiag(void *pvParameters)
                 }/* end of switch(pPoint->status.xVoltStat) */
                 /* end of 电压判断 */
 
-                /* 电流判断 GB/T 18487.1-2015 A3.10.7 P24 */
-//                if(pPoint->state == STATE_POINT_CHARGING)
+                /* 电流判断 GB/T 18487.1-2015 A3.10.7 P24 在此基础上增加一次降功率修正操作*/
+                if(pPoint->state == STATE_POINT_CHARGING)
                 {
                     currstat = HandleCurr(pPoint->status.dChargingCurrent,
                                           pPoint->info.dRatedCurrent);
@@ -536,7 +536,7 @@ void vTaskEVSEDiag(void *pvParameters)
                         break;
                     }/*end of switch(xCurrStat)*/
                 }/*end of (state == STATE_POINT_CHARGING)*/
-//                else //进入到STATE_CURR_ERROR前，point的状态应该已经变成非CHARGING状态。
+                else //进入到STATE_CURR_ERROR前，point的状态应该已经变成非CHARGING状态。
                 {
                     switch(pPoint->status.xCurrStat)
                     {
