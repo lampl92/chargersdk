@@ -35,7 +35,7 @@ typedef enum __ChargePointStateType
     //Ç¹Ëø
     LOCK,
     UNLOCK
-}ChargePointStateType;
+} ChargePointStateType;
 
 typedef enum
 {
@@ -45,8 +45,17 @@ typedef enum
     STATE_VOLT_LOWER_Dummy,
     STATE_VOLT_LOWER,   //Ç·Ñ¹
     STATE_VOLT_OK_Dummy
-}VoltState_t;
-
+} VoltState_t;
+typedef enum
+{
+    STATE_CURR_INIT,
+    STATE_CURR_DELAY,
+    STATE_CURR_OK,
+    STATE_CURR_UPPER_FixProc,
+    STATE_CURR_UPPER_Fix,
+    STATE_CURR_UPPER_Dummy,
+    STATE_CURR_ERROR
+} CurrState_t;
 typedef ErrorCode_t (*pChargePoint_ft)(void *pvPoint);
 
 typedef struct _ChargePointInfo
@@ -71,7 +80,7 @@ typedef struct _ChargePointInfo
     pChargePoint_ft GetConnectorTempLowerLimits;
     pChargePoint_ft GetRatedCurrent;
     pChargePoint_ft GetRatedPower;
-}ChargePointInfo_t;
+} ChargePointInfo_t;
 
 typedef struct _ChargePointStatus
 {
@@ -91,6 +100,7 @@ typedef struct _ChargePointStatus
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventException;
     TimerHandle_t xHandleTimerVolt;
+    TimerHandle_t xHandleTimerCurr;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
 
@@ -98,6 +108,7 @@ typedef struct _ChargePointStatus
     pChargePoint_ft GetChargingCurrent;
     pChargePoint_ft GetChargingFrequence;
     VoltState_t xVoltStat;
+    CurrState_t xCurrStat;
 
     pChargePoint_ft GetCPState;
     ErrorCode_t (*SetCPSwitch)(void *pvPoint, uint8_t cmd);
@@ -115,18 +126,18 @@ typedef struct _ChargePointStatus
     pChargePoint_ft GetRelayState;
     ErrorCode_t (*SetRelay)(void *pvPoint, uint8_t cmd);
 
-}ChargePointStatus_t;
+} ChargePointStatus_t;
 
 typedef enum _ChargePointState
 {
-    POINT_IDLE,
-    POINT_PLUGED,
-    POINT_PRECONTRACT,
-    POINT_STARTCHARGE,
-    POINT_CHARGING,
-    POINT_STOPCHARGE,
-    POINT_ERROR
-}ChargePointState_t;
+    STATE_POINT_IDLE,
+    STATE_POINT_PLUGED,
+    STATE_POINT_PRECONTRACT,
+    STATE_POINT_STARTCHARGE,
+    STATE_POINT_CHARGING,
+    STATE_POINT_STOPCHARGE,
+    STATE_POINT_ERROR
+} ChargePointState_t;
 
 
 typedef struct _ChargePoint

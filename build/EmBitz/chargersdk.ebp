@@ -19,6 +19,7 @@
 					<Add option="-O0" />
 					<Add option="-g2" />
 					<Add symbol="DEBUG_RFID" />
+					<Add symbol="DEBUG_MONITOR" />
 					<Add symbol="DEBUG_DATA" />
 					<Add symbol="DEBUG_DIAG" />
 				</Compiler>

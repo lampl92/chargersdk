@@ -15,6 +15,7 @@
 #define defFileNameLength       64
 #define defNodeNameLength       64
 
+/* 单位：ms */
 #define defMonitorTempCyc           5000
 #define defMonitorLockStateCyc      1000
 #define defMonitorPlugStateCyc      50
@@ -24,10 +25,13 @@
 #define defMonitorDataRefreshCyc    1000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
+#define defDiagCurrInitCyc          5000   //延时启动电流检测
+#define defDiagCurrDummyCyc         2000
+#define defRelayDelay               500
 
-#define defMonitorTempPeriod        10
-#define defMonitorVoltPeriod        10
-#define defMonitorCurrPeriod        1.5
+#define defMonitorTempPeriod        10  //(℃)
+#define defMonitorVoltPeriod        10  //(V)
+#define defMonitorCurrPeriod        1.5 //(A)
 
 
 

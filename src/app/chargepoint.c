@@ -284,6 +284,14 @@ static ErrorCode_t GetChargingCurrent(void *pvPoint)
     /** @todo (rgw#1#): 获取电能表电流 */
 
     //...
+    if(ucPointID == 0)
+    {
+        tmpCurr = 32;
+    }
+    if(ucPointID == 1)
+    {
+        tmpCurr = 34;
+    }
 
     /*********************/
 
@@ -378,7 +386,7 @@ static ErrorCode_t SetCPSwitch(void *pvPoint, uint8_t cmd)
 
     return errcode;
 }
-/** @brief 获取PWM占空比 详情请看18487.1-2015 P22
+/** @brief 设置PWM占空比 详情请看18487.1-2015 P22
  *
  * @param pvPoint void*
  * @param ucLoadPercent uint8_t 负载百分比
@@ -843,10 +851,12 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.xHandleEventCharge = xEventGroupCreate();
     pChargePoint->status.xHandleEventException = xEventGroupCreate();
     pChargePoint->status.xHandleTimerVolt = NULL;
+    pChargePoint->status.xHandleTimerCurr = NULL;
     pChargePoint->status.GetChargingVoltage = GetChargingVoltage;
     pChargePoint->status.GetChargingCurrent = GetChargingCurrent;
     pChargePoint->status.GetChargingFrequence = GetChargingFrequence;
     pChargePoint->status.xVoltStat = STATE_VOLT_OK;
+    pChargePoint->status.xCurrStat = STATE_CURR_INIT;
 
     pChargePoint->status.GetCPState = GetCPState;
     pChargePoint->status.SetCPSwitch = SetCPSwitch;
@@ -864,6 +874,6 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.GetRelayState = GetRelayState;
     pChargePoint->status.SetRelay = SetRelay;
 
-    pChargePoint->state = POINT_IDLE;
+    pChargePoint->state = STATE_POINT_IDLE;
     return pChargePoint;
 }

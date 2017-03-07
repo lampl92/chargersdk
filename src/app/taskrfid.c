@@ -12,14 +12,14 @@
 
 typedef enum _RFIDState
 {
-    STATE_NOUID,             //没有UID
-    STATE_GOTUID,           //获取到UID
-    STATE_OLDUID,
-    STATE_NEWUID,
-    STATE_GOODCARD,           //注册帐户
-    STATE_BADCARD,           //非注册帐户
-    STATE_OWE,                 //欠费
-    STATE_PRECONTRACT           //预约状态，还没开始充电
+    STATE_RFID_NOUID,             //没有UID
+    STATE_RFID_GOTUID,           //获取到UID
+    STATE_RFID_OLDUID,
+    STATE_RFID_NEWUID,
+    STATE_RFID_GOODCARD,           //注册帐户
+    STATE_RFID_BADCARD,           //非注册帐户
+    STATE_RFID_OWE,                 //欠费
+    STATE_RFID_PRECONTRACT           //预约状态，还没开始充电
 } RFIDState_t;
 void OrderInitData(OrderData_t *order)
 {
@@ -43,24 +43,24 @@ void vTaskEVSERFID(void *pvParameters)
     ulTotalPoint = pListChargePoint->Total;
     uxBits = 0;
     errcode = ERR_NO;
-    RFIDState = STATE_NOUID;
+    RFIDState = STATE_RFID_NOUID;
     OrderInitData(&OrderData);
 
     while(1)
     {
         switch(RFIDState)
         {
-        case STATE_NOUID:
+        case STATE_RFID_NOUID:
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotUIDtoRFID,
                                          pdTRUE, pdFALSE, portMAX_DELAY);
             if((uxBits & defEventBitGotUIDtoRFID) == defEventBitGotUIDtoRFID)//1. 检测到卡
             {
                 memmove(OrderData.ucUID, pRFIDDev->status.ucUID, defUIDLength);
-                RFIDState = STATE_GOTUID;
+                RFIDState = STATE_RFID_GOTUID;
             }
             break;
-        case STATE_GOTUID:
+        case STATE_RFID_GOTUID:
 #ifdef DEBUG_RFID
             printf_safe("im rfid task,find card, :)\n");
             printf_safe("UID = ");
@@ -79,7 +79,7 @@ void vTaskEVSERFID(void *pvParameters)
 #ifdef DEBUG_RFID
                     printf_safe("point %d 此卡已刷\n", i);
 #endif
-                    RFIDState = STATE_OLDUID;
+                    RFIDState = STATE_RFID_OLDUID;
                     break;
                 }
                 else
@@ -88,11 +88,11 @@ void vTaskEVSERFID(void *pvParameters)
 #ifdef DEBUG_RFID
                     printf_safe("point %d 未刷\n", i);
 #endif
-                    RFIDState = STATE_NEWUID;
+                    RFIDState = STATE_RFID_NEWUID;
                 }
             }
             break;
-        case STATE_NEWUID:
+        case STATE_RFID_NEWUID:
             xQueueSend(xHandleQueueOrders, &OrderData, 0);
             uxBits = xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                                      defEventBitIsNewUID,
@@ -103,55 +103,60 @@ void vTaskEVSERFID(void *pvParameters)
                 xQueueReceive(xHandleQueueOrders, &OrderData, 1000);
                 if(OrderData.ucAccountStatus != 0 && OrderData.dBalance > 0)
                 {
-                    RFIDState = STATE_GOODCARD;
+                    RFIDState = STATE_RFID_GOODCARD;
                 }
                 if(OrderData.ucAccountStatus == 0)
                 {
-                    RFIDState = STATE_BADCARD;
+                    RFIDState = STATE_RFID_BADCARD;
                 }
                 if(OrderData.dBalance < 0)
                 {
-                    RFIDState = STATE_OWE;
+                    RFIDState = STATE_RFID_OWE;
                 }
             }
             break;
-        case STATE_OLDUID:
-            OrderInitData(&OrderData);//fixme
-            RFIDState = STATE_NOUID;
+        case STATE_RFID_OLDUID:
+#ifdef DEBUG_RFID
+            printf_safe("用户再次刷卡\n");
+            printf_safe("等待HMI操作...\n");
+#endif
+            /** @fixme (rgw#1#): 假设用户选择停止充电 */
+            xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointAuthed);//清除认证标志。
+            OrderInitData(&OrderData);
+            RFIDState = STATE_RFID_NOUID;
             break;
-        case STATE_GOODCARD:
+        case STATE_RFID_GOODCARD:
             /** @todo (rgw#1#): 1. 本任务会发送Order队列到HMI，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
                                     HMI填充好选择的枪后，发送回Order队列*/
 
             OrderData.ucPointID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID */
             pPoint = ChargePointGetHandle(OrderData.ucPointID);
-            //pPoint->state = POINT_PRECONTRACT;
             memmove(pPoint->status.ucHeldCardUID, OrderData.ucUID, defUIDLength);
             xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointAuthed);
-            RFIDState = STATE_PRECONTRACT;
+            RFIDState = STATE_RFID_PRECONTRACT;
             break;
-        case STATE_BADCARD:
+        case STATE_RFID_BADCARD:
             /** @todo (rgw#1#): 通知HMI显示未注册 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
 
             OrderInitData(&OrderData);
-            RFIDState = STATE_NOUID;
+            RFIDState = STATE_RFID_NOUID;
             break;
-        case STATE_OWE:
+        case STATE_RFID_OWE:
             /** @todo (rgw#1#): 通知HMI显示欠费 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
 
             OrderInitData(&OrderData);
-            RFIDState = STATE_NOUID;
+            RFIDState = STATE_RFID_NOUID;
             break;
-        case STATE_PRECONTRACT:
+        case STATE_RFID_PRECONTRACT:
             pPoint = ChargePointGetHandle(OrderData.ucPointID);
             uxBits = xEventGroupWaitBits(pPoint->status.xHandleEventCharge,
                                          defEventBitPointStartOK,
                                          pdTRUE, pdFALSE, 1000);
             if((uxBits & defEventBitPointStartOK) == defEventBitPointStartOK)
             {
-                RFIDState = STATE_NOUID;
+                RFIDState = STATE_RFID_NOUID;
             }
             break;
         default:

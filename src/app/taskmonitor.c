@@ -18,7 +18,9 @@ void vTaskEVSEMonitor(void *pvParameters)
 
     ulTotalPoint = pListChargePoint->Total;
     uxBitsTimerCB = 0;
-    //vTaskDelay(10000);
+    #ifndef DEBUG_MONITOR
+    vTaskDelay(10000);
+    #endif
     while(1)
     {
         /* 获取EVSE和ChargePoint状态 */
@@ -93,9 +95,6 @@ void vTaskEVSEMonitor(void *pvParameters)
 
         /* end of 获取EVSE和ChargePoint状态 */
 
-#if DEBUG_MONITOR
-        printf_safe("%s\n", TASKNAME_EVSEMonitor);
-#endif
         vTaskDelay(20);//要比timer中的检测周期快
     }/* end of while(1)*/
 }

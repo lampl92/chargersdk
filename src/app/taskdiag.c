@@ -14,7 +14,21 @@ typedef enum
     VOLT_LOWER,
     VOLT_UPPER
 } HandleVolt_t;
+typedef enum
+{
+    CURR_OK,
+    CURR_UPPER,
+} HandleCurr_t;
 extern void vVoltTimerCB(TimerHandle_t xTimer);
+extern void vCurrTimerCB(TimerHandle_t xTimer);
+/** @brief 比较温度
+ *
+ * @param temp double   获取到的温度
+ * @param lower double  温度下限
+ * @param upper double  温度上限
+ * @return ErrorLevel_t
+ *
+ */
 static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
 {
     ErrorLevel_t templevel;
@@ -40,6 +54,14 @@ static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
     return templevel;
 }
 
+/** @brief 比较电压
+ *
+ * @param volt double
+ * @param lower double
+ * @param upper double
+ * @return HandleVolt_t
+ *
+ */
 static HandleVolt_t HandleVolt(double volt, double lower, double upper)
 {
     HandleVolt_t voltstat;
@@ -57,6 +79,26 @@ static HandleVolt_t HandleVolt(double volt, double lower, double upper)
     }
     return voltstat;
 }
+/** @brief 比较电流
+ *
+ * @param curr double       获取到的电流
+ * @param ratecurr double   额定电流
+ * @return HandleCurr_t
+ *
+ */
+static HandleCurr_t HandleCurr(double curr, double ratecurr)
+{
+    HandleCurr_t currstat;
+    if(curr <= ratecurr + defMonitorCurrPeriod)
+    {
+        currstat = CURR_OK;
+    }
+    else
+    {
+        currstat = CURR_UPPER;
+    }
+    return currstat;
+}
 void vTaskEVSEDiag(void *pvParameters)
 {
     ChargePoint_t *pPoint = NULL;
@@ -64,17 +106,21 @@ void vTaskEVSEDiag(void *pvParameters)
     int i;
     EventBits_t uxBitsDiag;
     EventBits_t uxBitsException;
+    EventBits_t uxBitsCharge;
     BaseType_t xResult;
     ErrorPackage_t errpack;
 
     ErrorLevel_t templevel;
     HandleVolt_t voltstat;
-    uint8_t strTimerName[30];
+    HandleCurr_t currstat;
+    uint8_t strTimerName[50];
 
     ulTotalPoint = pListChargePoint->Total;
     uxBitsDiag = 0;
     uxBitsException = 0;
+    uxBitsCharge = 0;
     xResult = pdFALSE;
+    currstat = CURR_OK;
     while(1)
     {
         /* 处理系统失效故障 */
@@ -100,6 +146,7 @@ void vTaskEVSEDiag(void *pvParameters)
         /* end of 处理系统报警 */
 
         /* 判断各状态 */
+        /* 温度检测 北汽需求 P10 (i 输出端口温度监控*/
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
         {
@@ -203,6 +250,7 @@ void vTaskEVSEDiag(void *pvParameters)
                 }
             }
         }/* end of defEventBitTimerCBTemp */
+        /* end of 温度检测 */
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagLockState) == defEventBitDiagLockState)
         {
@@ -246,7 +294,7 @@ void vTaskEVSEDiag(void *pvParameters)
             for(i = 0; i < ulTotalPoint; i++)
             {
                 pPoint = ChargePointGetHandle(i);
-                /* 电压判断 */
+                /* 电压判断 北汽需求 P10 f)过压保护 g)欠压保护 */
                 voltstat = HandleVolt(pPoint->status.dChargingVoltage,
                                       pPoint->info.dVolatageLowerLimits,
                                       pPoint->info.dVolatageUpperLimits);
@@ -278,13 +326,13 @@ void vTaskEVSEDiag(void *pvParameters)
                 case STATE_VOLT_LOWER_Dummy:
                 case STATE_VOLT_UPPER_Dummy:
                     uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
-                                                 defEventBitExceptionVoltTimer,
-                                                 pdTRUE, pdFALSE, 0);
+                                                          defEventBitExceptionVoltTimer,
+                                                          pdTRUE, pdFALSE, 0);
                     if((uxBitsException & defEventBitExceptionVoltTimer) == defEventBitExceptionVoltTimer)
                     {
                         xTimerDelete(pPoint->status.xHandleTimerVolt, 0);
                         xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointVoltOK);
-                        if(pPoint->state == POINT_CHARGING)
+                        if(pPoint->state == STATE_POINT_CHARGING)
                         {
                             THROW_ERROR(i, pPoint->status.SetRelay(pPoint, SWITCH_OFF), ERR_LEVEL_CRITICAL);
                         }
@@ -305,7 +353,6 @@ void vTaskEVSEDiag(void *pvParameters)
                         switch(voltstat)
                         {
                         case VOLT_OK:
-                            xTimerStop(pPoint->status.xHandleTimerVolt, 0);
                             xTimerDelete(pPoint->status.xHandleTimerVolt, 0);
                             pPoint->status.xVoltStat = STATE_VOLT_OK;
                             break;
@@ -350,13 +397,13 @@ void vTaskEVSEDiag(void *pvParameters)
                     break;
                 case STATE_VOLT_OK_Dummy:
                     uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
-                                                 defEventBitExceptionVoltTimer,
-                                                 pdTRUE, pdFALSE, 0);
+                                                          defEventBitExceptionVoltTimer,
+                                                          pdTRUE, pdFALSE, 0);
                     if((uxBitsException & defEventBitExceptionVoltTimer) == defEventBitExceptionVoltTimer)
                     {
                         xTimerDelete(pPoint->status.xHandleTimerVolt, 0);
                         xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointVoltOK);
-                        if(pPoint->state == POINT_CHARGING)
+                        if(pPoint->state == STATE_POINT_CHARGING)
                         {
                             THROW_ERROR(i, pPoint->status.SetRelay(pPoint, SWITCH_ON), ERR_LEVEL_CRITICAL);
                         }
@@ -375,12 +422,10 @@ void vTaskEVSEDiag(void *pvParameters)
                         case VOLT_OK://200~240
                             break;
                         case VOLT_LOWER:
-                            xTimerStop(pPoint->status.xHandleTimerVolt, 0);
                             xTimerDelete(pPoint->status.xHandleTimerVolt, 0);
                             pPoint->status.xVoltStat = STATE_VOLT_LOWER;
                             break;
                         case VOLT_UPPER:
-                            xTimerStop(pPoint->status.xHandleTimerVolt, 0);
                             xTimerDelete(pPoint->status.xHandleTimerVolt, 0);
                             pPoint->status.xVoltStat = STATE_VOLT_UPPER;
                             break;
@@ -394,10 +439,119 @@ void vTaskEVSEDiag(void *pvParameters)
                 }/* end of switch(pPoint->status.xVoltStat) */
                 /* end of 电压判断 */
 
-                /* 电流判断 */
-
-                /** @todo (rgw#1#): 电流应该如何判断？ */
-
+                /* 电流判断 北汽需求 P9 (c过流保护 */
+//                if(pPoint->state == STATE_POINT_CHARGING)
+                {
+                    currstat = HandleCurr(pPoint->status.dChargingCurrent,
+                                          pPoint->info.dRatedCurrent);
+                    switch(pPoint->status.xCurrStat)
+                    {
+                    case STATE_CURR_INIT:
+                        xsprintf(strTimerName, "TimerPoint%d_CurrInit", i);
+                        pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrInitCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                        xTimerStart(pPoint->status.xHandleTimerCurr, 0);
+                        pPoint->status.xCurrStat = STATE_CURR_DELAY;
+                        break;
+                    case STATE_CURR_DELAY:
+                        uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
+                                                              defEventBitExceptionCurrTimer,
+                                                              pdTRUE, pdFALSE, 0);
+                        if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
+                        {
+                            xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                            pPoint->status.xCurrStat = STATE_CURR_OK;
+                        }
+                        break;
+                    case STATE_CURR_OK:
+                        switch(currstat)
+                        {
+                        case CURR_OK:
+                            xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointCurrOK);
+                            break;
+                        case CURR_UPPER:
+                            xsprintf(strTimerName, "TimerPoint%d_CurrUp_Dummy", i);
+                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                            xTimerStart(pPoint->status.xHandleTimerCurr, 0);
+                            pPoint->status.xCurrStat = STATE_CURR_UPPER_Dummy;
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    case STATE_CURR_UPPER_Dummy:
+                        uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
+                                                              defEventBitExceptionCurrTimer,
+                                                              pdTRUE, pdFALSE, 0);
+                        if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
+                        {
+                            xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                            pPoint->status.xCurrStat = STATE_CURR_UPPER_Fix;
+                        }
+                        else
+                        {
+                            switch(currstat)
+                            {
+                            case CURR_OK:
+                                xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                                pPoint->status.xCurrStat = STATE_CURR_OK;
+                                break;
+                            case CURR_UPPER:
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        break;
+                    case STATE_CURR_UPPER_Fix:
+                        /** @fixme (rgw#1#): 当前处理办法比较粗暴，后续改正，
+                                            比如递减10%或者PID调整脉宽。*/
+                        THROW_ERROR(i, pPoint->status.SetLoadPercent(pPoint, 80), ERR_LEVEL_WARNING);
+                        xsprintf(strTimerName, "TimerPoint%d_CurrUp_Fix", i);
+                        pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                        xTimerStart(pPoint->status.xHandleTimerCurr, 0);
+                        pPoint->status.xCurrStat = STATE_CURR_UPPER_FixProc;
+                        break;
+                    case STATE_CURR_UPPER_FixProc:
+                        uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException,
+                                                              defEventBitExceptionCurrTimer,
+                                                              pdTRUE, pdFALSE, 0);
+                        if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
+                        {
+                            xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
+                            switch(currstat)
+                            {
+                            case CURR_OK:
+                                pPoint->status.xCurrStat = STATE_CURR_OK;
+                                break;
+                            case CURR_UPPER:
+                                /** @todo (rgw#1#): 电流错误，提示拔枪重新操作 */
+                                xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointCurrOK);
+                                pPoint->status.xCurrStat = STATE_CURR_ERROR;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                    }/*end of switch(xCurrStat)*/
+                }/*end of (state == STATE_POINT_CHARGING)*/
+//                else //进入到STATE_CURR_ERROR前，point的状态应该已经变成非CHARGING状态。
+                {
+                    switch(pPoint->status.xCurrStat)
+                    {
+                    case STATE_CURR_ERROR:
+                        uxBitsCharge = xEventGroupGetBits(pPoint->status.xHandleEventCharge);
+                        if((uxBitsCharge & defEventBitPointPlugOK) != defEventBitPointPlugOK)
+                        {
+                            pPoint->status.xCurrStat = STATE_CURR_INIT;
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+                }
                 /* end of 电流判断 */
 
                 /* 频率判断 */

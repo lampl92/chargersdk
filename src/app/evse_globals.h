@@ -77,12 +77,13 @@
 #define defEventBitExceptionCurr        BIT_3
 #define defEventBitExceptionCritical    defEventBitExceptionTempC
 #define defEventBitExceptionVoltTimer   BIT_4
+#define defEventBitExceptionCurrTimer   BIT_5
 //¶¨ÒåpChargePoint->status.xHandleEventCharge
 #define defEventBitPointAuthed      BIT_0
 #define defEventBitPointLocked      BIT_1
 #define defEventBitPointVoltOK      BIT_2
 #define defEventBitPointCurrOK      BIT_3
-#define defEventBitPointCPOK        BIT_4
+#define defEventBitPointS2OK        BIT_4
 #define defEventBitPointCCOK        BIT_5
 #define defEventBitPointConnTempOK  BIT_6
 #define defEventBitPointACTempOK    BIT_7
@@ -108,9 +109,10 @@
                                         defEventBitPointPlugOK | \
                                         defEventBitEVSEReady
 
-#define defEventBitChargeCondition   defEventBitCPSwitchCondition | \
+#define defEventBitChargeCondition  defEventBitCPSwitchCondition | \
+                                    defEventBitPointAuthed | \
                                     defEventBitPointCurrOK | \
-                                    defEventBitPointCPOK
+                                    defEventBitPointS2OK
 
 
 

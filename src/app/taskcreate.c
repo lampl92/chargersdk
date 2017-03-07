@@ -112,7 +112,7 @@ TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
-
+//chargepoint中还定义了两个定时器，xHandleTimerVolt，xHandleTimerCurr分别在使用时进行初始化
 //Mutex
 
 void vTaskCLI(void *pvParameters)
