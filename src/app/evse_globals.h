@@ -83,18 +83,19 @@
 #define defEventBitPointLocked      BIT_1
 #define defEventBitPointVoltOK      BIT_2
 #define defEventBitPointCurrOK      BIT_3
-#define defEventBitPointS2OK        BIT_4
-#define defEventBitPointCCOK        BIT_5
-#define defEventBitPointConnTempOK  BIT_6
-#define defEventBitPointACTempOK    BIT_7
-#define defEventBitPointPlugOK      BIT_8
-#define defEventBitPointStartOK     BIT_9
-#define defEventBitPointStopOK      BIT_10
-#define defEventBitEVSEScramOK      BIT_11
-#define defEventBitEVSEPEOK         BIT_12
-#define defEventBitEVSEKnockOK      BIT_13
-#define defEventBitEVSEArresterOK   BIT_14
-#define defEventBitEVSEPowerOffOK   BIT_15
+#define defEventBitPointFreqOK      BIT_4
+#define defEventBitPointS2OK        BIT_5
+#define defEventBitPointCCOK        BIT_6
+#define defEventBitPointConnTempOK  BIT_7
+#define defEventBitPointACTempOK    BIT_8
+#define defEventBitPointPlugOK      BIT_9
+#define defEventBitPointStartOK     BIT_10
+#define defEventBitPointStopOK      BIT_11
+#define defEventBitEVSEScramOK      BIT_12
+#define defEventBitEVSEPEOK         BIT_13
+#define defEventBitEVSEKnockOK      BIT_14
+#define defEventBitEVSEArresterOK   BIT_15
+#define defEventBitEVSEPowerOffOK   BIT_16
 
 #define defEventBitEVSEReady        defEventBitEVSEScramOK |    \
                                     defEventBitEVSEPEOK |       \
@@ -112,6 +113,7 @@
 #define defEventBitChargeCondition  defEventBitCPSwitchCondition | \
                                     defEventBitPointAuthed | \
                                     defEventBitPointCurrOK | \
+                                    defEventBitPointFreqOK | \
                                     defEventBitPointS2OK
 
 

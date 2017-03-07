@@ -556,7 +556,15 @@ void vTaskEVSEDiag(void *pvParameters)
 
                 /* 频率判断 */
 
-                /** @todo (rgw#1#): 频率需要判断？ */
+                if(pPoint->status.dChargingFrequence >= defMonitorFreqLower - defMonitorFreqPeriod &&
+                   pPoint->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
+                {
+                    xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointFreqOK);
+                }
+                else
+                {
+                    xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointFreqOK);
+                }
 
                 /* end of 频率判断 */
 

@@ -317,7 +317,7 @@ static ErrorCode_t GetChargingFrequence(void *pvPoint)
 
     pPoint = (ChargePoint_t *)pvPoint;
     ucPointID = pPoint->info.ucChargePointID;
-    tmpFreq = 0;
+    tmpFreq = 50;
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 从电表获取 */
