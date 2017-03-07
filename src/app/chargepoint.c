@@ -852,6 +852,7 @@ ChargePoint_t *ChargePointCreate(uint8_t ucChargePointID )
     pChargePoint->status.xHandleEventException = xEventGroupCreate();
     pChargePoint->status.xHandleTimerVolt = NULL;
     pChargePoint->status.xHandleTimerCurr = NULL;
+    pChargePoint->status.xHandleTimerCharge = NULL;
     pChargePoint->status.GetChargingVoltage = GetChargingVoltage;
     pChargePoint->status.GetChargingCurrent = GetChargingCurrent;
     pChargePoint->status.GetChargingFrequence = GetChargingFrequence;

@@ -202,6 +202,7 @@
 		<Unit filename="..\..\src\app\timercallback.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\timercallback.h" />
 		<Unit filename="..\..\src\cli\cli_app.c">
 			<Option compilerVar="CC" />
 		</Unit>

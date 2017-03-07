@@ -41,6 +41,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTemp);
         }
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBLockState) == defEventBitTimerCBLockState)
         {
@@ -54,6 +55,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
         }
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBPlugState) == defEventBitTimerCBPlugState)
         {
@@ -64,6 +66,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
@@ -77,6 +80,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBEVSEState) == defEventBitTimerCBEVSEState)
         {
@@ -87,6 +91,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagEVSEState);
         }
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
         {

@@ -19,8 +19,6 @@ typedef enum
     CURR_OK,
     CURR_UPPER,
 } HandleCurr_t;
-extern void vVoltTimerCB(TimerHandle_t xTimer);
-extern void vCurrTimerCB(TimerHandle_t xTimer);
 /** @brief 比较温度
  *
  * @param temp double   获取到的温度
@@ -121,6 +119,7 @@ void vTaskEVSEDiag(void *pvParameters)
     uxBitsCharge = 0;
     xResult = pdFALSE;
     currstat = CURR_OK;
+    memset(strTimerName, 0, 50);
     while(1)
     {
         /* 处理系统失效故障 */
@@ -248,6 +247,10 @@ void vTaskEVSEDiag(void *pvParameters)
                     }
                     /* end of ConnectorTemp2 */
                 }
+                else if(pPoint->info.ucConnectorType == defConnectorTypeC) //C型连接没有温度检测点，直接置位OK
+                {
+                    xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointConnTempOK);
+                }
             }
         }/* end of defEventBitTimerCBTemp */
         /* end of 温度检测 */
@@ -268,6 +271,10 @@ void vTaskEVSEDiag(void *pvParameters)
                         xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointLocked);
                     }
                 }
+                else if(pPoint->info.ucConnectorType == defConnectorTypeC) //C型连接没有锁，直接置位OK
+                {
+                    xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointLocked);
+                }
             }
         }/* end of defEventBitTimerCBLockState */
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagPlugState, pdTRUE, pdFALSE, 0);
@@ -284,7 +291,16 @@ void vTaskEVSEDiag(void *pvParameters)
                 {
                     xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointPlugOK);
                 }
-
+                if(pPoint->status.xCPState == CP_6V_PWM || pPoint->status.xCPState == CP_6V)
+                {
+                    xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointS2Closed);
+                    xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointS2Opened);
+                }
+                else
+                {
+                    xEventGroupSetBits(pPoint->status.xHandleEventCharge, defEventBitPointS2Opened);
+                    xEventGroupClearBits(pPoint->status.xHandleEventCharge, defEventBitPointS2Closed);
+                }
                 /** @note (rgw#1#):  CC和CP状态已经在GetPlugState中获取，在TaskCharge中判断*/
             }
         }/* end of defEventBitTimerCBPlugState */
@@ -448,7 +464,11 @@ void vTaskEVSEDiag(void *pvParameters)
                     {
                     case STATE_CURR_INIT:
                         xsprintf(strTimerName, "TimerPoint%d_CurrInit", i);
-                        pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrInitCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                        pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+                                                                       defDiagCurrInitCyc,
+                                                                       pdFALSE,
+                                                                       (void *)i,
+                                                                       vCurrTimerCB);
                         xTimerStart(pPoint->status.xHandleTimerCurr, 0);
                         pPoint->status.xCurrStat = STATE_CURR_DELAY;
                         break;
@@ -470,7 +490,11 @@ void vTaskEVSEDiag(void *pvParameters)
                             break;
                         case CURR_UPPER:
                             xsprintf(strTimerName, "TimerPoint%d_CurrUp_Dummy", i);
-                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+                                                                           defDiagCurrDummyCyc,
+                                                                           pdFALSE,
+                                                                           (void *)i,
+                                                                           vCurrTimerCB);
                             xTimerStart(pPoint->status.xHandleTimerCurr, 0);
                             pPoint->status.xCurrStat = STATE_CURR_UPPER_Dummy;
                             break;
@@ -487,7 +511,11 @@ void vTaskEVSEDiag(void *pvParameters)
                             xTimerDelete(pPoint->status.xHandleTimerCurr, 0);
                             THROW_ERROR(i, pPoint->status.SetLoadPercent(pPoint, 80), ERR_LEVEL_WARNING);
                             xsprintf(strTimerName, "TimerPoint%d_CurrUp_Fix", i);
-                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName, defDiagCurrDummyCyc, pdFALSE, (void *)i, vCurrTimerCB);
+                            pPoint->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+                                                                           defDiagCurrDummyCyc,
+                                                                           pdFALSE,
+                                                                           (void *)i,
+                                                                           vCurrTimerCB);
                             xTimerStart(pPoint->status.xHandleTimerCurr, 0);
                             pPoint->status.xCurrStat = STATE_CURR_UPPER_Fix;
                         }

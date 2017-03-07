@@ -9,6 +9,7 @@
 #define  __TASKCREATE_H
 
 #include "includes.h"
+#include "timercallback.h"
 
 #define defTIMERID_Temp             0
 #define defTIMERID_LockState        1

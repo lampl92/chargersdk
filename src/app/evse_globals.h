@@ -78,24 +78,27 @@
 #define defEventBitExceptionCritical    defEventBitExceptionTempC
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
+#define defEventBitExceptionChargeTimer BIT_6
+
 //¶¨ÒåpChargePoint->status.xHandleEventCharge
 #define defEventBitPointAuthed      BIT_0
 #define defEventBitPointLocked      BIT_1
 #define defEventBitPointVoltOK      BIT_2
 #define defEventBitPointCurrOK      BIT_3
 #define defEventBitPointFreqOK      BIT_4
-#define defEventBitPointS2OK        BIT_5
-#define defEventBitPointCCOK        BIT_6
-#define defEventBitPointConnTempOK  BIT_7
-#define defEventBitPointACTempOK    BIT_8
-#define defEventBitPointPlugOK      BIT_9
-#define defEventBitPointStartOK     BIT_10
-#define defEventBitPointStopOK      BIT_11
-#define defEventBitEVSEScramOK      BIT_12
-#define defEventBitEVSEPEOK         BIT_13
-#define defEventBitEVSEKnockOK      BIT_14
-#define defEventBitEVSEArresterOK   BIT_15
-#define defEventBitEVSEPowerOffOK   BIT_16
+#define defEventBitPointS2Closed    BIT_5
+#define defEventBitPointS2Opened    BIT_6
+#define defEventBitPointCCOK        BIT_7
+#define defEventBitPointConnTempOK  BIT_8
+#define defEventBitPointACTempOK    BIT_9
+#define defEventBitPointPlugOK      BIT_10
+#define defEventBitPointStartOK     BIT_11
+#define defEventBitPointStopOK      BIT_12
+#define defEventBitEVSEScramOK      BIT_13
+#define defEventBitEVSEPEOK         BIT_14
+#define defEventBitEVSEKnockOK      BIT_15
+#define defEventBitEVSEArresterOK   BIT_16
+#define defEventBitEVSEPowerOffOK   BIT_17
 
 #define defEventBitEVSEReady        defEventBitEVSEScramOK |    \
                                     defEventBitEVSEPEOK |       \
@@ -114,7 +117,7 @@
                                     defEventBitPointAuthed | \
                                     defEventBitPointCurrOK | \
                                     defEventBitPointFreqOK | \
-                                    defEventBitPointS2OK
+                                    defEventBitPointS2Closed
 
 
 

@@ -14,6 +14,7 @@
 #include "includes.h"
 #include "interface.h"
 #include "cli_main.h"
+#include "timercallback.h"
 /*---------------------------------------------------------------------------/
 / 任务栈定义
 /---------------------------------------------------------------------------*/
@@ -112,7 +113,7 @@ TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
-//chargepoint中还定义了两个定时器，xHandleTimerVolt，xHandleTimerCurr分别在使用时进行初始化
+//chargepoint中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
 
 void vTaskCLI(void *pvParameters)
@@ -155,9 +156,6 @@ void AppTaskCreate (void)
 
 /** @brief 创建任务通信机制。（信号量，软件定时器创建与启动）
  */
-extern void vEVSETimerCB(TimerHandle_t xTimer);
-extern void vChargePointTimerCB(TimerHandle_t xTimer);
-extern void vRFIDTimerCB(TimerHandle_t xTimer);
 void AppObjCreate (void)
 {
     xHandleEventTimerCBNotify = xEventGroupCreate();

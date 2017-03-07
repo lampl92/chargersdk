@@ -25,6 +25,7 @@ typedef enum __ChargePointStateType
     CP_12V,
     CP_9V,
     CP_9V_PWM,
+    CP_6V,
     CP_6V_PWM,
     //CC检测
     CC_PE,
@@ -98,8 +99,9 @@ typedef struct _ChargePointStatus
     double dChargingFrequence;
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventException;
-    TimerHandle_t xHandleTimerVolt;
-    TimerHandle_t xHandleTimerCurr;
+    TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
+    TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
+    TimerHandle_t xHandleTimerCharge;   //Charge状态判断过程中使用
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
 
@@ -132,6 +134,7 @@ typedef enum _ChargePointState
     STATE_POINT_IDLE,
     STATE_POINT_PLUGED,
     STATE_POINT_PRECONTRACT,
+    STATE_POINT_PRECONTRACT_LOSEPLUG,
     STATE_POINT_STARTCHARGE,
     STATE_POINT_CHARGING,
     STATE_POINT_STOPCHARGE,
