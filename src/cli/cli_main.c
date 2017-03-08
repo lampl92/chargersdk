@@ -4,6 +4,7 @@
 #include "cli_rtos.h"
 #include "cli_fatfs.h"
 #include "cli_xml.h"
+#include "cli_main.h"
 #include "bsp_uart.h"
 #include "userlib_queue.h"
 
@@ -34,6 +35,9 @@ void cli_init(void)
     tinysh_add_command(&cli_testxml_cmd);
     tinysh_add_command(&cli_testxml_create_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
+    tinysh_add_command(&cli_testjson_cmd);
+    tinysh_add_command(&cli_testjson_create_cmd);
+
 
     /* add the foo command
     */

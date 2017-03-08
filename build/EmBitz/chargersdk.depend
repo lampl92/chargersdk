@@ -719,7 +719,7 @@
 	"includes.h"
 	"cli_main.h"
 
-1486348332 d:\documents\projects\chargersdk\src\cli\cli_main.h
+1488957615 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
 1487213885 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdarg.h>
@@ -1946,4 +1946,8 @@
 
 1488937134 d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.h
 	<stddef.h>
+
+1488957584 source:d:\documents\projects\chargersdk\src\cli\cli_json.c
+	"includes.h"
+	"cJSON.h"
 

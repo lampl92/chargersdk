@@ -11,5 +11,7 @@
 
 
 void cli_main(void);
+extern tinysh_cmd_t cli_testjson_cmd;
+extern tinysh_cmd_t cli_testjson_create_cmd;
 
 #endif
