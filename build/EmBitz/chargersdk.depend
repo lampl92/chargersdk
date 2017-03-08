@@ -1689,7 +1689,7 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1488813489 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1488883471 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 	"interface.h"
@@ -1713,7 +1713,7 @@
 	"taskdata.h"
 	"interface.h"
 
-1488768554 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1488879545 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 	"interface.h"
@@ -1860,7 +1860,7 @@
 1486626084 source:d:\documents\projects\chargersdk\src\app\interface_error.c
 	"interface.h"
 
-1488784062 source:d:\documents\projects\chargersdk\src\app\timercallback.c
+1488872981 source:d:\documents\projects\chargersdk\src\app\timercallback.c
 	"includes.h"
 	"interface.h"
 
@@ -1915,7 +1915,7 @@
 
 1488871967 d:\documents\projects\chargersdk\src\app\evse_config.h
 
-1488866373 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
+1488883445 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
 	"taskcreate.h"
 	"taskdiag.h"
 	"interface.h"
@@ -1933,4 +1933,17 @@
 	<time.h>
 
 1488872981 d:\documents\projects\chargersdk\src\app\timercallback.h
+
+1488937134 source:d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.c
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<float.h>
+	<limits.h>
+	<ctype.h>
+	"cJSON.h"
+
+1488937134 d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.h
+	<stddef.h>
 

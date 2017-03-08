@@ -62,6 +62,7 @@
 		</Build>
 		<Device>
 			<Add option="$device=cortex-m4" />
+			<Add option="$arch=armv7e-m" />
 			<Add option="$fpu=fpv4-sp-d16" />
 			<Add option="$lscript=./stm32f429ig_flash.ld" />
 			<Add option="$stack=0x0A00" />
@@ -91,12 +92,13 @@
 			<Add directory="..\..\src\middlewares\fatfs\diskdrv" />
 			<Add directory="..\..\src\middlewares\mxml-2.10" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
-			<Add directory="..\..\src\middlewares\klib" />
+			<Add directory="..\..\src\middlewares\cJSON" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
+			<Add library="..\..\..\..\..\Program Files (x86)\EmBitz\1.11\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
@@ -207,6 +209,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_fatfs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_json.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_main.c">
@@ -348,10 +353,9 @@
 		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\camellia-BSD-1.2.0\camellia.c">
+		<Unit filename="..\..\src\middlewares\cJSON\cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\camellia-BSD-1.2.0\camellia.h" />
 		<Unit filename="..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -470,23 +474,6 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
-				</target_debugging_settings>
 				<target_debugging_settings target="Debug" active_interface="ST-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="Generic" />
@@ -512,6 +499,23 @@
 						</family_options>
 					</debug_interface>
 					<debug_interface interface_id="OpenOCD" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="" gdb_before_conn="" gdb_after_conn="" />
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="Release" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
