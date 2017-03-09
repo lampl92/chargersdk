@@ -46,17 +46,12 @@ uint8_t create_sysconf_file()
     s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_left);
     s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_right);
 
-//    cJSON *sysconf_root, *tp_calibrate_obj, *arraydata_obj, *data_obj1, *data_obj2, *data_obj3, *data_obj4;
-    res = f_open(&fil, "system/sysconf.cfg", FA_CREATE_ALWAYS | FA_WRITE);
+    p = cJSON_Print(Sysconf_j);
+    s2j_delete_json_obj(Sysconf_j);
+    res = f_open(&fil, "system/sysconf.cfg", FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
     case FR_OK:
-
-
-        p = cJSON_Print(Sysconf_j);
-        s2j_delete_json_obj(Sysconf_j);
-
-        printf_safe("sysconfig = \n %s", p);
         f_write(&fil, p, strlen(p), (void *)&bw);
         f_close(&fil);
         free(p);

@@ -168,11 +168,9 @@ static void cli_makeJson_fnt(int argc, char **argv)
 
     uint8_t *p = makeJson();
     printf_safe("\n%s\n", p);
-//    p = makeArray(20);
-//    printf_safe("\n%s\n", p);
     f_open(&fp, "test.json", FA_CREATE_ALWAYS | FA_WRITE);
     f_write(&fp, p, strlen(p), &bw);
-    printf_safe("写如%d字节\n", bw);
+    printf_safe("写入%d字节\n", bw);
     f_close(&fp);
     free(p);
 }
