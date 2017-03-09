@@ -92,7 +92,7 @@ static void _WaitForPressedState(int Pressed)
 {
     //GUI_PID_STATE State;
     uint8_t pen_state = 0;
-    
+
 
     do
     {
@@ -265,10 +265,10 @@ void Touch_Calibrate(void)
     /* Use the physical values to calibrate the touch screen */
     GUI_TOUCH_Calibrate(GUI_COORD_X, aLogX[0], aLogX[1], aPhysX[0], aPhysX[1]); /* Calibrate X-axis */
     GUI_TOUCH_Calibrate(GUI_COORD_Y, aLogY[0], aLogY[1], aPhysY[0], aPhysY[1]); /* Calibrate Y-axis */
-    sysconf_param.ad_left = aPhysX[0];
-    sysconf_param.ad_right = aPhysX[1];
-    sysconf_param.ad_top = aPhysY[0];
-    sysconf_param.ad_bottom = aPhysY[1];
+    syscxSysconfleft = aPhysX[0];
+    syscxSysconfright = aPhysX[1];
+    syscxSysconftop = aPhysY[0];
+    syscxSysconfbottom = aPhysY[1];
     write_sysconf_xml();
     /* Display the result */
     GUI_CURSOR_Show();

@@ -128,7 +128,7 @@ static void cli_umount_fnt(int argc, char **argv)
 
 static void cli_testfatfs_fnt(int argc, char **argv)
 {
-    uint32_t byteswritten, bytesread;                     /* File write/read counts */
+    UINT byteswritten, bytesread;                     /* File write/read counts */
     uint8_t wtext[200] = "This is z working with FatFs"; /* File write buffer */
     uint8_t *rtext;                                   /* File read buffer */
     rtext = malloc(200);
@@ -142,7 +142,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
     else
     {
 
-        f_write(&MyFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
+        f_write(&MyFile, wtext, strlen((char *)wtext), &byteswritten);
 
         f_close(&MyFile);
 
@@ -152,7 +152,7 @@ static void cli_testfatfs_fnt(int argc, char **argv)
         }
         else
         {
-            f_read(&MyFile, rtext, f_size(&MyFile), (void *)&bytesread);
+            f_read(&MyFile, rtext, f_size(&MyFile), &bytesread);
 
             {
                 f_close(&MyFile);

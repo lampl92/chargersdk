@@ -7,10 +7,15 @@ typedef struct
     uint16_t ad_bottom;
     uint16_t ad_left;
     uint16_t ad_right;
+} Calibrate_t;
 
-}sysconf_t;
+typedef struct
+{
+    Calibrate_t xCalibrate;
 
-extern sysconf_t   sysconf_param;
+} Sysconf_t;
+
+extern Sysconf_t   xSysconf;
 
 
 extern FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */

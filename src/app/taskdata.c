@@ -19,7 +19,7 @@ void vTaskEVSEData(void *pvParameters)
     ulTotalPoint = pListChargePoint->Total;
     uxBitsTimer = 0;
 
-    THROW_ERROR(defDevID_File, CreateOrderXML(), ERR_LEVEL_WARNING);//创建order.xml
+    THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING);//创建order.txt
     while(1)
     {
         /* 读取文件配置 */

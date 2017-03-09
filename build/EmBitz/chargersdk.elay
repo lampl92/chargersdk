@@ -26,12 +26,12 @@
 			<Cursor1 position="1553" topLine="36" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\chargepoint.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\chargepoint.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="471" topLine="0" />
+			<Cursor1 position="471" topLine="39" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\chargepoint.h" open="1" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\chargepoint.h" open="0" top="0" tabpos="31" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="531" topLine="13" />
 		</Cursor>
@@ -56,7 +56,7 @@
 			<Cursor1 position="365" topLine="6" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\evse_config.h" open="1" top="0" tabpos="37" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\evse_config.h" open="0" top="0" tabpos="37" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="933" topLine="13" />
 		</Cursor>
@@ -66,7 +66,7 @@
 			<Cursor1 position="175" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\evse_globals.h" open="1" top="0" tabpos="34" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\evse_globals.h" open="0" top="0" tabpos="34" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3893" topLine="98" />
 		</Cursor>
@@ -106,7 +106,7 @@
 			<Cursor1 position="207" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\interface_monitor.c" open="1" top="0" tabpos="36" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\interface_monitor.c" open="0" top="0" tabpos="36" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="149" topLine="0" />
 		</Cursor>
@@ -161,9 +161,9 @@
 			<Cursor1 position="166" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\main.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\main.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="482" topLine="4" />
+			<Cursor1 position="624" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\app\stm32f4xx_it.c" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -171,12 +171,12 @@
 			<Cursor1 position="2325" topLine="50" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\sysinit.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\sysinit.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="6852" topLine="160" />
+			<Cursor1 position="1790" topLine="41" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskcharge.c" open="1" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskcharge.c" open="0" top="0" tabpos="32" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1290" topLine="32" />
 		</Cursor>
@@ -186,7 +186,7 @@
 			<Cursor1 position="134" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskcreate.c" open="1" top="0" tabpos="35" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskcreate.c" open="0" top="0" tabpos="35" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2590" topLine="3" />
 		</Cursor>
@@ -206,7 +206,7 @@
 			<Cursor1 position="139" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskdiag.c" open="1" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskdiag.c" open="0" top="0" tabpos="30" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2998" topLine="105" />
 		</Cursor>
@@ -216,7 +216,7 @@
 			<Cursor1 position="20" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskmonitor.c" open="1" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskmonitor.c" open="0" top="0" tabpos="33" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4540" topLine="77" />
 		</Cursor>
@@ -236,7 +236,7 @@
 			<Cursor1 position="134" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskremote.c" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskremote.c" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1291" topLine="8" />
 		</Cursor>
@@ -246,7 +246,7 @@
 			<Cursor1 position="18" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\app\taskrfid.c" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\app\taskrfid.c" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4196" topLine="120" />
 		</Cursor>
@@ -266,9 +266,14 @@
 			<Cursor1 position="2684" topLine="81" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\cli\cli_fatfs.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\cli\cli_fatfs.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3483" topLine="124" />
+			<Cursor1 position="3477" topLine="124" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\cli\cli_json.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4679" topLine="165" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\cli\cli_main.c" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -279,11 +284,6 @@
 	<File name="..\..\src\cli\cli_rtos.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="694" topLine="5" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\cli\cli_xml.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="352" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\drivers\bsp\inc\bsp.h" open="0" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -418,17 +418,22 @@
 	</File>
 	<File name="..\..\src\hmi\HMI_Start.c" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="65" topLine="0" />
+			<Cursor1 position="30" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\hmi\TOUCH_Calibrate.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8752" topLine="259" />
+			<Cursor1 position="8732" topLine="259" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\middlewares\cJSON\cJSON.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\middlewares\cJSON\cJSON.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="429" topLine="0" />
+			<Cursor1 position="2122" topLine="72" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\middlewares\cJSON\s2j.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="719" topLine="24" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\middlewares\fatfs\src\diskio.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -451,66 +456,6 @@
 			<Cursor1 position="3393" topLine="92" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-attr.c" open="1" top="0" tabpos="27" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1483" topLine="286" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-cb.c" open="1" top="0" tabpos="26" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="489" topLine="130" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-entity.c" open="1" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="421" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-file-fatfs.c" open="1" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="694" topLine="2480" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-get.c" open="1" top="0" tabpos="23" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="424" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-index.c" open="1" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="643" topLine="631" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-node.c" open="1" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2159" topLine="814" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-private.c" open="1" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="295" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-search.c" open="1" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="582" topLine="252" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-set.c" open="1" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="309" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\mxml-string.c" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="9751" topLine="441" />
-		</Cursor>
-	</File>
-	<File name="..\..\src\middlewares\mxml-2.10\testmxml.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="13211" topLine="546" />
-		</Cursor>
-	</File>
 	<File name="..\..\src\middlewares\STemWin\Config\GUIConf.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1033" topLine="42" />
@@ -519,6 +464,11 @@
 	<File name="..\..\src\middlewares\STemWin\Config\GUIConf.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3628" topLine="75" />
+		</Cursor>
+	</File>
+	<File name="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="198" />
 		</Cursor>
 	</File>
 	<File name="..\..\src\middlewares\tinysh\tinysh.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -571,7 +521,7 @@
 			<Cursor1 position="10102" topLine="238" />
 		</Cursor>
 	</File>
-	<File name="..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="17775" topLine="486" />
 		</Cursor>

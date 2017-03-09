@@ -713,7 +713,7 @@
 1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\semphr.h
 	"queue.h"
 
-1485055193 d:\documents\projects\chargersdk\src\app\sysinit.h
+1489042696 d:\documents\projects\chargersdk\src\app\sysinit.h
 
 1481190735 d:\documents\projects\chargersdk\src\app\apptask.h
 	"includes.h"
@@ -877,11 +877,12 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1487832229 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1489043390 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
-	"mxml.h"
+	"cJSON.h"
+	"s2j.h"
 
 1480044329 d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\ff_gen_drv.h
 	"diskio.h"
@@ -914,7 +915,7 @@
 	"ff_gen_drv.h"
 	"nand_diskio.h"
 
-1488958696 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
+1489028323 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
 	"includes.h"
 	"tinysh.h"
 	"cli_app.h"
@@ -1708,7 +1709,7 @@
 	"errorcode.h"
 	"interface_rfid.h"
 
-1488509734 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1489028331 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
@@ -1819,7 +1820,7 @@
 1487660739 source:d:\documents\projects\chargersdk\src\hmi\evsedlg.c
 	"DIALOG.h"
 
-1481614666 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
+1489043017 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
 	"GUI.h"
 
 1486607994 source:d:\documents\projects\chargersdk\src\app\interface_charge.c
@@ -1876,10 +1877,10 @@
 	"userlib_list.h"
 	"interface.h"
 
-1487908619 source:d:\documents\projects\chargersdk\src\app\interface_data.c
+1489031653 source:d:\documents\projects\chargersdk\src\app\interface_data.c
 	"includes.h"
 	"interface.h"
-	"mxml.h"
+	"cJSON.h"
 
 1488442867 source:d:\documents\projects\chargersdk\src\app\errorcode.c
 	"includes.h"
@@ -1887,7 +1888,7 @@
 
 1488442710 d:\documents\projects\chargersdk\src\app\errorcode.h
 
-1487902830 d:\documents\projects\chargersdk\src\app\interface_data.h
+1489028572 d:\documents\projects\chargersdk\src\app\interface_data.h
 	"includes.h"
 
 1488881888 d:\documents\projects\chargersdk\src\app\evse_globals.h
@@ -1951,4 +1952,17 @@
 1489018888 source:d:\documents\projects\chargersdk\src\cli\cli_json.c
 	"includes.h"
 	"cJSON.h"
+
+1488949758 source:d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.c
+	<s2j.h>
+	<stdlib.h>
+
+1488949758 d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.h
+	<cJSON.h>
+	<string.h>
+	"s2jdef.h"
+
+1488949758 d:\documents\projects\chargersdk\src\middlewares\cjson\s2jdef.h
+	<cJSON.h>
+	<string.h>
 

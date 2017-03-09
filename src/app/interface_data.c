@@ -7,22 +7,17 @@
 */
 #include "includes.h"
 #include "interface.h"
-#include "mxml.h"
-ErrorCode_t CreateOrderXML(void)
+#include "cJSON.h"
+ErrorCode_t CreateOrderFile(void)
 {
     FRESULT res;
     ErrorCode_t errcode;
     FIL fil;
-    mxml_node_t *order_root, *order_node;
-    res = f_open(&fil, "order/order.xml", FA_CREATE_NEW | FA_WRITE);
+    cJSON *order_root, *order_item;
+    //res = f_open(&fil, "order/order.txt", FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
         case FR_OK:
-            order_root = mxmlNewXML("1.0");
-            order_node = mxmlNewElement(order_root, "Orders");
-            mxmlSaveFile(order_root, &fil, whitespace_cb);
-            f_close(&fil);
-            mxmlDelete(order_root);
             errcode = ERR_NO;
             break;
         default:

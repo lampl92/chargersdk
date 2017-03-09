@@ -32,8 +32,6 @@ void cli_init(void)
 
     /************œµÕ≥≤‚ ‘****************/
     tinysh_add_command(&cli_fatfs_cmd);
-    tinysh_add_command(&cli_testxml_cmd);
-    tinysh_add_command(&cli_testxml_create_cmd);
     tinysh_add_command(&cli_testsdram_cmd);
     tinysh_add_command(&cli_parseJson_cmd);
     tinysh_add_command(&cli_makeJson_cmd);

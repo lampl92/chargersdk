@@ -423,8 +423,8 @@ void LCD_X_Config(void)
         LCD_SetSizeEx (0, XSIZE_PHYS, YSIZE_PHYS);
         LCD_SetVSizeEx(0, XSIZE_PHYS, YSIZE_PHYS * NUM_VSCREENS);
     }
-    GUI_TOUCH_Calibrate(GUI_COORD_X,0+15,lcdltdc.pwidth-15,sysconf_param.ad_left,sysconf_param.ad_right);   
-    GUI_TOUCH_Calibrate(GUI_COORD_Y,0+15,lcdltdc.pheight-15,sysconf_param.ad_top,sysconf_param.ad_bottom);
+    GUI_TOUCH_Calibrate(GUI_COORD_X,0+15,lcdltdc.pwidth-15,xSysconf.ad_left,xSysconf.ad_right);
+    GUI_TOUCH_Calibrate(GUI_COORD_Y,0+15,lcdltdc.pheight-15,sysxSysconf_top,sysxSysconf_bottom);
 
 #if (GUI_NUM_LAYERS > 1)
     /* Set display driver and color conversion for 2nd layer */
@@ -666,7 +666,7 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
 
 static void LCD_LL_Init(void)
 {
-    
+
     static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
 
     lcdltdc.pwidth = XSIZE_PHYS;          //面板宽度,单位:像素

@@ -26,6 +26,6 @@ typedef struct _FileDataType
 
 }FileDataType_t;
 
-ErrorCode_t CreateOrderXML(void);
+ErrorCode_t CreateOrderFile(void);
 
 #endif
