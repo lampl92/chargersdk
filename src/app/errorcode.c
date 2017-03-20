@@ -47,7 +47,8 @@ const uint8_t *strErrorCode[100] =
     "网络模块串口帧错误",
     "网络模块串口超载",
     "网络模块串口DMA传输错误",
-    "网络通信故障"
+    "网络通信故障",
+    "内存分配错误"
 };
 
 void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel)

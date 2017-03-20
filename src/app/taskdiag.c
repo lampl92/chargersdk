@@ -9,24 +9,25 @@
 #include "taskdiag.h"
 #include "interface.h"
 
+//#define DEBUG_NO_TASKDIAG
 
 void vTaskEVSEDiag(void *pvParameters)
 {
-    ChargePoint_t *pPoint = NULL;
-    uint32_t ulTotalPoint;
+    CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsDiag;
     EventBits_t uxBitsException;
     BaseType_t xResult;
     ErrorPackage_t errpack;
 
-    ulTotalPoint = pListChargePoint->Total;
+    ulTotalCON = pListCON->Total;
     uxBitsDiag = 0;
     uxBitsException = 0;
     xResult = pdFALSE;
-
     while(1)
     {
+#ifndef DEBUG_NO_TASKDIAG
         /* 处理系统失效故障 */
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
@@ -38,13 +39,13 @@ void vTaskEVSEDiag(void *pvParameters)
         /* end of 处理系统失效故障 */
 
         /* 处理系统报警 */
-        for(i = 0; i < ulTotalPoint; i++)
+        for(i = 0; i < ulTotalCON; i++)
         {
-            pPoint = ChargePointGetHandle(i);
-            uxBitsException = xEventGroupWaitBits(pPoint->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
+            pCON = CONGetHandle(i);
+            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
             if((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
-                pPoint->status.SetLoadPercent(pPoint, 50);
+                pCON->status.SetLoadPercent(pCON, 50);
             }
         }
         /* end of 处理系统报警 */
@@ -54,58 +55,59 @@ void vTaskEVSEDiag(void *pvParameters)
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                DiagTempError(pPoint);
+                pCON = CONGetHandle(i);
+                DiagTempError(pCON);
             }
         }
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagLockState) == defEventBitDiagLockState)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                DiagLockError(pPoint);
+                pCON = CONGetHandle(i);
+                DiagLockError(pCON);
             }
         }
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagPlugState) == defEventBitDiagPlugState)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                DiagPlugError(pPoint);
+                pCON = CONGetHandle(i);
+                DiagPlugError(pCON);
             }
         }
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                DiagVoltageError(pPoint);
-                DiagCurrentError(pPoint);
-                DiagFreqError(pPoint);
+                pCON = CONGetHandle(i);
+                DiagVoltageError(pCON);
+                DiagCurrentError(pCON);
+                DiagFreqError(pCON);
             }
         }
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagEVSEState, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagEVSEState) == defEventBitDiagEVSEState)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                DiagEVSEError(pPoint);//EVSE启动相关条件判断
+                pCON = CONGetHandle(i);
+                DiagEVSEError(pCON);//EVSE启动相关条件判断
             }
         }
         /* end of 判断状态 */
 
 #if DEBUG_DIAG
         //printf_safe("%s\n", TASKNAME_EVSEDiag);
+#endif
 #endif
         vTaskDelay(10);
     }

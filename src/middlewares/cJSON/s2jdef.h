@@ -68,6 +68,16 @@ typedef struct {
 #define S2J_JSON_SET_int_ELEMENT(to_json, from_struct, _element) \
     cJSON_AddNumberToObject(to_json, #_element, (from_struct)->_element);
 
+    #define S2J_JSON_REPLACE_int_ELEMENT(to_json, from_struct, _element) \
+    cJSON_ReplaceItemInObject(to_json, #_element, cJSON_CreateNumber((from_struct)->_element));
+
+    #define S2J_JSON_REPLACE_double_ELEMENT(to_json, from_struct, _element) \
+    cJSON_ReplaceItemInObject(to_json, #_element, cJSON_CreateNumber((from_struct)->_element));
+
+    #define S2J_JSON_REPLACE_string_ELEMENT(to_json, from_struct, _element) \
+    cJSON_ReplaceItemInObject(to_json, #_element, cJSON_CreateString((from_struct)->_element));
+
+
 #define S2J_JSON_SET_double_ELEMENT(to_json, from_struct, _element) \
     cJSON_AddNumberToObject(to_json, #_element, (from_struct)->_element);
 

@@ -18,7 +18,7 @@
 /*---------------------------------------------------------------------------/
 / 任务栈定义
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskCLI                    512
+#define defSTACK_TaskCLI                    1024
 #define defSTACK_TaskGUI                    1024
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
@@ -27,7 +27,7 @@
 #define defSTACK_TaskEVSERFID               512
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEDiag              512
+#define defSTACK_TaskEVSEDiag               512
 #define defSTACK_TaskEVSEData               512
 
 /*---------------------------------------------------------------------------/
@@ -99,21 +99,21 @@ EventGroupHandle_t xHandleEventRemote = NULL;
 
 //下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
-//pChargePoint->status.xHandleEventStartCondition;
-//pChargePoint->status.xHandleEventStopCondition;
+//pCON->status.xHandleEventCharge;
+//pCON->status.xHandleEventException;
 //队列
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //软件定时器
 TimerHandle_t xHandleTimerTemp = NULL; //4个温度
 TimerHandle_t xHandleTimerLockState = NULL;
-TimerHandle_t xHandleTimerGetChargePoint = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
-//chargepoint中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
+TimerHandle_t xHandleTimerHeartbeat = NULL;
+//con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
 
 void vTaskCLI(void *pvParameters)
@@ -164,16 +164,17 @@ void AppObjCreate (void)
     xHandleEventRemote = xEventGroupCreate();
 
 
-    xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
+    xHandleQueueOrders = xQueueCreate(2, sizeof(RfidOrderData_t));
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
-    xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vChargePointTimerCB);
-    xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vChargePointTimerCB);
-    xHandleTimerPlugState = xTimerCreate("TimerPlugState", defMonitorPlugStateCyc, pdTRUE, (void *)defTIMERID_PlugState, vChargePointTimerCB);
-    xHandleTimerChargingData = xTimerCreate("TimerChargingData", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_ChargingData, vChargePointTimerCB);
+    xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);
+    xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vCONTimerCB);
+    xHandleTimerPlugState = xTimerCreate("TimerPlugState", defMonitorPlugStateCyc, pdTRUE, (void *)defTIMERID_PlugState, vCONTimerCB);
+    xHandleTimerChargingData = xTimerCreate("TimerChargingData", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_ChargingData, vCONTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", defMonitorEVSEStateCyc, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xHandleTimerRFID = xTimerCreate("TimerRFID", defMonitorRFIDCyc, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
     xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", defMonitorDataRefreshCyc, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
+    xHandleTimerHeartbeat = xTimerCreate("TimerHeartbeat", defRemoteHeartbeatCyc, pdTRUE, (void *)defTIMERID_Heartbeat, vEVSETimerCB);
 
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
@@ -182,6 +183,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
+    //TimerHeartbeat在联网后再启动
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 void vApplicationTickHook( void )
@@ -237,7 +239,6 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     /* Run time stack overflow checking is performed if
     configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
     function is called if a stack overflow is detected. */
-    printf_safe("stackoverflow!! task = %s\n",pcTaskName);
     taskDISABLE_INTERRUPTS();
     for( ;; );
 }

@@ -53,12 +53,13 @@ uint8_t create_sysconf_file()
     {
     case FR_OK:
         f_write(&fil, p, strlen(p), (void *)&bw);
-        f_close(&fil);
         free(p);
+        f_close(&fil);
         return TRUE;
     case FR_EXIST:
-        return FALSE;
     default:
+        free(p);
+        f_close(&fil);
         return FALSE;
     }
 }

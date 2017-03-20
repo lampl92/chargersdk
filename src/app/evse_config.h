@@ -8,10 +8,11 @@
 #ifndef __EVSE_CONFIG_H
 #define __EVSE_CONFIG_H
 
-#define defTotalPoint           2
-#define defUIDLength            4
-#define defEVSESNLength         24
-#define defEVSEIDLength         24
+#define defTotalCON             2
+//#define defUIDLength            4
+#define defCardIDLength         8
+#define defEVSESNLength         64
+#define defEVSEIDLength         64
 #define defFileNameLength       64
 #define defNodeNameLength       64
 
@@ -29,6 +30,7 @@
 #define defDiagCurrDummyCyc         2000
 #define defChargeAntiShakeCyc       1000    //状态1'->状态1时的延时
 #define defRelayDelay               500
+#define defRemoteHeartbeatCyc       5000    //心跳
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)

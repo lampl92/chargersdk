@@ -53,9 +53,9 @@
 / xEventGroup
 /---------------------------------------------------------------------------*/
 //定义pRFIDDev->xHandleEventGroupRFID
-#define defEventBitGotUIDtoRFID         BIT_0             //获取到UID，发送到RFID任务
-#define defEventBitGotUIDtoHMI          BIT_1               //获取到UID，发送到HMI
-#define defEventBitIsNewUID             BIT_2             //此卡在本桩没有刷过
+#define defEventBitGotIDtoRFID         BIT_0             //获取到ID，发送到RFID任务
+#define defEventBitGotIDtoHMI          BIT_1               //获取到ID，发送到HMI
+#define defEventBitIsNewID             BIT_2             //此卡在本桩没有刷过
 #define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
 
 //xHandleEventData
@@ -70,7 +70,7 @@
 #define defEventBitDiagPlugState         BIT_3
 #define defEventBitDiagChargingData      BIT_4
 #define defEventBitDiagEVSEState         BIT_5
-//定义pChargePoint->status.xHandleEventException
+//定义pCON->status.xHandleEventException
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
@@ -80,20 +80,20 @@
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
 
-//定义pChargePoint->status.xHandleEventCharge
-#define defEventBitPointAuthed      BIT_0
-#define defEventBitPointLocked      BIT_1
-#define defEventBitPointVoltOK      BIT_2
-#define defEventBitPointCurrOK      BIT_3
-#define defEventBitPointFreqOK      BIT_4
-#define defEventBitPointS2Closed    BIT_5
-#define defEventBitPointS2Opened    BIT_6
-#define defEventBitPointCCOK        BIT_7
-#define defEventBitPointConnTempOK  BIT_8
-#define defEventBitPointACTempOK    BIT_9
-#define defEventBitPointPlugOK      BIT_10
-#define defEventBitPointStartOK     BIT_11
-#define defEventBitPointStopOK      BIT_12
+//定义pCON->status.xHandleEventCharge
+#define defEventBitCONAuthed      BIT_0       //帐户认证OK
+#define defEventBitCONLocked      BIT_1
+#define defEventBitCONVoltOK      BIT_2
+#define defEventBitCONCurrOK      BIT_3
+#define defEventBitCONFreqOK      BIT_4
+#define defEventBitCONS2Closed    BIT_5
+#define defEventBitCONS2Opened    BIT_6
+#define defEventBitCONCCOK        BIT_7
+#define defEventBitCONSocketTempOK  BIT_8
+#define defEventBitCONACTempOK    BIT_9
+#define defEventBitCONPlugOK      BIT_10
+#define defEventBitCONStartOK     BIT_11
+//#define defEventBitCONStopOK      BIT_12
 #define defEventBitEVSEScramOK      BIT_13
 #define defEventBitEVSEPEOK         BIT_14
 #define defEventBitEVSEKnockOK      BIT_15
@@ -106,18 +106,18 @@
                                     defEventBitEVSEArresterOK | \
                                     defEventBitEVSEPowerOffOK
 
-#define defEventBitCPSwitchCondition    defEventBitPointLocked |      \
-                                        defEventBitPointVoltOK |      \
-                                        defEventBitPointConnTempOK |  \
-                                        defEventBitPointACTempOK |    \
-                                        defEventBitPointPlugOK | \
+#define defEventBitCPSwitchCondition    defEventBitCONLocked |      \
+                                        defEventBitCONVoltOK |      \
+                                        defEventBitCONSocketTempOK |  \
+                                        defEventBitCONACTempOK |    \
+                                        defEventBitCONPlugOK | \
                                         defEventBitEVSEReady
 
 #define defEventBitChargeCondition  defEventBitCPSwitchCondition | \
-                                    defEventBitPointAuthed | \
-                                    defEventBitPointCurrOK | \
-                                    defEventBitPointFreqOK | \
-                                    defEventBitPointS2Closed
+                                    defEventBitCONAuthed | \
+                                    defEventBitCONCurrOK | \
+                                    defEventBitCONFreqOK | \
+                                    defEventBitCONS2Closed
 
 
 
@@ -129,13 +129,14 @@
 #define defEventBitTimerCBEVSEState         BIT_4
 #define defEventBitTimerCBRFID              BIT_5
 #define defEventBitTimerCBDataRefresh       BIT_6
+#define defEventBitTimerCBHeartbeat         BIT_7
 
 
 
 
 
 extern EVSE_t *pEVSE;
-extern UserList_t *pListChargePoint;
+extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
 
 #endif

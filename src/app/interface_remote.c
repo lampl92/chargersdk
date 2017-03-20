@@ -45,14 +45,14 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, uint8_t *ucRetVal )
 
 /** @brief
  *
- * @param pucUID uint8_t*
- * @param ucUIDLength uint8_t
+ * @param pucID uint8_t*
+ * @param ucIDLength uint8_t
  * @param pucAccountStatus uint8_t*     0 Î´×¢²á ¡¢1 ×¢²á
  * @param pdBalance double*             ÕÊ»§Óà¶î
  * @return ErrorCode_t
  *
  */
-ErrorCode_t RemoteGetBalance(uint8_t *pucUID, uint8_t ucUIDLength, uint8_t *pucAccountStatus, double *pdBalance)
+ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAccountStatus, double *pdBalance)
 {
     double tmpBalance;
     uint8_t tmpAccountStat;

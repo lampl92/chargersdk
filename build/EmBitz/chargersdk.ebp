@@ -22,6 +22,7 @@
 					<Add symbol="DEBUG_MONITOR" />
 					<Add symbol="DEBUG_DATA" />
 					<Add symbol="DEBUG_DIAG" />
+					<Add symbol="DEBUG_INTERFACE_DATA" />
 				</Compiler>
 				<Cpp>
 					<Add option="-Wall" />
@@ -93,6 +94,7 @@
 			<Add directory="..\..\src\middlewares\mxml-2.10" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
 			<Add directory="..\..\src\middlewares\cJSON" />
+			<Add directory="..\..\src\middlewares\AES" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -104,13 +106,15 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="version.h" />
+		<Unit filename="..\..\nand\system\evse.cfg" />
 		<Unit filename="..\..\nand\system\evse_config.xml" />
+		<Unit filename="..\..\nand\system\order.txt" />
 		<Unit filename="..\..\nand\system\order.xml" />
 		<Unit filename="..\..\nand\system\public_info.xml" />
-		<Unit filename="..\..\src\app\chargepoint.c">
+		<Unit filename="..\..\src\app\connector.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\app\chargepoint.h" />
+		<Unit filename="..\..\src\app\connector.h" />
 		<Unit filename="..\..\src\app\errorcode.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -137,6 +141,7 @@
 		<Unit filename="..\..\src\app\interface_diag.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\interface_diag.h" />
 		<Unit filename="..\..\src\app\interface_monitor.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -163,6 +168,10 @@
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\order.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\order.h" />
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -205,6 +214,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\timercallback.h" />
+		<Unit filename="..\..\src\cli\cli_aes.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -290,6 +302,9 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -352,6 +367,18 @@
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\AES\aes_modes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\AES\aescrypt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\AES\aeskey.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\AES\aestab.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\middlewares\cJSON\cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -380,6 +407,7 @@
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\unicode.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -406,6 +434,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\userlib_queue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\userlib\src\utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\userlib\src\xprintf.c">
@@ -440,23 +471,6 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="STMicroelectronics">
-							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
-							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
-							<option opt_id="ID_RESET_TYPE" opt_value="System" />
-							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
-							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
-							<option opt_id="ID_RAM_EXEC" opt_value="0" />
-							<option opt_id="ID_VEC_TABLE" opt_value="1" />
-							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
-							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
-							<option opt_id="ID_DEV_ADDR" opt_value="" />
-							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
-						</family_options>
-					</debug_interface>
-				</target_debugging_settings>
 				<target_debugging_settings target="Debug" active_interface="ST-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="Generic" />
@@ -482,6 +496,23 @@
 						</family_options>
 					</debug_interface>
 					<debug_interface interface_id="OpenOCD" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="" gdb_before_conn="" gdb_after_conn="" />
+					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_RESET_TYPE" opt_value="System" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_DONT_CONN_RESET" opt_value="0" />
+							<option opt_id="ID_ALL_MODE_DEBUG" opt_value="0" />
+							<option opt_id="ID_DEV_ADDR" opt_value="" />
+							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
+						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="Release" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />

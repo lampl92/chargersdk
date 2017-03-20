@@ -35,6 +35,7 @@ void cli_init(void)
     tinysh_add_command(&cli_testsdram_cmd);
     tinysh_add_command(&cli_parseJson_cmd);
     tinysh_add_command(&cli_makeJson_cmd);
+    tinysh_add_command(&cli_aestest_cmd);
 
 
     /* add the foo command

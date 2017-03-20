@@ -120,7 +120,7 @@ static ErrorCode_t GetType(void *pvEVSE)
  * @return ErrorCode_t
  *
  */
-static ErrorCode_t GetTotalPoint(void *pvEVSE)
+static ErrorCode_t GetTotalCON(void *pvEVSE)
 {
     uint8_t tmpTotal;
     ErrorCode_t errcode;
@@ -136,7 +136,7 @@ static ErrorCode_t GetTotalPoint(void *pvEVSE)
 
     /*********************/
 
-    pEVSE->info.ucTotalPoint = tmpTotal;
+    pEVSE->info.ucTotalCON = tmpTotal;
 
     return errcode;
 }
@@ -331,14 +331,14 @@ EVSE_t *EVSECreate(void)
     memset(pEVSE->info.ucSN, 0, defEVSESNLength);
     memset(pEVSE->info.ucID, 0, defEVSEIDLength);
     pEVSE->info.ucType = 2;
-    pEVSE->info.ucTotalPoint = 2;
+    pEVSE->info.ucTotalCON = 2;
     pEVSE->info.dLng = 116.275833;
     pEVSE->info.dLat = 39.831944;
 
     pEVSE->info.GetSN = GetSN;
     pEVSE->info.GetID = GetID;
     pEVSE->info.GetType = GetType;
-    pEVSE->info.GetTotalPoint = GetTotalPoint;
+    pEVSE->info.GetTotalCON = GetTotalCON;
     pEVSE->info.GetLngLat = GetLngLat;
 
     pEVSE->status.ulArresterState = 0;
@@ -356,23 +356,23 @@ EVSE_t *EVSECreate(void)
     return pEVSE;
 }
 
-static void ChargePointInit(void)
+static void CONInit(void)
 {
-    static ChargePoint_t *pchargepoint[2];  //在堆中定义
+    static CON_t *pCON[2];  //在堆中定义
 
-    pListChargePoint = UserListCreate();
+    pListCON = UserListCreate();
     int i;
-    for(i = 0; i < pEVSE->info.ucTotalPoint; i++)
+    for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
-        pchargepoint[i] = ChargePointCreate(i);
+        pCON[i] = CONCreate(i);
 
-        THROW_ERROR(i, pchargepoint[i]->info.GetConnectorType(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pchargepoint[i]->info.GetVolatageUpperLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pchargepoint[i]->info.GetVolatageLowerLimits(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pchargepoint[i]->info.GetRatedCurrent(pchargepoint[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pchargepoint[i]->info.GetRatedPower(pchargepoint[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetSocketType(pCON[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetVolatageUpperLimits(pCON[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetVolatageLowerLimits(pCON[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetRatedCurrent(pCON[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetRatedPower(pCON[i]), ERR_LEVEL_WARNING);
 
-        pListChargePoint->Add(pListChargePoint, pchargepoint[i]);
+        pListCON->Add(pListCON, pCON[i]);
     }
 }
 void EVSEinit(void)
@@ -382,10 +382,10 @@ void EVSEinit(void)
     THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, pEVSE->info.GetTotalPoint(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetTotalCON(pEVSE), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
 
-    ChargePointInit();
+    CONInit();
 
     pRFIDDev = RFIDDevCreate();
 }

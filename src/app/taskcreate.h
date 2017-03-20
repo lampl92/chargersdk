@@ -18,6 +18,7 @@
 #define defTIMERID_EVSEState        4
 #define defTIMERID_RFID             5
 #define defTIMERID_DATAREFRESH      6
+#define defTIMERID_Heartbeat        7
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
@@ -35,6 +36,7 @@ extern EventGroupHandle_t xHandleEventData;
 extern EventGroupHandle_t xHandleEventDiag;
 extern EventGroupHandle_t xHandleEventRemote;
 
+extern TimerHandle_t xHandleTimerHeartbeat;
 
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;

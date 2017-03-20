@@ -24,18 +24,18 @@ typedef enum _ErrorCode
     ERR_POWEROFF_DECT_FAULT,//掉电状态检测器发生故障
     ERR_ARRESTER_FAULT,     //避雷器发生故障
 
-    ERR_POINT_METER_FAULT,        //电表通信故障
-    ERR_POINT_CP_FAULT,           //检测CP故障
-    ERR_POINT_CC_FAULT,           //检测CC故障
-    ERR_POINT_PLUG_FAULT,         //插枪状态检测器发生故障
-    ERR_POINT_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
-    ERR_POINT_CANT_LOCK,          //B型连接枪锁无法锁止
-    ERR_POINT_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
-    ERR_POINT_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
-    ERR_POINT_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
-    ERR_POINT_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
-    ERR_POINT_STARTCHARGE,        //开始充电错误
-    ERR_POINT_STOPCHARGE,         //结束充电错误
+    ERR_CON_METER_FAULT,        //电表通信故障
+    ERR_CON_CP_FAULT,           //检测CP故障
+    ERR_CON_CC_FAULT,           //检测CC故障
+    ERR_CON_PLUG_FAULT,         //插枪状态检测器发生故障
+    ERR_CON_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
+    ERR_CON_CANT_LOCK,          //B型连接枪锁无法锁止
+    ERR_CON_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
+    ERR_CON_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
+    ERR_CON_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
+    ERR_CON_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
+    ERR_CON_STARTCHARGE,        //开始充电错误
+    ERR_CON_STOPCHARGE,         //结束充电错误
 
     ERR_FILE_RW,            //文件读写错误
     ERR_FILE_NO,            //无目标文件
@@ -52,7 +52,8 @@ typedef enum _ErrorCode
     ERR_NETMODULE_ORE,      //网络模块串口超载
     ERR_NETMODULE_DMA,      //网络模块串口DMA传输错误
 
-    ERR_NONET               //网络通信故障
+    ERR_NONET,               //网络通信故障
+    ERR_MEMORY                //Malloc错误
 
 } ErrorCode_t;
 
@@ -74,11 +75,12 @@ typedef struct _ErrorPackage
 
 //充电枪ID从小到大定义，其他设备从大小定义
 //DevID 0~? 充电枪ID
-#define defDevID_Cloud      0xFB
-#define defDevID_File       0xFC
-#define defDevID_RFID       0xFE
-#define defDevID_NetMoudle  0xFD
-#define defDevID_EVSE       0xFF
+#define defDevID_System     250
+#define defDevID_Cloud      251
+#define defDevID_File       252
+#define defDevID_RFID       253
+#define defDevID_NetMoudle  254
+#define defDevID_EVSE       255 //0xff
 
 
 extern const uint8_t *strErrorCode[];

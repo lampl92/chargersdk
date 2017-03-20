@@ -9,34 +9,37 @@
 #include "taskmonitor.h"
 #include "interface.h"
 
+//#define DEBUG_NO_TASKMONITOR
+
 void vTaskEVSEMonitor(void *pvParameters)
 {
-    ChargePoint_t *pPoint = NULL;
-    uint32_t ulTotalPoint;
+    CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsTimerCB;
 
-    ulTotalPoint = pListChargePoint->Total;
+    ulTotalCON = pListCON->Total;
     uxBitsTimerCB = 0;
-    #ifndef DEBUG_MONITOR
+#ifndef DEBUG_MONITOR
     vTaskDelay(10000);
-    #endif
+#endif
     while(1)
     {
-        /* 获取EVSE和ChargePoint状态 */
+#ifndef DEBUG_NO_TASKMONITOR
+        /* 获取EVSE和CON状态 */
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                THROW_ERROR(i, pPoint->status.GetACLTemp(pPoint), ERR_LEVEL_WARNING);
-                THROW_ERROR(i, pPoint->status.GetACNTemp(pPoint), ERR_LEVEL_WARNING);
-                if(pPoint->info.ucConnectorType == defConnectorTypeB)
+                pCON = CONGetHandle(i);
+                THROW_ERROR(i, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING);
+                THROW_ERROR(i, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING);
+                if(pCON->info.ucSocketType == defSocketTypeB)
                 {
-                    THROW_ERROR(i, pPoint->status.GetBTypeConnectorTemp1(pPoint), ERR_LEVEL_WARNING);
-                    THROW_ERROR(i, pPoint->status.GetBTypeConnectorTemp2(pPoint), ERR_LEVEL_WARNING);
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING);
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING);
                 }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTemp);
@@ -45,12 +48,12 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBLockState) == defEventBitTimerCBLockState)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                if(pPoint->info.ucConnectorType == defConnectorTypeB)
+                pCON = CONGetHandle(i);
+                if(pCON->info.ucSocketType == defSocketTypeB)
                 {
-                    THROW_ERROR(i, pPoint->status.GetBTypeConnectorLock(pPoint), ERR_LEVEL_WARNING);
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketLock(pCON), ERR_LEVEL_WARNING);
                 }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
@@ -59,10 +62,10 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBPlugState) == defEventBitTimerCBPlugState)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                THROW_ERROR(i, pPoint->status.GetPlugState(pPoint), ERR_LEVEL_CRITICAL);//在GetPlugState中获取了CC与CP状态
+                pCON = CONGetHandle(i);
+                THROW_ERROR(i, pCON->status.GetPlugState(pCON), ERR_LEVEL_CRITICAL);//在GetPlugState中获取了CC与CP状态
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
@@ -70,13 +73,14 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
-            for(i = 0; i < ulTotalPoint; i++)
+            for(i = 0; i < ulTotalCON; i++)
             {
-                pPoint = ChargePointGetHandle(i);
-                THROW_ERROR(i, pPoint->status.GetChargingVoltage(pPoint), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pPoint->status.GetChargingCurrent(pPoint), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pPoint->status.GetChargingFrequence(pPoint), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pPoint->status.GetRelayState(pPoint), ERR_LEVEL_CRITICAL);
+                pCON = CONGetHandle(i);
+                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL);
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
@@ -95,11 +99,11 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
         {
-            THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetUID(pRFIDDev), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL);
         }
 
-        /* end of 获取EVSE和ChargePoint状态 */
-
+        /* end of 获取EVSE和CON状态 */
+#endif //DEBUG_NO_TASKMONITOR
         vTaskDelay(20);//要比timer中的检测周期快
     }/* end of while(1)*/
 }

@@ -1,0 +1,137 @@
+{
+    "MaxIndex": 2,
+    "Order": [
+        {
+            "Index": 1,
+            "EVSEID": "0102030405060708",
+            "PointID": 0,
+            "TotalPower": 12.34,
+            "PaymentType": 0,
+            "StopType": 2,
+            "CardID": "0102030405060708",
+            "TotalFee": 365.22,
+            "OrderSN": "20170313091324",
+            "ServiceFeeType": 1,
+            "ServiceFee": 1,
+            "TotalSegment": 8,
+            "DefSegPower": 12.1,
+            "DefSegFee": 12.1,
+            "Segments": [
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                }
+            ]
+        },
+        {
+            "Index": 2,
+            "EVSEID": "0102030405060708",
+            "PointID": 0,
+            "TotalPower": 12.34,
+            "PaymentType": 0,
+            "StopType": 2,
+            "CardID": "0102030405060708",
+            "TotalFee": 365.22,
+            "OrderSN": "20170313091324",
+            "ServiceFeeType": 1,
+            "ServiceFee": 1,
+            "TotalSegment": 8,
+            "DefSegPower": 12.1,
+            "DefSegFee": 12.1,
+            "Segments": [
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                },
+                {
+                    "StartTime": "20170313091324",
+                    "EndTime": "20170313091324",
+                    "SegPower": 14.2,
+                    "SegFee": 2.1
+                }
+            ]
+        }
+    ]
+}

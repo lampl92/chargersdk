@@ -8,7 +8,7 @@
 #ifndef  __TIMERCALLBACK_H
 #define  __TIMERCALLBACK_H
 
-void vChargePointTimerCB(TimerHandle_t xTimer);
+void vCONTimerCB(TimerHandle_t xTimer);
 void vEVSETimerCB(TimerHandle_t xTimer);
 void vRFIDTimerCB(TimerHandle_t xTimer);
 void vVoltTimerCB(TimerHandle_t xTimer);

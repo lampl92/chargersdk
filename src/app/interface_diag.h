@@ -8,12 +8,12 @@
 #ifndef  __INTERFACE_DIAG_H
 #define  __INTERFACE_DIAG_H
 
-void DiagVoltageError(ChargePoint_t *pPoint);
-void DiagCurrentError(ChargePoint_t *pPoint);
-void DiagTempError(ChargePoint_t *pPoint);
-void DiagFreqError(ChargePoint_t *pPoint);
-void DiagPlugError(ChargePoint_t *pPoint);
-void DiagLockError(ChargePoint_t *pPoint);
-void DiagEVSEError(ChargePoint_t *pPoint);
+void DiagVoltageError(CON_t *pCON);
+void DiagCurrentError(CON_t *pCON);
+void DiagTempError(CON_t *pCON);
+void DiagFreqError(CON_t *pCON);
+void DiagPlugError(CON_t *pCON);
+void DiagLockError(CON_t *pCON);
+void DiagEVSEError(CON_t *pCON);
 
 #endif

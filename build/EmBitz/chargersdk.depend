@@ -706,20 +706,20 @@
 	<windows.h>
 	<tchar.h>
 
-1481013520 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ffconf.h
+1489646583 d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ffconf.h
 	"FreeRTOS.h"
 	"semphr.h"
 
 1463761430 d:\documents\projects\chargersdk\src\os\freertos\source\include\semphr.h
 	"queue.h"
 
-1489042696 d:\documents\projects\chargersdk\src\app\sysinit.h
+1489047971 d:\documents\projects\chargersdk\src\app\sysinit.h
 
 1481190735 d:\documents\projects\chargersdk\src\app\apptask.h
 	"includes.h"
 	"cli_main.h"
 
-1488958696 d:\documents\projects\chargersdk\src\cli\cli_main.h
+1489742740 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
 1487213885 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdarg.h>
@@ -877,7 +877,7 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1489046555 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1489372494 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -909,13 +909,13 @@
 1488513482 source:d:\documents\projects\chargersdk\src\cli\cli_app.c
 	"includes.h"
 
-1489043688 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
+1489047971 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
 	"includes.h"
 	"ff.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
 
-1489028323 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
+1489742595 source:d:\documents\projects\chargersdk\src\cli\cli_main.c
 	"includes.h"
 	"tinysh.h"
 	"cli_app.h"
@@ -990,7 +990,7 @@
 1478673966 source:d:\documents\projects\chargersdk\src\drivers\hal\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
 	"stm32f4xx.h"
 
-1487641727 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
+1489985997 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\retarget.c
 	"bsp.h"
 	"xprintf.h"
 
@@ -1675,7 +1675,7 @@
 	"GUIDEMO.h"
 	"RFIDReader_mt626.h"
 
-1488872657 d:\documents\projects\chargersdk\src\app\taskcreate.h
+1489141193 d:\documents\projects\chargersdk\src\app\taskcreate.h
 	"includes.h"
 	"timercallback.h"
 
@@ -1691,38 +1691,39 @@
 	"taskcard.h"
 	"RFIDReader_mt626.h"
 
-1488883471 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskcharge.c
 	"taskcreate.h"
 	"taskcharge.h"
 	"interface.h"
 
-1488871425 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
+1489386104 source:d:\documents\projects\chargersdk\src\app\chargepoint.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
 	"chargepoint.h"
 
-1488880170 d:\documents\projects\chargersdk\src\app\chargepoint.h
+1489655785 d:\documents\projects\chargersdk\src\app\chargepoint.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
 	"errorcode.h"
 	"interface_rfid.h"
+	"interface_data.h"
 
-1489028331 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
 	"interface.h"
 
-1488879545 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskmonitor.c
 	"taskcreate.h"
 	"taskmonitor.h"
 	"interface.h"
 
 1488163129 d:\documents\projects\chargersdk\src\app\taskmonitor.h
 
-1488872798 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
+1489986158 source:d:\documents\projects\chargersdk\src\app\taskcreate.c
 	"includes.h"
 	"interface.h"
 	"cli_main.h"
@@ -1746,14 +1747,19 @@
 
 1485051725 d:\documents\projects\chargersdk\src\app\taskota.h
 
-1486347695 source:d:\documents\projects\chargersdk\src\app\connector.c
+1489984669 source:d:\documents\projects\chargersdk\src\app\connector.c
 	<stdlib.h>
-	"Connector.h"
+	<string.h>
+	"evse_globals.h"
+	"connector.h"
 
-1486522651 d:\documents\projects\chargersdk\src\app\connector.h
+1489982095 d:\documents\projects\chargersdk\src\app\connector.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
+	"errorcode.h"
+	"interface_rfid.h"
+	"interface_data.h"
 
 1487122408 source:d:\documents\projects\chargersdk\src\app\evseinit.c
 	"includes.h"
@@ -1797,7 +1803,7 @@
 
 1486345644 source:d:\documents\projects\chargersdk\src\app\interface_card.c
 
-1487727614 d:\documents\projects\chargersdk\src\app\interface_rfid.h
+1489113806 d:\documents\projects\chargersdk\src\app\interface_rfid.h
 	"FreeRTOS.h"
 	"semphr.h"
 	"event_groups.h"
@@ -1805,7 +1811,7 @@
 	"errorcode.h"
 	"evse_config.h"
 
-1488767346 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskrfid.c
 	"includes.h"
 	"taskcreate.h"
 	"taskrfid.h"
@@ -1813,29 +1819,29 @@
 
 1485157108 d:\documents\projects\chargersdk\src\app\taskrfid.h
 
-1487899504 source:d:\documents\projects\chargersdk\src\app\interface_rfid.c
+1489114761 source:d:\documents\projects\chargersdk\src\app\interface_rfid.c
 	"includes.h"
 	"interface.h"
 
 1487660739 source:d:\documents\projects\chargersdk\src\hmi\evsedlg.c
 	"DIALOG.h"
 
-1489043017 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
+1489047971 source:d:\documents\projects\chargersdk\src\hmi\hmi_start.c
 	"GUI.h"
 
-1486607994 source:d:\documents\projects\chargersdk\src\app\interface_charge.c
+1489386097 source:d:\documents\projects\chargersdk\src\app\interface_charge.c
 	"includes.h"
 
 1487124566 source:d:\documents\projects\chargersdk\src\app\interface_monitor.c
 	"includes.h"
 	"interface.h"
 
-1487913518 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
+1489114334 source:d:\documents\projects\chargersdk\src\app\interface_remote.c
 	<time.h>
 	"includes.h"
 	"bsp.h"
 
-1488507420 source:d:\documents\projects\chargersdk\src\app\taskremote.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskremote.c
 	"includes.h"
 	"interface.h"
 	"taskcreate.h"
@@ -1843,60 +1849,61 @@
 
 1486371770 d:\documents\projects\chargersdk\src\app\taskremote.h
 
-1486687143 d:\documents\projects\chargersdk\src\app\interface_charge.h
+1489386099 d:\documents\projects\chargersdk\src\app\interface_charge.h
 
 1487122631 d:\documents\projects\chargersdk\src\app\evseinit.h
 	"interface.h"
 
-1487912750 d:\documents\projects\chargersdk\src\app\interface.h
-	"chargepoint.h"
+1489980947 d:\documents\projects\chargersdk\src\app\interface.h
+	"connector.h"
 	"EVSE.h"
 	"interface_monitor.h"
 	"interface_charge.h"
 	"interface_rfid.h"
 	"interface_data.h"
 	"interface_remote.h"
+	"interface_diag.h"
 
 1487124505 d:\documents\projects\chargersdk\src\app\interface_monitor.h
 
 1486626084 source:d:\documents\projects\chargersdk\src\app\interface_error.c
 	"interface.h"
 
-1488872981 source:d:\documents\projects\chargersdk\src\app\timercallback.c
+1489981828 source:d:\documents\projects\chargersdk\src\app\timercallback.c
 	"includes.h"
 	"interface.h"
 
-1487908128 d:\documents\projects\chargersdk\src\app\evse.h
+1489980478 d:\documents\projects\chargersdk\src\app\evse.h
 	"stm32f4xx.h"
 	"evse_config.h"
 	"errorcode.h"
 
-1488442724 source:d:\documents\projects\chargersdk\src\app\evse.c
+1489982402 source:d:\documents\projects\chargersdk\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
 	"interface.h"
 
-1489031653 source:d:\documents\projects\chargersdk\src\app\interface_data.c
+1489980991 source:d:\documents\projects\chargersdk\src\app\interface_data.c
 	"includes.h"
 	"interface.h"
 	"cJSON.h"
 
-1488442867 source:d:\documents\projects\chargersdk\src\app\errorcode.c
+1489394914 source:d:\documents\projects\chargersdk\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
-1488442710 d:\documents\projects\chargersdk\src\app\errorcode.h
+1489980330 d:\documents\projects\chargersdk\src\app\errorcode.h
 
-1489028572 d:\documents\projects\chargersdk\src\app\interface_data.h
+1489981563 d:\documents\projects\chargersdk\src\app\interface_data.h
 	"includes.h"
 
-1488881888 d:\documents\projects\chargersdk\src\app\evse_globals.h
+1489981563 d:\documents\projects\chargersdk\src\app\evse_globals.h
 	"EVSE.h"
 	"interface_rfid.h"
 	"userlib_list.h"
 
-1487901688 source:d:\documents\projects\chargersdk\src\app\evse_globals.c
+1489979648 source:d:\documents\projects\chargersdk\src\app\evse_globals.c
 	"interface.h"
 	"userlib_list.h"
 
@@ -1915,28 +1922,30 @@
 
 1487731090 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.c
 
-1488871967 d:\documents\projects\chargersdk\src\app\evse_config.h
+1489980638 d:\documents\projects\chargersdk\src\app\evse_config.h
 
-1488883445 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
+1489986215 source:d:\documents\projects\chargersdk\src\app\taskdiag.c
 	"taskcreate.h"
 	"taskdiag.h"
 	"interface.h"
 
 1487729702 d:\documents\projects\chargersdk\src\app\taskdiag.h
 
-1487837612 source:d:\documents\projects\chargersdk\src\app\interface_diag.c
+1489984670 source:d:\documents\projects\chargersdk\src\app\interface_diag.c
 	"interface.h"
+	"evse_config.h"
+	"evse_globals.h"
 
 1487756901 source:d:\documents\projects\chargersdk\src\app\libpowershare\ps_protocol.c
 
 1487924155 d:\documents\projects\chargersdk\src\app\libpowershare\ps_err.h
 
-1487913628 d:\documents\projects\chargersdk\src\app\interface_remote.h
+1489981958 d:\documents\projects\chargersdk\src\app\interface_remote.h
 	<time.h>
 
-1488872981 d:\documents\projects\chargersdk\src\app\timercallback.h
+1489980947 d:\documents\projects\chargersdk\src\app\timercallback.h
 
-1488937134 source:d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.c
+1489047971 source:d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.c
 	<string.h>
 	<stdio.h>
 	<math.h>
@@ -1946,23 +1955,385 @@
 	<ctype.h>
 	"cJSON.h"
 
-1488937134 d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.h
+1489047971 d:\documents\projects\chargersdk\src\middlewares\cjson\cjson.h
 	<stddef.h>
 
-1489043516 source:d:\documents\projects\chargersdk\src\cli\cli_json.c
+1489974869 source:d:\documents\projects\chargersdk\src\cli\cli_json.c
 	"includes.h"
 	"cJSON.h"
 
-1488949758 source:d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.c
+1489047971 source:d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.c
 	<s2j.h>
 	<stdlib.h>
 
-1488949758 d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.h
+1489047971 d:\documents\projects\chargersdk\src\middlewares\cjson\s2j.h
 	<cJSON.h>
 	<string.h>
 	"s2jdef.h"
 
-1488949758 d:\documents\projects\chargersdk\src\middlewares\cjson\s2jdef.h
+1489050941 d:\documents\projects\chargersdk\src\middlewares\cjson\s2jdef.h
 	<cJSON.h>
 	<string.h>
+
+1489981614 d:\documents\projects\chargersdk\src\app\interface_diag.h
+
+1489373522 source:d:\documents\projects\chargersdk\src\app\order.c
+
+1489418421 source:d:\documents\projects\chargersdk\src\middlewares\userlib\src\utils.c
+	"includes.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbindex\dbindex.c
+	"dbindex.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbindex\dbindex.h
+	"../ref.h"
+	"../dblogic/eet.h"
+	"../dblogic/compare_tuple.h"
+	"dbindex_types.h"
+	"../dbops/db_ops_types.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\ref.h
+	"db_types.h"
+	"dbmacros.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\db_types.h
+	"db_ctconf.h"
+	<stdint.h>
+	<stdint.h>
+	<stdint.h>
+	"pstdint.h"
+
+1489631292 d:\documents\projects\chargersdk\src\middlewares\littled\src\db_ctconf.h
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\pstdint.h
+	<stddef.h>
+	<limits.h>
+	<signal.h>
+	<stdint.h>
+	<wchar.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbmacros.h
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dblogic\eet.h
+	<stdlib.h>
+	<string.h>
+	"../ref.h"
+	"../dbmm/db_query_mm.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"db_aggr_func_codes.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbmm\db_query_mm.h
+	<stdlib.h>
+	"../ref.h"
+	"../db_ctconf.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbobjects\relation.h
+	<string.h>
+	"../ref.h"
+	"../dbstorage/dbstorage.h"
+	"../dbmm/db_query_mm.h"
+
+1489635583 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbstorage\dbstorage.h
+	"../db_ctconf.h"
+	"../ref.h"
+	<stdio.h>
+	<stdlib.h>
+	"contiki.h"
+	"cfs/cfs.h"
+	"SD_c_iface.h"
+	"ff.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbstorage\sd_c_iface.h
+	<Arduino.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbobjects\tuple.h
+	<string.h>
+	<stdlib.h>
+	"../dbmm/db_query_mm.h"
+	"../ref.h"
+	"relation.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dblogic\db_aggr_func_codes.h
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dblogic\compare_tuple.h
+	<string.h>
+	"../ref.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"../dbops/db_ops_types.h"
+	"../dbops/db_ops.h"
+	"eet.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\db_ops_types.h
+	"../dbobjects/relation.h"
+	"../dblogic/eet.h"
+	"../dbindex/dbindex_types.h"
+	"../ref.h"
+	"../db_ctconf.h"
+	"../dbstorage/dbstorage.h"
+	<stdio.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbindex\dbindex_types.h
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\db_ops.h
+	"db_ops_types.h"
+	"../dbmm/db_query_mm.h"
+	"../dbobjects/tuple.h"
+	"scan.h"
+	"project.h"
+	"select.h"
+	"ntjoin.h"
+	"osijoin.h"
+	"sort.h"
+	"aggregate.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\scan.h
+	"../db_ctconf.h"
+	"../ref.h"
+	"db_ops_types.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"../dbindex/dbindex_types.h"
+	"../db_ctconf.h"
+	"../arduinodebug.h"
+	<stdio.h>
+	<stdlib.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\arduinodebug.h
+	<Arduino.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\project.h
+	"db_ops_types.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"../dblogic/eet.h"
+	<stdio.h>
+	<string.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\select.h
+	"db_ops_types.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\ntjoin.h
+	"db_ops_types.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	<stdio.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\osijoin.h
+	"../dbindex/dbindex.h"
+	"db_ops_types.h"
+	"osijoin.h"
+	"db_ops.h"
+	"../dblogic/eet.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\sort.h
+	<stddef.h>
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"../ref.h"
+	"db_ops_types.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\aggregate.h
+	"db_ops.h"
+	"../dbobjects/relation.h"
+	"../dblogic/eet.h"
+	"../dblogic/compare_tuple.h"
+	<limits.h>
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dblogic\compare_tuple.c
+	<stdio.h>
+	"../dbobjects/tuple.h"
+	"../dbops/db_ops_types.h"
+	"compare_tuple.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dblogic\eet.c
+	"eet.h"
+
+1489645421 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbmm\db_query_mm.c
+	"db_query_mm.h"
+	"../dbmacros.h"
+	"../db_ctconf.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbobjects\relation.c
+	"relation.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbobjects\tuple.c
+	"tuple.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\aggregate.c
+	"aggregate.h"
+	"../db_ctconf.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\db_ops.c
+	"db_ops.h"
+	"../db_ctconf.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\ntjoin.c
+	"db_ops_types.h"
+	"ntjoin.h"
+	"db_ops.h"
+	"../dblogic/eet.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\osijoin.c
+	"db_ops.h"
+	"../dbmacros.h"
+	"osijoin.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\project.c
+	"db_ops_types.h"
+	"project.h"
+	"db_ops.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\scan.c
+	"../dbstorage/dbstorage.h"
+	"scan.h"
+	"db_ops.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\select.c
+	"db_ops_types.h"
+	"select.h"
+	"db_ops.h"
+	"../dblogic/eet.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbops\sort.c
+	"sort.h"
+	"db_ops.h"
+	"../dblogic/compare_tuple.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbcreate.c
+	"dbcreate.h"
+	"../db_ctconf.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbcreate.h
+	"../ref.h"
+	"../db_ctconf.h"
+	"dblexer.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dblexer.h
+	"../ref.h"
+	"../dblogic/eet.h"
+	"../dblogic/compare_tuple.h"
+	"../dberror.h"
+
+1489643767 d:\documents\projects\chargersdk\src\middlewares\littled\src\dberror.h
+	"db_ctconf.h"
+	"bsp.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dboutput\query_output.c
+	"query_output.h"
+	"debug.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dboutput\query_output.h
+	"../dbmm/db_query_mm.h"
+	"../dbobjects/relation.h"
+	"../dbobjects/tuple.h"
+	"../dbops/db_ops.h"
+	"../ref.h"
+	<stdio.h>
+	<math.h>
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\include\debug.h
+	<stdio.h>
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbinsert.c
+	"dbinsert.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbinsert.h
+	"../ref.h"
+	"../dbmm/db_query_mm.h"
+	"dblexer.h"
+	"../dbstorage/dbstorage.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dblexer.c
+	"dblexer.h"
+	"debug.h"
+
+1489626806 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbparseexpr.c
+	"dbparseexpr.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbparseexpr.h
+	"dblexer.h"
+	"../dbobjects/relation.h"
+	"../dbops/db_ops.h"
+	"../dbmm/db_query_mm.h"
+	"../dblogic/eet.h"
+
+1489645410 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbparser.c
+	"dbparser.h"
+	"../db_ctconf.h"
+
+1489626806 d:\documents\projects\chargersdk\src\middlewares\littled\src\dbparser\dbparser.h
+	"../dbops/db_ops.h"
+	"../dbmm/db_query_mm.h"
+	"dblexer.h"
+	"dbparseexpr.h"
+	"dbcreate.h"
+	"dbinsert.h"
+	"../db_ctconf.h"
+	"../arduinodebug.h"
+
+1489647552 source:d:\documents\projects\chargersdk\src\middlewares\littled\src\dbstorage\dbstorage.c
+	"dbstorage.h"
+	"../db_ctconf.h"
+
+1489648116 source:d:\documents\projects\chargersdk\src\cli\cli_db.c
+	"includes.h"
+	"dbparser/dbparser.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cryp.c
+	"stm32f4xx_hal.h"
+
+1489722083 source:d:\documents\projects\chargersdk\src\middlewares\aes\aes_modes.c
+	<string.h>
+	<assert.h>
+	<stdint.h>
+	"aesopt.h"
+	"aes_via_ace.h"
+
+1489722083 d:\documents\projects\chargersdk\src\middlewares\aes\aesopt.h
+	"aescpp.h"
+	"aes.h"
+	"brg_endian.h"
+
+1489722083 d:\documents\projects\chargersdk\src\middlewares\aes\aes.h
+	<stdlib.h>
+	"brg_types.h"
+
+1489722083 d:\documents\projects\chargersdk\src\middlewares\aes\brg_types.h
+	<limits.h>
+	<stdint.h>
+	<stddef.h>
+
+1489736683 d:\documents\projects\chargersdk\src\middlewares\aes\brg_endian.h
+	<machine/endian.h>
+
+1489722083 d:\documents\projects\chargersdk\src\middlewares\aes\aes_via_ace.h
+
+1489722083 source:d:\documents\projects\chargersdk\src\middlewares\aes\aescrypt.c
+	"aesopt.h"
+	"aestab.h"
+	"aes_ni.h"
+
+1489722083 d:\documents\projects\chargersdk\src\middlewares\aes\aestab.h
+
+1489722083 source:d:\documents\projects\chargersdk\src\middlewares\aes\aeskey.c
+	"aesopt.h"
+	"aestab.h"
+	"aes_ni.h"
+	"aes_via_ace.h"
+
+1489722083 source:d:\documents\projects\chargersdk\src\middlewares\aes\aestab.c
+	"aes.h"
+	"aesopt.h"
+	"aestab.h"
+
+1489973536 source:d:\documents\projects\chargersdk\src\cli\cli_aes.c
+	"includes.h"
+	"aes.h"
 

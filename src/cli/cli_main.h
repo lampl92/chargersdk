@@ -13,5 +13,6 @@
 void cli_main(void);
 extern tinysh_cmd_t cli_parseJson_cmd;
 extern tinysh_cmd_t cli_makeJson_cmd;
+extern tinysh_cmd_t cli_aestest_cmd;
 
 #endif

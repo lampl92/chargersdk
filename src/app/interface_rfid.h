@@ -17,9 +17,9 @@
 typedef struct _RFIDDevStatus
 {
     uint8_t ucFoundCard;
-    uint8_t ucUID[defUIDLength];
+    uint8_t ucCardID[defCardIDLength];
 
-    ErrorCode_t (*GetUID)(void *pvRFIDDev);
+    ErrorCode_t (*GetCardID)(void *pvRFIDDev);
 }RFIDDevStatus_t;
 
 typedef struct _RFIDDev
