@@ -8,6 +8,8 @@
 #include "includes.h"
 #include "interface.h"
 #include "cJSON.h"
+#include "jsonname.h"
+#include "utils.h"
 ErrorCode_t CreateOrderFile(void)
 {
     FRESULT res;
@@ -76,7 +78,7 @@ ErrorCode_t CreateOrderFile(void)
  * @return ErrorCode_t
  *
  */
-ErrorCode_t DataAddOrder(uint32_t *pulIndex, cJSON *OrderObjToAdd)
+ErrorCode_t DataAddOrderToFile(uint32_t *pulIndex, cJSON *OrderObjToAdd)
 {
     ErrorCode_t errcode;
     errcode = ERR_NO;
@@ -103,7 +105,7 @@ ErrorCode_t DataAddOrder(uint32_t *pulIndex, cJSON *OrderObjToAdd)
  * @return ErrorCode_t
  *
  */
-ErrorCode_t DataGetOrder( uint32_t ulIndex, uint8_t *strNode, void *pvGetVal)
+ErrorCode_t DataGetOrderFromFile( uint32_t ulIndex, uint8_t *strNode, void *pvGetVal)
 {
     ErrorCode_t errcode;
     errcode = ERR_NO;
@@ -115,12 +117,22 @@ ErrorCode_t DataGetOrder( uint32_t ulIndex, uint8_t *strNode, void *pvGetVal)
 
     return errcode;
 }
-cJSON *DataOrderCreate(CON_t *pCON, EVSE_t *pEVSE, uint32_t ulIndex)
+cJSON *DataOrderObjCreate(CON_t *pCON, EVSE_t *pEVSE, uint32_t ulIndex)
 {
     cJSON *pOrderObj;
-    pOrderObj = cJSON_CreateObject();
+    uint8_t strCardID[defCardIDLength*2+1];
+    uint8_t strOrderSN[7*2+1];
+    int i;
 
-    cJSON_AddItemToObject(pOrderObj, "Index", cJSON_CreateNumber(ulIndex));
+    pOrderObj = cJSON_CreateObject();
+    HexToStr(pCON->order.ucCardID, strCardID, defCardIDLength);
+
+
+    cJSON_AddNumberToObject(pOrderObj, jnIndex, ulIndex);
+    cJSON_AddStringToObject(pOrderObj, jnCardID, strCardID);
+//    cJSON_AddStringToObject
+
+
 
 
 //    pCON->order.OrderState = 5;         //1:启动中，2：充电中，3：停止中，4：已结束，5：未知
@@ -149,8 +161,4 @@ ErrorCode_t DataDelOrder(uint32_t ulIndex)
     ErrorCode_t errcode;
     errcode = ERR_NO;
     return errcode;
-}
-ErrorCode_t makeOrder()
-{
-
 }

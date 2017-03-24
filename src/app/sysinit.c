@@ -3,6 +3,7 @@
 #include "nand_diskio.h"
 #include "cJSON.h"
 #include "s2j.h"
+#include <time.h>
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -14,9 +15,34 @@ Sysconf_t   xSysconf;//存放系统初始化参数
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
 char NANDDISKPath[4]; /* RAM disk logical drive path */
 
+extern time_t time_dat;
+
 static void Error_Handler()
 {
     while(1);
+}
+
+void timeInit()
+{
+    time_t settime;
+    struct tm orig;
+    RTC_TimeTypeDef RTC_TimeStruct;
+    RTC_DateTypeDef RTC_DateStruct;
+
+    HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
+    HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
+
+    orig.tm_sec = RTC_TimeStruct.Seconds;
+    orig.tm_min = RTC_TimeStruct.Minutes;
+    orig.tm_hour = RTC_TimeStruct.Hours;
+    orig.tm_mday = RTC_DateStruct.Date;
+    orig.tm_mon = RTC_DateStruct.Month-1;
+    orig.tm_year = 2000 + RTC_DateStruct.Year - 1900;
+//    orig.tm_wday = 5;
+//    orig.tm_yday = 19;
+    orig.tm_isdst = -1;
+    settime = mktime (&orig);
+    time(&settime);
 }
 
 static uint8_t create_system_dir(void)
@@ -67,6 +93,7 @@ uint8_t create_sysconf_file()
 extern void retarget_init(void);
 void sys_Init(void)
 {
+    timeInit();
     retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
     my_mem_init(SRAMIN);            //初始化内部内存池

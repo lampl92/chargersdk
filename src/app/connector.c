@@ -829,12 +829,12 @@ void CONOrderInit(CON_t *pCON)
     pCON->order.dBalance =0;            //余额
 
     pCON->order.dTotalPower =0;                  //总电量
-    pCON->order.ucPaymentType =0;                //支付方式 0：网络支付 1：已先下支付 2：线下未支付
+    pCON->order.ucPayType =0;                //支付方式 0.云平台支付 1.钱包卡支付
     pCON->order.ucStopType =0;                   //停止类型
     pCON->order.ucReserved =0;                   //保留
     memset(pCON->order.ucCardID, 0, defCardIDLength);//卡号//在taskrfid中赋值
     pCON->order.dTotalFee =0;                 //总费用
-    memset(pCON->order.strOrderSN, 0, 7);       //订单流水号
+    memset(pCON->order.strStartTime, 0, 7);       //订单流水号
     pCON->order.ucServiceFeeType =0;          //服务费类型
     pCON->order.dServiceFee =0;                //服务费
     pCON->order.ucTotalSegment =0;             //充电明细段数

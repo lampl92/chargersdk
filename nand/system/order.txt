@@ -6,7 +6,7 @@
             "EVSEID": "0102030405060708",
             "PointID": 0,
             "TotalPower": 12.34,
-            "PaymentType": 0,
+            "PayType": 0,
             "StopType": 2,
             "CardID": "0102030405060708",
             "TotalFee": 365.22,

@@ -91,10 +91,10 @@
 			<Add directory="..\..\src\middlewares\STemWin\Demo" />
 			<Add directory="..\..\src\middlewares\fatfs\src" />
 			<Add directory="..\..\src\middlewares\fatfs\diskdrv" />
-			<Add directory="..\..\src\middlewares\mxml-2.10" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
 			<Add directory="..\..\src\middlewares\cJSON" />
 			<Add directory="..\..\src\middlewares\AES" />
+			<Add directory="..\..\src\net\PolarSSL\include" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -154,6 +154,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_rfid.h" />
+		<Unit filename="..\..\src\app\jsonname.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_err.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -302,9 +303,6 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -414,7 +412,8 @@
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c">
 			<Option compilerVar="CC" />
-			<Option target="&lt;{~None~}&gt;" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_ATK_7016.c">
 			<Option compilerVar="CC" />
@@ -439,7 +438,14 @@
 		<Unit filename="..\..\src\middlewares\userlib\src\utils.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\userlib\src\utils.h" />
 		<Unit filename="..\..\src\middlewares\userlib\src\xprintf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\net\PolarSSL\library\aes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\net\PolarSSL\library\base64.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\os\FreeRTOS\Source\croutine.c">

@@ -6,6 +6,7 @@
 * @date 2017-03-13
 */
 #include "includes.h"
+#include "xprintf.h"
 
 uint32_t StrToBCD(const char *Src, char *Des, int iDesLen)
 
@@ -74,4 +75,27 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
     }
     Des[iSrcLen*2] = '\0';
     return 1;
+}
+
+uint32_t HexToChar(uint8_t Hex, uint8_t *Src)
+{
+//    if(Hex <= 0xf)
+//    {
+//        Src[0] = '0';
+//        xsprintf(&Src[1], "%x",Hex);
+//    }
+//    else
+    {
+        xsprintf(Src, "%02x", Hex);
+    }
+}
+
+uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen)
+{
+    int i;
+    for(i = 0; i < Hexlen; i++)
+    {
+        HexToChar(Hex[i], &(Src[i*2]));
+    }
+    Src[i*2] = '\0';
 }

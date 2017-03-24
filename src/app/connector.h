@@ -13,7 +13,7 @@
 #include "event_groups.h"
 #include "errorcode.h"
 #include "interface_rfid.h"
-#include "interface_data.h"
+#include "order.h"
 
 #define defSocketTypeB   ('B')
 #define defSocketTypeC   ('C')

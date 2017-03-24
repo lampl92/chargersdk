@@ -1,3 +1,4 @@
+#include <time.h>
 #include "bsp.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +15,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
-
+time_t time_dat;
 //RTC时间设置
 //hour,min,sec:小时,分钟,秒钟
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
@@ -64,12 +65,12 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
     //基姆拉尔森计算公式, w=0 时为 星期一
     if(m == 1 || m == 2)
     {
-            m += 12;
-            y--;
+        m += 12;
+        y--;
     }
     w = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7;
 
-    RTC_DateStructure.WeekDay = w+1;
+    RTC_DateStructure.WeekDay = w + 1;
     RTC_DateStructure.Month = month;
     RTC_DateStructure.Date = date;
     RTC_DateStructure.Year = year;
@@ -192,6 +193,18 @@ void RTC_WKUP_IRQHandler(void)
 //RTC WAKE UP中断处理
 void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    //LED1=!LED1;
+    time_dat ++;
 }
 
+time_t time (time_t *_timer)
+{
+    struct tm *ts;
+    if(_timer != NULL)
+    {
+        time_dat = *_timer;
+        ts = localtime (_timer);
+        RTC_Set_Time(ts->tm_hour, ts->tm_min, ts->tm_sec);
+        RTC_Set_Date(ts->tm_year+1900-2000, ts->tm_mon+1, ts->tm_mday);
+    }
+    return time_dat;
+}
