@@ -830,8 +830,12 @@ CON_t *CONGetHandle(uint8_t ucCONID)
 
     return pCON;
 }
-CONState_t CONGetState(CON_t *pCON)
+CONState_t CONGetState(uint8_t ucCONID)
 {
+    CON_t *pCON = NULL;
+
+    pCON = CONGetHandle(ucCONID);
+
     return pCON->state;
 }
 static void CONDelete(CON_t *pCON)

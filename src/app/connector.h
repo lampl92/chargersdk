@@ -87,7 +87,7 @@ typedef struct _CONStatus
 {
     //uint8_t ucHeldCardID[defCardIDLength];
     CONStatusType_t xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM
-    uint8_t ucLoadPercent;             // 负载百分比
+    uint8_t ucLoadPercent;        // 负载百分比
     CONStatusType_t xCCState;     // 检测点4 CC state --PE
     CONStatusType_t xPlugState;
     double dACLTemp;
@@ -158,5 +158,5 @@ typedef struct _CON
 
 CON_t *CONCreate(uint8_t ucCONID);
 CON_t *CONGetHandle(uint8_t ucCONID);
-CONState_t CONGetState(CON_t *pCON);
+CONState_t CONGetState(uint8_t ucCONID);
 #endif
