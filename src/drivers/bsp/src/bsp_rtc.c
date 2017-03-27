@@ -139,7 +139,7 @@ void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
     RTC_AlarmSturuct.AlarmTime.Minutes = min; //分钟
     RTC_AlarmSturuct.AlarmTime.Seconds = sec; //秒
     RTC_AlarmSturuct.AlarmTime.SubSeconds = 0;
-    RTC_AlarmSturuct.AlarmTime.TimeFormat = RTC_HOURFORMAT12_AM;
+    RTC_AlarmSturuct.AlarmTime.TimeFormat = RTC_HOURFORMAT_24;
 
     RTC_AlarmSturuct.AlarmMask = RTC_ALARMMASK_NONE; //精确匹配星期，时分秒
     RTC_AlarmSturuct.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_NONE;
@@ -148,7 +148,7 @@ void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
     RTC_AlarmSturuct.Alarm = RTC_ALARM_A;   //闹钟A
     HAL_RTC_SetAlarm_IT(&RTC_Handler, &RTC_AlarmSturuct, RTC_FORMAT_BIN);
 
-    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0x01, 0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, bspAlarm_PreemptPriority, bspAlarm_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
@@ -168,7 +168,7 @@ void RTC_Set_WakeUp(u32 wksel, u16 cnt)
 
     HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler, cnt, wksel);          //设置重装载值和时钟
 
-    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 0x02, 0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, bspWAKEUP_PreemptPriority, bspWAKEUP_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 }
 

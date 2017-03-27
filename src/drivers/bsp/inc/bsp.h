@@ -32,7 +32,11 @@
 #define bspLTDC_PreemptPriority         15
 #define bspLTDC_SubPriority             0
 
+#define bspWKUP_PreemptPriority         6
+#define bspWKUP_SubPriority             0
 
+#define bspAlarm_PreemptPriority        7
+#define bspAlarm_SubPriority            0
 
 /* CPU空闲时执行的函数 */
 //#define CPU_IDLE()        bsp_Idle()
