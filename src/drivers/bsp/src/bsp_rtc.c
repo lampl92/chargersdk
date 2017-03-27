@@ -168,7 +168,7 @@ void RTC_Set_WakeUp(u32 wksel, u16 cnt)
 
     HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler, cnt, wksel);          //设置重装载值和时钟
 
-    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, bspWAKEUP_PreemptPriority, bspWAKEUP_SubPriority);
+    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, bspWKUP_PreemptPriority, bspWKUP_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 }
 
