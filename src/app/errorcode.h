@@ -8,13 +8,13 @@
 #ifndef  __ERRORCODE_H
 #define  __ERRORCODE_H
 
-#define THROW_ERROR(_dev, _errcode,_errlevel)   {                                           \
-                                            ErrorCode_t _macro_errcode = _errcode;         \
-                                            if(_macro_errcode != ERR_NO)                  \
-                                            {                                       \
-                                                ThrowErrorCode(_dev, _macro_errcode,_errlevel);  \
-                                            }                                       \
-                                        }
+#define THROW_ERROR(_dev, _errcode,_errlevel)   do{                                           \
+                                                    ErrorCode_t _macro_errcode = _errcode;         \
+                                                    if(_macro_errcode != ERR_NO)                  \
+                                                    {                                       \
+                                                        ThrowErrorCode(_dev, _macro_errcode,_errlevel);  \
+                                                    }                                       \
+                                                }while(0);
 typedef enum _ErrorCode
 {
     ERR_NO,                 //No Error
@@ -71,7 +71,7 @@ typedef struct _ErrorPackage
     uint32_t ulDevID;
     ErrorCode_t code;
     ErrorLevel_t level;
-}ErrorPackage_t;
+} ErrorPackage_t;
 
 //充电枪ID从小到大定义，其他设备从大小定义
 //DevID 0~? 充电枪ID
