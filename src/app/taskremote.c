@@ -27,7 +27,7 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBitsRFID;
     EventBits_t uxBitsTimerCB;
-    RfidOrderData_t tmpRfidOrderData;
+    OrderData_t tmpRfidOrderData;
     RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;

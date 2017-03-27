@@ -164,7 +164,7 @@ void AppObjCreate (void)
     xHandleEventRemote = xEventGroupCreate();
 
 
-    xHandleQueueOrders = xQueueCreate(2, sizeof(RfidOrderData_t));
+    xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);

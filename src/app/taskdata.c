@@ -37,7 +37,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_CON_PRECONTRACT_LOSEPLUG:
             case STATE_CON_STARTCHARGE:
                 break;
-            case STATE_CON_Charging:
+            case STATE_CON_CHARGING:
                 //DataSetOrder(pCON, pEVSE);
             case STATE_CON_STOPCHARGE:
             case STATE_CON_ERROR:

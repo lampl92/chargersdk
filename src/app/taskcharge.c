@@ -126,11 +126,11 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->status.ucRelayNState == SWITCH_ON)
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
-                    pCON->state = STATE_CON_Charging;
+                    pCON->state = STATE_CON_CHARGING;
                 }
                 /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                 break;
-            case STATE_CON_Charging:
+            case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                       defEventBitExceptionCritical,
                                                       pdFALSE, pdFALSE, 0);
@@ -175,7 +175,7 @@ void vTaskEVSECharge(void *pvParameters)
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后进入idle */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
-                CONOrderInit(pCON);
+                OrderInit(&(pCON->order));
                 pCON->state = STATE_CON_IDLE;
                 break;
             case STATE_CON_ERROR:

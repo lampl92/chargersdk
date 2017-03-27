@@ -111,11 +111,11 @@ void DiagVoltageError(CON_t *pCON)
     HandleVolt_t voltstat;
     EventBits_t uxBitsException;
     uint8_t strTimerName[50];
-    int i;
+    int id;
 
     uxBitsException = 0;
     memset(strTimerName, 0, 50);
-    i = pCON->info.ucCONID;
+    id = pCON->info.ucCONID;
 
     voltstat = HandleVolt(pCON->status.dChargingVoltage,
                           pCON->info.dVolatageLowerLimits,
@@ -130,21 +130,21 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             break;
         case VOLT_LOWER:
-            xsprintf(strTimerName, "TimerCON%d_VoltLow_Dummy", i);
+            xsprintf(strTimerName, "TimerCON%d_VoltLow_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
-                                              (void *)i,
+                                              (void *)id,
                                               vVoltTimerCB);
             xTimerStart(pCON->status.xHandleTimerVolt, 0);
             pCON->status.xVoltStat = STATE_VOLT_LOWER_Dummy;
             break;
         case VOLT_UPPER:
-            xsprintf(strTimerName, "TimerCON%d_VoltUp_Dummy", i);
+            xsprintf(strTimerName, "TimerCON%d_VoltUp_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
-                                              (void *)i,
+                                              (void *)id,
                                               vVoltTimerCB);
             xTimerStart(pCON->status.xHandleTimerVolt, 0);
             pCON->status.xVoltStat = STATE_VOLT_UPPER_Dummy;
@@ -162,9 +162,9 @@ void DiagVoltageError(CON_t *pCON)
         {
             xTimerDelete(pCON->status.xHandleTimerVolt, 0);
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
-            if(pCON->state == STATE_CON_Charging)
+            if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(i, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
             }
             /********************************/
             /** @todo (rgw#1#): 向系统告警 */
@@ -213,11 +213,11 @@ void DiagVoltageError(CON_t *pCON)
         switch(voltstat)
         {
         case VOLT_OK://200~240
-            xsprintf(strTimerName, "TimerCON%d_VoltOK_Dummy", i);
+            xsprintf(strTimerName, "TimerCON%d_VoltOK_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
                                               defDiagVoltRecoverCyc,
                                               pdFALSE,
-                                              (void *)i,
+                                              (void *)id,
                                               vVoltTimerCB);
             xTimerStart(pCON->status.xHandleTimerVolt, 0);
             pCON->status.xVoltStat = STATE_VOLT_OK_Dummy;
@@ -237,9 +237,9 @@ void DiagVoltageError(CON_t *pCON)
         {
             xTimerDelete(pCON->status.xHandleTimerVolt, 0);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
-            if(pCON->state == STATE_CON_Charging)
+            if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(i, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL);
             }
             /********************************/
             /** @todo (rgw#1#): 系统恢复   */
@@ -284,26 +284,26 @@ void DiagCurrentError(CON_t *pCON)
     EventBits_t uxBitsCharge;
     EventBits_t uxBitsException;
     uint8_t strTimerName[50];
-    int i;
+    int id;
 
     uxBitsCharge = 0;
     uxBitsException = 0;
     currstat = CURR_OK;
     memset(strTimerName, 0, 50);
-    i = pCON->info.ucCONID;
+    id = pCON->info.ucCONID;
 
-    if(pCON->state == STATE_CON_Charging)
+    if(pCON->state == STATE_CON_CHARGING)
     {
         currstat = HandleCurr(pCON->status.dChargingCurrent,
                               pCON->info.dRatedCurrent);
         switch(pCON->status.xCurrStat)
         {
         case STATE_CURR_INIT:
-            xsprintf(strTimerName, "TimerCON%d_CurrInit", i);
+            xsprintf(strTimerName, "TimerCON%d_CurrInit", id);
             pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
                                               defDiagCurrInitCyc,
                                               pdFALSE,
-                                              (void *)i,
+                                              (void *)id,
                                               vCurrTimerCB);
             xTimerStart(pCON->status.xHandleTimerCurr, 0);
             pCON->status.xCurrStat = STATE_CURR_DELAY;
@@ -325,11 +325,11 @@ void DiagCurrentError(CON_t *pCON)
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 break;
             case CURR_UPPER:
-                xsprintf(strTimerName, "TimerCON%d_CurrUp_Dummy", i);
+                xsprintf(strTimerName, "TimerCON%d_CurrUp_Dummy", id);
                 pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
-                                                  (void *)i,
+                                                  (void *)id,
                                                   vCurrTimerCB);
                 xTimerStart(pCON->status.xHandleTimerCurr, 0);
                 pCON->status.xCurrStat = STATE_CURR_UPPER_Dummy;
@@ -345,12 +345,12 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                THROW_ERROR(i, pCON->status.SetLoadPercent(pCON, 80), ERR_LEVEL_WARNING);
-                xsprintf(strTimerName, "TimerCON%d_CurrUp_Fix", i);
+                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, 80), ERR_LEVEL_WARNING);
+                xsprintf(strTimerName, "TimerCON%d_CurrUp_Fix", id);
                 pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
-                                                  (void *)i,
+                                                  (void *)id,
                                                   vCurrTimerCB);
                 xTimerStart(pCON->status.xHandleTimerCurr, 0);
                 pCON->status.xCurrStat = STATE_CURR_UPPER_Fix;
@@ -425,8 +425,8 @@ void DiagCurrentError(CON_t *pCON)
 void DiagTempError(CON_t *pCON)
 {
     ErrorLevel_t templevel;
-    int i;
-    i = pCON->info.ucCONID;
+    int id;
+    id = pCON->info.ucCONID;
     /* ACLTemp */
     templevel = HandleTemp(pCON->status.dACLTemp,
                            pCON->info.dACTempLowerLimits,
@@ -444,7 +444,7 @@ void DiagTempError(CON_t *pCON)
     case ERR_LEVEL_CRITICAL:
         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(i, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
+        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
         break;
     default:
         break;
@@ -467,7 +467,7 @@ void DiagTempError(CON_t *pCON)
     case ERR_LEVEL_CRITICAL:
         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(i, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
+        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
         break;
     default:
         break;
@@ -492,7 +492,7 @@ void DiagTempError(CON_t *pCON)
         case ERR_LEVEL_CRITICAL:
             //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
-            ThrowErrorCode(i, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL);
+            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL);
             break;
         default:
             break;
@@ -515,7 +515,7 @@ void DiagTempError(CON_t *pCON)
         case ERR_LEVEL_CRITICAL:
             //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
-            ThrowErrorCode(i, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL);
+            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL);
             break;
         default:
             break;

@@ -23,13 +23,6 @@ typedef enum _RFIDState
     STATE_RFID_OWE,                 //欠费
     STATE_RFID_PRECONTRACT           //预约状态，还没开始充电
 } RFIDState_t;
-void RfidOrderInitData(RfidOrderData_t *order)
-{
-    order->dBalance = 0;
-    order->ucAccountStatus = 0;
-    order->ucCONID = 0;
-    memset(order->ucCardID, 0, defCardIDLength);
-}
 void vTaskEVSERFID(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -37,7 +30,7 @@ void vTaskEVSERFID(void *pvParameters)
     int i;
     EventBits_t uxBits;
     ErrorCode_t errcode;
-    RfidOrderData_t tmpOrderData;
+    OrderData_t tmpOrderData;
     RFIDState_t RFIDState;
 
 
@@ -45,7 +38,8 @@ void vTaskEVSERFID(void *pvParameters)
     uxBits = 0;
     errcode = ERR_NO;
     RFIDState = STATE_RFID_NOID;
-    RfidOrderInitData(&tmpOrderData);
+    tmpOrderData.pChargeSegment = NULL;
+    OrderInit(&tmpOrderData);
 
     while(1)
     {
@@ -68,27 +62,31 @@ void vTaskEVSERFID(void *pvParameters)
             printf_safe("ID = ");
             for(i = 0; i < defCardIDLength; i++)
             {
-                printf_safe("%x ", tmpOrderData.ucCardID[i]);
+                printf_safe("%02x ", tmpOrderData.ucCardID[i]);
             }
             printf_safe("\n");
 #endif
             for(i = 0; i < ulTotalCON; i++)  //2.判断卡是否刷过
             {
                 pCON =  CONGetHandle(i);
-                if(memcmp(pCON->order.ucCardID, tmpOrderData.ucCardID, defCardIDLength) == 0)
+                if(pCON->state == STATE_CON_CHARGING)
                 {
-                    //此卡已刷
+                    if(memcmp(pCON->order.ucCardID, tmpOrderData.ucCardID, defCardIDLength) == 0)
+                    {
+                        //此卡已刷
 #ifdef DEBUG_RFID
-                    printf_safe("connector %d 此卡已刷\n", i);
+                        printf_safe("connector %d 此卡已刷\n", i);
 #endif
-                    RFIDState = STATE_RFID_OLDID;
-                    break;
+                        tmpOrderData.ucCONID = i;
+                        RFIDState = STATE_RFID_OLDID;
+                        break;
+                    }
                 }
-                else
+                else if(pCON->state == STATE_CON_IDLE)
                 {
                     //未刷过卡
 #ifdef DEBUG_RFID
-                    printf_safe("connector %d 未刷\n", i);
+                    printf_safe("connector %d 空闲\n", i);
 #endif
                     RFIDState = STATE_RFID_NEWID;
                 }
@@ -125,7 +123,7 @@ void vTaskEVSERFID(void *pvParameters)
             /** @fixme (rgw#1#): 假设用户选择停止充电 */
             pCON = CONGetHandle(tmpOrderData.ucCONID);
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
-            RfidOrderInitData(&tmpOrderData);
+            OrderInit(&tmpOrderData);
             RFIDState = STATE_RFID_NOID;
             break;
         case STATE_RFID_GOODID:
@@ -134,7 +132,21 @@ void vTaskEVSERFID(void *pvParameters)
 
             tmpOrderData.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID */
 #ifdef DEBUG_RFID
-            printf_safe("选择充电枪ID：%d\n", tmpOrderData.ucCONID);
+            printf_safe("用户状态：");
+            switch(tmpOrderData.ucAccountStatus)
+            {
+            case 0:
+                printf_safe("未注册卡\n");
+                break;
+            case 1:
+                printf_safe("注册卡\n");
+                break;
+            case 2:
+                printf_safe("欠费卡\n");
+                break;
+            }
+            printf_safe("余额：%.2lf\n", tmpOrderData.dBalance);
+            printf_safe("用户选择充电枪ID：%d\n", tmpOrderData.ucCONID);
 #endif
             pCON = CONGetHandle(tmpOrderData.ucCONID);
             pCON->order.dBalance = tmpOrderData.dBalance;
@@ -142,21 +154,21 @@ void vTaskEVSERFID(void *pvParameters)
             memmove(pCON->order.ucCardID, tmpOrderData.ucCardID, defCardIDLength);
 
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-            RfidOrderInitData(&tmpOrderData);
+            OrderInit(&tmpOrderData);
             RFIDState = STATE_RFID_PRECONTRACT;
             break;
         case STATE_RFID_BADID:
             /** @todo (rgw#1#): 通知HMI显示未注册 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
 
-            RfidOrderInitData(&tmpOrderData);
+            OrderInit(&tmpOrderData);
             RFIDState = STATE_RFID_NOID;
             break;
         case STATE_RFID_OWE:
             /** @todo (rgw#1#): 通知HMI显示欠费 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
 
-            RfidOrderInitData(&tmpOrderData);
+            OrderInit(&tmpOrderData);
             RFIDState = STATE_RFID_NOID;
             break;
         case STATE_RFID_PRECONTRACT:
