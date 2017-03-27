@@ -157,4 +157,14 @@ void EXTI15_10_IRQHandler(void)
 {
 }
 
+/** @brief RTC唤醒中断
+ *
+ * @param void
+ * @return void
+ *
+ */
+//void RTC_WKUP_IRQHandler(void)
+//{
+//    //定义在bsp_rtc.c中
+//}
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
