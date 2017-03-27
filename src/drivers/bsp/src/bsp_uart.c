@@ -202,7 +202,7 @@ can
                                             {                                                   \
                                                 if(huart->ErrorCode == HAL_USART_ERROR_##ERR)   \
                                                 {                                               \
-                                                    ThrowErrorCode(defDevID_RFID, ERR_##DEV##_##ERR, LEVEL);   \
+                                                    ThrowErrorCode(defDevID_##DEV, ERR_##DEV##_##ERR, LEVEL);   \
                                                 }                                               \
                                             }
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
