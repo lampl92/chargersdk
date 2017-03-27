@@ -11,20 +11,32 @@
 #include <time.h>
 #include "userlib_list.h"
 
+typedef enum _OrderState
+{
+    STATE_ORDER_TEMP,
+    STATE_ORDER_MAKE,
+    STATE_ORDER_START,
+    STATE_ORDER_UPDATE,
+    STATE_ORDER_FINISH
+}OrderState_t;
+
+
 typedef struct _ChargeSegment
 {
-    uint8_t strStartTime[7];
-    uint8_t strEndTime[7];
+    time_t tStartTime;
+    time_t tEndTime;
+    double dSegStartPower;
     double dSegPower;
     double dSegFee;
 }ChargeSegment_t;
 
 typedef struct _OrderData
 {
-    uint8_t OrderState;         //1:启动中，2：充电中，3：停止中，4：已结束，5：未知
-    uint8_t ucAccountStatus;    //帐户状态 1：注册卡 0：未注册卡
+    OrderState_t state;
+    uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
     double  dBalance;           //余额
 
+    uint8_t ucCONID;
     double  dTotalPower;                  //总电量
     uint8_t ucPayType;                    //支付方式
     uint8_t ucStopType;                   //停止类型
@@ -38,7 +50,8 @@ typedef struct _OrderData
     double  dDefSegPower;               //默认段电量
     double  dDefSegFee;                //默认段电费
     UserList_t *pChargeSegment;
+    void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
 
-
+void OrderInit(OrderData_t *pOrder);
 #endif

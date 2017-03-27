@@ -139,10 +139,10 @@ typedef enum _CONState
     STATE_CON_PRECONTRACT,
     STATE_CON_PRECONTRACT_LOSEPLUG,
     STATE_CON_STARTCHARGE,
-    STATE_CON_Charging,
+    STATE_CON_CHARGING,
     STATE_CON_SuspendedEV,
     STATE_CON_SuspendedEVSE,
-    STATE_CON_Finishing,
+    STATE_CON_FINISHING,
     STATE_CON_STOPCHARGE,
     STATE_CON_ERROR
 } CONState_t;
@@ -159,5 +159,4 @@ typedef struct _CON
 CON_t *CONCreate(uint8_t ucCONID);
 CON_t *CONGetHandle(uint8_t ucCONID);
 CONState_t CONGetState(CON_t *pCON);
-void CONOrderInit(CON_t *pCON);
 #endif

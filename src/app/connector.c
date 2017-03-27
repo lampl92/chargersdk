@@ -822,26 +822,6 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     return errcode;
 }
 
-void CONOrderInit(CON_t *pCON)
-{
-    pCON->order.OrderState = 5;         //1:启动中，2：充电中，3：停止中，4：已结束，5：未知
-    pCON->order.ucAccountStatus = 0;    //帐户状态 1：注册卡 0：未注册卡
-    pCON->order.dBalance =0;            //余额
-
-    pCON->order.dTotalPower =0;                  //总电量
-    pCON->order.ucPayType =0;                //支付方式 0.云平台支付 1.钱包卡支付
-    pCON->order.ucStopType =0;                   //停止类型
-    pCON->order.ucReserved =0;                   //保留
-    memset(pCON->order.ucCardID, 0, defCardIDLength);//卡号//在taskrfid中赋值
-    pCON->order.dTotalFee =0;                 //总费用
-    memset(pCON->order.strStartTime, 0, 7);       //订单流水号
-    pCON->order.ucServiceFeeType =0;          //服务费类型
-    pCON->order.dServiceFee =0;                //服务费
-    pCON->order.ucTotalSegment =0;             //充电明细段数
-    pCON->order.dDefSegPower =0;               //默认段电量
-    pCON->order.dDefSegFee =0;                //默认段电费
-    pCON->order.pChargeSegment = UserListCreate();
-}
 CON_t *CONGetHandle(uint8_t ucCONID)
 {
     CON_t *pCON;
@@ -853,6 +833,17 @@ CON_t *CONGetHandle(uint8_t ucCONID)
 CONState_t CONGetState(CON_t *pCON)
 {
     return pCON->state;
+}
+static void CONDelete(CON_t *pCON)
+{
+    vEventGroupDelete(pCON->status.xHandleEventCharge);
+    vEventGroupDelete(pCON->status.xHandleEventException);
+    if(pCON->order.pChargeSegment != NULL)
+    {
+        pCON->order.pChargeSegment->Delete(pCON->order.pChargeSegment);
+    }
+    free(pCON);
+    pCON = NULL;
 }
 CON_t *CONCreate(uint8_t ucCONID )
 {
@@ -927,8 +918,9 @@ CON_t *CONCreate(uint8_t ucCONID )
 
     pCON->state = STATE_CON_IDLE;
 
+    pCON->order.pChargeSegment = NULL;
 
-    CONOrderInit(pCON);
+    OrderInit(&(pCON->order));
 
     return pCON;
 }
