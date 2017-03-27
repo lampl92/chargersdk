@@ -445,11 +445,13 @@ static void deleteCOM(void *pObj)
         if(pMT626COMObj->pMT626CMD[i] != NULL)
         {
             free(pMT626COMObj->pMT626CMD[i]);
+            pMT626COMObj->pMT626CMD[i] = NULL;
         }
     }
     free(pMT626COMObj ->pucRecvBuffer);
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
+    pMT626COMObj = NULL;
 }
 
 /** @brief 构造MT626通讯实例
