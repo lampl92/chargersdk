@@ -27,7 +27,6 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBitsRFID;
     EventBits_t uxBitsTimerCB;
-    OrderData_t tmpRfidOrderData;
     RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
@@ -35,8 +34,6 @@ void vTaskEVSERemote(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBitsRFID = 0;
     uxBitsTimerCB = 0;
-    tmpRfidOrderData.ucAccountStatus = 0;
-    tmpRfidOrderData.dBalance = 0;
     remotestat = REMOTE_NO;
     errcode = 0;
 
@@ -63,19 +60,20 @@ void vTaskEVSERemote(void *pvParameters)
                 }
             }
             /* 获取帐户信息*/
-            uxBitsRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-                                             defEventBitIsNewID,
+            uxBitsRFID = xEventGroupWaitBits(xHandleEventRemote,
+                                             defEventBitRemoteGetAccount,
                                              pdTRUE, pdFALSE, 0);
-            if((uxBitsRFID & defEventBitIsNewID) == defEventBitIsNewID)
+            if((uxBitsRFID & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
             {
-                xQueueReceive(xHandleQueueOrders, &tmpRfidOrderData, 1000);
                 THROW_ERROR(defDevID_Cloud,
-                            errcode = RemoteGetBalance(tmpRfidOrderData.ucCardID, defCardIDLength, &tmpRfidOrderData.ucAccountStatus, &tmpRfidOrderData.dBalance),
+                            errcode = RemoteGetBalance(pRFIDDev->order.ucCardID,
+                                                       defCardIDLength,
+                                                       &(pRFIDDev->order.ucAccountStatus),
+                                                       &(pRFIDDev->order.dBalance)),
                             ERR_LEVEL_CRITICAL);
                 if(errcode == ERR_NO)
                 {
-                    xQueueSend(xHandleQueueOrders, &tmpRfidOrderData, 0);
-                    xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGetAccountStatus);
+                    xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
                 }
             }
         }

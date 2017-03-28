@@ -172,7 +172,11 @@ static ErrorCode_t GetLngLat(void *pvEVSE)
 
     return errcode;
 }
-
+/** @todo (rgw#1#): 添加文件操作
+ */
+//    "ServiceFeeType": 1,
+//    "ServiceFee": 1,
+//    "DefSegFee": 1.2,
 
 /*---------------------------------------------------------------------------/
 /                               从驱动获取充电桩状态
@@ -319,6 +323,13 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     tmpArresterState = 0;
+
+    /** @todo (rgw#1#): 实现代码 */
+
+    //...
+
+    /*********************/
+
     pEVSE->status.ulArresterState = tmpArresterState;
     return errcode;
 }
@@ -334,6 +345,9 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.ucTotalCON = 2;
     pEVSE->info.dLng = 116.275833;
     pEVSE->info.dLat = 39.831944;
+    pEVSE->info.ucServiceFeeType = 0;
+    pEVSE->info.dServiceFee = 0;
+    pEVSE->info.dDefSegFee = 0;
 
     pEVSE->info.GetSN = GetSN;
     pEVSE->info.GetID = GetID;

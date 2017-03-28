@@ -53,6 +53,7 @@ typedef enum _ErrorCode
     ERR_NETMODULE_DMA,      //网络模块串口DMA传输错误
 
     ERR_NONET,               //网络通信故障
+    ERR_NET_TIMEOUT,        //网络通信超时
     ERR_MEMORY                //Malloc错误
 
 } ErrorCode_t;

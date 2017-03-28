@@ -24,6 +24,10 @@ typedef struct _EVSEInfo
     uint8_t ucTotalCON; //一共有多少枪
     double dLng;      //经度，保留后六位
     double dLat;      //纬度，保留后六位
+    uint8_t ucServiceFeeType;
+    double  dServiceFee;                //服务费
+    double dDefSegFee;
+
 
     pEVSE_ft GetSN;
     pEVSE_ft GetID;

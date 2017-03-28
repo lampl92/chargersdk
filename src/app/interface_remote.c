@@ -67,5 +67,7 @@ ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAcc
     *pucAccountStatus = tmpAccountStat;
     *pdBalance = tmpBalance;
 
+//    errcode = ERR_NET_TIMEOUT;
+//    errcode = ERR_NONET;
     return errcode;
 }

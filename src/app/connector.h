@@ -61,8 +61,9 @@ typedef ErrorCode_t (*pCon_ft)(void *pvCon);
 
 typedef struct _CONInfo
 {
-    uint8_t ucCONID;           // Ç¹ºÅ
-    uint8_t ucSocketType;           //0x0B 0x0C
+    uint8_t ucCONID;                // Ç¹ºÅ
+    uint8_t ucCONType;
+    uint8_t ucSocketType;
     double dVolatageUpperLimits;
     double dVolatageLowerLimits;
     double dACTempUpperLimits;

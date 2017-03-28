@@ -59,6 +59,9 @@ RFIDDev_t *RFIDDevCreate(void)
     pRFID->status.GetCardID = MT626GetUID;
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
+    pRFID->state = STATE_RFID_NOID;
+    pRFID->order.pChargeSegment = NULL;
+    OrderInit(&(pRFID->order));
 
     return pRFID;
 }

@@ -1,6 +1,6 @@
 /**
 * @file taskdata.c
-* @brief
+* @brief 配置文件读写、订单操作
 * @author rgw
 * @version v1.0
 * @date 2017-01-19
@@ -18,35 +18,66 @@ void vTaskEVSEData(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsTimer;
+    EventBits_t uxBitsData;
+    EventBits_t uxBitsCharge;
 
     ulTotalCON = pListCON->Total;
     uxBitsTimer = 0;
-
+    uxBitsData = 0;
+    uxBitsCharge = 0;
     THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING);//创建order.txt
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
+        /* 订单管理 */
+        //1. 等待刷卡完成事件
+        uxBitsData = xEventGroupWaitBits(xHandleEventData,
+                                         defEventBitOrderTmp,   //RFID中发出该事件
+                                         pdTRUE, pdFALSE, 0);
+        if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
+        {
+            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+            pCON->order.state = STATE_ORDER_TMP;
+        }
+        //2. 等待StartCharge事件
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
-            switch(pCON->state)
+            uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                               defEventBitCONStartOK,
+                                               pdFALSE, pdFALSE, 0);
+            if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
             {
-            case STATE_CON_IDLE:
-            case STATE_CON_PLUGED:
-            case STATE_CON_PRECONTRACT:
-            case STATE_CON_PRECONTRACT_LOSEPLUG:
-            case STATE_CON_STARTCHARGE:
+                pCON->order.state = STATE_ORDER_MAKE;
+            }
+        }
+
+        for(i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            switch(pCON->order.state)
+            {
+            case STATE_ORDER_IDLE:
                 break;
-            case STATE_CON_CHARGING:
-                //DataSetOrder(pCON, pEVSE);
-            case STATE_CON_STOPCHARGE:
-            case STATE_CON_ERROR:
-            default:
+            case STATE_ORDER_TMP:
+                makeOrder(pCON);
+                xEventGroupSetBits(xHandleEventData, defEventBitOrderUpdateOK);
+                break;
+            case STATE_ORDER_MAKE:
+                makeOrder(pCON);
+                xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);
+                break;
+            case STATE_ORDER_UPDATE:
+            case STATE_ORDER_FINISH:
                 break;
             }
         }
+
+
         /* 读取文件配置 */
-        uxBitsTimer = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh, pdTRUE, pdFALSE, 0);
+        uxBitsTimer = xEventGroupWaitBits(xHandleEventTimerCBNotify,
+                                          defEventBitTimerCBDataRefresh,
+                                          pdTRUE, pdFALSE, 0);
         if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
             THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);

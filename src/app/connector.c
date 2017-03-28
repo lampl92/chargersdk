@@ -15,6 +15,7 @@
 /                               从文件获取充电接口信息
 /---------------------------------------------------------------------------*/
 
+/** @todo (rgw#1#): 增加枪充电类型CONType */
 
 static ErrorCode_t GetSocketType(void *pvCON)
 {
@@ -858,6 +859,7 @@ CON_t *CONCreate(uint8_t ucCONID )
         return NULL;
     }
     pCON->info.ucCONID = ucCONID;
+    pCON->info.ucCONType = 0;
     pCON->info.ucSocketType = defSocketTypeB;
     pCON->info.dVolatageUpperLimits = 0;
     pCON->info.dVolatageLowerLimits = 0;

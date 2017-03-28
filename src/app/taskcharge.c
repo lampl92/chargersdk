@@ -182,7 +182,7 @@ void vTaskEVSECharge(void *pvParameters)
                 THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
                 vTaskDelay(defRelayDelay);
                 /** @todo (rgw#1#): 等待diag处理完成 */
-                pCON->state = STATE_CON_ERROR;
+                pCON->state = STATE_CON_IDLE;
                 break;
             }
         }

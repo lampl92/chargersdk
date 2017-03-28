@@ -52,25 +52,34 @@
 /*---------------------------------------------------------------------------/
 / xEventGroup
 /---------------------------------------------------------------------------*/
-//定义pRFIDDev->xHandleEventGroupRFID
-#define defEventBitGotIDtoRFID         BIT_0             //获取到ID，发送到RFID任务
-#define defEventBitGotIDtoHMI          BIT_1               //获取到ID，发送到HMI
-#define defEventBitIsNewID             BIT_2             //此卡在本桩没有刷过
+/*------pRFIDDev->xHandleEventGroupRFID*/
+#define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
+#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
+//#define defEventBitIsNewID              BIT_2             //此卡在本桩没有刷过
 #define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
+#define defEventBitRFIDNewID            BIT_4
+#define defEventBitRFIDOldID            BIT_5
 
-//xHandleEventData
-#define defEventBitAddOrder             BIT_0
-#define defEventBitAddOrderOK           BIT_1
-//xHandleEventRemote
-#define defEventBitRemote
-//xHandleEventDiag
-#define defEventBitDiagTempW            BIT_0              //温度报警
+/*------xHandleEventData*/
+#define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
+#define defEventBitOrderMakeOK          BIT_1
+#define defEventBitOrderUpdateOK        BIT_2
+
+
+#define defEventBitAddOrder             BIT_5
+#define defEventBitAddOrderOK           BIT_6
+/*------xHandleEventRemote*/
+#define defEventBitRemoteGetAccount     BIT_0
+#define defEventBitRemoteGotAccount     BIT_1
+
+/*------xHandleEventDiag*/
+#define defEventBitDiagTempW             BIT_0              //温度报警
 #define defEventBitDiagTemp              BIT_1
 #define defEventBitDiagLockState         BIT_2
 #define defEventBitDiagPlugState         BIT_3
 #define defEventBitDiagChargingData      BIT_4
 #define defEventBitDiagEVSEState         BIT_5
-//定义pCON->status.xHandleEventException
+/*------pCON->status.xHandleEventException*/
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
@@ -80,7 +89,7 @@
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
 
-//定义pCON->status.xHandleEventCharge
+/*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed      BIT_0       //帐户认证OK
 #define defEventBitCONLocked      BIT_1
 #define defEventBitCONVoltOK      BIT_2
@@ -99,6 +108,11 @@
 #define defEventBitEVSEKnockOK      BIT_15
 #define defEventBitEVSEArresterOK   BIT_16
 #define defEventBitEVSEPowerOffOK   BIT_17
+
+#define defEventBitCONOrderStart    BIT_18
+
+
+
 
 #define defEventBitEVSEReady        defEventBitEVSEScramOK |    \
                                     defEventBitEVSEPEOK |       \
@@ -121,7 +135,7 @@
 
 
 
-//定义xHandleEventTimerCBNotify
+/*------xHandleEventTimerCBNotify*/
 #define defEventBitTimerCBTemp              BIT_0
 #define defEventBitTimerCBLockState         BIT_1
 #define defEventBitTimerCBPlugState         BIT_2
