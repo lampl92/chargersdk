@@ -8,10 +8,9 @@
 #include "includes.h"
 #include "xprintf.h"
 
-uint32_t StrToBCD(const char *Src, char *Des, int iDesLen)
-
+uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
 {
-    if (NULL == Src)
+    if (NULL == Str)
     {
         return 0;
     }
@@ -24,22 +23,22 @@ uint32_t StrToBCD(const char *Src, char *Des, int iDesLen)
         return 0;
     }
 
-    int iSrcLen = strlen(Src);
-    if (iSrcLen > iDesLen * 2)
+    int iStrLen = strlen(Str);
+    if (iStrLen > iDesLen * 2)
     {
         return 0;
     }
     char chTemp = 0;
     int i;
-    for (i = 0; i < iSrcLen; i++)
+    for (i = 0; i < iStrLen; i++)
     {
         if (i % 2 == 0)
         {
-            chTemp = (Src[i] << 4) & 0xF0;
+            chTemp = (Str[i] << 4) & 0xF0;
         }
         else
         {
-            chTemp = chTemp & 0xF0 | (Src[i] & 0x0F);
+            chTemp = chTemp & 0xF0 | (Str[i] & 0x0F);
             Des[i / 2] = chTemp;
         }
     }
@@ -77,25 +76,32 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
     return 1;
 }
 
-uint32_t HexToChar(uint8_t Hex, uint8_t *Src)
+uint32_t HexToChar(uint8_t Hex, uint8_t *c)
 {
-//    if(Hex <= 0xf)
-//    {
-//        Src[0] = '0';
-//        xsprintf(&Src[1], "%x",Hex);
-//    }
-//    else
-    {
-        xsprintf(Src, "%02x", Hex);
-    }
+    xsprintf(c, "%02x", Hex);
 }
 
-uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen)
+uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
 {
     int i;
     for(i = 0; i < Hexlen; i++)
     {
-        HexToChar(Hex[i], &(Src[i*2]));
+        HexToChar(Hex[i], &(Str[i*2]));
     }
-    Src[i*2] = '\0';
+    Str[i*2] = '\0';
+}
+
+uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
+{
+//    uint8_t hexbuff[3];
+//    uint8_t *src;
+//    int i;
+//    src = Str;
+//
+//    for(i = 0; i < Strlen; i++)
+//    {
+//
+//    }
+//    strncpy((char *)tbuf, str, 2);//"16"->tbuf
+
 }

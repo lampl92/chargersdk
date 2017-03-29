@@ -11,6 +11,7 @@
 #include "interface.h"
 #include "stringName.h"
 #include "cJSON.h"
+#include "utils.h"
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -24,12 +25,17 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE)
     UINT  br;   //byte read
 
     cJSON *jsEVSEObj, *jsItem;
-
+    char *str;
     uint32_t ulTotalSegs;
     static TemplSeg_t *pTemplSeg;
     struct tm *ts;
+
+    EVSEInfo_t *pInfo;
     ErrorCode_t errcode;
 
+    pInfo = &(((EVSE_t *)pvEVSE)->info);
+
+    /*读取文件*/
     ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
     if(res != FR_OK)
     {
@@ -44,7 +50,17 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE)
         errcode = ERR_FILE_RW;
         return errcode;
     }
+
+    /*json解析*/
     jsEVSEObj = cJSON_Parse(rbuff);
+    jsItem = cJSON_GetObjectItem(jsEVSEObj, jnEVSESN);
+//    pInfo->ucSN
+    str = jsItem->valuestring;
+
+
+
+
+
     jsItem = cJSON_GetObjectItem(jsEVSEObj, jnTemplSegArray);
     ulTotalSegs = cJSON_GetArraySize(jsItem);
     cJSON_Delete(jsItem);
