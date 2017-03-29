@@ -39,18 +39,7 @@ void vTaskEVSEData(void *pvParameters)
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             pCON->order.state = STATE_ORDER_TMP;
         }
-        //2. 等待StartCharge事件
-        for(i = 0; i < ulTotalCON; i++)
-        {
-            pCON = CONGetHandle(i);
-            uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                               defEventBitCONStartOK,
-                                               pdFALSE, pdFALSE, 0);
-            if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
-            {
-                pCON->order.state = STATE_ORDER_MAKE;
-            }
-        }
+
 
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -62,13 +51,32 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
                 xEventGroupSetBits(xHandleEventData, defEventBitOrderUpdateOK);
+                pCON->order.state = STATE_ORDER_WAITSTART;
+                break;
+            case STATE_ORDER_WAITSTART:
+                //2. 等待StartCharge事件
+                for(i = 0; i < ulTotalCON; i++)
+                {
+                    pCON = CONGetHandle(i);
+                    uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                                       defEventBitCONStartOK,
+                                                       pdFALSE, pdFALSE, 0);
+                    if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
+                    {
+                        pCON->order.state = STATE_ORDER_MAKE;
+                    }
+                }
                 break;
             case STATE_ORDER_MAKE:
+                //3. 开始时的数据准备
                 makeOrder(pCON);
-                xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);
+                xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);//目前还没有地方用
+                pCON->order.state = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
+                //4. 更新充电数据
             case STATE_ORDER_FINISH:
+                //5. 结束充电
                 break;
             }
         }
