@@ -9,10 +9,53 @@
 #include "evse_globals.h"
 #include "userlib_list.h"
 #include "interface.h"
+#include "stringName.h"
+#include "cJSON.h"
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
 
+static ErrorCode_t GetEVSECfg(void *pvEVSE)
+{
+    FIL f;
+    FRESULT res;
+    uint8_t *rbuff;
+    FSIZE_t fsize;
+    UINT  br;   //byte read
+
+    cJSON *jsEVSEObj, *jsItem;
+
+    uint32_t ulTotalSegs;
+    static TemplSeg_t *pTemplSeg;
+    struct tm *ts;
+    ErrorCode_t errcode;
+
+    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
+    if(res != FR_OK)
+    {
+        errcode = ERR_FILE_RW;
+        return errcode;
+    }
+    fsize = f_size(&f);
+    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
+    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
+    if(fsize != br)
+    {
+        errcode = ERR_FILE_RW;
+        return errcode;
+    }
+    jsEVSEObj = cJSON_Parse(rbuff);
+    jsItem = cJSON_GetObjectItem(jsEVSEObj, jnTemplSegArray);
+    ulTotalSegs = cJSON_GetArraySize(jsItem);
+    cJSON_Delete(jsItem);
+    printf_safe("ulTotalSegs = %d\n", ulTotalSegs);
+
+    ulTotalSegs = 4;/** @fixme (rgw#1#): dummy,应该从文件获取 */
+    pTemplSeg = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
+    //pTemplSeg->tStartTime =
+
+    free(rbuff);
+}
 
 /** @brief 设备唯一序列号,和长度
  *
@@ -349,11 +392,16 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.dServiceFee = 0;
     pEVSE->info.dDefSegFee = 0;
 
+    pEVSE->info.GetEVSECfg = GetEVSECfg;
     pEVSE->info.GetSN = GetSN;
     pEVSE->info.GetID = GetID;
     pEVSE->info.GetType = GetType;
     pEVSE->info.GetTotalCON = GetTotalCON;
     pEVSE->info.GetLngLat = GetLngLat;
+
+    pEVSE->info.pTemplSeg = NULL;
+    pEVSE->info.pTemplSeg = UserListCreate();
+
 
     pEVSE->status.ulArresterState = 0;
     pEVSE->status.ulKnockState = 0;

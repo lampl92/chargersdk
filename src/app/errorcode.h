@@ -8,6 +8,8 @@
 #ifndef  __ERRORCODE_H
 #define  __ERRORCODE_H
 
+#include "ff.h"
+
 #define THROW_ERROR(_dev, _errcode,_errlevel)   do{                                           \
                                                     ErrorCode_t _macro_errcode = _errcode;         \
                                                     if(_macro_errcode != ERR_NO)                  \
@@ -87,5 +89,6 @@ typedef struct _ErrorPackage
 extern const uint8_t *strErrorCode[];
 
 void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel);
+void ThrowFSCode (FRESULT rc);
 
 #endif

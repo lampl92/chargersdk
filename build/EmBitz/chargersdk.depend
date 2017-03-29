@@ -721,7 +721,7 @@
 
 1489742740 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
-1490582273 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
+1490752417 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdarg.h>
 	<stdio.h>
 	<string.h>
@@ -877,13 +877,14 @@
 1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1490342351 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1490766687 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
 	"cJSON.h"
 	"s2j.h"
 	<time.h>
+	"stringName.h"
 
 1480044329 d:\documents\projects\chargersdk\src\middlewares\fatfs\diskdrv\ff_gen_drv.h
 	"diskio.h"
@@ -945,7 +946,7 @@
 	"includes.h"
 	"mxml.h"
 
-1490338951 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
+1490752378 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
 	"includes.h"
 	"bsp.h"
 
@@ -1071,9 +1072,10 @@
 	"ff_gen_drv.h"
 	"bsp_nand_ftl.h"
 
-1481016545 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\diskio.c
+1490765783 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\diskio.c
 	"diskio.h"
 	"ff_gen_drv.h"
+	<time.h>
 
 1480991217 source:d:\documents\projects\chargersdk\src\middlewares\fatfs\src\ff.c
 	"ff.h"
@@ -1714,7 +1716,7 @@
 	"interface_rfid.h"
 	"interface_data.h"
 
-1490748612 source:d:\documents\projects\chargersdk\src\app\taskdata.c
+1490768465 source:d:\documents\projects\chargersdk\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
@@ -1751,11 +1753,11 @@
 
 1485051725 d:\documents\projects\chargersdk\src\app\taskota.h
 
-1490750816 source:d:\documents\projects\chargersdk\src\app\connector.c
+1490751035 source:d:\documents\projects\chargersdk\src\app\connector.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
-	"interface.h"
+	"connector.h"
 
 1490751044 d:\documents\projects\chargersdk\src\app\connector.h
 	"stm32f4xx.h"
@@ -1878,29 +1880,33 @@
 	"includes.h"
 	"interface.h"
 
-1490692225 d:\documents\projects\chargersdk\src\app\evse.h
+1490769644 d:\documents\projects\chargersdk\src\app\evse.h
 	"stm32f4xx.h"
 	"evse_config.h"
 	"errorcode.h"
+	"userlib_list.h"
 
-1490692545 source:d:\documents\projects\chargersdk\src\app\evse.c
+1490771765 source:d:\documents\projects\chargersdk\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
 	"interface.h"
+	"stringName.h"
+	"cJSON.h"
 
-1490332486 source:d:\documents\projects\chargersdk\src\app\interface_data.c
+1490766787 source:d:\documents\projects\chargersdk\src\app\interface_data.c
 	"includes.h"
 	"interface.h"
 	"cJSON.h"
-	"jsonname.h"
+	"stringName.h"
 	"utils.h"
 
-1490624617 source:d:\documents\projects\chargersdk\src\app\errorcode.c
+1490768694 source:d:\documents\projects\chargersdk\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
-1490624659 d:\documents\projects\chargersdk\src\app\errorcode.h
+1490768364 d:\documents\projects\chargersdk\src\app\errorcode.h
+	"ff.h"
 
 1490594484 d:\documents\projects\chargersdk\src\app\interface_data.h
 	"includes.h"
@@ -1984,7 +1990,7 @@
 
 1489981614 d:\documents\projects\chargersdk\src\app\interface_diag.h
 
-1490692710 source:d:\documents\projects\chargersdk\src\app\order.c
+1490769647 source:d:\documents\projects\chargersdk\src\app\order.c
 	"includes.h"
 	"interface.h"
 	<time.h>
@@ -2386,4 +2392,6 @@
 1490750967 d:\documents\projects\chargersdk\src\app\order.h
 	<time.h>
 	"userlib_list.h"
+
+1490771334 d:\documents\projects\chargersdk\src\app\stringname.h
 

@@ -11,9 +11,15 @@
 #include "stm32f4xx.h"
 #include "evse_config.h"
 #include "errorcode.h"
+#include "userlib_list.h"
 
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
-
+typedef struct _TemplSeg
+{
+    time_t tStartTime;//用time_t表示时，忽略年月日，在时段中只关注时分秒
+    time_t tEndTime;
+    double dSegFee;
+}TemplSeg_t;
 typedef struct _EVSEInfo
 {
     uint8_t ucSN[defEVSESNLength+1]; //设备唯一序列号
@@ -27,8 +33,9 @@ typedef struct _EVSEInfo
     uint8_t ucServiceFeeType;
     double  dServiceFee;                //服务费
     double dDefSegFee;
+    UserList_t *pTemplSeg;
 
-
+    pEVSE_ft GetEVSECfg;
     pEVSE_ft GetSN;
     pEVSE_ft GetID;
     pEVSE_ft GetType;

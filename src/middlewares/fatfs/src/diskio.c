@@ -9,6 +9,7 @@
 
 #include "diskio.h"     /* FatFs lower layer API */
 #include "ff_gen_drv.h"
+#include <time.h>
 extern Disk_drvTypeDef  disk;
 
 /*-----------------------------------------------------------------------*/
@@ -96,17 +97,25 @@ DRESULT disk_ioctl (
     return res;
 }
 //TODO: 获取RTC时间
-//31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31)  
-//15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2)     
+//31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31)
+//15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2)
 DWORD get_fattime (void)
 {
-	/* ???????,?????????????. ?????2013-01-01 00:00:00 */
-    
-
-	return	  ((DWORD)(2013 - 1980) << 25)	/* Year = 2013 */
-			| ((DWORD)1 << 21)				/* Month = 1 */
-			| ((DWORD)1 << 16)				/* Day_m = 1*/
-			| ((DWORD)0 << 11)				/* Hour = 0 */
-			| ((DWORD)0 << 5)				/* Min = 0 */
-			| ((DWORD)0 >> 1);				/* Sec = 0 */
+    time_t now;
+    struct tm *ts;
+    now = time(NULL);
+    ts = localtime(&now);
+    return    ((DWORD)(ts->tm_year + 1900 - 1980) << 25)
+              | ((DWORD)(ts->tm_mon + 1) << 21)
+              | ((DWORD)(ts->tm_mday) << 16)
+              | ((DWORD)(ts->tm_hour) << 11)
+              | ((DWORD)(ts->tm_min) << 5)
+              | ((DWORD)(ts->tm_sec) >> 1);
+//
+//  return    ((DWORD)(2013 - 1980) << 25)  /* Year = 2013 */
+//          | ((DWORD)1 << 21)              /* Month = 1 */
+//          | ((DWORD)1 << 16)              /* Day_m = 1*/
+//          | ((DWORD)0 << 11)              /* Hour = 0 */
+//          | ((DWORD)0 << 5)               /* Min = 0 */
+//          | ((DWORD)0 >> 1);              /* Sec = 0 */
 }

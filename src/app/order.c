@@ -51,6 +51,20 @@ void OrderInit(OrderData_t *pOrder)
 
 void JudgeSegment(time_t now, CON_t *pCON)
 {
+    uint32_t ulTotalSegs;
+    TemplSeg_t *pTemplSeg;
+    struct tm *ts;
+    int i;
+
+    ts = localtime(&now);
+    ulTotalSegs = pEVSE->info.pTemplSeg->Total;
+    for(i = 0; i < ulTotalSegs; i++ )
+    {
+        pTemplSeg = (TemplSeg_t *)(pEVSE->info.pTemplSeg->pListPointArray[i]);
+        //pTemplSeg->tStartTime
+    }
+
+
 
 }
 
@@ -73,8 +87,10 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.tStartTime = time(NULL);
         pCON->order.dStartPower = pCON->status.dChargingPower;
         pCON->order.ucServiceFeeType = pEVSE->info.ucServiceFeeType;
+        JudgeSegment(pCON->order.tStartTime, pCON);
         break;
     case STATE_ORDER_UPDATE:
+        JudgeSegment(time(NULL), pCON);
     case STATE_ORDER_FINISH:
         break;
     }

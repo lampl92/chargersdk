@@ -154,7 +154,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\interface_rfid.h" />
-		<Unit filename="..\..\src\app\jsonname.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_err.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -176,6 +175,7 @@
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\stringName.h" />
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
 		</Unit>

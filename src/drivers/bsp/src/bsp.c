@@ -9,43 +9,6 @@
 #include "includes.h"
 #include "bsp.h"
 
-
-/* private function prototypes -----------------------------------------------*/
-static void SystemClock_Config(void);
-void Stm32_Clock_Init(uint32_t plln,uint32_t pllm,uint32_t pllp,uint32_t pllq);
-
-
-/* ---------------------------------------------------------------------------*/
-/**
-* @brief 初始化所有的硬件设备。该函数配置CPU寄存器和外设的寄存器并初始化一些
-*        全局变量。只需要调用一次
-*/
-/* ---------------------------------------------------------------------------*/
-void bsp_Init(void)
-{
-    /*
-        由于ST固件库的启动文件已经执行了CPU系统时钟的初始化，所以不必再次重复配置系统时钟。
-        启动文件配置了CPU主时钟频率、内部Flash访问速度和可选的外部SRAM FSMC初始化。
-
-    */
-    /* 优先级分组设置为4，可配置0-15级抢占式优先级，0级子优先级，即不存在子优先级。*/
-
-    HAL_Init();
-    SystemClock_Config(); //系统始终配置为180MHz
-    SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
-    /* Enable the CRC Module */
-    __HAL_RCC_CRC_CLK_ENABLE();	//
-    bsp_RTC_Init();
-    RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS,0);  //配置 WAKE UP 中断,1 秒钟中断一次
-    bsp_DWT_Init();
-    bsp_SDRAM_Init();
-    bsp_Uart_Init();   /* 初始化串口 */
-    //FTL_Init();在fatfs中初始化
-    //bsp_LTDC_Init();//在GUI中初始化
-    bsp_Touch_Init();
-
-}
-
 /**
   * @brief  System Clock Configuration
   *         The system Clock is configured as follow :
@@ -138,6 +101,37 @@ static void SystemClock_Config(void)
     /* Initialization Error */
     bsp_Error_Handler();
   }
+}
+
+/* ---------------------------------------------------------------------------*/
+/**
+* @brief 初始化所有的硬件设备。该函数配置CPU寄存器和外设的寄存器并初始化一些
+*        全局变量。只需要调用一次
+*/
+/* ---------------------------------------------------------------------------*/
+void bsp_Init(void)
+{
+    /*
+        由于ST固件库的启动文件已经执行了CPU系统时钟的初始化，所以不必再次重复配置系统时钟。
+        启动文件配置了CPU主时钟频率、内部Flash访问速度和可选的外部SRAM FSMC初始化。
+
+    */
+    /* 优先级分组设置为4，可配置0-15级抢占式优先级，0级子优先级，即不存在子优先级。*/
+
+    HAL_Init();
+    SystemClock_Config(); //系统始终配置为192MHz
+    SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
+    /* Enable the CRC Module */
+    __HAL_RCC_CRC_CLK_ENABLE();	//
+    bsp_RTC_Init();
+    RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS,0);  //配置 WAKE UP 中断,1 秒钟中断一次
+    bsp_DWT_Init();
+    bsp_SDRAM_Init();
+    bsp_Uart_Init();   /* 初始化串口 */
+    //FTL_Init();在fatfs中初始化
+    //bsp_LTDC_Init();//在GUI中初始化
+    bsp_Touch_Init();
+
 }
 
 void bsp_Error_Handler(void)

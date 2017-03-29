@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "interface.h"
 #include "cJSON.h"
-#include "jsonname.h"
+#include "stringName.h"
 #include "utils.h"
 ErrorCode_t CreateOrderFile(void)
 {
@@ -19,21 +19,21 @@ ErrorCode_t CreateOrderFile(void)
     UINT br,bw;
     cJSON *order_root, *order_item;
 
-    res = f_open(&fil, "system/order.txt",  FA_CREATE_NEW);
+    res = f_open(&fil, pathOrder,  FA_CREATE_NEW);
     switch(res)
     {
         case FR_OK:
             f_close(&fil);
             order_root = cJSON_CreateObject();
             order_item = cJSON_CreateArray();
-            cJSON_AddItemToObject(order_root, "MaxIndex", cJSON_CreateNumber(0));
-            cJSON_AddItemToObject(order_root, "Order", order_item);
+            cJSON_AddItemToObject(order_root, jnMaxIndex, cJSON_CreateNumber(0));
+            cJSON_AddItemToObject(order_root, jnOrder, order_item);
             p = cJSON_Print(order_root);
             #ifdef DEBUG_INTERFACE_DATA
             printf_safe("order.txt 创建成功\n");
             printf_safe("%s\n", p);
             #endif
-            f_open(&fil, "system/order.txt", FA_WRITE);
+            f_open(&fil, pathOrder, FA_WRITE);
             f_write(&fil, p, strlen(p), &bw);
             f_close(&fil);
             free(p);
@@ -42,7 +42,7 @@ ErrorCode_t CreateOrderFile(void)
             break;
         case FR_EXIST:
             f_close(&fil);
-            f_open(&fil, "system/order.txt", FA_READ);
+            f_open(&fil, pathOrder, FA_READ);
             p = (uint8_t *)malloc(f_size(&fil) * sizeof(uint8_t));
 
             f_read(&fil, p, f_size(&fil), &br);
@@ -55,7 +55,7 @@ ErrorCode_t CreateOrderFile(void)
                 errcode = ERR_FILE_RW;
                 return errcode ;
             }
-            order_item = cJSON_GetObjectItem(order_root, "MaxIndex");
+            order_item = cJSON_GetObjectItem(order_root, jnMaxIndex);
             #ifdef DEBUG_INTERFACE_DATA
             printf_safe("%s\n",p);
             printf_safe("MaxIndex = %d\n", order_item->valueint);

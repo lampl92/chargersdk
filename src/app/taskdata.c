@@ -88,6 +88,8 @@ void vTaskEVSEData(void *pvParameters)
                                           pdTRUE, pdFALSE, 0);
         if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
+            THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE), ERR_LEVEL_WARNING);
+
             THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
             THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
             THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);

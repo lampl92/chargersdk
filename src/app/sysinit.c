@@ -4,6 +4,7 @@
 #include "cJSON.h"
 #include "s2j.h"
 #include <time.h>
+#include "stringName.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -74,7 +75,7 @@ uint8_t create_sysconf_file()
 
     p = cJSON_Print(Sysconf_j);
     s2j_delete_json_obj(Sysconf_j);
-    res = f_open(&fil, "system/sysconf.cfg", FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&fil, pathSysconf, FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
     case FR_OK:
