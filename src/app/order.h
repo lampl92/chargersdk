@@ -60,4 +60,5 @@ typedef struct _OrderData
 }OrderData_t;
 
 void OrderInit(OrderData_t *pOrder);
+
 #endif

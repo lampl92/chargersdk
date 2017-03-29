@@ -49,7 +49,7 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->pChargeSegment = UserListCreate();
 }
 
-JudgeSegment(time_t now, CON_t *pCON)
+void JudgeSegment(time_t now, CON_t *pCON)
 {
 
 }
