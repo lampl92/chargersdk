@@ -1,5 +1,6 @@
 #ifndef BSP_SDRAM_H
 #define BSP_SDRAM_H
+#include "stm32f4xx.h"
 #include "bsp.h"
 
 extern SDRAM_HandleTypeDef SDRAM_Handler;//SDRAM¾ä±ú

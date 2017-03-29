@@ -172,7 +172,7 @@
 1474539204 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal.h
 	"stm32f4xx_hal_conf.h"
 
-1490060157 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_conf.h
+1490778109 d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\inc\stm32f4xx_hal_conf.h
 	"stm32f4xx_hal_rcc.h"
 	"stm32f4xx_hal_gpio.h"
 	"stm32f4xx_hal_dma.h"
@@ -721,7 +721,7 @@
 
 1489742740 d:\documents\projects\chargersdk\src\cli\cli_main.h
 
-1490752417 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
+1490781146 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp.h
 	<stdarg.h>
 	<stdio.h>
 	<string.h>
@@ -745,7 +745,8 @@
 	"FreeRTOS.h"
 	"semphr.h"
 
-1478666404 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_sdram.h
+1490780997 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_sdram.h
+	"stm32f4xx.h"
 	"bsp.h"
 
 1478674849 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_dwt.h
@@ -756,13 +757,13 @@
 1480053803 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_user_lib.h
 	"stm32f4xx.h"
 
-1479826861 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_hw.h
+1490780102 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_hw.h
 	"bsp.h"
 
-1479826913 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_ftl.h
+1490779969 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_nand_ftl.h
 	"bsp.h"
 
-1481520237 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_touch_2046.h
+1490780214 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_touch_2046.h
 	"bsp.h"
 
 1478573796 d:\documents\projects\chargersdk\src\middlewares\tinysh\tinysh.h
@@ -871,13 +872,13 @@
 1488445114 source:d:\documents\projects\chargersdk\src\app\main.c
 	"includes.h"
 
-1490575336 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
+1490776248 source:d:\documents\projects\chargersdk\src\app\stm32f4xx_it.c
 	"stm32f4xx_it.h"
 
-1477539502 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
+1490776995 d:\documents\projects\chargersdk\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1490766687 source:d:\documents\projects\chargersdk\src\app\sysinit.c
+1490780233 source:d:\documents\projects\chargersdk\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -913,7 +914,7 @@
 	"utils.h"
 	<time.h>
 
-1489047971 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
+1490780253 source:d:\documents\projects\chargersdk\src\cli\cli_fatfs.c
 	"includes.h"
 	"ff.h"
 	"ff_gen_drv.h"
@@ -938,7 +939,7 @@
 
 1480391775 d:\documents\projects\chargersdk\src\cli\cli_xml.h
 
-1488513583 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
+1490780337 source:d:\documents\projects\chargersdk\src\cli\cli_rtos.c
 	"includes.h"
 	"task.h"
 
@@ -946,7 +947,7 @@
 	"includes.h"
 	"mxml.h"
 
-1490752378 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
+1490781146 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp.c
 	"includes.h"
 	"bsp.h"
 
@@ -1779,7 +1780,8 @@
 
 1485138983 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_gpio.c
 
-1485140012 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_timer.c
+1490778176 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\bsp_timer.c
+	"bsp_timer.h"
 
 1485141036 source:d:\documents\projects\chargersdk\src\drivers\device\src\buzzer.c
 	"bsp.h"
@@ -1886,13 +1888,14 @@
 	"errorcode.h"
 	"userlib_list.h"
 
-1490771765 source:d:\documents\projects\chargersdk\src\app\evse.c
+1490774596 source:d:\documents\projects\chargersdk\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
 	"interface.h"
 	"stringName.h"
 	"cJSON.h"
+	"utils.h"
 
 1490766787 source:d:\documents\projects\chargersdk\src\app\interface_data.c
 	"includes.h"
@@ -2394,4 +2397,36 @@
 	"userlib_list.h"
 
 1490772674 d:\documents\projects\chargersdk\src\app\stringname.h
+
+1490781020 d:\documents\projects\chargersdk\src\drivers\bsp\inc\bsp_timer.h
+	"bsp.h"
+	"stm32f4xx_hal_tim.h"
+
+1490776699 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\myiic.c
+	"myiic.h"
+
+1490781029 d:\documents\projects\chargersdk\src\drivers\bsp\inc\myiic.h
+	"bsp.h"
+
+1490778473 source:d:\documents\projects\chargersdk\src\drivers\bsp\src\user_app.c
+	"stm32f4xx_hal.h"
+	"bsp.h"
+	<stdlib.h>
+	<math.h>
+	"bsp_timer.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c
+	"stm32f4xx_hal.h"
+
+1490775380 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_msp.c
+	"stm32f4xx_hal.h"
+
+1474539192 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim.c
+	"stm32f4xx_hal.h"
+
+1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim_ex.c
+	"stm32f4xx_hal.h"
 

@@ -4,9 +4,9 @@ uint8_t acTaskStatusBuffer[500];
 
 void cli_tasklist_fnt(int argc, char **argv)
 {
-    u16 FreeBytesRemaining=0;
-    u16 memused;
-    u8 paddr[20];
+    uint16_t FreeBytesRemaining=0;
+    uint16_t memused;
+    uint8_t paddr[20];
 
     printf_safe("\r\n");
     vTaskList((char *)&acTaskStatusBuffer);

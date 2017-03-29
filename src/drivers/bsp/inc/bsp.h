@@ -5,7 +5,7 @@
 * @version v1.0
 * @date 2016-11-01
 */
-#ifndef _BSP_H_
+#ifndef _BSP_H
 #define _BSP_H
 /* Private typedef -----------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -42,12 +42,12 @@
 //#define CPU_IDLE()        bsp_Idle()
 
 #ifdef USE_FreeRTOS
-    #define DISABLE_INT()    taskENTER_CRITICAL()
-    #define ENABLE_INT()     taskEXIT_CRITICAL()
+#define DISABLE_INT()    taskENTER_CRITICAL()
+#define ENABLE_INT()     taskEXIT_CRITICAL()
 #else
-    /* 开关全局中断的宏 */
-    #define ENABLE_INT()    __set_PRIMASK(0)    /* 使能全局中断 */
-    #define DISABLE_INT()   __set_PRIMASK(1)    /* 禁止全局中断 */
+/* 开关全局中断的宏 */
+#define ENABLE_INT()    __set_PRIMASK(0)    /* 使能全局中断 */
+#define DISABLE_INT()   __set_PRIMASK(1)    /* 禁止全局中断 */
 #endif
 
 
@@ -61,11 +61,11 @@
 #define DEBUG_GPS_TO_COM1   /* 打印GPS数据到串口1 */
 
 #ifndef TRUE
-    #define TRUE  1
+#define TRUE  1
 #endif
 
 #ifndef FALSE
-    #define FALSE 0
+#define FALSE 0
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -191,6 +191,195 @@ typedef __I uint8_t vuc8;
 
 #define PKout(n)   BIT_ADDR(GPIOK_ODR_Addr,n)  //输出
 #define PKin(n)    BIT_ADDR(GPIOK_IDR_Addr,n)  //输入
+
+
+/********************************************************************
+sys.h
+**********************************************************************/
+
+#define CS1_ON       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9,GPIO_PIN_SET)
+#define CS1_OFF      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9,GPIO_PIN_RESET)
+
+#define A_SELECT_OFF HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_RESET)
+#define A_SELECT_ON  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_SET)
+
+#define B_SELECT_OFF HAL_GPIO_WritePin(GPIOH, GPIO_PIN_3,GPIO_PIN_RESET)
+#define B_SELECT_ON  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_3,GPIO_PIN_SET)
+
+#define C_SELECT_OFF HAL_GPIO_WritePin(GPIOH, GPIO_PIN_4,GPIO_PIN_RESET)
+#define C_SELECT_ON  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_4,GPIO_PIN_SET)
+
+#define D_SELECT_OFF HAL_GPIO_WritePin(GPIOH, GPIO_PIN_5,GPIO_PIN_RESET)
+#define D_SELECT_ON  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_5,GPIO_PIN_SET)
+
+#define A_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_RESET)//ctr_gjd1
+#define A_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_SET)//ctr_gjd1
+
+#define B_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3,GPIO_PIN_RESET)//ctr_gjd2
+#define B_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3,GPIO_PIN_SET) //ctr_gjd2
+
+#define C_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6,GPIO_PIN_RESET)//ctr_gjd3
+#define C_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6,GPIO_PIN_SET) //ctr_gjd3
+
+#define D_KEY_OFF    HAL_GPIO_WritePin(GPIOI, GPIO_PIN_8,GPIO_PIN_RESET) //ctr_gjd4
+#define D_KEY_ON     HAL_GPIO_WritePin(GPIOI, GPIO_PIN_8,GPIO_PIN_SET)//ctr_gjd4
+
+#define POWER_L_ON   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,GPIO_PIN_SET)
+#define POWER_L_OFF  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,GPIO_PIN_RESET)
+
+#define POWER_N_ON   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5,GPIO_PIN_SET)
+#define POWER_N_OFF  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5,GPIO_PIN_RESET)
+
+#define PWM1_ON      HAL_TIM_OC_Start_IT(&htim2, TIM_CHANNEL_1)//????PWM1
+#define PWM2_ON      HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_2)//????PWM2
+#define PWM1_OFF     HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//??±?PWM1
+#define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//??±?PWM2
+
+#define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
+
+
+#define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
+#define TIMER5_OFF   HAL_TIM_Base_Stop_IT(&htim5)
+
+#define TIMER3_ON    HAL_TIM_Base_Start_IT(&htim3)
+#define TIMER3_OFF   HAL_TIM_Base_Stop_IT(&htim3)
+
+#define PWM1_1000  TIM_SetTIM2Compare1(1000);
+#define PWM1_535   TIM_SetTIM2Compare1(535);
+
+#define PWM2_1000  TIM_SetTIM4Compare1(1000);
+#define PWM2_535   TIM_SetTIM4Compare1(535);
+
+#define write_chip1 0x40 //0100 0000
+#define read_chip1 0x41 //0100 0001
+
+#define write_chip2 0x42 //0100 0010
+#define read_chip2 0x43 //0100 0011
+
+
+
+
+
+#define samp_sum   200
+#define samp_dma    10
+#define ia_k       0.02197265
+#define va_k       0.22056//0.38?????÷??????????·?????×è300??1
+#define leakage_current_k   0.073242
+#define temper_k   100
+#define CP1_k      0.00344238
+#define CP2_k      0.00344238//14.1/3??·???±???
+
+void Stm32_Clock_Init(u32 plln, u32 pllm, u32 pllp, u32 pllq); //?±??????????
+//????????±à????
+void WFI_SET(void);     //????WFI????
+void INTX_DISABLE(void);//??±??ù??????
+void INTX_ENABLE(void); //?????ù??????
+void MSR_MSP(u32 addr); //?è?????????·
+extern void MX_GPIO_Init(void);
+extern void MX_DMA_Init(void);
+extern void MX_ADC1_Init(void);
+extern void TIM_SetTIM2Compare1(unsigned int);
+extern void TIM2_PWM_Init(unsigned int, unsigned int);
+extern void DMA_START(void);
+extern void MX_TIM3_Init(void);
+extern void MX_TIM2_Init(void);
+extern void MX_TIM1_Init(void);
+extern float get_CP1(void);
+extern float get_CP2(void);
+extern float get_va(void);
+extern ADC_HandleTypeDef hadc1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
+extern void Gun_test(void);
+extern void Peripheral_Init(void);
+
+
+typedef struct
+{
+    unsigned short va_samp[samp_sum];
+    unsigned short ia_samp[samp_sum];
+    unsigned short leakage_current_samp[samp_sum];
+} AC_samp_t;
+typedef struct
+{
+    unsigned short CP1[samp_sum];
+    unsigned short CP2[samp_sum];
+    unsigned short CD4067[samp_sum];
+} DC_samp_t;
+typedef struct
+{
+    float va;
+    float ia;
+    float leakage_current;
+} AC_t;
+typedef struct
+{
+    float CP1;
+    float CP2;
+    float CD4067;
+    float TEMP1;
+    float TEMP2;
+    float TEMP3;
+    float TEMP4;
+    float TEMP_ARM1;
+    float TEMP_ARM2;
+    float TEMP_ARM3;
+    float TEMP_ARM4;
+} DC_t;
+typedef struct
+{
+    AC_samp_t AC_samp;
+    DC_samp_t DC_samp;
+    AC_t AC;
+    DC_t DC;
+} samp;
+typedef struct
+{
+    unsigned short CD4067;
+    unsigned short va_samp;
+    unsigned short ia_samp;
+    unsigned short leakage_current;
+    unsigned short CP1;
+    unsigned short CP2;
+
+} AD_samp[samp_dma];
+
+typedef struct
+{
+    uint8_t a_select;
+    uint8_t b_select;
+    uint8_t c_select;
+    uint8_t d_select;
+    uint8_t cs1_select;
+    uint8_t RESET_3G;
+    uint8_t KEY_BT;
+    uint8_t wifi_key;
+} IO_chip1;
+typedef struct
+{
+    uint8_t in1;
+    uint8_t in2;
+    uint8_t pause;
+    uint8_t in6;
+    uint8_t in7;
+    uint8_t in8;
+    uint8_t cs_zl;
+    uint8_t buzzer;
+} IO_chip2;
+
+typedef struct
+{
+    unsigned char pwm1;
+    unsigned char pwm2;
+} flag;
+/********************************************************************
+end of sys.h
+**********************************************************************/
+
+
+
 
 void  printf_safe(char *format, ...);
 void bsp_Error_Handler(void);

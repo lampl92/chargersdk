@@ -126,6 +126,7 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS,0);  //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
+    Peripheral_Init();
     bsp_SDRAM_Init();
     bsp_Uart_Init();   /* 初始化串口 */
     //FTL_Init();在fatfs中初始化
@@ -139,4 +140,3 @@ void bsp_Error_Handler(void)
     //do some alart
     while(1);
 }
-

@@ -18,10 +18,6 @@ char NANDDISKPath[4]; /* RAM disk logical drive path */
 
 extern time_t time_dat;
 
-static void Error_Handler()
-{
-    while(1);
-}
 
 void timeInit()
 {

@@ -5,11 +5,6 @@
 
 FIL MyFile;          /* File object */
 
-static void Error_Handler()
-{
-    while(1);
-}
-
 
 static void cli_mkfs_fnt(int argc, char **argv)
 {

@@ -271,7 +271,13 @@
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_user_lib.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\myiic.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\retarget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\user_app.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\device\inc\buzzer.h" />
@@ -295,6 +301,12 @@
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_conf.h" />
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
@@ -321,6 +333,9 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc_ex.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -343,6 +358,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c">
