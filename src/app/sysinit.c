@@ -18,6 +18,18 @@ char NANDDISKPath[4]; /* RAM disk logical drive path */
 
 extern time_t time_dat;
 
+static void fatfs_format(void)
+{
+    BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
+
+    /*##-3- Create a FAT file system (format) on the logical drive #########*/
+    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT32, 0, work, sizeof(work)) != FR_OK)
+    {
+        /* FatFs Format Error */
+        Error_Handler();
+    }
+
+}
 
 void timeInit()
 {
@@ -101,14 +113,16 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               FATFS≥ı ºªØ
     /---------------------------------------------------------------------------*/
+
     /*##-1- Link the NAND disk I/O driver #######################################*/
     if(FATFS_LinkDriver(&NANDDISK_Driver, NANDDISKPath) == 0)
     {
         /*##-2- Register the file system object to the FatFs module ##############*/
         if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
         {
+            fatfs_format();
             /* FatFs Initialization Error */
-            Error_Handler();
+            //Error_Handler();
         }
     }
 
