@@ -12,6 +12,10 @@
 #include "stringName.h"
 #include "cJSON.h"
 #include "utils.h"
+//#include "bsp.h"
+extern samp Sys_samp;
+extern IO_chip2 Chip2;
+//extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -265,7 +269,8 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
-
+    read_pca9554_2();
+    tmpScramState = Chip2.pause;
     /*********************/
 
     pEVSE->status.ulScramState = tmpScramState;
@@ -355,6 +360,14 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
+    if(get_va()<=180.0)//检测间隔10mS
+    {
+        tmpOffState=1;
+    }
+    else
+    {
+     tmpOffState=0;
+    }
 
     /*********************/
 
@@ -386,6 +399,8 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
+    read_pca9554_2();
+    tmpArresterState=Chip2.in6;
 
     /*********************/
 

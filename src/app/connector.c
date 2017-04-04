@@ -9,8 +9,10 @@
 #include <string.h>
 #include "evse_globals.h"
 #include "connector.h"
-
-
+#include "bsp.h"
+extern samp Sys_samp;
+extern IO_chip2 Chip2;
+extern uint8_t read_pca9554_2(void);
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电接口信息
 /---------------------------------------------------------------------------*/
@@ -32,6 +34,7 @@ static ErrorCode_t GetSocketType(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
+    tmpType = GET_CC1;
 
     /*********************/
 
@@ -54,6 +57,7 @@ static ErrorCode_t GetVolatageUpperLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
+    tmpVoltUpLim=get_va();
 
     /*********************/
 
@@ -76,6 +80,7 @@ static ErrorCode_t GetVolatageLowerLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
+    tmpVoltLowLim=get_va();
 
     /*********************/
 
@@ -98,6 +103,8 @@ static ErrorCode_t GetACTempUpperLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
+    get_dc_massage();//该位置有问题，应该是4+2个温度
+    tmpACTempUpperLim=Sys_samp.DC.TEMP1;
 
     /*********************/
 
@@ -120,6 +127,8 @@ static ErrorCode_t GetACTempLowerLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
+    get_dc_massage();
+    tmpACTempLowerLim = Sys_samp.DC.TEMP1;
 
     /*********************/
 
@@ -246,9 +255,10 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     /** @todo (rgw#1#): 获取电能表电压 */
 
     //...
+    tmpVolt=get_va();
     if(ucCONID == 0)
     {
-        tmpVolt = 220;
+        tmpVolt = 111 ;
     }
     if(ucCONID == 1)
     {
@@ -283,7 +293,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 获取电能表电流 */
-
+    tmpCurr=get_ia();
     //...
     if(ucCONID == 0)
     {
@@ -378,7 +388,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-
+    tmpCPState=get_CP1();
     /*********************/
 
     pCON->status.xCPState = tmpCPState;
@@ -432,7 +442,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-
+    TIM2->CCR1=ucLoadPercent*10;//负载百分比输入范围0~1000；
     //PWM
 
     /*********************/
@@ -577,7 +587,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
         /** @todo (rgw#1#): 执行锁止动作 */
 
         //...
-
+    Close_gun_1();
         /*********************/
 
     }
@@ -608,7 +618,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     /** @todo (rgw#1#):  */
 
-    //...
+    tmpACLTemp=Sys_samp.DC.TEMP1;
 
     /*********************/
 
@@ -639,6 +649,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
+    tmpACNTemp=Sys_samp.DC.TEMP3;
 
     /*********************/
 
@@ -669,6 +680,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
+    tmpTemp=Sys_samp.DC.TEMP_ARM1;
 
     /*********************/
 
@@ -698,7 +710,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-
+ tmpTemp=Sys_samp.DC.TEMP_ARM2;
     /*********************/
 
     pCON->status.dBTypeSocketTemp2 = tmpTemp;
@@ -726,6 +738,8 @@ static ErrorCode_t StartCharge(void *pvCON)
     /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
     //...
+    POWER_L_ON;
+    POWER_N_ON;
 
     /*********************/
     return errcode;
@@ -752,7 +766,8 @@ static ErrorCode_t StopCharge(void *pvCON)
     /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
     //...
-
+    POWER_L_OFF;
+    POWER_N_OFF;
     /*********************/
     return errcode;
 }
@@ -777,9 +792,10 @@ static ErrorCode_t GetRelayState(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-
+   read_pca9554_2();
     //...
-
+    tmpLStat=Chip2.in2;
+    tmpNStat=Chip2.in2;
     /*********************/
 
     pCON->status.ucRelayLState = tmpLStat;
@@ -793,7 +809,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
  * @param cmd uint8_t SWITCH_ON SWITCH_OFF
  * @return ErrorCode_t
  *
- */
+ */          //K1 K2指的是什么
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
