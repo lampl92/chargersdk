@@ -264,13 +264,6 @@ sys.h
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
-#define keep_off 0
-#define keep_on  1
-#define breath   2
-
-#define red      0
-#define green    1
-#define blue     2
 
 
 

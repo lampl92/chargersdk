@@ -41,6 +41,8 @@ typedef enum _ErrorCode
 
     ERR_FILE_RW,            //文件读写错误
     ERR_FILE_NO,            //无目标文件
+    ERR_FILE_PARSE,         //"参数解析错误",
+    ERR_FILE_PARAM,         //参数内容错误
     ERR_OTHER,              //其他错误
     ERR_RFID_FAULT,         //读卡器获取UID错误
     ERR_RFID_PE,            //读卡器串口奇偶校验错误

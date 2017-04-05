@@ -20,62 +20,8 @@ extern IO_chip2 Chip2;
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
 
-static ErrorCode_t GetEVSECfg(void *pvEVSE)
-{
-    FIL f;
-    FRESULT res;
-    uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
-
-    cJSON *jsEVSEObj, *jsItem;
-    char *str;
-    uint32_t ulTotalSegs;
-    static TemplSeg_t *pTemplSeg;
-    struct tm *ts;
-
-    EVSEInfo_t *pInfo;
-    ErrorCode_t errcode;
-
-    pInfo = &(((EVSE_t *)pvEVSE)->info);
-
-    /*读取文件*/
-    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
-    if(res != FR_OK)
-    {
-        errcode = ERR_FILE_RW;
-        return errcode;
-    }
-    fsize = f_size(&f);
-    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
-    if(fsize != br)
-    {
-        errcode = ERR_FILE_RW;
-        return errcode;
-    }
-
-    /*json解析*/
-    jsEVSEObj = cJSON_Parse(rbuff);
-    jsItem = cJSON_GetObjectItem(jsEVSEObj, jnEVSESN);
-//    pInfo->ucSN
-    str = jsItem->valuestring;
 
 
-
-
-
-    jsItem = cJSON_GetObjectItem(jsEVSEObj, jnTemplSegArray);
-    ulTotalSegs = cJSON_GetArraySize(jsItem);
-    cJSON_Delete(jsItem);
-    printf_safe("ulTotalSegs = %d\n", ulTotalSegs);
-
-    ulTotalSegs = 4;/** @fixme (rgw#1#): dummy,应该从文件获取 */
-    pTemplSeg = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
-    //pTemplSeg->tStartTime =
-
-    free(rbuff);
-}
 
 /** @brief 设备唯一序列号,和长度
  *
@@ -86,26 +32,55 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE)
  *                     ERR_FILE_NO
  *
  */
-static ErrorCode_t GetSN(void *pvEVSE)
+static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
 {
     uint8_t tmpSN[defEVSESNLength];
     uint8_t tmpLength;
+    uint8_t *ptmpSN;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
+
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     memset(tmpSN, 0, defEVSESNLength);
     tmpLength = 0;
 
-    /** @todo (rgw#1#): 从文件获取SN 并获取SN长度*/
+    pEVSECfgObj = (cJSON *)pvCfgObj;
 
-    //...
+    /** (rgw#1#): 从文件获取SN 并获取SN长度*/
+
+    //- 解析EVSESN
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSESN);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    ptmpSN = jsItem->valuestring;
+    tmpLength = strlen(ptmpSN);
+    StrToHex(ptmpSN, tmpSN, tmpLength);
+#ifdef DEBUG_CFG_PARSE
+    int i;
+    printf_safe("EVSE SN =");
+    for(i = 0; i < 8; i++)
+    {
+        printf_safe(" %02d ", tmpSN[i]);
+    }
+    printf_safe("\n");
+#endif
 
     /*********************/
-    pEVSE->info.ucSNLength = tmpLength;
-    memmove(pEVSE->info.ucSN, tmpSN, defEVSESNLength);
-
+    if(tmpLength <= defEVSESNLength && tmpLength > 0)
+    {
+        pEVSE->info.ucSNLength = tmpLength;
+        memmove(pEVSE->info.ucSN, tmpSN, tmpLength);
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
     return errcode;
 }
 
@@ -118,27 +93,54 @@ static ErrorCode_t GetSN(void *pvEVSE)
  *                     ERR_FILE_NO
  *
  */
-static ErrorCode_t GetID(void *pvEVSE)
+static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
 {
     uint8_t tmpID[defEVSEIDLength];
     uint8_t tmpLength;
+    uint8_t *ptmpID;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
+
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     memset(tmpID, 0, defEVSEIDLength);
     tmpLength = 0;
 
-    /** @todo (rgw#1#): 从文件获取ID 并获取ID长度*/
+    pEVSECfgObj = (cJSON *)pvCfgObj;
+    /**  (rgw#1#): 从文件获取ID 并获取ID长度*/
 
-    //...
+    //- 解析EVSEID
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSEID);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    ptmpID = jsItem->valuestring;
+    tmpLength = strlen(ptmpID);
+    StrToHex(ptmpID, tmpID, tmpLength);
+#ifdef DEBUG_CFG_PARSE
+    int i;
+    printf_safe("EVSE ID =");
+    for(i = 0; i < 8; i++)
+    {
+        printf_safe(" %02d ", tmpID[i]);
+    }
+    printf_safe("\n");
+#endif
 
     /*********************/
-
-    pEVSE->info.ucIDLenght = tmpLength;
-    memmove(pEVSE->info.ucID, tmpID, defEVSEIDLength);
-
+    if(tmpLength <= defEVSEIDLength && tmpLength > 0)
+    {
+        pEVSE->info.ucIDLenght = tmpLength;
+        memmove(pEVSE->info.ucID, tmpID, tmpLength);
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
     return errcode;
 }
 
@@ -156,24 +158,42 @@ static ErrorCode_t GetID(void *pvEVSE)
  *                     ERR_FILE_NO
  *
  */
-static ErrorCode_t GetType(void *pvEVSE)
+static ErrorCode_t GetType(void *pvEVSE, void *pvCfgObj)
 {
     uint8_t tmpType;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
 
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
+
     pEVSE = (EVSE_t *)pvEVSE;
     tmpType = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 从文件获取 */
+    pEVSECfgObj = (cJSON *)pvCfgObj;
+    /**  (rgw#1#): 从文件获取 */
 
-    //...
+    //- 解析EVSEType
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSEType);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpType = jsItem->valueint;
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("EVSE Type = %d\n", tmpType);
+#endif
 
     /*********************/
-
-    pEVSE->info.ucType = tmpType;
-
+    if(tmpType >= 1 && tmpType <= 5)
+    {
+        pEVSE->info.ucType = tmpType;
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
     return errcode;
 }
 
@@ -183,24 +203,40 @@ static ErrorCode_t GetType(void *pvEVSE)
  * @return ErrorCode_t
  *
  */
-static ErrorCode_t GetTotalCON(void *pvEVSE)
+static ErrorCode_t GetTotalCON(void *pvEVSE, void *pvCfgObj)
 {
     uint8_t tmpTotal;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
 
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
+
     pEVSE = (EVSE_t *)pvEVSE;
-    tmpTotal = 2;//枪的数量，2代表两把枪
+    tmpTotal = 0;//枪的数量，2代表两把枪
     errcode = ERR_NO;
 
+    pEVSECfgObj = (cJSON *)pvCfgObj;
     /** @todo (rgw#1#): 从文件获取 */
 
-    //...
-
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnTotalCON);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpTotal = jsItem->valueint;
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("EVSE TotalCON = %d\n", tmpTotal);
+#endif
     /*********************/
-
-    pEVSE->info.ucTotalCON = tmpTotal;
-
+    if(tmpTotal > 0)
+    {
+        pEVSE->info.ucTotalCON = tmpTotal;
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
     return errcode;
 }
 
@@ -213,33 +249,270 @@ static ErrorCode_t GetTotalCON(void *pvEVSE)
  *                     ERR_FILE_NO
  *
  */
-static ErrorCode_t GetLngLat(void *pvEVSE)
+static ErrorCode_t GetLngLat(void *pvEVSE, void *pvCfgObj)
 {
     double tmpLng, tmpLat;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
+
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
 
     pEVSE = (EVSE_t *)pvEVSE;
     tmpLng = 0;
     tmpLat = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 从文件获取 */
+    pEVSECfgObj = (cJSON *)pvCfgObj;
+    /**  (rgw#1#): 从文件获取 */
 
-    //...
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnLng);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpLng = jsItem->valuedouble;
+
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnLat);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpLat = jsItem->valuedouble;
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("EVSE Lng,Lat = (%.6lf , %.6lf)\n", tmpLng, tmpLat);
+#endif
 
     /*********************/
-
-    pEVSE->info.dLng = tmpLng;
-    pEVSE->info.dLat = tmpLng;
-
+    if((tmpLng >= 0 && tmpLng <=180) && (tmpLat >= 0 && tmpLat <= 180))
+    {
+        pEVSE->info.dLng = tmpLng;
+        pEVSE->info.dLat = tmpLat;
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
     return errcode;
 }
-/** @todo (rgw#1#): 添加文件操作
- */
-//    "ServiceFeeType": 1,
-//    "ServiceFee": 1,
-//    "DefSegFee": 1.2,
+static TemplSeg_t *TemplSegCreate(void)
+{
+    TemplSeg_t *ptemplseg;
+    ptemplseg = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
+    return ptemplseg;
+}
+static time_t SegTimeFormat(uint8_t *timestr, uint32_t ulStrlen)
+{
+    time_t now;
+    struct tm *ts;
+    uint8_t tbuff[2];
+    uint8_t *tmptimestr;
+
+    now = time(NULL);
+    ts = localtime(&now);
+    tmptimestr = timestr;
+    strncpy(tbuff, tmptimestr, 2);
+    ts->tm_hour = strtol(&tbuff, NULL, 10);
+    tmptimestr += 3;
+    strncpy(tbuff, tmptimestr, 2);
+    ts->tm_min = strtol(tbuff, NULL, 10);
+    ts->tm_sec = 0;
+    now = mktime(ts);
+    return now;
+}
+static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
+{
+    uint8_t tmpServiceType;
+    double tmpServiceFee;
+    double tmpDefSegFee;
+    uint32_t tmpTotalSegs;
+    UserList_t *pTemplSegList;
+    TemplSeg_t *pTemplSeg;
+
+    ErrorCode_t errcode;
+    EVSE_t *pEVSE;
+    int i;
+
+    cJSON *jsItem;
+    cJSON *pEVSECfgObj;
+    cJSON *jsArrayItem;
+    cJSON *jsArrayObjItem;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    tmpServiceType = 0;
+    tmpServiceFee = 0;
+    tmpDefSegFee = 0;
+    tmpTotalSegs = 0;
+    pTemplSeg = NULL;
+    errcode = ERR_NO;
+
+    pEVSECfgObj = (cJSON *)pvCfgObj;
+    pTemplSegList = UserListCreate();
+    /**  (rgw#1#): 从文件获取 */
+    //获取服务费类型
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFeeType);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpServiceType = jsItem->valueint;
+    //获取服务费
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFee);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpServiceFee = jsItem->valuedouble;
+    //获取默认段费率
+    jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnDefSegFee);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpDefSegFee = jsItem->valuedouble;
+    //获取段费率
+    jsItem = pEVSECfgObj->child;
+    do
+    {
+        if(strcmp(jsItem->string, jnTemplSegArray) == 0)
+        {
+            break;
+        }
+        else
+        {
+            jsItem = jsItem->next;
+        }
+    }
+    while(jsItem != NULL);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    tmpTotalSegs = cJSON_GetArraySize(jsItem);
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("ulTotalSegs = %d\n", tmpTotalSegs);
+#endif
+    tmpTotalSegs = 0;
+    if(tmpTotalSegs > 0)
+    {
+        for(i = 0; i < tmpTotalSegs; i++)
+        {
+            pTemplSeg = TemplSegCreate();
+#ifdef DEBUG_CFG_PARSE
+            printf_safe("Seg %d ", i);
+#endif
+            jsArrayItem = cJSON_GetArrayItem(jsItem, i);
+            jsArrayObjItem = cJSON_GetObjectItem(jsArrayItem, jnStartTime);
+#ifdef DEBUG_CFG_PARSE
+            printf_safe("StartTime: %s | ", jsArrayObjItem->valuestring);
+#endif
+            pTemplSeg->tStartTime = SegTimeFormat(jsArrayObjItem->valuestring,
+                                                  strlen(jsArrayObjItem->valuestring));
+
+            jsArrayObjItem = cJSON_GetObjectItem(jsArrayItem, jnEndTime);
+#ifdef DEBUG_CFG_PARSE
+            printf_safe("EndTime: %s | ", jsArrayObjItem->valuestring);
+#endif
+            pTemplSeg->tEndTime = SegTimeFormat(jsArrayObjItem->valuestring,
+                                                strlen(jsArrayObjItem->valuestring));;
+            jsArrayObjItem = cJSON_GetObjectItem(jsArrayItem, jnSegFee);
+#ifdef DEBUG_CFG_PARSE
+            printf_safe("SegFee: %.2lf\n", jsArrayObjItem->valuedouble);
+#endif
+            pTemplSeg->dSegFee = jsArrayObjItem->valuedouble;
+
+            pTemplSegList->Add(pTemplSegList, pTemplSeg);
+        }
+#ifdef DEBUG_CFG_PARSE
+        printf_safe("List Num = %d\n", pTemplSegList->Total);
+        struct tm *ts_dbg;
+        TemplSeg_t *tmlseg_dgb;
+        for(i = 0; i < pTemplSegList ->Total; i++)
+        {
+            tmlseg_dgb = (TemplSeg_t *)(pTemplSegList->pListPointArray[i]);
+            ts_dbg = localtime(&(tmlseg_dgb->tStartTime));
+            printf_safe("List seg %d  StartTime:%02d:%02d | ",
+                   i , ts_dbg->tm_hour, ts_dbg->tm_min  );
+            ts_dbg = localtime(&(tmlseg_dgb->tEndTime));
+            printf_safe("EndTime:%02d:%02d | ",
+                   ts_dbg->tm_hour, ts_dbg->tm_min  );
+            printf_safe("SegFee:%.2lf\n",
+                   tmlseg_dgb->dSegFee );
+        }
+#endif
+        //pEVSE->info.pTemplSeg = pTemplSegList;
+    }
+    pTemplSegList->Delete(pTemplSegList);
+
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("EVSE ServiceType = %d ,Fee = %.2lf\n", tmpServiceType, tmpServiceFee);
+    printf_safe("EVSE DefSegFee = %.2lf\n", tmpDefSegFee);
+#endif
+
+    /*********************/
+    if(tmpServiceType <= 1 && tmpServiceFee >= 0 && tmpDefSegFee >= 0)
+    {
+        pEVSE->info.ucServiceFeeType = tmpServiceType;
+        pEVSE->info.dServiceFee = tmpServiceFee;
+        pEVSE->info.dDefSegFee = tmpDefSegFee;
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
+    return errcode;
+}
+
+static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
+{
+    /** @todo (rgw#1#): 增加读取参数校验 */
+
+    FIL f;
+    FRESULT res;
+    uint8_t *rbuff;
+    FSIZE_t fsize;
+    UINT  br;   //byte read
+
+    cJSON *jsEVSEObj;
+    int i;
+    ErrorCode_t errcode;
+
+    /*读取文件*/
+    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
+
+    if(res != FR_OK)
+    {
+        errcode = ERR_FILE_RW;
+        return errcode;
+    }
+    fsize = f_size(&f);
+    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
+    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
+    if(fsize != br)
+    {
+        errcode = ERR_FILE_RW;
+        return errcode;
+    }
+
+    /*json解析*/
+    jsEVSEObj = cJSON_Parse(rbuff);
+
+    THROW_ERROR(defDevID_File, GetSN(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, GetID(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, GetType(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, GetTotalCON(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, GetLngLat(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, GetTempl(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+
+    cJSON_Delete(jsEVSEObj);
+    free(rbuff);
+    f_close(&f);
+}
 
 /*---------------------------------------------------------------------------/
 /                               从驱动获取充电桩状态
@@ -429,9 +702,10 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.GetType = GetType;
     pEVSE->info.GetTotalCON = GetTotalCON;
     pEVSE->info.GetLngLat = GetLngLat;
+    pEVSE->info.GetTempl = GetTempl;
 
     pEVSE->info.pTemplSeg = NULL;
-    pEVSE->info.pTemplSeg = UserListCreate();
+    //pEVSE->info.pTemplSeg = UserListCreate();
 
 
     pEVSE->status.ulArresterState = 0;
@@ -471,12 +745,12 @@ static void CONInit(void)
 void EVSEinit(void)
 {
     pEVSE = EVSECreate();
-
-    THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, pEVSE->info.GetTotalCON(pEVSE), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING);
+//    THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
+//    THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
+//    THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
+//    THROW_ERROR(defDevID_File, pEVSE->info.GetTotalCON(pEVSE), ERR_LEVEL_WARNING);
+//    THROW_ERROR(defDevID_File, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
 
     CONInit();
 

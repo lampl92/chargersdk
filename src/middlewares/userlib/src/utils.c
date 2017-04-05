@@ -72,7 +72,7 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
         chDes = (chTemp & 0x0F) + '0';
         Des[i * 2 + 1] = chDes;
     }
-    Des[iSrcLen*2] = '\0';
+    Des[iSrcLen * 2] = '\0';
     return 1;
 }
 
@@ -86,22 +86,29 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
     int i;
     for(i = 0; i < Hexlen; i++)
     {
-        HexToChar(Hex[i], &(Str[i*2]));
+        HexToChar(Hex[i], &(Str[i * 2]));
     }
-    Str[i*2] = '\0';
+    Str[i * 2] = '\0';
 }
 
 uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
 {
-//    uint8_t hexbuff[3];
-//    uint8_t *src;
-//    int i;
-//    src = Str;
-//
-//    for(i = 0; i < Strlen; i++)
-//    {
-//
-//    }
-//    strncpy((char *)tbuf, str, 2);//"16"->tbuf
+    uint8_t hexbuff[2];
+    uint8_t *src;
+    int i;
+    src = Str;
 
+    for(i = 0; i < Strlen / 2; i++)
+    {
+        strncpy((char *)hexbuff, src, 2);
+        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
+        {
+            Hex[i] = strtol(hexbuff, NULL, 16);
+        }
+        else
+        {
+            Hex[i] = strtol(hexbuff, NULL, 10);
+        }
+        src += 2;
+    }
 }
