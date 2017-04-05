@@ -23,6 +23,7 @@
 					<Add symbol="DEBUG_DATA" />
 					<Add symbol="DEBUG_DIAG" />
 					<Add symbol="DEBUG_INTERFACE_DATA" />
+					<Add symbol="__DEBUG_CFG_PARSE" />
 				</Compiler>
 				<Cpp>
 					<Add option="-Wall" />
@@ -426,7 +427,6 @@
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\unicode.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.c">
 			<Option compilerVar="CC" />
 		</Unit>
