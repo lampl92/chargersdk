@@ -29,6 +29,9 @@
 #define jnOrder             "Order"
 #define jnMaxIndex          "MaxIndex"
 #define jnTemplSegArray "TemplSegArray"
+#define jnStartTime         "StartTime"
+#define jnEndTime           "EndTime"
+#define jnSegFee            "SegFee"
 
 
 

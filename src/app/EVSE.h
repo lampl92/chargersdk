@@ -13,6 +13,7 @@
 #include "errorcode.h"
 #include "userlib_list.h"
 
+typedef ErrorCode_t (*pEVSECfg_ft)(void *pvEVSE, void *pvCfgObj);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 typedef struct _TemplSeg
 {
@@ -30,17 +31,18 @@ typedef struct _EVSEInfo
     uint8_t ucTotalCON; //一共有多少枪
     double dLng;      //经度，保留后六位
     double dLat;      //纬度，保留后六位
-    uint8_t ucServiceFeeType;
+    uint8_t ucServiceFeeType;//0:按单， 1：按度
     double  dServiceFee;                //服务费
     double dDefSegFee;
     UserList_t *pTemplSeg;
 
-    pEVSE_ft GetEVSECfg;
-    pEVSE_ft GetSN;
-    pEVSE_ft GetID;
-    pEVSE_ft GetType;
-    pEVSE_ft GetTotalCON;
-    pEVSE_ft GetLngLat;
+    pEVSECfg_ft GetEVSECfg;
+    pEVSECfg_ft GetSN;
+    pEVSECfg_ft GetID;
+    pEVSECfg_ft GetType;
+    pEVSECfg_ft GetTotalCON;
+    pEVSECfg_ft GetLngLat;
+    pEVSECfg_ft GetTempl;
 }EVSEInfo_t;
 
 typedef struct _EVSEStatus
