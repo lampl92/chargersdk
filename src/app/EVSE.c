@@ -308,7 +308,7 @@ static time_t SegTimeFormat(uint8_t *timestr, uint32_t ulStrlen)
     ts = localtime(&now);
     tmptimestr = timestr;
     strncpy(tbuff, tmptimestr, 2);
-    ts->tm_hour = strtol(&tbuff, NULL, 10);
+    ts->tm_hour = strtol(tbuff, NULL, 10);
     tmptimestr += 3;
     strncpy(tbuff, tmptimestr, 2);
     ts->tm_min = strtol(tbuff, NULL, 10);
