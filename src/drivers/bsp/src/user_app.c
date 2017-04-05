@@ -9,6 +9,8 @@ extern IO_chip2 Chip2;
 extern void write_pca9554_1(void);
 extern void Delay_ms(unsigned long long);
 extern void PCA9554_init(void);
+extern unsigned int pwm_r_1,pwm_g_1,pwm_b_1,pwm_r_2,pwm_g_2,pwm_b_2;
+extern uint16_t pwm_ms;
 AD_samp AD_samp_dma;
 samp Sys_samp;
 flag sys_flag;
@@ -23,6 +25,10 @@ unsigned char num_cp1,num_cp2;
 unsigned short vref=2014;
 unsigned long CD4067_sum;
 uint8_t DC_channel;
+uint8_t flag_breath_r_1,flag_breath_r_2,flag_breath_g_1,flag_breath_g_2,flag_breath_b_1,flag_breath_b_2;
+uint8_t pwm_r_flag_1,pwm_r_flag_2,pwm_g_flag_1,pwm_g_flag_2,pwm_b_flag_1,pwm_b_flag_2;
+uint8_t duty_ratio_r_1,duty_ratio_r_2,duty_ratio_g_1,
+  duty_ratio_g_2,duty_ratio_b_1,duty_ratio_b_2;
 const float  resistance[154]=
 {382.300,358.686,336.457,315.560,295.938,277.531,260.278,244.117,228.987,214.829,
   201.585,189.199,177.617,166.789,156.665,147.200,138.349,130.073,122.333,115.093,
@@ -290,7 +296,7 @@ void get_samp_point(void)//ÓÃÊ±30¦ÌS
 		va_samp_sum+=AD_samp_dma[i].va_samp;
 		leakage_current_sum+=AD_samp_dma[i].leakage_current;
 		CP1_sum+=AD_samp_dma[1].CP1;
-	    CP2_sum+=AD_samp_dma[1].CP2;
+	  CP2_sum+=AD_samp_dma[1].CP2;
 		}
 		for(j=0;j<samp_sum-1;j++)
 		{
@@ -402,6 +408,346 @@ void Gun_test(void)
 	   POWER_N_OFF;
 
 		}
+}
+void led_ctrl_r(uint8_t num,uint16_t state)
+{
+	if(num==1)
+	{
+	if(state==keep_on)
+	{
+		flag_breath_r_1=0;
+		pwm_r_1=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_r_1=0;
+		pwm_r_1=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_r_1=1;
+	}
+ }
+	else if(num==2)
+	{
+
+	if(state==keep_on)
+	{
+		flag_breath_r_2=0;
+		pwm_r_2=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_r_2=0;
+		pwm_r_2=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_r_2=1;
+	}
+	}
+}
+void led_ctrl_g(uint8_t num,uint16_t state)
+{
+	if(num==1)
+	{
+	if(state==keep_on)
+	{
+		flag_breath_g_1=0;
+		pwm_g_1=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_g_1=0;
+		pwm_g_1=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_g_1=1;
+	}
+ }
+	else if(num==2)
+	{
+
+	if(state==keep_on)
+	{
+		flag_breath_g_2=0;
+		pwm_g_2=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_g_2=0;
+		pwm_g_2=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_g_2=1;
+	}
+	}
+}
+void led_ctrl_b(uint8_t num,uint16_t state)
+{
+	if(num==1)
+	{
+	if(state==keep_on)
+	{
+		flag_breath_b_1=0;
+		pwm_b_1=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_b_1=0;
+		pwm_b_1=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_b_1=1;
+	}
+ }
+	else if(num==2)
+	{
+
+	if(state==keep_on)
+	{
+		flag_breath_b_2=0;
+		pwm_b_2=1000;
+	}
+	else if(state==keep_off)
+	{
+		flag_breath_g_2=0;
+		pwm_b_2=0;
+	}
+	else if(state==breath)
+	{
+		flag_breath_b_2=1;
+	}
+	}
+}
+void led_ctrl(uint8_t num,uint8_t colour,uint8_t state)
+{
+	if(colour==red)
+	{
+		led_ctrl_r(num,state);
+	}
+	else if(colour==green)
+	{
+		led_ctrl_g(num,state);
+	}
+	else if(colour==blue)
+	{
+		led_ctrl_b(num,state);
+	}
+}
+void led_breath_r(void)
+{
+if(flag_breath_r_1==1)
+		{
+
+			if(pwm_r_flag_1==0)
+			{
+				pwm_r_1--;
+				if(pwm_r_1<=1)
+				{
+					pwm_r_flag_1=1;
+				}
+			}
+			if(pwm_r_flag_1==1)
+			{
+			 pwm_r_1++;
+				if(pwm_r_1>=100)
+				{
+					pwm_r_flag_1=0;
+				}
+			}
+		}
+		if(flag_breath_r_2==1)
+		{
+
+			if(pwm_r_flag_2==0)
+			{
+				pwm_r_2--;
+				if(pwm_r_2<=1)
+				{
+					pwm_r_flag_2=1;
+				}
+			}
+			if(pwm_r_flag_2==1)
+			{
+			  pwm_r_2++;
+				if(pwm_r_2>=100)
+				{
+					pwm_r_flag_2=0;
+				}
+			}
+		}
+}
+void led_breath_g(void)
+{
+if(flag_breath_g_1==1)
+		{
+
+			if(pwm_g_flag_1==0)
+			{
+				pwm_g_1--;
+				if(pwm_g_1<=1)
+				{
+					pwm_g_flag_1=1;
+				}
+			}
+			if(pwm_g_flag_1==1)
+			{
+			 pwm_g_1++;
+				if(pwm_g_1>=100)
+				{
+					pwm_g_flag_1=0;
+				}
+			}
+		}
+		if(flag_breath_g_2==1)
+		{
+
+			if(pwm_g_flag_2==0)
+			{
+				pwm_g_2--;
+				if(pwm_g_2<=1)
+				{
+					pwm_g_flag_2=1;
+				}
+			}
+			if(pwm_g_flag_2==1)
+			{
+			  pwm_g_2++;
+				if(pwm_g_2>=100)
+				{
+					pwm_g_flag_2=0;
+				}
+			}
+		}
+}
+void led_breath_b(void)
+{
+if(flag_breath_b_1==1)
+		{
+
+			if(pwm_b_flag_1==0)
+			{
+				pwm_b_1--;
+				if(pwm_b_1<=1)
+				{
+					pwm_b_flag_1=1;
+				}
+			}
+			if(pwm_b_flag_1==1)
+			{
+			 pwm_b_1++;
+				if(pwm_b_1>=100)
+				{
+					pwm_b_flag_1=0;
+				}
+			}
+		}
+		if(flag_breath_b_2==1)
+		{
+
+			if(pwm_b_flag_2==0)
+			{
+				pwm_b_2--;
+				if(pwm_b_2<=1)
+				{
+					pwm_b_flag_2=1;
+				}
+			}
+			if(pwm_b_flag_2==1)
+			{
+			  pwm_b_2++;
+				if(pwm_b_2>=100)
+				{
+					pwm_b_flag_2=0;
+				}
+			}
+		}
+}
+void led_output(void)
+{
+	if(flag_breath_r_1==0)
+	{
+	if(pwm_r_1>=duty_ratio_r_1)
+	{
+		LED1_R_RUN;
+	}
+	else
+	{
+		LED1_R_OFF;
+	}
+ }
+	if(flag_breath_g_1==1)
+	{
+	if(pwm_g_1>=duty_ratio_g_1)
+	{
+		LED1_G_RUN;
+	}
+	else
+	{
+		LED1_G_OFF;
+  }
+ }
+if(flag_breath_b_1==1)
+{
+	if(pwm_b_1>=duty_ratio_b_1)
+	{
+		LED1_B_RUN;
+	}
+	else
+	{
+		LED1_B_OFF;
+	}
+}
+if(flag_breath_r_2==1)
+{
+	if(pwm_r_2>=duty_ratio_r_2)
+	{
+		LED2_R_RUN;
+	}
+	else
+	{
+		LED2_R_OFF;
+	}
+}
+if(flag_breath_g_2==1)
+{
+	if(pwm_g_2>=duty_ratio_g_2)
+	{
+		LED2_G_RUN;
+	}
+	else
+	{
+		LED2_G_OFF;
+	}
+}
+if(flag_breath_b_2==1)
+{
+	if(pwm_b_2>=duty_ratio_b_2)
+	{
+		LED2_B_RUN;
+	}
+	else
+	{
+		LED2_B_OFF;
+	}
+}
+}
+void Power_out_pwm_ctrl(void)
+{
+	if(pwm_ms/2==0)
+	{
+		POWER_L_ON;
+		POWER_N_ON;
+	}
+	  else
+	{
+		POWER_L_OFF;
+		POWER_N_OFF;
+	}
 }
 void Peripheral_Init(void)
 {

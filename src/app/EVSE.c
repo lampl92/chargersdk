@@ -269,8 +269,8 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
-    read_pca9554_2();
-    tmpScramState = Chip2.pause;
+
+    tmpScramState = (uint32_t)(read_pca9554_2()>>5)&&0x01;
     /*********************/
 
     pEVSE->status.ulScramState = tmpScramState;
@@ -330,7 +330,7 @@ static ErrorCode_t GetPEState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
-
+    tmpPEState=GET_CC1;
     /*********************/
 
     pEVSE->status.ulPEState = tmpPEState;
@@ -399,8 +399,8 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
-    read_pca9554_2();
-    tmpArresterState=Chip2.in6;
+
+    tmpArresterState= (read_pca9554_2()>>4)&&0x01;
 
     /*********************/
 

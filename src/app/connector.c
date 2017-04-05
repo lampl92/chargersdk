@@ -57,7 +57,6 @@ static ErrorCode_t GetVolatageUpperLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
-    tmpVoltUpLim=get_va();
 
     /*********************/
 
@@ -80,7 +79,7 @@ static ErrorCode_t GetVolatageLowerLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
-    tmpVoltLowLim=get_va();
+
 
     /*********************/
 
@@ -103,8 +102,8 @@ static ErrorCode_t GetACTempUpperLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
-    get_dc_massage();//该位置有问题，应该是4+2个温度
-    tmpACTempUpperLim=Sys_samp.DC.TEMP1;
+    //该位置有问题，应该是4+2个温度
+
 
     /*********************/
 
@@ -127,7 +126,6 @@ static ErrorCode_t GetACTempLowerLimits(void *pvCON)
     /** @todo (rgw#1#): 从文件获取 */
 
     //...
-    get_dc_massage();
     tmpACTempLowerLim = Sys_samp.DC.TEMP1;
 
     /*********************/
@@ -255,14 +253,14 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     /** @todo (rgw#1#): 获取电能表电压 */
 
     //...
-    tmpVolt=get_va();
+
     if(ucCONID == 0)
     {
-        tmpVolt = 111 ;
+        tmpVolt = tmpVolt=get_va();
     }
     if(ucCONID == 1)
     {
-        tmpVolt = 110;
+        tmpVolt = tmpVolt=get_va();
     }
 
     /*********************/
@@ -293,15 +291,15 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 获取电能表电流 */
-    tmpCurr=get_ia();
+
     //...
     if(ucCONID == 0)
     {
-        tmpCurr = 32;
+        tmpCurr=(double)get_ia();
     }
     if(ucCONID == 1)
     {
-        tmpCurr = 34;
+        tmpCurr=get_ia();
     }
 
     /*********************/
@@ -388,7 +386,14 @@ static ErrorCode_t GetCPState(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-    tmpCPState=get_CP1();
+    if(ucCONID==0)
+    {
+      tmpCPState=get_CP1();
+    }
+    else if(ucCONID==1)
+    {
+    ;
+    }
     /*********************/
 
     pCON->status.xCPState = tmpCPState;
@@ -415,6 +420,14 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     /** @todo (rgw#1#):  */
 
     //...
+    if(cmd==SWITCH_ON)
+    {
+        PWM1_535;
+    }
+    else
+    {
+        PWM1_1000;
+    }
 
     /*********************/
 
@@ -442,7 +455,15 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-    TIM2->CCR1=ucLoadPercent*10;//负载百分比输入范围0~1000；
+    if(ucCONID==0)
+    {
+      TIM2->CCR1=ucLoadPercent*10;
+    }
+    else if(ucCONID==1)
+    {
+      TIM4->CCR1=ucLoadPercent*10;
+    }
+    //负载百分比输入范围0~1000；
     //PWM
 
     /*********************/
@@ -474,7 +495,14 @@ static ErrorCode_t GetCCState(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-
+    if(ucCONID==0)
+    {
+    tmpCCState=GET_CC1;
+    }
+    else if(ucCONID==1)
+    {
+    tmpCCState=get_CP2();
+    }
     /*********************/
 
     pCON->status.xCCState = tmpCCState;
@@ -551,8 +579,14 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
 
     /** @todo (rgw#1#):  */
 
-    //...
-
+    if(ucCONID=0)
+     {
+     tmpLockState=GET_GUN_STATE_1;
+     }
+    else if(ucCONID==1)
+    {
+     tmpLockState=GET_GUN_STATE_2;
+    }
     /*********************/
 
 
@@ -582,13 +616,30 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    if(pCON->status.xBTypeSocketLockState == UNLOCK)
+    if(ucCONID==0)
     {
         /** @todo (rgw#1#): 执行锁止动作 */
 
-        //...
-    Close_gun_1();
-        /*********************/
+    if(cmd==SWITCH_ON)
+    {
+      Close_gun_1();
+    }
+    else
+    {
+     Open_gun_1();
+    }
+
+    }
+    else if(ucCONID==1)
+    {
+    if(cmd==SWITCH_ON)
+    {
+      Close_gun_2();
+    }
+    else
+    {
+      Open_gun_2();
+    }
 
     }
     THROW_ERROR(pCON->info.ucCONID, GetBTypeSocketLock(pCON), ERR_LEVEL_WARNING);
@@ -617,8 +668,15 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
+    if(ucCONID==0)
+    {
+      tmpACLTemp=Sys_samp.DC.TEMP1;
+    }
+    else if(ucCONID==1)
+    {
+      tmpACLTemp=Sys_samp.DC.TEMP2;
+    }
 
-    tmpACLTemp=Sys_samp.DC.TEMP1;
 
     /*********************/
 
@@ -649,7 +707,14 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-    tmpACNTemp=Sys_samp.DC.TEMP3;
+    if(ucCONID==0)
+    {
+      tmpACNTemp=Sys_samp.DC.TEMP3;
+    }
+    else if(ucCONID==1)
+    {
+      tmpACNTemp=Sys_samp.DC.TEMP4;
+    }
 
     /*********************/
 
@@ -680,8 +745,14 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
-    tmpTemp=Sys_samp.DC.TEMP_ARM1;
-
+    if(ucCONID ==0)
+    {
+      tmpTemp=Sys_samp.DC.TEMP_ARM1;
+    }
+    else if(ucCONID ==1)
+    {
+      tmpTemp=Sys_samp.DC.TEMP_ARM2;
+    }
     /*********************/
 
     pCON->status.dBTypeSocketTemp1 = tmpTemp;
@@ -710,7 +781,15 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     /** @todo (rgw#1#):  */
 
     //...
- tmpTemp=Sys_samp.DC.TEMP_ARM2;
+if(ucCONID==0)
+  {
+   tmpTemp=Sys_samp.DC.TEMP_ARM3;
+  }
+  else if(ucCONID==1)
+  {
+   tmpTemp=Sys_samp.DC.TEMP_ARM4;
+  }
+
     /*********************/
 
     pCON->status.dBTypeSocketTemp2 = tmpTemp;
@@ -737,9 +816,16 @@ static ErrorCode_t StartCharge(void *pvCON)
     errcode = ERR_NO;
     /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
-    //...
-    POWER_L_ON;
-    POWER_N_ON;
+    if(ucCONID==0)
+    {
+      POWER_L_ON;
+      POWER_N_ON;
+    }
+    else if(ucCONID==1)
+    {
+    ;
+    }
+
 
     /*********************/
     return errcode;
@@ -792,10 +878,9 @@ static ErrorCode_t GetRelayState(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
-   read_pca9554_2();
-    //...
-    tmpLStat=Chip2.in2;
-    tmpNStat=Chip2.in2;
+    read_pca9554_2();
+    tmpLStat=(read_pca9554_2()>>6)&&0x01;
+    tmpNStat=tmpLStat;
     /*********************/
 
     pCON->status.ucRelayLState = tmpLStat;
@@ -823,16 +908,24 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 
 
         /** @todo (rgw#1#): 操作K1,K2输出继电器 */
-
+if(ucCONID==0)
+{
         if(cmd == SWITCH_OFF)
         {
         //...
+        POWER_L_OFF;
+        POWER_N_OFF;
         }
-        else if(cmd == SWITCH_ON)
+        else
         {
-        //...
+        POWER_L_ON;
+        POWER_N_ON;
         }
-
+}
+else if(ucCONID==1)
+{
+  ;
+}
         /*********************/
 
     THROW_ERROR(pCON->info.ucCONID, GetRelayState(pCON), ERR_LEVEL_CRITICAL);

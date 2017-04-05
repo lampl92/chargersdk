@@ -242,6 +242,8 @@ sys.h
 #define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
 #define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
+#define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
+#define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
 
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
@@ -261,6 +263,14 @@ sys.h
 
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
+
+#define keep_off 0
+#define keep_on  1
+#define breath   2
+
+#define red      0
+#define green    1
+#define blue     2
 
 
 
