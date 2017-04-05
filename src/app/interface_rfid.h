@@ -25,7 +25,7 @@ typedef enum _RFIDState
     STATE_RFID_GOODID,           //注册帐户
     STATE_RFID_BADID,           //非注册帐户
     STATE_RFID_OWE,                 //欠费
-    STATE_RFID_PRECONTRACT           //预约状态，还没开始充电
+    STATE_RFID_HOLD           //预约状态，还没开始充电
 } RFIDState_t;
 
 typedef struct _RFIDDevStatus

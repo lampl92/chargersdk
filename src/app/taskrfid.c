@@ -24,7 +24,6 @@ void vTaskEVSERFID(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     errcode = ERR_NO;
-
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID
@@ -137,7 +136,7 @@ void vTaskEVSERFID(void *pvParameters)
                             defEventBitOrderUpdateOK,
                             portMAX_DELAY);
             OrderInit(&(pRFIDDev->order));
-            pRFIDDev->state = STATE_RFID_PRECONTRACT;
+            pRFIDDev->state = STATE_RFID_HOLD;
             break;
         case STATE_RFID_BADID:
             /** @todo (rgw#1#): Í¨ÖªHMIÏÔÊ¾Î´×¢²á */
@@ -153,7 +152,7 @@ void vTaskEVSERFID(void *pvParameters)
             OrderInit(&pRFIDDev->order);
             pRFIDDev->state = STATE_RFID_NOID;
             break;
-        case STATE_RFID_PRECONTRACT:
+        case STATE_RFID_HOLD:
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                          defEventBitCONStartOK,
