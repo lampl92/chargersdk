@@ -374,6 +374,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFeeType);
     if(jsItem == NULL)
     {
+        gdsl_list_free(pTemplSegList);
         return ERR_FILE_PARSE;
     }
     tmpServiceType = jsItem->valueint;
@@ -381,6 +382,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFee);
     if(jsItem == NULL)
     {
+        gdsl_list_free(pTemplSegList);
         return ERR_FILE_PARSE;
     }
     tmpServiceFee = jsItem->valuedouble;
@@ -388,6 +390,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnDefSegFee);
     if(jsItem == NULL)
     {
+        gdsl_list_free(pTemplSegList);
         return ERR_FILE_PARSE;
     }
     tmpDefSegFee = jsItem->valuedouble;
@@ -407,6 +410,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
     while(jsItem != NULL);
     if(jsItem == NULL)
     {
+        gdsl_list_free(pTemplSegList);
         return ERR_FILE_PARSE;
     }
     tmpTotalSegs = cJSON_GetArraySize(jsItem);
@@ -460,9 +464,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
             printf_safe("SegFee:%.2lf\n",
                         tmlseg_dgb->dSegFee );
         }
-#endif
-        TemplSegDup(pEVSE->info.plTemplSeg, pTemplSegList);
-#ifdef DEBUG_CFG_PARSE
+
         printf_safe("****Parse EVSE list****\n");
         listsize_dbg = gdsl_list_get_size((gdsl_element_t)(pEVSE->info.plTemplSeg));
         printf_safe("EVSE List Num = %d\n", listsize_dbg);
@@ -478,14 +480,11 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
             printf_safe("SegFee:%.2lf\n",
                         tmlseg_dgb->dSegFee );
         }
-
 #endif
-        //pEVSE->info.pTemplSeg = pTemplSegList;
     }
-    gdsl_list_free(pTemplSegList);
-
     if(jsItem == NULL)
     {
+        gdsl_list_free(pTemplSegList);
         return ERR_FILE_PARSE;
     }
 
@@ -500,11 +499,17 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
         pEVSE->info.ucServiceFeeType = tmpServiceType;
         pEVSE->info.dServiceFee = tmpServiceFee;
         pEVSE->info.dDefSegFee = tmpDefSegFee;
+        if(tmpTotalSegs > 0)
+        {
+            TemplSegDup(pEVSE->info.plTemplSeg, pTemplSegList);
+        }
+
     }
     else
     {
         errcode = ERR_FILE_PARAM;
     }
+    gdsl_list_free(pTemplSegList);
     return errcode;
 }
 
