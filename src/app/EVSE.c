@@ -12,6 +12,10 @@
 #include "stringName.h"
 #include "cJSON.h"
 #include "utils.h"
+
+#include "gdsl_types.h"
+#include "gdsl_list.h"
+#include "gdsl_perm.h"
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -280,7 +284,7 @@ static ErrorCode_t GetLngLat(void *pvEVSE, void *pvCfgObj)
 #endif
 
     /*********************/
-    if((tmpLng >= 0 && tmpLng <=180) && (tmpLat >= 0 && tmpLat <= 180))
+    if((tmpLng >= 0 && tmpLng <= 180) && (tmpLat >= 0 && tmpLat <= 180))
     {
         pEVSE->info.dLng = tmpLng;
         pEVSE->info.dLat = tmpLat;
@@ -291,11 +295,19 @@ static ErrorCode_t GetLngLat(void *pvEVSE, void *pvCfgObj)
     }
     return errcode;
 }
-static TemplSeg_t *TemplSegCreate(void)
+gdsl_element_t TemplSegAlloc(void *pTemplSeg)
 {
-    TemplSeg_t *ptemplseg;
-    ptemplseg = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
-    return ptemplseg;
+    TemplSeg_t *copyTempl;
+    copyTempl = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
+    if(copyTempl != NULL)
+    {
+        memcpy(copyTempl, pTemplSeg, sizeof(TemplSeg_t));
+    }
+    return (gdsl_element_t)copyTempl;
+}
+void TemplSegFree (gdsl_element_t e)
+{
+    free (e);
 }
 static time_t SegTimeFormat(uint8_t *timestr, uint32_t ulStrlen)
 {
@@ -316,14 +328,28 @@ static time_t SegTimeFormat(uint8_t *timestr, uint32_t ulStrlen)
     now = mktime(ts);
     return now;
 }
+static void TemplSegDup(gdsl_list_t dst, gdsl_list_t src)
+{
+    uint8_t ucSrcListSize;
+    int i;
+    ucSrcListSize = gdsl_list_get_size(src);
+    if(dst != NULL)
+    {
+        gdsl_list_flush(dst);
+    }
+    for(i = 1; i <= ucSrcListSize; i++)
+    {
+        gdsl_list_insert_tail(dst, gdsl_list_search_by_position(src, i));
+    }
+}
 static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
 {
     uint8_t tmpServiceType;
     double tmpServiceFee;
     double tmpDefSegFee;
     uint32_t tmpTotalSegs;
-    UserList_t *pTemplSegList;
-    TemplSeg_t *pTemplSeg;
+    gdsl_list_t pTemplSegList;
+    TemplSeg_t tmpTemplSeg;
 
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
@@ -339,11 +365,10 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
     tmpServiceFee = 0;
     tmpDefSegFee = 0;
     tmpTotalSegs = 0;
-    pTemplSeg = NULL;
     errcode = ERR_NO;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    pTemplSegList = UserListCreate();
+    pTemplSegList = gdsl_list_alloc ("tmpTempl", TemplSegAlloc, TemplSegFree);
     /**  (rgw#1#): 从文件获取 */
     //获取服务费类型
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFeeType);
@@ -388,12 +413,10 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
 #ifdef DEBUG_CFG_PARSE
     printf_safe("ulTotalSegs = %d\n", tmpTotalSegs);
 #endif
-    tmpTotalSegs = 0;
     if(tmpTotalSegs > 0)
     {
         for(i = 0; i < tmpTotalSegs; i++)
         {
-            pTemplSeg = TemplSegCreate();
 #ifdef DEBUG_CFG_PARSE
             printf_safe("Seg %d ", i);
 #endif
@@ -402,43 +425,64 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
 #ifdef DEBUG_CFG_PARSE
             printf_safe("StartTime: %s | ", jsArrayObjItem->valuestring);
 #endif
-            pTemplSeg->tStartTime = SegTimeFormat(jsArrayObjItem->valuestring,
-                                                  strlen(jsArrayObjItem->valuestring));
+            tmpTemplSeg.tStartTime = SegTimeFormat(jsArrayObjItem->valuestring,
+                                                   strlen(jsArrayObjItem->valuestring));
 
             jsArrayObjItem = cJSON_GetObjectItem(jsArrayItem, jnEndTime);
 #ifdef DEBUG_CFG_PARSE
             printf_safe("EndTime: %s | ", jsArrayObjItem->valuestring);
 #endif
-            pTemplSeg->tEndTime = SegTimeFormat(jsArrayObjItem->valuestring,
-                                                strlen(jsArrayObjItem->valuestring));;
+            tmpTemplSeg.tEndTime = SegTimeFormat(jsArrayObjItem->valuestring,
+                                                 strlen(jsArrayObjItem->valuestring));;
             jsArrayObjItem = cJSON_GetObjectItem(jsArrayItem, jnSegFee);
 #ifdef DEBUG_CFG_PARSE
             printf_safe("SegFee: %.2lf\n", jsArrayObjItem->valuedouble);
 #endif
-            pTemplSeg->dSegFee = jsArrayObjItem->valuedouble;
+            tmpTemplSeg.dSegFee = jsArrayObjItem->valuedouble;
 
-            pTemplSegList->Add(pTemplSegList, pTemplSeg);
+            gdsl_list_insert_tail(pTemplSegList, (void *)&tmpTemplSeg);
         }
 #ifdef DEBUG_CFG_PARSE
-        printf_safe("List Num = %d\n", pTemplSegList->Total);
+        uint8_t listsize_dbg = gdsl_list_get_size(pTemplSegList);
+        printf_safe("List Num = %d\n", listsize_dbg);
         struct tm *ts_dbg;
         TemplSeg_t *tmlseg_dgb;
-        for(i = 0; i < pTemplSegList ->Total; i++)
+
+        for(i = 1; i <= listsize_dbg; i++)
         {
-            tmlseg_dgb = (TemplSeg_t *)(pTemplSegList->pListPointArray[i]);
+            tmlseg_dgb = (TemplSeg_t *)(gdsl_list_search_by_position(pTemplSegList, i));
             ts_dbg = localtime(&(tmlseg_dgb->tStartTime));
             printf_safe("List seg %d  StartTime:%02d:%02d | ",
-                   i , ts_dbg->tm_hour, ts_dbg->tm_min  );
+                        i , ts_dbg->tm_hour, ts_dbg->tm_min  );
             ts_dbg = localtime(&(tmlseg_dgb->tEndTime));
             printf_safe("EndTime:%02d:%02d | ",
-                   ts_dbg->tm_hour, ts_dbg->tm_min  );
+                        ts_dbg->tm_hour, ts_dbg->tm_min  );
             printf_safe("SegFee:%.2lf\n",
-                   tmlseg_dgb->dSegFee );
+                        tmlseg_dgb->dSegFee );
         }
+#endif
+        TemplSegDup(pEVSE->info.plTemplSeg, pTemplSegList);
+#ifdef DEBUG_CFG_PARSE
+        printf_safe("****Parse EVSE list****\n");
+        listsize_dbg = gdsl_list_get_size((gdsl_element_t)(pEVSE->info.plTemplSeg));
+        printf_safe("EVSE List Num = %d\n", listsize_dbg);
+        for(i = 1; i <= listsize_dbg; i++)
+        {
+            tmlseg_dgb = (TemplSeg_t *)(gdsl_list_search_by_position((gdsl_element_t)(pEVSE->info.plTemplSeg), i));
+            ts_dbg = localtime(&(tmlseg_dgb->tStartTime));
+            printf_safe("List seg %d  StartTime:%02d:%02d | ",
+                        i , ts_dbg->tm_hour, ts_dbg->tm_min  );
+            ts_dbg = localtime(&(tmlseg_dgb->tEndTime));
+            printf_safe("EndTime:%02d:%02d | ",
+                        ts_dbg->tm_hour, ts_dbg->tm_min  );
+            printf_safe("SegFee:%.2lf\n",
+                        tmlseg_dgb->dSegFee );
+        }
+
 #endif
         //pEVSE->info.pTemplSeg = pTemplSegList;
     }
-    pTemplSegList->Delete(pTemplSegList);
+    gdsl_list_free(pTemplSegList);
 
     if(jsItem == NULL)
     {
@@ -504,7 +548,9 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     THROW_ERROR(defDevID_File, GetTotalCON(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, GetLngLat(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, GetTempl(pEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("********************************\n");
+#endif
     cJSON_Delete(jsEVSEObj);
     free(rbuff);
     f_close(&f);
@@ -689,9 +735,13 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.GetLngLat = GetLngLat;
     pEVSE->info.GetTempl = GetTempl;
 
-    pEVSE->info.pTemplSeg = NULL;
-    //pEVSE->info.pTemplSeg = UserListCreate();
 
+    pEVSE->info.plTemplSeg = gdsl_list_alloc("Templ", TemplSegAlloc, TemplSegFree);
+    if(pEVSE->info.plTemplSeg == NULL)
+    {
+        return NULL;
+    }
+    //pEVSE->info.pTemplSeg = UserListCreate();
 
     pEVSE->status.ulArresterState = 0;
     pEVSE->status.ulKnockState = 0;

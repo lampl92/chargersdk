@@ -12,6 +12,7 @@
 #include "evse_config.h"
 #include "errorcode.h"
 #include "userlib_list.h"
+#include "gdsl_list.h"
 
 typedef ErrorCode_t (*pEVSECfg_ft)(void *pvEVSE, void *pvCfgObj);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
@@ -34,7 +35,7 @@ typedef struct _EVSEInfo
     uint8_t ucServiceFeeType;//0:按单， 1：按度
     double  dServiceFee;                //服务费
     double dDefSegFee;
-    UserList_t *pTemplSeg;
+    gdsl_list_t plTemplSeg;
 
     pEVSECfg_ft GetEVSECfg;
     pEVSECfg_ft GetSN;
