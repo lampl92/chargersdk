@@ -295,17 +295,17 @@ static ErrorCode_t GetLngLat(void *pvEVSE, void *pvCfgObj)
     }
     return errcode;
 }
-gdsl_element_t TemplSegAlloc(void *pTemplSeg)
+static gdsl_element_t TemplSegAlloc(void *pTemplSeg)
 {
-    TemplSeg_t *copyTempl;
-    copyTempl = (TemplSeg_t *)malloc(sizeof(TemplSeg_t));
+    gdsl_element_t copyTempl;
+    copyTempl = (gdsl_element_t)malloc(sizeof(TemplSeg_t));
     if(copyTempl != NULL)
     {
         memcpy(copyTempl, pTemplSeg, sizeof(TemplSeg_t));
     }
-    return (gdsl_element_t)copyTempl;
+    return copyTempl;
 }
-void TemplSegFree (gdsl_element_t e)
+static void TemplSegFree (gdsl_element_t e)
 {
     free (e);
 }
@@ -464,7 +464,8 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
             printf_safe("SegFee:%.2lf\n",
                         tmlseg_dgb->dSegFee );
         }
-
+#endif
+#ifdef _DEBUG_CFG_PARSE
         printf_safe("****Parse EVSE list****\n");
         listsize_dbg = gdsl_list_get_size((gdsl_element_t)(pEVSE->info.plTemplSeg));
         printf_safe("EVSE List Num = %d\n", listsize_dbg);
