@@ -242,8 +242,12 @@ sys.h
 #define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
 #define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
+#define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
+
+#define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
+#define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
@@ -265,7 +269,22 @@ sys.h
 #define read_chip2 0x43 //0100 0011
 
 
+#define keep_off 0
+#define keep_on  1
+#define breath   2
 
+#define red      0
+#define green    1
+#define blue     2
+
+#define read     0x03
+#define write    0x10
+
+#define voltage  0x000A
+#define current  0x0016
+#define power    0x001C
+#define electric_energy 0x0065
+#define frequency 0x0030
 
 
 
@@ -277,6 +296,7 @@ sys.h
 #define temper_k   100
 #define CP1_k      0.00344238
 #define CP2_k      0.00344238//14.1/3??·???±???
+#define electricity_meter_num 256
 
 void Stm32_Clock_Init(u32 plln, u32 pllm, u32 pllp, u32 pllq); //?±??????????
 //????????±à????
@@ -293,9 +313,9 @@ extern void DMA_START(void);
 extern void MX_TIM3_Init(void);
 extern void MX_TIM2_Init(void);
 extern void MX_TIM1_Init(void);
-extern float get_CP1(void);
-extern float get_CP2(void);
-extern float get_va(void);
+extern double get_CP1(void);
+extern double get_CP2(void);
+extern double get_va(void);
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
@@ -319,23 +339,23 @@ typedef struct
 } DC_samp_t;
 typedef struct
 {
-    float va;
-    float ia;
-    float leakage_current;
+    double va;
+    double ia;
+    double leakage_current;
 } AC_t;
 typedef struct
 {
-    float CP1;
-    float CP2;
-    float CD4067;
-    float TEMP1;
-    float TEMP2;
-    float TEMP3;
-    float TEMP4;
-    float TEMP_ARM1;
-    float TEMP_ARM2;
-    float TEMP_ARM3;
-    float TEMP_ARM4;
+    double CP1;
+    double CP2;
+    double CD4067;
+    double TEMP1;
+    double TEMP2;
+    double TEMP3;
+    double TEMP4;
+    double TEMP_ARM1;
+    double TEMP_ARM2;
+    double TEMP_ARM3;
+    double TEMP_ARM4;
 } DC_t;
 typedef struct
 {
@@ -354,6 +374,26 @@ typedef struct
     unsigned short CP2;
 
 } AD_samp[samp_dma];
+typedef struct
+{
+    struct
+   {
+       uint8_t flag_va;
+       uint8_t flag_ia;
+       uint8_t flag_power;
+       uint8_t flag_electric_energy;
+       uint8_t flag_frequency;
+   }flag;
+     struct
+   {
+       float  massage_va;
+       float  massage_ia;
+       float massage_power;
+       float massage_electric_energy;
+       float massage_frequency;
+   }massage;
+
+} electricity_meter[electricity_meter_num];
 
 typedef struct
 {

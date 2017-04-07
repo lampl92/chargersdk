@@ -4,6 +4,7 @@ unsigned int delay_ms,pwm_ms,pwm_r_1,pwm_r_2,pwm_g_1,pwm_g_2,
 	pwm_b_1,pwm_b_2;
 uint8_t flag_power_pwm_on,flag_pwm_r_on_1,flag_pwm_r_on_2,flag_pwm_g_on_1,
 flag_pwm_g_on_2,flag_pwm_b_on_1,flag_pwm_b_on_2;
+uint8_t yy_test;
 TIM_HandleTypeDef TIM3_Handler;      //¶¨Ê±Æ÷¾ä±ú
 TIM_HandleTypeDef TIM2_Handler;         //¶¨Ê±Æ÷3PWM¾ä±ú
 TIM_OC_InitTypeDef TIM2_CH1Handler;	    //¶¨Ê±Æ÷3Í¨µÀ4¾ä±ú
@@ -20,7 +21,11 @@ extern void led_output(void);
 extern void led_breath_r(void);
 extern void led_breath_g(void);
 extern void led_breath_b(void);
-
+extern void RS485_Send_Data(u8 *buf,u8 len);
+extern void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num);
+extern void RS485_Receive_Data(u8 *buf,u8 *len);
+extern uint8_t RS485_RX_MODBUS_CNT;
+extern void electricity_meter_analysis(void);
 
 void MX_TIM2_Init(void)
 {
@@ -30,7 +35,7 @@ void MX_TIM2_Init(void)
   TIM_OC_InitTypeDef sConfigOC;
 
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 90;
+  htim2.Init.Prescaler = 96;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 1000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -76,9 +81,9 @@ void MX_TIM3_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 90;
+  htim3.Init.Prescaler = 96;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 100;
+  htim3.Init.Period = 1000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
@@ -107,7 +112,7 @@ void MX_TIM4_Init(void)
   TIM_OC_InitTypeDef sConfigOC;
 
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 90;
+  htim4.Init.Prescaler = 96;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 1000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -153,7 +158,7 @@ void MX_TIM4_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim5.Instance = TIM5;
-  htim5.Init.Prescaler = 90;
+  htim5.Init.Prescaler =96;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim5.Init.Period = 100;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -199,7 +204,7 @@ void TIM_SetTIM4Compare1(unsigned int compare)
 	}
 	else
 	{
-			TIM4->CCR1=compare;
+    TIM4->CCR1=compare;
        pwm=compare;
 	}
 }
@@ -211,12 +216,15 @@ void TIM2_IRQHandler (void)
 
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
-  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+/* USER CODE BEGIN TIM2_IRQn 1 */
 
   /* USER CODE END TIM2_IRQn 1 */
 }
 void TIM3_IRQHandler (void)
 {
+  //yy_test=get_va();
+ // RS485_Receive_Data(&RS485_RX_MODBUS,&RS485_RX_MODBUS_CNT);
   HAL_TIM_IRQHandler(&htim3);
 	delay_ms++;
 	pwm_ms++;
@@ -226,8 +234,10 @@ void TIM3_IRQHandler (void)
 	pwm_g_2++;
 	pwm_b_1++;
 	pwm_b_2++;
-	if(pwm_ms>=200)
+	electricity_meter_analysis();
+	if(pwm_ms>=2000)
 	{
+	    Get_electricity_meter_massage(02,read,frequency,1);
 		pwm_ms=0;
 
 	}
@@ -255,7 +265,7 @@ void TIM3_IRQHandler (void)
 	{
 		pwm_b_2=0;
 	}
- Power_out_pwm_ctrl();
+ //Power_out_pwm_ctrl();
 	led_breath_r();
 	led_breath_g();
 	led_breath_b();
@@ -278,7 +288,8 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
 
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
-	get_samp_point();
+	//get_samp_point();
+
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */

@@ -24,6 +24,7 @@ typedef enum _CONStatusType
     //CP¼ì²â
     CP_ERR,
     CP_12V,
+    CP_12V_PWM,
     CP_9V,
     CP_9V_PWM,
     CP_6V,
