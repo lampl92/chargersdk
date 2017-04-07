@@ -131,6 +131,7 @@ void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
+
         GUI_TOUCH_Exec();
         vTaskDelay(10);
     }
@@ -222,7 +223,7 @@ set
     memory allocated by the kernel to any task that has since been deleted.
 */
 void vApplicationIdleHook( void )
-{
+ {
 }
 
 /**

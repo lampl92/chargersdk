@@ -2430,20 +2430,21 @@
 1474539196 source:d:\documents\projects\chargersdk\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim_ex.c
 	"stm32f4xx_hal.h"
 
-1490940779 source:f:\work\2017\s1639prj\build\embitz\startup\startup_stm32f429x.s
+1491534231 source:f:\work\2017\s1639prj\build\embitz\startup\startup_stm32f429x.s
 
-1490942842 source:f:\work\2017\s1639prj\src\app\connector.c
+1491378534 source:f:\work\2017\s1639prj\src\app\connector.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
 	"connector.h"
+	"bsp.h"
 
 1490942842 f:\work\2017\s1639prj\src\app\evse_globals.h
 	"EVSE.h"
 	"interface_rfid.h"
 	"userlib_list.h"
 
-1490942842 f:\work\2017\s1639prj\src\app\evse.h
+1491375062 f:\work\2017\s1639prj\src\app\evse.h
 	"stm32f4xx.h"
 	"evse_config.h"
 	"errorcode.h"
@@ -2899,7 +2900,7 @@
 
 1490942842 f:\work\2017\s1639prj\src\app\evse_config.h
 
-1490942842 f:\work\2017\s1639prj\src\app\errorcode.h
+1491375062 f:\work\2017\s1639prj\src\app\errorcode.h
 	"ff.h"
 
 1490940783 f:\work\2017\s1639prj\src\middlewares\fatfs\src\ff.h
@@ -3093,7 +3094,7 @@
 
 1490940785 f:\work\2017\s1639prj\src\middlewares\userlib\inc\userlib_list.h
 
-1490942842 f:\work\2017\s1639prj\src\app\interface_rfid.h
+1491375062 f:\work\2017\s1639prj\src\app\interface_rfid.h
 	"FreeRTOS.h"
 	"semphr.h"
 	"event_groups.h"
@@ -3120,7 +3121,7 @@
 	<time.h>
 	"userlib_list.h"
 
-1490942842 f:\work\2017\s1639prj\src\app\connector.h
+1491376276 f:\work\2017\s1639prj\src\app\connector.h
 	"stm32f4xx.h"
 	"FreeRTOS.h"
 	"event_groups.h"
@@ -3128,7 +3129,7 @@
 	"interface_rfid.h"
 	"order.h"
 
-1490942842 source:f:\work\2017\s1639prj\src\app\errorcode.c
+1491375062 source:f:\work\2017\s1639prj\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
@@ -3196,7 +3197,7 @@
 
 1490942842 f:\work\2017\s1639prj\src\app\timercallback.h
 
-1491367963 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp.h
+1491547870 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp.h
 	<stdarg.h>
 	<stdio.h>
 	<string.h>
@@ -3245,7 +3246,7 @@
 
 1490940785 f:\work\2017\s1639prj\src\middlewares\userlib\inc\xprintf.h
 
-1491368104 source:f:\work\2017\s1639prj\src\app\evse.c
+1491375062 source:f:\work\2017\s1639prj\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
@@ -3276,7 +3277,7 @@
 
 1490942842 f:\work\2017\s1639prj\src\app\interface_diag.h
 
-1490942842 f:\work\2017\s1639prj\src\app\stringname.h
+1491375062 f:\work\2017\s1639prj\src\app\stringname.h
 
 1490940782 f:\work\2017\s1639prj\src\middlewares\cjson\cjson.h
 	<stddef.h>
@@ -3324,7 +3325,7 @@
 
 1490940780 f:\work\2017\s1639prj\src\app\libpowershare\ps_err.h
 
-1490940780 source:f:\work\2017\s1639prj\src\app\main.c
+1491472325 source:f:\work\2017\s1639prj\src\app\main.c
 	"includes.h"
 
 1490942842 source:f:\work\2017\s1639prj\src\app\order.c
@@ -3338,7 +3339,7 @@
 1490942842 f:\work\2017\s1639prj\src\app\stm32f4xx_it.h
 	"stm32f4xx.h"
 
-1490950599 source:f:\work\2017\s1639prj\src\app\sysinit.c
+1491375062 source:f:\work\2017\s1639prj\src\app\sysinit.c
 	"includes.h"
 	"ff_gen_drv.h"
 	"nand_diskio.h"
@@ -3373,7 +3374,7 @@
 
 1490940780 f:\work\2017\s1639prj\src\app\taskcharge.h
 
-1490942842 source:f:\work\2017\s1639prj\src\app\taskcreate.c
+1491464913 source:f:\work\2017\s1639prj\src\app\taskcreate.c
 	"includes.h"
 	"interface.h"
 	"cli_main.h"
@@ -3381,7 +3382,7 @@
 
 1490942842 f:\work\2017\s1639prj\src\cli\cli_main.h
 
-1490942842 source:f:\work\2017\s1639prj\src\app\taskdata.c
+1491375062 source:f:\work\2017\s1639prj\src\app\taskdata.c
 	"includes.h"
 	"taskcreate.h"
 	"taskdata.h"
@@ -3417,7 +3418,7 @@
 
 1490940780 f:\work\2017\s1639prj\src\app\taskremote.h
 
-1490942842 source:f:\work\2017\s1639prj\src\app\taskrfid.c
+1491375062 source:f:\work\2017\s1639prj\src\app\taskrfid.c
 	"includes.h"
 	"taskcreate.h"
 	"taskrfid.h"
@@ -3498,7 +3499,7 @@
 1490940780 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_sdram.c
 	"bsp.h"
 
-1491367792 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_timer.c
+1491549191 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_timer.c
 	"bsp_timer.h"
 
 1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp_timer.h
@@ -3510,7 +3511,7 @@
 	"stdlib.h"
 	"math.h"
 
-1490942842 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_uart.c
+1491549110 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
@@ -3520,7 +3521,7 @@
 	<ctype.h>
 	<string.h>
 
-1491273548 source:f:\work\2017\s1639prj\src\drivers\bsp\src\myiic.c
+1491375062 source:f:\work\2017\s1639prj\src\drivers\bsp\src\myiic.c
 	"myiic.h"
 
 1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\myiic.h
@@ -3530,7 +3531,7 @@
 	"bsp.h"
 	"xprintf.h"
 
-1491367875 source:f:\work\2017\s1639prj\src\drivers\bsp\src\user_app.c
+1491460483 source:f:\work\2017\s1639prj\src\drivers\bsp\src\user_app.c
 	"stm32f4xx_hal.h"
 	"bsp.h"
 	<stdlib.h>
@@ -3594,7 +3595,7 @@
 1490940781 source:f:\work\2017\s1639prj\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_ltdc_ex.c
 	"stm32f4xx_hal.h"
 
-1490945919 source:f:\work\2017\s1639prj\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_msp.c
+1491448972 source:f:\work\2017\s1639prj\src\drivers\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_msp.c
 	"stm32f4xx_hal.h"
 	"bsp.h"
 	"myiic.h"
@@ -3958,7 +3959,7 @@
 	<stdlib.h>
 	<string.h>
 
-1490942842 source:f:\work\2017\s1639prj\src\middlewares\userlib\src\utils.c
+1491375062 source:f:\work\2017\s1639prj\src\middlewares\userlib\src\utils.c
 	"includes.h"
 	"xprintf.h"
 
