@@ -53,7 +53,7 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
  * @return
  *
  */
-void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,uint32_t font,uint16_t color,uint8_t *buf)
+void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf)
 {
     FRAMEWIN_SetTextAlign(hItem, aglin);
     FRAMEWIN_SetTitleHeight(hItem, heigh);
@@ -68,7 +68,7 @@ void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,uint32_t font,uint1
  * @return
  *
  */
-void Text_Show(WM_HWIN hItem,uint32_t font,uint16_t color,uint8_t *buf)
+void Text_Show(WM_HWIN hItem,GUI_FONT *font,uint32_t color,uint8_t *buf)
 {
     TEXT_SetFont(hItem, font);
     TEXT_SetTextColor(hItem, color);
@@ -81,7 +81,7 @@ void Text_Show(WM_HWIN hItem,uint32_t font,uint16_t color,uint8_t *buf)
  * @return
  * note；此处并不做编辑处理,没有做颜色处理
  */
-void Edit_Show(WM_HWIN hItem,uint32_t font,uint8_t *buf)
+void Edit_Show(WM_HWIN hItem,GUI_FONT *font,uint8_t *buf)
 {
     EDIT_SetFont(hItem, font);
     EDIT_SetText(hItem, buf);
@@ -93,7 +93,7 @@ void Edit_Show(WM_HWIN hItem,uint32_t font,uint8_t *buf)
  * @return
  *
  */
-void Button_Show(WM_HWIN hItem,uint8_t aglin,uint32_t font,uint8_t bk_style,uint16_t bkcolor,uint8_t text_style,uint16_t color,uint8_t *buf)
+void Button_Show(WM_HWIN hItem,uint8_t aglin,GUI_FONT *font,uint8_t bk_style,uint32_t bkcolor,uint8_t text_style,uint32_t color,uint8_t *buf)
 {
     BUTTON_SetFont(hItem, font);
     BUTTON_SetTextAlign(hItem,aglin);

@@ -1,4 +1,7 @@
 #include "GUI.h"
+#include "xbffontcreate.h"
+#include "touchtimer.h"
+
 void MainTask(void)
 {
 	GUI_CURSOR_Show();
