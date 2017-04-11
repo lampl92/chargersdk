@@ -37,21 +37,21 @@ void vTaskEVSEData(void *pvParameters)
         if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
         {
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            pCON->order.state = STATE_ORDER_TMP;
+            pCON->order.statOrder = STATE_ORDER_TMP;
         }
 
 
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
-            switch(pCON->order.state)
+            switch(pCON->order.statOrder)
             {
             case STATE_ORDER_IDLE:
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
                 xEventGroupSetBits(xHandleEventData, defEventBitOrderUpdateOK);
-                pCON->order.state = STATE_ORDER_WAITSTART;
+                pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;
             case STATE_ORDER_WAITSTART:
                 //2. 等待StartCharge事件
@@ -63,20 +63,23 @@ void vTaskEVSEData(void *pvParameters)
                                                        pdFALSE, pdFALSE, 0);
                     if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
                     {
-                        pCON->order.state = STATE_ORDER_MAKE;
+                        pCON->order.statOrder = STATE_ORDER_MAKE;
                     }
                 }
                 break;
             case STATE_ORDER_MAKE:
-                //3. 开始时的数据准备
+                //3. 开始充电时数据准备
                 makeOrder(pCON);
                 xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);//目前还没有地方用
-                pCON->order.state = STATE_ORDER_UPDATE;
+                pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
                 //4. 更新充电数据
+                /** @todo (rgw#1#): 获取离开Update条件，进入Finish状态 */
+                makeOrder(pCON);
             case STATE_ORDER_FINISH:
                 //5. 结束充电
+                /** @todo (rgw#1#): 获取离开Finish条件 */
                 break;
             }
         }
@@ -90,11 +93,6 @@ void vTaskEVSEData(void *pvParameters)
         {
             THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING);
 
-//            THROW_ERROR(defDevID_File, pEVSE->info.GetSN(pEVSE), ERR_LEVEL_WARNING);
-//            THROW_ERROR(defDevID_File, pEVSE->info.GetID(pEVSE), ERR_LEVEL_WARNING);
-//            THROW_ERROR(defDevID_File, pEVSE->info.GetType(pEVSE), ERR_LEVEL_WARNING);
-//            THROW_ERROR(defDevID_File, pEVSE->info.GetTotalCON(pEVSE), ERR_LEVEL_WARNING);
-//            THROW_ERROR(defDevID_File, pEVSE->info.GetLngLat(pEVSE), ERR_LEVEL_WARNING);
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);

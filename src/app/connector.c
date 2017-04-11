@@ -843,9 +843,9 @@ static void CONDelete(CON_t *pCON)
 {
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventException);
-    if(pCON->order.pChargeSegment != NULL)
+    if(pCON->order.plChargeSegment != NULL)
     {
-        pCON->order.pChargeSegment->Delete(pCON->order.pChargeSegment);
+        gdsl_list_free(pCON->order.plChargeSegment);
     }
     free(pCON);
     pCON = NULL;
@@ -924,8 +924,7 @@ CON_t *CONCreate(uint8_t ucCONID )
 
     pCON->state = STATE_CON_IDLE;
 
-    pCON->order.pChargeSegment = NULL;
-
+    OrderCreate(&(pCON->order));
     OrderInit(&(pCON->order));
 
     return pCON;

@@ -60,7 +60,8 @@ RFIDDev_t *RFIDDevCreate(void)
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
     pRFID->state = STATE_RFID_NOID;
-    pRFID->order.pChargeSegment = NULL;
+
+    OrderCreate(&(pRFID->order));
     OrderInit(&(pRFID->order));
 
     return pRFID;
