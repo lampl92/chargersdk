@@ -73,12 +73,12 @@
 #define defEventBitRemoteGotAccount     BIT_1
 
 /*------xHandleEventDiag*/
-#define defEventBitDiagTempW             BIT_0              //温度报警
-#define defEventBitDiagTemp              BIT_1
-#define defEventBitDiagLockState         BIT_2
-#define defEventBitDiagPlugState         BIT_3
-#define defEventBitDiagChargingData      BIT_4
-#define defEventBitDiagEVSEState         BIT_5
+#define defEventBitDiagTempW            BIT_0              //温度报警
+#define defEventBitDiagTemp             BIT_1
+#define defEventBitDiagLockState        BIT_2
+#define defEventBitDiagPlugState        BIT_3
+#define defEventBitDiagChargingData     BIT_4
+#define defEventBitDiagEVSEState        BIT_5
 /*------pCON->status.xHandleEventException*/
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
@@ -90,35 +90,35 @@
 #define defEventBitExceptionChargeTimer BIT_6
 
 /*------pCON->status.xHandleEventCharge*/
-#define defEventBitCONAuthed      BIT_0       //帐户认证OK
-#define defEventBitCONLocked      BIT_1
-#define defEventBitCONVoltOK      BIT_2
-#define defEventBitCONCurrOK      BIT_3
-#define defEventBitCONFreqOK      BIT_4
-#define defEventBitCONS2Closed    BIT_5
-#define defEventBitCONS2Opened    BIT_6
-#define defEventBitCONCCOK        BIT_7
-#define defEventBitCONSocketTempOK  BIT_8
-#define defEventBitCONACTempOK    BIT_9
-#define defEventBitCONPlugOK      BIT_10
-#define defEventBitCONStartOK     BIT_11
-//#define defEventBitCONStopOK      BIT_12
-#define defEventBitEVSEScramOK      BIT_13
-#define defEventBitEVSEPEOK         BIT_14
-#define defEventBitEVSEKnockOK      BIT_15
-#define defEventBitEVSEArresterOK   BIT_16
-#define defEventBitEVSEPowerOffOK   BIT_17
+#define defEventBitCONAuthed            BIT_0       //帐户认证OK
+#define defEventBitCONLocked            BIT_1
+#define defEventBitCONVoltOK            BIT_2
+#define defEventBitCONCurrOK            BIT_3
+#define defEventBitCONFreqOK            BIT_4
+#define defEventBitCONS2Closed          BIT_5
+#define defEventBitCONS2Opened          BIT_6
+#define defEventBitCONCCOK              BIT_7
+#define defEventBitCONSocketTempOK      BIT_8
+#define defEventBitCONACTempOK          BIT_9
+#define defEventBitCONPlugOK            BIT_10
+#define defEventBitCONStartOK           BIT_11
+//#define defEventBitCONStopOK          BIT_12
+#define defEventBitEVSEScramOK          BIT_13
+#define defEventBitEVSEPEOK             BIT_14
+#define defEventBitEVSEKnockOK          BIT_15
+#define defEventBitEVSEArresterOK       BIT_16
+#define defEventBitEVSEPowerOffOK       BIT_17
 
-#define defEventBitCONOrderStart    BIT_18
-
-
+#define defEventBitCONOrderStart        BIT_18
 
 
-#define defEventBitEVSEReady        defEventBitEVSEScramOK |    \
-                                    defEventBitEVSEPEOK |       \
-                                    defEventBitEVSEKnockOK |    \
-                                    defEventBitEVSEArresterOK | \
-                                    defEventBitEVSEPowerOffOK
+
+
+#define defEventBitEVSEReady            defEventBitEVSEScramOK |    \
+                                        defEventBitEVSEPEOK |       \
+                                        defEventBitEVSEKnockOK |    \
+                                        defEventBitEVSEArresterOK | \
+                                        defEventBitEVSEPowerOffOK
 
 #define defEventBitCPSwitchCondition    defEventBitCONLocked |      \
                                         defEventBitCONVoltOK |      \
@@ -127,11 +127,11 @@
                                         defEventBitCONPlugOK | \
                                         defEventBitEVSEReady
 
-#define defEventBitChargeCondition  defEventBitCPSwitchCondition | \
-                                    defEventBitCONAuthed | \
-                                    defEventBitCONCurrOK | \
-                                    defEventBitCONFreqOK | \
-                                    defEventBitCONS2Closed
+#define defEventBitChargeCondition      defEventBitCPSwitchCondition | \
+                                        defEventBitCONAuthed | \
+                                        defEventBitCONCurrOK | \
+                                        defEventBitCONFreqOK | \
+                                        defEventBitCONS2Closed
 
 
 
