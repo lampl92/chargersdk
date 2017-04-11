@@ -955,6 +955,12 @@ static ErrorCode_t GetRelayState(void *pvCON)
 	tmpLStat=(read_pca9554_2()>>6)&&0x01;
 	tmpNStat=tmpLStat;
 	/*********************/
+/* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
+//    if(触电粘连)
+//    {
+//        errcode = ERR_RELAY_PASTE;
+//    }
+
 
 	pCON->status.ucRelayLState = tmpLStat;
 	pCON->status.ucRelayNState = tmpNStat;

@@ -201,7 +201,7 @@ void write_pca9554_1(void)
 void write_pca9554_2(void)
 {
     uint8_t PCAP554B_date;
-    PCAP554B_date = Chip2.in1 | Chip2.in2 | Chip2.pause | Chip2.in6 | Chip2.in7 | Chip2.in8 | Chip2.cs_zl | Chip2.buzzer;
+    PCAP554B_date = Chip2.cs_zl<<6 | Chip2.buzzer<<7;
     IIC_Start();
     IIC_Send_Byte(0X40 + 0X02); //发送器件地址0XA0,写数据
     IIC_Wait_Ack();
@@ -210,7 +210,7 @@ void write_pca9554_2(void)
     IIC_Send_Byte(PCAP554B_date);//发送字节
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件
-    Delay_ms(10);
+    Delay_ms(9);
 }
 uint8_t read_pca9554_2(void)
 {

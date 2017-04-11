@@ -29,6 +29,8 @@ uint8_t flag_breath_r_1, flag_breath_r_2, flag_breath_g_1, flag_breath_g_2, flag
 uint8_t pwm_r_flag_1, pwm_r_flag_2, pwm_g_flag_1, pwm_g_flag_2, pwm_b_flag_1, pwm_b_flag_2;
 uint8_t duty_ratio_r_1, duty_ratio_r_2, duty_ratio_g_1,
         duty_ratio_g_2, duty_ratio_b_1, duty_ratio_b_2;
+#define cs_zl_set do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
+#define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
 const double  resistance[154] =
 {
@@ -735,9 +737,11 @@ void Peripheral_Init(void)
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     RS485_Init(9600);
     DMA_START();
+    IIC_Init();
     TIMER5_ON;
     TIMER3_ON;
     PWM1_ON;
     PWM2_ON;
+    cs_zl_reset;
 
 }

@@ -2432,7 +2432,7 @@
 
 1491534231 source:f:\work\2017\s1639prj\build\embitz\startup\startup_stm32f429x.s
 
-1491378534 source:f:\work\2017\s1639prj\src\app\connector.c
+1491788268 source:f:\work\2017\s1639prj\src\app\connector.c
 	<stdlib.h>
 	<string.h>
 	"evse_globals.h"
@@ -2900,7 +2900,7 @@
 
 1490942842 f:\work\2017\s1639prj\src\app\evse_config.h
 
-1491375062 f:\work\2017\s1639prj\src\app\errorcode.h
+1491788180 f:\work\2017\s1639prj\src\app\errorcode.h
 	"ff.h"
 
 1490940783 f:\work\2017\s1639prj\src\middlewares\fatfs\src\ff.h
@@ -3129,7 +3129,7 @@
 	"interface_rfid.h"
 	"order.h"
 
-1491375062 source:f:\work\2017\s1639prj\src\app\errorcode.c
+1491788149 source:f:\work\2017\s1639prj\src\app\errorcode.c
 	"includes.h"
 	"errorcode.h"
 
@@ -3239,14 +3239,14 @@
 1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp_nand_ftl.h
 	"bsp.h"
 
-1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp_touch_2046.h
+1491811220 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp_touch_2046.h
 	"bsp.h"
 
 1490940785 f:\work\2017\s1639prj\src\middlewares\tinysh\tinysh.h
 
 1490940785 f:\work\2017\s1639prj\src\middlewares\userlib\inc\xprintf.h
 
-1491375062 source:f:\work\2017\s1639prj\src\app\evse.c
+1491787912 source:f:\work\2017\s1639prj\src\app\evse.c
 	"includes.h"
 	"evse_globals.h"
 	"userlib_list.h"
@@ -3374,7 +3374,7 @@
 
 1490940780 f:\work\2017\s1639prj\src\app\taskcharge.h
 
-1491464913 source:f:\work\2017\s1639prj\src\app\taskcreate.c
+1491786962 source:f:\work\2017\s1639prj\src\app\taskcreate.c
 	"includes.h"
 	"interface.h"
 	"cli_main.h"
@@ -3499,19 +3499,19 @@
 1490940780 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_sdram.c
 	"bsp.h"
 
-1491549191 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_timer.c
+1491804653 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_timer.c
 	"bsp_timer.h"
 
 1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\bsp_timer.h
 	"bsp.h"
 	"stm32f4xx_hal_tim.h"
 
-1490940780 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_touch_2046.c
+1491813020 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_touch_2046.c
 	"bsp.h"
 	"stdlib.h"
 	"math.h"
 
-1491549110 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_uart.c
+1491557772 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp_uart.c
 	"bsp.h"
 	"cli_main.h"
 	"userlib_queue.h"
@@ -3521,7 +3521,7 @@
 	<ctype.h>
 	<string.h>
 
-1491375062 source:f:\work\2017\s1639prj\src\drivers\bsp\src\myiic.c
+1491809439 source:f:\work\2017\s1639prj\src\drivers\bsp\src\myiic.c
 	"myiic.h"
 
 1490942842 f:\work\2017\s1639prj\src\drivers\bsp\inc\myiic.h
@@ -3531,7 +3531,7 @@
 	"bsp.h"
 	"xprintf.h"
 
-1491460483 source:f:\work\2017\s1639prj\src\drivers\bsp\src\user_app.c
+1491811375 source:f:\work\2017\s1639prj\src\drivers\bsp\src\user_app.c
 	"stm32f4xx_hal.h"
 	"bsp.h"
 	<stdlib.h>
@@ -3553,7 +3553,7 @@
 
 1490940780 f:\work\2017\s1639prj\src\drivers\device\inc\led.h
 
-1490942842 source:f:\work\2017\s1639prj\src\drivers\device\src\rfidreader_mt626.c
+1491553454 source:f:\work\2017\s1639prj\src\drivers\device\src\rfidreader_mt626.c
 	<stdlib.h>
 	<string.h>
 	"RFIDReader_mt626.h"
@@ -3821,7 +3821,7 @@
 	"WIDGET.h"
 	"GUI_Debug.h"
 
-1490940781 source:f:\work\2017\s1639prj\src\hmi\hmi_start.c
+1491785920 source:f:\work\2017\s1639prj\src\hmi\hmi_start.c
 	"GUI.h"
 
 1490942842 source:f:\work\2017\s1639prj\src\middlewares\aes\aes_modes.c
@@ -4058,4 +4058,102 @@
 1490951103 source:f:\work\2017\s1639prj\src\drivers\bsp\src\bsp.c
 	"includes.h"
 	"bsp.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\charge_gui_disp.c
+	"xbffontcreate.h"
+	"DIALOG.h"
+
+1491785920 f:\work\2017\s1639prj\src\middlewares\stemwin\xbf\xbffontcreate.h
+	"GUI.h"
+	"includes.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_alarm_log.c
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 f:\work\2017\s1639prj\src\hmi\touchtimer.h
+	<stdio.h>
+	<stdlib.h>
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_card_info.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_card_valid.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_charge_done.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_charging.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_charging_2-dimen.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_home.c
+	"xbffontcreate.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_machine_error.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_manager_infoanalog.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_manager_infostatus.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"SCROLLBAR.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\putout_skin_keyboard.c
+	"DIALOG.h"
+	"keyboard.h"
+	"string.h"
+	"stdlib.h"
+	"pyinput.h"
+	"xbffontcreate.h"
+	"WM.h"
+
+1491785920 f:\work\2017\s1639prj\src\hmi\keyboard.h
+	"DIALOG.h"
+	"pyinput.h"
+
+1491785920 f:\work\2017\s1639prj\src\hmi\pyinput.h
+	"xbffontcreate.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\pyinput.c
+	"pyinput.h"
+	"string.h"
+	"xbffontcreate.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\hmi\touch_disp_module.c
+	"xbffontcreate.h"
+	"touchtimer.h"
+	"DIALOG.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\middlewares\stemwin\bmp\bmpdisplay.c
+	"bmpdisplay.h"
+	"GUI.h"
+
+1491785920 f:\work\2017\s1639prj\src\middlewares\stemwin\bmp\bmpdisplay.h
+	"includes.h"
+
+1491785920 source:f:\work\2017\s1639prj\src\middlewares\stemwin\xbf\xbffontcreate.c
+	"xbffontcreate.h"
+	"ff.h"
 
