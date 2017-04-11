@@ -272,7 +272,7 @@ void DiagVoltageError(CON_t *pCON)
         break;
     }/* end of switch(pCON->status.xVoltStat) */
 }
-/** @brief 电流判断 GB/T 18487.1-2015 A3.10.7 P24 在此基础上增加一次降功率修正操作
+/** @brief 电流判断 GB/T 18487.1-2015 A3.10.7 (P24) 在此基础上增加一次降功率修正操作
  *
  * @param pCON CON_t*
  * @return void
