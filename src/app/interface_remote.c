@@ -9,6 +9,26 @@
 #include <time.h>
 #include "includes.h"
 #include "bsp.h"
+#include "polarssl/base64.h"
+
+ErrorCode_t RemoteInit()
+{
+    uint8_t  *pucAESKey_BASE64 = "oFqTg0a0VrjiVU76M1WRVw==";
+
+    uint8_t ucAESKey[64];
+    uint8_t ucAESKeyLen;
+    int i;
+    memset(ucAESKey, 0, 64);
+    base64_decode(ucAESKey, &ucAESKeyLen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
+    printf_safe("AESKEYBASE64 : %s\n", pucAESKey_BASE64);
+    printf_safe("AESKey ： ");
+    for(i = 0; i<ucAESKeyLen; i++)
+    {
+        printf_safe("%x ",ucAESKey[i]);
+    }
+    printf_safe("\n");
+
+}
 
 ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
 {
@@ -37,7 +57,7 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, uint8_t *ucRetVal )
 
     errcode = ERR_NO;
 
-/** @todo (rgw#1#): 调用平台注册接口 */
+    /** @todo (rgw#1#): 调用平台注册接口 */
 
     *ucRetVal = 0;
     return errcode;
