@@ -11,6 +11,7 @@ extern void Delay_ms(unsigned long long);
 extern void PCA9554_init(void);
 extern unsigned int pwm_r_1, pwm_g_1, pwm_b_1, pwm_r_2, pwm_g_2, pwm_b_2;
 extern uint16_t pwm_ms;
+extern uint8_t yy_test;
 AD_samp AD_samp_dma;
 samp Sys_samp;
 flag sys_flag;
@@ -743,5 +744,6 @@ void Peripheral_Init(void)
     PWM1_ON;
     PWM2_ON;
     cs_zl_reset;
+
 
 }

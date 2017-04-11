@@ -27,9 +27,6 @@ int main(void)
     AppObjCreate();
 
     EVSEinit();
-   //RS485_Init();
-
-
     vTaskStartScheduler();
 
     /*

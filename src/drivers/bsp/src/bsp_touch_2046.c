@@ -22,9 +22,11 @@ void TP_Write_Byte(u8 num)
             TDIN = 0;
         }
         num <<= 1;
-        TCLK = 0;
         bsp_DelayUS(5);
+        TCLK = 0;
+       bsp_DelayUS(10);
         TCLK = 1;   //上升沿有效
+        bsp_DelayUS(5);
     }
 }
 //SPI读数据
@@ -257,29 +259,30 @@ u8 bsp_Touch_Init(void)
 u16 Read_Lis2ds12(u8 CMD)
 {
     u8 count = 0;
-    u16 Num = 0;
+    u8 Num = 0;
     TCLK = 0;   //先拉低时钟
     TDIN = 0;   //拉低数据线
     Chip2.cs_zl = 0;    //选中重力传感器片选
     write_pca9554_2();
     TP_Write_Byte(CMD);//发送命令字
-    TCLK = 0;
-    bsp_DelayUS(1);
-    TCLK = 1;   //给1个时钟，清除BUSY
-    bsp_DelayUS(1);
-    TCLK = 0;
-    for(count = 0; count < 16; count++) //读出16位数据,只有高12位有效
+
+    //TCLK = 0;
+    //bsp_DelayUS(1);
+   // TCLK = 1;   //给1个时钟，清除BUSY
+   // bsp_DelayUS(1);
+    //TCLK = 0;
+    for(count = 0; count < 8; count++) //读出8位数据
     {
         Num <<= 1;
         TCLK = 0; //下降沿有效
-        bsp_DelayUS(1);
+        bsp_DelayUS(5);
         TCLK = 1;
+        bsp_DelayUS(5);
         if(DOUT)
         {
             Num |= 1;
         }
     }
-    Num >>= 4;  //只有高12位有效.
      Chip2.cs_zl = 1;    //释放片选
     write_pca9554_2();
     return(Num);

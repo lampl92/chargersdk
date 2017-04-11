@@ -5,6 +5,8 @@ unsigned int delay_ms,pwm_ms,pwm_r_1,pwm_r_2,pwm_g_1,pwm_g_2,
 uint8_t flag_power_pwm_on,flag_pwm_r_on_1,flag_pwm_r_on_2,flag_pwm_g_on_1,
 flag_pwm_g_on_2,flag_pwm_b_on_1,flag_pwm_b_on_2;
 uint8_t yy_test;
+        extern u16 Read_Lis2ds12(u8 CMD);
+#define	AXISDATA_REG	0x28
 TIM_HandleTypeDef TIM3_Handler;      //¶¨Ê±Æ÷¾ä±ú
 TIM_HandleTypeDef TIM2_Handler;         //¶¨Ê±Æ÷3PWM¾ä±ú
 TIM_OC_InitTypeDef TIM2_CH1Handler;	    //¶¨Ê±Æ÷3Í¨µÀ4¾ä±ú
@@ -225,6 +227,7 @@ void TIM3_IRQHandler (void)
 {
   //yy_test=get_va();
  // RS485_Receive_Data(&RS485_RX_MODBUS,&RS485_RX_MODBUS_CNT);
+
   HAL_TIM_IRQHandler(&htim3);
 	delay_ms++;
 	pwm_ms++;
@@ -237,7 +240,9 @@ void TIM3_IRQHandler (void)
 	electricity_meter_analysis();
 	if(pwm_ms>=2000)
 	{
-        Get_electricity_meter_massage(02,read,frequency,1);
+       // Get_electricity_meter_massage(02,read,frequency,1);
+       yy_test=Read_Lis2ds12(AXISDATA_REG);
+
 		pwm_ms=0;
 
 	}
