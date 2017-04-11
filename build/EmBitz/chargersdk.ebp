@@ -18,6 +18,7 @@
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
 					<Add option="-g2" />
+					<Add symbol="DEBUG_INIT" />
 					<Add symbol="DEBUG_RFID" />
 					<Add symbol="DEBUG_MONITOR" />
 					<Add symbol="DEBUG_DATA" />
@@ -96,12 +97,14 @@
 			<Add directory="..\..\src\middlewares\cJSON" />
 			<Add directory="..\..\src\middlewares\AES" />
 			<Add directory="..\..\src\net\PolarSSL\include" />
+			<Add directory="..\..\src\middlewares\gdsl-1.8\src" />
+			<Add directory="..\..\src\middlewares\gdsl-1.8\src\examples" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
-			<Add library="..\..\..\..\..\Program Files (x86)\EmBitz\1.11\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
+			<Add library="$(APP_PATH)\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
@@ -162,7 +165,10 @@
 		<Unit filename="..\..\src\app\libpowershare\ps_globals.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_protocol.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
+		<Unit filename="..\..\src\app\libpowershare\ps_protocol.h" />
 		<Unit filename="..\..\src\app\libpowershare\ps_transportlayer.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -238,6 +244,7 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_gpio.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\bsp_touch_2046.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
 		<Unit filename="..\..\src\drivers\bsp\src\bsp.c">
 			<Option compilerVar="CC" />
@@ -425,6 +432,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\fatfs\src\option\unicode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.c">
