@@ -483,7 +483,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     ErrorCode_t errcode;
 
     /*¶ÁÈ¡ÎÄ¼þ*/
-    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
+    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ), pathEVSECfg);
 
     if(res != FR_OK)
     {
@@ -492,7 +492,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     }
     fsize = f_size(&f);
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
+    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br), pathEVSECfg);
     if(fsize != br)
     {
         errcode = ERR_FILE_RW;

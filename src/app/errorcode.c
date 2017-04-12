@@ -65,7 +65,7 @@ void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel
     xQueueSend(xHandleQueueErrorPackage, (void *)&package, 0);
 }
 
-void ThrowFSCode (FRESULT rc)
+void ThrowFSCode (FRESULT rc, uint8_t *filename)
 {
     const char *str =
         "OK\0" "DISK_ERR\0" "INT_ERR\0" "NOT_READY\0" "NO_FILE\0" "NO_PATH\0"
@@ -79,6 +79,6 @@ void ThrowFSCode (FRESULT rc)
         {
             while (*str++) ;
         }
-        printf_safe("rc=%u FR_%s\n", (UINT)rc, str);
+        printf_safe("%s, rc=%u FR_%s\n", filename, (UINT)rc, str);
     }
 }

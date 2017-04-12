@@ -32,7 +32,7 @@
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0     (GUI_ID_USER + 0x01)
-#define ID_BUTTON_1     (GUI_ID_USER + 0x04)//刷卡支付
+#define ID_BUTTON_1     (GUI_ID_USER + 0x04)
 #define ID_TEXT_0     (GUI_ID_USER + 0x08)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x0A)
 
@@ -171,9 +171,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;
     WM_HWIN      hItem;
+    static WM_HTIMER   htimer;
     U32          FileSize;
     int          NCode;
     int          Id;
+            uint8_t *buf = "56";
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -183,6 +185,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
+
         FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
         //
         // Initialization of 'Image'
@@ -195,7 +198,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"12");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"23");
-        //
         // Initialization of 'Text'
         //
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0),&XBF36_Font,GUI_BLACK, "请选择支付方式");
@@ -240,19 +242,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
-                //检测卡片信息
-                if(1)//卡片非法
-                {
-
-                }
-                else if(1) //卡片余额不足
-                {
-
-                }
-                else //卡片可用
-                {
-
-                }
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -266,7 +255,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
         /* 显示时间和日期 */
-        Timer_Process(pMsg);
+        //Timer_Process(pMsg);
+        //EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), "45");
+
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), buf);
         /* 重启定时器 */
         WM_RestartTimer(pMsg->Data.v, 20);
         break;
@@ -295,6 +287,8 @@ WM_HWIN CreateFramewin(void)
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
 
+//    WM_CreateTimer(hWin, ID_TimerTime, 1000, 0);
+
     return hWin;
 }
 
@@ -309,8 +303,8 @@ WM_HWIN CreateFramewin(void)
 
 void PutOut_Home()
 {
-//    OrderData_t OrderData;//接收队列数据
     CreateFramewin();
+    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
     while(1)
     {
         //i++;
@@ -329,22 +323,7 @@ void PutOut_Home()
         // GUI_Delay(10);
         // GUI_DispStringAt((const char*)Time_buf,720,20);
         // GUI_DispCEOL();
-////        xQueueReceive(xHandleQueueOrders,&OrderData,10);
-////        //卡号，卡余额。
-////        if(OrderData.ucAccountStatus != 0 && OrderData.dBalance > 0)
-////        {
-////            PutOut_Card_Info(&OrderData);//跳入卡片信息页 且余额充裕//RFIDState = STATE_RFID_GOODCARD;
-////        }
-////        if(OrderData.ucAccountStatus == 0)
-////        {
-////            PutOut_Card_Valid();//卡片无效页 //RFIDState = STATE_RFID_BADCARD;
-////        }
-////        if(OrderData.dBalance < 0)
-////        {
-////            PutOut_Card_Info(&OrderData);//卡片信息页，欠费//RFIDState = STATE_RFID_OWE;
-////        }
 
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         GUI_Delay(10);
     }
 }

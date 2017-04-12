@@ -115,12 +115,12 @@ u8 TP_Read_XY(u16 *x, u16 *y)
     }
     *x = xtemp;
     *y = ytemp;
-    pressure = (xTPr * (float)xtemp) / 4096.0f * (4096.0f / (float)z1 - 1) - yTPr * (1 - (float)ytemp / 4096.0f);
-    if(pressure < 400 || pressure > 800)
-    {
-        return 0;
-    }
-    else
+//    pressure = (xTPr * (float)xtemp) / 4096.0f * (4096.0f / (float)z1 - 1) - yTPr * (1 - (float)ytemp / 4096.0f);
+//    if(pressure < 400 || pressure > 800)
+//    {
+//        return 0;
+//    }
+//    else
     {
         return 1;    //读数成功
     }
@@ -130,7 +130,7 @@ u8 TP_Read_XY(u16 *x, u16 *y)
 //该函数能大大提高准确度
 //x,y:读取到的坐标值
 //返回值:0,失败;1,成功。
-#define ERR_RANGE 100 //误差范围 
+#define ERR_RANGE 100 //误差范围
 u8 TP_Read_XY2(u16 *x, u16 *y)
 {
     u16 x1, y1;
