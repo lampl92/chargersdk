@@ -1,4 +1,5 @@
 #include "myiic.h"
+#include "user_app.h"
 //#include "delay.h"
 //////////////////////////////////////////////////////////////////////////////////
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -14,8 +15,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 //IIC初始
-IO_chip1 Chip1;
-IO_chip2 Chip2;
 unsigned char pca9554_1 = 0, pca9554_2 = 0;
 extern void Delay_ms(unsigned long long);
 uint8_t test;

@@ -12,9 +12,7 @@
 #include "stringName.h"
 #include "cJSON.h"
 #include "utils.h"
-//#include "bsp.h"
-extern samp Sys_samp;
-extern IO_chip2 Chip2;
+#include "user_app.h"
 //extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息

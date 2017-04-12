@@ -1,7 +1,7 @@
 #include "bsp.h"
 #include "stdlib.h"
 #include "math.h"
-extern IO_chip2 Chip2;
+#include "user_app.h"
 
 u8 CMD_RDX = 0XD0;
 u8 CMD_RDY = 0X90;

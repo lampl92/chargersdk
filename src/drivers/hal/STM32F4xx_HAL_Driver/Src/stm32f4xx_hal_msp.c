@@ -35,9 +35,9 @@
 #include "stm32f4xx_hal.h"
 #include "bsp.h"
 #include "myiic.h"
+#include "user_app.h"
 ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
-extern int AD_samp_dma;
 /* USER CODE BEGIN 0 */
 void Error_Handler(void)
 {

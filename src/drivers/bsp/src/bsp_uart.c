@@ -9,12 +9,12 @@
 #include "bsp.h"
 #include "cli_main.h"
 #include "userlib_queue.h"
+#include "user_app.h"
 
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef UART7_Handler;
 UART_HandleTypeDef UART7_RS485Handler;
-electricity_meter  Electricity_meter;
 typedef union
 {
     float yy_test_float;

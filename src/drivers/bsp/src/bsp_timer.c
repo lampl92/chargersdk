@@ -1,28 +1,14 @@
 #include "bsp_timer.h"
-unsigned int pwm,pwm4;
-unsigned int delay_ms,pwm_ms,pwm_r_1,pwm_r_2,pwm_g_1,pwm_g_2,
-	pwm_b_1,pwm_b_2;
-uint8_t flag_power_pwm_on,flag_pwm_r_on_1,flag_pwm_r_on_2,flag_pwm_g_on_1,
-flag_pwm_g_on_2,flag_pwm_b_on_1,flag_pwm_b_on_2;
-uint8_t yy_test;
-        extern u16 Read_Lis2ds12(u8 CMD);
+#include "user_app.h"
+#include "led_control.h"
 #define	AXISDATA_REG	0x28
-TIM_HandleTypeDef TIM3_Handler;      //¶¨Ê±Æ÷¾ä±ú
-TIM_HandleTypeDef TIM2_Handler;         //¶¨Ê±Æ÷3PWM¾ä±ú
-TIM_OC_InitTypeDef TIM2_CH1Handler;	    //¶¨Ê±Æ÷3Í¨µÀ4¾ä±ú
-TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim4;
-TIM_HandleTypeDef htim5;
-extern uint8_t pwm_r_flag_1,pwm_r_flag_2,pwm_g_flag_1,pwm_g_flag_2,pwm_b_flag_1,pwm_b_flag_2;
+
+
 extern void Error_Handler(void);
 extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim_base);
 extern void get_samp_point(void);
 extern void Power_out_pwm_ctrl(void);
 extern void led_output(void);
-extern void led_breath_r(void);
-extern void led_breath_g(void);
-extern void led_breath_b(void);
 extern void RS485_Send_Data(u8 *buf,u8 len);
 extern void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num);
 extern void RS485_Receive_Data(u8 *buf,u8 *len);
@@ -238,13 +224,20 @@ void TIM3_IRQHandler (void)
 	pwm_b_1++;
 	pwm_b_2++;
 	electricity_meter_analysis();
+	if((flag_pwm_out_n==1)&&(flag_gun_Open==1))
+    {
+      Power_out_n_pwm_ctrl();
+    }
+    if(flag_pwm_out_l==1)
+    {
+      Power_out_l_pwm_ctrl();
+    }
 	if(pwm_ms>=2000)
 	{
        // Get_electricity_meter_massage(02,read,frequency,1);
-       yy_test=Read_Lis2ds12(AXISDATA_REG);
+      // yy_test=Read_Lis2ds12(AXISDATA_REG);
 
 		pwm_ms=0;
-
 	}
 	if(pwm_r_1>=100)
 	{
@@ -262,7 +255,7 @@ void TIM3_IRQHandler (void)
 	{
 		pwm_g_2=0;
 	}
-		if(pwm_b_1>=100)
+    if(pwm_b_1>=100)
 	{
 		pwm_b_1=0;
 	}

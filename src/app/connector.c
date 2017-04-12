@@ -10,9 +10,8 @@
 #include "evse_globals.h"
 #include "connector.h"
 #include "bsp.h"
-extern samp Sys_samp;
-extern IO_chip2 Chip2;
-extern uint8_t read_pca9554_2(void);
+#include "user_app.h"
+
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电接口信息
 /---------------------------------------------------------------------------*/
