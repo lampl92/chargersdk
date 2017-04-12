@@ -224,6 +224,11 @@ void TIM3_IRQHandler (void)
         }
 
     }
+    if(timer_s>=60)
+    {
+        timer_s=0;
+        timer_min++;
+    }
 	if(timer_ms>=1000)
     {
         timer_ms=0;
@@ -266,11 +271,6 @@ void TIM3_IRQHandler (void)
 	{
 		pwm_b_2=0;
 	}
- //Power_out_pwm_ctrl();
-	led_breath_r();
-	led_breath_g();
-	led_breath_b();
-	led_output();
 
 }
 void TIM4_IRQHandler(void)

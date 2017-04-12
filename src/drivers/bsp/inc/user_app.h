@@ -80,6 +80,7 @@
 #define keep_off 0
 #define keep_on  1
 #define breath   2
+#define flicker  3
 
 #define red      0
 #define green    1
