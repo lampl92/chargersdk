@@ -358,7 +358,7 @@ void Open_gun_2(void)
 
 void Power_out_l_pwm_ctrl(void)
 {
-    if(pwm_ms / 2 == 0)
+    if(pwm_ms%2==0)
     {
         POWER_L_ON;
     }
@@ -369,7 +369,7 @@ void Power_out_l_pwm_ctrl(void)
 }
 void Power_out_n_pwm_ctrl(void)
 {
-    if(pwm_ms / 2 == 0)
+    if(pwm_ms%2==0)
     {
         POWER_N_ON;
     }
@@ -377,6 +377,32 @@ void Power_out_n_pwm_ctrl(void)
     {
         POWER_N_OFF;
     }
+}
+void POWER_L_CLOSE(void)
+{
+POWER_L_ON;
+flag_pwm_out_l=1;
+flag_power_out_l=0;
+timer_relay_ms=0;
+}
+void POWER_N_CLOSE(void)
+{
+POWER_N_ON;
+flag_power_out_n=0;
+flag_pwm_out_n=1;
+timer_relay_ms=0;
+}
+void POWER_L_OPEN(void)
+{
+flag_power_out_l=1;
+POWER_L_OFF;
+flag_pwm_out_l=0;
+}
+void POWER_N_OPEN(void)
+{
+flag_power_out_n=1;
+POWER_N_OFF;
+flag_pwm_out_n=0;
 }
 void Peripheral_Init(void)
 {

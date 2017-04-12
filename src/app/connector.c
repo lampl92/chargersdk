@@ -323,12 +323,11 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
 	pCON = (CON_t *)pvCON;
 	ucCONID = pCON->info.ucCONID;
-	tmpFreq = 50;
 	errcode = ERR_NO;
 
 	/** @todo (rgw#1#): 从电表获取 */
 
-	//...
+	tmpFreq = Electricity_meter[ucCONID].massage.massage_frequency;
 
 	/*********************/
 
@@ -346,12 +345,11 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 
 	pCON = (CON_t *)pvCON;
 	ucCONID = pCON->info.ucCONID;
-	tmpPower = 50;
 	errcode = ERR_NO;
 
 	/** @todo (rgw#1#): 从电表获取 */
 
-	//...
+		tmpPower = Electricity_meter[ucCONID].massage.massage_electric_energy;
 
 	/*********************/
 
@@ -890,8 +888,8 @@ static ErrorCode_t StartCharge(void *pvCON)
 
 	if(ucCONID==0)
 	{
-		POWER_L_ON;
-		POWER_N_ON;
+		POWER_L_CLOSE();
+		POWER_N_CLOSE();
 	}
 	else if(ucCONID==1)
 	{
@@ -924,8 +922,8 @@ static ErrorCode_t StopCharge(void *pvCON)
 	/** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
 
 	//...
-	POWER_L_OFF;
-	POWER_N_OFF;
+	POWER_L_OPEN();
+	POWER_N_OPEN();
 	/*********************/
 	return errcode;
 }
@@ -991,13 +989,13 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 		if(cmd == SWITCH_OFF)
 		{
 			//...
-			POWER_L_OFF;
-			POWER_N_OFF;
+			POWER_L_CLOSE();
+			POWER_N_CLOSE();
 		}
 		else
 		{
-			POWER_L_ON;
-			POWER_N_ON;
+			POWER_L_OPEN();
+			POWER_N_OPEN();
 		}
 	}
 	else if(ucCONID==1)

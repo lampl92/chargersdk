@@ -94,6 +94,8 @@
 #define electric_energy 0x0065
 #define frequency 0x0030
 
+#define	AXISDATA_REG	0x28
+
 #define samp_sum   200
 #define samp_dma    10
 #define ia_k       0.02197265
@@ -226,10 +228,14 @@ void TIM_SetTIM2Compare1(unsigned int);
 void TIM2_PWM_Init(unsigned int, unsigned int);
 void DMA_START(void);
 void Peripheral_Init(void);
+void POWER_L_CLOSE(void);
+void POWER_N_CLOSE(void);
+void POWER_L_OPEN(void);
+void POWER_N_OPEN(void);
 uint8_t yy_test,DC_channel;
-uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open;
-uint8_t flag_gun_Open;
+uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t vref,num_cp1,num_cp2;
+uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum,leakage_current_sum,va_samp_sum,ia_samp_sum,CP2_sum,CP1_sum,CP1_sum_sys,CP2_sum_sys;
 
 #endif /* USER_APP_H_INCLUDED */

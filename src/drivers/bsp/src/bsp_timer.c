@@ -1,20 +1,6 @@
 #include "bsp_timer.h"
 #include "user_app.h"
 #include "led_control.h"
-#define	AXISDATA_REG	0x28
-
-
-extern void Error_Handler(void);
-extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim_base);
-extern void get_samp_point(void);
-extern void Power_out_pwm_ctrl(void);
-extern void led_output(void);
-extern void RS485_Send_Data(u8 *buf,u8 len);
-extern void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num);
-extern void RS485_Receive_Data(u8 *buf,u8 *len);
-extern uint8_t RS485_RX_MODBUS_CNT;
-extern void electricity_meter_analysis(void);
-
 void MX_TIM2_Init(void)
 {
 
@@ -223,20 +209,37 @@ void TIM3_IRQHandler (void)
 	pwm_g_2++;
 	pwm_b_1++;
 	pwm_b_2++;
+	timer_ms++;
+	timer_relay_ms++;
+	if(timer_relay_ms>=1000)
+    {
+        timer_relay_ms=0;
+        if(flag_power_out_l==1)
+        {
+            flag_pwm_out_l=1;
+        }
+           if(flag_power_out_n==1)
+        {
+            flag_pwm_out_n=1;
+        }
+
+    }
+	if(timer_ms>=1000)
+    {
+        timer_ms=0;
+        timer_s++;
+    }
 	electricity_meter_analysis();
-	if((flag_pwm_out_n==1)&&(flag_gun_Open==1))
+	if((flag_pwm_out_n==1)&&(flag_power_out_n==1))
     {
       Power_out_n_pwm_ctrl();
     }
-    if(flag_pwm_out_l==1)
+    if((flag_pwm_out_l==1)&&(flag_power_out_l==1))
     {
       Power_out_l_pwm_ctrl();
     }
 	if(pwm_ms>=2000)
 	{
-       // Get_electricity_meter_massage(02,read,frequency,1);
-      // yy_test=Read_Lis2ds12(AXISDATA_REG);
-
 		pwm_ms=0;
 	}
 	if(pwm_r_1>=100)
