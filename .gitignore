@@ -13,3 +13,4 @@ build/EmBitz/doxygen/html/
 build/EmBitz/cscope.out
 build/EmBitz/chargersdk.cscope_file_list
 *.depend
+*.elay
