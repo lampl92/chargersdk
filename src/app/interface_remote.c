@@ -9,25 +9,28 @@
 #include <time.h>
 #include "includes.h"
 #include "bsp.h"
-#include "polarssl/base64.h"
+#include "mbedtls/base64.h"
 
 ErrorCode_t RemoteInit()
 {
-    uint8_t  *pucAESKey_BASE64 = "oFqTg0a0VrjiVU76M1WRVw==";
+    uint8_t  ucAESKey_BASE64[] = "oFqTg0a0VrjiVU76M1WRVw==";
+    uint8_t *pucAESKey_BASE64;
+
+    pucAESKey_BASE64 = ucAESKey_BASE64;
 
     uint8_t ucAESKey[64];
     uint8_t ucAESKeyLen;
+    uint8_t olen;
     int i;
-    memset(ucAESKey, 0, 64);
-    base64_decode(ucAESKey, &ucAESKeyLen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
+    pucAESKey_BASE64 = ucAESKey_BASE64;
+    mbedtls_base64_decode(ucAESKey, sizeof(ucAESKey), &olen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
     printf_safe("AESKEYBASE64 : %s\n", pucAESKey_BASE64);
     printf_safe("AESKey £º ");
-    for(i = 0; i<ucAESKeyLen; i++)
+    for(i = 0; i<olen; i++)
     {
-        printf_safe("%x ",ucAESKey[i]);
+        printf_safe("%02x ",ucAESKey[i]);
     }
     printf_safe("\n");
-
 }
 
 ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)

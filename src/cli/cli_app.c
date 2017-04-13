@@ -2,36 +2,6 @@
 #include "utils.h"
 #include <time.h>
 
-//?-¡À¨º??¨¦?
-#define WHITE            0xFFFF
-#define BLACK            0x0000
-#define BLUE             0x001F
-#define BRED             0XF81F
-#define GRED             0XFFE0
-#define GBLUE            0X07FF
-#define RED              0xF800
-#define MAGENTA          0xF81F
-#define GREEN            0x07E0
-#define CYAN             0x7FFF
-#define YELLOW           0xFFE0
-#define BROWN            0XBC40 //¡Á?¨¦?
-#define BRRED            0XFC07 //¡Á?o¨¬¨¦?
-#define GRAY             0X8430 //?¨°¨¦?
-//GUI??¨¦?
-
-#define DARKBLUE         0X01CF //¨¦?¨¤?¨¦?
-#define LIGHTBLUE        0X7D7C //?3¨¤?¨¦?
-#define GRAYBLUE         0X5458 //?¨°¨¤?¨¦?
-//¨°?¨¦?¨¨y¨¦??aPANEL¦Ì???¨¦?
-
-#define LIGHTGREEN       0X841F //?3?¨¬¨¦?
-//#define LIGHTGRAY        0XEF5B //?3?¨°¨¦?(PANNEL)
-#define LGRAY            0XC618 //?3?¨°¨¦?(PANNEL),¡ä¡ã¨¬?¡À3?¡ã¨¦?
-
-#define LGRAYBLUE        0XA651 //?3?¨°¨¤?¨¦?(?D??2???¨¦?)
-#define LBBLUE           0X2B12 //?3¡Á?¨¤?¨¦?(????¨¬???¦Ì?¡¤¡ä¨¦?)
-
-
 void cli_hello_fnt(int argc, char **argv)
 {
     uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
@@ -45,6 +15,8 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
+    RemoteInit();
+    mbedtls_aes_self_test(1);
 }
 
 tinysh_cmd_t cli_hello_cmd =
