@@ -96,9 +96,9 @@
 			<Add directory="..\..\src\middlewares\userlib\inc" />
 			<Add directory="..\..\src\middlewares\cJSON" />
 			<Add directory="..\..\src\middlewares\AES" />
-			<Add directory="..\..\src\net\PolarSSL\include" />
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src" />
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src\examples" />
+			<Add directory="..\..\src\net\mbedTLS\include" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -482,10 +482,13 @@
 		<Unit filename="..\..\src\middlewares\userlib\src\xprintf.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\net\PolarSSL\library\aes.c">
+		<Unit filename="..\..\src\net\mbedTLS\library\aes.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\net\PolarSSL\library\base64.c">
+		<Unit filename="..\..\src\net\mbedTLS\library\base64.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\net\mbedTLS\library\platform.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\os\FreeRTOS\Source\croutine.c">
