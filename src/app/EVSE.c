@@ -12,10 +12,11 @@
 #include "stringName.h"
 #include "cJSON.h"
 #include "utils.h"
-
 #include "gdsl_types.h"
 #include "gdsl_list.h"
 #include "gdsl_perm.h"
+#include "user_app.h"
+//extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -586,11 +587,11 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     //errcode = ERR_SCRAM_FAULT;
     errcode = ERR_NO;
     tmpScramState = 0;
-
-    /** @todo (rgw#1#): 实现代码 */
+/* @todo (yuye#1#): 确认取反 */
 
     //...
 
+    tmpScramState =~((uint8_t)(read_pca9554_2()>>5))&0x01;
     /*********************/
 
     pEVSE->status.ulScramState = tmpScramState;
@@ -616,9 +617,7 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     tmpKnockState = 0;
-
-    /** @todo (rgw#1#): 获取重力加速度传感器 */
-
+/* @todo (yuye#1#): 添加重力传感器驱动 */
     //...
 
     /*********************/
@@ -647,10 +646,9 @@ static ErrorCode_t GetPEState(void *pvEVSE)
     errcode = ERR_NO;
     tmpPEState = 0;
 
-    /** @todo (rgw#1#): 实现代码 */
-
+/* @todo (yuye#1#): 增加硬件功能，检测PE和相序。 */
     //...
-
+    tmpPEState=0;
     /*********************/
 
     pEVSE->status.ulPEState = tmpPEState;
@@ -677,9 +675,18 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     errcode = ERR_NO;
     tmpOffState = 0;
 
+/* @todo (yuye#1#): 确认电压范围 */
     /** @todo (rgw#1#): 实现代码 */
 
     //...
+    if(get_va()<=100.0)//检测间隔10mS
+    {
+        tmpOffState=1;
+    }
+    else if((get_va()>=180)&&(get_va()<=250))
+    {
+     tmpOffState=0;
+    }
 
     /*********************/
 
@@ -711,6 +718,8 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     /** @todo (rgw#1#): 实现代码 */
 
     //...
+
+    tmpArresterState= (~(read_pca9554_2()>>4))&0x01;
 
     /*********************/
 

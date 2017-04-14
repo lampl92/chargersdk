@@ -115,7 +115,6 @@ TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerHeartbeat = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
-
 void vTaskCLI(void *pvParameters)
 {
     cli_main();
@@ -123,7 +122,7 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    MainTask();
+    //MainTask();
 //    Touch_Calibrate();
 }
 
@@ -222,7 +221,7 @@ set
     memory allocated by the kernel to any task that has since been deleted.
 */
 void vApplicationIdleHook( void )
-{
+ {
 }
 
 /**

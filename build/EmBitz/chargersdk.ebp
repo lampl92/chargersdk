@@ -44,16 +44,16 @@
 				<Option compiler="armgcc_eb" />
 				<Option projectDeviceOptionsRelation="0" />
 				<Compiler>
-					<Add option="-O2" />
-					<Add option="-g2" />
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
+					<Add option="-O2" />
+					<Add option="-g2" />
 				</Compiler>
 				<Cpp>
-					<Add option="-O2" />
-					<Add option="-g2" />
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
+					<Add option="-O2" />
+					<Add option="-g2" />
 				</Cpp>
 				<Assembler>
 					<Add option="-Wa,--no-warn" />
@@ -73,7 +73,7 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-O0" />
+			<Add option="-O3" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -99,6 +99,9 @@
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src" />
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src\examples" />
 			<Add directory="..\..\src\net\mbedTLS\include" />
+			<Add directory="..\..\src\hmi" />
+			<Add directory="..\..\src\middlewares\STemWin\BMP" />
+			<Add directory="..\..\src\middlewares\STemWin\XBF" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -246,6 +249,8 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_touch_2046.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\led_control.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\user_app.h" />
 		<Unit filename="..\..\src\drivers\bsp\src\bsp.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -277,6 +282,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_user_lib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\led_control.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\myiic.c">
@@ -383,16 +391,60 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\EVSEDLG.c">
+		<Unit filename="..\..\src\hmi\Charge_GUI_Disp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\hmi\EVSEDLG.c">
+			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="..\..\src\hmi\HMI_Start.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Alarm_Log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Card_Info.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Card_Valid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Charge_Done.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Charging.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Charging_2-dimen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Home.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Machine_Error.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoStatus.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Skin_Keyboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\pyinput.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />
 			<Option link="0" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\Touch_Disp_Module.c">
+			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\AES\aes_modes.c">
 			<Option compilerVar="CC" />
@@ -446,6 +498,9 @@
 		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\Config\GUIConf.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -462,6 +517,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\middlewares\tinysh\tinysh.c">
@@ -520,12 +578,12 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Debug" active_interface="ST-link">
+				<target_debugging_settings target="Debug" active_interface="J-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="Generic" />
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
-							<option opt_id="ID_JTAG_SWD" opt_value="jtag" />
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
 							<option opt_id="ID_SPEED" opt_value="1000" />
 							<option opt_id="ID_AUTO_SPEED" opt_value="1" />
 							<option opt_id="ID_ENDIANNESS" opt_value="little" />
@@ -561,7 +619,29 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Release" active_interface="ST-link">
+				<target_debugging_settings target="Release" active_interface="J-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="STMicroelectronics">
+							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
+							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
+							<option opt_id="ID_SPEED" opt_value="1000" />
+							<option opt_id="ID_AUTO_SPEED" opt_value="1" />
+							<option opt_id="ID_ENDIANNESS" opt_value="little" />
+							<option opt_id="ID_RESET_TYPE" opt_value="0" />
+							<option opt_id="ID_VECTOR_START" opt_value="0x08000000" />
+							<option opt_id="ID_LOAD_PROGRAM" opt_value="1" />
+							<option opt_id="ID_FLASH_DOWNLOAD" opt_value="1" />
+							<option opt_id="ID_FLASH_BREAK" opt_value="1" />
+							<option opt_id="ID_RAM_EXEC" opt_value="0" />
+							<option opt_id="ID_VEC_TABLE" opt_value="1" />
+							<option opt_id="ID_NCACHE_CHECK" opt_value="0" />
+							<option opt_id="ID_NCACHE_BASE" opt_value="" />
+							<option opt_id="ID_NCACHE_LENGTH" opt_value="" />
+							<option opt_id="ID_SEMIHOST_CHECK" opt_value="0" />
+							<option opt_id="ID_ARM_SWI" opt_value="" />
+							<option opt_id="ID_THUMB_SWI" opt_value="" />
+						</family_options>
+					</debug_interface>
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBITZ}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
