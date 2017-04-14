@@ -887,10 +887,10 @@ static ErrorCode_t StartCharge(void *pvCON)
 
 	if(ucCONID==0)
 	{
-		POWER_L_CLOSE();
-		POWER_N_CLOSE();
-	}
-	else if(ucCONID==1)
+        POWER_L_CLOSE();
+        POWER_N_CLOSE();
+    }
+    else if(ucCONID == 1)
 	{
 		;
 	}
