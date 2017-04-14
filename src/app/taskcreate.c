@@ -124,6 +124,10 @@ void vTaskGUI(void *pvParameters)
 {
     //MainTask();
 //    Touch_Calibrate();
+    while(1)
+    {
+        GUI_Delay(1000);
+    }
 }
 
 void vTaskTouch(void *pvParameters)

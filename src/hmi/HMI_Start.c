@@ -27,8 +27,4 @@ void MainTask(void)
 	//CreateAlarmLog();
 
 	//GUI_Touch_Calibrate();
-    while(1)
-    {
-        GUI_Delay(1000);
-    }
 }
