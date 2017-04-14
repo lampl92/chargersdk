@@ -20,26 +20,25 @@
 
 static ErrorCode_t GetSocketType(void *pvCON)
 {
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpType;
-    ErrorCode_t errcode;
+	CON_t *pCON;
+	uint8_t ucCONID;
+	uint8_t tmpType;
+	ErrorCode_t errcode;
 
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpType = defSocketTypeB;
-    errcode = ERR_NO;
+	pCON = (CON_t *)pvCON;
+	ucCONID = pCON->info.ucCONID;
+	tmpType = defSocketTypeB;
+	errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 从文件获取 */
+	/** @todo (rgw#1#): 从文件获取 */
 
-    //...
 	tmpType = GET_CC1;
 
-    /*********************/
+	/*********************/
 
-    pCON->info.ucSocketType = tmpType;
+	pCON->info.ucSocketType = tmpType;
 
-    return  errcode;
+	return  errcode;
 }
 static ErrorCode_t GetVolatageUpperLimits(void *pvCON)
 {
