@@ -1,4 +1,5 @@
 #include "myiic.h"
+#include "user_app.h"
 //#include "delay.h"
 //////////////////////////////////////////////////////////////////////////////////
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -14,8 +15,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 //IIC初始
-IO_chip1 Chip1;
-IO_chip2 Chip2;
 unsigned char pca9554_1 = 0, pca9554_2 = 0;
 extern void Delay_ms(unsigned long long);
 uint8_t test;
@@ -51,9 +50,9 @@ void IIC_Start(void)
     SDA_OUT();     //sda线输出
     IIC_SDA = 1;
     IIC_SCL = 1;
-    delay_us(4);
+    bsp_DelayUS(4);
     IIC_SDA = 0; //START:when CLK is high,DATA change form high to low
-    delay_us(4);
+    bsp_DelayUS(4);
     IIC_SCL = 0; //钳住I2C总线，准备发送或接收数据
 }
 //产生IIC停止信号
@@ -62,10 +61,10 @@ void IIC_Stop(void)
     SDA_OUT();//sda线输出
     IIC_SCL = 0;
     IIC_SDA = 0; //STOP:when CLK is high DATA change form low to high
-    delay_us(4);
+    bsp_DelayUS(4);
     IIC_SCL = 1;
     IIC_SDA = 1; //发送I2C总线结束信号
-    delay_us(4);
+    bsp_DelayUS(4);
 }
 //等待应答信号到来
 //返回值：1，接收应答失败
@@ -75,9 +74,9 @@ u8 IIC_Wait_Ack(void)
     u8 ucErrTime = 0;
     SDA_IN();      //SDA设置为输入
     IIC_SDA = 1;
-    delay_us(1);
+    bsp_DelayUS(1);
     IIC_SCL = 1;
-    delay_us(1);
+    bsp_DelayUS(1);
     while(READ_SDA)
     {
         ucErrTime++;
@@ -96,9 +95,9 @@ void IIC_Ack(void)
     IIC_SCL = 0;
     SDA_OUT();
     IIC_SDA = 0;
-    delay_us(2);
+    bsp_DelayUS(2);
     IIC_SCL = 1;
-    delay_us(2);
+    bsp_DelayUS(2);
     IIC_SCL = 0;
 }
 //不产生ACK应答
@@ -107,9 +106,9 @@ void IIC_NAck(void)
     IIC_SCL = 0;
     SDA_OUT();
     IIC_SDA = 1;
-    delay_us(2);
+    bsp_DelayUS(2);
     IIC_SCL = 1;
-    delay_us(2);
+    bsp_DelayUS(2);
     IIC_SCL = 0;
 }
 //IIC发送一个字节
@@ -125,11 +124,11 @@ void IIC_Send_Byte(u8 txd)
     {
         IIC_SDA = (txd & 0x80) >> 7;
         txd <<= 1;
-        delay_us(2);   //对TEA5767这三个延时都是必须的
+        bsp_DelayUS(2);   //对TEA5767这三个延时都是必须的
         IIC_SCL = 1;
-        delay_us(2);
+        bsp_DelayUS(2);
         IIC_SCL = 0;
-        delay_us(2);
+        bsp_DelayUS(2);
     }
 }
 //读1个字节，ack=1时，发送ACK，ack=0，发送nACK
@@ -140,14 +139,14 @@ u8 IIC_Read_Byte(unsigned char ack)
     for(i = 0; i < 8; i++ )
     {
         IIC_SCL = 0;
-        delay_us(2);
+        bsp_DelayUS(2);
         IIC_SCL = 1;
         receive <<= 1;
         if(READ_SDA)
         {
             receive++;
         }
-        delay_us(1);
+        bsp_DelayUS(1);
     }
     if (!ack)
     {
@@ -201,7 +200,7 @@ void write_pca9554_1(void)
 void write_pca9554_2(void)
 {
     uint8_t PCAP554B_date;
-    PCAP554B_date = Chip2.in1 | Chip2.in2 | Chip2.pause | Chip2.in6 | Chip2.in7 | Chip2.in8 | Chip2.cs_zl | Chip2.buzzer;
+    PCAP554B_date = Chip2.cs_zl<<6 | Chip2.buzzer<<7;
     IIC_Start();
     IIC_Send_Byte(0X40 + 0X02); //发送器件地址0XA0,写数据
     IIC_Wait_Ack();

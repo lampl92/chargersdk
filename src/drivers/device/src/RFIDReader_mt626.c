@@ -16,6 +16,7 @@ extern Queue *pRfidRecvQue;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
+
 /** @brief 延时函数,用于命令传输过程中等待
  *
  * @param ms uint32_t 延时时间,单位:毫秒
@@ -513,6 +514,7 @@ void testmt626(void)
 
     while(1)
     {
+
         //eg. 无发送数据,无返回数据
         state = TransToMT626(pmt626com, MT626_FIND_CMD, NULL, 0);
         if(state == MT_STATE_Y)

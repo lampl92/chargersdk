@@ -38,6 +38,7 @@ typedef enum _ErrorCode
     ERR_CON_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
     ERR_CON_STARTCHARGE,        //开始充电错误
     ERR_CON_STOPCHARGE,         //结束充电错误
+    ERR_RELAY_PASTE,            //  "充电点 触电粘连",
 
     ERR_FILE_RW,            //文件读写错误
     ERR_FILE_NO,            //无目标文件
