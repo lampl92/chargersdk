@@ -18,6 +18,7 @@
 /*---------------------------------------------------------------------------/
 / 任务栈定义
 /---------------------------------------------------------------------------*/
+#define defSTACK_TaskInit                   512
 #define defSTACK_TaskCLI                    1024
 #define defSTACK_TaskGUI                    1024
 #define defSTACK_TaskTouch                  128
@@ -34,6 +35,7 @@
 / 任务优先级
 /---------------------------------------------------------------------------*/
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+#define defPRIORITY_TaskInit                1
 #define defPRIORITY_TaskCLI                 1
 #define defPRIORITY_TaskGUI                 1
 #define defPRIORITY_TaskTouch               1
@@ -49,6 +51,7 @@
 /*---------------------------------------------------------------------------/
 / 任务名称
 /---------------------------------------------------------------------------*/
+const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
@@ -63,6 +66,7 @@ const char *TASKNAME_EVSEData       = "TaskEVSEData";
 /*---------------------------------------------------------------------------/
 / 任务声明
 /---------------------------------------------------------------------------*/
+void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
@@ -78,6 +82,7 @@ void vTaskEVSEData(void *pvParameters);             //数据处理
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
+static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
@@ -115,6 +120,13 @@ TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerHeartbeat = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
+void vTaskInit(void *pvParameters)
+{
+    while(1)
+    {
+        vTaskDelay(1000);
+    }
+}
 void vTaskCLI(void *pvParameters)
 {
     cli_main();
@@ -126,7 +138,7 @@ void vTaskGUI(void *pvParameters)
 //    Touch_Calibrate();
     while(1)
     {
-        GUI_Delay(1000);
+        vTaskDelay(1000);
     }
 }
 
@@ -137,6 +149,11 @@ void vTaskTouch(void *pvParameters)
         GUI_TOUCH_Exec();
         vTaskDelay(10);
     }
+}
+
+void TaskInit(void)
+{
+    xTaskCreate( vTaskInit, TASKNAME_INIT, defSTACK_TaskInit, NULL, defPRIORITY_TaskInit, &xHandleTaskInit );
 }
 
 void SysTaskCreate (void)
