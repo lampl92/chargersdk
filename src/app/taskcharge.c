@@ -17,6 +17,7 @@ void vTaskEVSECharge(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsCharge;
+    EventBits_t uxBitsTest;
     EventBits_t uxBitsException;
     uint8_t strTimerName[50];
 
@@ -120,15 +121,21 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_STARTCHARGE:
-                THROW_ERROR(i, pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL);
-                vTaskDelay(defRelayDelay);
-                if(pCON->status.ucRelayLState == SWITCH_ON &&
-                        pCON->status.ucRelayNState == SWITCH_ON)
+                uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                if((uxBitsCharge & defEventBitCONAuthed) == defEventBitCONAuthed)
                 {
-                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
-                    pCON->state = STATE_CON_CHARGING;
+                    THROW_ERROR(i, pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL);
+                    vTaskDelay(defRelayDelay);
+                    if(pCON->status.ucRelayLState == SWITCH_ON &&
+                            pCON->status.ucRelayNState == SWITCH_ON)
+                    {
+                        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
+                        pCON->state = STATE_CON_CHARGING;
+                        printf_safe("Start Charge!\n");
+                    }
+                    /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                 }
-                /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
+
                 break;
             case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
@@ -140,6 +147,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
 
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                uxBitsTest = uxBitsCharge & defEventBitChargeCondition;
                 if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2主动断开
                 {
                     THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
@@ -152,8 +160,14 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
+                    printf_safe("Condition  = %d\n", defEventBitChargeCondition);
+                    printf_safe("res        = %d\n", (uxBitsCharge & defEventBitChargeCondition));
+                    printf_safe("uxBitsTest = %d\n", uxBitsTest);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
                     vTaskDelay(defRelayDelay);
+#ifdef DEBUG_DIAG_DUMMY
+                    pCON->status.xCPState = CP_12V;
+#endif
                     if(pCON->status.xCPState == CP_12V)
                     {
                         uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
@@ -162,6 +176,10 @@ void vTaskEVSECharge(void *pvParameters)
                         //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
                         THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
                         vTaskDelay(defRelayDelay);
+#ifdef DEBUG_DIAG_DUMMY
+                        pCON->status.ucRelayLState = SWITCH_OFF;
+                        pCON->status.ucRelayNState = SWITCH_OFF;
+#endif
                         if(pCON->status.ucRelayLState == SWITCH_OFF &&
                                 pCON->status.ucRelayNState == SWITCH_OFF)
                         {
@@ -172,6 +190,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_STOPCHARGE:
+                 printf_safe("Stop Charge!\n");
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后进入idle */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
