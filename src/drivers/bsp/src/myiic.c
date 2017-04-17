@@ -169,7 +169,7 @@ void PCA9554_init(void)
     IIC_Send_Byte(0x00);     //全部配置成输出
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件
-    Delay_ms(10);
+    bsp_DelayMS(10);
 //片2有输入和输出
     IIC_Start();
     IIC_Send_Byte(0X40 + 0x02); //器件地址02
@@ -179,7 +179,7 @@ void PCA9554_init(void)
     IIC_Send_Byte(0x3F);     //发送字节
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件
-    Delay_ms(10);
+    bsp_DelayMS(10);
 }
 
 void write_pca9554_1(void)
@@ -195,7 +195,7 @@ void write_pca9554_1(void)
     IIC_Send_Byte(PCAP554A_date);     //发送字节
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件 b
-    Delay_ms(10);
+    bsp_DelayUS(10);
 }
 void write_pca9554_2(void)
 {
@@ -209,7 +209,7 @@ void write_pca9554_2(void)
     IIC_Send_Byte(PCAP554B_date);//发送字节
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件
-    Delay_ms(10);
+    bsp_DelayUS(10);
 }
 uint8_t read_pca9554_2(void)
 {
