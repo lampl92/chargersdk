@@ -55,17 +55,17 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_WAITSTART:
                 //2. 等待StartCharge事件
-                for(i = 0; i < ulTotalCON; i++)
+//                for(i = 0; i < ulTotalCON; i++)
+//                {
+//                    pCON = CONGetHandle(i);
+                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                                   defEventBitCONStartOK,
+                                                   pdFALSE, pdFALSE, 0);
+                if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
                 {
-                    pCON = CONGetHandle(i);
-                    uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                                       defEventBitCONStartOK,
-                                                       pdFALSE, pdFALSE, 0);
-                    if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
-                    {
-                        pCON->order.statOrder = STATE_ORDER_MAKE;
-                    }
+                    pCON->order.statOrder = STATE_ORDER_MAKE;
                 }
+//                }
                 break;
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
@@ -76,10 +76,23 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_UPDATE:
                 //4. 更新充电数据
                 /** @todo (rgw#1#): 获取离开Update条件，进入Finish状态 */
-                makeOrder(pCON);
+
+                uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
+                {
+                    pCON->order.statOrder = STATE_ORDER_FINISH;
+                }
+                else
+                {
+                    makeOrder(pCON);
+                }
+                break;
             case STATE_ORDER_FINISH:
                 //5. 结束充电
-                /** @todo (rgw#1#): 获取离开Finish条件 */
+                makeOrder(pCON);
+                /** @todo (rgw#1#): 存储订单 */
+                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+                OrderInit(&(pCON->order));//状态变为IDLE
                 break;
             }
         }
