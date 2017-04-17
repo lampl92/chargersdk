@@ -84,6 +84,9 @@ static void SegmentProc(time_t now, CON_t *pCON)
     ts = localtime(&now);
     ulTotalTemplSegs = gdsl_list_get_size(plTemplSeg);
     /*1. 段判断*/
+#ifdef DEBUG_DIAG_DUMMY
+    ulTotalTemplSegs = 0;
+#endif
     if(ulTotalTemplSegs > 0)
     {
         for(i = 1; i <= ulTotalTemplSegs; i++ )
@@ -220,7 +223,9 @@ ErrorCode_t makeOrder(CON_t *pCON)
         break;
     case STATE_ORDER_UPDATE:
         SegmentProc(time(NULL), pCON);
+        break;
     case STATE_ORDER_FINISH:
+        /** @todo (rgw#1#): 添加订单结束时内容 */
         break;
     }
     return errcode;
