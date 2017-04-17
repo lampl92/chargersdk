@@ -144,8 +144,8 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsException & defEventBitExceptionCritical) != 0)
                 {
                     pCON->state = STATE_CON_ERROR;
+                    break;
                 }
-
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2主动断开
                 {
@@ -190,8 +190,13 @@ void vTaskEVSECharge(void *pvParameters)
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后进入idle */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
-                OrderInit(&(pCON->order));
-                pCON->state = STATE_CON_IDLE;
+                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                                      defEventBitCONOrderFinish,
+                                                      pdTRUE, pdTRUE, 0);
+                if((uxBitsCharge & defEventBitCONOrderFinish) == defEventBitCONOrderFinish)
+                {
+                    pCON->state = STATE_CON_IDLE;
+                }
                 break;
             case STATE_CON_ERROR:
                 THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
