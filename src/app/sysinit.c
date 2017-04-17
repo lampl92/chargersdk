@@ -50,6 +50,8 @@ void timeInit()
 //    orig.tm_wday = 5;
 //    orig.tm_yday = 19;
     orig.tm_isdst = -1;
+    putenv("TZ=Etc/GMT-8");
+    tzset();
     settime = mktime (&orig);
     time(&settime);
 }
