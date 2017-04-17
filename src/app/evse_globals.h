@@ -110,6 +110,7 @@
 #define defEventBitEVSEPowerOffOK       BIT_17
 
 #define defEventBitCONOrderStart        BIT_18
+#define defEventBitCONOrderFinish       BIT_19
 
 
 
