@@ -17,7 +17,6 @@ void vTaskEVSECharge(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsCharge;
-    EventBits_t uxBitsTest;
     EventBits_t uxBitsException;
     uint8_t strTimerName[50];
 
@@ -132,6 +131,7 @@ void vTaskEVSECharge(void *pvParameters)
                         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                         pCON->state = STATE_CON_CHARGING;
                         printf_safe("Start Charge!\n");
+                        vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
                     }
                     /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                 }
@@ -147,7 +147,6 @@ void vTaskEVSECharge(void *pvParameters)
                 }
 
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                uxBitsTest = uxBitsCharge & defEventBitChargeCondition;
                 if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2主动断开
                 {
                     THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
@@ -160,9 +159,6 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
-                    printf_safe("Condition  = %d\n", defEventBitChargeCondition);
-                    printf_safe("res        = %d\n", (uxBitsCharge & defEventBitChargeCondition));
-                    printf_safe("uxBitsTest = %d\n", uxBitsTest);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
                     vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
