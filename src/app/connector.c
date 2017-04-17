@@ -32,7 +32,7 @@ static ErrorCode_t GetSocketType(void *pvCON)
 
     /** @todo (rgw#1#): 从文件获取 */
 
-    tmpType = GET_CC1;
+    tmpType = defSocketTypeB;
 
     /*********************/
 
