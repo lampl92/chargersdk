@@ -270,7 +270,7 @@ uint16_t c_crc(uint8_t *pushdata,uint8_t length)
  * @param pvCON void*
  * @param  add uint8_t   要操作的电表的地址信息，01~255；
  * @param  cmd uint8_t   RS485/MODBUS-RTU通信协议命令如read write
- * @param  massage       获取相关电能信息voltage、current、power、electric_energy
+ * @param  massage       获取相关电能信息voltage、current、power、electric_energy、frequency
  */
 void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num)
 {

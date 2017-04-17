@@ -4,6 +4,7 @@
 #include <math.h>
 #include "user_app.h"
 #include "bsp_timer.h"
+#include "FreeRTOS.h"
 const double  resistance[154] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
@@ -301,10 +302,11 @@ void get_samp_point(void)//ÓÃÊ±30¦ÌS
 }
 void Delay_ms(unsigned long long time)
 {
-    unsigned int x, y;
-    x = time * 1000;
-    for(; x > 0; x--)
-        for(y = 180; y > 0; y--);
+//    unsigned int x, y;
+//    x = time * 1000;
+//    for(; x > 0; x--)
+//        for(y = 180; y > 0; y--);
+    vTaskDelay(time);
 }
 void Delay_us(unsigned long long time)
 {
