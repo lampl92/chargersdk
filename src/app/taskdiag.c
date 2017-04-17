@@ -33,7 +33,7 @@ void vTaskEVSEDiag(void *pvParameters)
         if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
         {
 #ifdef DEBUG_DIAG
-            printf_safe("%s(code: %d,level: %d)\n", strErrorCode[errpack.code], errpack.code, errpack.level);
+            printf_safe("%x %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
 #endif
         }
         /* end of 处理系统失效故障 */
