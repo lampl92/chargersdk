@@ -167,8 +167,6 @@ void vTaskEVSERFID(void *pvParameters)
             break;
         }/* switch(pRFIDDev->state)*/
 #endif
-#ifdef DEBUG_NO_TASKRFID
-        vTaskDelay(1000);
-#endif
+        vTaskDelay(100);
     }/* while(1)*/
 }
