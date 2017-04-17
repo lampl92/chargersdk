@@ -36,7 +36,8 @@ void cli_init(void)
     tinysh_add_command(&cli_parseJson_cmd);
     tinysh_add_command(&cli_makeJson_cmd);
     tinysh_add_command(&cli_aestest_cmd);
-
+    /************电桩信息****************/
+    tinysh_add_command(&cli_evsestatus_cmd);
 
     /* add the foo command
     */
@@ -53,7 +54,6 @@ void cli_init(void)
 
 }
 extern Queue *pCliRecvQue;
-/** @note (rgw#1#): 应该是tinysh本身性能的问题，连续输入"?"会造成tinysh死机。 */
 void cli_main(void)
 {
     uint8_t ch;
