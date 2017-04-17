@@ -21,7 +21,7 @@ void vTaskEVSEMonitor(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBitsTimerCB = 0;
 #ifndef DEBUG_INIT
-    vTaskDelay(10000);
+    vTaskDelay(1000);
 #endif
     while(1)
     {
