@@ -114,24 +114,24 @@
 
 
 
-#define defEventBitEVSEReady            defEventBitEVSEScramOK |    \
+#define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \
                                         defEventBitEVSEPEOK |       \
                                         defEventBitEVSEKnockOK |    \
                                         defEventBitEVSEArresterOK | \
-                                        defEventBitEVSEPowerOffOK
+                                        defEventBitEVSEPowerOffOK)
 
-#define defEventBitCPSwitchCondition    defEventBitCONLocked |      \
+#define defEventBitCPSwitchCondition    (defEventBitCONLocked |      \
                                         defEventBitCONVoltOK |      \
                                         defEventBitCONSocketTempOK |  \
                                         defEventBitCONACTempOK |    \
                                         defEventBitCONPlugOK | \
-                                        defEventBitEVSEReady
+                                        defEventBitEVSEReady)
 
-#define defEventBitChargeCondition      defEventBitCPSwitchCondition | \
+#define defEventBitChargeCondition      (defEventBitCPSwitchCondition | \
                                         defEventBitCONAuthed | \
                                         defEventBitCONCurrOK | \
                                         defEventBitCONFreqOK | \
-                                        defEventBitCONS2Closed
+                                        defEventBitCONS2Closed)
 
 
 
