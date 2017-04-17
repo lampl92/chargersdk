@@ -589,9 +589,11 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     tmpScramState = 0;
     /* @todo (yuye#1#): 确认取反 */
 
-    //...
-
+#ifdef DEBUG_DIAG_DUMMY
+    tmpScramState = 0;
+#else
     tmpScramState = ~((uint8_t)(read_pca9554_2() >> 5)) & 0x01;
+#endif
     /*********************/
 
     pEVSE->status.ulScramState = tmpScramState;
@@ -618,7 +620,11 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     errcode = ERR_NO;
     tmpKnockState = 0;
     /* @todo (yuye#1#): 添加重力传感器驱动 */
-    //...
+#ifdef DEBUG_DIAG_DUMMY
+    tmpKnockState = 0;
+#else
+    //在这添加代码
+#endif
 
     /*********************/
 
@@ -647,8 +653,11 @@ static ErrorCode_t GetPEState(void *pvEVSE)
     tmpPEState = 0;
 
     /* @todo (yuye#1#): 增加硬件功能，检测PE和相序。 */
-    //...
+#ifdef DEBUG_DIAG_DUMMY
     tmpPEState = 0;
+#else
+    //在这添加代码
+#endif
     /*********************/
 
     pEVSE->status.ulPEState = tmpPEState;
@@ -678,7 +687,9 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /* @todo (yuye#1#): 确认电压范围 */
     /** @todo (rgw#1#): 实现代码 */
 
-    //...
+#ifdef DEBUG_DIAG_DUMMY
+    tmpOffState = 0;
+#else
     if(get_va() <= 100.0) //检测间隔10mS
     {
         tmpOffState = 1;
@@ -687,7 +698,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     {
         tmpOffState = 0;
     }
-
+#endif
     /*********************/
 
     pEVSE->status.ulPowerOffState = tmpOffState;
@@ -717,9 +728,11 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
 
     /** @todo (rgw#1#): 实现代码 */
 
-    //...
-
+#ifdef DEBUG_DIAG_DUMMY
+    tmpArresterState = 0;
+#else
     tmpArresterState = (~(read_pca9554_2() >> 4)) & 0x01;
+#endif
 
     /*********************/
 

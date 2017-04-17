@@ -32,7 +32,6 @@ static ErrorCode_t GetSocketType(void *pvCON)
 
     /** @todo (rgw#1#): 从文件获取 */
 
-    tmpType = defSocketTypeB;
 
     /*********************/
 
@@ -250,7 +249,11 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
 
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpVolt = 220;
+#else
         tmpVolt = get_va();
+#endif
     }
     if(ucCONID == 1)
     {
@@ -288,7 +291,11 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
 
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpCurr = 32;
+#else
         tmpCurr = get_ia();
+#endif
     }
     if(ucCONID == 1)
     {
@@ -323,8 +330,12 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
     /** @todo (yuye#1#): 从电表获取 */
     //meter id 0 == CON id 0
+#ifdef DEBUG_DIAG_DUMMY
+    tmpFreq = 50;
+#else
     Get_electricity_meter_massage(ucCONID, read, frequency, 1);
     tmpFreq = Electricity_meter[ucCONID].massage.massage_frequency;
+#endif
 
     /*********************/
 
@@ -345,9 +356,12 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpPower = 100;
+#else
     Get_electricity_meter_massage(ucCONID, read, electric_energy, 1);
     tmpPower = Electricity_meter[ucCONID].massage.massage_electric_energy;
-
+#endif
     /*********************/
 
     pCON->status.dChargingPower = tmpPower;
@@ -380,6 +394,9 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpCPState = CP_6V_PWM;
+#else
         cp1 = get_CP1();
         if((cp1 < 12.8f) && (cp1 > 11.2f))
         {
@@ -418,6 +435,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         {
             tmpCPState = CP_ERR;
         }
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -541,7 +559,9 @@ static ErrorCode_t GetCCState(void *pvCON)
 
     /** *****************  */
 
-    //...
+#ifdef DEBUG_DIAG_DUMMY
+    tmpCCState = CC_PE;
+#else
     if(ucCONID == 0)
     {
         if(GET_CC1 == 0) //已经连接CC1点，PE连接正常
@@ -565,6 +585,7 @@ static ErrorCode_t GetCCState(void *pvCON)
             tmpCCState = CC_NO;
         }
     }
+#endif
     /*********************/
 
     pCON->status.xCCState = tmpCCState;
@@ -593,7 +614,6 @@ static ErrorCode_t GetPlugState(void *pvCON)
     errcode = ERR_NO;
 
     /** 检测插枪状态驱动接口  */
-
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL);
@@ -601,6 +621,10 @@ static ErrorCode_t GetPlugState(void *pvCON)
         if(pCON->status.xCCState == CC_PE && pCON->status.xCPState != CP_12V && pCON->status.xCPState != CP_ERR)
         {
             tmpPlugState = PLUG;
+        }
+        else
+        {
+            tmpPlugState = UNPLUG;
         }
     }
     else if(pCON->info.ucSocketType == defSocketTypeC)
@@ -610,8 +634,11 @@ static ErrorCode_t GetPlugState(void *pvCON)
         {
             tmpPlugState = PLUG;
         }
+        else
+        {
+            tmpPlugState = UNPLUG;
+        }
     }
-
     /*********************/
 
     pCON->status.xPlugState = tmpPlugState;
@@ -643,6 +670,9 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
 
     if(ucCONID = 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpLockState = LOCK;
+#else
         if(GET_GUN_STATE_1 == 1)
         {
             tmpLockState = UNLOCK;
@@ -651,6 +681,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
         {
             tmpLockState = LOCK;
         }
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -746,7 +777,11 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     /** @todo (rgw#1#):  */
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpACLTemp = 25;
+#else
         tmpACLTemp = Sys_samp.DC.TEMP1;
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -785,7 +820,11 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     //...
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpACNTemp = 25;
+#else
         tmpACNTemp = Sys_samp.DC.TEMP3;
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -820,10 +859,13 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 
     /** @todo (rgw#1#):  */
 
-    //...
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpTemp = 25;
+#else
         tmpTemp = Sys_samp.DC.TEMP_ARM1;
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -859,7 +901,11 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     //...
     if(ucCONID == 0)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpTemp = 25;
+#else
         tmpTemp = Sys_samp.DC.TEMP_ARM3;
+#endif
     }
     else if(ucCONID == 1)
     {
@@ -954,9 +1000,14 @@ static ErrorCode_t GetRelayState(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#):  */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpLStat = SWITCH_ON;
+    tmpNStat = tmpLStat;
+#else
     read_pca9554_2();
     tmpLStat = (read_pca9554_2() >> 6) && 0x01;
     tmpNStat = tmpLStat;
+#endif
     /*********************/
     /* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
 //    if(触电粘连)
@@ -1050,16 +1101,16 @@ CON_t *CONCreate(uint8_t ucCONID )
         return NULL;
     }
     pCON->info.ucCONID = ucCONID;
-    pCON->info.ucCONType = 0;
+    pCON->info.ucCONType = 2;
     pCON->info.ucSocketType = defSocketTypeB;
-    pCON->info.dVolatageUpperLimits = 0;
-    pCON->info.dVolatageLowerLimits = 0;
-    pCON->info.dACTempUpperLimits = 0;
-    pCON->info.dACTempLowerLimits = 0;
-    pCON->info.dSocketTempUpperLimits = 0;
-    pCON->info.dSocketTempLowerLimits = 0;
-    pCON->info.dRatedCurrent = 0;
-    pCON->info.dRatedPower = 0;
+    pCON->info.dVolatageUpperLimits = 250;
+    pCON->info.dVolatageLowerLimits = 180;
+    pCON->info.dACTempUpperLimits = 105;
+    pCON->info.dACTempLowerLimits = -40;
+    pCON->info.dSocketTempUpperLimits = 105;
+    pCON->info.dSocketTempLowerLimits = -40;
+    pCON->info.dRatedCurrent = 32;
+    pCON->info.dRatedPower = 7;
 
     pCON->info.GetSocketType = GetSocketType;
     pCON->info.GetVolatageUpperLimits = GetVolatageUpperLimits;
