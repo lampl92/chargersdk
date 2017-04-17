@@ -22,11 +22,11 @@
 #define defMonitorPlugStateCyc      50
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
-#define defMonitorRFIDCyc           500
+#define defMonitorRFIDCyc           5000
 #define defMonitorDataRefreshCyc    1000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
-#define defDiagCurrInitCyc          5000   //延时启动电流检测
+#define defDiagCurrInitCyc          500   //延时启动电流检测
 #define defDiagCurrDummyCyc         2000
 #define defChargeAntiShakeCyc       1000    //插枪防抖检测，状态1'->状态1时的延时
 #define defRelayDelay               500
