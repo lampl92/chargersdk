@@ -223,7 +223,12 @@ static ErrorCode_t GetRatedPower(void *pvCON)
 /---------------------------------------------------------------------------*/
 
 
-/** @note (rgw#1#): 注意不同ID对硬件的不同操作 */
+
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
+
+
 
 /** @brief 获取充电电压，检测精度 +/-0.1V
  *
@@ -618,7 +623,9 @@ static ErrorCode_t GetPlugState(void *pvCON)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL);
         THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
-        if(pCON->status.xCCState == CC_PE && pCON->status.xCPState != CP_12V && pCON->status.xCPState != CP_ERR)
+        if(pCON->status.xCCState == CC_PE &&
+                pCON->status.xCPState != CP_12V &&
+                pCON->status.xCPState != CP_ERR)
         {
             tmpPlugState = PLUG;
         }
@@ -630,7 +637,8 @@ static ErrorCode_t GetPlugState(void *pvCON)
     else if(pCON->info.ucSocketType == defSocketTypeC)
     {
         THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
-        if(pCON->status.xCPState != CP_12V && pCON->status.xCPState != CP_ERR)
+        if(pCON->status.xCPState != CP_12V &&
+                pCON->status.xCPState != CP_ERR)
         {
             tmpPlugState = PLUG;
         }
@@ -663,10 +671,10 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpLockState = LOCK;/** @fixme (rgw#1#): 完成驱动后需要修改为unlock */
+    tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
 
     if(ucCONID = 0)
     {
@@ -702,7 +710,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     return errcode;
 }
 
-/** @brief
+/** @brief B型连接枪锁开关
  *
  * @param pvCON void*
  * @param cmd uint8_t   开关控制，SWITCH_ON /SWITCH_OFF
@@ -725,7 +733,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
 
     if(ucCONID == 0)
     {
-        /** @todo (rgw#1#): 执行锁止动作 */
+        /**  执行锁止动作 */
 
         if(cmd == SWITCH_ON)
         {
@@ -774,7 +782,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     tmpACLTemp = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
@@ -815,7 +823,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     tmpACNTemp = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
 
     //...
     if(ucCONID == 0)
@@ -857,7 +865,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
 
     if(ucCONID == 0)
     {
@@ -896,7 +904,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
 
     //...
     if(ucCONID == 0)
@@ -936,18 +944,9 @@ static ErrorCode_t StartCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-    /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
+    /**  操作输出继电器，保存继电器状态 */
 
-    if(ucCONID == 0)
-    {
-        POWER_L_CLOSE();
-        POWER_N_CLOSE();
-    }
-    else if(ucCONID == 1)
-    {
-        ;
-    }
-
+    SetRelay(pvCON, SWITCH_ON);
 
     /*********************/
     return errcode;
@@ -971,11 +970,10 @@ static ErrorCode_t StopCharge(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 操作输出继电器，保存继电器状态 */
+    /** 操作输出继电器，保存继电器状态 */
 
-    //...
-    POWER_L_OPEN();
-    POWER_N_OPEN();
+    SetRelay(pvCON, SWITCH_OFF);
+
     /*********************/
     return errcode;
 }
@@ -999,7 +997,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = SWITCH_OFF;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#):  */
+    /** 实现代码  */
 #ifdef DEBUG_DIAG_DUMMY
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
@@ -1040,19 +1038,18 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     errcode = ERR_NO;
 
 
-    /** @todo (rgw#1#): 操作K1,K2输出继电器 */
+    /** 操作K1,K2输出继电器 */
     if(ucCONID == 0)
     {
         if(cmd == SWITCH_OFF)
         {
-            //...
-            POWER_L_CLOSE();
-            POWER_N_CLOSE();
-        }
-        else
-        {
             POWER_L_OPEN();
             POWER_N_OPEN();
+        }
+        else if(cmd == SWITCH_ON)
+        {
+            POWER_L_CLOSE();
+            POWER_N_CLOSE();
         }
     }
     else if(ucCONID == 1)

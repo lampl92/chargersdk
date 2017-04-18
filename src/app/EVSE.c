@@ -218,7 +218,7 @@ static ErrorCode_t GetTotalCON(void *pvEVSE, void *pvCfgObj)
     errcode = ERR_NO;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): 从文件获取 */
+    /** (rgw#1#): 从文件获取 */
 
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnTotalCON);
     if(jsItem == NULL)
@@ -685,7 +685,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     tmpOffState = 0;
 
     /* @todo (yuye#1#): 确认电压范围 */
-    /** @todo (rgw#1#): 实现代码 */
+    /**  (rgw#1#): 实现代码 */
 
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
@@ -726,7 +726,7 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     errcode = ERR_NO;
     tmpArresterState = 0;
 
-    /** @todo (rgw#1#): 实现代码 */
+    /**  (rgw#1#): 实现代码 */
 
 #ifdef DEBUG_DIAG_DUMMY
     tmpArresterState = 0;

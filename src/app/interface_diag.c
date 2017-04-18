@@ -566,7 +566,7 @@ void DiagPlugError(CON_t *pCON)
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONS2Opened);
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONS2Closed);
     }
-    /** @note (rgw#1#):  CC和CP状态已经在GetPlugState中获取，在TaskCharge中判断*/
+    /** (rgw#1#):  CC和CP状态已经在GetPlugState中获取，在TaskCharge中判断*/
 }
 void DiagLockError(CON_t *pCON)
 {
