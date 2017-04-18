@@ -15,9 +15,6 @@
 #include "interface_rfid.h"
 #include "order.h"
 
-#define defSocketTypeB   ('B')
-#define defSocketTypeC   ('C')
-
 typedef enum _CONStatusType
 {
     NO_ERR = 0,
@@ -58,6 +55,8 @@ typedef enum
     STATE_CURR_UPPER_Dummy,
     STATE_CURR_ERROR
 } CurrState_t;
+typedef ErrorCode_t (*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
+typedef ErrorCode_t (*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t (*pCon_ft)(void *pvCon);
 
 typedef struct _CONInfo
@@ -74,15 +73,18 @@ typedef struct _CONInfo
     double dRatedCurrent;
     double dRatedPower;                      //保留一位小数
 
-    pCon_ft GetSocketType;
-    pCon_ft GetVolatageUpperLimits;
-    pCon_ft GetVolatageLowerLimits;
-    pCon_ft GetACTempUpperLimits;
-    pCon_ft GetACTempLowerLimits;
-    pCon_ft GetSocketTempUpperLimits;
-    pCon_ft GetSocketTempLowerLimits;
-    pCon_ft GetRatedCurrent;
-    pCon_ft GetRatedPower;
+    pCONGetCfg_ft GetCONCfg;
+
+    pCONSetCfg_ft SetCONType;
+    pCONSetCfg_ft SetSocketType;
+    pCONSetCfg_ft SetVolatageUpperLimits;
+    pCONSetCfg_ft SetVolatageLowerLimits;
+    pCONSetCfg_ft SetACTempUpperLimits;
+    pCONSetCfg_ft SetACTempLowerLimits;
+    pCONSetCfg_ft SetSocketTempUpperLimits;
+    pCONSetCfg_ft SetSocketTempLowerLimits;
+    pCONSetCfg_ft SetRatedCurrent;
+    pCONSetCfg_ft SetRatedPower;
 } CONInfo_t;
 
 typedef struct _CONStatus
