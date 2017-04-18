@@ -62,7 +62,7 @@ typedef struct _OrderData
     //充电过程
     double  dTotalPower;                  //总电量
     double  dTotalPowerFee;             //总电费
-    double  dServiceFee;                //总服务费
+    double  dTotalServiceFee;                //总服务费
     double  dTotalFee;                      //总费用
     uint8_t ucTotalSegment;             //充电明细段数
     double  dDefSegStartPower;          //默认段起始变量。此变量为中间变量，功能为记录每一次进入默认段时的起始电量

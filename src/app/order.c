@@ -191,12 +191,14 @@ static void SegmentProc(time_t now, CON_t *pCON)
     /*3. 服务费数据*/
     if(pCON->order.ucServiceFeeType == 0)//按单
     {
-        pCON->order.dServiceFee = pEVSE->info.dServiceFee;
+        pCON->order.dTotalServiceFee = pEVSE->info.dServiceFee;
     }
     else if(pCON->order.ucServiceFeeType == 1)//按度
     {
-        pCON->order.dServiceFee = pCON->order.dTotalPower * pEVSE->info.dServiceFee;
+        pCON->order.dTotalServiceFee = pCON->order.dTotalPower * pEVSE->info.dServiceFee;
     }
+    /*4. 总费用*/
+    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServiceFee;
 }
 
 ErrorCode_t makeOrder(CON_t *pCON)
@@ -250,7 +252,7 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->dTotalFee = 0;                //总费用
     pOrder->tStartTime = 0;
     pOrder->ucServiceFeeType = 0;         //服务费类型
-    pOrder->dServiceFee = 0;               //服务费
+    pOrder->dTotalServiceFee = 0;               //服务费
     pOrder->ucTotalSegment = 0;            //充电明细段数
     pOrder->dDefSegPower = 0;              //默认段电量
     pOrder->dDefSegFee = 0;               //默认段电费
