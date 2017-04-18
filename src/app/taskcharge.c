@@ -154,6 +154,7 @@ void vTaskEVSECharge(void *pvParameters)
                     if(pCON->status.ucRelayLState == SWITCH_OFF &&
                             pCON->status.ucRelayNState == SWITCH_OFF)
                     {
+                        printf_safe("Stop Error!\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
@@ -184,9 +185,9 @@ void vTaskEVSECharge(void *pvParameters)
                     }
                     /** @todo (rgw#1#): 后续会增加判断失效点，并对失效点进行提示。或者在这里不进行提示，而在发现失效时进行提示 */
                 }
+                printf_safe("Stop Charge!\n");
                 break;
             case STATE_CON_STOPCHARGE:
-                 printf_safe("Stop Charge!\n");
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后进入idle */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
