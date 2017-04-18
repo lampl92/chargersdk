@@ -14,7 +14,8 @@
 #include "userlib_list.h"
 #include "gdsl_list.h"
 
-typedef ErrorCode_t (*pEVSECfg_ft)(void *pvEVSE, void *pvCfgObj);
+typedef ErrorCode_t (*pEVSEGetCfg_ft)(void *pvEVSE, void *pvCfgObj);
+typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 typedef struct _TemplSeg
 {
@@ -37,13 +38,14 @@ typedef struct _EVSEInfo
     double dDefSegFee;
     gdsl_list_t plTemplSeg;
 
-    pEVSECfg_ft GetEVSECfg;
-    pEVSECfg_ft GetSN;
-    pEVSECfg_ft GetID;
-    pEVSECfg_ft GetType;
-    pEVSECfg_ft GetTotalCON;
-    pEVSECfg_ft GetLngLat;
-    pEVSECfg_ft GetTempl;
+    pEVSEGetCfg_ft GetEVSECfg;
+
+    pEVSESetCfg_ft SetSN;
+    pEVSESetCfg_ft SetID;
+    pEVSESetCfg_ft SetType;
+    pEVSESetCfg_ft SetTotalCON;
+    pEVSESetCfg_ft SetLngLat;
+    pEVSESetCfg_ft SetTempl;
 }EVSEInfo_t;
 
 typedef struct _EVSEStatus

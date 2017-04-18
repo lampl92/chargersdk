@@ -18,12 +18,23 @@
 #include "user_app.h"
 //extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
+/                               设置充电桩信息到配置文件
+/---------------------------------------------------------------------------*/
+ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
+{}
+ErrorCode_t SetID(void *pvEVSE, void *pvCfgParam)
+{}
+ErrorCode_t SetType(void *pvEVSE, void *pvCfgParam)
+{}
+ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
+{}
+ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
+{}
+ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
+{}
+/*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
-
-
-
-
 /** @brief 设备唯一序列号,和长度
  *
  * @param pEVSE EVSE_t*
@@ -747,7 +758,7 @@ EVSE_t *EVSECreate(void)
 
     memset(pEVSE->info.ucSN, 0, defEVSESNLength);
     memset(pEVSE->info.ucID, 0, defEVSEIDLength);
-    pEVSE->info.ucType = 2;
+    pEVSE->info.ucType = defEVSEType_AC;
     pEVSE->info.ucTotalCON = 2;
     pEVSE->info.dLng = 116.275833;
     pEVSE->info.dLat = 39.831944;
@@ -756,12 +767,13 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.dDefSegFee = 0;
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
-    pEVSE->info.GetSN = GetSN;
-    pEVSE->info.GetID = GetID;
-    pEVSE->info.GetType = GetType;
-    pEVSE->info.GetTotalCON = GetTotalCON;
-    pEVSE->info.GetLngLat = GetLngLat;
-    pEVSE->info.GetTempl = GetTempl;
+    /** @todo (rgw#1#): 以下修改为Set参数 */
+    pEVSE->info.SetSN = SetSN;
+    pEVSE->info.SetID = SetID;
+    pEVSE->info.SetType = SetType;
+    pEVSE->info.SetTotalCON = SetTotalCON;
+    pEVSE->info.SetLngLat = SetLngLat;
+    pEVSE->info.SetTempl = SetTempl;
 
 
     pEVSE->info.plTemplSeg = gdsl_list_alloc("Templ", TemplSegAlloc, TemplSegFree);
@@ -796,11 +808,7 @@ static void CONInit(void)
     {
         pCON[i] = CONCreate(i);
 
-        THROW_ERROR(i, pCON[i]->info.GetSocketType(pCON[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pCON[i]->info.GetVolatageUpperLimits(pCON[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pCON[i]->info.GetVolatageLowerLimits(pCON[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pCON[i]->info.GetRatedCurrent(pCON[i]), ERR_LEVEL_WARNING);
-        THROW_ERROR(i, pCON[i]->info.GetRatedPower(pCON[i]), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING);
 
         pListCON->Add(pListCON, pCON[i]);
     }
