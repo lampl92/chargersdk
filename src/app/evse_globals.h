@@ -147,8 +147,20 @@
 #define defEventBitTimerCBHeartbeat         BIT_7
 
 
+/*充电桩类型*/
+#define defEVSEType_DC                  1
+#define defEVSEType_AC                  2
+#define defEVSEType_AC_DC               3
+#define defEVSEType_Wireless            4
+#define defEVSEType_Other               5
 
+/*充电枪类型*/
+#define defCONType_DC                   1
+#define defCONType_AC                   2
 
+/*充电桩接口类型*/
+#define defSocketTypeB              ('B')
+#define defSocketTypeC              ('C')
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
