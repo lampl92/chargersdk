@@ -71,7 +71,7 @@ static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
         return ERR_FILE_PARSE;
     }
     ptmpSN = jsItem->valuestring;
-    tmpLength = strlen(ptmpSN);
+    tmpLength = strlen(ptmpSN) >> 1;
     StrToHex(ptmpSN, tmpSN, tmpLength);
 #ifdef DEBUG_CFG_PARSE
     int i;
@@ -131,7 +131,7 @@ static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
         return ERR_FILE_PARSE;
     }
     ptmpID = jsItem->valuestring;
-    tmpLength = strlen(ptmpID);
+    tmpLength = strlen(ptmpID) >> 1;
     StrToHex(ptmpID, tmpID, tmpLength);
 #ifdef DEBUG_CFG_PARSE
     int i;
@@ -146,7 +146,7 @@ static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
     /*********************/
     if(tmpLength <= defEVSEIDLength && tmpLength > 0)
     {
-        pEVSE->info.ucIDLenght = tmpLength;
+        pEVSE->info.ucIDLength = tmpLength;
         memmove(pEVSE->info.ucID, tmpID, tmpLength);
     }
     else
