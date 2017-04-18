@@ -109,11 +109,7 @@ void vTaskEVSEData(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(defDevID_File, pCON->info.GetSocketType(pCON), ERR_LEVEL_WARNING);
-                THROW_ERROR(defDevID_File, pCON->info.GetVolatageUpperLimits(pCON), ERR_LEVEL_WARNING);
-                THROW_ERROR(defDevID_File, pCON->info.GetVolatageLowerLimits(pCON), ERR_LEVEL_WARNING);
-                THROW_ERROR(defDevID_File, pCON->info.GetRatedCurrent(pCON), ERR_LEVEL_WARNING);
-                THROW_ERROR(defDevID_File, pCON->info.GetRatedPower(pCON), ERR_LEVEL_WARNING);
+                THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING);
             }
         }
         /* end of ╤ах║нд╪ЧеДжц */
