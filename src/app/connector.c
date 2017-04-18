@@ -731,10 +731,9 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
+    /**  执行锁止动作 */
     if(ucCONID == 0)
     {
-        /**  执行锁止动作 */
-
         if(cmd == SWITCH_ON)
         {
             Close_gun_1();
@@ -743,7 +742,6 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
         {
             Open_gun_1();
         }
-
     }
     else if(ucCONID == 1)
     {
@@ -755,9 +753,8 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
         {
             Open_gun_2();
         }
-
     }
-    THROW_ERROR(pCON->info.ucCONID, GetBTypeSocketLock(pCON), ERR_LEVEL_WARNING);
+    errcode = GetBTypeSocketLock(pvCON);
 
     return errcode;
 }
@@ -926,57 +923,6 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 
     return errcode;
 }
-/** @brief
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_STARTCHARGE
- *
- */
-static ErrorCode_t StartCharge(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    CONStatusType_t tmpChargeStatus;
-    ErrorCode_t errcode;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    errcode = ERR_NO;
-    /**  操作输出继电器，保存继电器状态 */
-
-    SetRelay(pvCON, SWITCH_ON);
-
-    /*********************/
-    return errcode;
-}
-/** @brief
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_STOPCHARGE
- *
- */
-static ErrorCode_t StopCharge(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    CONStatusType_t tmpChargeStatus;
-    ErrorCode_t errcode;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    errcode = ERR_NO;
-
-    /** 操作输出继电器，保存继电器状态 */
-
-    SetRelay(pvCON, SWITCH_OFF);
-
-    /*********************/
-    return errcode;
-}
 /** @brief 获取输出继电器状态
  *
  * @param pvCON void*
@@ -1058,7 +1004,58 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     }
     /*********************/
 
-    THROW_ERROR(pCON->info.ucCONID, GetRelayState(pCON), ERR_LEVEL_CRITICAL);
+    errcode = GetRelayState(pvCON);
+    return errcode;
+}
+/** @brief
+ *
+ * @param pvCON void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_STARTCHARGE
+ *
+ */
+static ErrorCode_t StartCharge(void *pvCON)
+{
+    CON_t *pCON;
+    uint8_t ucCONID;
+    CONStatusType_t tmpChargeStatus;
+    ErrorCode_t errcode;
+
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    errcode = ERR_NO;
+    /**  操作输出继电器，保存继电器状态 */
+
+    errcode = SetRelay(pvCON, SWITCH_ON);
+
+    /*********************/
+    return errcode;
+}
+/** @brief
+ *
+ * @param pvCON void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  ERR_STOPCHARGE
+ *
+ */
+static ErrorCode_t StopCharge(void *pvCON)
+{
+    CON_t *pCON;
+    uint8_t ucCONID;
+    CONStatusType_t tmpChargeStatus;
+    ErrorCode_t errcode;
+
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    errcode = ERR_NO;
+
+    /** 操作输出继电器，保存继电器状态 */
+
+    errcode = SetRelay(pvCON, SWITCH_OFF);
+
+    /*********************/
     return errcode;
 }
 
