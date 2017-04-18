@@ -37,6 +37,8 @@ void cli_init(void)
     tinysh_add_command(&cli_makeJson_cmd);
     tinysh_add_command(&cli_aestest_cmd);
     /************µç×®ÐÅÏ¢****************/
+    tinysh_add_command(&cli_evseinfo_cmd);
+    tinysh_add_command(&cli_evseorder_cmd);
     tinysh_add_command(&cli_evsestatus_cmd);
 
     /* add the foo command
