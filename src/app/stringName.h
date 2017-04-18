@@ -23,12 +23,27 @@
 #define jnServiceFee        "ServiceFee"
 #define jnDefSegFee         "DefSegFee"
 #define jnCONArray               "CONArray"
+/*CONArray Item*/
+#define jnID                        "ID"
+#define jnType                      "Type"
+#define jnSocketType                "SocketType"
+#define jnVolatageUpperLimits       "VolatageUpperLimits"
+#define jnVolatageLowerLimits       "VolatageLowerLimits"
+#define jnACTempUpperLimits         "ACTempUpperLimits"
+#define jnACTempLowerLimits         "ACTempLowerLimits"
+#define jnSocketTempUpperLimits     "SocketTempUpperLimits"
+#define jnSocketTempLowerLimits     "SocketTempLowerLimits"
+#define jnRatedCurrent              "RatedCurrent"
+#define jnRatedPower                "RatedPower"
+/*end of CONArray Item*/
+
+
 
 #define jnCardID            "CardID"
 #define jnIndex             "Index"
 #define jnOrder             "Order"
 #define jnMaxIndex          "MaxIndex"
-#define jnTemplSegArray "TemplSegArray"
+#define jnTemplSegArray     "TemplSegArray"
 #define jnStartTime         "StartTime"
 #define jnEndTime           "EndTime"
 #define jnSegFee            "SegFee"
