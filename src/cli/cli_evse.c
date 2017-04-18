@@ -19,7 +19,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
     CON_t *pCON;
     int i;
     /**/
-    printf_safe("=============配置信息=============");
+    printf_safe("=============配置信息=============\n");
     printf_safe("EVSE SN:       ");
     for(i = 0; i < pEVSE->info.ucSNLength; i++)
     {
@@ -101,9 +101,9 @@ void cli_evseinfo_fnt(int argc, char **argv)
     {
         printf_safe("\n");
         pCON = CONGetHandle(i);
-        printf_safe("[ 枪ID:       %d ]\n", pCON->info.ucCONID);
+        printf_safe("[ 枪ID: %d ]\n", pCON->info.ucCONID);
 
-        printf_safe("枪类型:       ");
+        printf_safe("枪类型:        ");
         switch(pCON->info.ucCONType)
         {
         case defCONType_AC:
@@ -117,8 +117,8 @@ void cli_evseinfo_fnt(int argc, char **argv)
         }
         printf_safe("\n");
 
-        printf_safe("接口类型:     ");
-        switch(pCON->info.ucCONType)
+        printf_safe("接口类型:      ");
+        switch(pCON->info.ucSocketType)
         {
         case defSocketTypeB:
             printf_safe("B型连接");
