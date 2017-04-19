@@ -6,6 +6,8 @@
 * @date 2017-04-18
 */
 #include "includes.h"
+#include "stringName.h"
+#include "interface.h"
 #include "cJSON.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
@@ -27,17 +29,17 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
     pbuff = NULL;
     errcode = ERR_NO;
 
-    ThrowFSCode(res = f_open(&f, path, FA_WRITE));
-    if(res != FR_OK)
-    {
-        errcode = ERR_FILE_RW;
-        goto exit;
-    }
     pbuff = cJSON_Print(jsCfgObj);
     len = strlen(pbuff);
     if(pbuff == NULL)
     {
         errcode = ERR_SET_SERIALIZATION;
+        goto exit;
+    }
+    ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE));
+    if(res != FR_OK)
+    {
+        errcode = ERR_FILE_RW;
         goto exit;
     }
     ThrowFSCode(res = f_write(&f, pbuff, len, &bw));

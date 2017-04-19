@@ -21,6 +21,8 @@ typedef struct _TemplSeg
 {
     time_t tStartTime;//用time_t表示时，忽略年月日，在时段中只关注时分秒
     time_t tEndTime;
+    uint8_t strStartTime[6];//只在设置时使用 "HH:MM"
+    uint8_t strEndTime[6];//只在设置时使用 "HH:MM"
     double dSegFee;
 }TemplSeg_t;
 typedef struct _EVSEInfo

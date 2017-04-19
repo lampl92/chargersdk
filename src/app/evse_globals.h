@@ -12,6 +12,12 @@
 #include "interface_rfid.h"
 #include "userlib_list.h"
 
+#define ParamTypeU8         1
+#define ParamTypeU16        2
+#define ParamTypeU32        3
+#define ParamTypeDouble     4
+#define ParamTypeString     5
+#define ParamTypeList       6
 
 #define SWITCH_ON   (1)
 #define SWITCH_OFF  (0)
