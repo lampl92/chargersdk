@@ -5,6 +5,7 @@
 #include "s2j.h"
 #include <time.h>
 #include "stringName.h"
+#include "factorycfg.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -45,7 +46,7 @@ void timeInit()
     orig.tm_min = RTC_TimeStruct.Minutes;
     orig.tm_hour = RTC_TimeStruct.Hours;
     orig.tm_mday = RTC_DateStruct.Date;
-    orig.tm_mon = RTC_DateStruct.Month-1;
+    orig.tm_mon = RTC_DateStruct.Month - 1;
     orig.tm_year = 2000 + RTC_DateStruct.Year - 1900;
 //    orig.tm_wday = 5;
 //    orig.tm_yday = 19;
@@ -72,9 +73,9 @@ static uint8_t create_system_dir(void)
 uint8_t create_sysconf_file()
 {
     FRESULT res;
-    FIL fil;
+    FIL f;
     uint8_t *p;
-    uint32_t bw;
+    UINT bw;
 
     s2j_create_json_obj(Sysconf_j);
     s2j_json_set_struct_element(subCalibrate_j, Sysconf_j, subCalibrate_t, &xSysconf, Calibrate_t , xCalibrate);
@@ -85,22 +86,39 @@ uint8_t create_sysconf_file()
 
     p = cJSON_Print(Sysconf_j);
     s2j_delete_json_obj(Sysconf_j);
-    res = f_open(&fil, pathSysconf, FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&f, pathSysconf, FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
     case FR_OK:
-        f_write(&fil, p, strlen(p), (void *)&bw);
+        f_write(&f, p, strlen(p), &bw);
         free(p);
-        f_close(&fil);
+        f_close(&f);
         return TRUE;
     case FR_EXIST:
     default:
         free(p);
-        f_close(&fil);
+        f_close(&f);
         return FALSE;
     }
 }
-
+void create_evsecfg_file(void)
+{
+    FIL f;
+    UINT bw;
+    FRESULT res;
+    res = f_open(&f, pathEVSECfg, FA_CREATE_NEW | FA_WRITE);
+    switch(res)
+    {
+    case FR_OK:
+        f_write(&f, strEVSECfg, strlen(strEVSECfg), &bw);
+        f_close(&f);
+        return TRUE;
+    case FR_EXIST:
+    default:
+        f_close(&f);
+        return FALSE;
+    }
+}
 extern void retarget_init(void);
 void sys_Init(void)
 {
@@ -136,6 +154,7 @@ void sys_Init(void)
     xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
     create_sysconf_file();
+    create_evsecfg_file();
 
     /*---------------------------------------------------------------------------/
     /                               GUI≥ı ºªØ
