@@ -194,7 +194,7 @@ typedef __I uint8_t vuc8;
 
 
 
-void  printf_safe(char *format, ...);
+int printf_safe(const char *format, ...);
 void bsp_Error_Handler(void);
 
 #endif
