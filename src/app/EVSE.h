@@ -41,13 +41,13 @@ typedef struct _EVSEInfo
     gdsl_list_t plTemplSeg;
 
     pEVSEGetCfg_ft GetEVSECfg;
-
-    pEVSESetCfg_ft SetSN;
-    pEVSESetCfg_ft SetID;
-    pEVSESetCfg_ft SetType;
-    pEVSESetCfg_ft SetTotalCON;
-    pEVSESetCfg_ft SetLngLat;
-    pEVSESetCfg_ft SetTempl;
+    ErrorCode_t (*SetEVSECfg)(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+//    pEVSESetCfg_ft SetSN;
+//    pEVSESetCfg_ft SetID;
+//    pEVSESetCfg_ft SetType;
+//    pEVSESetCfg_ft SetTotalCON;
+//    pEVSESetCfg_ft SetLngLat;
+//    pEVSESetCfg_ft SetTempl;
 }EVSEInfo_t;
 
 typedef struct _EVSEStatus

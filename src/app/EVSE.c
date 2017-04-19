@@ -22,7 +22,7 @@
 /                               设置充电桩信息到配置文件
 /---------------------------------------------------------------------------*/
 static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam);
-static ErrorCode_t SetEVSEParam(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
 static void TemplSegFree (gdsl_element_t e);
 static gdsl_element_t TemplSegAlloc(void *pTemplSeg);
 
@@ -34,7 +34,7 @@ void testSetTemplEx(void)
     struct tm *ts;
     int i;
     plCfgTempl = gdsl_list_alloc ("tmpTempl", TemplSegAlloc, TemplSegFree);
-    for(i = 0; i < 0; i++)
+    for(i = 0; i < 5; i++)
     {
         strcpy(tmpTempl.strStartTime, "12:00");
         strcpy(tmpTempl.strEndTime, "13:00");
@@ -42,7 +42,7 @@ void testSetTemplEx(void)
         gdsl_list_insert_tail(plCfgTempl, &tmpTempl);
     }
 
-    SetEVSEParam(pEVSE, jnTemplSegArray, plCfgTempl, ParamTypeList);
+    pEVSE->info.SetEVSECfg(pEVSE, jnTemplSegArray, plCfgTempl, ParamTypeList);
     gdsl_list_free(plCfgTempl);
 }
 
@@ -52,12 +52,12 @@ void testSetTemplEx(void)
  *
  * @param pvEVSE void*
  * @param jnItemString uint8_t*
- * @param pvCfgParam void*
+ * @param pvCfgParam void* 当时段为0时设置为NULL
  * @param type uint8_t
  * @return ErrorCode_t
  *
  */
-static ErrorCode_t SetEVSEParam(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsItem;
@@ -250,6 +250,14 @@ static cJSON *jsTemplSegArrayItemObjCreate(void)
     return jsTemplSegArrayItemObj;
 }
 
+/** @brief
+ *
+ * @param pvEVSE void*
+ * @param jsEVSECfgObj cJSON*
+ * @param pvCfgParam void*
+ * @return ErrorCode_t
+ *
+ */
 static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam)
 {
     EVSE_t *pEVSE;
@@ -268,20 +276,24 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
     errcode = ERR_NO;
 
     jsTemplSegArray = cJSON_CreateArray();
-    ucTemplNum = gdsl_list_get_size(plCfgTempl);
-    if(ucTemplNum > 0)
+    if(plCfgTempl != NULL)
     {
-        for(i = 1; i <= ucTemplNum; i++)
+        ucTemplNum = gdsl_list_get_size(plCfgTempl);
+        if(ucTemplNum > 0)
         {
-            ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
-            jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
-            cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateString(ptCfgTempl->strStartTime));
-            cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateString(ptCfgTempl->strEndTime));
-            cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
+            for(i = 1; i <= ucTemplNum; i++)
+            {
+                ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
+                jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateString(ptCfgTempl->strStartTime));
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateString(ptCfgTempl->strEndTime));
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
 
-            cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
+                cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
+            }
         }
     }
+
     cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
 
     return errcode;
@@ -1055,12 +1067,13 @@ EVSE_t *EVSECreate(void)
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
     /** @todo (rgw#1#): 以下修改为Set参数 */
-    pEVSE->info.SetSN = SetSN;
-    pEVSE->info.SetID = SetID;
-    pEVSE->info.SetType = SetType;
-    pEVSE->info.SetTotalCON = SetTotalCON;
-    pEVSE->info.SetLngLat = SetLngLat;
-    pEVSE->info.SetTempl = SetTempl;
+    pEVSE->info.SetEVSECfg = SetEVSECfg;
+//    pEVSE->info.SetSN = SetSN;
+//    pEVSE->info.SetID = SetID;
+//    pEVSE->info.SetType = SetType;
+//    pEVSE->info.SetTotalCON = SetTotalCON;
+//    pEVSE->info.SetLngLat = SetLngLat;
+//    pEVSE->info.SetTempl = SetTempl;
 
 
     pEVSE->info.plTemplSeg = gdsl_list_alloc("Templ", TemplSegAlloc, TemplSegFree);

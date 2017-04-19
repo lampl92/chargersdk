@@ -18,7 +18,7 @@
 /                               设置充电接口信息到配置文件
 /---------------------------------------------------------------------------*/
 
-ErrorCode_t SetCONParam(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsCONArray;
@@ -1361,17 +1361,17 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.dRatedPower = 7;
 
     pCON->info.GetCONCfg = GetCONCfg;
-
-    pCON->info.SetCONType = SetCONType;
-    pCON->info.SetSocketType = SetSocketType;
-    pCON->info.SetVolatageUpperLimits = SetVolatageUpperLimits;
-    pCON->info.SetVolatageLowerLimits = SetVolatageLowerLimits;
-    pCON->info.SetACTempUpperLimits = SetACTempUpperLimits;
-    pCON->info.SetACTempLowerLimits = SetACTempLowerLimits;
-    pCON->info.SetSocketTempUpperLimits = SetSocketTempUpperLimits;
-    pCON->info.SetSocketTempLowerLimits = SetSocketTempLowerLimits;
-    pCON->info.SetRatedCurrent = SetRatedCurrent;
-    pCON->info.SetRatedPower = SetRatedPower;
+    pCON->info.SetCONCfg = SetCONCfg;
+//    pCON->info.SetCONType = SetCONType;
+//    pCON->info.SetSocketType = SetSocketType;
+//    pCON->info.SetVolatageUpperLimits = SetVolatageUpperLimits;
+//    pCON->info.SetVolatageLowerLimits = SetVolatageLowerLimits;
+//    pCON->info.SetACTempUpperLimits = SetACTempUpperLimits;
+//    pCON->info.SetACTempLowerLimits = SetACTempLowerLimits;
+//    pCON->info.SetSocketTempUpperLimits = SetSocketTempUpperLimits;
+//    pCON->info.SetSocketTempLowerLimits = SetSocketTempLowerLimits;
+//    pCON->info.SetRatedCurrent = SetRatedCurrent;
+//    pCON->info.SetRatedPower = SetRatedPower;
 
     //memset(pCON->status.ucHeldCardID, 0, defCardIDLength);
     pCON->status.dACLTemp = 0;
