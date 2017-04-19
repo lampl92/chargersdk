@@ -1116,7 +1116,6 @@ static void CONInit(void)
 void EVSEinit(void)
 {
     pEVSE = EVSECreate();
-    testSetTemplEx();
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 
