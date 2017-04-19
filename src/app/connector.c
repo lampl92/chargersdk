@@ -460,13 +460,13 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
         errcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
-    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONType()");
+    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketType()");
+    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetVolatageLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetACTempLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketTempLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedCurrent()");
+    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedPower()");
 exit_parse:
     cJSON_Delete(jsCfgObj);
 exit:
@@ -875,8 +875,8 @@ static ErrorCode_t GetPlugState(void *pvCON)
     /** ¼ì²â²åÇ¹×´Ì¬Çý¶¯½Ó¿Ú  */
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
-        THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL);
-        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
+        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCCState == CC_PE &&
                 pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)
@@ -890,7 +890,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     }
     else if(pCON->info.ucSocketType == defSocketTypeC)
     {
-        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)
         {

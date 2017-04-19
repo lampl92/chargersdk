@@ -70,7 +70,7 @@ void vTaskEVSERemote(void *pvParameters)
                                                        defCardIDLength,
                                                        &(pRFIDDev->order.ucAccountStatus),
                                                        &(pRFIDDev->order.dBalance)),
-                            ERR_LEVEL_CRITICAL);
+                            ERR_LEVEL_CRITICAL, "Remote GetBalance");
                 if(errcode == ERR_NO)
                 {
                     xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);

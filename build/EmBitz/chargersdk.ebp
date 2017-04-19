@@ -49,6 +49,7 @@
 					<Add option="-ffunction-sections" />
 					<Add option="-O0" />
 					<Add option="-g2" />
+					<Add symbol="DEBUG_DIAG" />
 				</Compiler>
 				<Cpp>
 					<Add option="-fdata-sections" />
@@ -121,6 +122,7 @@
 		<Unit filename="..\..\src\app\cfg_parse.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\cfg_parse.h" />
 		<Unit filename="..\..\src\app\connector.c">
 			<Option compilerVar="CC" />
 		</Unit>
