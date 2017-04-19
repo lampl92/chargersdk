@@ -11,6 +11,34 @@
 #include <time.h>
 #include "gdsl_list.h"
 
+/*停止原因*/
+#define defOrderStopType_Unknown        0
+#define defOrderStopType_RFID           1
+#define defOrderStopType_Full           2
+#define defOrderStopType_Power          3
+#define defOrderStopType_Time           4
+#define defOrderStopType_Fee            5
+#define defOrderStopType_NeedFee        6
+#define defOrderStopType_Remote         7
+#define defOrderStopType_NetLost        8
+#define defOrderStopType_Poweroff       9
+#define defOrderStopType_Scram          10
+#define defOrderStopType_SocketError    11
+#define defOrderStopType_SocketLost     12
+#define defOrderStopType_OverVolt       13
+#define defOrderStopType_UnderVolt      14
+#define defOrderStopType_OverCurr       15
+#define defOrderStopType_UnderCurr      16
+#define defOrderStopType_Knock          17
+
+/*支付方式*/
+#define defOrderPayType_Online          0
+#define defOrderPayType_Offline         1
+
+/*服务费类型*/
+#define defOrderSerType_Order           0
+#define defOrderSerType_Power           1
+
 typedef enum _OrderState
 {
     STATE_ORDER_IDLE,

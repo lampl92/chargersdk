@@ -189,11 +189,11 @@ static void SegmentProc(time_t now, CON_t *pCON)
         break;
     }
     /*3. 服务费数据*/
-    if(pCON->order.ucServiceFeeType == 0)//按单
+    if(pCON->order.ucServiceFeeType == defOrderSerType_Order)//按单
     {
         pCON->order.dTotalServiceFee = pEVSE->info.dServiceFee;
     }
-    else if(pCON->order.ucServiceFeeType == 1)//按度
+    else if(pCON->order.ucServiceFeeType == defOrderSerType_Power)//按度
     {
         pCON->order.dTotalServiceFee = pCON->order.dTotalPower * pEVSE->info.dServiceFee;
     }
@@ -227,6 +227,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         SegmentProc(time(NULL), pCON);
         break;
     case STATE_ORDER_FINISH:
+        pCON->order.ucPayType = 2;
+        pCON->order.ucStopType = 2;
         /** @todo (rgw#1#): 添加订单结束时内容 */
         break;
     }
