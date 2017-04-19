@@ -30,7 +30,7 @@ void vTaskEVSEDiag(void *pvParameters)
 #ifndef DEBUG_NO_TASKDIAG
         /* 处理系统失效故障 */
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
-        if(xResult == pdTRUE && errpack.level == ERR_LEVEL_CRITICAL)
+        if(xResult == pdTRUE)
         {
 #ifdef DEBUG_DIAG
             printf_safe("%x %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
