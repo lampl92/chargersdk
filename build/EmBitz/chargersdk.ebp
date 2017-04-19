@@ -47,7 +47,7 @@
 				<Compiler>
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-O2" />
+					<Add option="-O0" />
 					<Add option="-g2" />
 				</Compiler>
 				<Cpp>
@@ -74,7 +74,6 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-O3" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -119,6 +118,9 @@
 		<Unit filename="..\..\nand\system\order.txt" />
 		<Unit filename="..\..\nand\system\order.xml" />
 		<Unit filename="..\..\nand\system\public_info.xml" />
+		<Unit filename="..\..\src\app\cfg_parse.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\connector.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -136,6 +138,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\evse_globals.h" />
+		<Unit filename="..\..\src\app\factorycfg.h" />
 		<Unit filename="..\..\src\app\includes.h" />
 		<Unit filename="..\..\src\app\interface.h" />
 		<Unit filename="..\..\src\app\interface_charge.c">
@@ -230,6 +233,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_evse.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_fatfs.c">
