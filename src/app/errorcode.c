@@ -38,6 +38,8 @@ const uint8_t *strErrorCode[100] =
     "无目标文件",
     "参数解析错误",
     "参数内容错误",
+    "设置参数范围错误",//   ERR_SET_PARAM,          //
+    "JSON序列化错误",//ERR_SET_SERIALIZATION
     "其他错误",
     "读卡器故障",
     "读卡器串口奇偶校验错误",

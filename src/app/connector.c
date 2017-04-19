@@ -228,7 +228,7 @@ static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
-static ErrorCode_t GetSocketTempUpperLimits(void *pvCON, void *pvCfgObj)
+static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
 {
     CON_t *pCON;
     uint8_t ucCONID;
@@ -361,14 +361,6 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
  */
 static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 {
-    /** @todo (rgw#1#): 增加读取参数校验 */
-
-    FIL f;
-    FRESULT res;
-    uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
-
     cJSON *jsCfgObj;
     cJSON *jsCONArray;
     cJSON *jsCONObj;
@@ -376,55 +368,47 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 
     CON_t *pCON;
     int i;
-    ErrorCode_t errcode;
+    ErrorCode_t errcode = ERR_NO;
 
     pCON = (CON_t *)pvCON;
 
-    /*读取文件*/
-    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
-
-    if(res != FR_OK)
+        /*json解析*/
+    jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    if(jsCfgObj == NULL)
     {
-        errcode = ERR_FILE_RW;
-        return errcode;
+        //errcode 已经在GetCfgObj中获得
+        goto exit;
     }
-    fsize = f_size(&f);
-    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
-    if(fsize != br)
-    {
-        errcode = ERR_FILE_RW;
-        return errcode;
-    }
-
-    /*json解析*/
-    jsCfgObj = cJSON_Parse(rbuff);
     /*取出CON相关配置*/
     jsCONArray = cJSON_GetObjectItem(jsCfgObj, jnCONArray);
     if(jsCONArray == NULL)
     {
         errcode = ERR_FILE_PARSE;
-        return errcode;
+        goto exit_parse;
     }
     iArraySize = cJSON_GetArraySize(jsCONArray);//有多少个充电枪配置
-    if(iArraySize != pEVSE->info.ucTotalCON);
+    if(iArraySize != pEVSE->info.ucTotalCON)
     {
         errcode = ERR_FILE_PARAM;
-        return errcode;
+        goto exit_parse;
     }
     jsCONObj = cJSON_GetArrayItem(jsCONArray, pCON->info.ucCONID);
-
-    THROW_ERROR(defDevID_File, GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-
+    if(jsCONObj == NULL)
+    {
+        errcode = ERR_FILE_PARSE;
+        goto exit_parse;
+    }
+    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+exit_parse:
     cJSON_Delete(jsCfgObj);
-    free(rbuff);
-    f_close(&f);
+exit:
+    return errcode;
 }
 /*---------------------------------------------------------------------------/
 /                               从驱动获取充电接口状态
@@ -1305,12 +1289,12 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.ucCONID = ucCONID;
     pCON->info.ucCONType = defCONType_AC;
     pCON->info.ucSocketType = defSocketTypeB;
-    pCON->info.dVolatageUpperLimits = 250;
-    pCON->info.dVolatageLowerLimits = 180;
-    pCON->info.dACTempUpperLimits = 105;
-    pCON->info.dACTempLowerLimits = -40;
-    pCON->info.dSocketTempUpperLimits = 105;
-    pCON->info.dSocketTempLowerLimits = -40;
+    pCON->info.dVolatageUpperLimits = 0;
+    pCON->info.dVolatageLowerLimits = 0;
+    pCON->info.dACTempUpperLimits = 0;
+    pCON->info.dACTempLowerLimits = -0;
+    pCON->info.dSocketTempUpperLimits = 0;
+    pCON->info.dSocketTempLowerLimits = 0;
     pCON->info.dRatedCurrent = 32;
     pCON->info.dRatedPower = 7;
 

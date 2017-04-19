@@ -20,47 +20,8 @@
 /*---------------------------------------------------------------------------/
 /                               设置充电桩信息到配置文件
 /---------------------------------------------------------------------------*/
-static cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
-{
-    FIL f;
-    FRESULT res;
-    uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
+/** @todo (rgw#1#): 所有设置参数增加范围校验, 可以在这里进行校验, 也可以在界面输入的时候进行校验.  */
 
-    cJSON *jsCfgObj;
-    int i;
-
-    /*读取文件*/
-    ThrowFSCode(res = f_open(&f, path, FA_READ));
-    if(res != FR_OK)
-    {
-        *perrcode = ERR_FILE_RW;
-        goto exit;
-    }
-    fsize = f_size(&f);
-    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
-    if(fsize != br)
-    {
-        *perrcode = ERR_FILE_RW;
-        goto exit_read;
-    }
-
-    /*json解析*/
-    jsCfgObj = cJSON_Parse(rbuff);
-    if(jsEVSEObj == NULL)
-    {
-        *perrcode = ERR_FILE_PARSE;
-        goto exit_parse;
-    }
-exit_read:
-exit_parse:
-    free(rbuff);
-    f_close(&f);
-exit:
-    return jsCfgObj;
-}
 static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
 {}
 static ErrorCode_t SetID(void *pvEVSE, void *pvCfgParam)
@@ -69,44 +30,29 @@ static ErrorCode_t SetType(void *pvEVSE, void *pvCfgParam)
 {}
 static ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
 {
-    FIL f;
-    FRESULT res;
-    FSIZE_t fsize;
-    uint8_t *pbuff;
-    UINT br, bw;
-
+    EVSE_t *pEVSE;
     cJSON *jsEVSECfgObj;
-    cJSON *jsItem;
+    ErrorCode_t errcode;
+    uint8_t tmpTotal;
 
-    res = f_open(&f, pathEVSECfg, FA_READ | FA_WRITE);
-    ThrowFSCode(res);
-    if(res != FR_OK)
-    {
-        return ERR_FILE_NO;
-    }
-    fsize = f_size(&f);
-    pbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    res = f_read(&f, pbuff, fsize, &br);
-    if(res != FR_OK || br != fsize)
-    {
-        free(pbuff);
-        return ERR_FILE_RW;
-    }
-    jsEVSECfgObj = cJSON_Parse(pbuff);
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    errcode = ERR_NO;
+    tmpTotal = *((uint8_t *)pvCfgParam);
+
     if(jsEVSECfgObj == NULL)
     {
-        f_close(&f);
-        free(pbuff);
-        return ERR_FILE_PARSE;
+        goto exit;
     }
-    jsItem = cJSON_GetObjectItem(jsEVSEObj, jnTotalCON);
-    if(jsItem == NULL)
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpTotal));
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
     {
-        errcode = ERR_FILE_PARSE;
-        goto exit_getObj;
+        goto exit;
     }
-
-
+exit:
+    return errcode;
 }
 ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
 {}
@@ -616,47 +562,17 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
 
 static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
 {
-    FIL f;
-    FRESULT res;
-    uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
-
     cJSON *jsEVSEObj;
-    int i;
     ErrorCode_t errcode;
 
-    /*读取文件*/
-    ThrowFSCode(res = f_open(&f, pathEVSECfg, FA_READ));
-    if(res != FR_OK)
-    {
-        errcode = ERR_FILE_RW;
-//        return errcode;
-        goto exit;
-    }
-    fsize = f_size(&f);
-    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
-    if(fsize != br)
-    {
-//        f_close(&f);
-//        free(rbuff);
-        errcode = ERR_FILE_RW;
-//        return errcode;
-        goto exit_read;
-    }
+    errcode = ERR_NO;
 
     /*json解析*/
-    jsEVSEObj = cJSON_Parse(rbuff);
-    if(jsEVSEObj == NULL)
+    jsEVSEObj = GetCfgObj(pathEVSECfg, &errcode);
+    if(jsEVSEObj == NULL || errcode != ERR_NO)
     {
-//        f_close(&f);
-//        free(rbuff);
-        errcode = ERR_FILE_PARSE;
-//        return errcode;
-        goto exit_parse;
+        return errcode;
     }
-
     THROW_ERROR(defDevID_File, errcode = GetSN(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, errcode = GetID(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
     THROW_ERROR(defDevID_File, errcode = GetType(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
@@ -666,13 +582,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
 #ifdef DEBUG_CFG_PARSE
     printf_safe("********************************\n");
 #endif
-exit_getObj:
     cJSON_Delete(jsEVSEObj);
-exit_read:
-exit_parse:
-    free(rbuff);
-    f_close(&f);
-exit:
     return errcode;
 }
 
@@ -919,7 +829,6 @@ void EVSEinit(void)
 {
     pEVSE = EVSECreate();
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING);
-
     CONInit();
 
     pRFIDDev = RFIDDevCreate();
