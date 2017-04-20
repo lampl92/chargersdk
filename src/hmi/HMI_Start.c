@@ -2,8 +2,16 @@
 #include "xbffontcreate.h"
 #include "ff.h"
 
+uint8_t calebrate_done = 0;
+
 void MainTask(void)
 {
+    if(calebrate_done == 0)
+    {
+        GUI_Touch_Calibrate();
+        calebrate_done = 1;
+        //LCD_X_Config();
+    }
 	//GUI_CURSOR_Show();//鼠标箭头显示函数，默认不显示
 	//CreateEVSE();
     Create_XBF12("system/XBF宋体12.xbf");//创建xbf12号路径
@@ -15,22 +23,11 @@ void MainTask(void)
     WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
     GUI_UC_SetEncodeUTF8();
-    //CreateEVSE();
-    //Createbmptest();
+    //keypad_demo();
+//	CreateFramewin();
+//    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
     //PutOut_Home();
-    //PutOut_Card_Valid();
-	//PutOut_Machine_Error();
-	//PutOut_Card_Info();
-	//PutOut_Charging();
-	//PutOut_Charging_2dimen();
-	//PutOut_Charge_Done();
-    //PutOut_Manager_InfoAnalog();
-	//PutOut_Manager_InfoStatus();
-	//keypad_demo();
-	//Createtest();
-	CreateFramewin();
-    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-
+	PutOut_Card_Valid();
 	while(1)
 	{
 		GUI_Delay(10);

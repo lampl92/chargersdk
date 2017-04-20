@@ -255,10 +255,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
         /* 显示时间和日期 */
-        //Timer_Process(pMsg);
-        //EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), "45");
-
-        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), buf);
+        Timer_Process(pMsg);
         /* 重启定时器 */
         WM_RestartTimer(pMsg->Data.v, 20);
         break;
@@ -304,26 +301,10 @@ WM_HWIN CreateFramewin(void)
 void PutOut_Home()
 {
     CreateFramewin();
-    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+
     while(1)
     {
-        //i++;
-        //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-        //GUI_SetFont(&XBF16_Font);
-        //GUI_SetColor(GUI_RED);
-        // GUI_DispStringAt("        ",633,20);
-        // GUI_Delay(10);
-        // GUI_DispStringAt((const char*)Date_buf,633,20);
-        //GUI_DispCEOL();
-
-        //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-        // GUI_SetFont(&XBF16_Font);
-        // GUI_SetColor(GUI_RED);
-        // GUI_DispStringAt("        ",720,20);
-        // GUI_Delay(10);
-        // GUI_DispStringAt((const char*)Time_buf,720,20);
-        // GUI_DispCEOL();
-
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         GUI_Delay(10);
     }
 }

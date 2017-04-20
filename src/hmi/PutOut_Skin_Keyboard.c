@@ -7,7 +7,7 @@
 #include "xbffontcreate.h"
 #include "WM.h"
 
-#define lcd_height 360
+#define lcd_height 480
 #define lcd_width 800
 
 WM_HWIN hMulti=0;       //多行文本
@@ -984,6 +984,9 @@ void keypad_demo(void)
 	keypad_dev.ypos=150;//(lcd_height*6)/10;
 	keypad_dev.width=780;//lcd_width;
 	keypad_dev.height=320;//240;//lcd_height-((lcd_height*6)/10);
+//	keypad_dev.ypos=(lcd_height*6)/10;
+//	keypad_dev.width=lcd_width;
+//	keypad_dev.height=lcd_height-((lcd_height*6)/10);
 	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
 	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;

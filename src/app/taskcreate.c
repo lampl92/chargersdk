@@ -1,12 +1,12 @@
 /**
 * @file taskcreate.c
-* @brief ´´½¨ÈÎÎñTodolist ¶ÔÕÕ±í
-*        1. ¶¨ÒåSTACK´óĞ¡
-*        2. ¶¨ÒåPRIORITY
-*        3. ÉùÃ÷ÈÎÎñ
-*        4. ¶¨ÒåÈÎÎñ¾ä±ú
-*        5. ÈÎÎñÈë¿Ú
-*        6. ´´½¨ÈÎÎñ
+* @brief åˆ›å»ºä»»åŠ¡Todolist å¯¹ç…§è¡¨
+*        1. å®šä¹‰STACKå¤§å°
+*        2. å®šä¹‰PRIORITY
+*        3. å£°æ˜ä»»åŠ¡
+*        4. å®šä¹‰ä»»åŠ¡å¥æŸ„
+*        5. ä»»åŠ¡å…¥å£
+*        6. åˆ›å»ºä»»åŠ¡
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
@@ -16,10 +16,10 @@
 #include "cli_main.h"
 #include "timercallback.h"
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÕ»¶¨Òå
+/ ä»»åŠ¡æ ˆå®šä¹‰
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskCLI                    1024
-#define defSTACK_TaskGUI                    1024
+#define defSTACK_TaskGUI                    (1024*4)
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
 
@@ -31,13 +31,13 @@
 #define defSTACK_TaskEVSEData               512
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÓÅÏÈ¼¶
+/ ä»»åŠ¡ä¼˜å…ˆçº§
 /---------------------------------------------------------------------------*/
-//ÓÅÏÈ¼¶¹æÔòÎªÏµÍ³ÈÎÎñÓÅÏÈ¼¶µÍ£¬OTA > ³äµçÈÎÎñ > ¹ÊÕÏ´¦Àí > ÏµÍ³¼àÊÓ > Ë¢¿¨ÓëÍ¨ĞÅ > Êı¾İ´¦ÀíÓëÏµÍ³ÈÎÎñ
+//ä¼˜å…ˆçº§è§„åˆ™ä¸ºç³»ç»Ÿä»»åŠ¡ä¼˜å…ˆçº§ä½ï¼ŒOTA > å……ç”µä»»åŠ¡ > æ•…éšœå¤„ç† > ç³»ç»Ÿç›‘è§† > åˆ·å¡ä¸é€šä¿¡ > æ•°æ®å¤„ç†ä¸ç³»ç»Ÿä»»åŠ¡
 #define defPRIORITY_TaskCLI                 1
 #define defPRIORITY_TaskGUI                 1
 #define defPRIORITY_TaskTouch               1
-#define defPRIORITY_TaskOTA                 15 /* ×î¸ß*/
+#define defPRIORITY_TaskOTA                 15 /* æœ€é«˜*/
 
 #define defPRIORITY_TaskEVSERemote          3
 #define defPRIORITY_TaskEVSERFID            4
@@ -47,7 +47,7 @@
 #define defPRIORITY_TaskEVSEData            1
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÃû³Æ
+/ ä»»åŠ¡åç§°
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
@@ -61,22 +61,22 @@ const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÉùÃ÷
+/ ä»»åŠ¡å£°æ˜
 /---------------------------------------------------------------------------*/
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
-void vTaskOTA(void *pvParameters);                  //ÔÚÏßÉı¼¶
+void vTaskOTA(void *pvParameters);                  //åœ¨çº¿å‡çº§
 
-void vTaskEVSERemote(void *pvParameters);           //Ô¶³ÌÍ¨ĞÅ
-void vTaskEVSERFID(void *pvParameters);             //Ë¢¿¨
-void vTaskEVSECharge(void *pvParameters);           //³äµç
-void vTaskEVSEMonitor(void *pvParameters);          //¼à¿Ø
-void vTaskEVSEDiag(void *pvParameters);             //Õï¶Ï´¦Àí
-void vTaskEVSEData(void *pvParameters);             //Êı¾İ´¦Àí
+void vTaskEVSERemote(void *pvParameters);           //è¿œç¨‹é€šä¿¡
+void vTaskEVSERFID(void *pvParameters);             //åˆ·å¡
+void vTaskEVSECharge(void *pvParameters);           //å……ç”µ
+void vTaskEVSEMonitor(void *pvParameters);          //ç›‘æ§
+void vTaskEVSEDiag(void *pvParameters);             //è¯Šæ–­å¤„ç†
+void vTaskEVSEData(void *pvParameters);             //æ•°æ®å¤„ç†
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñ¾ä±ú
+/ ä»»åŠ¡å¥æŸ„
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
@@ -90,22 +90,22 @@ static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÍ¨ĞÅ
+/ ä»»åŠ¡é€šä¿¡
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 
-//ÏÂÃæµÄÊÂ¼ş¶¨ÒåÔÚ¸÷¸ö½á¹¹ÌåÖĞ
+//ä¸‹é¢çš„äº‹ä»¶å®šä¹‰åœ¨å„ä¸ªç»“æ„ä½“ä¸­
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
-//¶ÓÁĞ
+//é˜Ÿåˆ—
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
-//Èí¼ş¶¨Ê±Æ÷
-TimerHandle_t xHandleTimerTemp = NULL; //4¸öÎÂ¶È
+//è½¯ä»¶å®šæ—¶å™¨
+TimerHandle_t xHandleTimerTemp = NULL; //4ä¸ªæ¸©åº¦
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
@@ -113,7 +113,7 @@ TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerHeartbeat = NULL;
-//conÖĞ»¹¶¨ÒåÁË¼¸¸ö¶¨Ê±Æ÷£¬xHandleTimerVolt£¬xHandleTimerCurr£¬xHandleTimerCharge·Ö±ğÔÚÊ¹ÓÃÊ±½øĞĞ³õÊ¼»¯
+//conä¸­è¿˜å®šä¹‰äº†å‡ ä¸ªå®šæ—¶å™¨ï¼ŒxHandleTimerVoltï¼ŒxHandleTimerCurrï¼ŒxHandleTimerChargeåˆ†åˆ«åœ¨ä½¿ç”¨æ—¶è¿›è¡Œåˆå§‹åŒ–
 //Mutex
 
 void vTaskCLI(void *pvParameters)
@@ -131,9 +131,11 @@ void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
+		GUI_TOUCH_Exec();
+		vTaskDelay(5);		//Ã‘Ã“ÃŠÂ±5ms
 
-        GUI_TOUCH_Exec();
-        vTaskDelay(10);
+//        GUI_TOUCH_Exec();
+//        vTaskDelay(10);
     }
 }
 
@@ -155,7 +157,7 @@ void AppTaskCreate (void)
     xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
-/** @brief ´´½¨ÈÎÎñÍ¨ĞÅ»úÖÆ¡££¨ĞÅºÅÁ¿£¬Èí¼ş¶¨Ê±Æ÷´´½¨ÓëÆô¶¯£©
+/** @brief åˆ›å»ºä»»åŠ¡é€šä¿¡æœºåˆ¶ã€‚ï¼ˆä¿¡å·é‡ï¼Œè½¯ä»¶å®šæ—¶å™¨åˆ›å»ºä¸å¯åŠ¨ï¼‰
  */
 void AppObjCreate (void)
 {
@@ -184,9 +186,9 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //TimerHeartbeatÔÚÁªÍøºóÔÙÆô¶¯
+    //TimerHeartbeatåœ¨è”ç½‘åå†å¯åŠ¨
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //±»ÏµÍ³µ÷ÓÃ
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //è¢«ç³»ç»Ÿè°ƒç”¨
 void vApplicationTickHook( void )
 {
     ulHighFrequencyTimerTicks = xTaskGetTickCount();

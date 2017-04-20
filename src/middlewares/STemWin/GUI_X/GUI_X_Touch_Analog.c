@@ -21,7 +21,7 @@ for  the  purposes  of  creating  libraries  for  ARM7, ARM9, Cortex-M
 series,  and   Cortex-R4   processor-based  devices,  sublicensed  and
 distributed as part of the  MDK-ARM  Professional  under the terms and
 conditions  of  the   End  User  License  supplied  with  the  MDK-ARM
-Professional. 
+Professional.
 Full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -32,7 +32,7 @@ Licensor:                 SEGGER Software GmbH
 Licensed to:              ARM Ltd, 110 Fulbourn Road, CB1 9NJ Cambridge, UK
 Licensed SEGGER software: emWin
 License number:           GUI-00181
-License model:            LES-SLA-20007, Agreement, effective since October 1st 2011 
+License model:            LES-SLA-20007, Agreement, effective since October 1st 2011
 Licensed product:         MDK-ARM Professional
 Licensed platform:        ARM7/9, Cortex-M/R4
 Licensed number of seats: -
@@ -44,9 +44,11 @@ Purpose     : Config / System dependent externals for GUI
 
 #include "GUI.h"
 #include "bsp.h"
+#include "lcd.h"
+#include "touch.h"
 
 static u16 adc_x,adc_y;
-
+extern uint8_t calebrate_done;
 void GUI_TOUCH_X_ActivateX(void) {
 }
 
@@ -54,12 +56,26 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-    TP_Scan(&adc_x, &adc_y);
-  return adc_x;
+    uint16_t value_x;
+
+    if(calebrate_done == 1)
+    {
+        value_x = TP_Read_XOY(0XD0);
+        value_x = tp_dev.xfac * value_x + tp_dev.xoff;
+    }
+
+    return value_x;
 }
 
 int  GUI_TOUCH_X_MeasureY(void) {
-  return adc_y;
+    uint16_t value_y;
+
+    if(calebrate_done == 1)
+    {
+        value_y = TP_Read_XOY(0X90);
+        value_y = tp_dev.yfac * value_y + tp_dev.yoff;
+    }
+    return value_y;
 }
 
 
