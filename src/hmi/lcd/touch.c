@@ -1,5 +1,5 @@
 #include "touch.h"
-#include "lcd.h"
+#include "lcddrv.h"
 #include "stdlib.h"
 #include "math.h"
 #include "GUI.h"

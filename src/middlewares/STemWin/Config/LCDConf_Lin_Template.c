@@ -1,7 +1,7 @@
 #include "LCDConf.h"
 #include "GUI_Private.h"
 #include "ltdc.h"
-#include "lcd.h"
+#include "lcddrv.h"
 #include "GUIDRV_Lin.h"
 //////////////////////////////////////////////////////////////////////////////////
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途

@@ -395,10 +395,10 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\keyboard.h" />
 		<Unit filename="..\..\src\hmi\lcd\font.h" />
-		<Unit filename="..\..\src\hmi\lcd\lcd.c">
+		<Unit filename="..\..\src\hmi\lcd\lcddrv.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\lcd\lcd.h">
+		<Unit filename="..\..\src\hmi\lcd\lcddrv.h">
 			<Option compilerVar="CPP" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\lcd\ltdc.c">

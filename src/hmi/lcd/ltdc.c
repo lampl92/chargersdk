@@ -1,5 +1,5 @@
 #include "ltdc.h"
-#include "lcd.h"
+#include "lcddrv.h"
 #include "GUI.h"
 
 LTDC_HandleTypeDef  LTDC_Handler;	    //LTDC¾ä±ú
