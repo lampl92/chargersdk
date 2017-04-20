@@ -178,14 +178,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"123");
 
         //if(Card_Info[current_id_disp].balance <= 0)
-        if(1)
-        {
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF36_Font,GUI_RED, "余额不足请充值");
-        }
-        else
-        {
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF36_Font,GUI_RED, "          ");
-        }
+
+//            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF36_Font,GUI_RED, "余额不足请充值");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF36_Font,GUI_RED, "正在获取账户信息...");
+
         //
         // Initialization of 'Button'
         //
