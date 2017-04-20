@@ -134,7 +134,7 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    //MainTask();
+    MainTask();
 //    Touch_Calibrate();
     while(1)
     {

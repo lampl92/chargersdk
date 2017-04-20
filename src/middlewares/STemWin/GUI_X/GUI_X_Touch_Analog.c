@@ -44,7 +44,7 @@ Purpose     : Config / System dependent externals for GUI
 
 #include "GUI.h"
 #include "bsp.h"
-#include "lcd.h"
+#include "lcddrv.h"
 #include "touch.h"
 
 static u16 adc_x,adc_y;

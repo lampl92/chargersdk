@@ -257,7 +257,6 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_gpio.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
-		<Unit filename="..\..\src\drivers\bsp\inc\bsp_touch_2046.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\led_control.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\user_app.h" />
@@ -285,28 +284,14 @@
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_timer.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\drivers\bsp\src\bsp_touch_2046.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_uart.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_user_lib.c">
 			<Option compilerVar="CC" />
 		</Unit>
-
 		<Unit filename="..\..\src\drivers\bsp\src\led_control.c">
 			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\drivers\bsp\src\lcd.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="&lt;{~None~}&gt;" />
-
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\myiic.c">
 			<Option compilerVar="CC" />
@@ -419,8 +404,6 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\HMI_Start.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\keyboard.h" />
 		<Unit filename="..\..\src\hmi\lcd\font.h" />
@@ -440,28 +423,18 @@
 		<Unit filename="..\..\src\hmi\lcd\touch.h" />
 		<Unit filename="..\..\src\hmi\PutOut_Alarm_Log.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Card_Info.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Card_Valid.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charge_Done.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charging.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charging_2-dimen.c">
 			<Option compilerVar="CC" />
@@ -470,23 +443,15 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Home.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Machine_Error.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoStatus.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Skin_Keyboard.c">
 			<Option compilerVar="CC" />
@@ -510,8 +475,6 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\Touch_Disp_Module.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\touchtimer.h" />
 		<Unit filename="..\..\src\middlewares\AES\aes_modes.c">

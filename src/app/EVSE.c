@@ -109,6 +109,14 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgPa
 
     return errcode;
 }
+static cJSON *jsTemplSegArrayItemObjCreate(void)
+{
+    cJSON *jsTemplSegArrayItemObj;
+
+    jsTemplSegArrayItemObj = cJSON_CreateObject();
+
+    return jsTemplSegArrayItemObj;
+}
 #if 0
 static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
 {
@@ -241,16 +249,6 @@ static ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
 exit:
     return errcode;
 }
-
-static cJSON *jsTemplSegArrayItemObjCreate(void)
-{
-    cJSON *jsTemplSegArrayItemObj;
-
-    jsTemplSegArrayItemObj = cJSON_CreateObject();
-
-    return jsTemplSegArrayItemObj;
-}
-
 
 static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
 {
