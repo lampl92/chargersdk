@@ -37,6 +37,8 @@ void vTaskEVSERFID(void *pvParameters)
             {
                 memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
                 pRFIDDev->state = STATE_RFID_GOTID;
+                xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
+                                   defEventBitGotIDtoHMI);
             }
             break;
         case STATE_RFID_GOTID:
