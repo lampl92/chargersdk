@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <includes.h>
 #include "xbffontcreate.h"
 #include "bmpdisplay.h"
 
