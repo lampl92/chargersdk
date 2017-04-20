@@ -133,6 +133,9 @@ static const void *_GetImageById(U32 Id, U32 *pSize)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
     uint8_t i = 0;
+    uint8_t strPowerFee[10];
+    uint8_t strServiceFee[10];
+
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
@@ -158,8 +161,10 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     }
 
     //充电费和服务费的费用值显示
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), "45");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), "56");
+    xsprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+    xsprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
 }
 // USER END
 
