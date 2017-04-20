@@ -35,6 +35,7 @@ extern EventGroupHandle_t xHandleEventTimerCBNotify;
 extern EventGroupHandle_t xHandleEventData;
 extern EventGroupHandle_t xHandleEventDiag;
 extern EventGroupHandle_t xHandleEventRemote;
+extern EventGroupHandle_t xHandleEventHMI;
 
 extern TimerHandle_t xHandleTimerHeartbeat;
 

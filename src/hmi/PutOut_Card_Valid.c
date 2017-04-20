@@ -88,7 +88,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 
     xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_valid);
-    if((num++) >= 3)
+    if((num++) >= 50)
     {
         num = 0;
         if((wait_timer.card_valid--) == 0)

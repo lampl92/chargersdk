@@ -8,7 +8,7 @@ void MainTask(void)
 {
     if(calebrate_done == 0)
     {
-        GUI_Touch_Calibrate();
+        //GUI_Touch_Calibrate();
         calebrate_done = 1;
         //LCD_X_Config();
     }

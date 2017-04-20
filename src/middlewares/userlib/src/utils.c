@@ -78,7 +78,7 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 
 uint32_t HexToChar(uint8_t Hex, uint8_t *c)
 {
-    xsprintf(c, "%02x", Hex);
+    xsprintf(c, "%02X", Hex);
 }
 
 uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)

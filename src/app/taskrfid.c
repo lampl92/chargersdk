@@ -112,8 +112,12 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
                                     HMI填充好选择的枪后，发送回Order队列*/
+            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
+            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
+                            defEventBitGoodIDReqDisp,
+                            defEventBitGoodIDReqDispOK,
+                            portMAX_DELAY);
 
-            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID */
 #ifdef DEBUG_RFID
             printf_safe("用户状态：");
             switch(pRFIDDev->order.ucAccountStatus)
@@ -143,14 +147,20 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_BADID:
             /** @todo (rgw#1#): 通知HMI显示未注册 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
-
+            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
+                            defEventBitBadIDReqDisp,
+                            defEventBitBadIDReqDispOK,
+                            portMAX_DELAY);
             OrderInit(&(pRFIDDev->order));
             pRFIDDev->state = STATE_RFID_NOID;
             break;
         case STATE_RFID_OWE:
             /** @todo (rgw#1#): 通知HMI显示欠费 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
-
+            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
+                            defEventBitOweIDReqDisp,
+                            defEventBitOwdIDReqDispOK,
+                            portMAX_DELAY);
             OrderInit(&pRFIDDev->order);
             pRFIDDev->state = STATE_RFID_NOID;
             break;
@@ -158,8 +168,15 @@ void vTaskEVSERFID(void *pvParameters)
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                          defEventBitCONStartOK,
-                                         pdFALSE, pdFALSE, 1000);
+                                         pdFALSE, pdFALSE, 0);
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+            {
+                pRFIDDev->state = STATE_RFID_NOID;
+            }
+            uxBits = xEventGroupWaitBits(xHandleEventHMI,
+                                         defEventBitHMITimeOutToRFID,
+                                         pdTRUE, pdTRUE,0);
+            if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
             {
                 pRFIDDev->state = STATE_RFID_NOID;
             }
