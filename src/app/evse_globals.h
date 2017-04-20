@@ -65,6 +65,12 @@
 #define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
 #define defEventBitRFIDNewID            BIT_4
 #define defEventBitRFIDOldID            BIT_5
+#define defEventBitGoodIDReqDisp        BIT_6
+#define defEventBitGoodIDReqDispOK      BIT_7
+#define defEventBitBadIDReqDisp        BIT_8
+#define defEventBitBadIDReqDispOK      BIT_9
+#define defEventBitOweIDReqDisp        BIT_10
+#define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
 #define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
@@ -77,6 +83,8 @@
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
 #define defEventBitRemoteGotAccount     BIT_1
+/*------xHandleEventHMI*/
+#define defEventBitHMITimeOutToRFID     BIT_0
 
 /*------xHandleEventDiag*/
 #define defEventBitDiagTempW            BIT_0              //温度报警

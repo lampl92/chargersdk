@@ -22,7 +22,7 @@
 #define defMonitorPlugStateCyc      50
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
-#define defMonitorRFIDCyc           5000
+#define defMonitorRFIDCyc           1000
 #define defMonitorDataRefreshCyc    1000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000

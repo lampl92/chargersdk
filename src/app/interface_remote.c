@@ -82,7 +82,7 @@ ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAcc
     ErrorCode_t errcode;
 
     tmpAccountStat = 1;
-    tmpBalance = 88888.88;
+    tmpBalance = 888.88;
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 调用云平台接口 */

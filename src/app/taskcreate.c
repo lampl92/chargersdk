@@ -101,6 +101,7 @@ EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
+EventGroupHandle_t xHandleEventHMI  = NULL;
 
 //下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
@@ -182,6 +183,7 @@ void AppObjCreate (void)
     xHandleEventData = xEventGroupCreate();
     xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
+    xHandleEventHMI = xEventGroupCreate();
 
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));

@@ -8,7 +8,7 @@ void MainTask(void)
 {
     if(calebrate_done == 0)
     {
-        GUI_Touch_Calibrate();
+        //GUI_Touch_Calibrate();
         calebrate_done = 1;
         //LCD_X_Config();
     }
@@ -26,8 +26,8 @@ void MainTask(void)
     //keypad_demo();
 //	CreateFramewin();
 //    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-    //PutOut_Home();
-	PutOut_Card_Valid();
+    PutOut_Home();
+	//PutOut_Card_Valid();
 	while(1)
 	{
 		GUI_Delay(10);
