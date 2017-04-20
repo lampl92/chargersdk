@@ -138,7 +138,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 
     WM_HWIN hWin = pMsg->hWin;
 
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
+    Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
     switch(i % 5)
@@ -161,8 +161,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     }
 
     //充电费和服务费的费用值显示
-    xsprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-    xsprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+    sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+    sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
 }
@@ -180,7 +180,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-            uint8_t *buf = "56";
+    uint8_t *buf = "56";
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -191,7 +191,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Framewin'
         //
 
-        FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
         //
         // Initialization of 'Image'
         //
@@ -201,22 +201,24 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"12");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"23");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, "12");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, "23");
+        EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
+        EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0),&XBF36_Font,GUI_BLACK, "请选择支付方式");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK, "充电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK, "元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK, "服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择支付方式");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "充电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "元/度");
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_LEFT|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"手机支付请扫描二维码");
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"刷卡支付请刷卡");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -305,12 +307,22 @@ WM_HWIN CreateFramewin(void)
 
 void PutOut_Home()
 {
-    CreateFramewin();
+    WM_HWIN hWin;
+    EventBits_t uxBitRFID;
+    hWin = CreateFramewin();
 
     while(1)
     {
+        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
+                                        defEventBitGotIDtoHMI,
+                                        pdTRUE, pdTRUE, 0);
+        if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
+        {
+            WM_DeleteWindow(hWin);
+            PutOut_Card_Info();
+        }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(10);
+        GUI_Delay(1000);
     }
 }
 // USER END
