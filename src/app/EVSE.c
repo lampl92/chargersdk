@@ -48,7 +48,7 @@ void testSetTemplEx(void)
 
 /** @todo (rgw#1#): 所有设置参数增加范围校验, 可以在这里进行校验, 也可以在界面输入的时候进行校验.  */
 
-/** @brief
+/** @brief EVSE配置函数,
  *
  * @param pvEVSE void*
  * @param jnItemString uint8_t*
@@ -109,6 +109,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgPa
 
     return errcode;
 }
+#if 0
 static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
 {
     EVSE_t *pEVSE;
@@ -250,6 +251,56 @@ static cJSON *jsTemplSegArrayItemObjCreate(void)
     return jsTemplSegArrayItemObj;
 }
 
+
+static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    cJSON *jsTemplSegArray;
+    cJSON *jsTemplSegArrayItemObj;
+    ErrorCode_t errcode;
+    gdsl_list_t plCfgTempl;
+    TemplSeg_t *ptCfgTempl;
+    uint8_t ucTemplNum;
+    TemplSeg_t tmpTemplSeg;
+    int i;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    plCfgTempl = (gdsl_list_t)pvCfgParam;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+
+
+    if(jsEVSECfgObj == NULL)
+    {
+        return errcode;
+    }
+    jsTemplSegArray = cJSON_CreateArray();
+    ucTemplNum = gdsl_list_get_size(plCfgTempl);
+    for(i = 1; i <= ucTemplNum; i++)
+    {
+        ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
+        jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
+
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateNumber(ptCfgTempl->tStartTime));
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateNumber(ptCfgTempl->tEndTime));
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
+
+        cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
+    }
+
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+//        此处注释只为说明该条件下进行的操作
+//        cJSON_Delete(jsTemplSegArray);
+//        return errcode;
+    }
+    cJSON_Delete(jsTemplSegArray);
+    return errcode;
+}
+#endif
 /** @brief
  *
  * @param pvEVSE void*
@@ -296,53 +347,6 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
 
     cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
 
-    return errcode;
-}
-static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    cJSON *jsTemplSegArray;
-    cJSON *jsTemplSegArrayItemObj;
-    ErrorCode_t errcode;
-    gdsl_list_t plCfgTempl;
-    TemplSeg_t *ptCfgTempl;
-    uint8_t ucTemplNum;
-    TemplSeg_t tmpTemplSeg;
-    int i;
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    plCfgTempl = (gdsl_list_t)pvCfgParam;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-
-
-    if(jsEVSECfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsTemplSegArray = cJSON_CreateArray();
-    ucTemplNum = gdsl_list_get_size(plCfgTempl);
-    for(i = 1; i <= ucTemplNum; i++)
-    {
-        ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
-        jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
-
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateNumber(ptCfgTempl->tStartTime));
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateNumber(ptCfgTempl->tEndTime));
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
-
-        cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
-    }
-
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-//        cJSON_Delete(jsTemplSegArray);
-//        return errcode;
-    }
-    cJSON_Delete(jsTemplSegArray);
     return errcode;
 }
 /*---------------------------------------------------------------------------/
