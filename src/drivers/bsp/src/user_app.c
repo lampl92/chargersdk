@@ -423,7 +423,9 @@ void Peripheral_Init(void)
     TIMER3_ON;
     PWM1_ON;
     PWM2_ON;
-    cs_zl_reset;
+    Write_Lis2ds12(0X20,0X77);
+    Write_Lis2ds12(0X27,0XFF);
+	Write_Lis2ds12(0X23,0X38);
 
 
 }

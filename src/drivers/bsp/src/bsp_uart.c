@@ -76,6 +76,7 @@ void bsp_Uart_Init(void)
     RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&RFID_UARTx_Handler);
     HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1);
+
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
@@ -136,6 +137,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 
         HAL_NVIC_EnableIRQ(USART3_IRQn);
         HAL_NVIC_SetPriority(USART3_IRQn, bspUSART3_PreemptPriority, bspUSART3_SubPriority);
+    }
+     if(huart->Instance == UART4)
+    {
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        __HAL_RCC_UART4_CLK_ENABLE();
+
+        GPIO_InitStruct.Pin = GPIO_PIN_10;//PIN_TX
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+        GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_11;//PIN_RX
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+        HAL_NVIC_EnableIRQ(UART4_IRQn);
+        HAL_NVIC_SetPriority(UART4_IRQn, bspUART4_PreemptPriority, bspUART4_SubPriority);
     }
 
 }
