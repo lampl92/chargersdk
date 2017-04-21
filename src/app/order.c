@@ -227,8 +227,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         SegmentProc(time(NULL), pCON);
         break;
     case STATE_ORDER_FINISH:
-        pCON->order.ucPayType = 2;
-        pCON->order.ucStopType = 2;
+        pCON->order.ucPayType = defOrderPayType_Online;
+//        pCON->order.ucStopType = defOrderStopType_RFID;//在taskcharge 停止时进行赋值
         /** @todo (rgw#1#): 添加订单结束时内容 */
         break;
     }

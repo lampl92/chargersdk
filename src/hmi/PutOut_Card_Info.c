@@ -21,6 +21,7 @@
 // USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
 #include "touchtimer.h"
+#include "interface.h"
 // USER END
 
 #include "DIALOG.h"
@@ -99,6 +100,18 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     CON_t *pCON;
 
     WM_HWIN hWin = pMsg->hWin;
+
+    pCON = CONGetHandle(0);
+    uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+    if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
+    {
+        /** @todo (zshare#1#): 跳转充电界面 */
+        PutOut_Charging();
+    }
+    else
+    {
+        /** @todo (zshare#1#): 充电条件未达成 */
+    }
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_info);
@@ -147,38 +160,14 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
 
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
 
-        if(pCON->info.ucSocketType == defSocketTypeB)
-        {
-            if(pCON->status.xPlugState == PLUG && pCON->status.xBTypeSocketLockState == LOCK)
-            {
-                /** @todo (zshare#1#): 插枪后的操作 */
-                uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
-                {
-                    /** @todo (zshare#1#): 跳转充电界面 */
-                }
-                else
-                {
-                    /** @todo (zshare#1#): 充电条件未达成 */
-                }
-            }
-        }
-        else if(pCON->info.ucSocketType == defSocketTypeC)
-        {
-            if(pCON->status.xPlugState == PLUG )
-            {
-                /** @todo (zshare#1#): 插枪后的操作 */
-            }
-        }
-        if(pCON->status.xPlugState == UNPLUG)
-        {
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
-        }
 
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGoodIDReqDispOK);
 
     }
+
+
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                     defEventBitBadIDReqDisp,
                                     pdTRUE, pdTRUE, 0);
@@ -200,6 +189,14 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         /** @todo (zshare#1#): 定10s退出 */
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitOwdIDReqDispOK);
     }
+    pCON = CONGetHandle(0);//选择枪的时候获取pCON
+    /*未进GoodID ,BadID和OweID状态时显示内容*/
+    if(pCON->status.xPlugState == UNPLUG)
+    {
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
+    }
+
+    /*end of 未进GoodID ,BadID和OweID状态时显示内容*/
 }
 // USER END
 
@@ -356,7 +353,7 @@ void PutOut_Card_Info()//(OrderData_t *order)
     while(1)
     {
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(1000);
+        GUI_Delay(500);
     }
 }
 // USER END

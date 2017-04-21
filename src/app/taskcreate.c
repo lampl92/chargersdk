@@ -37,7 +37,7 @@
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
 #define defPRIORITY_TaskInit                1
 #define defPRIORITY_TaskCLI                 1
-#define defPRIORITY_TaskGUI                 1
+#define defPRIORITY_TaskGUI                 1   //不能高,GUI任务时间太长,会影响硬件响应
 #define defPRIORITY_TaskTouch               1
 #define defPRIORITY_TaskOTA                 15 /* 鏈?楂?*/
 

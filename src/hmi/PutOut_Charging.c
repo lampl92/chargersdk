@@ -21,6 +21,7 @@
 // USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
 #include "touchtimer.h"
+#include "interface.h"
 // USER END
 
 #include "DIALOG.h"
@@ -125,35 +126,72 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     static uint8_t num = 0;
     uint8_t Timer_buf[10];
     uint8_t temp_buf[32];
+    CON_t *pCON;
+    time_t now;
+    uint32_t diffsec;
+    uint8_t sec;
+    uint8_t min;
+    uint8_t hour;
+    EventBits_t uxBitCharge;
+    EventBits_t uxBitHMI;
 
     WM_HWIN hWin = pMsg->hWin;
 
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
+    Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
 //    memset(temp_buf,'\0',sizeof(temp_buf));
 //    xsprintf((char *)temp_buf, "(%02d)", Card_Info[current_id_disp].id);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), "14");//充入电量
+    pCON = CONGetHandle(0);
+//    uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+//    if((uxBitCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
+//    {
+//        WM_DeleteWindow(hWin);
+//            PutOut_Charge_Done();
+//    }
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
+                                   defEventBitHMI_ChargeReqDispDone,
+                                   pdTRUE, pdTRUE, 0);
+    if((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
+    {
+        PutOut_Charge_Done();
+    }
 
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), "5");//当前服务费
+    pCON = CONGetHandle(0);///** @todo (zshare#1#): 双枪ID选择 */
+    now = time(NULL);
+    diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
 
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), "1.5");//当前电费
+    sprintf(temp_buf, "%02d", hour);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
+    sprintf(temp_buf, "%02d", min);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_5), temp_buf);// min
+    sprintf(temp_buf, "%02d", sec);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), temp_buf);// sec
 
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), "45.6");//消费总额
-
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), "00");//已充电时间小时
-
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_5), "02");//
-
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), "34");//
+    sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), temp_buf);//充入电量
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), temp_buf);//当前服务费
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);//当前电费
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 
     xsprintf((char *)Timer_buf, "%02dS", wait_timer.charge_screen_lock);
-    if((num++) >= 3)
+    if((num++) >= 1)
     {
         num = 0;
         if((wait_timer.charge_screen_lock--) == 0)
         {
             wait_timer.charge_screen_lock = 0;
             TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
+
             //进行退出的跳页操作
         }
     }
@@ -181,40 +219,40 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
         //
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF36_Font,GUI_BLACK, "正在充电 ... ...");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK, "已充电");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK, "充入电量");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK, "当前服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK, "当前电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK, "消费总额");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK, "度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&XBF24_Font,GUI_BLACK, "元/单");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13),&XBF24_Font,GUI_BLACK, "元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14),&XBF24_Font,GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15),&XBF24_Font,GUI_BLACK, "小时");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&XBF24_Font,GUI_BLACK, "分");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&XBF24_Font,GUI_BLACK, "秒");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_RED, "后屏幕锁定");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF36_Font, GUI_BLACK, "正在充电 ... ...");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "已充电");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "充入电量");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "当前服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9), &XBF24_Font, GUI_BLACK, "当前电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &XBF24_Font, GUI_BLACK, "消费总额");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11), &XBF24_Font, GUI_BLACK, "度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12), &XBF24_Font, GUI_BLACK, "元/单");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13), &XBF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14), &XBF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15), &XBF24_Font, GUI_BLACK, "小时");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16), &XBF24_Font, GUI_BLACK, "分");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17), &XBF24_Font, GUI_BLACK, "秒");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18), &XBF24_Font, GUI_RED, "后屏幕锁定");
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7),&XBF24_Font,"00S");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), &XBF24_Font, "00S");
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_LEFT|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"停止充电");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "停止充电");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -291,8 +329,8 @@ void PutOut_Charging()
     CreateCharging();
     while(1)
     {
-       dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(10);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+        GUI_Delay(500);
     }
 }
 // USER END

@@ -283,7 +283,7 @@ void PutOut_Charge_Done()
     while(1)
     {
        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(10);
+        GUI_Delay(500);
     }
 }
 // USER END

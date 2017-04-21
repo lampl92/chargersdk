@@ -78,46 +78,38 @@ ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint
 
     return errcode;
 }
+#if 0
 ErrorCode_t SetCONType(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetSocketType(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetVolatageUpperLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetVolatageLowerLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetACTempUpperLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetACTempLowerLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetSocketTempUpperLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetSocketTempLowerLimits(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetRatedCurrent(void *pvCON, void *pvCfgParam)
 {
-
 }
 ErrorCode_t SetRatedPower(void *pvCON, void *pvCfgParam)
 {
-
 }
+#endif
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电接口信息
 /---------------------------------------------------------------------------*/
@@ -434,7 +426,7 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
 
-        /*json解析*/
+    /*json解析*/
     jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
     if(jsCfgObj == NULL)
     {
@@ -930,7 +922,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
 
     /** 实现代码  */
 
-    if(ucCONID = 0)
+    if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
         tmpLockState = LOCK;
@@ -1243,13 +1235,19 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     {
         if(cmd == SWITCH_OFF)
         {
+#ifdef DEBUG_DIAG_DUMMY
+#else
             POWER_L_OPEN();
             POWER_N_OPEN();
+#endif
         }
         else if(cmd == SWITCH_ON)
         {
+#ifdef DEBUG_DIAG_DUMMY
+#else
             POWER_L_CLOSE();
             POWER_N_CLOSE();
+#endif
         }
     }
     else if(ucCONID == 1)
