@@ -16,57 +16,58 @@ ErrorCode_t CreateOrderFile(void)
     ErrorCode_t errcode;
     FIL fil;
     uint8_t *p;
-    UINT br,bw;
+    UINT br, bw;
     cJSON *order_root, *order_item;
 
     res = f_open(&fil, pathOrder,  FA_CREATE_NEW);
     switch(res)
     {
-        case FR_OK:
-            f_close(&fil);
-            order_root = cJSON_CreateObject();
-            order_item = cJSON_CreateArray();
-            cJSON_AddItemToObject(order_root, jnMaxIndex, cJSON_CreateNumber(0));
-            cJSON_AddItemToObject(order_root, jnOrder, order_item);
-            p = cJSON_Print(order_root);
-            #ifdef DEBUG_INTERFACE_DATA
-            printf_safe("order.txt 创建成功\n");
-            printf_safe("%s\n", p);
-            #endif
-            f_open(&fil, pathOrder, FA_WRITE);
-            f_write(&fil, p, strlen(p), &bw);
-            f_close(&fil);
-            free(p);
-            cJSON_Delete(order_root);
-            errcode = ERR_NO;
-            break;
-        case FR_EXIST:
-            f_close(&fil);
-            f_open(&fil, pathOrder, FA_READ);
-            p = (uint8_t *)malloc(f_size(&fil) * sizeof(uint8_t));
+    case FR_OK:
+        f_close(&fil);
+        order_root = cJSON_CreateObject();
+        order_item = cJSON_CreateArray();
+        cJSON_AddItemToObject(order_root, jnMaxIndex, cJSON_CreateNumber(0));
+        cJSON_AddItemToObject(order_root, jnOrder, order_item);
+        p = cJSON_Print(order_root);
+#ifdef DEBUG_INTERFACE_DATA
+        printf_safe("order.txt 创建成功\n");
+        printf_safe("%s\n", p);
+#endif
+        f_open(&fil, pathOrder, FA_WRITE);
+        f_write(&fil, p, strlen(p), &bw);
+        f_close(&fil);
+        free(p);
+        cJSON_Delete(order_root);
+        errcode = ERR_NO;
+        break;
+    case FR_EXIST:
+        f_close(&fil);
+        f_open(&fil, pathOrder, FA_READ);
+        p = (uint8_t *)malloc(f_size(&fil) * sizeof(uint8_t));
 
-            f_read(&fil, p, f_size(&fil), &br);
-            if(br == f_size(&fil))
-            {
-                order_root = cJSON_Parse(p);
-            }
-            else
-            {
-                errcode = ERR_FILE_RW;
-                return errcode ;
-            }
-            order_item = cJSON_GetObjectItem(order_root, jnMaxIndex);
-            #ifdef DEBUG_INTERFACE_DATA
-            printf_safe("%s\n",p);
-            printf_safe("MaxIndex = %d\n", order_item->valueint);
-            #endif
-            free(p);
-            f_close(&fil);
-            cJSON_Delete(order_root);
-            errcode = ERR_NO;
-        default:
+        f_read(&fil, p, f_size(&fil), &br);
+        if(br == f_size(&fil))
+        {
+            order_root = cJSON_Parse(p);
+        }
+        else
+        {
             errcode = ERR_FILE_RW;
-            break;
+            return errcode ;
+        }
+        order_item = cJSON_GetObjectItem(order_root, jnMaxIndex);
+#ifdef DEBUG_INTERFACE_DATA
+        printf_safe("%s\n", p);
+        printf_safe("MaxIndex = %d\n", order_item->valueint);
+#endif
+        free(p);
+        f_close(&fil);
+        cJSON_Delete(order_root);
+        errcode = ERR_NO;
+        break;
+    default:
+        errcode = ERR_FILE_RW;
+        break;
     }
     return errcode;
 }
@@ -83,14 +84,14 @@ ErrorCode_t DataAddOrderToFile(uint32_t *pulIndex, cJSON *OrderObjToAdd)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#):  */
+    /** @todo (rgw#1#):  */
 
 //1. 获取最后节点
 //2. 获取最后节点Index
 //3. 将order的Index设置为+1
 //4. 添加到节点最后
 
-/*********************/
+    /*********************/
 
     *pulIndex = 1;
 
@@ -110,18 +111,18 @@ ErrorCode_t DataGetOrderFromFile( uint32_t ulIndex, uint8_t *strNode, void *pvGe
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-/** @todo (rgw#1#):  */
+    /** @todo (rgw#1#):  */
 
 
-/*********************/
+    /*********************/
 
     return errcode;
 }
 cJSON *DataOrderObjCreate(CON_t *pCON, EVSE_t *pEVSE, uint32_t ulIndex)
 {
     cJSON *pOrderObj;
-    uint8_t strCardID[defCardIDLength*2+1];
-    uint8_t strOrderSN[7*2+1];
+    uint8_t strCardID[defCardIDLength * 2 + 1];
+    uint8_t strOrderSN[7 * 2 + 1];
     int i;
 
     pOrderObj = cJSON_CreateObject();

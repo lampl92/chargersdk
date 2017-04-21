@@ -6,6 +6,8 @@
 * @date 2017-04-18
 */
 #include "includes.h"
+#include "stringName.h"
+#include "interface.h"
 #include "cJSON.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
@@ -27,12 +29,6 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
     pbuff = NULL;
     errcode = ERR_NO;
 
-    ThrowFSCode(res = f_open(&f, path, FA_WRITE));
-    if(res != FR_OK)
-    {
-        errcode = ERR_FILE_RW;
-        goto exit;
-    }
     pbuff = cJSON_Print(jsCfgObj);
     len = strlen(pbuff);
     if(pbuff == NULL)
@@ -40,7 +36,13 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    ThrowFSCode(res = f_write(&f, pbuff, len, &bw));
+    ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
+    if(res != FR_OK)
+    {
+        errcode = ERR_FILE_RW;
+        goto exit;
+    }
+    ThrowFSCode(res = f_write(&f, pbuff, len, &bw), path, "SetCfgObj()-write");
     if(len != bw)
     {
         errcode = ERR_FILE_RW;
@@ -73,7 +75,7 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     int i;
     *perrcode = ERR_NO;
     /*读取文件*/
-    ThrowFSCode(res = f_open(&f, path, FA_READ));
+    ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
     if(res != FR_OK)
     {
         *perrcode = ERR_FILE_RW;
@@ -81,7 +83,7 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     }
     fsize = f_size(&f);
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br));
+    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br), path, "GetCfgObj-read");
     if(fsize != br)
     {
         *perrcode = ERR_FILE_RW;

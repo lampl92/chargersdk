@@ -57,18 +57,19 @@ const uint8_t *strErrorCode[100] =
     "ÄÚ´æ·ÖÅä´íÎó"
 };
 
-void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel)
+void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg)
 {
     ErrorPackage_t package;
 
     package.ulDevID = ulDevID;
     package.code = errcode;
     package.level = errlevel;
+    strcpy(package.msg, msg);
 
     xQueueSend(xHandleQueueErrorPackage, (void *)&package, 0);
 }
 
-void ThrowFSCode (FRESULT rc)
+void ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info)
 {
     const char *str =
         "OK\0" "DISK_ERR\0" "INT_ERR\0" "NOT_READY\0" "NO_FILE\0" "NO_PATH\0"
@@ -82,6 +83,6 @@ void ThrowFSCode (FRESULT rc)
         {
             while (*str++) ;
         }
-        printf_safe("rc=%u FR_%s\n", (UINT)rc, str);
+        printf_safe("%s, %s, rc=%u FR_%s\n", (UINT)rc, str);
     }
 }

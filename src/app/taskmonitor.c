@@ -34,12 +34,12 @@ void vTaskEVSEMonitor(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING);
-                THROW_ERROR(i, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING);
+                THROW_ERROR(i, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
+                THROW_ERROR(i, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
                 if(pCON->info.ucSocketType == defSocketTypeB)
                 {
-                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING);
-                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING);
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING, "Monitor");
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING, "Monitor");
                 }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTemp);
@@ -53,7 +53,7 @@ void vTaskEVSEMonitor(void *pvParameters)
                 pCON = CONGetHandle(i);
                 if(pCON->info.ucSocketType == defSocketTypeB)
                 {
-                    THROW_ERROR(i, pCON->status.GetBTypeSocketLock(pCON), ERR_LEVEL_WARNING);
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketLock(pCON), ERR_LEVEL_WARNING, "Monitor");
                 }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
@@ -65,7 +65,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetPlugState(pCON), ERR_LEVEL_CRITICAL);//在GetPlugState中获取了CC与CP状态
+                THROW_ERROR(i, pCON->status.GetPlugState(pCON), ERR_LEVEL_CRITICAL, "Monitor");//在GetPlugState中获取了CC与CP状态
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
@@ -76,11 +76,11 @@ void vTaskEVSEMonitor(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL);
-                THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "Monitor");
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
@@ -88,18 +88,18 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBEVSEState) == defEventBitTimerCBEVSEState)
         {
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL);
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS);
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS);
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS);
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetScramState(pEVSE), ERR_LEVEL_CRITICAL, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPEState(pEVSE), ERR_LEVEL_CRITICAL, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagEVSEState);
         }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
         {
-            THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL);
+            THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
         }
 
         /* end of 获取EVSE和CON状态 */

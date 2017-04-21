@@ -21,6 +21,8 @@ typedef struct _TemplSeg
 {
     time_t tStartTime;//用time_t表示时，忽略年月日，在时段中只关注时分秒
     time_t tEndTime;
+    uint8_t strStartTime[6];//只在设置时使用 "HH:MM"
+    uint8_t strEndTime[6];//只在设置时使用 "HH:MM"
     double dSegFee;
 }TemplSeg_t;
 typedef struct _EVSEInfo
@@ -39,13 +41,13 @@ typedef struct _EVSEInfo
     gdsl_list_t plTemplSeg;
 
     pEVSEGetCfg_ft GetEVSECfg;
-
-    pEVSESetCfg_ft SetSN;
-    pEVSESetCfg_ft SetID;
-    pEVSESetCfg_ft SetType;
-    pEVSESetCfg_ft SetTotalCON;
-    pEVSESetCfg_ft SetLngLat;
-    pEVSESetCfg_ft SetTempl;
+    ErrorCode_t (*SetEVSECfg)(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+//    pEVSESetCfg_ft SetSN;
+//    pEVSESetCfg_ft SetID;
+//    pEVSESetCfg_ft SetType;
+//    pEVSESetCfg_ft SetTotalCON;
+//    pEVSESetCfg_ft SetLngLat;
+//    pEVSESetCfg_ft SetTempl;
 }EVSEInfo_t;
 
 typedef struct _EVSEStatus

@@ -10,11 +10,11 @@
 
 #include "ff.h"
 
-#define THROW_ERROR(_dev, _errcode,_errlevel)   do{                                           \
+#define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
                                                     ErrorCode_t _macro_errcode = _errcode;         \
                                                     if(_macro_errcode != ERR_NO)                  \
                                                     {                                       \
-                                                        ThrowErrorCode(_dev, _macro_errcode,_errlevel);  \
+                                                        ThrowErrorCode(_dev, _macro_errcode,_errlevel, _msg);  \
                                                     }                                       \
                                                 }while(0);
 typedef enum _ErrorCode
@@ -79,6 +79,7 @@ typedef struct _ErrorPackage
     uint32_t ulDevID;
     ErrorCode_t code;
     ErrorLevel_t level;
+    uint8_t msg[64];
 } ErrorPackage_t;
 
 //充电枪ID从小到大定义，其他设备从大小定义
@@ -93,7 +94,7 @@ typedef struct _ErrorPackage
 
 extern const uint8_t *strErrorCode[];
 
-void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel);
-void ThrowFSCode (FRESULT rc);
+void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg);
+void ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info);
 
 #endif

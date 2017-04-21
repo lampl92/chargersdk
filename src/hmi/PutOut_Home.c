@@ -32,7 +32,7 @@
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0     (GUI_ID_USER + 0x01)
-#define ID_BUTTON_1     (GUI_ID_USER + 0x04)//刷卡支付
+#define ID_BUTTON_1     (GUI_ID_USER + 0x04)
 #define ID_TEXT_0     (GUI_ID_USER + 0x08)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x0A)
 
@@ -133,9 +133,12 @@ static const void *_GetImageById(U32 Id, U32 *pSize)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
     uint8_t i = 0;
+    uint8_t strPowerFee[10];
+    uint8_t strServiceFee[10];
+
     WM_HWIN hWin = pMsg->hWin;
 
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
+    Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
     switch(i % 5)
@@ -158,8 +161,10 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     }
 
     //充电费和服务费的费用值显示
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), "45");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), "56");
+    sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+    sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
 }
 // USER END
 
@@ -171,9 +176,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;
     WM_HWIN      hItem;
+    static WM_HTIMER   htimer;
     U32          FileSize;
     int          NCode;
     int          Id;
+    uint8_t *buf = "56";
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -183,7 +190,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
+
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
         //
         // Initialization of 'Image'
         //
@@ -193,23 +201,24 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"12");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"23");
-        //
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, " ");
+        EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
+        EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0),&XBF36_Font,GUI_BLACK, "请选择支付方式");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK, "充电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK, "元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK, "服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择支付方式");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "充电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "元/度");
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_LEFT|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"手机支付请扫描二维码");
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"刷卡支付请刷卡");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -240,19 +249,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
-                //检测卡片信息
-                if(1)//卡片非法
-                {
-
-                }
-                else if(1) //卡片余额不足
-                {
-
-                }
-                else //卡片可用
-                {
-
-                }
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -295,6 +291,8 @@ WM_HWIN CreateFramewin(void)
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
 
+//    WM_CreateTimer(hWin, ID_TimerTime, 1000, 0);
+
     return hWin;
 }
 
@@ -309,43 +307,22 @@ WM_HWIN CreateFramewin(void)
 
 void PutOut_Home()
 {
-//    OrderData_t OrderData;//接收队列数据
-    CreateFramewin();
+    WM_HWIN hWin;
+    EventBits_t uxBitRFID;
+    hWin = CreateFramewin();
+
     while(1)
     {
-        //i++;
-        //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-        //GUI_SetFont(&XBF16_Font);
-        //GUI_SetColor(GUI_RED);
-        // GUI_DispStringAt("        ",633,20);
-        // GUI_Delay(10);
-        // GUI_DispStringAt((const char*)Date_buf,633,20);
-        //GUI_DispCEOL();
-
-        //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-        // GUI_SetFont(&XBF16_Font);
-        // GUI_SetColor(GUI_RED);
-        // GUI_DispStringAt("        ",720,20);
-        // GUI_Delay(10);
-        // GUI_DispStringAt((const char*)Time_buf,720,20);
-        // GUI_DispCEOL();
-////        xQueueReceive(xHandleQueueOrders,&OrderData,10);
-////        //卡号，卡余额。
-////        if(OrderData.ucAccountStatus != 0 && OrderData.dBalance > 0)
-////        {
-////            PutOut_Card_Info(&OrderData);//跳入卡片信息页 且余额充裕//RFIDState = STATE_RFID_GOODCARD;
-////        }
-////        if(OrderData.ucAccountStatus == 0)
-////        {
-////            PutOut_Card_Valid();//卡片无效页 //RFIDState = STATE_RFID_BADCARD;
-////        }
-////        if(OrderData.dBalance < 0)
-////        {
-////            PutOut_Card_Info(&OrderData);//卡片信息页，欠费//RFIDState = STATE_RFID_OWE;
-////        }
-
+        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
+                                        defEventBitGotIDtoHMI,
+                                        pdTRUE, pdTRUE, 0);
+        if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
+        {
+            WM_DeleteWindow(hWin);
+            PutOut_Card_Info();
+        }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(10);
+        GUI_Delay(1000);
     }
 }
 // USER END

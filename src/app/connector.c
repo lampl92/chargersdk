@@ -13,9 +13,71 @@
 #include "user_app.h"
 #include "cJSON.h"
 #include "stringName.h"
+#include "cfg_parse.h"
 /*---------------------------------------------------------------------------/
 /                               设置充电接口信息到配置文件
 /---------------------------------------------------------------------------*/
+
+ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+{
+    cJSON *jsEVSECfgObj;
+    cJSON *jsCONArray;
+    cJSON *jsCONObj;
+    cJSON *jsItem;
+    ErrorCode_t errcode;
+    CON_t *pCON;
+    uint8_t ucCONID;
+
+
+    errcode = ERR_NO;
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    if(jsEVSECfgObj == NULL)
+    {
+        return errcode;
+    }
+    jsCONArray = cJSON_GetObjectItem(jsEVSECfgObj, jnCONArray);
+    jsCONObj = cJSON_GetArrayItem(jsCONArray, ucCONID);
+    jsItem = jsCONObj->child;
+    do
+    {
+        if(strcmp(jsItem->string, jnItemString) == 0)
+        {
+            switch(type)
+            {
+            case ParamTypeU8:
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
+                break;
+            case ParamTypeU16:
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
+                break;
+            case ParamTypeU32:
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
+                break;
+            case ParamTypeDouble:
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
+                break;
+            case ParamTypeString:
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                break;
+            case ParamTypeList:
+                break;
+            default:
+                break;
+            }
+            break;//退出while循环
+        }
+        else
+        {
+            jsItem = jsItem->next;
+        }
+    }
+    while(jsItem != NULL);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+
+    return errcode;
+}
 ErrorCode_t SetCONType(void *pvCON, void *pvCfgParam)
 {
 
@@ -124,7 +186,7 @@ static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
     tmpType = jsItem->valueint;
 
     /*********************/
-    if(tmpType == defSocketTypeB && tmpType == defSocketTypeC)
+    if(tmpType == defSocketTypeB || tmpType == defSocketTypeC)
     {
         pCON->info.ucSocketType = tmpType;
     }
@@ -398,13 +460,13 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
         errcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
-    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONType()");
+    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketType()");
+    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetVolatageLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetACTempLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketTempLimits()");
+    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedCurrent()");
+    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedPower()");
 exit_parse:
     cJSON_Delete(jsCfgObj);
 exit:
@@ -813,8 +875,8 @@ static ErrorCode_t GetPlugState(void *pvCON)
     /** 检测插枪状态驱动接口  */
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
-        THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL);
-        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
+        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCCState == CC_PE &&
                 pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)
@@ -828,7 +890,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     }
     else if(pCON->info.ucSocketType == defSocketTypeC)
     {
-        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL);
+        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)
         {
@@ -1299,17 +1361,17 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.dRatedPower = 7;
 
     pCON->info.GetCONCfg = GetCONCfg;
-
-    pCON->info.SetCONType = SetCONType;
-    pCON->info.SetSocketType = SetSocketType;
-    pCON->info.SetVolatageUpperLimits = SetVolatageUpperLimits;
-    pCON->info.SetVolatageLowerLimits = SetVolatageLowerLimits;
-    pCON->info.SetACTempUpperLimits = SetACTempUpperLimits;
-    pCON->info.SetACTempLowerLimits = SetACTempLowerLimits;
-    pCON->info.SetSocketTempUpperLimits = SetSocketTempUpperLimits;
-    pCON->info.SetSocketTempLowerLimits = SetSocketTempLowerLimits;
-    pCON->info.SetRatedCurrent = SetRatedCurrent;
-    pCON->info.SetRatedPower = SetRatedPower;
+    pCON->info.SetCONCfg = SetCONCfg;
+//    pCON->info.SetCONType = SetCONType;
+//    pCON->info.SetSocketType = SetSocketType;
+//    pCON->info.SetVolatageUpperLimits = SetVolatageUpperLimits;
+//    pCON->info.SetVolatageLowerLimits = SetVolatageLowerLimits;
+//    pCON->info.SetACTempUpperLimits = SetACTempUpperLimits;
+//    pCON->info.SetACTempLowerLimits = SetACTempLowerLimits;
+//    pCON->info.SetSocketTempUpperLimits = SetSocketTempUpperLimits;
+//    pCON->info.SetSocketTempLowerLimits = SetSocketTempLowerLimits;
+//    pCON->info.SetRatedCurrent = SetRatedCurrent;
+//    pCON->info.SetRatedPower = SetRatedPower;
 
     //memset(pCON->status.ucHeldCardID, 0, defCardIDLength);
     pCON->status.dACLTemp = 0;

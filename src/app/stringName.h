@@ -8,9 +8,9 @@
 #ifndef STRINGNAME_H_INCLUDED
 #define STRINGNAME_H_INCLUDED
 
-#define pathOrder       "system/order.txt"
-#define pathEVSECfg     "system/evse.cfg"
-#define pathSysconf     "system/sysconf.cfg"
+#define pathOrder       "system\\order.txt"
+#define pathEVSECfg     "system\\evse.cfg"
+#define pathSysconf     "system\\sysconf.cfg"
 
 
 #define jnEVSESN        "EVSESN"

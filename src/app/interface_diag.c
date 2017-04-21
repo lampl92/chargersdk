@@ -164,7 +164,7 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
             /** @todo (rgw#1#): 向系统告警 */
@@ -239,7 +239,7 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
             /** @todo (rgw#1#): 系统恢复   */
@@ -345,7 +345,7 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, 80), ERR_LEVEL_WARNING);
+                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, 80), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
                 xsprintf(strTimerName, "TimerCON%d_CurrUp_Fix", id);
                 pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
                                                   defDiagCurrDummyCyc,
@@ -444,7 +444,7 @@ void DiagTempError(CON_t *pCON)
     case ERR_LEVEL_CRITICAL:
         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
+        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
         break;
     default:
         break;
@@ -467,7 +467,7 @@ void DiagTempError(CON_t *pCON)
     case ERR_LEVEL_CRITICAL:
         //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL);
+        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
         break;
     default:
         break;
@@ -492,7 +492,7 @@ void DiagTempError(CON_t *pCON)
         case ERR_LEVEL_CRITICAL:
             //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
-            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL);
+            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;
@@ -515,7 +515,7 @@ void DiagTempError(CON_t *pCON)
         case ERR_LEVEL_CRITICAL:
             //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
-            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL);
+            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;

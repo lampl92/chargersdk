@@ -112,11 +112,9 @@ void create_evsecfg_file(void)
     case FR_OK:
         f_write(&f, strEVSECfg, strlen(strEVSECfg), &bw);
         f_close(&f);
-        return TRUE;
     case FR_EXIST:
     default:
         f_close(&f);
-        return FALSE;
     }
 }
 extern void retarget_init(void);

@@ -16,18 +16,187 @@
 #include "gdsl_list.h"
 #include "gdsl_perm.h"
 #include "user_app.h"
+#include "cfg_parse.h"
 //extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               设置充电桩信息到配置文件
 /---------------------------------------------------------------------------*/
+static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam);
+static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+static void TemplSegFree (gdsl_element_t e);
+static gdsl_element_t TemplSegAlloc(void *pTemplSeg);
+
+
+void testSetTemplEx(void)
+{
+    TemplSeg_t tmpTempl;
+    gdsl_list_t plCfgTempl;
+    struct tm *ts;
+    int i;
+    plCfgTempl = gdsl_list_alloc ("tmpTempl", TemplSegAlloc, TemplSegFree);
+    for(i = 0; i < 5; i++)
+    {
+        strcpy(tmpTempl.strStartTime, "12:00");
+        strcpy(tmpTempl.strEndTime, "13:00");
+        tmpTempl.dSegFee = i + 1;
+        gdsl_list_insert_tail(plCfgTempl, &tmpTempl);
+    }
+
+    pEVSE->info.SetEVSECfg(pEVSE, jnTemplSegArray, plCfgTempl, ParamTypeList);
+    gdsl_list_free(plCfgTempl);
+}
+
 /** @todo (rgw#1#): 所有设置参数增加范围校验, 可以在这里进行校验, 也可以在界面输入的时候进行校验.  */
 
+/** @brief EVSE配置函数,
+ *
+ * @param pvEVSE void*
+ * @param jnItemString uint8_t*
+ * @param pvCfgParam void* 当时段为0时设置为NULL
+ * @param type uint8_t
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+{
+    cJSON *jsEVSECfgObj;
+    cJSON *jsItem;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    if(jsEVSECfgObj == NULL)
+    {
+        return errcode;
+    }
+    jsItem = jsEVSECfgObj->child;
+    do
+    {
+        if(strcmp(jsItem->string, jnItemString) == 0)
+        {
+            switch(type)
+            {
+            case ParamTypeU8:
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
+                break;
+            case ParamTypeU16:
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
+                break;
+            case ParamTypeU32:
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
+                break;
+            case ParamTypeDouble:
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
+                break;
+            case ParamTypeString:
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                break;
+            case ParamTypeList:
+                SetTemplEx(pvEVSE, jsEVSECfgObj, pvCfgParam);
+                break;
+            default:
+                break;
+            }
+            break;//退出while循环
+        }
+        else
+        {
+            jsItem = jsItem->next;
+        }
+    }
+    while(jsItem != NULL);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+
+    return errcode;
+}
+static cJSON *jsTemplSegArrayItemObjCreate(void)
+{
+    cJSON *jsTemplSegArrayItemObj;
+
+    jsTemplSegArrayItemObj = cJSON_CreateObject();
+
+    return jsTemplSegArrayItemObj;
+}
+#if 0
 static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
-{}
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    ErrorCode_t errcode;
+    uint8_t *ptmpSN;
+    uint8_t tmpStrLength;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    ptmpSN = (uint8_t *)pvCfgParam;
+
+    if(jsEVSECfgObj == NULL)
+    {
+        goto exit;
+    }
+    /** @todo (rgw#1#): 在这里可以获取原参数与新参数.可以通过send队列方式发送到操作记录 */
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnEVSESN, cJSON_CreateString(ptmpSN));
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+        goto exit;
+    }
+exit:
+    return errcode;
+}
 static ErrorCode_t SetID(void *pvEVSE, void *pvCfgParam)
-{}
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    ErrorCode_t errcode;
+    uint8_t *ptmpID;
+    uint8_t tmpStrLength;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    ptmpID = (uint8_t *)pvCfgParam;
+
+    if(jsEVSECfgObj == NULL)
+    {
+        goto exit;
+    }
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnEVSEID, cJSON_CreateString(ptmpID));
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+        goto exit;
+    }
+exit:
+    return errcode;
+}
 static ErrorCode_t SetType(void *pvEVSE, void *pvCfgParam)
-{}
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    ErrorCode_t errcode;
+    uint8_t tmpType;
+
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    tmpType = *((uint8_t *)pvCfgParam);
+
+    if(jsEVSECfgObj == NULL)
+    {
+        goto exit;
+    }
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpType));
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+        goto exit;
+    }
+exit:
+    return errcode;
+}
 static ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
 {
     EVSE_t *pEVSE;
@@ -37,8 +206,8 @@ static ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
 
 
     pEVSE = (EVSE_t *)pvEVSE;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
     errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
     tmpTotal = *((uint8_t *)pvCfgParam);
 
     if(jsEVSECfgObj == NULL)
@@ -54,10 +223,130 @@ static ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
 exit:
     return errcode;
 }
-ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
-{}
-ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
-{}
+static ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    ErrorCode_t errcode;
+    uint8_t tmpTotal;
+
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+    tmpTotal = *((uint8_t *)pvCfgParam);
+
+    if(jsEVSECfgObj == NULL)
+    {
+        goto exit;
+    }
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpTotal));
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+        goto exit;
+    }
+exit:
+    return errcode;
+}
+
+static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
+{
+    EVSE_t *pEVSE;
+    cJSON *jsEVSECfgObj;
+    cJSON *jsTemplSegArray;
+    cJSON *jsTemplSegArrayItemObj;
+    ErrorCode_t errcode;
+    gdsl_list_t plCfgTempl;
+    TemplSeg_t *ptCfgTempl;
+    uint8_t ucTemplNum;
+    TemplSeg_t tmpTemplSeg;
+    int i;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    plCfgTempl = (gdsl_list_t)pvCfgParam;
+    errcode = ERR_NO;
+    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
+
+
+    if(jsEVSECfgObj == NULL)
+    {
+        return errcode;
+    }
+    jsTemplSegArray = cJSON_CreateArray();
+    ucTemplNum = gdsl_list_get_size(plCfgTempl);
+    for(i = 1; i <= ucTemplNum; i++)
+    {
+        ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
+        jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
+
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateNumber(ptCfgTempl->tStartTime));
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateNumber(ptCfgTempl->tEndTime));
+        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
+
+        cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
+    }
+
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    if(errcode != ERR_NO)
+    {
+//        此处注释只为说明该条件下进行的操作
+//        cJSON_Delete(jsTemplSegArray);
+//        return errcode;
+    }
+    cJSON_Delete(jsTemplSegArray);
+    return errcode;
+}
+#endif
+/** @brief
+ *
+ * @param pvEVSE void*
+ * @param jsEVSECfgObj cJSON*
+ * @param pvCfgParam void*
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam)
+{
+    EVSE_t *pEVSE;
+
+    cJSON *jsTemplSegArray;
+    cJSON *jsTemplSegArrayItemObj;
+    ErrorCode_t errcode;
+    gdsl_list_t plCfgTempl;
+    TemplSeg_t *ptCfgTempl;
+    uint8_t ucTemplNum;
+    TemplSeg_t tmpTemplSeg;
+    int i;
+
+    pEVSE = (EVSE_t *)pvEVSE;
+    plCfgTempl = (gdsl_list_t)pvCfgParam;
+    errcode = ERR_NO;
+
+    jsTemplSegArray = cJSON_CreateArray();
+    if(plCfgTempl != NULL)
+    {
+        ucTemplNum = gdsl_list_get_size(plCfgTempl);
+        if(ucTemplNum > 0)
+        {
+            for(i = 1; i <= ucTemplNum; i++)
+            {
+                ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
+                jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateString(ptCfgTempl->strStartTime));
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateString(ptCfgTempl->strEndTime));
+                cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
+
+                cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
+            }
+        }
+    }
+
+    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
+
+    return errcode;
+}
 /*---------------------------------------------------------------------------/
 /                               从文件获取充电桩信息
 /---------------------------------------------------------------------------*/
@@ -573,12 +862,12 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     {
         return errcode;
     }
-    THROW_ERROR(defDevID_File, errcode = GetSN(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetID(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetType(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetTotalCON(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetLngLat(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
-    THROW_ERROR(defDevID_File, errcode = GetTempl(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, errcode = GetSN(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetSN()");
+    THROW_ERROR(defDevID_File, errcode = GetID(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetID()");
+    THROW_ERROR(defDevID_File, errcode = GetType(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetType()");
+    THROW_ERROR(defDevID_File, errcode = GetTotalCON(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetTotalCON()");
+    THROW_ERROR(defDevID_File, errcode = GetLngLat(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetLngLat()");
+    THROW_ERROR(defDevID_File, errcode = GetTempl(pvEVSE, jsEVSEObj), ERR_LEVEL_WARNING, "GetTempl");
 #ifdef DEBUG_CFG_PARSE
     printf_safe("********************************\n");
 #endif
@@ -780,12 +1069,13 @@ EVSE_t *EVSECreate(void)
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
     /** @todo (rgw#1#): 以下修改为Set参数 */
-    pEVSE->info.SetSN = SetSN;
-    pEVSE->info.SetID = SetID;
-    pEVSE->info.SetType = SetType;
-    pEVSE->info.SetTotalCON = SetTotalCON;
-    pEVSE->info.SetLngLat = SetLngLat;
-    pEVSE->info.SetTempl = SetTempl;
+    pEVSE->info.SetEVSECfg = SetEVSECfg;
+//    pEVSE->info.SetSN = SetSN;
+//    pEVSE->info.SetID = SetID;
+//    pEVSE->info.SetType = SetType;
+//    pEVSE->info.SetTotalCON = SetTotalCON;
+//    pEVSE->info.SetLngLat = SetLngLat;
+//    pEVSE->info.SetTempl = SetTempl;
 
 
     pEVSE->info.plTemplSeg = gdsl_list_alloc("Templ", TemplSegAlloc, TemplSegFree);
@@ -820,7 +1110,7 @@ static void CONInit(void)
     {
         pCON[i] = CONCreate(i);
 
-        THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING);
+        THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
 
         pListCON->Add(pListCON, pCON[i]);
     }
@@ -828,7 +1118,7 @@ static void CONInit(void)
 void EVSEinit(void)
 {
     pEVSE = EVSECreate();
-    THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING);
+    THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 
     pRFIDDev = RFIDDevCreate();

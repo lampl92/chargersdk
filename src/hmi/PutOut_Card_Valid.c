@@ -88,7 +88,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 
     xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_valid);
-    if((num++) >= 3)
+    if((num++) >= 50)
     {
         num = 0;
         if((wait_timer.card_valid--) == 0)
@@ -140,15 +140,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         switch(Id)
         {
         case ID_BUTTON_0: // Notifications sent by 'Button'
+            //PutOut_Home();
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
-                PutOut_Home();
+                //PutOut_Home();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)

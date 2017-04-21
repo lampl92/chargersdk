@@ -25,7 +25,7 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
-    THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING);//创建order.txt
+    THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//创建order.txt
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
@@ -104,12 +104,12 @@ void vTaskEVSEData(void *pvParameters)
                                           pdTRUE, pdFALSE, 0);
         if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
-            THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING);
+            THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "taskdata GetEVSECfg");
 
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING);
+                THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING, "taskdata GetCONCfg");
             }
         }
         /* end of 读取文件配置 */

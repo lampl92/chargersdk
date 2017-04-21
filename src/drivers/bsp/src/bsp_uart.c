@@ -459,7 +459,7 @@ can
                                             {                                                   \
                                                 if(huart->ErrorCode == HAL_USART_ERROR_##ERR)   \
                                                 {                                               \
-                                                    ThrowErrorCode(defDevID_##DEV, ERR_##DEV##_##ERR, LEVEL);   \
+                                                    ThrowErrorCode(defDevID_##DEV, ERR_##DEV##_##ERR, LEVEL, "USART ERR");   \
                                                 }                                               \
                                             }
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)

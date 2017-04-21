@@ -74,17 +74,17 @@ typedef struct _CONInfo
     double dRatedPower;                      //保留一位小数
 
     pCONGetCfg_ft GetCONCfg;
-
-    pCONSetCfg_ft SetCONType;
-    pCONSetCfg_ft SetSocketType;
-    pCONSetCfg_ft SetVolatageUpperLimits;
-    pCONSetCfg_ft SetVolatageLowerLimits;
-    pCONSetCfg_ft SetACTempUpperLimits;
-    pCONSetCfg_ft SetACTempLowerLimits;
-    pCONSetCfg_ft SetSocketTempUpperLimits;
-    pCONSetCfg_ft SetSocketTempLowerLimits;
-    pCONSetCfg_ft SetRatedCurrent;
-    pCONSetCfg_ft SetRatedPower;
+    ErrorCode_t (*SetCONCfg)(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+//    pCONSetCfg_ft SetCONType;
+//    pCONSetCfg_ft SetSocketType;
+//    pCONSetCfg_ft SetVolatageUpperLimits;
+//    pCONSetCfg_ft SetVolatageLowerLimits;
+//    pCONSetCfg_ft SetACTempUpperLimits;
+//    pCONSetCfg_ft SetACTempLowerLimits;
+//    pCONSetCfg_ft SetSocketTempUpperLimits;
+//    pCONSetCfg_ft SetSocketTempLowerLimits;
+//    pCONSetCfg_ft SetRatedCurrent;
+//    pCONSetCfg_ft SetRatedPower;
 } CONInfo_t;
 
 typedef struct _CONStatus

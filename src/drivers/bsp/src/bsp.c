@@ -134,8 +134,9 @@ void bsp_Init(void)
     bsp_Uart_Init();   /* 初始化串口 */
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
-
-
+//    bsp_Touch_Init();
+LCD_Init();
+TP_Init();
 }
 
 void bsp_Error_Handler(void)

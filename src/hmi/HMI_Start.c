@@ -1,30 +1,35 @@
 #include "GUI.h"
+#include "xbffontcreate.h"
+#include "ff.h"
+
+uint8_t calebrate_done = 0;
+
 void MainTask(void)
 {
-	GUI_CURSOR_Show();
+    if(calebrate_done == 0)
+    {
+        //GUI_Touch_Calibrate();
+        calebrate_done = 1;
+        //LCD_X_Config();
+    }
+	//GUI_CURSOR_Show();//Êó±ê¼ıÍ·ÏÔÊ¾º¯Êı£¬Ä¬ÈÏ²»ÏÔÊ¾
+	//CreateEVSE();
+    Create_XBF12("system/XBFËÎÌå12.xbf");//´´½¨xbf12ºÅÂ·¾¶
+    Create_XBF16("system/XBFËÎÌå16.xbf");//´´½¨xbf16ºÅÂ·¾¶
+    Create_XBF24("system/XBFËÎÌå24.xbf");//´´½¨xbf24ºÅÂ·¾¶
+    Create_XBF36("system/XBFËÎÌå36.xbf");//´´½¨xbf36ºÅÂ·¾¶
 
-    Create_XBF12("system/XBFå®‹ä½“12.xbf");//åˆ›å»ºxbf12å·è·¯å¾„
-    Create_XBF16("system/XBFå®‹ä½“16.xbf");//åˆ›å»ºxbf16å·è·¯å¾„
-    Create_XBF24("system/XBFå®‹ä½“24.xbf");//åˆ›å»ºxbf24å·è·¯å¾„
-    Create_XBF36("system/XBFå®‹ä½“36.xbf");//åˆ›å»ºxbf36å·è·¯å¾„
 
-
-    WM_SetDesktopColor(GUI_WHITE);//è®¾ç½®èƒŒæ™¯é¢œè‰²
+    WM_SetDesktopColor(GUI_WHITE);//ÉèÖÃ±³¾°ÑÕÉ«
 
     GUI_UC_SetEncodeUTF8();
-    //Createbmptest();
+    //keypad_demo();
+//	CreateFramewin();
+//    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
     PutOut_Home();
-    //PutOut_Card_Valid();
-	//PutOut_Machine_Error();
-	//PutOut_Card_Info();
-	//PutOut_Charging();
-	//PutOut_Charging_2dimen();
-	//PutOut_Charge_Done();
-    //PutOut_Manager_InfoAnalog();
-	//PutOut_Manager_InfoStatus();
-	//keypad_demo();
-	//Createtest();
-	//CreateAlarmLog();
-
-	//GUI_Touch_Calibrate();
+	//PutOut_Card_Valid();
+	while(1)
+	{
+		GUI_Delay(10);
+	}
 }

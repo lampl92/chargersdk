@@ -56,7 +56,7 @@ void vTaskEVSECharge(void *pvParameters)
                     }
                     else
                     {
-                        THROW_ERROR(i, pCON->status.SetBTypeSocketLock(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL);
+                        THROW_ERROR(i, pCON->status.SetBTypeSocketLock(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                         vTaskDelay(defRelayDelay);
                     }
                 }
@@ -66,7 +66,7 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
                     pCON->status.SetLoadPercent(pCON, 100);/** @fixme (rgw#1#): 设置PWM脉宽，100%负载启动 */
-                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL);
+                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
                     if(pCON->status.xCPState == CP_9V_PWM || pCON->status.xCPState == CP_6V_PWM) //后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
                     {
@@ -103,7 +103,7 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsException & defEventBitExceptionChargeTimer) == defEventBitExceptionChargeTimer)
                 {
                     xTimerDelete(pCON->status.xHandleTimerCharge, 0);
-                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
+                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_PRECONTRACT_LOSEPLUG");
                     vTaskDelay(defRelayDelay);
                     if(pCON->status.xCPState == CP_12V)
                     {
@@ -123,7 +123,7 @@ void vTaskEVSECharge(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONAuthed) == defEventBitCONAuthed)
                 {
-                    THROW_ERROR(i, pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL);
+                    THROW_ERROR(i, pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
                     vTaskDelay(defRelayDelay);
                     if(pCON->status.ucRelayLState == SWITCH_ON &&
                             pCON->status.ucRelayNState == SWITCH_ON)
@@ -149,7 +149,7 @@ void vTaskEVSECharge(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2主动断开
                 {
-                    THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
+                    THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING S2 Open");
                     vTaskDelay(defRelayDelay);
                     if(pCON->status.ucRelayLState == SWITCH_OFF &&
                             pCON->status.ucRelayNState == SWITCH_OFF)
@@ -160,7 +160,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
-                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL);
+                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING Without \"S2 open\"");
                     vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
                     pCON->status.xCPState = CP_12V;
@@ -171,7 +171,7 @@ void vTaskEVSECharge(void *pvParameters)
                                                            defEventBitCONS2Opened,
                                                            pdFALSE, pdTRUE, 100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
                         //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
-                        THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
+                        THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "CP_12V");
                         vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
                         pCON->status.ucRelayLState = SWITCH_OFF;
@@ -200,7 +200,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_ERROR:
-                THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL);
+                THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_ERROR");
                 vTaskDelay(defRelayDelay);
                 /** @todo (rgw#1#): 等待diag处理完成 */
                 pCON->state = STATE_CON_IDLE;
