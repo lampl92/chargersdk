@@ -2,6 +2,7 @@
 #include "myiic.h"
 #include "user_app.h"
 #include <stdlib.h>
+#include "touch.h"
 uint16_t Read_Lis2ds12(uint8_t CMD)
 {
     u8 count = 0;

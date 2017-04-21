@@ -21,6 +21,7 @@
 // USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
 #include "touchtimer.h"
+#include "interface.h"
 // USER END
 
 #include "DIALOG.h"

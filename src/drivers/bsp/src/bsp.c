@@ -126,7 +126,6 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
-    bsp_Touch_Init();
 #ifndef DEBUG_INIT
     Peripheral_Init();
 #endif
