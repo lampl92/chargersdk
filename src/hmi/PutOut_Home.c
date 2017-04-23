@@ -20,6 +20,7 @@
 
 // USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
+#include "touchtimer.h"
 // USER END
 
 #include "DIALOG.h"
@@ -313,6 +314,7 @@ void PutOut_Home()
 
     while(1)
     {
+        GUI_Delay(500);
         uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                         defEventBitGotIDtoHMI,
                                         pdTRUE, pdTRUE, 0);
@@ -322,7 +324,7 @@ void PutOut_Home()
             PutOut_Card_Info();
         }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(500);
+        vTaskDelay(500);
     }
 }
 // USER END

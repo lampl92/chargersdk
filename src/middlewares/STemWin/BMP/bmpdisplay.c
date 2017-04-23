@@ -87,12 +87,12 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
 	bmpbuffer = malloc(BMPFile.obj.objsize);//申请内存
 	if(bmpbuffer == NULL) return 2;
 
-    taskENTER_CRITICAL();	//临界区
+    //taskENTER_CRITICAL();	//临界区
 
 	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //读取数据
 	if(result != FR_OK) return 3;
 
-    taskEXIT_CRITICAL();//退出临界区
+    //taskEXIT_CRITICAL();//退出临界区
 
 	switch(mode)
 	{

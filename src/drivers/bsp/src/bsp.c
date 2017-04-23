@@ -134,8 +134,8 @@ void bsp_Init(void)
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
-LCD_Init();
-TP_Init();
+    LCD_Init();
+    TP_Init();
 }
 
 void bsp_Error_Handler(void)

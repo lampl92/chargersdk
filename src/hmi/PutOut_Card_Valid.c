@@ -81,23 +81,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void Caculate_RTC(WM_MESSAGE *pMsg)
 {
     uint8_t Timer_buf[10];
-    static uint8_t num = 0;
 
     WM_HWIN hWin = pMsg->hWin;
-
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
-
     xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_valid);
-    if((num++) >= 50)
-    {
-        num = 0;
-        if((wait_timer.card_valid--) == 0)
-        {
-            wait_timer.card_valid = 0;
-            //进行退出的跳页操作
-        }
-    }
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
+    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 }
 // USER END
 
@@ -151,7 +139,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
-                //PutOut_Home();
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_Home();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -208,14 +197,23 @@ static WM_HWIN CreateCardValid(void)
  */
 void PutOut_Card_Valid()
 {
+    WM_HWIN hWin;
+    static uint8_t i = 0;
+
     wait_timer.card_valid = 60;
-    CreateCardValid();
+    hWin = CreateCardValid();
+
     while(1)
     {
-        dispbmp("system/charge.bmp", 0, 250, 100, 1, 2);
-        //GUI_Delay(10);
+        GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(10);
+        if((wait_timer.card_valid--) == 0)
+        {
+            //跳出卡片非法页
+            WM_DeleteWindow(hWin);
+            PutOut_Home();
+        }
+        vTaskDelay(500);
     }
 }
 // USER END
