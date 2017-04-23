@@ -218,12 +218,11 @@ void UART7_IRQHandler(void)
 //len:·¢ËÍµÄ×Ö½ÚÊý(ÎªÁËºÍ±¾´úÂëµÄ½ÓÊÕÆ¥Åä,ÕâÀï½¨Òé²»Òª³¬¹ý64¸ö×Ö½Ú)
 void RS485_Send_Data(u8 *buf,u8 len)
 
-{RUN_ON;
+{
 	RS485_EN;			//ÉèÖÃÎª·¢ËÍÄ£Ê½
 	HAL_UART_Transmit(&UART7_RS485Handler,buf,len,1000);//´®¿Ú2·¢ËÍÊý¾Ý
 	RS485_DIS;
     RS485_RX_CNT=0;
-    RUN_OFF;
 }
 //RS485²éÑ¯½ÓÊÕµ½µÄÊý¾Ý
 //buf:½ÓÊÕ»º´æÊ×µØÖ·
@@ -324,11 +323,16 @@ void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint
     RS485_TX_BUF[6]=(VREF_CRC>>8)&0Xff;
     RS485_TX_BUF[7]=VREF_CRC&0Xff;
     RS485_Send_Data(&RS485_TX_BUF,8);
+    flag_rs485++;
 
+//直接接收数据
+bsp_DelayMS(100);
+electricity_meter_analysis();
 }
 void electricity_meter_analysis(void)
 {
     uint16_t crc_vref;
+    uint8_t i;
      crc_vref=c_crc(&RS485_RX_MODBUS[0],5);
     if((RS485_RX_MODBUS[5]!= crc_vref/256)||(RS485_RX_MODBUS[6]!= crc_vref%256))
     {
@@ -347,6 +351,7 @@ void electricity_meter_analysis(void)
             A1.an[2]=RS485_RX_MODBUS[4];
             Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_va=A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_va=0;
+            flag_rs485=0;
         }
         if(Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_ia==1)
         {
@@ -354,6 +359,7 @@ void electricity_meter_analysis(void)
             A1.an[2]=RS485_RX_MODBUS[4];
             Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_ia=A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_ia=0;
+            flag_rs485=0;
         }
         if(Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_power==1)
         {
@@ -361,6 +367,7 @@ void electricity_meter_analysis(void)
             A1.an[2]=RS485_RX_MODBUS[4];
             Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_power=A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_power=0;
+            flag_rs485=0;
         }
         if(Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_electric_energy==1)
         {
@@ -368,6 +375,7 @@ void electricity_meter_analysis(void)
             A1.an[2]=RS485_RX_MODBUS[4];
             Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_electric_energy=A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_electric_energy=0;
+            flag_rs485=0;
         }
         if(Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_frequency==1)
         {
@@ -375,6 +383,11 @@ void electricity_meter_analysis(void)
             A1.an[2]=RS485_RX_MODBUS[4];
             Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_frequency=A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_frequency=0;
+            flag_rs485=0;
+        }
+        for(i=0;i<64;i++)
+        {
+            RS485_RX_MODBUS[i]=0;
         }
 
     }

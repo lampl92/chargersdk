@@ -383,32 +383,49 @@ void Power_out_n_pwm_ctrl(void)
 void POWER_L_CLOSE(void)
 {
 POWER_L_ON;
-flag_pwm_out_l=1;
-flag_power_out_l=0;
+flag_power_out_l=1;
+flag_pwm_out_l=0;
 timer_relay_ms=0;
 }
 void POWER_N_CLOSE(void)
 {
 POWER_N_ON;
-flag_power_out_n=0;
-flag_pwm_out_n=1;
+flag_power_out_n=1;
+flag_pwm_out_n=0;
 timer_relay_ms=0;
 }
 void POWER_L_OPEN(void)
 {
-flag_power_out_l=1;
+flag_power_out_l=0;
 POWER_L_OFF;
 flag_pwm_out_l=0;
 }
 void POWER_N_OPEN(void)
 {
-flag_power_out_n=1;
+flag_power_out_n=0;
 POWER_N_OFF;
 flag_pwm_out_n=0;
+}
+uint8_t Get_State_relay()
+{ uint8_t relay_num,i;
+    for (i=0;i<5;i++)
+    {
+        relay_num+=(read_pca9554_2()>>1)&0x01;
+    }
+    if(relay_num!=0)
+    {
+    return 1;
+    }
+    else
+    {
+    return 0;
+    }
+
 }
 void Peripheral_Init(void)
 {
     MX_GPIO_Init();
+        IIC_Init();
     PCA9554_init();
     MX_DMA_Init();
     MX_ADC1_Init();
@@ -417,15 +434,17 @@ void Peripheral_Init(void)
     MX_TIM4_Init();//2ºÅÇ¹PWMÆµÂÊ1K
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     RS485_Init(9600);
+    Lis2dh12_init();
     DMA_START();
-    IIC_Init();
-    TIMER5_ON;
-    TIMER3_ON;
     PWM1_ON;
     PWM2_ON;
-    Write_Lis2ds12(0X20,0X77);
-    Write_Lis2ds12(0X27,0XFF);
-	Write_Lis2ds12(0X23,0X38);
-
+    TIMER3_ON;
+    TIMER5_ON;
+    //POWER_L_CLOSE();
+   // POWER_N_CLOSE();
+    Get_State_relay();
+	//led_ctrl(1,red,flicker);
+	//led_ctrl(1,green,keep_off);
+	//led_ctrl(1,blue,keep_off);
 
 }
