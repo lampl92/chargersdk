@@ -14,6 +14,7 @@
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
+#include "electric_energy_meter.h"
 /*---------------------------------------------------------------------------/
 /                               设置充电接口信息到配置文件
 /---------------------------------------------------------------------------*/
@@ -547,19 +548,20 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     errcode = ERR_NO;
 
     /** 获取电流 */
+if(Electricity_meter[ucCONID].flag.flag_erro==1)
+{
+return ERR_CON_METER_FAULT;
+}
+else
+{
 
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpCurr = 32;
 #else
-        tmpCurr = get_ia();
+        tmpCurr = Get_Electricity_meter_massage_current(ucCONID);
 #endif
-    }
-    if(ucCONID == 1)
-    {
-        //tmpCurr=get_ia();
-    }
+
+}
 
     /*********************/
 
@@ -592,8 +594,15 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
 #else
-    Get_electricity_meter_massage(ucCONID, read, frequency, 1);
-    tmpFreq = Electricity_meter[ucCONID].massage.massage_frequency;
+if(Electricity_meter[ucCONID].flag.flag_erro==1)
+{
+return ERR_CON_METER_FAULT;
+}
+else
+{
+    tmpFreq = Get_Electricity_meter_massage_frequency(ucCONID);
+}
+
 #endif
 
     /*********************/
@@ -615,12 +624,19 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
-#ifdef DEBUG_DIAG_DUMMY
-    tmpPower = 100;
-#else
-    Get_electricity_meter_massage(ucCONID, read, electric_energy, 1);
-    tmpPower = Electricity_meter[ucCONID].massage.massage_electric_energy;
-#endif
+    if(Electricity_meter[ucCONID].flag.flag_erro==1)
+   {
+    return ERR_CON_METER_FAULT;
+   }
+    else
+   {
+    #ifdef DEBUG_DIAG_DUMMY
+        tmpPower = 100;
+    #else
+        tmpPower = Get_Electricity_meter_massage_energy(ucCONID);
+    #endif
+    }
+
     /*********************/
 
     pCON->status.dChargingPower = tmpPower;
@@ -638,7 +654,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
  */
 static ErrorCode_t GetCPState(void *pvCON)
 {
-    float cp1;
+    float cp1,cp2;
     CON_t *pCON;
     uint8_t ucCONID;
     CONStatusType_t tmpCPState;
@@ -693,12 +709,51 @@ static ErrorCode_t GetCPState(void *pvCON)
         else
         {
             tmpCPState = CP_ERR;
+            return ERR_CON_CP_FAULT;
         }
 #endif
     }
     else if(ucCONID == 1)
     {
-        ;
+        cp1 = get_CP2();
+        if((cp2 < 12.8f) && (cp2 > 11.2f))
+        {
+            if(TIM4->CCR1 != 1000)
+            {
+                tmpCPState = CP_12V_PWM;
+            }
+            else
+            {
+                tmpCPState = CP_12V;
+            }
+        }
+        else if((cp2 < 9.8f) && (cp2 > 8.2f))
+        {
+            if(TIM4->CCR1 != 1000)
+            {
+                tmpCPState = CP_9V_PWM;
+            }
+            else
+            {
+                tmpCPState = CP_9V;
+            }
+        }
+        else if((cp2 < 6.8f) && (cp2 > 5.2f))
+        {
+            if(TIM2->CCR1 != 1000)
+            {
+                tmpCPState = CP_6V_PWM;
+            }
+            else
+            {
+                tmpCPState = CP_6V;
+            }
+        }
+        else
+        {
+            tmpCPState = CP_ERR;
+            return ERR_CON_CP_FAULT;
+        } ;
     }
     /*********************/
 
@@ -789,7 +844,6 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     }
     //负载百分比输入范围0~1000；
     //PWM
-
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;

@@ -32,7 +32,6 @@
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 
-
 #define cs_zl_set do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
@@ -68,11 +67,12 @@
 #define read     0x03
 #define write    0x10
 
-#define voltage  0x000A
-#define current  0x0016
-#define power    0x001C
-#define electric_energy 0x0065
-#define frequency 0x0030
+#define voltage  0x000b
+#define current  0x000c
+#define power    0x000d
+#define electric_energy_l 0x0001
+#define electric_energy_h 0x0000
+#define frequency 0x0011
 
 #define	AXISDATA_REG	0x28
 
@@ -143,8 +143,10 @@ typedef struct
        uint8_t flag_va;
        uint8_t flag_ia;
        uint8_t flag_power;
-       uint8_t flag_electric_energy;
+       uint8_t flag_electric_energy_l;
+       uint8_t flag_electric_energy_h;
        uint8_t flag_frequency;
+       uint8_t flag_erro;
    }flag;
      struct
    {
@@ -152,6 +154,8 @@ typedef struct
        float  massage_ia;
        float massage_power;
        float massage_electric_energy;
+       float massage_electric_energy_l;
+       float massage_electric_energy_h;
        float massage_frequency;
    }massage;
 
@@ -212,7 +216,8 @@ void POWER_L_CLOSE(void);
 void POWER_N_CLOSE(void);
 void POWER_L_OPEN(void);
 void POWER_N_OPEN(void);
-uint8_t yy_test,DC_channel,flag_rs485;
+uint8_t yy_test,DC_channel;
+uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t vref,num_cp1,num_cp2;
 uint8_t RS485_RX_MODBUS_CNT;

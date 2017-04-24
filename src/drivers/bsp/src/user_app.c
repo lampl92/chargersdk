@@ -4,7 +4,9 @@
 #include <math.h>
 #include "user_app.h"
 #include "bsp_timer.h"
+#include "electric_energy_meter.h"
 #include "FreeRTOS.h"
+float frequency_test;
 const double  resistance[154] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
@@ -72,7 +74,7 @@ double get_CD4067(void)
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
     return Sys_samp.DC.CD4067;
 }
-double get_dc_massage(void)
+double get_dc_massage(uint8_t channel)
 {
     uint16_t j, ad_samp_value;
     double ad_value, re_value;
@@ -83,7 +85,7 @@ double get_dc_massage(void)
     Chip1.d_select = DC_channel >> 3 & 0x01;
     Chip1.cs1_select = 1;
     write_pca9554_1();
-    Delay_ms(1);
+    Delay_ms(2);
     ad_samp_value = get_CD4067();
     switch (DC_channel)
     {
@@ -237,7 +239,10 @@ double get_CP1(void)
     CP1_sum_sys = 0;
     num_cp1 = 0;
     return Sys_samp.DC.CP1;
+
+
 }
+
 double get_CP2(void)
 {
     unsigned short i;
@@ -427,6 +432,7 @@ uint8_t Get_State_relay()
 }
 void Peripheral_Init(void)
 {
+
     MX_GPIO_Init();
         IIC_Init();
     PCA9554_init();
@@ -446,6 +452,7 @@ void Peripheral_Init(void)
     POWER_L_OPEN();
     POWER_N_OPEN();
    Get_State_relay();
+   frequency_test=Get_Electricity_meter_massage_voltage(1);
 	//led_ctrl(1,red,flicker);
 	//led_ctrl(1,green,keep_off);
 	//led_ctrl(1,blue,keep_off);
