@@ -72,7 +72,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
     { BUTTON_CreateIndirect, "退出", ID_BUTTON_0, 554, 317, 100, 36, 0, 0x0, 0 },//倒计时退出
-    //{ BUTTON_CreateIndirect, "确定", ID_BUTTON_1, 554, 272, 100, 36, 0, 0x0, 0 },//枪锁完全锁止后的确认按钮
+    { BUTTON_CreateIndirect, "确定", ID_BUTTON_1, 554, 272, 100, 36, 0, 0x0, 0 },//枪锁完全锁止后的确认按钮
     { TEXT_CreateIndirect, "Text", ID_TEXT_5, 600, 324, 61, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_6, 223, 228, 500, 61, 0, 0x0, 0 },//是否提示余额不足
     { TEXT_CreateIndirect, "Text", ID_TEXT_0, 222, 149, 80, 30, 0, 0x0, 0 }, //卡号
@@ -138,7 +138,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
                                     pdTRUE, pdTRUE, 0);
     if((uxBitRFID & defEventBitBadIDReqDisp) == defEventBitBadIDReqDisp)
     {
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
         /** @todo (zshare#1#): 未注册卡处理流程 ，处理完成之后，发送DispOK事件*/
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitBadIDReqDispOK);
     }
@@ -160,7 +160,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
     }
-
+Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
     /*end of 未进GoodID ,BadID和OweID状态时显示内容*/
 }
 // USER END
@@ -206,13 +206,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
-//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "    ");
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
                     &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
-        WM_SetFocus(pMsg->hWin);
-        BUTTON_SetFocussable(pMsg->hWin,1);
         // USER END
         break;
     case WM_NOTIFY_PARENT:
@@ -233,6 +231,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 // USER START (Optionally insert code for reacting on notification message)
                 WM_DeleteWindow(pMsg->hWin);
                 PutOut_Home();
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_1: // Notifications sent by 'Button'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_RegisterDisp();
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_RegisterDisp();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)

@@ -32,6 +32,7 @@
 **********************************************************************
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0     (GUI_ID_USER + 0x10)
 #define ID_BUTTON_0     (GUI_ID_USER + 0x01)
 #define ID_BUTTON_1     (GUI_ID_USER + 0x04)
 #define ID_TEXT_0     (GUI_ID_USER + 0x08)
@@ -51,8 +52,18 @@
 #define ID_TEXT_7     (GUI_ID_USER + 0x02)
 #define ID_EDIT_1     (GUI_ID_USER + 0x03)
 #define ID_TEXT_8     (GUI_ID_USER + 0x09)
-
+#define ID_TEXT_9     (GUI_ID_USER + 0x0F)
 #define ID_TimerTime    0
+
+//14行1列，14个故障项
+#define TEXT_MAX_X 1
+#define TEXT_MAX_Y 14
+#define ERROR_LINE 14
+#define ERROR_CAL 1
+//后续将编辑和文本的滚轮方式用链表进行封装
+static EDIT_Handle _aahEdit[TEXT_MAX_Y][TEXT_MAX_X];
+static TEXT_Handle _aahText[ERROR_LINE][ERROR_CAL];
+static int _x,_y;
 // USER END
 
 /*********************************************************************
@@ -108,7 +119,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 286, 80, 30, 0, 0x0, 0 },
     // USER END
 };
-
 /*********************************************************************
 *
 *       Static code
@@ -129,14 +139,126 @@ static const void *_GetImageById(U32 Id, U32 *pSize)
     }
     return NULL;
 }
+static void _cbWindow(WM_MESSAGE *pMsg) {
+    WM_SCROLL_STATE ScrollState;
+    WM_HWIN      hItem;
+    char *dest = (char *)malloc(10);
+    static int flag = 0;
+    switch (pMsg->MsgId) {
+        case WM_CREATE:
+//            WINDOW_SetDefaultBkColor(GUI_GRAY);
+        break;
+        case WM_NOTIFY_PARENT:
+            if(pMsg->Data.v == WM_NOTIFICATION_VALUE_CHANGED)
+            {
+                if(WM_GetId(pMsg->hWinSrc) == GUI_ID_HSCROLL)
+                {
+                    /* 得到滚动条的状态，得到的数值好像是负值 才能使得 _x - ScrollState.v是正值 */
+                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
+                    if (_x != ScrollState.v)
+                    {
+                        int x, y;
+                        for (y = 0; y < TEXT_MAX_Y; y++)
+                        {
+                            for (x = 0; x < TEXT_MAX_X; x++)
+                            {
+                                WM_MoveWindow(_aahEdit[y][x], _x - ScrollState.v, 0);
+                            }
+                        }
+                    _x = ScrollState.v;
+                    }
+                }
+                else if(WM_GetId(pMsg->hWinSrc) == GUI_ID_VSCROLL)
+                {
+                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
+                    if (_y != ScrollState.v)
+                    {
+                        int x, y;
+                        for (y = 0; y < TEXT_MAX_Y; y++)
+                        {
+                            for (x = 0; x < TEXT_MAX_X; x++)
+                            {
+                                WM_MoveWindow(_aahEdit[y][x],0, _y - ScrollState.v);
+                            }
+                        }
+                        _y = ScrollState.v;
+                    }
+                }
+                else
+                {
+                    EDIT_SetText(_aahEdit[2][4],"adsfa");
+                    flag = EDIT_GetValue(_aahEdit[2][3]);
+                    EDIT_GetText(_aahEdit[2][4],dest,10);
+                    flag = EDIT_GetValue(_aahEdit[2][3]);
+                }
+            }
+            break;
+        default:
+        WM_DefaultProc(pMsg);
+    }
+}
+static void _cbDialog_Error()
+{
+    int x, y;
+    WM_HWIN hWindow;
+    SCROLLBAR_Handle hScroll;
+    SCROLLBAR_Handle wScroll;
+    uint8_t tmp[20] = {"交流输入故障"};
+    static int flag = 0;
 
+    if(flag == 0)
+    {
+        flag = 1;
+        // USER START (Optionally insert additional variables)
+        // 创建窗口
+        hWindow = WM_CreateWindow(495, 145, 300, 250, WM_CF_SHOW, &_cbWindow, 0);
+
+        //WINDOW_SetBkColor(hWindow,GUI_GRAY);
+        //创建水平滑轮
+//        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
+//        //设置滑轮条目数量
+//        SCROLLBAR_SetNumItems(hScroll, 48 * TEXT_MAX_X);
+//        //设置页尺寸
+//        //SCROLLBAR_SetPageSize(hScroll, 220);
+//        SCROLLBAR_SetValue(hScroll,10);
+        //创建垂直滑轮
+        wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+        //设置滑轮条目数量
+        SCROLLBAR_SetNumItems(wScroll, 80 * TEXT_MAX_Y);
+        //设置页尺寸
+        SCROLLBAR_SetPageSize(wScroll, 220);
+        //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
+        _aahText[0][0] = TEXT_CreateEx(30, 20, 24*strlen(tmp), 25,hWindow,WM_CF_SHOW,0,13,tmp);
+        _aahText[1][0] = TEXT_CreateEx(30, 50, 120, 25,hWindow,WM_CF_SHOW,0,13,"充电电流过大过大过大过大过大！");
+        _aahText[2][0] = TEXT_CreateEx(30, 80, 120, 25,hWindow,WM_CF_SHOW,0,13,"环境温度:");
+        _aahText[3][0] = TEXT_CreateEx(30, 110, 144, 25,hWindow,WM_CF_SHOW,0,13,"A插座温度:");
+        _aahText[4][0] = TEXT_CreateEx(30, 140, 144, 25,hWindow,WM_CF_SHOW,0,13,"B插座温度:");
+        _aahText[5][0] = TEXT_CreateEx(30, 170, 168, 25,hWindow,WM_CF_SHOW,0,13,"A枪输出电流:");
+        _aahText[6][0] = TEXT_CreateEx(30, 200, 168, 25,hWindow,WM_CF_SHOW,0,13,"B枪输出电流:");
+        _aahText[7][0] = TEXT_CreateEx(30, 230, 120, 25,hWindow,WM_CF_SHOW,0,13,"A枪枪锁:");
+        _aahText[8][0] = TEXT_CreateEx(30, 260, 120, 25,hWindow,WM_CF_SHOW,0,13,"B枪枪锁:");
+        _aahText[9][0] = TEXT_CreateEx(30, 290, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电压:");
+        _aahText[10][0] = TEXT_CreateEx(30, 320, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电流:");
+        _aahText[11][0] = TEXT_CreateEx(30, 350, 144, 25,hWindow,WM_CF_SHOW,0,13,"防雷器状态:");
+        _aahText[12][0] = TEXT_CreateEx(30, 380, 144, 25,hWindow,WM_CF_SHOW,0,13,"输出继电器:");
+        _aahText[13][0] = TEXT_CreateEx(30, 410, 120, 25,hWindow,WM_CF_SHOW,0,13,"控制导引:");
+
+        for(x = 0;x < ERROR_LINE;x++)
+        {
+            TEXT_SetFont(_aahText[x][0], &XBF24_Font);
+            TEXT_SetTextColor(_aahText[x][0], GUI_BLACK);
+        }
+        TEXT_SetTextColor(_aahText[0][0], GUI_RED);
+    }
+
+}
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
     uint8_t i = 0;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
-
+    WM_HWIN hWin_Error;
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
@@ -166,6 +288,12 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
+
+    /// TODO (zshare#1#): 增加故障弹窗
+//    if(1)//故障
+//    {
+//        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
+//    }
 }
 // USER END
 
@@ -177,7 +305,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;
     WM_HWIN      hItem;
-    static WM_HTIMER   htimer;
     U32          FileSize;
     int          NCode;
     int          Id;

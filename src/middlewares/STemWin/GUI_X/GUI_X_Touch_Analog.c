@@ -56,26 +56,22 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-    uint16_t value_x;
-
-    if(calebrate_done == 1)
+    if((calebrate_done == 1)&&(PEN == 0))
     {
-        value_x = TP_Read_XOY(0XD0);
-        value_x = tp_dev.xfac * value_x + tp_dev.xoff;
+        if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
+        {
+            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+        }
+        adc_x = tp_dev.x[0];
+        adc_y = tp_dev.y[0];
     }
 
-    return value_x;
+    return adc_x;
 }
 
 int  GUI_TOUCH_X_MeasureY(void) {
-    uint16_t value_y;
-
-    if(calebrate_done == 1)
-    {
-        value_y = TP_Read_XOY(0X90);
-        value_y = tp_dev.yfac * value_y + tp_dev.yoff;
-    }
-    return value_y;
+    return adc_y;
 }
 
 

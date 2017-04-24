@@ -391,11 +391,17 @@ void numkeypad_process(BUTTON_DATA *buttondata,int Id,WM_MESSAGE *pMsg)
 	char 		c;
 	WM_MESSAGE 	Msg;
     u8          KeyID;
+//    char tmp[10];
 
     KeyID=Id-ID_BUTTON;
 	if (buttondata[Id - ID_BUTTON].acLabel)
 	{
 		c = buttondata[Id - ID_BUTTON].acLabel[0];
+
+//        if(c == '\r')
+//        {
+//           MULTIEDIT_GetText(hMulti,tmp,6);
+//        }
 
         if(KeyID == 19)                             //返回英文键盘
         {
@@ -844,7 +850,7 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
 			NCode = pMsg->Data.v;
 			switch (NCode)
 			{
-				case WM_NOTIFICATION_RELEASED:				//按钮被释放
+				case WM_NOTIFICATION_CLICKED:				//按钮被释放
 					if(keypad_dev.padtype==ENGLISH_KEYPAD)	//英文键盘
 					{
 						engkeypad_process(_aEngButtonData,Id,pMsg);		//处理英文键盘
@@ -974,10 +980,10 @@ static void _cbBk(WM_MESSAGE * pMsg)
 }
 
 
-void keypad_demo(void)
+void Keypad_GetValue(void)
 {
+//    uint8_t tmp[0x10];
 	WM_HWIN hFrame;
-
 	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
 
 	keypad_dev.xpos=10;
@@ -1009,18 +1015,22 @@ void keypad_demo(void)
 	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", 0);
 	FRAMEWIN_SetTextColor(hFrame, GUI_YELLOW);
 	FRAMEWIN_SetFont(hFrame, &GUI_Font20_ASCII);
-	FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
+	FRAMEWIN_SetClientColor(hFrame, GUI_BLUE);
 
 	//创建一个multi edit(多行文本小工具)小工具
-	hMulti = MULTIEDIT_CreateEx(0, 0, 0, 0, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
-	MULTIEDIT_EnableBlink(hMulti,500,1);			//开启光标,周期500ms
+	hMulti = MULTIEDIT_CreateEx(280, 60, 100, 30, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+	//MULTIEDIT_EnableBlink(hMulti,500,1);			//开启光标,周期500ms
     MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
 	MULTIEDIT_SetFont(hMulti, &XBF24_Font);
 	WM_SetFocus(hMulti);
 
+    /// TODO (zshare#1#): ///增加键盘值返回函数
+    //MULTIEDIT_GetText(hMulti,传参数组,个数);
+//    MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
+
 	while(1)
 	{
-		GUI_Delay(100);
+		GUI_Delay(500);
 	}
 }
 

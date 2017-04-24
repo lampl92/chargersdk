@@ -298,6 +298,6 @@ static GUI_CONST_STORAGE GUI_BITMAP bmReturn = {
   GUI_DRAW_BMP8888
 };
 
-void keypad_demo(void);
+void Keypad_GetValue(void);
 #endif
 
