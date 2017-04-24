@@ -213,14 +213,13 @@ void TIM3_IRQHandler (void)//0.1ms
     delay_breath++;
     if(delay_breath>=200)
     {
-        read_pca9554_2();
     led_breath_r();
     led_breath_g();
     led_breath_b();
     delay_breath=0;
     }
 	timer_relay_ms++;
-	if(timer_relay_ms>=1000)
+	if(timer_relay_ms>=10000)
     {
         timer_relay_ms=0;
         if(flag_power_out_l==1)
@@ -297,7 +296,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
 
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
-   //get_samp_point();
+  get_samp_point();
 
   /* USER CODE BEGIN TIM5_IRQn 1 */
 

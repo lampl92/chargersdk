@@ -407,18 +407,21 @@ POWER_N_OFF;
 flag_pwm_out_n=0;
 }
 uint8_t Get_State_relay()
-{ uint8_t relay_num,i;
-    for (i=0;i<5;i++)
+{
+     uint8_t relay_num,i,j;
+          relay_num=0;
+    for (i=0;i<100;i++)
     {
-        relay_num+=(read_pca9554_2()>>1)&0x01;
+        j=read_pca9554_2()>>1;
+        relay_num+=(j&0x01);
     }
-    if(relay_num!=0)
+    if(relay_num==100)
     {
-    return 1;
+    return 0;//未连接
     }
     else
     {
-    return 0;
+    return 1;//已经连接
     }
 
 }
@@ -440,9 +443,9 @@ void Peripheral_Init(void)
     PWM2_ON;
     TIMER3_ON;
     TIMER5_ON;
-    //POWER_L_CLOSE();
-   // POWER_N_CLOSE();
-    Get_State_relay();
+    POWER_L_OPEN();
+    POWER_N_OPEN();
+   Get_State_relay();
 	//led_ctrl(1,red,flicker);
 	//led_ctrl(1,green,keep_off);
 	//led_ctrl(1,blue,keep_off);
