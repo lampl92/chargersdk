@@ -596,7 +596,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #else
 if(Electricity_meter[ucCONID].flag.flag_erro==1)
 {
-return ERR_CON_METER_FAULT;
+  return ERR_CON_METER_FAULT;
 }
 else
 {

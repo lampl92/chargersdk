@@ -85,7 +85,7 @@ double get_dc_massage(uint8_t channel)
     Chip1.d_select = DC_channel >> 3 & 0x01;
     Chip1.cs1_select = 1;
     write_pca9554_1();
-    Delay_ms(2);
+    bsp_DelayMS(25);
     ad_samp_value = get_CD4067();
     switch (DC_channel)
     {
@@ -445,16 +445,14 @@ void Peripheral_Init(void)
     RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
-    PWM1_ON;
-    PWM2_ON;
-    TIMER3_ON;
-    TIMER5_ON;
     POWER_L_OPEN();
     POWER_N_OPEN();
    Get_State_relay();
    frequency_test=Get_Electricity_meter_massage_voltage(1);
-	//led_ctrl(1,red,flicker);
-	//led_ctrl(1,green,keep_off);
-	//led_ctrl(1,blue,keep_off);
+    PWM1_ON;
+    PWM2_ON;
+    TIMER3_ON;
+    TIMER5_ON;
+
 
 }
