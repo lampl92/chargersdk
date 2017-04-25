@@ -1085,12 +1085,20 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACLTemp = 25;
 #else
-        tmpACLTemp = Sys_samp.DC.TEMP1;
+        tmpACLTemp = get_dc_massage(TEMP_L_OUT);
+                    if(tmpACLTemp>100||tmpACLTemp<-40)
+        {
+            return ERR_CON_ACLTEMP_DECT_FAULT;
+        }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpACLTemp = Sys_samp.DC.TEMP2;
+             tmpACLTemp = get_dc_massage(TEMP_L_OUT);
+                    if(tmpACLTemp>100||tmpACLTemp<-40)
+        {
+            return ERR_CON_ACLTEMP_DECT_FAULT;
+        }
     }
 
 
@@ -1128,12 +1136,20 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACNTemp = 25;
 #else
-        tmpACNTemp = Sys_samp.DC.TEMP3;
+        tmpACNTemp = get_dc_massage(TEMP_N_OUT);
+                if(tmpACNTemp>100||tmpACNTemp<-40)
+        {
+            return ERR_CON_ACNTEMP_DECT_FAULT;
+        }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpACNTemp = Sys_samp.DC.TEMP4;
+        tmpACNTemp = get_dc_massage(TEMP_N_OUT);
+                if(tmpACNTemp>100||tmpACNTemp<-40)
+        {
+            return ERR_CON_ACNTEMP_DECT_FAULT;
+        }
     }
 
     /*********************/
@@ -1169,12 +1185,20 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
-        tmpTemp = Sys_samp.DC.TEMP_ARM1;
+        tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
+        if(tmpTemp>100||tmpTemp<-40)
+        {
+            return ERR_CON_BTEMP1_DECT_FAULT;
+        }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpTemp = Sys_samp.DC.TEMP_ARM2;
+        tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
+                if(tmpTemp>100||tmpTemp<-40)
+        {
+            return ERR_CON_BTEMP1_DECT_FAULT;
+        }
     }
     /*********************/
 
@@ -1209,12 +1233,20 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
-        tmpTemp = Sys_samp.DC.TEMP_ARM3;
+        tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
+                if(tmpTemp>100||tmpTemp<-40)
+        {
+            return ERR_CON_BTEMP2_DECT_FAULT;
+        }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpTemp = Sys_samp.DC.TEMP_ARM4;
+        tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
+                   if(tmpTemp>100||tmpTemp<-40)
+        {
+            return ERR_CON_BTEMP2_DECT_FAULT;
+        }
     }
 
     /*********************/
@@ -1249,7 +1281,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = tmpLStat;
 #else
     read_pca9554_2();
-    tmpLStat = (read_pca9554_2() >> 6) && 0x01;
+    tmpLStat = (read_pca9554_2() >> 2) && 0x01;
     tmpNStat = tmpLStat;
 #endif
     /*********************/

@@ -54,6 +54,17 @@
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
+#define TEMP_L_OUT 0X00
+#define TEMP_L_IN  0X01
+#define TEMP_N_OUT 0X02
+#define TEMP_N_IN  0X03
+#define TEMP_GUN1_POSITIVE  0X04
+#define TEMP_GUN1_NEGATIVE  0X05
+#define TEMP_GUN2_POSITIVE  0X06
+#define TEMP_GUN2_NEGATIVE  0X07
+#define VREF_1.5            0X0F
+
+
 
 #define keep_off 0
 #define keep_on  1
@@ -216,7 +227,6 @@ void POWER_L_CLOSE(void);
 void POWER_N_CLOSE(void);
 void POWER_L_OPEN(void);
 void POWER_N_OPEN(void);
-uint8_t yy_test,DC_channel;
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t vref,num_cp1,num_cp2;

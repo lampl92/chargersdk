@@ -74,10 +74,12 @@ double get_CD4067(void)
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
     return Sys_samp.DC.CD4067;
 }
-double get_dc_massage(uint8_t channel)
+float get_dc_massage(uint8_t DC_channel)
 {
     uint16_t j, ad_samp_value;
-    double ad_value, re_value;
+    float ad_value, re_value;
+    float dc_data;
+
 
     Chip1.a_select = DC_channel >> 0 & 0x01;
     Chip1.b_select = DC_channel >> 1 & 0x01;
@@ -97,10 +99,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP1 = j - 40;
+                dc_data=(float)Sys_samp.DC.TEMP1;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -109,10 +111,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP2 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP2;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -121,10 +123,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP3 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP3;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -133,10 +135,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP4 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP4;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -145,10 +147,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM1 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM1;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -157,10 +159,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM2 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM2;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -169,10 +171,10 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM3 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM3;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -181,38 +183,19 @@ double get_dc_massage(uint8_t channel)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM4 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM4;
             }
         }
-        DC_channel++;
-        break;
-    case 8:
-        DC_channel++;
-        break;
-    case 9:
-        DC_channel++;
-        break;
-    case 10:
-        DC_channel++;
-        break;
-    case 11:
-        DC_channel++;
-        break;
-    case 12:
-        DC_channel++;
-        break;
-    case 13:
-        DC_channel++;
-        break;
-    case 14:
-        DC_channel++;
-        break;
+
+         return dc_data;
+
     case 15:
         vref = ad_samp_value;
         DC_channel++;
-        break;
+         return dc_data;
 
     default :
-        DC_channel = 0;
+
         break;
     }
 
