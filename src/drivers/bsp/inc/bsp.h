@@ -29,6 +29,9 @@
 #define bspUSART3_PreemptPriority       5
 #define bspUSART3_SubPriority           0
 
+#define bspUART4_PreemptPriority       6
+#define bspUART4_SubPriority           0
+
 #define bspLTDC_PreemptPriority         15
 #define bspLTDC_SubPriority             0
 
