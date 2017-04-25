@@ -78,6 +78,8 @@
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
+			<Add symbol="__EVSE" />
+			<Add symbol="EVSE_DEV" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Include" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include" />
 			<Add directory="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc" />
