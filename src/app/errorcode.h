@@ -48,16 +48,13 @@ typedef enum _ErrorCode
     ERR_SET_SERIALIZATION,	//JSON序列化错误
     ERR_OTHER,			//其他错误
     ERR_RFID_FAULT,		//读卡器获取UID错误
-    ERR_RFID_PE,		//读卡器串口奇偶校验错误
-    ERR_RFID_NE,		//读卡器串口噪声错误
-    ERR_RFID_FE,		//读卡器串口帧错误
-    ERR_RFID_ORE,		//读卡器串口超载
-    ERR_RFID_DMA,		//读卡器串口DMA传输错误
-    ERR_NETMODULE_PE,		//网络模块串口奇偶校验错误
-    ERR_NETMODULE_NE,		//网络模块串口噪声错误
-    ERR_NETMODULE_FE,		//网络模块串口帧错误
-    ERR_NETMODULE_ORE,		//网络模块串口超载
-    ERR_NETMODULE_DMA,		//网络模块串口DMA传输错误
+
+    ERR_UART_PE,		//串口奇偶校验错误
+    ERR_UART_NE,		//串口噪声错误
+    ERR_UART_FE,		//串口帧错误
+    ERR_UART_ORE,		//串口超载
+    ERR_UART_DMA,		//串口DMA传输错误
+
 
     ERR_NONET,			//网络通信故障
     ERR_NET_TIMEOUT,		//网络通信超时
@@ -84,9 +81,10 @@ typedef struct _ErrorPackage
 
 //充电枪ID从小到大定义，其他设备从大小定义
 //DevID 0~? 充电枪ID
-#define defDevID_System		250
-#define defDevID_Cloud		251
-#define defDevID_File		252
+#define defDevID_System		249
+#define defDevID_Cloud		250
+#define defDevID_File		251
+#define defDevID_GPRS       252
 #define defDevID_RFID		253
 #define defDevID_NetMoudle	254
 #define defDevID_EVSE		255	//0xff

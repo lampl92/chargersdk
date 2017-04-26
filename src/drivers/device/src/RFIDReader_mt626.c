@@ -11,8 +11,6 @@
 #include "bsp_uart.h"
 
 /** @note (rgw#1#): 调用的外部变量与函数, 如在其他系统中使用应实现对应的函数. */
-extern UART_HandleTypeDef RFID_UARTx_Handler;
-extern Queue *pRfidRecvQue;
 extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
@@ -87,40 +85,6 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
 
 }
 
-/** @brief 通过串口接收队列读取命令
- *
- * @param pObj void*            MT626实例
- * @param puiRecvdLen uint32_t* 返回接收到的命令长度指针
- * @return MT_RESULT            返回通讯状态
- *
- */
-static MT_RESULT recvReadEx(void *pObj, uint32_t *puiRecvdLen)
-{
-    uint8_t ch;
-    uint32_t i;
-    MT626COM_t *pMT626COM;
-
-    pMT626COM = (MT626COM_t *)pObj;
-    ch = 0;
-    i = 0;
-
-    while(readRecvQue(pRfidRecvQue, &ch, 1) == 0)
-    {
-        pMT626COM->pucRecvBuffer[i] = ch;
-        i++;
-    }
-    if(i > 0)
-    {
-        *puiRecvdLen = i;
-        return MT_SUCCEED;
-    }
-    else
-    {
-        return MT_FAIL;
-    }
-
-}
-
 /** @brief 对接收到的数据分析是否正确
  *
  * @param pObj void*            MT626通讯实例
@@ -139,7 +103,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *puiRecvdLe
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
 
-    recvReadEx(pObj, puiRecvdLen);
+    recvReadEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen);
     if(*puiRecvdLen == 0)
     {
         return MT_COM_FAIL;
