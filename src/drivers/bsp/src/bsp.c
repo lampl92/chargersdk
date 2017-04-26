@@ -123,6 +123,7 @@ void bsp_Init(void)
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
     /* Enable the CRC Module */
     __HAL_RCC_CRC_CLK_ENABLE(); //
+    bsp_GPIO_Init();
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
