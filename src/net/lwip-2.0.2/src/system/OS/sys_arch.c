@@ -418,9 +418,15 @@ void sys_arch_unprotect(sys_prot_t pval)
 }
 
 /*rgw*/
-u32_t sys_now (void)
+u32_t sys_jiffies(void)
 {
     return (u32_t)clock();
 }
+u32_t sys_now (void)
+{
+    return sys_jiffies();
+}
+
+
 
 #endif /* !NO_SYS */
