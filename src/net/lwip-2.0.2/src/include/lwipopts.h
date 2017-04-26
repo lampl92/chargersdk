@@ -5,7 +5,7 @@
 #define MAX_QUEUE_ENTRIES       20  // 消息邮箱的大小
 
 /* # PPP支持*/
-#define LWIP_PPP_API
+#define LWIP_PPP_API    1
 #define PPP_SUPPORT     1
 
 
