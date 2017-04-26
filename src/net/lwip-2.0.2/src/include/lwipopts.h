@@ -4,9 +4,13 @@
 #define MAX_QUEUES              10  // 消息邮箱的数量
 #define MAX_QUEUE_ENTRIES       20  // 消息邮箱的大小
 
+/* # PPP支持*/
+#define LWIP_PPP_API
+#define PPP_SUPPORT     1
+
 
 /* # 基础架构# */
-
+/* ## NO_SYS*/
 #define NO_SYS 0                //使用操作系统
 
 /* ## Core locking and MPU*/
@@ -35,7 +39,7 @@
 #define TCPIP_THREAD_PRIO           11
 #define TCPIP_MBOX_SIZE             MAX_QUEUE_ENTRIES
 /** @todo (rgw#1#): Define LWIP_TCPIP_THREAD_ALIVE to something that triggers a watchdog.  */
-#define LWIP_TCPIP_THREAD_ALIVE ()  //This is called from tcpip_thread after processing a message.
+//#define LWIP_TCPIP_THREAD_ALIVE ()  //This is called from tcpip_thread after processing a message.
 
 #define SLIPIF_THREAD_NAME          "slipif_loop"
 #define SLIPIF_THREAD_STACKSIZE     1024
@@ -63,16 +67,16 @@
 /* ## TCP*/
 #define     LWIP_TCP         1  //使用TCP
 #define     TCP_TTL          (IP_DEFAULT_TTL)
-#define TCP_WND              (2*TCP_MSS) //TCP发送窗口
-#define TCP_QUEUE_OOSEQ      1  //当TCP的数据段超出队列时的控制位,当设备的内存过小的时候此项应为0
+#define     TCP_WND              (2*TCP_MSS) //TCP发送窗口
+#define     TCP_QUEUE_OOSEQ      1  //当TCP的数据段超出队列时的控制位,当设备的内存过小的时候此项应为0
 #define     TCP_MSS          536//最大TCP分段,TCP_MSS  = (MTU - IP报头大小 - TCP报头大小
 #define     TCP_SND_BUF      (4 * TCP_MSS) //TCP发送缓冲区大小(bytes).越大性能越好,至少(2 * TCP_MSS)
 #define     TCP_SND_QUEUELEN ((4 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS)) //TCP发送缓冲区大小(pbuf).
-#define     LWIP_EVENT_API   0
+//#define     LWIP_EVENT_API   0
 /*LWIP_EVENT_API and LWIP_CALLBACK_API:
 Only one of these should be set to 1.
-LWIP_EVENT_API                                        == 1: The user defines lwip_tcp_event() to receive all events (accept, sent, etc)
-that happen in the system. LWIP_CALLBACK_API          == 1: The PCB callback function is called directly for the event.
+LWIP_EVENT_API== 1: The user defines lwip_tcp_event() to receive all events (accept, sent, etc) that happen in the system.
+LWIP_CALLBACK_API== 1: The PCB callback function is called directly for the event.
 This is the default.*/
 
 /* ## UDP*/
@@ -102,13 +106,13 @@ Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 
 /* #IPv4*/
 /* ## ICMP*/
-#define 	LWIP_ICMP                    1
+#define LWIP_ICMP                    1
 /* ## DHCP*/
 #define LWIP_DHCP                        1
 /* ## PBUF*/
-#define 	PBUF_LINK_HLEN               (14 + ETH_PAD_SIZE)
-#define 	PBUF_LINK_ENCAPSULATION_HLEN 0u
-#define 	PBUF_POOL_BUFSIZE            LWIP_MEM_ALIGN_SIZE(TCP_MSS+40+PBUF_LINK_ENCAPSULATION_HLEN+PBUF_LINK_HLEN)
+#define PBUF_LINK_HLEN               (14 + ETH_PAD_SIZE)
+#define PBUF_LINK_ENCAPSULATION_HLEN 0u
+#define PBUF_POOL_BUFSIZE            LWIP_MEM_ALIGN_SIZE(TCP_MSS+40+PBUF_LINK_ENCAPSULATION_HLEN+PBUF_LINK_HLEN)
 /* ## NETIF*/
 
 /* # Debugging*/
