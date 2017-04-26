@@ -15,3 +15,5 @@ build/EmBitz/chargersdk.cscope_file_list
 *.depend
 *.elay
 *.cfg~
+src/net/lwip-2.0.2/doc
+src/net/lwip-2.0.2/test
