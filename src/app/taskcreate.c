@@ -31,6 +31,8 @@
 #define defSTACK_TaskEVSEDiag               512
 #define defSTACK_TaskEVSEData               512
 
+//#define TCPIP_THREAD_STACKSIZE      512
+
 /*---------------------------------------------------------------------------/
 / 浠诲姟浼樺厛绾?
 /---------------------------------------------------------------------------*/
@@ -40,6 +42,7 @@
 #define defPRIORITY_TaskGUI                 1   //不能高,GUI任务时间太长,会影响硬件响应
 #define defPRIORITY_TaskTouch               1
 #define defPRIORITY_TaskOTA                 15 /* 鏈?楂?*/
+//#define configTIMER_TASK_PRIORITY		( in FreeRTOSConfig.h )
 
 #define defPRIORITY_TaskEVSERemote          3
 #define defPRIORITY_TaskEVSERFID            4
@@ -47,6 +50,8 @@
 #define defPRIORITY_TaskEVSEMonitor         7
 #define defPRIORITY_TaskEVSEDiag            9
 #define defPRIORITY_TaskEVSEData            1
+
+//#define TCPIP_THREAD_PRIO		    11 //defined in lwipopts.h
 
 /*---------------------------------------------------------------------------/
 / 浠诲姟鍚嶇О
@@ -62,7 +67,7 @@ const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
 const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
 const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
-
+//#define TCPIP_THREAD_NAME           "tcpip_thread"
 /*---------------------------------------------------------------------------/
 / 浠诲姟澹版槑
 /---------------------------------------------------------------------------*/
