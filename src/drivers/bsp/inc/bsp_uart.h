@@ -11,10 +11,16 @@
 
 #include "bsp.h"
 #include "userlib_queue.h"
-
+#ifdef EVSE
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         9600
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
+#endif
+#ifdef EVSE_DEV
+#define CLI_USARTx_BASE                             USART2
+#define CLI_USARTx_BAUDRATE                         115200
+#define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)
+#endif
 #define CLI_QUEUE_SIZE                              10
 
 #define RFID_USARTx_BASE                            USART3
