@@ -418,8 +418,9 @@ void sys_arch_unprotect(sys_prot_t pval)
 }
 
 /*rgw*/
-void sys_msleep(u32_t ms)
+u32_t sys_now (void)
 {
-	osDelay(ms);
+    return (u32_t)clock();
 }
+
 #endif /* !NO_SYS */
