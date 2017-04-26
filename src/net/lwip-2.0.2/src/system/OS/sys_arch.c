@@ -50,7 +50,7 @@ int errno;
 err_t sys_mbox_new(sys_mbox_t *mbox, int size)
 {
   osMessageQDef(QUEUE, size, void *);
-  
+
   *mbox = osMessageCreate(osMessageQ(QUEUE), NULL);
 
 #if SYS_STATS
@@ -61,7 +61,7 @@ err_t sys_mbox_new(sys_mbox_t *mbox, int size)
 #endif /* SYS_STATS */
  if (*mbox == NULL)
   return ERR_MEM;
- 
+
  return ERR_OK;
 }
 
@@ -80,7 +80,7 @@ void sys_mbox_free(sys_mbox_t *mbox)
 #if SYS_STATS
 	    lwip_stats.sys.mbox.err++;
 #endif /* SYS_STATS */
-			
+
 		// TODO notify the user of failure.
 	}
 
@@ -112,11 +112,11 @@ err_t result;
    else {
       // could not post, queue must be full
       result = ERR_MEM;
-			
+
 #if SYS_STATS
       lwip_stats.sys.mbox.err++;
 #endif /* SYS_STATS */
-			
+
    }
 
    return result;
@@ -142,11 +142,11 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
 {
   osEvent event;
   uint32_t starttime = osKernelSysTick();;
-  
+
   if(timeout != 0)
-  { 
+  {
     event = osMessageGet (*mbox, timeout);
-    
+
     if(event.status == osEventMessage)
     {
       *msg = (void *)event.value.v;
@@ -155,7 +155,7 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
     else
     {
       return SYS_ARCH_TIMEOUT;
-    } 
+    }
   }
   else
   {
@@ -173,9 +173,9 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
 u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
 {
   osEvent event;
-  
+
   event = osMessageGet (*mbox, 0);
-  
+
   if(event.status == osEventMessage)
   {
     *msg = (void *)event.value.v;
@@ -187,18 +187,18 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
   }
 }
 /*----------------------------------------------------------------------------------*/
-int sys_mbox_valid(sys_mbox_t *mbox)          
-{      
-  if (*mbox == SYS_MBOX_NULL) 
+int sys_mbox_valid(sys_mbox_t *mbox)
+{
+  if (*mbox == SYS_MBOX_NULL)
     return 0;
   else
     return 1;
-}                                             
-/*-----------------------------------------------------------------------------------*/                                              
-void sys_mbox_set_invalid(sys_mbox_t *mbox)   
-{                                             
-  *mbox = SYS_MBOX_NULL;                      
-}                                             
+}
+/*-----------------------------------------------------------------------------------*/
+void sys_mbox_set_invalid(sys_mbox_t *mbox)
+{
+  *mbox = SYS_MBOX_NULL;
+}
 
 /*-----------------------------------------------------------------------------------*/
 //  Creates a new semaphore. The "count" argument specifies
@@ -208,15 +208,15 @@ err_t sys_sem_new(sys_sem_t *sem, u8_t count)
   osSemaphoreDef(SEM);
 
   *sem = osSemaphoreCreate (osSemaphore(SEM), 1);
-	
+
   if(*sem == NULL)
   {
 #if SYS_STATS
       ++lwip_stats.sys.sem.err;
-#endif /* SYS_STATS */	
+#endif /* SYS_STATS */
 		return ERR_MEM;
   }
-	
+
   if(count == 0)	// Means it can't be taken
   {
     osSemaphoreWait(*sem,0);
@@ -228,7 +228,7 @@ err_t sys_sem_new(sys_sem_t *sem, u8_t count)
 		lwip_stats.sys.sem.max = lwip_stats.sys.sem.used;
 	}
 #endif /* SYS_STATS */
-		
+
 	return ERR_OK;
 }
 
@@ -251,9 +251,9 @@ err_t sys_sem_new(sys_sem_t *sem, u8_t count)
 u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 {
   uint32_t starttime = osKernelSysTick();
-  
+
   if(timeout != 0)
-  {    
+  {
     if(osSemaphoreWait (*sem, timeout) == osOK)
     {
       return (osKernelSysTick() - starttime);
@@ -261,7 +261,7 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
     else
     {
       return SYS_ARCH_TIMEOUT;
-    } 
+    }
   }
   else
   {
@@ -284,25 +284,25 @@ void sys_sem_free(sys_sem_t *sem)
 #if SYS_STATS
   --lwip_stats.sys.sem.used;
 #endif /* SYS_STATS */
-  
+
   osSemaphoreDelete(*sem);
 }
 /*-----------------------------------------------------------------------------------*/
-int sys_sem_valid(sys_sem_t *sem)                                               
+int sys_sem_valid(sys_sem_t *sem)
 {
   if (*sem == SYS_SEM_NULL)
     return 0;
   else
-    return 1;                                       
+    return 1;
 }
 
-/*-----------------------------------------------------------------------------------*/                                                                                                                                                                
-void sys_sem_set_invalid(sys_sem_t *sem)                                        
-{                                                                               
-  *sem = SYS_SEM_NULL;                                                          
-} 
+/*-----------------------------------------------------------------------------------*/
+void sys_sem_set_invalid(sys_sem_t *sem)
+{
+  *sem = SYS_SEM_NULL;
+}
 
-/*-----------------------------------------------------------------------------------*/ 
+/*-----------------------------------------------------------------------------------*/
 osMutexId lwip_sys_mutex;
 osMutexDef(lwip_sys_mutex);
 // Initialize sys arch
@@ -317,21 +317,21 @@ void sys_init(void)
 #if LWIP_COMPAT_MUTEX == 0
 /* Create a new mutex*/
 err_t sys_mutex_new(sys_mutex_t *mutex) {
-  
+
   osMutexDef(MUTEX);
-  
+
   *mutex = osMutexCreate(osMutex(MUTEX));
-  
-  
+
+
   //*mutex = xSemaphoreCreateMutex();
   if(*mutex == NULL)
   {
 #if SYS_STATS
     ++lwip_stats.sys.mutex.err;
-#endif /* SYS_STATS */	
+#endif /* SYS_STATS */
     return ERR_MEM;
   }
-  
+
 #if SYS_STATS
   ++lwip_stats.sys.mutex.used;
   if (lwip_stats.sys.mutex.max < lwip_stats.sys.mutex.used) {
@@ -347,7 +347,7 @@ void sys_mutex_free(sys_mutex_t *mutex)
 #if SYS_STATS
       --lwip_stats.sys.mutex.used;
 #endif /* SYS_STATS */
-			
+
   osMutexDelete(*mutex);
 }
 /*-----------------------------------------------------------------------------------*/
@@ -417,4 +417,9 @@ void sys_arch_unprotect(sys_prot_t pval)
   osMutexRelease(lwip_sys_mutex);
 }
 
+/*rgw*/
+void sys_msleep(u32_t ms)
+{
+	osDelay(ms);
+}
 #endif /* !NO_SYS */
