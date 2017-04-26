@@ -37,6 +37,7 @@
 #define SYS_MBOX_NULL (osMessageQId)0
 #define SYS_SEM_NULL  (osSemaphoreId)0
 #define SYS_DEFAULT_THREAD_STACK_DEPTH	configMINIMAL_STACK_SIZE
+#define sys_msleep     osDelay
 
 typedef osSemaphoreId sys_sem_t;
 typedef osSemaphoreId sys_mutex_t;
