@@ -49,6 +49,7 @@ extern Queue *pGprsRecvQue;
 void bsp_Uart_Init(void);
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
 uint8_t recvReadEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
+uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len);
 
 #endif
 

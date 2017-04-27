@@ -76,6 +76,21 @@ uint8_t recvReadEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRe
         return 0;
     }
 }
+
+uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len)
+{
+    uint8_t *p;
+    p = strstr(q->elem, str);
+    if(p != NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void bsp_Uart_Init(void)
 {
     pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
@@ -176,7 +191,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_NVIC_EnableIRQ(USART3_IRQn);
         HAL_NVIC_SetPriority(USART3_IRQn, bspUSART3_PreemptPriority, bspUSART3_SubPriority);
     }
-     if(huart->Instance == UART4)
+    if(huart->Instance == UART4)
     {
         __HAL_RCC_GPIOC_CLK_ENABLE();
         __HAL_RCC_UART4_CLK_ENABLE();
