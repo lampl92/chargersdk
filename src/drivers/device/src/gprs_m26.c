@@ -7,6 +7,7 @@
 */
 #include "bsp.h"
 #include "gprs_m26.h"
+
 #define GPRS_IO     PBout(3)
 
 dev_gprs_t dev_gprs;
@@ -127,10 +128,10 @@ uint8_t gprs_init(void)
     gprs_ioctl(DA_GPRS_RESET);
     if(dev_gprs.state == DS_GPRS_ERR)
     {
-        printf_safe("GPRS ERR\n");
+        ThrowErrorCode(defDevID_GPRS, ERR_GPRS_FAULT, ERR_LEVEL_WARNING, "≥ı ºªØ ß∞‹");
     }
 }
-
+#if self_test_gprs
 uint8_t test_state = DA_GPRS_RESET;
 uint8_t test_gprs()
 {
@@ -181,4 +182,4 @@ uint8_t test_gprs()
         break;
     }
 }
-
+#endif
