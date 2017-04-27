@@ -112,6 +112,7 @@
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 			<Add library="$(APP_PATH)\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
+			<Add library="..\..\src\hmi\dimen_barcode\ATK_QR_V1.4.lib" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
@@ -407,6 +408,10 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\hmi\dimen_barcode\qrdecode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\dimen_barcode\qrdecode.h" />
 		<Unit filename="..\..\src\hmi\EVSEDLG.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />
@@ -448,8 +453,6 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charging_2-dimen.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Home.c">
 			<Option compilerVar="CC" />
@@ -463,15 +466,17 @@
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoStatus.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_RegisterDisp.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Skin_Keyboard.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Window.c">
+			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\pyinput.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\pyinput.h" />
 		<Unit filename="..\..\src\hmi\pymb.h" />

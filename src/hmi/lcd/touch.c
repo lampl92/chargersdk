@@ -328,30 +328,30 @@ uint8_t TP_Get_Adjdata(void)
     return 0;
 }
 //提示字符串
-uint8_t *const TP_REMIND_MSG_TBL = "Please use the stylus click the cross on the screen.The cross will always move until the screen adjustment is completed.";
+uint8_t *const TP_REMIND_MSG_TBL = "Please use the stylus click the cross on the screen.The cross will always move until the screen adjustment is completed.If you can't click the red cross within 30 seconds,the program of calibration will quit!";
 
 //提示校准结果(各个参数)
 void TP_Adj_Info_Show(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, uint16_t fac)
 {
     POINT_COLOR = RED;
-    LCD_ShowString(40, 160, lcddev.width, lcddev.height, 16, "x1:");
-    LCD_ShowString(40 + 80, 160, lcddev.width, lcddev.height, 16, "y1:");
-    LCD_ShowString(40, 180, lcddev.width, lcddev.height, 16, "x2:");
-    LCD_ShowString(40 + 80, 180, lcddev.width, lcddev.height, 16, "y2:");
-    LCD_ShowString(40, 200, lcddev.width, lcddev.height, 16, "x3:");
-    LCD_ShowString(40 + 80, 200, lcddev.width, lcddev.height, 16, "y3:");
-    LCD_ShowString(40, 220, lcddev.width, lcddev.height, 16, "x4:");
-    LCD_ShowString(40 + 80, 220, lcddev.width, lcddev.height, 16, "y4:");
-    LCD_ShowString(40, 240, lcddev.width, lcddev.height, 16, "fac is:");
-    LCD_ShowNum(40 + 24, 160, x0, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 160, y0, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 180, x1, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 180, y1, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 200, x2, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 200, y2, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 220, x3, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 220, y3, 4, 16); //显示数值
-    LCD_ShowNum(40 + 56, 240, fac, 3, 16); //显示数值,该数值必须在95~105范围之内.
+    LCD_ShowString(500, 160, lcddev.width, lcddev.height, 16, "x1:");
+    LCD_ShowString(500 + 80, 160, lcddev.width, lcddev.height, 16, "y1:");
+    LCD_ShowString(500, 180, lcddev.width, lcddev.height, 16, "x2:");
+    LCD_ShowString(500 + 80, 180, lcddev.width, lcddev.height, 16, "y2:");
+    LCD_ShowString(500, 200, lcddev.width, lcddev.height, 16, "x3:");
+    LCD_ShowString(500 + 80, 200, lcddev.width, lcddev.height, 16, "y3:");
+    LCD_ShowString(500, 220, lcddev.width, lcddev.height, 16, "x4:");
+    LCD_ShowString(500 + 80, 220, lcddev.width, lcddev.height, 16, "y4:");
+    LCD_ShowString(500, 240, lcddev.width, lcddev.height, 16, "fac is:");
+    LCD_ShowNum(500 + 24, 160, x0, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 160, y0, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 180, x1, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 180, y1, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 200, x2, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 200, y2, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 220, x3, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 220, y3, 4, 16); //显示数值
+    LCD_ShowNum(500 + 56, 240, fac, 3, 16); //显示数值,该数值必须在95~105范围之内.
 
 }
 
@@ -365,18 +365,21 @@ void TP_Adjust(void)
     uint32_t tem1, tem2;
     double fac;
     uint16_t outtime = 0;
+    uint8_t tmp[4];
+
     cnt = 0;
     POINT_COLOR = BLUE;
     BACK_COLOR = WHITE;
     LCD_Clear(WHITE);//清屏
     POINT_COLOR = RED; //红色
     LCD_Clear(WHITE);//清屏
-    POINT_COLOR = BLACK;
-    LCD_ShowString(40, 40, 160, 100, 16, (uint8_t *)TP_REMIND_MSG_TBL); //显示提示信息
+    POINT_COLOR = RED;
+    LCD_ShowString(210, 150, 200, 16, 16, "DPC TOUCH CALIBRATE");
+    LCD_ShowString(210, 200, 250, 100, 16, (uint8_t *)TP_REMIND_MSG_TBL); //显示提示信息
     TP_Drow_Touch_Point(20, 20, RED); //画点1
     tp_dev.sta = 0; //消除触发信号
     tp_dev.xfac = 0; //xfac用来标记是否校准过,所以校准之前必须清掉!以免错误
-    while(1)//如果连续10秒钟没有按下,则自动退出
+    while(1)//如果连续30秒钟没有按下,则自动退出
     {
         tp_dev.scan(1);//扫描物理坐标
         if((tp_dev.sta & 0xc0) == TP_CATH_PRES) //按键按下了一次(此时按键松开了.)
@@ -492,7 +495,7 @@ void TP_Adjust(void)
                     }
                     POINT_COLOR = BLUE;
                     LCD_Clear(WHITE);//清屏
-                    LCD_ShowString(35, 110, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!"); //校正完成
+                    LCD_ShowString(210, 150, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!"); //校正完成
                     bsp_DelayMS(1000);
                     TP_Save_Adjdata();
                     LCD_Clear(WHITE);//清屏
@@ -501,7 +504,13 @@ void TP_Adjust(void)
         }
         bsp_DelayMS(10);
         outtime++;
-        if(outtime > 1000)
+        if(outtime % 100 == 0)
+        {
+            sprintf(tmp,"%2dS",30-(outtime/100));
+            POINT_COLOR = RED;
+            LCD_ShowString(500, 400, 20, 20, 16, tmp); //显示倒计时
+        }
+        if(outtime > 3000)
         {
             TP_Get_Adjdata();
             break;
@@ -590,16 +599,22 @@ void Load_Drow_Dialog(void)
 }
 void GUI_Touch_Calibrate()
 {
-    POINT_COLOR = RED;
-    LCD_ShowString(30, 50, 200, 16, 16, "Apollo STM32f4/F7");
-    LCD_ShowString(30, 70, 200, 16, 16, "TOUCH TEST");
-    LCD_ShowString(30, 90, 200, 16, 16, "ATOM@ALIENTEK");
-    LCD_ShowString(30, 110, 200, 16, 16, "2016/1/16");
+    tp_dev.touchtype = 1;
+
+    if(tp_dev.touchtype)//X,Y方向与屏幕相反
+    {
+        CMD_RDX = 0X90;
+        CMD_RDY = 0XD0;
+    }
+    else                   //X,Y方向与屏幕相同
+    {
+        CMD_RDX = 0XD0;
+        CMD_RDY = 0X90;
+    }
 
     LCD_Clear(WHITE);   //ÇåÆÁ
     TP_Adjust();        //ÆÁÄ»Ð£×¼
     TP_Save_Adjdata();
-//    Load_Drow_Dialog();
 
     while(1)
     {

@@ -263,6 +263,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
+            WM_DeleteWindow(pMsg->hWin);
+            PutOut_Home();
             // USER END
             break;
           case WM_NOTIFICATION_RELEASED:

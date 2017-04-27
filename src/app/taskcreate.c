@@ -136,19 +136,13 @@ void vTaskCLI(void *pvParameters)
 void vTaskGUI(void *pvParameters)
 {
     MainTask();
-//    Touch_Calibrate();
-    while(1)
-    {
-        printf_safe(" read_pca9554_2 = %d \n",read_pca9554_2());
-        vTaskDelay(1000);
-    }
 }
 
 void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-        GUI_TOUCH_Exec();
+        GUI_TOUCH_Exec();//º§ªÓXY÷·µƒ≤‚¡ø
         vTaskDelay(10);
     }
 }
