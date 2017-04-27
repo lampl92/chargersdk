@@ -48,6 +48,7 @@ typedef enum _ErrorCode
     ERR_SET_SERIALIZATION,	//JSON序列化错误
     ERR_OTHER,			//其他错误
     ERR_RFID_FAULT,		//读卡器获取UID错误
+    ERR_GPRS_FAULT,     //GPRS模块故障
 
     ERR_UART_PE,		//串口奇偶校验错误
     ERR_UART_NE,		//串口噪声错误

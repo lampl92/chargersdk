@@ -42,6 +42,7 @@ const uint8_t *strErrorCode[100] =
     "JSON序列化错误",//ERR_SET_SERIALIZATION
     "其他错误",
     "读卡器故障",
+    "GPRS模块故障",
     "串口奇偶校验错误",
     "串口噪声错误",
     "串口帧错误",
