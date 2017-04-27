@@ -8,6 +8,7 @@
 #include "touch.h"
 #include "utils.h"
 #include "interface.h"
+#include "keyboard.h"
 //#include "chargepoint.h"
 #define EXIT_DISP_DELAY 60
 #define REFLASH 20
@@ -42,6 +43,7 @@ void PutOut_Card_Info();
 void PutOut_Card_Valid();
 void PutOut_Charging();
 void PutOut_Charge_Done();
+void PutOut_Charging_2dimen();
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
 void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf);

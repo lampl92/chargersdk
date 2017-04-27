@@ -6,13 +6,18 @@
 #include "pyinput.h"
 #include "xbffontcreate.h"
 #include "WM.h"
-
+#include "BUTTON.h"
 #define lcd_height 480
 #define lcd_width 800
 
 WM_HWIN hMulti=0;       //多行文本
+BUTTON_Handle _aahButtonOk;
+BUTTON_Handle _aahButtonCancel;
+EDIT_Handle _aahEditVar;
 KEYPADStructTypeDef keypad_dev;
 
+uint8_t ManagerSetOptions = 0;
+uint8_t *passwd = "888888";
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
@@ -46,6 +51,25 @@ static void _DrawCentered(WM_HWIN hWin, const GUI_BITMAP * pBM)
 	yPos = (ySizeWin - ySizeBMP) >> 1;
 	GUI_DrawBitmap(pBM, xPos, yPos);
 }
+
+//static const unsigned char _aahEyeOn[] = {
+//
+//
+//
+//
+//
+//};
+//static const unsigned char _aahEyeOff[] = {
+//
+//
+//
+//
+//
+//};
+//static const GUI_COLOR Colors[] = { 0x000000, 0xFFFFFF };
+//static const GUI_LOGPALETTE Palette = { 2, 1, Colors };
+//static const GUI_BITMAP bm_bpp_on = { 5, 5, 4, 1, _aahEyeOn, &Palette};
+//static const GUI_BITMAP bm_bpp_off = { 5, 5, 4, 1, _aahEyeOff, &Palette};
 
 static void _DrawBkSpc (WM_HWIN hWin) {  _DrawCentered(hWin, &bmBackSpace); }	//绘制退格键(删除键)
 static void _DrawEnter (WM_HWIN hWin) {  _DrawCentered(hWin, &bmEnter); }		//绘制回车键
@@ -253,7 +277,7 @@ void drawenglish_pad(WM_HWIN hWin)
 	u16 	i;
 
 	//创建键盘按钮
-	BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
+	//BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 	for (i = 0; i < GUI_COUNTOF(_aEngButtonData); i++)
 	{
 		//创建按钮
@@ -262,6 +286,7 @@ void drawenglish_pad(WM_HWIN hWin)
 		BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&XBF24_Font);
         BUTTON_SetText(keypad_dev.EngButton_Handle[i], _aEngButtonData[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.EngButton_Handle[i], 0);
+        BUTTON_SetSkin(keypad_dev.EngButton_Handle[i], _DrawSkinFlex_BUTTON);
 	}
 	changecase(keypad_dev.LowerCase,_aEngButtonData);
 }
@@ -270,15 +295,16 @@ void drawenglish_pad(WM_HWIN hWin)
 void drawnumber_pad(WM_HWIN hWin)
 {
 	u16 i;
+	//BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 	for(i=0;i<GUI_COUNTOF(_aNumButtonData);i++)								//创建数字键盘
 	{
 		//创建按钮
-		BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 		keypad_dev.NumButton_Handle[i] = BUTTON_CreateEx(_aNumButtonData[i].xPos, _aNumButtonData[i].yPos, _aNumButtonData[i].xSize, _aNumButtonData[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
 		BUTTON_SetFont(keypad_dev.NumButton_Handle[i],&XBF24_Font);
 		BUTTON_SetText(keypad_dev.NumButton_Handle[i], _aNumButtonData[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.NumButton_Handle[i], 0);
+        BUTTON_SetSkin(keypad_dev.NumButton_Handle[i], _DrawSkinFlex_BUTTON);
 	}
 }
 
@@ -286,16 +312,17 @@ void drawnumber_pad(WM_HWIN hWin)
 void drawsign_pad(WM_HWIN hWin)
 {
 	u16 i;
+	//BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 	for(i=0;i<GUI_COUNTOF(_aSinButtonData[keypad_dev.signpad_flag]);i++)					//创建符号键盘
 	{
 		//创建按钮
-      	BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 		keypad_dev.SignButton_Handle[i] = BUTTON_CreateEx(_aSinButtonData[keypad_dev.signpad_flag][i].xPos, _aSinButtonData[keypad_dev.signpad_flag][i].yPos,
 											_aSinButtonData[keypad_dev.signpad_flag][i].xSize,_aSinButtonData[keypad_dev.signpad_flag][i].ySize,
 											hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
 		BUTTON_SetFont(keypad_dev.SignButton_Handle[i],&XBF24_Font);
 		BUTTON_SetText(keypad_dev.SignButton_Handle[i],_aSinButtonData[keypad_dev.signpad_flag][i].ButString);
 		BUTTON_SetFocussable(keypad_dev.SignButton_Handle[i], 0);
+        BUTTON_SetSkin(keypad_dev.SignButton_Handle[i], _DrawSkinFlex_BUTTON);
 	}
 }
 
@@ -303,30 +330,32 @@ void drawsign_pad(WM_HWIN hWin)
 void drawchinese1_pad(WM_HWIN hWin)
 {
 	u16 i;
+	//BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 	for(i=0;i<GUI_COUNTOF(_aChineseButtonData1);i++)					//创建中文键盘1
 	{
 		//创建按钮
-		BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); //设置BUTTON的皮肤
 		keypad_dev.ChineseButton_Handle[i] = BUTTON_CreateEx(_aChineseButtonData1[i].xPos, _aChineseButtonData1[i].yPos, _aChineseButtonData1[i].xSize, _aChineseButtonData1[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
 		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i],&XBF24_Font);
 		BUTTON_SetText(keypad_dev.ChineseButton_Handle[i], _aChineseButtonData1[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.ChineseButton_Handle[i], 0);
+		BUTTON_SetSkin(keypad_dev.ChineseButton_Handle[i], _DrawSkinFlex_BUTTON);
 	}
 }
 
 void drawchinese2_pad(WM_HWIN hWin)
 {
     u16 i;
+    //BUTTON_SetDefaultSkin(_DrawChineseSkin_BUTTON); //设置BUTTON的皮肤
     for(i=0;i<GUI_COUNTOF(_aChineseButtonData2);i++)					//创建中文键盘2
 	{
 		//创建按钮
-		BUTTON_SetDefaultSkin(_DrawChineseSkin_BUTTON); //设置BUTTON的皮肤
 		keypad_dev.ChineseButton_Handle[i+12] = BUTTON_CreateEx(_aChineseButtonData2[i].xPos, _aChineseButtonData2[i].yPos, _aChineseButtonData2[i].xSize, _aChineseButtonData2[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i+12);
 		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i+12],&XBF24_Font);
 		BUTTON_SetText(keypad_dev.ChineseButton_Handle[i+12], _aChineseButtonData2[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.ChineseButton_Handle[i+12], 0);
+		BUTTON_SetSkin(keypad_dev.ChineseButton_Handle[i+12], _DrawSkinFlex_BUTTON);
 	}
 }
 
@@ -391,18 +420,11 @@ void numkeypad_process(BUTTON_DATA *buttondata,int Id,WM_MESSAGE *pMsg)
 	char 		c;
 	WM_MESSAGE 	Msg;
     u8          KeyID;
-//    char tmp[10];
 
     KeyID=Id-ID_BUTTON;
 	if (buttondata[Id - ID_BUTTON].acLabel)
 	{
 		c = buttondata[Id - ID_BUTTON].acLabel[0];
-
-//        if(c == '\r')
-//        {
-//           MULTIEDIT_GetText(hMulti,tmp,6);
-//        }
-
         if(KeyID == 19)                             //返回英文键盘
         {
             keypad_dev.padtype=ENGLISH_KEYPAD;		//英文键盘
@@ -979,20 +1001,177 @@ static void _cbBk(WM_MESSAGE * pMsg)
 	}
 }
 
+/** @brief
+ *对输入的值检测合法性，合法进行设置动作，保存;非法返回
+ * @param
+ * @param
+ * @return
+ *  0：数据合法，并且保存成功;1：数据非法;2：保存不成功;
+ */
 
-void Keypad_GetValue(void)
+static uint8_t Value_Check()
 {
-//    uint8_t tmp[0x10];
-	WM_HWIN hFrame;
-	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
+    uint8_t result_input[0x100];
+    uint16_t i = 0;
 
+    memset(result_input,'\0',strlen(result_input));
+    MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
+
+    switch(ManagerSetOptions)
+    {
+    case LOGIN_PASSWD:
+
+        if(strlen(result_input) == 0)
+        {
+            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+            BUTTON_SetText(_aahButtonOk, "确定");
+        }
+        else if(strcmp(result_input,passwd) == 0)
+        {
+            return VALUE_OK_SAV;
+        }
+        else
+        {
+            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
+            BUTTON_SetText(_aahButtonOk, "密码错误");
+            for(i = 0;i < MULTIEDIT_GetTextSize(hMulti);i++)
+            {
+                GUI_StoreKeyMsg('\b', 1);
+                GUI_StoreKeyMsg('\b', 0);
+            }
+            return VALUE_ERROR;
+        }
+    break;
+    default:/// TODO (zshare#1#): 设置数据进行检测，定义数据检测结构体?????
+        if(strcmp(result_input,"888888") == 0)
+        {
+
+            return VALUE_OK_SAV;
+        }
+        else if(Value_Check() == VALUE_ERROR)
+        {
+            //MULTIEDIT_SetPrompt(hMulti,"密码错误");
+            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
+            BUTTON_SetText(_aahButtonOk, "数据非法");
+        }
+        else if(Value_Check() == VALUE_OK_UNSAV)
+        {
+            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
+            BUTTON_SetText(_aahButtonOk, "保存失败");
+        }
+    break;
+
+    }
+}
+
+static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
+{
+    uint8_t i = 0;
+
+    for (i = 0; i < GUI_COUNTOF(_aEngButtonData); i++)
+	{
+		WM_DeleteWindow(keypad_dev.EngButton_Handle[i]);
+        keypad_dev.EngButton_Handle[i] = 0;
+	}
+    for (i = 0; i < GUI_COUNTOF(_aNumButtonData); i++)
+	{
+		WM_DeleteWindow(keypad_dev.NumButton_Handle[i]);
+		keypad_dev.NumButton_Handle[i] = 0;
+	}
+    for (i = 0; i < GUI_COUNTOF(_aSinButtonData); i++)
+	{
+		WM_DeleteWindow(keypad_dev.SignButton_Handle[i]);
+		keypad_dev.SignButton_Handle[i] = 0;
+	}
+    for (i = 0; i < GUI_COUNTOF(_aChineseButtonData1); i++)
+	{
+		WM_DeleteWindow(keypad_dev.ChineseButton_Handle[i]);
+		keypad_dev.ChineseButton_Handle[i] = 0;
+	}
+    for (i = 0; i < GUI_COUNTOF(_aChineseButtonData2); i++)
+	{
+		WM_DeleteWindow(keypad_dev.ChineseButton_Handle[i+12]);
+		keypad_dev.ChineseButton_Handle[i+12] = 0;
+	}
+
+    WM_DeleteWindow(hWin);
+    WM_DeleteWindow(keypad_dev.hKeypad);
+    WM_DeleteWindow(hMulti);
+    //跳页操作
+    switch(ManagerSetOptions)
+    {
+    case LOGIN_PASSWD:
+        (IS_jump == 0) ? (PutOut_Manager_InfoAnalog()):(PutOut_Home());
+    break;
+
+    default:
+    break;
+    }
+}
+
+/** @brief
+ *frame回调函数，标示ok，cancle的动作
+ * @param
+ * @param
+ * @return
+ *
+ */
+
+static void _cbFrame(WM_MESSAGE * pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch(Id)
+        {
+        case GUI_ID_BUTTON0:
+            switch(NCode)
+            /// TODO (zshare#1#): /*添加设置值检测合法性*/
+            {
+            case WM_NOTIFICATION_CLICKED:
+                if(Value_Check() == VALUE_OK_SAV)
+                {
+                    //跳页操作
+                    Jump_Screen(pMsg->hWin,0);
+                }
+                break;
+            }
+            break;
+        case GUI_ID_BUTTON1:
+            switch(NCode)
+            {
+            ///* TODO (zshare#1#): 没有设置或设置失败然后返回跳页操作*/
+            case WM_NOTIFICATION_CLICKED:
+                Jump_Screen(pMsg->hWin,1);
+                break;
+            }
+            break;
+        }
+        break;
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
+}
+
+void Keypad_GetValue(uint8_t optios)
+{
+	WM_HWIN hFrame;
+
+    ManagerSetOptions = optios;
+	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
 	keypad_dev.xpos=10;
-	keypad_dev.ypos=150;//(lcd_height*6)/10;
-	keypad_dev.width=780;//lcd_width;
-	keypad_dev.height=320;//240;//lcd_height-((lcd_height*6)/10);
-//	keypad_dev.ypos=(lcd_height*6)/10;
-//	keypad_dev.width=lcd_width;
-//	keypad_dev.height=lcd_height-((lcd_height*6)/10);
+	keypad_dev.ypos=150;
+	keypad_dev.width=780;
+	keypad_dev.height=320;
 	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
 	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;
@@ -1012,21 +1191,49 @@ void Keypad_GetValue(void)
 	FRAMEWIN_SetDefaultTextAlign(GUI_TA_HCENTER);
 
 	//创建FRAME窗口
-	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", 0);
-	FRAMEWIN_SetTextColor(hFrame, GUI_YELLOW);
-	FRAMEWIN_SetFont(hFrame, &GUI_Font20_ASCII);
-	FRAMEWIN_SetClientColor(hFrame, GUI_BLUE);
+	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
+	FRAMEWIN_SetTextColor(hFrame, GUI_RED);
+	FRAMEWIN_SetFont(hFrame, &XBF24_Font);
+	FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
 
 	//创建一个multi edit(多行文本小工具)小工具
-	hMulti = MULTIEDIT_CreateEx(280, 60, 100, 30, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
-	//MULTIEDIT_EnableBlink(hMulti,500,1);			//开启光标,周期500ms
+	hMulti = MULTIEDIT_CreateEx(170, 10, 400, 100, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+	MULTIEDIT_EnableBlink(hMulti,500,1);//开启光标,周期500ms
     MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
 	MULTIEDIT_SetFont(hMulti, &XBF24_Font);
 	WM_SetFocus(hMulti);
 
+    _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
+    BUTTON_SetFont(_aahButtonOk, &XBF24_Font);
+    BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
+    BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
+    BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+    BUTTON_SetText(_aahButtonOk, "确定");
+
+    _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    BUTTON_SetFont(_aahButtonCancel, &XBF24_Font);
+    BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
+    BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);
+    BUTTON_SetTextColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_BLACK);
+    BUTTON_SetText(_aahButtonCancel, "取消");
+
+    /// TODO (zshare#1#): ///添加密码是否显示眼睛位图
+    //    hButton = BUTTON_CreateEx(580,45,20,20,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    //    BUTTON_SetBitmapEx(hButton, 0, &bm_bpp_off, 0, 0);
+
+    switch(ManagerSetOptions)
+    {
+    case LOGIN_PASSWD:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
+        TEXT_SetFont(_aahEditVar, &XBF24_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
+    break;
+    default:
+    break;
+    }
     /// TODO (zshare#1#): ///增加键盘值返回函数
     //MULTIEDIT_GetText(hMulti,传参数组,个数);
-//    MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
 
 	while(1)
 	{

@@ -3,6 +3,16 @@
 #include "DIALOG.h"
 #include "pyinput.h"
 
+//下述定义为输入设置项的对应宏
+#define LOGIN_PASSWD 0
+
+
+//下述定义为输入数据合法性检测返回值
+#define VALUE_OK_SAV 0
+#define VALUE_ERROR 1
+#define VALUE_OK_UNSAV 2
+
+
 //键盘类型，包括英文键盘，数字键盘，符号键盘，九宫格中文输入法键盘
 typedef enum
 {
@@ -61,6 +71,7 @@ typedef struct
 
 #define ID_BUTTON              (GUI_ID_USER + 0)
 
+#define X_OFF 110   //每行在各自字符模式下距左侧的偏移，不包含base
 //自定义消息
 #define CHANGE_ENGLISHPADTO_NUMPAD	   	(WM_USER+0)
 #define CHANGE_ENGLISHPADTO_SIGNPAD1	(WM_USER+1)
@@ -82,10 +93,10 @@ typedef struct
 #define ENG_BUTTON_LINE3YPOS		163	//英文键盘第三行Y坐标
 #define ENG_BUTTON_LINE4YPOS		241	//英文键盘第四行Y坐标
 
-#define ENG_BUTTONLINE1_XOFFSET		7	//英文键盘第一行按钮X轴偏移
-#define ENG_BUTTONLINE2_XOFFSET		30	//英文键盘第二行按钮X轴偏移
-#define ENG_BUTTONLINE3_XOFFSET		7	//英文键盘第三行按钮X轴偏移
-#define ENG_BUTTONLINE4_XOFFSET		7	//英文键盘第四行按钮X轴偏移
+#define ENG_BUTTONLINE1_XOFFSET		(7+X_OFF)	//英文键盘第一行按钮X轴偏移
+#define ENG_BUTTONLINE2_XOFFSET		(30+X_OFF)	//英文键盘第二行按钮X轴偏移
+#define ENG_BUTTONLINE3_XOFFSET		(7+X_OFF)	//英文键盘第三行按钮X轴偏移
+#define ENG_BUTTONLINE4_XOFFSET		(7+X_OFF)	//英文键盘第四行按钮X轴偏移
 
 #define ENG_BUTTONSHIFT_XINC		23	//英文键盘shift键的X轴长度增量
 #define ENG_BUTTONENTER_XINC		23	//英文键盘回车键的X轴长度增量
@@ -99,7 +110,7 @@ typedef struct
 #define NUM_BUTTON_WIDTH			110	//数字键盘按钮宽度
 #define NUM_BUTTON_HEIGHT			72	//数字键盘按钮高度
 #define NUM_BUTTON_XPAC				5	//数字键盘按钮X轴间距
-#define NUM_BUTTON_XOFFSET			7	//数字键盘每行按钮X轴偏移
+#define NUM_BUTTON_XOFFSET			(7+X_OFF)	//数字键盘每行按钮X轴偏移
 
 #define NUM_BUTTON_LINE1YPOS		7	//数字键盘第一行Y坐标
 #define NUM_BUTTON_LINE2YPOS		85	//数字键盘第二行Y坐标
@@ -116,7 +127,7 @@ typedef struct
 #define SING_BUTTON_WIDTH			93	//符号键盘按钮宽度
 #define SIGN_BUTTON_HEIGHT			72	//符号键盘按钮高度
 #define SIGN_BUTTON_XPAC			5	//符号键盘按钮X轴间距
-#define SIGN_BUTTON_XOFFSET			7	//符号键盘每行按钮X轴偏移
+#define SIGN_BUTTON_XOFFSET			(7+X_OFF)	//符号键盘每行按钮X轴偏移
 #define SIGN_BUTTONCONTR_XINC		28	//符号键盘中控制按键的X轴长度增量
 
 #define SIGN_BUTTON_LINE1YPOS		7	//符号键盘第一行Y坐标
@@ -128,7 +139,7 @@ typedef struct
 #define CHIN1_BUTTON_WIDTH			90	//中文键盘1按钮宽度
 #define CHIN1_BUTTON_HEIGHT			81	//中文键盘1按钮高度
 #define CHIN1_BUTTON_XPAC			5	//中文键盘1按钮X轴间距
-#define CHIN1_BUTTON_XOFFSET	    110	//中文键盘1每行按钮X轴偏移
+#define CHIN1_BUTTON_XOFFSET	    (110+X_OFF)	//中文键盘1每行按钮X轴偏移
 #define CHIN1_BUTTONCONTR_XINC		15	//中文键盘1中控制按键的X轴长度增量
 
 #define CHIN1_BUTTON_LINE1YPOS		56	//中文键盘1第一行Y坐标
@@ -139,7 +150,7 @@ typedef struct
 #define CHIN2_BUTTON_WIDTH			60	//中文键盘2按钮宽度
 #define CHIN2_BUTTON_HEIGHT			50	//中文键盘2按钮高度
 #define CHIN2_BUTTON_XPAC			0	//中文键盘2按钮X轴间距
-#define CHIN2_BUTTON_XOFFSET	    0	//中文键盘2每行按钮X轴偏移
+#define CHIN2_BUTTON_XOFFSET	    (0+X_OFF)	//中文键盘2每行按钮X轴偏移
 #define CHIN2_BUTTONPY_XINC		    50	//中文键盘2中控制按键的X轴长度增量
 #define CHIN2_BUTTONPY_YINC         4   //中文键盘2中控制按键的Y轴长度增量
 
@@ -298,6 +309,7 @@ static GUI_CONST_STORAGE GUI_BITMAP bmReturn = {
   GUI_DRAW_BMP8888
 };
 
-void Keypad_GetValue(void);
+extern uint8_t ManagerSetOptions;
+void Keypad_GetValue(uint8_t optios);
 #endif
 

@@ -66,6 +66,11 @@ int  GUI_TOUCH_X_MeasureX(void) {
         adc_x = tp_dev.x[0];
         adc_y = tp_dev.y[0];
     }
+    else
+    {
+        adc_x = 0;
+        adc_y = 0;
+    }
 
     return adc_x;
 }

@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -54,6 +54,8 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x03)
 #define ID_TEXT_8     (GUI_ID_USER + 0x09)
 #define ID_TEXT_9     (GUI_ID_USER + 0x0F)
+#define ID_BUTTON_2  (GUI_ID_USER + 0x13)
+#define ID_TEXT_10     (GUI_ID_USER + 0x14)
 #define ID_TimerTime    0
 
 //14行1列，14个故障项
@@ -103,12 +105,12 @@ static const U8 _acImage_0[463] =
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    //{ FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 186, 250, 40, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 186, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 99, 254, 50, 0, 0x0, 0 },
     //{ IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
-    //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
@@ -120,12 +122,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_7, 422, 286, 80, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 286, 80, 30, 0, 0x64, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 286, 80, 30, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 740, 380, 50, 50, 0, 0x0, 0 },
-    // USER END
-};
-static const GUI_WIDGET_CREATE_INFO _aDialogWindow[] =
-{
-    { FRAMEWIN_CreateIndirect, "win", ID_WINDOW_0, 495, 145, 300, 250, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_10, 200, 0, 240, 30, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 750, 0, 40, 40, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 200, -43, 300, 50, 0, 0x0, 0 },
     // USER END
 };
@@ -221,26 +220,22 @@ static void _cbDialog_Error()
         flag = 1;
         // USER START (Optionally insert additional variables)
         // 创建窗口
-        //hWindow = WM_CreateWindow(495, 145, 300, 250, WM_CF_SHOW, &_cbWindow, 0);
-        hWindow = GUI_CreateDialogBox(_aDialogWindow, GUI_COUNTOF(_aDialogWindow), _cbWindow, WM_HBKWIN, 0, 0);
-//        FRAMEWIN_AddCloseButton(hWindow,FRAMEWIN_BUTTON_RIGHT,0);
-//        FRAMEWIN_AddMaxButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
-//        FRAMEWIN_AddMinButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
+        hWindow = WM_CreateWindow(495, 145, 300, 250, WM_CF_SHOW, &_cbWindow, 0);
+
         //WINDOW_SetBkColor(hWindow,GUI_GRAY);
         //创建水平滑轮
-        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
-        //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(hScroll, 48 * TEXT_MAX_X);
-        //设置页尺寸
-        //SCROLLBAR_SetPageSize(hScroll, 220);
-        SCROLLBAR_SetWidth(hScroll,20);
+//        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
+//        //设置滑轮条目数量
+//        SCROLLBAR_SetNumItems(hScroll, 48 * TEXT_MAX_X);
+//        //设置页尺寸
+//        //SCROLLBAR_SetPageSize(hScroll, 220);
+//        SCROLLBAR_SetValue(hScroll,10);
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
         SCROLLBAR_SetNumItems(wScroll, 80 * TEXT_MAX_Y);
         //设置页尺寸
         SCROLLBAR_SetPageSize(wScroll, 220);
-        SCROLLBAR_SetWidth(wScroll,20);
         //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
         _aahText[0][0] = TEXT_CreateEx(30, 20, 24*strlen(tmp), 25,hWindow,WM_CF_SHOW,0,13,tmp);
         _aahText[1][0] = TEXT_CreateEx(30, 50, 120, 25,hWindow,WM_CF_SHOW,0,13,"充电电流过大过大过大过大过大！");
@@ -342,10 +337,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Framewin'
         //
 
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        Window_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &XBF24_Font, GUI_RED, "欢迎使用北京动力源交流充电桩");
+
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2), GUI_TA_HCENTER | GUI_TA_VCENTER,
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_RED, "          ");
+
 //        _framebutton = FRAMEWIN_AddButton(pMsg->hWin,FRAMEWIN_BUTTON_RIGHT,0,ID_BUTTON_MANAGER);
-//        BUTTON_SetBkColor(_framebutton,BUTTON_CI_UNPRESSED,GUI_RED); //FRAMEWIN_GetBarColor(pMsg->hWin,0));
-//        FRAMEWIN_AddMinButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
+//
+//        BUTTON_GetFont();
 //        BUTTON_GetText();
         //
         // Initialization of 'Image'
@@ -353,7 +353,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
         pData = _GetImageById(ID_IMAGE_0_IMAGE_0, &FileSize);
         IMAGE_SetBMP(hItem, pData, FileSize);
-        //dispbmp2("system/girl.bmp", 0, 5, 5, 1, 1,pMsg->hWin);
+//        dispbmp2("system/girl.bmp", 0, 5, 5, 1, 1,pMsg->hWin);
         //
         // Initialization of 'Edit'
         //
@@ -376,30 +376,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
                     &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
 
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER), GUI_TA_HCENTER | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_GREEN, BUTTON_CI_UNPRESSED, GUI_GREEN, "管理");
-        //BUTTON_SetDefaultBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER))
-        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER),BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED,GUI_BLUE);
-//        WM_SetCallback(pMsg->hWin, _cbFrame);
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, FRAMEWIN_BUTTON_RIGHT), GUI_TA_HCENTER | GUI_TA_VCENTER,
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "管理");
+
+        //WM_SetCallback(pMsg->hWin, _cbFrame);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id)
         {
-        case ID_BUTTON_MANAGER:
-            switch(NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                WM_DeleteWindow(pMsg->hWin);
-                Keypad_GetValue(LOGIN_PASSWD);
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                WM_DeleteWindow(pMsg->hWin);
-                Keypad_GetValue(LOGIN_PASSWD);
-                break;
-            }
-            break;
         case ID_BUTTON_0: // Notifications sent by 'Button'
             switch(NCode)
             {
@@ -455,10 +441,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 /*********************************************************************
 *
-*       CreateFramewin
+*       CreateWindow
 */
-WM_HWIN CreateFramewin(void);
-WM_HWIN CreateFramewin(void)
+WM_HWIN CreateWindow(void);
+WM_HWIN CreateWindow(void)
 {
     WM_HWIN hWin;
 
@@ -479,11 +465,11 @@ WM_HWIN CreateFramewin(void)
  *
  */
 
-void PutOut_Home()
+void PutOut_Window()
 {
     WM_HWIN hWin;
     EventBits_t uxBitRFID;
-    hWin = CreateFramewin();
+    hWin = CreateWindow();
 
     while(1)
     {
@@ -504,4 +490,5 @@ void PutOut_Home()
 // USER END
 
 /*************************** End of file ****************************/
+
 

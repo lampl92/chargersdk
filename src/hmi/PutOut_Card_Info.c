@@ -160,7 +160,6 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
     }
-Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
     /*end of 未进GoodID ,BadID和OweID状态时显示内容*/
 }
 // USER END
