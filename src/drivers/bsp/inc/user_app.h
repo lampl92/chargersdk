@@ -1,27 +1,6 @@
 #ifndef USER_APP_H_INCLUDED
 #define USER_APP_H_INCLUDED
 
-#define LED2_R_RUN  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_RESET)
-#define LED2_R_OFF  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_SET)
-
-#define LED2_G_RUN  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_3,GPIO_PIN_RESET)
-#define LED2_G_OFF  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_3,GPIO_PIN_SET)
-
-#define LED2_B_RUN  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_4,GPIO_PIN_RESET)
-#define LED2_B_OFF  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_4,GPIO_PIN_SET)
-
-#define LED1_R_RUN  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3,GPIO_PIN_RESET)
-#define LED1_R_OFF  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3,GPIO_PIN_SET)
-
-#define LED1_G_RUN  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4,GPIO_PIN_RESET)
-#define LED1_G_OFF  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4,GPIO_PIN_SET)
-
-#define LED1_B_RUN  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7,GPIO_PIN_RESET)
-#define LED1_B_OFF  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7,GPIO_PIN_SET)
-
-#define RUN_ON      HAL_GPIO_WritePin(GPIOH, GPIO_PIN_5,GPIO_PIN_SET)
-#define RUN_OFF     HAL_GPIO_WritePin(GPIOH, GPIO_PIN_5,GPIO_PIN_RESET)
-
 #define A_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_RESET)//ctr_gjd1
 #define A_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_SET)//ctr_gjd1
 
@@ -53,7 +32,6 @@
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 
-
 #define cs_zl_set do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
@@ -76,6 +54,17 @@
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
+#define TEMP_L_OUT 0X00
+#define TEMP_L_IN  0X01
+#define TEMP_N_OUT 0X02
+#define TEMP_N_IN  0X03
+#define TEMP_GUN1_POSITIVE  0X04
+#define TEMP_GUN1_NEGATIVE  0X05
+#define TEMP_GUN2_POSITIVE  0X06
+#define TEMP_GUN2_NEGATIVE  0X07
+#define VREF_1.5            0X0F
+
+
 
 #define keep_off 0
 #define keep_on  1
@@ -89,11 +78,12 @@
 #define read     0x03
 #define write    0x10
 
-#define voltage  0x000A
-#define current  0x0016
-#define power    0x001C
-#define electric_energy 0x0065
-#define frequency 0x0030
+#define voltage  0x000b
+#define current  0x000c
+#define power    0x000d
+#define electric_energy_l 0x0001
+#define electric_energy_h 0x0000
+#define frequency 0x0011
 
 #define	AXISDATA_REG	0x28
 
@@ -164,8 +154,10 @@ typedef struct
        uint8_t flag_va;
        uint8_t flag_ia;
        uint8_t flag_power;
-       uint8_t flag_electric_energy;
+       uint8_t flag_electric_energy_l;
+       uint8_t flag_electric_energy_h;
        uint8_t flag_frequency;
+       uint8_t flag_erro;
    }flag;
      struct
    {
@@ -173,6 +165,8 @@ typedef struct
        float  massage_ia;
        float massage_power;
        float massage_electric_energy;
+       float massage_electric_energy_l;
+       float massage_electric_energy_h;
        float massage_frequency;
    }massage;
 
@@ -233,7 +227,7 @@ void POWER_L_CLOSE(void);
 void POWER_N_CLOSE(void);
 void POWER_L_OPEN(void);
 void POWER_N_OPEN(void);
-uint8_t yy_test,DC_channel;
+uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t vref,num_cp1,num_cp2;
 uint8_t RS485_RX_MODBUS_CNT;

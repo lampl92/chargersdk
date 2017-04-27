@@ -143,6 +143,7 @@ void vTaskEVSECharge(void *pvParameters)
                                                       pdFALSE, pdFALSE, 0);
                 if((uxBitsException & defEventBitExceptionCritical) != 0)
                 {
+                    printf_safe("Stop Error!\n");
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
@@ -154,12 +155,16 @@ void vTaskEVSECharge(void *pvParameters)
                     if(pCON->status.ucRelayLState == SWITCH_OFF &&
                             pCON->status.ucRelayNState == SWITCH_OFF)
                     {
-                        printf_safe("Stop Error!\n");
+                        printf_safe("Stop Charge!\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
+                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)//刷卡停止
+                    {
+                        pCON->order.ucStopType = defOrderStopType_RFID;
+                    }
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING Without \"S2 open\"");
                     vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
@@ -179,17 +184,20 @@ void vTaskEVSECharge(void *pvParameters)
 #endif
                         if(pCON->status.ucRelayLState == SWITCH_OFF &&
                                 pCON->status.ucRelayNState == SWITCH_OFF)
-                        {
+                        {   printf_safe("Stop Charge!\n");
                             pCON->state = STATE_CON_STOPCHARGE;
                         }
                     }
                     /** @todo (rgw#1#): 后续会增加判断失效点，并对失效点进行提示。或者在这里不进行提示，而在发现失效时进行提示 */
                 }
-                printf_safe("Stop Charge!\n");
                 break;
             case STATE_CON_STOPCHARGE:
+                xEventGroupSync(xHandleEventHMI,
+                                defEventBitHMI_ChargeReqDispDone,
+                                defeventBitHMI_ChargeReqDispDoneOK,
+                                portMAX_DELAY );
                 /** @todo (rgw#1#): 等待结费
-                                    结费成功后进入idle */
+                                    结费成功后通知HMI显示结费完成,进入idle */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                       defEventBitCONOrderFinish,

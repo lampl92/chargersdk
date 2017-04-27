@@ -85,6 +85,8 @@
 #define defEventBitRemoteGotAccount     BIT_1
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID     BIT_0
+#define defEventBitHMI_ChargeReqDispDone   BIT_1
+#define defeventBitHMI_ChargeReqDispDoneOK  BIT_2
 
 /*------xHandleEventDiag*/
 #define defEventBitDiagTempW            BIT_0              //ÎÂ¶È±¨¾¯

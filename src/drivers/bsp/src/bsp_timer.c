@@ -57,7 +57,7 @@ void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 96;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1000;
+  htim3.Init.Period = 100;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
@@ -195,7 +195,7 @@ void TIM2_IRQHandler (void)
 
   /* USER CODE END TIM2_IRQn 1 */
 }
-void TIM3_IRQHandler (void)
+void TIM3_IRQHandler (void)//0.1ms
 {
   //yy_test=get_va();
  // RS485_Receive_Data(&RS485_RX_MODBUS,&RS485_RX_MODBUS_CNT);
@@ -210,8 +210,16 @@ void TIM3_IRQHandler (void)
 	pwm_b_1++;
 	pwm_b_2++;
 	timer_ms++;
+    delay_breath++;
+    if(delay_breath>=200)
+    {
+    led_breath_r();
+    led_breath_g();
+    led_breath_b();
+    delay_breath=0;
+    }
 	timer_relay_ms++;
-	if(timer_relay_ms>=1000)
+	if(timer_relay_ms>=10000)
     {
         timer_relay_ms=0;
         if(flag_power_out_l==1)
@@ -224,17 +232,16 @@ void TIM3_IRQHandler (void)
         }
 
     }
+    if(timer_ms>=1000)
+    {
+        timer_ms=0;
+        timer_s++;
+    }
     if(timer_s>=60)
     {
         timer_s=0;
         timer_min++;
     }
-	if(timer_ms>=1000)
-    {
-        timer_ms=0;
-        timer_s++;
-    }
-	electricity_meter_analysis();
 	if((flag_pwm_out_n==1)&&(flag_power_out_n==1))
     {
       Power_out_n_pwm_ctrl();
@@ -271,7 +278,7 @@ void TIM3_IRQHandler (void)
 	{
 		pwm_b_2=0;
 	}
-
+    led_output();
 }
 void TIM4_IRQHandler(void)
 {
@@ -286,11 +293,9 @@ void TIM4_IRQHandler(void)
 void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
-
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
-  get_samp_point();
-
+  //get_samp_point();
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */

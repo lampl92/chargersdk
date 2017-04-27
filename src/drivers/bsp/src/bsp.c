@@ -126,6 +126,7 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
+    TP_Init_1();
 #ifndef DEBUG_INIT
     Peripheral_Init();
 #endif
@@ -134,8 +135,7 @@ void bsp_Init(void)
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
-LCD_Init();
-TP_Init();
+//LCD_Init();
 }
 
 void bsp_Error_Handler(void)

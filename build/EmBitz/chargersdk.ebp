@@ -78,6 +78,8 @@
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
+			<Add symbol="__EVSE" />
+			<Add symbol="EVSE_DEV" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Include" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include" />
 			<Add directory="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc" />
@@ -258,6 +260,7 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_gpio.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_timer.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\electric_energy_meter.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\led_control.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\ST_LIS2DH12.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\user_app.h" />
@@ -289,6 +292,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\bsp_user_lib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\electric_energy_meter.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\led_control.c">

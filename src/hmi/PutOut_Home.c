@@ -322,7 +322,7 @@ void PutOut_Home()
             PutOut_Card_Info();
         }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(1000);
+        GUI_Delay(500);
     }
 }
 // USER END

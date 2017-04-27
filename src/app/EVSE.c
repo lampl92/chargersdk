@@ -904,7 +904,7 @@ static ErrorCode_t GetScramState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpScramState = 0;
 #else
-    tmpScramState = ~((uint8_t)(read_pca9554_2() >> 5)) & 0x01;
+    tmpScramState = ~((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
 #endif
     /*********************/
 
@@ -933,7 +933,15 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     tmpKnockState = 0;
     /* @todo (yuye#1#): 添加重力传感器驱动 */
 #ifdef DEBUG_DIAG_DUMMY
-    tmpKnockState = 0;
+if(get_angle_max()>90)
+{
+  return ERR_GSENSOR_FAULT;
+}
+else
+{
+  tmpKnockState = get_angle_max();
+}
+
 #else
     //在这添加代码
 #endif
@@ -1002,7 +1010,13 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
-    if(get_va() <= 100.0) //检测间隔10mS
+if(get_va()>=400)
+{
+return ERR_POWEROFF_DECT_FAULT;
+}
+else
+{
+if(get_va() <= 100.0) //检测间隔10mS
     {
         tmpOffState = 1;
     }
@@ -1010,6 +1024,8 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     {
         tmpOffState = 0;
     }
+}
+
 #endif
     /*********************/
 

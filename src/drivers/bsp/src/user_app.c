@@ -4,7 +4,9 @@
 #include <math.h>
 #include "user_app.h"
 #include "bsp_timer.h"
+#include "electric_energy_meter.h"
 #include "FreeRTOS.h"
+float frequency_test;
 const double  resistance[154] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
@@ -72,10 +74,12 @@ double get_CD4067(void)
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
     return Sys_samp.DC.CD4067;
 }
-double get_dc_massage(void)
+float get_dc_massage(uint8_t DC_channel)
 {
     uint16_t j, ad_samp_value;
-    double ad_value, re_value;
+    float ad_value, re_value;
+    float dc_data;
+
 
     Chip1.a_select = DC_channel >> 0 & 0x01;
     Chip1.b_select = DC_channel >> 1 & 0x01;
@@ -83,7 +87,7 @@ double get_dc_massage(void)
     Chip1.d_select = DC_channel >> 3 & 0x01;
     Chip1.cs1_select = 1;
     write_pca9554_1();
-    Delay_ms(1);
+    bsp_DelayMS(25);
     ad_samp_value = get_CD4067();
     switch (DC_channel)
     {
@@ -95,10 +99,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP1 = j - 40;
+                dc_data=(float)Sys_samp.DC.TEMP1;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -107,10 +111,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP2 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP2;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -119,10 +123,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP3 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP3;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -131,10 +135,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP4 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP4;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -143,10 +147,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM1 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM1;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -155,10 +159,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM2 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM2;
             }
         }
-        DC_channel++;
-        break;
+        return dc_data;
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -167,10 +171,10 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM3 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM3;
             }
         }
-        DC_channel++;
-        break;
+         return dc_data;
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -179,38 +183,19 @@ double get_dc_massage(void)
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM4 = j - 40;
+                 dc_data=(float)Sys_samp.DC.TEMP_ARM4;
             }
         }
-        DC_channel++;
-        break;
-    case 8:
-        DC_channel++;
-        break;
-    case 9:
-        DC_channel++;
-        break;
-    case 10:
-        DC_channel++;
-        break;
-    case 11:
-        DC_channel++;
-        break;
-    case 12:
-        DC_channel++;
-        break;
-    case 13:
-        DC_channel++;
-        break;
-    case 14:
-        DC_channel++;
-        break;
+
+         return dc_data;
+
     case 15:
         vref = ad_samp_value;
         DC_channel++;
-        break;
+         return dc_data;
 
     default :
-        DC_channel = 0;
+
         break;
     }
 
@@ -237,7 +222,10 @@ double get_CP1(void)
     CP1_sum_sys = 0;
     num_cp1 = 0;
     return Sys_samp.DC.CP1;
+
+
 }
+
 double get_CP2(void)
 {
     unsigned short i;
@@ -383,32 +371,53 @@ void Power_out_n_pwm_ctrl(void)
 void POWER_L_CLOSE(void)
 {
 POWER_L_ON;
-flag_pwm_out_l=1;
-flag_power_out_l=0;
+flag_power_out_l=1;
+flag_pwm_out_l=0;
 timer_relay_ms=0;
 }
 void POWER_N_CLOSE(void)
 {
 POWER_N_ON;
-flag_power_out_n=0;
-flag_pwm_out_n=1;
+flag_power_out_n=1;
+flag_pwm_out_n=0;
 timer_relay_ms=0;
 }
 void POWER_L_OPEN(void)
 {
-flag_power_out_l=1;
+flag_power_out_l=0;
 POWER_L_OFF;
 flag_pwm_out_l=0;
 }
 void POWER_N_OPEN(void)
 {
-flag_power_out_n=1;
+flag_power_out_n=0;
 POWER_N_OFF;
 flag_pwm_out_n=0;
 }
+uint8_t Get_State_relay()
+{
+     uint8_t relay_num,i,j;
+          relay_num=0;
+    for (i=0;i<100;i++)
+    {
+        j=read_pca9554_2()>>1;
+        relay_num+=(j&0x01);
+    }
+    if(relay_num==100)
+    {
+    return 0;//未连接
+    }
+    else
+    {
+    return 1;//已经连接
+    }
+
+}
 void Peripheral_Init(void)
 {
+
     MX_GPIO_Init();
+        IIC_Init();
     PCA9554_init();
     MX_DMA_Init();
     MX_ADC1_Init();
@@ -417,15 +426,16 @@ void Peripheral_Init(void)
     MX_TIM4_Init();//2ºÅÇ¹PWMÆµÂÊ1K
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     RS485_Init(9600);
+    Lis2dh12_init();
     DMA_START();
-    IIC_Init();
-    TIMER5_ON;
-    TIMER3_ON;
+    POWER_L_OPEN();
+    POWER_N_OPEN();
+   Get_State_relay();
+   frequency_test=Get_Electricity_meter_massage_voltage(1);
     PWM1_ON;
     PWM2_ON;
-    Write_Lis2ds12(0X20,0X77);
-    Write_Lis2ds12(0X27,0XFF);
-	Write_Lis2ds12(0X23,0X38);
+    TIMER3_ON;
+    TIMER5_ON;
 
 
 }

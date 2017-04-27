@@ -71,3 +71,9 @@ float get_angle_max(void)
     }
 return angle_max;
 }
+void Lis2dh12_init(void)
+{
+    Write_Lis2ds12(0X20,0X77);
+    Write_Lis2ds12(0X27,0XFF);
+	Write_Lis2ds12(0X23,0X38);
+}

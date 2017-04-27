@@ -67,7 +67,15 @@ void vTaskEVSERFID(void *pvParameters)
                         break;
                     }
                 }
-                else if(pCON->state == STATE_CON_IDLE)
+                else if(pCON->state == STATE_CON_STOPCHARGE)
+                {
+                    while(1);
+                }
+                else if(pCON->state == STATE_CON_ERROR)
+                {
+                    while(1);
+                }
+                else// if(pCON->state == STATE_CON_IDLE)
                 {
                     //Î´Ë¢¹ý¿¨
 #ifdef DEBUG_RFID
@@ -171,6 +179,7 @@ void vTaskEVSERFID(void *pvParameters)
                                          pdFALSE, pdFALSE, 0);
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
             {
+                vTaskDelay(10000);
                 pRFIDDev->state = STATE_RFID_NOID;
             }
             uxBits = xEventGroupWaitBits(xHandleEventHMI,
