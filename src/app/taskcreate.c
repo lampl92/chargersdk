@@ -18,7 +18,7 @@
 /*---------------------------------------------------------------------------/
 / 任务栈定�?
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskInit                   512
+#define defSTACK_TaskInit                   2048
 #define defSTACK_TaskCLI                    1024
 #define defSTACK_TaskGUI                    (1024*4)
 #define defSTACK_TaskTouch                  128
@@ -107,6 +107,7 @@ EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
+EventGroupHandle_t xHandleEventlwIP   = NULL;
 
 //下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
@@ -128,10 +129,8 @@ TimerHandle_t xHandleTimerHeartbeat = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
+    gprs_init();
+    gprs_ppp_poll();
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -188,6 +187,7 @@ void AppObjCreate (void)
     xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
+    xHandleEventlwIP = xEventGroupCreate();
 
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
