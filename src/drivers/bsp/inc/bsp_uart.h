@@ -12,6 +12,13 @@
 #include "stm32f4xx.h"
 #include "userlib_queue.h"
 
+typedef enum
+{
+    UART_PORT_CLI,
+    UART_PORT_GPRS,
+    UART_PORT_RFID
+}UART_Portdef;
+
 #ifdef EVSE
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         9600
@@ -47,8 +54,9 @@ extern Queue *pRfidRecvQue;
 extern Queue *pGprsRecvQue;
 
 void bsp_Uart_Init(void);
+uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
-uint8_t recvReadEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
+uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
 uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len);
 
 #endif

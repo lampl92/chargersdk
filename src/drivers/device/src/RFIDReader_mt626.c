@@ -11,7 +11,6 @@
 #include "bsp_uart.h"
 
 /** @note (rgw#1#): 调用的外部变量与函数, 如在其他系统中使用应实现对应的函数. */
-extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
 
 
@@ -58,7 +57,7 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
     uint32_t ucFailedCounts;
     MT626COM_t *pMT626COMObj;
     uint8_t *pucSendBuffer;
-    HAL_StatusTypeDef hal_res;
+    uint32_t btw;
 
     ucFailedCounts = 0;
     pMT626COMObj = (MT626COM_t *)pObj;
@@ -66,15 +65,15 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
 
     do
     {
-        hal_res = HAL_UART_Transmit(&RFID_UARTx_Handler, pucSendBuffer, ucSendLength, 0xFFFF);
-        if(hal_res != HAL_OK)
+        btw =  uart_write(UART_PORT_RFID, pucSendBuffer, ucSendLength);
+        if(btw != ucSendLength)
         {
             ucFailedCounts++;
             MT626DelayMS(ucTimeOutMS);
         }
     }
-    while(hal_res != HAL_OK && ucFailedCounts < uiTryTimes);
-    if(hal_res != HAL_OK || ucFailedCounts == uiTryTimes)
+    while(btw != ucSendLength && ucFailedCounts < uiTryTimes);
+    if(btw != ucSendLength || ucFailedCounts == uiTryTimes)
     {
         return MT_COM_FAIL;
     }
@@ -103,7 +102,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *puiRecvdLe
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
 
-    recvReadEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen);
+    readRecvQueEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen);
     if(*puiRecvdLen == 0)
     {
         return MT_COM_FAIL;

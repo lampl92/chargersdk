@@ -21,7 +21,32 @@ static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
+uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
+{
+    UART_HandleTypeDef *pUART_Handle;
+    switch(uartport)
+    {
+    case UART_PORT_CLI:
+        pUART_Handle = &CLI_UARTx_Handler;
+        break;
+    case UART_PORT_RFID:
+        pUART_Handle = &RFID_UARTx_Handler;
+        break;
+    case UART_PORT_GPRS:
+        pUART_Handle = &GPRS_UARTx_Handler;
+        break;
+    default:
+        break;
+    }
+    HAL_StatusTypeDef hal_res;
+    hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 0xFFFF);
+    if(hal_res == HAL_OK)
+    {
+        return len;
+    }
+}
+
+    uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
 {
     xSemaphoreTake(q->xHandleMutexQue, 100);
     while(time_out)
@@ -46,7 +71,7 @@ uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
  * @return uint8_t 1 有数据; 0 无数据
  *
  */
-uint8_t recvReadEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen)
+uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen)
 {
     uint8_t ch;
     uint32_t i;
