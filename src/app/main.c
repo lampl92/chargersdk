@@ -22,6 +22,7 @@ int main(void)
     bsp_Init();
     sys_Init();
 
+    TaskInit();
     SysTaskCreate();
     AppTaskCreate();
     AppObjCreate();
