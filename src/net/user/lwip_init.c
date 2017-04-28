@@ -167,7 +167,7 @@ void lwip_init_task()
 {
     ppp_pcb *ppp;           /* PPP control block */
     struct netif ppp_netif; /* PPP IP interface */
-    EventBits_t uxBitTCP;
+    EventBits_t uxBitLwIP;
 
     /*创建 PPPoS 控制块*/
     ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
@@ -181,16 +181,21 @@ void lwip_init_task()
     pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
 
     tcpip_init(tcpip_init_done, NULL);
-    uxBitTCP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitTCPIPinit,
-                                   pdTRUE, pdTRUE, portMAX_DELAY);
-    if((uxBitTCP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
+    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitTCPIPinit,
+                                    pdTRUE, pdTRUE, portMAX_DELAY);
+    if((uxBitLwIP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
     {
         //当portMAX_DELAY修改为超时时间后，当超时后仍未初始化完成则进入超时处理。
 
     }
 
-    /**/
-    pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
+    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitDailCONNECT,
+                                    pdTRUE, pdTRUE, portMAX_DELAY);
+    if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
+    {
+        pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
+    }
+
 
 
 
