@@ -462,3 +462,12 @@ void led_output(void)
 
     }
 }
+void led_state_init(void)
+{
+led_ctrl(1,red,keep_off);
+led_ctrl(1,blue,keep_off);
+led_ctrl(1,green,keep_off);
+led_ctrl(2,red,keep_off);
+led_ctrl(2,blue,keep_off);
+led_ctrl(2,green,keep_off);
+}

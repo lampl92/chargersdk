@@ -1323,8 +1323,8 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-            POWER_L_OPEN();
-            POWER_N_OPEN();
+           POWER_L_OPEN();
+           POWER_N_OPEN();
 #endif
         }
         else if(cmd == SWITCH_ON)

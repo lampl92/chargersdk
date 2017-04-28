@@ -47,7 +47,7 @@
 				<Compiler>
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-O0" />
+					<Add option="-O3" />
 					<Add option="-g2" />
 					<Add symbol="DEBUG_DIAG" />
 				</Compiler>
@@ -75,11 +75,12 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
+			<Add option="-O3" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
-			<Add symbol="__EVSE" />
-			<Add symbol="EVSE_DEV" />
+			<Add symbol="EVSE" />
+			<Add symbol="__EVSE_DEV" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Include" />
 			<Add directory="..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include" />
 			<Add directory="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc" />

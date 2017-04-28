@@ -335,8 +335,6 @@ void MX_GPIO_Init(void)
     B_KEY_OFF;
 	C_KEY_OFF;
 	D_KEY_OFF;
-	POWER_L_OFF;
-	POWER_N_OFF;
     IIC_SDA = 1;
     IIC_SCL = 1;
     /*Configure GPIO pin Output Level */

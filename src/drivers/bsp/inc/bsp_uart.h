@@ -17,9 +17,9 @@
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
 #define CLI_QUEUE_SIZE                              10
 
-#define RFID_USARTx_BASE                            USART3
+#define RFID_USARTx_BASE                            USART1
 #define RFID_USARTx_BAUDRATE                        115200
-#define RFID_USARTx_IRQHandler                      void USART3_IRQHandler(void)
+#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
 #define RFID_QUEUE_SIZE                             100
 
 

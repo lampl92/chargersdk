@@ -64,7 +64,7 @@ double get_leakage_current(void)
     Sys_samp.AC.leakage_current = sqrt(leakage_current_sum) * leakage_current_k;
     return Sys_samp.AC.leakage_current;
 }
-double get_CD4067(void)
+ float get_CD4067(void)
 {
     unsigned short i;
     for(i = 0; i < samp_sum; i++)
@@ -76,7 +76,8 @@ double get_CD4067(void)
 }
 float get_dc_massage(uint8_t DC_channel)
 {
-    uint16_t j, ad_samp_value;
+    uint16_t j;
+    double ad_samp_value;
     float ad_value, re_value;
     float dc_data;
 
@@ -88,7 +89,7 @@ float get_dc_massage(uint8_t DC_channel)
     Chip1.cs1_select = 1;
     write_pca9554_1();
     bsp_DelayMS(25);
-    ad_samp_value = get_CD4067();
+    ad_samp_value =get_CD4067();;
     switch (DC_channel)
     {
     case 0:
@@ -103,6 +104,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
         return dc_data;
+
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -115,6 +117,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
          return dc_data;
+
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -127,6 +130,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
          return dc_data;
+         //break;
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -139,6 +143,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
         return dc_data;
+        //break;
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -151,6 +156,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
          return dc_data;
+      //break;
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -163,6 +169,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
         return dc_data;
+        //break;
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -175,6 +182,7 @@ float get_dc_massage(uint8_t DC_channel)
             }
         }
          return dc_data;
+         //break;
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
@@ -189,10 +197,24 @@ float get_dc_massage(uint8_t DC_channel)
 
          return dc_data;
 
+    case 8:
+        break;
+    case 9:
+        break;
+    case 10:
+        break;
+    case 11:
+        break;
+    case 12:
+        break;
+    case 13:
+        break;
+    case 14:
+        break;
     case 15:
-        vref = ad_samp_value;
-        DC_channel++;
+        dc_data = ad_samp_value;
          return dc_data;
+         break;
 
     default :
 
@@ -419,6 +441,7 @@ void Peripheral_Init(void)
     MX_GPIO_Init();
         IIC_Init();
     PCA9554_init();
+    led_state_init();
     MX_DMA_Init();
     MX_ADC1_Init();
     MX_TIM2_Init();//1ºÅÇ¹PWMÆµÂÊ1K
@@ -428,14 +451,14 @@ void Peripheral_Init(void)
     RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
-    POWER_L_OPEN();
-    POWER_N_OPEN();
-   Get_State_relay();
-   frequency_test=Get_Electricity_meter_massage_voltage(1);
     PWM1_ON;
     PWM2_ON;
     TIMER3_ON;
     TIMER5_ON;
-
+    POWER_L_CLOSE();
+    POWER_N_CLOSE();
+   Get_State_relay();
+   vref=get_dc_massage(VREF_1v5);
+         Get_Electricity_meter_massage_frequency();
 
 }
