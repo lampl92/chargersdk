@@ -83,6 +83,9 @@
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
 #define defEventBitRemoteGotAccount     BIT_1
+/*------xHandleEventlwIP*/
+#define defEventBitTCPIPinit            BIT_0
+
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID     BIT_0
 #define defEventBitHMI_ChargeReqDispDone   BIT_1
