@@ -36,14 +36,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <bsp.h>
 
 typedef int sys_prot_t;
 
 #define LWIP_PROVIDE_ERRNO
 #define LWIP_TIMEVAL_PRIVATE   0
-
-
-#define LWIP_PLATFORM_DIAG(message)  printf message
 
 /* define compiler specific symbols */
 #if defined (__ICCARM__)
@@ -78,7 +76,10 @@ typedef int sys_prot_t;
 
 #endif
 
-#define LWIP_PLATFORM_ASSERT(x) //do { if(!(x)) while(1); } while(0)
+#define LWIP_PLATFORM_DIAG(message)  printf_safe message
+
+#define LWIP_PLATFORM_ASSERT(x) do {printf_safe("Assertion \"%s\" failed at line %d in %s\n", \
+                                     x, __LINE__, __FILE__); while(1);} while(0)
 
 #define LWIP_RAND() ((u32_t)rand())
 
