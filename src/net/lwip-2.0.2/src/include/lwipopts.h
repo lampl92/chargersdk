@@ -7,6 +7,7 @@
 /* # PPP支持*/
 #define LWIP_PPP_API    1
 #define PPP_SUPPORT     1
+#define PPPOS_SUPPORT   1
 
 
 /* # 基础架构# */
@@ -22,7 +23,7 @@
 #define MEM_ALIGNMENT       4   //使用4字节对齐模式
 #define MEM_SIZE            16000 //内存堆heap大小
 #define MEMP_OVERFLOW_CHECK 2   // when >= 2, checks each element in every pool every time memp_malloc() or memp_free() is called (useful but slow!)
-#define MEMP_SANITY_CHECK   1   //run a sanity check after each memp_free() to make sure that there are no cycles in the linked lists.
+#define MEMP_SANITY_CHECK   0   //run a sanity check after each memp_free() to make sure that there are no cycles in the linked lists.
 
 /* ## Internal memory pools*/
 #define MEMP_NUM_PBUF           16 //MEMP_NUM_PBUF:memp结构的pbuf数量,如果应用从ROM或者静态存储区发送大量数据时,这个值应该设置大一点
@@ -41,9 +42,6 @@
 /** @todo (rgw#1#): Define LWIP_TCPIP_THREAD_ALIVE to something that triggers a watchdog.  */
 //#define LWIP_TCPIP_THREAD_ALIVE ()  //This is called from tcpip_thread after processing a message.
 
-#define SLIPIF_THREAD_NAME          "slipif_loop"
-#define SLIPIF_THREAD_STACKSIZE     1024
-#define SLIPIF_THREAD_PRIO          1
 #define DEFAULT_THREAD_NAME         "lwIP"
 #define DEFAULT_THREAD_STACKSIZE    1024
 #define DEFAULT_THREAD_PRIO         1
@@ -84,8 +82,7 @@ This is the default.*/
 #define UDP_TTL   (IP_DEFAULT_TTL)
 
 /* ## DNS*/
-//Default
-
+#define LWIP_DNS    1
 /* ## RAW*/
 //Default
 
@@ -99,7 +96,7 @@ This is the default.*/
 #define LWIP_SO_RCVTIMEO                1   //通过定义LWIP_SO_RCVTIMEO使能netconn结构体中recv_timeout,使用recv_timeout可以避免阻塞线程
 #define LWIP_SO_SNDTIMEO                1
 
-#define LWIP_TCP_KEEPALIVE   1 //↓
+#define LWIP_TCP_KEEPALIVE   1 // ↓
 /*Enable TCP_KEEPIDLE, TCP_KEEPINTVL and TCP_KEEPCNT options processing.
 Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 
@@ -122,8 +119,8 @@ Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 /* #opt.h*/
 
 //LWIP调试选项
-#define LWIP_DEBUG                       0   //关闭DEBUG选项
-#define ICMP_DEBUG                      LWIP_DBG_OFF //开启/关闭ICMPdebug
-
+#define LWIP_DEBUG                      LWIP_DBG_ON   //DEBUG选项
+//#define ICMP_DEBUG                      LWIP_DBG_ON //开启/关闭ICMPdebug
+#define PPP_DEBUG                       LWIP_DBG_ON
 #endif /* __LWIPOPTS_H__ */
 
