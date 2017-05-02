@@ -7,13 +7,14 @@
 */
 #include "ip.h"
 #include "init.h"
-#include "netif/ppp/ppp.h"
 #include "netif/ppp/pppapi.h"
 #include "netif/ppp/pppos.h"
 #include "lwip/dns.h"
 #include "bsp.h"
 
 typedef void (*ctx_cb_fn)(uint8_t *msg);
+
+
 
 
 void tcpip_init_done(void *arg)
@@ -34,6 +35,14 @@ void tcpip_init_done(void *arg)
 static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
 {
     (*(ctx_cb_fn)ctx)("output_cb called\n");
+    int i;
+    printf_safe("mcu output: ");
+    for(i = 0; i < len; i++)
+    {
+        printf_safe("%X ", data[i]);
+    }
+    printf_safe("\n");
+    printf_safe("len = %d\n", len);
     return uart_write(UART_PORT_GPRS, data, len);
 }
 
@@ -163,11 +172,20 @@ void ctx_cb(uint8_t *msg)
     printf_safe("%s", msg);
 }
 
-void lwip_init_task()
+ppp_pcb *lwip_init_task(void)
 {
     ppp_pcb *ppp;           /* PPP control block */
     struct netif ppp_netif; /* PPP IP interface */
     EventBits_t uxBitLwIP;
+
+    tcpip_init(tcpip_init_done, NULL);
+    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitTCPIPinit,
+                                    pdTRUE, pdTRUE, portMAX_DELAY);
+    if((uxBitLwIP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
+    {
+        //当portMAX_DELAY修改为超时时间后，当超时后仍未初始化完成则进入超时处理。
+
+    }
 
     /*创建 PPPoS 控制块*/
     ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
@@ -180,14 +198,7 @@ void lwip_init_task()
      */
     pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
 
-    tcpip_init(tcpip_init_done, NULL);
-    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitTCPIPinit,
-                                    pdTRUE, pdTRUE, portMAX_DELAY);
-    if((uxBitLwIP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
-    {
-        //当portMAX_DELAY修改为超时时间后，当超时后仍未初始化完成则进入超时处理。
 
-    }
 
     uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitDailCONNECT,
                                     pdTRUE, pdTRUE, portMAX_DELAY);
@@ -195,7 +206,6 @@ void lwip_init_task()
     {
         pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
     }
-
 
 
 
@@ -208,4 +218,5 @@ void lwip_init_task()
 //    netif_add();
 //    netif_set_default()
 //    netif_set_up();
+    return ppp;
 }
