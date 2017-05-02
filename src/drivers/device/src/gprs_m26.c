@@ -499,11 +499,17 @@ uint32_t gprs_ppp_poll(void)
             dev_gprs.pollstate = DS_GPRS_POLL_PPPDego;
             break;
         case DS_GPRS_POLL_PPPDego:
-                break;
+            if(recvStrCmp(pGprsRecvQue, "NO CARRIER", 0) == 1)
+            {
+                dev_gprs.pollstate = DS_GPRS_POLL_ERR;
+            }
+            break;
         case DS_GPRS_POLL_ERR:
+            dev_gprs.pollstate = DS_GPRS_POLL_AT;
+            vTaskDelay(10000);
             break;
         }
-        vTaskDelay(100);
+        vTaskDelay(1000);
     }
 }
 #if self_test_gprs
