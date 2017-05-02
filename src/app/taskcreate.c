@@ -16,13 +16,14 @@
 #include "cli_main.h"
 #include "timercallback.h"
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鏍堝畾涔?
+/ 任务栈大小
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   2048
 #define defSTACK_TaskCLI                    1024
 #define defSTACK_TaskGUI                    (1024*4)
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
+#define defSTACK_TaskPPP                    1024
 
 #define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               512
@@ -34,15 +35,16 @@
 //#define TCPIP_THREAD_STACKSIZE      512
 
 /*---------------------------------------------------------------------------/
-/ 浠诲姟浼樺厛绾?
+/ 任务优先级
 /---------------------------------------------------------------------------*/
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
 #define defPRIORITY_TaskInit                1
 #define defPRIORITY_TaskCLI                 1
 #define defPRIORITY_TaskGUI                 1   //不能高,GUI任务时间太长,会影响硬件响应
-#define defPRIORITY_TaskTouch               1
-#define defPRIORITY_TaskOTA                 15 /* 鏈?楂?*/
-//#define configTIMER_TASK_PRIORITY		( in FreeRTOSConfig.h )
+#define defPRIORITY_TaskTouch               2
+#define defPRIORITY_TaskOTA                 15 /* 最高*/
+#define defPRIORITY_TaskPPP                 12
+//#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 13
 
 #define defPRIORITY_TaskEVSERemote          3
 #define defPRIORITY_TaskEVSERFID            4
@@ -51,16 +53,19 @@
 #define defPRIORITY_TaskEVSEDiag            9
 #define defPRIORITY_TaskEVSEData            1
 
-//#define TCPIP_THREAD_PRIO		    11 //defined in lwipopts.h
+//#define TCPIP_THREAD_PRIO         11 //defined in lwipopts.h
 
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鍚嶇О
+/ 任务名称
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
+const char *TASKNAME_PPP            = "TaskPPP";
+
+
 const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
 const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
 const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
@@ -69,29 +74,31 @@ const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
 //#define TCPIP_THREAD_NAME           "tcpip_thread"
 /*---------------------------------------------------------------------------/
-/ 浠诲姟澹版槑
+/ 任务声明
 /---------------------------------------------------------------------------*/
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
-void vTaskOTA(void *pvParameters);                  //鍦ㄧ嚎鍗囩骇
+void vTaskOTA(void *pvParameters);
+void vTaskPPP(void *pvParameters);
 
-void vTaskEVSERemote(void *pvParameters);           //杩滅▼閫氫俊
-void vTaskEVSERFID(void *pvParameters);             //鍒峰崱
-void vTaskEVSECharge(void *pvParameters);           //鍏呯數
-void vTaskEVSEMonitor(void *pvParameters);          //鐩戞帶
-void vTaskEVSEDiag(void *pvParameters);             //璇婃柇澶勭悊
-void vTaskEVSEData(void *pvParameters);             //鏁版嵁澶勭悊
+void vTaskEVSERemote(void *pvParameters);
+void vTaskEVSERFID(void *pvParameters);
+void vTaskEVSECharge(void *pvParameters);
+void vTaskEVSEMonitor(void *pvParameters);
+void vTaskEVSEDiag(void *pvParameters);
+void vTaskEVSEData(void *pvParameters);
 
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鍙ユ焺
+/ 任务句柄
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
+static TaskHandle_t xHandleTaskPPP = NULL;
 
 static TaskHandle_t xHandleTaskEVSERemote = NULL;
 static TaskHandle_t xHandleTaskEVSERFID = NULL;
@@ -100,7 +107,7 @@ static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
-/ 浠诲姟閫氫俊
+/ 任务间通信
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
@@ -166,6 +173,7 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
+    xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
 }
 
 void AppTaskCreate (void)
@@ -248,7 +256,7 @@ set
     memory allocated by the kernel to any task that has since been deleted.
 */
 void vApplicationIdleHook( void )
- {
+{
 }
 
 /**
