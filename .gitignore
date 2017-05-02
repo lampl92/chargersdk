@@ -4,6 +4,9 @@ src/drivers/bsp/inc/no_use/
 src/drivers/bsp/src/not use/
 *.h~
 *.c#
+*.h#
+*.c.swp
+*.h.swp
 *.TMP
 build/Keil/chargersdk.bin
 build/EmBitz/obj/
@@ -17,3 +20,4 @@ build/EmBitz/chargersdk.cscope_file_list
 *.cfg~
 src/net/lwip-2.0.2/doc
 src/net/lwip-2.0.2/test
+tags
