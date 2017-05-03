@@ -86,6 +86,7 @@
 /*------xHandleEventlwIP*/
 #define defEventBitTCPIPinit            BIT_0
 #define defEventBitDailCONNECT          BIT_1
+#define defEventBitReDail               BIT_2
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID     BIT_0
 #define defEventBitHMI_ChargeReqDispDone   BIT_1
