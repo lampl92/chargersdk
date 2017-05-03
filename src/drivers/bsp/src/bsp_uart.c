@@ -9,6 +9,9 @@
 #include "cli_main.h"
 #include "userlib_queue.h"
 #include "user_app.h"
+
+#include "bsp_uart_queue.h"
+
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;
@@ -46,7 +49,9 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     }
 }
 
-    uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
+
+
+uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
 {
     xSemaphoreTake(q->xHandleMutexQue, 100);
     while(time_out)
@@ -63,6 +68,44 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     return 0;
 }
 
+uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, uint32_t *puiRecvdLen)
+{
+    uint8_t ch;
+    uint32_t i;
+
+    ch = 0;
+    i = 0;
+    xSemaphoreTake(q->xHandleMutexQue, 100);
+    while(q->DeElem(q, &ch) == QUE_OK)
+    {
+        if(ch == head)
+        {
+            do
+            {
+                pbuff[i] = ch;
+                i++;
+                if(q->DeElem(q, &ch) != QUE_OK)
+                {
+                    *puiRecvdLen = 0;
+                    xSemaphoreGive(q->xHandleMutexQue);
+                    return 0;
+                }
+                if(ch == end && i != 1)
+                {
+                    pbuff[i] = ch;
+                    i++;
+                }
+            }
+            while(ch != end || i == 1);
+
+            *puiRecvdLen = i;
+            xSemaphoreGive(q->xHandleMutexQue);
+            return 1;
+        }
+    }
+    xSemaphoreGive(q->xHandleMutexQue);
+    return 0;
+}
 /** @brief
  *
  * @param pbuff uint8_t*
@@ -121,6 +164,8 @@ void bsp_Uart_Init(void)
     pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
     pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
     pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
+
+    uart_queue_init();
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
     CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
@@ -280,6 +325,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
+            //gdsl_queue_insert(queCLI, (void *)CLI_RX_Buffer);
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)
@@ -294,6 +340,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1) == HAL_OK)
         {
             pGprsRecvQue->EnElem(pGprsRecvQue, GPRS_RX_Buffer[0]);
+            //gdsl_queue_insert(queGPRS, (void *)GPRS_RX_Buffer);
         }
     }
 }
