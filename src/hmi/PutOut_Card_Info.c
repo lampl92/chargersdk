@@ -22,6 +22,8 @@
 #include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "interface.h"
+#include "HMI_Start.h"
+#include "utils.h"
 // USER END
 
 #include "DIALOG.h"

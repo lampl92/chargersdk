@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "xbffontcreate.h"
 #include "ff.h"
+#include "HMI_Start.h"
 
 uint8_t calebrate_done = 0;
 

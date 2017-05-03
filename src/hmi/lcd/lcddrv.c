@@ -1,3 +1,4 @@
+#include "bsp.h"
 #include "lcddrv.h"
 #include "ltdc.h"
 #include "stdlib.h"
@@ -49,7 +50,7 @@ void LCD_WriteReg(uint16_t LCD_Reg,uint16_t LCD_RegValue)
 uint16_t LCD_ReadReg(uint16_t LCD_Reg)
 {
 	LCD_WR_REG(LCD_Reg);		//写入要读的寄存器序号
-	delay_us(5);
+	bsp_DelayUS(5);
 	return LCD_RD_DATA();		//返回读到的值
 }
 //开始写GRAM
