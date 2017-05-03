@@ -39,7 +39,7 @@ typedef enum
 #define GPRS_USARTx_BASE                            USART1
 #define GPRS_USARTx_BAUDRATE                        115200
 #define GPRS_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             1500
+#define GPRS_QUEUE_SIZE                             100
 #endif
 
 /* Exported macro ------------------------------------------------------------*/
@@ -58,6 +58,7 @@ uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
 uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
 uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len);
+uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, uint32_t *puiRecvdLen);
 
 #endif
 
