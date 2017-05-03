@@ -9,22 +9,28 @@
 #include "netif/ppp/pppos.h"
 #include "lwip_init.h"
 #include "bsp.h"
+#include "gprs_m26.h"
+
 
 void input_over_serial(ppp_pcb *pcb)
 {
     uint8_t data[512];
     uint32_t len;
     int i;
-    if(readRecvQueEx(pGprsRecvQue, data, 0, &len) == 1)
+    if(readRecvQueProto(pGprsRecvQue, data, 0x7e, 0x7e, &len) == 1)
     {
-        pppos_input_tcpip(pcb, data, len);
-        printf_safe("mcu input: ");
-        for(i = 0; i < len; i++)
+        if(len != 0)
         {
-            printf_safe("%X ", data[i]);
+            pppos_input_tcpip(pcb, data, len);
         }
-        printf_safe("\n");
-        printf_safe("len = %d\n", len);
+//        printf_safe("mcu input: ");
+//        for(i = 0; i < len; i++)
+//        {
+//            printf_safe("%X ", data[i]);
+//        }
+//        printf_safe("\n");
+//        printf_safe("len = %d\n", len);
+        //pGprsRecvQue->Flush(pGprsRecvQue);
     }
 }
 
@@ -34,7 +40,11 @@ void vTaskPPP(void *pvParameters)
     ppp = lwip_init_task();
     while(1)
     {
-        input_over_serial(ppp);
+        if(dev_gprs.pollstate == DS_GPRS_POLL_PPPDego)
+        {
+            input_over_serial(ppp);
+        }
+
         vTaskDelay(100);
     }
 }
