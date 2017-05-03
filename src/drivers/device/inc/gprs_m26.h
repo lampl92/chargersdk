@@ -43,5 +43,9 @@ typedef struct
     uint8_t pollstate;
 }dev_gprs_t;
 
+extern dev_gprs_t dev_gprs;
+
+uint32_t gprs_init(void);
+uint32_t gprs_ppp_poll(void);
 
 #endif
