@@ -33,6 +33,7 @@ typedef struct _Queue
     QUERESULT (*EnElem)(struct _Queue *q, QUEUETYPE elem);
     QUERESULT (*isEmpty)(struct _Queue *q);
     QUERESULT (*DeElem)(struct _Queue *q, QUEUETYPE *pelem);
+    QUERESULT (*GetElem)(struct _Queue *q, QUEUETYPE *pelem);
     QUERESULT (*Flush)(struct _Queue *q);
     void (*Delete)(struct _Queue *q);
 } Queue;

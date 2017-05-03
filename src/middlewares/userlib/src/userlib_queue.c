@@ -45,6 +45,16 @@ static QUERESULT DeElem(Queue *q, QUEUETYPE *pelem)
     q->front = (q->front + 1) % q->length;
     return QUE_OK;
 }
+static QUERESULT GetElem(Queue *q, QUEUETYPE *pelem)
+{
+    if(isEmpty(q) == QUE_TRUE)
+    {
+        return QUE_FAIL;
+    }
+    *pelem = q->elem[q->front];
+
+    return QUE_OK;
+}
 static QUERESULT FlushQueue(Queue *q)
 {
     QUEUETYPE ch;
@@ -76,6 +86,7 @@ Queue *QueueCreate(int len)
     pQueue->isFull = isEmpty;
     pQueue->EnElem = EnElem;
     pQueue->DeElem = DeElem;
+    pQueue->GetElem = GetElem;
     pQueue->Flush = FlushQueue;
     pQueue->Delete = DeleteQue;
     return pQueue;
