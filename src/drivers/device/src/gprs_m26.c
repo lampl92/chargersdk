@@ -160,7 +160,14 @@ uint32_t gprs_read_AT(void)
     }
     else
     {
-        return DR_AT_ERR;
+        if(buff[0] == 0x30 && buff[1] == 0x0d)
+        {
+            return DR_AT_OK;
+        }
+        else
+        {
+            return DR_AT_ERR;
+        }
     }
 }
 
@@ -341,6 +348,7 @@ uint32_t gprs_ppp_poll(void)
 {
     uint32_t res_at;
     uint32_t try_cont = 0;
+    EventBits_t uxBitLwip;
     while(1)
     {
         switch(dev_gprs.pollstate)
@@ -499,7 +507,13 @@ uint32_t gprs_ppp_poll(void)
             dev_gprs.pollstate = DS_GPRS_POLL_PPPDego;
             break;
         case DS_GPRS_POLL_PPPDego:
-            if(recvStrCmp(pGprsRecvQue, "NO CARRIER", 0) == 1)
+//            if(recvStrCmp(pGprsRecvQue, "NO CARRIER", 0) == 1)
+//            {
+//
+//            }
+            uxBitLwip = xEventGroupWaitBits(xHandleEventlwIP, defEventBitReDail,
+                                            pdTRUE, pdTRUE, portMAX_DELAY);
+            if((uxBitLwip & defEventBitReDail) == defEventBitReDail)
             {
                 dev_gprs.pollstate = DS_GPRS_POLL_ERR;
             }
