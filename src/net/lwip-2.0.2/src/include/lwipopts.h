@@ -8,6 +8,8 @@
 #define LWIP_PPP_API    1
 #define PPP_SUPPORT     1
 #define PPPOS_SUPPORT   1
+#define PAP_SUPPORT    1
+//#define PPP_SERVER  1
 
 
 /* # 基础架构# */
@@ -21,7 +23,7 @@
 #define MEM_LIBC_MALLOC     1
 #define MEMP_MEM_MALLOC     1   //使用malloc代替mem_pool
 #define MEM_ALIGNMENT       4   //使用4字节对齐模式
-#define MEM_SIZE            16000 //内存堆heap大小
+#define MEM_SIZE            1600 //内存堆heap大小
 #define MEMP_OVERFLOW_CHECK 2   // when >= 2, checks each element in every pool every time memp_malloc() or memp_free() is called (useful but slow!)
 #define MEMP_SANITY_CHECK   0   //run a sanity check after each memp_free() to make sure that there are no cycles in the linked lists.
 
@@ -122,5 +124,7 @@ Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 #define LWIP_DEBUG                      LWIP_DBG_ON   //DEBUG选项
 //#define ICMP_DEBUG                      LWIP_DBG_ON //开启/关闭ICMPdebug
 #define PPP_DEBUG                       LWIP_DBG_ON
+#define NETIF_DEBUG                     LWIP_DBG_ON
+//#define PBUF_DEBUG                      LWIP_DBG_ON
 #endif /* __LWIPOPTS_H__ */
 
