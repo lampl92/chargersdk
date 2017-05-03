@@ -56,6 +56,7 @@ static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
  */
 static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 {
+    EventBits_t uxBitLwip;
     struct netif *pppif = ppp_netif(pcb);
     //LWIP_UNUSED_ARG(ctx);
     (*(ctx_cb_fn)ctx)("status_cb called\n");
@@ -163,8 +164,14 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     }
 
     /** @todo (zshare#1#): 在这里对modem进行重连，连接好后通过信号量或者时间通知该函数，然后对ppp进行重连 */
-
-    ppp_connect(pcb, 30);//30s
+    uxBitLwip = xEventGroupSync(xHandleEventlwIP,
+                                defEventBitReDail,
+                                defEventBitDailCONNECT,
+                                portMAX_DELAY);
+    if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
+    {
+        ppp_connect(pcb, 1);    //30s
+    }
 }
 
 void ctx_cb(uint8_t *msg)
@@ -187,36 +194,23 @@ ppp_pcb *lwip_init_task(void)
 
     }
 
-    /*创建 PPPoS 控制块*/
-    ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
-
-    /*创建 PPP 连接*/
-
-    /*
-     * 初始化 PPP 客户端连接
-     * ==============================
-     */
-    pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
-
-
-
     uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitDailCONNECT,
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
+        /*创建 PPPoS 控制块*/
+        ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
+
+        /*创建 PPP 连接*/
+
+        /*
+         * 初始化 PPP 客户端连接
+         * ==============================
+         */
+        ppp_set_silent(ppp, 1);
+        pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
         pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
+//        pppapi_listen(ppp);
     }
-
-
-
-//    ip_addr_t ip_addr, netmask, gw;
-//
-//    tcpip_init(tcpip_init_done, NULL);
-//    IP4_ADDR(&gw, 192, 168, 1, 1);
-//    IP4_ADDR(&ip_addr, 192, 168, 1, 100);
-//    IP4_ADDR(&netmask, 255, 255, 255, 0);
-//    netif_add();
-//    netif_set_default()
-//    netif_set_up();
     return ppp;
 }
