@@ -12,6 +12,8 @@
 
 //#define DEBUG_NO_TASKDATA
 
+extern ErrorCode_t makeOrder(CON_t *pCON);
+
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
