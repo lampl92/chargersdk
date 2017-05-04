@@ -5,11 +5,8 @@
 * @version v1.0
 * @date 2017-04-27
 */
-#include "ip.h"
-#include "init.h"
-#include "netif/ppp/pppapi.h"
-#include "netif/ppp/pppos.h"
-#include "lwip/dns.h"
+#include "lwip/ip.h"
+#include "netif/ppp/ppp.h"
 #include "bsp.h"
 
 typedef void (*ctx_cb_fn)(uint8_t *msg);
@@ -32,6 +29,7 @@ void tcpip_init_done(void *arg)
  * @return u32_t        成功写入长度
  *
  */
+#if 0
 static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
 {
     (*(ctx_cb_fn)ctx)("output_cb called\n");
@@ -173,16 +171,78 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
         ppp_connect(pcb, 1);    //30s
     }
 }
+#endif
+
+void ppp_on_status(void *ctx, int errCode, void *arg)
+{
+    int pd;
+    EventBits_t uxBitLwip;
+
+    pd = *((int *)arg);
+    switch (errCode)
+    {
+    case PPPERR_PARAM:              /* Invalid parameter. */
+        printf_safe("status_cb: Invalid parameter\n");
+        break;
+    case PPPERR_OPEN:               /* Unable to open PPP session. */
+        printf_safe("status_cb: Unable to open PPP session\n");
+        break;
+    case PPPERR_DEVICE:             /* Invalid I/O device for PPP. */
+        printf_safe("status_cb: Invalid I/O device for PPP\n");
+        break;
+    case PPPERR_ALLOC:              /* Unable to allocate resources. */
+        printf_safe("status_cb: Unable to allocate resources\n");
+        break;
+    case PPPERR_CONNECT:            /* Connection lost. */
+        printf_safe("status_cb: Connection lost\n");
+        break;
+    case PPPERR_AUTHFAIL:           /* Failed authentication challenge. */
+        printf_safe("status_cb: Failed authentication challenge\n");
+        break;
+    case PPPERR_PROTOCOL:           /* Failed to meet protocol. */
+        printf_safe("status_cb: Failed to meet protocol\n");
+        break;
+    default:
+        break;
+    }
+
+    if (errCode == PPPERR_NONE)
+    {
+        return;
+    }
+
+    /* ppp_close() 被用户调用时返回的代码，说明不要自动重新连接，可以进行释放 */
+    if (errCode == PPPERR_USER)
+    {
+        /* ppp_free(); -- 可以在这里调用 */
+        return;
+    }
+
+    /** @todo (zshare#1#): 在这里对modem进行重连，连接好后通过信号量或者时间通知该函数，然后对ppp进行重连 */
+    uxBitLwip = xEventGroupSync(xHandleEventlwIP,
+                                defEventBitReDail,
+                                defEventBitDailCONNECT,
+                                portMAX_DELAY);
+    if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
+    {
+        pppOverSerialOpen(0, ppp_on_status, NULL);
+    }
+
+}
+
 
 void ctx_cb(uint8_t *msg)
 {
     printf_safe("%s", msg);
 }
 
-ppp_pcb *lwip_init_task(void)
+int lwip_init_task(void)
 {
-    ppp_pcb *ppp;           /* PPP control block */
-    struct netif ppp_netif; /* PPP IP interface */
+    int pd;
+
+    int *fd = NULL;
+    int *linkstateCx = NULL;
+
     EventBits_t uxBitLwIP;
 
     tcpip_init(tcpip_init_done, NULL);
@@ -198,19 +258,10 @@ ppp_pcb *lwip_init_task(void)
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
+        pppInit();
         /*创建 PPPoS 控制块*/
-        ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
-
-        /*创建 PPP 连接*/
-
-        /*
-         * 初始化 PPP 客户端连接
-         * ==============================
-         */
-        ppp_set_silent(ppp, 1);
-        pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
-        pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
-//        pppapi_listen(ppp);
+        pppSetAuth(PPPAUTHTYPE_PAP, "", "");
+        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
     }
-    return ppp;
+    return pd;
 }

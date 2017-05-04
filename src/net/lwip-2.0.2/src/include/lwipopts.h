@@ -8,7 +8,8 @@
 #define LWIP_PPP_API    1
 #define PPP_SUPPORT     1
 #define PPPOS_SUPPORT   1
-#define PAP_SUPPORT    1
+//#define PAP_SUPPORT    1
+#define CHAP_SUPPORT    1
 //#define PPP_SERVER  1
 
 
@@ -45,7 +46,7 @@
 //#define LWIP_TCPIP_THREAD_ALIVE ()  //This is called from tcpip_thread after processing a message.
 
 #define DEFAULT_THREAD_NAME         "lwIP"
-#define DEFAULT_THREAD_STACKSIZE    1024
+#define DEFAULT_THREAD_STACKSIZE    (1024*4)
 #define DEFAULT_THREAD_PRIO         1
 
 #define DEFAULT_TCP_RECVMBOX_SIZE       MAX_QUEUE_ENTRIES
@@ -124,7 +125,7 @@ Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 #define LWIP_DEBUG                      LWIP_DBG_ON   //DEBUG选项
 //#define ICMP_DEBUG                      LWIP_DBG_ON //开启/关闭ICMPdebug
 #define PPP_DEBUG                       LWIP_DBG_ON
-#define NETIF_DEBUG                     LWIP_DBG_ON
+//#define NETIF_DEBUG                     LWIP_DBG_ON
 //#define PBUF_DEBUG                      LWIP_DBG_ON
 #endif /* __LWIPOPTS_H__ */
 

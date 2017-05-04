@@ -8,6 +8,8 @@
 #include "bsp.h"
 #include "gprs_m26.h"
 
+#define DEBUG_DEV_GPRS 1
+
 #define GPRS_IO     PBout(3)
 
 dev_gprs_t dev_gprs;
@@ -37,12 +39,18 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         GPRS_IO = 0;
         do
         {
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 开机中 第 %d 次尝试（10次）\n", try_cont);
+#endif
             try_cont++;
             if(try_cont > 10)
             {
                 try_cont = 0;
                 fn_res = 0;
                 dev_gprs.state = DS_GPRS_ERR;
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS 开机失败\n");
+#endif
                 break;
             }
             res = recvStrCmp(pGprsRecvQue, "RDY", 0);
@@ -56,6 +64,9 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         {
             fn_res = 1;
             gprs_delayms(5000);
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 开机\n");
+#endif
             dev_gprs.state = DS_GPRS_ON;
         }
         break;
@@ -65,12 +76,18 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         GPRS_IO = 0;
         do
         {
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 关机中 第 %d 次尝试（10次）\n", try_cont);
+#endif
             try_cont++;
             if(try_cont > 10)
             {
                 try_cont = 0;
                 fn_res = 0;
                 dev_gprs.state = DS_GPRS_ERR;
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS 关机失败\n");
+#endif
                 break;
             }
             res = recvStrCmp(pGprsRecvQue, "NORMAL POWER DOWN", 0);
@@ -85,11 +102,17 @@ uint32_t gprs_ioctl(uint8_t ioctl)
             fn_res = 1;
             gprs_delayms(15000);
             dev_gprs.state = DS_GPRS_OFF;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 关机\n");
+#endif
         }
         break;
     case DA_GPRS_RESET:
         do
         {
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 重启中 第 %d 次尝试（10次）\n", try_cont);
+#endif
             GPRS_IO = 1;
             try_cont++;
             if(try_cont > 10)
@@ -97,6 +120,9 @@ uint32_t gprs_ioctl(uint8_t ioctl)
                 try_cont = 0;
                 fn_res = 0;
                 dev_gprs.state = DS_GPRS_ERR;
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS 重启失败\n");
+#endif
                 break;
             }
             res = recvStrCmp(pGprsRecvQue, "RDY", 0);
@@ -111,6 +137,9 @@ uint32_t gprs_ioctl(uint8_t ioctl)
             GPRS_IO = 0;
             fn_res = 1;
             gprs_delayms(5000);
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS 重启成功\n");
+#endif
             dev_gprs.state = DS_GPRS_ON;
         }
         break;
@@ -355,11 +384,17 @@ uint32_t gprs_ppp_poll(void)
         {
         case DS_GPRS_POLL_AT:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：AT 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_AT();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：AT 失败\n");
+#endif
                     try_cont = 0;
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
@@ -370,18 +405,27 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：AT OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_ATE0V1;
             }
             break;
         case DS_GPRS_POLL_ATE0V1:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：ATE0V1 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_ATE0V1();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
                     try_cont = 0;
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：ATE0V1 失败\n");
+#endif
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                     break;
                 }
@@ -393,17 +437,26 @@ uint32_t gprs_ppp_poll(void)
             else
             {
                 try_cont = 0;
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：ATE0V1 OK\n");
+#endif
                 dev_gprs.pollstate = DS_GPRS_POLL_CPIN;
             }
             break;
         case DS_GPRS_POLL_CPIN:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：AT+CPIN? 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_CPIN();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
                     try_cont = 0;
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：AT+CPIN? 失败\n");
+#endif
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
                 else
@@ -413,18 +466,27 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：AT+CPIN? OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_CREG;
             }
             break;
         case DS_GPRS_POLL_CREG:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：AT+CREG? 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_CREG();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
-
+                    try_cont = 0;
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：AT+CREG? 失败\n");
+#endif
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
                 else
@@ -434,6 +496,9 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：AT+CREG? OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_CGREG;
             }
@@ -441,11 +506,17 @@ uint32_t gprs_ppp_poll(void)
 
         case DS_GPRS_POLL_CGREG:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：AT+CGREG? 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_CGREG();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：AT+CGREG? 失败\n");
+#endif
                     try_cont = 0;
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
@@ -456,17 +527,26 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：AT+CGREG? OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_APN;
             }
             break;
         case DS_GPRS_POLL_APN:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：APN 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_APN();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：APN 失败\n");
+#endif
                     try_cont = 0;
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
@@ -477,17 +557,26 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：APN OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_ATD;
             }
             break;
         case DS_GPRS_POLL_ATD:
             try_cont++;
+#if DEBUG_DEV_GPRS
+            printf_safe("GPRS Send CMD：ATD 第 %d 次（5次）\n", try_cont);
+#endif
             res_at = gprs_send_ATD();
             if(res_at != DR_AT_OK)
             {
                 if(try_cont > 5)
                 {
+#if DEBUG_DEV_GPRS
+                    printf_safe("GPRS Send CMD：ATD 失败\n");
+#endif
                     try_cont = 0;
                     dev_gprs.pollstate = DS_GPRS_POLL_ERR;
                 }
@@ -498,6 +587,9 @@ uint32_t gprs_ppp_poll(void)
             }
             else
             {
+#if DEBUG_DEV_GPRS
+                printf_safe("GPRS recv CMD：ATD OK\n");
+#endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_PPP;
             }
