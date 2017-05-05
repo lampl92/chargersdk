@@ -36,6 +36,7 @@
 #define DS_GPRS_POLL_ATD        7
 #define DS_GPRS_POLL_PPP        8
 #define DS_GPRS_POLL_PPPDego    9
+#define DS_GPRS_POLL_PlusPlusPlus       10
 #define DS_GPRS_POLL_ERR        0xff
 typedef struct
 {

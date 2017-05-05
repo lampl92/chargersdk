@@ -354,6 +354,14 @@ uint32_t gprs_send_ATD(void)
     return gprs_read_ATD();
 
 }
+uint32_t gprs_send_PlusPlusPlus(void)
+{
+    pGprsRecvQue->Flush(pGprsRecvQue);
+    HAL_UART_Transmit(&GPRS_UARTx_Handler, "+++", strlen("+++"), 0xFFFF);
+    gprs_delayms(100);
+    return gprs_read_AT();
+
+}
 uint32_t gprs_read_ATD(void)
 {
     uint8_t *p;
@@ -400,7 +408,7 @@ uint32_t gprs_ppp_poll(void)
                 }
                 else
                 {
-                    dev_gprs.pollstate = DS_GPRS_POLL_AT;
+                    dev_gprs.pollstate = DS_GPRS_POLL_PlusPlusPlus;
                 }
             }
             else
@@ -410,6 +418,17 @@ uint32_t gprs_ppp_poll(void)
 #endif
                 try_cont = 0;
                 dev_gprs.pollstate = DS_GPRS_POLL_ATE0V1;
+            }
+            break;
+        case DS_GPRS_POLL_PlusPlusPlus:
+            res_at = gprs_send_PlusPlusPlus();
+            if(res_at == DR_AT_OK)
+            {
+                dev_gprs.pollstate = DS_GPRS_POLL_AT;
+            }
+            else
+            {
+                dev_gprs.pollstate = DS_GPRS_POLL_ERR;
             }
             break;
         case DS_GPRS_POLL_ATE0V1:
