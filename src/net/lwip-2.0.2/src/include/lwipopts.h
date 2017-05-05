@@ -8,9 +8,8 @@
 #define LWIP_PPP_API    1
 #define PPP_SUPPORT     1
 #define PPPOS_SUPPORT   1
-//#define PAP_SUPPORT    1
-#define CHAP_SUPPORT    1
-//#define PPP_SERVER  1
+#define PAP_SUPPORT    1
+//#define CHAP_SUPPORT    1
 
 
 /* # 基础架构# */
@@ -99,7 +98,7 @@ This is the default.*/
 #define LWIP_SO_RCVTIMEO                1   //通过定义LWIP_SO_RCVTIMEO使能netconn结构体中recv_timeout,使用recv_timeout可以避免阻塞线程
 #define LWIP_SO_SNDTIMEO                1
 
-#define LWIP_TCP_KEEPALIVE   1 // ↓
+#define LWIP_TCP_KEEPALIVE   0 // ↓
 /*Enable TCP_KEEPIDLE, TCP_KEEPINTVL and TCP_KEEPCNT options processing.
 Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 
@@ -123,9 +122,8 @@ Note that TCP_KEEPIDLE and TCP_KEEPINTVL have to be set in seconds. */
 
 //LWIP调试选项
 #define LWIP_DEBUG                      LWIP_DBG_ON   //DEBUG选项
-//#define ICMP_DEBUG                      LWIP_DBG_ON //开启/关闭ICMPdebug
+#define ICMP_DEBUG                      LWIP_DBG_ON //开启/关闭ICMPdebug
 #define PPP_DEBUG                       LWIP_DBG_ON
 //#define NETIF_DEBUG                     LWIP_DBG_ON
 //#define PBUF_DEBUG                      LWIP_DBG_ON
 #endif /* __LWIPOPTS_H__ */
-
