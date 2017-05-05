@@ -34,7 +34,7 @@ void tcpip_init_done(void *arg)
 #ifdef lwip2_0
 static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
 {
-//    (*(ctx_cb_fn)ctx)("output_cb called\n");
+    (*(ctx_cb_fn)ctx)("output_cb called\n");/** @todo (rgw#1#): 注释掉后会无法拨通 */
 //    int i;
 //    printf_safe("mcu output: ");
 //    for(i = 0; i < len; i++)
