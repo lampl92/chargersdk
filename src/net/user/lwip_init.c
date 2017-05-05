@@ -6,13 +6,15 @@
 * @date 2017-04-27
 */
 #include "lwip/ip.h"
-#include "netif/ppp/ppp.h"
+#include "lwip/dns.h"
+#include "netif/ppp/pppapi.h"
+#include "netif/ppp/pppos.h"
 #include "bsp.h"
+#include "ifconfig.h"
 
+
+#define lwip2_0
 typedef void (*ctx_cb_fn)(uint8_t *msg);
-
-
-
 
 void tcpip_init_done(void *arg)
 {
@@ -29,18 +31,18 @@ void tcpip_init_done(void *arg)
  * @return u32_t        成功写入长度
  *
  */
-#if 0
+#ifdef lwip2_0
 static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
 {
-    (*(ctx_cb_fn)ctx)("output_cb called\n");
-    int i;
-    printf_safe("mcu output: ");
-    for(i = 0; i < len; i++)
-    {
-        printf_safe("%X ", data[i]);
-    }
-    printf_safe("\n");
-    printf_safe("len = %d\n", len);
+//    (*(ctx_cb_fn)ctx)("output_cb called\n");
+//    int i;
+//    printf_safe("mcu output: ");
+//    for(i = 0; i < len; i++)
+//    {
+//        printf_safe("%02X ", data[i]);
+//    }
+//    printf_safe("\n");
+//    printf_safe("len = %d\n", len);
     return uart_write(UART_PORT_GPRS, data, len);
 }
 
@@ -62,24 +64,10 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     {
     case PPPERR_NONE:
     {
-#if LWIP_DNS
-        const ip_addr_t *ns;
-#endif /* LWIP_DNS */
-        printf_safe("status_cb: Connected\n");
-#if PPP_IPV4_SUPPORT
-        printf_safe("   our_ipaddr  = %s\n", ipaddr_ntoa(&pppif->ip_addr));
-        printf_safe("   his_ipaddr  = %s\n", ipaddr_ntoa(&pppif->gw));
-        printf_safe("   netmask     = %s\n", ipaddr_ntoa(&pppif->netmask));
-#if LWIP_DNS
-        ns = dns_getserver(0);
-        printf_safe("   dns1        = %s\n", ipaddr_ntoa(ns));
-//        ns = dns_getserver(1);
-        printf_safe("   dns2        = %s\n", ipaddr_ntoa(ns));
-#endif /* LWIP_DNS */
-#endif /* PPP_IPV4_SUPPORT */
-#if PPP_IPV6_SUPPORT
-        printf_safe("   our6_ipaddr = %s\n", ip6addr_ntoa(netif_ip6_addr(pppif, 0)));
-#endif /* PPP_IPV6_SUPPORT */
+        ifconfig.local_ip.addr = pppif->ip_addr.addr;
+        ifconfig.gateway.addr = pppif->gw.addr;
+        ifconfig.netmask.addr = pppif->netmask.addr;
+        ifconfig_set();
         break;
     }
     case PPPERR_PARAM:
@@ -151,8 +139,11 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 
     if (err_code == PPPERR_NONE)
     {
+        xEventGroupSetBits(xHandleEventlwIP, defEventBitPPPup);
         return;
     }
+
+    xEventGroupClearBits(xHandleEventlwIP, defEventBitPPPup);
 
     /* ppp_close() 被用户调用，不要重新连接 */
     if (err_code == PPPERR_USER)
@@ -172,7 +163,7 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     }
 }
 #endif
-
+#if lwip1_4_1
 void ppp_on_status(void *ctx, int errCode, void *arg)
 {
     int pd;
@@ -225,23 +216,19 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
                                 portMAX_DELAY);
     if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
-        pppOverSerialOpen(0, ppp_on_status, NULL);
     }
-
 }
-
+#endif
 
 void ctx_cb(uint8_t *msg)
 {
     printf_safe("%s", msg);
 }
 
-int lwip_init_task(void)
+ppp_pcb *lwip_init_task(void)
 {
-    int pd;
-
-    int *fd = NULL;
-    int *linkstateCx = NULL;
+    ppp_pcb *ppp;           /* PPP control block */
+    struct netif ppp_netif; /* PPP IP interface */
 
     EventBits_t uxBitLwIP;
 
@@ -258,10 +245,25 @@ int lwip_init_task(void)
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
-        pppInit();
+//        pppInit();
+//        /*创建 PPPoS 控制块*/
+//        pppSetAuth(PPPAUTHTYPE_PAP, "", "");
+//        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
+
         /*创建 PPPoS 控制块*/
-        pppSetAuth(PPPAUTHTYPE_PAP, "", "");
-        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
+        ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
+
+        /*创建 PPP 连接*/
+
+        /*
+         * 初始化 PPP 客户端连接
+         * ==============================
+         */
+        ppp_set_auth(ppp, PPPAUTHTYPE_PAP, "", "");
+        ppp_set_silent(ppp, 1);
+        pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
+        pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
+//        pppapi_listen(ppp);
     }
-    return pd;
+    return ppp;
 }
