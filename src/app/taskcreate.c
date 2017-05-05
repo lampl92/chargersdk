@@ -25,6 +25,7 @@
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
 #define defSTACK_TaskPPP                    (1024*4)
+#define defSTACK_TaskTCPClient               1024
 
 #define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               512
@@ -32,6 +33,7 @@
 #define defSTACK_TaskEVSEMonitor            512
 #define defSTACK_TaskEVSEDiag               512
 #define defSTACK_TaskEVSEData               512
+
 
 //#define TCPIP_THREAD_STACKSIZE      512
 
@@ -45,6 +47,7 @@
 #define defPRIORITY_TaskTouch               2
 #define defPRIORITY_TaskOTA                 15 /* ×î¸ß*/
 #define defPRIORITY_TaskPPP                 12
+#define defPRIORITY_TaskTCPClient           10
 //#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 13
 
 #define defPRIORITY_TaskEVSERemote          3
@@ -65,7 +68,7 @@ const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
 const char *TASKNAME_PPP            = "TaskPPP";
-
+const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
 
 const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
 const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
@@ -83,6 +86,7 @@ void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
 void vTaskPPP(void *pvParameters);
+void vTaskTCPClient(void *pvParameters);
 
 void vTaskEVSERemote(void *pvParameters);
 void vTaskEVSERFID(void *pvParameters);
@@ -100,6 +104,7 @@ static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
 static TaskHandle_t xHandleTaskPPP = NULL;
+static TaskHandle_t xHandleTaskTCPClient = NULL;
 
 static TaskHandle_t xHandleTaskEVSERemote = NULL;
 static TaskHandle_t xHandleTaskEVSERFID = NULL;
@@ -175,6 +180,7 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
     xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
+    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
 }
 
 void AppTaskCreate (void)
