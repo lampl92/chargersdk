@@ -8,15 +8,15 @@
 #ifndef  __IFCONFIG_H
 #define  __IFCONFIG_H
 
-#include "lwip/ip4_addr.h"
+#include "lwip/ip_addr.h"
 
 typedef struct _ifconfig
 {
-    ip4_addr_t local_ip;
-    ip4_addr_t gateway;
-    ip4_addr_t netmask;
-    ip4_addr_t server_ip;
-    ip4_addr_t server_ip_bak;
+    ip_addr_t local_ip;
+    ip_addr_t gateway;
+    ip_addr_t netmask;
+    ip_addr_t server_ip;
+    ip_addr_t server_ip_bak;
     uint16_t server_port;
     uint16_t server_port_bak;
     uint16_t local_port;

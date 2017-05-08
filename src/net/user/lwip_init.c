@@ -6,14 +6,12 @@
 * @date 2017-04-27
 */
 #include "lwip/ip.h"
-#include "lwip/dns.h"
-#include "netif/ppp/pppapi.h"
-#include "netif/ppp/pppos.h"
+#include "tcpip.h"
+#include "netif/ppp/ppp.h"
 #include "bsp.h"
-#include "ifconfig.h"
 
 
-#define lwip2_0
+#define lwip1_4_1
 typedef void (*ctx_cb_fn)(uint8_t *msg);
 
 void tcpip_init_done(void *arg)
@@ -199,8 +197,11 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
 
     if (errCode == PPPERR_NONE)
     {
+        xEventGroupSetBits(xHandleEventlwIP, defEventBitPPPup);
         return;
     }
+
+    xEventGroupClearBits(xHandleEventlwIP, defEventBitPPPup);
 
     /* ppp_close() 被用户调用时返回的代码，说明不要自动重新连接，可以进行释放 */
     if (errCode == PPPERR_USER)
@@ -217,6 +218,7 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
     if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
     }
+
 }
 #endif
 
@@ -225,10 +227,12 @@ void ctx_cb(uint8_t *msg)
     printf_safe("%s", msg);
 }
 
-ppp_pcb *lwip_init_task(void)
+int lwip_init_task(void)
 {
-    ppp_pcb *ppp;           /* PPP control block */
-    struct netif ppp_netif; /* PPP IP interface */
+    int pd;
+
+    int *fd = NULL;
+    int *linkstateCx = NULL;
 
     EventBits_t uxBitLwIP;
 
@@ -245,25 +249,10 @@ ppp_pcb *lwip_init_task(void)
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
-//        pppInit();
-//        /*创建 PPPoS 控制块*/
-//        pppSetAuth(PPPAUTHTYPE_PAP, "", "");
-//        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
-
+        pppInit();
         /*创建 PPPoS 控制块*/
-        ppp = pppapi_pppos_create(&ppp_netif, output_cb, status_cb, ctx_cb);
-
-        /*创建 PPP 连接*/
-
-        /*
-         * 初始化 PPP 客户端连接
-         * ==============================
-         */
-        ppp_set_auth(ppp, PPPAUTHTYPE_PAP, "", "");
-        ppp_set_silent(ppp, 1);
-        pppapi_set_default(ppp);    //设置ppp为默认线路（default route）
-        pppapi_connect(ppp, 0);     //初始化PPP协商，等待时间为0（holdoff = 0;）。只在PPP对话挂掉状态时进行调用
-//        pppapi_listen(ppp);
+        pppSetAuth(PPPAUTHTYPE_PAP, "", "");
+        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
     }
-    return ppp;
+    return pd;
 }

@@ -37,6 +37,9 @@
 				<Assembler>
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin\Release\chargersdk.elf" />
@@ -872,7 +875,6 @@
 		<Unit filename="..\..\src\net\user\ifconfig.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\net\user\ifconfig.h" />
 		<Unit filename="..\..\src\net\user\lwip_init.c">
 			<Option compilerVar="CC" />
 		</Unit>

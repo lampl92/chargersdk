@@ -36,6 +36,8 @@
 #include <stdlib.h>
 #include "bsp.h"
 
+#define LWIP_TIMEVAL_PRIVATE        0
+
 typedef unsigned   char    u8_t;
 typedef signed     char    s8_t;
 typedef unsigned   short   u16_t;
