@@ -6,13 +6,13 @@
 * @date 2017-05-02
 */
 
-#include "netif/ppp/pppos.h"
+#include "netif/ppp/ppp.h"
 #include "lwip_init.h"
 #include "bsp.h"
 #include "gprs_m26.h"
 
 
-void input_over_serial(ppp_pcb *ppp)
+void input_over_serial(int ppp)
 {
     uint8_t data[1500];
     uint32_t len;
@@ -35,7 +35,7 @@ void input_over_serial(ppp_pcb *ppp)
 
 void vTaskPPP(void *pvParameters)
 {
-    ppp_pcb *ppp;
+    int ppp;
     ppp = lwip_init_task();
     while(1)
     {

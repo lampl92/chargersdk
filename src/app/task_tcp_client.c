@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "lwip/api.h"
 #include "ifconfig.h"
-#include "sockets.h"
+#include "lwip/sockets.h"
 
 #define TCP_CLIENT_RX_BUFSIZE   1500
 void vTaskTCPClient(void *pvParameters)

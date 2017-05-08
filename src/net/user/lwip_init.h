@@ -8,6 +8,6 @@
 #ifndef  __LWIP_INIT_H
 #define  __LWIP_INIT_H
 
-ppp_pcb *lwip_init_task(void);
+int lwip_init_task(void);
 
 #endif

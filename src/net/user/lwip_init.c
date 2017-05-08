@@ -6,7 +6,7 @@
 * @date 2017-04-27
 */
 #include "lwip/ip.h"
-#include "tcpip.h"
+#include "lwip/tcpip.h"
 #include "netif/ppp/ppp.h"
 #include "bsp.h"
 
@@ -161,7 +161,7 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     }
 }
 #endif
-#if lwip1_4_1
+#ifdef lwip1_4_1
 void ppp_on_status(void *ctx, int errCode, void *arg)
 {
     int pd;
