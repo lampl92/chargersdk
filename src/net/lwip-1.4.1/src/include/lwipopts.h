@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright � 2016 STMicroelectronics International N.V.
+  * <h2><center>&copy; Copyright © 2016 STMicroelectronics International N.V.
   * All rights reserved.</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without
@@ -242,7 +242,12 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 /**
  * LWIP_NETCONN==1: Enable Netconn API (require to use api_lib.c)
  */
-//#define LWIP_NETCONN                    0
+#define LWIP_NETCONN                    1
+#define LWIP_TCPIP_TIMEOUT   0//Enable tcpip_timeout/tcpip_untimeout to create timers running in tcpip_thread from another thread.
+
+#define LWIP_SO_RCVTIMEO                1   //通过定义LWIP_SO_RCVTIMEO使能netconn结构体中recv_timeout,使用recv_timeout可以避免阻塞线程
+#define LWIP_SO_SNDTIMEO                1
+
 
 /*
    ------------------------------------
@@ -252,7 +257,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 /**
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
-#define LWIP_SOCKET                     0
+#define LWIP_SOCKET                     1
 
 
 /*

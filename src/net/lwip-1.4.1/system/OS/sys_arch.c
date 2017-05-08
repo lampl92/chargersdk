@@ -464,11 +464,16 @@ void sys_assert( const char *msg )
     ;
 }
 
-
 u32_t sys_jiffies(void)
 {
     return (u32_t)clock();
 }
+
+u32_t sys_now(void)
+{
+    return sys_jiffies();
+}
+
 //
 //u32_t sio_read(sio_fd_t fd, u8_t * buf, u32_t size)
 //{

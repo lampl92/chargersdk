@@ -37,6 +37,9 @@
 				<Assembler>
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin\Release\chargersdk.elf" />
@@ -206,6 +209,9 @@
 		</Unit>
 		<Unit filename="..\..\src\app\stringName.h" />
 		<Unit filename="..\..\src\app\sysinit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\app\task_tcp_client.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\taskcharge.c">
@@ -796,6 +802,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\net\mbedTLS\library\platform.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\net\user\ifconfig.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\net\user\lwip_init.c">

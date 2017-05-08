@@ -6,6 +6,7 @@
 * @date 2017-04-27
 */
 #include "lwip/ip.h"
+#include "tcpip.h"
 #include "netif/ppp/ppp.h"
 #include "bsp.h"
 
@@ -208,8 +209,11 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
 
     if (errCode == PPPERR_NONE)
     {
+        xEventGroupSetBits(xHandleEventlwIP, defEventBitPPPup);
         return;
     }
+
+    xEventGroupClearBits(xHandleEventlwIP, defEventBitPPPup);
 
     /* ppp_close() 被用户调用时返回的代码，说明不要自动重新连接，可以进行释放 */
     if (errCode == PPPERR_USER)
