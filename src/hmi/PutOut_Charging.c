@@ -66,7 +66,7 @@
 
 #define ID_TimerTime    0
 // USER END
-
+volatile uint8_t countdown_flag;
 /*********************************************************************
 *
 *       Static data
@@ -124,36 +124,36 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCharging[] =
 // USER START (Optionally insert additional static code)
 static void Caculate_RTC(WM_MESSAGE *pMsg)
 {
-    static uint8_t num = 0;
+    static uint8_t timer_count = 0;
     uint8_t Timer_buf[10];
     uint8_t temp_buf[32];
     CON_t *pCON;
     time_t now;
     uint32_t diffsec;
-    uint8_t sec;
+    volatile uint8_t sec;
     uint8_t min;
     uint8_t hour;
     EventBits_t uxBitCharge;
     EventBits_t uxBitHMI;
+    EventBits_t uxBitIsDone;
 
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
-//    memset(temp_buf,'\0',sizeof(temp_buf));
-//    xsprintf((char *)temp_buf, "(%02d)", Card_Info[current_id_disp].id);
     pCON = CONGetHandle(0);
-//    uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-//    if((uxBitCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
-//    {
-//        WM_DeleteWindow(hWin);
-//            PutOut_Charge_Done();
-//    }
+    ///* TODO (zshare#1#): 添加再次刷卡进行结算事件标志弹出是否结束充电*/
+//    uxBitIsDone = xEventGroupWaitBits()
+//
+
+
+
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
                                    defEventBitHMI_ChargeReqDispDone,
                                    pdTRUE, pdTRUE, 0);
     if((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
     {
+        xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
         PutOut_Charge_Done();
     }
 
@@ -184,18 +184,12 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 
-    xsprintf((char *)Timer_buf, "%02dS", wait_timer.charge_screen_lock);
-    if((num++) >= 1)
+    if(sec == 59)
     {
-        num = 0;
-        if((wait_timer.charge_screen_lock--) == 0)
-        {
-            wait_timer.charge_screen_lock = 0;
-            TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
-
-            //进行退出的跳页操作
-        }
+        sec = 60;
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
     }
+    xsprintf((char *)Timer_buf, "%02dS", (60-sec));
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
 }
 // USER END
@@ -326,12 +320,23 @@ WM_HWIN CreateCharging(void)
  */
 void PutOut_Charging()
 {
+    WM_HWIN hWin;
+
     wait_timer.charge_screen_lock = 60;
-    CreateCharging();
+    hWin = CreateCharging();
+    countdown_flag = 0;
     while(1)
     {
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         GUI_Delay(500);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//        if((wait_timer.charge_screen_lock--) == 0)
+//        {
+//            wait_timer.charge_screen_lock = 0;
+//            //跳出卡片非法页
+////            WM_DeleteWindow(hWin);
+////            PutOut_Home();
+//        }
+        vTaskDelay(500);
     }
 }
 // USER END

@@ -3,49 +3,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <includes.h>
 #include "xbffontcreate.h"
 #include "bmpdisplay.h"
-
+#include "touch.h"
+#include "utils.h"
+#include "interface.h"
+#include "keyboard.h"
 //#include "chargepoint.h"
-
+#define EXIT_DISP_DELAY 60
 #define REFLASH 20
 #define GUN_NUM 2
 
 #define PAGE_HOME 0
 #define PAGE_CARD_VALID 1
 #define PAGE_CARD_INFO 2
-//#define PAGE_
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-//#define
-////uint8_t current_id_disp = 0;
-
-//typedef struct
-//{
-//    uint32_t id;
-//    uint8_t status;
-//    uint16_t balance;
-//    uint8_t charge_gun_status;//0可用；1正在使用中
-//}All_Card_Info;
-//
-//typedef struct
-//{
-//    uint8_t point_statue;
-//
-//}ALL_Point_Info;
-//
-//All_Card_Info Card_Info[GUN_NUM];
-//ALL_Point_Info Point_Info[GUN_NUM];
 
 struct Sys{
     uint8_t charge_gun_num;
@@ -58,8 +30,6 @@ struct Wait_timer{
     uint8_t charge_done_exit;//充电完成界面退出倒计时
 }wait_timer;
 
-
-
 //临时调试变量
 typedef struct
 {
@@ -68,8 +38,14 @@ typedef struct
     char day[5];
 }DateStruct;
 
+volatile uint8_t countdown_60;
 
 void PutOut_Home();
+void PutOut_Card_Info();
+void PutOut_Card_Valid();
+void PutOut_Charging();
+void PutOut_Charge_Done();
+void PutOut_Charging_2dimen();
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
 void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf);

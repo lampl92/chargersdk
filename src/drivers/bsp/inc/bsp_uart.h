@@ -21,7 +21,7 @@ typedef enum
 
 #ifdef EVSE
 #define CLI_USARTx_BASE                             UART4
-#define CLI_USARTx_BAUDRATE                         9600
+#define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
 #define CLI_QUEUE_SIZE                              10
 #endif
@@ -31,9 +31,9 @@ typedef enum
 #define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)
 #define CLI_QUEUE_SIZE                              10
 
-#define RFID_USARTx_BASE                            USART3
+#define RFID_USARTx_BASE                            USART1
 #define RFID_USARTx_BAUDRATE                        115200
-#define RFID_USARTx_IRQHandler                      void USART3_IRQHandler(void)
+#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
 #define RFID_QUEUE_SIZE                             100
 
 #define GPRS_USARTx_BASE                            USART1

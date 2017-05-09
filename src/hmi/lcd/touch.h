@@ -44,11 +44,11 @@ extern _m_tp_dev tp_dev;	 	//触屏控制器在touch.c里面定义
 //#define TCS     PIout(8)   //T_CS
 
 
-#define PEN     PHin(7)    //T_PEN
+#define PEN     PDin(3)    //T_PEN
 #define DOUT    PGin(12)    //T_MISO
-#define TDIN    PIout(14)   //T_MOSI
+#define TDIN    PGout(14)   //T_MOSI
 #define TCLK    PGout(13)   //T_SCK
-#define TCS     PIout(8)   //T_CS
+#define TCS     PFout(9)   //T_CS
 //电阻屏函数
 void TP_Write_Byte(uint8_t num);						//向控制芯片写入一个数据
 uint16_t TP_Read_AD(uint8_t CMD);							//读取AD转换值

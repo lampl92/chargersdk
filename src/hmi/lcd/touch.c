@@ -68,7 +68,7 @@ uint16_t TP_Read_AD(uint8_t CMD)
     TDIN = 0;   //拉低数据线
     TCS = 0;    //选中触摸屏IC
     TP_Write_Byte(CMD);//发送命令字
-    bsp_DelayUS(6);//ADS7846的转换时间最长为6us
+    bsp_DelayUS(3);//ADS7846的转换时间最长为6us
     TCLK = 0;
     bsp_DelayUS(1);
     TCLK = 1;   //给1个时钟，清除BUSY
@@ -156,6 +156,7 @@ uint8_t TP_Read_XY2(uint16_t *x, uint16_t *y)
     {
         return(0);
     }
+
     flag = TP_Read_XY(&x2, &y2);
     if(flag == 0)
     {
@@ -328,30 +329,30 @@ uint8_t TP_Get_Adjdata(void)
     return 0;
 }
 //提示字符串
-uint8_t *const TP_REMIND_MSG_TBL = "Please use the stylus click the cross on the screen.The cross will always move until the screen adjustment is completed.";
+uint8_t *const TP_REMIND_MSG_TBL = "Please use the stylus click the cross on the screen.The cross will always move until the screen adjustment is completed.If you can't click the red cross within 30 seconds,the program of calibration will quit!";
 
 //提示校准结果(各个参数)
 void TP_Adj_Info_Show(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, uint16_t fac)
 {
     POINT_COLOR = RED;
-    LCD_ShowString(40, 160, lcddev.width, lcddev.height, 16, "x1:");
-    LCD_ShowString(40 + 80, 160, lcddev.width, lcddev.height, 16, "y1:");
-    LCD_ShowString(40, 180, lcddev.width, lcddev.height, 16, "x2:");
-    LCD_ShowString(40 + 80, 180, lcddev.width, lcddev.height, 16, "y2:");
-    LCD_ShowString(40, 200, lcddev.width, lcddev.height, 16, "x3:");
-    LCD_ShowString(40 + 80, 200, lcddev.width, lcddev.height, 16, "y3:");
-    LCD_ShowString(40, 220, lcddev.width, lcddev.height, 16, "x4:");
-    LCD_ShowString(40 + 80, 220, lcddev.width, lcddev.height, 16, "y4:");
-    LCD_ShowString(40, 240, lcddev.width, lcddev.height, 16, "fac is:");
-    LCD_ShowNum(40 + 24, 160, x0, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 160, y0, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 180, x1, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 180, y1, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 200, x2, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 200, y2, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24, 220, x3, 4, 16); //显示数值
-    LCD_ShowNum(40 + 24 + 80, 220, y3, 4, 16); //显示数值
-    LCD_ShowNum(40 + 56, 240, fac, 3, 16); //显示数值,该数值必须在95~105范围之内.
+    LCD_ShowString(500, 160, lcddev.width, lcddev.height, 16, "x1:");
+    LCD_ShowString(500 + 80, 160, lcddev.width, lcddev.height, 16, "y1:");
+    LCD_ShowString(500, 180, lcddev.width, lcddev.height, 16, "x2:");
+    LCD_ShowString(500 + 80, 180, lcddev.width, lcddev.height, 16, "y2:");
+    LCD_ShowString(500, 200, lcddev.width, lcddev.height, 16, "x3:");
+    LCD_ShowString(500 + 80, 200, lcddev.width, lcddev.height, 16, "y3:");
+    LCD_ShowString(500, 220, lcddev.width, lcddev.height, 16, "x4:");
+    LCD_ShowString(500 + 80, 220, lcddev.width, lcddev.height, 16, "y4:");
+    LCD_ShowString(500, 240, lcddev.width, lcddev.height, 16, "fac is:");
+    LCD_ShowNum(500 + 24, 160, x0, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 160, y0, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 180, x1, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 180, y1, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 200, x2, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 200, y2, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24, 220, x3, 4, 16); //显示数值
+    LCD_ShowNum(500 + 24 + 80, 220, y3, 4, 16); //显示数值
+    LCD_ShowNum(500 + 56, 240, fac, 3, 16); //显示数值,该数值必须在95~105范围之内.
 
 }
 
@@ -365,18 +366,21 @@ void TP_Adjust(void)
     uint32_t tem1, tem2;
     double fac;
     uint16_t outtime = 0;
+    uint8_t tmp[4];
+
     cnt = 0;
     POINT_COLOR = BLUE;
     BACK_COLOR = WHITE;
     LCD_Clear(WHITE);//清屏
     POINT_COLOR = RED; //红色
     LCD_Clear(WHITE);//清屏
-    POINT_COLOR = BLACK;
-    LCD_ShowString(40, 40, 160, 100, 16, (uint8_t *)TP_REMIND_MSG_TBL); //显示提示信息
+    POINT_COLOR = RED;
+    LCD_ShowString(210, 150, 200, 16, 16, "DPC TOUCH CALIBRATE");
+    LCD_ShowString(210, 200, 250, 100, 16, (uint8_t *)TP_REMIND_MSG_TBL); //显示提示信息
     TP_Drow_Touch_Point(20, 20, RED); //画点1
     tp_dev.sta = 0; //消除触发信号
     tp_dev.xfac = 0; //xfac用来标记是否校准过,所以校准之前必须清掉!以免错误
-    while(1)//如果连续10秒钟没有按下,则自动退出
+    while(1)//如果连续30秒钟没有按下,则自动退出
     {
         tp_dev.scan(1);//扫描物理坐标
         if((tp_dev.sta & 0xc0) == TP_CATH_PRES) //按键按下了一次(此时按键松开了.)
@@ -492,7 +496,7 @@ void TP_Adjust(void)
                     }
                     POINT_COLOR = BLUE;
                     LCD_Clear(WHITE);//清屏
-                    LCD_ShowString(35, 110, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!"); //校正完成
+                    LCD_ShowString(210, 150, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!"); //校正完成
                     bsp_DelayMS(1000);
                     TP_Save_Adjdata();
                     LCD_Clear(WHITE);//清屏
@@ -501,7 +505,13 @@ void TP_Adjust(void)
         }
         bsp_DelayMS(10);
         outtime++;
-        if(outtime > 1000)
+        if(outtime % 100 == 0)
+        {
+            sprintf(tmp,"%2dS",30-(outtime/100));
+            POINT_COLOR = RED;
+            LCD_ShowString(500, 400, 20, 20, 16, tmp); //显示倒计时
+        }
+        if(outtime > 3000)
         {
             TP_Get_Adjdata();
             break;
@@ -511,70 +521,36 @@ void TP_Adjust(void)
 //触摸屏初始化
 //返回值:0,没有进行校准
 //       1,进行过校准
+
 uint8_t TP_Init(void)
 {
     GPIO_InitTypeDef GPIO_Initure;
-
-    __HAL_RCC_GPIOH_CLK_ENABLE();           //开启GPIOH时钟
-    __HAL_RCC_GPIOI_CLK_ENABLE();           //开启GPIOI时钟
+    __HAL_RCC_GPIOD_CLK_ENABLE();           //开启GPIOH时钟
     __HAL_RCC_GPIOG_CLK_ENABLE();           //开启GPIOG时钟
+    __HAL_RCC_GPIOF_CLK_ENABLE();           //开启GPIOG时钟
 
-    //PH6   T_SCK
-    GPIO_Initure.Pin = GPIO_PIN_6;          //PH6
+    //PG13 T_SCK | T_MOSI
+    GPIO_Initure.Pin = GPIO_PIN_13 | GPIO_PIN_14;
     GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
     GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
     GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
-    HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
+    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
 
-    //PI3,8   T_MOSI/T_CS
-    GPIO_Initure.Pin = GPIO_PIN_3 | GPIO_PIN_8; //PI3,8
-    HAL_GPIO_Init(GPIOI, &GPIO_Initure);    //初始化
+    //T_CS
+    GPIO_Initure.Pin = GPIO_PIN_9;          //PF9
+    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
+    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
+    HAL_GPIO_Init(GPIOF, &GPIO_Initure);    //初始化
 
-    //PH7  T_PEN
-    GPIO_Initure.Pin = GPIO_PIN_7;          //PH7
+    //PD3  T_PEN
+    GPIO_Initure.Pin = GPIO_PIN_3;          //PD3
     GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-    HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
+    HAL_GPIO_Init(GPIOD, &GPIO_Initure);    //初始化
 
-    //PG3  TMISO
-    GPIO_Initure.Pin = GPIO_PIN_3;          //PG3
-    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
-
-    TP_Read_XY(&tp_dev.x[0], &tp_dev.y[0]); //第一次读取初始化
-
-    return 1;
-}
-uint8_t TP_Init_1(void)
-{
-    GPIO_InitTypeDef GPIO_Initure;
-
-    __HAL_RCC_GPIOH_CLK_ENABLE();           //开启GPIOH时钟
-    __HAL_RCC_GPIOI_CLK_ENABLE();           //开启GPIOI时钟
-    __HAL_RCC_GPIOG_CLK_ENABLE();           //开启GPIOG时钟
-
-    //PH6   T_SCK
-    GPIO_Initure.Pin = GPIO_PIN_6;          //PH6
-    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
-    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
-    HAL_GPIO_Init(GPIOH, &GPIO_Initure);    //初始化
-
-    GPIO_Initure.Pin = GPIO_PIN_14|GPIO_PIN_13;          //PH6
-    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
-    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
-    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
-
-    //PI3,8   T_MOSI/T_CS
-    GPIO_Initure.Pin = GPIO_PIN_3 | GPIO_PIN_8; //PI3,8
-    HAL_GPIO_Init(GPIOI, &GPIO_Initure);    //初始化
-
-    //PH7  T_PEN
-    GPIO_Initure.Pin = GPIO_PIN_12;          //PH7
+    //PG12  T_MISO
+    GPIO_Initure.Pin = GPIO_PIN_12;          //PG12
     GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
-
-    //PG3  TMISO
-    GPIO_Initure.Pin = GPIO_PIN_3;          //PG3
     HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
 
     TP_Read_XY(&tp_dev.x[0], &tp_dev.y[0]); //第一次读取初始化
@@ -590,16 +566,23 @@ void Load_Drow_Dialog(void)
 }
 void GUI_Touch_Calibrate()
 {
-    POINT_COLOR = RED;
-    LCD_ShowString(30, 50, 200, 16, 16, "Apollo STM32f4/F7");
-    LCD_ShowString(30, 70, 200, 16, 16, "TOUCH TEST");
-    LCD_ShowString(30, 90, 200, 16, 16, "ATOM@ALIENTEK");
-    LCD_ShowString(30, 110, 200, 16, 16, "2016/1/16");
+
+    tp_dev.touchtype = 0;
+
+    if(tp_dev.touchtype)//X,Y方向与屏幕相反
+    {
+        CMD_RDX = 0X90;
+        CMD_RDY = 0XD0;
+    }
+    else                   //X,Y方向与屏幕相同
+    {
+        CMD_RDX = 0XD0;
+        CMD_RDY = 0X90;
+    }
 
     LCD_Clear(WHITE);   //ÇåÆÁ
     TP_Adjust();        //ÆÁÄ»Ð£×¼
     TP_Save_Adjdata();
-//    Load_Drow_Dialog();
 
     while(1)
     {

@@ -1,201 +1,203 @@
 #include "bsp.h"
 
 #define USE_WAITRB 0
-#define BSP_DELAY_US_VAL    20
-NAND_HandleTypeDef NAND_Handler;    //NAND FLASH¾ä±ú
-nand_attriute nand_dev;             //nandÖØÒª²ÎÊı½á¹¹Ìå
+#define BSP_DELAY_US_VAL    30
+NAND_HandleTypeDef NAND_Handler;    //NAND FLASHå¥æŸ„
+nand_attriute nand_dev;             //nandé‡è¦å‚æ•°ç»“æ„ä½“
 
-//³õÊ¼»¯NAND FLASH
+//åˆå§‹åŒ–NAND FLASH
 u8 NAND_Init(void)
 {
     FMC_NAND_PCC_TimingTypeDef ComSpaceTiming, AttSpaceTiming;
 
     NAND_Handler.Instance = FMC_NAND_DEVICE;
-    NAND_Handler.Init.NandBank = FMC_NAND_BANK3;                        //NAND¹ÒÔÚBANK3ÉÏ
-    NAND_Handler.Init.Waitfeature = FMC_NAND_PCC_WAIT_FEATURE_DISABLE;  //¹Ø±ÕµÈ´ıÌØĞÔ
-    NAND_Handler.Init.MemoryDataWidth = FMC_NAND_PCC_MEM_BUS_WIDTH_8;   //8Î»Êı¾İ¿í¶È
-    NAND_Handler.Init.EccComputation = FMC_NAND_ECC_DISABLE;            //²»Ê¹ÓÃECC
-    NAND_Handler.Init.ECCPageSize = FMC_NAND_ECC_PAGE_SIZE_2048BYTE;    //ECCÒ³´óĞ¡Îª2k
-    NAND_Handler.Init.TCLRSetupTime = 0;                                //ÉèÖÃTCLR(tCLR=CLEµ½REµÄÑÓÊ±)=(TCLR+TSET+2)*THCLK,THCLK=1/180M=5.5ns
-    NAND_Handler.Init.TARSetupTime = 1;                                 //ÉèÖÃTAR(tAR=ALEµ½REµÄÑÓÊ±)=(TAR+TSET+2)*THCLK,THCLK=1/180M=5.5n¡£
+    NAND_Handler.Init.NandBank = FMC_NAND_BANK3;                        //NANDæŒ‚åœ¨BANK3ä¸Š
+    NAND_Handler.Init.Waitfeature = FMC_NAND_PCC_WAIT_FEATURE_DISABLE;  //å…³é—­ç­‰å¾…ç‰¹æ€§
+    NAND_Handler.Init.MemoryDataWidth = FMC_NAND_PCC_MEM_BUS_WIDTH_8;   //8ä½æ•°æ®å®½åº¦
+    NAND_Handler.Init.EccComputation = FMC_NAND_ECC_DISABLE;            //ä¸ä½¿ç”¨ECC
+    NAND_Handler.Init.ECCPageSize = FMC_NAND_ECC_PAGE_SIZE_2048BYTE;    //ECCé¡µå¤§å°ä¸º2k
+    NAND_Handler.Init.TCLRSetupTime = 0;                                //è®¾ç½®TCLR(tCLR=CLEåˆ°REçš„å»¶æ—¶)=(TCLR+TSET+2)*THCLK,THCLK=1/180M=5.5ns
+    NAND_Handler.Init.TARSetupTime = 1;                                 //è®¾ç½®TAR(tAR=ALEåˆ°REçš„å»¶æ—¶)=(TAR+TSET+2)*THCLK,THCLK=1/180M=5.5nã€‚
 
-    ComSpaceTiming.SetupTime = 2;       //½¨Á¢Ê±¼ä
-    ComSpaceTiming.WaitSetupTime = 3;   //µÈ´ıÊ±¼ä
-    ComSpaceTiming.HoldSetupTime = 2;   //±£³ÖÊ±¼ä
-    ComSpaceTiming.HiZSetupTime = 1;    //¸ß×èÌ¬Ê±¼ä
+    ComSpaceTiming.SetupTime = 2;       //å»ºç«‹æ—¶é—´
+    ComSpaceTiming.WaitSetupTime = 3;   //ç­‰å¾…æ—¶é—´
+    ComSpaceTiming.HoldSetupTime = 2;   //ä¿æŒæ—¶é—´
+    ComSpaceTiming.HiZSetupTime = 1;    //é«˜é˜»æ€æ—¶é—´
 
-    AttSpaceTiming.SetupTime = 2;       //½¨Á¢Ê±¼ä
-    AttSpaceTiming.WaitSetupTime = 3;   //µÈ´ıÊ±¼ä
-    AttSpaceTiming.HoldSetupTime = 2;   //±£³ÖÊ±¼ä
-    AttSpaceTiming.HiZSetupTime = 1;    //¸ß×èÌ¬Ê±¼ä
+    AttSpaceTiming.SetupTime = 2;       //å»ºç«‹æ—¶é—´
+    AttSpaceTiming.WaitSetupTime = 3;   //ç­‰å¾…æ—¶é—´
+    AttSpaceTiming.HoldSetupTime = 2;   //ä¿æŒæ—¶é—´
+    AttSpaceTiming.HiZSetupTime = 1;    //é«˜é˜»æ€æ—¶é—´
 
     HAL_NAND_Init(&NAND_Handler, &ComSpaceTiming, &AttSpaceTiming);
-    NAND_Reset();                       //¸´Î»NAND
+    NAND_Reset();                       //å¤ä½NAND
     bsp_DelayMS(100);
-    nand_dev.id = NAND_ReadID();        //¶ÁÈ¡ID
-    NAND_ModeSet(4);                    //ÉèÖÃÎªMODE4,¸ßËÙÄ£Ê½
-    if(nand_dev.id == MT29F16G08ABABA)  //NANDÎªMT29F16G08ABABA
+    nand_dev.id = NAND_ReadID();        //è¯»å–ID
+    NAND_ModeSet(4);                    //è®¾ç½®ä¸ºMODE4,é«˜é€Ÿæ¨¡å¼
+    if(nand_dev.id == MT29F16G08ABABA)  //NANDä¸ºMT29F16G08ABABA
     {
-        nand_dev.page_totalsize = 4320; //nandÒ»¸öpageµÄ×Ü´óĞ¡£¨°üÀ¨spareÇø£©
-        nand_dev.page_mainsize = 4096;  //nandÒ»¸öpageµÄÓĞĞ§Êı¾İÇø´óĞ¡
-        nand_dev.page_sparesize = 224;  //nandÒ»¸öpageµÄspareÇø´óĞ¡
-        nand_dev.block_pagenum = 128;   //nandÒ»¸öblockËù°üº¬µÄpageÊıÄ¿
-        nand_dev.plane_blocknum = 2048; //nandÒ»¸öplaneËù°üº¬µÄblockÊıÄ¿
-        nand_dev.block_totalnum = 4096; //nandµÄ×ÜblockÊıÄ¿
+        nand_dev.page_totalsize = 4320; //nandä¸€ä¸ªpageçš„æ€»å¤§å°ï¼ˆåŒ…æ‹¬spareåŒºï¼‰
+        nand_dev.page_mainsize = 4096;  //nandä¸€ä¸ªpageçš„æœ‰æ•ˆæ•°æ®åŒºå¤§å°
+        nand_dev.page_sparesize = 224;  //nandä¸€ä¸ªpageçš„spareåŒºå¤§å°
+        nand_dev.block_pagenum = 128;   //nandä¸€ä¸ªblockæ‰€åŒ…å«çš„pageæ•°ç›®
+        nand_dev.plane_blocknum = 2048; //nandä¸€ä¸ªplaneæ‰€åŒ…å«çš„blockæ•°ç›®
+        nand_dev.block_totalnum = 4096; //nandçš„æ€»blockæ•°ç›®
     }
-    else if(nand_dev.id == MT29F4G08ABADA) //NANDÎªMT29F4G08ABADA
+    else if(nand_dev.id == MT29F4G08ABADA) //NANDä¸ºMT29F4G08ABADA
     {
-        nand_dev.page_totalsize = 2112; //nandÒ»¸öpageµÄ×Ü´óĞ¡£¨°üÀ¨spareÇø£©
-        nand_dev.page_mainsize = 2048;  //nandÒ»¸öpageµÄÓĞĞ§Êı¾İÇø´óĞ¡
-        nand_dev.page_sparesize = 64;   //nandÒ»¸öpageµÄspareÇø´óĞ¡
-        nand_dev.block_pagenum = 64;    //nandÒ»¸öblockËù°üº¬µÄpageÊıÄ¿
-        nand_dev.plane_blocknum = 2048; //nandÒ»¸öplaneËù°üº¬µÄblockÊıÄ¿
-        nand_dev.block_totalnum = 4096; //nandµÄ×ÜblockÊıÄ¿
+        nand_dev.page_totalsize = 2112; //nandä¸€ä¸ªpageçš„æ€»å¤§å°ï¼ˆåŒ…æ‹¬spareåŒºï¼‰
+        nand_dev.page_mainsize = 2048;  //nandä¸€ä¸ªpageçš„æœ‰æ•ˆæ•°æ®åŒºå¤§å°
+        nand_dev.page_sparesize = 64;   //nandä¸€ä¸ªpageçš„spareåŒºå¤§å°
+        nand_dev.block_pagenum = 64;    //nandä¸€ä¸ªblockæ‰€åŒ…å«çš„pageæ•°ç›®
+        nand_dev.plane_blocknum = 2048; //nandä¸€ä¸ªplaneæ‰€åŒ…å«çš„blockæ•°ç›®
+        nand_dev.block_totalnum = 4096; //nandçš„æ€»blockæ•°ç›®
     }
     else
     {
-        return 1;    //´íÎó£¬·µ»Ø
+        return 1;    //é”™è¯¯ï¼Œè¿”å›
     }
     return 0;
 }
 
-//NAND FALSHµ×²ãÇı¶¯,Òı½ÅÅäÖÃ£¬Ê±ÖÓÊ¹ÄÜ
-//´Ëº¯Êı»á±»HAL_NAND_Init()µ÷ÓÃ
+//NAND FALSHåº•å±‚é©±åŠ¨,å¼•è„šé…ç½®ï¼Œæ—¶é’Ÿä½¿èƒ½
+//æ­¤å‡½æ•°ä¼šè¢«HAL_NAND_Init()è°ƒç”¨
 void HAL_NAND_MspInit(NAND_HandleTypeDef *hnand)
 {
     GPIO_InitTypeDef GPIO_Initure;
 
-    __HAL_RCC_FMC_CLK_ENABLE();             //Ê¹ÄÜFMCÊ±ÖÓ
-    __HAL_RCC_GPIOD_CLK_ENABLE();           //Ê¹ÄÜGPIODÊ±ÖÓ
-    __HAL_RCC_GPIOE_CLK_ENABLE();           //Ê¹ÄÜGPIOEÊ±ÖÓ
-    __HAL_RCC_GPIOG_CLK_ENABLE();           //Ê¹ÄÜGPIOGÊ±ÖÓ
+    __HAL_RCC_FMC_CLK_ENABLE();             //ä½¿èƒ½FMCæ—¶é’Ÿ
+    __HAL_RCC_GPIOD_CLK_ENABLE();           //ä½¿èƒ½GPIODæ—¶é’Ÿ
+    __HAL_RCC_GPIOE_CLK_ENABLE();           //ä½¿èƒ½GPIOEæ—¶é’Ÿ
+    __HAL_RCC_GPIOG_CLK_ENABLE();           //ä½¿èƒ½GPIOGæ—¶é’Ÿ
 
-    //³õÊ¼»¯PD6 R/BÒı½Å
+    //åˆå§‹åŒ–PD6 R/Bå¼•è„š
     GPIO_Initure.Pin = GPIO_PIN_6;
-    GPIO_Initure.Mode = GPIO_MODE_INPUT;        //ÊäÈë
-    GPIO_Initure.Pull = GPIO_PULLUP;            //ÉÏÀ­
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //¸ßËÙ
+    GPIO_Initure.Mode = GPIO_MODE_INPUT;        //è¾“å…¥
+    GPIO_Initure.Pull = GPIO_PULLUP;            //ä¸Šæ‹‰
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //é«˜é€Ÿ
     HAL_GPIO_Init(GPIOD, &GPIO_Initure);
 
-    //³õÊ¼»¯PG9 NCE3Òı½Å
+    //åˆå§‹åŒ–PG9 NCE3å¼•è„š
     GPIO_Initure.Pin = GPIO_PIN_9;
-    GPIO_Initure.Mode = GPIO_MODE_AF_PP;        //ÊäÈë
-    GPIO_Initure.Pull = GPIO_NOPULL;            //ÉÏÀ­
-    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //¸ßËÙ
-    GPIO_Initure.Alternate = GPIO_AF12_FMC;     //¸´ÓÃÎªFMC
+    GPIO_Initure.Mode = GPIO_MODE_AF_PP;        //è¾“å…¥
+    GPIO_Initure.Pull = GPIO_NOPULL;            //ä¸Šæ‹‰
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH;       //é«˜é€Ÿ
+    GPIO_Initure.Alternate = GPIO_AF12_FMC;     //å¤ç”¨ä¸ºFMC
     HAL_GPIO_Init(GPIOG, &GPIO_Initure);
 
-    //³õÊ¼»¯PD0,1,4,5,11,12,14,15
+    //åˆå§‹åŒ–PD0,1,4,5,11,12,14,15
     GPIO_Initure.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5 | \
                        GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_14 | GPIO_PIN_15;
     GPIO_Initure.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOD, &GPIO_Initure);
 
-    //³õÊ¼»¯PE7,8,9,10
+    //åˆå§‹åŒ–PE7,8,9,10
     GPIO_Initure.Pin = GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;
     HAL_GPIO_Init(GPIOE, &GPIO_Initure);
 }
 
-//¶ÁÈ¡NAND FLASHµÄID
-//·µ»ØÖµ:0,³É¹¦;
-//    ÆäËû,Ê§°Ü
+//è¯»å–NAND FLASHçš„ID
+//è¿”å›å€¼:0,æˆåŠŸ;
+//    å…¶ä»–,å¤±è´¥
 u8 NAND_ModeSet(u8 mode)
 {
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_FEATURE; //·¢ËÍÉèÖÃÌØĞÔÃüÁî
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = 0X01;  //µØÖ·Îª0X01,ÉèÖÃmode
-    *(vu8 *)NAND_ADDRESS = mode;                //P1²ÎÊı,ÉèÖÃmode
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_FEATURE; //å‘é€è®¾ç½®ç‰¹æ€§å‘½ä»¤
+    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = 0X01;  //åœ°å€ä¸º0X01,è®¾ç½®mode
+    *(vu8 *)NAND_ADDRESS = mode;                //P1å‚æ•°,è®¾ç½®mode
     *(vu8 *)NAND_ADDRESS = 0;
     *(vu8 *)NAND_ADDRESS = 0;
     *(vu8 *)NAND_ADDRESS = 0;
     if(NAND_WaitForReady() == NSTA_READY)
     {
-        return 0;    //³É¹¦
+        return 0;    //æˆåŠŸ
     }
     else
     {
-        return 1;    //Ê§°Ü
+        return 1;    //å¤±è´¥
     }
 }
 
-//¶ÁÈ¡NAND FLASHµÄID
-//²»Í¬µÄNANDÂÔÓĞ²»Í¬£¬Çë¸ù¾İ×Ô¼ºËùÊ¹ÓÃµÄNAND FALSHÊı¾İÊÖ²áÀ´±àĞ´º¯Êı
-//·µ»ØÖµ:NAND FLASHµÄIDÖµ
+//è¯»å–NAND FLASHçš„ID
+//ä¸åŒçš„NANDç•¥æœ‰ä¸åŒï¼Œè¯·æ ¹æ®è‡ªå·±æ‰€ä½¿ç”¨çš„NAND FALSHæ•°æ®æ‰‹å†Œæ¥ç¼–å†™å‡½æ•°
+//è¿”å›å€¼:NAND FLASHçš„IDå€¼
 u32 NAND_ReadID(void)
 {
     u8 deviceid[5];
     u32 id;
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_READID; //·¢ËÍ¶ÁÈ¡IDÃüÁî
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_READID; //å‘é€è¯»å–IDå‘½ä»¤
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = 0X00;
-    //IDÒ»¹²ÓĞ5¸ö×Ö½Ú
+    //IDä¸€å…±æœ‰5ä¸ªå­—èŠ‚
     deviceid[0] = *(vu8 *)NAND_ADDRESS;
     deviceid[1] = *(vu8 *)NAND_ADDRESS;
     deviceid[2] = *(vu8 *)NAND_ADDRESS;
     deviceid[3] = *(vu8 *)NAND_ADDRESS;
     deviceid[4] = *(vu8 *)NAND_ADDRESS;
-    //Ã¾¹âµÄNAND FLASHµÄIDÒ»¹²5¸ö×Ö½Ú£¬µ«ÊÇÎªÁË·½±ãÎÒÃÇÖ»È¡4¸ö×Ö½Ú×é³ÉÒ»¸ö32Î»µÄIDÖµ
-    //¸ù¾İNAND FLASHµÄÊı¾İÊÖ²á£¬Ö»ÒªÊÇÃ¾¹âµÄNAND FLASH£¬ÄÇÃ´Ò»¸ö×Ö½ÚIDµÄµÚÒ»¸ö×Ö½Ú¶¼ÊÇ0X2C
-    //ËùÒÔÎÒÃÇ¾Í¿ÉÒÔÅ×ÆúÕâ¸ö0X2C£¬Ö»È¡ºóÃæËÄ×Ö½ÚµÄIDÖµ¡£
+    //é•å…‰çš„NAND FLASHçš„IDä¸€å…±5ä¸ªå­—èŠ‚ï¼Œä½†æ˜¯ä¸ºäº†æ–¹ä¾¿æˆ‘ä»¬åªå–4ä¸ªå­—èŠ‚ç»„æˆä¸€ä¸ª32ä½çš„IDå€¼
+    //æ ¹æ®NAND FLASHçš„æ•°æ®æ‰‹å†Œï¼Œåªè¦æ˜¯é•å…‰çš„NAND FLASHï¼Œé‚£ä¹ˆä¸€ä¸ªå­—èŠ‚IDçš„ç¬¬ä¸€ä¸ªå­—èŠ‚éƒ½æ˜¯0X2C
+    //æ‰€ä»¥æˆ‘ä»¬å°±å¯ä»¥æŠ›å¼ƒè¿™ä¸ª0X2Cï¼Œåªå–åé¢å››å­—èŠ‚çš„IDå€¼ã€‚
     id = ((u32)deviceid[1]) << 24 | ((u32)deviceid[2]) << 16 | ((u32)deviceid[3]) << 8 | deviceid[4];
     return id;
 }
-//¶ÁNAND×´Ì¬
-//·µ»ØÖµ:NAND×´Ì¬Öµ
-//bit0:0,³É¹¦;1,´íÎó(±à³Ì/²Á³ı/READ)
+//è¯»NANDçŠ¶æ€
+//è¿”å›å€¼:NANDçŠ¶æ€å€¼
+//bit0:0,æˆåŠŸ;1,é”™è¯¯(ç¼–ç¨‹/æ“¦é™¤/READ)
 //bit6:0,Busy;1,Ready
 u8 NAND_ReadStatus(void)
 {
     vu8 data = 0;
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_READSTA; //·¢ËÍ¶Á×´Ì¬ÃüÁî
-    data++;
-    data++;
-    data++;
-    data++;
-    data++; //¼ÓÑÓÊ±,·ÀÖ¹-O2ÓÅ»¯,µ¼ÖÂµÄ´íÎó.
-    data = *(vu8 *)NAND_ADDRESS;        //¶ÁÈ¡×´Ì¬Öµ
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_READSTA; //å‘é€è¯»çŠ¶æ€å‘½ä»¤
+//    data++;
+//    data++;
+//    data++;
+//    data++;
+//    data++; //åŠ å»¶æ—¶,é˜²æ­¢-O2ä¼˜åŒ–,å¯¼è‡´çš„é”™è¯¯.
+    bsp_DelayUS(10);
+    data = *(vu8 *)NAND_ADDRESS;        //è¯»å–çŠ¶æ€å€¼
     return data;
 }
-//µÈ´ıNAND×¼±¸ºÃ
-//·µ»ØÖµ:NSTA_TIMEOUT µÈ´ı³¬Ê±ÁË
-//      NSTA_READY    ÒÑ¾­×¼±¸ºÃ
+//ç­‰å¾…NANDå‡†å¤‡å¥½
+//è¿”å›å€¼:NSTA_TIMEOUT ç­‰å¾…è¶…æ—¶äº†
+//      NSTA_READY    å·²ç»å‡†å¤‡å¥½
 u8 NAND_WaitForReady(void)
 {
     u8 status = 0;
     vu32 time = 0;
-    while(1)                        //µÈ´ıready
+    while(1)                        //ç­‰å¾…ready
     {
-        status = NAND_ReadStatus(); //»ñÈ¡×´Ì¬Öµ
+        status = NAND_ReadStatus(); //è·å–çŠ¶æ€å€¼
         if(status & NSTA_READY)
         {
             break;
         }
         time++;
-        if(time >= 0X1FFFF)
+        bsp_DelayUS(1);
+        if(time >= 100000)
         {
-            return NSTA_TIMEOUT;    //³¬Ê±
+            return NSTA_TIMEOUT;    //è¶…æ—¶
         }
     }
-    return NSTA_READY;//×¼±¸ºÃ
+    return NSTA_READY;//å‡†å¤‡å¥½
 }
-//¸´Î»NAND
-//·µ»ØÖµ:0,³É¹¦;
-//    ÆäËû,Ê§°Ü
+//å¤ä½NAND
+//è¿”å›å€¼:0,æˆåŠŸ;
+//    å…¶ä»–,å¤±è´¥
 u8 NAND_Reset(void)
 {
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_RESET; //¸´Î»NAND
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_RESET; //å¤ä½NAND
     if(NAND_WaitForReady() == NSTA_READY)
     {
-        return 0;    //¸´Î»³É¹¦
+        return 0;    //å¤ä½æˆåŠŸ
     }
     else
     {
-        return 1;    //¸´Î»Ê§°Ü
+        return 1;    //å¤ä½å¤±è´¥
     }
 }
-//µÈ´ıRBĞÅºÅÎªÄ³¸öµçÆ½
-//rb:0,µÈ´ıRB==0
-//   1,µÈ´ıRB==1
-//·µ»ØÖµ:0,³É¹¦
-//       1,³¬Ê±
+//ç­‰å¾…RBä¿¡å·ä¸ºæŸä¸ªç”µå¹³
+//rb:0,ç­‰å¾…RB==0
+//   1,ç­‰å¾…RB==1
+//è¿”å›å€¼:0,æˆåŠŸ
+//       1,è¶…æ—¶
 u8 NAND_WaitRB(vu8 rb)
 {
     vu16 time = 0;
@@ -209,57 +211,58 @@ u8 NAND_WaitRB(vu8 rb)
     }
     return 1;
 }
-//NANDÑÓÊ±
+//NANDå»¶æ—¶
 void NAND_Delay(vu32 i)
 {
-    while(i > 0)
-    {
-        i--;
-    }
+//    while(i > 0)
+//    {
+//        i--;
+//    }
+    bsp_DelayUS(i);
 }
-//¶ÁÈ¡NAND FlashµÄÖ¸¶¨Ò³Ö¸¶¨ÁĞµÄÊı¾İ(mainÇøºÍspareÇø¶¼¿ÉÒÔÊ¹ÓÃ´Ëº¯Êı)
-//PageNum:Òª¶ÁÈ¡µÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:Òª¶ÁÈ¡µÄÁĞ¿ªÊ¼µØÖ·(Ò²¾ÍÊÇÒ³ÄÚµØÖ·),·¶Î§:0~(page_totalsize-1)
-//*pBuffer:Ö¸ÏòÊı¾İ´æ´¢Çø
-//NumByteToRead:¶ÁÈ¡×Ö½ÚÊı(²»ÄÜ¿çÒ³¶Á)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//è¯»å–NAND Flashçš„æŒ‡å®šé¡µæŒ‡å®šåˆ—çš„æ•°æ®(mainåŒºå’ŒspareåŒºéƒ½å¯ä»¥ä½¿ç”¨æ­¤å‡½æ•°)
+//PageNum:è¦è¯»å–çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦è¯»å–çš„åˆ—å¼€å§‹åœ°å€(ä¹Ÿå°±æ˜¯é¡µå†…åœ°å€),èŒƒå›´:0~(page_totalsize-1)
+//*pBuffer:æŒ‡å‘æ•°æ®å­˜å‚¨åŒº
+//NumByteToRead:è¯»å–å­—èŠ‚æ•°(ä¸èƒ½è·¨é¡µè¯»)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
 {
     vu16 i = 0;
     u8 res = 0;
-    u8 eccnum = 0;      //ĞèÒª¼ÆËãµÄECC¸öÊı£¬Ã¿NAND_ECC_SECTOR_SIZE×Ö½Ú¼ÆËãÒ»¸öecc
-    u8 eccstart = 0;    //µÚÒ»¸öECCÖµËùÊôµÄµØÖ··¶Î§
+    u8 eccnum = 0;      //éœ€è¦è®¡ç®—çš„ECCä¸ªæ•°ï¼Œæ¯NAND_ECC_SECTOR_SIZEå­—èŠ‚è®¡ç®—ä¸€ä¸ªecc
+    u8 eccstart = 0;    //ç¬¬ä¸€ä¸ªECCå€¼æ‰€å±çš„åœ°å€èŒƒå›´
     u8 errsta = 0;
     u8 *p;
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
-    //·¢ËÍµØÖ·
+    //å‘é€åœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
-    //ÏÂÃæÁ½ĞĞ´úÂëÊÇµÈ´ıR/BÒı½Å±äÎªµÍµçÆ½£¬ÆäÊµÖ÷ÒªÆğÑÓÊ±×÷ÓÃµÄ£¬µÈ´ıNAND²Ù×÷R/BÒı½Å¡£ÒòÎªÎÒÃÇÊÇÍ¨¹ı
-    //½«STM32µÄNWAITÒı½Å(NANDµÄR/BÒı½Å)ÅäÖÃÎªÆÕÍ¨IO£¬´úÂëÖĞÍ¨¹ı¶ÁÈ¡NWAITÒı½ÅµÄµçÆ½À´ÅĞ¶ÏNANDÊÇ·ñ×¼±¸
-    //¾ÍĞ÷µÄ¡£Õâ¸öÒ²¾ÍÊÇÄ£ÄâµÄ·½·¨£¬ËùÒÔÔÚËÙ¶ÈºÜ¿ìµÄÊ±ºòÓĞ¿ÉÄÜNAND»¹Ã»À´µÃ¼°²Ù×÷R/BÒı½ÅÀ´±íÊ¾NANDµÄÃ¦
-    //ÏĞ×´Ì¬£¬½á¹ûÎÒÃÇ¾Í¶ÁÈ¡ÁËR/BÒı½Å,Õâ¸öÊ±ºò¿Ï¶¨»á³ö´íµÄ£¬ÊÂÊµÉÏÈ·ÊµÊÇ»á³ö´í!´ó¼ÒÒ²¿ÉÒÔ½«ÏÂÃæÁ½ĞĞ
-    //´úÂë»»³ÉÑÓÊ±º¯Êı,Ö»²»¹ıÕâÀïÎÒÃÇÎªÁËĞ§ÂÊËùÒÔÃ»ÓĞÓÃÑÓÊ±º¯Êı¡£
-    //TODO:Èç¹û·¢ÏÖnand´íÎó, ½«ÏÂÃæµÄµÈ´ıRB»»³ÉÑÓÊ±º¯Êı
+    //ä¸‹é¢ä¸¤è¡Œä»£ç æ˜¯ç­‰å¾…R/Bå¼•è„šå˜ä¸ºä½ç”µå¹³ï¼Œå…¶å®ä¸»è¦èµ·å»¶æ—¶ä½œç”¨çš„ï¼Œç­‰å¾…NANDæ“ä½œR/Bå¼•è„šã€‚å› ä¸ºæˆ‘ä»¬æ˜¯é€šè¿‡
+    //å°†STM32çš„NWAITå¼•è„š(NANDçš„R/Bå¼•è„š)é…ç½®ä¸ºæ™®é€šIOï¼Œä»£ç ä¸­é€šè¿‡è¯»å–NWAITå¼•è„šçš„ç”µå¹³æ¥åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡
+    //å°±ç»ªçš„ã€‚è¿™ä¸ªä¹Ÿå°±æ˜¯æ¨¡æ‹Ÿçš„æ–¹æ³•ï¼Œæ‰€ä»¥åœ¨é€Ÿåº¦å¾ˆå¿«çš„æ—¶å€™æœ‰å¯èƒ½NANDè¿˜æ²¡æ¥å¾—åŠæ“ä½œR/Bå¼•è„šæ¥è¡¨ç¤ºNANDçš„å¿™
+    //é—²çŠ¶æ€ï¼Œç»“æœæˆ‘ä»¬å°±è¯»å–äº†R/Bå¼•è„š,è¿™ä¸ªæ—¶å€™è‚¯å®šä¼šå‡ºé”™çš„ï¼Œäº‹å®ä¸Šç¡®å®æ˜¯ä¼šå‡ºé”™!å¤§å®¶ä¹Ÿå¯ä»¥å°†ä¸‹é¢ä¸¤è¡Œ
+    //ä»£ç æ¢æˆå»¶æ—¶å‡½æ•°,åªä¸è¿‡è¿™é‡Œæˆ‘ä»¬ä¸ºäº†æ•ˆç‡æ‰€ä»¥æ²¡æœ‰ç”¨å»¶æ—¶å‡½æ•°ã€‚
+    //TODO:å¦‚æœå‘ç°nandé”™è¯¯, å°†ä¸‹é¢çš„ç­‰å¾…RBæ¢æˆå»¶æ—¶å‡½æ•°
     #if USE_WAITRB
-        res=NAND_WaitRB(0);         //µÈ´ıRB=0
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
-        //ÏÂÃæ2ĞĞ´úÂëÊÇÕæÕıÅĞ¶ÏNANDÊÇ·ñ×¼±¸ºÃµÄ
-        res=NAND_WaitRB(1);         //µÈ´ıRB=1
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
+        res=NAND_WaitRB(0);         //ç­‰å¾…RB=0
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
+        //ä¸‹é¢2è¡Œä»£ç æ˜¯çœŸæ­£åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡å¥½çš„
+        res=NAND_WaitRB(1);         //ç­‰å¾…RB=1
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
 
     //bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
-    if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //²»ÊÇNAND_ECC_SECTOR_SIZEµÄÕûÊı±¶£¬²»½øĞĞECCĞ£Ñé
+    if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //ä¸æ˜¯NAND_ECC_SECTOR_SIZEçš„æ•´æ•°å€ï¼Œä¸è¿›è¡ŒECCæ ¡éªŒ
     {
-        //¶ÁÈ¡NAND FLASHÖĞµÄÖµ
+        //è¯»å–NAND FLASHä¸­çš„å€¼
         for(i = 0; i < NumByteToRead; i++)
         {
             *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
@@ -267,66 +270,66 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     }
     else
     {
-        eccnum = NumByteToRead / NAND_ECC_SECTOR_SIZE;      //µÃµ½ecc¼ÆËã´ÎÊı
+        eccnum = NumByteToRead / NAND_ECC_SECTOR_SIZE;      //å¾—åˆ°eccè®¡ç®—æ¬¡æ•°
         eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
         p = pBuffer;
         for(res = 0; res < eccnum; res++)
         {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //Ê¹ÄÜECCĞ£Ñé
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //¶ÁÈ¡NAND_ECC_SECTOR_SIZE¸öÊı¾İ
+            FMC_Bank2_3->PCR3 |= 1 << 6;                    //ä½¿èƒ½ECCæ ¡éªŒ
+            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //è¯»å–NAND_ECC_SECTOR_SIZEä¸ªæ•°æ®
             {
                 *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
             }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //µÈ´ıFIFO¿Õ
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //¶ÁÈ¡Ó²¼ş¼ÆËãºóµÄECCÖµ
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //½ûÖ¹ECCĞ£Ñé
+            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //ç­‰å¾…FIFOç©º
+            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //è¯»å–ç¡¬ä»¶è®¡ç®—åçš„ECCå€¼
+            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //ç¦æ­¢ECCæ ¡éªŒ
         }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //´ÓspareÇøµÄ0X10Î»ÖÃ¿ªÊ¼¶ÁÈ¡Ö®Ç°´æ´¢µÄeccÖµ
-        NAND_Delay(30);//µÈ´ıtADL
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X05;           //Ëæ»ú¶ÁÖ¸Áî
-        //·¢ËÍµØÖ·
+        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //ä»spareåŒºçš„0X10ä½ç½®å¼€å§‹è¯»å–ä¹‹å‰å­˜å‚¨çš„eccå€¼
+        NAND_Delay(30);//ç­‰å¾…tADL
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X05;           //éšæœºè¯»æŒ‡ä»¤
+        //å‘é€åœ°å€
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0XE0;           //¿ªÊ¼¶ÁÊı¾İ
-        NAND_Delay(30);//µÈ´ıtADL
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0XE0;           //å¼€å§‹è¯»æ•°æ®
+        NAND_Delay(30);//ç­‰å¾…tADL
         pBuffer = (u8 *)&nand_dev.ecc_rdbuf[eccstart];
-        for(i = 0; i < 4 * eccnum; i++)                     //¶ÁÈ¡±£´æµÄECCÖµ
+        for(i = 0; i < 4 * eccnum; i++)                     //è¯»å–ä¿å­˜çš„ECCå€¼
         {
             *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
         }
-        for(i = 0; i < eccnum; i++)                         //¼ìÑéECC
+        for(i = 0; i < eccnum; i++)                         //æ£€éªŒECC
         {
-            if(nand_dev.ecc_rdbuf[i + eccstart] != nand_dev.ecc_hdbuf[i + eccstart]) //²»ÏàµÈ,ĞèÒªĞ£Õı
+            if(nand_dev.ecc_rdbuf[i + eccstart] != nand_dev.ecc_hdbuf[i + eccstart]) //ä¸ç›¸ç­‰,éœ€è¦æ ¡æ­£
             {
                 xprintf("err hd,rd:0x%x,0x%x\r\n", nand_dev.ecc_hdbuf[i + eccstart], nand_dev.ecc_rdbuf[i + eccstart]);
                 xprintf("eccnum,eccstart:%d,%d\r\n", eccnum, eccstart);
                 xprintf("PageNum,ColNum:%d,%d\r\n", PageNum, ColNum);
-                res = NAND_ECC_Correction(p + NAND_ECC_SECTOR_SIZE * i, nand_dev.ecc_rdbuf[i + eccstart], nand_dev.ecc_hdbuf[i + eccstart]); //ECCĞ£Ñé
+                res = NAND_ECC_Correction(p + NAND_ECC_SECTOR_SIZE * i, nand_dev.ecc_rdbuf[i + eccstart], nand_dev.ecc_hdbuf[i + eccstart]); //ECCæ ¡éªŒ
                 if(res)
                 {
-                    errsta = NSTA_ECC2BITERR;    //±ê¼Ç2BIT¼°ÒÔÉÏECC´íÎó
+                    errsta = NSTA_ECC2BITERR;    //æ ‡è®°2BITåŠä»¥ä¸ŠECCé”™è¯¯
                 }
                 else
                 {
-                    errsta = NSTA_ECC1BITERR;    //±ê¼Ç1BIT ECC´íÎó
+                    errsta = NSTA_ECC1BITERR;    //æ ‡è®°1BIT ECCé”™è¯¯
                 }
             }
         }
     }
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        errsta = NSTA_ERROR;    //Ê§°Ü
+        errsta = NSTA_ERROR;    //å¤±è´¥
     }
-    return errsta;  //³É¹¦
+    return errsta;  //æˆåŠŸ
 }
-//¶ÁÈ¡NAND FlashµÄÖ¸¶¨Ò³Ö¸¶¨ÁĞµÄÊı¾İ(mainÇøºÍspareÇø¶¼¿ÉÒÔÊ¹ÓÃ´Ëº¯Êı),²¢¶Ô±È(FTL¹ÜÀíÊ±ĞèÒª)
-//PageNum:Òª¶ÁÈ¡µÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:Òª¶ÁÈ¡µÄÁĞ¿ªÊ¼µØÖ·(Ò²¾ÍÊÇÒ³ÄÚµØÖ·),·¶Î§:0~(page_totalsize-1)
-//CmpVal:Òª¶Ô±ÈµÄÖµ,ÒÔu32Îªµ¥Î»
-//NumByteToRead:¶ÁÈ¡×ÖÊı(ÒÔ4×Ö½ÚÎªµ¥Î»,²»ÄÜ¿çÒ³¶Á)
-//NumByteEqual:´Ó³õÊ¼Î»ÖÃ³ÖĞøÓëCmpValÖµÏàÍ¬µÄÊı¾İ¸öÊı
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//è¯»å–NAND Flashçš„æŒ‡å®šé¡µæŒ‡å®šåˆ—çš„æ•°æ®(mainåŒºå’ŒspareåŒºéƒ½å¯ä»¥ä½¿ç”¨æ­¤å‡½æ•°),å¹¶å¯¹æ¯”(FTLç®¡ç†æ—¶éœ€è¦)
+//PageNum:è¦è¯»å–çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦è¯»å–çš„åˆ—å¼€å§‹åœ°å€(ä¹Ÿå°±æ˜¯é¡µå†…åœ°å€),èŒƒå›´:0~(page_totalsize-1)
+//CmpVal:è¦å¯¹æ¯”çš„å€¼,ä»¥u32ä¸ºå•ä½
+//NumByteToRead:è¯»å–å­—æ•°(ä»¥4å­—èŠ‚ä¸ºå•ä½,ä¸èƒ½è·¨é¡µè¯»)
+//NumByteEqual:ä»åˆå§‹ä½ç½®æŒç»­ä¸CmpValå€¼ç›¸åŒçš„æ•°æ®ä¸ªæ•°
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16 *NumByteEqual)
 {
     u16 i = 0;
@@ -334,94 +337,94 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
     u8 res = 0;
 #endif
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
-    //·¢ËÍµØÖ·
+    //å‘é€åœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
-    //ÏÂÃæÁ½ĞĞ´úÂëÊÇµÈ´ıR/BÒı½Å±äÎªµÍµçÆ½£¬ÆäÊµÖ÷ÒªÆğÑÓÊ±×÷ÓÃµÄ£¬µÈ´ıNAND²Ù×÷R/BÒı½Å¡£ÒòÎªÎÒÃÇÊÇÍ¨¹ı
-    //½«STM32µÄNWAITÒı½Å(NANDµÄR/BÒı½Å)ÅäÖÃÎªÆÕÍ¨IO£¬´úÂëÖĞÍ¨¹ı¶ÁÈ¡NWAITÒı½ÅµÄµçÆ½À´ÅĞ¶ÏNANDÊÇ·ñ×¼±¸
-    //¾ÍĞ÷µÄ¡£Õâ¸öÒ²¾ÍÊÇÄ£ÄâµÄ·½·¨£¬ËùÒÔÔÚËÙ¶ÈºÜ¿ìµÄÊ±ºòÓĞ¿ÉÄÜNAND»¹Ã»À´µÃ¼°²Ù×÷R/BÒı½ÅÀ´±íÊ¾NANDµÄÃ¦
-    //ÏĞ×´Ì¬£¬½á¹ûÎÒÃÇ¾Í¶ÁÈ¡ÁËR/BÒı½Å,Õâ¸öÊ±ºò¿Ï¶¨»á³ö´íµÄ£¬ÊÂÊµÉÏÈ·ÊµÊÇ»á³ö´í!´ó¼ÒÒ²¿ÉÒÔ½«ÏÂÃæÁ½ĞĞ
-    //´úÂë»»³ÉÑÓÊ±º¯Êı,Ö»²»¹ıÕâÀïÎÒÃÇÎªÁËĞ§ÂÊËùÒÔÃ»ÓĞÓÃÑÓÊ±º¯Êı¡£
+    //ä¸‹é¢ä¸¤è¡Œä»£ç æ˜¯ç­‰å¾…R/Bå¼•è„šå˜ä¸ºä½ç”µå¹³ï¼Œå…¶å®ä¸»è¦èµ·å»¶æ—¶ä½œç”¨çš„ï¼Œç­‰å¾…NANDæ“ä½œR/Bå¼•è„šã€‚å› ä¸ºæˆ‘ä»¬æ˜¯é€šè¿‡
+    //å°†STM32çš„NWAITå¼•è„š(NANDçš„R/Bå¼•è„š)é…ç½®ä¸ºæ™®é€šIOï¼Œä»£ç ä¸­é€šè¿‡è¯»å–NWAITå¼•è„šçš„ç”µå¹³æ¥åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡
+    //å°±ç»ªçš„ã€‚è¿™ä¸ªä¹Ÿå°±æ˜¯æ¨¡æ‹Ÿçš„æ–¹æ³•ï¼Œæ‰€ä»¥åœ¨é€Ÿåº¦å¾ˆå¿«çš„æ—¶å€™æœ‰å¯èƒ½NANDè¿˜æ²¡æ¥å¾—åŠæ“ä½œR/Bå¼•è„šæ¥è¡¨ç¤ºNANDçš„å¿™
+    //é—²çŠ¶æ€ï¼Œç»“æœæˆ‘ä»¬å°±è¯»å–äº†R/Bå¼•è„š,è¿™ä¸ªæ—¶å€™è‚¯å®šä¼šå‡ºé”™çš„ï¼Œäº‹å®ä¸Šç¡®å®æ˜¯ä¼šå‡ºé”™!å¤§å®¶ä¹Ÿå¯ä»¥å°†ä¸‹é¢ä¸¤è¡Œ
+    //ä»£ç æ¢æˆå»¶æ—¶å‡½æ•°,åªä¸è¿‡è¿™é‡Œæˆ‘ä»¬ä¸ºäº†æ•ˆç‡æ‰€ä»¥æ²¡æœ‰ç”¨å»¶æ—¶å‡½æ•°ã€‚
     #if USE_WAITRB
-        res=NAND_WaitRB(0);         //µÈ´ıRB=0
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
-        //ÏÂÃæ2ĞĞ´úÂëÊÇÕæÕıÅĞ¶ÏNANDÊÇ·ñ×¼±¸ºÃµÄ
-        res=NAND_WaitRB(1);         //µÈ´ıRB=1
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
+        res=NAND_WaitRB(0);         //ç­‰å¾…RB=0
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
+        //ä¸‹é¢2è¡Œä»£ç æ˜¯çœŸæ­£åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡å¥½çš„
+        res=NAND_WaitRB(1);         //ç­‰å¾…RB=1
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-    for(i = 0; i < NumByteToRead; i++) //¶ÁÈ¡Êı¾İ,Ã¿´Î¶Á4×Ö½Ú
+    for(i = 0; i < NumByteToRead; i++) //è¯»å–æ•°æ®,æ¯æ¬¡è¯»4å­—èŠ‚
     {
         if(*(vu32 *)NAND_ADDRESS != CmpVal)
         {
-            break;    //Èç¹ûÓĞÈÎºÎÒ»¸öÖµ,ÓëCmpVal²»ÏàµÈ,ÔòÍË³ö.
+            break;    //å¦‚æœæœ‰ä»»ä½•ä¸€ä¸ªå€¼,ä¸CmpValä¸ç›¸ç­‰,åˆ™é€€å‡º.
         }
     }
-    *NumByteEqual = i;                  //ÓëCmpValÖµÏàÍ¬µÄ¸öÊı
+    *NumByteEqual = i;                  //ä¸CmpValå€¼ç›¸åŒçš„ä¸ªæ•°
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //Ê§°Ü
+        return NSTA_ERROR;    //å¤±è´¥
     }
-    return 0;   //³É¹¦
+    return 0;   //æˆåŠŸ
 }
-//ÔÚNANDÒ»Ò³ÖĞĞ´ÈëÖ¸¶¨¸ö×Ö½ÚµÄÊı¾İ(mainÇøºÍspareÇø¶¼¿ÉÒÔÊ¹ÓÃ´Ëº¯Êı)
-//PageNum:ÒªĞ´ÈëµÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:ÒªĞ´ÈëµÄÁĞ¿ªÊ¼µØÖ·(Ò²¾ÍÊÇÒ³ÄÚµØÖ·),·¶Î§:0~(page_totalsize-1)
-//pBbuffer:Ö¸ÏòÊı¾İ´æ´¢Çø
-//NumByteToWrite:ÒªĞ´ÈëµÄ×Ö½ÚÊı£¬¸ÃÖµ²»ÄÜ³¬¹ı¸ÃÒ³Ê£Óà×Ö½ÚÊı£¡£¡£¡
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//åœ¨NANDä¸€é¡µä¸­å†™å…¥æŒ‡å®šä¸ªå­—èŠ‚çš„æ•°æ®(mainåŒºå’ŒspareåŒºéƒ½å¯ä»¥ä½¿ç”¨æ­¤å‡½æ•°)
+//PageNum:è¦å†™å…¥çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦å†™å…¥çš„åˆ—å¼€å§‹åœ°å€(ä¹Ÿå°±æ˜¯é¡µå†…åœ°å€),èŒƒå›´:0~(page_totalsize-1)
+//pBbuffer:æŒ‡å‘æ•°æ®å­˜å‚¨åŒº
+//NumByteToWrite:è¦å†™å…¥çš„å­—èŠ‚æ•°ï¼Œè¯¥å€¼ä¸èƒ½è¶…è¿‡è¯¥é¡µå‰©ä½™å­—èŠ‚æ•°ï¼ï¼ï¼
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
 {
     vu16 i = 0;
     u8 res = 0;
-    u8 eccnum = 0;      //ĞèÒª¼ÆËãµÄECC¸öÊı£¬Ã¿NAND_ECC_SECTOR_SIZE×Ö½Ú¼ÆËãÒ»¸öecc
-    u8 eccstart = 0;    //µÚÒ»¸öECCÖµËùÊôµÄµØÖ··¶Î§
+    u8 eccnum = 0;      //éœ€è¦è®¡ç®—çš„ECCä¸ªæ•°ï¼Œæ¯NAND_ECC_SECTOR_SIZEå­—èŠ‚è®¡ç®—ä¸€ä¸ªecc
+    u8 eccstart = 0;    //ç¬¬ä¸€ä¸ªECCå€¼æ‰€å±çš„åœ°å€èŒƒå›´
 
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
-    //·¢ËÍµØÖ·
+    //å‘é€åœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    NAND_Delay(30);//µÈ´ıtADL
-    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //²»ÊÇNAND_ECC_SECTOR_SIZEµÄÕûÊı±¶£¬²»½øĞĞECCĞ£Ñé
+    NAND_Delay(30);//ç­‰å¾…tADL
+    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //ä¸æ˜¯NAND_ECC_SECTOR_SIZEçš„æ•´æ•°å€ï¼Œä¸è¿›è¡ŒECCæ ¡éªŒ
     {
-        for(i = 0; i < NumByteToWrite; i++) //Ğ´ÈëÊı¾İ
+        for(i = 0; i < NumByteToWrite; i++) //å†™å…¥æ•°æ®
         {
             *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
         }
     }
     else
     {
-        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //µÃµ½ecc¼ÆËã´ÎÊı
+        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //å¾—åˆ°eccè®¡ç®—æ¬¡æ•°
         eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
         for(res = 0; res < eccnum; res++)
         {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //Ê¹ÄÜECCĞ£Ñé
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //Ğ´ÈëNAND_ECC_SECTOR_SIZE¸öÊı¾İ
+            FMC_Bank2_3->PCR3 |= 1 << 6;                    //ä½¿èƒ½ECCæ ¡éªŒ
+            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //å†™å…¥NAND_ECC_SECTOR_SIZEä¸ªæ•°æ®
             {
                 *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
             }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //µÈ´ıFIFO¿Õ
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //¶ÁÈ¡Ó²¼ş¼ÆËãºóµÄECCÖµ
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //½ûÖ¹ECCĞ£Ñé
+            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //ç­‰å¾…FIFOç©º
+            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //è¯»å–ç¡¬ä»¶è®¡ç®—åçš„ECCå€¼
+            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //ç¦æ­¢ECCæ ¡éªŒ
         }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //¼ÆËãĞ´ÈëECCµÄspareÇøµØÖ·
-        NAND_Delay(30);//µÈ´ı
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //Ëæ»úĞ´Ö¸Áî
-        //·¢ËÍµØÖ·
+        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //è®¡ç®—å†™å…¥ECCçš„spareåŒºåœ°å€
+        NAND_Delay(30);//ç­‰å¾…
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //éšæœºå†™æŒ‡ä»¤
+        //å‘é€åœ°å€
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
-        NAND_Delay(30);//µÈ´ıtADL
+        NAND_Delay(30);//ç­‰å¾…tADL
         pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
-        for(i = 0; i < eccnum; i++)             //Ğ´ÈëECC
+        for(i = 0; i < eccnum; i++)             //å†™å…¥ECC
         {
             for(res = 0; res < 4; res++)
             {
@@ -432,181 +435,181 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //Ê§°Ü
+        return NSTA_ERROR;    //å¤±è´¥
     }
-    return 0;//³É¹¦
+    return 0;//æˆåŠŸ
 }
-//ÔÚNANDÒ»Ò³ÖĞµÄÖ¸¶¨µØÖ·¿ªÊ¼,Ğ´ÈëÖ¸¶¨³¤¶ÈµÄºã¶¨Êı×Ö
-//PageNum:ÒªĞ´ÈëµÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:ÒªĞ´ÈëµÄÁĞ¿ªÊ¼µØÖ·(Ò²¾ÍÊÇÒ³ÄÚµØÖ·),·¶Î§:0~(page_totalsize-1)
-//cval:ÒªĞ´ÈëµÄÖ¸¶¨³£Êı
-//NumByteToWrite:ÒªĞ´ÈëµÄ×ÖÊı(ÒÔ4×Ö½ÚÎªµ¥Î»)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//åœ¨NANDä¸€é¡µä¸­çš„æŒ‡å®šåœ°å€å¼€å§‹,å†™å…¥æŒ‡å®šé•¿åº¦çš„æ’å®šæ•°å­—
+//PageNum:è¦å†™å…¥çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦å†™å…¥çš„åˆ—å¼€å§‹åœ°å€(ä¹Ÿå°±æ˜¯é¡µå†…åœ°å€),èŒƒå›´:0~(page_totalsize-1)
+//cval:è¦å†™å…¥çš„æŒ‡å®šå¸¸æ•°
+//NumByteToWrite:è¦å†™å…¥çš„å­—æ•°(ä»¥4å­—èŠ‚ä¸ºå•ä½)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_WritePageConst(u32 PageNum, u16 ColNum, u32 cval, u16 NumByteToWrite)
 {
     u16 i = 0;
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
-    //·¢ËÍµØÖ·
+    //å‘é€åœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    NAND_Delay(30);//µÈ´ıtADL
-    for(i = 0; i < NumByteToWrite; i++) //Ğ´ÈëÊı¾İ,Ã¿´ÎĞ´4×Ö½Ú
+    NAND_Delay(30);//ç­‰å¾…tADL
+    for(i = 0; i < NumByteToWrite; i++) //å†™å…¥æ•°æ®,æ¯æ¬¡å†™4å­—èŠ‚
     {
         *(vu32 *)NAND_ADDRESS = cval;
     }
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //Ê§°Ü
+        return NSTA_ERROR;    //å¤±è´¥
     }
-    return 0;//³É¹¦
+    return 0;//æˆåŠŸ
 }
-//½«Ò»Ò³Êı¾İ¿½±´µ½ÁíÒ»Ò³,²»Ğ´ÈëĞÂÊı¾İ
-//×¢Òâ:Ô´Ò³ºÍÄ¿µÄÒ³ÒªÔÚÍ¬Ò»¸öPlaneÄÚ£¡
-//Source_PageNo:Ô´Ò³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//Dest_PageNo:Ä¿µÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å°†ä¸€é¡µæ•°æ®æ‹·è´åˆ°å¦ä¸€é¡µ,ä¸å†™å…¥æ–°æ•°æ®
+//æ³¨æ„:æºé¡µå’Œç›®çš„é¡µè¦åœ¨åŒä¸€ä¸ªPlaneå†…ï¼
+//Source_PageNo:æºé¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//Dest_PageNo:ç›®çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
 {
 #if USE_WAITRB
     u8 res = 0;
 #endif
     u16 source_block = 0, dest_block = 0;
-    //ÅĞ¶ÏÔ´Ò³ºÍÄ¿µÄÒ³ÊÇ·ñÔÚÍ¬Ò»¸öplaneÖĞ
+    //åˆ¤æ–­æºé¡µå’Œç›®çš„é¡µæ˜¯å¦åœ¨åŒä¸€ä¸ªplaneä¸­
     source_block = Source_PageNum / nand_dev.block_pagenum;
     dest_block = Dest_PageNum / nand_dev.block_pagenum;
     if((source_block % 2) != (dest_block % 2))
     {
-        return NSTA_ERROR;    //²»ÔÚÍ¬Ò»¸öplaneÄÚ
+        return NSTA_ERROR;    //ä¸åœ¨åŒä¸€ä¸ªplaneå†…
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //·¢ËÍÃüÁî0X00
-    //·¢ËÍÔ´Ò³µØÖ·
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //å‘é€å‘½ä»¤0X00
+    //å‘é€æºé¡µåœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //·¢ËÍÃüÁî0X35
-    //ÏÂÃæÁ½ĞĞ´úÂëÊÇµÈ´ıR/BÒı½Å±äÎªµÍµçÆ½£¬ÆäÊµÖ÷ÒªÆğÑÓÊ±×÷ÓÃµÄ£¬µÈ´ıNAND²Ù×÷R/BÒı½Å¡£ÒòÎªÎÒÃÇÊÇÍ¨¹ı
-    //½«STM32µÄNWAITÒı½Å(NANDµÄR/BÒı½Å)ÅäÖÃÎªÆÕÍ¨IO£¬´úÂëÖĞÍ¨¹ı¶ÁÈ¡NWAITÒı½ÅµÄµçÆ½À´ÅĞ¶ÏNANDÊÇ·ñ×¼±¸
-    //¾ÍĞ÷µÄ¡£Õâ¸öÒ²¾ÍÊÇÄ£ÄâµÄ·½·¨£¬ËùÒÔÔÚËÙ¶ÈºÜ¿ìµÄÊ±ºòÓĞ¿ÉÄÜNAND»¹Ã»À´µÃ¼°²Ù×÷R/BÒı½ÅÀ´±íÊ¾NANDµÄÃ¦
-    //ÏĞ×´Ì¬£¬½á¹ûÎÒÃÇ¾Í¶ÁÈ¡ÁËR/BÒı½Å,Õâ¸öÊ±ºò¿Ï¶¨»á³ö´íµÄ£¬ÊÂÊµÉÏÈ·ÊµÊÇ»á³ö´í!´ó¼ÒÒ²¿ÉÒÔ½«ÏÂÃæÁ½ĞĞ
-    //´úÂë»»³ÉÑÓÊ±º¯Êı,Ö»²»¹ıÕâÀïÎÒÃÇÎªÁËĞ§ÂÊËùÒÔÃ»ÓĞÓÃÑÓÊ±º¯Êı¡£
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //å‘é€å‘½ä»¤0X35
+    //ä¸‹é¢ä¸¤è¡Œä»£ç æ˜¯ç­‰å¾…R/Bå¼•è„šå˜ä¸ºä½ç”µå¹³ï¼Œå…¶å®ä¸»è¦èµ·å»¶æ—¶ä½œç”¨çš„ï¼Œç­‰å¾…NANDæ“ä½œR/Bå¼•è„šã€‚å› ä¸ºæˆ‘ä»¬æ˜¯é€šè¿‡
+    //å°†STM32çš„NWAITå¼•è„š(NANDçš„R/Bå¼•è„š)é…ç½®ä¸ºæ™®é€šIOï¼Œä»£ç ä¸­é€šè¿‡è¯»å–NWAITå¼•è„šçš„ç”µå¹³æ¥åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡
+    //å°±ç»ªçš„ã€‚è¿™ä¸ªä¹Ÿå°±æ˜¯æ¨¡æ‹Ÿçš„æ–¹æ³•ï¼Œæ‰€ä»¥åœ¨é€Ÿåº¦å¾ˆå¿«çš„æ—¶å€™æœ‰å¯èƒ½NANDè¿˜æ²¡æ¥å¾—åŠæ“ä½œR/Bå¼•è„šæ¥è¡¨ç¤ºNANDçš„å¿™
+    //é—²çŠ¶æ€ï¼Œç»“æœæˆ‘ä»¬å°±è¯»å–äº†R/Bå¼•è„š,è¿™ä¸ªæ—¶å€™è‚¯å®šä¼šå‡ºé”™çš„ï¼Œäº‹å®ä¸Šç¡®å®æ˜¯ä¼šå‡ºé”™!å¤§å®¶ä¹Ÿå¯ä»¥å°†ä¸‹é¢ä¸¤è¡Œ
+    //ä»£ç æ¢æˆå»¶æ—¶å‡½æ•°,åªä¸è¿‡è¿™é‡Œæˆ‘ä»¬ä¸ºäº†æ•ˆç‡æ‰€ä»¥æ²¡æœ‰ç”¨å»¶æ—¶å‡½æ•°ã€‚
     #if USE_WAITRB
-        res=NAND_WaitRB(0);         //µÈ´ıRB=0
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
-        //ÏÂÃæ2ĞĞ´úÂëÊÇÕæÕıÅĞ¶ÏNANDÊÇ·ñ×¼±¸ºÃµÄ
-        res=NAND_WaitRB(1);         //µÈ´ıRB=1
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
+        res=NAND_WaitRB(0);         //ç­‰å¾…RB=0
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
+        //ä¸‹é¢2è¡Œä»£ç æ˜¯çœŸæ­£åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡å¥½çš„
+        res=NAND_WaitRB(1);         //ç­‰å¾…RB=1
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //·¢ËÍÃüÁî0X85
-    //·¢ËÍÄ¿µÄÒ³µØÖ·
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //å‘é€å‘½ä»¤0X85
+    //å‘é€ç›®çš„é¡µåœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //·¢ËÍÃüÁî0X10
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //å‘é€å‘½ä»¤0X10
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //NANDÎ´×¼±¸ºÃ
+        return NSTA_ERROR;    //NANDæœªå‡†å¤‡å¥½
     }
-    return 0;//³É¹¦
+    return 0;//æˆåŠŸ
 }
 
-//½«Ò»Ò³Êı¾İ¿½±´µ½ÁíÒ»Ò³,²¢ÇÒ¿ÉÒÔĞ´ÈëÊı¾İ
-//×¢Òâ:Ô´Ò³ºÍÄ¿µÄÒ³ÒªÔÚÍ¬Ò»¸öPlaneÄÚ£¡
-//Source_PageNo:Ô´Ò³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//Dest_PageNo:Ä¿µÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNo:Ò³ÄÚÁĞµØÖ·,·¶Î§:0~(page_totalsize-1)
-//pBuffer:ÒªĞ´ÈëµÄÊı¾İ
-//NumByteToWrite:ÒªĞ´ÈëµÄÊı¾İ¸öÊı
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å°†ä¸€é¡µæ•°æ®æ‹·è´åˆ°å¦ä¸€é¡µ,å¹¶ä¸”å¯ä»¥å†™å…¥æ•°æ®
+//æ³¨æ„:æºé¡µå’Œç›®çš„é¡µè¦åœ¨åŒä¸€ä¸ªPlaneå†…ï¼
+//Source_PageNo:æºé¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//Dest_PageNo:ç›®çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNo:é¡µå†…åˆ—åœ°å€,èŒƒå›´:0~(page_totalsize-1)
+//pBuffer:è¦å†™å…¥çš„æ•°æ®
+//NumByteToWrite:è¦å†™å…¥çš„æ•°æ®ä¸ªæ•°
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
 {
     u8 res = 0;
     vu16 i = 0;
     u16 source_block = 0, dest_block = 0;
-    u8 eccnum = 0;      //ĞèÒª¼ÆËãµÄECC¸öÊı£¬Ã¿NAND_ECC_SECTOR_SIZE×Ö½Ú¼ÆËãÒ»¸öecc
-    u8 eccstart = 0;    //µÚÒ»¸öECCÖµËùÊôµÄµØÖ··¶Î§
-    //ÅĞ¶ÏÔ´Ò³ºÍÄ¿µÄÒ³ÊÇ·ñÔÚÍ¬Ò»¸öplaneÖĞ
+    u8 eccnum = 0;      //éœ€è¦è®¡ç®—çš„ECCä¸ªæ•°ï¼Œæ¯NAND_ECC_SECTOR_SIZEå­—èŠ‚è®¡ç®—ä¸€ä¸ªecc
+    u8 eccstart = 0;    //ç¬¬ä¸€ä¸ªECCå€¼æ‰€å±çš„åœ°å€èŒƒå›´
+    //åˆ¤æ–­æºé¡µå’Œç›®çš„é¡µæ˜¯å¦åœ¨åŒä¸€ä¸ªplaneä¸­
     source_block = Source_PageNum / nand_dev.block_pagenum;
     dest_block = Dest_PageNum / nand_dev.block_pagenum;
     if((source_block % 2) != (dest_block % 2))
     {
-        return NSTA_ERROR;    //²»ÔÚÍ¬Ò»¸öplaneÄÚ
+        return NSTA_ERROR;    //ä¸åœ¨åŒä¸€ä¸ªplaneå†…
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //·¢ËÍÃüÁî0X00
-    //·¢ËÍÔ´Ò³µØÖ·
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //å‘é€å‘½ä»¤0X00
+    //å‘é€æºé¡µåœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //·¢ËÍÃüÁî0X35
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //å‘é€å‘½ä»¤0X35
 
-    //ÏÂÃæÁ½ĞĞ´úÂëÊÇµÈ´ıR/BÒı½Å±äÎªµÍµçÆ½£¬ÆäÊµÖ÷ÒªÆğÑÓÊ±×÷ÓÃµÄ£¬µÈ´ıNAND²Ù×÷R/BÒı½Å¡£ÒòÎªÎÒÃÇÊÇÍ¨¹ı
-    //½«STM32µÄNWAITÒı½Å(NANDµÄR/BÒı½Å)ÅäÖÃÎªÆÕÍ¨IO£¬´úÂëÖĞÍ¨¹ı¶ÁÈ¡NWAITÒı½ÅµÄµçÆ½À´ÅĞ¶ÏNANDÊÇ·ñ×¼±¸
-    //¾ÍĞ÷µÄ¡£Õâ¸öÒ²¾ÍÊÇÄ£ÄâµÄ·½·¨£¬ËùÒÔÔÚËÙ¶ÈºÜ¿ìµÄÊ±ºòÓĞ¿ÉÄÜNAND»¹Ã»À´µÃ¼°²Ù×÷R/BÒı½ÅÀ´±íÊ¾NANDµÄÃ¦
-    //ÏĞ×´Ì¬£¬½á¹ûÎÒÃÇ¾Í¶ÁÈ¡ÁËR/BÒı½Å,Õâ¸öÊ±ºò¿Ï¶¨»á³ö´íµÄ£¬ÊÂÊµÉÏÈ·ÊµÊÇ»á³ö´í!´ó¼ÒÒ²¿ÉÒÔ½«ÏÂÃæÁ½ĞĞ
-    //´úÂë»»³ÉÑÓÊ±º¯Êı,Ö»²»¹ıÕâÀïÎÒÃÇÎªÁËĞ§ÂÊËùÒÔÃ»ÓĞÓÃÑÓÊ±º¯Êı¡£
+    //ä¸‹é¢ä¸¤è¡Œä»£ç æ˜¯ç­‰å¾…R/Bå¼•è„šå˜ä¸ºä½ç”µå¹³ï¼Œå…¶å®ä¸»è¦èµ·å»¶æ—¶ä½œç”¨çš„ï¼Œç­‰å¾…NANDæ“ä½œR/Bå¼•è„šã€‚å› ä¸ºæˆ‘ä»¬æ˜¯é€šè¿‡
+    //å°†STM32çš„NWAITå¼•è„š(NANDçš„R/Bå¼•è„š)é…ç½®ä¸ºæ™®é€šIOï¼Œä»£ç ä¸­é€šè¿‡è¯»å–NWAITå¼•è„šçš„ç”µå¹³æ¥åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡
+    //å°±ç»ªçš„ã€‚è¿™ä¸ªä¹Ÿå°±æ˜¯æ¨¡æ‹Ÿçš„æ–¹æ³•ï¼Œæ‰€ä»¥åœ¨é€Ÿåº¦å¾ˆå¿«çš„æ—¶å€™æœ‰å¯èƒ½NANDè¿˜æ²¡æ¥å¾—åŠæ“ä½œR/Bå¼•è„šæ¥è¡¨ç¤ºNANDçš„å¿™
+    //é—²çŠ¶æ€ï¼Œç»“æœæˆ‘ä»¬å°±è¯»å–äº†R/Bå¼•è„š,è¿™ä¸ªæ—¶å€™è‚¯å®šä¼šå‡ºé”™çš„ï¼Œäº‹å®ä¸Šç¡®å®æ˜¯ä¼šå‡ºé”™!å¤§å®¶ä¹Ÿå¯ä»¥å°†ä¸‹é¢ä¸¤è¡Œ
+    //ä»£ç æ¢æˆå»¶æ—¶å‡½æ•°,åªä¸è¿‡è¿™é‡Œæˆ‘ä»¬ä¸ºäº†æ•ˆç‡æ‰€ä»¥æ²¡æœ‰ç”¨å»¶æ—¶å‡½æ•°ã€‚
     #if USE_WAITRB
-        res=NAND_WaitRB(0);         //µÈ´ıRB=0
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
-        //ÏÂÃæ2ĞĞ´úÂëÊÇÕæÕıÅĞ¶ÏNANDÊÇ·ñ×¼±¸ºÃµÄ
-        res=NAND_WaitRB(1);         //µÈ´ıRB=1
-        if(res)return NSTA_TIMEOUT; //³¬Ê±ÍË³ö
+        res=NAND_WaitRB(0);         //ç­‰å¾…RB=0
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
+        //ä¸‹é¢2è¡Œä»£ç æ˜¯çœŸæ­£åˆ¤æ–­NANDæ˜¯å¦å‡†å¤‡å¥½çš„
+        res=NAND_WaitRB(1);         //ç­‰å¾…RB=1
+        if(res)return NSTA_TIMEOUT; //è¶…æ—¶é€€å‡º
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //·¢ËÍÃüÁî0X85
-    //·¢ËÍÄ¿µÄÒ³µØÖ·
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //å‘é€å‘½ä»¤0X85
+    //å‘é€ç›®çš„é¡µåœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
-    //·¢ËÍÒ³ÄÚÁĞµØÖ·
-    NAND_Delay(30);//µÈ´ıtADL
-    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //²»ÊÇNAND_ECC_SECTOR_SIZEµÄÕûÊı±¶£¬²»½øĞĞECCĞ£Ñé
+    //å‘é€é¡µå†…åˆ—åœ°å€
+    NAND_Delay(30);//ç­‰å¾…tADL
+    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //ä¸æ˜¯NAND_ECC_SECTOR_SIZEçš„æ•´æ•°å€ï¼Œä¸è¿›è¡ŒECCæ ¡éªŒ
     {
-        for(i = 0; i < NumByteToWrite; i++) //Ğ´ÈëÊı¾İ
+        for(i = 0; i < NumByteToWrite; i++) //å†™å…¥æ•°æ®
         {
             *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
         }
     }
     else
     {
-        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //µÃµ½ecc¼ÆËã´ÎÊı
+        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //å¾—åˆ°eccè®¡ç®—æ¬¡æ•°
         eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
         for(res = 0; res < eccnum; res++)
         {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //Ê¹ÄÜECCĞ£Ñé
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //Ğ´ÈëNAND_ECC_SECTOR_SIZE¸öÊı¾İ
+            FMC_Bank2_3->PCR3 |= 1 << 6;                    //ä½¿èƒ½ECCæ ¡éªŒ
+            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //å†™å…¥NAND_ECC_SECTOR_SIZEä¸ªæ•°æ®
             {
                 *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
             }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //µÈ´ıFIFO¿Õ
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //¶ÁÈ¡Ó²¼ş¼ÆËãºóµÄECCÖµ
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //½ûÖ¹ECCĞ£Ñé
+            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //ç­‰å¾…FIFOç©º
+            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //è¯»å–ç¡¬ä»¶è®¡ç®—åçš„ECCå€¼
+            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //ç¦æ­¢ECCæ ¡éªŒ
         }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //¼ÆËãĞ´ÈëECCµÄspareÇøµØÖ·
-        NAND_Delay(30);//µÈ´ı
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //Ëæ»úĞ´Ö¸Áî
-        //·¢ËÍµØÖ·
+        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //è®¡ç®—å†™å…¥ECCçš„spareåŒºåœ°å€
+        NAND_Delay(30);//ç­‰å¾…
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //éšæœºå†™æŒ‡ä»¤
+        //å‘é€åœ°å€
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
-        NAND_Delay(30);//µÈ´ıtADL
+        NAND_Delay(30);//ç­‰å¾…tADL
         pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
-        for(i = 0; i < eccnum; i++)             //Ğ´ÈëECC
+        for(i = 0; i < eccnum; i++)             //å†™å…¥ECC
         {
             for(res = 0; res < 4; res++)
             {
@@ -614,20 +617,20 @@ u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *
             }
         }
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //·¢ËÍÃüÁî0X10
+    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //å‘é€å‘½ä»¤0X10
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //Ê§°Ü
+        return NSTA_ERROR;    //å¤±è´¥
     }
-    return 0;   //³É¹¦
+    return 0;   //æˆåŠŸ
 }
-//¶ÁÈ¡spareÇøÖĞµÄÊı¾İ
-//PageNum:ÒªĞ´ÈëµÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:ÒªĞ´ÈëµÄspareÇøµØÖ·(spareÇøÖĞÄÄ¸öµØÖ·),·¶Î§:0~(page_sparesize-1)
-//pBuffer:½ÓÊÕÊı¾İ»º³åÇø
-//NumByteToRead:Òª¶ÁÈ¡µÄ×Ö½ÚÊı(²»´óÓÚpage_sparesize)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//è¯»å–spareåŒºä¸­çš„æ•°æ®
+//PageNum:è¦å†™å…¥çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦å†™å…¥çš„spareåŒºåœ°å€(spareåŒºä¸­å“ªä¸ªåœ°å€),èŒƒå›´:0~(page_sparesize-1)
+//pBuffer:æ¥æ”¶æ•°æ®ç¼“å†²åŒº
+//NumByteToRead:è¦è¯»å–çš„å­—èŠ‚æ•°(ä¸å¤§äºpage_sparesize)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 u8 NAND_ReadSpare(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
 {
     u8 temp = 0;
@@ -635,18 +638,18 @@ u8 NAND_ReadSpare(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     remainbyte = nand_dev.page_sparesize - ColNum;
     if(NumByteToRead > remainbyte)
     {
-        NumByteToRead = remainbyte;    //È·±£ÒªĞ´ÈëµÄ×Ö½ÚÊı²»´óÓÚspareÊ£ÓàµÄ´óĞ¡
+        NumByteToRead = remainbyte;    //ç¡®ä¿è¦å†™å…¥çš„å­—èŠ‚æ•°ä¸å¤§äºspareå‰©ä½™çš„å¤§å°
     }
-    temp = NAND_ReadPage(PageNum, ColNum + nand_dev.page_mainsize, pBuffer, NumByteToRead); //¶ÁÈ¡Êı¾İ
+    temp = NAND_ReadPage(PageNum, ColNum + nand_dev.page_mainsize, pBuffer, NumByteToRead); //è¯»å–æ•°æ®
     return temp;
 }
-//ÏòspareÇøÖĞĞ´Êı¾İ
-//PageNum:ÒªĞ´ÈëµÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:ÒªĞ´ÈëµÄspareÇøµØÖ·(spareÇøÖĞÄÄ¸öµØÖ·),·¶Î§:0~(page_sparesize-1)
-//pBuffer:ÒªĞ´ÈëµÄÊı¾İÊ×µØÖ·
-//NumByteToWrite:ÒªĞ´ÈëµÄ×Ö½ÚÊı(²»´óÓÚpage_sparesize)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//å‘spareåŒºä¸­å†™æ•°æ®
+//PageNum:è¦å†™å…¥çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦å†™å…¥çš„spareåŒºåœ°å€(spareåŒºä¸­å“ªä¸ªåœ°å€),èŒƒå›´:0~(page_sparesize-1)
+//pBuffer:è¦å†™å…¥çš„æ•°æ®é¦–åœ°å€
+//NumByteToWrite:è¦å†™å…¥çš„å­—èŠ‚æ•°(ä¸å¤§äºpage_sparesize)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 NAND_WriteSpare(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
 {
     u8 temp = 0;
@@ -654,57 +657,57 @@ u8 NAND_WriteSpare(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
     remainbyte = nand_dev.page_sparesize - ColNum;
     if(NumByteToWrite > remainbyte)
     {
-        NumByteToWrite = remainbyte;    //È·±£Òª¶ÁÈ¡µÄ×Ö½ÚÊı²»´óÓÚspareÊ£ÓàµÄ´óĞ¡
+        NumByteToWrite = remainbyte;    //ç¡®ä¿è¦è¯»å–çš„å­—èŠ‚æ•°ä¸å¤§äºspareå‰©ä½™çš„å¤§å°
     }
-    temp = NAND_WritePage(PageNum, ColNum + nand_dev.page_mainsize, pBuffer, NumByteToWrite); //¶ÁÈ¡
+    temp = NAND_WritePage(PageNum, ColNum + nand_dev.page_mainsize, pBuffer, NumByteToWrite); //è¯»å–
     return temp;
 }
-//²Á³ıÒ»¸ö¿é
-//BlockNum:Òª²Á³ıµÄBLOCK±àºÅ,·¶Î§:0-(block_totalnum-1)
-//·µ»ØÖµ:0,²Á³ı³É¹¦
-//    ÆäËû,²Á³ıÊ§°Ü
+//æ“¦é™¤ä¸€ä¸ªå—
+//BlockNum:è¦æ“¦é™¤çš„BLOCKç¼–å·,èŒƒå›´:0-(block_totalnum-1)
+//è¿”å›å€¼:0,æ“¦é™¤æˆåŠŸ
+//    å…¶ä»–,æ“¦é™¤å¤±è´¥
 u8 NAND_EraseBlock(u32 BlockNum)
 {
     if(nand_dev.id == MT29F16G08ABABA)
     {
-        BlockNum <<= 7;    //½«¿éµØÖ·×ª»»ÎªÒ³µØÖ·
+        BlockNum <<= 7;    //å°†å—åœ°å€è½¬æ¢ä¸ºé¡µåœ°å€
     }
     else if(nand_dev.id == MT29F4G08ABADA)
     {
         BlockNum <<= 6;
     }
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE0;
-    //·¢ËÍ¿éµØÖ·
+    //å‘é€å—åœ°å€
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)BlockNum;
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 8);
     *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 16);
     *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE1;
     if(NAND_WaitForReady() != NSTA_READY)
     {
-        return NSTA_ERROR;    //Ê§°Ü
+        return NSTA_ERROR;    //å¤±è´¥
     }
-    return 0;   //³É¹¦
+    return 0;   //æˆåŠŸ
 }
-//È«Æ¬²Á³ıNAND FLASH
+//å…¨ç‰‡æ“¦é™¤NAND FLASH
 void NAND_EraseChip(void)
 {
     u8 status;
     u16 i = 0;
-    for(i = 0; i < nand_dev.block_totalnum; i++) //Ñ­»·²Á³ıËùÓĞµÄ¿é
+    for(i = 0; i < nand_dev.block_totalnum; i++) //å¾ªç¯æ“¦é™¤æ‰€æœ‰çš„å—
     {
         status = NAND_EraseBlock(i);
         if(status)
         {
-            xprintf("Erase %d block fail!!£¬´íÎóÂëÎª%d\r\n", i, status);    //²Á³ıÊ§°Ü
+            xprintf("Erase %d block fail!!ï¼Œé”™è¯¯ç ä¸º%d\r\n", i, status);    //æ“¦é™¤å¤±è´¥
         }
     }
 }
 
-//»ñÈ¡ECCµÄÆæÊıÎ»/Å¼ÊıÎ»
-//oe:0,Å¼ÊıÎ»
-//   1,ÆæÊıÎ»
-//eccval:ÊäÈëµÄeccÖµ
-//·µ»ØÖµ:¼ÆËãºóµÄeccÖµ(×î¶à16Î»)
+//è·å–ECCçš„å¥‡æ•°ä½/å¶æ•°ä½
+//oe:0,å¶æ•°ä½
+//   1,å¥‡æ•°ä½
+//eccval:è¾“å…¥çš„eccå€¼
+//è¿”å›å€¼:è®¡ç®—åçš„eccå€¼(æœ€å¤š16ä½)
 u16 NAND_ECC_Get_OE(u8 oe, u32 eccval)
 {
     u8 i;
@@ -721,30 +724,30 @@ u16 NAND_ECC_Get_OE(u8 oe, u32 eccval)
     }
     return ecctemp;
 }
-//ECCĞ£Õıº¯Êı
-//eccrd:¶ÁÈ¡³öÀ´,Ô­À´±£´æµÄECCÖµ
-//ecccl:¶ÁÈ¡Êı¾İÊ±,Ó²¼ş¼ÆËãµÄECCÖ»
-//·µ»ØÖµ:0,´íÎóÒÑĞŞÕı
-//    ÆäËû,ECC´íÎó(ÓĞ´óÓÚ2¸öbitµÄ´íÎó,ÎŞ·¨»Ö¸´)
+//ECCæ ¡æ­£å‡½æ•°
+//eccrd:è¯»å–å‡ºæ¥,åŸæ¥ä¿å­˜çš„ECCå€¼
+//ecccl:è¯»å–æ•°æ®æ—¶,ç¡¬ä»¶è®¡ç®—çš„ECCåª
+//è¿”å›å€¼:0,é”™è¯¯å·²ä¿®æ­£
+//    å…¶ä»–,ECCé”™è¯¯(æœ‰å¤§äº2ä¸ªbitçš„é”™è¯¯,æ— æ³•æ¢å¤)
 u8 NAND_ECC_Correction(u8 *data_buf, u32 eccrd, u32 ecccl)
 {
     u16 eccrdo, eccrde, eccclo, ecccle;
     u16 eccchk = 0;
     u16 errorpos = 0;
     u32 bytepos = 0;
-    eccrdo = NAND_ECC_Get_OE(1, eccrd); //»ñÈ¡eccrdµÄÆæÊıÎ»
-    eccrde = NAND_ECC_Get_OE(0, eccrd); //»ñÈ¡eccrdµÄÅ¼ÊıÎ»
-    eccclo = NAND_ECC_Get_OE(1, ecccl); //»ñÈ¡eccclµÄÆæÊıÎ»
-    ecccle = NAND_ECC_Get_OE(0, ecccl); //»ñÈ¡eccclµÄÅ¼ÊıÎ»
+    eccrdo = NAND_ECC_Get_OE(1, eccrd); //è·å–eccrdçš„å¥‡æ•°ä½
+    eccrde = NAND_ECC_Get_OE(0, eccrd); //è·å–eccrdçš„å¶æ•°ä½
+    eccclo = NAND_ECC_Get_OE(1, ecccl); //è·å–eccclçš„å¥‡æ•°ä½
+    ecccle = NAND_ECC_Get_OE(0, ecccl); //è·å–eccclçš„å¶æ•°ä½
     eccchk = eccrdo ^ eccrde ^ eccclo ^ ecccle;
-    if(eccchk == 0XFFF) //È«1,ËµÃ÷Ö»ÓĞ1bit ECC´íÎó
+    if(eccchk == 0XFFF) //å…¨1,è¯´æ˜åªæœ‰1bit ECCé”™è¯¯
     {
         errorpos = eccrdo ^ eccclo;
         xprintf("errorpos:%d\r\n", errorpos);
         bytepos = errorpos / 8;
         data_buf[bytepos] ^= 1 << (errorpos % 8);
     }
-    else                //²»ÊÇÈ«1,ËµÃ÷ÖÁÉÙÓĞ2bit ECC´íÎó,ÎŞ·¨ĞŞ¸´
+    else                //ä¸æ˜¯å…¨1,è¯´æ˜è‡³å°‘æœ‰2bit ECCé”™è¯¯,æ— æ³•ä¿®å¤
     {
         xprintf("2bit ecc error or more\r\n");
         return 1;

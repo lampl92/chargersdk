@@ -51,7 +51,6 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x07)
 #define ID_TimerTime    0
 // USER END
-
 /*********************************************************************
 *
 *       Static data
@@ -80,8 +79,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_0, 222, 149, 80, 30, 0, 0x0, 0 }, //卡号
     { TEXT_CreateIndirect, "Text", ID_TEXT_7, 222, 184, 80, 30, 0, 0x0, 0 }, //余额
     { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 313, 149, 255, 30, 0, 0x64, 0 },//卡号号码
-    { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 313, 184, 93, 27, 0, 0x64, 0 },//余额钱
-    { TEXT_CreateIndirect, "Text", ID_TEXT_8, 417, 184, 80, 30, 0, 0x0, 0 },//余额单位
+    { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 313, 184, 100, 27, 0, 0x64, 0 },//余额钱
+    { TEXT_CreateIndirect, "Text", ID_TEXT_8, 423, 184, 80, 30, 0, 0x0, 0 },//余额单位
     // USER END
 };
 
@@ -95,11 +94,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
 static void Caculate_RTC(WM_MESSAGE *pMsg)
 {
     uint8_t i = 1;
+    static uint8_t timer_count = 0;
     static uint8_t num = 0;
     uint8_t Timer_buf[10];
     EventBits_t uxBitRFID;
     EventBits_t uxBitCharge;
     CON_t *pCON;
+    time_t now;
+    static time_t first;
+    static uint8_t first_flag = 0;
+    volatile uint32_t diffsec;
+    volatile uint8_t sec;
+    volatile uint8_t min;
+    volatile uint8_t hour;
 
     WM_HWIN hWin = pMsg->hWin;
 
@@ -108,50 +115,14 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
     {
         /** @todo (zshare#1#): 跳转充电界面 */
+        WM_DeleteWindow(pMsg->hWin);
         PutOut_Charging();
     }
     else
     {
-        /** @todo (zshare#1#): 充电条件未达成 */
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "充电条件不满足.");/** @todo (zshare#1#): 充电条件未达成 */
     }
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-
-    xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_info);
-
-    //if(ChargePointStateType.xPlugState == PLUG) // 枪已插好
-    //xQueueReceive(xHandleQueueOrders,&order,10);//接收枪锁信息队列
-    //解析队列信息
-    //Point_Info[current_id_disp].point_statue =
-////    if(Point_Info[current_id_disp].point_statue == STATE_POINT_IDLE)
-////    {
-////        TEXT_SetText(WM_GetDialogItem(hWin,ID_TEXT_6), "请连接充电枪头!");
-////    }
-////    else if(Point_Info[current_id_disp].point_statue == STATE_POINT_PRECONTRACT_LOSEPLUG)
-////    {
-////        BUTTON_SetBkColor(WM_GetDialogItem(hWin,ID_BUTTON_1),BUTTON_CI_UNPRESSED,GUI_RED);
-////        BUTTON_SetTextColor(WM_GetDialogItem(hWin,ID_BUTTON_1),BUTTON_CI_UNPRESSED,GUI_BLUE);
-////        BUTTON_SetText(WM_GetDialogItem(hWin,ID_BUTTON_1),"确定");
-////        TEXT_SetText(WM_GetDialogItem(hWin,ID_TEXT_6), "枪锁未锁止，是否继续充电?");
-////    }
-////    else if(Point_Info[current_id_disp].point_statue == STATE_POINT_CHARGING)
-////    {
-////        //正在充电
-////        PutOut_Charging();
-////    }
-
-    if((num++) >= (1000 / REFLASH))
-    {
-        num = 0;
-        if((wait_timer.card_info--) == 0)
-        {
-            wait_timer.card_info = 0;
-            //未操作计时结束调转home页
-            xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);
-            PutOut_Home();
-        }
-    }
-
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
 
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                     defEventBitGoodIDReqDisp,
@@ -161,8 +132,6 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         pCON = CONGetHandle(0);//选择枪的时候获取pCON
 
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
-
-
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGoodIDReqDispOK);
@@ -175,7 +144,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
                                     pdTRUE, pdTRUE, 0);
     if((uxBitRFID & defEventBitBadIDReqDisp) == defEventBitBadIDReqDisp)
     {
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
         /** @todo (zshare#1#): 未注册卡处理流程 ，处理完成之后，发送DispOK事件*/
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitBadIDReqDispOK);
     }
@@ -197,11 +166,34 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
     }
-
     /*end of 未进GoodID ,BadID和OweID状态时显示内容*/
+
+    now = time(NULL);
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = now;
+    }
+    diffsec = (uint32_t)difftime(now, first);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    xsprintf((char *)Timer_buf, "(%02dS)", (60 - sec));
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
+    if(sec == 59)
+    {
+        xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+        //跳出卡片信息页
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
 }
 // USER END
-
 /*********************************************************************
 *
 *       _cbDialog
@@ -238,21 +230,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, temp_buf);         //卡号
-////        memset(temp_buf,'\0',sizeof(temp_buf));
-////        xsprintf((char *)temp_buf, "(%02d)", Card_Info[current_id_disp].balance);
-////        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,temp_buf);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, "?");
-
-        //if(Card_Info[current_id_disp].balance <= 0)
-
-//            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF36_Font,GUI_RED, "余额不足请充值");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "正在获取账户信息...");
 
         //
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "    ");
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
                     &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
@@ -268,11 +253,33 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
                 PutOut_Home();
+                // USER END
+                break;
+                // USER START (Optionally insert additional code for further notification handling)
+                // USER END
+            }
+            break;
+        case ID_BUTTON_1: // Notifications sent by 'Button'
+            switch(NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_RegisterDisp();
+                // USER END
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_RegisterDisp();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -329,33 +336,14 @@ WM_HWIN CreateCardInfo(void)
  */
 void PutOut_Card_Info()//(OrderData_t *order)
 {
-    uint8_t i = 0;
-    wait_timer.card_info = 60;
+    WM_HWIN hWin;
+    hWin = CreateCardInfo();
 
-//    for(i = 0;i < Sys_Info.charge_gun_num;i++)
-//    {
-//        if(Card_Info[i].charge_gun_status == 0)//可用
-//        {
-//            current_id_disp = i;
-//            Card_Info[i].id = order.ucUID[0]<<24 + order.ucUID[0]<<16 + order.ucUID[0]<<8 + order.ucUID[0]<<24;
-//            Card_Info[i].status = order.ucAccountStatus;
-//            Card_Info[i].balance = order.dBalance;
-//            order.ucPointID = i;
-//            xQueueSend(xHandleQueueOrders,&order,10);
-//            break;
-//        }
-//    }
-
-    if(Sys_Info.charge_gun_num == i)
-    {
-        ;//不区分单双枪，枪都在使用中。
-    }
-
-    CreateCardInfo();
     while(1)
     {
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         GUI_Delay(500);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+        vTaskDelay(500);
     }
 }
 // USER END

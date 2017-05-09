@@ -24,7 +24,7 @@ FIL XBF36FontFile;
 //		pVoid:	要读取的文件
 //		pBuff:	读取到的数据的缓冲区
 //返回值:0 成功，1 失败
-static int _cbGetData(uint32_t Off, uint16_t NumBytes, void * pVoid, void * pBuffer)
+static int _cbGetData(volatile uint32_t Off, volatile uint16_t NumBytes, void * pVoid, void * pBuffer)
 {
 	int result;
 	uint16_t bread;

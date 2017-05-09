@@ -14,7 +14,7 @@
 uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 #endif
 
-Sysconf_t   xSysconf;//´æ·ÅÏµÍ³³õÊ¼»¯²ÎÊı
+Sysconf_t   xSysconf;//å­˜æ”¾ç³»ç»Ÿåˆå§‹åŒ–å‚æ•°
 
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
 char NANDDISKPath[4]; /* RAM disk logical drive path */
@@ -126,18 +126,20 @@ void sys_Init(void)
     timeInit();
     retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
-    my_mem_init(SRAMIN);            //³õÊ¼»¯ÄÚ²¿ÄÚ´æ³Ø
-    my_mem_init(SRAMEX);            //³õÊ¼»¯Íâ²¿ÄÚ´æ³Ø
-    my_mem_init(SRAMCCM);           //³õÊ¼»¯CCMÄÚ´æ³Ø
+    my_mem_init(SRAMIN);            //åˆå§‹åŒ–å†…éƒ¨å†…å­˜æ± 
+    my_mem_init(SRAMEX);            //åˆå§‹åŒ–å¤–éƒ¨å†…å­˜æ± 
+    my_mem_init(SRAMCCM);           //åˆå§‹åŒ–CCMå†…å­˜æ± 
 #endif
 
     /*---------------------------------------------------------------------------/
-    /                               FATFS³õÊ¼»¯
+    /                               FATFSåˆå§‹åŒ–
     /---------------------------------------------------------------------------*/
     /*##-1- Link the NAND disk I/O driver #######################################*/
     if(FATFS_LinkDriver(&NANDDISK_Driver, NANDDISKPath) == 0)
     {
+        //fatfs_format();
         /*##-2- Register the file system object to the FatFs module ##############*/
+        //DISABLE_INT();
         if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
         {
             fatfs_format();
@@ -147,7 +149,7 @@ void sys_Init(void)
     }
 
     /*---------------------------------------------------------------------------/
-    /                               ÏµÍ³²ÎÊı³õÊ¼»¯
+    /                               ç³»ç»Ÿå‚æ•°åˆå§‹åŒ–
     /---------------------------------------------------------------------------*/
     xSysconf.xCalibrate.ad_top = 270;
     xSysconf.xCalibrate.ad_bottom = 3865;
@@ -158,11 +160,11 @@ void sys_Init(void)
     create_evsecfg_file();
 
     /*---------------------------------------------------------------------------/
-    /                               GUI³õÊ¼»¯
+    /                               GUIåˆå§‹åŒ–
     /---------------------------------------------------------------------------*/
     WM_SetCreateFlags(WM_CF_MEMDEV);    /* Activate the use of memory device feature */
     GUI_Init();
-    WM_MULTIBUF_Enable(1);  //¿ªÆôSTemWin¶à»º³å,RGBÆÁ»áÓÃµ½
+    WM_MULTIBUF_Enable(1);  //å¼€å¯STemWinå¤šç¼“å†²,RGBå±ä¼šç”¨åˆ°
 
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");

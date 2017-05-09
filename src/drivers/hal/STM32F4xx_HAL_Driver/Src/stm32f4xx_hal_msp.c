@@ -295,7 +295,7 @@ void MX_GPIO_Init(void)
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PH3 PH4 */
-    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5|GPIO_PIN_6 | GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5|GPIO_PIN_6 ;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -335,8 +335,6 @@ void MX_GPIO_Init(void)
     B_KEY_OFF;
 	C_KEY_OFF;
 	D_KEY_OFF;
-	POWER_L_OFF;
-	POWER_N_OFF;
     IIC_SDA = 1;
     IIC_SCL = 1;
     /*Configure GPIO pin Output Level */

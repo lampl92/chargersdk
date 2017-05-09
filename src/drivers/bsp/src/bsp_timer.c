@@ -37,7 +37,7 @@ void MX_TIM2_Init(void)
   }
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500;
+  sConfigOC.Pulse = 1000;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -114,7 +114,7 @@ void MX_TIM4_Init(void)
   }
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500;
+  sConfigOC.Pulse = 1000;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
@@ -134,7 +134,7 @@ void MX_TIM4_Init(void)
   htim5.Instance = TIM5;
   htim5.Init.Prescaler =96;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim5.Init.Period = 100;
+  htim5.Init.Period = 160;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
   {
@@ -221,7 +221,7 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_relay_ms++;
 	if(timer_relay_ms>=10000)
     {
-        timer_relay_ms=0;
+
         if(flag_power_out_l==1)
         {
             flag_pwm_out_l=1;
@@ -242,11 +242,11 @@ void TIM3_IRQHandler (void)//0.1ms
         timer_s=0;
         timer_min++;
     }
-	if((flag_pwm_out_n==1)&&(flag_power_out_n==1))
+	if(flag_pwm_out_n==1)
     {
       Power_out_n_pwm_ctrl();
     }
-    if((flag_pwm_out_l==1)&&(flag_power_out_l==1))
+    if(flag_pwm_out_l==1)
     {
       Power_out_l_pwm_ctrl();
     }

@@ -35,5 +35,6 @@ uint8_t flag_breath_r_1,flag_breath_r_2,flag_breath_g_1,flag_breath_g_2,flag_bre
  void led_breath_r(void);
  void led_breath_g(void);
  void led_breath_b(void);
+ void led_state_init(void);
 
 #endif /* LED_CONTROL_H_INCLUDED */

@@ -61,6 +61,7 @@
 #define ID_TEXT_17    (GUI_ID_USER + 0x18)
 #define ID_EDIT_7     (GUI_ID_USER + 0x19)
 #define ID_TEXT_18    (GUI_ID_USER + 0x1A)
+#define ID_TEXT_19    (GUI_ID_USER + 0x1B)
 
 #define ID_TimerTime    0
 // USER END
@@ -112,7 +113,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_16, 450, 100, 70, 35, 0, 0x0, 0 },//分钟
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 500, 100, 45, 35, 0, 0x64, 0 },//秒数值
     { TEXT_CreateIndirect, "Text", ID_TEXT_17, 545, 100, 70, 35, 0, 0x0, 0 },//秒钟
-
+    { TEXT_CreateIndirect, "Text", ID_TEXT_19, 300, 314, 100, 35, 0, 0x0, 0 },//正在结费中
     // USER END
 };
 
@@ -125,32 +126,87 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
+    static uint8_t timer_count = 0;
     static uint8_t num = 0;
     uint8_t Timer_buf[10];
+    uint8_t temp_buf[32];
+    CON_t *pCON;
+    time_t now;
+    static time_t first;
+    static uint8_t first_flag = 0;
+    volatile uint32_t diffsec;
+    volatile uint8_t sec;
+    volatile uint8_t min;
+    volatile uint8_t hour;
+
 
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), "14");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), "5");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), "1.5");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), "45.6");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), "00");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_5), "02");
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), "34");
-
-    xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.charge_done_exit);
-    if((num++) >= 3)
+    if(first_flag == 0)
     {
-        num = 0;
-        if((wait_timer.charge_done_exit--) == 0)
-        {
-            wait_timer.charge_done_exit = 0;
-            //进行退出的跳页操作
-        }
+        first_flag = 1;
+        first = time(NULL);
     }
+
+    pCON = CONGetHandle(0);
+    now = time(NULL);
+    diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    sprintf(temp_buf, "%02d", hour);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
+    sprintf(temp_buf, "%02d", min);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_5), temp_buf);// min
+    sprintf(temp_buf, "%02d", sec);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), temp_buf);// sec
+
+    sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), temp_buf);
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), temp_buf);
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);
+
+
+    if((60-(uint32_t)difftime(now, first)) == 0)
+    {
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
+    now = time(NULL);
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = now;
+    }
+    diffsec = (uint32_t)difftime(now, first);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    xsprintf((char *)Timer_buf, "(%02dS)", (60 - sec));
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
+    if(sec == 59)
+    {
+        //xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+        //跳出卡片信息页
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
 }
 // USER END
 
@@ -172,6 +228,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
         //
+        //设置本页焦点
+        //
+        WM_SetFocus(pMsg->hWin);
+        //
         // Initialization of 'Framewin'
         //
         FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
@@ -192,6 +252,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&XBF24_Font,GUI_BLACK,"分");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&XBF24_Font,GUI_BLACK,"秒");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_BLACK,"(00S)");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&XBF24_Font,GUI_RED,"正在结费中...");
         //
         // Initialization of 'Edit'
         //
@@ -217,11 +278,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
                 PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
+                WM_DeleteWindow(pMsg->hWin);
+                PutOut_Home();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -278,12 +342,21 @@ WM_HWIN CreateChargeDone(void)
  */
 void PutOut_Charge_Done()
 {
+    WM_HWIN hWin;
+
+    countdown_60 = 60;
     wait_timer.charge_done_exit = 60;
-    CreateChargeDone();
+    hWin = CreateChargeDone();
     while(1)
     {
-       dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         GUI_Delay(500);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//        if((countdown_60--) == 0)
+//        {
+//            WM_DeleteWindow(hWin);
+//            PutOut_Home(); //跳出卡片非法页
+//        }
+        vTaskDelay(500);
     }
 }
 // USER END

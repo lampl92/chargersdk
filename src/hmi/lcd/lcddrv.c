@@ -470,9 +470,9 @@ void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height)
 //该初始化函数可以初始化各种型号的LCD(详见本.c文件最前面的描述)
 void LCD_Init(void)
 {
-    GPIO_InitTypeDef GPIO_Initure;
+    //GPIO_InitTypeDef GPIO_Initure;
 
-    lcddev.id=LTDC_PanelID_Read();	//检查是否有RGB屏接入
+   //lcddev.id=LTDC_PanelID_Read();	//检查是否有RGB屏接入
     lcddev.id = 0X7084;
 	if(lcddev.id!=0)
 	{
@@ -480,7 +480,7 @@ void LCD_Init(void)
 	}
 
 	LCD_Display_Dir(1);		//默认为竖屏
-	LCD_LED=1;				//点亮背光
+	//LCD_LED=1;				//点亮背光
 	LCD_Clear(WHITE);
 }
 //清屏函数

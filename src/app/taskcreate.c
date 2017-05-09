@@ -1,12 +1,12 @@
 /**
 * @file taskcreate.c
-* @brief 创建任务Todolist 对照�?
-*        1. 定义STACK大小
-*        2. 定义PRIORITY
-*        3. 声明任务
-*        4. 定义任务句柄
-*        5. 任务入口
-*        6. 创建任务
+* @brief 鍒涘缓浠诲姟Todolist 瀵圭収琛?
+*        1. 瀹氫箟STACK澶у皬
+*        2. 瀹氫箟PRIORITY
+*        3. 澹版槑浠诲姟
+*        4. 瀹氫箟浠诲姟鍙ユ�?
+*        5. 浠诲姟鍏ュ彛
+*        6. 鍒涘缓浠诲姟
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
@@ -133,6 +133,7 @@ QueueHandle_t xHandleQueueErrorPackage = NULL;
 TimerHandle_t xHandleTimerTemp = NULL; //4个温�?
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
+TimerHandle_t xHandleTimerVolt = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
@@ -152,18 +153,18 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    //MainTask();
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
+    MainTask();
+//    while(1)
+//    {
+//     vTaskDelay(1000);
+//    }
 }
 
 void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-        GUI_TOUCH_Exec();
+        GUI_TOUCH_Exec();//����XY��Ĳ���
         vTaskDelay(10);
     }
 }
@@ -193,7 +194,7 @@ void AppTaskCreate (void)
     xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
-/** @brief 创建任务通信机制。（信号量，软件定时器创建与启动�?
+/** @brief 鍒涘缓浠诲姟閫氫俊鏈哄埗銆傦紙淇″彿閲忥紝杞欢瀹氭椂鍣ㄥ垱寤轰笌鍚姩�??
  */
 void AppObjCreate (void)
 {
@@ -211,6 +212,7 @@ void AppObjCreate (void)
     xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vCONTimerCB);
     xHandleTimerPlugState = xTimerCreate("TimerPlugState", defMonitorPlugStateCyc, pdTRUE, (void *)defTIMERID_PlugState, vCONTimerCB);
+    xHandleTimerVolt = xTimerCreate("TimerVolt", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_Volt, vCONTimerCB);
     xHandleTimerChargingData = xTimerCreate("TimerChargingData", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_ChargingData, vCONTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", defMonitorEVSEStateCyc, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xHandleTimerRFID = xTimerCreate("TimerRFID", defMonitorRFIDCyc, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
@@ -220,13 +222,14 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerPlugState, 0);
-    xTimerStart(xHandleTimerChargingData, 0);
+    xTimerStart(xHandleTimerVolt, 0);
+    //xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //TimerHeartbeat在联网后再启�?
+    //TimerHeartbeat鍦ㄨ仈缃戝悗鍐嶅惎鍔?
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调�?
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟�??
 void vApplicationTickHook( void )
 {
     ulHighFrequencyTimerTicks = xTaskGetTickCount();

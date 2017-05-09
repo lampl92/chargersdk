@@ -87,12 +87,12 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
 	bmpbuffer = malloc(BMPFile.obj.objsize);//申请内存
 	if(bmpbuffer == NULL) return 2;
 
-    taskENTER_CRITICAL();	//临界区
+    //taskENTER_CRITICAL();	//临界区
 
 	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //读取数据
 	if(result != FR_OK) return 3;
 
-    taskEXIT_CRITICAL();//退出临界区
+    //taskEXIT_CRITICAL();//退出临界区
 
 	switch(mode)
 	{
@@ -222,3 +222,64 @@ void bmpdisplay(uint8_t *ppath)
     dispbmp(ppath,0,0,0,1,1);
     //GUI_Clear();
 }
+
+
+int dispbmp2(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
+{
+	uint16_t bread;
+	uint16_t bred;
+	uint16_t bre;
+	char *bmpbuffer;
+	char result;
+	int XSize,YSize;
+	float Xflag,Yflag;
+	WM_HWIN      hItem;
+
+	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
+	//文件打开错误或者文件大于BMPMEMORYSIZE
+	if((result != FR_OK) || (BMPFile.obj.objsize>BMPMEMORYSIZE)) 	return 1;
+
+	bmpbuffer = malloc(BMPFile.obj.objsize);//申请内存
+	if(bmpbuffer == NULL) return 2;
+
+    //taskENTER_CRITICAL();	//临界区
+
+	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //读取数据
+	if(result != FR_OK) return 3;
+
+    //taskEXIT_CRITICAL();//退出临界区
+
+	switch(mode)
+	{
+		case 0:	//在指定位置显示图片
+			if((member == 1) && (denom == 1)) //无需缩放，直接绘制
+			{
+			    hItem = WM_GetDialogItem(hWin, (GUI_ID_USER + 0x0A));
+				IMAGE_SetBMP(hItem, bmpbuffer, BMPFile.obj.objsize);//GUI_BMP_Draw(bmpbuffer,x,y);	//在指定位置显示BMP图片
+			}else //否则图片需要缩放
+			{
+				GUI_BMP_DrawScaled(bmpbuffer,x,y,member,denom);
+			}
+			break;
+		case 1:	//在LCD中间显示图片
+			XSize = GUI_BMP_GetXSize(bmpbuffer);	//获取图片的X轴大小
+			YSize = GUI_BMP_GetYSize(bmpbuffer);	//获取图片的Y轴大小
+			if((member == 1) && (denom == 1)) //无需缩放，直接绘制
+			{
+				//在LCD中间显示图片
+				//GUI_BMP_Draw(bmpbuffer,(lcddev.width-XSize)/2-1,(lcddev.height-YSize)/2-1);
+			}else //否则图片需要缩放
+			{
+				//Xflag = (float)XSize*((float)member/(float)denom);
+				//Yflag = (float)YSize*((float)member/(float)denom);
+				//XSize = (lcddev.width-(int)Xflag)/2-1;
+				//YSize = (lcddev.height-(int)Yflag)/2-1;
+				//GUI_BMP_DrawScaled(bmpbuffer,XSize,YSize,member,denom);
+			}
+			break;
+	}
+	f_close(&BMPFile);				//关闭BMPFile文件
+	//free(bmpbuffer);		//释放内存
+	return 0;
+}
+
