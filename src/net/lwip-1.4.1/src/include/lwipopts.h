@@ -77,7 +77,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
-#define MEMP_NUM_PBUF           10
+#define MEMP_NUM_PBUF           32
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
 #define MEMP_NUM_UDP_PCB        6
@@ -90,17 +90,14 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
 #define MEMP_NUM_TCP_SEG        12
-/* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
-   timeouts. */
-#define MEMP_NUM_SYS_TIMEOUT    10
 
 
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
-#define PBUF_POOL_SIZE          12
+#define PBUF_POOL_SIZE          16
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
-#define PBUF_POOL_BUFSIZE       512
+//#define PBUF_POOL_BUFSIZE       512
 
 
 /* ---------- TCP options ---------- */
@@ -109,23 +106,18 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* Controls if TCP should queue segments that arrive out of
    order. Define to 0 if your device is low on memory. */
-#define TCP_QUEUE_OOSEQ         0
+#define TCP_QUEUE_OOSEQ         1
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                 (1500 - 40)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
+#define TCP_MSS                 (536)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
 
 /* TCP sender buffer space (bytes). */
 #define TCP_SND_BUF             (4*TCP_MSS)
 
-/*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
-  as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
-
-#define TCP_SND_QUEUELEN        (2* TCP_SND_BUF/TCP_MSS)
-
 /* TCP receive window. */
-#define TCP_WND                 (2*TCP_MSS)
+#define TCP_WND                 (4*TCP_MSS)
 
-
+#define DEFAULT_TCP_RECVMBOX_SIZE 20
 
 
 /* ---------- ICMP options ---------- */
@@ -137,7 +129,7 @@ a lot of data that needs to be copied, this should be set high. */
    ------------------------------------
 */
 #define TCPIP_THREAD_NAME              "tcpip_thread"
-#define TCPIP_THREAD_STACKSIZE          (4*1024)
+#define TCPIP_THREAD_STACKSIZE          (10*1024)
 #define TCPIP_THREAD_PRIO               11
 #define TCPIP_MBOX_SIZE                 20
 
@@ -267,7 +259,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 */
 #define LWIP_DEBUG                      1
 #define PPP_DEBUG                       LWIP_DBG_ON
-#define ICMP_DEBUG                      LWIP_DBG_ON
+//#define ICMP_DEBUG                      LWIP_DBG_ON
 
 #endif /* __LWIPOPTS_H__ */
 
