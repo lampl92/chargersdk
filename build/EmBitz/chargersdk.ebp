@@ -734,6 +734,8 @@
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\udp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\opt.h" />
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\etharp.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -793,10 +795,6 @@
 		<Unit filename="..\..\src\net\lwip-1.4.1\system\OS\sys_arch.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\net\lwip-2.0.2\src\include\lwip\opt.h" />
-		<Unit filename="..\..\src\net\lwip-2.0.2\src\include\lwipopts.h" />
-		<Unit filename="..\..\src\net\lwip-2.0.2\src\system\arch\cc.h" />
-		<Unit filename="..\..\src\net\lwip-2.0.2\src\system\arch\sys_arch.h" />
 		<Unit filename="..\..\src\net\mbedTLS\library\aes.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -845,9 +843,8 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Debug" active_interface="ST-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="Generic" />
+				<target_debugging_settings target="Release" active_interface="ST-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -885,8 +882,9 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Release" active_interface="ST-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+				<target_debugging_settings target="Debug" active_interface="ST-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="Generic" />
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
