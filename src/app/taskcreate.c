@@ -24,8 +24,8 @@
 #define defSTACK_TaskGUI                    (1024*4)
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
-#define defSTACK_TaskPPP                    (1024*4)
-#define defSTACK_TaskTCPClient               1024
+#define defSTACK_TaskPPP                    (1024*10)
+#define defSTACK_TaskTCPClient               (1024*10)
 
 #define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               512
