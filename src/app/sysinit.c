@@ -143,6 +143,7 @@ void sys_Init(void)
         if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
         {
             fatfs_format();
+            f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1);
             /* FatFs Initialization Error */
             //Error_Handler();
         }
