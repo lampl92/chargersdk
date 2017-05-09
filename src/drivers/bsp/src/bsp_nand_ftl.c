@@ -1,57 +1,58 @@
 #include "bsp.h"
 
-//Éı¼¶ËµÃ÷
+//å‡çº§è¯´æ˜
 //V1.1 20160124
-//ĞŞ¸ÄFTL_CopyAndWriteToBlockºÍFTL_WriteSectorsº¯Êı,Ìá¸ß·Ç0XFFÊ±µÄĞ´ÈëËÙ¶È.
+//ä¿®æ”¹FTL_CopyAndWriteToBlockå’ŒFTL_WriteSectorså‡½æ•°,æé«˜é0XFFæ—¶çš„å†™å…¥é€Ÿåº¦.
 //V1.2 20160520
-//1,ĞŞ¸ÄFTL_ReadSectors,Ôö¼ÓECC³ö´íÅĞ¶Ï,¼ì²â»µ¿é´¦Àí,²¢Ôö¼Ó¶à¿éÁ¬¶Á,Ìá¸ßËÙ¶È
-//2,ĞÂÔöFTL_BlockCompareºÍFTL_SearchBadBlockº¯Êı,ÓÃÓÚËÑÑ°»µ¿é
-//3,ĞŞ¸ÄFTL_Format»µ¿é¼ì²â·½Ê½,Ôö¼ÓFTL_USE_BAD_BLOCK_SEARCHºê
+//1,ä¿®æ”¹FTL_ReadSectors,å¢åŠ ECCå‡ºé”™åˆ¤æ–­,æ£€æµ‹åå—å¤„ç†,å¹¶å¢åŠ å¤šå—è¿è¯»,æé«˜é€Ÿåº¦
+//2,æ–°å¢FTL_BlockCompareå’ŒFTL_SearchBadBlockå‡½æ•°,ç”¨äºæœå¯»åå—
+//3,ä¿®æ”¹FTL_Formatåå—æ£€æµ‹æ–¹å¼,å¢åŠ FTL_USE_BAD_BLOCK_SEARCHå®
 //V1.3 20160530
-//ĞŞ¸Äµ±1bit ECC´íÎó³öÏÖÊ±£¬¶ÁÈ¡2´Î£¬À´È·ÈÏ1bit ´íÎó£¬ÒÔ·À´íÎóµÄĞŞ¸ÄÊı¾İ
+//ä¿®æ”¹å½“1bit ECCé”™è¯¯å‡ºç°æ—¶ï¼Œè¯»å–2æ¬¡ï¼Œæ¥ç¡®è®¤1bit é”™è¯¯ï¼Œä»¥é˜²é”™è¯¯çš„ä¿®æ”¹æ•°æ®
 //////////////////////////////////////////////////////////////////////////////////
 
-//Ã¿¸ö¿é,µÚÒ»¸öpageµÄspareÇø,Ç°ËÄ¸ö×Ö½ÚµÄº¬Òå:
-//µÚÒ»¸ö×Ö½Ú,±íÊ¾¸Ã¿éÊÇ·ñÊÇ»µ¿é:0XFF,Õı³£¿é;ÆäËûÖµ,»µ¿é.
-//µÚ¶ş¸ö×Ö½Ú,±íÊ¾¸Ã¿éÊÇ·ñ±»ÓÃ¹ı:0XFF,Ã»ÓĞĞ´¹ıÊı¾İ;0XCC,Ğ´¹ıÊı¾İÁË.
-//µÚÈıºÍµÚËÄ¸ö×Ö½Ú,±íÊ¾¸Ã¿éËùÊôµÄÂß¼­¿é±àºÅ.
+//æ¯ä¸ªå—,ç¬¬ä¸€ä¸ªpageçš„spareåŒº,å‰å››ä¸ªå­—èŠ‚çš„å«ä¹‰:
+//ç¬¬ä¸€ä¸ªå­—èŠ‚,è¡¨ç¤ºè¯¥å—æ˜¯å¦æ˜¯åå—:0XFF,æ­£å¸¸å—;å…¶ä»–å€¼,åå—.
+//ç¬¬äºŒä¸ªå­—èŠ‚,è¡¨ç¤ºè¯¥å—æ˜¯å¦è¢«ç”¨è¿‡:0XFF,æ²¡æœ‰å†™è¿‡æ•°æ®;0XCC,å†™è¿‡æ•°æ®äº†.
+//ç¬¬ä¸‰å’Œç¬¬å››ä¸ªå­—èŠ‚,è¡¨ç¤ºè¯¥å—æ‰€å±çš„é€»è¾‘å—ç¼–å·.
 
-//Ã¿¸öpage,spareÇø16×Ö½ÚÒÔºóµÄ×Ö½Úº¬Òå:
-//µÚÊ®Áù×Ö½Ú¿ªÊ¼,ºóĞøÃ¿4¸ö×Ö½ÚÓÃÓÚ´æ´¢Ò»¸öÉÈÇø(´óĞ¡:NAND_ECC_SECTOR_SIZE)µÄECCÖµ,ÓÃÓÚECCĞ£Ñé
+//æ¯ä¸ªpage,spareåŒº16å­—èŠ‚ä»¥åçš„å­—èŠ‚å«ä¹‰:
+//ç¬¬åå…­å­—èŠ‚å¼€å§‹,åç»­æ¯4ä¸ªå­—èŠ‚ç”¨äºå­˜å‚¨ä¸€ä¸ªæ‰‡åŒº(å¤§å°:NAND_ECC_SECTOR_SIZE)çš„ECCå€¼,ç”¨äºECCæ ¡éªŒ
 
 
-//FTL²ã³õÊ¼»¯
-//·µ»ØÖµ:0,Õı³£
-//    ÆäËû,Ê§°Ü
+//FTLå±‚åˆå§‹åŒ–
+//è¿”å›å€¼:0,æ­£å¸¸
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_Init(void)
 {
     u8 temp;
     if(NAND_Init())
     {
-        return 1;    //³õÊ¼»¯NAND FLASH
+        return 1;    //åˆå§‹åŒ–NAND FLASH
     }
     if(nand_dev.lut)
     {
         free(nand_dev.lut);
     }
-    nand_dev.lut = malloc((nand_dev.block_totalnum) * 2); //¸øLUT±íÉêÇëÄÚ´æ
-    memset(nand_dev.lut, 0, nand_dev.block_totalnum * 2);       //È«²¿ÇåÀí
+    nand_dev.lut = malloc((nand_dev.block_totalnum) * 2); //ç»™LUTè¡¨ç”³è¯·å†…å­˜
+    memset(nand_dev.lut, 0, nand_dev.block_totalnum * 2);       //å…¨éƒ¨æ¸…ç†
     if(!nand_dev.lut)
     {
-        return 1;    //ÄÚ´æÉêÇëÊ§°Ü
+        return 1;    //å†…å­˜ç”³è¯·å¤±è´¥
     }
     temp = FTL_CreateLUT(1);
+    //FTL_Format();
     if(temp)
     {
         xprintf("format nand flash...\r\n");
-        temp = FTL_Format();   //¸ñÊ½»¯NAND
+        temp = FTL_Format();   //æ ¼å¼åŒ–NAND
         if(temp)
         {
             xprintf("format failed!\r\n");
             return 2;
         }
     }
-    else    //´´½¨LUT±í³É¹¦
+    else    //åˆ›å»ºLUTè¡¨æˆåŠŸ
     {
         xprintf("total block num:%d\r\n", nand_dev.block_totalnum);
         xprintf("good block num:%d\r\n", nand_dev.good_blocknum);
@@ -60,149 +61,149 @@ u8 FTL_Init(void)
     return 0;
 }
 
-//±ê¼ÇÄ³Ò»¸ö¿éÎª»µ¿é
-//blocknum:¿é±àºÅ,·¶Î§:0~(block_totalnum-1)
+//æ ‡è®°æŸä¸€ä¸ªå—ä¸ºåå—
+//blocknum:å—ç¼–å·,èŒƒå›´:0~(block_totalnum-1)
 void FTL_BadBlockMark(u32 blocknum)
 {
-    u32 temp = 0XAAAAAAAA; //»µ¿é±ê¼Çmark,ÈÎÒâÖµ¶¼OK,Ö»Òª²»ÊÇ0XFF.ÕâÀïĞ´Ç°4¸ö×Ö½Ú,·½±ãFTL_FindUnusedBlockº¯Êı¼ì²é»µ¿é.(²»¼ì²é±¸·İÇø,ÒÔÌá¸ßËÙ¶È)
-    NAND_WriteSpare(blocknum * nand_dev.block_pagenum, 0, (u8 *)&temp, 4); //ÔÚµÚÒ»¸öpageµÄspareÇø,µÚÒ»¸ö×Ö½Ú×ö»µ¿é±ê¼Ç(Ç°4¸ö×Ö½Ú¶¼Ğ´)
-    NAND_WriteSpare(blocknum * nand_dev.block_pagenum + 1, 0, (u8 *)&temp, 4); //ÔÚµÚ¶ş¸öpageµÄspareÇø,µÚÒ»¸ö×Ö½Ú×ö»µ¿é±ê¼Ç(±¸·İÓÃ,Ç°4¸ö×Ö½Ú¶¼Ğ´)
+    u32 temp = 0XAAAAAAAA; //åå—æ ‡è®°mark,ä»»æ„å€¼éƒ½OK,åªè¦ä¸æ˜¯0XFF.è¿™é‡Œå†™å‰4ä¸ªå­—èŠ‚,æ–¹ä¾¿FTL_FindUnusedBlockå‡½æ•°æ£€æŸ¥åå—.(ä¸æ£€æŸ¥å¤‡ä»½åŒº,ä»¥æé«˜é€Ÿåº¦)
+    NAND_WriteSpare(blocknum * nand_dev.block_pagenum, 0, (u8 *)&temp, 4); //åœ¨ç¬¬ä¸€ä¸ªpageçš„spareåŒº,ç¬¬ä¸€ä¸ªå­—èŠ‚åšåå—æ ‡è®°(å‰4ä¸ªå­—èŠ‚éƒ½å†™)
+    NAND_WriteSpare(blocknum * nand_dev.block_pagenum + 1, 0, (u8 *)&temp, 4); //åœ¨ç¬¬äºŒä¸ªpageçš„spareåŒº,ç¬¬ä¸€ä¸ªå­—èŠ‚åšåå—æ ‡è®°(å¤‡ä»½ç”¨,å‰4ä¸ªå­—èŠ‚éƒ½å†™)
 }
-//¼ì²éÄ³Ò»¿éÊÇ·ñÊÇ»µ¿é
-//blocknum:¿é±àºÅ,·¶Î§:0~(block_totalnum-1)
-//·µ»ØÖµ:0,ºÃ¿é
-//    ÆäËû,»µ¿é
+//æ£€æŸ¥æŸä¸€å—æ˜¯å¦æ˜¯åå—
+//blocknum:å—ç¼–å·,èŒƒå›´:0~(block_totalnum-1)
+//è¿”å›å€¼:0,å¥½å—
+//    å…¶ä»–,åå—
 u8 FTL_CheckBadBlock(u32 blocknum)
 {
     u8 flag = 0;
-    NAND_ReadSpare(blocknum * nand_dev.block_pagenum, 0, &flag, 1); //¶ÁÈ¡»µ¿é±êÖ¾
-    if(flag == 0XFF) //ºÃ¿é?,¶ÁÈ¡±¸·İÇø»µ¿é±ê¼Ç
+    NAND_ReadSpare(blocknum * nand_dev.block_pagenum, 0, &flag, 1); //è¯»å–åå—æ ‡å¿—
+    if(flag == 0XFF) //å¥½å—?,è¯»å–å¤‡ä»½åŒºåå—æ ‡è®°
     {
-        NAND_ReadSpare(blocknum * nand_dev.block_pagenum + 1, 0, &flag, 1); //¶ÁÈ¡±¸·İÇø»µ¿é±êÖ¾
+        NAND_ReadSpare(blocknum * nand_dev.block_pagenum + 1, 0, &flag, 1); //è¯»å–å¤‡ä»½åŒºåå—æ ‡å¿—
         if(flag == 0XFF)
         {
-            return 0;    //ºÃ¿é
+            return 0;    //å¥½å—
         }
         else
         {
-            return 1;    //»µ¿é
+            return 1;    //åå—
         }
     }
     return 2;
 }
-//±ê¼ÇÄ³Ò»¸ö¿éÒÑ¾­Ê¹ÓÃ
-//blocknum:¿é±àºÅ,·¶Î§:0~(block_totalnum-1)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//æ ‡è®°æŸä¸€ä¸ªå—å·²ç»ä½¿ç”¨
+//blocknum:å—ç¼–å·,èŒƒå›´:0~(block_totalnum-1)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_UsedBlockMark(u32 blocknum)
 {
     u8 Usedflag = 0XCC;
     u8 temp = 0;
-    temp = NAND_WriteSpare(blocknum * nand_dev.block_pagenum, 1, (u8 *)&Usedflag, 1); //Ğ´Èë¿éÒÑ¾­±»Ê¹ÓÃ±êÖ¾
+    temp = NAND_WriteSpare(blocknum * nand_dev.block_pagenum, 1, (u8 *)&Usedflag, 1); //å†™å…¥å—å·²ç»è¢«ä½¿ç”¨æ ‡å¿—
     return temp;
 }
-//´Ó¸ø¶¨µÄ¿é¿ªÊ¼ÕÒµ½ÍùÇ°ÕÒµ½Ò»¸öÎ´±»Ê¹ÓÃµÄ¿é(Ö¸¶¨ÆæÊı/Å¼Êı)
-//sblock:¿ªÊ¼¿é,·¶Î§:0~(block_totalnum-1)
-//flag:0,Å¼Êı¿ì;1,ÆæÊı¿é.
-//·µ»ØÖµ:0XFFFFFFFF,Ê§°Ü
-//           ÆäËûÖµ,Î´Ê¹ÓÃ¿éºÅ
+//ä»ç»™å®šçš„å—å¼€å§‹æ‰¾åˆ°å¾€å‰æ‰¾åˆ°ä¸€ä¸ªæœªè¢«ä½¿ç”¨çš„å—(æŒ‡å®šå¥‡æ•°/å¶æ•°)
+//sblock:å¼€å§‹å—,èŒƒå›´:0~(block_totalnum-1)
+//flag:0,å¶æ•°å¿«;1,å¥‡æ•°å—.
+//è¿”å›å€¼:0XFFFFFFFF,å¤±è´¥
+//           å…¶ä»–å€¼,æœªä½¿ç”¨å—å·
 u32 FTL_FindUnusedBlock(u32 sblock, u8 flag)
 {
     u32 temp = 0;
     u32 blocknum = 0;
     for(blocknum = sblock + 1; blocknum > 0; blocknum--)
     {
-        if(((blocknum - 1) % 2) == flag) //ÆæÅ¼ºÏ¸ñ,²Å¼ì²â
+        if(((blocknum - 1) % 2) == flag) //å¥‡å¶åˆæ ¼,æ‰æ£€æµ‹
         {
-            NAND_ReadSpare((blocknum - 1)*nand_dev.block_pagenum, 0, (u8 *)&temp, 4); //¶Á¿éÊÇ·ñ±»Ê¹ÓÃ±ê¼Ç
+            NAND_ReadSpare((blocknum - 1)*nand_dev.block_pagenum, 0, (u8 *)&temp, 4); //è¯»å—æ˜¯å¦è¢«ä½¿ç”¨æ ‡è®°
             if(temp == 0XFFFFFFFF)
             {
-                return(blocknum - 1);    //ÕÒµ½Ò»¸ö¿Õ¿é,·µ»Ø¿é±àºÅ
+                return(blocknum - 1);    //æ‰¾åˆ°ä¸€ä¸ªç©ºå—,è¿”å›å—ç¼–å·
             }
         }
     }
-    return 0XFFFFFFFF;  //Î´ÕÒµ½¿ÕÓà¿é
+    return 0XFFFFFFFF;  //æœªæ‰¾åˆ°ç©ºä½™å—
 
 }
-//²éÕÒÓë¸ø¶¨¿éÔÚÍ¬Ò»¸öplaneÄÚµÄÎ´Ê¹ÓÃµÄ¿é
-//sblock£º¸ø¶¨¿é,·¶Î§:0~(block_totalnum-1)
-//·µ»ØÖµ:0XFFFFFFFF,Ê§°Ü
-//           ÆäËûÖµ,Î´Ê¹ÓÃ¿éºÅ
+//æŸ¥æ‰¾ä¸ç»™å®šå—åœ¨åŒä¸€ä¸ªplaneå†…çš„æœªä½¿ç”¨çš„å—
+//sblockï¼šç»™å®šå—,èŒƒå›´:0~(block_totalnum-1)
+//è¿”å›å€¼:0XFFFFFFFF,å¤±è´¥
+//           å…¶ä»–å€¼,æœªä½¿ç”¨å—å·
 u32 FTL_FindSamePlaneUnusedBlock(u32 sblock)
 {
     static u32 curblock = 0XFFFFFFFF;
     u32 unusedblock = 0;
     if(curblock > (nand_dev.block_totalnum - 1))
     {
-        curblock = nand_dev.block_totalnum - 1;    //³¬³ö·¶Î§ÁË,Ç¿ÖÆ´Ó×îºóÒ»¸ö¿é¿ªÊ¼
+        curblock = nand_dev.block_totalnum - 1;    //è¶…å‡ºèŒƒå›´äº†,å¼ºåˆ¶ä»æœ€åä¸€ä¸ªå—å¼€å§‹
     }
-    unusedblock = FTL_FindUnusedBlock(curblock, sblock % 2);            //´Óµ±Ç°¿é,¿ªÊ¼,ÏòÇ°²éÕÒ¿ÕÓà¿é
-    if(unusedblock == 0XFFFFFFFF && curblock < (nand_dev.block_totalnum - 1)) //Î´ÕÒµ½,ÇÒ²»ÊÇ´Ó×îÄ©Î²¿ªÊ¼ÕÒµÄ
+    unusedblock = FTL_FindUnusedBlock(curblock, sblock % 2);            //ä»å½“å‰å—,å¼€å§‹,å‘å‰æŸ¥æ‰¾ç©ºä½™å—
+    if(unusedblock == 0XFFFFFFFF && curblock < (nand_dev.block_totalnum - 1)) //æœªæ‰¾åˆ°,ä¸”ä¸æ˜¯ä»æœ€æœ«å°¾å¼€å§‹æ‰¾çš„
     {
-        curblock = nand_dev.block_totalnum - 1;                         //Ç¿ÖÆ´Ó×îºóÒ»¸ö¿é¿ªÊ¼
-        unusedblock = FTL_FindUnusedBlock(curblock, sblock % 2);        //´Ó×îÄ©Î²¿ªÊ¼,ÖØĞÂÕÒÒ»±é
+        curblock = nand_dev.block_totalnum - 1;                         //å¼ºåˆ¶ä»æœ€åä¸€ä¸ªå—å¼€å§‹
+        unusedblock = FTL_FindUnusedBlock(curblock, sblock % 2);        //ä»æœ€æœ«å°¾å¼€å§‹,é‡æ–°æ‰¾ä¸€é
     }
     if(unusedblock == 0XFFFFFFFF)
     {
-        return 0XFFFFFFFF;    //ÕÒ²»µ½¿ÕÏĞblock
+        return 0XFFFFFFFF;    //æ‰¾ä¸åˆ°ç©ºé—²block
     }
-    curblock = unusedblock;                                             //µ±Ç°¿éºÅµÈÓÚÎ´Ê¹ÓÃ¿é±àºÅ.ÏÂ´ÎÔò´Ó´Ë´¦¿ªÊ¼²éÕÒ
-    return unusedblock;                                                 //·µ»ØÕÒµ½µÄ¿ÕÏĞblock
+    curblock = unusedblock;                                             //å½“å‰å—å·ç­‰äºæœªä½¿ç”¨å—ç¼–å·.ä¸‹æ¬¡åˆ™ä»æ­¤å¤„å¼€å§‹æŸ¥æ‰¾
+    return unusedblock;                                                 //è¿”å›æ‰¾åˆ°çš„ç©ºé—²block
 }
-//½«Ò»¸ö¿éµÄÊı¾İ¿½±´µ½ÁíÒ»¿é,²¢ÇÒ¿ÉÒÔĞ´ÈëÊı¾İ
-//Source_PageNo:ÒªĞ´ÈëÊı¾İµÄÒ³µØÖ·,·¶Î§:0~(block_pagenum*block_totalnum-1)
-//ColNum:ÒªĞ´ÈëµÄÁĞ¿ªÊ¼µØÖ·(Ò²¾ÍÊÇÒ³ÄÚµØÖ·),·¶Î§:0~(page_totalsize-1)
-//pBuffer:ÒªĞ´ÈëµÄÊı¾İ
-//NumByteToWrite:ÒªĞ´ÈëµÄ×Ö½ÚÊı£¬¸ÃÖµ²»ÄÜ³¬¹ı¿éÄÚÊ£ÓàÈİÁ¿´óĞ¡
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//å°†ä¸€ä¸ªå—çš„æ•°æ®æ‹·è´åˆ°å¦ä¸€å—,å¹¶ä¸”å¯ä»¥å†™å…¥æ•°æ®
+//Source_PageNo:è¦å†™å…¥æ•°æ®çš„é¡µåœ°å€,èŒƒå›´:0~(block_pagenum*block_totalnum-1)
+//ColNum:è¦å†™å…¥çš„åˆ—å¼€å§‹åœ°å€(ä¹Ÿå°±æ˜¯é¡µå†…åœ°å€),èŒƒå›´:0~(page_totalsize-1)
+//pBuffer:è¦å†™å…¥çš„æ•°æ®
+//NumByteToWrite:è¦å†™å…¥çš„å­—èŠ‚æ•°ï¼Œè¯¥å€¼ä¸èƒ½è¶…è¿‡å—å†…å‰©ä½™å®¹é‡å¤§å°
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_CopyAndWriteToBlock(u32 Source_PageNum, u16 ColNum, u8 *pBuffer, u32 NumByteToWrite)
 {
     u16 i = 0, temp = 0, wrlen;
     u32 source_block = 0, pageoffset = 0;
     u32 unusedblock = 0;
-    source_block = Source_PageNum / nand_dev.block_pagenum; //»ñµÃÒ³ËùÔÚµÄ¿éºÅ
-    pageoffset = Source_PageNum % nand_dev.block_pagenum; //»ñµÃÒ³ÔÚËùÔÚ¿éÄÚµÄÆ«ÒÆ
+    source_block = Source_PageNum / nand_dev.block_pagenum; //è·å¾—é¡µæ‰€åœ¨çš„å—å·
+    pageoffset = Source_PageNum % nand_dev.block_pagenum; //è·å¾—é¡µåœ¨æ‰€åœ¨å—å†…çš„åç§»
 retry:
-    unusedblock = FTL_FindSamePlaneUnusedBlock(source_block); //²éÕÒÓëÔ´¿éÔÚÒ»¸öplaneµÄÎ´Ê¹ÓÃ¿é
+    unusedblock = FTL_FindSamePlaneUnusedBlock(source_block); //æŸ¥æ‰¾ä¸æºå—åœ¨ä¸€ä¸ªplaneçš„æœªä½¿ç”¨å—
     if(unusedblock > nand_dev.block_totalnum)
     {
-        return 1;    //µ±ÕÒµ½µÄ¿ÕÓà¿éºÅ´óÓÚ¿é×ÜÊıÁ¿µÄ»°¿Ï¶¨ÊÇ³ö´íÁË
+        return 1;    //å½“æ‰¾åˆ°çš„ç©ºä½™å—å·å¤§äºå—æ€»æ•°é‡çš„è¯è‚¯å®šæ˜¯å‡ºé”™äº†
     }
-    for(i = 0; i < nand_dev.block_pagenum; i++)         //½«Ò»¸ö¿éµÄÊı¾İ¸´ÖÆµ½ÕÒµ½µÄÎ´Ê¹ÓÃ¿éÖĞ
+    for(i = 0; i < nand_dev.block_pagenum; i++)         //å°†ä¸€ä¸ªå—çš„æ•°æ®å¤åˆ¶åˆ°æ‰¾åˆ°çš„æœªä½¿ç”¨å—ä¸­
     {
-        if(i >= pageoffset && NumByteToWrite)           //Êı¾İÒªĞ´Èëµ½µ±Ç°Ò³
+        if(i >= pageoffset && NumByteToWrite)           //æ•°æ®è¦å†™å…¥åˆ°å½“å‰é¡µ
         {
-            if(NumByteToWrite > (nand_dev.page_mainsize - ColNum)) //ÒªĞ´ÈëµÄÊı¾İ,³¬¹ıÁËµ±Ç°Ò³µÄÊ£ÓàÊı¾İ
+            if(NumByteToWrite > (nand_dev.page_mainsize - ColNum)) //è¦å†™å…¥çš„æ•°æ®,è¶…è¿‡äº†å½“å‰é¡µçš„å‰©ä½™æ•°æ®
             {
-                wrlen = nand_dev.page_mainsize - ColNum; //Ğ´Èë³¤¶ÈµÈÓÚµ±Ç°Ò³Ê£ÓàÊı¾İ³¤¶È
+                wrlen = nand_dev.page_mainsize - ColNum; //å†™å…¥é•¿åº¦ç­‰äºå½“å‰é¡µå‰©ä½™æ•°æ®é•¿åº¦
             }
             else
             {
-                wrlen = NumByteToWrite;    //Ğ´ÈëÈ«²¿Êı¾İ
+                wrlen = NumByteToWrite;    //å†™å…¥å…¨éƒ¨æ•°æ®
             }
             temp = NAND_CopyPageWithWrite(source_block * nand_dev.block_pagenum + i, unusedblock * nand_dev.block_pagenum + i, ColNum, pBuffer, wrlen);
-            ColNum = 0;                     //ÁĞµØÖ·¹éÁã
-            pBuffer += wrlen;               //Ğ´µØÖ·Æ«ÒÆ
-            NumByteToWrite -= wrlen;        //Ğ´ÈëÊı¾İ¼õÉÙ
+            ColNum = 0;                     //åˆ—åœ°å€å½’é›¶
+            pBuffer += wrlen;               //å†™åœ°å€åç§»
+            NumByteToWrite -= wrlen;        //å†™å…¥æ•°æ®å‡å°‘
         }
-        else                                //ÎŞÊı¾İĞ´Èë,Ö±½Ó¿½±´¼´¿É
+        else                                //æ— æ•°æ®å†™å…¥,ç›´æ¥æ‹·è´å³å¯
         {
             temp = NAND_CopyPageWithoutWrite(source_block * nand_dev.block_pagenum + i, unusedblock * nand_dev.block_pagenum + i);
         }
-        if(temp)                            //·µ»ØÖµ·ÇÁã,µ±»µ¿é´¦Àí
+        if(temp)                            //è¿”å›å€¼éé›¶,å½“åå—å¤„ç†
         {
-            FTL_BadBlockMark(unusedblock);  //±ê¼ÇÎª»µ¿é
-            FTL_CreateLUT(1);               //ÖØ½¨LUT±í
+            FTL_BadBlockMark(unusedblock);  //æ ‡è®°ä¸ºåå—
+            FTL_CreateLUT(1);               //é‡å»ºLUTè¡¨
             goto retry;
         }
     }
-    if(i == nand_dev.block_pagenum)         //¿½±´Íê³É
+    if(i == nand_dev.block_pagenum)         //æ‹·è´å®Œæˆ
     {
-        FTL_UsedBlockMark(unusedblock);     //±ê¼Ç¿éÒÑ¾­Ê¹ÓÃ
-        NAND_EraseBlock(source_block);      //²Á³ıÔ´¿é
-        //xprintf("\r\ncopy block %d to block %d\r\n",source_block,unusedblock);//´òÓ¡µ÷ÊÔĞÅÏ¢
-        for(i = 0; i < nand_dev.block_totalnum; i++) //ĞŞÕıLUT±í£¬ÓÃunusedblockÌæ»»source_block
+        FTL_UsedBlockMark(unusedblock);     //æ ‡è®°å—å·²ç»ä½¿ç”¨
+        NAND_EraseBlock(source_block);      //æ“¦é™¤æºå—
+        //xprintf("\r\ncopy block %d to block %d\r\n",source_block,unusedblock);//æ‰“å°è°ƒè¯•ä¿¡æ¯
+        for(i = 0; i < nand_dev.block_totalnum; i++) //ä¿®æ­£LUTè¡¨ï¼Œç”¨unusedblockæ›¿æ¢source_block
         {
             if(nand_dev.lut[i] == source_block)
             {
@@ -211,15 +212,15 @@ retry:
             }
         }
     }
-    return 0;                               //³É¹¦
+    return 0;                               //æˆåŠŸ
 }
-//Âß¼­¿éºÅ×ª»»ÎªÎïÀí¿éºÅ
-//LBNNum:Âß¼­¿é±àºÅ
-//·µ»ØÖµ:ÎïÀí¿é±àºÅ
+//é€»è¾‘å—å·è½¬æ¢ä¸ºç‰©ç†å—å·
+//LBNNum:é€»è¾‘å—ç¼–å·
+//è¿”å›å€¼:ç‰©ç†å—ç¼–å·
 u16 FTL_LBNToPBN(u32 LBNNum)
 {
     u16 PBNNo = 0;
-    //µ±Âß¼­¿éºÅ´óÓÚÓĞĞ§¿éÊıµÄÊ±ºò·µ»Ø0XFFFF
+    //å½“é€»è¾‘å—å·å¤§äºæœ‰æ•ˆå—æ•°çš„æ—¶å€™è¿”å›0XFFFF
     if(LBNNum > nand_dev.valid_blocknum)
     {
         return 0XFFFF;
@@ -227,179 +228,179 @@ u16 FTL_LBNToPBN(u32 LBNNum)
     PBNNo = nand_dev.lut[LBNNum];
     return PBNNo;
 }
-//Ğ´ÉÈÇø(Ö§³Ö¶àÉÈÇøĞ´)£¬FATFSÎÄ¼şÏµÍ³Ê¹ÓÃ
-//pBuffer:ÒªĞ´ÈëµÄÊı¾İ
-//SectorNo:ÆğÊ¼ÉÈÇøºÅ
-//SectorSize:ÉÈÇø´óĞ¡(²»ÄÜ´óÓÚNAND_ECC_SECTOR_SIZE¶¨ÒåµÄ´óĞ¡,·ñÔò»á³ö´í!!)
-//SectorCount:ÒªĞ´ÈëµÄÉÈÇøÊıÁ¿
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//å†™æ‰‡åŒº(æ”¯æŒå¤šæ‰‡åŒºå†™)ï¼ŒFATFSæ–‡ä»¶ç³»ç»Ÿä½¿ç”¨
+//pBuffer:è¦å†™å…¥çš„æ•°æ®
+//SectorNo:èµ·å§‹æ‰‡åŒºå·
+//SectorSize:æ‰‡åŒºå¤§å°(ä¸èƒ½å¤§äºNAND_ECC_SECTOR_SIZEå®šä¹‰çš„å¤§å°,å¦åˆ™ä¼šå‡ºé”™!!)
+//SectorCount:è¦å†™å…¥çš„æ‰‡åŒºæ•°é‡
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_WriteSectors(u8 *pBuffer, u32 SectorNo, u16 SectorSize, u32 SectorCount)
 {
     u8 flag = 0;
     u16 temp;
     u32 i = 0;
-    u16 wsecs;      //Ğ´Ò³´óĞ¡
-    u32 wlen;       //Ğ´Èë³¤¶È
-    u32 LBNNo;      //Âß¼­¿éºÅ
-    u32 PBNNo;      //ÎïÀí¿éºÅ
-    u32 PhyPageNo;  //ÎïÀíÒ³ºÅ
-    u32 PageOffset; //Ò³ÄÚÆ«ÒÆµØÖ·
-    u32 BlockOffset;//¿éÄÚÆ«ÒÆµØÖ·
-    u32 markdpbn = 0XFFFFFFFF;      //±ê¼ÇÁËµÄÎïÀí¿é±àºÅ
+    u16 wsecs;      //å†™é¡µå¤§å°
+    u32 wlen;       //å†™å…¥é•¿åº¦
+    u32 LBNNo;      //é€»è¾‘å—å·
+    u32 PBNNo;      //ç‰©ç†å—å·
+    u32 PhyPageNo;  //ç‰©ç†é¡µå·
+    u32 PageOffset; //é¡µå†…åç§»åœ°å€
+    u32 BlockOffset;//å—å†…åç§»åœ°å€
+    u32 markdpbn = 0XFFFFFFFF;      //æ ‡è®°äº†çš„ç‰©ç†å—ç¼–å·
     for(i = 0; i < SectorCount; i++)
     {
-        LBNNo = (SectorNo + i) / (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize)); //¸ù¾İÂß¼­ÉÈÇøºÅºÍÉÈÇø´óĞ¡¼ÆËã³öÂß¼­¿éºÅ
-        PBNNo = FTL_LBNToPBN(LBNNo);                //½«Âß¼­¿é×ª»»ÎªÎïÀí¿é
+        LBNNo = (SectorNo + i) / (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize)); //æ ¹æ®é€»è¾‘æ‰‡åŒºå·å’Œæ‰‡åŒºå¤§å°è®¡ç®—å‡ºé€»è¾‘å—å·
+        PBNNo = FTL_LBNToPBN(LBNNo);                //å°†é€»è¾‘å—è½¬æ¢ä¸ºç‰©ç†å—
         if(PBNNo >= nand_dev.block_totalnum)
         {
-            return 1;    //ÎïÀí¿éºÅ´óÓÚNAND FLASHµÄ×Ü¿éÊı,ÔòÊ§°Ü.
+            return 1;    //ç‰©ç†å—å·å¤§äºNAND FLASHçš„æ€»å—æ•°,åˆ™å¤±è´¥.
         }
-        BlockOffset = ((SectorNo + i) % (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize))) * SectorSize; //¼ÆËã¿éÄÚÆ«ÒÆ
-        PhyPageNo = PBNNo * nand_dev.block_pagenum + BlockOffset / nand_dev.page_mainsize; //¼ÆËã³öÎïÀíÒ³ºÅ
-        PageOffset = BlockOffset % nand_dev.page_mainsize;                          //¼ÆËã³öÒ³ÄÚÆ«ÒÆµØÖ·
-        temp = nand_dev.page_mainsize - PageOffset; //pageÄÚÊ£Óà×Ö½ÚÊı
-        temp /= SectorSize;                     //¿ÉÒÔÁ¬ĞøĞ´ÈëµÄsectorÊı
-        wsecs = SectorCount - i;                //»¹Ê£¶àÉÙ¸ösectorÒªĞ´
+        BlockOffset = ((SectorNo + i) % (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize))) * SectorSize; //è®¡ç®—å—å†…åç§»
+        PhyPageNo = PBNNo * nand_dev.block_pagenum + BlockOffset / nand_dev.page_mainsize; //è®¡ç®—å‡ºç‰©ç†é¡µå·
+        PageOffset = BlockOffset % nand_dev.page_mainsize;                          //è®¡ç®—å‡ºé¡µå†…åç§»åœ°å€
+        temp = nand_dev.page_mainsize - PageOffset; //pageå†…å‰©ä½™å­—èŠ‚æ•°
+        temp /= SectorSize;                     //å¯ä»¥è¿ç»­å†™å…¥çš„sectoræ•°
+        wsecs = SectorCount - i;                //è¿˜å‰©å¤šå°‘ä¸ªsectorè¦å†™
         if(wsecs >= temp)
         {
-            wsecs = temp;    //´óÓÚ¿ÉÁ¬ĞøĞ´ÈëµÄsectorÊı,ÔòĞ´Èëtemp¸öÉÈÇø
+            wsecs = temp;    //å¤§äºå¯è¿ç»­å†™å…¥çš„sectoræ•°,åˆ™å†™å…¥tempä¸ªæ‰‡åŒº
         }
-        wlen = wsecs * SectorSize;              //Ã¿´ÎĞ´wsecs¸ösector
-        //¶Á³öĞ´Èë´óĞ¡µÄÄÚÈİÅĞ¶ÏÊÇ·ñÈ«Îª0XFF
-        flag = NAND_ReadPageComp(PhyPageNo, PageOffset, 0XFFFFFFFF, wlen / 4, &temp); //¶ÁÒ»¸öwlen/4´óĞ¡¸öÊı¾İ,²¢Óë0XFFFFFFFF¶Ô±È
+        wlen = wsecs * SectorSize;              //æ¯æ¬¡å†™wsecsä¸ªsector
+        //è¯»å‡ºå†™å…¥å¤§å°çš„å†…å®¹åˆ¤æ–­æ˜¯å¦å…¨ä¸º0XFF
+        flag = NAND_ReadPageComp(PhyPageNo, PageOffset, 0XFFFFFFFF, wlen / 4, &temp); //è¯»ä¸€ä¸ªwlen/4å¤§å°ä¸ªæ•°æ®,å¹¶ä¸0XFFFFFFFFå¯¹æ¯”
         if(flag)
         {
-            return 2;    //¶ÁĞ´´íÎó£¬»µ¿é
+            return 2;    //è¯»å†™é”™è¯¯ï¼Œåå—
         }
         if(temp == (wlen / 4))
         {
-            flag = NAND_WritePage(PhyPageNo, PageOffset, pBuffer, wlen);    //È«Îª0XFF,¿ÉÒÔÖ±½ÓĞ´Êı¾İ
+            flag = NAND_WritePage(PhyPageNo, PageOffset, pBuffer, wlen);    //å…¨ä¸º0XFF,å¯ä»¥ç›´æ¥å†™æ•°æ®
         }
         else
         {
-            flag = 1;    //²»È«ÊÇ0XFF,ÔòÁí×÷´¦Àí
+            flag = 1;    //ä¸å…¨æ˜¯0XFF,åˆ™å¦ä½œå¤„ç†
         }
-        if(flag == 0 && (markdpbn != PBNNo))    //È«ÊÇ0XFF,ÇÒĞ´Èë³É¹¦,ÇÒ±ê¼ÇÁËµÄÎïÀí¿éÓëµ±Ç°ÎïÀí¿é²»Í¬
+        if(flag == 0 && (markdpbn != PBNNo))    //å…¨æ˜¯0XFF,ä¸”å†™å…¥æˆåŠŸ,ä¸”æ ‡è®°äº†çš„ç‰©ç†å—ä¸å½“å‰ç‰©ç†å—ä¸åŒ
         {
-            flag = FTL_UsedBlockMark(PBNNo);    //±ê¼Ç´Ë¿éÒÑ¾­Ê¹ÓÃ
-            markdpbn = PBNNo;                   //±ê¼ÇÍê³É,±ê¼Ç¿é=µ±Ç°¿é,·ÀÖ¹ÖØ¸´±ê¼Ç
+            flag = FTL_UsedBlockMark(PBNNo);    //æ ‡è®°æ­¤å—å·²ç»ä½¿ç”¨
+            markdpbn = PBNNo;                   //æ ‡è®°å®Œæˆ,æ ‡è®°å—=å½“å‰å—,é˜²æ­¢é‡å¤æ ‡è®°
         }
-        if(flag)//²»È«Îª0XFF/±ê¼ÇÊ§°Ü£¬½«Êı¾İĞ´µ½ÁíÒ»¸ö¿é
+        if(flag)//ä¸å…¨ä¸º0XFF/æ ‡è®°å¤±è´¥ï¼Œå°†æ•°æ®å†™åˆ°å¦ä¸€ä¸ªå—
         {
-            temp = ((u32)nand_dev.block_pagenum * nand_dev.page_mainsize - BlockOffset) / SectorSize; //¼ÆËãÕû¸öblock»¹Ê£ÏÂ¶àÉÙ¸öSECTOR¿ÉÒÔĞ´Èë
-            wsecs = SectorCount - i;            //»¹Ê£¶àÉÙ¸ösectorÒªĞ´
+            temp = ((u32)nand_dev.block_pagenum * nand_dev.page_mainsize - BlockOffset) / SectorSize; //è®¡ç®—æ•´ä¸ªblockè¿˜å‰©ä¸‹å¤šå°‘ä¸ªSECTORå¯ä»¥å†™å…¥
+            wsecs = SectorCount - i;            //è¿˜å‰©å¤šå°‘ä¸ªsectorè¦å†™
             if(wsecs >= temp)
             {
-                wsecs = temp;    //´óÓÚ¿ÉÁ¬ĞøĞ´ÈëµÄsectorÊı,ÔòĞ´Èëtemp¸öÉÈÇø
+                wsecs = temp;    //å¤§äºå¯è¿ç»­å†™å…¥çš„sectoræ•°,åˆ™å†™å…¥tempä¸ªæ‰‡åŒº
             }
-            wlen = wsecs * SectorSize;          //Ã¿´ÎĞ´wsecs¸ösector
-            flag = FTL_CopyAndWriteToBlock(PhyPageNo, PageOffset, pBuffer, wlen); //¿½±´µ½ÁíÍâÒ»¸öblock,²¢Ğ´ÈëÊı¾İ
+            wlen = wsecs * SectorSize;          //æ¯æ¬¡å†™wsecsä¸ªsector
+            flag = FTL_CopyAndWriteToBlock(PhyPageNo, PageOffset, pBuffer, wlen); //æ‹·è´åˆ°å¦å¤–ä¸€ä¸ªblock,å¹¶å†™å…¥æ•°æ®
             if(flag)
             {
-                return 3;    //Ê§°Ü
+                return 3;    //å¤±è´¥
             }
         }
         i += wsecs - 1;
-        pBuffer += wlen; //Êı¾İ»º³åÇøÖ¸ÕëÆ«ÒÆ
+        pBuffer += wlen; //æ•°æ®ç¼“å†²åŒºæŒ‡é’ˆåç§»
     }
     return 0;
 }
-//¶ÁÉÈÇø(Ö§³Ö¶àÉÈÇø¶Á)£¬FATFSÎÄ¼şÏµÍ³Ê¹ÓÃ
-//pBuffer:Êı¾İ»º´æÇø
-//SectorNo:ÆğÊ¼ÉÈÇøºÅ
-//SectorSize:ÉÈÇø´óĞ¡
-//SectorCount:ÒªĞ´ÈëµÄÉÈÇøÊıÁ¿
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//è¯»æ‰‡åŒº(æ”¯æŒå¤šæ‰‡åŒºè¯»)ï¼ŒFATFSæ–‡ä»¶ç³»ç»Ÿä½¿ç”¨
+//pBuffer:æ•°æ®ç¼“å­˜åŒº
+//SectorNo:èµ·å§‹æ‰‡åŒºå·
+//SectorSize:æ‰‡åŒºå¤§å°
+//SectorCount:è¦å†™å…¥çš„æ‰‡åŒºæ•°é‡
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_ReadSectors(u8 *pBuffer, u32 SectorNo, u16 SectorSize, u32 SectorCount)
 {
     u8 flag = 0;
-    u16 rsecs;      //µ¥´Î¶ÁÈ¡Ò³Êı
+    u16 rsecs;      //å•æ¬¡è¯»å–é¡µæ•°
     u32 i = 0;
-    u32 LBNNo;      //Âß¼­¿éºÅ
-    u32 PBNNo;      //ÎïÀí¿éºÅ
-    u32 PhyPageNo;  //ÎïÀíÒ³ºÅ
-    u32 PageOffset; //Ò³ÄÚÆ«ÒÆµØÖ·
-    u32 BlockOffset;//¿éÄÚÆ«ÒÆµØÖ·
+    u32 LBNNo;      //é€»è¾‘å—å·
+    u32 PBNNo;      //ç‰©ç†å—å·
+    u32 PhyPageNo;  //ç‰©ç†é¡µå·
+    u32 PageOffset; //é¡µå†…åç§»åœ°å€
+    u32 BlockOffset;//å—å†…åç§»åœ°å€
     for(i = 0; i < SectorCount; i++)
     {
-        LBNNo = (SectorNo + i) / (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize)); //¸ù¾İÂß¼­ÉÈÇøºÅºÍÉÈÇø´óĞ¡¼ÆËã³öÂß¼­¿éºÅ
-        PBNNo = FTL_LBNToPBN(LBNNo);                //½«Âß¼­¿é×ª»»ÎªÎïÀí¿é
+        LBNNo = (SectorNo + i) / (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize)); //æ ¹æ®é€»è¾‘æ‰‡åŒºå·å’Œæ‰‡åŒºå¤§å°è®¡ç®—å‡ºé€»è¾‘å—å·
+        PBNNo = FTL_LBNToPBN(LBNNo);                //å°†é€»è¾‘å—è½¬æ¢ä¸ºç‰©ç†å—
         if(PBNNo >= nand_dev.block_totalnum)
         {
-            return 1;    //ÎïÀí¿éºÅ´óÓÚNAND FLASHµÄ×Ü¿éÊı,ÔòÊ§°Ü.
+            return 1;    //ç‰©ç†å—å·å¤§äºNAND FLASHçš„æ€»å—æ•°,åˆ™å¤±è´¥.
         }
-        BlockOffset = ((SectorNo + i) % (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize))) * SectorSize; //¼ÆËã¿éÄÚÆ«ÒÆ
-        PhyPageNo = PBNNo * nand_dev.block_pagenum + BlockOffset / nand_dev.page_mainsize; //¼ÆËã³öÎïÀíÒ³ºÅ
-        PageOffset = BlockOffset % nand_dev.page_mainsize;                          //¼ÆËã³öÒ³ÄÚÆ«ÒÆµØÖ·
-        rsecs = (nand_dev.page_mainsize - PageOffset) / SectorSize;                 //¼ÆËãÒ»´Î×î¶à¿ÉÒÔ¶ÁÈ¡¶àÉÙÒ³
+        BlockOffset = ((SectorNo + i) % (nand_dev.block_pagenum * (nand_dev.page_mainsize / SectorSize))) * SectorSize; //è®¡ç®—å—å†…åç§»
+        PhyPageNo = PBNNo * nand_dev.block_pagenum + BlockOffset / nand_dev.page_mainsize; //è®¡ç®—å‡ºç‰©ç†é¡µå·
+        PageOffset = BlockOffset % nand_dev.page_mainsize;                          //è®¡ç®—å‡ºé¡µå†…åç§»åœ°å€
+        rsecs = (nand_dev.page_mainsize - PageOffset) / SectorSize;                 //è®¡ç®—ä¸€æ¬¡æœ€å¤šå¯ä»¥è¯»å–å¤šå°‘é¡µ
         if(rsecs > (SectorCount - i))
         {
-            rsecs = SectorCount - i;    //×î¶à²»ÄÜ³¬¹ıSectorCount-i
+            rsecs = SectorCount - i;    //æœ€å¤šä¸èƒ½è¶…è¿‡SectorCount-i
         }
-        flag = NAND_ReadPage(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize);   //¶ÁÈ¡Êı¾İ
-        if(flag == NSTA_ECC1BITERR)                                                 //¶ÔÓÚ1bit ecc´íÎó,¿ÉÄÜÎª»µ¿é
+        flag = NAND_ReadPage(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize);   //è¯»å–æ•°æ®
+        if(flag == NSTA_ECC1BITERR)                                                 //å¯¹äº1bit eccé”™è¯¯,å¯èƒ½ä¸ºåå—
         {
-            flag = NAND_ReadPage(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize); //ÖØ¶ÁÊı¾İ,ÔÙ´ÎÈ·ÈÏ
+            flag = NAND_ReadPage(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize); //é‡è¯»æ•°æ®,å†æ¬¡ç¡®è®¤
             if(flag == NSTA_ECC1BITERR)
             {
-                FTL_CopyAndWriteToBlock(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize); //°áÔËÊı¾İ
-                flag = FTL_BlockCompare(PhyPageNo / nand_dev.block_pagenum, 0XFFFFFFFF); //È«1¼ì²é,È·ÈÏÊÇ·ñÎª»µ¿é
+                FTL_CopyAndWriteToBlock(PhyPageNo, PageOffset, pBuffer, rsecs * SectorSize); //æ¬è¿æ•°æ®
+                flag = FTL_BlockCompare(PhyPageNo / nand_dev.block_pagenum, 0XFFFFFFFF); //å…¨1æ£€æŸ¥,ç¡®è®¤æ˜¯å¦ä¸ºåå—
                 if(flag == 0)
                 {
-                    flag = FTL_BlockCompare(PhyPageNo / nand_dev.block_pagenum, 0X00);  //È«0¼ì²é,È·ÈÏÊÇ·ñÎª»µ¿é
-                    NAND_EraseBlock(PhyPageNo / nand_dev.block_pagenum);                //¼ì²âÍê³Éºó,²Á³ıÕâ¸ö¿é
+                    flag = FTL_BlockCompare(PhyPageNo / nand_dev.block_pagenum, 0X00);  //å…¨0æ£€æŸ¥,ç¡®è®¤æ˜¯å¦ä¸ºåå—
+                    NAND_EraseBlock(PhyPageNo / nand_dev.block_pagenum);                //æ£€æµ‹å®Œæˆå,æ“¦é™¤è¿™ä¸ªå—
                 }
-                if(flag)                                                                //È«0/È«1¼ì²é³ö´í,¿Ï¶¨ÊÇ»µ¿éÁË.
+                if(flag)                                                                //å…¨0/å…¨1æ£€æŸ¥å‡ºé”™,è‚¯å®šæ˜¯åå—äº†.
                 {
-                    FTL_BadBlockMark(PhyPageNo / nand_dev.block_pagenum);               //±ê¼ÇÎª»µ¿é
-                    FTL_CreateLUT(1);                                                   //ÖØ½¨LUT±í
+                    FTL_BadBlockMark(PhyPageNo / nand_dev.block_pagenum);               //æ ‡è®°ä¸ºåå—
+                    FTL_CreateLUT(1);                                                   //é‡å»ºLUTè¡¨
                 }
                 flag = 0;
             }
         }
         if(flag == NSTA_ECC2BITERR)
         {
-            flag = 0;    //2bit ecc´íÎó,²»´¦Àí(¿ÉÄÜÊÇ³õ´ÎĞ´ÈëÊı¾İµ¼ÖÂµÄ)
+            flag = 0;    //2bit eccé”™è¯¯,ä¸å¤„ç†(å¯èƒ½æ˜¯åˆæ¬¡å†™å…¥æ•°æ®å¯¼è‡´çš„)
         }
         if(flag)
         {
-            return 2;    //Ê§°Ü
+            return 2;    //å¤±è´¥
         }
-        pBuffer += SectorSize * rsecs;      //Êı¾İ»º³åÇøÖ¸ÕëÆ«ÒÆ
+        pBuffer += SectorSize * rsecs;      //æ•°æ®ç¼“å†²åŒºæŒ‡é’ˆåç§»
         i += rsecs - 1;
     }
     return 0;
 }
-//ÖØĞÂ´´½¨LUT±í
-//mode:0,½ö¼ì²éµÚÒ»¸ö»µ¿é±ê¼Ç
-//     1,Á½¸ö»µ¿é±ê¼Ç¶¼Òª¼ì²é(±¸·İÇøÒ²Òª¼ì²é)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//é‡æ–°åˆ›å»ºLUTè¡¨
+//mode:0,ä»…æ£€æŸ¥ç¬¬ä¸€ä¸ªåå—æ ‡è®°
+//     1,ä¸¤ä¸ªåå—æ ‡è®°éƒ½è¦æ£€æŸ¥(å¤‡ä»½åŒºä¹Ÿè¦æ£€æŸ¥)
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_CreateLUT(u8 mode)
 {
     u32 i;
     u8 buf[4];
-    u32 LBNnum = 0;                             //Âß¼­¿éºÅ
-    for(i = 0; i < nand_dev.block_totalnum; i++) //¸´Î»LUT±í£¬³õÊ¼»¯ÎªÎŞĞ§Öµ£¬Ò²¾ÍÊÇ0XFFFF
+    u32 LBNnum = 0;                             //é€»è¾‘å—å·
+    for(i = 0; i < nand_dev.block_totalnum; i++) //å¤ä½LUTè¡¨ï¼Œåˆå§‹åŒ–ä¸ºæ— æ•ˆå€¼ï¼Œä¹Ÿå°±æ˜¯0XFFFF
     {
         nand_dev.lut[i] = 0XFFFF;
     }
     nand_dev.good_blocknum = 0;
     for(i = 0; i < nand_dev.block_totalnum; i++)
     {
-        NAND_ReadSpare(i * nand_dev.block_pagenum, 0, buf, 4); //¶ÁÈ¡4¸ö×Ö½Ú
+        NAND_ReadSpare(i * nand_dev.block_pagenum, 0, buf, 4); //è¯»å–4ä¸ªå­—èŠ‚
         if((buf[0] == 0XFF) && mode)
         {
-            NAND_ReadSpare(i * nand_dev.block_pagenum + 1, 0, buf, 1);    //ºÃ¿é,ÇÒĞèÒª¼ì²é2´Î»µ¿é±ê¼Ç
+            NAND_ReadSpare(i * nand_dev.block_pagenum + 1, 0, buf, 1);    //å¥½å—,ä¸”éœ€è¦æ£€æŸ¥2æ¬¡åå—æ ‡è®°
         }
-        if(buf[0] == 0XFF) //ÊÇºÃ¿é
+        if(buf[0] == 0XFF) //æ˜¯å¥½å—
         {
-            LBNnum = ((u16)buf[3] << 8) + buf[2]; //µÃµ½Âß¼­¿é±àºÅ
-            if(LBNnum < nand_dev.block_totalnum) //Âß¼­¿éºÅ¿Ï¶¨Ğ¡ÓÚ×ÜµÄ¿éÊıÁ¿
+            LBNnum = ((u16)buf[3] << 8) + buf[2]; //å¾—åˆ°é€»è¾‘å—ç¼–å·
+            if(LBNnum < nand_dev.block_totalnum) //é€»è¾‘å—å·è‚¯å®šå°äºæ€»çš„å—æ•°é‡
             {
-                nand_dev.lut[LBNnum] = i;       //¸üĞÂLUT±í£¬Ğ´LBNnum¶ÔÓ¦µÄÎïÀí¿é±àºÅ
+                nand_dev.lut[LBNnum] = i;       //æ›´æ–°LUTè¡¨ï¼Œå†™LBNnumå¯¹åº”çš„ç‰©ç†å—ç¼–å·
             }
             nand_dev.good_blocknum++;
         }
@@ -408,7 +409,7 @@ u8 FTL_CreateLUT(u8 mode)
             xprintf("bad block index:%d\r\n", i);
         }
     }
-    //LUT±í½¨Á¢Íê³ÉÒÔºó¼ì²éÓĞĞ§¿é¸öÊı
+    //LUTè¡¨å»ºç«‹å®Œæˆä»¥åæ£€æŸ¥æœ‰æ•ˆå—ä¸ªæ•°
     for(i = 0; i < nand_dev.block_totalnum; i++)
     {
         if(nand_dev.lut[i] >= nand_dev.block_totalnum)
@@ -419,24 +420,24 @@ u8 FTL_CreateLUT(u8 mode)
     }
     if(nand_dev.valid_blocknum < 100)
     {
-        return 2;    //ÓĞĞ§¿éÊıĞ¡ÓÚ100,ÓĞÎÊÌâ.ĞèÒªÖØĞÂ¸ñÊ½»¯
+        return 2;    //æœ‰æ•ˆå—æ•°å°äº100,æœ‰é—®é¢˜.éœ€è¦é‡æ–°æ ¼å¼åŒ–
     }
-    return 0;   //LUT±í´´½¨Íê³É
+    return 0;   //LUTè¡¨åˆ›å»ºå®Œæˆ
 }
-//FTLÕû¸öBlockÓëÄ³¸öÊı¾İ¶Ô±È
-//blockx:block±àºÅ
-//cmpval:ÒªÓëÖ®¶Ô±ÈµÄÖµ
-//·µ»ØÖµ:0,¼ì²é³É¹¦,È«²¿ÏàµÈ
-//       1,¼ì²éÊ§°Ü,ÓĞ²»ÏàµÈµÄÇé¿ö
+//FTLæ•´ä¸ªBlockä¸æŸä¸ªæ•°æ®å¯¹æ¯”
+//blockx:blockç¼–å·
+//cmpval:è¦ä¸ä¹‹å¯¹æ¯”çš„å€¼
+//è¿”å›å€¼:0,æ£€æŸ¥æˆåŠŸ,å…¨éƒ¨ç›¸ç­‰
+//       1,æ£€æŸ¥å¤±è´¥,æœ‰ä¸ç›¸ç­‰çš„æƒ…å†µ
 u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
 {
     u8 res;
     u16 i, j, k;
-    for(i = 0; i < 3; i++) //ÔÊĞí3´Î»ú»á
+    for(i = 0; i < 3; i++) //å…è®¸3æ¬¡æœºä¼š
     {
         for(j = 0; j < nand_dev.block_pagenum; j++)
         {
-            NAND_ReadPageComp(blockx * nand_dev.block_pagenum, 0, cmpval, nand_dev.page_mainsize / 4, &k); //¼ì²éÒ»¸öpage,²¢Óë0XFFFFFFFF¶Ô±È
+            NAND_ReadPageComp(blockx * nand_dev.block_pagenum, 0, cmpval, nand_dev.page_mainsize / 4, &k); //æ£€æŸ¥ä¸€ä¸ªpage,å¹¶ä¸0XFFFFFFFFå¯¹æ¯”
             if(k != (nand_dev.page_mainsize / 4))
             {
                 break;
@@ -444,7 +445,7 @@ u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
         }
         if(j == nand_dev.block_pagenum)
         {
-            return 0;    //¼ì²éºÏ¸ñ,Ö±½ÓÍË³ö
+            return 0;    //æ£€æŸ¥åˆæ ¼,ç›´æ¥é€€å‡º
         }
         res = NAND_EraseBlock(blockx);
         if(res)
@@ -453,11 +454,11 @@ u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
         }
         else
         {
-            if(cmpval != 0XFFFFFFFF) //²»ÊÇÅĞ¶ÏÈ«1,ÔòĞèÒªÖØĞ´Êı¾İ
+            if(cmpval != 0XFFFFFFFF) //ä¸æ˜¯åˆ¤æ–­å…¨1,åˆ™éœ€è¦é‡å†™æ•°æ®
             {
                 for(k = 0; k < nand_dev.block_pagenum; k++)
                 {
-                    NAND_WritePageConst(blockx * nand_dev.block_pagenum + k, 0, 0, nand_dev.page_mainsize / 4); //Ğ´PAGE
+                    NAND_WritePageConst(blockx * nand_dev.block_pagenum + k, 0, 0, nand_dev.page_mainsize / 4); //å†™PAGE
                 }
             }
         }
@@ -465,42 +466,42 @@ u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
     xprintf("bad block checked:%d\r\n", blockx);
     return 1;
 }
-//FTL³õÊ¼»¯Ê±£¬ËÑÑ°ËùÓĞ»µ¿é,Ê¹ÓÃ:²Á-Ğ´-¶Á ·½Ê½
-//512MµÄNAND ,ĞèÒªÔ¼3·ÖÖÓÊ±¼ä,À´Íê³É¼ì²â
-//¶ÔÓÚRGBÆÁ,ÓÉÓÚÆµ·±¶ÁĞ´NAND,»áÒıÆğÆÁÄ»ÂÒÉÁ
-//·µ»ØÖµ£ººÃ¿éµÄÊıÁ¿
+//FTLåˆå§‹åŒ–æ—¶ï¼Œæœå¯»æ‰€æœ‰åå—,ä½¿ç”¨:æ“¦-å†™-è¯» æ–¹å¼
+//512Mçš„NAND ,éœ€è¦çº¦3åˆ†é’Ÿæ—¶é—´,æ¥å®Œæˆæ£€æµ‹
+//å¯¹äºRGBå±,ç”±äºé¢‘ç¹è¯»å†™NAND,ä¼šå¼•èµ·å±å¹•ä¹±é—ª
+//è¿”å›å€¼ï¼šå¥½å—çš„æ•°é‡
 u32 FTL_SearchBadBlock(void)
 {
     u8 *blktbl;
     u8 res;
     u32 i, j;
     u32 goodblock = 0;
-    blktbl = malloc(nand_dev.block_totalnum); //ÉêÇëblock»µ¿é±íÄÚ´æ,¶ÔÓ¦Ïî:0,ºÃ¿é;1,»µ¿é;
-    NAND_EraseChip();                       //È«Æ¬²Á³ı
-    for(i = 0; i < nand_dev.block_totalnum; i++) //µÚÒ»½×¶Î¼ì²é,¼ì²éÈ«1
+    blktbl = malloc(nand_dev.block_totalnum); //ç”³è¯·blockåå—è¡¨å†…å­˜,å¯¹åº”é¡¹:0,å¥½å—;1,åå—;
+    NAND_EraseChip();                       //å…¨ç‰‡æ“¦é™¤
+    for(i = 0; i < nand_dev.block_totalnum; i++) //ç¬¬ä¸€é˜¶æ®µæ£€æŸ¥,æ£€æŸ¥å…¨1
     {
-        res = FTL_BlockCompare(i, 0XFFFFFFFF); //È«1¼ì²é
+        res = FTL_BlockCompare(i, 0XFFFFFFFF); //å…¨1æ£€æŸ¥
         if(res)
         {
-            blktbl[i] = 1;    //»µ¿é
+            blktbl[i] = 1;    //åå—
         }
         else
         {
-            blktbl[i] = 0;                  //ºÃ¿é
-            for(j = 0; j < nand_dev.block_pagenum; j++) //Ğ´blockÎªÈ«0,ÎªºóÃæµÄ¼ì²é×¼±¸
+            blktbl[i] = 0;                  //å¥½å—
+            for(j = 0; j < nand_dev.block_pagenum; j++) //å†™blockä¸ºå…¨0,ä¸ºåé¢çš„æ£€æŸ¥å‡†å¤‡
             {
                 NAND_WritePageConst(i * nand_dev.block_pagenum + j, 0, 0, nand_dev.page_mainsize / 4);
             }
         }
     }
-    for(i = 0; i < nand_dev.block_totalnum; i++) //µÚ¶ş½×¶Î¼ì²é,¼ì²éÈ«0
+    for(i = 0; i < nand_dev.block_totalnum; i++) //ç¬¬äºŒé˜¶æ®µæ£€æŸ¥,æ£€æŸ¥å…¨0
     {
-        if(blktbl[i] == 0)                  //ÔÚµÚÒ»½×¶Î,Ã»ÓĞ±»±ê¼Ç»µ¿éµÄ,²Å¿ÉÄÜÊÇºÃ¿é
+        if(blktbl[i] == 0)                  //åœ¨ç¬¬ä¸€é˜¶æ®µ,æ²¡æœ‰è¢«æ ‡è®°åå—çš„,æ‰å¯èƒ½æ˜¯å¥½å—
         {
-            res = FTL_BlockCompare(i, 0);   //È«0¼ì²é
+            res = FTL_BlockCompare(i, 0);   //å…¨0æ£€æŸ¥
             if(res)
             {
-                blktbl[i] = 1;    //±ê¼Ç»µ¿é
+                blktbl[i] = 1;    //æ ‡è®°åå—
             }
             else
             {
@@ -508,43 +509,43 @@ u32 FTL_SearchBadBlock(void)
             }
         }
     }
-    NAND_EraseChip();   //È«Æ¬²Á³ı
-    for(i = 0; i < nand_dev.block_totalnum; i++) //µÚÈı½×¶Î¼ì²é,±ê¼Ç»µ¿é
+    NAND_EraseChip();   //å…¨ç‰‡æ“¦é™¤
+    for(i = 0; i < nand_dev.block_totalnum; i++) //ç¬¬ä¸‰é˜¶æ®µæ£€æŸ¥,æ ‡è®°åå—
     {
         if(blktbl[i])
         {
-            FTL_BadBlockMark(i);    //ÊÇ»µ¿é
+            FTL_BadBlockMark(i);    //æ˜¯åå—
         }
     }
-    return goodblock;   //·µ»ØºÃ¿éµÄÊıÁ¿
+    return goodblock;   //è¿”å›å¥½å—çš„æ•°é‡
 }
 
-//¸ñÊ½»¯NAND ÖØ½¨LUT±í
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,Ê§°Ü
+//æ ¼å¼åŒ–NAND é‡å»ºLUTè¡¨
+//è¿”å›å€¼:0,æˆåŠŸ
+//    å…¶ä»–,å¤±è´¥
 u8 FTL_Format(void)
 {
     u8 temp;
     u32 i, n;
     u32 goodblock = 0;
     nand_dev.good_blocknum = 0;
-#if FTL_USE_BAD_BLOCK_SEARCH==1             //Ê¹ÓÃ²Á-Ğ´-¶ÁµÄ·½Ê½,¼ì²â»µ¿é
-    nand_dev.good_blocknum = FTL_SearchBadBlock(); //ËÑÑ°»µ¿é.ºÄÊ±ºÜ¾Ã
-#else                                       //Ö±½ÓÊ¹ÓÃNAND FLASHµÄ³ö³§»µ¿é±êÖ¾(ÆäËû¿é,Ä¬ÈÏÊÇºÃ¿é)
+#if FTL_USE_BAD_BLOCK_SEARCH==1             //ä½¿ç”¨æ“¦-å†™-è¯»çš„æ–¹å¼,æ£€æµ‹åå—
+    nand_dev.good_blocknum = FTL_SearchBadBlock(); //æœå¯»åå—.è€—æ—¶å¾ˆä¹…
+#else                                       //ç›´æ¥ä½¿ç”¨NAND FLASHçš„å‡ºå‚åå—æ ‡å¿—(å…¶ä»–å—,é»˜è®¤æ˜¯å¥½å—)
     for(i = 0; i < nand_dev.block_totalnum; i++)
     {
-        temp = FTL_CheckBadBlock(i);        //¼ì²éÒ»¸ö¿éÊÇ·ñÎª»µ¿é
-        if(temp == 0)                       //ºÃ¿é
+        temp = FTL_CheckBadBlock(i);        //æ£€æŸ¥ä¸€ä¸ªå—æ˜¯å¦ä¸ºåå—
+        if(temp == 0)                       //å¥½å—
         {
             temp = NAND_EraseBlock(i);
-            if(temp)                        //²Á³ıÊ§°Ü,ÈÏÎª»µ¿é
+            if(temp)                        //æ“¦é™¤å¤±è´¥,è®¤ä¸ºåå—
             {
                 xprintf("Bad block:%d\r\n", i);
-                FTL_BadBlockMark(i);        //±ê¼ÇÊÇ»µ¿é
+                FTL_BadBlockMark(i);        //æ ‡è®°æ˜¯åå—
             }
             else
             {
-                nand_dev.good_blocknum++;    //ºÃ¿éÊıÁ¿¼ÓÒ»
+                nand_dev.good_blocknum++;    //å¥½å—æ•°é‡åŠ ä¸€
             }
         }
     }
@@ -552,26 +553,26 @@ u8 FTL_Format(void)
     xprintf("good_blocknum:%d\r\n", nand_dev.good_blocknum);
     if(nand_dev.good_blocknum < 100)
     {
-        return 1;    //Èç¹ûºÃ¿éµÄÊıÁ¿ÉÙÓÚ100£¬ÔòNAND Flash±¨·Ï
+        return 1;    //å¦‚æœå¥½å—çš„æ•°é‡å°‘äº100ï¼Œåˆ™NAND FlashæŠ¥åºŸ
     }
-    goodblock = (nand_dev.good_blocknum * 93) / 100; //%93µÄºÃ¿éÓÃÓÚ´æ´¢Êı¾İ
+    goodblock = (nand_dev.good_blocknum * 93) / 100; //%93çš„å¥½å—ç”¨äºå­˜å‚¨æ•°æ®
     n = 0;
-    for(i = 0; i < nand_dev.block_totalnum; i++) //ÔÚºÃ¿éÖĞ±ê¼ÇÉÏÂß¼­¿éĞÅÏ¢
+    for(i = 0; i < nand_dev.block_totalnum; i++) //åœ¨å¥½å—ä¸­æ ‡è®°ä¸Šé€»è¾‘å—ä¿¡æ¯
     {
-        temp = FTL_CheckBadBlock(i);            //¼ì²éÒ»¸ö¿éÊÇ·ñÎª»µ¿é
-        if(temp == 0)                           //ºÃ¿é
+        temp = FTL_CheckBadBlock(i);            //æ£€æŸ¥ä¸€ä¸ªå—æ˜¯å¦ä¸ºåå—
+        if(temp == 0)                           //å¥½å—
         {
-            NAND_WriteSpare(i * nand_dev.block_pagenum, 2, (u8 *)&n, 2); //Ğ´ÈëÂß¼­¿é±àºÅ
-            n++;                                //Âß¼­¿é±àºÅ¼Ó1
+            NAND_WriteSpare(i * nand_dev.block_pagenum, 2, (u8 *)&n, 2); //å†™å…¥é€»è¾‘å—ç¼–å·
+            n++;                                //é€»è¾‘å—ç¼–å·åŠ 1
             if(n == goodblock)
             {
-                break;    //È«²¿±ê¼ÇÍêÁË
+                break;    //å…¨éƒ¨æ ‡è®°å®Œäº†
             }
         }
     }
     if(FTL_CreateLUT(1))
     {
-        return 2;    //ÖØ½¨LUT±íÊ§°Ü
+        return 2;    //é‡å»ºLUTè¡¨å¤±è´¥
     }
     return 0;
 }

@@ -93,8 +93,9 @@
 #define defEventBitDiagTemp             BIT_1
 #define defEventBitDiagLockState        BIT_2
 #define defEventBitDiagPlugState        BIT_3
-#define defEventBitDiagChargingData     BIT_4
-#define defEventBitDiagEVSEState        BIT_5
+#define defEventBitDiagVolt             BIT_4
+#define defEventBitDiagChargingData     BIT_5
+#define defEventBitDiagEVSEState        BIT_6
 /*------pCON->status.xHandleEventException*/
 #define defEventBitExceptionTempW       BIT_0   //Warning
 #define defEventBitExceptionTempC       BIT_1   //Critical
@@ -136,9 +137,8 @@
                                         defEventBitEVSEKnockOK |    \
                                         defEventBitEVSEArresterOK | \
                                         defEventBitEVSEPowerOffOK)
-
-#define defEventBitCPSwitchCondition    (defEventBitCONLocked |      \
-                                        defEventBitCONVoltOK |      \
+//(defEventBitCONLocked |
+#define defEventBitCPSwitchCondition    (defEventBitCONVoltOK |      \
                                         defEventBitCONSocketTempOK |  \
                                         defEventBitCONACTempOK |    \
                                         defEventBitCONPlugOK | \
@@ -156,11 +156,12 @@
 #define defEventBitTimerCBTemp              BIT_0
 #define defEventBitTimerCBLockState         BIT_1
 #define defEventBitTimerCBPlugState         BIT_2
-#define defEventBitTimerCBChargingData      BIT_3
-#define defEventBitTimerCBEVSEState         BIT_4
-#define defEventBitTimerCBRFID              BIT_5
-#define defEventBitTimerCBDataRefresh       BIT_6
-#define defEventBitTimerCBHeartbeat         BIT_7
+#define defEventBitTimerCBVolt              BIT_3
+#define defEventBitTimerCBChargingData      BIT_4
+#define defEventBitTimerCBEVSEState         BIT_5
+#define defEventBitTimerCBRFID              BIT_6
+#define defEventBitTimerCBDataRefresh       BIT_7
+#define defEventBitTimerCBHeartbeat         BIT_8
 
 
 /*³äµç×®ÀàÐÍ*/

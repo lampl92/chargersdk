@@ -1,6 +1,6 @@
 /**
 * @file taskmonitor.c
-* @brief ¼à¿ØÈÎÎñ
+* @brief ç›‘æ§ä»»åŠ¡
 * @author rgw
 * @version v1.0
 * @date 2017-01-19
@@ -26,7 +26,7 @@ void vTaskEVSEMonitor(void *pvParameters)
     while(1)
     {
 #ifndef DEBUG_NO_TASKMONITOR
-        /* »ñÈ¡EVSEºÍCON×´Ì¬ */
+        /* è·å–EVSEå’ŒCONçŠ¶æ€ */
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
@@ -58,16 +58,28 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
         }
-
+  //TODO (zshare#1#): 2-3sæ˜¾ç¤ºä¼šæ›´æ–°ä¸€æ¬¡
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBPlugState) == defEventBitTimerCBPlugState)
         {
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetPlugState(pCON), ERR_LEVEL_CRITICAL, "Monitor");//ÔÚGetPlugStateÖĞ»ñÈ¡ÁËCCÓëCP×´Ì¬
+                THROW_ERROR(i, pCON->status.GetPlugState(pCON), ERR_LEVEL_CRITICAL, "Monitor");//åœ¨GetPlugStateä¸­è·å–äº†CCä¸CPçŠ¶æ€
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
+        }
+ //TODO (zshare#1#): 6sæ˜¾ç¤ºä¼šæ›´æ–°ä¸€æ¬¡
+
+        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBVolt, pdTRUE, pdFALSE, 0);
+        if((uxBitsTimerCB & defEventBitTimerCBVolt) == defEventBitTimerCBVolt)
+        {
+            for(i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+            }
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagVolt);
         }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
@@ -76,11 +88,10 @@ void vTaskEVSEMonitor(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                //THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-                THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "Monitor");
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
@@ -102,8 +113,8 @@ void vTaskEVSEMonitor(void *pvParameters)
             THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
         }
 
-        /* end of »ñÈ¡EVSEºÍCON×´Ì¬ */
+        /* end of è·å–EVSEå’ŒCONçŠ¶æ€ */
 #endif //DEBUG_NO_TASKMONITOR
-        vTaskDelay(20);//Òª±ÈtimerÖĞµÄ¼ì²âÖÜÆÚ¿ì
+        vTaskDelay(20);//è¦æ¯”timerä¸­çš„æ£€æµ‹å‘¨æœŸå¿«
     }/* end of while(1)*/
 }

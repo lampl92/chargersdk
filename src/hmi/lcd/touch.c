@@ -68,7 +68,7 @@ uint16_t TP_Read_AD(uint8_t CMD)
     TDIN = 0;   //拉低数据线
     TCS = 0;    //选中触摸屏IC
     TP_Write_Byte(CMD);//发送命令字
-    bsp_DelayUS(6);//ADS7846的转换时间最长为6us
+    bsp_DelayUS(3);//ADS7846的转换时间最长为6us
     TCLK = 0;
     bsp_DelayUS(1);
     TCLK = 1;   //给1个时钟，清除BUSY
@@ -156,6 +156,7 @@ uint8_t TP_Read_XY2(uint16_t *x, uint16_t *y)
     {
         return(0);
     }
+
     flag = TP_Read_XY(&x2, &y2);
     if(flag == 0)
     {
@@ -526,23 +527,31 @@ uint8_t TP_Init(void)
     GPIO_InitTypeDef GPIO_Initure;
     __HAL_RCC_GPIOD_CLK_ENABLE();           //开启GPIOH时钟
     __HAL_RCC_GPIOG_CLK_ENABLE();           //开启GPIOG时钟
+    __HAL_RCC_GPIOF_CLK_ENABLE();           //开启GPIOG时钟
 
-    //PG13 T_SCK   //PG14 T_MOSI
-    GPIO_Initure.Pin = GPIO_PIN_14|GPIO_PIN_13;
+    //PG13 T_SCK | T_MOSI
+    GPIO_Initure.Pin = GPIO_PIN_13 | GPIO_PIN_14;
     GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
     GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
     GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
     HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
 
-    //PG12  TMISO
-    GPIO_Initure.Pin = GPIO_PIN_12;          //PG12
-    GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
-    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
+    //T_CS
+    GPIO_Initure.Pin = GPIO_PIN_9;          //PF9
+    GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP; //推挽输出
+    GPIO_Initure.Pull = GPIO_PULLUP;        //上拉
+    GPIO_Initure.Speed = GPIO_SPEED_HIGH;   //高速
+    HAL_GPIO_Init(GPIOF, &GPIO_Initure);    //初始化
 
     //PD3  T_PEN
     GPIO_Initure.Pin = GPIO_PIN_3;          //PD3
     GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
     HAL_GPIO_Init(GPIOD, &GPIO_Initure);    //初始化
+
+    //PG12  T_MISO
+    GPIO_Initure.Pin = GPIO_PIN_12;          //PG12
+    GPIO_Initure.Mode = GPIO_MODE_INPUT;    //输入
+    HAL_GPIO_Init(GPIOG, &GPIO_Initure);    //初始化
 
     TP_Read_XY(&tp_dev.x[0], &tp_dev.y[0]); //第一次读取初始化
 
@@ -557,7 +566,8 @@ void Load_Drow_Dialog(void)
 }
 void GUI_Touch_Calibrate()
 {
-    tp_dev.touchtype = 1;
+
+    tp_dev.touchtype = 0;
 
     if(tp_dev.touchtype)//X,Y方向与屏幕相反
     {

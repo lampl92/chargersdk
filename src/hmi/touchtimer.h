@@ -38,6 +38,7 @@ typedef struct
     char day[5];
 }DateStruct;
 
+volatile uint8_t countdown_60;
 
 void PutOut_Home();
 void PutOut_Card_Info();

@@ -583,7 +583,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
     /** @todo (yuye#1#): 从电表获取 */
     //meter id 0 == CON id 0
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
 #else
 if(Electricity_meter[ucCONID].flag.flag_erro==1)
@@ -922,7 +922,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
-        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
+        THROW_ERROR(ucCONID, errcode = GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCCState == CC_PE &&
                 pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)
@@ -1085,8 +1085,9 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACLTemp = 25;
 #else
-        tmpACLTemp = get_dc_massage(TEMP_L_OUT);
-                    if(tmpACLTemp>100||tmpACLTemp<-40)
+        get_dc_massage(TEMP_L_OUT);
+        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
+        if(tmpACLTemp>100||tmpACLTemp<-40)
         {
             return ERR_CON_ACLTEMP_DECT_FAULT;
         }
@@ -1136,7 +1137,8 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACNTemp = 25;
 #else
-        tmpACNTemp = get_dc_massage(TEMP_N_OUT);
+        get_dc_massage(TEMP_N_OUT);
+        tmpACNTemp = (double)Sys_samp.DC.TEMP3;
                 if(tmpACNTemp>100||tmpACNTemp<-40)
         {
             return ERR_CON_ACNTEMP_DECT_FAULT;
@@ -1182,7 +1184,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 
     if(ucCONID == 0)
     {
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
@@ -1230,7 +1232,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     //...
     if(ucCONID == 0)
     {
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
@@ -1280,8 +1282,8 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
 #else
-    read_pca9554_2();
-    tmpLStat = (read_pca9554_2() >> 2) && 0x01;
+
+    tmpLStat = flag_power_out_l;//Get_State_relay();//1 : switch on
     tmpNStat = tmpLStat;
 #endif
     /*********************/

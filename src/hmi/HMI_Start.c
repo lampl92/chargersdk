@@ -10,7 +10,7 @@ void MainTask(void)
     if(calebrate_done == 0)
     {
         GUI_CURSOR_Show();
-        GUI_Touch_Calibrate();
+        //GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
     Create_XBF12("system/XBF宋体12.xbf");//创建xbf12号路径

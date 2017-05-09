@@ -29,6 +29,10 @@ void vCONTimerCB(TimerHandle_t xTimer)
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState);
     }
+    if(uxTimerID == defTIMERID_Volt)   //50ms
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBVolt);
+    }
     if(uxTimerID == defTIMERID_ChargingData) //50ms
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData);

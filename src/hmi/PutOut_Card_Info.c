@@ -49,7 +49,6 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x07)
 #define ID_TimerTime    0
 // USER END
-
 /*********************************************************************
 *
 *       Static data
@@ -93,11 +92,19 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
 static void Caculate_RTC(WM_MESSAGE *pMsg)
 {
     uint8_t i = 1;
+    static uint8_t timer_count = 0;
     static uint8_t num = 0;
     uint8_t Timer_buf[10];
     EventBits_t uxBitRFID;
     EventBits_t uxBitCharge;
     CON_t *pCON;
+    time_t now;
+    static time_t first;
+    static uint8_t first_flag = 0;
+    volatile uint32_t diffsec;
+    volatile uint8_t sec;
+    volatile uint8_t min;
+    volatile uint8_t hour;
 
     WM_HWIN hWin = pMsg->hWin;
 
@@ -111,12 +118,9 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     }
     else
     {
-        /** @todo (zshare#1#): 充电条件未达成 */
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "充电条件不满足.");/** @todo (zshare#1#): 充电条件未达成 */
     }
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-
-    xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.card_info);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
 
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                     defEventBitGoodIDReqDisp,
@@ -161,6 +165,31 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
     }
     /*end of 未进GoodID ,BadID和OweID状态时显示内容*/
+
+    now = time(NULL);
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = now;
+    }
+    diffsec = (uint32_t)difftime(now, first);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    xsprintf((char *)Timer_buf, "(%02dS)", (60 - sec));
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
+    if(sec == 59)
+    {
+        xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+        //跳出卡片信息页
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
 }
 // USER END
 /*********************************************************************
@@ -306,20 +335,12 @@ WM_HWIN CreateCardInfo(void)
 void PutOut_Card_Info()//(OrderData_t *order)
 {
     WM_HWIN hWin;
-    wait_timer.card_info = 60;
     hWin = CreateCardInfo();
 
     while(1)
     {
         GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        if((wait_timer.card_info--) == 0)
-        {
-            xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
-            //跳出卡片信息页
-            WM_DeleteWindow(hWin);
-            PutOut_Home();
-        }
         vTaskDelay(500);
     }
 }

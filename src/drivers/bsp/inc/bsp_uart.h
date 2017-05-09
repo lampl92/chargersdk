@@ -13,7 +13,7 @@
 #include "userlib_queue.h"
 
 #define CLI_USARTx_BASE                             UART4
-#define CLI_USARTx_BAUDRATE                         9600
+#define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
 #define CLI_QUEUE_SIZE                              10
 

@@ -126,19 +126,29 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
+    static uint8_t timer_count = 0;
     static uint8_t num = 0;
     uint8_t Timer_buf[10];
     uint8_t temp_buf[32];
     CON_t *pCON;
     time_t now;
-    uint32_t diffsec;
-    uint8_t sec;
-    uint8_t min;
-    uint8_t hour;
+    static time_t first;
+    static uint8_t first_flag = 0;
+    volatile uint32_t diffsec;
+    volatile uint8_t sec;
+    volatile uint8_t min;
+    volatile uint8_t hour;
+
 
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
+
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = time(NULL);
+    }
 
     pCON = CONGetHandle(0);
     now = time(NULL);
@@ -167,8 +177,36 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);
 
-    xsprintf((char *)Timer_buf, "(%02dS)", wait_timer.charge_done_exit);
+
+    if((60-(uint32_t)difftime(now, first)) == 0)
+    {
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
+    now = time(NULL);
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = now;
+    }
+    diffsec = (uint32_t)difftime(now, first);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    xsprintf((char *)Timer_buf, "(%02dS)", (60 - sec));
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
+    if(sec == 59)
+    {
+        //xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+        //跳出卡片信息页
+        WM_DeleteWindow(hWin);
+        PutOut_Home();
+    }
 }
 // USER END
 
@@ -306,18 +344,18 @@ void PutOut_Charge_Done()
 {
     WM_HWIN hWin;
 
+    countdown_60 = 60;
     wait_timer.charge_done_exit = 60;
     hWin = CreateChargeDone();
     while(1)
     {
         GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        if((wait_timer.charge_done_exit--) == 0)
-        {
-            //跳出卡片非法页
-            WM_DeleteWindow(hWin);
-            PutOut_Home();
-        }
+//        if((countdown_60--) == 0)
+//        {
+//            WM_DeleteWindow(hWin);
+//            PutOut_Home(); //跳出卡片非法页
+//        }
         vTaskDelay(500);
     }
 }

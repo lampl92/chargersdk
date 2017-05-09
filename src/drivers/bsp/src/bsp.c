@@ -1,7 +1,7 @@
 /**
 * @file bsp.c
-* @brief ����Ӳ���ײ�������������ļ���ÿ��c�ļ����� #include "bsp.h" ������
-*        ���е���������ģ�顣
+* @brief 这是硬件底层驱动程序的主文件。每个c文件可以 #include "bsp.h" 来包含
+*        所有的外设驱动模块。
 * @author rgw
 * @version v1.0
 * @date 2016-10-28
@@ -32,20 +32,20 @@
   *            SYSCLK=Fvco/pllp=Fs*(plln/(pllm*pllp));
   *            Fusb=Fvco/pllq=Fs*(plln/(pllm*pllq));
   *
-  *            Fvco:VCOƵ��
-  *            SYSCLK:ϵͳʱ��Ƶ��
-  *            Fusb:USB,SDIO,RNG�ȵ�ʱ��Ƶ��
-  *            Fs:PLL����ʱ��Ƶ��,������HSI,HSE��.
-  *            plln:��PLL��Ƶϵ��(PLL��Ƶ),ȡֵ��Χ:64~432.
-  *            pllm:��PLL����ƵPLL��Ƶϵ��(PLL֮ǰ�ķ�Ƶ),ȡֵ��Χ:2~63.
-  *            pllp:ϵͳʱ�ӵ���PLL��Ƶϵ��(PLL֮��ķ�Ƶ),ȡֵ��Χ:2,4,6,8.(������4��ֵ!)
-  *            pllq:USB/SDIO/������������ȵ���PLL��Ƶϵ��(PLL֮��ķ�Ƶ),ȡֵ��Χ:2~15.
-  *            �ⲿ����Ϊ25M��ʱ��,�Ƽ�ֵ:plln=360,pllm=25,pllp=2,pllq=8.
-  *            �õ�:Fvco=25*(360/25)=360Mhz
+  *            Fvco:VCO频率
+  *            SYSCLK:系统时钟频率
+  *            Fusb:USB,SDIO,RNG等的时钟频率
+  *            Fs:PLL输入时钟频率,可以是HSI,HSE等.
+  *            plln:主PLL倍频系数(PLL倍频),取值范围:64~432.
+  *            pllm:主PLL和音频PLL分频系数(PLL之前的分频),取值范围:2~63.
+  *            pllp:系统时钟的主PLL分频系数(PLL之后的分频),取值范围:2,4,6,8.(仅限这4个值!)
+  *            pllq:USB/SDIO/随机数产生器等的主PLL分频系数(PLL之后的分频),取值范围:2~15.
+  *            外部晶振为25M的时候,推荐值:plln=360,pllm=25,pllp=2,pllq=8.
+  *            得到:Fvco=25*(360/25)=360Mhz
   *                 SYSCLK=360/2=180Mhz
   *                 Fusb=360/8=45Mhz
   *
-  *       *** ���Ҫʹ��USB,NҪ����Ϊ384, Fusb = 48Mhz ***
+  *       *** 如果要使用USB,N要设置为384, Fusb = 48Mhz ***
   *
   * @param  None
   * @retval None
@@ -56,7 +56,7 @@ static void SystemClock_Config(void)
     RCC_OscInitTypeDef RCC_OscInitStruct;
 
     uint32_t pllm = 25;
-    uint32_t plln = 384;//plln = 384ʱ,sysclk = 192Mhz, plln = 360,180Mhz,
+    uint32_t plln = 384;//plln = 384时,sysclk = 192Mhz, plln = 360,180Mhz,
     uint32_t pllp = RCC_PLLP_DIV2;
     uint32_t pllq = 8;
 
@@ -83,7 +83,7 @@ static void SystemClock_Config(void)
         bsp_Error_Handler();
     }
 
-    if(HAL_PWREx_EnableOverDrive() != HAL_OK)//����Over-Driver����,ʹ��Ƶ�ܹ��ﵽ180MHz,����ֻ�ܵ�168MHz
+    if(HAL_PWREx_EnableOverDrive() != HAL_OK)//开启Over-Driver功能,使主频能够达到180MHz,否则只能到168MHz
     {
         /* Initialization Error */
         bsp_Error_Handler();
@@ -92,11 +92,11 @@ static void SystemClock_Config(void)
     /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
        clocks dividers */
     RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;//����ϵͳʱ��ʱ��ԴΪPLL
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;//设置系统时钟时钟源为PLL
     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
     RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-    if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)//ͬʱ����FLASH��ʱ����Ϊ5WS��Ҳ����6��CPU���ڡ�
+    if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)//同时设置FLASH延时周期为5WS，也就是6个CPU周期。
     {
         /* Initialization Error */
         bsp_Error_Handler();
@@ -105,39 +105,41 @@ static void SystemClock_Config(void)
 
 /* ---------------------------------------------------------------------------*/
 /**
-* @brief ��ʼ�����е�Ӳ���豸���ú�������CPU�Ĵ���������ļĴ�������ʼ��һЩ
-*        ȫ�ֱ�����ֻ��Ҫ����һ��
+* @brief 初始化所有的硬件设备。该函数配置CPU寄存器和外设的寄存器并初始化一些
+*        全局变量。只需要调用一次
 */
 /* ---------------------------------------------------------------------------*/
 void bsp_Init(void)
 {
     /*
-        ����ST�̼���������ļ��Ѿ�ִ����CPUϵͳʱ�ӵĳ�ʼ�������Բ����ٴ��ظ�����ϵͳʱ�ӡ�
-        �����ļ�������CPU��ʱ��Ƶ�ʡ��ڲ�Flash�����ٶȺͿ�ѡ���ⲿSRAM FSMC��ʼ����
+        由于ST固件库的启动文件已经执行了CPU系统时钟的初始化，所以不必再次重复配置系统时钟。
+        启动文件配置了CPU主时钟频率、内部Flash访问速度和可选的外部SRAM FSMC初始化。
 
     */
-    /* ���ȼ���������Ϊ4��������0-15����ռʽ���ȼ���0�������ȼ����������������ȼ���*/
+    /* 优先级分组设置为4，可配置0-15级抢占式优先级，0级子优先级，即不存在子优先级。*/
 
     HAL_Init();
-    SystemClock_Config(); //ϵͳʼ������Ϊ192MHz
-    SystemCoreClockUpdate();    /* ����PLL���ø���ϵͳʱ��Ƶ�ʱ��� SystemCoreClock */
+    SystemClock_Config(); //系统始终配置为192MHz
+    SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
     /* Enable the CRC Module */
     __HAL_RCC_CRC_CLK_ENABLE(); //
     bsp_RTC_Init();
-    RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //���� WAKE UP �ж�,1 �����ж�һ��
+    RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
+
+    LCD_Init();
+    TP_Init();
 #ifndef DEBUG_INIT
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();
-    bsp_Uart_Init();   /* ��ʼ������ */
-    //FTL_Init();��fatfs�г�ʼ��
-    //bsp_LTDC_Init();//��GUI�г�ʼ��
-//    bsp_Touch_Init();
 
+    //FTL_Init();在fatfs中初始化
+    //bsp_LTDC_Init();//在GUI中初始化
+//    bsp_Touch_Init();
+bsp_Uart_Init();   /* 初始化串口 */
 //LCD_Init();
-    LCD_Init();
-    TP_Init();
+
 }
 
 void bsp_Error_Handler(void)

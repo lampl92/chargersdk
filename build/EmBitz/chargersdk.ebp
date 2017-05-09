@@ -16,7 +16,7 @@
 				<Compiler>
 					<Add option="-fdata-sections" />
 					<Add option="-ffunction-sections" />
-					<Add option="-O0" />
+					<Add option="-O3" />
 					<Add option="-g2" />
 					<Add symbol="DEBUG_INIT" />
 					<Add symbol="DEBUG_RFID" />
@@ -37,6 +37,9 @@
 				<Assembler>
 					<Add option="-Wa,--gdwarf-2" />
 				</Assembler>
+				<Linker>
+					<Add option="-Wl,--gc-sections" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin\Release\chargersdk.elf" />
@@ -75,7 +78,6 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-O3" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -409,9 +411,6 @@
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\dimen_barcode\qrdecode.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\hmi\dimen_barcode\qrdecode.h" />
 		<Unit filename="..\..\src\hmi\EVSEDLG.c">
 			<Option compilerVar="CC" />
@@ -637,9 +636,8 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Debug" active_interface="J-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="Generic" />
+				<target_debugging_settings target="Release" active_interface="J-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -677,8 +675,9 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Release" active_interface="J-link">
-					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="0" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+				<target_debugging_settings target="Debug" active_interface="J-link">
+					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="Generic" />
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />

@@ -904,7 +904,7 @@ static ErrorCode_t GetScramState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpScramState = 0;
 #else
-    tmpScramState = ~((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
+    tmpScramState = ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
 #endif
     /*********************/
 
