@@ -62,8 +62,11 @@
 
 /* ---------- Memory options ---------- */
 
-#define MEM_LIBC_MALLOC                 1
-#define MEMP_MEM_MALLOC                 1
+#define MEM_LIBC_MALLOC                 0
+#define MEMP_MEM_MALLOC                 0
+#define MEM_USE_POOLS                   1
+#define MEM_USE_POOLS_TRY_BIGGER_POOL   1
+#define MEMP_USE_CUSTOM_POOLS           1
 
 /* MEM_ALIGNMENT: should be set to the alignment of the CPU for which
    lwIP is compiled. 4 byte alignment -> define MEM_ALIGNMENT to 4, 2
@@ -89,7 +92,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 6
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        12
+#define MEMP_NUM_TCP_SEG        16
 
 
 /* ---------- Pbuf options ---------- */
