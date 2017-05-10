@@ -112,7 +112,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_QUEUE_OOSEQ         1
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                 (536)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
+#define TCP_MSS                 (1500-40)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
 
 /* TCP sender buffer space (bytes). */
 #define TCP_SND_BUF             (4*TCP_MSS)
@@ -135,6 +135,10 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCPIP_THREAD_STACKSIZE          (10*1024)
 #define TCPIP_THREAD_PRIO               11
 #define TCPIP_MBOX_SIZE                 20
+
+#define PPP_THREAD_NAME                "pppInputThread"
+#define PPP_THREAD_STACKSIZE            (10*1024)
+#define PPP_THREAD_PRIO                 12
 
 /*
    ---------------------------------
@@ -175,7 +179,6 @@ a lot of data that needs to be copied, this should be set high. */
 #define PAP_SUPPORT                     1
 //#define CHAP_SUPPORT                    1
 //#define MD5_SUPPORT                     1
-#define PPP_INPROC_OWNTHREAD    0
 /* ---------- link callback options ---------- */
 /* LWIP_NETIF_LINK_CALLBACK==1: Support a callback function from an interface
  * whenever the link changes (i.e., link down)

@@ -39,11 +39,11 @@ void vTaskPPP(void *pvParameters)
     ppp = lwip_init_task();
     while(1)
     {
-        if(dev_gprs.pollstate == DS_GPRS_POLL_PPPDego)
-        {
-            input_over_serial(ppp);
-        }
+//        if(dev_gprs.pollstate == DS_GPRS_POLL_PPPDego)
+//        {
+//            input_over_serial(ppp);
+//        }
 
-        vTaskDelay(100);
+        vTaskDelay(1000);
     }
 }
