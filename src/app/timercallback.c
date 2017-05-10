@@ -51,10 +51,10 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     if(uxTimerID == defTIMERID_DATAREFRESH)//1000ms
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh);
-        xEventGroupSetBits(xHandleEventlwIP, defEventBitTCPClientSendReq);
     }
     if(uxTimerID == defTIMERID_Heartbeat)//5000ms
     {
+        xEventGroupSetBits(xHandleEventlwIP, defEventBitTCPClientSendReq);
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
     }
 }
