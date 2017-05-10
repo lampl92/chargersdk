@@ -160,11 +160,14 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
+#ifdef EVSE_DEBUG
+    while(1)
+    {
+        vTaskDelay(1000);
+    }
+#else
     MainTask();
-//    while(1)
-//    {
-//     vTaskDelay(1000);
-//    }
+#endif
 }
 
 void vTaskTouch(void *pvParameters)
