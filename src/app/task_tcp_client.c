@@ -75,7 +75,12 @@ void vTaskTCPClient(void *pvParameters)
                         if(FD_ISSET(sock, &readfds))//测试网络是否有数据
                         {
                             recv_len = lwip_read(sock, tcp_client_recvbuf, TCP_CLIENT_RX_BUFSIZE);
-                            printf_safe("\nTCP Recv: %s\n", tcp_client_recvbuf);
+                            printf_safe("\nTCP Recv: ");
+                            for(i = 0; i < recv_len; i++)
+                            {
+                                printf_safe("%c", tcp_client_recvbuf[i]);
+                            }
+                            printf_safe("\n");
                             memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
                         }
                         if(FD_ISSET(sock, &writefds))
@@ -97,7 +102,7 @@ void vTaskTCPClient(void *pvParameters)
                         }
                         break;
                     }
-                    vTaskDelay(1000);
+                    vTaskDelay(100);
                 }//while(1)
                 break;
             default:
