@@ -49,7 +49,27 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     }
 }
 
-
+uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout)
+{
+    Queue *pRecvQue;
+    uint8_t rl = 0;//read len
+    switch(uartport)
+    {
+    case UART_PORT_CLI:
+        pRecvQue = pCliRecvQue;
+        break;
+    case UART_PORT_RFID:
+        pRecvQue = pRfidRecvQue;
+        break;
+    case UART_PORT_GPRS:
+        pRecvQue = pGprsRecvQue;
+        break;
+    default:
+        break;
+    }
+    readRecvQueEx(pRecvQue, data, len, &rl);
+    return rl;
+}
 
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
 {
@@ -141,6 +161,7 @@ uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *pu
     }
     else
     {
+        *puiRecvdLen = i;
         return 0;
     }
 }
