@@ -344,18 +344,11 @@ void PutOut_Charge_Done()
 {
     WM_HWIN hWin;
 
-    countdown_60 = 60;
-    wait_timer.charge_done_exit = 60;
     hWin = CreateChargeDone();
     while(1)
     {
         GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-//        if((countdown_60--) == 0)
-//        {
-//            WM_DeleteWindow(hWin);
-//            PutOut_Home(); //跳出卡片非法页
-//        }
         vTaskDelay(500);
     }
 }

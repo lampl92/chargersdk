@@ -104,9 +104,9 @@ static const U8 _acImage_0[463] =
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 186, 250, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 186, 250, 40, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 99, 254, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
+    //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 50, 254, 50, 0, 0x0, 0 },
     //{ IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
@@ -114,13 +114,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-    { TEXT_CreateIndirect, "Text", ID_TEXT_5, 422, 247, 80, 30, 0, 0x0, 0 },
-    { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 510, 247, 80, 30, 0, 0x64, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_6, 598, 247, 80, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_7, 422, 286, 80, 30, 0, 0x0, 0 },
-    { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 286, 80, 30, 0, 0x64, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 286, 80, 30, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 740, 380, 50, 50, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_5, 422, 177, 80, 30, 0, 0x0, 0 },
+    { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 510, 177, 80, 30, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_6, 598, 177, 80, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_7, 422, 216, 80, 30, 0, 0x0, 0 },
+    { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 216, 80, 30, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 216, 80, 30, 0, 0x0, 0 },
+    //{ BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 740, 380, 50, 50, 0, 0x0, 0 },
     // USER END
 };
 static const GUI_WIDGET_CREATE_INFO _aDialogWindow[] =
@@ -275,6 +275,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin_Error;
     WM_HWIN hWin = pMsg->hWin;
 
+    Jump_IsManager(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
@@ -363,7 +364,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择支付方式");
+        //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择支付方式");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "充电费");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "元/度");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "服务费");
@@ -376,10 +377,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
                     &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
 
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER), GUI_TA_HCENTER | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_GREEN, BUTTON_CI_UNPRESSED, GUI_GREEN, "管理");
+        //Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER), GUI_TA_HCENTER | GUI_TA_VCENTER,
+         //           &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_GREEN, BUTTON_CI_UNPRESSED, GUI_GREEN, "管理");
         //BUTTON_SetDefaultBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER))
-        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER),BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED,GUI_BLUE);
+        //BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER),BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED,GUI_BLUE);
 //        WM_SetCallback(pMsg->hWin, _cbFrame);
         break;
     case WM_NOTIFY_PARENT:
@@ -478,11 +479,77 @@ WM_HWIN CreateFramewin(void)
  * @return
  *
  */
-
+const u8 codetest[]={
+    "https://www.baidu.com"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+//"名称:DPC-AC-CHARGE\r\n"
+//"版本:1.0\r\n"
+//"订单号:1234567890\r\n"
+//"卡号:1234567890123456789\r\n"
+//"账户余额:123456\r\n"
+//"上次欠费金额:12\r\n"
+//"地址:北京市丰台区星火路8号\r\n"
+//"如有疑问请拔打:13911582408\r\n"
+//"或者:010-83682266转658\r\n"
+//"联系人:王先生\r\n"
+};
 void PutOut_Home()
 {
+    uint16_t p,x,y;
     WM_HWIN hWin;
     EventBits_t uxBitRFID;
+
+    qrencode((uint8_t *)codetest,&p,&x,&y);
+
     hWin = CreateFramewin();
 
     while(1)
@@ -497,7 +564,7 @@ void PutOut_Home()
             PutOut_Card_Info();
         }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-
+        display_encode(&x,&y,&p);
         vTaskDelay(500);
     }
 }

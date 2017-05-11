@@ -132,7 +132,82 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
     //pData = _GetImageById(imageid, &filesize);
     IMAGE_SetBMP(hItem, pData, filesize);
 }
+/** 跳转管理员密码界面
+ *
+ * WM_WIN:源窗口
+ * @param
+ * @return
+ *Note:
+ */
+void Jump_IsManager(WM_HWIN hWin)
+{
+    if(bittest(calebrate_done,6))
+    {
+        bitclr(calebrate_done,6);
+        WM_DeleteWindow(hWin);
+        PutOut_SelAOrB();
+    }
+    if(bittest(calebrate_done,7))
+    {
+        bitclr(calebrate_done,7);
+        WM_DeleteWindow(hWin);
+        Keypad_GetValue(LOGIN_PASSWD);
+    }
+}
+/** 生成二维码数据
+ *qrcode_data:需要生成二维码的字符串，p计算画笔的大小，x计算x坐标，y计算y坐标，
+ *
+ * @param
+ * @return
+ *Note:
+ */
+void qrencode(uint8_t *qrcode_data,uint16_t *p,uint16_t *x,uint16_t *y)
+{
+	uint8_t i;
 
+	EncodeData((char *)qrcode_data);
+
+    LCD_Fill(130,170,130+m_nSymbleSize,170+m_nSymbleSize,WHITE);
+
+	for(i=0;i<10;i++)
+	{
+		if((m_nSymbleSize*i*2)>(130+m_nSymbleSize))	break;
+	}
+
+	*p=(i-1)*2;//点大小
+	if(m_nSymbleSize <= 250)
+    {
+        *x = 67 + ((250 - m_nSymbleSize*(*p)) / 2);
+    }
+    else
+    {
+        *x = 67 - ((m_nSymbleSize*(*p) - 250) / 2);
+    }
+
+	*y = 170;
+}
+/** 画二维码
+ *x:显示二维码的左上角x 坐标，y:显示二维码的左上角y坐标，p：画笔的大小
+ *
+ * @param
+ * @return
+ *Note:
+ */
+void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
+{
+ 	uint8_t i,j;
+
+	for(i=0;i<m_nSymbleSize;i++)
+	{
+		for(j=0;j<m_nSymbleSize;j++)
+		{
+			if(m_byModuleData[i][j]==1)
+            {
+                LCD_Fill(*x+(*p)*i,*y+(*p)*j,*x+(*p)*(i+1)-1,*y+(*p)*(j+1)-1,BLACK);
+            }
+		}
+	}
+}
 
 
 

@@ -135,6 +135,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     EventBits_t uxBitCharge;
     EventBits_t uxBitHMI;
     EventBits_t uxBitIsDone;
+    static volatile uint8_t sec_done = 0;
 
     WM_HWIN hWin = pMsg->hWin;
 
@@ -183,13 +184,21 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 
-    if(sec == 59)
+    if((60 - sec ) == 1)
     {
-        sec = 60;
+        sec_done = 1;
+    }
+
+    if(sec_done == 1)
+    {
+        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), "00S");
         TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
     }
-    xsprintf((char *)Timer_buf, "%02dS", (60-sec));
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
+    else
+    {
+        xsprintf((char *)Timer_buf, "%02dS", (60-sec));
+        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
+    }
 }
 // USER END
 

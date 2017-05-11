@@ -497,13 +497,13 @@ void TP_Adjust(void)
                     POINT_COLOR = BLUE;
                     LCD_Clear(WHITE);//清屏
                     LCD_ShowString(210, 150, lcddev.width, lcddev.height, 16, "Touch Screen Adjust OK!"); //校正完成
-                    bsp_DelayMS(1000);
+                    vTaskDelay(1000);
                     TP_Save_Adjdata();
                     LCD_Clear(WHITE);//清屏
                     return;//校正完成
             }
         }
-        bsp_DelayMS(10);
+        vTaskDelay(10);
         outtime++;
         if(outtime % 100 == 0)
         {

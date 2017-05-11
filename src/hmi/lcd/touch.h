@@ -5,7 +5,17 @@
 #define TP_PRES_DOWN 0x80  //触屏被按下
 #define TP_CATH_PRES 0x40  //有按键按下了
 #define CT_MAX_TOUCH  5    //电容屏支持的点数,固定为5点
+#ifndef bitset
+#define bitset(var,bitno) ((var) |= (1<<(bitno)))           //置位
+#endif
 
+#ifndef bitclr
+#define bitclr(var,bitno) ((var) &= ~(1<<(bitno)))          //清0
+#endif
+
+#ifndef bittest
+#define bittest(var,bitno) ((var >> bitno)& 0x01)           //位状态检测
+#endif
 //触摸屏控制器
 typedef struct
 {

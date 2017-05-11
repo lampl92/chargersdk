@@ -22,6 +22,7 @@ void MainTask(void)
     WM_SetDesktopColor(GUI_WHITE);//…Ë÷√±≥æ∞—’…´
 
     GUI_UC_SetEncodeUTF8();
+    //PutOut_SelAOrB();
     //PutOut_Window();
     //PutOut_Charging_2dimen();
     PutOut_Home();

@@ -169,7 +169,8 @@ void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint
     flag_rs485[add]++;
 
 //直接接收数据
-bsp_DelayMS(100);
+//bsp_DelayMS(100);
+vTaskDelay(100);
 electricity_meter_analysis(add);
 }
 void electricity_meter_analysis(uint8_t add)

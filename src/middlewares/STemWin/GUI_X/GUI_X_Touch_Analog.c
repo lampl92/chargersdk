@@ -48,6 +48,7 @@ Purpose     : Config / System dependent externals for GUI
 #include "touch.h"
 
 static u16 adc_x,adc_y;
+static uint8_t step = 0;
 extern uint8_t calebrate_done;
 void GUI_TOUCH_X_ActivateX(void) {
 }
@@ -56,7 +57,7 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-    if((calebrate_done == 1)&&(PEN == 0))
+    if(((calebrate_done&0x1) == 1)&&(PEN == 0))
     {
         if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
         {
@@ -65,6 +66,42 @@ int  GUI_TOUCH_X_MeasureX(void) {
         }
         adc_x = tp_dev.x[0];
         adc_y = tp_dev.y[0];
+        if(adc_y <= 40 && adc_y >= 0)
+        {
+            if(adc_x <= 40 && adc_x >= 0)
+            {
+                bitset(calebrate_done,6);
+            }
+            switch(step)
+            {
+            case 0:
+                if(adc_x <= 800 && adc_x >= 400)
+                    step++;
+                else
+                    step = 0;
+            break;
+//            case 1:
+//                if(adc_x < 600 && adc_x >= 400)
+//                    step++;
+//                else
+//                    step = 0;
+//            break;
+            case 1:
+                if(adc_x < 400 && adc_x >= 0)
+                {
+                    step = 0;
+                    bitset(calebrate_done,7);
+                }
+                else
+                    step = 0;
+            break;
+
+            }
+        }
+        else
+        {
+            step = 0;
+        }
     }
     else
     {

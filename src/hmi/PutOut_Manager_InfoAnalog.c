@@ -1,4 +1,4 @@
-ï»¿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -38,12 +38,12 @@
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ä¿¡æ¯
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//å†å²
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ç³»ç»Ÿ
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//é€€å‡º
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//æ¨¡æ‹Ÿ
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//çŠ¶æ€
+#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ĞÅÏ¢
+#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//ÀúÊ·
+#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ÏµÍ³
+#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//ÍË³ö
+#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//Ä£Äâ
+#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//×´Ì¬
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -80,22 +80,22 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//ç½‘ç»œä¿¡å·å¼ºåº¦
-    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//æœ€åº•ç«¯çš„è¯´æ˜
-    { BUTTON_CreateIndirect, "ä¿¡æ¯æŸ¥è¯¢", ID_BUTTON_0, 70, 120, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "å†å²è®°å½•", ID_BUTTON_1, 70, 184, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "ç³»ç»Ÿé…ç½®", ID_BUTTON_2, 70, 247, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "é€€    å‡º", ID_BUTTON_3, 70, 312, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "æ¨¡æ‹Ÿé‡", ID_BUTTON_4, 285, 40, 140, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "çŠ¶æ€é‡", ID_BUTTON_5, 491, 40, 140, 40, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "äº¤æµç”µå‹:", ID_TEXT_5, 300, 100, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//ÍøÂçĞÅºÅÇ¿¶È
+    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//×îµ×¶ËµÄËµÃ÷
+    { BUTTON_CreateIndirect, "ĞÅÏ¢²éÑ¯", ID_BUTTON_0, 70, 120, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "ÀúÊ·¼ÇÂ¼", ID_BUTTON_1, 70, 184, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "ÏµÍ³ÅäÖÃ", ID_BUTTON_2, 70, 247, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "ÍË    ³ö", ID_BUTTON_3, 70, 312, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Ä£ÄâÁ¿", ID_BUTTON_4, 285, 40, 140, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "×´Ì¬Á¿", ID_BUTTON_5, 491, 40, 140, 40, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "½»Á÷µçÑ¹:", ID_TEXT_5, 300, 100, 150, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 477, 100, 100, 30, 0, 0x64, 0 },
-    { TEXT_CreateIndirect, "äº¤æµç”µæµ:", ID_TEXT_6, 300, 140, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "å……ç”µå¯¼å¼•ç”µå‹:", ID_TEXT_7, 300, 178, 160, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "é¢‘    ç‡:", ID_TEXT_8, 300, 216, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Aæ’åº§æ¸©åº¦:", ID_TEXT_9, 300, 256, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Bæ’åº§æ¸©åº¦:", ID_TEXT_10, 300, 296, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "æ¥çº¿æ¸©åº¦:", ID_TEXT_11, 300, 336, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "½»Á÷µçÁ÷:", ID_TEXT_6, 300, 140, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "³äµçµ¼ÒıµçÑ¹:", ID_TEXT_7, 300, 178, 160, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Æµ    ÂÊ:", ID_TEXT_8, 300, 216, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "A²å×ùÎÂ¶È:", ID_TEXT_9, 300, 256, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "B²å×ùÎÂ¶È:", ID_TEXT_10, 300, 296, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "½ÓÏßÎÂ¶È:", ID_TEXT_11, 300, 336, 150, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 477, 140, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_2, 477, 178, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_3, 477, 216, 100, 30, 0, 0x64, 0 },
@@ -119,23 +119,23 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin = pMsg->hWin;
 
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
-    //éœ€è¦å¢åŠ 3Gæ¨¡å—çš„ä¿¡å·å¼ºåº¦åˆ¤æ–­
+    //ĞèÒªÔö¼Ó3GÄ£¿éµÄĞÅºÅÇ¿¶ÈÅĞ¶Ï
     switch(i % 5)
     {
     case 0:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ä¿¡å·:éå¸¸å¼º");
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:·Ç³£Ç¿");
         break;
     case 1:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ä¿¡å·:ä¸€èˆ¬");
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:Ò»°ã");
         break;
     case 2:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ä¿¡å·:å·®");
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:²î");
         break;
     case 3:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ä¿¡å·:æå·®");
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:¼«²î");
         break;
     default:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ä¿¡å·:æ— ");
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:ÎŞ");
         break;
     }
 
@@ -143,9 +143,9 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"32.00A");
     Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,"12.00V");
     Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,"50Hz");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"30.0â„ƒ");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"30.0â„ƒ");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"30.0â„ƒ");
+    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"30.0¡æ");
+    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"30.0¡æ");
+    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"30.0¡æ");
 
 }
 /*********************************************************************
@@ -172,13 +172,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         //Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK,"äº¤æµç”µå‹:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"äº¤æµç”µæµ:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"å……ç”µå¯¼å¼•ç”µå‹:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"é¢‘    ç‡:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"Aæ’åº§æ¸©åº¦:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"Bæ’åº§æ¸©åº¦:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"æ¥çº¿æ¸©åº¦:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK,"½»Á÷µçÑ¹:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"½»Á÷µçÁ÷:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"³äµçµ¼ÒıµçÑ¹:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"Æµ    ÂÊ:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"A²å×ùÎÂ¶È:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"B²å×ùÎÂ¶È:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"½ÓÏßÎÂ¶È:");
         //
         // Initialization of 'Edit'
         //
@@ -193,17 +193,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"ä¿¡æ¯æŸ¥è¯¢");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"ĞÅÏ¢²éÑ¯");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"å†å²æŸ¥è¯¢");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÀúÊ·²éÑ¯");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ç³»ç»Ÿé…ç½®");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÏµÍ³ÅäÖÃ");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"é€€    å‡º");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÍË    ³ö");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"æ¨¡æ‹Ÿé‡");
+                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"Ä£ÄâÁ¿");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"çŠ¶æ€é‡");
+                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"×´Ì¬Á¿");
 //        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_UNPRESSED,GUI_GREEN);
 //        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_UNPRESSED,GUI_GREEN);
 
@@ -264,7 +264,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
             WM_DeleteWindow(pMsg->hWin);
-            PutOut_Home();
+            //PutOut_SelAOrB();
             // USER END
             break;
           case WM_NOTIFICATION_RELEASED:
@@ -306,9 +306,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         break;
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        /* æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
+        /* ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
         Timer_Process(pMsg);
-        /* é‡å¯å®šæ—¶å™¨ */
+        /* ÖØÆô¶¨Ê±Æ÷ */
         WM_RestartTimer(pMsg->Data.v, REFLASH);
         break;
         // USER END
@@ -340,7 +340,7 @@ WM_HWIN CreateManagerInfoAnalog(void)
     return hWin;
 }
 /** @brief
- *  è¾“å‡ºç®¡ç†å‘˜ç•Œé¢é‡Œçš„ä¿¡æ¯æŸ¥è¯¢æ¨¡æ‹Ÿé‡éƒ¨åˆ†
+ *  Êä³ö¹ÜÀíÔ±½çÃæÀïµÄĞÅÏ¢²éÑ¯Ä£ÄâÁ¿²¿·Ö
  * @param
  * @param
  * @return
