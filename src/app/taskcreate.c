@@ -4,7 +4,7 @@
 *        1. 瀹氫箟STACK澶у皬
 *        2. 瀹氫箟PRIORITY
 *        3. 澹版槑浠诲姟
-*        4. 瀹氫箟浠诲姟鍙ユ焺
+*        4. 瀹氫箟浠诲姟鍙ユ�?
 *        5. 浠诲姟鍏ュ彛
 *        6. 鍒涘缓浠诲姟
 * @author rgw
@@ -15,14 +15,17 @@
 #include "interface.h"
 #include "cli_main.h"
 #include "timercallback.h"
+#include "gprs_m26.h"
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鏍堝畾涔?
+/ ����ջ��С
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskInit                   512
+#define defSTACK_TaskInit                   2048
 #define defSTACK_TaskCLI                    1024
 #define defSTACK_TaskGUI                    (1024*4)
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
+#define defSTACK_TaskPPP                    (1024*10)
+#define defSTACK_TaskTCPClient               (1024*10)
 
 #define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               512
@@ -31,15 +34,21 @@
 #define defSTACK_TaskEVSEDiag               512
 #define defSTACK_TaskEVSEData               512
 
+
+//#define TCPIP_THREAD_STACKSIZE      512
+
 /*---------------------------------------------------------------------------/
-/ 浠诲姟浼樺厛绾?
+/ �������ȼ�
 /---------------------------------------------------------------------------*/
-//优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+//���ȼ�����Ϊϵͳ�������ȼ��ͣ�OTA > ������� > ���ϴ��� > ϵͳ���� > ˢ����ͨ�� > ���ݴ�����ϵͳ����
 #define defPRIORITY_TaskInit                1
 #define defPRIORITY_TaskCLI                 1
-#define defPRIORITY_TaskGUI                 1   //不能高,GUI任务时间太长,会影响硬件响应
-#define defPRIORITY_TaskTouch               1
-#define defPRIORITY_TaskOTA                 15 /* 鏈?楂?*/
+#define defPRIORITY_TaskGUI                 1   //���ܸ�,GUI����ʱ��̫��,��Ӱ��Ӳ����Ӧ
+#define defPRIORITY_TaskTouch               2
+#define defPRIORITY_TaskOTA                 15 /* ���*/
+#define defPRIORITY_TaskPPP                 12
+#define defPRIORITY_TaskTCPClient           10
+//#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 13
 
 #define defPRIORITY_TaskEVSERemote          3
 #define defPRIORITY_TaskEVSERFID            4
@@ -48,45 +57,54 @@
 #define defPRIORITY_TaskEVSEDiag            9
 #define defPRIORITY_TaskEVSEData            1
 
+//#define TCPIP_THREAD_PRIO         11 //defined in lwipopts.h
+
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鍚嶇О
+/ ��������
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
+const char *TASKNAME_PPP            = "TaskPPP";
+const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
+
 const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
 const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
 const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
 const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
 const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
-
+//#define TCPIP_THREAD_NAME           "tcpip_thread"
 /*---------------------------------------------------------------------------/
-/ 浠诲姟澹版槑
+/ ��������
 /---------------------------------------------------------------------------*/
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
 void vTaskTouch(void *pvParameters);
-void vTaskOTA(void *pvParameters);                  //鍦ㄧ嚎鍗囩骇
+void vTaskOTA(void *pvParameters);
+void vTaskPPP(void *pvParameters);
+void vTaskTCPClient(void *pvParameters);
 
-void vTaskEVSERemote(void *pvParameters);           //杩滅▼閫氫俊
-void vTaskEVSERFID(void *pvParameters);             //鍒峰崱
-void vTaskEVSECharge(void *pvParameters);           //鍏呯數
-void vTaskEVSEMonitor(void *pvParameters);          //鐩戞帶
-void vTaskEVSEDiag(void *pvParameters);             //璇婃柇澶勭悊
-void vTaskEVSEData(void *pvParameters);             //鏁版嵁澶勭悊
+void vTaskEVSERemote(void *pvParameters);
+void vTaskEVSERFID(void *pvParameters);
+void vTaskEVSECharge(void *pvParameters);
+void vTaskEVSEMonitor(void *pvParameters);
+void vTaskEVSEDiag(void *pvParameters);
+void vTaskEVSEData(void *pvParameters);
 
 /*---------------------------------------------------------------------------/
-/ 浠诲姟鍙ユ焺
+/ ������
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
+static TaskHandle_t xHandleTaskPPP = NULL;
+static TaskHandle_t xHandleTaskTCPClient = NULL;
 
 static TaskHandle_t xHandleTaskEVSERemote = NULL;
 static TaskHandle_t xHandleTaskEVSERFID = NULL;
@@ -95,23 +113,24 @@ static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
-/ 浠诲姟閫氫俊
+/ �����ͨ��
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
+EventGroupHandle_t xHandleEventlwIP   = NULL;
 
-//涓嬮潰鐨勪簨浠跺畾涔夊湪鍚勪釜缁撴瀯浣撲腑
+//下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
-//闃熷垪
+//队列
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
-//杞欢瀹氭椂鍣?
-TimerHandle_t xHandleTimerTemp = NULL; //4涓俯搴?
+//软件定时�?
+TimerHandle_t xHandleTimerTemp = NULL; //4个温�?
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerVolt = NULL;
@@ -120,14 +139,19 @@ TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerHeartbeat = NULL;
-//con涓繕瀹氫箟浜嗗嚑涓畾鏃跺櫒锛寈HandleTimerVolt锛寈HandleTimerCurr锛寈HandleTimerCharge鍒嗗埆鍦ㄤ娇鐢ㄦ椂杩涜鍒濆鍖?
+//con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始�?
 //Mutex
 void vTaskInit(void *pvParameters)
 {
+#ifdef EVSE_DEBUG
+    gprs_init();
+    gprs_ppp_poll();
+#else
     while(1)
     {
         vTaskDelay(1000);
     }
+#endif
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -147,7 +171,7 @@ void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-        GUI_TOUCH_Exec();//激活XY轴的测量
+        GUI_TOUCH_Exec();//����XY��Ĳ���
         vTaskDelay(10);
     }
 }
@@ -163,6 +187,10 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
+#ifdef EVSE_DEBUG
+    xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
+    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
+#endif
 }
 
 void AppTaskCreate (void)
@@ -175,7 +203,7 @@ void AppTaskCreate (void)
     xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
-/** @brief 鍒涘缓浠诲姟閫氫俊鏈哄埗銆傦紙淇″彿閲忥紝杞欢瀹氭椂鍣ㄥ垱寤轰笌鍚姩锛?
+/** @brief 鍒涘缓浠诲姟閫氫俊鏈哄埗銆傦紙淇″彿閲忥紝杞欢瀹氭椂鍣ㄥ垱寤轰笌鍚姩�??
  */
 void AppObjCreate (void)
 {
@@ -184,6 +212,7 @@ void AppObjCreate (void)
     xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
+    xHandleEventlwIP = xEventGroupCreate();
 
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
@@ -209,7 +238,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat鍦ㄨ仈缃戝悗鍐嶅惎鍔?
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟鐢?
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟�??
 void vApplicationTickHook( void )
 {
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
@@ -246,7 +275,7 @@ set
     memory allocated by the kernel to any task that has since been deleted.
 */
 void vApplicationIdleHook( void )
- {
+{
 }
 
 /**

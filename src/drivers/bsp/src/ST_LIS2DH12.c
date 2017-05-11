@@ -1,3 +1,4 @@
+#include "bsp.h"
 #include "ST_LIS2DH12.h"
 #include "myiic.h"
 #include "user_app.h"
@@ -16,9 +17,9 @@ uint16_t Read_Lis2ds12(uint8_t CMD)
     {
         Num <<= 1;
         TCLK = 0; //?????
-        delay_us(10);
+        bsp_DelayUS(10);
         TCLK = 1;
-        delay_us(10);
+        bsp_DelayUS(10);
         if(DOUT)
         {
             Num |= 1;

@@ -5,12 +5,13 @@ extern void Delay_ms(unsigned long long);
 uint8_t test;
 void delay_us(u32 nus)
 {
-    uint16_t i, j;
-    j = 90 * nus;
-    for(i = 0; i < j; i++)
-    {
-        ;
-    }
+//    uint16_t i, j;
+//    j = 90 * nus;
+//    for(i = 0; i < j; i++)
+//    {
+//        ;
+//    }
+    bsp_DelayUS(nus);
 }
 void IIC_Init(void)
 {

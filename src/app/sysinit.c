@@ -6,6 +6,8 @@
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
+#include "ifconfig.h"
+
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -120,6 +122,7 @@ void create_evsecfg_file(void)
 extern void retarget_init(void);
 void sys_Init(void)
 {
+    ifconfig_init();
     timeInit();
     retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
@@ -140,6 +143,7 @@ void sys_Init(void)
         if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
         {
             fatfs_format();
+            f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1);
             /* FatFs Initialization Error */
             //Error_Handler();
         }

@@ -40,6 +40,8 @@ void cli_init(void)
     tinysh_add_command(&cli_evseinfo_cmd);
     tinysh_add_command(&cli_evseorder_cmd);
     tinysh_add_command(&cli_evsestatus_cmd);
+    /************…Ë±∏≤‚ ‘****************/
+    tinysh_add_command(&cli_gprs_cmd);
 
     /* add the foo command
     */
@@ -58,17 +60,18 @@ void cli_init(void)
 extern Queue *pCliRecvQue;
 void cli_main(void)
 {
-    uint8_t ch;
+    uint8_t ch[1];
+    uint32_t l;
     int8_t res;
     cli_init();
     while(1)
     {
-        res = readRecvQue(pCliRecvQue, &ch, 1);
-        if(res == 0)
+        res = readRecvQueEx(pCliRecvQue, ch, 1, &l);
+//        res = readRecvQue(pCliRecvQue, &ch, 1);
+        if(res == 1)
         {
-            tinysh_char_in(ch);
+            tinysh_char_in(ch[0]);
         }
-//      tinysh_char_in((unsigned char)getchar());
         vTaskDelay(100);
     }
 }

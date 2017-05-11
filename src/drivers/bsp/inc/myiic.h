@@ -33,6 +33,8 @@ void IIC_NAck(void);				//IIC²»·¢ËÍACKÐÅºÅ
 
 void IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 u8 IIC_Read_One_Byte(u8 daddr,u8 addr);
+void write_pca9554_2(void);
+uint8_t read_pca9554_2(void);
 #endif
 
 

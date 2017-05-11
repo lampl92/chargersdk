@@ -922,7 +922,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
-        THROW_ERROR(ucCONID, errcode = GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
+        THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCCState == CC_PE &&
                 pCON->status.xCPState != CP_12V &&
                 pCON->status.xCPState != CP_ERR)

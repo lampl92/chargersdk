@@ -208,3 +208,10 @@ time_t time (time_t *_timer)
     }
     return time_dat;
 }
+extern volatile uint32_t ulHighFrequencyTimerTicks;
+clock_t clock(void)
+{
+    clock_t clock_dat;
+    clock_dat = (clock_t)ulHighFrequencyTimerTicks;
+    return clock_dat;
+}
