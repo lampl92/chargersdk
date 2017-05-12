@@ -6,20 +6,20 @@
 * @date 2017-05-04
 */
 #include "includes.h"
-#include "lwip/api.h"
-#include "ifconfig.h"
 #include "lwip/sockets.h"
+#include "ifconfig.h"
 
 #define TCP_CLIENT_RX_BUFSIZE   1500
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_RX_BUFSIZE]; //TCP客户端接收数据缓冲区
+int recv_len;
 void vTaskTCPClient(void *pvParameters)
 {
-    uint8_t  tcp_client_sendbuf[128] ; //TCP客户端发送数据缓冲
+    uint8_t  tcp_client_sendbuf[1500] ; //TCP客户端发送数据缓冲
 
     u32_t data_len = 0;
 
-    err_t err;
-    int recv_len;
+
+
 
     EventBits_t uxBitsTCP;
 
@@ -27,23 +27,24 @@ void vTaskTCPClient(void *pvParameters)
 ////socket
 
     int sock;
-    struct sockaddr_in server_ip;
+    int ret;
+    struct sockaddr_in server_addr;
 
     int maxfdp;
     struct fd_set readfds;
     struct fd_set writefds;
     struct fd_set exceptfds;
-    struct timeval timeout = {0, 0};
+    struct timeval timeout = {5, 0};
 
-    memset(&server_ip, 0, sizeof(server_ip));
-    server_ip.sin_family = AF_INET;
-    server_ip.sin_port = htons(ifconfig.server_port);
-    server_ip.sin_addr.s_addr = ifconfig.server_ip.addr;
-
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(ifconfig.server_port);
+    server_addr.sin_addr.s_addr = ifconfig.server_ip.addr;
+    server_addr.sin_len = sizeof(server_addr);
     int i;
-    for(i = 0; i < 128;i ++)
+    for(i = 0; i < 128; i ++)
     {
-        tcp_client_sendbuf[i] = '0'+i;
+        tcp_client_sendbuf[i] = '0' + i;
     }
     while(1)
     {
@@ -51,8 +52,8 @@ void vTaskTCPClient(void *pvParameters)
         if((uxBitsTCP & defEventBitPPPup) == defEventBitPPPup)
         {
             sock = lwip_socket(AF_INET, SOCK_STREAM, 0);
-            err = lwip_connect(sock, (struct sockaddr *)&server_ip, sizeof(server_ip));
-            switch(err) //sock 错误判断
+            ret = lwip_connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
+            switch(ret) //sock 错误判断
             {
             case -1:
 
@@ -62,26 +63,34 @@ void vTaskTCPClient(void *pvParameters)
                 {
                     FD_ZERO(&readfds);
                     FD_ZERO(&writefds);
+                    FD_ZERO(&exceptfds);
                     FD_SET(sock, &readfds);
                     FD_SET(sock, &writefds);
+                    FD_SET(sock, &exceptfds);
                     maxfdp = sock + 1;
-                    switch(lwip_select(maxfdp, &readfds, &writefds, NULL, &timeout))
+                    switch(lwip_select(maxfdp, &readfds, &writefds, &exceptfds, &timeout))
                     {
                     case -1:
                         break;//select错误
                     case 0:
                         break;
                     default:
+                        if(FD_ISSET(sock, &exceptfds))
+                        {
+                            printf_safe("exceptfds exceptfds exceptfds!\n");
+                            pppClose(ppp);
+                        }
                         if(FD_ISSET(sock, &readfds))//测试网络是否有数据
                         {
                             recv_len = lwip_read(sock, tcp_client_recvbuf, TCP_CLIENT_RX_BUFSIZE);
-                            printf_safe("\nTCP Recv: ");
-                            for(i = 0; i < recv_len; i++)
-                            {
-                                printf_safe("%c", tcp_client_recvbuf[i]);
-                            }
-                            printf_safe("\n");
-                            memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
+//                            printf_safe("\nTCP Recv: ");
+//                            for(i = 0; i < recv_len; i++)
+//                            {
+//                                printf_safe("%c", tcp_client_recvbuf[i]);
+//                            }
+//                            printf_safe("\n");
+                            //memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
+                            xEventGroupSetBits(xHandleEventlwIP,defEventBitTCPRxEcho);
                         }
                         if(FD_ISSET(sock, &writefds))
                         {
@@ -91,10 +100,23 @@ void vTaskTCPClient(void *pvParameters)
 
                             if((uxBitsTCP & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
                             {
-                                err = lwip_write(sock,
+                                ret = lwip_write(sock,
                                                  tcp_client_sendbuf,
                                                  70); //发送tcp_server_sentbuf中的数据
-                                if(err < 0)
+                                if(ret < 0)
+                                {
+                                    printf_safe("发送失败\r\n");
+                                }
+                            }
+                            uxBitsTCP = xEventGroupWaitBits(xHandleEventlwIP,
+                                                            defEventBitTCPRxEcho,
+                                                            pdTRUE, pdTRUE, 0);
+                            if((uxBitsTCP & defEventBitTCPRxEcho) == defEventBitTCPRxEcho) //有数据要发送
+                            {
+                                ret = lwip_write(sock,
+                                                 tcp_client_recvbuf,
+                                                 recv_len); //发送tcp_server_sentbuf中的数据
+                                if(ret < 0)
                                 {
                                     printf_safe("发送失败\r\n");
                                 }
