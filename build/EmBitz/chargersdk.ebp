@@ -80,7 +80,7 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-O3" />
+			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -116,6 +116,7 @@
 			<Add directory="..\..\src\net\user" />
 			<Add directory="..\..\src\net\lwip-1.4.1\src\include\ipv4" />
 			<Add directory="..\..\src\net\lwip-1.4.1\src" />
+			<Add directory="..\..\src\middlewares\tiny-AES128-C" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -530,18 +531,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\touchtimer.h" />
-		<Unit filename="..\..\src\middlewares\AES\aes_modes.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aescrypt.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aeskey.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aestab.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\middlewares\cJSON\cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -621,6 +610,14 @@
 		<Unit filename="..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\aes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\aes.h" />
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\enc_dec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\enc_dec.h" />
 		<Unit filename="..\..\src\middlewares\tinysh\tinysh.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -736,7 +733,9 @@
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\udp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\err.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\opt.h" />
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\sockets.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\etharp.c">
