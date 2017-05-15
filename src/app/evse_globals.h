@@ -155,7 +155,8 @@
                                         defEventBitCONAuthed | \
                                         defEventBitCONCurrOK | \
                                         defEventBitCONFreqOK | \
-                                        defEventBitCONS2Closed)
+                                        defEventBitCONS2Closed | \
+                                        defEventBitCONLocked)
 
 
 

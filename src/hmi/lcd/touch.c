@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "math.h"
 #include "GUI.h"
+#include "cJSON.h"
 
 static float sqrt1(float x)
 {
@@ -275,59 +276,6 @@ uint8_t TP_Scan(uint8_t tp)
     }
     return tp_dev.sta & TP_PRES_DOWN; //返回当前的触屏状态
 }
-//////////////////////////////////////////////////////////////////////////
-//保存在EEPROM里面的地址区间基址,占用13个字节(RANGE:SAVE_ADDR_BASE~SAVE_ADDR_BASE+12)
-#define SAVE_ADDR_BASE 40
-//保存校准参数
-void TP_Save_Adjdata(void)
-{
-//    int temp;
-//    //保存校正结果!
-//    temp = tp_dev.xfac * 100000000; //保存x校正因素
-//    AT24CXX_WriteLenByte(SAVE_ADDR_BASE, temp, 4);
-//    temp = tp_dev.yfac * 100000000; //保存y校正因素
-//    AT24CXX_WriteLenByte(SAVE_ADDR_BASE + 4, temp, 4);
-//    //保存x偏移量
-//    AT24CXX_WriteLenByte(SAVE_ADDR_BASE + 8, tp_dev.xoff, 2);
-//    //保存y偏移量
-//    AT24CXX_WriteLenByte(SAVE_ADDR_BASE + 10, tp_dev.yoff, 2);
-//    //保存触屏类型
-//    AT24CXX_WriteOneByte(SAVE_ADDR_BASE + 12, tp_dev.touchtype);
-//    temp = 0X0A; //标记校准过了
-//    AT24CXX_WriteOneByte(SAVE_ADDR_BASE + 13, temp);
-}
-//得到保存在EEPROM里面的校准值
-//返回值：1，成功获取数据
-//        0，获取失败，要重新校准
-uint8_t TP_Get_Adjdata(void)
-{
-//    int tempfac;
-//    tempfac = AT24CXX_ReadOneByte(SAVE_ADDR_BASE + 13); //读取标记字,看是否校准过！
-//    if(tempfac == 0X0A) //触摸屏已经校准过了
-//    {
-//        tempfac = AT24CXX_ReadLenByte(SAVE_ADDR_BASE, 4);
-//        tp_dev.xfac = (float)tempfac / 100000000; //得到x校准参数
-//        tempfac = AT24CXX_ReadLenByte(SAVE_ADDR_BASE + 4, 4);
-//        tp_dev.yfac = (float)tempfac / 100000000; //得到y校准参数
-//        //得到x偏移量
-//        tp_dev.xoff = AT24CXX_ReadLenByte(SAVE_ADDR_BASE + 8, 2);
-//        //得到y偏移量
-//        tp_dev.yoff = AT24CXX_ReadLenByte(SAVE_ADDR_BASE + 10, 2);
-//        tp_dev.touchtype = AT24CXX_ReadOneByte(SAVE_ADDR_BASE + 12); //读取触屏类型标记
-//        if(tp_dev.touchtype)//X,Y方向与屏幕相反
-//        {
-//            CMD_RDX = 0X90;
-//            CMD_RDY = 0XD0;
-//        }
-//        else                   //X,Y方向与屏幕相同
-//        {
-//            CMD_RDX = 0XD0;
-//            CMD_RDY = 0X90;
-//        }
-//        return 1;
-//    }
-    return 0;
-}
 //提示字符串
 uint8_t *const TP_REMIND_MSG_TBL = "Please use the stylus click the cross on the screen.The cross will always move until the screen adjustment is completed.If you can't click the red cross within 30 seconds,the program of calibration will quit!";
 
@@ -419,7 +367,7 @@ void TP_Adjust(void)
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到3,4的距离
                     fac = (float)d1 / d2;
-                    if(fac < 0.95 || fac > 1.05 || d1 == 0 || d2 == 0) //不合格
+                    if(fac < 0.80 || fac > 1.2 || d1 == 0 || d2 == 0) //不合格
                     {
                         cnt = 0;
                         TP_Drow_Touch_Point(lcddev.width - 20, lcddev.height - 20, WHITE); //清除点4
@@ -439,7 +387,7 @@ void TP_Adjust(void)
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到2,4的距离
                     fac = (float)d1 / d2;
-                    if(fac < 0.95 || fac > 1.05) //不合格
+                    if(fac < 0.80 || fac > 1.20) //不合格
                     {
                         cnt = 0;
                         TP_Drow_Touch_Point(lcddev.width - 20, lcddev.height - 20, WHITE); //清除点4
@@ -461,7 +409,7 @@ void TP_Adjust(void)
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到2,3的距离
                     fac = (float)d1 / d2;
-                    if(fac < 0.95 || fac > 1.05) //不合格
+                    if(fac < 0.80 || fac > 1.2) //不合格
                     {
                         cnt = 0;
                         TP_Drow_Touch_Point(lcddev.width - 20, lcddev.height - 20, WHITE); //清除点4
@@ -564,10 +512,137 @@ void Load_Drow_Dialog(void)
     LCD_ShowString(lcddev.width - 24, 0, 200, 16, 16, "RST"); //显示清屏区域
     POINT_COLOR = RED; //设置画笔蓝色
 }
+/** @brief 保存校准值
+ *
+ * @param
+ * @param
+ * @return 1 保存失败; 0  保存成功
+ *
+ */
+uint8_t TP_Save_Adjdata(void)
+{
+	int temp;
+    FIL fp;
+    UINT bw;
+    char result;
+    uint8_t *p;
+    cJSON *pJsonRoot = NULL;
+
+    pJsonRoot = cJSON_CreateObject();
+    if(pJsonRoot == NULL)
+    {
+        printf_safe("保存数据cjson创建失败!");
+        return 1;
+    }
+
+    cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",170);
+    temp=tp_dev.xfac*100000000;
+    cJSON_AddNumberToObject(pJsonRoot,"xfac",temp);
+    temp=tp_dev.yfac*100000000;
+    cJSON_AddNumberToObject(pJsonRoot,"yfac",temp);
+
+    cJSON_AddNumberToObject(pJsonRoot,"xoff",tp_dev.xoff);
+
+    cJSON_AddNumberToObject(pJsonRoot,"yoff",tp_dev.yoff);
+
+    result = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_ALWAYS | FA_WRITE);
+	//文件打开错误或者文件大于BMPMEMORYSIZE
+	if(result != FR_OK)
+    {
+        return 1;
+    }
+    p = cJSON_Print(pJsonRoot);
+    f_write(&fp, p, strlen(p), &bw);
+
+    f_close(&fp);
+    cJSON_Delete(pJsonRoot);
+    return 0;
+}
+/** @brief 取得校准值
+ *
+ * @param
+ * @param
+ * @return 1: 取保存的校准值失败; 0:取保存校准值成功
+ *
+ */
+uint8_t TP_Get_Adjdata(void)
+{
+    cJSON *jsCaliObj;
+    ErrorCode_t errcode;
+    cJSON * pSub;
+    errcode = ERR_NO;
+    uint8_t res;
+    FIL fp;
+    UINT bw;
+    uint8_t *p;
+
+    res = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_NEW | FA_WRITE);
+
+    if(res == FR_OK)
+    {
+        if(f_size(&fp) == 0)
+        {
+            cJSON *pJsonRoot = NULL;
+
+            pJsonRoot = cJSON_CreateObject();
+            if(pJsonRoot == NULL)
+            {
+                printf_safe("保存数据cjson创建失败!");
+                return 1;
+            }
+
+            cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",0);
+            cJSON_AddNumberToObject(pJsonRoot,"xfac",0);
+            cJSON_AddNumberToObject(pJsonRoot,"yfac",0);
+            cJSON_AddNumberToObject(pJsonRoot,"xoff",0);
+            cJSON_AddNumberToObject(pJsonRoot,"yoff",0);
+
+            p = cJSON_Print(pJsonRoot);
+            f_write(&fp, p, strlen(p), &bw);
+            cJSON_Delete(pJsonRoot);
+            f_close(&fp);
+        }
+    }
+
+    jsCaliObj = GetCfgObj("system/CalibrationData.cfg", &errcode);
+
+    if(jsCaliObj == NULL || errcode != ERR_NO)
+    {
+        return 1;
+    }
+
+    pSub = cJSON_GetObjectItem(jsCaliObj,"is_calibrate");
+    if(pSub == NULL)
+    {
+        return 1;
+    }
+    if(pSub->valueint == 170)
+    {
+        pSub = cJSON_GetObjectItem(jsCaliObj,"xfac");
+        tp_dev.xfac = (float)(pSub->valueint)/100000000;
+
+        pSub = cJSON_GetObjectItem(jsCaliObj,"yfac");
+        tp_dev.yfac = (float)(pSub->valueint)/100000000;
+
+        pSub = cJSON_GetObjectItem(jsCaliObj,"xoff");
+        tp_dev.xoff = pSub->valueint;
+
+        pSub = cJSON_GetObjectItem(jsCaliObj,"yoff");
+        tp_dev.yoff = pSub->valueint;
+
+        cJSON_Delete(jsCaliObj);
+        cJSON_Delete(pSub);
+        return 0;
+    }
+
+    return 1;
+}
+
+
 void GUI_Touch_Calibrate()
 {
 
-    tp_dev.touchtype = 0;
+    tp_dev.touchtype = 1;
 
     if(tp_dev.touchtype)//X,Y方向与屏幕相反
     {
@@ -581,31 +656,33 @@ void GUI_Touch_Calibrate()
     }
 
     LCD_Clear(WHITE);   //ÇåÆÁ
-    TP_Adjust();        //ÆÁÄ»Ð£×¼
-    TP_Save_Adjdata();
-
-    while(1)
+    if(TP_Get_Adjdata() != 0)//需要校准
     {
-        tp_dev.scan(0);
-        if(tp_dev.sta & TP_PRES_DOWN)       //触摸屏被按下
-        {
-            if(tp_dev.x[0] < lcddev.width && tp_dev.y[0] < lcddev.height)
-            {
-                if(tp_dev.x[0] > (lcddev.width - 24) && tp_dev.y[0] < 16)
-                {
-                    Load_Drow_Dialog();    //清除
-                }
-                else
-                {
-                    TP_Draw_Big_Point(tp_dev.x[0], tp_dev.y[0], RED);    //画图
-                }
-            }
-        }
-        else
-        {
-             break;//vTaskDelay(10);    //没有按键按下的时候
-        }
+        TP_Adjust();
     }
+
+//    while(1)
+//    {
+//        tp_dev.scan(0);
+//        if(tp_dev.sta & TP_PRES_DOWN)       //触摸屏被按下
+//        {
+//            if(tp_dev.x[0] < lcddev.width && tp_dev.y[0] < lcddev.height)
+//            {
+//                if(tp_dev.x[0] > (lcddev.width - 24) && tp_dev.y[0] < 16)
+//                {
+//                    Load_Drow_Dialog();    //清除
+//                }
+//                else
+//                {
+//                    TP_Draw_Big_Point(tp_dev.x[0], tp_dev.y[0], RED);    //画图
+//                }
+//            }
+//        }
+//        else
+//        {
+//             break;//vTaskDelay(10);    //没有按键按下的时候
+//        }
+//    }
 }
 
 
