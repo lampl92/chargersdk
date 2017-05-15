@@ -86,7 +86,7 @@
 #define frequency 0x0011
 
 #define	AXISDATA_REG	0x28
-
+#define lock_timer      100
 #define samp_sum    125
 #define samp_dma    10
 #define ia_k       0.02197265

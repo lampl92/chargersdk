@@ -20,7 +20,7 @@
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   512
 #define defSTACK_TaskCLI                    1024
-#define defSTACK_TaskGUI                    (1024*4)
+#define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskTouch                  128
 #define defSTACK_TaskOTA                    512
 
