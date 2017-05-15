@@ -17,6 +17,7 @@
 #include "gdsl_perm.h"
 #include "user_app.h"
 #include "cfg_parse.h"
+#include "ST_LIS2DH12.h"
 //extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               设置充电桩信息到配置文件

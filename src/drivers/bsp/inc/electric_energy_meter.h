@@ -4,8 +4,11 @@
 UART_HandleTypeDef UART7_Handler;
 UART_HandleTypeDef UART7_RS485Handler;
 void RS485_Init(u32 bound);
-double Get_Electricity_meter_massage(uint8_t add);
-float Get_Electricity_meter_massage_voltage(uint8_t add);
+double Get_Electricity_meter_massage_energy(uint8_t add);
+double Get_Electricity_meter_massage_current(uint8_t add);
+double Get_Electricity_meter_massage_voltage(uint8_t add);
+double Get_Electricity_meter_massage_power(uint8_t add);
+double Get_Electricity_meter_massage_frequency(uint8_t add);
 typedef union
 {
     float yy_test_float;

@@ -26,6 +26,8 @@ TIM_HandleTypeDef htim5;
  void MX_TIM7_Init(void);
  void MX_TIM4_Init(void);
  void MX_TIM5_Init(void);
+ void TIM_SetTIM2Compare1(unsigned int compare);
+ void TIM_SetTIM2Compare4(unsigned int compare);
 
 #endif
 

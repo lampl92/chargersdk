@@ -1,6 +1,5 @@
 #ifndef USER_APP_H_INCLUDED
 #define USER_APP_H_INCLUDED
-
 #define A_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_RESET)//ctr_gjd1
 #define A_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_SET)//ctr_gjd1
 
@@ -42,11 +41,11 @@
 #define TIMER3_ON    HAL_TIM_Base_Start_IT(&htim3)
 #define TIMER3_OFF   HAL_TIM_Base_Stop_IT(&htim3)
 
-#define PWM1_1000  TIM_SetTIM2Compare1(1000);
-#define PWM1_535   TIM_SetTIM2Compare1(535);
+#define PWM1_1000  do{TIM_SetTIM2Compare1(1000);}while(0)
+#define PWM1_535   do{TIM_SetTIM2Compare1(535);}while(0)
 
-#define PWM2_1000  TIM_SetTIM4Compare1(1000);
-#define PWM2_535   TIM_SetTIM4Compare1(535);
+#define PWM2_1000  do{TIM_SetTIM4Compare1(1000);}while(0)
+#define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
 
 #define write_chip1 0x40 //0100 0000
 #define read_chip1 0x41 //0100 0001
@@ -86,7 +85,7 @@
 #define frequency 0x0011
 
 #define	AXISDATA_REG	0x28
-#define lock_timer      100
+#define lock_timer      50
 #define samp_sum    125
 #define samp_dma    10
 #define ia_k       0.02197265
@@ -207,6 +206,7 @@ void IIC_Init(void);
 double get_CP1(void);
 double get_CP2(void);
 double get_va(void);
+float get_dc_massage(uint8_t DC_channel);
 void write_pca9554_1(void);
 void Delay_ms(unsigned long long);
 void PCA9554_init(void);
@@ -227,6 +227,10 @@ void POWER_L_CLOSE(void);
 void POWER_N_CLOSE(void);
 void POWER_L_OPEN(void);
 void POWER_N_OPEN(void);
+void Close_gun_1(void);
+void Open_gun_1(void);
+void Close_gun_2(void);
+void Open_gun_2(void);
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t num_cp1,num_cp2;

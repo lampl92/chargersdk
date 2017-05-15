@@ -1,6 +1,7 @@
 #include "bsp_timer.h"
 #include "user_app.h"
 #include "led_control.h"
+#include "stm32f4xx_hal.h"
 void MX_TIM2_Init(void)
 {
 
