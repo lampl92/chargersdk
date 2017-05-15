@@ -534,10 +534,7 @@ uint8_t TP_Save_Adjdata(void)
         printf_safe("保存数据cjson创建失败!");
         return 1;
     }
-    tp_dev.xfac = 1.23;
-    tp_dev.yfac = 1.34;
-    tp_dev.xoff = 19;
-    tp_dev.yoff = 1234;
+
     cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",170);
     temp=tp_dev.xfac*100000000;
     cJSON_AddNumberToObject(pJsonRoot,"xfac",temp);
@@ -577,6 +574,7 @@ uint8_t TP_Get_Adjdata(void)
     uint8_t res;
     FIL fp;
     UINT bw;
+    uint8_t *p;
 
     res = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_NEW | FA_WRITE);
 
@@ -584,7 +582,25 @@ uint8_t TP_Get_Adjdata(void)
     {
         if(f_size(&fp) == 0)
         {
-            f_write(&fp, "NULL", 5, &bw);
+            cJSON *pJsonRoot = NULL;
+
+            pJsonRoot = cJSON_CreateObject();
+            if(pJsonRoot == NULL)
+            {
+                printf_safe("保存数据cjson创建失败!");
+                return 1;
+            }
+
+            cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",0);
+            cJSON_AddNumberToObject(pJsonRoot,"xfac",0);
+            cJSON_AddNumberToObject(pJsonRoot,"yfac",0);
+            cJSON_AddNumberToObject(pJsonRoot,"xoff",0);
+            cJSON_AddNumberToObject(pJsonRoot,"yoff",0);
+
+            p = cJSON_Print(pJsonRoot);
+            f_write(&fp, p, strlen(p), &bw);
+            cJSON_Delete(pJsonRoot);
+            f_close(&fp);
         }
     }
 
@@ -642,8 +658,7 @@ void GUI_Touch_Calibrate()
     LCD_Clear(WHITE);   //ÇåÆÁ
     if(TP_Get_Adjdata() != 0)//需要校准
     {
-        //TP_Adjust();
-        TP_Save_Adjdata();
+        TP_Adjust();
     }
 
 //    while(1)
