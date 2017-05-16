@@ -35,6 +35,7 @@
 #define jnSocketTempLowerLimits     "SocketTempLowerLimits"
 #define jnRatedCurrent              "RatedCurrent"
 #define jnRatedPower                "RatedPower"
+#define jnQRCode                    "QRCode"
 /*end of CONArray Item*/
 
 

@@ -153,6 +153,42 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
     }
     return  errcode;
 }
+static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
+{/** @todo (rgw#1#): 该函数未测试 */
+    CON_t *pCON;
+    uint8_t ucCONID;
+    uint8_t tmpQRCode[defQRCodeLength];
+    ErrorCode_t errcode;
+
+    cJSON *jsItem;
+    cJSON *pCONCfgObj;
+
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    memset(tmpQRCode, 0, defQRCodeLength);
+    errcode = ERR_NO;
+
+    pCONCfgObj = (cJSON *)pvCfgObj;
+
+    /** 从文件获取 */
+    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
+    if(jsItem == NULL)
+    {
+        return ERR_FILE_PARSE;
+    }
+    memmove(tmpQRCode, jsItem->valuestring, strlen(jsItem->valuestring));
+
+    /*********************/
+    if(strlen(tmpQRCode) > 0)
+    {
+        memmove(pCON->info.strQRCode, tmpQRCode, strlen(tmpQRCode));
+    }
+    else
+    {
+        errcode = ERR_FILE_PARAM;
+    }
+    return  errcode;
+}
 
 static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
 {
@@ -1445,6 +1481,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.dSocketTempLowerLimits = 0;
     pCON->info.dRatedCurrent = 32;
     pCON->info.dRatedPower = 7;
+    memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode);
 
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;

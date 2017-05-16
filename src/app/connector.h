@@ -72,6 +72,7 @@ typedef struct _CONInfo
     double dSocketTempLowerLimits;
     double dRatedCurrent;
     double dRatedPower;                      //保留一位小数
+    uint8_t strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
     ErrorCode_t (*SetCONCfg)(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
