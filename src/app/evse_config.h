@@ -15,6 +15,7 @@
 #define defEVSEIDLength         64
 #define defFileNameLength       64
 #define defNodeNameLength       64
+#define defQRCodeLength         64
 
 /* µ¥Î»£ºms */
 #define defMonitorTempCyc           5000
