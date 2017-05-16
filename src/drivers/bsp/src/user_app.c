@@ -313,10 +313,10 @@ void get_samp_point(void)//ÓÃÊ±30¦ÌS
 }
 void Delay_ms(unsigned long long time)
 {
-//    unsigned int x, y;
-//    x = time * 1000;
-//    for(; x > 0; x--)
-//        for(y = 180; y > 0; y--);
+    //unsigned int x, y;
+   // x = time * 1000;
+   // for(; x > 0; x--)
+    //    for(y = 180; y > 0; y--);
     vTaskDelay(time);
 }
 void Delay_us(unsigned long long time)
@@ -454,4 +454,7 @@ void Peripheral_Init(void)
     PWM2_ON;
     TIMER3_ON;
     TIMER5_ON;
+    yy_test== ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
+  //  yy_test= ~((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
+        //Close_gun_1();
 }

@@ -17,6 +17,7 @@
 #include "gdsl_perm.h"
 #include "user_app.h"
 #include "cfg_parse.h"
+#include "ST_LIS2DH12.h"
 //extern void read_pca9554_2(void)；
 /*---------------------------------------------------------------------------/
 /                               设置充电桩信息到配置文件
@@ -1059,7 +1060,7 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpArresterState = 0;
 #else
-    tmpArresterState = (~(read_pca9554_2() >> 4)) & 0x01;
+    tmpArresterState = ((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
 #endif
 
     /*********************/
