@@ -47,7 +47,10 @@ Purpose     : Config / System dependent externals for GUI
 #include "lcddrv.h"
 #include "touch.h"
 
-static u16 adc_x,adc_y;
+#define Y (1)
+static uint16_t adc_x,adc_y;
+static float adc_press;
+volatile static uint8_t i = 0;
 static uint8_t step = 0;
 extern uint8_t calebrate_done;
 void GUI_TOUCH_X_ActivateX(void) {
@@ -57,8 +60,26 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
+
     if(((calebrate_done&0x1) == 1)&&(PEN == 0))
     {
+        if(TP_Read_Pressure(&adc_press) == 0)
+        {
+            if(adc_press >= 2000 && adc_press <= 6000)
+            {
+                i = i + Y;
+                if(i == 200)//持续5S
+                {
+                    i = 0;
+                    bitset(calebrate_done,5);
+                    bitclr(calebrate_done,0);
+                }
+            }
+            else
+            {
+                i = 0;
+            }
+        }
         if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
         {
             tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标

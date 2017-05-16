@@ -203,11 +203,6 @@ void TP_Draw_Big_Point(uint16_t x, uint16_t y, uint16_t color)
     LCD_DrawPoint(x, y + 1);
     LCD_DrawPoint(x + 1, y + 1);
 }
-//void TP_Scan_Get(uint16_t *adc_x,uint16_t *adc_y)
-//{
-//    *adc_x = tp_dev.x[0];
-//    *adc_y = tp_dev.y[0];
-//}
 void TP_Scan_Get(u16 *adc_x, u16 *adc_y)
 {
     u8 tp_pressed;
@@ -234,7 +229,15 @@ void TP_Scan_Get(u16 *adc_x, u16 *adc_y)
         *adc_y = 0xffff;
     }
 }
-
+uint8_t TP_Read_Pressure(float *pressure)
+{
+    uint16_t x, y, z1;
+    float xTPr = 738, yTPr = 222;
+    z1 = TP_Read_XOY(0xB4);
+    TP_Read_XY2(&x, &y);
+    *pressure = (xTPr * (float)x) / 4096.0f * (4096.0f / (float)z1 - 1) - yTPr * (1 - (float)y / 4096.0f);
+    return 0;
+}
 //////////////////////////////////////////////////////////////////////////////////
 //触摸按键扫描
 //tp:0,屏幕坐标;1,物理坐标(校准等特殊场合用)
@@ -631,7 +634,7 @@ uint8_t TP_Get_Adjdata(void)
         tp_dev.yoff = pSub->valueint;
 
         cJSON_Delete(jsCaliObj);
-        cJSON_Delete(pSub);
+        //cJSON_Delete(pSub);
         return 0;
     }
 
@@ -660,7 +663,6 @@ void GUI_Touch_Calibrate()
     {
         TP_Adjust();
     }
-
 //    while(1)
 //    {
 //        tp_dev.scan(0);

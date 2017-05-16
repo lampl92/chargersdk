@@ -308,10 +308,10 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
 
     /// TODO (zshare#1#): 增加故障弹窗
-//    if(1)//故障
-//    {
-//        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
-//    }
+    if(1)//故障
+    {
+        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
+    }
 }
 // USER END
 static void _cbFrame(WM_MESSAGE * pMsg) {

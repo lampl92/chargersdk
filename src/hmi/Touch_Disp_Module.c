@@ -141,6 +141,19 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
  */
 void Jump_IsManager(WM_HWIN hWin)
 {
+    if(bittest(calebrate_done,5))
+    {
+        bitclr(calebrate_done,5);
+        WM_DeleteWindow(hWin);
+        vTaskDelay(100);
+        LCD_Init();
+        TP_Init();
+        vTaskDelay(100);
+        LCD_Clear(WHITE);
+        TP_Adjust();
+        bitset(calebrate_done,0);
+        PutOut_SelAOrB();
+    }
     if(bittest(calebrate_done,6))
     {
         bitclr(calebrate_done,6);
