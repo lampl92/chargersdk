@@ -1060,7 +1060,7 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpArresterState = 0;
 #else
-    tmpArresterState = (~(read_pca9554_2() >> 3)) & 0x01;
+    tmpArresterState = ((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
 #endif
 
     /*********************/
