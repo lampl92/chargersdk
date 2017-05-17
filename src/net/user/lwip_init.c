@@ -20,7 +20,7 @@ typedef void (*ctx_cb_fn)(uint8_t *msg);
 void tcpip_init_done(void *arg)
 {
     LWIP_UNUSED_ARG(arg);
-    xEventGroupSetBits(xHandleEventlwIP, defEventBitTCPIPinit);
+    xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPIPinit);
 }
 
 /** @brief PPPoS 串口输出回调函数
@@ -140,11 +140,11 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 
     if (err_code == PPPERR_NONE)
     {
-        xEventGroupSetBits(xHandleEventlwIP, defEventBitPPPup);
+        xEventGroupSetBits(xHandleEventLwIP, defEventBitPPPup);
         return;
     }
 
-    xEventGroupClearBits(xHandleEventlwIP, defEventBitPPPup);
+    xEventGroupClearBits(xHandleEventLwIP, defEventBitPPPup);
 
     /* ppp_close() 被用户调用，不要重新连接 */
     if (err_code == PPPERR_USER)
@@ -154,7 +154,7 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     }
 
     /** @todo (zshare#1#): 在这里对modem进行重连，连接好后通过信号量或者时间通知该函数，然后对ppp进行重连 */
-    uxBitLwip = xEventGroupSync(xHandleEventlwIP,
+    uxBitLwip = xEventGroupSync(xHandleEventLwIP,
                                 defEventBitReDail,
                                 defEventBitDailCONNECT,
                                 portMAX_DELAY);
@@ -200,11 +200,11 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
 
     if (errCode == PPPERR_NONE)
     {
-        xEventGroupSetBits(xHandleEventlwIP, defEventBitPPPup);
+        xEventGroupSetBits(xHandleEventLwIP, defEventBitPPPup);
         return;
     }
 
-    xEventGroupClearBits(xHandleEventlwIP, defEventBitPPPup);
+    xEventGroupClearBits(xHandleEventLwIP, defEventBitPPPup);
 
     /* ppp_close() 被用户调用时返回的代码，说明不要自动重新连接，可以进行释放 */
     if (errCode == PPPERR_USER)
@@ -214,7 +214,7 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
     }
 
     /** @todo (zshare#1#): 在这里对modem进行重连，连接好后通过信号量或者时间通知该函数，然后对ppp进行重连 */
-    uxBitLwip = xEventGroupSync(xHandleEventlwIP,
+    uxBitLwip = xEventGroupSync(xHandleEventLwIP,
                                 defEventBitReDail,
                                 defEventBitDailCONNECT,
                                 portMAX_DELAY);
@@ -238,7 +238,7 @@ int lwip_init_task(void)
     EventBits_t uxBitLwIP;
 
     tcpip_init(tcpip_init_done, NULL);
-    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitTCPIPinit,
+    uxBitLwIP = xEventGroupWaitBits(xHandleEventLwIP, defEventBitTCPIPinit,
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
     {
@@ -246,7 +246,7 @@ int lwip_init_task(void)
 
     }
 
-    uxBitLwIP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitDailCONNECT,
+    uxBitLwIP = xEventGroupWaitBits(xHandleEventLwIP, defEventBitDailCONNECT,
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
