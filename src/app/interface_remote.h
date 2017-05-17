@@ -8,6 +8,7 @@
 #ifndef  __INTERFACE_REMOTE_H
 #define  __INTERFACE_REMOTE_H
 
+#include "libEcharge/ech_protocol.h"
 #include <time.h>
 
 typedef struct _Heartbeat
