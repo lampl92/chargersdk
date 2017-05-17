@@ -9,33 +9,64 @@
 #include "aes.h"
 #include "mbedtls/aes.h"
 
+int tinyaestest()
+{
+    int i;
+    unsigned char plain[32] = {0xEC, 0x5B, 0xBD, 0x91, 0xB3, 0x72, 0xBE, 0x99, 0x38, 0x31,
+                               0xAD, 0x2E, 0xF4, 0xD4, 0xBB, 0x26, 0xCA, 0x63, 0xB1, 0x41,
+                               0xDF, 0x7D, 0xCD, 0x47, 0xE6, 0x81, 0x21, 0x7B, 0x23, 0x54,
+                               0x8D, 0x5C
+                              };
+    unsigned char key[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'g'};
+    unsigned char dec_plain[200] = {0};
+
+    aes_decrypt(plain, key, dec_plain, 32);
+    printf_safe("\n*********** 解密后：\n");
+    for(i = 0; i < 32; i++)
+    {
+        printf_safe("%02X ", dec_plain[i]);
+    }
+    printf_safe("\n");
+}
+
 int mbedtlsaesmain()
 {
+    int i;
     mbedtls_aes_context aes_ctx;
     //密钥数值
-    unsigned char key[16] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x00};
+    unsigned char key[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'g'};
 
     //明文空间
-    unsigned char plain[16] = "helloworld我们";
+    unsigned char plain[32] = {0xEC, 0x5B, 0xBD, 0x91, 0xB3, 0x72, 0xBE, 0x99, 0x38, 0x31,
+                               0xAD, 0x2E, 0xF4, 0xD4, 0xBB, 0x26, 0xCA, 0x63, 0xB1, 0x41,
+                               0xDF, 0x7D, 0xCD, 0x47, 0xE6, 0x81, 0x21, 0x7B, 0x23, 0x54,
+                               0x8D, 0x5C
+                              };
+    unsigned char iv[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     //解密后明文的空间
-    unsigned char dec_plain[16] = {0};
+    unsigned char dec_plain[200] = {0};
     //密文空间
-    unsigned char cipher[16] = {0};
+    unsigned char cipher[200] = {0};
 
     mbedtls_aes_init( &aes_ctx );
 
 
     //设置加密密钥
-    mbedtls_aes_setkey_enc( &aes_ctx, key, 128);
+//    mbedtls_aes_setkey_enc( &aes_ctx, key, 128);
 
-    printf_safe("\n*********** 加密前：%s\n", plain);
-    mbedtls_aes_crypt_ecb( &aes_ctx, MBEDTLS_AES_ENCRYPT, plain, cipher );
-    printf_safe("\n*********** 加密后：%s\n", cipher);
+    //printf_safe("\n*********** 加密前：%s\n", plain);
+//    mbedtls_aes_crypt_cbc( &aes_ctx, MBEDTLS_AES_ENCRYPT, 32, plain, cipher );
+//    printf_safe("\n*********** 加密后：%s\n", cipher);
     //设置解密密钥
     mbedtls_aes_setkey_dec(&aes_ctx, key, 128);
 
-    mbedtls_aes_crypt_ecb( &aes_ctx, MBEDTLS_AES_DECRYPT, cipher, dec_plain );
-    printf_safe("\n*********** 解密后：%s\n", dec_plain);
+    mbedtls_aes_crypt_cbc( &aes_ctx, MBEDTLS_AES_DECRYPT, 32, iv, cipher, dec_plain );
+    printf_safe("\n*********** 解密后：");
+    for(i = 0; i < 32; i++)
+    {
+        printf_safe("%02X ", dec_plain[i]);
+    }
+    printf_safe("\n");
 
     mbedtls_aes_free( &aes_ctx );
 
@@ -78,120 +109,14 @@ void print_hex(uint8_t *buf, uint32_t len)
 void aesmain()
 {
 
-    uint8_t key[]   = {0x10, 0xa5, 0x88, 0x69, 0xd7, 0x4b, 0xe5, 0xa3, 0x74, 0xcf,   0x86, 0x7c, 0xfb, 0x47, 0x38, 0x59}; //AES::DEFAULT_KEYLENGTH
-    uint8_t buf[16];//tmp buffer
 
-    uint8_t msg[]   = "HelloWorld!23456asdfasdfasdfasdfasdf中国";
-    uint32_t    fsize = strlen((char *)msg); //message size
-    uint8_t    *DataBuf;//Data Buffer
-    DataBuf = (uint8_t *)malloc(1024);
-
-    //AES with CBC
-    printf_safe("AES with CBC\n");
-
-    //Copy data
-    memset(DataBuf, 0, 1024);
-    strcpy((char *)DataBuf, (char *)msg);
-    uint8_t *pDataBuf = DataBuf;//tmp pointer
-    uint8_t iv1[]   = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-    uint32_t    iEncryptTimes = fsize / 16 + 1;
-    uint8_t iPaddings     = 16 - fsize % 16; //Padding size
-    uint32_t    newlen = fsize + iPaddings; //New length
-
-    uint32_t i;
-    //memcpy(DataBuf,iv,16);//Save iv
-    memset(pDataBuf + fsize, iPaddings, iPaddings); //Padding
-    printf_safe("input	=\n");
-    print_hex(DataBuf, newlen);
-    printf_safe("%s\n", DataBuf);
-    aes_encrypt_ctx en_ctx[1];//Init encrypt
-
-    //Encrypt
-    for(i = 0; i < iEncryptTimes; i++)
-    {
-        aes_encrypt_key128(key, en_ctx);
-        aes_cbc_encrypt(pDataBuf, buf, 16, iv1, en_ctx); //iv has been changed, ctx has been changed!!!
-        memcpy(pDataBuf, buf, 16);
-        pDataBuf += 16;
-    }
-
-    printf_safe("encrypt	=\n");
-    print_hex(DataBuf, newlen);
-
-    //Decrypt
-    pDataBuf = DataBuf;
-    uint8_t iv2[]       = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    uint8_t buf3[256] = {'\0'};
-    aes_decrypt_ctx de_ctx[1];
-    aes_decrypt_key128(key, de_ctx);
-    aes_cbc_decrypt(pDataBuf, buf3, newlen, iv2, de_ctx);
-
-    printf_safe("decrypt	=\n");
-    print_hex(buf3, newlen);
-    printf_safe("%s\n", buf3);
-
-    //================================
-
-    printf_safe("AES with CTR\n");
-    //Copy data
-    memset(DataBuf, 0, 1024);
-    strcpy((char *)DataBuf, (char *)msg);
-    pDataBuf = DataBuf;//tmp pointer
-    uint8_t iv3[]   = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-    iEncryptTimes = fsize / 16;
-    uint8_t iRemain       = fsize % 16;
-    uint8_t ctr_buf[AES_BLOCK_SIZE];
-
-    //Save iv(as ctrl buffer)
-    //memcpy(DataBuf,iv,16);
-    printf_safe("input	=\n");
-    print_hex(DataBuf, fsize);
-    printf_safe("%s\n", DataBuf);
-    //Init encrypt
-    //aes_encrypt_ctx en_ctx[1];
-
-    //Encrypt
-    for(i = 0; i < iEncryptTimes; i++)
-    {
-        aes_encrypt_key128(key, en_ctx);
-        ctr_init(iv3, iv3 + 4, ctr_buf); //we set iv as the nouce
-        aes_ctr_encrypt(pDataBuf, buf, 16, ctr_buf, ctr_inc, en_ctx); //iv has been changed, ctx has been changed!!!
-        memcpy(pDataBuf, buf, 16);
-        pDataBuf += 16;
-    }
-
-    if(iRemain != 0) //last times
-    {
-        pDataBuf += i * 16;
-        aes_encrypt_key128(key, en_ctx);
-        ctr_init(iv3, iv3 + 4, ctr_buf); //we set iv as the nouce
-        aes_ctr_encrypt(pDataBuf, buf, iRemain, ctr_buf, ctr_inc, en_ctx); //iv has been changed, ctx has been changed!!!
-        memcpy(pDataBuf, buf, iRemain);
-    }
-
-    printf_safe("encrypt	=\n");
-    print_hex(DataBuf, fsize);
-    //Decrypt
-    pDataBuf = DataBuf;
-    uint8_t iv4[]       = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    //uint8_t   buf3[256]={'\0'};
-    //aes_decrypt_ctx de_ctx[1];
-    //aes_decrypt_key128(key,de_ctx);
-    aes_encrypt_key128(key, en_ctx);
-    ctr_init(iv4, iv4 + 4, ctr_buf); //we set iv as the nouce
-    aes_ctr_decrypt(pDataBuf, buf3, 16, ctr_buf, ctr_inc, en_ctx);
-    printf_safe("decrypt	=\n");
-    print_hex(buf3, fsize);
-    printf_safe("%s\n", buf3);
-    printf_safe("\n");
 }
 
 static void cli_aestest_fnt(int argc, char **argv)
 {
     //aesmain();
-    mbedtlsaesmain();
+    //mbedtlsaesmain();
+    tinyaestest();
 
 }
 
