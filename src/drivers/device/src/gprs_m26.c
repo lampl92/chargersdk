@@ -635,7 +635,7 @@ uint32_t gprs_ppp_poll(void)
             }
             break;
         case DS_GPRS_POLL_PPP:
-            xEventGroupSetBits(xHandleEventlwIP, defEventBitDailCONNECT);
+            xEventGroupSetBits(xHandleEventLwIP, defEventBitDailCONNECT);
             dev_gprs.pollstate = DS_GPRS_POLL_PPPDego;
             break;
         case DS_GPRS_POLL_PPPDego:
@@ -643,7 +643,7 @@ uint32_t gprs_ppp_poll(void)
 //            {
 //
 //            }
-            uxBitLwip = xEventGroupWaitBits(xHandleEventlwIP, defEventBitReDail,
+            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitReDail,
                                             pdTRUE, pdTRUE, portMAX_DELAY);
             if((uxBitLwip & defEventBitReDail) == defEventBitReDail)
             {
