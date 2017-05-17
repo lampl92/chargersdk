@@ -171,17 +171,17 @@ static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
     pCONCfgObj = (cJSON *)pvCfgObj;
 
     /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
+    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnQRCode);
     if(jsItem == NULL)
     {
         return ERR_FILE_PARSE;
     }
-    memmove(tmpQRCode, jsItem->valuestring, strlen(jsItem->valuestring));
+    strncpy(tmpQRCode, jsItem->valuestring, strlen(jsItem->valuestring));
 
     /*********************/
     if(strlen(tmpQRCode) > 0)
     {
-        memmove(pCON->info.strQRCode, tmpQRCode, strlen(tmpQRCode));
+        strncpy(pCON->info.strQRCode, tmpQRCode, strlen(tmpQRCode));
     }
     else
     {
@@ -496,6 +496,7 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketTempLimits()");
     THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedCurrent()");
     THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedPower()");
+    THROW_ERROR(defDevID_File, errcode = GetCONQRCode(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONQRCode()");
 exit_parse:
     cJSON_Delete(jsCfgObj);
 exit:
@@ -1481,7 +1482,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.dSocketTempLowerLimits = 0;
     pCON->info.dRatedCurrent = 32;
     pCON->info.dRatedPower = 7;
-    memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode);
+    memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode));
 
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;
