@@ -120,7 +120,7 @@ EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
-EventGroupHandle_t xHandleEventlwIP   = NULL;
+EventGroupHandle_t xHandleEventLwIP   = NULL;
 
 //下面的事件定义在各个结构体中
 //pRFIDDev->xHandleEventGroupRFID
@@ -215,7 +215,7 @@ void AppObjCreate (void)
     xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
-    xHandleEventlwIP = xEventGroupCreate();
+    xHandleEventLwIP = xEventGroupCreate();
 
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
