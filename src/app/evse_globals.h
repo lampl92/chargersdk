@@ -11,6 +11,7 @@
 #include "EVSE.h"
 #include "interface_rfid.h"
 #include "userlib_list.h"
+#include "ech_protocol.h"
 
 #define ParamTypeU8         1
 #define ParamTypeU16        2
@@ -190,5 +191,6 @@
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
+extern echProtocol_t *pechProto;
 
 #endif
