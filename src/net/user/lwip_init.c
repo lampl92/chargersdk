@@ -12,6 +12,9 @@
 
 
 #define lwip1_4_1
+
+int ppp;
+
 typedef void (*ctx_cb_fn)(uint8_t *msg);
 
 void tcpip_init_done(void *arg)
@@ -229,8 +232,6 @@ void ctx_cb(uint8_t *msg)
 
 int lwip_init_task(void)
 {
-    int pd;
-
     int *fd = NULL;
     int *linkstateCx = NULL;
 
@@ -252,7 +253,7 @@ int lwip_init_task(void)
         pppInit();
         /*´´½¨ PPPoS ¿ØÖÆ¿é*/
         pppSetAuth(PPPAUTHTYPE_PAP, "", "");
-        pd = pppOverSerialOpen(0, ppp_on_status, &pd);
+        ppp = pppOverSerialOpen(0, ppp_on_status, &ppp);
     }
-    return pd;
+    return ppp;
 }

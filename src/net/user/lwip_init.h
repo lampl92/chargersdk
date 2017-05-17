@@ -8,6 +8,8 @@
 #ifndef  __LWIP_INIT_H
 #define  __LWIP_INIT_H
 
+extern int ppp;
+
 int lwip_init_task(void);
 
 #endif
