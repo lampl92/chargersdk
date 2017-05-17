@@ -136,6 +136,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
         printf_safe("B型枪温度范围: %.2lf ~ %.2lf\n", pCON->info.dSocketTempLowerLimits, pCON->info.dSocketTempUpperLimits);
         printf_safe("额定电流:      %.2lf\n", pCON->info.dRatedCurrent);
         printf_safe("额定功率:      %.2lf\n", pCON->info.dRatedPower);
+        printf_safe("QRCode  :      %s\n", pCON->info.strQRCode);
     }
 }
 void cli_evseorder_fnt(int argc, char **argv)
