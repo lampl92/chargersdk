@@ -16,6 +16,7 @@ typedef enum
 {
     REMOTE_NO,
     REMOTE_CONNECTED,
+    REMOTE_REGEDITED;
     REMOTE_RECONNECT,
     REMOTE_ERROR
 } RemoteState_t;
@@ -27,6 +28,7 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBitsRFID;
     EventBits_t uxBitsTimerCB;
+    EventBits_t uxBitLwip;
     RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
@@ -44,10 +46,19 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): ³¢ÊÔÁ¬½ÓÍøÂç */
-            xTimerStart(xHandleTimerHeartbeat, 0);
-            remotestat = REMOTE_CONNECTED;
+            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE,portMAX_DELAY);
+            if((uxBitLwip & defEventBitPPPup) == defEventBitPPPup)
+            {
+                //xTimerStart(xHandleTimerHeartbeat, 0);
+                remotestat = REMOTE_CONNECTED;
+            }
+
             break;
         case REMOTE_CONNECTED:
+            /* ×¢²á */
+
+
+
             /* ÐÄÌø */
             uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat,
                                                 pdTRUE, pdFALSE, 0);
@@ -76,6 +87,10 @@ void vTaskEVSERemote(void *pvParameters)
                     xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
                 }
             }
+            break;
+        case REMOTE_REGEDITED:
+
+
         }
 
 #if DEBUG_REMOTE
