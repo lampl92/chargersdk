@@ -77,7 +77,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin_Error;
     WM_HWIN hWin = pMsg->hWin;
 
-    Jump_IsManager(hWin);
+    CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
@@ -107,6 +107,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 //                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
 //
 //
+    ErrWindow_Show(hWin);
 }
 /*********************************************************************
 *

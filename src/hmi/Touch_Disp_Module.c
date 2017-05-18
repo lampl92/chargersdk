@@ -9,6 +9,34 @@
 #include "touchtimer.h"
 #include "DIALOG.h"
 
+uint8_t *Scram_err = "急停异常\n";
+uint8_t *Volt_err = "充电电压异常\n";
+uint8_t *ACTemp_err = "温度异常\n";
+uint8_t *PE_err = "PE异常\n";
+uint8_t *Knock_err = "撞击异常\n";
+uint8_t *Arrester_err = "防雷异常\n";
+uint8_t *PowerOff_err = "停电异常\n";
+uint8_t *Curr_err = "电流异常\n";
+uint8_t *Freq_err = "频率异常\n";
+
+WM_HWIN err_hItem;
+
+//uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
+//{
+//    return ((var) |= (1<<(bitno)));
+//}
+//
+//uint8_t bitclr(uint32_t var,uint8_t bitno)
+//{
+//    return ((var) &= ~(1<<(bitno)));         //清0
+//}
+//
+//uint8_t bittest(uint32_t var,uint8_t bitno)
+//{
+//    return ((var >> bitno)& 0x01);           //位状态检测
+//}
+
+
 /** framewin初始化
  *
  * pMsg:消息体 ,textid0:文本0 ,textid1:文本1, textid2：文本2，textid3:文本3
@@ -132,15 +160,24 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
     //pData = _GetImageById(imageid, &filesize);
     IMAGE_SetBMP(hItem, pData, filesize);
 }
-/** 跳转管理员密码界面
- *
+/** 解析置位数据
+ * bit3 : 显示故障界面的控件
+ * bit4 : 删除故障界面的控件
+ * bit5 : 重新校准
+ * bit6 : 跳转首页选枪界面
+ * bit7 : 跳转管理员密码界面
  * WM_WIN:源窗口
  * @param
  * @return
  *Note:
  */
-void Jump_IsManager(WM_HWIN hWin)
+void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 {
+    if(bittest(calebrate_done,4))
+    {
+        bitclr(calebrate_done,4);
+        WM_DeleteWindow(err_hItem);
+    }
     if(bittest(calebrate_done,5))
     {
         bitclr(calebrate_done,5);
@@ -221,6 +258,121 @@ void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
 		}
 	}
 }
+/** @brief 故障弹窗弹出展示
+ *
+ * @param
+ * @param
+ * @return
+ *
+ */
+void ErrWindow_Show(WM_HWIN hWin)
+{
+    CON_t *pCON;
+    static EventBits_t uxBitsErr;
+    static EventBits_t uxBitsErrTmp;
+
+    pCON = CONGetHandle(0);
+    uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+
+    if((uxBitsErr & 0x0003e21c) != 0)//0x3C21C)
+    {
+        if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
+        {
+            uxBitsErrTmp = (uxBitsErr & 0x0003e21c);
+            //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
+            err_window(hWin,uxBitsErr);
+        }
+    }
+    if(bittest(calebrate_done,3) == 1)
+    {
+        bitclr(calebrate_done,3);
+        err_window(hWin,uxBitsErr);
+    }
+}
+
+/** @brief 故障弹窗内容组装
+ *
+ * @param
+ * @param
+ * @return
+ *
+ */
+void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
+{
+
+    uint8_t msg_err[150] = "\0";
+
+    WM_DeleteWindow(err_hItem);
+    err_hItem = MULTIEDIT_CreateEx(460, 60, 300, 300, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+    MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
+    MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
+    WM_SetFocus(err_hItem);
+    MULTIEDIT_SetInsertMode(err_hItem, 1);
+    MULTIEDIT_SetCursorOffset(err_hItem,0);
+    MULTIEDIT_EnableBlink(err_hItem,0,0);
+
+    if((uxBitsErr >> 13) & 0x01)//(bittest(err_sysbol,defEventBitEVSEScramOK))
+    {
+        strncat(msg_err,Scram_err,strlen(Scram_err));
+        //MULTIEDIT_SetText(hItem, "急停异常\n");
+    }
+    if((uxBitsErr >> 2) & 0x01)
+    //if(bittest(err_sysbol,defEventBitCONVoltOK))
+    {
+        strncat(msg_err,Volt_err,strlen(Volt_err));
+        //MULTIEDIT_SetText(hItem, "充电电压异常\n");
+    }
+    if((uxBitsErr >> 9) & 0x01)
+    //if(bittest(err_sysbol,defEventBitCONACTempOK))
+    {
+        strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
+        //MULTIEDIT_SetText(hItem, "温度异常\n");
+    }
+    if((uxBitsErr >> 14) & 0x01)
+    //if(bittest(err_sysbol,defEventBitEVSEPEOK))
+    {
+        strncat(msg_err,PE_err,strlen(PE_err));
+        //MULTIEDIT_SetText(hItem, "PE异常\n");
+    }
+    if((uxBitsErr >> 15) & 0x01)
+    //if(bittest(err_sysbol,defEventBitEVSEKnockOK))
+    {
+        strncat(msg_err,Knock_err,strlen(Knock_err));
+        //MULTIEDIT_SetText(hItem, "撞击异常\n");
+    }
+    if((uxBitsErr >> 16) & 0x01)
+    //if(bittest(err_sysbol,defEventBitEVSEArresterOK))
+    {
+        strncat(msg_err,Arrester_err,strlen(Arrester_err));
+        //MULTIEDIT_SetText(hItem, "防雷异常\n");
+    }
+    if((uxBitsErr >> 17) & 0x01)
+    //if(bittest(err_sysbol,defEventBitEVSEPowerOffOK))
+    {
+        strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
+       // MULTIEDIT_SetText(hItem, "停电异常\n");
+    }
+    if((uxBitsErr >> 3) & 0x01)
+    //if(bittest(err_sysbol,defEventBitCONCurrOK))
+    {
+        strncat(msg_err,Curr_err,strlen(Curr_err));
+        //MULTIEDIT_SetText(hItem, "电流异常\n");
+    }
+    if((uxBitsErr >> 4) & 0x01)
+    //if(bittest(err_sysbol,defEventBitCONFreqOK))
+    {
+        strncat(msg_err,Freq_err,strlen(Freq_err));
+       // MULTIEDIT_SetText(hItem, "频率异常\n");
+    }
+    MULTIEDIT_SetText(err_hItem, msg_err);
+//    SCROLLBAR_CreateAttached(err_hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
+//    SCROLLBAR_CreateAttached(err_hItem, 0);//创建水平滑轮
+
+//    GUI_CURSOR_SetPosition(460,160);
+    WM_SetFocus(err_hItem);
+    bitclr(calebrate_done,4);
+}
+
 
 
 

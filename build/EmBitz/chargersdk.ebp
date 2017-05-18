@@ -80,7 +80,7 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
-			<Add option="-O3" />
+			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />

@@ -903,7 +903,7 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     /* @todo (yuye#1#): 确认取反 */
 
 #ifdef DEBUG_DIAG_DUMMY
-    tmpScramState = 0;
+    tmpScramState = 1;
 #else
     tmpScramState = ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
 #endif
@@ -1077,7 +1077,7 @@ EVSE_t *EVSECreate(void)
     memset(pEVSE->info.ucSN, 0, defEVSESNLength);
     memset(pEVSE->info.ucID, 0, defEVSEIDLength);
     pEVSE->info.ucType = defEVSEType_AC;
-    pEVSE->info.ucTotalCON = 2;
+    pEVSE->info.ucTotalCON = 1;
     pEVSE->info.dLng = 116.275833;
     pEVSE->info.dLat = 39.831944;
     pEVSE->info.ucServiceFeeType = 0;
@@ -1119,7 +1119,7 @@ EVSE_t *EVSECreate(void)
 
 static void CONInit(void)
 {
-    static CON_t *pCON[2];  //在堆中定义
+    static CON_t *pCON[1];  //在堆中定义
 
     pListCON = UserListCreate();
     int i;

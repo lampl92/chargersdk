@@ -65,7 +65,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
     {
         if(TP_Read_Pressure(&adc_press) == 0)
         {
-            if(adc_press >= 2000 && adc_press <= 6000)
+            if(adc_press >= 1000 && adc_press <= 6000)
             {
                 i = i + Y;
                 if(i == 200)//持续5S
@@ -73,6 +73,10 @@ int  GUI_TOUCH_X_MeasureX(void) {
                     i = 0;
                     bitset(calebrate_done,5);
                     bitclr(calebrate_done,0);
+                }
+                if(i == 100)
+                {
+                    bitset(calebrate_done,3);
                 }
             }
             else
@@ -87,6 +91,10 @@ int  GUI_TOUCH_X_MeasureX(void) {
         }
         adc_x = tp_dev.x[0];
         adc_y = tp_dev.y[0];
+        if(adc_x >= 0 && adc_x <= 400)
+        {
+            bitset(calebrate_done,4); //清除故障窗口
+        }
         if(adc_y <= 40 && adc_y >= 0)
         {
             if(adc_x <= 40 && adc_x >= 0)

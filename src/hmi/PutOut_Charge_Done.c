@@ -207,6 +207,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         WM_DeleteWindow(hWin);
         PutOut_Home();
     }
+    ErrWindow_Show(hWin);
 }
 // USER END
 

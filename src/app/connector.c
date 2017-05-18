@@ -700,6 +700,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else
         {
+            printf_safe("CPERR %lf\n",cp1);
             tmpCPState = CP_ERR;
             return ERR_CON_CP_FAULT;
         }

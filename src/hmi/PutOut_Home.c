@@ -57,6 +57,7 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x03)
 #define ID_TEXT_8     (GUI_ID_USER + 0x09)
 #define ID_TEXT_9     (GUI_ID_USER + 0x0F)
+#define ID_MULTIEDIT_0  (GUI_ID_USER + 0x13)
 #define ID_TimerTime    0
 
 //14行1列，14个故障项
@@ -70,7 +71,7 @@ static TEXT_Handle _aahText[ERROR_LINE][ERROR_CAL];
 static BUTTON_Handle _framebutton;
 static int _x,_y;
 // USER END
-
+volatile int   Id;
 /*********************************************************************
 *
 *       Static data
@@ -124,6 +125,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 216, 80, 30, 0, 0x64, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 216, 80, 30, 0, 0x0, 0 },
     //{ BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 740, 380, 50, 50, 0, 0x0, 0 },
+    //{ MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 495, 145, 300, 250, 0, 0x0, 0 },
     // USER END
 };
 static const GUI_WIDGET_CREATE_INFO _aDialogWindow[] =
@@ -217,7 +219,9 @@ static void _cbDialog_Error()
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     uint8_t tmp[20] = {"交流输入故障"};
-    static int flag = 0;
+    static int flag = 1;
+
+    //GUI_CURSOR_SetPosition(496,146);
 
     if(flag == 0)
     {
@@ -226,6 +230,10 @@ static void _cbDialog_Error()
         // 创建窗口
         //hWindow = WM_CreateWindow(495, 145, 300, 250, WM_CF_SHOW, &_cbWindow, 0);
         hWindow = GUI_CreateDialogBox(_aDialogWindow, GUI_COUNTOF(_aDialogWindow), _cbWindow, WM_HBKWIN, 0, 0);
+        FRAMEWIN_SetTitleHeight(hWindow, 30);
+        WM_SetStayOnTop(hWindow,1);
+        WM_SetFocus(hWindow);
+
 //        FRAMEWIN_AddCloseButton(hWindow,FRAMEWIN_BUTTON_RIGHT,0);
 //        FRAMEWIN_AddMaxButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
 //        FRAMEWIN_AddMinButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
@@ -272,13 +280,13 @@ static void _cbDialog_Error()
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
-    uint8_t i = 0;
+    static uint32_t i = 0;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
     WM_HWIN hWin_Error;
     WM_HWIN hWin = pMsg->hWin;
 
-    Jump_IsManager(hWin);
+    CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
@@ -307,11 +315,46 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
 
-    /// TODO (zshare#1#): 增加故障弹窗
-    if(1)//故障
-    {
-        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
-    }
+//       if(bittest(defEventBitErr,defEventBitCONVoltOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "充电电压异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitCONACTempOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "温度异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitEVSEPEOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "PE异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitEVSEKnockOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "撞击异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitEVSEArresterOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "防雷异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitEVSEPowerOffOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "停电异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitCONCurrOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "电流异常\n");
+//        }
+//        if(bittest(defEventBitErr,defEventBitCONFreqOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "频率异常\n");
+//        }
+//
+//    defEventBitErr = defEventBitChargeCondition;
+    ErrWindow_Show(hWin);
+
+//    if(1)//故障
+//    {
+//        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
+//    }
 }
 // USER END
 static void _cbFrame(WM_MESSAGE * pMsg) {
@@ -334,13 +377,74 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN      hItem;
     U32          FileSize;
     int          NCode;
-    int          Id;
+
     uint8_t *buf = "56";
     // USER START (Optionally insert additional variables)
     // USER END
 
     switch (pMsg->MsgId)
     {
+    case MSG_PAINTErr:
+//        hItem = MULTIEDIT_CreateEx(460, 160, 300, 200, WM_GetClientWindow(pMsg->hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+//        MULTIEDIT_SetInsertMode(hItem,1);  //开启插入模式
+//        MULTIEDIT_SetFont(hItem, &XBF24_Font);
+//        WM_SetFocus(hItem);
+//        MULTIEDIT_SetInsertMode(hItem, 1);
+//        MULTIEDIT_SetCursorOffset(hItem,0);
+////#define defEventBitErr      (defEventBitCONVoltOK |     \
+////                            defEventBitCONACTempOK |    \
+////                            defEventBitEVSEPEOK |       \
+////                            defEventBitEVSEKnockOK |    \
+////                            defEventBitEVSEArresterOK | \
+////                            defEventBitEVSEPowerOffOK) | \
+////                            defEventBitCONCurrOK | \
+////                            defEventBitCONFreqOK)
+//        if(bittest(defEventBitChargeCondition,defEventBitEVSEScramOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "急停异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitCONVoltOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "充电电压异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitCONACTempOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "温度异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitEVSEPEOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "PE异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitEVSEKnockOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "撞击异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitEVSEArresterOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "防雷异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitEVSEPowerOffOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "停电异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitCONCurrOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "电流异常\n");
+//        }
+//        if(bittest(defEventBitChargeCondition,defEventBitCONFreqOK))
+//        {
+//            MULTIEDIT_SetText(hItem, "频率异常\n");
+//        }
+//
+//        //MULTIEDIT_SetText(hItem, "charge log\n1\n2\n3\n4\n\n\n\n\n\nn\\2\n\3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nfdagfgafgfdgda");
+//
+//        SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
+//        SCROLLBAR_CreateAttached(hItem, 0);//创建水平滑轮
+//
+//        GUI_CURSOR_SetPosition(460,160);
+//        WM_SetFocus(hItem);
+
+        break;
     case WM_INIT_DIALOG:
         //
         // Initialization of 'Framewin'
@@ -441,6 +545,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
         /* 显示时间和日期 */
+        Id = WM_GetTimerId(pMsg->Data.v);
         Timer_Process(pMsg);
         /* 重启定时器 */
         WM_RestartTimer(pMsg->Data.v, 20);

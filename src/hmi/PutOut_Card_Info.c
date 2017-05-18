@@ -192,6 +192,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         WM_DeleteWindow(hWin);
         PutOut_Home();
     }
+    ErrWindow_Show(hWin);
 }
 // USER END
 /*********************************************************************

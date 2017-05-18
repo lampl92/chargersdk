@@ -200,6 +200,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         xsprintf((char *)Timer_buf, "%02dS", (60-sec));
         EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
     }
+    ErrWindow_Show(hWin);
 }
 // USER END
 
