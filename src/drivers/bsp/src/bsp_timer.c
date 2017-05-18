@@ -39,7 +39,7 @@ void MX_TIM2_Init(void)
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 1000;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
@@ -161,8 +161,7 @@ void TIM_SetTIM2Compare1(unsigned int compare)
 {
 	if(pwm==compare)
 	{
-  ;
-	}
+ 	}
 	else
 	{
 			TIM2->CCR1=compare;
@@ -215,11 +214,13 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_ms++;
     delay_breath++;
     pwm_samp_timer++;
-    if((pwm_samp_flag==1)&&(pwm_samp_timer>=2))
+    if((pwm_samp_flag==1)&&(pwm_samp_timer>=4))
     {
+        RUN_ON;
         get_CP1();
         pwm_samp_timer=0;
         pwm_samp_flag=0;
+        RUN_OFF;
     }
     if(delay_breath>=200)
     {
@@ -231,7 +232,6 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_relay_ms++;
 	if(timer_relay_ms>=10000)
     {
-
         if(flag_power_out_l==1)
         {
             flag_pwm_out_l=1;
