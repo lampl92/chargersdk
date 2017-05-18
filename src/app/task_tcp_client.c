@@ -8,6 +8,7 @@
 #include "includes.h"
 #include "lwip/sockets.h"
 #include "ifconfig.h"
+#include "lwip_init.h"
 
 #define TCP_CLIENT_RX_BUFSIZE   1500
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_RX_BUFSIZE]; //TCP客户端接收数据缓冲区
@@ -42,13 +43,10 @@ void vTaskTCPClient(void *pvParameters)
     server_addr.sin_addr.s_addr = ifconfig.server_ip.addr;
     server_addr.sin_len = sizeof(server_addr);
     int i;
-    for(i = 0; i < 128; i ++)
-    {
-        tcp_client_sendbuf[i] = '0' + i;
-    }
+
     while(1)
     {
-        uxBitsTCP = xEventGroupWaitBits(xHandleEventlwIP, defEventBitPPPup, pdFALSE, pdTRUE, 0);
+        uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE, 0);
         if((uxBitsTCP & defEventBitPPPup) == defEventBitPPPup)
         {
             sock = lwip_socket(AF_INET, SOCK_STREAM, 0);
@@ -90,25 +88,30 @@ void vTaskTCPClient(void *pvParameters)
 //                            }
 //                            printf_safe("\n");
                             //memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
-                            xEventGroupSetBits(xHandleEventlwIP,defEventBitTCPRxEcho);
+                            xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPRxEcho);
                         }
                         if(FD_ISSET(sock, &writefds))
                         {
-                            uxBitsTCP = xEventGroupWaitBits(xHandleEventlwIP,
+                            uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
                                                             defEventBitTCPClientSendReq,
                                                             pdTRUE, pdTRUE, 0);
 
                             if((uxBitsTCP & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
                             {
+
                                 ret = lwip_write(sock,
-                                                 tcp_client_sendbuf,
-                                                 70); //发送tcp_server_sentbuf中的数据
+                                                 pechProto->pucSendBuffer,
+                                                 pechProto->ulSendLength);
                                 if(ret < 0)
                                 {
                                     printf_safe("发送失败\r\n");
                                 }
+                                else
+                                {
+                                    xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientSendOK);
+                                }
                             }
-                            uxBitsTCP = xEventGroupWaitBits(xHandleEventlwIP,
+                            uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
                                                             defEventBitTCPRxEcho,
                                                             pdTRUE, pdTRUE, 0);
                             if((uxBitsTCP & defEventBitTCPRxEcho) == defEventBitTCPRxEcho) //有数据要发送
@@ -125,7 +128,7 @@ void vTaskTCPClient(void *pvParameters)
                         break;
                     }
                     vTaskDelay(100);
-                }//while(1)
+                }//end of while(1)
                 break;
             default:
                 break;
