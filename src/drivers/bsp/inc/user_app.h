@@ -46,10 +46,10 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define TIMER3_ON    HAL_TIM_Base_Start_IT(&htim3)
 #define TIMER3_OFF   HAL_TIM_Base_Stop_IT(&htim3)
 
-#define PWM1_1000  do{TIM_SetTIM2Compare1(1000);}while(0)
+#define PWM1_1000  do{TIM_SetTIM2Compare1(1010);}while(0)
 #define PWM1_535   do{TIM_SetTIM2Compare1(535);}while(0)
 
-#define PWM2_1000  do{TIM_SetTIM4Compare1(1000);}while(0)
+#define PWM2_1000  do{TIM_SetTIM4Compare1(1010);}while(0)
 #define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
 
 #define write_chip1 0x40 //0100 0000
@@ -97,8 +97,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define va_k       0.22056//0.38?????÷??????????·?????×è300??1
 #define leakage_current_k   0.073242
 #define temper_k   100
-#define CP1_k      0.00344238
-#define CP2_k      0.00344238//14.1/3??·???±???
+#define CP1_k      0.0032
+#define CP2_k      0.0032//14.1/3??·???±???
 #define electricity_meter_num 256
 typedef struct
 {

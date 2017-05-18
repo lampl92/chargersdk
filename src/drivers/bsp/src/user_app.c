@@ -79,8 +79,8 @@ float get_CD4067(void)
 *********************************/
 void Buzzer_control(uint8_t state)
 {
-    Chip2.buzzer=state;
-    write_pca9554_1();
+    Chip2.buzzer=state&0x01;
+    write_pca9554_2();
 }
 float get_dc_massage(uint8_t DC_channel)
 {
@@ -234,12 +234,13 @@ float get_dc_massage(uint8_t DC_channel)
 void get_CP1(void)
 {
     unsigned short i;
-    uint32_t dma_cp1_sum;
+    float dma_cp1_sum;
     for(i = 0; i < samp_dma; i++)
     {
        dma_cp1_sum+=AD_samp_dma[i].CP1;
     }
-    Sys_samp.DC.CP1 = (dma_cp1_sum * CP1_k) / samp_dma + 0.32;
+    dma_cp1_sum=dma_cp1_sum/samp_dma;
+    Sys_samp.DC.CP1 = dma_cp1_sum * CP1_k + 0.2;
     dma_cp1_sum = 0;
     //return Sys_samp.DC.CP1;
 }
@@ -263,7 +264,7 @@ double get_CP2(void)
     }
     else
     {
-        Sys_samp.DC.CP2 = (CP2_sum_sys * CP2_k) / num_cp2 + 0.32;
+        Sys_samp.DC.CP2 = (CP2_sum_sys * CP2_k) / num_cp2 + 0.2;
     }
     CP2_sum_sys = 0;
     num_cp2 = 0;
