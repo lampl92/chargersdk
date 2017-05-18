@@ -53,7 +53,7 @@ typedef struct _ECHProtoParam
 
 
 
-typedef    int (*pECH_MAKE_PROC)  (void *pObj, uint16_t usSendID);
+typedef    int (*pECH_MAKE_PROC)  (void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uint32_t *pulLen);
 typedef    int (*pECH_ANALY_PROC) (void *pObj, uint16_t usSendID, uint32_t ulRecvLen);
 
 typedef struct
@@ -78,14 +78,18 @@ typedef struct _echProtocol
 {
     echProtoInfo_t info;
     echCMD_t *pCMD[ECH_CMD_MAX];
-    uint8_t *pucSendBuffer;
-    uint8_t *pucRecvBuffer;
-    uint32_t ulSendLength;
-    uint32_t ulRecvLength;
-    int (*sendCommand)(void *pObj, uint16_t usSendID);
+//    uint8_t *pucSendBuffer;
+//    uint8_t *pucRecvBuffer;
+//    uint32_t ulSendLength;
+//    uint32_t ulRecvLength;
+    gdsl_list_t plechSendCmd;
+    gdsl_list_t plechRecvCmd;
+    int (*sendCommand)(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t trycount);
 //    MT_RESULT (*recvResponse)(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLen);
     void (*deleteProtocol)(void *pObj);
 } echProtocol_t;
 
 echProtocol_t *EchProtocolCreate(void);
+int TransToServer(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t trycount);
+
 #endif

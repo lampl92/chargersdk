@@ -16,9 +16,10 @@ typedef struct
     uint32_t timeout;
     echCMDType_t cmd;
     uint32_t len;
-    uint32_t *buff;
+    uint32_t *pbuff;
     uint8_t status;
-}
+    uint8_t trycount;
+}echCmdElem_t;
 
 
 #endif

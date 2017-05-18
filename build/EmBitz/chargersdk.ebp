@@ -187,16 +187,18 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_err.h" />
+		<Unit filename="..\..\src\app\libEcharge\ech_globals.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_globals.h" />
 		<Unit filename="..\..\src\app\libEcharge\ech_protocol.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_protocol.h" />
-		<Unit filename="..\..\src\app\libEcharge\ech_transportlayer.c">
+		<Unit filename="..\..\src\app\libEcharge\ech_protocol_proc.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
+		<Unit filename="..\..\src\app\libEcharge\ech_protocol_proc.h" />
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
