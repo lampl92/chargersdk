@@ -255,7 +255,7 @@ double get_CP2(void)
 
     for(i = 0; i < samp_sum; i++)
     {
-        if(Sys_samp.DC_samp.CP2[i] >= 680)
+        if(Sys_samp.DC_samp.CP2[i] >= 1000)
         {
             CP2_sum_sys += Sys_samp.DC_samp.CP2[i];
             num_cp2++;
