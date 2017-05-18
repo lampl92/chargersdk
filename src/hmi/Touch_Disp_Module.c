@@ -9,15 +9,17 @@
 #include "touchtimer.h"
 #include "DIALOG.h"
 
-uint8_t *Scram_err = "急停异常\n";
-uint8_t *Volt_err = "充电电压异常\n";
-uint8_t *ACTemp_err = "温度异常\n";
-uint8_t *PE_err = "PE异常\n";
-uint8_t *Knock_err = "撞击异常\n";
-uint8_t *Arrester_err = "防雷异常\n";
-uint8_t *PowerOff_err = "停电异常\n";
-uint8_t *Curr_err = "电流异常\n";
-uint8_t *Freq_err = "频率异常\n";
+uint8_t *cur_err = "       当前故障列表\n";
+uint8_t *cur_noerr = "   当前没有故障\n";
+uint8_t *Scram_err = "   急停异常\n";
+uint8_t *Volt_err = "   充电电压异常\n";
+uint8_t *ACTemp_err = "   温度异常\n";
+uint8_t *PE_err = "   PE异常\n";
+uint8_t *Knock_err = "   撞击异常\n";
+uint8_t *Arrester_err = "   防雷异常\n";
+uint8_t *PowerOff_err = "   停电异常\n";
+uint8_t *Curr_err = "   电流异常\n";
+uint8_t *Freq_err = "   频率异常\n";
 
 WM_HWIN err_hItem;
 
@@ -303,6 +305,72 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     uint8_t msg_err[150] = "\0";
 
     WM_DeleteWindow(err_hItem);
+
+    if((uxBitsErr & 0x3e21c)== 0x3e21c)
+    {
+        strncat(msg_err,cur_noerr,strlen(cur_noerr));
+    }
+    else
+    {
+        strncat(msg_err,cur_err,strlen(cur_err));
+
+        if(((uxBitsErr >> 13) & 0x01) == 0)//(bittest(err_sysbol,defEventBitEVSEScramOK))
+        {
+            strncat(msg_err,Scram_err,strlen(Scram_err));
+            //MULTIEDIT_SetText(hItem, "急停异常\n");
+        }
+        if(((uxBitsErr >> 2) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitCONVoltOK))
+        {
+            strncat(msg_err,Volt_err,strlen(Volt_err));
+            //MULTIEDIT_SetText(hItem, "充电电压异常\n");
+        }
+        if(((uxBitsErr >> 9) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitCONACTempOK))
+        {
+            strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
+            //MULTIEDIT_SetText(hItem, "温度异常\n");
+        }
+        if(((uxBitsErr >> 14) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitEVSEPEOK))
+        {
+            strncat(msg_err,PE_err,strlen(PE_err));
+            //MULTIEDIT_SetText(hItem, "PE异常\n");
+        }
+        if(((uxBitsErr >> 15) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitEVSEKnockOK))
+        {
+            strncat(msg_err,Knock_err,strlen(Knock_err));
+            //MULTIEDIT_SetText(hItem, "撞击异常\n");
+        }
+        if(((uxBitsErr >> 16) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitEVSEArresterOK))
+        {
+            strncat(msg_err,Arrester_err,strlen(Arrester_err));
+            //MULTIEDIT_SetText(hItem, "防雷异常\n");
+        }
+        if(((uxBitsErr >> 17) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitEVSEPowerOffOK))
+        {
+            strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
+           // MULTIEDIT_SetText(hItem, "停电异常\n");
+        }
+        if(((uxBitsErr >> 3) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitCONCurrOK))
+        {
+            strncat(msg_err,Curr_err,strlen(Curr_err));
+            //MULTIEDIT_SetText(hItem, "电流异常\n");
+        }
+        if(((uxBitsErr >> 4) & 0x01) == 0)
+        //if(bittest(err_sysbol,defEventBitCONFreqOK))
+        {
+            strncat(msg_err,Freq_err,strlen(Freq_err));
+           // MULTIEDIT_SetText(hItem, "频率异常\n");
+        }
+    }
+
+//    ErrMultiEdit_Size.length =
+//
     err_hItem = MULTIEDIT_CreateEx(460, 60, 300, 300, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
     MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
     MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
@@ -311,59 +379,6 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     MULTIEDIT_SetCursorOffset(err_hItem,0);
     MULTIEDIT_EnableBlink(err_hItem,0,0);
 
-    if((uxBitsErr >> 13) & 0x01)//(bittest(err_sysbol,defEventBitEVSEScramOK))
-    {
-        strncat(msg_err,Scram_err,strlen(Scram_err));
-        //MULTIEDIT_SetText(hItem, "急停异常\n");
-    }
-    if((uxBitsErr >> 2) & 0x01)
-    //if(bittest(err_sysbol,defEventBitCONVoltOK))
-    {
-        strncat(msg_err,Volt_err,strlen(Volt_err));
-        //MULTIEDIT_SetText(hItem, "充电电压异常\n");
-    }
-    if((uxBitsErr >> 9) & 0x01)
-    //if(bittest(err_sysbol,defEventBitCONACTempOK))
-    {
-        strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
-        //MULTIEDIT_SetText(hItem, "温度异常\n");
-    }
-    if((uxBitsErr >> 14) & 0x01)
-    //if(bittest(err_sysbol,defEventBitEVSEPEOK))
-    {
-        strncat(msg_err,PE_err,strlen(PE_err));
-        //MULTIEDIT_SetText(hItem, "PE异常\n");
-    }
-    if((uxBitsErr >> 15) & 0x01)
-    //if(bittest(err_sysbol,defEventBitEVSEKnockOK))
-    {
-        strncat(msg_err,Knock_err,strlen(Knock_err));
-        //MULTIEDIT_SetText(hItem, "撞击异常\n");
-    }
-    if((uxBitsErr >> 16) & 0x01)
-    //if(bittest(err_sysbol,defEventBitEVSEArresterOK))
-    {
-        strncat(msg_err,Arrester_err,strlen(Arrester_err));
-        //MULTIEDIT_SetText(hItem, "防雷异常\n");
-    }
-    if((uxBitsErr >> 17) & 0x01)
-    //if(bittest(err_sysbol,defEventBitEVSEPowerOffOK))
-    {
-        strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
-       // MULTIEDIT_SetText(hItem, "停电异常\n");
-    }
-    if((uxBitsErr >> 3) & 0x01)
-    //if(bittest(err_sysbol,defEventBitCONCurrOK))
-    {
-        strncat(msg_err,Curr_err,strlen(Curr_err));
-        //MULTIEDIT_SetText(hItem, "电流异常\n");
-    }
-    if((uxBitsErr >> 4) & 0x01)
-    //if(bittest(err_sysbol,defEventBitCONFreqOK))
-    {
-        strncat(msg_err,Freq_err,strlen(Freq_err));
-       // MULTIEDIT_SetText(hItem, "频率异常\n");
-    }
     MULTIEDIT_SetText(err_hItem, msg_err);
 //    SCROLLBAR_CreateAttached(err_hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
 //    SCROLLBAR_CreateAttached(err_hItem, 0);//创建水平滑轮

@@ -26,7 +26,6 @@
 //#define MSG_MusicStart    (GUI_ID_USER + 0x31)
 //#define MSG_NextMusic     (GUI_ID_USER + 0x32)
 //电压异常；AC温度异常；PE异常；撞击；防雷异常；停电；电流异常；频率异常
-//defEventBitCONSocketTempOK、defEventBitEVSEScramOK
 
 extern uint8_t calebrate_done;
 struct Sys{
@@ -47,6 +46,14 @@ typedef struct
     char month[5];
     char day[5];
 }DateStruct;
+
+struct errMultiEdit_size{
+    uint16_t length;
+    uint16_t heigth;
+    uint8_t err_num;
+}ErrMultiEdit_Size;
+
+
 //uint8_t bitset(uint32_t var,uint8_t bitno);
 //uint8_t bitclr(uint32_t var,uint8_t bitno);
 //uint8_t bittest(uint32_t var,uint8_t bitno);

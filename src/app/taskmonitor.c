@@ -95,6 +95,18 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
+        else
+        {
+            for(i = 0;i <ulTotalCON;i++)
+            {
+                pCON = CONGetHandle(i);
+                if(pCON->state != STATE_CON_CHARGING)
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
+                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+                }
+            }
+        }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBEVSEState) == defEventBitTimerCBEVSEState)

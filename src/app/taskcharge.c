@@ -156,12 +156,11 @@ void vTaskEVSECharge(void *pvParameters)
                         if(pCON->status.ucRelayLState == SWITCH_ON &&
                                 pCON->status.ucRelayNState == SWITCH_ON)
                         {
+                            xTimerStart(xHandleTimerChargingData, 0);
+                            vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
                             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                             pCON->state = STATE_CON_CHARGING;
                             printf_safe("Start Charge!\n");
-                            xTimerStart(xHandleTimerChargingData, 0);
-                            vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
-
                         }
                         /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                     }
