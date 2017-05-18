@@ -32,9 +32,11 @@ uint16_t pwm_r_1, pwm_g_1, pwm_b_1, pwm_r_2, pwm_g_2, pwm_b_2,
 
 uint8_t flag_breath_r_1,flag_breath_r_2,flag_breath_g_1,flag_breath_g_2,flag_breath_b_1,flag_breath_b_2,
         flag_flicker_r_1,flag_flicker_r_2,flag_flicker_g_1,flag_flicker_g_2,flag_flicker_b_1,flag_flicker_b_2;
+void led_ctrl(uint8_t num, uint8_t colour, uint8_t state);
+ void led_state_init(void);
  void led_breath_r(void);
  void led_breath_g(void);
  void led_breath_b(void);
- void led_state_init(void);
+ void led_output(void);
 
 #endif /* LED_CONTROL_H_INCLUDED */

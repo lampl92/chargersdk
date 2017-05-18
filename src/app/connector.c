@@ -664,7 +664,7 @@ static ErrorCode_t GetCPState(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpCPState = CP_6V_PWM;
 #else
-        cp1 = get_CP1();
+        cp1 = Sys_samp.DC.CP1;//get_CP1();
         if((cp1 < 12.8f) && (cp1 > 11.2f))
         {
             if(TIM2->CCR1 != 1000)

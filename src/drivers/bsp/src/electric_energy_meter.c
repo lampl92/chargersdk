@@ -52,47 +52,6 @@ void UART7_IRQHandler(void)
 		  }
 	}
 }
-//RS485·¢ËÍlen¸ö×Ö½Ú.
-//buf:·¢ËÍÇøÊ×µØÖ·
-//len:·¢ËÍµÄ×Ö½ÚÊý(ÎªÁËºÍ±¾´úÂëµÄ½ÓÊÕÆ¥Åä,ÕâÀï½¨Òé²»Òª³¬¹ý64¸ö×Ö½Ú)
-void RS485_Send_Data(u8 *buf,u8 len)
-
-{
-	RS485_EN;			//ÉèÖÃÎª·¢ËÍÄ£Ê½
-	HAL_UART_Transmit(&UART7_RS485Handler,buf,len,1000);//´®¿Ú2·¢ËÍÊý¾Ý
-	RS485_DIS;
-    RS485_RX_CNT=0;
-}
-//RS485²éÑ¯½ÓÊÕµ½µÄÊý¾Ý
-//buf:½ÓÊÕ»º´æÊ×µØÖ·
-//len:¶Áµ½µÄÊý¾Ý³¤¶È
-void RS485_Receive_Data(u8 *buf,u8 *len)
-{
-	u8 rxlen=RS485_RX_CNT;
-	u8 i=0;
-	*len=0;				//Ä¬ÈÏÎª0
-	delay_ms(10);		//µÈ´ý10ms,Á¬Ðø³¬¹ý10msÃ»ÓÐ½ÓÊÕµ½Ò»¸öÊý¾Ý,ÔòÈÏÎª½ÓÊÕ½áÊø
-	if(rxlen==RS485_RX_CNT&&rxlen)//½ÓÊÕµ½ÁËÊý¾Ý,ÇÒ½ÓÊÕÍê³ÉÁË
-	{
-		for(i=0;i<rxlen;i++)
-		{
-			buf[i]=RS485_RX_BUF[i];
-		}
-		*len=RS485_RX_CNT;	//¼ÇÂ¼±¾´ÎÊý¾Ý³¤¶È
-		RS485_RX_CNT=0;		//ÇåÁã
-	}
-}
-void rs_485_analysis(void)
-{
-    if(RS485_RX_MODBUS[2]==0X03)
-    {
-        if(Electricity_meter[0].flag.flag_va==1)
-        {
-
-        }
-    }
-}
-
 uint16_t c_crc(uint8_t *pushdata,uint8_t length)
 {
 
@@ -122,57 +81,49 @@ uint16_t c_crc(uint8_t *pushdata,uint8_t length)
 
 		return(reg_crc);
 }
-/***********************************************************/
-/** @brief 读取电表寄存器相关信息
- * @param pvCON void*
- * @param  add uint8_t   要操作的电表的地址信息，01~255；
- * @param  cmd uint8_t   RS485/MODBUS-RTU通信协议命令如read write
- * @param  massage       获取相关电能信息voltage、current、power、electric_energy_l、electric_energy_h、frequency
- */
-void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num)
-{
-    uint16_t VREF_CRC;
-    if(massage==voltage)
-    {
-     Electricity_meter[add].flag.flag_va=1;
-    }
-    if(massage==current)
-    {
-     Electricity_meter[add].flag.flag_ia=1;
-    }
-      if(massage==power)
-    {
-     Electricity_meter[add].flag.flag_power=1;
-    }
-    if(massage==electric_energy_l)
-    {
-     Electricity_meter[add].flag.flag_electric_energy_l=1;
-    }
-        if(massage==electric_energy_h)
-    {
-     Electricity_meter[add].flag.flag_electric_energy_h=1;
-    }
-    if(massage==frequency)
-    {
-     Electricity_meter[add].flag.flag_frequency=1;
-    }
-    RS485_TX_BUF[0]=add;
-    RS485_TX_BUF[1]=cmd;
-    RS485_TX_BUF[2]=(massage>>8)&0x00ff;
-    RS485_TX_BUF[3]=massage&0x00ff;
-    RS485_TX_BUF[4]=(num>>8)&0x00ff;
-    RS485_TX_BUF[5]=num&0x00ff;
-    VREF_CRC=c_crc(&RS485_TX_BUF,6);
-    RS485_TX_BUF[6]=(VREF_CRC>>8)&0Xff;
-    RS485_TX_BUF[7]=VREF_CRC&0Xff;
-    RS485_Send_Data(&RS485_TX_BUF,8);
-    flag_rs485[add]++;
+//RS485·¢ËÍlen¸ö×Ö½Ú.
+//buf:·¢ËÍÇøÊ×µØÖ·
+//len:·¢ËÍµÄ×Ö½ÚÊý(ÎªÁËºÍ±¾´úÂëµÄ½ÓÊÕÆ¥Åä,ÕâÀï½¨Òé²»Òª³¬¹ý64¸ö×Ö½Ú)
+void RS485_Send_Data(u8 *buf,u8 len)
 
-//直接接收数据
-//bsp_DelayMS(100);
-vTaskDelay(100);
-electricity_meter_analysis(add);
+{
+	RS485_EN;			//ÉèÖÃÎª·¢ËÍÄ£Ê½
+	HAL_UART_Transmit(&UART7_RS485Handler,buf,len,1000);//´®¿Ú2·¢ËÍÊý¾Ý
+	RS485_DIS;
+    RS485_RX_CNT=0;
 }
+//RS485²éÑ¯½ÓÊÕµ½µÄÊý¾Ý
+//buf:½ÓÊÕ»º´æÊ×µØÖ·
+//len:¶Áµ½µÄÊý¾Ý³¤¶È
+void RS485_Receive_Data(u8 *buf,u8 *len)
+{
+	u8 rxlen=RS485_RX_CNT;
+	u8 i=0;
+	*len=0;				//Ä¬ÈÏÎª0
+	Delay_ms(10);		//µÈ´ý10ms,Á¬Ðø³¬¹ý10msÃ»ÓÐ½ÓÊÕµ½Ò»¸öÊý¾Ý,ÔòÈÏÎª½ÓÊÕ½áÊø
+	if(rxlen==RS485_RX_CNT&&rxlen)//½ÓÊÕµ½ÁËÊý¾Ý,ÇÒ½ÓÊÕÍê³ÉÁË
+	{
+		for(i=0;i<rxlen;i++)
+		{
+			buf[i]=RS485_RX_BUF[i];
+		}
+		*len=RS485_RX_CNT;	//¼ÇÂ¼±¾´ÎÊý¾Ý³¤¶È
+		RS485_RX_CNT=0;		//ÇåÁã
+	}
+}
+void rs_485_analysis(void)
+{
+    if(RS485_RX_MODBUS[2]==0X03)
+    {
+        if(Electricity_meter[0].flag.flag_va==1)
+        {
+
+        }
+    }
+}
+
+
+
 void electricity_meter_analysis(uint8_t add)
 {
     uint16_t crc_vref;
@@ -253,6 +204,58 @@ void electricity_meter_analysis(uint8_t add)
     }
 
 }
+/***********************************************************/
+/** @brief 读取电表寄存器相关信息
+ * @param pvCON void*
+ * @param  add uint8_t   要操作的电表的地址信息，01~255；
+ * @param  cmd uint8_t   RS485/MODBUS-RTU通信协议命令如read write
+ * @param  massage       获取相关电能信息voltage、current、power、electric_energy_l、electric_energy_h、frequency
+ */
+void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint16_t num)
+{
+    uint16_t VREF_CRC;
+    if(massage==voltage)
+    {
+     Electricity_meter[add].flag.flag_va=1;
+    }
+    if(massage==current)
+    {
+     Electricity_meter[add].flag.flag_ia=1;
+    }
+      if(massage==power)
+    {
+     Electricity_meter[add].flag.flag_power=1;
+    }
+    if(massage==electric_energy_l)
+    {
+     Electricity_meter[add].flag.flag_electric_energy_l=1;
+    }
+        if(massage==electric_energy_h)
+    {
+     Electricity_meter[add].flag.flag_electric_energy_h=1;
+    }
+    if(massage==frequency)
+    {
+     Electricity_meter[add].flag.flag_frequency=1;
+    }
+    RS485_TX_BUF[0]=add;
+    RS485_TX_BUF[1]=cmd;
+    RS485_TX_BUF[2]=(massage>>8)&0x00ff;
+    RS485_TX_BUF[3]=massage&0x00ff;
+    RS485_TX_BUF[4]=(num>>8)&0x00ff;
+    RS485_TX_BUF[5]=num&0x00ff;
+    VREF_CRC=c_crc(&RS485_TX_BUF,6);
+    RS485_TX_BUF[6]=(VREF_CRC>>8)&0Xff;
+    RS485_TX_BUF[7]=VREF_CRC&0Xff;
+    RS485_Send_Data(&RS485_TX_BUF,8);
+    flag_rs485[add]++;
+
+//直接接收数据
+//bsp_DelayMS(100);
+vTaskDelay(100);
+electricity_meter_analysis(add);
+}
+
 double Get_Electricity_meter_massage_energy(uint8_t add)
 {
     double electricity_data;
