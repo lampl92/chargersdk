@@ -1,5 +1,10 @@
 #ifndef USER_APP_H_INCLUDED
 #define USER_APP_H_INCLUDED
+#include "myiic.h"
+#include "led_control.h"
+#include "ST_LIS2DH12.h"
+extern void TIM_SetTIM4Compare1(unsigned int compare);
+extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define A_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_RESET)//ctr_gjd1
 #define A_KEY_ON     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_SET)//ctr_gjd1
 
@@ -208,7 +213,7 @@ double get_CP2(void);
 double get_va(void);
 float get_dc_massage(uint8_t DC_channel);
 void write_pca9554_1(void);
-void Delay_ms(unsigned long long);
+void Delay_ms(unsigned long long time);
 void PCA9554_init(void);
 void Gun_test(void);
 void Power_out_n_pwm_ctrl(void);
@@ -231,6 +236,7 @@ void Close_gun_1(void);
 void Open_gun_1(void);
 void Close_gun_2(void);
 void Open_gun_2(void);
+void get_samp_point(void);//ÓÃÊ±30¦ÌS
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t num_cp1,num_cp2;
