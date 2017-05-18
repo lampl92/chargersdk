@@ -25,8 +25,6 @@ const double  resistance[154] =
     0.806, 0.780, 0.756, 0.732, 0.709, 0.687, 0.666, 0.645, 0.625, 0.606,
     0.588, 0.570, 0.552, 0.536, 0.520, 0.504
 };
-
-
 double get_ia(void)
 {
     unsigned short i;
@@ -326,7 +324,6 @@ void Delay_us(unsigned long long time)
 }
 void Close_gun_1(void)
 {
-
         A_KEY_ON;
         B_KEY_OFF;
         Delay_ms(lock_timer);
@@ -441,20 +438,16 @@ void Peripheral_Init(void)
     RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
-
+    Close_gun_1();
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
-    vref = 2045;
-    //vref=get_dc_massage(VREF_1v5);
+    vref=get_dc_massage(VREF_1v5);
 //   Get_State_relay();
-//
 //         Get_Electricity_meter_massage_frequency();
     //Close_gun_1();
     PWM1_ON;
     PWM2_ON;
     TIMER3_ON;
     TIMER5_ON;
-    yy_test== ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
-  //  yy_test= ~((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
-        //Close_gun_1();
+
 }

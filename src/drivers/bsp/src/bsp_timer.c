@@ -295,10 +295,8 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
   /* USER CODE END TIM5_IRQn 0 */
-  RUN_ON;
   HAL_TIM_IRQHandler(&htim5);
   get_samp_point();
-  RUN_OFF;
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */
