@@ -53,7 +53,7 @@ typedef struct _ECHProtoParam
 
 
 
-typedef    int (*pECH_MAKE_PROC)  (void *pObj, uint16_t usSendID, uint32_t *pulSendLength);
+typedef    int (*pECH_MAKE_PROC)  (void *pObj, uint16_t usSendID);
 typedef    int (*pECH_ANALY_PROC) (void *pObj, uint16_t usSendID, uint32_t ulRecvLen);
 
 typedef struct
@@ -80,7 +80,9 @@ typedef struct _echProtocol
     echCMD_t *pCMD[ECH_CMD_MAX];
     uint8_t *pucSendBuffer;
     uint8_t *pucRecvBuffer;
-    int (*sendCommand)(void *pObj, uint16_t usSendID, uint32_t ulSendLenght);
+    uint32_t ulSendLength;
+    uint32_t ulRecvLength;
+    int (*sendCommand)(void *pObj, uint16_t usSendID);
 //    MT_RESULT (*recvResponse)(void *pObj, uint8_t ucSendID, uint32_t *pucRecvdLen);
     void (*deleteProtocol)(void *pObj);
 } echProtocol_t;
