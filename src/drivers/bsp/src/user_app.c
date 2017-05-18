@@ -25,8 +25,6 @@ const double  resistance[154] =
     0.806, 0.780, 0.756, 0.732, 0.709, 0.687, 0.666, 0.645, 0.625, 0.606,
     0.588, 0.570, 0.552, 0.536, 0.520, 0.504
 };
-
-
 double get_ia(void)
 {
     unsigned short i;
@@ -73,6 +71,16 @@ float get_CD4067(void)
     }
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
     return Sys_samp.DC.CD4067;
+}
+/********************************
+*蜂鸣器状态控制函数
+*state 0 关闭 1 开启
+*无返回值
+*********************************/
+void Buzzer_control(uint8_t state)
+{
+    Chip2.buzzer=state;
+    write_pca9554_1();
 }
 float get_dc_massage(uint8_t DC_channel)
 {
@@ -223,30 +231,17 @@ float get_dc_massage(uint8_t DC_channel)
     return dc_data;
 
 }
-double get_CP1(void)
+void get_CP1(void)
 {
     unsigned short i;
-    for(i = 0; i < samp_sum; i++)
+    uint32_t dma_cp1_sum;
+    for(i = 0; i < samp_dma; i++)
     {
-        if(Sys_samp.DC_samp.CP1[i] >= 1000)
-        {
-            CP1_sum_sys += Sys_samp.DC_samp.CP1[i];
-            num_cp1++;
-        }
+       dma_cp1_sum+=AD_samp_dma[i].CP1;
     }
-    if(num_cp1 <= 20)
-    {
-        Sys_samp.DC.CP1 = 0;
-    }
-    else
-    {
-        Sys_samp.DC.CP1 = (CP1_sum_sys * CP1_k) / num_cp1 + 0.32;
-    }
-    CP1_sum_sys = 0;
-    num_cp1 = 0;
-    return Sys_samp.DC.CP1;
-
-
+    Sys_samp.DC.CP1 = (dma_cp1_sum * CP1_k) / samp_dma + 0.32;
+    dma_cp1_sum = 0;
+    //return Sys_samp.DC.CP1;
 }
 
 double get_CP2(void)
@@ -285,8 +280,8 @@ void get_samp_point(void)//ÓÃÊ±30¦ÌS
         ia_samp_sum += AD_samp_dma[i].ia_samp;
         va_samp_sum += AD_samp_dma[i].va_samp;
         leakage_current_sum += AD_samp_dma[i].leakage_current;
-        CP1_sum += AD_samp_dma[1].CP1;
-        CP2_sum += AD_samp_dma[1].CP2;
+        //CP1_sum += AD_samp_dma[i].CP1;
+      // CP2_sum += AD_samp_dma[i].CP2;
     }
     for(j = 0; j < samp_sum - 1; j++)
     {
@@ -294,21 +289,21 @@ void get_samp_point(void)//ÓÃÊ±30¦ÌS
         Sys_samp.AC_samp.va_samp[j] = Sys_samp.AC_samp.va_samp[j + 1];
         Sys_samp.AC_samp.leakage_current_samp[j] = Sys_samp.AC_samp.leakage_current_samp[j + 1];
         Sys_samp.DC_samp.CD4067[j] = Sys_samp.DC_samp.CD4067[j + 1];
-        Sys_samp.DC_samp.CP1[j] = Sys_samp.DC_samp.CP1[j + 1];
-        Sys_samp.DC_samp.CP2[j] = Sys_samp.DC_samp.CP2[j + 1];
+       // Sys_samp.DC_samp.CP1[j] = Sys_samp.DC_samp.CP1[j + 1];
+       // Sys_samp.DC_samp.CP2[j] = Sys_samp.DC_samp.CP2[j + 1];
     }
     Sys_samp.AC_samp.ia_samp[samp_sum - 1] = ia_samp_sum / samp_dma;
     Sys_samp.AC_samp.va_samp[samp_sum - 1] = va_samp_sum / samp_dma;
     Sys_samp.AC_samp.leakage_current_samp[samp_sum - 1] = leakage_current_sum / samp_dma;
     Sys_samp.DC_samp.CD4067[samp_sum - 1] = CD4067_sum / samp_dma;
-    Sys_samp.DC_samp.CP1[samp_sum - 1] = CP1_sum / samp_dma;
-    Sys_samp.DC_samp.CP2[samp_sum - 1] = CP2_sum / samp_dma;
+   // Sys_samp.DC_samp.CP1[samp_sum - 1] = CP1_sum / samp_dma;
+   // Sys_samp.DC_samp.CP2[samp_sum - 1] = CP2_sum / samp_dma;
     CD4067_sum = 0;
     leakage_current_sum = 0;
     va_samp_sum = 0;
     ia_samp_sum = 0;
-    CP2_sum = 0;
-    CP1_sum = 0;
+    //CP2_sum = 0;
+   // CP1_sum = 0;
     //RUN_OFF;
 }
 void Delay_ms(unsigned long long time)
@@ -326,7 +321,6 @@ void Delay_us(unsigned long long time)
 }
 void Close_gun_1(void)
 {
-
         A_KEY_ON;
         B_KEY_OFF;
         Delay_ms(lock_timer);
@@ -441,20 +435,18 @@ void Peripheral_Init(void)
     RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
-
-    //POWER_L_CLOSE();
-    //POWER_N_CLOSE();
-    vref = 2045;
-    //vref=get_dc_massage(VREF_1v5);
-//   Get_State_relay();
-//
-//         Get_Electricity_meter_massage_frequency();
-    //Close_gun_1();
     PWM1_ON;
     PWM2_ON;
     TIMER3_ON;
     TIMER5_ON;
-    yy_test== ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
-  //  yy_test= ~((uint8_t)(read_pca9554_2() >> 3)) & 0x01;
-        //Close_gun_1();
+    //Close_gun_1();
+    //POWER_L_CLOSE();
+    //POWER_N_CLOSE();
+    vref=2045;
+ //   vref=get_dc_massage(VREF_1v5);
+//   Get_State_relay();
+//         Get_Electricity_meter_massage_frequency();
+    //Close_gun_1();
+
+
 }

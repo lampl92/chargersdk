@@ -208,7 +208,8 @@ typedef struct
 } flag;
 flag sys_flag;
 void IIC_Init(void);
-double get_CP1(void);
+//double get_CP1(void);
+void get_CP1(void);
 double get_CP2(void);
 double get_va(void);
 float get_dc_massage(uint8_t DC_channel);
@@ -237,11 +238,12 @@ void Open_gun_1(void);
 void Close_gun_2(void);
 void Open_gun_2(void);
 void get_samp_point(void);//ÓÃÊ±30¦ÌS
+void Buzzer_control(uint8_t state);
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
 uint16_t num_cp1,num_cp2;
 double vref,va;
 uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum,leakage_current_sum,va_samp_sum,ia_samp_sum,CP2_sum,CP1_sum,CP1_sum_sys,CP2_sum_sys;
-
+uint8_t   pwm_samp_timer,pwm_samp_flag;
 #endif /* USER_APP_H_INCLUDED */

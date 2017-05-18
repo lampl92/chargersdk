@@ -191,6 +191,8 @@ void TIM2_IRQHandler (void)
 
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
+  pwm_samp_timer=0;
+  pwm_samp_flag=1;
 
 /* USER CODE BEGIN TIM2_IRQn 1 */
 
@@ -212,6 +214,13 @@ void TIM3_IRQHandler (void)//0.1ms
 	pwm_b_2++;
 	timer_ms++;
     delay_breath++;
+    pwm_samp_timer++;
+    if((pwm_samp_flag==1)&&(pwm_samp_timer>=2))
+    {
+        get_CP1();
+        pwm_samp_timer=0;
+        pwm_samp_flag=0;
+    }
     if(delay_breath>=200)
     {
     led_breath_r();
@@ -295,10 +304,8 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
   /* USER CODE END TIM5_IRQn 0 */
-  RUN_ON;
   HAL_TIM_IRQHandler(&htim5);
   get_samp_point();
-  RUN_OFF;
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */
