@@ -89,8 +89,9 @@
 #define defEventBitDailCONNECT          BIT_1
 #define defEventBitReDail               BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
-#define defEventBitPPPup                BIT_4
-#define defEventBitTCPRxEcho            BIT_5
+#define defEventBitTCPClientSendOK      BIT_4
+#define defEventBitPPPup                BIT_5
+#define defEventBitTCPRxEcho            BIT_6
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID     BIT_0
