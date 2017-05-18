@@ -75,6 +75,7 @@ void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x
 uint8_t TP_Scan(uint8_t tp);								//…®√Ë
 uint8_t TP_Init(void);								//≥ı ºªØ
 void GUI_Touch_Calibrate();
+uint8_t TP_Read_Pressure(float *pressure);
 #endif
 
 

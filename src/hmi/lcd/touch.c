@@ -4,6 +4,7 @@
 #include "math.h"
 #include "GUI.h"
 #include "cJSON.h"
+#include "cfg_parse.h"
 
 static float sqrt1(float x)
 {

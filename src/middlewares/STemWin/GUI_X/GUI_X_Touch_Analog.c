@@ -46,6 +46,7 @@ Purpose     : Config / System dependent externals for GUI
 #include "bsp.h"
 #include "lcddrv.h"
 #include "touch.h"
+#include "touchtimer.h"
 
 #define Y (1)
 static uint16_t adc_x,adc_y;
@@ -60,6 +61,21 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
+        if(TP_Read_Pressure(&adc_press) == 0)
+        {
+            if((adc_press > 0)&&(PEN == 0))
+            {
+               Buzzer_control(1);
+            }
+            else
+            {
+                Buzzer_control(0);
+            }
+
+        }
+
+//        vTaskDelay(100);
+
 
     if(((calebrate_done&0x1) == 1)&&(PEN == 0))
     {
@@ -91,9 +107,13 @@ int  GUI_TOUCH_X_MeasureX(void) {
         }
         adc_x = tp_dev.x[0];
         adc_y = tp_dev.y[0];
-        if(adc_x >= 0 && adc_x <= 400)
+        if(adc_x < ErrMultiEdit_Size.xpos)
         {
             bitset(calebrate_done,4); //清除故障窗口
+        }
+        else if(adc_y < ErrMultiEdit_Size.ypos)
+        {
+            bitset(calebrate_done,4);
         }
         if(adc_y <= 40 && adc_y >= 0)
         {
@@ -137,6 +157,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
         adc_x = 0;
         adc_y = 0;
     }
+
 
     return adc_x;
 }

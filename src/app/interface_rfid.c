@@ -26,6 +26,9 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
     state = TransToMT626(pRfid->com, MT626_READ_UID_CMD, NULL, 0);
     if(state == MT_STATE_Y)
     {
+        Buzzer_control(1);
+        vTaskDelay(100);
+        Buzzer_control(0);
         ulRecvdOptLen = pmt626cmd->uiRecvdOptLen;
         memset(pRfid->status.ucCardID, 0, defCardIDLength);
         memmove(pRfid->status.ucCardID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);

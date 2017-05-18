@@ -57,6 +57,8 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x03)
 #define ID_TEXT_8     (GUI_ID_USER + 0x09)
 #define ID_TEXT_9     (GUI_ID_USER + 0x0F)
+#define ID_TEXT_A     (GUI_ID_USER + 0x14)
+#define ID_TEXT_B     (GUI_ID_USER + 0x15)
 #define ID_MULTIEDIT_0  (GUI_ID_USER + 0x13)
 #define ID_TimerTime    0
 
@@ -108,8 +110,10 @@ static const U8 _acImage_0[463] =
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
+//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
+//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_B, 450, 80, 250, 40, 0, 0x0, 0 },
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 50, 254, 50, 0, 0x0, 0 },
     //{ IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
@@ -314,41 +318,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
+    EDIT_SetCursorAtPixel(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),100);
 
-//       if(bittest(defEventBitErr,defEventBitCONVoltOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "充电电压异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitCONACTempOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "温度异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitEVSEPEOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "PE异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitEVSEKnockOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "撞击异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitEVSEArresterOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "防雷异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitEVSEPowerOffOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "停电异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitCONCurrOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "电流异常\n");
-//        }
-//        if(bittest(defEventBitErr,defEventBitCONFreqOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "频率异常\n");
-//        }
-//
-//    defEventBitErr = defEventBitChargeCondition;
     ErrWindow_Show(hWin);
 
 //    if(1)//故障
@@ -479,10 +450,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &XBF24_Font, GUI_BLACK, "手机支付请扫描二维码");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
 
         //Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER), GUI_TA_HCENTER | GUI_TA_VCENTER,
          //           &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_GREEN, BUTTON_CI_UNPRESSED, GUI_GREEN, "管理");
@@ -611,6 +584,7 @@ void PutOut_Home()
     while(1)
     {
         GUI_Delay(500);
+
         uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                         defEventBitGotIDtoHMI,
                                         pdTRUE, pdTRUE, 0);
@@ -622,6 +596,7 @@ void PutOut_Home()
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         display_encode(&x,&y,&p);
         vTaskDelay(500);
+        led_breath_r();
     }
 }
 // USER END

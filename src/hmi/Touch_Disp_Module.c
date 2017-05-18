@@ -10,7 +10,7 @@
 #include "DIALOG.h"
 
 uint8_t *cur_err = "       当前故障列表\n";
-uint8_t *cur_noerr = "   当前没有故障\n";
+uint8_t *cur_noerr = "\n   当前没有故障\n";
 uint8_t *Scram_err = "   急停异常\n";
 uint8_t *Volt_err = "   充电电压异常\n";
 uint8_t *ACTemp_err = "   温度异常\n";
@@ -308,70 +308,90 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
 
     if((uxBitsErr & 0x3e21c)== 0x3e21c)
     {
+        led_ctrl(1,red,keep_off);
         strncat(msg_err,cur_noerr,strlen(cur_noerr));
+        ErrMultiEdit_Size.xlength = 300;
+        ErrMultiEdit_Size.ylength = 24*4;
+        ErrMultiEdit_Size.xpos = 480;
+        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
     }
     else
     {
+        led_ctrl(1,red,flicker);
+        ErrMultiEdit_Size.err_num = 0;
         strncat(msg_err,cur_err,strlen(cur_err));
 
         if(((uxBitsErr >> 13) & 0x01) == 0)//(bittest(err_sysbol,defEventBitEVSEScramOK))
         {
             strncat(msg_err,Scram_err,strlen(Scram_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "急停异常\n");
         }
         if(((uxBitsErr >> 2) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitCONVoltOK))
         {
             strncat(msg_err,Volt_err,strlen(Volt_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "充电电压异常\n");
         }
         if(((uxBitsErr >> 9) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitCONACTempOK))
         {
             strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "温度异常\n");
         }
         if(((uxBitsErr >> 14) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitEVSEPEOK))
         {
             strncat(msg_err,PE_err,strlen(PE_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "PE异常\n");
         }
         if(((uxBitsErr >> 15) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitEVSEKnockOK))
         {
             strncat(msg_err,Knock_err,strlen(Knock_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "撞击异常\n");
         }
         if(((uxBitsErr >> 16) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitEVSEArresterOK))
         {
             strncat(msg_err,Arrester_err,strlen(Arrester_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "防雷异常\n");
         }
         if(((uxBitsErr >> 17) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitEVSEPowerOffOK))
         {
             strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
+            ErrMultiEdit_Size.err_num++;
            // MULTIEDIT_SetText(hItem, "停电异常\n");
         }
         if(((uxBitsErr >> 3) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitCONCurrOK))
         {
             strncat(msg_err,Curr_err,strlen(Curr_err));
+            ErrMultiEdit_Size.err_num++;
             //MULTIEDIT_SetText(hItem, "电流异常\n");
         }
         if(((uxBitsErr >> 4) & 0x01) == 0)
         //if(bittest(err_sysbol,defEventBitCONFreqOK))
         {
             strncat(msg_err,Freq_err,strlen(Freq_err));
+            ErrMultiEdit_Size.err_num++;
            // MULTIEDIT_SetText(hItem, "频率异常\n");
         }
+        ErrMultiEdit_Size.xlength = 300;
+        ErrMultiEdit_Size.ylength = 24*(ErrMultiEdit_Size.err_num+4);
+        ErrMultiEdit_Size.xpos = 480;
+        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
     }
 
 //    ErrMultiEdit_Size.length =
-//
-    err_hItem = MULTIEDIT_CreateEx(460, 60, 300, 300, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+//460,60,300,300
+    err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos, ErrMultiEdit_Size.ypos, ErrMultiEdit_Size.xlength, ErrMultiEdit_Size.ylength, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
     MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
     MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
     WM_SetFocus(err_hItem);
@@ -380,6 +400,7 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     MULTIEDIT_EnableBlink(err_hItem,0,0);
 
     MULTIEDIT_SetText(err_hItem, msg_err);
+    MULTIEDIT_SetCursorOffset(err_hItem,300);
 //    SCROLLBAR_CreateAttached(err_hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
 //    SCROLLBAR_CreateAttached(err_hItem, 0);//创建水平滑轮
 

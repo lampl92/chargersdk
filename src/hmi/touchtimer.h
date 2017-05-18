@@ -12,6 +12,7 @@
 #include "keyboard.h"
 #include "qr_encode.h"
 #include "lcddrv.h"
+#include "user_app.h"
 //#include "chargepoint.h"
 #define EXIT_DISP_DELAY 60
 #define REFLASH 20
@@ -48,8 +49,10 @@ typedef struct
 }DateStruct;
 
 struct errMultiEdit_size{
-    uint16_t length;
-    uint16_t heigth;
+    uint16_t xpos;
+    uint16_t ypos;
+    uint16_t xlength;
+    uint16_t ylength;
     uint8_t err_num;
 }ErrMultiEdit_Size;
 

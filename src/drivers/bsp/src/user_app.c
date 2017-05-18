@@ -79,8 +79,8 @@ float get_CD4067(void)
 *********************************/
 void Buzzer_control(uint8_t state)
 {
-    Chip2.buzzer=state;
-    write_pca9554_1();
+    Chip2.buzzer=state&0x01;;
+    write_pca9554_2();
 }
 float get_dc_massage(uint8_t DC_channel)
 {
@@ -443,6 +443,7 @@ void Peripheral_Init(void)
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
     vref=2045;
+    PWM1_1000;
  //   vref=get_dc_massage(VREF_1v5);
 //   Get_State_relay();
 //         Get_Electricity_meter_massage_frequency();
