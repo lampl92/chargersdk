@@ -256,7 +256,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto ->sendCommand = sendCommand;
     pProto ->deleteProtocol = deleteProto;
 
-///** @todo (zshare#1#): 调通后去掉这个buff，因为已经存在链表了 */
+///** @todo (rgw#1#): 调通后去掉这个buff，因为已经存在链表了 */
 //    pProto->pucSendBuffer = (uint8_t *)malloc(REMOTE_SENDBUFF_MAX * sizeof(uint8_t));
 //    memset(pProto->pucSendBuffer, 0, MT626_SENDBUFF_MAX);
 //    pProto->pucRecvBuffer = (uint8_t *)malloc(REMOTE_RECVBUFF_MAX * sizeof(uint8_t));

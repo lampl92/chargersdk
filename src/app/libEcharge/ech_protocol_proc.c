@@ -83,8 +83,12 @@ void vTaskRemoteCmdProc(void)
 
                 }
             }
+            else(pechCmdElem->status == 1)
+            {
 
-            /* 2. 判断超时 */
+            }
+
+            /* 2. 判断超时 ，发送未收到回复的以及没有发送出去的*/
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
             {
                 gdsl_list_cursor_delete(c);
