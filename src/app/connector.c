@@ -550,7 +550,7 @@ else
 #ifdef DEBUG_DIAG_DUMMY
         tmpCurr = 32;
 #else
-        tmpCurr = Get_Electricity_meter_massage_current(ucCONID);
+        tmpCurr = Get_Electricity_meter_massage_current(ucCONID+1);
 #endif
 
 }
@@ -625,7 +625,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     #ifdef DEBUG_DIAG_DUMMY
         tmpPower = 100;
     #else
-        tmpPower = Get_Electricity_meter_massage_energy(ucCONID);
+        tmpPower = Get_Electricity_meter_massage_energy(ucCONID+1);
     #endif
     }
 
@@ -667,7 +667,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         cp1 = Sys_samp.DC.CP1;//get_CP1();
         if((cp1 < 12.8f) && (cp1 > 11.2f))
         {
-            if(TIM2->CCR1 != 1000)
+            if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_12V_PWM;
             }
@@ -678,7 +678,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else if((cp1 < 9.8f) && (cp1 > 8.2f))
         {
-            if(TIM2->CCR1 != 1000)
+            if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_9V_PWM;
             }
@@ -689,7 +689,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else if((cp1 < 6.8f) && (cp1 > 5.2f))
         {
-            if(TIM2->CCR1 != 1000)
+            if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_6V_PWM;
             }
@@ -711,7 +711,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         cp1 = get_CP2();
         if((cp2 < 12.8f) && (cp2 > 11.2f))
         {
-            if(TIM4->CCR1 != 1000)
+            if(TIM4->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_12V_PWM;
             }
@@ -722,7 +722,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else if((cp2 < 9.8f) && (cp2 > 8.2f))
         {
-            if(TIM4->CCR1 != 1000)
+            if(TIM4->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_9V_PWM;
             }
@@ -733,7 +733,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else if((cp2 < 6.8f) && (cp2 > 5.2f))
         {
-            if(TIM2->CCR1 != 1000)
+            if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_6V_PWM;
             }

@@ -598,7 +598,9 @@ void chinesekeypad_process(BUTTON_DATA *buttondata,int Id,WM_MESSAGE *pMsg)
             }
 
         }
-        if((keypad_dev.inputstr[0])!=NULL)
+/// TODO (zshare#1#): ///NULL -- '\0'
+
+        if((keypad_dev.inputstr[0])!='\0')
         {
             key=t9.getpymb(keypad_dev.inputstr);        //得到匹配的结果数
             if(key)                                     //有部分匹配/完全匹配的结果
@@ -951,7 +953,9 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
             }
             keypad_dev.dispagenum=keypad_dev.hznum/6+(keypad_dev.hznum%6?1:0);              //得到汉字字符串的总页数
             keypad_dev.pypagenum=keypad_dev.result_num/3+(keypad_dev.result_num%3?1:0);     //得到拼音页数
-            if(keypad_dev.inputstr[0]!=NULL)
+/// TODO (zshare#1#): ///NULL -- '\0'
+
+            if(keypad_dev.inputstr[0]!='\0')
             {
                 for(i=0;i<3;i++)
                 {

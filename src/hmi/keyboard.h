@@ -2,7 +2,7 @@
 #define _KEYBOARD_H
 #include "DIALOG.h"
 #include "pyinput.h"
-
+#include "touchtimer.h"
 //下述定义为输入设置项的对应宏
 #define LOGIN_PASSWD 0
 

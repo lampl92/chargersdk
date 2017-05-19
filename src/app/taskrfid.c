@@ -112,10 +112,31 @@ void vTaskEVSERFID(void *pvParameters)
             printf_safe("等待HMI操作...\n");
 #endif
             /** @fixme (rgw#1#): 假设用户选择停止充电 */
-            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
-            OrderInit(&(pRFIDDev->order));
-            pRFIDDev->state = STATE_RFID_NOID;
+            xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_RFIDOLD);
+
+            uxBits = xEventGroupWaitBits(xHandleEventHMI,
+                            defEventBitHMI_ChargeReqClickOK,
+                            pdTRUE, pdTRUE, 0);
+            if((uxBits & defEventBitHMI_ChargeReqClickOK) == defEventBitHMI_ChargeReqClickOK)
+            {
+                //等到停止充电事件的发生
+                pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
+                OrderInit(&(pRFIDDev->order));
+                pRFIDDev->state = STATE_RFID_NOID;
+            }
+            else
+            {
+                //刷卡未等待停止充电事件发生
+                uxBits = xEventGroupWaitBits(xHandleEventHMI,
+                                defEventBitHMI_ChargeReqLockLcdOK,
+                                pdTRUE, pdTRUE, 0);
+                if((uxBits & defEventBitHMI_ChargeReqLockLcdOK) == defEventBitHMI_ChargeReqLockLcdOK)
+                {
+                    //等到锁屏事件
+                    pRFIDDev->state = STATE_RFID_NOID;
+                }
+            }
             break;
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪

@@ -97,6 +97,7 @@ void vTaskEVSEMonitor(void *pvParameters)
         }
         else
         {
+            /// TODO (zshare#1#): 后续更改这块，这块会一直占用cpu
             for(i = 0;i <ulTotalCON;i++)
             {
                 pCON = CONGetHandle(i);

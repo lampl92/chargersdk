@@ -355,7 +355,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
     switch (pMsg->MsgId)
     {
-    case MSG_PAINTErr:
+//    case MSG_PAINTErr:
 //        hItem = MULTIEDIT_CreateEx(460, 160, 300, 200, WM_GetClientWindow(pMsg->hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
 //        MULTIEDIT_SetInsertMode(hItem,1);  //开启插入模式
 //        MULTIEDIT_SetFont(hItem, &XBF24_Font);
@@ -415,7 +415,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //        GUI_CURSOR_SetPosition(460,160);
 //        WM_SetFocus(hItem);
 
-        break;
+//        break;
     case WM_INIT_DIALOG:
         //
         // Initialization of 'Framewin'
@@ -429,9 +429,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Image'
         //
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        pData = _GetImageById(ID_IMAGE_0_IMAGE_0, &FileSize);
-        IMAGE_SetBMP(hItem, pData, FileSize);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+//        pData = _GetImageById(ID_IMAGE_0_IMAGE_0, &FileSize);
+//        IMAGE_SetBMP(hItem, pData, FileSize);
         //dispbmp2("system/girl.bmp", 0, 5, 5, 1, 1,pMsg->hWin);
         //
         // Initialization of 'Edit'
@@ -580,10 +580,11 @@ void PutOut_Home()
     qrencode((uint8_t *)codetest,&p,&x,&y);
 
     hWin = CreateFramewin();
+    led_ctrl(1,green,keep_on);
 
     while(1)
     {
-        GUI_Delay(500);
+        GUI_Delay(1);
 
         uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                         defEventBitGotIDtoHMI,
@@ -595,8 +596,7 @@ void PutOut_Home()
         }
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         display_encode(&x,&y,&p);
-        vTaskDelay(500);
-        led_breath_r();
+        vTaskDelay(20);
     }
 }
 // USER END

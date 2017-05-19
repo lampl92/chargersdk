@@ -27,7 +27,7 @@
 // USER END
 
 #include "DIALOG.h"
-
+static uint8_t first_flag = 0;
 /*********************************************************************
 *
 *       Defines
@@ -102,7 +102,6 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     CON_t *pCON;
     time_t now;
     static time_t first;
-    static uint8_t first_flag = 0;
     volatile uint32_t diffsec;
     volatile uint8_t sec;
     volatile uint8_t min;
@@ -110,6 +109,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
 
     WM_HWIN hWin = pMsg->hWin;
 
+    CaliDone_Analy(hWin);
     pCON = CONGetHandle(0);
     uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
     if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
@@ -187,6 +187,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), Timer_buf);
     if(sec == 59)
     {
+        first_flag = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
         //跳出卡片信息页
         WM_DeleteWindow(hWin);
@@ -254,13 +255,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
+                first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 PutOut_Home();
                 // USER END
                 break;
@@ -342,9 +347,9 @@ void PutOut_Card_Info()//(OrderData_t *order)
 
     while(1)
     {
-        GUI_Delay(500);
+        GUI_Delay(1);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
+        vTaskDelay(20);
     }
 }
 // USER END

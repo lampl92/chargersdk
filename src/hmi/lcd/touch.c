@@ -574,11 +574,12 @@ uint8_t TP_Get_Adjdata(void)
     cJSON *jsCaliObj;
     ErrorCode_t errcode;
     cJSON * pSub;
-    errcode = ERR_NO;
     uint8_t res;
     FIL fp;
     UINT bw;
     uint8_t *p;
+
+    errcode = ERR_NO;
 
     res = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_NEW | FA_WRITE);
 

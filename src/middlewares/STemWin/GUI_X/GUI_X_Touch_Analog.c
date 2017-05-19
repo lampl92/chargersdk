@@ -61,24 +61,13 @@ void GUI_TOUCH_X_ActivateY(void) {
 }
 
 int  GUI_TOUCH_X_MeasureX(void) {
-        if(TP_Read_Pressure(&adc_press) == 0)
-        {
-            if((adc_press > 0)&&(PEN == 0))
-            {
-               Buzzer_control(1);
-            }
-            else
-            {
-                Buzzer_control(0);
-            }
-
-        }
-
-//        vTaskDelay(100);
-
-
-    if(((calebrate_done&0x1) == 1)&&(PEN == 0))
+    if(((calebrate_done&0x1) == 1)&&(PEN == 0)&&(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])))
     {
+        Buzzer_control(1);
+
+        adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+        adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+
         if(TP_Read_Pressure(&adc_press) == 0)
         {
             if(adc_press >= 1000 && adc_press <= 6000)
@@ -90,7 +79,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
                     bitset(calebrate_done,5);
                     bitclr(calebrate_done,0);
                 }
-                if(i == 100)
+                if(i == 25)
                 {
                     bitset(calebrate_done,3);
                 }
@@ -100,13 +89,13 @@ int  GUI_TOUCH_X_MeasureX(void) {
                 i = 0;
             }
         }
-        if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
-        {
-            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-        }
-        adc_x = tp_dev.x[0];
-        adc_y = tp_dev.y[0];
+//       if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
+//        {
+//            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+//            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+//        }
+//        adc_x = tp_dev.x[0];
+//        adc_y = tp_dev.y[0];
         if(adc_x < ErrMultiEdit_Size.xpos)
         {
             bitset(calebrate_done,4); //清除故障窗口
@@ -129,12 +118,6 @@ int  GUI_TOUCH_X_MeasureX(void) {
                 else
                     step = 0;
             break;
-//            case 1:
-//                if(adc_x < 600 && adc_x >= 400)
-//                    step++;
-//                else
-//                    step = 0;
-//            break;
             case 1:
                 if(adc_x < 400 && adc_x >= 0)
                 {
@@ -144,19 +127,117 @@ int  GUI_TOUCH_X_MeasureX(void) {
                 else
                     step = 0;
             break;
-
             }
         }
         else
         {
             step = 0;
         }
+
     }
     else
     {
+        Buzzer_control(0);
         adc_x = 0;
         adc_y = 0;
     }
+
+
+//        if(TP_Read_Pressure(&adc_press) == 0)
+//        {
+//            if((adc_press > 0)&&(PEN == 0))
+//            {
+//               Buzzer_control(1);
+//            }
+//            else
+//            {
+//                Buzzer_control(0);
+//            }
+//        }
+//
+////        vTaskDelay(100);
+//
+//
+//    if(((calebrate_done&0x1) == 1)&&(PEN == 0))
+//    {
+//        if(TP_Read_Pressure(&adc_press) == 0)
+//        {
+//            if(adc_press >= 1000 && adc_press <= 6000)
+//            {
+//                i = i + Y;
+//                if(i == 200)//持续5S
+//                {
+//                    i = 0;
+//                    bitset(calebrate_done,5);
+//                    bitclr(calebrate_done,0);
+//                }
+//                if(i == 100)
+//                {
+//                    bitset(calebrate_done,3);
+//                }
+//            }
+//            else
+//            {
+//                i = 0;
+//            }
+//        }
+//        if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
+//        {
+//            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+//            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+//        }
+//        adc_x = tp_dev.x[0];
+//        adc_y = tp_dev.y[0];
+//        if(adc_x < ErrMultiEdit_Size.xpos)
+//        {
+//            bitset(calebrate_done,4); //清除故障窗口
+//        }
+//        else if(adc_y < ErrMultiEdit_Size.ypos)
+//        {
+//            bitset(calebrate_done,4);
+//        }
+//        if(adc_y <= 40 && adc_y >= 0)
+//        {
+//            if(adc_x <= 40 && adc_x >= 0)
+//            {
+//                bitset(calebrate_done,6);
+//            }
+//            switch(step)
+//            {
+//            case 0:
+//                if(adc_x <= 800 && adc_x >= 400)
+//                    step++;
+//                else
+//                    step = 0;
+//            break;
+////            case 1:
+////                if(adc_x < 600 && adc_x >= 400)
+////                    step++;
+////                else
+////                    step = 0;
+////            break;
+//            case 1:
+//                if(adc_x < 400 && adc_x >= 0)
+//                {
+//                    step = 0;
+//                    bitset(calebrate_done,7);
+//                }
+//                else
+//                    step = 0;
+//            break;
+//
+//            }
+//        }
+//        else
+//        {
+//            step = 0;
+//        }
+//    }
+//    else
+//    {
+//        adc_x = 0;
+//        adc_y = 0;
+//    }
 
 
     return adc_x;

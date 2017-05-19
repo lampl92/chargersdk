@@ -82,4 +82,5 @@ void PutOut_RegisterDisp();
 void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3);
 void ErrWindow_Show(WM_HWIN hWin);
 void err_window(WM_HWIN hWin,EventBits_t uxBitsErr);
+void PutOut_Manager_InfoAnalog();
 #endif

@@ -137,17 +137,24 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     EventBits_t uxBitHMI;
     EventBits_t uxBitIsDone;
     static volatile uint8_t sec_done = 0;
+    static time_t first;
+    static uint8_t first_flag = 0;
 
     WM_HWIN hWin = pMsg->hWin;
-
+    CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     pCON = CONGetHandle(0);
-    ///* TODO (zshare#1#): 添加再次刷卡进行结算事件标志弹出是否结束充电*/
-//    uxBitIsDone = xEventGroupWaitBits()
-//
-
-
+    //再次刷卡事件发生,进行解锁操作
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
+                    defEventBitHMI_RFIDOLD,
+                    pdTRUE, pdTRUE, 0);
+    if((uxBitHMI & defEventBitHMI_RFIDOLD) == defEventBitHMI_RFIDOLD)
+    {
+        first_flag = 0;
+        sec_done = 0;
+        bitclr(calebrate_done,2);
+    }
 
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
                                    defEventBitHMI_ChargeReqDispDone,
@@ -160,6 +167,11 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
 
     pCON = CONGetHandle(0);///** @todo (zshare#1#): 双枪ID选择 */
     now = time(NULL);
+    if(first_flag == 0)
+    {
+        first_flag = 1;
+        first = now;
+    }
     diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
     if(diffsec > 86400)
     {
@@ -185,7 +197,16 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 
-    if((60 - sec ) == 1)
+    diffsec = (uint32_t)difftime(now, first);
+    if(diffsec > 86400)
+    {
+        diffsec = 86400;
+    }
+    hour = diffsec / 3600;
+    min = diffsec % 3600 / 60;
+    sec = diffsec % 3600 % 60;
+
+    if(sec == 59)
     {
         sec_done = 1;
     }
@@ -194,13 +215,26 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     {
         EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), "00S");
         TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
+        xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqLockLcdOK);
+        bitset(calebrate_done,2);
     }
     else
     {
+        bitclr(calebrate_done,2);
         xsprintf((char *)Timer_buf, "%02dS", (60-sec));
         EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
     }
+
     ErrWindow_Show(hWin);
+//    //等待结束充电信号
+//    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
+//                   defEventBitHMI_ChargeReqDoneOK,
+//                   pdTRUE, pdTRUE, 0);
+//    if((uxBitHMI & defEventBitHMI_ChargeReqDoneOK) == defEventBitHMI_ChargeReqDoneOK)
+//    {
+//        WM_DeleteWindow(hWin);
+//        PutOut_Home();
+//    }
 }
 // USER END
 
@@ -269,7 +303,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-                PutOut_Home();
+                //处于解锁状态下要发送停止充电事件
+                if(bittest(calebrate_done,2) == 0)
+                {
+                    xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqClickOK);
+                }
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -335,18 +373,12 @@ void PutOut_Charging()
     wait_timer.charge_screen_lock = 60;
     hWin = CreateCharging();
     countdown_flag = 0;
+    led_ctrl(1,green,breath);
     while(1)
     {
-        GUI_Delay(500);
+        GUI_Delay(1);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-//        if((wait_timer.charge_screen_lock--) == 0)
-//        {
-//            wait_timer.charge_screen_lock = 0;
-//            //跳出卡片非法页
-////            WM_DeleteWindow(hWin);
-////            PutOut_Home();
-//        }
-        vTaskDelay(500);
+        vTaskDelay(20);
     }
 }
 // USER END

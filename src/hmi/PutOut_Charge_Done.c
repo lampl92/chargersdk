@@ -65,7 +65,7 @@
 
 #define ID_TimerTime    0
 // USER END
-
+static uint8_t first_flag = 0;
 /*********************************************************************
 *
 *       Static data
@@ -133,7 +133,6 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     CON_t *pCON;
     time_t now;
     static time_t first;
-    static uint8_t first_flag = 0;
     volatile uint32_t diffsec;
     volatile uint8_t sec;
     volatile uint8_t min;
@@ -141,7 +140,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 
 
     WM_HWIN hWin = pMsg->hWin;
-
+    CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 
     if(first_flag == 0)
@@ -202,7 +201,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
     if(sec == 59)
     {
-        //xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+        first_flag = 0;
+        xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
         //跳出卡片信息页
         WM_DeleteWindow(hWin);
         PutOut_Home();
@@ -279,13 +279,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
+                first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
+                first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 PutOut_Home();
                 // USER END
                 break;
@@ -346,11 +350,12 @@ void PutOut_Charge_Done()
     WM_HWIN hWin;
 
     hWin = CreateChargeDone();
+    led_ctrl(1,green,keep_on);
     while(1)
     {
-        GUI_Delay(500);
+        GUI_Delay(1);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
+        vTaskDelay(20);
     }
 }
 // USER END

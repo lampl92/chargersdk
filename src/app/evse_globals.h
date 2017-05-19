@@ -91,9 +91,15 @@
 #define defEventBitPPPup                BIT_4
 
 /*------xHandleEventHMI*/
-#define defEventBitHMITimeOutToRFID     BIT_0
-#define defEventBitHMI_ChargeReqDispDone   BIT_1
+#define defEventBitHMITimeOutToRFID         BIT_0
+#define defEventBitHMI_ChargeReqDispDone    BIT_1
 #define defeventBitHMI_ChargeReqDispDoneOK  BIT_2
+#define defEventBitHMI_ChargeReqClick       BIT_3
+#define defEventBitHMI_ChargeReqClickOK     BIT_4
+#define defEventBitHMI_ChargeReqLockLcdOK   BIT_5
+#define defEventBitHMI_RFIDOLD              BIT_6
+
+//#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
 /*------xHandleEventDiag*/
 #define defEventBitDiagTempW            BIT_0              //ÎÂ¶È±¨¾¯
@@ -135,8 +141,6 @@
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitCONOrderFinish       BIT_19
-
-
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \

@@ -25,7 +25,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define PWM1_ON      HAL_TIM_OC_Start_IT(&htim2, TIM_CHANNEL_1)//¿ªÆôPWM1
 #define PWM2_ON      HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_2)//¿ªÆôPWM2
-#define PWM1_OFF     HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//¹Ø±ÕPWM1
+#define PWM1_OFF     ;//HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//¹Ø±ÕPWM1
 #define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
 #define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
@@ -46,10 +46,10 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define TIMER3_ON    HAL_TIM_Base_Start_IT(&htim3)
 #define TIMER3_OFF   HAL_TIM_Base_Stop_IT(&htim3)
 
-#define PWM1_1000  do{TIM_SetTIM2Compare1(1010);}while(0)
-#define PWM1_535   do{TIM_SetTIM2Compare1(535);}while(0)
+#define PWM1_1000  TIM_SetTIM2Compare1(TIMER_MAX)
+#define PWM1_535   TIM_SetTIM2Compare1(465)
 
-#define PWM2_1000  do{TIM_SetTIM4Compare1(1010);}while(0)
+#define PWM2_1000  do{TIM_SetTIM4Compare1(TIMER_MAX);}while(0)
 #define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
 
 #define write_chip1 0x40 //0100 0000
@@ -91,7 +91,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define	AXISDATA_REG	0x28
 #define lock_timer      20
-#define samp_sum    125
+#define samp_sum    124
 #define samp_dma    10
 #define ia_k       0.02197265
 #define va_k       0.22056//0.38?????÷??????????·?????×è300??1
@@ -100,6 +100,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define CP1_k      0.0032
 #define CP2_k      0.0032//14.1/3??·???±???
 #define electricity_meter_num 256
+#define TIMER_MAX 1
 typedef struct
 {
     unsigned short va_samp[samp_sum];

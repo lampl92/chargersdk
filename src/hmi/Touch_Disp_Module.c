@@ -163,6 +163,7 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
     IMAGE_SetBMP(hItem, pData, filesize);
 }
 /** 解析置位数据
+ * bit2 : 对充电中界面停止充电按钮解锁操作
  * bit3 : 显示故障界面的控件
  * bit4 : 删除故障界面的控件
  * bit5 : 重新校准
@@ -276,7 +277,7 @@ void ErrWindow_Show(WM_HWIN hWin)
     pCON = CONGetHandle(0);
     uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 
-    if((uxBitsErr & 0x0003e21c) != 0)//0x3C21C)
+    if((uxBitsErr & 0x0003e21c) != 0x3e21C)
     {
         if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
         {
@@ -301,7 +302,7 @@ void ErrWindow_Show(WM_HWIN hWin)
  */
 void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
 {
-
+    CON_t *pCON;
     uint8_t msg_err[150] = "\0";
 
     WM_DeleteWindow(err_hItem);
@@ -309,6 +310,17 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     if((uxBitsErr & 0x3e21c)== 0x3e21c)
     {
         led_ctrl(1,red,keep_off);
+        pCON = CONGetHandle(0);
+        switch(pCON->state)
+        {
+            case STATE_CON_IDLE:
+                led_ctrl(1,green,keep_on);
+            break;
+            case STATE_CON_CHARGING:
+                led_ctrl(1,green,breath);
+            break;
+        }
+
         strncat(msg_err,cur_noerr,strlen(cur_noerr));
         ErrMultiEdit_Size.xlength = 300;
         ErrMultiEdit_Size.ylength = 24*4;
@@ -317,6 +329,7 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     }
     else
     {
+        led_ctrl(1,green,keep_off);
         led_ctrl(1,red,flicker);
         ErrMultiEdit_Size.err_num = 0;
         strncat(msg_err,cur_err,strlen(cur_err));
