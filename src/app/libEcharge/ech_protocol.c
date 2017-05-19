@@ -42,6 +42,7 @@ static int sendCommand(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t 
     echSendCmdElem.pbuff = pucSendBuffer;
     echSendCmdElem.status = 0;//0表示未发送  1表示已发送
     echSendCmdElem.trycount = trycount;
+    echSendCmdElem.trycountmax = 3;//当一个常量用了，需要修改次数时再定义
 
     gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
 }
@@ -264,8 +265,8 @@ echProtocol_t *EchProtocolCreate(void)
 //    pProto->ulSendLength = 0;
 //    pProto->ulRecvLength = 0;
 
-    plechRecvCmd = gdsl_list_alloc ("RecvCmd", echCmdListAlloc, echCmdListFree);
-    plechSendCmd = gdsl_list_alloc ("SendCmd", echCmdListAlloc, echCmdListFree);
+    pProto->plechRecvCmd = gdsl_list_alloc ("RecvCmd", echCmdListAlloc, echCmdListFree);
+    pProto->plechSendCmd = gdsl_list_alloc ("SendCmd", echCmdListAlloc, echCmdListFree);
 
     return pProto;
 }
