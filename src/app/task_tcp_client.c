@@ -10,22 +10,15 @@
 #include "ifconfig.h"
 #include "lwip_init.h"
 
-#define TCP_CLIENT_RX_BUFSIZE   1500
-uint8_t  tcp_client_recvbuf[TCP_CLIENT_RX_BUFSIZE]; //TCP客户端接收数据缓冲区
-int recv_len;
+#define TCP_CLIENT_BUFSIZE   1500
+uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE] ; //TCP客户端发送数据缓冲
+uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
+
+u32_t recv_len;
+u32_t send_len = 0;
 void vTaskTCPClient(void *pvParameters)
 {
-    uint8_t  tcp_client_sendbuf[1500] ; //TCP客户端发送数据缓冲
-
-    u32_t data_len = 0;
-
-
-
-
     EventBits_t uxBitsTCP;
-
-
-////socket
 
     int sock;
     int ret;
@@ -98,10 +91,9 @@ void vTaskTCPClient(void *pvParameters)
 
                             if((uxBitsTCP & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
                             {
-
                                 ret = lwip_write(sock,
-                                                 pechProto->pucSendBuffer,
-                                                 pechProto->ulSendLength);
+                                                 tcp_client_sendbuf,
+                                                 send_len);
                                 if(ret < 0)
                                 {
                                     printf_safe("发送失败\r\n");
@@ -123,6 +115,7 @@ void vTaskTCPClient(void *pvParameters)
                                 {
                                     printf_safe("发送失败\r\n");
                                 }
+
                             }
                         }
                         break;
