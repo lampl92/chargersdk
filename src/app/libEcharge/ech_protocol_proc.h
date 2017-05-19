@@ -19,6 +19,7 @@ typedef struct
     uint32_t *pbuff;
     uint8_t status;
     uint8_t trycount;
+    uint8_t trycountmax;
 }echCmdElem_t;
 
 

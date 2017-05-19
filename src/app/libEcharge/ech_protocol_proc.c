@@ -18,7 +18,7 @@
  */
 static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
 {
-    echCmdElem_t* copyCmdListElem;
+    echCmdElem_t *copyCmdListElem;
 
     copyCmdListElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
     if(copyCmdListElem != NULL)
@@ -49,23 +49,58 @@ static void echCmdListFree (gdsl_element_t e)
     e = NULL;
 }
 
-void echCmdProcess(void)
+void vTaskRemoteCmdProc(void)
 {
     echCmdElem_t *pechCmdElem;
+    gdsl_list_cursor_t c;
+
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
+    EventBits_t uxBitsLwip;
     int i;
 
-    ulSendCmdCount = gdsl_list_get_size(pechProto->plechSendCmd);
-    ulRecvCmdCount = gdsl_list_get_size(pechProto->plechRecvCmd);
-
-    for(i = 0; i < ulSendCmdCount; i++)
+    while(1)
     {
-        pechCmdElem = gdsl_list_search_by_position(pechProto->plechSendCmd, i);
-        /* 1. 判断协议是否需要发送 */
-        if(pechCmdElem ->status == 0)
+        /* 遍历SendCmd */
+        c = gdsl_list_cursor_alloc (pechProto->plechSendCmd);
+        for(gdsl_list_cursor_move_to_head (c); pechCmdElem = gdsl_list_cursor_get_content (c); gdsl_list_cursor_step_forward (c))
         {
+            /* 1. 判断协议是否需要发送 */
+            if(pechCmdElem ->status == 0)
+            {
+                memcpy(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
+                send_len = pechCmdElem->len;
+                uxBitsLwip = xEventGroupSync(xHandleEventLwIP,
+                                             defEventBitTCPClientSendReq,
+                                             defEventBitTCPClientSendOK,
+                                             0);
+                if((uxBitsLwip & defEventBitTCPClientSendOK) == defEventBitTCPClientSendOK)
+                {
+                    pechCmdElem->status = 1;
+                }
+                else//没发出去
+                {
 
+                }
+            }
+
+            /* 2. 判断超时 */
+            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
+            {
+                gdsl_list_cursor_delete(c);
+                gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                continue;
+            }
+
+            /* 3. */
         }
+        gdsl_list_free(c);
+
+        /* 遍历RecvCmd */
+        c = gdsl_list_cursor_alloc (pechProto->plechRecvCmd);
+        for(gdsl_list_cursor_move_to_head (c); pechCmdElem = gdsl_list_cursor_get_content (c); gdsl_list_cursor_step_forward (c))
+        {
+        }
+        gdsl_list_free(c);
     }
 }
