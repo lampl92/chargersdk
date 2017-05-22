@@ -54,7 +54,6 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     }
     if(uxTimerID == defTIMERID_Heartbeat)//5000ms
     {
-        xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientSendReq);
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
     }
 }
