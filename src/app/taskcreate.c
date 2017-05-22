@@ -28,7 +28,7 @@
 #define defSTACK_TaskOTA                    512
 #define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
-#define defSTACK_TaskRemoteCmdProc          (1024*4)
+#define defSTACK_TaskRemoteCmdProc          (1024*10)
 
 #define defSTACK_TaskEVSERemote             512
 #define defSTACK_TaskEVSERFID               512
@@ -200,7 +200,7 @@ void SysTaskCreate (void)
 #ifdef EVSE_DEBUG
     xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
     xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
-    xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, NULL, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
+    xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 #endif
 }
 
@@ -247,7 +247,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //TimerHeartbeat閸︺劏浠堢純鎴濇倵閸愬秴鎯庨崝?
+    //TimerHeartbeat远程服务器连接后开启定时器
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //鐞氼偆閮寸紒鐔荤殶閻??
 void vApplicationTickHook( void )
