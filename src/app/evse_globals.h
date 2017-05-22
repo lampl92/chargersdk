@@ -91,7 +91,8 @@
 #define defEventBitTCPClientSendReq     BIT_3
 #define defEventBitTCPClientSendOK      BIT_4
 #define defEventBitPPPup                BIT_5
-#define defEventBitTCPRxEcho            BIT_6
+#define defEventBitTCPClientRecvValid   BIT_6
+#define defEventBitCmdRegedit           BIT_7
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID     BIT_0
