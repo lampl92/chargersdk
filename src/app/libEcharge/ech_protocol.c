@@ -13,17 +13,13 @@
 
 #define defProtocolTimeout      10000
 
-static uint16_t verifCheck(uint8_t *data, uint32_t len)
+static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uint32_t *pulSendLength);
+
+static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
-    uint16_t out = 0;
-    uint32_t i;
-    for(i = 0; i < len; i++)
-    {
-        out += data[i];
-    }
-    return out;
+    return (uint16_t)(ver + atrri + cmd + len);
 }
-static int sendCommand(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t trycount)
+static int sendCommand(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax)
 {
     echProtocol_t *pProto;
     echCmdElem_t echSendCmdElem;
@@ -33,17 +29,20 @@ static int sendCommand(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t 
     pProto = (echProtocol_t *)pObj;
     ulSendLength = 0;
 
-    makeStdCmd(pProto, usSendID, pucSendBuffer, ulSendLength);
+    makeStdCmd(pProto, usSendID, pucSendBuffer, &ulSendLength);
 
     echSendCmdElem.timestamp = time(NULL);
     echSendCmdElem.timeout = timeout;
     echSendCmdElem.cmd = pProto->pCMD[usSendID]->CMDType;
+    echSendCmdElem.cmd_id = usSendID;
     echSendCmdElem.len = ulSendLength;
     echSendCmdElem.pbuff = pucSendBuffer;
     echSendCmdElem.status = 0;//0表示未发送  1表示已发送
-    echSendCmdElem.trycount = trycount;
-    echSendCmdElem.trycountmax = 3;//当一个常量用了，需要修改次数时再定义
+    echSendCmdElem.trycount = 0;
+    echSendCmdElem.trycountmax = trycountmax;
 
+    pProto->pCMD[usSendID]->uiRecvdOptLen = 0;
+    memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, pProto->pCMD[usSendID]->uiRecvdOptLen);
     gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
 }
 static int makeStdRegBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -75,7 +74,6 @@ static int makeStdRegBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtx
 static int makeStdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t i;
 
     ul2uc ultmpNetSeq;
 
@@ -98,13 +96,15 @@ static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uin
     uint32_t ulMsgBodyCtxLen_enc;
     uint32_t ulMsgHeadLen;
     uint16_t usCheck;
+    echProtocol_t *pProto;
     echCMD_t *pCMD;
     uint8_t i;
 
     us2uc ustmpNetSeq;
     ul2uc ultmpNetSeq;
 
-    pCMD = ((echProtocol_t *)pObj)->pCMD[usSendID];
+    pProto = (echProtocol_t *)pObj;
+    pCMD = pProto->pCMD[usSendID];
     ulMsgHeadLen = 0;
     ulMsgBodyCtxLen_dec = 0;
 
@@ -146,7 +146,10 @@ static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uin
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[2];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[3];
     //消息校验码
-    ustmpNetSeq.usVal = htons(verifCheck(ucMsgHead, ulMsgHeadLen));
+    ustmpNetSeq.usVal = htons(echVerifCheck(pProto->info.ucProtoVer,
+                                            0,
+                                            pCMD->CMDType.usSendCmd,
+                                            (pEVSE->info.ucIDLength << 1) + ulMsgBodyCtxLen_enc));
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[1];
 
@@ -169,11 +172,188 @@ static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uin
     return 0;
 }
 
-static int analyStdRes(void *pObj, uint8_t ucSendID, uint32_t ulRecvLen)
+#define ECH_ERR_VER     -1
+#define ECH_ERR_CHECK   -2
+#define ECH_ERR_ID      -3
+
+static int recvResponse(void *pObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax)
 {
+    echProtocol_t *pProto;
+    echCmdElem_t echRecvCmdElem;
+    us2uc ustmpNetSeq;
+    ul2uc ultmpNetSeq;
+    uint32_t ulMsgBodyLen_enc;
+    uint16_t usChecksum;
+    uint8_t EVSEID[8];
+    int i;
 
+    pProto = (echProtocol_t *)pObj;
 
+    if(pbuff[0] != 0x68)
+    {
+        return ECH_ERR_VER;
+    }
+
+    //pbuff[1] 属性
+
+    //pbuff[2,3] 命令字
+    ustmpNetSeq.ucVal[0] = pbuff[2];
+    ustmpNetSeq.ucVal[1] = pbuff[3];
+    echRecvCmdElem.cmd.usRecvCmd = ntohs(ustmpNetSeq.usVal);
+
+    //pbuff[4...7] 预留字段
+
+    //pbuff[8...11] 消息体长度
+    ultmpNetSeq.ucVal[0] = pbuff[8];
+    ultmpNetSeq.ucVal[1] = pbuff[9];
+    ultmpNetSeq.ucVal[2] = pbuff[10];
+    ultmpNetSeq.ucVal[3] = pbuff[11];
+    ulMsgBodyLen_enc = ntohl(ultmpNetSeq.ulVal);
+
+    //pbuff[12,13] Checksum
+    ustmpNetSeq.ucVal[0] = pbuff[12];
+    ustmpNetSeq.ucVal[1] = pbuff[13];
+    usChecksum = ntohs(ustmpNetSeq.usVal);
+    if(usChecksum != echVerifCheck(0x68, 0, echRecvCmdElem.cmd.usRecvCmd, ulMsgBodyLen_enc))
+    {
+        return ECH_ERR_CHECK;
+    }
+    StrToHex(&pbuff[14], EVSEID, 16);
+    if(memcmp(EVSEID, pEVSE->info.ucID, 8) != 0 )
+    {
+        return ECH_ERR_ID;
+    }
+    echRecvCmdElem.timestamp = time(NULL);
+    switch(echRecvCmdElem.cmd.usRecvCmd)
+    {
+    case 2://主机回复的命令，不需要timeout
+        echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
+        echRecvCmdElem.timeout =  0xffffffff;
+        break;
+    case 4:
+        echRecvCmdElem.cmd_id = ECH_CMDID_HEARTBEAT;
+        echRecvCmdElem.timeout =  0xffffffff;
+        break;
+    default:
+        break;
+    }
+    echRecvCmdElem.len = ulRecvdLen;
+    echRecvCmdElem.pbuff = pbuff;
+    echRecvCmdElem.status = 0;
+    echRecvCmdElem.trycount = 0;
+    echRecvCmdElem.trycountmax = trycountmax;
+
+    gdsl_list_insert_tail(pProto->plechRecvCmd, (void *)&echRecvCmdElem);
 }
+
+/** @brief
+ *
+ * @param pObj void*
+ * @param usSendID uint16_t （这里可能会产生理解问题）SendID表示收到的回复对应的SendID
+ * @param pbuff uint8_t*
+ * @param ulRecvLen uint32_t
+ * @return int
+ *
+ */
+static int analyStdRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    echProtocol_t *pProto;
+    uint8_t *pMsgBodyCtx_enc;
+    uint8_t *pMsgBodyCtx_dec;
+    uint32_t ulMsgBodyCtxLen_enc;
+    ul2uc ultmpNetSeq;
+    time_t timestamp;
+
+    pProto = (echProtocol_t *)pObj;
+    pMsgBodyCtx_enc = &pbuff[30];         //取出加密部分buff
+    ulMsgBodyCtxLen_enc = ulRecvLen - 30; //加密部分长度
+    pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
+
+    aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+
+    memcpy(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+    pProto->pCMD[usSendID]->uiRecvdOptLen = ulMsgBodyCtxLen_enc;
+
+    free(pMsgBodyCtx_dec);
+}
+
+static int analyRegRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    echProtocol_t *pProto;
+    uint8_t *pMsgBodyCtx_dec;
+
+    pProto = (echProtocol_t *)pObj;
+    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+
+    analyStdRes(pObj, usSendID, pbuff, ulRecvLen);
+
+    //xEventGroupSetBits(xHandleEventLwIP, defEventBitCmdRegedit);
+    return 1;
+}
+
+static int analyHeartRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    echProtocol_t *pProto;
+    uint8_t *pMsgBodyCtx_dec;
+    ul2uc ultmpNetSeq;
+    time_t timestamp;
+
+    pProto = (echProtocol_t *)pObj;
+    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+
+    analyStdRes(pObj, usSendID, pbuff, ulRecvLen);
+
+    ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
+    ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
+    ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
+    ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
+    timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
+    if(utils_abs(timestamp - time(NULL)) > 30)//大于30s进行校时
+    {
+        time(&timestamp);
+    }
+    return 1;
+}
+
+/** @brief 复制待插入的元素到新申请的空间
+ *
+ * @param pechCmd void*
+ * @return gdsl_element_t
+ *
+ */
+static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
+{
+    echCmdElem_t *copyCmdListElem;
+
+    copyCmdListElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
+    if(copyCmdListElem != NULL)
+    {
+        memcpy(copyCmdListElem, pechCmd, sizeof(echCmdElem_t));
+    }
+    else
+    {
+        return NULL;
+    }
+    copyCmdListElem->pbuff = (uint8_t *)malloc(copyCmdListElem->len * sizeof(uint8_t));
+    if(copyCmdListElem->pbuff != NULL)
+    {
+        memcpy(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, ((echCmdElem_t *)pechCmd)->len);
+    }
+    else
+    {
+        return NULL;
+    }
+
+    return (gdsl_element_t)copyCmdListElem;
+}
+
+static void echCmdListFree (gdsl_element_t e)
+{
+    free(((echCmdElem_t *)e)->pbuff);
+    free (e);
+    e = NULL;
+}
+
 static void deleteProto(void *pObj)
 {
     int i;
@@ -188,8 +368,6 @@ static void deleteProto(void *pObj)
             pProto->pCMD[i] = NULL;
         }
     }
-//    free(pProto->pucRecvBuffer);
-//    free(pProto->pucSendBuffer);
     gdsl_list_free(pProto->plechSendCmd);
     gdsl_list_free(pProto->plechRecvCmd);
     free(pProto);
@@ -248,22 +426,12 @@ echProtocol_t *EchProtocolCreate(void)
     {
         pProto->pCMD[i] = NULL;
     }
-    pProto->pCMD[ECH_CMDID_REGISTER]    = EchCMDCreate(0x01, 0x02, makeStdCmd, analyStdRes);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT]   = EchCMDCreate(0x03, 0x04, makeStdCmd, analyStdRes);
+    pProto->pCMD[ECH_CMDID_REGISTER]    = EchCMDCreate(0x01, 0x02, makeStdCmd, analyRegRes);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT]   = EchCMDCreate(0x03, 0x04, makeStdCmd, analyHeartRes);
 
-
-//    pProto ->recvResponse = recvResponse;
+    pProto ->recvResponse = recvResponse;
     pProto ->sendCommand = sendCommand;
     pProto ->deleteProtocol = deleteProto;
-
-///** @todo (rgw#1#): 调通后去掉这个buff，因为已经存在链表了 */
-//    pProto->pucSendBuffer = (uint8_t *)malloc(REMOTE_SENDBUFF_MAX * sizeof(uint8_t));
-//    memset(pProto->pucSendBuffer, 0, MT626_SENDBUFF_MAX);
-//    pProto->pucRecvBuffer = (uint8_t *)malloc(REMOTE_RECVBUFF_MAX * sizeof(uint8_t));
-//    memset(pProto->pucRecvBuffer, 0, MT626_RECVBUFF_MAX);
-
-//    pProto->ulSendLength = 0;
-//    pProto->ulRecvLength = 0;
 
     pProto->plechRecvCmd = gdsl_list_alloc ("RecvCmd", echCmdListAlloc, echCmdListFree);
     pProto->plechSendCmd = gdsl_list_alloc ("SendCmd", echCmdListAlloc, echCmdListFree);

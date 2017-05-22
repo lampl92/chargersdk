@@ -15,9 +15,10 @@ typedef struct
     time_t timestamp;
     uint32_t timeout;
     echCMDType_t cmd;
+    uint16_t cmd_id;
     uint32_t len;
-    uint32_t *pbuff;
-    uint8_t status;
+    uint8_t *pbuff;
+    uint8_t status; //Send：1 已发送，0 未发送   Recv：1 已处理 0 未处理
     uint8_t trycount;
     uint8_t trycountmax;
 }echCmdElem_t;
