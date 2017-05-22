@@ -9,12 +9,14 @@
 #include "lwip/sockets.h"
 #include "ifconfig.h"
 #include "lwip_init.h"
+#include "ech_protocol.h"
+#include "evse_globals.h"
+#include "task_tcp_client.h"
 
-#define TCP_CLIENT_BUFSIZE   1500
-uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE] ; //TCP客户端发送数据缓冲
+uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端发送数据缓冲
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
 
-u32_t recv_len;
+u32_t recv_len = 0;
 u32_t send_len = 0;
 void vTaskTCPClient(void *pvParameters)
 {
@@ -73,22 +75,22 @@ void vTaskTCPClient(void *pvParameters)
                         }
                         if(FD_ISSET(sock, &readfds))//测试网络是否有数据
                         {
-                            recv_len = lwip_read(sock, tcp_client_recvbuf, TCP_CLIENT_RX_BUFSIZE);
-//                            printf_safe("\nTCP Recv: ");
-//                            for(i = 0; i < recv_len; i++)
-//                            {
-//                                printf_safe("%c", tcp_client_recvbuf[i]);
-//                            }
-//                            printf_safe("\n");
+                            recv_len = lwip_read(sock, tcp_client_recvbuf, TCP_CLIENT_BUFSIZE);
+                            printf_safe("\nTCP Recv: ");
+                            for(i = 0; i < recv_len; i++)
+                            {
+                                printf_safe("%c", tcp_client_recvbuf[i]);
+                            }
+                            printf_safe("\n");
                             //memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
-                            xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPRxEcho);
+                            //xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientRecvValid);
+                            pechProto->recvResponse(pechProto, tcp_client_recvbuf, recv_len, 3);
                         }
                         if(FD_ISSET(sock, &writefds))
                         {
                             uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
                                                             defEventBitTCPClientSendReq,
                                                             pdTRUE, pdTRUE, 0);
-
                             if((uxBitsTCP & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
                             {
                                 ret = lwip_write(sock,
@@ -103,20 +105,20 @@ void vTaskTCPClient(void *pvParameters)
                                     xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientSendOK);
                                 }
                             }
-                            uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
-                                                            defEventBitTCPRxEcho,
-                                                            pdTRUE, pdTRUE, 0);
-                            if((uxBitsTCP & defEventBitTCPRxEcho) == defEventBitTCPRxEcho) //有数据要发送
-                            {
-                                ret = lwip_write(sock,
-                                                 tcp_client_recvbuf,
-                                                 recv_len); //发送tcp_server_sentbuf中的数据
-                                if(ret < 0)
-                                {
-                                    printf_safe("发送失败\r\n");
-                                }
-
-                            }
+//                            uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
+//                                                            defEventBitTCPRxEcho,
+//                                                            pdTRUE, pdTRUE, 0);
+//                            if((uxBitsTCP & defEventBitTCPRxEcho) == defEventBitTCPRxEcho) //有数据要发送
+//                            {
+//                                ret = lwip_write(sock,
+//                                                 tcp_client_recvbuf,
+//                                                 recv_len); //发送tcp_server_sentbuf中的数据
+//                                if(ret < 0)
+//                                {
+//                                    printf_safe("发送失败\r\n");
+//                                }
+//
+//                            }
                         }
                         break;
                     }
@@ -129,4 +131,5 @@ void vTaskTCPClient(void *pvParameters)
         }
         vTaskDelay(1000);
     }
+    while(1);
 }
