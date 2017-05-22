@@ -112,3 +112,11 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
         src += 2;
     }
 }
+
+int utils_abs(int num)
+{
+	if(num<0)
+		return -num;
+	else
+		return num;
+}
