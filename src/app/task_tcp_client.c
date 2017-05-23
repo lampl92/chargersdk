@@ -9,7 +9,7 @@
 #include "lwip/sockets.h"
 #include "ifconfig.h"
 #include "lwip_init.h"
-#include "ech_protocol.h"
+#include "libEcharge/ech_protocol.h"
 #include "evse_globals.h"
 #include "task_tcp_client.h"
 
@@ -79,7 +79,7 @@ void vTaskTCPClient(void *pvParameters)
                             printf_safe("\nTCP Recv: ");
                             for(i = 0; i < recv_len; i++)
                             {
-                                printf_safe("%c", tcp_client_recvbuf[i]);
+                                printf_safe("%02X ", tcp_client_recvbuf[i]);
                             }
                             printf_safe("\n");
                             //memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
@@ -105,20 +105,6 @@ void vTaskTCPClient(void *pvParameters)
                                     xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientSendOK);
                                 }
                             }
-//                            uxBitsTCP = xEventGroupWaitBits(xHandleEventLwIP,
-//                                                            defEventBitTCPRxEcho,
-//                                                            pdTRUE, pdTRUE, 0);
-//                            if((uxBitsTCP & defEventBitTCPRxEcho) == defEventBitTCPRxEcho) //有数据要发送
-//                            {
-//                                ret = lwip_write(sock,
-//                                                 tcp_client_recvbuf,
-//                                                 recv_len); //发送tcp_server_sentbuf中的数据
-//                                if(ret < 0)
-//                                {
-//                                    printf_safe("发送失败\r\n");
-//                                }
-//
-//                            }
                         }
                         break;
                     }
