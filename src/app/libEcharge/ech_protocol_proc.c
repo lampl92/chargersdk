@@ -6,7 +6,7 @@
 * @date 2017-02-21
 */
 #include "gdsl_list.h"
-#include "ech_protocol_proc.h"
+#include "libEcharge/ech_protocol_proc.h"
 #include "libEcharge/ech_err.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
@@ -19,7 +19,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
 {
     echProtocol_t *pProto;
     echCmdElem_t *pechCmdElem;
-    gdsl_list_cursor_t c;
+    gdsl_list_cursor_t cr;
+    gdsl_list_cursor_t cs;
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
@@ -29,12 +30,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
 
     //pProto = (echProtocol_t *)pvParameters;
     pProto = pechProto;
+    cs = gdsl_list_cursor_alloc (pProto->plechSendCmd);
+    cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
         /* 遍历SendCmd */
-        c = gdsl_list_cursor_alloc (pProto->plechSendCmd);
 
-        for(gdsl_list_cursor_move_to_head (c); pechCmdElem = gdsl_list_cursor_get_content (c); gdsl_list_cursor_step_forward (c))
+
+        for(gdsl_list_cursor_move_to_head (cs); pechCmdElem = gdsl_list_cursor_get_content (cs); gdsl_list_cursor_step_forward (cs))
         {
             /* 1. 判断协议是否发送 */
             if(pechCmdElem ->status == 0)
@@ -54,8 +57,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     pechCmdElem->trycount++;
                     if(pechCmdElem->trycount > pechCmdElem->trycountmax)
                     {
-                        gdsl_list_cursor_delete(c);
-                        gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                        gdsl_list_cursor_delete(cs);
+                        gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                         continue;
                         /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
                     }
@@ -69,8 +72,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 */
                 if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到回复
                 {
-                    gdsl_list_cursor_delete(c);
-                    gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                    gdsl_list_cursor_delete(cs);
+                    gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                     continue;
                 }
 
@@ -86,11 +89,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
 #endif
             /* 3. */
         }
-        gdsl_list_cursor_free(c);
+        //gdsl_list_cursor_free(c);
 
         /* 遍历RecvCmd */
-        c = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
-        for(gdsl_list_cursor_move_to_head (c); pechCmdElem = gdsl_list_cursor_get_content (c); gdsl_list_cursor_step_forward (c))
+
+        for(gdsl_list_cursor_move_to_head (cr); pechCmdElem = gdsl_list_cursor_get_content (cr); gdsl_list_cursor_step_forward (cr))
         {
             if(pechCmdElem->status == 0)
             {
@@ -101,15 +104,15 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 }
                 else//接收的协议帧序列有问题，直接删除
                 {
-                    gdsl_list_cursor_delete(c);
-                    gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                    gdsl_list_cursor_delete(cr);
+                    gdsl_list_cursor_step_backward(cr);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                     continue;
                 }
             }
             else if(pechCmdElem->status == 1)
             {
-                gdsl_list_cursor_delete(c);
-                gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                gdsl_list_cursor_delete(cr);
+                gdsl_list_cursor_step_backward(cr);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                 continue;
             }
 #if 0
@@ -122,7 +125,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             }
             #endif
         }
-        gdsl_list_cursor_free(c);
+        //gdsl_list_cursor_free(c);
 
         vTaskDelay(100);
     }

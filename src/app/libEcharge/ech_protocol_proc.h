@@ -8,7 +8,7 @@
 #ifndef  __ECH_PROTOCOL_PROC_H
 #define  __ECH_PROTOCOL_PROC_H
 
-#include "ech_protocol.h"
+#include "libEcharge/ech_protocol.h"
 
 typedef struct
 {
