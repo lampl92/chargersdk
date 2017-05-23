@@ -11,7 +11,7 @@
 #include "EVSE.h"
 #include "interface_rfid.h"
 #include "userlib_list.h"
-#include "ech_protocol.h"
+#include "libEcharge/ech_protocol.h"
 
 #define ParamTypeU8         1
 #define ParamTypeU16        2
