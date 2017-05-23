@@ -11,7 +11,7 @@
 #include "enc_dec.h"
 #include "libEcharge/ech_protocol_proc.h"
 
-#define defProtocolTimeout      10000
+#define defProtocolTimeout      10
 
 static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uint32_t *pulSendLength);
 
@@ -193,7 +193,7 @@ static int recvResponse(void *pObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t
 
     pProto = (echProtocol_t *)pObj;
 
-    if(pbuff[0] != 0x68)
+    if(pbuff[0] != pProto->info.ucProtoVer)
     {
         return ECH_ERR_VER;
     }
@@ -218,7 +218,7 @@ static int recvResponse(void *pObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t
     ustmpNetSeq.ucVal[0] = pbuff[12];
     ustmpNetSeq.ucVal[1] = pbuff[13];
     usChecksum = ntohs(ustmpNetSeq.usVal);
-    if(usChecksum != echVerifCheck(0x68, 0, echRecvCmdElem.cmd.usRecvCmd, ulMsgBodyLen_enc))
+    if(usChecksum != echVerifCheck(pProto->info.ucProtoVer, 0, echRecvCmdElem.cmd.usRecvCmd, ulMsgBodyLen_enc))
     {
         return ECH_ERR_CHECK;
     }
