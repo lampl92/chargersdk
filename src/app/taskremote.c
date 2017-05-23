@@ -10,13 +10,15 @@
 #include "taskcreate.h"
 #include "taskremote.h"
 
+/** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
+
 //#define DEBUG_NO_TASKREMOTE
 
 typedef enum
 {
     REMOTE_NO,
     REMOTE_CONNECTED,
-    REMOTE_REGEDITED;
+    REMOTE_REGEDITED,
     REMOTE_RECONNECT,
     REMOTE_ERROR
 } RemoteState_t;
@@ -32,12 +34,14 @@ void vTaskEVSERemote(void *pvParameters)
     RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
+    int network_res;
 
     ulTotalCON = pListCON->Total;
     uxBitsRFID = 0;
     uxBitsTimerCB = 0;
     remotestat = REMOTE_NO;
     errcode = 0;
+    network_res = 0;
 
     while(1)
     {
@@ -46,29 +50,35 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): 尝试连接网络 */
-            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE,portMAX_DELAY);
+            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBitLwip & defEventBitPPPup) == defEventBitPPPup)
             {
-                //xTimerStart(xHandleTimerHeartbeat, 0);
+                RemoteRegist(pEVSE, pechProto, &network_res);
                 remotestat = REMOTE_CONNECTED;
             }
-
             break;
         case REMOTE_CONNECTED:
             /* 注册 */
+            //            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitCmdRegedit, pdTRUE, pdTRUE, 0);
+//            if((uxBitLwip & defEventBitCmdRegedit) == defEventBitCmdRegedit)
+//            {
+            RemoteRegistRes(pEVSE, pechProto, &network_res);
+            if(network_res == 1)
+            {
+                xTimerStart(xHandleTimerHeartbeat, 0);
+                remotestat = REMOTE_REGEDITED;
+            }
 
-
+            break;
+        case REMOTE_REGEDITED:
 
             /* 心跳 */
-            uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat,
-                                                pdTRUE, pdFALSE, 0);
+            uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify,
+                                                defEventBitTimerCBHeartbeat,
+                                                pdTRUE, pdTRUE , 0);
             if((uxBitsTimerCB & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
-                for(i = 0; i < ulTotalCON; i++)
-                {
-                    pCON = CONGetHandle(i);
-                    //pHeart = makeHeart(pEVSE, pCON);
-                }
+                RemoteHeart(pEVSE, pechProto);
             }
             /* 获取帐户信息*/
             uxBitsRFID = xEventGroupWaitBits(xHandleEventRemote,
@@ -88,9 +98,6 @@ void vTaskEVSERemote(void *pvParameters)
                 }
             }
             break;
-        case REMOTE_REGEDITED:
-
-
         }
 
 #if DEBUG_REMOTE
