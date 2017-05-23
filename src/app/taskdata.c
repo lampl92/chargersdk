@@ -10,7 +10,7 @@
 #include "taskdata.h"
 #include "interface.h"
 
-//#define DEBUG_NO_TASKDATA
+#define DEBUG_NO_TASKDATA
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
 
