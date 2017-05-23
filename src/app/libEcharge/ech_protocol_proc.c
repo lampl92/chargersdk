@@ -34,7 +34,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-        #if 0
+        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+        #if 1
         /* 遍历SendCmd */
 
         gdsl_list_cursor_move_to_head (cs);
@@ -79,12 +81,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 }
 
             }
-#if 0
+#if 1
             /* 2. 判断超时 ，删除发送未收到回复的命令*/
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
             {
-                gdsl_list_cursor_delete(c);
-                gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                gdsl_list_cursor_delete(cs);
                 continue;
             }
 #endif
@@ -117,12 +118,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 gdsl_list_cursor_delete(cr);
                 continue;
             }
-#if 0
+#if 1
             /* 2. 判断超时 ，删除发送未收到回复的命令*/
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
             {
-                gdsl_list_cursor_delete(c);
-                gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                gdsl_list_cursor_delete(cr);
                 continue;
             }
 #endif
@@ -130,7 +130,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
         //gdsl_list_cursor_free(c);
 #endif
-        vTaskDelay(100);
+        vTaskDelay(1000);
     }
     while(1);
 }
