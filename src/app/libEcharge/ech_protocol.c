@@ -9,7 +9,7 @@
 #include "libEcharge/ech_protocol.h"
 #include "lwip/sockets.h"
 #include "enc_dec.h"
-#include "ech_protocol_proc.h"
+#include "libEcharge/ech_protocol_proc.h"
 
 #define defProtocolTimeout      10000
 
@@ -351,6 +351,7 @@ static void echCmdListFree (gdsl_element_t e)
 {
     free(((echCmdElem_t *)e)->pbuff);
     free (e);
+    ((echCmdElem_t *)e)->pbuff = NULL;
     e = NULL;
 }
 
