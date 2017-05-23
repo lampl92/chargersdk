@@ -42,7 +42,7 @@ static int sendCommand(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t 
     echSendCmdElem.trycountmax = trycountmax;
 
     pProto->pCMD[usSendID]->uiRecvdOptLen = 0;
-    memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, pProto->pCMD[usSendID]->uiRecvdOptLen);
+    memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
     gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
 }
 static int makeStdRegBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -337,7 +337,7 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
     copyCmdListElem->pbuff = (uint8_t *)malloc(copyCmdListElem->len * sizeof(uint8_t));
     if(copyCmdListElem->pbuff != NULL)
     {
-        memcpy(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, ((echCmdElem_t *)pechCmd)->len);
+        memcpy(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, copyCmdListElem->len);
     }
     else
     {

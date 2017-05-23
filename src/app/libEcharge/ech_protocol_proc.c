@@ -34,13 +34,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
+        #if 0
         /* 遍历SendCmd */
 
-
-        for(gdsl_list_cursor_move_to_head (cs); pechCmdElem = gdsl_list_cursor_get_content (cs); gdsl_list_cursor_step_forward (cs))
+        gdsl_list_cursor_move_to_head (cs);
+        while(pechCmdElem = gdsl_list_cursor_get_content (cs))
         {
             /* 1. 判断协议是否发送 */
-            if(pechCmdElem ->status == 0)
+            if(pechCmdElem->status == 0)
             {
                 memcpy(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
                 send_len = pechCmdElem->len;
@@ -58,13 +59,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     if(pechCmdElem->trycount > pechCmdElem->trycountmax)
                     {
                         gdsl_list_cursor_delete(cs);
-                        gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+                        //gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                         continue;
                         /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
                     }
                 }
             }
-            else if(pechCmdElem->status == 1)
+
+            if(pechCmdElem->status == 1)
             {
                 /* 判断命令字，
                    如果是请求命令，则等待主机回复
@@ -73,7 +75,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到回复
                 {
                     gdsl_list_cursor_delete(cs);
-                    gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                     continue;
                 }
 
@@ -88,12 +89,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
             }
 #endif
             /* 3. */
+            gdsl_list_cursor_step_forward (cs);
         }
         //gdsl_list_cursor_free(c);
 
         /* 遍历RecvCmd */
 
-        for(gdsl_list_cursor_move_to_head (cr); pechCmdElem = gdsl_list_cursor_get_content (cr); gdsl_list_cursor_step_forward (cr))
+        gdsl_list_cursor_move_to_head (cr);
+        while(pechCmdElem = gdsl_list_cursor_get_content (cr))
         {
             if(pechCmdElem->status == 0)
             {
@@ -105,28 +108,28 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 else//接收的协议帧序列有问题，直接删除
                 {
                     gdsl_list_cursor_delete(cr);
-                    gdsl_list_cursor_step_backward(cr);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                     continue;
                 }
             }
-            else if(pechCmdElem->status == 1)
+
+            if(pechCmdElem->status == 1)
             {
                 gdsl_list_cursor_delete(cr);
-                gdsl_list_cursor_step_backward(cr);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                 continue;
             }
 #if 0
-             /* 2. 判断超时 ，删除发送未收到回复的命令*/
+            /* 2. 判断超时 ，删除发送未收到回复的命令*/
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
             {
                 gdsl_list_cursor_delete(c);
                 gdsl_list_cursor_step_backward(c);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
                 continue;
             }
-            #endif
+#endif
+            gdsl_list_cursor_step_forward (cr);
         }
         //gdsl_list_cursor_free(c);
-
+#endif
         vTaskDelay(100);
     }
     while(1);

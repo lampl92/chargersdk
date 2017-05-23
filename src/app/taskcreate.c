@@ -30,7 +30,7 @@
 #define defSTACK_TaskTCPClient               (1024*10)
 #define defSTACK_TaskRemoteCmdProc          (1024*10)
 
-#define defSTACK_TaskEVSERemote             512
+#define defSTACK_TaskEVSERemote             (1024*10)
 #define defSTACK_TaskEVSERFID               512
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512

@@ -10,8 +10,9 @@
 
 #include "gdsl_list.h"
 
-#define REMOTE_SENDBUFF_MAX              1500 //发送缓冲长度
-#define REMOTE_RECVBUFF_MAX              1500 //接收缓冲长度
+#define REMOTE_SENDBUFF_MAX              128 //发送缓冲长度
+#define REMOTE_RECVBUFF_MAX              128 //接收缓冲长度
+#define REMOTE_RECVDOPTDATA             128
 
 typedef struct _ECHProtoParam
 {
@@ -68,7 +69,7 @@ typedef struct _echCMD
 {
     echCMDType_t CMDType;
 
-    uint8_t     ucRecvdOptData[1024];
+    uint8_t     ucRecvdOptData[REMOTE_RECVDOPTDATA];
     uint32_t    uiRecvdOptLen;
 
     pECH_MAKE_PROC  makeProc;
