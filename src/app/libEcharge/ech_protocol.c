@@ -68,7 +68,9 @@ static int makeStdRegBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtx
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pechProto->info.strUserPwd[i];
     }
+
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec;
+
     return 0;
 }
 static int makeStdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -85,11 +87,13 @@ static int makeStdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyC
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
     return 0;
 }
 static int makeStdCmd(void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uint32_t *pulSendLength)
 {
-    uint8_t ucMsgHead[14];
+    uint8_t ucMsgHead[20];
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
     uint8_t ucMsgBodyCtx_enc[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_dec;
