@@ -69,7 +69,7 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
     return errcode;
 }
 
-ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pucRetVal )
+ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
     uint8_t *pbuff; //数据部分
@@ -79,18 +79,18 @@ ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pucRe
         pbuff = pProto->pCMD[ECH_CMDID_REGISTER]->ucRecvdOptData;
         len = pProto->pCMD[ECH_CMDID_REGISTER]->uiRecvdOptLen;
         errcode = ERR_NO;
-        *pucRetVal = 0;
+        *psiRetVal = 0;
         switch(pbuff[0])//登陆结果
         {
         case 1: //正常
         case 3:
-            *pucRetVal = 1;
+            *psiRetVal = 1;
             break;
         case 2: //设备不存在，关闭连接
         case 4: //密钥失效，关闭连接
         case 5: //其他错误，关闭连接
         default:
-            *pucRetVal = 0;
+            *psiRetVal = 0;
             break;
         }
     }
@@ -109,7 +109,7 @@ ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     return errcode;
 }
 
-ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pucRetVal )
+ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
     uint8_t *pbuff; //数据部分
@@ -118,7 +118,7 @@ ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pucRet
     len = pProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen;
     if(len > 0)
     {
-        *pucRetVal = 1;
+        *psiRetVal = 1;
     }
 
     errcode = ERR_NO;
