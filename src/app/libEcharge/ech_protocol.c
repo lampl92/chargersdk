@@ -269,13 +269,13 @@ static int analyStdRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t u
     time_t timestamp;
 
     pProto = (echProtocol_t *)pObj;
-    pMsgBodyCtx_enc = &pbuff[30];         //取出加密部分buff
+    pMsgBodyCtx_enc = pbuff + 30;         //取出加密部分buff
     ulMsgBodyCtxLen_enc = ulRecvLen - 30; //加密部分长度
     pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
     aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
 
-    memcpy(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+    memmove(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
     pProto->pCMD[usSendID]->uiRecvdOptLen = ulMsgBodyCtxLen_enc;
 
     free(pMsgBodyCtx_dec);
@@ -283,15 +283,15 @@ static int analyStdRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t u
 
 static int analyRegRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
-    echProtocol_t *pProto;
-    uint8_t *pMsgBodyCtx_dec;
-
-    pProto = (echProtocol_t *)pObj;
-    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+//    echProtocol_t *pProto;
+//    uint8_t *pMsgBodyCtx_dec;
+//
+//    pProto = (echProtocol_t *)pObj;
 
     analyStdRes(pObj, usSendID, pbuff, ulRecvLen);
 
-    //xEventGroupSetBits(xHandleEventLwIP, defEventBitCmdRegedit);
+//    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+
     return 1;
 }
 
@@ -303,9 +303,8 @@ static int analyHeartRes(void *pObj, uint16_t usSendID, uint8_t *pbuff, uint32_t
     time_t timestamp;
 
     pProto = (echProtocol_t *)pObj;
-    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
-
     analyStdRes(pObj, usSendID, pbuff, ulRecvLen);
+    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
 
     ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
     ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
@@ -332,7 +331,7 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
     copyCmdListElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
     if(copyCmdListElem != NULL)
     {
-        memcpy(copyCmdListElem, pechCmd, sizeof(echCmdElem_t));
+        memmove(copyCmdListElem, pechCmd, sizeof(echCmdElem_t));
     }
     else
     {
@@ -341,7 +340,7 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
     copyCmdListElem->pbuff = (uint8_t *)malloc(copyCmdListElem->len * sizeof(uint8_t));
     if(copyCmdListElem->pbuff != NULL)
     {
-        memcpy(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, copyCmdListElem->len);
+        memmove(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, copyCmdListElem->len);
     }
     else
     {
