@@ -53,15 +53,12 @@ void vTaskEVSERemote(void *pvParameters)
             uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBitLwip & defEventBitPPPup) == defEventBitPPPup)
             {
-                RemoteRegist(pEVSE, pechProto, &network_res);
+                RemoteRegist(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
             }
             break;
         case REMOTE_CONNECTED:
             /* зЂВс */
-            //            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitCmdRegedit, pdTRUE, pdTRUE, 0);
-//            if((uxBitLwip & defEventBitCmdRegedit) == defEventBitCmdRegedit)
-//            {
             RemoteRegistRes(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
