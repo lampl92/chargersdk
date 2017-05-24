@@ -55,7 +55,7 @@ typedef struct _ECHProtoParam
 #define ECH_CMDID_HEARTBEAT       1//ÐÄÌø
 #define ECH_CMDID_STATUS           2//×´Ì¬
 
-#define ECH_CMD_MAX          3
+#define ECH_CMD_MAX          2
 
 
 

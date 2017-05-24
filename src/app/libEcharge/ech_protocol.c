@@ -115,8 +115,10 @@ static int makeStdCmd(void *pPObj,
     }
 
     *pulSendLength = ulMsgHeadLen + ulMsgBodyCtxLen_enc; //此处ulMsgHeadLen已经包含了桩号长度
-
-    return 0;
+    gmagec = ulMsgHeadLen;
+    gmagec = ulMsgBodyCtxLen_enc;
+    gmagec = *pulSendLength;
+    return 1;
 }
 static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -154,7 +156,9 @@ static int makeCmdReg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuf
     uint32_t ulMsgBodyCtxLen_dec;
 
     makeCmdRegBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
-    makeStdCmd(pPObj, ECH_CMDID_REGISTER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, &pulSendLen);
+    makeStdCmd(pPObj, ECH_CMDID_REGISTER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+
+    return 1;
 }
 
 static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -183,7 +187,7 @@ static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     uint32_t ulMsgBodyCtxLen_dec;
 
     makeCmdHeartBodyCtx(ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
-    makeStdCmd(pPObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, &pulSendLen);
+    makeStdCmd(pPObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
 //static int makeCmdStatusBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
