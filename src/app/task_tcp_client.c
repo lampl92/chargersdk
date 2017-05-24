@@ -82,8 +82,6 @@ void vTaskTCPClient(void *pvParameters)
                                 printf_safe("%02X ", tcp_client_recvbuf[i]);
                             }
                             printf_safe("\n");
-                            //memset(tcp_client_recvbuf, 0, sizeof(tcp_client_recvbuf));
-                            //xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientRecvValid);
                             pechProto->recvResponse(pechProto, tcp_client_recvbuf, recv_len, 3);
                         }
                         if(FD_ISSET(sock, &writefds))
