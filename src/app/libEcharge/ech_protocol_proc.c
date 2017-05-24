@@ -19,8 +19,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
 {
     echProtocol_t *pProto;
     echCmdElem_t *pechCmdElem;
-    gdsl_list_cursor_t cr;
     gdsl_list_cursor_t cs;
+    gdsl_list_cursor_t cr;
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
@@ -28,15 +28,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
     int res;
     int i;
 
-    //pProto = (echProtocol_t *)pvParameters;
-    pProto = pechProto;
+    pProto = (echProtocol_t *)pvParameters;
     cs = gdsl_list_cursor_alloc (pProto->plechSendCmd);
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
         printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
         printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-        #if 1
+
         /* 遍历SendCmd */
 
         gdsl_list_cursor_move_to_head (cs);
@@ -45,7 +44,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             /* 1. 判断协议是否发送 */
             if(pechCmdElem->status == 0)
             {
-                memcpy(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
+                memmove(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
                 send_len = pechCmdElem->len;
                 uxBitsLwip = xEventGroupSync(xHandleEventLwIP,
                                              defEventBitTCPClientSendReq,
@@ -92,7 +91,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
             /* 3. */
             gdsl_list_cursor_step_forward (cs);
         }
-        //gdsl_list_cursor_free(c);
 
         /* 遍历RecvCmd */
 
@@ -101,7 +99,10 @@ void vTaskRemoteCmdProc(void *pvParameters)
         {
             if(pechCmdElem->status == 0)
             {
-                res = pProto->pCMD[pechCmdElem->cmd_id]->analyProc(pProto, pechCmdElem->cmd_id, pechCmdElem->pbuff, pechCmdElem->len);
+                res = pProto->pCMD[pechCmdElem->cmd_id]->analyProc(pProto,
+                        pechCmdElem->cmd_id,
+                        pechCmdElem->pbuff,
+                        pechCmdElem->len);
                 if(res == 1)
                 {
                     pechCmdElem->status = 1;
@@ -128,9 +129,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
 #endif
             gdsl_list_cursor_step_forward (cr);
         }
-        //gdsl_list_cursor_free(c);
-#endif
         vTaskDelay(1000);
     }
-    while(1);
 }
