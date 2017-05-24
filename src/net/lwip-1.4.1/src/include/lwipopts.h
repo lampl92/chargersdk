@@ -133,12 +133,12 @@ a lot of data that needs to be copied, this should be set high. */
 */
 #define TCPIP_THREAD_NAME              "tcpip_thread"
 #define TCPIP_THREAD_STACKSIZE          (10*1024)
-#define TCPIP_THREAD_PRIO               11
+#define TCPIP_THREAD_PRIO               13
 #define TCPIP_MBOX_SIZE                 20
 
 #define PPP_THREAD_NAME                "pppInputThread"
 #define PPP_THREAD_STACKSIZE            (10*1024)
-#define PPP_THREAD_PRIO                 12
+#define PPP_THREAD_PRIO                 14
 
 /*
    ---------------------------------

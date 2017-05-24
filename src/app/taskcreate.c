@@ -44,24 +44,27 @@
 / 任务优先级
 /---------------------------------------------------------------------------*/
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
-#define defPRIORITY_TaskInit                1
-#define defPRIORITY_TaskCLI                 1
-#define defPRIORITY_TaskGUI                 1   //不能高,GUI任务时间太长,会影响硬件响应
-#define defPRIORITY_TaskTouch               2
-#define defPRIORITY_TaskOTA                 15 /* 最高*/
-#define defPRIORITY_TaskPPP                 12
-#define defPRIORITY_TaskTCPClient           10
+#define defPRIORITY_TaskOTA                 31/* 最高*/
+
+#define defPRIORITY_TaskEVSECharge          27
+#define defPRIORITY_TaskEVSEDiag            25
+#define defPRIORITY_TaskEVSEMonitor         23
+//#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 22
+#define defPRIORITY_TaskEVSERFID            20
+#define defPRIORITY_TaskEVSERemote          18
+#define defPRIORITY_TaskEVSEData            16
+
+#define defPRIORITY_TaskPPP                 14
+#define defPRIORITY_TaskTCPClient           12
 #define defPRIORITY_TaskRemoteCmdProc       10
-//#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 13
 
-#define defPRIORITY_TaskEVSERemote          3
-#define defPRIORITY_TaskEVSERFID            4
-#define defPRIORITY_TaskEVSECharge          5
-#define defPRIORITY_TaskEVSEMonitor         7
-#define defPRIORITY_TaskEVSEDiag            9
-#define defPRIORITY_TaskEVSEData            1
+#define defPRIORITY_TaskInit                8
+#define defPRIORITY_TaskTouch               6
+#define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
+#define defPRIORITY_TaskCLI                 2
 
-//#define TCPIP_THREAD_PRIO         11 //defined in lwipopts.h
+//#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
+// define PPP_THREAD_PRIO          14
 
 /*---------------------------------------------------------------------------/
 / 任务名称
@@ -181,8 +184,15 @@ void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
+#ifdef EVSE_DEBUG
+        while(1)
+        {
+            vTaskDelay(1000);
+        }
+#else
         GUI_TOUCH_Exec();//激活XY轴的测量
         vTaskDelay(10);
+#endif
     }
 }
 
@@ -207,11 +217,11 @@ void SysTaskCreate (void)
 void AppTaskCreate (void)
 {
     xTaskCreate( vTaskEVSERemote, TASKNAME_EVSERemote, defSTACK_TaskEVSERemote, NULL, defPRIORITY_TaskEVSERemote, &xHandleTaskEVSERemote );
-    xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
-    xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
-    xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
-    xTaskCreate( vTaskEVSEDiag, TASKNAME_EVSEDiag, defSTACK_TaskEVSEDiag, NULL, defPRIORITY_TaskEVSEDiag, &xHandleTaskEVSEDiag );
-    xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
+//    xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
+//    xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
+//    xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
+//    xTaskCreate( vTaskEVSEDiag, TASKNAME_EVSEDiag, defSTACK_TaskEVSEDiag, NULL, defPRIORITY_TaskEVSEDiag, &xHandleTaskEVSEDiag );
+//    xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
 /** @brief 閸掓稑缂撴禒璇插闁矮淇婇張鍝勫煑閵嗗偊绱欐穱鈥冲娇闁插骏绱濇潪顖欐鐎规碍妞傞崳銊ュ灡瀵よ桨绗岄崥顖氬З閿??
