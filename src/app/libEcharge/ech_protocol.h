@@ -10,6 +10,8 @@
 
 #include "gdsl_list.h"
 
+#define ECH_UNUSED_ARG(x) (void)x
+
 #define REMOTE_SENDBUFF_MAX              128 //发送缓冲长度
 #define REMOTE_RECVBUFF_MAX              128 //接收缓冲长度
 #define REMOTE_RECVDOPTDATA             128
@@ -51,13 +53,14 @@ typedef struct _ECHProtoParam
 /*命令子RecvCMDID*/
 #define ECH_CMDID_REGISTER        0//注册登陆
 #define ECH_CMDID_HEARTBEAT       1//心跳
+#define ECH_CMDID_STATUS           2//状态
 
-#define ECH_CMD_MAX          2
+#define ECH_CMD_MAX          3
 
 
 
-typedef    int (*pECH_MAKE_PROC)  (void *pObj, uint16_t usSendID, uint8_t *pucSendBuffer, uint32_t *pulLen);
-typedef    int (*pECH_ANALY_PROC) (void *pObj, uint16_t usSendID, uint8_t *pucRecvBuffer, uint32_t ulRecvLen);
+typedef    int (*pECH_MAKE_PROC)  (void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen);
+typedef    int (*pECH_ANALY_PROC) (void *pPObj, uint16_t usSendID, uint8_t *pucRecvBuffer, uint32_t ulRecvLen);
 
 typedef struct
 {
@@ -83,9 +86,9 @@ typedef struct _echProtocol
     echCMD_t *pCMD[ECH_CMD_MAX];
     gdsl_list_t plechSendCmd;
     gdsl_list_t plechRecvCmd;
-    int (*sendCommand)(void *pObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax);
-    int (*recvResponse)(void *pObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax);
-    void (*deleteProtocol)(void *pObj);
+    int (*sendCommand)(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax);
+    int (*recvResponse)(void *pPObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax);
+    void (*deleteProtocol)(void *pPObj);
 } echProtocol_t;
 
 echProtocol_t *EchProtocolCreate(void);
