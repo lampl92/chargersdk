@@ -288,6 +288,20 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
 
     return  errcode;
 }
+
+ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t reason)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_RTDATA]->ucRecvdOptData;
+
+    pbuff[¹þ¹þ¹þ] = reason;
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 10, 1);
+
+    return errcode;
+}
 /** @brief
  *
  * @param pucID uint8_t*
