@@ -179,14 +179,33 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionCritical,
+                                                      defEventBitExceptionStop,
                                                       pdFALSE, pdFALSE, 0);
-                if((uxBitsException & defEventBitExceptionCritical) != 0)
+                if((uxBitsException & defEventBitExceptionStop) != 0)
                 {
                     printf_safe("Stop Error!\n");
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
+                /*** 判断用户相关停止条件  ***/
+                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
+                if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
+                {
+                    pCON->order.ucStopType = defOrderStopType_Fee;
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_Remote;
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if((uxBitsException & defEventBitExceptionRFID) == defEventBitExceptionRFID)    //刷卡停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_RFID;
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                /******************************/
+
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 //                printf_safe("uxBitsCharge = %X\n", uxBitsCharge);
 //                printf_safe("CPCondition = %X\n", defEventBitChargeCondition);
@@ -208,9 +227,9 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
-                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)//刷卡停止
+                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
-                        pCON->order.ucStopType = defOrderStopType_RFID;
+                        //用户原因停止
                     }
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING Without \"S2 open\"");
                     vTaskDelay(defRelayDelay);
