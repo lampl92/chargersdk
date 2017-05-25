@@ -109,13 +109,17 @@
 #define defEventBitDiagEVSEState        BIT_6
 /*------pCON->status.xHandleEventException*/
 #define defEventBitExceptionTempW       BIT_0   //Warning
-#define defEventBitExceptionTempC       BIT_1   //Critical
+//#define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
 #define defEventBitExceptionCurr        BIT_3
-#define defEventBitExceptionCritical    defEventBitExceptionTempC
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
+#define defEventBitExceptionRFID        BIT_7
+#define defEventBitExceptionMeter       BIT_8
+#define defEventBitExceptionRelayPaste  BIT_9
+
+#define defEventBitExceptionCritical    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -173,6 +177,8 @@
 #define defEventBitTimerCBRFID              BIT_6
 #define defEventBitTimerCBDataRefresh       BIT_7
 #define defEventBitTimerCBHeartbeat         BIT_8
+#define defEventBitTimerCBStatus            BIT_9
+#define defEventBitTimerCBRTData            BIT_10
 
 
 /*充电桩类型*/
@@ -187,8 +193,8 @@
 #define defCONType_AC                   2
 
 /*充电桩接口类型*/
-#define defSocketTypeB              ('B')
-#define defSocketTypeC              ('C')
+#define defSocketTypeB              ('B')//66
+#define defSocketTypeC              ('C')//67
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;

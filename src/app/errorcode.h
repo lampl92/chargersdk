@@ -82,9 +82,10 @@ typedef struct _ErrorPackage
 
 //充电枪ID从小到大定义，其他设备从大小定义
 //DevID 0~? 充电枪ID
-#define defDevID_System		249
-#define defDevID_Cloud		250
-#define defDevID_File		251
+#define defDevID_System		248
+#define defDevID_Cloud		249
+#define defDevID_File		250
+#define devDevID_Meter      251
 #define defDevID_GPRS       252
 #define defDevID_RFID		253
 #define defDevID_NetMoudle	254
