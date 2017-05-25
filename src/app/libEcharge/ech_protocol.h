@@ -12,9 +12,9 @@
 
 #define ECH_UNUSED_ARG(x) (void)x
 
-#define REMOTE_SENDBUFF_MAX              128 //发送缓冲长度
-#define REMOTE_RECVBUFF_MAX              128 //接收缓冲长度
-#define REMOTE_RECVDOPTDATA             128
+#define REMOTE_SENDBUFF_MAX              1500 //发送缓冲长度
+#define REMOTE_RECVBUFF_MAX              1500 //接收缓冲长度
+#define REMOTE_RECVDOPTDATA              1500
 
 typedef struct _ECHProtoParam
 {
@@ -27,7 +27,7 @@ typedef struct _ECHProtoParam
     time_t tNewKeyChangeTime;
 
     uint8_t ucProtoVer; //协议版本号
-    uint8_t ucHeartBeatCyc; //心跳周期 精确到秒
+    uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t ucResetAct;//重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
 
     uint32_t ulPowerFee_sharp;//尖峰费率 系数0.0001
@@ -40,8 +40,8 @@ typedef struct _ECHProtoParam
     uint32_t ulServiceFee_shoulder;
     uint32_t ulServiceFee_off_peak;
 
-    uint8_t ucStatusUploadCyc;  //状态数据上报间隔，精确到秒
-    uint8_t ucRTDataUploadCyc;  //实时数据上报间隔  10s
+    uint32_t ulStatusCyc_ms;  //状态数据上报间隔，精确到秒
+    uint32_t ulRTDataCyc_ms;  //实时数据上报间隔  10s
 
 } echProtoInfo_t;
 
@@ -54,8 +54,9 @@ typedef struct _ECHProtoParam
 #define ECH_CMDID_REGISTER        0//注册登陆
 #define ECH_CMDID_HEARTBEAT       1//心跳
 #define ECH_CMDID_STATUS           2//状态
+#define ECH_CMDID_QRSTART           3//无卡启停
 
-#define ECH_CMD_MAX          2
+#define ECH_CMD_MAX          4
 
 
 
@@ -87,7 +88,7 @@ typedef struct _echProtocol
     gdsl_list_t plechSendCmd;
     gdsl_list_t plechRecvCmd;
     int (*sendCommand)(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax);
-    int (*recvResponse)(void *pPObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax);
+    int (*recvResponse)(void *pPObj, void *pEObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax);
     void (*deleteProtocol)(void *pPObj);
 } echProtocol_t;
 

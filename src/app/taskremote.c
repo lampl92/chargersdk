@@ -50,7 +50,9 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): 尝试连接网络 */
-            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitPPPup, pdFALSE, pdTRUE, portMAX_DELAY);
+            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP,
+                                            defEventBitPPPup,
+                                            pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBitLwip & defEventBitPPPup) == defEventBitPPPup)
             {
                 RemoteRegist(pEVSE, pechProto);
@@ -62,7 +64,12 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteRegistRes(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
-                xTimerStart(xHandleTimerHeartbeat, 0);
+                xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
+                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
+                                   100);//设置timer period ，有timer start 功能
+                xTimerChangePeriod(xHandleTimerRemoteStatus,
+                                   pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
+                                   100);//设置timer period ，有timer start 功能
                 remotestat = REMOTE_REGEDITED;
             }
 
@@ -76,6 +83,18 @@ void vTaskEVSERemote(void *pvParameters)
             if((uxBitsTimerCB & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteHeart(pEVSE, pechProto);
+            }
+            /* 状态*/
+            uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify,
+                                                defEventBitTimerCBStatus,
+                                                pdTRUE, pdTRUE , 0);
+            if((uxBitsTimerCB & defEventBitTimerCBStatus) == defEventBitTimerCBStatus)
+            {
+                for(i = 0; i < ulTotalCON; i++)
+                {
+                    pCON = CONGetHandle(i);
+                    RemoteStatus(pEVSE, pechProto, pCON);
+                }
             }
             /* 获取帐户信息*/
             uxBitsRFID = xEventGroupWaitBits(xHandleEventRemote,

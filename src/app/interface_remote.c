@@ -63,7 +63,7 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 调用平台注册接口 */
-    pProto->sendCommand(pProto, NULL, NULL, ECH_CMDID_REGISTER, 10, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_REGISTER, 10, 3);
     /**********/
 
     return errcode;
@@ -103,7 +103,7 @@ ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     errcode = ERR_NO;
 
     /** @todo (rgw#1#): 调用平台注册接口 */
-    pProto->sendCommand(pProto, NULL, NULL, ECH_CMDID_HEARTBEAT, 10, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 10, 3);
     /**********/
 
     return errcode;
@@ -122,6 +122,15 @@ ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
     }
 
     errcode = ERR_NO;
+}
+ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 1, 1);
+
+    return errcode;
 }
 /** @brief
  *

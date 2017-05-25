@@ -39,6 +39,7 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
 ErrorCode_t RemoteGetTime(struct tm *pTimeBlock);
 ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAccountStatus, double *pdBalance);
 
