@@ -13,7 +13,7 @@
 typedef struct
 {
     time_t timestamp;
-    uint32_t timeout;
+    uint32_t timeout_s;
     echCMDType_t cmd;
     uint16_t cmd_id;
     uint32_t len;
