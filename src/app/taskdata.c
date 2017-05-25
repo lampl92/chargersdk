@@ -33,15 +33,18 @@ void vTaskEVSEData(void *pvParameters)
 #ifndef DEBUG_NO_TASKDATA
         /* 订单管理 */
         //1. 等待刷卡完成事件
-        uxBitsData = xEventGroupWaitBits(xHandleEventData,
-                                         defEventBitOrderTmp,   //RFID中发出该事件
-                                         pdTRUE, pdFALSE, 0);
-        if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
+        for(i = 0; i < ulTotalCON; i++)
         {
-            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            pCON->order.statOrder = STATE_ORDER_TMP;
+            pCON = CONGetHandle(i);
+            uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                             defEventBitOrderTmp,   //RFID中发出该事件
+                                             pdTRUE, pdFALSE, 0);
+            if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
+            {
+                pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+                pCON->order.statOrder = STATE_ORDER_TMP;
+            }
         }
-
 
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -52,7 +55,7 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
-                xEventGroupSetBits(xHandleEventData, defEventBitOrderUpdateOK);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUpdateOK);
                 pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;
             case STATE_ORDER_WAITSTART:
@@ -68,7 +71,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
                 makeOrder(pCON);
-                xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);//目前还没有地方用
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//目前还没有地方用
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
@@ -104,9 +107,34 @@ void vTaskEVSEData(void *pvParameters)
                     }
                 }
                 /*****************************************/
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                 defEventBitOrderStopType,
+                                                 pdTRUE, pdFALSE, 0);
+                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
+                {
+                    pCON->order.ucStopType = defOrderStopType_Fee;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //远程停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_Remote;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //刷卡停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_RFID;
+                }
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+
                 /** @todo (rgw#1#): 存储订单 */
-                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-                OrderInit(&(pCON->order));//状态变为IDLE
+
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                 defEventBitOrderUseless,
+                                                 pdTRUE, pdTRUE, 0);
+                if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+                    OrderInit(&(pCON->order));//状态变为IDLE
+                }
                 break;
             }
         }
