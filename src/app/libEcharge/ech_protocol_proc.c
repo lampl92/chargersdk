@@ -82,7 +82,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             }
 #if 1
             /* 2. ÅÐ¶Ï³¬Ê± £¬É¾³ý·¢ËÍÎ´ÊÕµ½»Ø¸´µÄÃüÁî*/
-            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
+            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
             {
                 gdsl_list_cursor_delete(cs);
                 continue;
@@ -121,7 +121,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             }
 #if 1
             /* 2. ÅÐ¶Ï³¬Ê± £¬É¾³ý·¢ËÍÎ´ÊÕµ½»Ø¸´µÄÃüÁî*/
-            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout)
+            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
             {
                 gdsl_list_cursor_delete(cr);
                 continue;
