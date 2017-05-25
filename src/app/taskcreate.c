@@ -132,14 +132,14 @@ EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
 EventGroupHandle_t xHandleEventLwIP   = NULL;
 
-//下面的事件定义在各个结构体中
+//�����Event����Ӧ�ṹ���ж���
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
-//队列
+//����
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
-//软件定时�?
+//Timer���
 TimerHandle_t xHandleTimerTemp = NULL; //4个温�?
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
@@ -148,7 +148,9 @@ TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
-TimerHandle_t xHandleTimerHeartbeat = NULL;
+TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
+TimerHandle_t xHandleTimerRemoteStatus    = NULL;
+TimerHandle_t xHandleTimerRemoteRTData    = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始�?
 //Mutex
 void vTaskInit(void *pvParameters)
@@ -217,14 +219,14 @@ void SysTaskCreate (void)
 void AppTaskCreate (void)
 {
     xTaskCreate( vTaskEVSERemote, TASKNAME_EVSERemote, defSTACK_TaskEVSERemote, NULL, defPRIORITY_TaskEVSERemote, &xHandleTaskEVSERemote );
-//    xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
-//    xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
-//    xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
-//    xTaskCreate( vTaskEVSEDiag, TASKNAME_EVSEDiag, defSTACK_TaskEVSEDiag, NULL, defPRIORITY_TaskEVSEDiag, &xHandleTaskEVSEDiag );
-//    xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
+    xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
+    xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
+    xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
+    xTaskCreate( vTaskEVSEDiag, TASKNAME_EVSEDiag, defSTACK_TaskEVSEDiag, NULL, defPRIORITY_TaskEVSEDiag, &xHandleTaskEVSEDiag );
+    xTaskCreate( vTaskEVSEData, TASKNAME_EVSEData, defSTACK_TaskEVSEData, NULL, defPRIORITY_TaskEVSEData, &xHandleTaskEVSEData );
 }
 
-/** @brief 鍒涘缓浠诲姟閫氫俊鏈哄埗銆傦紙淇″彿閲忥紝杞欢瀹氭椂鍣ㄥ垱寤轰笌鍚姩�??
+/** @brief
  */
 void AppObjCreate (void)
 {
@@ -247,7 +249,9 @@ void AppObjCreate (void)
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", defMonitorEVSEStateCyc, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
     xHandleTimerRFID = xTimerCreate("TimerRFID", defMonitorRFIDCyc, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
     xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", defMonitorDataRefreshCyc, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
-    xHandleTimerHeartbeat = xTimerCreate("TimerHeartbeat", defRemoteHeartbeatCyc, pdTRUE, (void *)defTIMERID_Heartbeat, vEVSETimerCB);
+    xHandleTimerRemoteHeartbeat = xTimerCreate("TimerHeartbeat", defRemoteHeartbeatCyc, pdTRUE, (void *)defTIMERID_RemoteHeartbeat, vEVSETimerCB);
+    xHandleTimerRemoteStatus = xTimerCreate("TimerRemoteStatus", defRemoteStatusCyc, pdTRUE, (void *)defTIMERID_RemoteStatus, vEVSETimerCB);
+    xHandleTimerRemoteRTData = xTimerCreate("TimerRemoteRTData", defRemoteRTDataCyc, pdTRUE, (void *)defTIMERID_RemoteRTData, vEVSETimerCB);
 
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
