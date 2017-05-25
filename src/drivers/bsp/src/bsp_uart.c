@@ -52,7 +52,7 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout)
 {
     Queue *pRecvQue;
-    uint8_t rl = 0;//read len
+    uint32_t rl = 0;//read len
     switch(uartport)
     {
     case UART_PORT_CLI:
