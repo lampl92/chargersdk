@@ -1440,10 +1440,18 @@ static ErrorCode_t StopCharge(void *pvCON)
 CON_t *CONGetHandle(uint8_t ucCONID)
 {
     CON_t *pCON;
+    uint32_t ulTotalCON;
 
-    pCON =  (CON_t *)(pListCON->pListPointArray[ucCONID]);
+    ulTotalCON = pListCON->Total;
 
-    return pCON;
+    if(ucCONID < ulTotalCON)
+    {
+        return (CON_t *)(pListCON->pListPointArray[ucCONID]);
+    }
+    else
+    {
+        return NULL;
+    }
 }
 CONState_t CONGetState(uint8_t ucCONID)
 {
