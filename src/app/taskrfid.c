@@ -146,7 +146,11 @@ void vTaskEVSERFID(void *pvParameters)
 #endif
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-            xEventGroupSync(xHandleEventData,
+//            xEventGroupSync(xHandleEventData,
+//                            defEventBitOrderTmp,
+//                            defEventBitOrderUpdateOK,
+//                            portMAX_DELAY);
+            xEventGroupSync(pCON->status.xHandleEventOrder,
                             defEventBitOrderTmp,
                             defEventBitOrderUpdateOK,
                             portMAX_DELAY);
