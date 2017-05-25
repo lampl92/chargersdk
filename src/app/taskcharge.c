@@ -179,29 +179,31 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionStop,
+                                                      defEventBitExceptionDevFault,
                                                       pdFALSE, pdFALSE, 0);
-                if((uxBitsException & defEventBitExceptionStop) != 0)
+                if((uxBitsException & defEventBitExceptionDevFault) != 0)
                 {
                     printf_safe("Stop Error!\n");
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
                 /*** 判断用户相关停止条件  ***/
-                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
+                uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+                                                      defEventBitExceptionStopType,
+                                                      pdTRUE, pdFALSE, 0);
                 if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
                 {
-                    pCON->order.ucStopType = defOrderStopType_Fee;
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
-                    pCON->order.ucStopType = defOrderStopType_Remote;
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRFID) == defEventBitExceptionRFID)    //刷卡停止
                 {
-                    pCON->order.ucStopType = defOrderStopType_RFID;
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 /******************************/
@@ -274,6 +276,7 @@ void vTaskEVSECharge(void *pvParameters)
                                 defEventBitHMI_ChargeReqDispDone,
                                 defeventBitHMI_ChargeReqDispDoneOK,
                                 portMAX_DELAY );
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);//通知Order HMI显示完成了。
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
