@@ -23,25 +23,40 @@ typedef enum
     REMOTE_ERROR
 } RemoteState_t;
 
+typedef enum
+{
+    REMOTECTRL_IDLE,
+    REMOTECTRL_WAIT_START,
+    REMOTECTRL_SUCC,
+    REMOTECTRL_WAIT_STOP,
+    REMOTECTRL_STOP,
+    REMOTECTRL_FAIL,
+    REMOTECTRL_SENDCMD
+} RemoteCtrlState_e;
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
     int i;
-    EventBits_t uxBitsRFID;
-    EventBits_t uxBitsTimerCB;
-    EventBits_t uxBitLwip;
+    EventBits_t uxBits;
     RemoteState_t remotestat;
+    RemoteCtrlState_e eRemoteCtrlStat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
+    uint8_t id_rmtctrl;
+    uint8_t ctrl_rmtctrl;
+    time_t time_rmtctrl;
 
     ulTotalCON = pListCON->Total;
-    uxBitsRFID = 0;
-    uxBitsTimerCB = 0;
+    uxBits = 0;
+    uxBits = 0;
     remotestat = REMOTE_NO;
+    eRemoteCtrlStat = REMOTECTRL_IDLE;
     errcode = 0;
     network_res = 0;
+    id_rmtctrl = 0;
+    ctrl_rmtctrl = 0;
 
     while(1)
     {
@@ -50,10 +65,10 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): 尝试连接网络 */
-            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP,
-                                            defEventBitPPPup,
-                                            pdFALSE, pdTRUE, portMAX_DELAY);
-            if((uxBitLwip & defEventBitPPPup) == defEventBitPPPup)
+            uxBits = xEventGroupWaitBits(xHandleEventLwIP,
+                                         defEventBitPPPup,
+                                         pdFALSE, pdTRUE, portMAX_DELAY);
+            if((uxBits & defEventBitPPPup) == defEventBitPPPup)
             {
                 RemoteRegist(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
@@ -77,18 +92,18 @@ void vTaskEVSERemote(void *pvParameters)
         case REMOTE_REGEDITED:
 
             /* 心跳 */
-            uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify,
+            uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                                 defEventBitTimerCBHeartbeat,
                                                 pdTRUE, pdTRUE , 0);
-            if((uxBitsTimerCB & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
+            if((uxBits & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteHeart(pEVSE, pechProto);
             }
             /* 状态*/
-            uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify,
+            uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                                 defEventBitTimerCBStatus,
                                                 pdTRUE, pdTRUE , 0);
-            if((uxBitsTimerCB & defEventBitTimerCBStatus) == defEventBitTimerCBStatus)
+            if((uxBits & defEventBitTimerCBStatus) == defEventBitTimerCBStatus)
             {
                 for(i = 0; i < ulTotalCON; i++)
                 {
@@ -96,11 +111,83 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteStatus(pEVSE, pechProto, pCON);
                 }
             }
+            /* 远程启停*/
+            switch(eRemoteCtrlStat)
+            {
+            case REMOTECTRL_IDLE:
+                RemoteRemoteCtrlRes(pEVSE, pechProto, &id_rmtctrl, &ctrl_rmtctrl, &network_res);
+                if(network_res == 1) //注意这里的ID会一直存在，在其他状态中也可以使用
+                {
+                    time_rmtctrl = time(NULL);
+                    if(ctrl_rmtctrl == 1)
+                    {
+                        eRemoteCtrlStat = REMOTECTRL_WAIT_START;
+                    }
+                    else if(ctrl_rmtctrl == 2)
+                    {
+                        eRemoteCtrlStat = REMOTECTRL_WAIT_STOP;
+                    }
+                }
+                break;
+            case REMOTECTRL_WAIT_START:
+                pCON = CONGetHandle(id_rmtctrl);
+                uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                             defEventBitCONStartOK,
+                                             pdFALSE, pdTRUE, 0);
+                if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+                {
+                    eRemoteCtrlStat = REMOTECTRL_SUCC;
+                }
+                else
+                {
+                    if(time(NULL) - time_rmtctrl > 30)
+                    {
+                        eRemoteCtrlStat = REMOTECTRL_FAIL;
+                    }
+                }
+                break;
+            case REMOTECTRL_WAIT_STOP:
+                pCON = CONGetHandle(id_rmtctrl);
+                uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
+                {
+                    eRemoteCtrlStat = REMOTECTRL_SUCC;
+                }
+                else
+                {
+                    if(time(NULL) - time_rmtctrl > 30)
+                    {
+                        eRemoteCtrlStat = REMOTECTRL_FAIL;
+                    }
+                }
+                break;
+            case REMOTECTRL_SUCC:
+                pCON = CONGetHandle(id_rmtctrl);
+                RemoteRemoteCtrl(pEVSE, pechProto, pCON, 1, 0); //0， 正常
+                eRemoteCtrlStat = REMOTECTRL_IDLE;
+                break;
+            case REMOTECTRL_FAIL:
+                pCON = CONGetHandle(id_rmtctrl);
+                uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                if((uxBits & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                {
+                    RemoteRemoteCtrl(pEVSE, pechProto, pCON, 0, 3);//3, 枪未连接
+                }
+                else
+                {
+                    RemoteRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4， 其他错误
+                }
+                eRemoteCtrlStat = REMOTECTRL_IDLE;
+                break;
+            default:
+                break;
+            }
+
             /* 获取帐户信息*/
-            uxBitsRFID = xEventGroupWaitBits(xHandleEventRemote,
-                                             defEventBitRemoteGetAccount,
-                                             pdTRUE, pdFALSE, 0);
-            if((uxBitsRFID & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
+            uxBits = xEventGroupWaitBits(xHandleEventRemote,
+                                         defEventBitRemoteGetAccount,
+                                         pdTRUE, pdFALSE, 0);
+            if((uxBits & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
             {
                 THROW_ERROR(defDevID_Cloud,
                             errcode = RemoteGetBalance(pRFIDDev->order.ucCardID,
@@ -113,7 +200,7 @@ void vTaskEVSERemote(void *pvParameters)
                     xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
                 }
             }
-            break;
+            break;//REMOTE_REGEDITED
         }
 
 #if DEBUG_REMOTE

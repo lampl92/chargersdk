@@ -54,7 +54,7 @@ typedef struct _ECHProtoParam
 #define ECH_CMDID_REGISTER        0//×¢²áµÇÂ½
 #define ECH_CMDID_HEARTBEAT       1//ÐÄÌø
 #define ECH_CMDID_STATUS           2//×´Ì¬
-#define ECH_CMDID_QRSTART           3//ÎÞ¿¨ÆôÍ£
+#define ECH_CMDID_REMOTE_CTRL      3//ÎÞ¿¨ÆôÍ£
 
 #define ECH_CMD_MAX          4
 

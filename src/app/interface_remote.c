@@ -11,6 +11,8 @@
 #include "bsp.h"
 #include "interface.h"
 #include "mbedtls/base64.h"
+#include "utils.h"
+#include "lwip/sockets.h"
 
 #if 0
 ErrorCode_t RemoteInit()
@@ -50,6 +52,26 @@ ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
     return errcode;
 }
 #endif
+
+uint8_t EchRemoteIDtoCONID(uint8_t remote_id)
+{
+    uint8_t id;
+    switch(remote_id)
+    {
+    case 0:
+    case 1:
+        id = 0;
+        break;
+    case 2:
+        id = 1;
+    default:
+        id = 0xff;
+        break;
+    }
+    return id;
+}
+
+
 /** @brief
  *
  * @param pucRetVal uint8_t*     1注册成功  0注册失败
@@ -102,9 +124,7 @@ ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 调用平台注册接口 */
     pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 10, 3);
-    /**********/
 
     return errcode;
 }
@@ -131,6 +151,142 @@ ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 1, 1);
 
     return errcode;
+}
+ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t len;
+    uint8_t id;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    id = 0;
+
+    pbuff = pProto->pCMD[ECH_CMDID_STATUS]->ucRecvdOptData;
+    len = pProto->pCMD[ECH_CMDID_STATUS]->uiRecvdOptLen;
+    if(len > 0)
+    {
+        //pbuff[0...3] 操作序列号
+        //pbuff[4] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[4]);
+        pCON = CONGetHandle(id);
+        if(pCON != NULL)
+        {
+            RemoteStatus(pEVSE, pProto, pCON);
+            *psiRetVal = 1;
+        }
+        else
+        {
+            *psiRetVal = 0;
+        }
+    }
+
+    return errcode;
+}
+
+/** @brief 桩回复平台启停命令
+ *
+ * @param pEVSE EVSE_t*
+ * @param pProto echProtocol_t*
+ * @param pCON CON_t*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ, uint8_t reason)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    /*** 如下操作为破坏了程序结构，用pCMD中的缓存空间带入一些需要传递的参数*/
+    pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
+    if(succ == 1)
+    {
+        pbuff[14] = 1;
+    }
+    else if(succ == 0)
+    {
+        pbuff[14] = 2;
+    }
+    pbuff[15] = reason;
+    /*********************/
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 30, 3);
+
+    return errcode;
+}
+
+/** @brief 平台下发的启停命令
+ *
+ * @param pEVSE EVSE_t*
+ * @param pProto echProtocol_t*
+ * @param pid uint8_t* 返回ID到程序
+ * @param pctrl uint8_t* 返回操作到程序
+ * @param psiRetVal int* 返回结果到程序
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )// →_→
+{
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t len;
+
+    double dLimetFee;
+    ul2uc ulTmp;
+    uint8_t id;
+    ErrorCode_t errcode;
+
+    id = 0;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
+    len = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->uiRecvdOptLen;
+    if(len > 0)
+    {
+        //pbuff[0...3] 操作ID ，不处理，留在ucRecvdOptData中待回复时使用
+
+        //pbuff[12] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[12]);
+        pCON = CONGetHandle(id);
+        if(pCON != NULL)
+        {
+            //pbuff[4...11] 交易流水号
+            HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
+
+            //pbuff[13] 操作 1启动，2停止
+            if(pbuff[13] == 1)
+            {
+                *pctrl = pbuff[13];
+                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+            }
+            else if(pbuff[13] == 2)
+            {
+                *pctrl = pbuff[13];
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
+            }
+            //pbuff[14...17] 充电金额
+            ulTmp.ucVal[0] = pbuff[14];
+            ulTmp.ucVal[1] = pbuff[15];
+            ulTmp.ucVal[2] = pbuff[16];
+            ulTmp.ucVal[3] = pbuff[17];
+            dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
+            pCON->order.dLimitFee = dLimetFee;
+
+            *psiRetVal = 1;
+            *pid = id;
+        }
+        else
+        {
+            *psiRetVal = 0;
+        }
+    }
+    else
+    {
+        *psiRetVal = 0;
+    }
+
+    return  errcode;
 }
 /** @brief
  *

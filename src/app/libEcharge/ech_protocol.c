@@ -31,7 +31,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     pProto->pCMD[usSendID]->makeProc(pPObj, pEObj, pCObj, pucSendBuffer, &ulSendLength);
 
     echSendCmdElem.timestamp = time(NULL);
-    echSendCmdElem.timeout = timeout;
+    echSendCmdElem.timeout_s = timeout;
     echSendCmdElem.cmd = pProto->pCMD[usSendID]->CMDType;
     echSendCmdElem.cmd_id = usSendID;
     echSendCmdElem.len = ulSendLength;
@@ -345,7 +345,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     }
     if(pEVSE->status.ulPowerOffState == 1)
     {
-        errcode |= 1 << 7;  //Bit7 其他（停电故障)
+        errcode |= 1 << 7;  //Bit7 其他(在此定义为停电故障)
     }
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = errcode;
     //充电桩当前时间
@@ -366,6 +366,46 @@ static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
 
     makeCmdStatusBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_STATUS, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+
+static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpNetSeq;
+    int i;
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
+
+    for(i = 0; i < 14; i++)
+    {
+        //[0...3] 操作ID
+        //[4...11] 交易流水号
+        //[12] 充电桩接口
+        //[13] 充电桩操作
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //不变
+    }
+    //[14] 启停结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[14];//在发送命令之前赋值的
+    //[15] 失败原因
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[15];//在发送命令之前赋值的
+    //[16] SOC
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdRemoteCtrlBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REMOTE_CTRL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
 #define ECH_ERR_VER     -1
@@ -428,13 +468,21 @@ static int recvResponse(void *pPObj,
     echRecvCmdElem.timestamp = time(NULL);
     switch(echRecvCmdElem.cmd.usRecvCmd)
     {
-    case 2://主机回复的命令，不需要timeout
+    case 2://主机回复的命令，不需要timeout 单位s。
         echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
-        echRecvCmdElem.timeout =  0xffffffff;
+        echRecvCmdElem.timeout_s =  0xffffffff;
         break;
     case 4:
         echRecvCmdElem.cmd_id = ECH_CMDID_HEARTBEAT;
-        echRecvCmdElem.timeout =  0xffffffff;
+        echRecvCmdElem.timeout_s =  0xffffffff;
+        break;
+    case 42:
+        echRecvCmdElem.cmd_id = ECH_CMDID_STATUS;
+        echRecvCmdElem.timeout_s =  30;
+        break;
+    case 43:
+        echRecvCmdElem.cmd_id = ECH_CMDID_REMOTE_CTRL;
+        echRecvCmdElem.timeout_s =  30;
         break;
     default:
         break;
@@ -477,6 +525,8 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     pProto->pCMD[usSendID]->uiRecvdOptLen = ulMsgBodyCtxLen_enc;
 
     free(pMsgBodyCtx_dec);
+
+    return 1;
 }
 
 static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
@@ -518,6 +568,14 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
 static int analyCmdStatus(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
+    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+
+    return 1;
+}
+static int analyCmdRemoteCtrl(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+
     return 1;
 }
 /** @brief 复制待插入的元素到新申请的空间
@@ -624,7 +682,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulServiceFee_shoulder = 0;
     pProto->info.ulServiceFee_off_peak = 0;
 
-    pProto->info.ulStatusCyc_ms = 5000; //状态数据上报间隔，精确到秒
+    pProto->info.ulStatusCyc_ms = 5000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
 
 
@@ -632,9 +690,11 @@ echProtocol_t *EchProtocolCreate(void)
     {
         pProto->pCMD[i] = NULL;
     }
-    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(0x01, 0x02, makeCmdReg, analyCmdReg);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT] = EchCMDCreate(0x03, 0x04, makeCmdHeart, analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(0x41, 0x42, makeCmdStatus, analyCmdStatus);
+    //桩命令, 平台命令
+    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdReg);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT] = EchCMDCreate(3, 4, makeCmdHeart, analyCmdHeart);
+    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdStatus);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdRemoteCtrl);
 
     pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;
