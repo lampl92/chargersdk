@@ -247,6 +247,8 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->ucAccountStatus = 0;    //帐户状态 1：注册卡 0：未注册卡
     pOrder->dBalance = 0;           //余额
 
+    memset(pOrder->strOrderSN, 0, defOrderSNLength);
+    pOrder->dLimitFee = 0;
     pOrder->dTotalPower = 0;                 //总电量
     pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
     pOrder->ucStopType = 0;                  //停止类型

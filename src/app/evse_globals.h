@@ -118,8 +118,9 @@
 #define defEventBitExceptionRFID        BIT_7
 #define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionRelayPaste  BIT_9
+#define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 
-#define defEventBitExceptionCritical    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionStop    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -143,8 +144,6 @@
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitCONOrderFinish       BIT_19
-
-
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \
