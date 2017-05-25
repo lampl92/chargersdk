@@ -154,7 +154,8 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
-{/** @todo (rgw#1#): 该函数未测试 */
+{
+    /** @todo (rgw#1#): 该函数未测试 */
     CON_t *pCON;
     uint8_t ucCONID;
     uint8_t tmpQRCode[defQRCodeLength];
@@ -561,7 +562,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
  * @param pvCON void*
  * @return ErrorCode_t
  *                  ERR_NO
- *                  ERR_METER_FAULT
+ *                  ERR_CON_METER_FAULT
  *
  */
 static ErrorCode_t GetChargingCurrent(void *pvCON)
@@ -577,12 +578,12 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     errcode = ERR_NO;
 
     /** 获取电流 */
-if(Electricity_meter[ucCONID].flag.flag_erro==1)
-{
-return ERR_CON_METER_FAULT;
-}
-else
-{
+    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    {
+        return ERR_CON_METER_FAULT;
+    }
+    else
+    {
 
 #ifdef DEBUG_DIAG_DUMMY
         tmpCurr = 32;
@@ -590,7 +591,7 @@ else
         tmpCurr = Get_Electricity_meter_massage_current(ucCONID);
 #endif
 
-}
+    }
 
     /*********************/
 
@@ -604,7 +605,7 @@ else
  * @param pvCON void*
  * @return ErrorCode_t
  *                  ERR_NO
- *                  ERR_METER_FAULT
+ *                  ERR_CON_METER_FAULT
  *
  */
 static ErrorCode_t GetChargingFrequence(void *pvCON)
@@ -623,14 +624,14 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #ifndef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
 #else
-if(Electricity_meter[ucCONID].flag.flag_erro==1)
-{
-  return ERR_CON_METER_FAULT;
-}
-else
-{
-    tmpFreq = Get_Electricity_meter_massage_frequency(ucCONID);
-}
+    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    {
+        return ERR_CON_METER_FAULT;
+    }
+    else
+    {
+        tmpFreq = Get_Electricity_meter_massage_frequency(ucCONID);
+    }
 
 #endif
 
@@ -653,17 +654,17 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
-    if(Electricity_meter[ucCONID].flag.flag_erro==1)
-   {
-    return ERR_CON_METER_FAULT;
-   }
+    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    {
+        return ERR_CON_METER_FAULT;
+    }
     else
-   {
-    #ifdef DEBUG_DIAG_DUMMY
+    {
+#ifdef DEBUG_DIAG_DUMMY
         tmpPower = 100;
-    #else
+#else
         tmpPower = Get_Electricity_meter_massage_energy(ucCONID);
-    #endif
+#endif
     }
 
     /*********************/
@@ -683,7 +684,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
  */
 static ErrorCode_t GetCPState(void *pvCON)
 {
-    float cp1,cp2;
+    float cp1, cp2;
     CON_t *pCON;
     uint8_t ucCONID;
     CONStatusType_t tmpCPState;
@@ -940,7 +941,7 @@ static ErrorCode_t GetCCState(void *pvCON)
  * @param pvCON void*
  * @return ErrorCode_t
  *                  ERR_NO
- *                  ERR_PLUG_FAULT
+ *                  ERR_CON_PLUG_FAULT
  *
  */
 static ErrorCode_t GetPlugState(void *pvCON)
@@ -1124,7 +1125,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #else
         get_dc_massage(TEMP_L_OUT);
         tmpACLTemp = (double)Sys_samp.DC.TEMP1;
-        if(tmpACLTemp>100||tmpACLTemp<-40)
+        if(tmpACLTemp > 100 || tmpACLTemp < -40)
         {
             return ERR_CON_ACLTEMP_DECT_FAULT;
         }
@@ -1132,8 +1133,8 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     }
     else if(ucCONID == 1)
     {
-             tmpACLTemp = get_dc_massage(TEMP_L_OUT);
-                    if(tmpACLTemp>100||tmpACLTemp<-40)
+        tmpACLTemp = get_dc_massage(TEMP_L_OUT);
+        if(tmpACLTemp > 100 || tmpACLTemp < -40)
         {
             return ERR_CON_ACLTEMP_DECT_FAULT;
         }
@@ -1176,7 +1177,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #else
         get_dc_massage(TEMP_N_OUT);
         tmpACNTemp = (double)Sys_samp.DC.TEMP3;
-                if(tmpACNTemp>100||tmpACNTemp<-40)
+        if(tmpACNTemp > 100 || tmpACNTemp < -40)
         {
             return ERR_CON_ACNTEMP_DECT_FAULT;
         }
@@ -1185,7 +1186,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     else if(ucCONID == 1)
     {
         tmpACNTemp = get_dc_massage(TEMP_N_OUT);
-                if(tmpACNTemp>100||tmpACNTemp<-40)
+        if(tmpACNTemp > 100 || tmpACNTemp < -40)
         {
             return ERR_CON_ACNTEMP_DECT_FAULT;
         }
@@ -1225,7 +1226,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
-        if(tmpTemp>100||tmpTemp<-40)
+        if(tmpTemp > 100 || tmpTemp < -40)
         {
             return ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -1234,7 +1235,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     else if(ucCONID == 1)
     {
         tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
-                if(tmpTemp>100||tmpTemp<-40)
+        if(tmpTemp > 100 || tmpTemp < -40)
         {
             return ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -1273,7 +1274,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
-                if(tmpTemp>100||tmpTemp<-40)
+        if(tmpTemp > 100 || tmpTemp < -40)
         {
             return ERR_CON_BTEMP2_DECT_FAULT;
         }
@@ -1282,7 +1283,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     else if(ucCONID == 1)
     {
         tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
-                   if(tmpTemp>100||tmpTemp<-40)
+        if(tmpTemp > 100 || tmpTemp < -40)
         {
             return ERR_CON_BTEMP2_DECT_FAULT;
         }
@@ -1362,8 +1363,8 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-           POWER_L_OPEN();
-           POWER_N_OPEN();
+            POWER_L_OPEN();
+            POWER_N_OPEN();
 #endif
         }
         else if(cmd == SWITCH_ON)
