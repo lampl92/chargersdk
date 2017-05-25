@@ -105,10 +105,12 @@ typedef struct _CONStatus
     double dChargingFrequence;
     double dChargingPower;
     EventGroupHandle_t xHandleEventCharge;
+    EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
     TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
     TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
     TimerHandle_t xHandleTimerCharge;   //Charge状态判断过程中使用
+    TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
 

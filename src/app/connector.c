@@ -1521,10 +1521,12 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.ucLoadPercent = 100;//(%)
     pCON->status.xPlugState = 0;
     pCON->status.xHandleEventCharge = xEventGroupCreate();
+    pCON->status.xHandleEventOrder = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
     pCON->status.xHandleTimerVolt = NULL;
     pCON->status.xHandleTimerCurr = NULL;
     pCON->status.xHandleTimerCharge = NULL;
+    pCON->status.xHandleTimerRTData = NULL;
     pCON->status.GetChargingVoltage = GetChargingVoltage;
     pCON->status.GetChargingCurrent = GetChargingCurrent;
     pCON->status.GetChargingFrequence = GetChargingFrequence;
@@ -1549,6 +1551,13 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.SetRelay = SetRelay;
 
     pCON->state = STATE_CON_IDLE;
+
+    pCON->status.xHandleTimerRTData = xTimerCreate("TimerRemoteRTData",
+                                                   defRemoteRTDataCyc,
+                                                   pdTRUE,
+                                                   (void *)ucCONID,
+                                                   vRemoteRTDataTimerCB);
+
 
     OrderCreate(&(pCON->order));
     OrderInit(&(pCON->order));
