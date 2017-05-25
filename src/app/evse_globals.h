@@ -74,13 +74,29 @@
 #define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
+
+
+/*------pCON->status.xHandleEventOrder*/
 #define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
 #define defEventBitOrderMakeOK          BIT_1
 #define defEventBitOrderUpdateOK        BIT_2
-
-
 #define defEventBitAddOrder             BIT_5
 #define defEventBitAddOrderOK           BIT_6
+
+#define defEventBitOrder_HMIDispOK      BIT_7
+#define defEventBitOrder_RemoteOK       BIT_8
+#define defEventBitOrder_StoreOK        BIT_9
+
+#define defEventBitOrderStopTypeLimitFee    BIT_10
+#define defEventBitOrderStopTypeRemoteStop  BIT_11
+#define defEventBitOrderStopTypeRFIDStop    BIT_12
+
+#define defEventBitOrderMakeFinish      BIT_13  //等待处不清除, 该事件置位后整个订单完成
+
+#define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
+#define defEventBitOrderUseless          (defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
+
+
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
 #define defEventBitRemoteGotAccount     BIT_1
@@ -122,8 +138,8 @@
 #define defEventBitExceptionRemoteStop  BIT_11
 #define defEventBitExceptionRFIDStop    BIT_12
 
-
-#define defEventBitExceptionStop    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -147,6 +163,7 @@
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitCONOrderFinish       BIT_19
+#define defEventBitChargeRTDataTimer         BIT_20
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \
