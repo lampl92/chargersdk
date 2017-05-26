@@ -77,7 +77,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin_Error;
     WM_HWIN hWin = pMsg->hWin;
 
-    CaliDone_Analy(hWin);
+    //CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
     //需要增加3G模块的信号强度判断
@@ -107,7 +107,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 //                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
 //
 //
-    ErrWindow_Show(hWin);
+    //ErrWindow_Show(hWin);
 }
 /*********************************************************************
 *
@@ -140,11 +140,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
+                vTaskDelay(500);
                 PutOut_Home();
                 break;
             case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
+                vTaskDelay(500);
                 PutOut_Home();
                 break;
             }
@@ -153,11 +157,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
+                vTaskDelay(500);
                 PutOut_Home();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 WM_DeleteWindow(pMsg->hWin);
+                GUI_EndDialog(pMsg->hWin,0);
+                vTaskDelay(500);
                 PutOut_Home();
                 break;
             }

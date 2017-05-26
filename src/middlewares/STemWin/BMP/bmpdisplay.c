@@ -1,5 +1,6 @@
 #include "bmpdisplay.h"
 #include "GUI.h"
+#include "DIALOG.h"
 
 static FIL BMPFile;
 static FIL ScrSortFile;                 //屏幕截图文件
@@ -223,8 +224,14 @@ void bmpdisplay(uint8_t *ppath)
     //GUI_Clear();
 }
 
-
-int dispbmp2(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
+/** @brief
+ *
+ * @param
+ * @param
+ * @return
+ *  **********注意在切换界面时要使用free释放掉图片的内存
+ */
+int dispbmpNOFree(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin,uint8_t is_free)
 {
 	uint16_t bread;
 	uint16_t bred;
@@ -234,13 +241,24 @@ int dispbmp2(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,
 	int XSize,YSize;
 	float Xflag,Yflag;
 	WM_HWIN      hItem;
+	IMAGE_Handle imageHandle;
+
+    if(is_free == 1)
+    {
+        free(bmpbuffer);
+        return 0;
+    }
 
 	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
 	//文件打开错误或者文件大于BMPMEMORYSIZE
 	if((result != FR_OK) || (BMPFile.obj.objsize>BMPMEMORYSIZE)) 	return 1;
 
 	bmpbuffer = malloc(BMPFile.obj.objsize);//申请内存
-	if(bmpbuffer == NULL) return 2;
+
+	if(bmpbuffer == NULL)
+	{
+        return 2;//分配失败
+	}
 
     //taskENTER_CRITICAL();	//临界区
 
@@ -254,8 +272,13 @@ int dispbmp2(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,
 		case 0:	//在指定位置显示图片
 			if((member == 1) && (denom == 1)) //无需缩放，直接绘制
 			{
-			    hItem = WM_GetDialogItem(hWin, (GUI_ID_USER + 0x0A));
-				IMAGE_SetBMP(hItem, bmpbuffer, BMPFile.obj.objsize);//GUI_BMP_Draw(bmpbuffer,x,y);	//在指定位置显示BMP图片
+//			    hItem = WM_GetDialogItem(hWin, (GUI_ID_USER + 0x0A));
+                XSize = GUI_BMP_GetXSize(bmpbuffer);	//获取图片的X轴大小
+                YSize = GUI_BMP_GetYSize(bmpbuffer);	//获取图片的Y轴大小
+                imageHandle = IMAGE_CreateEx(x,y,XSize,YSize,
+                                     hWin,WM_CF_SHOW,IMAGE_CF_TILE,GUI_ID_IMAGE0);
+
+				IMAGE_SetBMP(imageHandle, bmpbuffer, BMPFile.obj.objsize);//GUI_BMP_Draw(bmpbuffer,x,y);	//在指定位置显示BMP图片
 			}else //否则图片需要缩放
 			{
 				GUI_BMP_DrawScaled(bmpbuffer,x,y,member,denom);
@@ -279,7 +302,6 @@ int dispbmp2(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,
 			break;
 	}
 	f_close(&BMPFile);				//关闭BMPFile文件
-	//free(bmpbuffer);		//释放内存
 	return 0;
 }
 

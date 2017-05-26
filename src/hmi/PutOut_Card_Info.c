@@ -115,6 +115,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
     {
         /** @todo (zshare#1#): 跳转充电界面 */
+        first_flag = 0;
         WM_DeleteWindow(pMsg->hWin);
         PutOut_Charging();
     }
@@ -258,6 +259,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+                vTaskDelay(500);
                 PutOut_Home();
                 // USER END
                 break;
@@ -266,6 +268,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+                vTaskDelay(500);
                 PutOut_Home();
                 // USER END
                 break;
@@ -279,12 +282,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 WM_DeleteWindow(pMsg->hWin);
+                vTaskDelay(500);
                 PutOut_RegisterDisp();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
                 WM_DeleteWindow(pMsg->hWin);
+                vTaskDelay(500);
                 PutOut_RegisterDisp();
                 // USER END
                 break;
@@ -343,6 +348,7 @@ WM_HWIN CreateCardInfo(void)
 void PutOut_Card_Info()//(OrderData_t *order)
 {
     WM_HWIN hWin;
+    led_ctrl(1,green,keep_on);
     hWin = CreateCardInfo();
 
     while(1)

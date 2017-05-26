@@ -113,7 +113,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_16, 450, 100, 70, 35, 0, 0x0, 0 },//分钟
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 500, 100, 45, 35, 0, 0x64, 0 },//秒数值
     { TEXT_CreateIndirect, "Text", ID_TEXT_17, 545, 100, 70, 35, 0, 0x0, 0 },//秒钟
-    { TEXT_CreateIndirect, "Text", ID_TEXT_19, 300, 314, 100, 35, 0, 0x0, 0 },//正在结费中
+//    { TEXT_CreateIndirect, "Text", ID_TEXT_19, 300, 314, 100, 35, 0, 0x0, 0 },//正在结费中
     // USER END
 };
 
@@ -149,16 +149,16 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         first = time(NULL);
     }
 
-    pCON = CONGetHandle(0);
-    now = time(NULL);
-    diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
-    if(diffsec > 86400)
-    {
-        diffsec = 86400;
-    }
-    hour = diffsec / 3600;
-    min = diffsec % 3600 / 60;
-    sec = diffsec % 3600 % 60;
+//    pCON = CONGetHandle(0);
+//    now = time(NULL);
+//    diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
+//    if(diffsec > 86400)
+//    {
+//        diffsec = 86400;
+//    }
+//    hour = diffsec / 3600;
+//    min = diffsec % 3600 / 60;
+//    sec = diffsec % 3600 % 60;
 
     sprintf(temp_buf, "%02d", hour);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
@@ -177,17 +177,17 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);
 
 
-    if((60-(uint32_t)difftime(now, first)) == 0)
-    {
-        WM_DeleteWindow(hWin);
-        PutOut_Home();
-    }
+//    if((60-(uint32_t)difftime(now, first)) == 0)
+//    {
+//        WM_DeleteWindow(hWin);
+//        PutOut_Home();
+//    }
     now = time(NULL);
-    if(first_flag == 0)
-    {
-        first_flag = 1;
-        first = now;
-    }
+//    if(first_flag == 0)
+//    {
+//        first_flag = 1;
+//        first = now;
+//    }
     diffsec = (uint32_t)difftime(now, first);
     if(diffsec > 86400)
     {
@@ -197,14 +197,16 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     min = diffsec % 3600 / 60;
     sec = diffsec % 3600 % 60;
 
-    xsprintf((char *)Timer_buf, "(%02dS)", (60 - sec));
+    xsprintf((char *)Timer_buf, "(%02dS)", (10 - sec));
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
-    if(sec == 59)
+    if(sec == 10)
     {
         first_flag = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
         //跳出卡片信息页
         WM_DeleteWindow(hWin);
+
+        //PutOut_SelAOrB();
         PutOut_Home();
     }
     ErrWindow_Show(hWin);
@@ -253,7 +255,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&XBF24_Font,GUI_BLACK,"分");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&XBF24_Font,GUI_BLACK,"秒");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_BLACK,"(00S)");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&XBF24_Font,GUI_RED,"正在结费中...");
+//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&XBF24_Font,GUI_RED,"正在结费中...");
         //
         // Initialization of 'Edit'
         //
@@ -282,15 +284,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 WM_DeleteWindow(pMsg->hWin);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+
+                //PutOut_SelAOrB();
                 PutOut_Home();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
                 // USER START (Optionally insert code for reacting on notification message)
-                first_flag = 0;
-                WM_DeleteWindow(pMsg->hWin);
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
-                PutOut_Home();
+//                first_flag = 0;
+//                WM_DeleteWindow(pMsg->hWin);
+//                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+//                vTaskDelay(500);
+//                //PutOut_SelAOrB();
+//                PutOut_Home();
                 // USER END
                 break;
                 // USER START (Optionally insert additional code for further notification handling)
@@ -306,7 +312,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /* 显示时间和日期 */
         Timer_Process(pMsg);
         /* 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, REFLASH);
+        WM_RestartTimer(pMsg->Data.v, 200);
         break;
         // USER END
     default:
@@ -353,9 +359,9 @@ void PutOut_Charge_Done()
     led_ctrl(1,green,keep_on);
     while(1)
     {
-        GUI_Delay(1);
+        GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(20);
+        vTaskDelay(500);
     }
 }
 // USER END

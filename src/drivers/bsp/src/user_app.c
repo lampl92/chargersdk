@@ -323,20 +323,20 @@ void Delay_us(unsigned long long time)
 void Close_gun_1(void)
 {
         A_KEY_ON;
-        B_KEY_OFF;
+       B_KEY_OFF;
         Delay_ms(lock_timer);
         A_KEY_OFF;
 }
 void Open_gun_1(void)
 {
         A_KEY_OFF;
-        B_KEY_ON;
+       B_KEY_ON;
         Delay_ms(lock_timer);
         B_KEY_OFF;
 }
 void Close_gun_2(void)
 {
-    A_KEY_ON;
+   A_KEY_ON;
     Delay_ms(10);
     B_KEY_ON;
     Delay_ms(lock_timer);

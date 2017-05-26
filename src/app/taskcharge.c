@@ -70,10 +70,12 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdFALSE, pdTRUE, 0);
                 if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
-                    pCON->status.SetLoadPercent(pCON, 100);/** @fixme (rgw#1#): 设置PWM脉宽，100%负载启动 */
+                    pCON->status.SetLoadPercent(pCON, 53);/** @fixme (rgw#1#): 设置PWM脉宽，100%负载启动 */
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
-                    if(pCON->status.xCPState == CP_9V_PWM || pCON->status.xCPState == CP_6V_PWM) //后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
+                    if((pCON->status.xCPState == CP_9V_PWM
+                       || pCON->status.xCPState == CP_6V_PWM)
+                       &&(pCON->status.xCPState != CP_12V_PWM)) //后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
                     {
                         pCON->state = STATE_CON_PRECONTRACT;
                     }
@@ -165,6 +167,14 @@ void vTaskEVSECharge(void *pvParameters)
                         /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                     }
                 }
+                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                                   defEventBitCONPlugOK,
+                                                   pdFALSE, pdFALSE, 0);
+                if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                {
+                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "拔枪关pwm");
+                    pCON->state = STATE_CON_IDLE;
+                }
                 break;
             case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
@@ -230,6 +240,9 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_STOPCHARGE:
                 xTimerStop(xHandleTimerChargingData, 0);
+
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
+
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后通知HMI显示结费完成,进入idle */
                 xEventGroupSync(xHandleEventHMI,
@@ -273,6 +286,9 @@ void vTaskEVSECharge(void *pvParameters)
                 THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_ERROR");
                 vTaskDelay(defRelayDelay);
                 /** @todo (rgw#1#): 等待diag处理完成 */
+
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
+
                 pCON->state = STATE_CON_IDLE;
                 break;
             }

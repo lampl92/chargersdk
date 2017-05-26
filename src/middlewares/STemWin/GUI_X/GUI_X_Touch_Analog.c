@@ -79,7 +79,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
                     bitset(calebrate_done,5);
                     bitclr(calebrate_done,0);
                 }
-                if(i == 25)
+                if(i == 50)
                 {
                     bitset(calebrate_done,3);
                 }

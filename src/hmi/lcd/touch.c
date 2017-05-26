@@ -605,6 +605,7 @@ uint8_t TP_Get_Adjdata(void)
             p = cJSON_Print(pJsonRoot);
             f_write(&fp, p, strlen(p), &bw);
             cJSON_Delete(pJsonRoot);
+            free(p);
             f_close(&fp);
         }
     }

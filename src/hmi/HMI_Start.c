@@ -6,6 +6,9 @@
 
 uint8_t calebrate_done = 0;
 
+static uint8_t codetest[]={
+    "https://www.baidu.com"
+};
 void MainTask(void)
 {
     if(calebrate_done == 0)
@@ -14,6 +17,9 @@ void MainTask(void)
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
+
+    encodetobmp("system/encodeCharge.bmp",codetest);
+
     Create_XBF12("system/XBF宋体12.xbf");//创建xbf12号路径
     Create_XBF16("system/XBF宋体16.xbf");//创建xbf16号路径
     Create_XBF24("system/XBF宋体24.xbf");//创建xbf24号路径

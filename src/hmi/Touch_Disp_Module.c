@@ -21,7 +21,8 @@ uint8_t *PowerOff_err = "   停电异常\n";
 uint8_t *Curr_err = "   电流异常\n";
 uint8_t *Freq_err = "   频率异常\n";
 
-WM_HWIN err_hItem;
+WM_HWIN err_hItem = 0;
+static uint8_t winCreateFlag = 0;
 
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
 //{
@@ -179,7 +180,11 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     if(bittest(calebrate_done,4))
     {
         bitclr(calebrate_done,4);
-        WM_DeleteWindow(err_hItem);
+        if(bittest(winCreateFlag,0))
+        {
+            bitclr(winCreateFlag,0);
+            WM_DeleteWindow(err_hItem);
+        }
     }
     if(bittest(calebrate_done,5))
     {
@@ -261,6 +266,23 @@ void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
 		}
 	}
 }
+/** 将二维码显示界面转换为图片
+ *
+ * @param
+ * @param
+ * @return 0:转换保存成功，1:打开文件错误 2:
+ *
+ */
+uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString)
+{
+    static uint16_t p,x,y;
+
+    qrencode((uint8_t *)codeString,&p,&x,&y);
+    display_encode(&x,&y,&p);
+    vTaskDelay(500);
+    create_bmppicture(filename,x,y,p*m_nSymbleSize,p*m_nSymbleSize);
+    //create_bmppicture("system/encode_test.bmp",x,y,p*m_nSymbleSize,p*m_nSymbleSize);
+}
 /** @brief 故障弹窗弹出展示
  *
  * @param
@@ -275,9 +297,19 @@ void ErrWindow_Show(WM_HWIN hWin)
     static EventBits_t uxBitsErrTmp;
 
     pCON = CONGetHandle(0);
+
     uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 
-    if((uxBitsErr & 0x0003e21c) != 0x3e21C)
+    if(((uxBitsErr & 0x0003e21c) != 0x3e21C))
+    {
+        if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
+        {
+            uxBitsErrTmp = (uxBitsErr & 0x0003e21c);
+            //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
+            err_window(hWin,uxBitsErr);
+        }
+    }
+    else
     {
         if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
         {
@@ -300,27 +332,40 @@ void ErrWindow_Show(WM_HWIN hWin)
  * @return
  *
  */
-void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
+uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
 {
     CON_t *pCON;
     uint8_t msg_err[150] = "\0";
 
-    WM_DeleteWindow(err_hItem);
+    if(bittest(winCreateFlag,0))
+    {
+        bitclr(winCreateFlag,0);
+        WM_DeleteWindow(err_hItem);
+    }
 
     if((uxBitsErr & 0x3e21c)== 0x3e21c)
     {
-        led_ctrl(1,red,keep_off);
         pCON = CONGetHandle(0);
+        led_ctrl(1,red,keep_off);
+        led_ctrl(1,blue,keep_off);
+        led_ctrl(1,green,keep_off);
         switch(pCON->state)
         {
             case STATE_CON_IDLE:
                 led_ctrl(1,green,keep_on);
             break;
+    //        case STATE_CON_STARTCHARGE:
+    //            led_ctrl(1,)
             case STATE_CON_CHARGING:
                 led_ctrl(1,green,breath);
+                break;
+            default:
+                led_ctrl(1,green,keep_on);
             break;
         }
 
+        return 0;
+        /// TODO (zshare#1#):  //暂时处理为没有故障不显示
         strncat(msg_err,cur_noerr,strlen(cur_noerr));
         ErrMultiEdit_Size.xlength = 300;
         ErrMultiEdit_Size.ylength = 24*4;
@@ -330,71 +375,55 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
     else
     {
         led_ctrl(1,green,keep_off);
+        led_ctrl(1,blue,keep_off);
         led_ctrl(1,red,flicker);
         ErrMultiEdit_Size.err_num = 0;
         strncat(msg_err,cur_err,strlen(cur_err));
 
-        if(((uxBitsErr >> 13) & 0x01) == 0)//(bittest(err_sysbol,defEventBitEVSEScramOK))
+        if(((uxBitsErr >> 13) & 0x01) == 0)
         {
             strncat(msg_err,Scram_err,strlen(Scram_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "急停异常\n");
         }
         if(((uxBitsErr >> 2) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitCONVoltOK))
         {
             strncat(msg_err,Volt_err,strlen(Volt_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "充电电压异常\n");
         }
         if(((uxBitsErr >> 9) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitCONACTempOK))
         {
             strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "温度异常\n");
         }
         if(((uxBitsErr >> 14) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitEVSEPEOK))
         {
             strncat(msg_err,PE_err,strlen(PE_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "PE异常\n");
         }
         if(((uxBitsErr >> 15) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitEVSEKnockOK))
         {
             strncat(msg_err,Knock_err,strlen(Knock_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "撞击异常\n");
         }
         if(((uxBitsErr >> 16) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitEVSEArresterOK))
         {
             strncat(msg_err,Arrester_err,strlen(Arrester_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "防雷异常\n");
         }
         if(((uxBitsErr >> 17) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitEVSEPowerOffOK))
         {
             strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
             ErrMultiEdit_Size.err_num++;
-           // MULTIEDIT_SetText(hItem, "停电异常\n");
         }
         if(((uxBitsErr >> 3) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitCONCurrOK))
         {
             strncat(msg_err,Curr_err,strlen(Curr_err));
             ErrMultiEdit_Size.err_num++;
-            //MULTIEDIT_SetText(hItem, "电流异常\n");
         }
         if(((uxBitsErr >> 4) & 0x01) == 0)
-        //if(bittest(err_sysbol,defEventBitCONFreqOK))
         {
             strncat(msg_err,Freq_err,strlen(Freq_err));
             ErrMultiEdit_Size.err_num++;
-           // MULTIEDIT_SetText(hItem, "频率异常\n");
         }
         ErrMultiEdit_Size.xlength = 300;
         ErrMultiEdit_Size.ylength = 24*(ErrMultiEdit_Size.err_num+4);
@@ -402,9 +431,8 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
         ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
     }
 
-//    ErrMultiEdit_Size.length =
-//460,60,300,300
     err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos, ErrMultiEdit_Size.ypos, ErrMultiEdit_Size.xlength, ErrMultiEdit_Size.ylength, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+    bitset(winCreateFlag,0);
     MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
     MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
     WM_SetFocus(err_hItem);
@@ -414,10 +442,7 @@ void err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
 
     MULTIEDIT_SetText(err_hItem, msg_err);
     MULTIEDIT_SetCursorOffset(err_hItem,300);
-//    SCROLLBAR_CreateAttached(err_hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
-//    SCROLLBAR_CreateAttached(err_hItem, 0);//创建水平滑轮
 
-//    GUI_CURSOR_SetPosition(460,160);
     WM_SetFocus(err_hItem);
     bitclr(calebrate_done,4);
 }

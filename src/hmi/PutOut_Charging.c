@@ -88,7 +88,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCharging[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 627, 342, 100, 36, 0, 0x0, 0 },//停止充电
+//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 627, 342, 100, 36, 0, 0x0, 0 },//停止充电
     { TEXT_CreateIndirect, "Text", ID_TEXT_5, 222, 40, 326, 35, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_6, 190, 100, 120, 35, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_7, 222, 159, 100, 30, 0, 0x0, 0 },
@@ -109,8 +109,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCharging[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_16, 450, 100, 70, 35, 0, 0x0, 0 },//分钟
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 500, 100, 45, 35, 0, 0x64, 0 },//秒数值
     { TEXT_CreateIndirect, "Text", ID_TEXT_17, 545, 100, 70, 35, 0, 0x0, 0 },//秒钟
-    { EDIT_CreateIndirect, "Edit", ID_EDIT_7, 250, 320, 45, 30, 0, 0x64, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_18, 305, 320, 260, 30, 0, 0x0, 0 },
+//    { EDIT_CreateIndirect, "Edit", ID_EDIT_7, 250, 320, 45, 30, 0, 0x64, 0 },
+//    { TEXT_CreateIndirect, "Text", ID_TEXT_18, 305, 320, 260, 30, 0, 0x0, 0 },
 
     // USER END
 };
@@ -162,6 +162,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     if((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
     {
         xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
+        WM_DeleteWindow(hWin);
         PutOut_Charge_Done();
     }
 
@@ -197,33 +198,33 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 
-    diffsec = (uint32_t)difftime(now, first);
-    if(diffsec > 86400)
-    {
-        diffsec = 86400;
-    }
-    hour = diffsec / 3600;
-    min = diffsec % 3600 / 60;
-    sec = diffsec % 3600 % 60;
-
-    if(sec == 59)
-    {
-        sec_done = 1;
-    }
-
-    if(sec_done == 1)
-    {
-        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), "00S");
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
-        xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqLockLcdOK);
-        bitset(calebrate_done,2);
-    }
-    else
-    {
-        bitclr(calebrate_done,2);
-        xsprintf((char *)Timer_buf, "%02dS", (60-sec));
-        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
-    }
+//    diffsec = (uint32_t)difftime(now, first);
+//    if(diffsec > 86400)
+//    {
+//        diffsec = 86400;
+//    }
+//    hour = diffsec / 3600;
+//    min = diffsec % 3600 / 60;
+//    sec = diffsec % 3600 % 60;
+//
+//    if(sec == 59)
+//    {
+//        sec_done = 1;
+//    }
+//
+//    if(sec_done == 1)
+//    {
+//        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), "00S");
+//        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), "屏幕已锁定，操作请刷卡");
+//        xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqLockLcdOK);
+//        bitset(calebrate_done,2);
+//    }
+//    else
+//    {
+//        bitclr(calebrate_done,2);
+//        xsprintf((char *)Timer_buf, "%02dS", (60-sec));
+//        EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_7), Timer_buf);
+//    }
 
     ErrWindow_Show(hWin);
 //    //等待结束充电信号
@@ -275,7 +276,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15), &XBF24_Font, GUI_BLACK, "小时");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16), &XBF24_Font, GUI_BLACK, "分");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17), &XBF24_Font, GUI_BLACK, "秒");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18), &XBF24_Font, GUI_RED, "后屏幕锁定");
+//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18), &XBF24_Font, GUI_RED, "后屏幕锁定");
         //
         // Initialization of 'Edit'
         //
@@ -286,12 +287,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), &XBF24_Font, "00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), &XBF24_Font, "00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), &XBF24_Font, "00S");
+//        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), &XBF24_Font, "00S");
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "停止充电");
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "停止充电");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -304,10 +305,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 //处于解锁状态下要发送停止充电事件
-                if(bittest(calebrate_done,2) == 0)
-                {
-                    xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqClickOK);
-                }
+//                if(bittest(calebrate_done,2) == 0)
+//                {
+//                    xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_ChargeReqClickOK);
+//                }
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -327,7 +328,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /* 显示时间和日期 */
         Caculate_RTC(pMsg);
         /* 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, REFLASH);
+        WM_RestartTimer(pMsg->Data.v, 200);
         break;
         // USER END
     default:
@@ -373,12 +374,13 @@ void PutOut_Charging()
     wait_timer.charge_screen_lock = 60;
     hWin = CreateCharging();
     countdown_flag = 0;
-    led_ctrl(1,green,breath);
+    led_ctrl(1,green,keep_off);
     while(1)
     {
-        GUI_Delay(1);
+        led_ctrl(1,green,breath);
+        GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(20);
+        vTaskDelay(500);
     }
 }
 // USER END

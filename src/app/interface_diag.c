@@ -597,7 +597,7 @@ void DiagEVSEError(CON_t *pCON)
     if(pEVSE->status.ulScramState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEScramOK);
-        printf_safe("Scram == 0\n");
+//        printf_safe("Scram == 0\n");
     }
     else
     {

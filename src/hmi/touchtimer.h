@@ -81,6 +81,7 @@ void display_encode(uint16_t *x,uint16_t *y,uint16_t *p);
 void PutOut_RegisterDisp();
 void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3);
 void ErrWindow_Show(WM_HWIN hWin);
-void err_window(WM_HWIN hWin,EventBits_t uxBitsErr);
+uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr);
 void PutOut_Manager_InfoAnalog();
+uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString);
 #endif

@@ -161,6 +161,7 @@ void TIM_SetTIM2Compare1(unsigned int compare)
 {
 	if(pwm==compare)
 	{
+	    ;
  	}
 	else
 	{
@@ -240,7 +241,8 @@ void TIM3_IRQHandler (void)//0.1ms
         {
             flag_pwm_out_n=1;
         }
-
+//Open_gun_1();
+    timer_relay_ms=0;
     }
     if(timer_ms>=1000)
     {

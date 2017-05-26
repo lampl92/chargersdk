@@ -91,7 +91,11 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_FINISH:
                 //5. 结束充电
-                makeOrder(pCON);
+                if(makeOrder(pCON) == ERR_NO)//
+                {
+                    saveOrder(pCON);
+                }
+
                 /** @todo (rgw#1#): 存储订单 */
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
                 OrderInit(&(pCON->order));//状态变为IDLE

@@ -58,7 +58,7 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
         }
-  //TODO (zshare#1#): 2-3s显示会更新一次
+
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBPlugState) == defEventBitTimerCBPlugState)
         {
@@ -69,7 +69,6 @@ void vTaskEVSEMonitor(void *pvParameters)
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
- //TODO (zshare#1#): 6s显示会更新一次
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBVolt, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBVolt) == defEventBitTimerCBVolt)

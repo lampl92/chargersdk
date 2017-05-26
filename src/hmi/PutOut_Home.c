@@ -80,26 +80,6 @@ volatile int   Id;
 *
 **********************************************************************
 */
-/*********************************************************************
-*
-*       _acImage_0, "BMP", ID_IMAGE_0_IMAGE_0
-*/
-static const U8 _acImage_0[463] =
-{
-    0x42, 0x4D, 0xCE, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x01, 0x00, 0x00, 0x12, 0x0B, 0x00, 0x00,
-    0x12, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21,
-    0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00,
-    0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84,
-    0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08,
-    0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10,
-    0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00,
-    0x88, 0x42, 0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42,
-    0x10, 0x84, 0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84,
-    0x21, 0x08, 0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0x88, 0x42, 0x10, 0x84, 0x21, 0x08,
-    0x40, 0x00, 0x84, 0x21, 0x08, 0x42, 0x10, 0x84, 0x40, 0x00, 0xC2, 0x10, 0x84, 0x21, 0x08, 0x42, 0x40, 0x00, 0xA1, 0x08, 0x42, 0x10, 0x84, 0x21, 0x40, 0x00, 0x90, 0x84, 0x21, 0x08, 0x42, 0x10, 0xC0, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0, 0x00,
-    0x00,
-};
-
 // USER START (Optionally insert additional static data)
 // USER END
 
@@ -132,155 +112,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     //{ MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 495, 145, 300, 250, 0, 0x0, 0 },
     // USER END
 };
-static const GUI_WIDGET_CREATE_INFO _aDialogWindow[] =
-{
-    { FRAMEWIN_CreateIndirect, "win", ID_WINDOW_0, 495, 145, 300, 250, 0, 0x64, 0 },
-//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 200, -43, 300, 50, 0, 0x0, 0 },
-    // USER END
-};
 /*********************************************************************
 *
 *       Static code
 *
 **********************************************************************
 */
-/*********************************************************************
-*
-*       _GetImageById
-*/
-static const void *_GetImageById(U32 Id, U32 *pSize)
-{
-    switch (Id)
-    {
-    case ID_IMAGE_0_IMAGE_0:
-        *pSize = sizeof(_acImage_0);
-        return (const void *)_acImage_0;
-    }
-    return NULL;
-}
-static void _cbWindow(WM_MESSAGE *pMsg) {
-    WM_SCROLL_STATE ScrollState;
-    WM_HWIN      hItem;
-    char *dest = (char *)malloc(10);
-    static int flag = 0;
-    switch (pMsg->MsgId) {
-        case WM_CREATE:
-//            WINDOW_SetDefaultBkColor(GUI_GRAY);
-        break;
-        case WM_NOTIFY_PARENT:
-            if(pMsg->Data.v == WM_NOTIFICATION_VALUE_CHANGED)
-            {
-                if(WM_GetId(pMsg->hWinSrc) == GUI_ID_HSCROLL)
-                {
-                    /* 得到滚动条的状态，得到的数值好像是负值 才能使得 _x - ScrollState.v是正值 */
-                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
-                    if (_x != ScrollState.v)
-                    {
-                        int x, y;
-                        for (y = 0; y < TEXT_MAX_Y; y++)
-                        {
-                            for (x = 0; x < TEXT_MAX_X; x++)
-                            {
-                                WM_MoveWindow(_aahEdit[y][x], _x - ScrollState.v, 0);
-                            }
-                        }
-                    _x = ScrollState.v;
-                    }
-                }
-                else if(WM_GetId(pMsg->hWinSrc) == GUI_ID_VSCROLL)
-                {
-                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
-                    if (_y != ScrollState.v)
-                    {
-                        int x, y;
-                        for (y = 0; y < TEXT_MAX_Y; y++)
-                        {
-                            for (x = 0; x < TEXT_MAX_X; x++)
-                            {
-                                WM_MoveWindow(_aahEdit[y][x],0, _y - ScrollState.v);
-                            }
-                        }
-                        _y = ScrollState.v;
-                    }
-                }
-                else
-                {
-                    EDIT_SetText(_aahEdit[2][4],"adsfa");
-                    flag = EDIT_GetValue(_aahEdit[2][3]);
-                    EDIT_GetText(_aahEdit[2][4],dest,10);
-                    flag = EDIT_GetValue(_aahEdit[2][3]);
-                }
-            }
-            break;
-        default:
-        WM_DefaultProc(pMsg);
-    }
-}
-static void _cbDialog_Error()
-{
-    int x, y;
-    WM_HWIN hWindow;
-    SCROLLBAR_Handle hScroll;
-    SCROLLBAR_Handle wScroll;
-    uint8_t tmp[20] = {"交流输入故障"};
-    static int flag = 1;
-
-    //GUI_CURSOR_SetPosition(496,146);
-
-    if(flag == 0)
-    {
-        flag = 1;
-        // USER START (Optionally insert additional variables)
-        // 创建窗口
-        //hWindow = WM_CreateWindow(495, 145, 300, 250, WM_CF_SHOW, &_cbWindow, 0);
-        hWindow = GUI_CreateDialogBox(_aDialogWindow, GUI_COUNTOF(_aDialogWindow), _cbWindow, WM_HBKWIN, 0, 0);
-        FRAMEWIN_SetTitleHeight(hWindow, 30);
-        WM_SetStayOnTop(hWindow,1);
-        WM_SetFocus(hWindow);
-
-//        FRAMEWIN_AddCloseButton(hWindow,FRAMEWIN_BUTTON_RIGHT,0);
-//        FRAMEWIN_AddMaxButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
-//        FRAMEWIN_AddMinButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
-        //WINDOW_SetBkColor(hWindow,GUI_GRAY);
-        //创建水平滑轮
-        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
-        //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(hScroll, 48 * TEXT_MAX_X);
-        //设置页尺寸
-        //SCROLLBAR_SetPageSize(hScroll, 220);
-        SCROLLBAR_SetWidth(hScroll,20);
-        //创建垂直滑轮
-        wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-        //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(wScroll, 80 * TEXT_MAX_Y);
-        //设置页尺寸
-        SCROLLBAR_SetPageSize(wScroll, 220);
-        SCROLLBAR_SetWidth(wScroll,20);
-        //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
-        _aahText[0][0] = TEXT_CreateEx(30, 20, 24*strlen(tmp), 25,hWindow,WM_CF_SHOW,0,13,tmp);
-        _aahText[1][0] = TEXT_CreateEx(30, 50, 120, 25,hWindow,WM_CF_SHOW,0,13,"充电电流过大过大过大过大过大！");
-        _aahText[2][0] = TEXT_CreateEx(30, 80, 120, 25,hWindow,WM_CF_SHOW,0,13,"环境温度:");
-        _aahText[3][0] = TEXT_CreateEx(30, 110, 144, 25,hWindow,WM_CF_SHOW,0,13,"A插座温度:");
-        _aahText[4][0] = TEXT_CreateEx(30, 140, 144, 25,hWindow,WM_CF_SHOW,0,13,"B插座温度:");
-        _aahText[5][0] = TEXT_CreateEx(30, 170, 168, 25,hWindow,WM_CF_SHOW,0,13,"A枪输出电流:");
-        _aahText[6][0] = TEXT_CreateEx(30, 200, 168, 25,hWindow,WM_CF_SHOW,0,13,"B枪输出电流:");
-        _aahText[7][0] = TEXT_CreateEx(30, 230, 120, 25,hWindow,WM_CF_SHOW,0,13,"A枪枪锁:");
-        _aahText[8][0] = TEXT_CreateEx(30, 260, 120, 25,hWindow,WM_CF_SHOW,0,13,"B枪枪锁:");
-        _aahText[9][0] = TEXT_CreateEx(30, 290, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电压:");
-        _aahText[10][0] = TEXT_CreateEx(30, 320, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电流:");
-        _aahText[11][0] = TEXT_CreateEx(30, 350, 144, 25,hWindow,WM_CF_SHOW,0,13,"防雷器状态:");
-        _aahText[12][0] = TEXT_CreateEx(30, 380, 144, 25,hWindow,WM_CF_SHOW,0,13,"输出继电器:");
-        _aahText[13][0] = TEXT_CreateEx(30, 410, 120, 25,hWindow,WM_CF_SHOW,0,13,"控制导引:");
-
-        for(x = 0;x < ERROR_LINE;x++)
-        {
-            TEXT_SetFont(_aahText[x][0], &XBF24_Font);
-            TEXT_SetTextColor(_aahText[x][0], GUI_BLACK);
-        }
-        TEXT_SetTextColor(_aahText[0][0], GUI_RED);
-    }
-
-}
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
@@ -321,11 +158,6 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     EDIT_SetCursorAtPixel(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),100);
 
     ErrWindow_Show(hWin);
-
-//    if(1)//故障
-//    {
-//        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
-//    }
 }
 // USER END
 static void _cbFrame(WM_MESSAGE * pMsg) {
@@ -348,6 +180,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN      hItem;
     U32          FileSize;
     int          NCode;
+    IMAGE_Handle imageHandle;
 
     uint8_t *buf = "56";
     // USER START (Optionally insert additional variables)
@@ -355,84 +188,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
     switch (pMsg->MsgId)
     {
-//    case MSG_PAINTErr:
-//        hItem = MULTIEDIT_CreateEx(460, 160, 300, 200, WM_GetClientWindow(pMsg->hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
-//        MULTIEDIT_SetInsertMode(hItem,1);  //开启插入模式
-//        MULTIEDIT_SetFont(hItem, &XBF24_Font);
-//        WM_SetFocus(hItem);
-//        MULTIEDIT_SetInsertMode(hItem, 1);
-//        MULTIEDIT_SetCursorOffset(hItem,0);
-////#define defEventBitErr      (defEventBitCONVoltOK |     \
-////                            defEventBitCONACTempOK |    \
-////                            defEventBitEVSEPEOK |       \
-////                            defEventBitEVSEKnockOK |    \
-////                            defEventBitEVSEArresterOK | \
-////                            defEventBitEVSEPowerOffOK) | \
-////                            defEventBitCONCurrOK | \
-////                            defEventBitCONFreqOK)
-//        if(bittest(defEventBitChargeCondition,defEventBitEVSEScramOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "急停异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitCONVoltOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "充电电压异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitCONACTempOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "温度异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitEVSEPEOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "PE异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitEVSEKnockOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "撞击异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitEVSEArresterOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "防雷异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitEVSEPowerOffOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "停电异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitCONCurrOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "电流异常\n");
-//        }
-//        if(bittest(defEventBitChargeCondition,defEventBitCONFreqOK))
-//        {
-//            MULTIEDIT_SetText(hItem, "频率异常\n");
-//        }
-//
-//        //MULTIEDIT_SetText(hItem, "charge log\n1\n2\n3\n4\n\n\n\n\n\nn\\2\n\3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nfdagfgafgfdgda");
-//
-//        SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
-//        SCROLLBAR_CreateAttached(hItem, 0);//创建水平滑轮
-//
-//        GUI_CURSOR_SetPosition(460,160);
-//        WM_SetFocus(hItem);
-
-//        break;
     case WM_INIT_DIALOG:
         //
         // Initialization of 'Framewin'
         //
-
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
-//        _framebutton = FRAMEWIN_AddButton(pMsg->hWin,FRAMEWIN_BUTTON_RIGHT,0,ID_BUTTON_MANAGER);
-//        BUTTON_SetBkColor(_framebutton,BUTTON_CI_UNPRESSED,GUI_RED); //FRAMEWIN_GetBarColor(pMsg->hWin,0));
-//        FRAMEWIN_AddMinButton(hWindow,FRAMEWIN_BUTTON_RIGHT,1);
-//        BUTTON_GetText();
-        //
-        // Initialization of 'Image'
-        //
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-//        pData = _GetImageById(ID_IMAGE_0_IMAGE_0, &FileSize);
-//        IMAGE_SetBMP(hItem, pData, FileSize);
-        //dispbmp2("system/girl.bmp", 0, 5, 5, 1, 1,pMsg->hWin);
         //
         // Initialization of 'Edit'
         //
@@ -452,6 +212,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &XBF24_Font, GUI_BLACK, "手机支付请扫描二维码");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
+
+        //显示二维码
+        dispbmpNOFree("system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin,0);//不能释放内存,需要在切换界面时再把图片内存释放掉
+
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
 //                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
@@ -518,10 +282,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
         /* 显示时间和日期 */
-        Id = WM_GetTimerId(pMsg->Data.v);
+//        Id = WM_GetTimerId(pMsg->Data.v);
         Timer_Process(pMsg);
         /* 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, 20);
+        WM_RestartTimer(pMsg->Data.v, 200);
         break;
         // USER END
     default:
@@ -547,11 +311,8 @@ WM_HWIN CreateFramewin(void)
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
 
-//    WM_CreateTimer(hWin, ID_TimerTime, 1000, 0);
-
     return hWin;
 }
-
 // USER START (Optionally insert additional public code)
 /** @brief
  *  输出充电桩欢迎界面
@@ -560,43 +321,31 @@ WM_HWIN CreateFramewin(void)
  * @return
  *
  */
-const u8 codetest[]={
-    "https://www.baidu.com"
-//"名称:DPC-AC-CHARGE\r\n"
-//"版本:1.0\r\n"
-//"订单号:1234567890\r\n"
-//"卡号:1234567890123456789\r\n"
-//"账户余额:123456\r\n"
-//"上次欠费金额:12\r\n"
-//"地址:北京市丰台区星火路8号\r\n"
-//"如有疑问请拔打:010-83682266转658\r\n"
-};
 void PutOut_Home()
 {
-    uint16_t p,x,y;
     WM_HWIN hWin;
     EventBits_t uxBitRFID;
 
-    qrencode((uint8_t *)codetest,&p,&x,&y);
-
-    hWin = CreateFramewin();
     led_ctrl(1,green,keep_on);
+    hWin = CreateFramewin();
 
     while(1)
     {
-        GUI_Delay(1);
+        GUI_Delay(500);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+
 
         uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                         defEventBitGotIDtoHMI,
                                         pdTRUE, pdTRUE, 0);
+        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
         if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
         {
+            dispbmpNOFree("system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin,1);
             WM_DeleteWindow(hWin);
             PutOut_Card_Info();
         }
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        display_encode(&x,&y,&p);
-        vTaskDelay(20);
+        vTaskDelay(500);
     }
 }
 // USER END

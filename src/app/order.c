@@ -8,6 +8,10 @@
 #include "includes.h"
 #include "interface.h"
 #include <time.h>
+#include "cJSON.h"
+#include "cfg_parse.h"
+
+volatile uint8_t *tmpcjson;
 
 //static void OrderDelete(OrderData_t *pOrder)
 //{
@@ -263,3 +267,125 @@ void OrderInit(OrderData_t *pOrder)
         gdsl_list_flush(pOrder->plChargeSegment);
     }
 }
+
+void saveOrder(CON_t *pCON)
+{
+	int temp;
+    FIL fp;
+    ErrorCode_t errcode;
+    UINT bw;
+    char result;
+    uint8_t *p;
+    cJSON *pJsonRoot = NULL;
+    cJSON *jsOrderObj = NULL;
+    cJSON *pSub = NULL;
+    cJSON *pSubJson = NULL;
+    cJSON *pSubJsonSeg = NULL;
+    cJSON *seg0,*seg1,*seg2,*seg3,*seg4,*seg5,*seg6,*seg7;// = NULL;
+
+    f_open(&fp, "system/order.txt", FA_CREATE_NEW | FA_WRITE);
+
+    pJsonRoot = GetCfgObj("system/order.txt", &errcode);
+    if(pJsonRoot == NULL || errcode != ERR_NO)
+    {
+        return 1;
+    }
+    tmpcjson = cJSON_Print(pJsonRoot);
+
+    pSub = cJSON_GetObjectItem(pJsonRoot,"MaxIndex");
+
+    if(pSub == NULL)
+    {
+        cJSON_Delete(pSub);
+        return 1;
+    }
+
+    pSub->valueint = pSub->valueint+1;
+    cJSON_ReplaceItemInObject(pJsonRoot,"MaxIndex",cJSON_CreateNumber(*((uint32_t *)(pSub->valueint))));
+    jsOrderObj = cJSON_GetObjectItem(pJsonRoot,"Order");//取得数组
+
+    pSubJson = cJSON_CreateObject();
+    if(pSubJson == NULL)
+    {
+        cJSON_Delete(pSubJson);
+        return 1;
+    }
+    cJSON_AddItemToArray(pSubJson,jsOrderObj);
+
+    cJSON_AddNumberToObject(pSubJson,"Index",pSub->valueint);
+    cJSON_AddStringToObject(pSubJson, "EVSEID",&(pCON->order.ucCardID));//数据错误
+    cJSON_AddNumberToObject(pSubJson,"CONID",pCON->order.ucCONID);
+    cJSON_AddNumberToObject(pSubJson,"TotalPower",pCON->order.dTotalPower);
+    cJSON_AddNumberToObject(pSubJson,"PayType",pCON->order.ucPayType);
+    cJSON_AddNumberToObject(pSubJson,"StopType",pCON->order.ucStopType);
+    cJSON_AddStringToObject(pSubJson,"CardID",&(pCON->order.ucCardID));
+    cJSON_AddNumberToObject(pSubJson,"TotalFee",pCON->order.dTotalFee);
+    cJSON_AddStringToObject(pSubJson,"OrderSN",&(pCON->order.ucCardID));//数据错误
+    cJSON_AddNumberToObject(pSubJson,"ServiceFeeType",pCON->order.ucServiceFeeType);
+    cJSON_AddNumberToObject(pSubJson,"ServiceFee",pCON->order.dTotalServiceFee);
+    cJSON_AddNumberToObject(pSubJson,"TotalSegment",pCON->order.ucTotalSegment);
+    cJSON_AddNumberToObject(pSubJson,"DefSegPower",pCON->order.dDefSegPower);
+    cJSON_AddNumberToObject(pSubJson,"DefSegFee",pCON->order.dDefSegFee);
+
+    pSubJsonSeg = cJSON_CreateArray();
+    cJSON_AddItemToObject(pSubJson,"Segments",pSubJsonSeg);
+    seg0 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg0",seg0);
+    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
+    seg1 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg1",seg1);
+    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
+    seg2 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg2",seg2);
+    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
+    seg3 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg3",seg3);
+    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
+    seg4 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg4",seg4);
+    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
+    seg5 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg5",seg5);
+    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
+    seg6 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg6",seg6);
+    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
+    seg7 = cJSON_CreateObject();
+    cJSON_AddItemToObject(pSubJsonSeg,"seg7",seg7);
+    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
+    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
+
+    //p = cJSON_Print(pJsonRoot);
+//    f_write(&fp, p, strlen(p), &bw);
+
+    f_close(&fp);
+//    SetCfgObj("system/order.txt",pJsonRoot);
+
+    cJSON_Delete(pJsonRoot);
+    return 0;
+}
+
+
