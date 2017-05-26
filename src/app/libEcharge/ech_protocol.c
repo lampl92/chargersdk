@@ -415,10 +415,12 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     uint8_t ucOrderSN[8];
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
+    us2uc ustmpNetSeq;
     int i;
 
     pProto = (echProtocol_t *)pPObj;
     pCON = (CON_t *)pCObj;
+    pbuff = pProto->pCMD[ECH_CMDID_RTDATA]->ucRecvdOptData;
 
     //[0...7] 交易流水号
     StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
@@ -428,11 +430,78 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     }
     //[8] 桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
+    //[9...12] 当前充电总电量 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[13...16] 尖电量 xxx.xx
+    //[17...20] 峰电量
+    //[21...24] 平电量
+    //[25...28] 谷电量
+    for(i = 0; i < 16; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    }
+    //[29...32] 当前充电金额 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[32...36] 当前服务费金额 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServiceFee * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[37,38] 当前充电时间
+    ustmpNetSeq.usVal = htons(time(NULL) - pCON->order.tStartTime);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
+    //[39] 充电桩状态
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[39];//注意修改这里也要修改interface_remote.c对应位置
+    //[40] 停止原因
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[40];
+    //[41] 当前SOC
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    //[42,43] 剩余充电时间
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    //[44...47] 输出电压 xxx.x
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[48...51] 输出电流 xxx.x
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[52...55] 电池组最低温度
+    //[56...59] 电池组最高温度
+    for(i = 0; i < 8; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    }
+    //[60...63] 当前时间戳
+    ultmpNetSeq.ulVal = htonl(time(NULL));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[64...80] 车辆VIN号
+    for(i = 0; i < 17; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    }
 
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-
-
-
+    return 0;
 }
 static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
