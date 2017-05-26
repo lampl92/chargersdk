@@ -271,7 +271,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
             }
             else if(pbuff[13] == 2)
             {
-                /** @todo (rgw#1#): 在这里判断交易号是否相等 */
+                /**在这里判断交易号是否相等 */
                 HexToStr(&pbuff[4], strOrderSN_tmp, 8);
                 if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
                 {
@@ -321,6 +321,58 @@ ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint
     pbuff[39] = ctrl;
     pbuff[40] = reason;
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 10, 1);
+
+    return errcode;
+}
+ErrorCode_t RemoteOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
+
+    pbuff[0] = 5;//4 有卡，5 无卡 /** @todo (rgw#1#): 增加启动方式判断 */
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
+
+    return errcode;
+}
+ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t len;
+    uint8_t id;
+    uint8_t strOrderSN_tmp[17];
+    ErrorCode_t errcode;
+
+    id = 0;
+    memset(strOrderSN_tmp, 0, 17);
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
+    len = pProto->pCMD[ECH_CMDID_ORDER]->uiRecvdOptLen;
+    if(len > 0)
+    {
+        //[0] 有无卡
+        //[1...8] 交易流水号
+        //[9] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[9]);
+        pCON = CONGetHandle(id);
+        if(pCON != NULL)
+        {
+            HexToStr(&pbuff[1], strOrderSN_tmp, 8);
+            if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+            {
+                *psiRetVal = 1;
+            }
+            else //订单号不相等
+            {
+                *psiRetVal = 0;
+                return ERR_REMOTE_ORDERSN;
+            }
+        }
+    }
 
     return errcode;
 }

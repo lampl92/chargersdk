@@ -421,6 +421,7 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pProto = (echProtocol_t *)pPObj;
     pCON = (CON_t *)pCObj;
     pbuff = pProto->pCMD[ECH_CMDID_RTDATA]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
 
     //[0...7] 交易流水号
     StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
@@ -457,7 +458,7 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[37,38] 当前充电时间
-    ustmpNetSeq.usVal = htons(time(NULL) - pCON->order.tStartTime);
+    ustmpNetSeq.usVal = htons(  time(NULL) - pCON->order.tStartTime  );
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[39] 充电桩状态
@@ -511,7 +512,145 @@ static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeCmdRTDataBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint8_t ucOrderSN[8];
+    uint8_t strCardID[17];
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpNetSeq;
+    us2uc ustmpNetSeq;
+    uint8_t reason;
+    int i;
 
+    pProto = (echProtocol_t *)pPObj;
+    pCON = (CON_t *)pCObj;
+    pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0] 有卡 04 无卡05
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0]哈哈哈，要在interface中赋值;
+    //[1...8] 交易流水号
+    StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
+    for(i = 0; i < 8; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+    }
+    //[9] 充电桩接口
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
+    //[10...25] 卡号
+    if(pbuff[0] == 4)
+    {
+        HexToStr(pCON->order.ucCardID, strCardID, 8);
+        for(i = 0; i < 16; i++)
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+        }
+    }
+    else if(pbuff[0] == 5)
+    {
+        for(i = 0; i < 16; i++)
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+        }
+    }
+    //[26...29] 充电前总电能示值 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[30...33] 充电后电能总示值 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)((pCON->order.dStartPower + pCON->order.dTotalPower) * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[34...37] 本次充电电费总金额 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[38...41] 本次充电服务费总金额 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServiceFee * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[42...45] 尖电价       xx.xxxx
+    //[46...49] 尖服务费单价 xx.xxxx
+    //[50...53] 尖电量       xxx.xx
+    //[54...57] 尖充电金额   xxx.xx
+    //[58...61] 尖服务费金额 xxx.xx
+    //[62,63] 尖充电时长 xx
+    //[64...85]峰
+    //[86...107]平
+    //[108...129]谷
+    for(i = 0; i < 22 * 4; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    }
+    //[130...133] 充电开始时间
+    ultmpNetSeq.ulVal = htonl(pCON->order.tStartTime);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //[134,135] 充电持续时间
+    ustmpNetSeq.usVal = htons(pCON->order.tStopTime - pCON->order.tStartTime);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
+    //[136] 停止充电原因
+    switch(pCON->order.ucStopType)
+    {
+    case defOrderStopType_RFID:
+    case defOrderStopType_Remote:
+        reason = 1;//手动停止
+        break;
+    case defOrderStopType_Full:
+        reason = 3;//充满停止
+        break;
+    case defOrderStopType_Fee:
+        reason = 4;//达到充电金额
+        break;
+    case defOrderStopType_Scram:
+    case defOrderStopType_NetLost:
+    case defOrderStopType_Poweroff:
+    case defOrderStopType_OverCurr:
+    case defOrderStopType_Knock:
+        reason = 5;//异常停止
+        break;
+    default:
+        reason = 6;//其他原因停止
+        break;
+    }
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = reason;
+    //[137] 当前soc
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    //[138] 状态
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    //[139...142] 充电结束时间
+    ultmpNetSeq.ulVal = htonl(pCON->order.tStopTime);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 #define ECH_ERR_VER     -1
 #define ECH_ERR_CHECK   -2
 #define ECH_ERR_ID      -3
@@ -686,6 +825,10 @@ static int analyCmdRTData(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
 {
     return 1;
 }
+static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    return 1;
+}
 /** @brief 复制待插入的元素到新申请的空间
  *
  * @param pechCmd void*
@@ -804,8 +947,9 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdStatus);
     pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdRemoteCtrl);
     pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdRTData);
+    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdOrder);
 
-    pProto->recvResponse = recvResponse;
+                                    pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;
     pProto->deleteProtocol = deleteProto;
 

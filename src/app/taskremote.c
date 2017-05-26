@@ -40,6 +40,14 @@ typedef enum
     REMOTERTData_STOP
 } RemoteRTDataState_e;
 
+typedef enum
+{
+    REMOTEOrder_IDLE,
+    REMOTEOrder_Send,
+    REMOTEOrder_WaitRecv
+} RemoteOrderState_e;
+
+
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -49,12 +57,15 @@ void vTaskEVSERemote(void *pvParameters)
     RemoteState_t remotestat;
     RemoteCtrlState_e eRmtCtrlStat;
     RemoteRTDataState_e eRmtRTDataStat;
+    RemoteOrderState_e eRmtOrderStat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
     uint8_t id_rmtctrl;
     uint8_t ctrl_rmtctrl;
     time_t time_rmtctrl;
+    time_t time_order;
+    uint8_t order_send_count;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -62,10 +73,14 @@ void vTaskEVSERemote(void *pvParameters)
     remotestat = REMOTE_NO;
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
+    eRmtOrderStat = REMOTEOrder_IDLE;
     errcode = 0;
     network_res = 0;
     id_rmtctrl = 0;
     ctrl_rmtctrl = 0;
+    time_rmtctrl = 0;
+    time_order = 0;
+    order_send_count = 0
 
     while(1)
     {
@@ -267,6 +282,49 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     RemoteRTData(pEVSE, pechProto, pCON, 1, 0);
                 }
+            }
+
+            /******** 交易记录 ****************/
+            for(i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                switch(eRmtOrderStat)
+                {
+                case REMOTEOrder_IDLE:
+                   uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                             defEventBitOrderMakeFinish,
+                                             pdFALSE, pdTRUE, 0);
+                    if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
+                    {
+                        order_send_count = 0
+                        eRmtOrderStat = REMOTEOrder_Send;
+                    }
+                    break;
+                case REMOTEOrder_Send:
+                    RemoteOrder(pEVSE, pechProto, pCON);
+                    order_send_count++;
+                    time_order = time(NULL);
+                    eRmtOrderStat = REMOTEOrder_WaitRecv;
+                    break;
+                case REMOTEOrder_WaitRecv: //重发这部分，先测试自动重发，然后再测试手动重发
+                    RemoteOrderRes(pEVSE, pechProto, &network_res);
+                    if(network_res == 1)
+                    {
+                        eRmtOrderStat = REMOTEOrder_IDLE;
+                    }
+                    else if(network_res == 0)
+                    {
+                        if(time(NULL) - time_order > 20)
+                        {
+                            eRmtOrderStat = REMOTEOrder_Send;
+                        }
+                        if(order_send_count > 3)
+                        {
+                            eRmtOrderStat = REMOTEOrder_IDLE;
+                        }
+                    }
+                    break;
+                }//switch
             }
             /* 获取帐户信息*/
             uxBits = xEventGroupWaitBits(xHandleEventRemote,

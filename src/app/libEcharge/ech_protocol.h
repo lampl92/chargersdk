@@ -56,8 +56,9 @@ typedef struct _ECHProtoParam
 #define ECH_CMDID_STATUS           2//×´Ì¬
 #define ECH_CMDID_REMOTE_CTRL      3//ÎÞ¿¨ÆôÍ£
 #define ECH_CMDID_RTDATA      4//ÎÞ¿¨ÆôÍ£
+#define ECH_CMDID_ORDER         5 //½»Ò×¼ÇÂ¼
 
-#define ECH_CMD_MAX          5
+#define ECH_CMD_MAX          6
 
 
 
