@@ -128,9 +128,11 @@ void vTaskEVSERemote(void *pvParameters)
                 RemoteRemoteCtrlRes(pEVSE, pechProto, &id_rmtctrl, &ctrl_rmtctrl, &network_res);
                 if(network_res == 1) //注意这里的ID会一直存在，在其他状态中也可以使用
                 {
+                    pCON = CONGetHandle(id_rmtctrl);
                     time_rmtctrl = time(NULL);
                     if(ctrl_rmtctrl == 1)
                     {
+                        pCON->order.statOrder = STATE_ORDER_WAITSTART;//状态处理见taskdata.c文件
                         eRmtCtrlStat = REMOTECTRL_WAIT_START;
                     }
                     else if(ctrl_rmtctrl == 2)
@@ -210,7 +212,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     break;
                 }
-                case REMOTERTData_START:
+                case REMOTERTData_START: //在这期间，由Timer发送Timeout事件对RTData进行刷新
                 {
                     uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                     if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
@@ -229,26 +231,27 @@ void vTaskEVSERemote(void *pvParameters)
                         {
                         case defOrderStopType_RFID:
                         case defOrderStopType_Remote:
-                            RemoteRTData(pEVSE, pechProto, pCON, 1);//手动停止
+                            RemoteRTData(pEVSE, pechProto, pCON, 2, 1);//手动停止
                             break;
                         case defOrderStopType_Full:
-                            RemoteRTData(pEVSE, pechProto, pCON, 3);//充满停止
+                            RemoteRTData(pEVSE, pechProto, pCON, 2, 3);//充满停止
                             break;
                         case defOrderStopType_Fee:
-                            RemoteRTData(pEVSE, pechProto, pCON, 4);//达到充电金额
+                            RemoteRTData(pEVSE, pechProto, pCON, 2, 4);//达到充电金额
                             break;
                         case defOrderStopType_Scram:
                         case defOrderStopType_NetLost:
                         case defOrderStopType_Poweroff:
                         case defOrderStopType_OverCurr:
                         case defOrderStopType_Knock:
-                            RemoteRTData(pEVSE, pechProto, pCON, 5);//异常停止
+                            RemoteRTData(pEVSE, pechProto, pCON, 2, 5);//异常停止
                             break;
                         default:
-                            RemoteRTData(pEVSE, pechProto, pCON, 6);//其他原因停止
+                            RemoteRTData(pEVSE, pechProto, pCON, 2, 6);//其他原因停止
                             break;
                         }
                     }
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOK); //告诉order你用完了他的数据
                     eRmtRTDataStat = REMOTERTData_IDLE;
                     break;
                 }
@@ -262,7 +265,7 @@ void vTaskEVSERemote(void *pvParameters)
                                              pdTRUE, pdTRUE, 0);
                 if((uxBits & defEventBitChargeRTDataTimer) == defEventBitChargeRTDataTimer)
                 {
-                    RemoteRTData(pEVSE, pechProto, pCON, 0);
+                    RemoteRTData(pEVSE, pechProto, pCON, 1, 0);
                 }
             }
             /* 获取帐户信息*/
