@@ -45,6 +45,7 @@ void vTaskEVSEData(void *pvParameters)
                 pCON->order.statOrder = STATE_ORDER_TMP;
             }
         }
+        /** @todo (rgw#1#): !!! 这里没有做扫码启动判断。目前在扫码接受到开启充电处置pCON->order.statOrder = STATE_ORDER_WAITSTART; */
 
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -121,6 +122,10 @@ void vTaskEVSEData(void *pvParameters)
                 if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //刷卡停止
                 {
                     pCON->order.ucStopType = defOrderStopType_RFID;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //自动充满
+                {
+                    pCON->order.ucStopType = defOrderStopType_Full;
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
