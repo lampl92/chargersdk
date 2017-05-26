@@ -90,8 +90,9 @@
 #define defEventBitOrderStopTypeLimitFee    BIT_10
 #define defEventBitOrderStopTypeRemoteStop  BIT_11
 #define defEventBitOrderStopTypeRFIDStop    BIT_12
+#define defEventBitOrderStopTypeFull        BIT_13
 
-#define defEventBitOrderMakeFinish      BIT_13  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinish      BIT_20  //等待处不清除, 该事件置位后整个订单完成
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
 #define defEventBitOrderUseless          (defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
@@ -134,9 +135,10 @@
 #define defEventBitExceptionRFID        BIT_7
 #define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionRelayPaste  BIT_9
+
 #define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionRemoteStop  BIT_11
-#define defEventBitExceptionRFIDStop    BIT_12
+#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
 #define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
