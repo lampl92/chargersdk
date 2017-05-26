@@ -113,7 +113,7 @@ void vTaskEVSERFID(void *pvParameters)
 #endif
             /** @fixme (rgw#1#): 假设用户选择停止充电 */
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
 //            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
             OrderInit(&(pRFIDDev->order));
             pRFIDDev->state = STATE_RFID_NOID;
