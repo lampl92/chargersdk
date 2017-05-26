@@ -1,0 +1,237 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ulmsgbod",
+				"ulMsgBodyCtxLen_dec"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "remove",
+		"selected_items":
+		[
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"view",
+				"View: Toggle Menu"
+			]
+		],
+		"width": 560.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '261dd1222b4693ce6d4f85f9c827ac06' + '6d5ab8ebdd020086947172a8a1356bb6'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'https://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) ",
+			"import urllib.request,os,hashlib; h = '261dd1222b4693ce6d4f85f9c827ac06' + '6d5ab8ebdd020086947172a8a1356bb6'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = '261dd1222b4693ce6d4f85f9c827ac06' + '6d5ab8ebdd020086947172a8a1356bb6'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Documents/Projects/chargersdk",
+		"/D/Documents/Projects/chargersdk/build",
+		"/D/Documents/Projects/chargersdk/src"
+	],
+	"file_history":
+	[
+		"/D/Documents/Projects/chargersdk/src/app/libEcharge/ech_protocol.h",
+		"/D/Documents/Projects/chargersdk/src/app/libEcharge/ech_protocol.c",
+		"/C/Users/DT-553/AppData/Roaming/Sublime Text 3/Packages/YcmdCompletion/YcmdCompletion.sublime-settings",
+		"/C/Users/DT-553/AppData/Roaming/Sublime Text 3/Packages/C++YouCompleteMe/C++YouCompleteMe.sublime-settings",
+		"/C/Users/DT-553/AppData/Roaming/Sublime Text 3/Packages/Terminal/Default (Windows).sublime-keymap",
+		"/D/Documents/Projects/chargersdk/src/middlewares/gdsl-1.8/src/gdsl_list.c",
+		"/C/Users/DT-553/AppData/Roaming/Sublime Text 3/Packages/C++YouCompleteMe/Default (Windows).sublime-keymap",
+		"/C/Users/DT-553/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/D/Documents/Projects/chargersdk/build/ST3/csproj.sublime-project",
+		"/D/Documents/Projects/codeblocktest/testaes/tiny-AES128-C/enc_dec.c",
+		"/D/Documents/Projects/codeblocktest/testaes/tiny-AES128-C/enc_dec.h",
+		"/D/Documents/RGW/参考资料/marvell/MC200/wmsdk_bundle-2.14.54/wmsdk_bundle-2.14.54/wmsdk/src/libc/README",
+		"/D/Documents/RGW/Projects/Finger-Vein-Authentication/FVA-USB/doc/ReadMe.md",
+		"/C/Users/DT-553/AppData/Local/Haroopad/Themes/viewer/default.css",
+		"/C/Users/DT-553/AppData/Local/Haroopad/Themes/editor/default.css",
+		"/Y/workspace/HOME_IBSU/DeviceManage/DeviceManage.h",
+		"//192.168.164.130/vmshare/workspace/HOME_IBSU/IBSUMain/RwIBSUXMLConfig.h",
+		"/D/Documents/Projects/Finger-Vein-Authentication/FVA-USB/src/exe/H1EUSB_SampleApp/camellia.c",
+		"/Y/workspace/HOME_IBSU/DeviceManage/CardsDevice.cpp",
+		"/Y/workspace/HOME_IBSU/DeviceManage/CShieldHandler.cpp",
+		"/Y/workspace/HOME_IBSU/common/include/ComBase.h",
+		"/D/Documents/Projects/Finger-Vein-Authentication/FVA-USB/src/exe/H2E_SampleApp/H2E_Com.cpp",
+		"/Y/workspace/HOME_IBSU/IBSUMain/CFileTransfer.d",
+		"/D/rgw/D/充电桩/3/driverlib/adc.txt",
+		"/D/rgw/D/充电桩/3/driverlib/adc.c",
+		"/D/Documents/Projects/Finger-Vein-Authentication/FVA-USB/src/exe/H1EUSB_SampleApp/ReadMe.txt",
+		"/D/workspace/rt-thread-2.1.0_beta/bsp/stm32f40x/rtconfig.py",
+		"/D/Downloads/DCP/api_run.dat",
+		"/D/Downloads/DCP/S99userapp.dat",
+		"/D/Downloads/深圳市铭特科技充电桩读卡器/MT.c"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"uint8_t",
+			"makeSt"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.CppYCM.2":
+	{
+		"height": 0.0
+	},
+	"output.astyle_error_message":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "csproj.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"echprot",
+				"src\\app\\libEcharge\\ech_protocol.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 964.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
