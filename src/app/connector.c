@@ -621,7 +621,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
     /** @todo (yuye#1#): 从电表获取 */
     //meter id 0 == CON id 0
-#ifndef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
 #else
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
