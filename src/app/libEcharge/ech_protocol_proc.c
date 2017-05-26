@@ -36,6 +36,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
 //        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
 //        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
 
+        /** @todo (rgw#1#): ！！！ 需要抽时间整理一下这里的超时和重发次数，逻辑上有问题 */
+
         /* 遍历SendCmd */
 
         gdsl_list_cursor_move_to_head (cs);
