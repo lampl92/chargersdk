@@ -183,7 +183,7 @@ void vTaskEVSECharge(void *pvParameters)
                                                       pdFALSE, pdFALSE, 0);
                 if((uxBitsException & defEventBitExceptionDevFault) != 0)
                 {
-                    printf_safe("Stop Error!\n");
+                    printf_safe("Dev Fault Stop Error!\n");
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
@@ -201,7 +201,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-                if((uxBitsException & defEventBitExceptionRFID) == defEventBitExceptionRFID)    //Ë¢¿¨Í£Ö¹
+                if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //Ë¢¿¨Í£Ö¹
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
@@ -223,6 +223,7 @@ void vTaskEVSECharge(void *pvParameters)
                     if(pCON->status.ucRelayLState == SWITCH_OFF &&
                             pCON->status.ucRelayNState == SWITCH_OFF)
                     {
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
                         printf_safe("S2 Stop Charge!\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
