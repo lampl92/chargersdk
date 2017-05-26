@@ -231,7 +231,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
     CON_t *pCON;
     uint8_t *pbuff;
     uint32_t len;
-
+    uint8_t strOrderSN_tmp[17];
     double dLimetFee;
     ul2uc ulTmp;
     uint8_t id;
@@ -251,37 +251,48 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
         pCON = CONGetHandle(id);
         if(pCON != NULL)
         {
-            //pbuff[4...11] 交易流水号
-            HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
-
             //pbuff[13] 操作 1启动，2停止
             if(pbuff[13] == 1)
             {
+                //pbuff[4...11] 交易流水号
+                HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
+
                 *pctrl = pbuff[13];
+
+                //pbuff[14...17] 充电金额
+                ulTmp.ucVal[0] = pbuff[14];
+                ulTmp.ucVal[1] = pbuff[15];
+                ulTmp.ucVal[2] = pbuff[16];
+                ulTmp.ucVal[3] = pbuff[17];
+                dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
+                pCON->order.dLimitFee = dLimetFee;
+
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
             else if(pbuff[13] == 2)
             {
-                *pctrl = pbuff[13];
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
+                /** @todo (rgw#1#): 在这里判断交易号是否相等 */
+                HexToStr(&pbuff[4], strOrderSN_tmp, 8);
+                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+                {
+                    *pctrl = pbuff[13];
+                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
+                }
+                else //订单号不相等
+                {
+                    *psiRetVal = 0;
+                    return ERR_REMOTE_ORDERSN;
+                }
             }
-            //pbuff[14...17] 充电金额
-            ulTmp.ucVal[0] = pbuff[14];
-            ulTmp.ucVal[1] = pbuff[15];
-            ulTmp.ucVal[2] = pbuff[16];
-            ulTmp.ucVal[3] = pbuff[17];
-            dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
-            pCON->order.dLimitFee = dLimetFee;
-
             *psiRetVal = 1;
             *pid = id;
         }
-        else
+        else // pCON = NULL
         {
             *psiRetVal = 0;
         }
     }
-    else
+    else//len = 0
     {
         *psiRetVal = 0;
     }
@@ -289,7 +300,17 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
     return  errcode;
 }
 
-ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t reason)
+/** @brief
+ *
+ * @param pEVSE EVSE_t*
+ * @param pProto echProtocol_t*
+ * @param pCON CON_t*
+ * @param ctrl uint8_t     充电桩状态 1 开机，2 停机
+ * @param reason uint8_t   停止原因
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
 {
     uint8_t *pbuff;
     ErrorCode_t errcode;
@@ -297,8 +318,9 @@ ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint
 
     pbuff = pProto->pCMD[ECH_CMDID_RTDATA]->ucRecvdOptData;
 
-    pbuff[哈哈哈] = reason;
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 10, 1);
+    pbuff[39] = ctrl;
+    pbuff[40] = reason;
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 10, 1);
 
     return errcode;
 }
