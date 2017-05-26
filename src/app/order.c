@@ -228,6 +228,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
+        pCON->order.tStopTime = time(NULL);
         break;
     }
     return errcode;
@@ -264,6 +265,7 @@ void OrderInit(OrderData_t *pOrder)
 
     pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
     pOrder->ucStopType = 0;                  //停止类型
+    pOrder->tStopTime = 0;              //停止时间
 
     if(pOrder->plChargeSegment != NULL)
     {

@@ -102,6 +102,7 @@ typedef struct _OrderData
     //停止时
     uint8_t ucPayType;                    //支付方式
     uint8_t ucStopType;                   //停止类型
+    time_t  tStopTime;                      //停止时间
 
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
