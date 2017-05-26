@@ -59,7 +59,9 @@ typedef enum _ErrorCode
 
     ERR_NONET,			//网络通信故障
     ERR_NET_TIMEOUT,		//网络通信超时
-    ERR_MEMORY			//Malloc错误
+    ERR_MEMORY,			//Malloc错误
+
+    ERR_REMOTE_ORDERSN  //订单号不相等
 
 } ErrorCode_t;
 
