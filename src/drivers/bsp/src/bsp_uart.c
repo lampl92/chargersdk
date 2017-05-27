@@ -184,9 +184,9 @@ void bsp_Uart_Init(void)
 {
     pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
     pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
-#ifdef EVSE_DEBUG
+
     pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
-#endif
+
     uart_queue_init();
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
@@ -210,7 +210,7 @@ void bsp_Uart_Init(void)
     RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&RFID_UARTx_Handler);
     HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1);
-#ifdef EVSE_DEBUG
+
     GPRS_UARTx_Handler.Instance = GPRS_USARTx_BASE;
     GPRS_UARTx_Handler.Init.BaudRate = GPRS_USARTx_BAUDRATE;
     GPRS_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
@@ -221,7 +221,7 @@ void bsp_Uart_Init(void)
     GPRS_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&GPRS_UARTx_Handler);
     HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
-#endif
+
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
@@ -301,6 +301,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_NVIC_EnableIRQ(UART4_IRQn);
         HAL_NVIC_SetPriority(UART4_IRQn, bspUART4_PreemptPriority, bspUART4_SubPriority);
     }
+    if(huart->Instance == UART5)
+    {
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        __HAL_RCC_UART4_CLK_ENABLE();
+
+        GPIO_InitStruct.Pin = GPIO_PIN_12;//PIN_TX
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+        GPIO_InitStruct.Alternate = GPIO_AF8_UART5;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = GPIO_PIN_2;//PIN_RX
+        HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+        HAL_NVIC_EnableIRQ(UART5_IRQn);
+        HAL_NVIC_SetPriority(UART5_IRQn, bspUART5_PreemptPriority, bspUART5_SubPriority);
+    }
 
 }
 
@@ -313,12 +331,12 @@ RFID_USARTx_IRQHandler
 {
     HAL_UART_IRQHandler(&RFID_UARTx_Handler);
 }
-#ifdef EVSE_DEBUG
+
 GPRS_USARTx_IRQHandler
 {
     HAL_UART_IRQHandler(&GPRS_UARTx_Handler);
 }
-#endif
+
 /**
   * @brief  Tx Transfer completed callback
   * @param  UartHandle: UART handler.
@@ -357,7 +375,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             pRfidRecvQue->EnElem(pRfidRecvQue, RFID_RX_Buffer[0]);
         }
     }
-#ifdef EVSE_DEBUG
+
     if(huart->Instance == GPRS_USARTx_BASE)
     {
         if(HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1) == HAL_OK)
@@ -366,7 +384,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             //gdsl_queue_insert(queGPRS, (void *)GPRS_RX_Buffer);
         }
     }
-#endif
 }
 
 /**
@@ -391,11 +408,11 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(RFID, ORE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(RFID, DMA, ERR_LEVEL_TIPS);
-#ifdef EVSE_DEBUG
+
     THROW_USART_ERR(GPRS, PE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(GPRS, NE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(GPRS, FE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(GPRS, ORE, ERR_LEVEL_TIPS);
     THROW_USART_ERR(GPRS, DMA, ERR_LEVEL_TIPS);
-#endif
+
 }

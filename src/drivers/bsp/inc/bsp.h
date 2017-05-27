@@ -32,13 +32,16 @@
 #define bspUART4_PreemptPriority       6
 #define bspUART4_SubPriority           0
 
+#define bspUART5_PreemptPriority       7
+#define bspUART5_SubPriority           0
+
 #define bspLTDC_PreemptPriority         15
 #define bspLTDC_SubPriority             0
 
 #define bspWKUP_PreemptPriority         6
 #define bspWKUP_SubPriority             0
 
-#define bspAlarm_PreemptPriority        7
+#define bspAlarm_PreemptPriority        8
 #define bspAlarm_SubPriority            0
 
 /* CPU空闲时执行的函数 */
