@@ -3,7 +3,7 @@
 #include "ff.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
-
+#include "interface.h"
 uint8_t calebrate_done = 0;
 
 static uint8_t codetest[]={
@@ -11,14 +11,15 @@ static uint8_t codetest[]={
 };
 void MainTask(void)
 {
+    CON_t *pCON;
     if(calebrate_done == 0)
     {
         GUI_CURSOR_Show();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
-
-    encodetobmp("system/encodeCharge.bmp",codetest);
+    pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
+    encodetobmp("system/encodeCharge.bmp",pCON->info.strQRCode);
 
     Create_XBF12("system/XBF宋体12.xbf");//创建xbf12号路径
     Create_XBF16("system/XBF宋体16.xbf");//创建xbf16号路径

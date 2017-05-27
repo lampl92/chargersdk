@@ -47,6 +47,7 @@
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
 
+#define LWIP_POSIX_SOCKETS_IO_NAMES      0  //与于也定义冲突， 于也应把read和write修改为其他定义
 /**
  * SYS_LIGHTWEIGHT_PROT==1: if you want inter-task protection for certain
  * critical regions during buffer allocation, deallocation and memory
