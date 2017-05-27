@@ -232,8 +232,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
-//        pCON->order.ucStopType = defOrderStopType_RFID;//在taskcharge 停止时进行赋值
-        /** @todo (rgw#1#): 添加订单结束时内容 */
+        pCON->order.tStopTime = time(NULL);
         break;
     }
     return errcode;
@@ -248,20 +247,30 @@ void OrderInit(OrderData_t *pOrder)
 {
     pOrder->statOrder = STATE_ORDER_IDLE;
     pOrder->statOrderSeg = STATE_ORDERSEG_DEF;
+
+    memset(pOrder->ucCardID, 0, defCardIDLength);//卡号//在taskrfid中赋值
     pOrder->ucAccountStatus = 0;    //帐户状态 1：注册卡 0：未注册卡
     pOrder->dBalance = 0;           //余额
 
-    pOrder->dTotalPower = 0;                 //总电量
-    pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
-    pOrder->ucStopType = 0;                  //停止类型
-    memset(pOrder->ucCardID, 0, defCardIDLength);//卡号//在taskrfid中赋值
-    pOrder->dTotalFee = 0;                //总费用
-    pOrder->tStartTime = 0;
+    memset(pOrder->strOrderSN, 0, defOrderSNLength);
+    pOrder->dLimitFee = 0;                    //充电金额限制
+    pOrder->tStartTime = 0;                 //起始时间
+    pOrder->dStartPower = 0;                //起始电表读数
     pOrder->ucServiceFeeType = 0;         //服务费类型
+
+    pOrder->dTotalPower = 0;                 //总电量
+    pOrder->dTotalPowerFee = 0;             //总电费
     pOrder->dTotalServiceFee = 0;               //服务费
+    pOrder->dTotalFee = 0;                //总费用
     pOrder->ucTotalSegment = 0;            //充电明细段数
+    pOrder->dDefSegStartPower = 0;          //默认段起始电表读数
     pOrder->dDefSegPower = 0;              //默认段电量
     pOrder->dDefSegFee = 0;               //默认段电费
+
+    pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
+    pOrder->ucStopType = 0;                  //停止类型
+    pOrder->tStopTime = 0;              //停止时间
+
     if(pOrder->plChargeSegment != NULL)
     {
         gdsl_list_flush(pOrder->plChargeSegment);

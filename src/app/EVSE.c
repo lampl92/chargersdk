@@ -1139,4 +1139,6 @@ void EVSEinit(void)
     CONInit();
 
     pRFIDDev = RFIDDevCreate();
+
+    pechProto = EchProtocolCreate();
 }

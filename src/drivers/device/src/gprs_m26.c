@@ -146,23 +146,44 @@ uint32_t gprs_ioctl(uint8_t ioctl)
     }
     return fn_res;
 }
-
+uint32_t gprs_send_AT(void);
+/** @brief
+ *
+ * @param void
+ * @return uint32_t 0 失败，1 成功
+ *
+ */
 uint32_t gprs_init(void)
 {
     uint8_t state;
     uint32_t res;
+    uint32_t res_at;
+
+    res = 0;
 
     GPRS_IO = 0;
     pGprsRecvQue->Flush(pGprsRecvQue);
-    gprs_ioctl(DA_GPRS_RESET);
+    res_at = gprs_send_AT();
+    if(res_at != DR_AT_OK)
+    {
+        gprs_ioctl(DA_GPRS_RESET);
+    }
+    else
+    {
+        dev_gprs.state = DS_GPRS_ON;
+    }
+
     if(dev_gprs.state == DS_GPRS_ON)
     {
+        res = 1;
         dev_gprs.pollstate = DS_GPRS_POLL_AT;
     }
     else
     {
+        res = 0;
         ThrowErrorCode(defDevID_GPRS, ERR_GPRS_FAULT, ERR_LEVEL_WARNING, "初始化失败");
     }
+    return res;
 }
 uint32_t gprs_read_AT(void);
 uint32_t gprs_send_AT(void)
@@ -614,7 +635,7 @@ uint32_t gprs_ppp_poll(void)
             }
             break;
         case DS_GPRS_POLL_PPP:
-            xEventGroupSetBits(xHandleEventlwIP, defEventBitDailCONNECT);
+            xEventGroupSetBits(xHandleEventLwIP, defEventBitDailCONNECT);
             dev_gprs.pollstate = DS_GPRS_POLL_PPPDego;
             break;
         case DS_GPRS_POLL_PPPDego:
@@ -622,7 +643,7 @@ uint32_t gprs_ppp_poll(void)
 //            {
 //
 //            }
-            uxBitLwip = xEventGroupWaitBits(xHandleEventlwIP, defEventBitReDail,
+            uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP, defEventBitReDail,
                                             pdTRUE, pdTRUE, portMAX_DELAY);
             if((uxBitLwip & defEventBitReDail) == defEventBitReDail)
             {
@@ -630,8 +651,9 @@ uint32_t gprs_ppp_poll(void)
             }
             break;
         case DS_GPRS_POLL_ERR:
-            dev_gprs.pollstate = DS_GPRS_POLL_AT;
+            gprs_ioctl(DA_GPRS_RESET);
             vTaskDelay(10000);
+            dev_gprs.pollstate = DS_GPRS_POLL_AT;
             break;
         }
         vTaskDelay(1000);

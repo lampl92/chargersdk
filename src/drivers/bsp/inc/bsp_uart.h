@@ -19,7 +19,7 @@ typedef enum
     UART_PORT_RFID
 }UART_Portdef;
 
-#ifdef EVSE_RELEASE
+#ifndef EVSE_DEBUG
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
@@ -46,7 +46,7 @@ typedef enum
 #define GPRS_USARTx_BASE                            USART1
 #define GPRS_USARTx_BAUDRATE                        115200
 #define GPRS_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             1500
+#define GPRS_QUEUE_SIZE                             10000
 #endif
 
 /* Exported macro ------------------------------------------------------------*/
@@ -62,6 +62,7 @@ extern Queue *pGprsRecvQue;
 
 void bsp_Uart_Init(void);
 uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
+uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout);
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
 uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
 uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len);

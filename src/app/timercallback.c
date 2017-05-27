@@ -51,11 +51,14 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     if(uxTimerID == defTIMERID_DATAREFRESH)//1000ms
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh);
-        xEventGroupSetBits(xHandleEventlwIP, defEventBitTCPClientSendReq);
     }
-    if(uxTimerID == defTIMERID_Heartbeat)//5000ms
+    if(uxTimerID == defTIMERID_RemoteHeartbeat)//15000
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
+    }
+    if(uxTimerID == defTIMERID_RemoteStatus)//120000
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBStatus);
     }
 }
 
@@ -115,6 +118,24 @@ void vChargeStateTimerCB(TimerHandle_t xTimer)
         {
             pCON = CONGetHandle(i);
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionChargeTimer);
+        }
+    }
+}
+void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
+{
+    uint32_t uxTimerID;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
+    uint32_t i;
+
+    uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
+
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        if(uxTimerID == i)
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitChargeRTDataTimer);
         }
     }
 }

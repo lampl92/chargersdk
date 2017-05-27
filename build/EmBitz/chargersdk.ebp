@@ -54,7 +54,6 @@
 					<Add option="-O3" />
 					<Add option="-g2" />
 					<Add symbol="DEBUG_DIAG" />
-					<Add symbol="EVSE_RELEASE" />
 				</Compiler>
 				<Cpp>
 					<Add option="-fdata-sections" />
@@ -75,11 +74,13 @@
 			<Add option="$arch=armv7e-m" />
 			<Add option="$fpu=fpv4-sp-d16" />
 			<Add option="$lscript=./stm32f429ig_flash.ld" />
-			<Add option="$stack=0x0A00" />
+			<Add option="$stack=0x2000" />
 			<Add option="$heap=0x0000" />
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=hard" />
+			<Add option="-fdata-sections" />
+			<Add option="-ffunction-sections" />
 			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
@@ -102,7 +103,6 @@
 			<Add directory="..\..\src\middlewares\fatfs\diskdrv" />
 			<Add directory="..\..\src\middlewares\userlib\inc" />
 			<Add directory="..\..\src\middlewares\cJSON" />
-			<Add directory="..\..\src\middlewares\AES" />
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src" />
 			<Add directory="..\..\src\middlewares\gdsl-1.8\src\examples" />
 			<Add directory="..\..\src\net\mbedTLS\include" />
@@ -116,6 +116,7 @@
 			<Add directory="..\..\src\net\user" />
 			<Add directory="..\..\src\net\lwip-1.4.1\src\include\ipv4" />
 			<Add directory="..\..\src\net\lwip-1.4.1\src" />
+			<Add directory="..\..\src\middlewares\tiny-AES128-C" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
@@ -129,8 +130,10 @@
 		</Unit>
 		<Unit filename="version.h" />
 		<Unit filename="..\..\nand\system\evse.cfg" />
+		<Unit filename="..\..\nand\system\evse.cfg.templ" />
 		<Unit filename="..\..\nand\system\evse_config.xml" />
 		<Unit filename="..\..\nand\system\order.txt" />
+		<Unit filename="..\..\nand\system\order.txt.templ" />
 		<Unit filename="..\..\nand\system\order.xml" />
 		<Unit filename="..\..\nand\system\public_info.xml" />
 		<Unit filename="..\..\src\app\cfg_parse.c">
@@ -187,18 +190,18 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_err.h" />
+		<Unit filename="..\..\src\app\libEcharge\ech_globals.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_globals.h" />
 		<Unit filename="..\..\src\app\libEcharge\ech_protocol.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\app\libEcharge\ech_protocol.h" />
-		<Unit filename="..\..\src\app\libEcharge\ech_transportlayer.c">
+		<Unit filename="..\..\src\app\libEcharge\ech_protocol_proc.c">
 			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
+		<Unit filename="..\..\src\app\libEcharge\ech_protocol_proc.h" />
 		<Unit filename="..\..\src\app\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -216,6 +219,7 @@
 		<Unit filename="..\..\src\app\task_tcp_client.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\task_tcp_client.h" />
 		<Unit filename="..\..\src\app\taskcharge.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -570,18 +574,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\touchtimer.h" />
-		<Unit filename="..\..\src\middlewares\AES\aes_modes.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aescrypt.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aeskey.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\AES\aestab.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\middlewares\cJSON\cJSON.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -661,6 +653,14 @@
 		<Unit filename="..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\aes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\aes.h" />
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\enc_dec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\tiny-AES128-C\enc_dec.h" />
 		<Unit filename="..\..\src\middlewares\tinysh\tinysh.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -776,8 +776,11 @@
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\udp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\err.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\opt.h" />
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\sockets.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
+		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\etharp.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -834,6 +837,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\vj.h" />
+		<Unit filename="..\..\src\net\lwip-1.4.1\system\arch\cc.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\system\OS\sys_arch.c">
 			<Option compilerVar="CC" />
 		</Unit>

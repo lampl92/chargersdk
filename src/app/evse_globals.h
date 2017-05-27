@@ -11,6 +11,7 @@
 #include "EVSE.h"
 #include "interface_rfid.h"
 #include "userlib_list.h"
+#include "libEcharge/ech_protocol.h"
 
 #define ParamTypeU8         1
 #define ParamTypeU16        2
@@ -73,13 +74,30 @@
 #define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
+
+
+/*------pCON->status.xHandleEventOrder*/
 #define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
 #define defEventBitOrderMakeOK          BIT_1
 #define defEventBitOrderUpdateOK        BIT_2
-
-
 #define defEventBitAddOrder             BIT_5
 #define defEventBitAddOrderOK           BIT_6
+
+#define defEventBitOrder_HMIDispOK      BIT_7
+#define defEventBitOrder_RemoteOK       BIT_8
+#define defEventBitOrder_StoreOK        BIT_9
+
+#define defEventBitOrderStopTypeLimitFee    BIT_10
+#define defEventBitOrderStopTypeRemoteStop  BIT_11
+#define defEventBitOrderStopTypeRFIDStop    BIT_12
+#define defEventBitOrderStopTypeFull        BIT_13
+
+#define defEventBitOrderMakeFinish      BIT_20  //等待处不清除, 该事件置位后整个订单完成
+
+#define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
+#define defEventBitOrderUseless          (defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
+
+
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
 #define defEventBitRemoteGotAccount     BIT_1
@@ -88,7 +106,10 @@
 #define defEventBitDailCONNECT          BIT_1
 #define defEventBitReDail               BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
-#define defEventBitPPPup                BIT_4
+#define defEventBitTCPClientSendOK      BIT_4
+#define defEventBitPPPup                BIT_5
+#define defEventBitTCPClientRecvValid   BIT_6
+#define defEventBitCmdRegedit           BIT_7
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
@@ -111,13 +132,22 @@
 #define defEventBitDiagEVSEState        BIT_6
 /*------pCON->status.xHandleEventException*/
 #define defEventBitExceptionTempW       BIT_0   //Warning
-#define defEventBitExceptionTempC       BIT_1   //Critical
+//#define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
 #define defEventBitExceptionCurr        BIT_3
-#define defEventBitExceptionCritical    defEventBitExceptionTempC
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
+#define defEventBitExceptionRFID        BIT_7
+#define defEventBitExceptionMeter       BIT_8
+#define defEventBitExceptionRelayPaste  BIT_9
+
+#define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionRemoteStop  BIT_11
+#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
+
+#define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -141,6 +171,7 @@
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitCONOrderFinish       BIT_19
+#define defEventBitChargeRTDataTimer         BIT_20
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \
@@ -174,6 +205,7 @@
 #define defEventBitTimerCBRFID              BIT_6
 #define defEventBitTimerCBDataRefresh       BIT_7
 #define defEventBitTimerCBHeartbeat         BIT_8
+#define defEventBitTimerCBStatus            BIT_9
 
 
 /*充电桩类型*/
@@ -188,11 +220,12 @@
 #define defCONType_AC                   2
 
 /*充电桩接口类型*/
-#define defSocketTypeB              ('B')
-#define defSocketTypeC              ('C')
+#define defSocketTypeB              ('B')//66
+#define defSocketTypeC              ('C')//67
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
+extern echProtocol_t *pechProto;
 
 #endif

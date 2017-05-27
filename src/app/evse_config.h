@@ -15,6 +15,8 @@
 #define defEVSEIDLength         64
 #define defFileNameLength       64
 #define defNodeNameLength       64
+#define defQRCodeLength         64
+#define defOrderSNLength        32
 
 /* 单位：ms */
 #define defMonitorTempCyc           5000
@@ -30,7 +32,9 @@
 #define defDiagCurrDummyCyc         2000
 #define defChargeAntiShakeCyc       1000    //插枪防抖检测，状态1'->状态1时的延时
 #define defRelayDelay               500
-#define defRemoteHeartbeatCyc       5000    //心跳
+#define defRemoteHeartbeatCyc       15000    //心跳
+#define defRemoteStatusCyc          120000    //状态上报
+#define defRemoteRTDataCyc          10000    //充电实时数据
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)

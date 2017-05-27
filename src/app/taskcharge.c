@@ -19,16 +19,22 @@ void vTaskEVSECharge(void *pvParameters)
     EventBits_t uxBitsCharge;
     EventBits_t uxBitsException;
     uint8_t strTimerName[50];
+    ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
     uxBitsCharge = 0;
     uxBitsException = 0;
     memset(strTimerName, 0, 50);
+    errcode = ERR_NO;
 
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "Charge init");
+        THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "Charge init");
+        if(errcode == ERR_NO)
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+        }
         if(pCON->status.ucRelayLState == SWITCH_ON &&
                 pCON->status.ucRelayNState == SWITCH_ON)
         {
@@ -154,7 +160,11 @@ void vTaskEVSECharge(void *pvParameters)
                     {
                         THROW_ERROR(i, pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
                         vTaskDelay(defRelayDelay);
-                        THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
+                        THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
+                        if(errcode == ERR_NO)
+                        {
+                            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+                        }
                         if(pCON->status.ucRelayLState == SWITCH_ON &&
                                 pCON->status.ucRelayNState == SWITCH_ON)
                         {
@@ -178,14 +188,35 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_CHARGING:
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionCritical,
+                                                      defEventBitExceptionDevFault,
                                                       pdFALSE, pdFALSE, 0);
-                if((uxBitsException & defEventBitExceptionCritical) != 0)
+                if((uxBitsException & defEventBitExceptionDevFault) != 0)
                 {
-                    printf_safe("Stop Error!\n");
+                    printf_safe("Dev Fault Stop Error!\n");
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
+                /*** 判断用户相关停止条件  ***/
+                uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+                                                      defEventBitExceptionStopType,
+                                                      pdTRUE, pdFALSE, 0);
+                if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                /******************************/
+
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 //                printf_safe("uxBitsCharge = %X\n", uxBitsCharge);
 //                printf_safe("CPCondition = %X\n", defEventBitChargeCondition);
@@ -193,19 +224,24 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING S2 Open");
                     vTaskDelay(defRelayDelay);
-                    THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING");
+                    THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING");
+                    if(errcode == ERR_NO)
+                    {
+                        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+                    }
                     if(pCON->status.ucRelayLState == SWITCH_OFF &&
                             pCON->status.ucRelayNState == SWITCH_OFF)
                     {
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
                         printf_safe("S2 Stop Charge!\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
                 else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
                 {
-                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)//刷卡停止
+                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
-                        pCON->order.ucStopType = defOrderStopType_RFID;
+                        //用户原因停止
                     }
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING Without \"S2 open\"");
                     vTaskDelay(defRelayDelay);
@@ -214,8 +250,8 @@ void vTaskEVSECharge(void *pvParameters)
 #endif
 
                     if(pCON->status.xCPState == CP_6V ||
-                       pCON->status.xCPState == CP_9V ||
-                        pCON->status.xCPState == CP_12V)
+                            pCON->status.xCPState == CP_9V ||
+                            pCON->status.xCPState == CP_12V)
                     {
                         uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                            defEventBitCONS2Opened,
@@ -223,7 +259,11 @@ void vTaskEVSECharge(void *pvParameters)
                         //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
                         THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
                         vTaskDelay(defRelayDelay);
-                        THROW_ERROR(i, pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
+                        THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
+                        if(errcode == ERR_NO)
+                        {
+                            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+                        }
 #ifdef DEBUG_DIAG_DUMMY
                         pCON->status.ucRelayLState = SWITCH_OFF;
                         pCON->status.ucRelayNState = SWITCH_OFF;
@@ -249,6 +289,7 @@ void vTaskEVSECharge(void *pvParameters)
                                 defEventBitHMI_ChargeReqDispDone,
                                 defeventBitHMI_ChargeReqDispDoneOK,
                                 portMAX_DELAY );
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);//通知Order HMI显示完成了。
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,

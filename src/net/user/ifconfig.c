@@ -27,8 +27,9 @@ void ifconfig_init(void)
     ifconfig.gateway.addr = 0;
     ifconfig.netmask.addr = 0;
     IP4_ADDR(&ifconfig.server_ip,124,207,112,70);
+    //IP4_ADDR(&ifconfig.server_ip,123,56,113,123);
     ifconfig.server_ip_bak.addr = 0;
-    ifconfig.server_port = 8051;
+    ifconfig.server_port = 8051;//6677;//
     ifconfig.server_port_bak = 0;
     ifconfig.local_port = 0;
     ifconfig.server_domain[0] = '\0';

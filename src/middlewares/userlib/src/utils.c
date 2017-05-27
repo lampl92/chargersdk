@@ -101,14 +101,22 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
     for(i = 0; i < Strlen / 2; i++)
     {
         strncpy((char *)hexbuff, src, 2);
-        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
-        {
+//        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
+//        {
             Hex[i] = strtol(hexbuff, NULL, 16);
-        }
-        else
-        {
-            Hex[i] = strtol(hexbuff, NULL, 10);
-        }
+//        }
+//        else
+//        {
+//            Hex[i] = strtol(hexbuff, NULL, 10);
+//        }
         src += 2;
     }
+}
+
+int utils_abs(int num)
+{
+	if(num<0)
+		return -num;
+	else
+		return num;
 }

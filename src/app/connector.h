@@ -72,6 +72,7 @@ typedef struct _CONInfo
     double dSocketTempLowerLimits;
     double dRatedCurrent;
     double dRatedPower;                      //保留一位小数
+    uint8_t strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
     ErrorCode_t (*SetCONCfg)(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
@@ -104,10 +105,12 @@ typedef struct _CONStatus
     double dChargingFrequence;
     double dChargingPower;
     EventGroupHandle_t xHandleEventCharge;
+    EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
     TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
     TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
     TimerHandle_t xHandleTimerCharge;   //Charge状态判断过程中使用
+    TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
 

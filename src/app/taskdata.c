@@ -33,15 +33,19 @@ void vTaskEVSEData(void *pvParameters)
 #ifndef DEBUG_NO_TASKDATA
         /* 订单管理 */
         //1. 等待刷卡完成事件
-        uxBitsData = xEventGroupWaitBits(xHandleEventData,
-                                         defEventBitOrderTmp,   //RFID中发出该事件
-                                         pdTRUE, pdFALSE, 0);
-        if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
+        for(i = 0; i < ulTotalCON; i++)
         {
-            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            pCON->order.statOrder = STATE_ORDER_TMP;
+            pCON = CONGetHandle(i);
+            uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                             defEventBitOrderTmp,   //RFID中发出该事件
+                                             pdTRUE, pdFALSE, 0);
+            if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
+            {
+                pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+                pCON->order.statOrder = STATE_ORDER_TMP;
+            }
         }
-
+        /** @todo (rgw#1#): !!! 这里没有做扫码启动判断。目前在扫码接受到开启充电处置pCON->order.statOrder = STATE_ORDER_WAITSTART; */
 
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -52,14 +56,11 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
-                xEventGroupSetBits(xHandleEventData, defEventBitOrderUpdateOK);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUpdateOK);
                 pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;
             case STATE_ORDER_WAITSTART:
                 //2. 等待StartCharge事件
-//                for(i = 0; i < ulTotalCON; i++)
-//                {
-//                    pCON = CONGetHandle(i);
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONStartOK,
                                                    pdFALSE, pdFALSE, 0);
@@ -67,18 +68,16 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     pCON->order.statOrder = STATE_ORDER_MAKE;
                 }
-//                }
                 break;
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
                 makeOrder(pCON);
-                xEventGroupSetBits(xHandleEventData, defEventBitOrderMakeOK);//目前还没有地方用
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//目前还没有地方用
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
                 //4. 更新充电数据
-                /** @todo (rgw#1#): 获取离开Update条件，进入Finish状态 */
-
+                /** 获取离开Update条件，进入Finish状态 */
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
                 {
@@ -88,17 +87,60 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     makeOrder(pCON);
                 }
+
+                if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
+                {
+                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
+                    {
+                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                    }
+                }
                 break;
             case STATE_ORDER_FINISH:
                 //5. 结束充电
-                if(makeOrder(pCON) == ERR_NO)//
+                makeOrder(pCON);
+                /************ make user happy ************/
+                if(pCON->order.dLimitFee != 0)
                 {
-                    saveOrder(pCON);
+                    if(pCON->order.dTotalFee > pCON->order.dLimitFee)
+                    {
+                        pCON->order.dTotalFee = pCON->order.dLimitFee;
+                    }
                 }
+                /*****************************************/
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                 defEventBitOrderStopType,
+                                                 pdTRUE, pdFALSE, 0);
+                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
+                {
+                    pCON->order.ucStopType = defOrderStopType_Fee;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //远程停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_Remote;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //刷卡停止
+                {
+                    pCON->order.ucStopType = defOrderStopType_RFID;
+                }
+                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //自动充满
+                {
+                    pCON->order.ucStopType = defOrderStopType_Full;
+                }
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
                 /** @todo (rgw#1#): 存储订单 */
-                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-                OrderInit(&(pCON->order));//状态变为IDLE
+
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                 defEventBitOrderUseless,
+                                                 pdTRUE, pdTRUE, 0);
+                if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                    /* @todo (rgw#1): 在这里存储订单*/
+                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+                    OrderInit(&(pCON->order));//状态变为IDLE
+                }
                 break;
             }
         }

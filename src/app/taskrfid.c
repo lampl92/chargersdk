@@ -121,7 +121,8 @@ void vTaskEVSERFID(void *pvParameters)
 //            {
                 //等到停止充电事件的发生
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
+                //xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
                 OrderInit(&(pRFIDDev->order));
 //                pRFIDDev->state = STATE_RFID_NOID;
                 uxBits = xEventGroupWaitBits(xHandleEventHMI,
@@ -146,6 +147,7 @@ void vTaskEVSERFID(void *pvParameters)
 //                    pRFIDDev->state = STATE_RFID_NOID;
 //                }
 //            }
+
             break;
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
@@ -175,7 +177,7 @@ void vTaskEVSERFID(void *pvParameters)
 #endif
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-            xEventGroupSync(xHandleEventData,
+            xEventGroupSync(pCON->status.xHandleEventOrder,
                             defEventBitOrderTmp,
                             defEventBitOrderUpdateOK,
                             portMAX_DELAY);

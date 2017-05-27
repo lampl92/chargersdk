@@ -10,6 +10,7 @@
 
 #include "connector.h"
 #include "EVSE.h"
+#include "libEcharge/ech_protocol.h"
 #include "interface_monitor.h"
 #include "interface_charge.h"
 #include "interface_rfid.h"

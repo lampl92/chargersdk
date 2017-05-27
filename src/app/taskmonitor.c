@@ -17,9 +17,11 @@ void vTaskEVSEMonitor(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBitsTimerCB;
+    ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
     uxBitsTimerCB = 0;
+    errcode = ERR_NO;
 #ifndef DEBUG_INIT
     vTaskDelay(1000);
 #endif
@@ -88,9 +90,13 @@ void vTaskEVSEMonitor(void *pvParameters)
             {
                 pCON = CONGetHandle(i);
                 //THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-                THROW_ERROR(i, pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-                THROW_ERROR(i, pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-                THROW_ERROR(i, pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, errcode = pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, errcode = pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                if(errcode == ERR_NO)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+                }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
         }
@@ -122,7 +128,11 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
         {
-            THROW_ERROR(defDevID_RFID, pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
+            THROW_ERROR(defDevID_RFID, errcode = pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
+            if(errcode == ERR_NO)
+            {
+                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+            }
         }
 
         /* end of 获取EVSE和CON状态 */

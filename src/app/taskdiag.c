@@ -36,7 +36,28 @@ void vTaskEVSEDiag(void *pvParameters)
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
 #endif
+            switch(errpack.code) // ！！！ 这里一定要仔细查看errpack.ulDevID是否可以用作 CONID， 主要是看设备是否是归属于枪还是桩。 ！！！
+            {
+            case ERR_RFID_FAULT:
+                for(i = 0; i < ulTotalCON; i++)
+                {
+                    pCON = CONGetHandle(i);
+                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+                }
+                break;
+            case ERR_CON_METER_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+                break;
+            case ERR_RELAY_PASTE:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+                break;
+            default:
+                break;
+            }
         }
+
         /* end of 处理系统失效故障 */
 
         /* 处理系统报警 */

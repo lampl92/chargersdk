@@ -50,7 +50,9 @@ const uint8_t *strErrorCode[100] =
     "串口DMA传输错误",
     "网络通信故障",
     "网络通信超时",
-    "内存分配错误"
+    "内存分配错误",
+
+    "订单号不相等"
 };
 
 void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg)

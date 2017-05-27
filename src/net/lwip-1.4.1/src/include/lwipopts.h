@@ -62,8 +62,11 @@
 
 /* ---------- Memory options ---------- */
 
-#define MEM_LIBC_MALLOC                 1
-#define MEMP_MEM_MALLOC                 1
+#define MEM_LIBC_MALLOC                 0
+#define MEMP_MEM_MALLOC                 0
+#define MEM_USE_POOLS                   1
+#define MEM_USE_POOLS_TRY_BIGGER_POOL   1
+#define MEMP_USE_CUSTOM_POOLS           1
 
 /* MEM_ALIGNMENT: should be set to the alignment of the CPU for which
    lwIP is compiled. 4 byte alignment -> define MEM_ALIGNMENT to 4, 2
@@ -89,7 +92,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 6
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        12
+#define MEMP_NUM_TCP_SEG        16
 
 
 /* ---------- Pbuf options ---------- */
@@ -109,7 +112,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_QUEUE_OOSEQ         1
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                 (536)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
+#define TCP_MSS                 (1500-40)  /* TCP_MSS = (Ethernet MTU - IP header size - TCP header size) */
 
 /* TCP sender buffer space (bytes). */
 #define TCP_SND_BUF             (4*TCP_MSS)
@@ -130,8 +133,12 @@ a lot of data that needs to be copied, this should be set high. */
 */
 #define TCPIP_THREAD_NAME              "tcpip_thread"
 #define TCPIP_THREAD_STACKSIZE          (10*1024)
-#define TCPIP_THREAD_PRIO               11
+#define TCPIP_THREAD_PRIO               13
 #define TCPIP_MBOX_SIZE                 20
+
+#define PPP_THREAD_NAME                "pppInputThread"
+#define PPP_THREAD_STACKSIZE            (10*1024)
+#define PPP_THREAD_PRIO                 14
 
 /*
    ---------------------------------
@@ -172,7 +179,6 @@ a lot of data that needs to be copied, this should be set high. */
 #define PAP_SUPPORT                     1
 //#define CHAP_SUPPORT                    1
 //#define MD5_SUPPORT                     1
-#define PPP_INPROC_OWNTHREAD    0
 /* ---------- link callback options ---------- */
 /* LWIP_NETIF_LINK_CALLBACK==1: Support a callback function from an interface
  * whenever the link changes (i.e., link down)
@@ -235,7 +241,7 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
  * LWIP_NETCONN==1: Enable Netconn API (require to use api_lib.c)
  */
 #define LWIP_NETCONN                    1
-#define LWIP_TCPIP_TIMEOUT   0//Enable tcpip_timeout/tcpip_untimeout to create timers running in tcpip_thread from another thread.
+#define LWIP_TCPIP_TIMEOUT   1//Enable tcpip_timeout/tcpip_untimeout to create timers running in tcpip_thread from another thread.
 
 #define LWIP_SO_RCVTIMEO                1   //通过定义LWIP_SO_RCVTIMEO使能netconn结构体中recv_timeout,使用recv_timeout可以避免阻塞线程
 #define LWIP_SO_SNDTIMEO                1

@@ -18,8 +18,10 @@
 #define defTIMERID_EVSEState        4
 #define defTIMERID_RFID             5
 #define defTIMERID_DATAREFRESH      6
-#define defTIMERID_Heartbeat        7
-#define defTIMERID_Volt             8
+#define defTIMERID_Volt             7
+#define defTIMERID_RemoteHeartbeat  8
+#define defTIMERID_RemoteStatus     9
+#define defTIMERID_RemoteRTData     10
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
@@ -37,10 +39,12 @@ extern EventGroupHandle_t xHandleEventData;
 extern EventGroupHandle_t xHandleEventDiag;
 extern EventGroupHandle_t xHandleEventRemote;
 extern EventGroupHandle_t xHandleEventHMI;
-extern EventGroupHandle_t xHandleEventlwIP;
+extern EventGroupHandle_t xHandleEventLwIP;
 
 extern TimerHandle_t xHandleTimerChargingData;
-extern TimerHandle_t xHandleTimerHeartbeat;
+extern TimerHandle_t xHandleTimerRemoteHeartbeat;
+extern TimerHandle_t xHandleTimerRemoteStatus;
+extern TimerHandle_t xHandleTimerRemoteRTData;
 
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;

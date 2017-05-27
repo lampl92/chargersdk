@@ -474,20 +474,18 @@ u32_t sys_now(void)
     return sys_jiffies();
 }
 
-//
-//u32_t sio_read(sio_fd_t fd, u8_t * buf, u32_t size)
-//{
-//    uart_read(1, buf, size, 100);
-//	return 0;
-//}
+
+u32_t sio_read(sio_fd_t fd, u8_t * buf, u32_t size)
+{
+	return uart_read(UART_PORT_GPRS, buf, size, 100);
+}
 
 u32_t sio_write(sio_fd_t fd, u8_t * buf, u32_t size)
 {
-    uart_write(UART_PORT_GPRS, buf, size);
-	return 0;
+	return uart_write(UART_PORT_GPRS, buf, size);
 }
 
-//void sio_read_abort(sio_fd_t fd)
-//{
-//
-//}
+void sio_read_abort(sio_fd_t fd)
+{
+
+}
