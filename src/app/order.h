@@ -84,6 +84,7 @@ typedef struct _OrderData
     double  dBalance;           //余额
     uint8_t ucCONID;
     //创建时
+    uint8_t ucStartType;   //4 有卡 5 无卡
     uint8_t strOrderSN[defOrderSNLength]; //交易流水号
     double dLimitFee;                      //充电截至金额
     time_t tStartTime;                    //启动充电时间

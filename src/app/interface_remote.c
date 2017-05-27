@@ -266,6 +266,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
                 ulTmp.ucVal[3] = pbuff[17];
                 dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
                 pCON->order.dLimitFee = dLimetFee;
+                pCON->order.ucStartType = 5;//无卡
 
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
@@ -332,7 +333,7 @@ ErrorCode_t RemoteOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
-    pbuff[0] = 5;//4 有卡，5 无卡 /** @todo (rgw#1#): 增加启动方式判断 */
+    pbuff[0] = pCON->order.ucStartType;//4 有卡，5 无卡
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
 
     return errcode;

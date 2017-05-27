@@ -41,6 +41,7 @@ void vTaskEVSEData(void *pvParameters)
                                              pdTRUE, pdFALSE, 0);
             if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
             {
+                pCON->order.ucStartType = 4; //ÓÐ¿¨
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 pCON->order.statOrder = STATE_ORDER_TMP;
             }
