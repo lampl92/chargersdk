@@ -121,7 +121,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
     }
     else
     {
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "充电条件不满足.");/** @todo (zshare#1#): 充电条件未达成 */
+        ;//Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "充电条件不满足.");/** @todo (zshare#1#): 充电条件未达成 */
     }
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 

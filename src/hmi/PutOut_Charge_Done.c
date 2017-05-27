@@ -134,9 +134,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     time_t now;
     static time_t first;
     volatile uint32_t diffsec;
-    volatile uint8_t sec;
-    volatile uint8_t min;
-    volatile uint8_t hour;
+    volatile int8_t sec;
+
 
 
     WM_HWIN hWin = pMsg->hWin;
@@ -159,7 +158,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 //    hour = diffsec / 3600;
 //    min = diffsec % 3600 / 60;
 //    sec = diffsec % 3600 % 60;
-
+#if 0
     sprintf(temp_buf, "%02d", hour);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
     sprintf(temp_buf, "%02d", min);
@@ -175,7 +174,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);
-
+#endif
 
 //    if((60-(uint32_t)difftime(now, first)) == 0)
 //    {
@@ -189,17 +188,19 @@ static void Timer_Process(WM_MESSAGE *pMsg)
 //        first = now;
 //    }
     diffsec = (uint32_t)difftime(now, first);
-    if(diffsec > 86400)
-    {
-        diffsec = 86400;
-    }
-    hour = diffsec / 3600;
-    min = diffsec % 3600 / 60;
-    sec = diffsec % 3600 % 60;
-
-    xsprintf((char *)Timer_buf, "(%02dS)", (10 - sec));
+//    if(diffsec > 86400)
+//    {
+//        diffsec = 86400;
+//    }
+//    hour = diffsec / 3600;
+//    min = diffsec % 3600 / 60;
+//    sec = diffsec % 3600 % 60;
+    sec = 10 - diffsec;
+    if(sec < 0)
+        sec = 0;
+    xsprintf((char *)Timer_buf, "(%02dS)", sec);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
-    if(sec == 10)
+    if(sec == 0)
     {
         first_flag = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
@@ -224,6 +225,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
+    CON_t *pCON;
+    time_t time_charge;
+    uint8_t temp_buf[32];
+    volatile int8_t hour;
+    volatile int8_t min;
+    volatile int8_t sec;
+
+
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -259,13 +268,34 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"00");
+        pCON = CONGetHandle(0);
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,temp_buf);
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,temp_buf);
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,temp_buf);
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,temp_buf);
+
+        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+        hour = time_charge / 3600;
+        min = time_charge % 3600 / 60;
+        sec = time_charge % 3600 % 60;
+
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%02d", hour);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,temp_buf);//小时
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%02d", min);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,temp_buf);//分
+        memset(temp_buf,'\0',strlen(temp_buf));
+        sprintf(temp_buf, "%02d", sec);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,temp_buf);//秒
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
                     &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");

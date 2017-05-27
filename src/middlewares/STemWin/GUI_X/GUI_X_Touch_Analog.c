@@ -70,7 +70,7 @@ int  GUI_TOUCH_X_MeasureX(void) {
 
         if(TP_Read_Pressure(&adc_press) == 0)
         {
-            if(adc_press >= 1000 && adc_press <= 6000)
+            if(adc_press >= 0)
             {
                 i = i + Y;
                 if(i == 200)//持续5S

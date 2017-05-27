@@ -5,6 +5,7 @@
 static FIL BMPFile;
 static FIL ScrSortFile;                 //屏幕截图文件
 static char bmpBuffer[BMPPERLINESIZE];
+char *bmpbuffer;
 /*******************************************************************
 *
 *       Static functions
@@ -231,23 +232,22 @@ void bmpdisplay(uint8_t *ppath)
  * @return
  *  **********注意在切换界面时要使用free释放掉图片的内存
  */
-int dispbmpNOFree(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin,uint8_t is_free)
+int dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
 {
 	uint16_t bread;
 	uint16_t bred;
 	uint16_t bre;
-	char *bmpbuffer;
 	char result;
 	int XSize,YSize;
 	float Xflag,Yflag;
 	WM_HWIN      hItem;
 	IMAGE_Handle imageHandle;
 
-    if(is_free == 1)
-    {
-        free(bmpbuffer);
-        return 0;
-    }
+//    if(is_free == 1)
+//    {
+//        free(bmpbuffer);
+//        return 0;
+//    }
 
 	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
 	//文件打开错误或者文件大于BMPMEMORYSIZE

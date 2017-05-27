@@ -30,7 +30,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
     printf_safe("EVSE ID:       ");
     for(i = 0; i < pEVSE->info.ucIDLength; i++)
     {
-        printf_safe("%02d", pEVSE->info.ucID[i]);
+        printf_safe("%02X", pEVSE->info.ucID[i]);
     }
     printf_safe("\n");
     /**/
@@ -236,7 +236,7 @@ void cli_evsestatus_fnt(int argc, char **argv)
         printf_safe("充电电压：    %.2lf\n", pCON->status.dChargingVoltage);
         printf_safe("充电电流：    %.2lf\n", pCON->status.dChargingCurrent);
         printf_safe("电压频率：    %.2lf\n", pCON->status.dChargingFrequence);
-        printf_safe("充电电量：    %.2lf\n", pCON->status.dChargingPower);
+        printf_safe("电表读数：    %.2lf\n", pCON->status.dChargingPower);
         printf_safe("继电器：      L %d N %d\n", pCON->status.ucRelayLState, pCON->status.ucRelayNState);
 
         printf_safe("\n");

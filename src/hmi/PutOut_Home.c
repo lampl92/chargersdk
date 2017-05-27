@@ -74,6 +74,7 @@ static BUTTON_Handle _framebutton;
 static int _x,_y;
 // USER END
 volatile int   Id;
+extern uint8_t *bmpbuffer;
 /*********************************************************************
 *
 *       Static data
@@ -214,7 +215,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
 
         //显示二维码
-        dispbmpNOFree("system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin,0);//不能释放内存,需要在切换界面时再把图片内存释放掉
+        dispbmpNOFree(0,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin);//不能释放内存,需要在切换界面时再把图片内存释放掉
 
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
 //                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
@@ -341,7 +342,8 @@ void PutOut_Home()
         xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
         if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
         {
-            dispbmpNOFree("system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin,1);
+            //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
+            free(bmpbuffer);
             WM_DeleteWindow(hWin);
             PutOut_Card_Info();
         }
