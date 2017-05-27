@@ -266,7 +266,7 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         }
                     }
-                    //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOK); //告诉order你用完了他的数据
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK);
                     eRmtRTDataStat = REMOTERTData_IDLE;
                     break;
                 }
@@ -310,6 +310,7 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteOrderRes(pEVSE, pechProto, &network_res);
                     if(network_res == 1)
                     {
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK); //告诉order你用完了他的数据
                         eRmtOrderStat = REMOTEOrder_IDLE;
                     }
                     else if(network_res == 0)
@@ -320,6 +321,7 @@ void vTaskEVSERemote(void *pvParameters)
                         }
                         if(order_send_count > 3)
                         {
+                            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK); //告诉order你用完了他的数据
                             eRmtOrderStat = REMOTEOrder_IDLE;
                         }
                     }

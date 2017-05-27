@@ -26,6 +26,9 @@ uint8_t *Freq_err = "   频率异常\n";
 WM_HWIN err_hItem = 0;
 static uint8_t winCreateFlag = 0;
 
+extern FIL BMPFile_BCGROUND;
+extern char *bmpBackGround;
+
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
 //{
 //    return ((var) |= (1<<(bitno)));
@@ -52,6 +55,20 @@ static uint8_t winCreateFlag = 0;
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3)
 {
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
+    //dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
+    //IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF16_Font,GUI_RED,"信号：强");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF16_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF16_Font,GUI_RED,"14:00:00");
+    WM_SetFocus(pMsg->hWin);
+}
+void FrameWin_Init_test(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
+{
+    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
+    dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
+//    GUI_BMP_Draw(bmpBackGround,0,40);
+    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF16_Font,GUI_RED,"信号：强");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF16_Font,GUI_RED,"2017-02-28");

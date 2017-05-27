@@ -139,9 +139,142 @@ void cli_evseinfo_fnt(int argc, char **argv)
         printf_safe("QRCode  :      %s\n", pCON->info.strQRCode);
     }
 }
+
 void cli_evseorder_fnt(int argc, char **argv)
 {
+    CON_t *pCON;
+    OrderState_t statOrder;//记录订单状态
+    char buf [80];
+    struct tm *ts;
+    int i;
 
+    for(i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        printf_safe("名称=========状态=======   CONID %d\r\n", i);
+        switch(statOrder)
+        {
+        case STATE_ORDER_IDLE:
+            printf_safe("订单状态：IDLE");
+            break;
+        case STATE_ORDER_TMP:
+            printf_safe("订单状态：IDLE");
+            break;
+        case STATE_ORDER_WAITSTART:
+            printf_safe("订单状态：WAITSTART");
+            break;
+        case STATE_ORDER_MAKE:
+            printf_safe("订单状态：MAKE");
+            break;
+        case STATE_ORDER_UPDATE:
+            printf_safe("订单状态：UPDATE");
+            break;
+        case STATE_ORDER_FINISH:
+            printf_safe("订单状态：FINISH");
+            break;
+        }
+        //Card ID
+        printf_safe("CardID:        ");
+        for(i = 0; i < defCardIDLength; i++)
+        {
+            printf_safe("%02X ", pCON->order.ucCardID[i]);
+        }
+        printf_safe("\n");
+         //帐户状态 1：注册卡 2:欠费 0：未注册卡
+        printf_safe("账户状态:      ");
+        switch(pCON->order.ucAccountStatus)
+        {
+        case 1:
+                printf_safe(" 注册卡");
+                break;
+        case 2:
+                printf_safe("欠费");
+                break;
+        case 0:
+                printf_safe("未注册");
+                break;
+        }
+        printf_safe("\n");
+        //double  dBalance;           //余额
+        printf_safe("余额:            %.2lf", pCON->order.dBalance);
+        //uint8_t ucStartType;   //4 有卡 5 无卡
+        if(pCON->order.ucStartType == 4)
+        {
+            printf_safe("启动方式:        有卡\n");
+        }
+        else
+        {
+            printf_safe("启动方式:        网络\n");
+        }
+        //uint8_t strOrderSN[defOrderSNLength]; //交易流水号
+        printf_safe("交易流水号:         %s\n", pCON->order.strOrderSN);
+        //double dLimitFee;                      //充电截至金额
+        printf_safe("充电截止金额:        %.2lf\n", pCON->order.dLimitFee);
+        ts = localtime (& pCON->order.tStartTime);
+        strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+        printf_safe("启动时间:          %s \n", buf);
+        printf_safe("启动时电表读数    %.2lf\n", pCON->order.dStartPower);
+        printf_safe("服务费类型:     ");
+        switch(pCON->order.ucServiceFeeType)
+        {
+        case defOrderSerType_Order:
+            printf_safe("按单");
+            break;
+        case defOrderSerType_Power:
+            printf_safe("按度");
+            break;
+        default:
+            break;
+        }
+        printf_safe("\n");
+        printf_safe("========充电过程数据=========\n");
+        printf_safe("总电量:       %.2lf\n", pCON->order.dTotalPower);
+        printf_safe("总电费:       %.2lf\n", pCON->order.dTotalPowerFee);
+        printf_safe("总服务费:     %.2lf\n", pCON->order.dTotalServiceFee);
+        printf_safe("总费用:       %.2lf\n", pCON->order.dTotalFee);
+        printf_safe("充电明细段数: %d\n", pCON->order.ucTotalSegment);
+        printf_safe("默认段起始电量: %.2lf\n", pCON->order.dDefSegStartPower);
+        printf_safe("默认段电量:   %.2lf\n", pCON->order.dDefSegPower);
+        printf_safe("默认段电费:   %.2lf\n", pCON->order.dDefSegFee);
+        printf_safe("========停止时数据=========\n");
+        if(pCON->order.ucPayType == defOrderPayType_Online)
+        {
+            printf_safe("支付方式:      在线支付\n");
+        }
+        else
+        {
+            printf_safe("支付方式:      离线支付\n");
+        }
+        printf_safe("停止类型:         ");
+        switch(pCON->order.ucStopType)
+        {
+        case defOrderStopType_RFID:
+             printf_safe("RFID\n");
+             break;
+        case defOrderStopType_Remote:
+            printf_safe("remote\n");
+            break;
+        case defOrderStopType_Full:
+            printf_safe("充满停止\n");
+            break;
+        case defOrderStopType_Fee:
+             printf_safe("达到充电金额\n");//达到充电金额
+            break;
+        case defOrderStopType_Scram:
+        case defOrderStopType_NetLost:
+        case defOrderStopType_Poweroff:
+        case defOrderStopType_OverCurr:
+        case defOrderStopType_Knock:
+            printf_safe("异常停止\n");//异常停止
+            break;
+        default:
+            printf_safe("其他原因停止\n");;//其他原因停止
+            break;
+        }
+        ts = localtime (& pCON->order.tStopTime);
+        strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+        printf_safe("停止时间:          %s \n", buf);
+    }
 }
 void cli_evsestatus_fnt(int argc, char **argv)
 {
