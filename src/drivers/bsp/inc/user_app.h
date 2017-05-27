@@ -3,6 +3,7 @@
 #include "myiic.h"
 #include "led_control.h"
 #include "ST_LIS2DH12.h"
+
 extern void TIM_SetTIM4Compare1(unsigned int compare);
 extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define A_KEY_OFF    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2,GPIO_PIN_RESET)//ctr_gjd1
@@ -36,9 +37,11 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
 
-#define cs_zl_set do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
+#define cs_zl_set   do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
+#define GPRS_set      do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
+#define GPRS_reset    do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
 #define TIMER5_OFF   HAL_TIM_Base_Stop_IT(&htim5)
@@ -187,7 +190,7 @@ typedef struct
     uint8_t cs1_select;
     uint8_t RESET_3G;
     uint8_t KEY_BT;
-    uint8_t wifi_key;
+    uint8_t GPRS_key;
 } IO_chip1;
 IO_chip1 Chip1;
 typedef struct

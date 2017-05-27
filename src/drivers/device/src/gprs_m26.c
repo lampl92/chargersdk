@@ -12,6 +12,8 @@
 
 #define GPRS_IO     PBout(3)
 
+
+
 dev_gprs_t dev_gprs;
 
 void gprs_delayms(uint32_t ms)
@@ -34,9 +36,9 @@ uint32_t gprs_ioctl(uint8_t ioctl)
     switch(ioctl)
     {
     case DA_GPRS_ON:
-        GPRS_IO = 1;
+        GPRS_set;
         gprs_delayms(2000);
-        GPRS_IO = 0;
+        GPRS_reset;
         do
         {
 #if DEBUG_DEV_GPRS
@@ -71,9 +73,9 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         }
         break;
     case DA_GPRS_OFF:
-        GPRS_IO = 1;
+        GPRS_set;
         gprs_delayms(1000);
-        GPRS_IO = 0;
+        GPRS_reset;
         do
         {
 #if DEBUG_DEV_GPRS
@@ -113,7 +115,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
 #if DEBUG_DEV_GPRS
             printf_safe("GPRS 重启中 第 %d 次尝试（10次）\n", try_cont);
 #endif
-            GPRS_IO = 1;
+            GPRS_set;
             try_cont++;
             if(try_cont > 10)
             {
@@ -134,7 +136,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         while(res == 0);
         if(try_cont != 0)
         {
-            GPRS_IO = 0;
+            GPRS_reset;
             fn_res = 1;
             gprs_delayms(5000);
 #if DEBUG_DEV_GPRS
@@ -161,7 +163,7 @@ uint32_t gprs_init(void)
 
     res = 0;
 
-    GPRS_IO = 0;
+    GPRS_reset;
     pGprsRecvQue->Flush(pGprsRecvQue);
     res_at = gprs_send_AT();
     if(res_at != DR_AT_OK)
