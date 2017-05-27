@@ -184,7 +184,6 @@ void bsp_Uart_Init(void)
 {
     pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
     pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
-
     pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
 
     uart_queue_init();
@@ -304,7 +303,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     if(huart->Instance == UART5)
     {
         __HAL_RCC_GPIOC_CLK_ENABLE();
-        __HAL_RCC_UART4_CLK_ENABLE();
+        __HAL_RCC_UART5_CLK_ENABLE();
 
         GPIO_InitStruct.Pin = GPIO_PIN_12;//PIN_TX
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -319,7 +318,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_NVIC_EnableIRQ(UART5_IRQn);
         HAL_NVIC_SetPriority(UART5_IRQn, bspUART5_PreemptPriority, bspUART5_SubPriority);
     }
-
 }
 
 CLI_USARTx_IRQHandler
