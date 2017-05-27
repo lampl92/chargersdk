@@ -300,20 +300,20 @@ void ErrWindow_Show(WM_HWIN hWin)
 
     uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 
-    if(((uxBitsErr & 0x0003e21c) != 0x3e21C))
+    if(((uxBitsErr & 0x3e00c) != 0x3e00c))
     {
-        if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
+        if(uxBitsErrTmp != (uxBitsErr & 0x3e00c))
         {
-            uxBitsErrTmp = (uxBitsErr & 0x0003e21c);
+            uxBitsErrTmp = (uxBitsErr & 0x3e00c);
             //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
             err_window(hWin,uxBitsErr);
         }
     }
     else
     {
-        if(uxBitsErrTmp != (uxBitsErr & 0x0003e21c))
+        if(uxBitsErrTmp != (uxBitsErr & 0x3e00c))
         {
-            uxBitsErrTmp = (uxBitsErr & 0x0003e21c);
+            uxBitsErrTmp = (uxBitsErr & 0x3e00c);
             //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
             err_window(hWin,uxBitsErr);
         }
@@ -343,7 +343,7 @@ uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
         WM_DeleteWindow(err_hItem);
     }
 
-    if((uxBitsErr & 0x3e21c)== 0x3e21c)
+    if((uxBitsErr & 0x3e00c)== 0x3e00c)
     {
         pCON = CONGetHandle(0);
         led_ctrl(1,red,keep_off);
@@ -390,11 +390,13 @@ uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
             strncat(msg_err,Volt_err,strlen(Volt_err));
             ErrMultiEdit_Size.err_num++;
         }
-        if(((uxBitsErr >> 9) & 0x01) == 0)
-        {
-            strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
-            ErrMultiEdit_Size.err_num++;
-        }
+        /// TODO (zshare#1#): ///温度和频率异常暂时屏蔽为了送客户
+
+//        if(((uxBitsErr >> 9) & 0x01) == 0)
+//        {
+//            strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
+//            ErrMultiEdit_Size.err_num++;
+//        }
         if(((uxBitsErr >> 14) & 0x01) == 0)
         {
             strncat(msg_err,PE_err,strlen(PE_err));
@@ -420,11 +422,11 @@ uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
             strncat(msg_err,Curr_err,strlen(Curr_err));
             ErrMultiEdit_Size.err_num++;
         }
-        if(((uxBitsErr >> 4) & 0x01) == 0)
-        {
-            strncat(msg_err,Freq_err,strlen(Freq_err));
-            ErrMultiEdit_Size.err_num++;
-        }
+//        if(((uxBitsErr >> 4) & 0x01) == 0)
+//        {
+//            strncat(msg_err,Freq_err,strlen(Freq_err));
+//            ErrMultiEdit_Size.err_num++;
+//        }
         ErrMultiEdit_Size.xlength = 300;
         ErrMultiEdit_Size.ylength = 24*(ErrMultiEdit_Size.err_num+4);
         ErrMultiEdit_Size.xpos = 480;
