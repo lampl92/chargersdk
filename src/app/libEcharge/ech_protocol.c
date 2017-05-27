@@ -109,7 +109,7 @@ static int makeStdCmd(void *pPObj,
     }
     for(i = 0; i < pE->info.ucIDLength; i++)  //此处借用ulMsgHeadLen表示pucSendBuffer位置，运行之后ulMsgHeadLen表示的就是原ulMsgHeadLen + 桩号长度
     {
-        sprintf(&(pucSendBuffer[ulMsgHeadLen]), "%02d", pE->info.ucID[i]);
+        sprintf(&(pucSendBuffer[ulMsgHeadLen]), "%02x", pE->info.ucID[i]);
         ulMsgHeadLen = ulMsgHeadLen + 2;
     }
     for(i = 0; i < ulMsgBodyCtxLen_enc; i++)
@@ -208,7 +208,20 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
     //车位状态 1：空闲   2：占用   3：未知
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
-    //接口连接状态  1：充电 2:待机 3：故障 4：充电结束 5：未知
+    //接口连接状态  1 空闲， 2,车连接 3 未知
+    if(pCON->status.xPlugState == UNPLUG)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
+    }
+    else if(pCON->status.xPlugState == PLUG)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
+    }
+    else
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
+    }
+    //接口工作状态 1：充电 2:待机 3：故障 4：充电结束 5：未知
     switch(pCON->state)
     {
     case STATE_CON_CHARGING:
@@ -949,7 +962,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdRTData);
     pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdOrder);
 
-                                    pProto->recvResponse = recvResponse;
+    pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;
     pProto->deleteProtocol = deleteProto;
 
