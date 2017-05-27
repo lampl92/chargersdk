@@ -372,7 +372,8 @@ void LTDC_Init(void)
 		lcdltdc.vbp=23;				    //垂直后廊
 		lcdltdc.hfp=210;			    //水平前廊
 		lcdltdc.vfp=22;				    //垂直前廊
-        LTDC_Clk_Set(396,3,RCC_PLLSAIDIVR_4); //设置像素时钟 33M(如果开双显,需要降低DCLK到:18.75Mhz  300/4/4,才会比较好)
+        //LTDC_Clk_Set(396,3,RCC_PLLSAIDIVR_4); //设置像素时钟 33M(如果开双显,需要降低DCLK到:18.75Mhz  300/4/4,才会比较好)
+        LTDC_Clk_Set(320,2,RCC_PLLSAIDIVR_4);
 	}else if(lcdid==0X7016)
 	{
 		lcdltdc.pwidth=1024;			//面板宽度,单位:像素

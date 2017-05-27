@@ -163,6 +163,10 @@ uint32_t gprs_init(void)
 
     res = 0;
 
+//    res = 1;
+//    dev_gprs.state = DS_GPRS_ON;
+//    dev_gprs.pollstate = DS_GPRS_POLL_AT;
+#if 1
     GPRS_reset;
     pGprsRecvQue->Flush(pGprsRecvQue);
     res_at = gprs_send_AT();
@@ -185,6 +189,7 @@ uint32_t gprs_init(void)
         res = 0;
         ThrowErrorCode(defDevID_GPRS, ERR_GPRS_FAULT, ERR_LEVEL_WARNING, "≥ı ºªØ ß∞‹");
     }
+    #endif
     return res;
 }
 uint32_t gprs_read_AT(void);
@@ -294,7 +299,7 @@ uint32_t gprs_read_CREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CREG: 0,1");
+    p = strstr(buff, "+CREG: 0,5");
     if(p != NULL)
     {
         return DR_AT_OK;
@@ -326,7 +331,7 @@ uint32_t gprs_read_CGREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CGREG: 0,1");
+    p = strstr(buff, "+CGREG: 0,5");
     if(p != NULL)
     {
         return DR_AT_OK;

@@ -154,7 +154,7 @@ TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-#ifdef EVSE_DEBUG
+#ifndef EVSE_DEBUG
     gprs_init();
     gprs_ppp_poll();
 #else

@@ -54,6 +54,7 @@
 					<Add option="-O3" />
 					<Add option="-g2" />
 					<Add symbol="DEBUG_DIAG" />
+					<Add symbol="DEBUG_DEV_GPRS" />
 				</Compiler>
 				<Cpp>
 					<Add option="-fdata-sections" />

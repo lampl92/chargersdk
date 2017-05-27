@@ -299,6 +299,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
                     &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
+        xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
         // USER END
         break;
     case WM_NOTIFY_PARENT:

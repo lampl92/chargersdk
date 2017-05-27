@@ -161,7 +161,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
                                    pdTRUE, pdTRUE, 0);
     if((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
     {
-        xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
+
         WM_DeleteWindow(hWin);
         PutOut_Charge_Done();
     }

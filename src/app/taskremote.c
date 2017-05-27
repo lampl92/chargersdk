@@ -70,7 +70,7 @@ void vTaskEVSERemote(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     uxBits = 0;
-    remotestat = REMOTE_REGEDITED;//REMOTE_NO;
+    remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
     eRmtOrderStat = REMOTEOrder_IDLE;
