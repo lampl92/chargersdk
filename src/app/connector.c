@@ -1558,7 +1558,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleTimerRTData = xTimerCreate("TimerRemoteRTData",
                                                    defRemoteRTDataCyc,
                                                    pdTRUE,
-                                                   (void *)ucCONID,
+                                                   (void *)(int)ucCONID,
                                                    vRemoteRTDataTimerCB);
 
 

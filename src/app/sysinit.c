@@ -20,7 +20,7 @@ FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
 char NANDDISKPath[4]; /* RAM disk logical drive path */
 
 extern time_t time_dat;
-
+extern void Error_Handler(void);
 static void fatfs_format(void)
 {
     BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */

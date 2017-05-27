@@ -2,6 +2,9 @@
 #include "user_app.h"
 #include "led_control.h"
 #include "stm32f4xx_hal.h"
+
+extern void Error_Handler(void);
+
 void MX_TIM2_Init(void)
 {
 

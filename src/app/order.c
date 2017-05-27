@@ -276,7 +276,7 @@ void OrderInit(OrderData_t *pOrder)
         gdsl_list_flush(pOrder->plChargeSegment);
     }
 }
-
+#if 0
 void saveOrder(CON_t *pCON)
 {
 	int temp;
@@ -396,5 +396,5 @@ void saveOrder(CON_t *pCON)
     cJSON_Delete(pJsonRoot);
     return 0;
 }
-
+#endif
 

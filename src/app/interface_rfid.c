@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "interface.h"
+#include "user_app.h"
 
 static ErrorCode_t MT626GetUID(void *pvRfid)
 {

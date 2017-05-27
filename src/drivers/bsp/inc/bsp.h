@@ -88,6 +88,9 @@
 #include "bsp_user_lib.h"
 #include "bsp_nand_hw.h"
 #include "bsp_nand_ftl.h"
+#include "lcddrv.h"
+#include "touch.h"
+#include "user_app.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);

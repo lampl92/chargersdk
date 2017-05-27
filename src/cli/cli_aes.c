@@ -8,6 +8,7 @@
 #include "includes.h"
 #include "aes.h"
 #include "mbedtls/aes.h"
+#include "enc_dec.h"
 
 int tinyaestest()
 {

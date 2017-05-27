@@ -5,7 +5,7 @@
 
 FIL MyFile;          /* File object */
 
-
+extern void Error_Handler(void);
 static void cli_mkfs_fnt(int argc, char **argv)
 {
     BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */

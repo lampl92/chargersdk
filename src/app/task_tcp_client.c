@@ -6,6 +6,7 @@
 * @date 2017-05-04
 */
 #include "includes.h"
+#include "netif/ppp/ppp.h"
 #include "lwip/sockets.h"
 #include "ifconfig.h"
 #include "lwip_init.h"

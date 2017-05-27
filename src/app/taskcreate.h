@@ -49,6 +49,7 @@ extern TimerHandle_t xHandleTimerRemoteRTData;
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;
 
+void TaskInit(void);
 void SysTaskCreate (void);
 void AppTaskCreate (void);
 void AppObjCreate(void);

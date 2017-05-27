@@ -244,10 +244,10 @@ void Get_electricity_meter_massage(uint8_t add,uint8_t cmd,uint16_t massage,uint
     RS485_TX_BUF[3]=massage&0x00ff;
     RS485_TX_BUF[4]=(num>>8)&0x00ff;
     RS485_TX_BUF[5]=num&0x00ff;
-    VREF_CRC=c_crc(&RS485_TX_BUF,6);
+    VREF_CRC=c_crc(RS485_TX_BUF,6);
     RS485_TX_BUF[6]=(VREF_CRC>>8)&0Xff;
     RS485_TX_BUF[7]=VREF_CRC&0Xff;
-    RS485_Send_Data(&RS485_TX_BUF,8);
+    RS485_Send_Data(RS485_TX_BUF,8);
     flag_rs485[add]++;
 
 //直接接收数据
