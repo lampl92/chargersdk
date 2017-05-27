@@ -531,7 +531,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     ulMsgBodyCtxLen_dec = 0;
 
     //[0] 有卡 04 无卡05
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0]哈哈哈，要在interface中赋值;
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
     //[1...8] 交易流水号
     StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
     for(i = 0; i < 8; i++)

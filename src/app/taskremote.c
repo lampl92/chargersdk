@@ -80,7 +80,7 @@ void vTaskEVSERemote(void *pvParameters)
     ctrl_rmtctrl = 0;
     time_rmtctrl = 0;
     time_order = 0;
-    order_send_count = 0
+    order_send_count = 0;
 
     while(1)
     {
@@ -296,7 +296,7 @@ void vTaskEVSERemote(void *pvParameters)
                                              pdFALSE, pdTRUE, 0);
                     if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
                     {
-                        order_send_count = 0
+                        order_send_count = 0;
                         eRmtOrderStat = REMOTEOrder_Send;
                     }
                     break;

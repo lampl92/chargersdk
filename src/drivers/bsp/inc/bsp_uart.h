@@ -19,7 +19,7 @@ typedef enum
     UART_PORT_RFID
 }UART_Portdef;
 
-#ifdef EVSE_RELEASE
+#ifndef EVSE_DEBUG
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
