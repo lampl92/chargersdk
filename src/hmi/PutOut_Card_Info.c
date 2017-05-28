@@ -36,6 +36,7 @@ static uint8_t first_flag = 0;
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0     (GUI_ID_USER + 0x01)
+#define ID_IMAGE_0      (GUI_ID_USER + 0x09)
 // USER START (Optionally insert additional defines)
 #define ID_BUTTON_1   (GUI_ID_USER + 0x08)
 #define ID_TEXT_0     (GUI_ID_USER + 0x0A)
@@ -68,6 +69,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     // USER START (Optionally insert additional widgets)
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
@@ -219,7 +221,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         //
         // Initialization of 'Text'
         //

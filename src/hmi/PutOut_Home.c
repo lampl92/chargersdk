@@ -75,8 +75,6 @@ static int _x,_y;
 // USER END
 volatile int   Id;
 extern uint8_t *bmpbuffer;
-extern FIL BMPFile_BCGROUND;
-extern char *bmpBackGround;
 
 /*********************************************************************
 *
@@ -94,12 +92,12 @@ extern char *bmpBackGround;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_B, 450, 80, 250, 40, 0, 0x0, 0 },
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 50, 254, 50, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
@@ -148,7 +146,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
         {
             //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
-            free(bmpBackGround);
+            //free(bmpBackGround);
             free(bmpbuffer);
             WM_DeleteWindow(hWin);
             PutOut_Card_Info();
@@ -156,8 +154,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     }
     else if(pCON->order.ucStartType == 5)
     {
-        free(bmpBackGround);
-        free(bmpbuffer);
+        //free(bmpBackGround);
+        //free(bmpbuffer);
         WM_DeleteWindow(hWin);
         PutOut_Charging();
     }
@@ -227,7 +225,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
 
         //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
-        FrameWin_Init_test(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         //
         // Initialization of 'Edit'
         //

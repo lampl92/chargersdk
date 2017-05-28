@@ -313,15 +313,10 @@ uint8_t dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t
  * @return
  *
  */
-uint8_t dispBackGroundNOFREE(uint8_t *BMPFileName,uint32_t x,uint32_t y,WM_HWIN hWin)
+uint8_t readBackGroundNOFREE(uint8_t *BMPFileName)
 {
 	uint16_t bread;
-	uint16_t bred;
-	uint16_t bre;
 	char result;
-	int XSize,YSize;
-	WM_HWIN      hItem;
-	IMAGE_Handle imageHandle;
 
 	result = f_open(&BMPFile_BCGROUND,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
 	//文件打开错误或者文件大于BMPMEMORYSIZE
@@ -337,13 +332,7 @@ uint8_t dispBackGroundNOFREE(uint8_t *BMPFileName,uint32_t x,uint32_t y,WM_HWIN 
 	result = f_read(&BMPFile_BCGROUND,bmpBackGround,BMPFile_BCGROUND.obj.objsize,(UINT *)&bread); //读取数据
 	if(result != FR_OK) return 3;
 
-    XSize = GUI_BMP_GetXSize(bmpBackGround);	//获取图片的X轴大小
-    YSize = GUI_BMP_GetYSize(bmpBackGround);	//获取图片的Y轴大小
-
-//    imageHandle = IMAGE_CreateEx(x,y,XSize,YSize,hWin,WM_CF_SHOW,IMAGE_CF_TILE,GUI_ID_IMAGE1);
-//    IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
-
-	//f_close(&BMPFile_BCGROUND);				//关闭BMPFile文件
+	f_close(&BMPFile_BCGROUND);				//关闭BMPFile文件
 	return 0;
 }
 
