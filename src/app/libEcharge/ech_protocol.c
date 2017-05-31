@@ -836,10 +836,12 @@ static int analyCmdRemoteCtrl(void *pPObj, uint16_t usSendID, uint8_t *pbuff, ui
 }
 static int analyCmdRTData(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
+    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
     return 1;
 }
 static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
+    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
     return 1;
 }
 /** @brief 复制待插入的元素到新申请的空间
