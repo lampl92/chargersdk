@@ -677,7 +677,8 @@ uint32_t gprs_ppp_poll(void)
             }
             break;
         case DS_GPRS_POLL_ERR:
-            gprs_ioctl(DA_GPRS_RESET);
+            //gprs_ioctl(DA_GPRS_RESET);
+            gprs_init();
             vTaskDelay(10000);
             dev_gprs.pollstate = DS_GPRS_POLL_AT;
             break;

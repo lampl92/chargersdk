@@ -376,9 +376,9 @@ void PutOut_Charging()
     hWin = CreateCharging();
     countdown_flag = 0;
     led_ctrl(1,green,keep_off);
+    led_ctrl(1,green,breath);
     while(1)
     {
-        led_ctrl(1,green,breath);
         GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(500);

@@ -66,6 +66,11 @@ void vTaskEVSERFID(void *pvParameters)
                         pRFIDDev->state = STATE_RFID_OLDID;
                         break;
                     }
+                    else
+                    {
+                        OrderInit(&(pRFIDDev->order));
+                        pRFIDDev->state = STATE_RFID_NOID;
+                    }
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
                 {
@@ -132,6 +137,8 @@ void vTaskEVSERFID(void *pvParameters)
                 {
                     xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
                                    defEventBitGotIDtoHMI);
+                    /// TODO (zshare#1#): 增加清除位,第二次刷卡充电会直接停止 , 原因此处等待延时会一直置位 上述两个会不会有问题???????
+                    xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
                     pRFIDDev->state = STATE_RFID_NOID;
                 }
 //            }
