@@ -91,38 +91,38 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_IDLE;
                 }
 
-                if((uxBitsCharge & defEventBitCONVoltOK) != defEventBitCONVoltOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºµçÑ¹²»¶Ô£º%.2lf\n", pCON->status.dChargingVoltage);
-                }
-                if((uxBitsCharge & defEventBitCONSocketTempOK) != defEventBitCONSocketTempOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º²å×ùÎÂ¶È²»¶Ô£º1:%.2lf 2:%.2lf\n", pCON->status.dBTypeSocketTemp1, pCON->status.dBTypeSocketTemp2);
-                }
-                if((uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºACÎÂ¶È²»¶Ô£ºL:%.2lf N:%.2lf\n", pCON->status.dACLTemp, pCON->status.dACNTemp);
-                }
-                if((uxBitsCharge & defEventBitEVSEScramOK) != defEventBitEVSEScramOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º¼±Í£¸æ¾¯\n");
-                }
-                if((uxBitsCharge & defEventBitEVSEPEOK) != defEventBitEVSEPEOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºPE¸æ¾¯\n");
-                }
-                if((uxBitsCharge & defEventBitEVSEKnockOK) != defEventBitEVSEKnockOK)
-                {
-                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º×²»÷¸æ¾¯\n");
-                }
-                if((uxBitsCharge & defEventBitEVSEArresterOK) != defEventBitEVSEArresterOK)
-                {
-                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º·ÀÀ×¸æ¾¯\n");
-                }
-                if((uxBitsCharge & defEventBitEVSEPowerOffOK) != defEventBitEVSEPowerOffOK)
-                {
-                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºÍ£µç¸æ¾¯\n");
-                }
+//                if((uxBitsCharge & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºµçÑ¹²»¶Ô£º%.2lf\n", pCON->status.dChargingVoltage);
+//                }
+//                if((uxBitsCharge & defEventBitCONSocketTempOK) != defEventBitCONSocketTempOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º²å×ùÎÂ¶È²»¶Ô£º1:%.2lf 2:%.2lf\n", pCON->status.dBTypeSocketTemp1, pCON->status.dBTypeSocketTemp2);
+//                }
+//                if((uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºACÎÂ¶È²»¶Ô£ºL:%.2lf N:%.2lf\n", pCON->status.dACLTemp, pCON->status.dACNTemp);
+//                }
+//                if((uxBitsCharge & defEventBitEVSEScramOK) != defEventBitEVSEScramOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º¼±Í£¸æ¾¯\n");
+//                }
+//                if((uxBitsCharge & defEventBitEVSEPEOK) != defEventBitEVSEPEOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºPE¸æ¾¯\n");
+//                }
+//                if((uxBitsCharge & defEventBitEVSEKnockOK) != defEventBitEVSEKnockOK)
+//                {
+//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º×²»÷¸æ¾¯\n");
+//                }
+//                if((uxBitsCharge & defEventBitEVSEArresterOK) != defEventBitEVSEArresterOK)
+//                {
+//                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º·ÀÀ×¸æ¾¯\n");
+//                }
+//                if((uxBitsCharge & defEventBitEVSEPowerOffOK) != defEventBitEVSEPowerOffOK)
+//                {
+//                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºÍ£µç¸æ¾¯\n");
+//                }
                 break;
             case STATE_CON_PRECONTRACT://×´Ì¬2' ³äµçÉè±¸×¼±¸¾ÍĞ÷£¬µÈ´ı³µµÄS2£¬ÓÉ³µÁ¾¾ö¶¨£¬¿ÉÓÃÓÚÔ¤Ô¼³äµçµÈ
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);

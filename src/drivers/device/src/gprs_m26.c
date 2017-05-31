@@ -20,6 +20,9 @@
 #endif
 dev_gprs_t dev_gprs;
 
+uint32_t gprs_send_PlusPlusPlus(void);
+uint32_t gprs_send_ATH(void);
+
 void gprs_delayms(uint32_t ms)
 {
     vTaskDelay(ms);
@@ -114,6 +117,8 @@ uint32_t gprs_ioctl(uint8_t ioctl)
         }
         break;
     case DA_GPRS_RESET:
+//        GPRS_reset;
+//        gprs_delayms(2000);
         do
         {
 #if DEBUG_DEV_GPRS
@@ -131,7 +136,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
 #endif
                 break;
             }
-            res = recvStrCmp(pGprsRecvQue, "RDY", 0);
+            res = recvStrCmp(pGprsRecvQue, "Call Ready", 0);
             if(res == 0)
             {
                 gprs_delayms(3000);
@@ -167,22 +172,20 @@ uint32_t gprs_init(void)
     uint32_t res_at;
 
     res = 0;
-
-//    res = 1;
-//    dev_gprs.state = DS_GPRS_ON;
-//    dev_gprs.pollstate = DS_GPRS_POLL_AT;
 #if 1
     GPRS_reset;
     pGprsRecvQue->Flush(pGprsRecvQue);
-//    res_at = gprs_send_AT();
-//    if(res_at != DR_AT_OK)
-//    {
+    gprs_send_PlusPlusPlus();
+    gprs_send_ATH();
+    res_at = gprs_send_AT();
+    if(res_at != DR_AT_OK)
+    {
         gprs_ioctl(DA_GPRS_RESET);
-//    }
-//    else
-//    {
-//        dev_gprs.state = DS_GPRS_ON;
-//    }
+    }
+    else
+    {
+        dev_gprs.state = DS_GPRS_ON;
+    }
 
     if(dev_gprs.state == DS_GPRS_ON)
     {
@@ -276,10 +279,11 @@ uint32_t gprs_read_CPIN(void)
     uint32_t rl;//read len;
     uint8_t res;
 
-    res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-//    p = strstr(buff, "+CPIN: READY");
-    p = strstr(buff, "READY");
-    if(p != NULL)
+//    res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
+////    p = strstr(buff, "+CPIN: READY");
+//    p = strstr(buff, "READY");
+    res = recvStrCmp(pGprsRecvQue, "READY", 0);
+    if(res == 1)//if(p != NULL)
     {
         return DR_AT_OK;
     }
@@ -395,9 +399,15 @@ uint32_t gprs_send_PlusPlusPlus(void)
 {
     pGprsRecvQue->Flush(pGprsRecvQue);
     HAL_UART_Transmit(&GPRS_UARTx_Handler, "+++", strlen("+++"), 0xFFFF);
-    gprs_delayms(100);
+    gprs_delayms(1000);
     return gprs_read_AT();
-
+}
+uint32_t gprs_send_ATH(void)
+{
+    pGprsRecvQue->Flush(pGprsRecvQue);
+    HAL_UART_Transmit(&GPRS_UARTx_Handler, "ATH\r\n", strlen("ATH\r\n"), 0xFFFF);
+    gprs_delayms(5000);
+    return gprs_read_AT();
 }
 uint32_t gprs_read_ATD(void)
 {

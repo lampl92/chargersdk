@@ -154,7 +154,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         }
     //}
     //else
-    if(pCON->order.ucStartType == 5)
+    if((pCON->order.ucStartType == 5)
+        &&(pCON->state == STATE_CON_CHARGING))
     {
         //free(bmpBackGround);
         //free(bmpbuffer);

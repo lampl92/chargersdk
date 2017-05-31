@@ -13,7 +13,7 @@
 #include "evse_globals.h"
 #include "task_tcp_client.h"
 #include "taskcreate.h"
-
+#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {
@@ -59,10 +59,12 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 else//没发出去
                 {
                     pechCmdElem->trycount++;
+                    pppClose(ppp);
                     if(pechCmdElem->trycount > pechCmdElem->trycountmax)
                     {
                         gdsl_list_cursor_delete(cs);
                         //gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
+
                         continue;
                         /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
                     }

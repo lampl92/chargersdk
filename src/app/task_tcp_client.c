@@ -101,6 +101,7 @@ void vTaskTCPClient(void *pvParameters)
                                 }
                                 else
                                 {
+                                    vTaskDelay(1000);
                                     xEventGroupSetBits(xHandleEventLwIP, defEventBitTCPClientSendOK);
                                 }
                             }

@@ -166,6 +166,8 @@ void PCA9554_init(void)
     IIC_Wait_Ack();
     IIC_Stop();//产生一个停止条件
     bsp_DelayMS(10);
+
+    GPRS_reset;
 }
 
 void write_pca9554_1(void)
