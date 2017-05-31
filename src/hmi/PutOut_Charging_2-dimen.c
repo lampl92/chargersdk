@@ -86,6 +86,7 @@
 static const GUI_WIDGET_CREATE_INFO _aDialogCharging2dimen[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
@@ -114,7 +115,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCharging2dimen[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_17, 545, 100, 70, 35, 0, 0x0, 0 },//秒钟
     { EDIT_CreateIndirect, "Edit", ID_EDIT_7, 250, 320, 45, 30, 0, 0x64, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_18, 305, 320, 300, 30, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "二维码", ID_IMAGE_0, 55, 291, 101, 87, 0, 0, 0 },
+//    { IMAGE_CreateIndirect, "二维码", ID_IMAGE_0, 55, 291, 101, 87, 0, 0, 0 },
     // USER END
 };
 /*********************************************************************
@@ -212,7 +213,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg,ID_TEXT_1,ID_TEXT_2,ID_TEXT_3,ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
 
         //
         // Initialization of '二维码'

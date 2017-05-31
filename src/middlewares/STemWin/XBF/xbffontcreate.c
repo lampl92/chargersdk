@@ -4,17 +4,23 @@
 
 //定义字体
 GUI_FONT XBF12_Font;
+GUI_FONT XBF14_Font;
 GUI_FONT XBF16_Font;
+GUI_FONT XBF19_Font;
 GUI_FONT XBF24_Font;
 GUI_FONT XBF36_Font;
 
 GUI_XBF_DATA	XBF12_Data;
+GUI_XBF_DATA	XBF14_Data;
 GUI_XBF_DATA	XBF16_Data;
+GUI_XBF_DATA	XBF19_Data;
 GUI_XBF_DATA	XBF24_Data;
 GUI_XBF_DATA	XBF36_Data;
 
 FIL XBF12FontFile;
+FIL XBF14FontFile;
 FIL XBF16FontFile;
+FIL XBF19FontFile;
 FIL XBF24FontFile;
 FIL XBF36FontFile;
 
@@ -59,6 +65,23 @@ uint8_t Create_XBF12(uint8_t *fxpath)
 						&XBF12FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
 }
+//创建XBF12字体，共EMWIN使用
+//fxpath:XBF字体文件路径
+//返回值:0，成功；1，失败
+uint8_t Create_XBF14(uint8_t *fxpath)
+{
+	int result;
+	result = f_open(&XBF14FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
+
+	if(result != FR_OK) return 1;
+	//创建XBF16字体
+	GUI_XBF_CreateFont(	&XBF14_Font,    //指向GUI_FONT结构
+						&XBF14_Data, 	//指向GUI_XBF_DATA结构
+						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						_cbGetData,   	//回调函数
+						&XBF14FontFile);  //窗体给回调函数_cbGetData的参数
+	return 0;
+}
 
 //创建XBF16字体，共EMWIN使用
 //fxpath:XBF字体文件路径
@@ -75,6 +98,23 @@ uint8_t Create_XBF16(uint8_t *fxpath)
 						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF16FontFile);  //窗体给回调函数_cbGetData的参数
+	return 0;
+}
+//创建XBF12字体，共EMWIN使用
+//fxpath:XBF字体文件路径
+//返回值:0，成功；1，失败
+uint8_t Create_XBF19(uint8_t *fxpath)
+{
+	int result;
+	result = f_open(&XBF19FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
+
+	if(result != FR_OK) return 1;
+	//创建XBF16字体
+	GUI_XBF_CreateFont(	&XBF19_Font,    //指向GUI_FONT结构
+						&XBF19_Data, 	//指向GUI_XBF_DATA结构
+						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						_cbGetData,   	//回调函数
+						&XBF19FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
 }
 

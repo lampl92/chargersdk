@@ -80,12 +80,12 @@
 #define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
 #define defEventBitOrderMakeOK          BIT_1
 #define defEventBitOrderUpdateOK        BIT_2
-#define defEventBitAddOrder             BIT_5
-#define defEventBitAddOrderOK           BIT_6
+#define defEventBitAddOrder             BIT_3
+#define defEventBitAddOrderOK           BIT_4
 
 #define defEventBitOrder_HMIDispOK      BIT_7
-#define defEventBitOrder_RemoteOrderOK       BIT_8
-#define defEventBitOrder_RemoteRTDataOK       BIT_9
+#define defEventBitOrder_RemoteOrderOK  BIT_8
+#define defEventBitOrder_RemoteRTDataOK BIT_9
 #define defEventBitOrder_StoreOK        BIT_10
 
 #define defEventBitOrderStopTypeLimitFee    BIT_15
@@ -93,11 +93,11 @@
 #define defEventBitOrderStopTypeRFIDStop    BIT_17
 #define defEventBitOrderStopTypeFull        BIT_18
 
-#define defEventBitOrderMakeFinish      BIT_20  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToRemote  BIT_21  //Order订单命令使用，使用后清除
+#define defEventBitOrderMakeFinish      BIT_19  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderFinishToRemote  BIT_20  //Order订单命令使用，使用后清除
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
-#define defEventBitOrderUseless          (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK)//(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOrderOK |defEventBitOrder_StoreOK)
+#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK)    //(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
 
 
 /*------xHandleEventRemote*/

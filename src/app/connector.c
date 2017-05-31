@@ -669,7 +669,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 
     /*********************/
 
-    pCON->status.dChargingPower = tmpPower;
+    pCON->status.dChargingPower = pCON->status.dChargingPower+0.01;//tmpPower;
 
     return errcode;
 }

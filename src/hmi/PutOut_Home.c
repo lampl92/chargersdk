@@ -36,8 +36,8 @@
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_WINDOW_0     (GUI_ID_USER + 0x10)
-#define ID_BUTTON_0     (GUI_ID_USER + 0x01)
-#define ID_BUTTON_1     (GUI_ID_USER + 0x04)
+//#define ID_BUTTON_0     (GUI_ID_USER + 0x01)
+//#define ID_BUTTON_1     (GUI_ID_USER + 0x04)
 #define ID_BUTTON_MANAGER   (GUI_ID_USER + 0x12)
 #define ID_TEXT_0     (GUI_ID_USER + 0x11)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x0A)
@@ -57,8 +57,8 @@
 #define ID_EDIT_1     (GUI_ID_USER + 0x03)
 #define ID_TEXT_8     (GUI_ID_USER + 0x09)
 #define ID_TEXT_9     (GUI_ID_USER + 0x0F)
-#define ID_TEXT_A     (GUI_ID_USER + 0x14)
-#define ID_TEXT_B     (GUI_ID_USER + 0x15)
+#define ID_TEXT_A     (GUI_ID_USER + 0x01)
+#define ID_TEXT_B     (GUI_ID_USER + 0x04)
 #define ID_MULTIEDIT_0  (GUI_ID_USER + 0x13)
 #define ID_TimerTime    0
 
@@ -75,6 +75,7 @@ static int _x,_y;
 // USER END
 volatile int   Id;
 extern uint8_t *bmpbuffer;
+
 /*********************************************************************
 *
 *       Static data
@@ -91,12 +92,12 @@ extern uint8_t *bmpbuffer;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_B, 450, 80, 250, 40, 0, 0x0, 0 },
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 50, 254, 50, 0, 0x0, 0 },
-    //{ IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
     //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
@@ -122,15 +123,42 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 // USER START (Optionally insert additional static code)
 static void Timer_Process(WM_MESSAGE *pMsg)
 {
+    CON_t *pCON;
     static uint32_t i = 0;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
     WM_HWIN hWin_Error;
+    EventBits_t uxBitRFID;
+
     WM_HWIN hWin = pMsg->hWin;
+
+    pCON = CONGetHandle(0);
 
     CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
+    if(pCON->order.ucStartType == 4)
+    {
+        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
+                                        defEventBitGotIDtoHMI,
+                                        pdTRUE, pdTRUE, 0);
+        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
+        if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
+        {
+            //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
+            //free(bmpBackGround);
+            free(bmpbuffer);
+            WM_DeleteWindow(hWin);
+            PutOut_Card_Info();
+        }
+    }
+    else if(pCON->order.ucStartType == 5)
+    {
+        //free(bmpBackGround);
+        //free(bmpbuffer);
+        WM_DeleteWindow(hWin);
+        PutOut_Charging();
+    }
     //需要增加3G模块的信号强度判断
     switch(i % 5)
     {
@@ -193,7 +221,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        //IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+
+        //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         //
         // Initialization of 'Edit'
         //
@@ -246,36 +278,36 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             }
             break;
-        case ID_BUTTON_0: // Notifications sent by 'Button'
-            switch(NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
-        case ID_BUTTON_1: // Notifications sent by 'Button'
-            switch(NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                // USER END
-                break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
-            }
-            break;
+//        case ID_BUTTON_0: // Notifications sent by 'Button'
+//            switch(NCode)
+//            {
+//            case WM_NOTIFICATION_CLICKED:
+//                // USER START (Optionally insert code for reacting on notification message)
+//                // USER END
+//                break;
+//            case WM_NOTIFICATION_RELEASED:
+//                // USER START (Optionally insert code for reacting on notification message)
+//                // USER END
+//                break;
+//                // USER START (Optionally insert additional code for further notification handling)
+//                // USER END
+//            }
+//            break;
+//        case ID_BUTTON_1: // Notifications sent by 'Button'
+//            switch(NCode)
+//            {
+//            case WM_NOTIFICATION_CLICKED:
+//                // USER START (Optionally insert code for reacting on notification message)
+//                // USER END
+//                break;
+//            case WM_NOTIFICATION_RELEASED:
+//                // USER START (Optionally insert code for reacting on notification message)
+//                // USER END
+//                break;
+//                // USER START (Optionally insert additional code for further notification handling)
+//                // USER END
+//            }
+//            break;
             // USER START (Optionally insert additional code for further Ids)
             // USER END
         }
@@ -325,7 +357,6 @@ WM_HWIN CreateFramewin(void)
 void PutOut_Home()
 {
     WM_HWIN hWin;
-    EventBits_t uxBitRFID;
 
     led_ctrl(1,green,keep_on);
     hWin = CreateFramewin();
@@ -334,19 +365,6 @@ void PutOut_Home()
     {
         GUI_Delay(500);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-
-
-        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-                                        defEventBitGotIDtoHMI,
-                                        pdTRUE, pdTRUE, 0);
-        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
-        if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
-        {
-            //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
-            free(bmpbuffer);
-            WM_DeleteWindow(hWin);
-            PutOut_Card_Info();
-        }
         vTaskDelay(500);
     }
 }

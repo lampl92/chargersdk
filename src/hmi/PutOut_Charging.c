@@ -35,6 +35,7 @@
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0     (GUI_ID_USER + 0x1B)
+#define ID_IMAGE_0      (GUI_ID_USER + 0x1C)
 // USER START (Optionally insert additional defines)
 #define ID_TEXT_1     (GUI_ID_USER + 0x01)
 #define ID_TEXT_2     (GUI_ID_USER + 0x02)
@@ -83,6 +84,7 @@ volatile uint8_t countdown_flag;
 static const GUI_WIDGET_CREATE_INFO _aDialogCharging[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
@@ -161,7 +163,6 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
                                    pdTRUE, pdTRUE, 0);
     if((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
     {
-
         WM_DeleteWindow(hWin);
         PutOut_Charge_Done();
     }
@@ -259,7 +260,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         //
         // Initialization of 'Text'
         //

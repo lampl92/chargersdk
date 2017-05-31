@@ -106,6 +106,7 @@ static const U8 _acImage_0[463] =
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     //{ FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
+    { WINDOW_CreateIndirect, "Window_test", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 186, 250, 40, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 186, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 99, 254, 50, 0, 0x0, 0 },
@@ -123,7 +124,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 286, 80, 30, 0, 0x64, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 286, 80, 30, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_10, 200, 0, 240, 30, 0, 0x0, 0 },
-    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+//    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button", ID_BUTTON_2, 750, 0, 40, 40, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 200, -43, 300, 50, 0, 0x0, 0 },
     // USER END

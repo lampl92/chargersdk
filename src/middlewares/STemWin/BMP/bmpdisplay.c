@@ -3,9 +3,11 @@
 #include "DIALOG.h"
 
 static FIL BMPFile;
+FIL BMPFile_BCGROUND;
 static FIL ScrSortFile;                 //屏幕截图文件
 static char bmpBuffer[BMPPERLINESIZE];
 char *bmpbuffer;
+char *bmpBackGround;
 /*******************************************************************
 *
 *       Static functions
@@ -232,7 +234,7 @@ void bmpdisplay(uint8_t *ppath)
  * @return
  *  **********注意在切换界面时要使用free释放掉图片的内存
  */
-int dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
+uint8_t dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
 {
 	uint16_t bread;
 	uint16_t bred;
@@ -302,6 +304,35 @@ int dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t x,u
 			break;
 	}
 	f_close(&BMPFile);				//关闭BMPFile文件
+	return 0;
+}
+/** @brief 显示背景图片
+ *
+ * @param 路径；左上角位置；句柄
+ * @param
+ * @return
+ *
+ */
+uint8_t readBackGroundNOFREE(uint8_t *BMPFileName)
+{
+	uint16_t bread;
+	char result;
+
+	result = f_open(&BMPFile_BCGROUND,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
+	//文件打开错误或者文件大于BMPMEMORYSIZE
+	if((result != FR_OK) || (BMPFile_BCGROUND.obj.objsize>BMPMEMORYSIZE)) 	return 1;
+
+	bmpBackGround = malloc(BMPFile_BCGROUND.obj.objsize);//申请内存
+
+	if(bmpBackGround == NULL)
+	{
+        return 2;//分配失败
+	}
+
+	result = f_read(&BMPFile_BCGROUND,bmpBackGround,BMPFile_BCGROUND.obj.objsize,(UINT *)&bread); //读取数据
+	if(result != FR_OK) return 3;
+
+	f_close(&BMPFile_BCGROUND);				//关闭BMPFile文件
 	return 0;
 }
 

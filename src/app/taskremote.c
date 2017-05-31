@@ -266,7 +266,7 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         }
                     }
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //告诉order你用完了他的数据
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK);
                     eRmtRTDataStat = REMOTERTData_IDLE;
                     break;
                 }

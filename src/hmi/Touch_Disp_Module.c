@@ -26,6 +26,9 @@ uint8_t *Freq_err = "   频率异常\n";
 WM_HWIN err_hItem = 0;
 static uint8_t winCreateFlag = 0;
 
+extern FIL BMPFile_BCGROUND;
+extern char *bmpBackGround;
+
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
 //{
 //    return ((var) |= (1<<(bitno)));
@@ -49,15 +52,30 @@ static uint8_t winCreateFlag = 0;
  * @return
  *
  */
-void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3)
+void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF16_Font,GUI_RED,"信号：强");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF16_Font,GUI_RED,"2017-02-28");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF16_Font,GUI_RED,"14:00:00");
+    //dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
+    //IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号：强");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
 }
+//void FrameWin_Init_test(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
+//{
+//    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
+//    dispBackGroundNOFREE("system/background.bmp");
+////    GUI_BMP_Draw(bmpBackGround,0,40);
+//    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+//    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF16_Font,GUI_RED,"信号：强");
+//    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+//    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF16_Font,GUI_RED,"2017-02-28");
+//    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF16_Font,GUI_RED,"14:00:00");
+//    WM_SetFocus(pMsg->hWin);
+//}
 /** window初始化
  *
  * pMsg:消息体 ,textid0:文本0 ,textid1:文本1, textid2：文本2，textid3:文本3
@@ -65,13 +83,14 @@ void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t t
  * @return
  *
  */
-void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3)
+void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
+    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     //FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF16_Font,GUI_RED,"信号：强");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF16_Font,GUI_RED,"2017-02-28");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF16_Font,GUI_RED,"14:00:00");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号：强");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
 }
 /** framewin初始化
@@ -109,6 +128,7 @@ void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint
     FRAMEWIN_SetFont(hItem, font);
     FRAMEWIN_SetTextColor(hItem, color);
     FRAMEWIN_SetText(hItem, buf);
+//    FRAMEWIN_SetDefaultBarColor(1,GUI_BLUE);
 //    FRAMEWIN_AddMinButton(hItem,FRAMEWIN_BUTTON_RIGHT,0);
 }
 /** Text显示
