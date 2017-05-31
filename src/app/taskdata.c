@@ -139,6 +139,7 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                     /* @todo (rgw#1): 在这里存储订单*/
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
                     OrderInit(&(pCON->order));//状态变为IDLE
                 }

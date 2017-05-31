@@ -10,10 +10,14 @@
 
 #define DEBUG_DEV_GPRS 1
 
-#define GPRS_IO     PBout(3)
+#ifdef EVSE_DEBUG
 
+#undef   GPRS_set
+#undef   GPRS_reset
+#define GPRS_set        PBout(3) = 1
+#define GPRS_reset      PBout(3) = 0
 
-
+#endif
 dev_gprs_t dev_gprs;
 
 void gprs_delayms(uint32_t ms)
@@ -273,7 +277,8 @@ uint32_t gprs_read_CPIN(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CPIN: READY");
+//    p = strstr(buff, "+CPIN: READY");
+    p = strstr(buff, "READY");
     if(p != NULL)
     {
         return DR_AT_OK;
@@ -300,7 +305,9 @@ uint32_t gprs_read_CREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CREG: 0,5");
+//    p = strstr(buff, "+CREG: 0,5");
+    p = strstr(buff, "+CREG: 0");
+
     if(p != NULL)
     {
         return DR_AT_OK;
@@ -332,7 +339,8 @@ uint32_t gprs_read_CGREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CGREG: 0,5");
+//    p = strstr(buff, "+CGREG: 0,5");
+    p = strstr(buff, "+CGREG: 0");
     if(p != NULL)
     {
         return DR_AT_OK;
