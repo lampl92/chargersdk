@@ -64,6 +64,7 @@ uint8_t EchRemoteIDtoCONID(uint8_t remote_id)
         break;
     case 2:
         id = 1;
+        break;
     default:
         id = 0xff;
         break;

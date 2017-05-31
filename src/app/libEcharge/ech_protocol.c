@@ -740,6 +740,10 @@ static int recvResponse(void *pPObj,
         echRecvCmdElem.cmd_id = ECH_CMDID_REMOTE_CTRL;
         echRecvCmdElem.timeout_s =  30;
         break;
+    case 47:
+        echRecvCmdElem.cmd_id = ECH_CMDID_ORDER;
+        echRecvCmdElem.timeout_s =  30;
+        break;
     default:
         break;
     }

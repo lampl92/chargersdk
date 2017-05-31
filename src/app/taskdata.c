@@ -145,7 +145,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 break;
             }
-        }
+        }//for CONid
 
 
         /* ╤ах║нд╪ЧеДжц */
