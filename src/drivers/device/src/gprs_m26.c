@@ -10,10 +10,14 @@
 
 #define DEBUG_DEV_GPRS 1
 
-#define GPRS_IO     PBout(3)
+#ifdef EVSE_DEBUG
 
+#undef   GPRS_set
+#undef   GPRS_reset
+#define GPRS_set        PBout(3) = 1
+#define GPRS_reset      PBout(3) = 0
 
-
+#endif
 dev_gprs_t dev_gprs;
 
 void gprs_delayms(uint32_t ms)
