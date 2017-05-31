@@ -41,7 +41,7 @@
 #define ID_BUTTON_MANAGER   (GUI_ID_USER + 0x12)
 #define ID_TEXT_0     (GUI_ID_USER + 0x11)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x0A)
-
+#define ID_IMAGE_1      (GUI_ID_USER + 0x14)
 #define ID_IMAGE_0_IMAGE_0     0x00
 
 // USER START (Optionally insert additional defines)
@@ -75,7 +75,7 @@ static int _x,_y;
 // USER END
 volatile int   Id;
 extern uint8_t *bmpbuffer;
-
+extern FIL BMPFile_ENCODE;
 /*********************************************************************
 *
 *       Static data
@@ -93,6 +93,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
+    { IMAGE_CreateIndirect, "Image", ID_IMAGE_1, 130, 170, 150, 150, 0, 0, 0 },//二维码显示
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
@@ -137,8 +138,8 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     CaliDone_Analy(hWin);
     Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
 
-    if(pCON->order.ucStartType == 4)
-    {
+    //if(pCON->order.ucStartType == 4)
+    //{
         uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                         defEventBitGotIDtoHMI,
                                         pdTRUE, pdTRUE, 0);
@@ -147,12 +148,13 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         {
             //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
             //free(bmpBackGround);
-            free(bmpbuffer);
+            //free(bmpbuffer);
             WM_DeleteWindow(hWin);
             PutOut_Card_Info();
         }
-    }
-    else if(pCON->order.ucStartType == 5)
+    //}
+    //else
+    if(pCON->order.ucStartType == 5)
     {
         //free(bmpBackGround);
         //free(bmpbuffer);
@@ -226,6 +228,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
+        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1), bmpbuffer, BMPFile_ENCODE.obj.objsize);
         //
         // Initialization of 'Edit'
         //
@@ -247,7 +250,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
 
         //显示二维码
-        dispbmpNOFree(0,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin);//不能释放内存,需要在切换界面时再把图片内存释放掉
+        //dispbmpNOFree(0,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin);//不能释放内存,需要在切换界面时再把图片内存释放掉
 
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
 //                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");

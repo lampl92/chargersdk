@@ -94,6 +94,7 @@
 #include "lcddrv.h"
 #include "touch.h"
 #include "user_app.h"
+#include "iwdg.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);

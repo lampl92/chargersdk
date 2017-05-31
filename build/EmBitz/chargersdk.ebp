@@ -82,7 +82,7 @@
 			<Add option="-mfloat-abi=hard" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-O0" />
+			<Add option="-O3" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -288,6 +288,7 @@
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\bsp_uart_queue.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\electric_energy_meter.h" />
+		<Unit filename="..\..\src\drivers\bsp\inc\iwdg.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\led_control.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\ST_LIS2DH12.h" />
 		<Unit filename="..\..\src\drivers\bsp\inc\user_app.h" />
@@ -325,6 +326,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\electric_energy_meter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\bsp\src\iwdg.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\bsp\src\led_control.c">
@@ -404,6 +408,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c">

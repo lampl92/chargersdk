@@ -135,6 +135,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
             if(res == 0)
             {
                 gprs_delayms(3000);
+                //bsp_DelayMS(3000);
             }
         }
         while(res == 0);
@@ -173,15 +174,15 @@ uint32_t gprs_init(void)
 #if 1
     GPRS_reset;
     pGprsRecvQue->Flush(pGprsRecvQue);
-    res_at = gprs_send_AT();
-    if(res_at != DR_AT_OK)
-    {
+//    res_at = gprs_send_AT();
+//    if(res_at != DR_AT_OK)
+//    {
         gprs_ioctl(DA_GPRS_RESET);
-    }
-    else
-    {
-        dev_gprs.state = DS_GPRS_ON;
-    }
+//    }
+//    else
+//    {
+//        dev_gprs.state = DS_GPRS_ON;
+//    }
 
     if(dev_gprs.state == DS_GPRS_ON)
     {

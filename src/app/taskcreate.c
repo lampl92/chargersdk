@@ -16,6 +16,7 @@
 #include "cli_main.h"
 #include "timercallback.h"
 #include "gprs_m26.h"
+#include "bsp.h"
 
 
 /*---------------------------------------------------------------------------/
@@ -257,6 +258,7 @@ void AppObjCreate (void)
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟�??
 void vApplicationTickHook( void )
 {
+    IWDG_Feed();
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
 }
 

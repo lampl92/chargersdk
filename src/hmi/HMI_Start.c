@@ -24,6 +24,7 @@ void MainTask(void)
     encodetobmp("system/encodeCharge.bmp",pCON->info.strQRCode);
     //readBackGroundNOFREE("system/background.bmp");
     readBackGroundNOFREE("system/background_tree.bmp");
+    readEncodeNOFREE("system/encodeCharge.bmp");
     Create_XBF12("system/XBF宋体12.xbf");//创建xbf12号路径
     Create_XBF14("system/XBF宋体14.xbf");//创建XBF14号路径
     Create_XBF16("system/XBF宋体16.xbf");//创建xbf16号路径

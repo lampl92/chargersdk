@@ -29,6 +29,7 @@ static uint8_t winCreateFlag = 0;
 extern FIL BMPFile_BCGROUND;
 extern char *bmpBackGround;
 
+extern FIL BMPFile_ENCODE;
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
 //{
 //    return ((var) |= (1<<(bitno)));
