@@ -90,6 +90,39 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     pCON->state = STATE_CON_IDLE;
                 }
+
+                if((uxBitsCharge & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：电压不对：%.2lf\n", pCON->status.dChargingVoltage);
+                }
+                if((uxBitsCharge & defEventBitCONSocketTempOK) != defEventBitCONSocketTempOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：插座温度不对：1:%.2lf 2:%.2lf\n", pCON->status.dBTypeSocketTemp1, pCON->status.dBTypeSocketTemp2);
+                }
+                if((uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：AC温度不对：L:%.2lf N:%.2lf\n", pCON->status.dACLTemp, pCON->status.dACNTemp);
+                }
+                if((uxBitsCharge & defEventBitEVSEScramOK) != defEventBitEVSEScramOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：急停告警\n");
+                }
+                if((uxBitsCharge & defEventBitEVSEPEOK) != defEventBitEVSEPEOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：PE告警\n");
+                }
+                if((uxBitsCharge & defEventBitEVSEKnockOK) != defEventBitEVSEKnockOK)
+                {
+                    printf_safe("插枪状态下CPSwitch失败：撞击告警\n");
+                }
+                if((uxBitsCharge & defEventBitEVSEArresterOK) != defEventBitEVSEArresterOK)
+                {
+                     printf_safe("插枪状态下CPSwitch失败：防雷告警\n");
+                }
+                if((uxBitsCharge & defEventBitEVSEPowerOffOK) != defEventBitEVSEPowerOffOK)
+                {
+                     printf_safe("插枪状态下CPSwitch失败：停电告警\n");
+                }
                 break;
             case STATE_CON_PRECONTRACT://状态2' 充电设备准备就绪，等待车的S2，由车辆决定，可用于预约充电等
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
@@ -285,6 +318,9 @@ void vTaskEVSECharge(void *pvParameters)
 
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后通知HMI显示结费完成,进入idle */
+#ifdef DEBUG_DIAG_DUMMY
+                xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
+#endif
                 xEventGroupSync(xHandleEventHMI,
                                 defEventBitHMI_ChargeReqDispDone,
                                 defeventBitHMI_ChargeReqDispDoneOK,
@@ -297,6 +333,9 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdTRUE, pdTRUE, portMAX_DELAY);
                 if((uxBitsCharge & defEventBitCONOrderFinish) == defEventBitCONOrderFinish)
                 {
+#ifdef DEBUG_DIAG_DUMMY
+                            pCON->state = STATE_CON_IDLE;
+#endif
                     //解锁
                     if(pCON->info.ucSocketType == defSocketTypeB)
                     {

@@ -266,7 +266,7 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         }
                     }
-                    //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOK); //告诉order你用完了他的数据
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //告诉order你用完了他的数据
                     eRmtRTDataStat = REMOTERTData_IDLE;
                     break;
                 }
@@ -291,9 +291,7 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(eRmtOrderStat)
                 {
                 case REMOTEOrder_IDLE:
-                   uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                             defEventBitOrderMakeFinish,
-                                             pdFALSE, pdTRUE, 0);
+                   uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                     if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
                     {
                         order_send_count = 0;
@@ -310,7 +308,14 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteOrderRes(pEVSE, pechProto, &network_res);
                     if(network_res == 1)
                     {
-                        eRmtOrderStat = REMOTEOrder_IDLE;
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
+                        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                     defEventBitOrderFinishToRemote,
+                                                     pdTRUE, pdTRUE, portMAX_DELAY);
+                        if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
+                        {
+                              eRmtOrderStat = REMOTEOrder_IDLE;
+                        }
                     }
                     else if(network_res == 0)
                     {
@@ -320,7 +325,14 @@ void vTaskEVSERemote(void *pvParameters)
                         }
                         if(order_send_count > 3)
                         {
-                            eRmtOrderStat = REMOTEOrder_IDLE;
+                            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
+                            uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                         defEventBitOrderFinishToRemote,
+                                                         pdTRUE, pdTRUE, portMAX_DELAY);
+                            if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
+                            {
+                                  eRmtOrderStat = REMOTEOrder_IDLE;
+                            }
                         }
                     }
                     break;

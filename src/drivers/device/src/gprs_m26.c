@@ -276,7 +276,8 @@ uint32_t gprs_read_CPIN(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CPIN: READY");
+//    p = strstr(buff, "+CPIN: READY");
+    p = strstr(buff, "READY");
     if(p != NULL)
     {
         return DR_AT_OK;
@@ -303,7 +304,9 @@ uint32_t gprs_read_CREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CREG: 0,5");
+//    p = strstr(buff, "+CREG: 0,5");
+    p = strstr(buff, "+CREG: 0");
+
     if(p != NULL)
     {
         return DR_AT_OK;
@@ -335,7 +338,8 @@ uint32_t gprs_read_CGREG(void)
     uint8_t res;
 
     res = readRecvQueEx(pGprsRecvQue, buff, 0, &rl);
-    p = strstr(buff, "+CGREG: 0,5");
+//    p = strstr(buff, "+CGREG: 0,5");
+    p = strstr(buff, "+CGREG: 0");
     if(p != NULL)
     {
         return DR_AT_OK;

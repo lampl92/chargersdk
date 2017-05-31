@@ -132,16 +132,17 @@ void vTaskEVSEData(void *pvParameters)
 
                 /** @todo (rgw#1#): 存储订单 */
 
-//                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-//                                                 defEventBitOrderUseless,
-//                                                 pdTRUE, pdTRUE, 0);
-//                if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
-//                {
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                 defEventBitOrderUseless,
+                                                 pdTRUE, pdTRUE, 0);
+                if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                     /* @todo (rgw#1): 在这里存储订单*/
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
                     OrderInit(&(pCON->order));//状态变为IDLE
-//                }
+                }
                 break;
             }
         }
