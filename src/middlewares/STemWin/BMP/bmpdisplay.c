@@ -4,6 +4,7 @@
 
 static FIL BMPFile;
 FIL BMPFile_BCGROUND;
+FIL BMPFile_ENCODE;
 static FIL ScrSortFile;                 //屏幕截图文件
 static char bmpBuffer[BMPPERLINESIZE];
 char *bmpbuffer;
@@ -335,4 +336,34 @@ uint8_t readBackGroundNOFREE(uint8_t *BMPFileName)
 	f_close(&BMPFile_BCGROUND);				//关闭BMPFile文件
 	return 0;
 }
+/** @brief 读取二维码图片
+ *
+ * @param 路径；左上角位置；句柄
+ * @param
+ * @return
+ *
+ */
+uint8_t readEncodeNOFREE(uint8_t *BMPFileName)
+{
+	uint16_t bread;
+	char result;
+
+	result = f_open(&BMPFile_ENCODE,(const TCHAR*)BMPFileName,FA_READ);	//打开文件
+	//文件打开错误或者文件大于BMPMEMORYSIZE
+	if((result != FR_OK) || (BMPFile_ENCODE.obj.objsize>BMPMEMORYSIZE)) 	return 1;
+
+	bmpbuffer = malloc(BMPFile_ENCODE.obj.objsize);//申请内存
+
+	if(bmpbuffer == NULL)
+	{
+        return 2;//分配失败
+	}
+
+	result = f_read(&BMPFile_ENCODE,bmpbuffer,BMPFile_ENCODE.obj.objsize,(UINT *)&bread); //读取数据
+	if(result != FR_OK) return 3;
+
+	f_close(&BMPFile_ENCODE);				//关闭BMPFile文件
+	return 0;
+}
+
 

@@ -16,6 +16,7 @@
 #include "cli_main.h"
 #include "timercallback.h"
 #include "gprs_m26.h"
+#include "bsp.h"
 
 
 /*---------------------------------------------------------------------------/
@@ -154,15 +155,8 @@ TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-#ifndef EVSE_DEBUG
     gprs_init();
     gprs_ppp_poll();
-#else
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
-#endif
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -264,6 +258,7 @@ void AppObjCreate (void)
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟�??
 void vApplicationTickHook( void )
 {
+    IWDG_Feed();
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
 }
 
