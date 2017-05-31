@@ -903,7 +903,7 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     /* @todo (yuye#1#): 确认取反 */
 
 #ifdef DEBUG_DIAG_DUMMY
-    tmpScramState = 1;
+    tmpScramState = 0;
 #else
     tmpScramState = ~((uint8_t)(read_pca9554_2() >> 2)) & 0x01;
 #endif
