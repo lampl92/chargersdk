@@ -233,6 +233,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     volatile int8_t hour;
     volatile int8_t min;
     volatile int8_t sec;
+    EventBits_t uxBits;
 
 
     // USER START (Optionally insert additional variables)
@@ -284,6 +285,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,temp_buf);
 
+        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                     defEventBitOrderMakeFinish,
+                                     pdFALSE, pdTRUE, portMAX_DELAY);
+        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
         time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
         hour = time_charge / 3600;
         min = time_charge % 3600 / 60;
