@@ -321,18 +321,20 @@ void vTaskEVSECharge(void *pvParameters)
 #ifdef DEBUG_DIAG_DUMMY
                 xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
 #endif
-                xEventGroupSync(xHandleEventHMI,
-                                defEventBitHMI_ChargeReqDispDone,
-                                defeventBitHMI_ChargeReqDispDoneOK,
-                                portMAX_DELAY );
-                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);//通知Order HMI显示完成了。
+//                xEventGroupSync(xHandleEventHMI,
+//                                defEventBitHMI_ChargeReqDispDone,
+//                                defeventBitHMI_ChargeReqDispDoneOK,
+//                                portMAX_DELAY );
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//通知HMI显示结束订单
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
+#ifdef RFID_ProtoOK// 刷卡协议完成后添加
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONOrderFinish,
                                                    pdTRUE, pdTRUE, portMAX_DELAY);
                 if((uxBitsCharge & defEventBitCONOrderFinish) == defEventBitCONOrderFinish)
                 {
+#endif
 #ifdef DEBUG_DIAG_DUMMY
                             pCON->state = STATE_CON_IDLE;
 #endif
@@ -360,7 +362,9 @@ void vTaskEVSECharge(void *pvParameters)
                     {
                         pCON->state = STATE_CON_IDLE;
                     }
+#ifdef RFID_ProtoOK// 刷卡协议完成后添加
                 }
+#endif
                 break;
             case STATE_CON_ERROR:
                 THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_ERROR");
