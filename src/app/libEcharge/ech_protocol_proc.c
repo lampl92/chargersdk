@@ -92,6 +92,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 continue;
             }
 #endif
+            vTaskDelay(1000);
             /* 3. */
             gdsl_list_cursor_step_forward (cs);
         }
@@ -131,6 +132,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 continue;
             }
 #endif
+            vTaskDelay(1000);
             gdsl_list_cursor_step_forward (cr);
         }
         vTaskDelay(1000);
