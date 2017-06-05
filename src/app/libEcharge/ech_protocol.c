@@ -682,41 +682,50 @@ static int recvResponse(void *pPObj,
     uint32_t ulMsgBodyLen_enc;
     uint16_t usChecksum;
     uint8_t EVSEID[8];
+    uint32_t ulOffset;
     int i;
 
     pProto = (echProtocol_t *)pPObj;
     pE = (EVSE_t *)pEObj;
-
-    if(pbuff[0] != pProto->info.ucProtoVer)
+    ulOffset = 0;
+    while(pbuff[ulOffset] != pProto->info.ucProtoVer)
     {
-        return ECH_ERR_VER;
+        ulOffset++;
+        if(ulOffset == ulRecvdLen)
+        {
+            return ECH_ERR_VER;
+        }
     }
+//    if(pbuff[ulOffset] != pProto->info.ucProtoVer)
+//    {
+//        return ECH_ERR_VER;
+//    }
 
     //pbuff[1] 属性
 
     //pbuff[2,3] 命令字
-    ustmpNetSeq.ucVal[0] = pbuff[2];
-    ustmpNetSeq.ucVal[1] = pbuff[3];
+    ustmpNetSeq.ucVal[0] = pbuff[ulOffset + 2];
+    ustmpNetSeq.ucVal[1] = pbuff[ulOffset + 3];
     echRecvCmdElem.cmd.usRecvCmd = ntohs(ustmpNetSeq.usVal);
 
     //pbuff[4...7] 预留字段
 
     //pbuff[8...11] 消息体长度
-    ultmpNetSeq.ucVal[0] = pbuff[8];
-    ultmpNetSeq.ucVal[1] = pbuff[9];
-    ultmpNetSeq.ucVal[2] = pbuff[10];
-    ultmpNetSeq.ucVal[3] = pbuff[11];
+    ultmpNetSeq.ucVal[0] = pbuff[ulOffset + 8];
+    ultmpNetSeq.ucVal[1] = pbuff[ulOffset + 9];
+    ultmpNetSeq.ucVal[2] = pbuff[ulOffset + 10];
+    ultmpNetSeq.ucVal[3] = pbuff[ulOffset + 11];
     ulMsgBodyLen_enc = ntohl(ultmpNetSeq.ulVal);
 
     //pbuff[12,13] Checksum
-    ustmpNetSeq.ucVal[0] = pbuff[12];
-    ustmpNetSeq.ucVal[1] = pbuff[13];
+    ustmpNetSeq.ucVal[0] = pbuff[ulOffset + 12];
+    ustmpNetSeq.ucVal[1] = pbuff[ulOffset + 13];
     usChecksum = ntohs(ustmpNetSeq.usVal);
     if(usChecksum != echVerifCheck(pProto->info.ucProtoVer, 0, echRecvCmdElem.cmd.usRecvCmd, ulMsgBodyLen_enc))
     {
         return ECH_ERR_CHECK;
     }
-    StrToHex(&pbuff[14], EVSEID, 16);
+    StrToHex(&pbuff[ulOffset + 14], EVSEID, 16);
     if(memcmp(EVSEID, pE->info.ucID, 8) != 0 )
     {
         return ECH_ERR_ID;
@@ -747,13 +756,19 @@ static int recvResponse(void *pPObj,
     default:
         break;
     }
-    echRecvCmdElem.len = ulRecvdLen;
+    echRecvCmdElem.len = ulMsgBodyLen_enc + 14;
     echRecvCmdElem.pbuff = pbuff;
     echRecvCmdElem.status = 0;
     echRecvCmdElem.trycount = 0;
     echRecvCmdElem.trycountmax = trycountmax;
 
     gdsl_list_insert_tail(pProto->plechRecvCmd, (void *)&echRecvCmdElem);
+
+    if(ulRecvdLen - ulOffset > echRecvCmdElem.len)
+    {
+        recvResponse(pPObj, pEObj, &pbuff[ulOffset + echRecvCmdElem.len], ulRecvdLen - ulOffset - echRecvCmdElem.len, 3);
+    }
+    return 1;
 }
 
 /** @brief
@@ -935,7 +950,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.usServerPort      = 8051;
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
-    strcpy(pProto->info.strKey, "0123456789abcdeg");
+    strcpy(pProto->info.strKey, "1234567890abcde2");
     memset(pProto->info.strNewKey, 0, 17);
     pProto->info.tNewKeyChangeTime = 0;
     pProto->info.ucProtoVer        = 0x68;
