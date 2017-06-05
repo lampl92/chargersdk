@@ -57,16 +57,17 @@ static QUERESULT GetElem(Queue *q, QUEUETYPE *pelem)
 }
 static QUERESULT FlushQueue(Queue *q)
 {
-    QUEUETYPE ch;
-    QUERESULT res;
-    do
-    {
-        res = DeElem(q, &ch);
-    }
-    while(res == QUE_OK);
-    memset(q->elem, 0, q->length);
-    q->front = 0;
-    q->rear = 0;
+//    QUEUETYPE ch;
+//    QUERESULT res;
+//    do
+//    {
+//        res = DeElem(q, &ch);
+//    }
+//    while(res == QUE_OK);
+//    memset(q->elem, 0, q->length);
+//    q->front = 0;
+//    q->rear = 0;
+    q = q;
 }
 static void DeleteQue(Queue *q)
 {
