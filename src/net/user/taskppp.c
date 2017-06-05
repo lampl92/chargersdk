@@ -10,8 +10,11 @@
 #include "lwip_init.h"
 #include "bsp.h"
 #include "gprs_m26.h"
+#include "FreeRTOS.h"
+#include "event_groups.h"
+#include "netif/ppp/ppp.h"
 
-
+EventBits_t uxBitLwip;
 //void input_over_serial(int ppp)
 //{
 //    uint8_t data[1500];
@@ -39,11 +42,13 @@ void vTaskPPP(void *pvParameters)
     ppp = lwip_init_task();
     while(1)
     {
-//        if(dev_gprs.pollstate == DS_GPRS_POLL_PPPDego)
-//        {
-//            input_over_serial(ppp);
-//        }
-
+        uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP,
+                                        defEventBitDailCONNECT,
+                                        pdTRUE, pdTRUE, portMAX_DELAY);
+        if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
+        {
+            ppp = pppOverSerialOpen(0, ppp_on_status, &ppp);
+        }
         vTaskDelay(1000);
     }
 }

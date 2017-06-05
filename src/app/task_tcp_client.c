@@ -72,7 +72,7 @@ void vTaskTCPClient(void *pvParameters)
                         if(FD_ISSET(sock, &exceptfds))
                         {
                             printf_safe("exceptfds exceptfds exceptfds!\n");
-                            pppClose(ppp);
+                            pppSigHUP(ppp);
                         }
                         if(FD_ISSET(sock, &readfds))//测试网络是否有数据
                         {

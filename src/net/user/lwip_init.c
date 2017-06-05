@@ -214,14 +214,7 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
     }
 
     /** @todo (zshare#1#): 在这里对modem进行重连，连接好后通过信号量或者时间通知该函数，然后对ppp进行重连 */
-    uxBitLwip = xEventGroupSync(xHandleEventLwIP,
-                                defEventBitReDail,
-                                defEventBitDailCONNECT,
-                                portMAX_DELAY);
-    if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)
-    {
-    }
-
+    xEventGroupSetBits(xHandleEventLwIP, defEventBitReDail);
 }
 #endif
 

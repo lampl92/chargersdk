@@ -11,5 +11,6 @@
 extern int ppp;
 
 int lwip_init_task(void);
+void ppp_on_status(void *ctx, int errCode, void *arg);
 
 #endif

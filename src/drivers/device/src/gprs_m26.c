@@ -128,6 +128,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
             try_cont++;
             if(try_cont > 10)
             {
+                GPRS_reset;
                 try_cont = 0;
                 fn_res = 0;
                 dev_gprs.state = DS_GPRS_ERR;
@@ -136,7 +137,7 @@ uint32_t gprs_ioctl(uint8_t ioctl)
 #endif
                 break;
             }
-            res = recvStrCmp(pGprsRecvQue, "Call Ready", 0);
+            res = recvStrCmp(pGprsRecvQue, "RDY", 0);
             if(res == 0)
             {
                 gprs_delayms(3000);
@@ -427,7 +428,12 @@ uint32_t gprs_read_ATD(void)
         return DR_AT_ERR;
     }
 }
-
+uint32_t gprs_send_RESET(void)
+{
+    pGprsRecvQue->Flush(pGprsRecvQue);
+    HAL_UART_Transmit(&GPRS_UARTx_Handler, "AT+CFUN=1,1\r\n", strlen("AT+CFUN=1,1\r\n"), 0xFFFF);
+    gprs_delayms(100);
+}
 uint32_t gprs_ppp_poll(void)
 {
     uint32_t res_at;
@@ -677,8 +683,7 @@ uint32_t gprs_ppp_poll(void)
             }
             break;
         case DS_GPRS_POLL_ERR:
-            //gprs_ioctl(DA_GPRS_RESET);
-            gprs_init();
+            gprs_send_RESET();
             vTaskDelay(10000);
             dev_gprs.pollstate = DS_GPRS_POLL_AT;
             break;
