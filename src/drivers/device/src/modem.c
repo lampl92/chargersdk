@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdarg.h>
 #include "modem.h"
-#include "bsp_uart.h"
+#include "bsp.h"
 #include "user_app.h"
 
-#define MODEMDEBUG(msg) do{printf_safe(msg)}while(0);
+#define MODEMDEBUG(msg) do{printf_safe(msg);}while(0);
 
-static int get_line(uint8_t *line, int len);
+DevModem_t *pModem;
 
 static uint8_t UART_getc(void)
 {
@@ -318,11 +318,12 @@ void modem_get_info(DevModem_t *pModem)
     modem_get_gprs_reg(pModem);
 }
 
-
-DR_MODEM_e modem_init(DevModem_t *pModem)
+DR_MODEM_e modem_init(void)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
+
+    pModem = DevModemCreate();
 
     MODEMDEBUG(("modem init: \r\n"));
     ret = modem_open(pModem);
@@ -333,4 +334,11 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     ret = modem_disable_echo();
 
     return ret;
+}
+
+DevModem_t *DevModemCreate(void)
+{
+    DevModem_t *pMod;
+    pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
+    return pMod;
 }

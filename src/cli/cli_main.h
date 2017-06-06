@@ -18,6 +18,7 @@ extern tinysh_cmd_t cli_evseinfo_cmd;
 extern tinysh_cmd_t cli_evsestatus_cmd;
 extern tinysh_cmd_t cli_evseorder_cmd;
 extern tinysh_cmd_t cli_gprs_cmd;
+extern tinysh_cmd_t cli_modeminfo_cmd;
 
 
 #endif

@@ -13,7 +13,50 @@
 #include "gdsl_list.h"
 #include "gdsl_perm.h"
 #include <time.h>
+#include "modem.h"
 
+void cli_modeminfo_fnt(int argc, char **argv)
+{
+    printf_safe("=============ÐÅÏ¢=============\n");
+
+    printf_safe("=============×´Ì¬=============\n");
+    printf_safe("²å¿¨×´Ì¬£º      ");
+    if(pModem->status.ucSimStat == DR_MODEM_CPIN_READY)
+    {
+        printf_safe("READY\n");
+    }
+    else if(pModem->status.ucSimStat == DR_MODEM_CPIN_OTHER)
+    {
+        printf_safe("Other\n");
+    }
+    printf_safe("ÍøÂç×¢²áÐÅÏ¢£º    ");
+    switch(pModem->status.ucNetReg)
+    {
+    case 1:
+        printf_safe("±¾µØ¿¨\n");
+        break;
+    case 5:
+        printf_safe("ÂþÓÎ¿¨\n");
+        break;
+    default:
+        printf_safe("ÓÐÎÊÌâ\n");
+        break;
+    }
+    printf_safe("GPRSÍøÂç×¢²áÐÅÏ¢£º");
+    switch(pModem->status.ucGprsReg)
+    {
+    case 1:
+        printf_safe("±¾µØ¿¨\n");
+        break;
+    case 5:
+        printf_safe("ÂþÓÎ¿¨\n");
+        break;
+    default:
+        printf_safe("ÓÐÎÊÌâ\n");
+        break;
+    }
+    printf_safe("ÐÅºÅÇ¿¶È£º  %d\n", pModem->status.ucSignalQuality);
+}
 void cli_evseinfo_fnt(int argc, char **argv)
 {
     CON_t *pCON;
@@ -180,19 +223,19 @@ void cli_evseorder_fnt(int argc, char **argv)
             printf_safe("%02X ", pCON->order.ucCardID[i]);
         }
         printf_safe("\n");
-         //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 2:Ç··Ñ 0£ºÎ´×¢²á¿¨
+        //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 2:Ç··Ñ 0£ºÎ´×¢²á¿¨
         printf_safe("ÕË»§×´Ì¬:      ");
         switch(pCON->order.ucAccountStatus)
         {
         case 1:
-                printf_safe(" ×¢²á¿¨");
-                break;
+            printf_safe(" ×¢²á¿¨");
+            break;
         case 2:
-                printf_safe("Ç··Ñ");
-                break;
+            printf_safe("Ç··Ñ");
+            break;
         case 0:
-                printf_safe("Î´×¢²á");
-                break;
+            printf_safe("Î´×¢²á");
+            break;
         }
         printf_safe("\n");
         //double  dBalance;           //Óà¶î
@@ -249,8 +292,8 @@ void cli_evseorder_fnt(int argc, char **argv)
         switch(pCON->order.ucStopType)
         {
         case defOrderStopType_RFID:
-             printf_safe("RFID\n");
-             break;
+            printf_safe("RFID\n");
+            break;
         case defOrderStopType_Remote:
             printf_safe("remote\n");
             break;
@@ -258,7 +301,7 @@ void cli_evseorder_fnt(int argc, char **argv)
             printf_safe("³äÂúÍ£Ö¹\n");
             break;
         case defOrderStopType_Fee:
-             printf_safe("´ïµ½³äµç½ð¶î\n");//´ïµ½³äµç½ð¶î
+            printf_safe("´ïµ½³äµç½ð¶î\n");//´ïµ½³äµç½ð¶î
             break;
         case defOrderStopType_Scram:
         case defOrderStopType_NetLost:
@@ -400,5 +443,14 @@ tinysh_cmd_t cli_evsestatus_cmd =
     "display evse status",
     0,
     cli_evsestatus_fnt,
+    "<cr>", 0, 0
+};
+tinysh_cmd_t cli_modeminfo_cmd =
+{
+    0,
+    "modeminfo",
+    "display modem info",
+    0,
+    cli_modeminfo_fnt,
     "<cr>", 0, 0
 };

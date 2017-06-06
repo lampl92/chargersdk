@@ -17,6 +17,7 @@
 #include "timercallback.h"
 #include "gprs_m26.h"
 #include "bsp.h"
+#include "modem.h"
 
 
 /*---------------------------------------------------------------------------/
@@ -155,8 +156,14 @@ TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-    gprs_init();
-    gprs_ppp_poll();
+    modem_init();
+    while(1)
+    {
+        modem_get_info(pModem);
+        vTaskDelay(10000);
+    }
+//    gprs_init();
+//    gprs_ppp_poll();
 }
 void vTaskCLI(void *pvParameters)
 {

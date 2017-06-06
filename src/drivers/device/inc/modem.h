@@ -25,13 +25,6 @@ typedef enum
 #define MODEM_GET_SOFTWARE_VER_ERR       1<<3
 #define MODEM_GET_GPRS_STA_ERR           1<<6
 
-/* information length */
-#define MODEM_MANUFACTURER_LEN           7
-#define MODEM_MODEL_LEN                  4
-#define MODEM_SERIAL_NUMBER_LEN          15
-#define MODEM_IMEI_LEN                   15
-#define MODEM_SIMCARD_ID_LEN             20
-
 
 typedef struct
 {
@@ -63,17 +56,10 @@ typedef struct _dev_modem
     ModemState_e state;
 } DevModem_t;
 
+extern DevModem_t *pModem;
 
-
-int     modem_send_at(char *format, ...);                                         /* 发送AT命令 */
-int     modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, uint32_t second);    /* 获取AT命令返回 */
-
+DevModem_t *DevModemCreate(void);
 DR_MODEM_e modem_init(void);
 void modem_get_info(DevModem_t *pModem);
-
-
-
-
-
 
 #endif/*_MODEM_H_*/
