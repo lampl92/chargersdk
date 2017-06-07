@@ -89,10 +89,10 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): ≥¢ ‘¡¨Ω”Õ¯¬Á */
-            uxBits = xEventGroupWaitBits(xHandleEventLwIP,
-                                         defEventBitPPPup,
+            uxBits = xEventGroupWaitBits(xHandleEventTCP,
+                                         defEventBitTCPConnectOK,
                                          pdFALSE, pdTRUE, portMAX_DELAY);
-            if((uxBits & defEventBitPPPup) == defEventBitPPPup)
+            if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
                 RemoteRegist(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
