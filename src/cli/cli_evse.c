@@ -21,21 +21,21 @@ void cli_modeminfo_fnt(int argc, char **argv)
 
     printf_safe("=============状态=============\n");
     printf_safe("插卡状态：      ");
-    if(pModem->status.ucSimStat == DR_MODEM_CPIN_READY)
+    if(pModem->status.eSimStat == CPIN_READY)
     {
         printf_safe("READY\n");
     }
-    else if(pModem->status.ucSimStat == DR_MODEM_CPIN_OTHER)
+    else if(pModem->status.eSimStat == CPIN_OTHER)
     {
         printf_safe("Other\n");
     }
     printf_safe("网络注册信息：    ");
-    switch(pModem->status.ucNetReg)
+    switch(pModem->status.eNetReg)
     {
-    case 1:
+    case REG_LOCAl:
         printf_safe("本地卡\n");
         break;
-    case 5:
+    case REG_ROAMING:
         printf_safe("漫游卡\n");
         break;
     default:
@@ -43,12 +43,12 @@ void cli_modeminfo_fnt(int argc, char **argv)
         break;
     }
     printf_safe("GPRS网络注册信息：");
-    switch(pModem->status.ucGprsReg)
+    switch(pModem->status.eGprsReg)
     {
-    case 1:
+    case REG_LOCAl:
         printf_safe("本地卡\n");
         break;
-    case 5:
+    case REG_ROAMING:
         printf_safe("漫游卡\n");
         break;
     default:
@@ -56,6 +56,7 @@ void cli_modeminfo_fnt(int argc, char **argv)
         break;
     }
     printf_safe("信号强度：  %d\n", pModem->status.ucSignalQuality);
+    printf_safe("本地地址：  %s\n", pModem->status.strLocIP);
 }
 void cli_evseinfo_fnt(int argc, char **argv)
 {
