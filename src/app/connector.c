@@ -1225,7 +1225,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 
     if(ucCONID == 0)
     {
-#ifndef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY_C
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
@@ -1273,7 +1273,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     //...
     if(ucCONID == 0)
     {
-#ifndef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY_C
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
