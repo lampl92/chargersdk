@@ -343,7 +343,7 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
 static void LCD_LL_Init(void)
 {
     //LTDC中断，抢占优先级1，子优先级1
-    HAL_NVIC_SetPriority(LTDC_IRQn,1,1);
+    HAL_NVIC_SetPriority(LTDC_IRQn,bspLTDC_PreemptPriority, bspLTDC_SubPriority);
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
     HAL_LTDC_ProgramLineEvent(&LTDC_Handler,0);//开启LTDC的行中断
 
