@@ -945,8 +945,8 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");
-    pProto->info.usServerPort      = 6677;//8051;
+    strcpy(pProto->info.strServerIP, "124.207.112.70");//"123.56.113.123");//
+    pProto->info.usServerPort      = 8051;//6677;//
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
     strcpy(pProto->info.strKey, "1234567890abcde2");
