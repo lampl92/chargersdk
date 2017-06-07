@@ -7,7 +7,6 @@
 */
 #include "utils.h"
 #include "interface.h"
-#include "lwip/sockets.h"
 #include "enc_dec.h"
 #include "libEcharge/ech_protocol_proc.h"
 
@@ -484,13 +483,13 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //[44...47] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[48...51] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -946,8 +945,8 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "124.207.112.70");
-    pProto->info.usServerPort      = 8051;
+    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");
+    pProto->info.usServerPort      = 6677;//8051;
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
     strcpy(pProto->info.strKey, "1234567890abcde2");
