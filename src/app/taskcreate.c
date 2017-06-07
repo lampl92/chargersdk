@@ -132,7 +132,7 @@ EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
-EventGroupHandle_t xHandleEventLwIP   = NULL;
+EventGroupHandle_t xHandleEventTCP   = NULL;
 
 //下面的Event在相应结构体中定义
 //pRFIDDev->xHandleEventGroupRFID
@@ -156,14 +156,15 @@ TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-    modem_init();
-    while(1)
-    {
-        modem_get_info(pModem);
-        vTaskDelay(10000);
-    }
-//    gprs_init();
-//    gprs_ppp_poll();
+    pModem = DevModemCreate();
+    strcpy(pModem->info.strAPN, "CMNET");
+    pModem->info.ucContext = 0;
+    pModem->xMutex = xSemaphoreCreateMutex();
+
+    modem_open(pModem);
+    modem_init(pModem);
+    Modem_Poll(pModem);//这是任务
+
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -210,8 +211,8 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 
-    xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
-    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
+    //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
+    //xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 
 }
@@ -235,7 +236,7 @@ void AppObjCreate (void)
     xHandleEventDiag = xEventGroupCreate();
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
-    xHandleEventLwIP = xEventGroupCreate();
+    xHandleEventTCP = xEventGroupCreate();
 
 
     xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
