@@ -103,15 +103,12 @@
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
 #define defEventBitRemoteGotAccount     BIT_1
-/*------xHandleEventlwIP*/
-#define defEventBitTCPIPinit            BIT_0
-#define defEventBitDailCONNECT          BIT_1
-#define defEventBitReDail               BIT_2
+/*------xHandleEventTCP*/
+#define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
 #define defEventBitTCPClientSendOK      BIT_4
-#define defEventBitPPPup                BIT_5
+#define defEventBitTCPConnectOK                BIT_5 //服务器连接成功
 #define defEventBitTCPClientRecvValid   BIT_6
-#define defEventBitCmdRegedit           BIT_7
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
