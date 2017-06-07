@@ -6,7 +6,6 @@
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
-#include "ifconfig.h"
 
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
@@ -122,7 +121,7 @@ void create_evsecfg_file(void)
 extern void retarget_init(void);
 void sys_Init(void)
 {
-    ifconfig_init();
+    //ifconfig_init();
     timeInit();
     retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
