@@ -24,7 +24,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
-    EventBits_t uxBitsLwip;
+    EventBits_t uxBitsTCP;
     int res;
     int i;
 
@@ -33,8 +33,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
         printf_safe("\n");
 
         /** @todo (rgw#1#): ！！！ 需要抽时间整理一下这里的超时和重发次数，逻辑上有问题 */
@@ -49,22 +49,20 @@ void vTaskRemoteCmdProc(void *pvParameters)
             {
                 memmove(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
                 send_len = pechCmdElem->len;
-                uxBitsLwip = xEventGroupSync(xHandleEventLwIP,
+                uxBitsTCP = xEventGroupSync(xHandleEventTCP,
                                              defEventBitTCPClientSendReq,
                                              defEventBitTCPClientSendOK,
                                              10000);
-                if((uxBitsLwip & defEventBitTCPClientSendOK) == defEventBitTCPClientSendOK)
+                if((uxBitsTCP & defEventBitTCPClientSendOK) == defEventBitTCPClientSendOK)
                 {
                     pechCmdElem->status = 1;
                 }
                 else//没发出去
                 {
                     pechCmdElem->trycount++;
-                    pppSigHUP(ppp);
                     if(pechCmdElem->trycount > pechCmdElem->trycountmax)
                     {
                         gdsl_list_cursor_delete(cs);
-                        //gdsl_list_cursor_step_backward(cs);//删除之后光标会自动forward一步，for循环中forward就会错过一个元素，因此向后移一步。
 
                         continue;
                         /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
