@@ -384,25 +384,25 @@ DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     MODEMDEBUG("modem set RecvType: \r\n");
-    modem_send_at("AT+QISHOWRA=1\r");  //在接收到的数据头位置增加数据来源的地址和端口号。具体的格式为：RECV FROM:<IP ADDRESS>:<PORT>
+    modem_send_at("AT+QISHOWRA=%d\r", 0);  //在接收到的数据头位置增加数据来源的地址和端口号。具体的格式为：RECV FROM:<IP ADDRESS>:<PORT>
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    modem_send_at("AT+QISHOWPT=1\r"); //在接收到的数据之前增加传输层的协议类型，TCP或者UDP。这个应用不是很多
+    modem_send_at("AT+QISHOWPT=%d\r", 0); //在接收到的数据之前增加传输层的协议类型，TCP或者UDP。这个应用不是很多
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    modem_send_at("AT+QIHEAD=1\r");  //在接收到的数据之前增加头信息"IPD<len>:"
+    modem_send_at("AT+QIHEAD=%d\r", 0);  //在接收到的数据之前增加头信息"IPD<len>:"
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    modem_send_at("AT+QINDI=1\r");
+    modem_send_at("AT+QINDI=%d\r", 1);
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
@@ -757,7 +757,7 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     {
         return ret;
     }
-    //ret = modem_set_RecvType(pModem);
+    ret = modem_set_RecvType(pModem);
     return ret;
 }
 
