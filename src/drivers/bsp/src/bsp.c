@@ -132,9 +132,9 @@ void bsp_Init(void)
 
     LCD_Init();
     TP_Init();
-//#ifndef DEBUG_INIT
+#ifndef DEBUG_INIT
     Peripheral_Init();
-//#endif
+#endif
     bsp_SDRAM_Init();
 
     //FTL_Init();在fatfs中初始化
