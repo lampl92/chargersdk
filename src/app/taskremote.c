@@ -66,6 +66,7 @@ void vTaskEVSERemote(void *pvParameters)
     time_t time_rmtctrl;
     time_t time_order;
     uint8_t order_send_count;
+    uint8_t reg_try_cnt;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -81,6 +82,7 @@ void vTaskEVSERemote(void *pvParameters)
     time_rmtctrl = 0;
     time_order = 0;
     order_send_count = 0;
+    reg_try_cnt = 0;
 
     while(1)
     {
@@ -111,9 +113,23 @@ void vTaskEVSERemote(void *pvParameters)
                                    100);//设置timer period ，有timer start 功能
                 remotestat = REMOTE_REGEDITED;
             }
-
+            else
+            {
+                reg_try_cnt++;
+                if(reg_try_cnt > 5)
+                {
+                    reg_try_cnt = 0;
+                    remotestat = REMOTE_NO;
+                }
+                vTaskDelay(1000);
+            }
             break;
         case REMOTE_REGEDITED:
+            if(pModem->state != DS_MODEM_TCP_KEEP)
+            {
+                remotestat = REMOTE_NO;
+                break;
+            }
 
             /************ 心跳 ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
