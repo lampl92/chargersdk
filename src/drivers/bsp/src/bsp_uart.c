@@ -24,8 +24,15 @@ static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 
+static void uart_putc(uint8_t ch)
+{
+    while((GPRS_USARTx_BASE->SR&0X40)==0);
+    GPRS_USARTx_BASE->DR = ch;
+}
+
 uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
 {
+    int i;
     UART_HandleTypeDef *pUART_Handle;
     switch(uartport)
     {
@@ -37,12 +44,20 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     case UART_PORT_GPRS:
         pUART_Handle = &GPRS_UARTx_Handler;
+        for(i = 0; i < len; i++)
+        {
+            uart_putc(data[i]);
+        }
+        return i;
         break;
     default:
         break;
     }
     HAL_StatusTypeDef hal_res;
     hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 0xFFFF);
+
+
+
     if(hal_res == HAL_OK)
     {
         return len;
