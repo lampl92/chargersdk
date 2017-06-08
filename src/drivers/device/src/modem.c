@@ -600,9 +600,14 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     }
     modem_UART_puts(pbuff, len);
     vTaskDelay(10);
-    modem_QISACK(pModem);
-    while(pModem->flag.sent != pModem->flag.acked)
+    do
     {
+        modem_QISACK(pModem);
+        if(pModem->flag.sent == pModem->flag.acked)
+        {
+            ret = DR_MODEM_OK;
+            break;
+        }
         n++;
         if(n >= 40)
         {
@@ -610,8 +615,8 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
             break;
         }
         vTaskDelay(500);
-        modem_QISACK(pModem);
-    }
+    }while(pModem->flag.sent != pModem->flag.acked);
+
     return ret;
 }
 uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
@@ -851,6 +856,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_KEEP:
+            modem_get_STATE(pModem);
             if(pModem->state == PDP_DEACT)
             {
                 xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
