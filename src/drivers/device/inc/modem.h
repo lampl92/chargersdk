@@ -22,7 +22,9 @@ typedef enum
 {
     DR_MODEM_ERROR,
     DR_MODEM_OK,
-    DR_MODEM_TIMEOUT
+    DR_MODEM_TIMEOUT,
+    DR_MODEM_READ,
+    DR_MODEM_CLOSED
 } DR_MODEM_e;
 
 
