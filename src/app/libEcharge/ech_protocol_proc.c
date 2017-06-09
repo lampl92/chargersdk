@@ -33,68 +33,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
         printf_safe("\n");
 
         /** @todo (rgw#1#): ！！！ 需要抽时间整理一下这里的超时和重发次数，逻辑上有问题 */
-
-        /* 遍历SendCmd */
-
-        gdsl_list_cursor_move_to_head (cs);
-        while(pechCmdElem = gdsl_list_cursor_get_content (cs))
-        {
-            /* 1. 判断协议是否发送 */
-            if(pechCmdElem->status == 0)
-            {
-                memmove(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
-                send_len = pechCmdElem->len;
-                uxBitsTCP = xEventGroupSync(xHandleEventTCP,
-                                             defEventBitTCPClientSendReq,
-                                             defEventBitTCPClientSendOK,
-                                             10000);
-                if((uxBitsTCP & defEventBitTCPClientSendOK) == defEventBitTCPClientSendOK)
-                {
-                    pechCmdElem->status = 1;
-                }
-                else//没发出去
-                {
-                    pechCmdElem->trycount++;
-                    if(pechCmdElem->trycount > pechCmdElem->trycountmax)
-                    {
-                        gdsl_list_cursor_delete(cs);
-
-                        continue;
-                        /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
-                    }
-                }
-            }
-
-            if(pechCmdElem->status == 1)
-            {
-                /* 判断命令字，
-                   如果是请求命令，则等待主机回复
-                   如果是回复命令，则删除
-                */
-                if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到回复
-                {
-                    gdsl_list_cursor_delete(cs);
-                    continue;
-                }
-
-            }
-#if 1
-            /* 2. 判断超时 ，删除发送未收到回复的命令*/
-            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
-            {
-                gdsl_list_cursor_delete(cs);
-                continue;
-            }
-#endif
-            vTaskDelay(1000);
-            /* 3. */
-            gdsl_list_cursor_step_forward (cs);
-        }
 
         /* 遍历RecvCmd */
 
@@ -124,16 +67,67 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 continue;
             }
 #if 1
-            /* 2. 判断超时 ，删除发送未收到回复的命令*/
+            /* 2. 判断超时 */
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
             {
-                gdsl_list_cursor_delete(cr);
+                gdsl_list_cursor_delete(cs);
                 continue;
             }
 #endif
-            vTaskDelay(1000);
+//            vTaskDelay(1000);
             gdsl_list_cursor_step_forward (cr);
         }
+
+        /* 遍历SendCmd */
+
+        gdsl_list_cursor_move_to_head (cs);
+        while(pechCmdElem = gdsl_list_cursor_get_content (cs))
+        {
+            /* 1. 判断协议是否发送 */
+            if(pechCmdElem->status == 0)
+            {
+                memmove(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
+                send_len = pechCmdElem->len;
+                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
+
+                pechCmdElem->status = 1;
+
+            }
+           /* 2. 已发送，判断发送情况*/
+            if(pechCmdElem->status == 1)
+            {
+                /* 判断命令字，
+                   如果是请求命令，则等待主机回复
+                   如果是回复命令，则删除
+                */
+                if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到回复
+                {
+                    gdsl_list_cursor_delete(cs);
+                    continue;
+                }
+                pechCmdElem->trycount++;
+                if(pechCmdElem->trycount > pechCmdElem->trycountmax)
+                {
+                    gdsl_list_cursor_delete(cs);
+                    continue;
+                    /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
+                }
+
+            }
+#if 1
+            /* 2. 判断超时 ，超时后置状态为0，再次进行发送*/
+            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
+            {
+                pechCmdElem->timestamp = time(NULL);
+                pechCmdElem->status = 0;
+                continue;//跳过后面的语句立即发送
+            }
+#endif
+            /* 3. */
+            gdsl_list_cursor_step_forward (cs);
+        }
+
+
         vTaskDelay(1000);
     }
 }
