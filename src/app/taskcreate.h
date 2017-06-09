@@ -39,7 +39,7 @@ extern EventGroupHandle_t xHandleEventData;
 extern EventGroupHandle_t xHandleEventDiag;
 extern EventGroupHandle_t xHandleEventRemote;
 extern EventGroupHandle_t xHandleEventHMI;
-extern EventGroupHandle_t xHandleEventLwIP;
+extern EventGroupHandle_t xHandleEventTCP;
 
 extern TimerHandle_t xHandleTimerChargingData;
 extern TimerHandle_t xHandleTimerRemoteHeartbeat;

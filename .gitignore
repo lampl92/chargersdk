@@ -21,3 +21,4 @@ build/EmBitz/chargersdk.cscope_file_list
 src/net/lwip-2.0.2/doc
 src/net/lwip-2.0.2/test
 tags
+*.sublime-workspace

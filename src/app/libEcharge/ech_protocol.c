@@ -7,7 +7,6 @@
 */
 #include "utils.h"
 #include "interface.h"
-#include "lwip/sockets.h"
 #include "enc_dec.h"
 #include "libEcharge/ech_protocol_proc.h"
 
@@ -484,13 +483,13 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //[44...47] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[48...51] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -735,11 +734,11 @@ static int recvResponse(void *pPObj,
     {
     case 2://主机回复的命令，不需要timeout 单位s。
         echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
-        echRecvCmdElem.timeout_s =  0xffffffff;
+        echRecvCmdElem.timeout_s =  30;
         break;
     case 4:
         echRecvCmdElem.cmd_id = ECH_CMDID_HEARTBEAT;
-        echRecvCmdElem.timeout_s =  0xffffffff;
+        echRecvCmdElem.timeout_s =  30;
         break;
     case 42:
         echRecvCmdElem.cmd_id = ECH_CMDID_STATUS;
@@ -946,15 +945,15 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "124.207.112.70");
-    pProto->info.usServerPort      = 8051;
+    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");//
+    pProto->info.usServerPort      = 6677;//8051;//
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
     strcpy(pProto->info.strKey, "1234567890abcde2");
     memset(pProto->info.strNewKey, 0, 17);
     pProto->info.tNewKeyChangeTime = 0;
     pProto->info.ucProtoVer        = 0x68;
-    pProto->info.ulHeartBeatCyc_ms = 5000;
+    pProto->info.ulHeartBeatCyc_ms = 15000;
     pProto->info.ucResetAct        = 0;
 
     pProto->info.ulPowerFee_sharp    = 0; //尖峰费率 系数0.0001
@@ -967,7 +966,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulServiceFee_shoulder = 0;
     pProto->info.ulServiceFee_off_peak = 0;
 
-    pProto->info.ulStatusCyc_ms = 5000; //状态数据上报间隔
+    pProto->info.ulStatusCyc_ms = 15000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
 
 

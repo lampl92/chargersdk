@@ -42,7 +42,7 @@ void vTaskPPP(void *pvParameters)
     ppp = lwip_init_task();
     while(1)
     {
-        uxBitLwip = xEventGroupWaitBits(xHandleEventLwIP,
+        uxBitLwip = xEventGroupWaitBits(xHandleEventTCP,
                                         defEventBitDailCONNECT,
                                         pdTRUE, pdTRUE, portMAX_DELAY);
         if((uxBitLwip & defEventBitDailCONNECT) == defEventBitDailCONNECT)

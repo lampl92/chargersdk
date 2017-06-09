@@ -82,7 +82,7 @@
 			<Add option="-mfloat-abi=hard" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-O3" />
+			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -112,11 +112,7 @@
 			<Add directory="..\..\src\middlewares\STemWin\XBF" />
 			<Add directory="..\..\src\hmi\lcd" />
 			<Add directory="..\..\src\drivers\hal\CMSIS_RTOS" />
-			<Add directory="..\..\src\net\lwip-1.4.1\src\include" />
-			<Add directory="..\..\src\net\lwip-1.4.1\system" />
 			<Add directory="..\..\src\net\user" />
-			<Add directory="..\..\src\net\lwip-1.4.1\src\include\ipv4" />
-			<Add directory="..\..\src\net\lwip-1.4.1\src" />
 			<Add directory="..\..\src\middlewares\tiny-AES128-C" />
 		</Compiler>
 		<Linker>
@@ -215,9 +211,6 @@
 		</Unit>
 		<Unit filename="..\..\src\app\stringName.h" />
 		<Unit filename="..\..\src\app\sysinit.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\app\task_tcp_client.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\task_tcp_client.h" />
@@ -350,14 +343,12 @@
 		<Unit filename="..\..\src\drivers\device\inc\card_m1.h" />
 		<Unit filename="..\..\src\drivers\device\inc\gprs_m26.h" />
 		<Unit filename="..\..\src\drivers\device\inc\led.h" />
+		<Unit filename="..\..\src\drivers\device\inc\modem.h" />
 		<Unit filename="..\..\src\drivers\device\inc\RFIDReader_mt626.h" />
 		<Unit filename="..\..\src\drivers\device\src\buzzer.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\device\src\card_m1.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\drivers\device\src\gprs_m26.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\drivers\device\src\led.c">
@@ -683,167 +674,26 @@
 		<Unit filename="..\..\src\middlewares\userlib\src\xprintf.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\api_lib.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\api_msg.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\err.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\netbuf.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\netdb.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\netifapi.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\sockets.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\api\tcpip.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\def.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\dhcp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\dns.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\init.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\autoip.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\icmp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\igmp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\inet.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\inet_chksum.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\ip.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\ip_addr.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\ipv4\ip_frag.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\mem.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\memp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\netif.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\pbuf.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\raw.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\stats.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\sys.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\tcp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\tcp_in.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\tcp_out.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\timers.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\core\udp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\err.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\opt.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwip\sockets.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\etharp.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\auth.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\auth.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\chap.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\chap.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\chpms.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\chpms.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\fsm.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\fsm.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ipcp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ipcp.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\lcp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\lcp.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\magic.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\magic.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\md5.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\md5.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\pap.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\pap.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp_impl.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp_oe.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\pppdebug.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\randm.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\randm.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\vj.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\lwip-1.4.1\src\netif\ppp\vj.h" />
 		<Unit filename="..\..\src\net\lwip-1.4.1\system\arch\cc.h" />
-		<Unit filename="..\..\src\net\lwip-1.4.1\system\OS\sys_arch.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\net\mbedTLS\library\aes.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -855,14 +705,10 @@
 		</Unit>
 		<Unit filename="..\..\src\net\user\ifconfig.c">
 			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\net\user\lwip_init.c">
-			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\net\user\lwip_init.h" />
-		<Unit filename="..\..\src\net\user\taskppp.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\os\FreeRTOS\Source\croutine.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -23,13 +23,13 @@
 #define bspUSART1_PreemptPriority       3
 #define bspUSART1_SubPriority           0
 
-#define bspUSART2_PreemptPriority       4
+#define bspUSART2_PreemptPriority       15
 #define bspUSART2_SubPriority           0
 
 #define bspUSART3_PreemptPriority       5
 #define bspUSART3_SubPriority           0
 
-#define bspUART4_PreemptPriority       6
+#define bspUART4_PreemptPriority       15
 #define bspUART4_SubPriority           0
 
 #define bspUART5_PreemptPriority       7
@@ -83,6 +83,7 @@
 #include "errorcode.h"
 
 /* 通过取消注释或者添加注释的方式控制是否包含底层驱动模块 */
+#include "bsp_gpio.h"
 #include "bsp_uart.h"
 #include "bsp_sdram.h"
 #include "bsp_dwt.h"

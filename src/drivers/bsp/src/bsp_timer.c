@@ -293,7 +293,9 @@ void TIM3_IRQHandler (void)//0.1ms
 	{
 		pwm_b_2=0;
 	}
+#ifndef EVSE_DEBUG
     led_output();
+#endif
 }
 void TIM4_IRQHandler(void)
 {

@@ -10,6 +10,16 @@
 
 #include "stm32f4xx.h"
 
+uint16_t utils_htons(uint16_t n);
+uint16_t utils_ntohs(uint16_t n);
+uint32_t utils_htonl(uint32_t n);
+uint32_t utils_ntohl(uint32_t n);
+
+#define htons(x) utils_htons(x)
+#define ntohs(x) utils_ntohs(x)
+#define htonl(x) utils_htonl(x)
+#define ntohl(x) utils_ntohl(x)
+
 typedef union
 {
 	uint32_t ulVal;

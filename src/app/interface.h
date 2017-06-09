@@ -17,5 +17,6 @@
 #include "interface_data.h"
 #include "interface_remote.h"
 #include "interface_diag.h"
+#include "modem.h"
 
 #endif /* __INTERFACE_H */

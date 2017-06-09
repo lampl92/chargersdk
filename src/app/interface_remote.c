@@ -12,7 +12,6 @@
 #include "interface.h"
 #include "mbedtls/base64.h"
 #include "utils.h"
-#include "lwip/sockets.h"
 
 #if 0
 ErrorCode_t RemoteInit()
