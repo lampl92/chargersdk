@@ -17,7 +17,7 @@
 
 #endif
 
-#define MODEMDEBUG(msg) do{printf_safe(msg);}while(0);
+#define MODEMDEBUG(msg)  do{printf_safe(msg);}while(0);
 
 DevModem_t *pModem;
 
@@ -35,28 +35,7 @@ static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
 
 static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
 {
-//    uint8_t  c;
     uint32_t   cnt  = 0;
-//    int   i;
-//
-//    for (i = 0; i < len; i++)
-//    {
-//        c  = UART_getc();
-//        if ( c == '\0' )
-//        {
-//            break;
-//        }
-//
-//        if ( c == '\r' )
-//        {
-//            c  = UART_getc();
-//            {
-//                break;
-//            }
-//        }
-//
-//        line[cnt++]  = c;
-//    }
     if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
     {
         cnt = uart_read(UART_PORT_GPRS, line, len, 0);
@@ -83,7 +62,7 @@ static uint32_t modem_send_at(uint8_t *format, ...)
     modem_UART_puts(cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
-    MODEMDEBUG(("send at: [%s].\r\n", cmd));
+    MODEMDEBUG(("%s\r\n", cmd));
 
     return n;
 }
@@ -158,7 +137,7 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
         vTaskDelay(100);
     }
 
-    MODEMDEBUG(("wait at return: [%s].\r\n\r\n", reply));
+    MODEMDEBUG(("%s\r\n\r\n", reply));
     return ret;
 }
 
@@ -210,7 +189,6 @@ static DR_MODEM_e modem_disable_echo(void)
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem disable echo: \r\n");
     modem_send_at("ATE0V1\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
 
@@ -229,7 +207,6 @@ static DR_MODEM_e modem_CPIN(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get simcard stat: \r\n");
     modem_send_at("AT+CPIN?\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CPIN:", 3);
     switch(ret)
@@ -264,8 +241,6 @@ static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-
-    MODEMDEBUG("modem get aerial signal: \r\n");
     modem_send_at("AT+CSQ\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CSQ:", 3);
     switch(ret)
@@ -290,7 +265,6 @@ static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get network stat: \r\n");
     modem_send_at("AT+CREG?\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CREG:", 3);
     switch(ret)
@@ -327,7 +301,6 @@ static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get gprs stat: \r\n");
     modem_send_at("AT+CGREG?\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CGREG:", 3);
@@ -365,7 +338,6 @@ DR_MODEM_e modem_set_context(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem set context: \r\n");
     modem_send_at("AT+QIFGCNT=%d\r", pModem->info.ucContext);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
@@ -390,7 +362,6 @@ DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem set RecvType: \r\n");
     modem_send_at("AT+QISHOWRA=%d\r", 0);  //在接收到的数据头位置增加数据来源的地址和端口号。具体的格式为：RECV FROM:<IP ADDRESS>:<PORT>
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
@@ -430,7 +401,6 @@ DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem set APN: \r\n");
     modem_send_at("AT+QIREGAPP\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
@@ -450,7 +420,6 @@ DR_MODEM_e modem_set_QIACT(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem QIACT: \r\n");
     modem_send_at("AT+QIACT\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 150);
@@ -469,7 +438,6 @@ DR_MODEM_e modem_set_QIDEACT(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem QIDEACT: \r\n");
     modem_send_at("AT+QIDEACT\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 150);
@@ -489,7 +457,6 @@ DR_MODEM_e modem_get_LOCIP(DevModem_t *pModem)
     uint8_t *p;
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get local ip: \r\n");
     modem_send_at("AT+QILOCIP\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, NULL, 3);
@@ -506,7 +473,6 @@ DR_MODEM_e modem_set_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem set tcp open: \r\n");
     modem_send_at("AT+QIOPEN=\"TCP\",\"%s\",\"%d\"\r",
                   pProto->info.strServerIP,
                   pProto->info.usServerPort);
@@ -535,7 +501,6 @@ DR_MODEM_e modem_QISACK(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get send ack: \r\n");
     modem_send_at("AT+QISACK\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QISACK:", 3);
     if(ret == DR_MODEM_OK)
@@ -562,7 +527,7 @@ static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIRD=%d,%d,%d,%d\r", 0, 1, 0, len);
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QIRD:", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QIRD:", 1);
     if(ret == DR_MODEM_OK)
     {
         sscanf(reply, "%*s %*[^,],%*[^,],%d", &recv_len);
@@ -599,7 +564,7 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         return ret;
     }
     modem_UART_puts(pbuff, len);
-    vTaskDelay(10);
+    vTaskDelay(200);
     do
     {
         modem_QISACK(pModem);
@@ -609,13 +574,14 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
             break;
         }
         n++;
-        if(n >= 40)
+        if(n >= 240)
         {
             ret = DR_MODEM_TIMEOUT;
             break;
         }
         vTaskDelay(500);
-    }while(pModem->flag.sent != pModem->flag.acked);
+    }
+    while(pModem->flag.sent != pModem->flag.acked);
 
     return ret;
 }
@@ -630,7 +596,6 @@ DR_MODEM_e modem_QICLOSE(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem set tcp close: \r\n");
     modem_send_at("AT+QICLOSE\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
 
@@ -643,7 +608,6 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem reset: \r\n");
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
 
@@ -661,7 +625,6 @@ DR_MODEM_e modem_get_STATE(DevModem_t *pModem)
     uint8_t  s[16 + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem get STATE: \r\n");
     modem_send_at("AT+QISTATE\r");
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "STATE", 3);
@@ -735,8 +698,6 @@ DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
 
 void modem_get_info(DevModem_t *pModem)
 {
-    MODEMDEBUG("modem get informations: \r\n");
-
     modem_CPIN(pModem);
     modem_CSQ(pModem);
     modem_get_STATE(pModem);
@@ -833,6 +794,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_OPEN:
+            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
             ret = modem_set_TCPOPEN(pModem, pechProto);
             switch(pModem->status.eConnect)
             {
@@ -859,12 +821,10 @@ void Modem_Poll(DevModem_t *pModem)
             modem_get_STATE(pModem);
             if(pModem->state == PDP_DEACT)
             {
-                xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
                 pModem->state = DS_MODEM_TCP_ACT_PDP;
             }
             if(pModem->state == IP_CLOSE)
             {
-                xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
                 pModem->state = DS_MODEM_TCP_OPEN;
             }
             //等待发送请求，从remote过来
@@ -878,8 +838,14 @@ void Modem_Poll(DevModem_t *pModem)
                 {
                     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
                 }
+                else if(ret == DR_MODEM_TIMEOUT)
+                {
+
+                }
                 else
                 {
+                    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
+                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
                     pModem->state = DS_MODEM_TCP_CLOSE;
                     printf_safe("发送失败\r\n");
                 }
@@ -908,6 +874,8 @@ void Modem_Poll(DevModem_t *pModem)
                     printf_safe("\n");
 
                     pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                    memset(tcp_client_recvbuf, 0, recv_len);
+                    recv_len = 0;
                 }
             }
 
@@ -937,6 +905,27 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         default:
             break;
+        }
+
+        uxBits = xEventGroupWaitBits(xHandleEventTCP,
+                                     defEventBitTCPClientFlushBuff,
+                                     pdTRUE, pdTRUE, 0); //定时请一次缓存
+        if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
+        {
+            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+            if(recv_len > 0)
+            {
+                printf_safe("\nTCP Recv: ");
+                for(i = 0; i < recv_len; i++)
+                {
+                    printf_safe("%02X ", tcp_client_recvbuf[i]);
+                }
+                printf_safe("\n");
+
+                pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                memset(tcp_client_recvbuf, 0, recv_len);
+                recv_len = 0;
+            }
         }
 
         modem_get_info(pModem);

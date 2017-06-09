@@ -85,7 +85,7 @@ typedef struct _dev_modem
 {
     ModemInfo_t info;
     ModemStatus_t status;
-    ModemState_e state;
+    volatile ModemState_e state;
     ModemFlag_t flag;
     SemaphoreHandle_t xMutex;
 } DevModem_t;
