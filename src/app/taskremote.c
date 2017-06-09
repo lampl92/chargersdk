@@ -96,8 +96,12 @@ void vTaskEVSERemote(void *pvParameters)
                                          pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
+//            if(pModem->state == DS_MODEM_TCP_KEEP)
+//            {
                 RemoteRegist(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
+//            }
+
             }
             break;
         case REMOTE_CONNECTED:
@@ -125,11 +129,20 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_REGEDITED:
-            if(pModem->state != DS_MODEM_TCP_KEEP)
+            uxBits = xEventGroupWaitBits(xHandleEventTCP,
+                                         defEventBitTCPConnectFail,
+                                         pdTRUE,pdTRUE,0);
+            if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
             {
+//             if(pModem->state != DS_MODEM_TCP_KEEP)
+//            {
+                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+                xTimerStop(xHandleTimerRemoteStatus, 100);
                 remotestat = REMOTE_NO;
                 break;
+//            }
             }
+
 
             /************ 心跳 ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
@@ -232,60 +245,60 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(eRmtRTDataStat)
                 {
                 case REMOTERTData_IDLE:
-                {
-                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                    if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
                     {
-                        xTimerChangePeriod(pCON->status.xHandleTimerRTData,
-                                           pdMS_TO_TICKS(pechProto->info.ulRTDataCyc_ms),
-                                           100);//设置timer period ，有timer start 功能
-                        eRmtRTDataStat = REMOTERTData_START;
-                    }
-                    break;
-                }
-                case REMOTERTData_START: //在这期间，由Timer发送Timeout事件对RTData进行刷新
-                {
-                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                    if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
-                    {
-                        xTimerStop(pCON->status.xHandleTimerRTData, 100);
-                        eRmtRTDataStat = REMOTERTData_STOP;
-                    }
-                    break;
-                }
-                case REMOTERTData_STOP:
-                {
-                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
-                    if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
-                    {
-                        switch(pCON->order.ucStopType)
+                        uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                        if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
                         {
-                        case defOrderStopType_RFID:
-                        case defOrderStopType_Remote:
-                            RemoteRTData(pEVSE, pechProto, pCON, 2, 1);//手动停止
-                            break;
-                        case defOrderStopType_Full:
-                            RemoteRTData(pEVSE, pechProto, pCON, 2, 3);//充满停止
-                            break;
-                        case defOrderStopType_Fee:
-                            RemoteRTData(pEVSE, pechProto, pCON, 2, 4);//达到充电金额
-                            break;
-                        case defOrderStopType_Scram:
-                        case defOrderStopType_NetLost:
-                        case defOrderStopType_Poweroff:
-                        case defOrderStopType_OverCurr:
-                        case defOrderStopType_Knock:
-                            RemoteRTData(pEVSE, pechProto, pCON, 2, 5);//异常停止
-                            break;
-                        default:
-                            RemoteRTData(pEVSE, pechProto, pCON, 2, 6);//其他原因停止
-                            break;
+                            xTimerChangePeriod(pCON->status.xHandleTimerRTData,
+                                               pdMS_TO_TICKS(pechProto->info.ulRTDataCyc_ms),
+                                               100);//设置timer period ，有timer start 功能
+                            eRmtRTDataStat = REMOTERTData_START;
                         }
+                        break;
                     }
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK);
-                    eRmtRTDataStat = REMOTERTData_IDLE;
-                    break;
-                }
+                case REMOTERTData_START: //在这期间，由Timer发送Timeout事件对RTData进行刷新
+                    {
+                        uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                        if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
+                        {
+                            xTimerStop(pCON->status.xHandleTimerRTData, 100);
+                            eRmtRTDataStat = REMOTERTData_STOP;
+                        }
+                        break;
+                    }
+                case REMOTERTData_STOP:
+                    {
+                        uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
+                        if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
+                        {
+                            switch(pCON->order.ucStopType)
+                            {
+                            case defOrderStopType_RFID:
+                            case defOrderStopType_Remote:
+                                RemoteRTData(pEVSE, pechProto, pCON, 2, 1);//手动停止
+                                break;
+                            case defOrderStopType_Full:
+                                RemoteRTData(pEVSE, pechProto, pCON, 2, 3);//充满停止
+                                break;
+                            case defOrderStopType_Fee:
+                                RemoteRTData(pEVSE, pechProto, pCON, 2, 4);//达到充电金额
+                                break;
+                            case defOrderStopType_Scram:
+                            case defOrderStopType_NetLost:
+                            case defOrderStopType_Poweroff:
+                            case defOrderStopType_OverCurr:
+                            case defOrderStopType_Knock:
+                                RemoteRTData(pEVSE, pechProto, pCON, 2, 5);//异常停止
+                                break;
+                            default:
+                                RemoteRTData(pEVSE, pechProto, pCON, 2, 6);//其他原因停止
+                                break;
+                            }
+                        }
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK);
+                        eRmtRTDataStat = REMOTERTData_IDLE;
+                        break;
+                    }
                 }
             }
             for(i = 0; i < ulTotalCON; i++)
@@ -307,7 +320,7 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(eRmtOrderStat)
                 {
                 case REMOTEOrder_IDLE:
-                   uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
+                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                     if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
                     {
                         order_send_count = 0;
@@ -330,7 +343,7 @@ void vTaskEVSERemote(void *pvParameters)
                                                      pdTRUE, pdTRUE, portMAX_DELAY);
                         if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
                         {
-                              eRmtOrderStat = REMOTEOrder_IDLE;
+                            eRmtOrderStat = REMOTEOrder_IDLE;
                         }
                     }
                     else if(network_res == 0)
@@ -347,7 +360,7 @@ void vTaskEVSERemote(void *pvParameters)
                                                          pdTRUE, pdTRUE, portMAX_DELAY);
                             if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
                             {
-                                  eRmtOrderStat = REMOTEOrder_IDLE;
+                                eRmtOrderStat = REMOTEOrder_IDLE;
                             }
                         }
                     }
