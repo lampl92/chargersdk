@@ -107,8 +107,10 @@
 #define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
 #define defEventBitTCPClientSendOK      BIT_4
-#define defEventBitTCPConnectOK                BIT_5 //服务器连接成功
-#define defEventBitTCPClientRecvValid   BIT_6
+#define defEventBitTCPConnectOK         BIT_5 //接收不清除， 服务器连接成功
+#define defEventBitTCPConnectFail       BIT_6 //接收主动清除
+#define defEventBitTCPClientRecvValid   BIT_7
+#define defEventBitTCPClientFlushBuff   BIT_8
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
