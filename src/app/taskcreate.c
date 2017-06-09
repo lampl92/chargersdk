@@ -58,9 +58,9 @@
 
 #define defPRIORITY_TaskPPP                 14
 #define defPRIORITY_TaskTCPClient           12
-#define defPRIORITY_TaskRemoteCmdProc       10
+#define defPRIORITY_TaskRemoteCmdProc       8
 
-#define defPRIORITY_TaskInit                8
+#define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
 #define defPRIORITY_TaskCLI                 2
