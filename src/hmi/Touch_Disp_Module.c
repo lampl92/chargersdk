@@ -59,7 +59,7 @@ void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t t
     //dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
     //IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号：强");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号:");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
