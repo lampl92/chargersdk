@@ -51,11 +51,11 @@ typedef struct
 
 typedef struct
 {
-    ModemParam_e eSimStat;        //CPIN   见errcode
-    ModemParam_e eNetReg;            //CREG 网络注册信息    1 || 5
-    ModemParam_e eGprsReg;       //CGREG GPRS网络注册信息  1 || 5
-    uint8_t ucSignalQuality;   //CSQ 信号强度  rssi:0-99  越小越好
-    uint8_t strLocIP[15+1]; //本地IP
+    ModemParam_e eSimStat;      //CPIN   CPIN_OTHER || CPIN_READY
+    ModemParam_e eNetReg;       //CREG 网络注册信息    REG_LOCAl || REG_ROAMING
+    ModemParam_e eGprsReg;      //CGREG GPRS网络注册信息 REG_LOCAl || REG_ROAMING
+    uint8_t ucSignalQuality;    //CSQ 信号强度  rssi:0-31，越大越好,  99 信号异常
+    uint8_t strLocIP[15+1];     //本地IP
     ModemParam_e eConnect;
     ModemConStat_e statConStat;
 } ModemStatus_t;

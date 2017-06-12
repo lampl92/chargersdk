@@ -232,7 +232,7 @@ static DR_MODEM_e modem_CPIN(DevModem_t *pModem)
 /** @brief 信号强度检测
  *
  * @param void
- * @return uint8_t 返回信号强度  0-99 值越小信号越好
+ * @return uint8_t 返回信号强度  0-31，值越大信号越好；99，无信号或不可检测
  *
  */
 static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
