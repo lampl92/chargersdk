@@ -37,8 +37,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
         printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
         printf_safe("\n");
 
-        /** @todo (rgw#1#): ！！！ 需要抽时间整理一下这里的超时和重发次数，逻辑上有问题 */
-
         /* 遍历RecvCmd */
 
         gdsl_list_cursor_move_to_head (cr);
@@ -100,17 +98,17 @@ void vTaskRemoteCmdProc(void *pvParameters)
                    如果是请求命令，则等待主机回复
                    如果是回复命令，则删除
                 */
-                if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到回复
+                if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到主机回复
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
                 }
-                pechCmdElem->trycount++;
+
                 if(pechCmdElem->trycount > pechCmdElem->trycountmax)
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
-                    /* @todo (rgw#1#): 通知系统网络发生问题，需要重启gprs */
+                    /* 发送超时，删除命令 */
                 }
 
             }
@@ -118,6 +116,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             /* 2. 判断超时 ，超时后置状态为0，再次进行发送*/
             if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
             {
+                pechCmdElem->trycount++;
                 pechCmdElem->timestamp = time(NULL);
                 pechCmdElem->status = 0;
                 continue;//跳过后面的语句立即发送
