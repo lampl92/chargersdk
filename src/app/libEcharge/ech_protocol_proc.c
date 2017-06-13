@@ -107,7 +107,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
-                    /* ·¢ËÍ³¬Ê±£¬É¾³ıÃüÁî */
                 }
 
             }
