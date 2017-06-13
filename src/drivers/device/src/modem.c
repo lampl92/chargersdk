@@ -17,8 +17,8 @@
 
 #endif
 
-#define MODEMDEBUG(msg)  do{printf_safe(msg);}while(0);
-
+#define DEVDEBUG(msg)  do{printf_safe(msg);}while(0);
+#define TCP_CLIENT_BUFSIZE   1500
 DevModem_t *pModem;
 
 uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端发送数据缓冲
@@ -62,7 +62,7 @@ static uint32_t modem_send_at(uint8_t *format, ...)
     modem_UART_puts(cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
-    MODEMDEBUG(("%s\r\n", cmd));
+    DEVDEBUG(("%s\r\n", cmd));
 
     return n;
 }
@@ -137,7 +137,7 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
         vTaskDelay(100);
     }
 
-    MODEMDEBUG(("%s\r\n\r\n", reply));
+    DEVDEBUG(("%s\r\n\r\n", reply));
     return ret;
 }
 
@@ -152,7 +152,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    MODEMDEBUG("modem open: \r\n");
+    DEVDEBUG("modem open: \r\n");
     modem_send_at("AT\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret == DR_MODEM_OK)
@@ -161,7 +161,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
         return ret;
     }
     GPRS_set; //上电启动
-    MODEMDEBUG("modem Key set!: \r\n");
+    DEVDEBUG("modem Key set!: \r\n");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
     switch(ret)
     {
@@ -710,7 +710,7 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
 
     /** @todo (rgw#1#): 从文件获取配置 */
 
-    MODEMDEBUG("modem init: \r\n");
+    DEVDEBUG("modem init: \r\n");
     ret = modem_disable_echo();
     if(ret != DR_MODEM_OK)
     {
@@ -756,7 +756,7 @@ void Modem_Poll(DevModem_t *pModem)
             if(ret != DR_MODEM_OK)
             {
                 GPRS_reset;
-                MODEMDEBUG("modem Key reset!: \r\n");
+                DEVDEBUG("modem Key reset!: \r\n");
                 vTaskDelay(10000);
             }
             break;

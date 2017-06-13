@@ -5,7 +5,6 @@
 #include "semphr.h"
 
 #define MAX_COMMAND_LEN                  1024  /* 最大命令长度 */
-#define TCP_CLIENT_BUFSIZE   1500
 typedef enum
 {
     CPIN_OTHER,
