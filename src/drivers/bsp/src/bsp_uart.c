@@ -15,14 +15,17 @@
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;
+UART_HandleTypeDef WIFI_UARTx_Handler;
 
 Queue *pCliRecvQue;
 Queue *pRfidRecvQue;
 Queue *pGprsRecvQue;
+Queue *pWifiRecvQue;
 
 static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
+static volatile uint8_t WIFI_RX_Buffer[1];
 
 static void uart_putc(uint8_t ch)
 {
@@ -49,6 +52,9 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
             uart_putc(data[i]);
         }
         return i;
+        break;
+    case UART_PORT_WIFI:
+        pUART_Handle = &WIFI_UARTx_Handler;
         break;
     default:
         break;
@@ -78,6 +84,9 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
         break;
     case UART_PORT_GPRS:
         pRecvQue = pGprsRecvQue;
+        break;
+    case UART_PORT_WIFI:
+        pRecvQue = pWifiRecvQue;
         break;
     default:
         break;
@@ -200,8 +209,9 @@ void bsp_Uart_Init(void)
     pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
     pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
     pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
+    pWifiRecvQue = QueueCreate(WIFI_QUEUE_SIZE);
 
-    uart_queue_init();
+    //uart_queue_init();
 
     CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
     CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
@@ -235,6 +245,17 @@ void bsp_Uart_Init(void)
     GPRS_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&GPRS_UARTx_Handler);
     HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
+
+    WIFI_UARTx_Handler.Instance = WIFI_USARTx_BASE;
+    WIFI_UARTx_Handler.Init.BaudRate = WIFI_USARTx_BAUDRATE;
+    WIFI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+    WIFI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+    WIFI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+    WIFI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+    WIFI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    WIFI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&WIFI_UARTx_Handler);
+    HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1);
 
 }
 
@@ -350,6 +371,11 @@ GPRS_USARTx_IRQHandler
     HAL_UART_IRQHandler(&GPRS_UARTx_Handler);
 }
 
+WIFI_USARTx_IRQHandler
+{
+    HAL_UART_IRQHandler(&WIFI_UARTx_Handler);
+}
+
 /**
   * @brief  Tx Transfer completed callback
   * @param  UartHandle: UART handler.
@@ -394,7 +420,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1) == HAL_OK)
         {
             pGprsRecvQue->EnElem(pGprsRecvQue, GPRS_RX_Buffer[0]);
-            //gdsl_queue_insert(queGPRS, (void *)GPRS_RX_Buffer);
+        }
+    }
+    if(huart->Instance == WIFI_USARTx_BASE)
+    {
+        if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
+        {
+            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
         }
     }
 }
