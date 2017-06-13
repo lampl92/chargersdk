@@ -28,21 +28,21 @@ uint32_t recv_len = 0;
 uint32_t send_len = 0;
 
 
-static uint32_t esp_UART_puts(uint8_t *pbuff, uint32_t len)
+static uint32_t wifi_UART_puts(uint8_t *pbuff, uint32_t len)
 {
     return uart_write(UART_PORT_WIFI, pbuff, len);
 }
 
-static uint32_t esp_UART_gets(DevWIFI_t *pWIFI, uint8_t *line, uint32_t len)
+static uint32_t wifi_UART_gets(DevWIFI_t *pWIFI, uint8_t *line, uint32_t len)
 {
     uint32_t   cnt  = 0;
-    if(xSemaphoreTake(pWIFI->xMutex, 10000) == pdTRUE)
-    {
-        cnt = uart_read(UART_PORT_WIFI, line, len, 0);
-        xSemaphoreGive(pWIFI->xMutex);
-        return cnt;
-    }
-    else
+//    if(xSemaphoreTake(pWIFI->xMutex, 10000) == pdTRUE)
+//    {
+    cnt = uart_read(UART_PORT_WIFI, line, len, 0);
+//        xSemaphoreGive(pWIFI->xMutex);
+    return cnt;
+//    }
+//    else
     {
         //没等到，离开了
     }
@@ -59,8 +59,8 @@ static uint32_t wifi_send_at(uint8_t *format, ...)
     n  = vsnprintf(cmd, sizeof(cmd) - 1, format, va);
     va_end(va);
 
-    //cmd[strlen(cmd)] = '\n';
-    esp_UART_puts(cmd, strlen(cmd));
+    cmd[strlen(cmd)] = '\n';
+    wifi_UART_puts(cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
     DEVDEBUG(("%s\r\n", cmd));
@@ -89,7 +89,7 @@ static DR_WIFI_e wifi_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *
     time  = 0;
     while (1)
     {
-        n  = esp_UART_gets(pWIFI, reply, len);
+        n  = wifi_UART_gets(pWIFI, reply, len);
         if ( n > 0 )
         {
             //优先判断这两个模块会主动发出的命令
@@ -166,7 +166,7 @@ DR_WIFI_e wifi_open(DevWIFI_t *pWIFI)
     DR_WIFI_e ret;
 
     DEVDEBUG("modem open: \r\n");
-    wifi_send_at("AT\r\n");
+    wifi_send_at("AT\r");
     ret = wifi_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret == DR_WIFI_OK)
     {
@@ -230,6 +230,30 @@ static DR_WIFI_e wifi_CWMODE(DevWIFI_t *pWIFI)
     return ret;
 }
 
+/** @brief 设置模式 1 透传， 0 普通
+ *
+ * @param pWifi DevWIFI_t*
+ * @return DR_WIFI_e
+ *
+ */
+static DR_WIFI_e wifi_CIPMODE(DevWIFI_t *pWIFI)
+{
+    uint8_t  reply[WIFI_MAX_COMMAND_LEN + 1]  = {0};
+    uint8_t  s[8 + 1]  = {0};
+    DR_WIFI_e ret;
+
+    wifi_send_at("AT+CIPMODE=%d\r", 1);
+
+    ret = wifi_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+    switch(ret)
+    {
+    case DR_WIFI_OK:
+        break;
+    }
+
+    return ret;
+}
+
 /** @brief 获取locIP
  *
  * @param pModem DevModem_t*
@@ -260,8 +284,8 @@ DR_WIFI_e wifi_set_tcp_open(DevWIFI_t *pWIFI, echProtocol_t *pProto)
     DR_WIFI_e ret;
 
     wifi_send_at("AT+CIPSTART=\"TCP\",\"%s\",%d\r",
-                pProto->info.strServerIP,
-                pProto->info.usServerPort);
+                 pProto->info.strServerIP,
+                 pProto->info.usServerPort);
 
     ret = wifi_get_at_reply(reply, sizeof(reply) - 1, "OK", 75);
     if(ret == DR_WIFI_OK)
@@ -278,7 +302,7 @@ DR_WIFI_e wifi_set_tcp_open(DevWIFI_t *pWIFI, echProtocol_t *pProto)
     }
     else if(ret == DR_WIFI_ERROR)
     {
-         pWIFI->status.eConnect = WIFI_AP_CONNECT_FAIL;
+        pWIFI->status.eConnect = WIFI_AP_CONNECT_FAIL;
     }
     return ret;
 }
@@ -315,6 +339,17 @@ static uint32_t wifi_IPD(DevWIFI_t *pWIFI, uint8_t *pbuff, uint32_t len)
     }
     return recv_len;
 }
+
+static DR_WIFI_e wifi_set_transparent(DevWIFI_t *pWIFI)
+{
+    uint8_t  reply[WIFI_MAX_COMMAND_LEN + 1]  = {0};
+    DR_WIFI_e ret;
+
+    wifi_send_at("AT+CIPSEND\r");
+    ret = wifi_get_at_reply(reply, sizeof(reply) - 1, ">", 3);
+
+    return ret;
+}
 /** @brief 发送数据，超时时间20s
  *
  * @param pModem DevModem_t*
@@ -329,26 +364,41 @@ DR_WIFI_e wifi_write(DevWIFI_t *pWIFI, uint8_t *pbuff, uint32_t len)
     uint32_t n;
     DR_WIFI_e ret;
 
-    n = 0;
-    ret = DR_WIFI_ERROR;
+//    n = 0;
+//    ret = DR_WIFI_ERROR;
+//
+//    ret = modem_CIPSENDEX(pWIFI, len);
+//    if(ret != DR_WIFI_OK)
+//    {
+//        return ret;
+//    }
+//    esp_UART_puts(pbuff, len);
+//    ret = wifi_get_at_reply(reply, sizeof(reply) - 1, "OK", 120);
+//    if(ret != DR_WIFI_OK)
+//    {
+//        return ret;
+//    }
 
-    ret = modem_CIPSENDEX(pWIFI, len);
-    if(ret != DR_WIFI_OK)
-    {
-        return ret;
-    }
-    esp_UART_puts(pbuff, len);
-    ret = wifi_get_at_reply(reply, sizeof(reply) - 1, "OK", 120);
-    if(ret != DR_WIFI_OK)
-    {
-        return ret;
-    }
+//    return ret;
 
+    n = wifi_UART_puts(pbuff, len);
+    if(n == len)
+    {
+        ret = DR_WIFI_OK;
+    }
+    else
+    {
+        ret = DS_WIFI_ERR;
+    }
     return ret;
+
 }
 uint32_t wifi_read(DevWIFI_t *pWIFI, uint8_t *pbuff, uint32_t len)
 {
-    return wifi_IPD(pWIFI, pbuff, len);
+    uint32_t n;
+//    return wifi_IPD(pWIFI, pbuff, len);
+    n  = wifi_UART_gets(pWIFI, pbuff, len);
+    return n;
 }
 
 DR_WIFI_e wifi_tcp_close(DevWIFI_t *pWIFI)
@@ -412,6 +462,11 @@ DR_WIFI_e wifi_init(DevWIFI_t *pWIFI)
         return ret;
     }
     ret = wifi_CWMODE(pWIFI);
+    if(ret != DR_WIFI_OK)
+    {
+        return ret;
+    }
+    ret = wifi_CIPMODE(pWIFI);
     if(ret != DR_WIFI_OK)
     {
         return ret;
@@ -484,6 +539,12 @@ void Wifi_Poll(DevWIFI_t *pWIFI)
             switch(pWIFI->status.eConnect)
             {
             case WIFI_AP_CONNECT_OK:
+                ret = wifi_set_transparent(pWIFI);
+                if(ret != DR_WIFI_OK)
+                {
+                    pWIFI->state = DS_WIFI_ERR;
+                    break;
+                }
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK);
                 pWIFI->state = DS_WIFI_TCP_KEEP;
                 break;
