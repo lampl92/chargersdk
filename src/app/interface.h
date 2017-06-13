@@ -18,5 +18,6 @@
 #include "interface_remote.h"
 #include "interface_diag.h"
 #include "modem.h"
+#include "esp8266.h"
 
 #endif /* __INTERFACE_H */
