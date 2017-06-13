@@ -165,6 +165,14 @@ void vTaskInit(void *pvParameters)
     modem_init(pModem);
     Modem_Poll(pModem);//这是任务
 
+//    pWIFI = DevWifiCreate();
+//    strcpy(pWIFI->info.strSSID, "rgw");
+//    strcpy(pWIFI->info.strPWD,"abc666def8");
+//    pWIFI->xMutex = xSemaphoreCreateMutex();
+//
+//    wifi_open(pWIFI);
+//    wifi_init(pWIFI);
+//    Wifi_Poll(pWIFI);
 }
 void vTaskCLI(void *pvParameters)
 {
