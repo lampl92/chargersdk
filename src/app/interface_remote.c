@@ -94,12 +94,20 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
 ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
+    echCMD_t *pCMD;
+    echCmdElem_t * pechCmdElem;
+    gdsl_list_cursor_t cur;
     uint8_t *pbuff; //数据部分
     uint32_t len;
-    if(pProto->pCMD[ECH_CMDID_REGISTER]->uiRecvdOptLen > 0)
+
+    pCMD = pProto->pCMD[ECH_CMDID_REGISTER];
+    cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
+    gdsl_list_cursor_move_to_head (cur);
+    while(pechCmdElem = gdsl_list_cursor_get_content (cur))
     {
-        pbuff = pProto->pCMD[ECH_CMDID_REGISTER]->ucRecvdOptData;
-        len = pProto->pCMD[ECH_CMDID_REGISTER]->uiRecvdOptLen;
+        pbuff = pCMD->ucRecvdOptData;
+        len = pCMD->ulRecvdOptLen;
+        printf_safe("len = %d\n", len);
         errcode = ERR_NO;
         *psiRetVal = 0;
         switch(pbuff[0])//登陆结果
@@ -115,7 +123,10 @@ ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
             *psiRetVal = 0;
             break;
         }
+        pechCmdElem->status = 1; //处理过了
+        gdsl_list_cursor_step_forward (cur);
     }
+
     return errcode;
 }
 
@@ -132,13 +143,18 @@ ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
 ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
-    uint8_t *pbuff; //数据部分
-    uint32_t len;
+    echCMD_t *pCMD;
+    echCmdElem_t * pechCmdElem;
+    gdsl_list_cursor_t cur;
 
-    len = pProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen;
-    if(len > 0)
+    pCMD = pProto->pCMD[ECH_CMDID_HEARTBEAT];
+    cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
+    gdsl_list_cursor_move_to_head (cur);
+    while(pechCmdElem = gdsl_list_cursor_get_content (cur))
     {
         *psiRetVal = 1;
+        pechCmdElem->status = 1; //处理过了
+        gdsl_list_cursor_step_forward (cur);
     }
 
     errcode = ERR_NO;
@@ -164,7 +180,7 @@ ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
     id = 0;
 
     pbuff = pProto->pCMD[ECH_CMDID_STATUS]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_STATUS]->uiRecvdOptLen;
+    len = pProto->pCMD[ECH_CMDID_STATUS]->ulRecvdOptLen;
     if(len > 0)
     {
         //pbuff[0...3] 操作序列号
@@ -241,7 +257,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
     errcode = ERR_NO;
 
     pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->uiRecvdOptLen;
+    len = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ulRecvdOptLen;
     if(len > 0)
     {
         //pbuff[0...3] 操作ID ，不处理，留在ucRecvdOptData中待回复时使用
@@ -352,7 +368,7 @@ ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
     errcode = ERR_NO;
 
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_ORDER]->uiRecvdOptLen;
+    len = pProto->pCMD[ECH_CMDID_ORDER]->ulRecvdOptLen;
     if(len > 0)
     {
         //[0] 有无卡

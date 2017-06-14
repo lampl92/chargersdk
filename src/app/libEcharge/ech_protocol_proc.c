@@ -18,9 +18,11 @@
 void vTaskRemoteCmdProc(void *pvParameters)
 {
     echProtocol_t *pProto;
+    echProtoElem_t *pechProtoElem;
     echCmdElem_t *pechCmdElem;
     gdsl_list_cursor_t cs;
     gdsl_list_cursor_t cr;
+    gdsl_list_cursor_t ccmd;
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
@@ -33,24 +35,24 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-        printf_safe("\n");
+//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+//        printf_safe("\n");
 
         /* 遍历RecvCmd */
 
         gdsl_list_cursor_move_to_head (cr);
-        while(pechCmdElem = gdsl_list_cursor_get_content (cr))
+        while(pechProtoElem = gdsl_list_cursor_get_content (cr))
         {
-            if(pechCmdElem->status == 0)
+            if(pechProtoElem->status == 0)
             {
-                res = pProto->pCMD[pechCmdElem->cmd_id]->analyProc(pProto,
-                        pechCmdElem->cmd_id,
-                        pechCmdElem->pbuff,
-                        pechCmdElem->len);
+                res = pProto->pCMD[pechProtoElem->cmd_id]->analyProc(pProto,
+                        pechProtoElem->cmd_id,
+                        pechProtoElem->pbuff,
+                        pechProtoElem->len);
                 if(res == 1)
                 {
-                    pechCmdElem->status = 1;
+                    pechProtoElem->status = 1;
                 }
                 else//接收的协议帧序列有问题，直接删除
                 {
@@ -59,14 +61,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 }
             }
 
-            if(pechCmdElem->status == 1)
+            if(pechProtoElem->status == 1)
             {
                 gdsl_list_cursor_delete(cr);
                 continue;
             }
 #if 1
             /* 2. 判断超时 */
-            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
+            if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
                 gdsl_list_cursor_delete(cs);
                 continue;
@@ -78,32 +80,42 @@ void vTaskRemoteCmdProc(void *pvParameters)
         /* 遍历SendCmd */
 
         gdsl_list_cursor_move_to_head (cs);
-        while(pechCmdElem = gdsl_list_cursor_get_content (cs))
+        while(pechProtoElem = gdsl_list_cursor_get_content (cs))
         {
             /* 1. 判断协议是否发送 */
-            if(pechCmdElem->status == 0)
+            if(pechProtoElem->status == 0)
             {
-                memmove(tcp_client_sendbuf, pechCmdElem->pbuff, pechCmdElem->len);
-                send_len = pechCmdElem->len;
+                memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
+                send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
 
-                pechCmdElem->status = 1;
+                pechProtoElem->status = 1;
 
             }
            /* 2. 已发送，判断发送情况*/
-            if(pechCmdElem->status == 1)
+            if(pechProtoElem->status == 1)
             {
                 /* 判断命令字，
                    如果是请求命令，则等待主机回复
                    如果是回复命令，则删除
                 */
-                if(pProto->pCMD[pechCmdElem->cmd_id]->uiRecvdOptLen > 0) //请求命令收到主机回复
+                /** @todo (rgw#1#): 后期需要在这里比较协议UID，删除接受到的UID与发送UID相同的命令 */
+
+                ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
+                gdsl_list_cursor_move_to_head (ccmd);
+                while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
                 {
-                    gdsl_list_cursor_delete(cs);
-                    continue;
+                    if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
+                    {
+                        gdsl_list_cursor_delete(ccmd);
+                        gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
+                        gdsl_list_flush(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);//清空接收命令队列
+                        break;
+                    }
+//                    gdsl_list_cursor_step_forward (ccmd);
                 }
 
-                if(pechCmdElem->trycount > pechCmdElem->trycountmax)
+                if(pechProtoElem->trycount > pechProtoElem->trycountmax)
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
@@ -112,11 +124,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
             }
 #if 1
             /* 2. 判断超时 ，超时后置状态为0，再次进行发送*/
-            if((time(NULL) - pechCmdElem->timestamp) > pechCmdElem->timeout_s)
+            if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
-                pechCmdElem->trycount++;
-                pechCmdElem->timestamp = time(NULL);
-                pechCmdElem->status = 0;
+                pechProtoElem->trycount++;
+                pechProtoElem->timestamp = time(NULL);
+                pechProtoElem->status = 0;
                 continue;//跳过后面的语句立即发送
             }
 #endif
@@ -125,6 +137,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
 
 
-        vTaskDelay(1000);
+        vTaskDelay(10);
     }
 }

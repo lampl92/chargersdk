@@ -20,7 +20,7 @@ static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t
 static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax)
 {
     echProtocol_t *pProto;
-    echCmdElem_t echSendCmdElem;
+    echProtoElem_t echSendCmdElem;
     uint8_t pucSendBuffer[REMOTE_SENDBUFF_MAX];
     uint32_t ulSendLength;
 
@@ -39,7 +39,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     echSendCmdElem.trycount = 0;
     echSendCmdElem.trycountmax = trycountmax;
 
-    pProto->pCMD[usSendID]->uiRecvdOptLen = 0;
+    pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
     memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
     gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
 }
@@ -675,7 +675,7 @@ static int recvResponse(void *pPObj,
 {
     echProtocol_t *pProto;
     EVSE_t *pE;
-    echCmdElem_t echRecvCmdElem;
+    echProtoElem_t echRecvCmdElem;
     us2uc ustmpNetSeq;
     ul2uc ultmpNetSeq;
     uint32_t ulMsgBodyLen_enc;
@@ -796,7 +796,7 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
 
     memmove(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
-    pProto->pCMD[usSendID]->uiRecvdOptLen = ulMsgBodyCtxLen_enc;
+    pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
 
     free(pMsgBodyCtx_dec);
 
@@ -805,14 +805,21 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 
 static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
-//    echProtocol_t *pProto;
-//    uint8_t *pMsgBodyCtx_dec;
-//
-//    pProto = (echProtocol_t *)pPObj;
+    echProtocol_t *pProto;
+    echCMD_t *pCMD;
+    echCmdElem_t lRecvElem;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCMD = pProto->pCMD[usSendID];
 
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
 
-//    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+    lRecvElem.UID = 0;
+    lRecvElem.timestamp = time(NULL);
+    lRecvElem.len = pCMD->ulRecvdOptLen;
+    lRecvElem.pbuff = pCMD->ucRecvdOptData;
+    lRecvElem.status = 0;
+    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
 
     return 1;
 }
@@ -820,13 +827,16 @@ static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
+    echCMD_t *pCMD;
     uint8_t *pMsgBodyCtx_dec;
     ul2uc ultmpNetSeq;
     time_t timestamp;
+    echCmdElem_t lRecvElem;
 
     pProto = (echProtocol_t *)pPObj;
+    pCMD = pProto->pCMD[usSendID];
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    pMsgBodyCtx_dec = pProto->pCMD[usSendID]->ucRecvdOptData;
+    pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
 
     ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
     ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
@@ -837,6 +847,13 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
     {
         time(&timestamp);
     }
+    lRecvElem.UID = 0;
+    lRecvElem.timestamp = time(NULL);
+    lRecvElem.len = pCMD->ulRecvdOptLen;
+    lRecvElem.pbuff = pCMD->ucRecvdOptData;
+    lRecvElem.status = 0;
+    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
     return 1;
 }
 
@@ -862,43 +879,75 @@ static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
     return 1;
 }
+
+static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
+{
+    echCmdElem_t *copyCmdElem;
+    copyCmdElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
+    if(copyCmdElem != NULL)
+    {
+        memmove(copyCmdElem, e, sizeof(echCmdElem_t));
+    }
+    else
+    {
+        return NULL;
+    }
+    copyCmdElem->pbuff = (uint8_t *)malloc(copyCmdElem->len * sizeof(uint8_t));
+    if(copyCmdElem->pbuff != NULL)
+    {
+        memmove(copyCmdElem->pbuff, ((echCmdElem_t *)e)->pbuff, copyCmdElem->len);
+    }
+    else
+    {
+        return NULL;
+    }
+
+    return (gdsl_element_t)copyCmdElem;
+}
+static void echCmdListFree (gdsl_element_t e)
+{
+    free(((echCmdElem_t *)e)->pbuff);
+    free (e);
+    ((echCmdElem_t *)e)->pbuff = NULL;
+    e = NULL;
+}
 /** @brief 复制待插入的元素到新申请的空间
  *
  * @param pechCmd void*
  * @return gdsl_element_t
  *
  */
-static gdsl_element_t echCmdListAlloc(gdsl_element_t pechCmd)
+static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
 {
-    echCmdElem_t *copyCmdListElem;
+    echProtoElem_t *copyProtoElem;
 
-    copyCmdListElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
-    if(copyCmdListElem != NULL)
+    copyProtoElem = (echProtoElem_t *)malloc(sizeof(echProtoElem_t));
+    if(copyProtoElem != NULL)
     {
-        memmove(copyCmdListElem, pechCmd, sizeof(echCmdElem_t));
+        memmove(copyProtoElem, e, sizeof(echProtoElem_t));
     }
     else
     {
         return NULL;
     }
-    copyCmdListElem->pbuff = (uint8_t *)malloc(copyCmdListElem->len * sizeof(uint8_t));
-    if(copyCmdListElem->pbuff != NULL)
+    copyProtoElem->pbuff = (uint8_t *)malloc(copyProtoElem->len * sizeof(uint8_t));
+    if(copyProtoElem->pbuff != NULL)
     {
-        memmove(copyCmdListElem->pbuff, ((echCmdElem_t *)pechCmd)->pbuff, copyCmdListElem->len);
+        memmove(copyProtoElem->pbuff, ((echProtoElem_t *)e)->pbuff, copyProtoElem->len);
     }
     else
     {
         return NULL;
     }
 
-    return (gdsl_element_t)copyCmdListElem;
+    return (gdsl_element_t)copyProtoElem;
 }
 
-static void echCmdListFree (gdsl_element_t e)
+static void echProtoListFree (gdsl_element_t e)
 {
-    free(((echCmdElem_t *)e)->pbuff);
+    free(((echProtoElem_t *)e)->pbuff);
     free (e);
-    ((echCmdElem_t *)e)->pbuff = NULL;
+    ((echProtoElem_t *)e)->pbuff = NULL;
     e = NULL;
 }
 
@@ -912,6 +961,7 @@ static void deleteProto(void *pPObj)
     {
         if(pProto->pCMD[i] != NULL)
         {
+            gdsl_list_free(pProto->pCMD[i]->plRecvCmd);
             free(pProto->pCMD[i]);
             pProto->pCMD[i] = NULL;
         }
@@ -931,6 +981,7 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, pECH_MAKE_
     pECHCMD->CMDType.usSendCmd = usSendCmd;
     pECHCMD->CMDType.usRecvCmd = usRecvCmd;
 
+    pECHCMD->plRecvCmd = gdsl_list_alloc ("CMDRecvLis", echCmdListAlloc, echCmdListFree);
     pECHCMD->makeProc = makeProc;
     pECHCMD->analyProc = analyProc;
 
@@ -986,8 +1037,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->sendCommand = sendCommand;
     pProto->deleteProtocol = deleteProto;
 
-    pProto->plechRecvCmd = gdsl_list_alloc ("RecvCmd", echCmdListAlloc, echCmdListFree);
-    pProto->plechSendCmd = gdsl_list_alloc ("SendCmd", echCmdListAlloc, echCmdListFree);
+    pProto->plechRecvCmd = gdsl_list_alloc ("ProtoRecvLis", echProtoListAlloc, echProtoListFree);
+    pProto->plechSendCmd = gdsl_list_alloc ("ProtoSendLis", echProtoListAlloc, echProtoListFree);
 
     return pProto;
 }

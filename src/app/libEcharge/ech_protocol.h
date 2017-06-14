@@ -60,7 +60,14 @@ typedef struct _ECHProtoParam
 
 #define ECH_CMD_MAX          6
 
-
+typedef struct
+{
+    uint32_t UID;
+    time_t timestamp;
+    uint32_t len;
+    uint8_t *pbuff;
+    uint8_t status;
+}echCmdElem_t;
 
 typedef    int (*pECH_MAKE_PROC)  (void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen);
 typedef    int (*pECH_ANALY_PROC) (void *pPObj, uint16_t usSendID, uint8_t *pucRecvBuffer, uint32_t ulRecvLen);
@@ -76,7 +83,9 @@ typedef struct _echCMD
     echCMDType_t CMDType;
 
     uint8_t     ucRecvdOptData[REMOTE_RECVDOPTDATA];
-    uint32_t    uiRecvdOptLen;
+    uint32_t    ulRecvdOptLen;
+
+    gdsl_list_t plRecvCmd;
 
     pECH_MAKE_PROC  makeProc;
     pECH_ANALY_PROC analyProc;

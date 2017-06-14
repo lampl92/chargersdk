@@ -21,7 +21,7 @@ typedef struct
     uint8_t status; //Send：1 已发送，0 未发送   Recv：1 已处理 0 未处理
     uint8_t trycount;
     uint8_t trycountmax;
-}echCmdElem_t;
+}echProtoElem_t;
 
 
 #endif
