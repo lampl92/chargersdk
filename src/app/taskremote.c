@@ -156,16 +156,16 @@ void vTaskEVSERemote(void *pvParameters)
                 eRmtHeartStat = REMOTEHEART_RECV;
             }
 
-            switch(eRmtHeartStat)
-            {
-            case REMOTEHEART_IDLE:
-                break;
-            case REMOTEHEART_RECV:
+//            switch(eRmtHeartStat)
+//            {
+//            case REMOTEHEART_IDLE:
+//                break;
+//            case REMOTEHEART_RECV:
                 RemoteHeartRes(pEVSE, pechProto, &network_res);
                 if(network_res != 1)
                 {
                     heart_lost++;
-                    printf_safe("heart_lost = %d\n",heart_lost);
+//                    printf_safe("heart_lost = %d\n",heart_lost);
                     if(heart_lost > 750)
                     {
                         heart_lost = 0;
@@ -183,8 +183,8 @@ void vTaskEVSERemote(void *pvParameters)
 //                    pechProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen = 0;
 //                    memset(pechProto->pCMD[ECH_CMDID_HEARTBEAT]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
                 }
-                break;
-            }
+//                break;
+//            }
 
 
             /************ ״̬******************/
@@ -423,8 +423,8 @@ void vTaskEVSERemote(void *pvParameters)
         case REMOTE_RECONNECT:
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
-            remotestat = REMOTE_NO;
             pModem->state = DS_MODEM_TCP_CLOSE;
+            remotestat = REMOTE_NO;
             printf_safe("State Reconnect ,Call TCP close!!\n");
             break;
         }
