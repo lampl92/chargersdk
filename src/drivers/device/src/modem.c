@@ -795,6 +795,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_TCP_OPEN:
             xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
+
             ret = modem_set_TCPOPEN(pModem, pechProto);
             switch(pModem->status.eConnect)
             {
@@ -807,6 +808,7 @@ void Modem_Poll(DevModem_t *pModem)
                 if(pModem->status.statConStat == TCP_CONNECTING)
                 {
                     pModem->state = DS_MODEM_TCP_CLOSE;
+                    printf_safe("State TCP open Fail ,Call TCP close!!\n");
                 }
                 else
                 {
@@ -821,10 +823,12 @@ void Modem_Poll(DevModem_t *pModem)
             modem_get_STATE(pModem);
             if(pModem->state == PDP_DEACT)
             {
+                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
                 pModem->state = DS_MODEM_TCP_ACT_PDP;
             }
             if(pModem->state == IP_CLOSE)
             {
+                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
                 pModem->state = DS_MODEM_TCP_OPEN;
             }
             //等待发送请求，从remote过来
@@ -881,6 +885,8 @@ void Modem_Poll(DevModem_t *pModem)
 
             break;
         case DS_MODEM_TCP_CLOSE:
+            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
+            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
             ret = modem_QICLOSE(pModem);
             if(ret == DR_MODEM_OK)
             {
