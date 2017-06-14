@@ -108,8 +108,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
                     {
                         gdsl_list_cursor_delete(ccmd);
-                        gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
                         gdsl_list_flush(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);//清空接收命令队列
+                        gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
                         break;
                     }
 //                    gdsl_list_cursor_step_forward (ccmd);
