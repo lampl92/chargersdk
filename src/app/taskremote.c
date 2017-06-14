@@ -25,6 +25,12 @@ typedef enum
 
 typedef enum
 {
+    REMOTEHEART_IDLE,
+    REMOTEHEART_RECV
+} RemoteHeartState_e;
+
+typedef enum
+{
     REMOTECTRL_IDLE,
     REMOTECTRL_WAIT_START,
     REMOTECTRL_SUCC,
@@ -55,6 +61,7 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBits;
     RemoteState_t remotestat;
+    RemoteHeartState_e eRmtHeartStat;
     RemoteCtrlState_e eRmtCtrlStat;
     RemoteRTDataState_e eRmtRTDataStat;
     RemoteOrderState_e eRmtOrderStat;
@@ -66,12 +73,14 @@ void vTaskEVSERemote(void *pvParameters)
     time_t time_rmtctrl;
     time_t time_order;
     uint8_t order_send_count;
-    uint8_t reg_try_cnt;
+    uint32_t reg_try_cnt;
+    uint32_t heart_lost;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
+    eRmtHeartStat = REMOTEHEART_IDLE;
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
     eRmtOrderStat = REMOTEOrder_IDLE;
@@ -83,6 +92,7 @@ void vTaskEVSERemote(void *pvParameters)
     time_order = 0;
     order_send_count = 0;
     reg_try_cnt = 0;
+    heart_lost = 0;
 
     while(1)
     {
@@ -96,12 +106,8 @@ void vTaskEVSERemote(void *pvParameters)
                                          pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
-//            if(pModem->state == DS_MODEM_TCP_KEEP)
-//            {
                 RemoteRegist(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
-//            }
-
             }
             break;
         case REMOTE_CONNECTED:
@@ -120,29 +126,24 @@ void vTaskEVSERemote(void *pvParameters)
             else
             {
                 reg_try_cnt++;
-                if(reg_try_cnt > 5)
+                if(reg_try_cnt > 200)
                 {
+                    printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
                     remotestat = REMOTE_NO;
                 }
-                vTaskDelay(1000);
             }
             break;
         case REMOTE_REGEDITED:
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectFail,
-                                         pdTRUE,pdTRUE,0);
+                                         pdTRUE, pdTRUE, 0);
             if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
             {
-//             if(pModem->state != DS_MODEM_TCP_KEEP)
-//            {
-                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
-                xTimerStop(xHandleTimerRemoteStatus, 100);
-                remotestat = REMOTE_NO;
+                remotestat = REMOTE_RECONNECT;
+                printf_safe("State Regedit TCPConnectFail, Call Reconnect!!!\n");
                 break;
-//            }
             }
-
 
             /************ ÐÄÌø ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
@@ -151,7 +152,41 @@ void vTaskEVSERemote(void *pvParameters)
             if((uxBits & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteHeart(pEVSE, pechProto);
+//                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+                eRmtHeartStat = REMOTEHEART_RECV;
             }
+
+            switch(eRmtHeartStat)
+            {
+            case REMOTEHEART_IDLE:
+                break;
+            case REMOTEHEART_RECV:
+                RemoteHeartRes(pEVSE, pechProto, &network_res);
+                if(network_res != 1)
+                {
+                    heart_lost++;
+                    printf_safe("heart_lost = %d\n",heart_lost);
+                    if(heart_lost > 750)
+                    {
+                        heart_lost = 0;
+                        eRmtHeartStat = REMOTEHEART_IDLE;
+                        remotestat = REMOTE_RECONNECT;
+                        break;
+                    }
+                }
+                else
+                {
+//                    xTimerStart(xHandleTimerRemoteHeartbeat, 100);
+                    printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
+                    eRmtHeartStat = REMOTEHEART_IDLE;
+                    heart_lost = 0;
+//                    pechProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen = 0;
+//                    memset(pechProto->pCMD[ECH_CMDID_HEARTBEAT]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
+                }
+                break;
+            }
+
+
             /************ ×´Ì¬******************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                          defEventBitTimerCBStatus,
@@ -385,6 +420,13 @@ void vTaskEVSERemote(void *pvParameters)
                 }
             }
             break;//REMOTE_REGEDITED
+        case REMOTE_RECONNECT:
+            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+            xTimerStop(xHandleTimerRemoteStatus, 100);
+            remotestat = REMOTE_NO;
+            pModem->state = DS_MODEM_TCP_CLOSE;
+            printf_safe("State Reconnect ,Call TCP close!!\n");
+            break;
         }
 
 #if DEBUG_REMOTE
