@@ -374,6 +374,10 @@ GPRS_USARTx_IRQHandler
 WIFI_USARTx_IRQHandler
 {
     HAL_UART_IRQHandler(&WIFI_UARTx_Handler);
+            if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
+        {
+            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
+        }
 }
 
 /**
@@ -424,10 +428,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
     if(huart->Instance == WIFI_USARTx_BASE)
     {
-        if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
-        {
-            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
-        }
+//        if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
+//        {
+//            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
+//        }
     }
 }
 
