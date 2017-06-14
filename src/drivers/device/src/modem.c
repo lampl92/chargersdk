@@ -95,7 +95,7 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
             p  = strstr(reply, "CLOSED");
             if ( p )
             {
-                pModem->state = DS_MODEM_TCP_OPEN;
+                pModem->state = DS_MODEM_TCP_CLOSE;
                 ret = DR_MODEM_CLOSED;
                 break;
             }
@@ -567,7 +567,11 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     vTaskDelay(200);
     do
     {
-        modem_QISACK(pModem);
+        ret = modem_QISACK(pModem);
+        if(ret == DR_MODEM_READ)
+        {
+            return ret;
+        }
         if(pModem->flag.sent == pModem->flag.acked)
         {
             ret = DR_MODEM_OK;
@@ -794,13 +798,11 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_OPEN:
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
-
             ret = modem_set_TCPOPEN(pModem, pechProto);
             switch(pModem->status.eConnect)
             {
             case CONNECT_OK:
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK);
+                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
             case CONNECT_FAIL:
@@ -819,19 +821,19 @@ void Modem_Poll(DevModem_t *pModem)
                 break;
             }
             break;
-        case DS_MODEM_TCP_KEEP:
-            modem_get_STATE(pModem);
-            if(pModem->state == PDP_DEACT)
-            {
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
-                pModem->state = DS_MODEM_TCP_ACT_PDP;
-            }
-            if(pModem->state == IP_CLOSE)
-            {
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
-                pModem->state = DS_MODEM_TCP_OPEN;
-            }
-            //等待发送请求，从remote过来
+        case DS_MODEM_TCP_KEEP: //临时注释，不要删
+//            modem_get_STATE(pModem);
+//            if(pModem->state == PDP_DEACT)
+//            {
+//                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
+//                pModem->state = DS_MODEM_TCP_ACT_PDP;
+//            }
+//            if(pModem->state == IP_CLOSE)
+//            {
+//                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
+//                pModem->state = DS_MODEM_TCP_OPEN;
+//            }
+            //等待remote发送请求
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPClientSendReq,
                                          pdTRUE, pdTRUE, 0);
@@ -842,14 +844,17 @@ void Modem_Poll(DevModem_t *pModem)
                 {
                     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
                 }
+                else if(ret == DR_MODEM_READ)
+                {
+                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
+// 别删             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READ处已经发送读事件，此处作为提示用途。
+                }
                 else if(ret == DR_MODEM_TIMEOUT)
                 {
 
                 }
                 else
                 {
-                    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
-                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
                     pModem->state = DS_MODEM_TCP_CLOSE;
                     printf_safe("发送失败\r\n");
                 }
@@ -885,8 +890,8 @@ void Modem_Poll(DevModem_t *pModem)
 
             break;
         case DS_MODEM_TCP_CLOSE:
-            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
+            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
+            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             ret = modem_QICLOSE(pModem);
             if(ret == DR_MODEM_OK)
             {
@@ -894,7 +899,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             else
             {
-                pModem->state = DS_MODEM_ERR;
+                pModem->state = DS_MODEM_TCP_DEACT_PDP;
             }
             break;
         case DS_MODEM_ERR:
@@ -918,6 +923,7 @@ void Modem_Poll(DevModem_t *pModem)
                                      pdTRUE, pdTRUE, 0); //定时请一次缓存
         if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
         {
+            //printf_safe("看看是不是定时清缓存这里出问题了\n");
             recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
             if(recv_len > 0)
             {
