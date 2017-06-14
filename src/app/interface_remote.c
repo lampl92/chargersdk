@@ -100,6 +100,7 @@ ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
     uint8_t *pbuff; //数据部分
     uint32_t len;
 
+    *psiRetVal = 0;
     pCMD = pProto->pCMD[ECH_CMDID_REGISTER];
     cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
     gdsl_list_cursor_move_to_head (cur);
@@ -146,9 +147,12 @@ ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
     echCMD_t *pCMD;
     echCmdElem_t * pechCmdElem;
     gdsl_list_cursor_t cur;
+    errcode = ERR_NO;
 
     pCMD = pProto->pCMD[ECH_CMDID_HEARTBEAT];
     cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
+    *psiRetVal = 0;
+
     gdsl_list_cursor_move_to_head (cur);
     while(pechCmdElem = gdsl_list_cursor_get_content (cur))
     {
@@ -157,7 +161,7 @@ ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
         gdsl_list_cursor_step_forward (cur);
     }
 
-    errcode = ERR_NO;
+    return errcode;
 }
 ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
@@ -175,6 +179,7 @@ ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
     uint32_t len;
     uint8_t id;
     ErrorCode_t errcode;
+    *psiRetVal = 0;
 
     errcode = ERR_NO;
     id = 0;
@@ -252,6 +257,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
     ul2uc ulTmp;
     uint8_t id;
     ErrorCode_t errcode;
+    *psiRetVal = 0;
 
     id = 0;
     errcode = ERR_NO;
@@ -362,6 +368,7 @@ ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
     uint8_t id;
     uint8_t strOrderSN_tmp[17];
     ErrorCode_t errcode;
+    *psiRetVal = 0;
 
     id = 0;
     memset(strOrderSN_tmp, 0, 17);
