@@ -528,18 +528,29 @@ static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 
     modem_send_at("AT+QIRD=%d,%d,%d,%d\r", 0, 1, 0, len);
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QIRD:", 1);
-    if(ret == DR_MODEM_OK)
+    switch(ret)
     {
+    case DR_MODEM_OK:
         sscanf(reply, "%*s %*[^,],%*[^,],%d", &recv_len);
-        for(i = 0; i < MAX_COMMAND_LEN; i++)
+        for (i = 0; i < MAX_COMMAND_LEN; i++)
         {
-            if(reply[i] == 0x68)
+            if (reply[i] == 0x68)
             {
                 memmove(pbuff, &reply[i], recv_len);
                 break;
             }
         }
+        break;
+    case DR_MODEM_TIMEOUT:
+        break;
+    case DR_MODEM_ERROR:
+        break;
+    case DR_MODEM_READ:
+        break;
+    case DR_MODEM_CLOSED:
+        break;
     }
+    
     return recv_len;
 }
 /** @brief 发送数据，超时时间20s
