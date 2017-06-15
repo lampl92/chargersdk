@@ -99,22 +99,44 @@ void vTaskRemoteCmdProc(void *pvParameters)
                    如果是请求命令，则等待主机回复
                    如果是回复命令，则删除
                 */
+                #if 0
                 /** @todo (rgw#1#): 后期需要在这里比较协议UID，删除接受到的UID与发送UID相同的命令 */
-
-                ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
-                gdsl_list_cursor_move_to_head (ccmd);
-                while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
+                if(xSemaphoreTake(pProto->pCMD[pechProtoElem->cmd_id]->xMutexCmd, 1000) == pdTRUE)
                 {
-                    if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
+                    ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
+                    gdsl_list_cursor_move_to_head (ccmd);
+                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
                     {
-                        gdsl_list_cursor_delete(ccmd);
-                        gdsl_list_flush(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);//清空接收命令队列
-                        gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
-                        break;
+                        if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
+                        {
+                            gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
+                            break;
+                        }
+                        gdsl_list_cursor_step_forward (ccmd);
                     }
-//                    gdsl_list_cursor_step_forward (ccmd);
-                }
 
+                    gdsl_list_cursor_move_to_head (ccmd);
+                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
+                    {
+                        if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
+                        {
+                            gdsl_list_cursor_delete(ccmd);
+                            continue;
+                        }
+                        gdsl_list_cursor_step_forward (ccmd);
+                    }
+                    gdsl_list_cursor_free(ccmd);
+                    xSemaphoreGive(pProto->xMutexCmd);
+                }
+                #endif
+                uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
+                                                defEventBitProtoCmdHandled,
+                                                pdTRUE, pdTRUE, 0);
+                if((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
+                {
+                    gdsl_list_cursor_delete(cs);//请求命令收到平台回复并已处理, 删除命令
+                    continue;
+                }
                 if(pechProtoElem->trycount > pechProtoElem->trycountmax)
                 {
                     gdsl_list_cursor_delete(cs);
