@@ -60,7 +60,7 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     }
     HAL_StatusTypeDef hal_res;
-    hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 100);
+    hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 2000);
 
     if(hal_res == HAL_OK)
     {
