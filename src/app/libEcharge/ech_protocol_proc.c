@@ -137,7 +137,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     gdsl_list_cursor_delete(cs);//请求命令收到平台回复并已处理, 删除命令
                     continue;
                 }
-                if(pechProtoElem->trycount > pechProtoElem->trycountmax)
+                if(pechProtoElem->trycount >= pechProtoElem->trycountmax)
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
