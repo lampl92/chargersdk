@@ -542,15 +542,19 @@ static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         }
         break;
     case DR_MODEM_TIMEOUT:
+        printf_safe("Read 超时！！\n");
         break;
     case DR_MODEM_ERROR:
+        printf_safe("Read 错误！！\n");
         break;
     case DR_MODEM_READ:
+        printf_safe("Read READ!!！！\n");
         break;
     case DR_MODEM_CLOSED:
+        printf_safe("Read 时发现Close\n");
         break;
     }
-    
+
     return recv_len;
 }
 /** @brief 发送数据，超时时间20s
@@ -569,13 +573,6 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     n = 0;
     ret = DR_MODEM_ERROR;
 
-    ret = modem_QISEND(pModem, len);
-    if(ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
-    modem_UART_puts(pbuff, len);
-    vTaskDelay(200);
     do
     {
         ret = modem_QISACK(pModem);
@@ -597,6 +594,16 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         vTaskDelay(500);
     }
     while(pModem->flag.sent != pModem->flag.acked);
+
+    if(ret == DR_MODEM_OK)
+    {
+        ret = modem_QISEND(pModem, len);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        modem_UART_puts(pbuff, len);
+    }
 
     return ret;
 }
@@ -853,6 +860,12 @@ void Modem_Poll(DevModem_t *pModem)
                 ret = modem_write(pModem, tcp_client_sendbuf, send_len);
                 if(ret == DR_MODEM_OK)
                 {
+                    printf_safe("\nTCP Send: ");
+                    for(i = 0; i < send_len; i++)
+                    {
+                        printf_safe("%02X ", tcp_client_sendbuf[i]);
+                    }
+                    printf_safe("\n");
                     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
                 }
                 else if(ret == DR_MODEM_READ)
