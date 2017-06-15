@@ -197,7 +197,7 @@ ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 0, 0);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 0xffff, 0);
 
     return errcode;
 }
@@ -372,7 +372,7 @@ ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint
 
     pbuff[39] = ctrl;
     pbuff[40] = reason;
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 0, 0);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 20, 1);
 
     return errcode;
 }
