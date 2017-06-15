@@ -36,13 +36,13 @@ static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
 static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
 {
     uint32_t   cnt  = 0;
-    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
-    {
+//    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
+//    {
         cnt = uart_read(UART_PORT_GPRS, line, len, 0);
-        xSemaphoreGive(pModem->xMutex);
+//        xSemaphoreGive(pModem->xMutex);
         return cnt;
-    }
-    else
+//    }
+//    else
     {
         //没等到，离开了
     }
@@ -59,6 +59,7 @@ static uint32_t modem_send_at(uint8_t *format, ...)
     n  = vsnprintf(cmd, sizeof(cmd) - 1, format, va);
     va_end(va);
 
+//    cmd[strlen(cmd)] = '\n';
     modem_UART_puts(cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
@@ -567,6 +568,7 @@ static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
  */
 DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
+    uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint32_t n;
     DR_MODEM_e ret;
 
@@ -602,7 +604,14 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         {
             return ret;
         }
+        taskENTER_CRITICAL();
         modem_UART_puts(pbuff, len);
+        taskEXIT_CRITICAL();
+        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+        if(ret != DR_MODEM_OK)
+        {
+            ret = DR_MODEM_TIMEOUT;
+        }
     }
 
     return ret;
@@ -820,6 +829,7 @@ void Modem_Poll(DevModem_t *pModem)
             switch(pModem->status.eConnect)
             {
             case CONNECT_OK:
+                xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
@@ -942,29 +952,29 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         }
 
-        uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                     defEventBitTCPClientFlushBuff,
-                                     pdTRUE, pdTRUE, 0); //定时请一次缓存
-        if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
-        {
-            //printf_safe("看看是不是定时清缓存这里出问题了\n");
-            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-            if(recv_len > 0)
-            {
-                printf_safe("\nTCP Recv: ");
-                for(i = 0; i < recv_len; i++)
-                {
-                    printf_safe("%02X ", tcp_client_recvbuf[i]);
-                }
-                printf_safe("\n");
+//        uxBits = xEventGroupWaitBits(xHandleEventTCP,
+//                                     defEventBitTCPClientFlushBuff,
+//                                     pdTRUE, pdTRUE, 0); //定时请一次缓存
+//        if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
+//        {
+//            //printf_safe("看看是不是定时清缓存这里出问题了\n");
+//            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+//            if(recv_len > 0)
+//            {
+//                printf_safe("\nTCP Recv: ");
+//                for(i = 0; i < recv_len; i++)
+//                {
+//                    printf_safe("%02X ", tcp_client_recvbuf[i]);
+//                }
+//                printf_safe("\n");
+//
+//                pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+//                memset(tcp_client_recvbuf, 0, recv_len);
+//                recv_len = 0;
+//            }
+//        }
 
-                pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-                memset(tcp_client_recvbuf, 0, recv_len);
-                recv_len = 0;
-            }
-        }
-
-        modem_get_info(pModem);
+        //modem_get_info(pModem);
 
         vTaskDelay(500);
     }
