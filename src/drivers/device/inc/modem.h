@@ -47,6 +47,7 @@ typedef struct
 {
     uint8_t strAPN[16+1];
     uint8_t ucContext;
+    uint8_t ucTPMode;
 } ModemInfo_t;
 
 typedef struct
@@ -67,6 +68,7 @@ typedef enum
     DS_MODEM_ERR,
     DS_MODEM_TCP_ACT_PDP,
     DS_MODEM_TCP_DEACT_PDP,
+//    DS_MODEM_TRANSPARENT,
     DS_MODEM_TCP_OPEN,
     DS_MODEM_TCP_KEEP,
     DS_MODEM_TCP_CLOSE

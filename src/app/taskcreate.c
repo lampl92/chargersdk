@@ -159,6 +159,7 @@ void vTaskInit(void *pvParameters)
     pModem = DevModemCreate();
     strcpy(pModem->info.strAPN, "CMNET");
     pModem->info.ucContext = 0;
+    pModem->info.ucTPMode = 1;
     pModem->xMutex = xSemaphoreCreateMutex();
 
     modem_open(pModem);

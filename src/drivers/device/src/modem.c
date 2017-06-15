@@ -352,12 +352,12 @@ DR_MODEM_e modem_set_context(DevModem_t *pModem)
     return ret;
 }
 
-DR_MODEM_e modem_QIMODE(DevModem_t *pModem, uint8_t tpmode)
+DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    modem_send_at("AT+QIMODE=%d\r", tpmode);
+    modem_send_at("AT+QIMODE=%d\r", pModem->info.ucTPMode);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
 
@@ -381,19 +381,23 @@ DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
  * @return DR_MODEM_e
  *
  */
-DR_MODEM_e modem_set_Transparent(DevModem_t *pModem, uint8_t tpmode)
+DR_MODEM_e modem_set_Transparent(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
-    ret = modem_QIMODE(pModem, tpmode);
+    ret = modem_QIMODE(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    ret = modem_QITCFG(pModem);
-    if(ret != DR_MODEM_OK)
+    if(pModem->info.ucTPMode == 1)
     {
-        return ret;
+        ret = modem_QITCFG(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
     }
+
     return ret;
 }
 
@@ -527,18 +531,38 @@ DR_MODEM_e modem_set_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
     if(ret == DR_MODEM_OK)
     {
-        sscanf(reply, "%*s%s", s);
-        if(strcmp(s, "OK") == 0) //"CONNECT OK"
+        if(pModem->info.ucTPMode == 0)
         {
-            pModem->status.eConnect = CONNECT_OK;
+            sscanf(reply, "%*s%s", s);
+            if(strcmp(s, "OK") == 0) //"CONNECT OK"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+            else if(strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            {
+                pModem->status.eConnect = CONNECT_FAIL;
+            }
+            else if(strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
         }
-        else if(strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+        else
         {
-            pModem->status.eConnect = CONNECT_FAIL;
-        }
-        else if(strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
-        {
-            pModem->status.eConnect = CONNECT_OK;
+            sscanf(reply, "%s", s);
+            if(strcmp(s, "CONNECT") == 0) //"CONNECT OK"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+            sscanf(reply, "%*s%s", s);
+            if(strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            {
+                pModem->status.eConnect = CONNECT_FAIL;
+            }
+            else if(strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
         }
     }
     return ret;
@@ -621,42 +645,53 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     n = 0;
     ret = DR_MODEM_ERROR;
 
-    do
+    if(pModem->info.ucTPMode == 0)
     {
-        ret = modem_QISACK(pModem);
-        if(ret == DR_MODEM_READ)
+        do
         {
-            return ret;
+            ret = modem_QISACK(pModem);
+            if(ret == DR_MODEM_READ)
+            {
+                return ret;
+            }
+            if(pModem->flag.sent == pModem->flag.acked)
+            {
+                ret = DR_MODEM_OK;
+                break;
+            }
+            n++;
+            if(n >= 240)
+            {
+                ret = DR_MODEM_TIMEOUT;
+                break;
+            }
+            vTaskDelay(500);
         }
-        if(pModem->flag.sent == pModem->flag.acked)
+        while(pModem->flag.sent != pModem->flag.acked);
+
+        if(ret == DR_MODEM_OK)
+        {
+            ret = modem_QISEND(pModem, len);
+            if(ret != DR_MODEM_OK)
+            {
+                return ret;
+            }
+            taskENTER_CRITICAL();
+            modem_UART_puts(pbuff, len);
+            taskEXIT_CRITICAL();
+            ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+            if(ret != DR_MODEM_OK)
+            {
+                ret = DR_MODEM_TIMEOUT;
+            }
+        }
+    }
+    else//透传模式
+    {
+        n = modem_UART_puts(pbuff, len);
+        if(n == len)
         {
             ret = DR_MODEM_OK;
-            break;
-        }
-        n++;
-        if(n >= 240)
-        {
-            ret = DR_MODEM_TIMEOUT;
-            break;
-        }
-        vTaskDelay(500);
-    }
-    while(pModem->flag.sent != pModem->flag.acked);
-
-    if(ret == DR_MODEM_OK)
-    {
-        ret = modem_QISEND(pModem, len);
-        if(ret != DR_MODEM_OK)
-        {
-            return ret;
-        }
-        taskENTER_CRITICAL();
-        modem_UART_puts(pbuff, len);
-        taskEXIT_CRITICAL();
-        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
-        if(ret != DR_MODEM_OK)
-        {
-            ret = DR_MODEM_TIMEOUT;
         }
     }
 
@@ -664,7 +699,14 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 }
 uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
-    return modem_QIRD(pModem, pbuff, len);
+    if(pModem->info.ucTPMode == 0)
+    {
+        return modem_QIRD(pModem, pbuff, len);
+    }
+    else
+    {
+        return modem_UART_gets(pModem, pbuff, len);
+    }
 }
 
 DR_MODEM_e modem_QICLOSE(DevModem_t *pModem)
@@ -854,7 +896,7 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     {
         return ret;
     }
-    ret = modem_set_Transparent(pModem, 0);
+    ret = modem_set_Transparent(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
@@ -991,17 +1033,37 @@ void Modem_Poll(DevModem_t *pModem)
             }
 
             /*=== read处理 ===*/
-            ret = modem_get_at_reply(tcp_client_recvbuf, sizeof(tcp_client_recvbuf) - 1, "+QIRDI:", 1);
-            if(ret == DR_MODEM_READ)
+            if(pModem->info.ucTPMode == 0)
             {
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid);
+                ret = modem_get_at_reply(tcp_client_recvbuf, sizeof(tcp_client_recvbuf) - 1, "+QIRDI:", 1);
+                if(ret == DR_MODEM_READ)
+                {
+                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid);
+                }
+                uxBits = xEventGroupWaitBits(xHandleEventTCP,
+                                             defEventBitTCPClientRecvValid,
+                                             pdTRUE, pdTRUE, 0);
+                if((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
+                {
+                    //读取串口数据
+                    recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+                    if(recv_len > 0)
+                    {
+                        printf_safe("\nTCP Recv: ");
+                        for(i = 0; i < recv_len; i++)
+                        {
+                            printf_safe("%02X ", tcp_client_recvbuf[i]);
+                        }
+                        printf_safe("\n");
+
+                        pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                        memset(tcp_client_recvbuf, 0, recv_len);
+                        recv_len = 0;
+                    }
+                }
             }
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPClientRecvValid,
-                                         pdTRUE, pdTRUE, 0);
-            if((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
+            else//透传模式
             {
-                //读取串口数据
                 recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                 if(recv_len > 0)
                 {
