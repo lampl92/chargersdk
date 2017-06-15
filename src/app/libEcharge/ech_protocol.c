@@ -803,6 +803,14 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     return 1;
 }
 
+/*
+写分析函数的方法
+1. 等待Mutex
+2. 初始化lRecvElem
+3. 将lRecvElem插入队尾
+4. 释放Mutex
+*/
+
 static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -812,14 +820,19 @@ static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
 
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
+    {
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
 
-    lRecvElem.UID = 0;
-    lRecvElem.timestamp = time(NULL);
-    lRecvElem.len = pCMD->ulRecvdOptLen;
-    lRecvElem.pbuff = pCMD->ucRecvdOptData;
-    lRecvElem.status = 0;
-    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
+    }
 
     return 1;
 }
@@ -835,24 +848,29 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
-
-    ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
-    ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
-    ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
-    ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
-    timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-    if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
     {
-        time(&timestamp);
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+        pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
+
+        ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
+        ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
+        ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
+        ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
+        timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
+        if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
+        {
+            time(&timestamp);
+        }
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
     }
-    lRecvElem.UID = 0;
-    lRecvElem.timestamp = time(NULL);
-    lRecvElem.len = pCMD->ulRecvdOptLen;
-    lRecvElem.pbuff = pCMD->ucRecvdOptData;
-    lRecvElem.status = 0;
-    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
 
     return 1;
 }
@@ -961,6 +979,8 @@ static void deleteProto(void *pPObj)
     {
         if(pProto->pCMD[i] != NULL)
         {
+            vEventGroupDelete(pProto->pCMD[i]->xHandleEventCmd);
+            vSemaphoreDelete(pProto->pCMD[i]->xMutexCmd);
             gdsl_list_free(pProto->pCMD[i]->plRecvCmd);
             free(pProto->pCMD[i]);
             pProto->pCMD[i] = NULL;
@@ -980,6 +1000,8 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, pECH_MAKE_
     }
     pECHCMD->CMDType.usSendCmd = usSendCmd;
     pECHCMD->CMDType.usRecvCmd = usRecvCmd;
+    pECHCMD->xHandleEventCmd = xEventGroupCreate();
+    pECHCMD->xMutexCmd = xSemaphoreCreateMutex();
 
     pECHCMD->plRecvCmd = gdsl_list_alloc ("CMDRecvLis", echCmdListAlloc, echCmdListFree);
     pECHCMD->makeProc = makeProc;

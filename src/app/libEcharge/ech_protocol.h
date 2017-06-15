@@ -9,6 +9,9 @@
 #define  __ECH_PROTOCOL_H
 
 #include "gdsl_list.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "event_groups.h"
 
 #define ECH_UNUSED_ARG(x) (void)x
 
@@ -84,6 +87,8 @@ typedef struct _echCMD
 
     uint8_t     ucRecvdOptData[REMOTE_RECVDOPTDATA];
     uint32_t    ulRecvdOptLen;
+    EventGroupHandle_t xHandleEventCmd;
+    SemaphoreHandle_t xMutexCmd;
 
     gdsl_list_t plRecvCmd;
 
