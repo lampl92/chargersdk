@@ -91,43 +91,74 @@ ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
     return errcode;
 }
 
-ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteResHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *pbuff, uint32_t *pLen)
 {
     ErrorCode_t errcode;
     echCMD_t *pCMD;
     echCmdElem_t * pechCmdElem;
     gdsl_list_cursor_t cur;
-    uint8_t *pbuff; //数据部分
-    uint32_t len;
 
-    *psiRetVal = 0;
-    pCMD = pProto->pCMD[ECH_CMDID_REGISTER];
-    cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
-    gdsl_list_cursor_move_to_head (cur);
-    while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+    errcode = ERR_REMOTE_NODATA;
+    pCMD = pProto->pCMD[usSendID];
+    if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdTRUE)
     {
-        pbuff = pCMD->ucRecvdOptData;
-        len = pCMD->ulRecvdOptLen;
-        printf_safe("len = %d\n", len);
-        errcode = ERR_NO;
+        cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
+        gdsl_list_cursor_move_to_head (cur);
+        while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+        {
+            memmove(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
+            *pLen = pCMD->ulRecvdOptLen;
+            errcode = ERR_NO;
+            break;
+        }
+        gdsl_list_cursor_move_to_head (cur);
+        while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+        {
+            gdsl_list_cursor_delete(cur);
+        }
+        gdsl_list_cursor_free(cur);
+        xSemaphoreGive(pCMD->xMutexCmd);
+        if(errcode != ERR_REMOTE_NODATA)
+        {
+            xEventGroupSetBits(pCMD->xHandleEventCmd, defEventBitProtoCmdHandled);
+        }
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_REGISTER, pbuff, &len);
+
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
+        break;
+    case ERR_NO:
         switch(pbuff[0])//登陆结果
         {
         case 1: //正常
         case 3:
+            errcode = ERR_NO;
             *psiRetVal = 1;
             break;
         case 2: //设备不存在，关闭连接
         case 4: //密钥失效，关闭连接
         case 5: //其他错误，关闭连接
         default:
+            errcode = ERR_REMOTE_REGEDIT;
             *psiRetVal = 0;
             break;
         }
-        pechCmdElem->status = 1; //处理过了
-        gdsl_list_cursor_step_forward (cur);
+        break;
     }
-
     return errcode;
 }
 
@@ -136,31 +167,29 @@ ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 10, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 3);
 
     return errcode;
 }
 
 ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
-    echCMD_t *pCMD;
-    echCmdElem_t * pechCmdElem;
-    gdsl_list_cursor_t cur;
-    errcode = ERR_NO;
 
-    pCMD = pProto->pCMD[ECH_CMDID_HEARTBEAT];
-    cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
-    *psiRetVal = 0;
-
-    gdsl_list_cursor_move_to_head (cur);
-    while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_HEARTBEAT, pbuff, &len);
+    switch(handle_errcode)
     {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
         *psiRetVal = 1;
-        pechCmdElem->status = 1; //处理过了
-        gdsl_list_cursor_step_forward (cur);
+        break;
     }
-
+    errcode = handle_errcode;
     return errcode;
 }
 ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
@@ -168,7 +197,7 @@ ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 1, 1);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_STATUS, 0, 0);
 
     return errcode;
 }
@@ -343,7 +372,7 @@ ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint
 
     pbuff[39] = ctrl;
     pbuff[40] = reason;
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 10, 1);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 0, 0);
 
     return errcode;
 }
