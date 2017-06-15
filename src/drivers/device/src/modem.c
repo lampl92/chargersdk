@@ -38,9 +38,9 @@ static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
     uint32_t   cnt  = 0;
 //    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
 //    {
-        cnt = uart_read(UART_PORT_GPRS, line, len, 0);
+    cnt = uart_read(UART_PORT_GPRS, line, len, 0);
 //        xSemaphoreGive(pModem->xMutex);
-        return cnt;
+    return cnt;
 //    }
 //    else
     {
@@ -277,6 +277,9 @@ static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
         case 1:
             pModem->status.eNetReg = REG_LOCAl;
             break;
+        case 2:
+            pModem->status.eNetReg = REG_SEARCH;
+            break;
         case 5:
             pModem->status.eNetReg = REG_ROAMING;
             break;
@@ -314,6 +317,9 @@ static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
         case 1:
             pModem->status.eGprsReg = REG_LOCAl;
             break;
+        case 2:
+            pModem->status.eGprsReg = REG_SEARCH;
+            break;
         case 5:
             pModem->status.eGprsReg = REG_ROAMING;
             break;
@@ -342,12 +348,52 @@ DR_MODEM_e modem_set_context(DevModem_t *pModem)
     modem_send_at("AT+QIFGCNT=%d\r", pModem->info.ucContext);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
-    switch(ret)
-    {
-    case DR_MODEM_OK:
-        break;
-    }
 
+    return ret;
+}
+
+DR_MODEM_e modem_QIMODE(DevModem_t *pModem, uint8_t tpmode)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QIMODE=%d\r", tpmode);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QITCFG=%d,%d,%d,%d\r", 3, 2, 512, 1);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+
+/** @brief 设置透传模式参数
+ *
+ * @param pModem DevModem_t*
+ * @return DR_MODEM_e
+ *
+ */
+DR_MODEM_e modem_set_Transparent(DevModem_t *pModem, uint8_t tpmode)
+{
+    DR_MODEM_e ret;
+    ret = modem_QIMODE(pModem, tpmode);
+    if(ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    ret = modem_QITCFG(pModem);
+    if(ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
     return ret;
 }
 
@@ -727,11 +773,55 @@ DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
     return ret;
 }
 
-void modem_get_info(DevModem_t *pModem)
+DR_MODEM_e modem_get_info(DevModem_t *pModem)
 {
-    modem_CPIN(pModem);
-    modem_CSQ(pModem);
-    modem_get_STATE(pModem);
+    DR_MODEM_e ret;
+
+    do
+    {
+        ret = modem_CPIN(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        vTaskDelay(1000);
+    }
+    while(pModem->status.eSimStat != CPIN_READY);
+    do
+    {
+        ret = modem_get_net_reg(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        vTaskDelay(1000);
+    }
+    while(pModem->status.eNetReg == REG_SEARCH );
+
+    do
+    {
+        ret = modem_get_gprs_reg(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        vTaskDelay(1000);
+    }
+    while(pModem->status.eGprsReg == REG_SEARCH );
+    do
+    {
+        ret = modem_CSQ(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        vTaskDelay(1000);
+    }
+    while(pModem->status.ucSignalQuality < 5 ||
+            pModem->status.ucSignalQuality >= 99);
+
+    return ret;
+    //modem_get_STATE(pModem);
 }
 
 DR_MODEM_e modem_init(DevModem_t *pModem)
@@ -747,22 +837,28 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     {
         return ret;
     }
-    ret = modem_get_net_reg(pModem);
+
+    ret = modem_get_info(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    ret = modem_get_gprs_reg(pModem);
-    if(ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
+
     ret = modem_set_context(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
     ret = modem_set_RecvType(pModem);
+    if(ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    ret = modem_set_Transparent(pModem, 0);
+    if(ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
     return ret;
 }
 

@@ -11,6 +11,7 @@ typedef enum
     CPIN_READY,
     REG_LOCAl,
     REG_ROAMING,
+    REG_SEARCH,
     REG_UNKNOWN,
     CONNECT_OK,
     CONNECT_FAIL
@@ -94,7 +95,6 @@ extern DevModem_t *pModem;
 DevModem_t *DevModemCreate(void);
 DR_MODEM_e modem_open(DevModem_t *pModem);
 DR_MODEM_e modem_init(DevModem_t *pModem);
-void modem_get_info(DevModem_t *pModem);
 void Modem_Poll(DevModem_t *pModem);
 
 #endif/*_MODEM_H_*/
