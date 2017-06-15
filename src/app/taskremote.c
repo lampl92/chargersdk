@@ -115,6 +115,7 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteRegistRes(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
+                reg_try_cnt = 0;
                 xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
                                    pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
                                    100);//设置timer period ，有timer start 功能
@@ -158,15 +159,15 @@ void vTaskEVSERemote(void *pvParameters)
             if((uxBits & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteHeart(pEVSE, pechProto);
-//                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
                 eRmtHeartStat = REMOTEHEART_RECV;
             }
 
-//            switch(eRmtHeartStat)
-//            {
-//            case REMOTEHEART_IDLE:
-//                break;
-//            case REMOTEHEART_RECV:
+            switch(eRmtHeartStat)
+            {
+            case REMOTEHEART_IDLE:
+                break;
+            case REMOTEHEART_RECV:
                 RemoteHeartRes(pEVSE, pechProto, &network_res);
                 if(network_res != 1)
                 {
@@ -182,15 +183,15 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 else
                 {
-//                    xTimerStart(xHandleTimerRemoteHeartbeat, 100);
+                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
+                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
+                                   100);//这样的话还能随时更改心跳频率不用重启
                     printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
                     eRmtHeartStat = REMOTEHEART_IDLE;
                     heart_lost = 0;
-//                    pechProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen = 0;
-//                    memset(pechProto->pCMD[ECH_CMDID_HEARTBEAT]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
                 }
-//                break;
-//            }
+                break;
+            }
 
 
             /************ 状态******************/
