@@ -132,6 +132,12 @@ void vTaskEVSERemote(void *pvParameters)
                     reg_try_cnt = 0;
                     remotestat = REMOTE_NO;
                 }
+                uxBits = xEventGroupGetBits(xHandleEventTCP);
+                if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
+                {
+                    reg_try_cnt = 0;
+                    remotestat = REMOTE_NO;
+                }
             }
             break;
         case REMOTE_REGEDITED:
@@ -424,6 +430,7 @@ void vTaskEVSERemote(void *pvParameters)
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
             pModem->state = DS_MODEM_TCP_CLOSE;
+            vTaskDelay(1000);
             remotestat = REMOTE_NO;
             printf_safe("State Reconnect ,Call TCP close!!\n");
             break;
