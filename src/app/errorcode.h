@@ -61,6 +61,8 @@ typedef enum _ErrorCode
     ERR_NET_TIMEOUT,		//网络通信超时
     ERR_MEMORY,			//Malloc错误
 
+    ERR_REMOTE_NODATA,  //无数据
+    ERR_REMOTE_REGEDIT,  //注册失败
     ERR_REMOTE_ORDERSN  //订单号不相等
 
 } ErrorCode_t;
