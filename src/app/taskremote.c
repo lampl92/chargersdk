@@ -159,15 +159,15 @@ void vTaskEVSERemote(void *pvParameters)
             if((uxBits & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteHeart(pEVSE, pechProto);
-                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
-                eRmtHeartStat = REMOTEHEART_RECV;
+//                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+//                eRmtHeartStat = REMOTEHEART_RECV;
             }
 
-            switch(eRmtHeartStat)
-            {
-            case REMOTEHEART_IDLE:
-                break;
-            case REMOTEHEART_RECV:
+//            switch(eRmtHeartStat)
+//            {
+//            case REMOTEHEART_IDLE:
+//                break;
+//            case REMOTEHEART_RECV:
                 RemoteHeartRes(pEVSE, pechProto, &network_res);
                 if(network_res != 1)
                 {
@@ -183,15 +183,15 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 else
                 {
-                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
-                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
-                                   100);//这样的话还能随时更改心跳频率不用重启
+//                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
+//                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
+//                                   100);//这样的话还能随时更改心跳频率不用重启
                     printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
-                    eRmtHeartStat = REMOTEHEART_IDLE;
+//                    eRmtHeartStat = REMOTEHEART_IDLE;
                     heart_lost = 0;
                 }
-                break;
-            }
+//                break;
+//            }
 
 
             /************ 状态******************/
