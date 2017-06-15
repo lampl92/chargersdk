@@ -169,7 +169,7 @@ uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *pu
     ch = 0;
     i = 0;
 
-    while(readRecvQue(q, &ch, 1) == 1)
+    while(readRecvQue(q, &ch, 10) == 1)
     {
         pbuff[i] = ch;
         i++;
