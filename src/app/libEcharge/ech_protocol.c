@@ -811,6 +811,32 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 4. ÊÍ·ÅMutex
 */
 
+static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    echProtocol_t *pProto;
+    echCMD_t *pCMD;
+    echCmdElem_t lRecvElem;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCMD = pProto->pCMD[usSendID];
+
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
+    {
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
+    }
+
+    return 1;
+}
+#if 0
 static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -836,7 +862,7 @@ static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 
     return 1;
 }
-
+#endif
 static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -874,7 +900,7 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
     return 1;
 }
-
+#if 0
 static int analyCmdStatus(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
@@ -897,7 +923,7 @@ static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
     return 1;
 }
-
+#endif
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
@@ -1048,12 +1074,12 @@ echProtocol_t *EchProtocolCreate(void)
         pProto->pCMD[i] = NULL;
     }
     //×®ÃüÁî, Æ½Ì¨ÃüÁî
-    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdReg);
+    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_HEARTBEAT] = EchCMDCreate(3, 4, makeCmdHeart, analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdStatus);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdRemoteCtrl);
-    pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdRTData);
-    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdOrder);
+    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdCommon);
 
     pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;

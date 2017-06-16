@@ -204,19 +204,20 @@ ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     CON_t *pCON;
-    uint8_t *pbuff;
-    uint32_t len;
     uint8_t id;
-    ErrorCode_t errcode;
-    *psiRetVal = 0;
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode = ERR_NO;
 
-    errcode = ERR_NO;
-    id = 0;
-
-    pbuff = pProto->pCMD[ECH_CMDID_STATUS]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_STATUS]->ulRecvdOptLen;
-    if(len > 0)
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_STATUS, pbuff, &len);
+    switch(handle_errcode)
     {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
         //pbuff[0...3] 操作序列号
         //pbuff[4] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[4]);
@@ -230,6 +231,7 @@ ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
         {
             *psiRetVal = 0;
         }
+        break;
     }
 
     return errcode;
@@ -250,6 +252,7 @@ ErrorCode_t RemoteRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, 
     errcode = ERR_NO;
 
     /*** 如下操作为破坏了程序结构，用pCMD中的缓存空间带入一些需要传递的参数*/
+    /*** 2017年6月16日：现在pCMD的缓存专用于接收与传递参数，程序结构上不用担心了*/
     pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
     if(succ == 1)
     {
@@ -279,22 +282,26 @@ ErrorCode_t RemoteRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, 
 ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )// →_→
 {
     CON_t *pCON;
-    uint8_t *pbuff;
+    uint8_t id;
+
+    uint8_t pbuff[1024] = {0};
     uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
     uint8_t strOrderSN_tmp[17];
     double dLimetFee;
     ul2uc ulTmp;
-    uint8_t id;
-    ErrorCode_t errcode;
-    *psiRetVal = 0;
 
     id = 0;
     errcode = ERR_NO;
-
-    pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ulRecvdOptLen;
-    if(len > 0)
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_REMOTE_CTRL, pbuff, &len);
+    switch(handle_errcode)
     {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
         //pbuff[0...3] 操作ID ，不处理，留在ucRecvdOptData中待回复时使用
 
         //pbuff[12] 充电桩接口
@@ -317,7 +324,7 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
                 ulTmp.ucVal[3] = pbuff[17];
                 dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
                 pCON->order.dLimitFee = dLimetFee;
-                pCON->order.ucStartType = 5;//无卡
+                pCON->order.ucStartType = 5;//Remote无卡
 
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
@@ -339,17 +346,10 @@ ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *p
             *psiRetVal = 1;
             *pid = id;
         }
-        else // pCON = NULL
-        {
-            *psiRetVal = 0;
-        }
-    }
-    else//len = 0
-    {
-        *psiRetVal = 0;
+        break;
     }
 
-    return  errcode;
+    return errcode;
 }
 
 /** @brief
@@ -392,21 +392,25 @@ ErrorCode_t RemoteOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     CON_t *pCON;
-    uint8_t *pbuff;
-    uint32_t len;
     uint8_t id;
-    uint8_t strOrderSN_tmp[17];
+
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
-    *psiRetVal = 0;
+    uint8_t strOrderSN_tmp[17];
 
     id = 0;
     memset(strOrderSN_tmp, 0, 17);
     errcode = ERR_NO;
 
-    pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
-    len = pProto->pCMD[ECH_CMDID_ORDER]->ulRecvdOptLen;
-    if(len > 0)
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_ORDER, pbuff, &len);
+    switch(handle_errcode)
     {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
         //[0] 有无卡
         //[1...8] 交易流水号
         //[9] 充电桩接口
@@ -422,9 +426,10 @@ ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
             else //订单号不相等
             {
                 *psiRetVal = 0;
-                return ERR_REMOTE_ORDERSN;
+                errcode = ERR_REMOTE_ORDERSN;
             }
         }
+        break;
     }
 
     return errcode;
