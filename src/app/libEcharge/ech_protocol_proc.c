@@ -99,7 +99,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                    如果是请求命令，则等待主机回复
                    如果是回复命令，则删除
                 */
-                #if 0
+                #if 0 //注释的这部分的思路以后用来检测UID
                 /** @todo (rgw#1#): 后期需要在这里比较协议UID，删除接受到的UID与发送UID相同的命令 */
                 if(xSemaphoreTake(pProto->pCMD[pechProtoElem->cmd_id]->xMutexCmd, 1000) == pdTRUE)
                 {
