@@ -60,7 +60,7 @@ uint8_t Create_XBF12(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF12_Font,    //指向GUI_FONT结构
 						&XBF12_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF12FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
@@ -77,7 +77,7 @@ uint8_t Create_XBF14(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF14_Font,    //指向GUI_FONT结构
 						&XBF14_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF14FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
@@ -95,7 +95,7 @@ uint8_t Create_XBF16(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF16_Font,    //指向GUI_FONT结构
 						&XBF16_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF16FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
@@ -112,7 +112,7 @@ uint8_t Create_XBF19(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF19_Font,    //指向GUI_FONT结构
 						&XBF19_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF19FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
@@ -129,7 +129,7 @@ uint8_t Create_XBF24(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF24_Font,    //指向GUI_FONT结构
 						&XBF24_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF24FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
@@ -158,7 +158,7 @@ uint8_t Create_XBF36(uint8_t *fxpath)
 	//创建XBF16字体
 	GUI_XBF_CreateFont(	&XBF36_Font,    //指向GUI_FONT结构
 						&XBF36_Data, 	//指向GUI_XBF_DATA结构
-						GUI_XBF_TYPE_PROP_AA2_EXT,//要创建的字体类型
+						GUI_XBF_TYPE_PROP,//要创建的字体类型
 						_cbGetData,   	//回调函数
 						&XBF36FontFile);  //窗体给回调函数_cbGetData的参数
 	return 0;
