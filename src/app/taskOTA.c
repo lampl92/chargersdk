@@ -11,9 +11,10 @@ void vTaskOTA(void *pvParameters)
 {
     while(1)
     {
+        IWDG_Feed();
 #if DEBUG_TASK
         xprintf("%s\n", TASKNAME_OTA);
 #endif
-        vTaskDelay(1000);
+        vTaskDelay(100);
     }
 }

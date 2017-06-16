@@ -58,7 +58,7 @@
 
 #define defPRIORITY_TaskPPP                 14
 #define defPRIORITY_TaskTCPClient           12
-#define defPRIORITY_TaskRemoteCmdProc       8
+#define defPRIORITY_TaskRemoteCmdProc       19
 
 #define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
@@ -159,6 +159,7 @@ void vTaskInit(void *pvParameters)
     pModem = DevModemCreate();
     strcpy(pModem->info.strAPN, "CMNET");
     pModem->info.ucContext = 0;
+    pModem->info.ucTPMode = 1;
     pModem->xMutex = xSemaphoreCreateMutex();
 
     modem_open(pModem);
@@ -272,10 +273,11 @@ void AppObjCreate (void)
     //TimerHeartbeat远程服务器连接后开启定时器
 }
 volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //鐞氼偆閮寸紒鐔荤殶閻??
+extern __IO uint32_t uwTick;
 void vApplicationTickHook( void )
 {
-    IWDG_Feed();
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
+    uwTick = ulHighFrequencyTimerTicks;
 }
 
 /**

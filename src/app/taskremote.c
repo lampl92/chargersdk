@@ -115,6 +115,7 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteRegistRes(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
+                reg_try_cnt = 0;
                 xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
                                    pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
                                    100);//设置timer period ，有timer start 功能
@@ -129,6 +130,12 @@ void vTaskEVSERemote(void *pvParameters)
                 if(reg_try_cnt > 200)
                 {
                     printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
+                    reg_try_cnt = 0;
+                    remotestat = REMOTE_NO;
+                }
+                uxBits = xEventGroupGetBits(xHandleEventTCP);
+                if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
+                {
                     reg_try_cnt = 0;
                     remotestat = REMOTE_NO;
                 }
@@ -153,19 +160,19 @@ void vTaskEVSERemote(void *pvParameters)
             {
                 RemoteHeart(pEVSE, pechProto);
 //                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
-                eRmtHeartStat = REMOTEHEART_RECV;
+//                eRmtHeartStat = REMOTEHEART_RECV;
             }
 
-            switch(eRmtHeartStat)
-            {
-            case REMOTEHEART_IDLE:
-                break;
-            case REMOTEHEART_RECV:
+//            switch(eRmtHeartStat)
+//            {
+//            case REMOTEHEART_IDLE:
+//                break;
+//            case REMOTEHEART_RECV:
                 RemoteHeartRes(pEVSE, pechProto, &network_res);
                 if(network_res != 1)
                 {
                     heart_lost++;
-                    printf_safe("heart_lost = %d\n",heart_lost);
+//                    printf_safe("heart_lost = %d\n",heart_lost);
                     if(heart_lost > 750)
                     {
                         heart_lost = 0;
@@ -176,15 +183,15 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 else
                 {
-//                    xTimerStart(xHandleTimerRemoteHeartbeat, 100);
+//                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
+//                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
+//                                   100);//这样的话还能随时更改心跳频率不用重启
                     printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
-                    eRmtHeartStat = REMOTEHEART_IDLE;
+//                    eRmtHeartStat = REMOTEHEART_IDLE;
                     heart_lost = 0;
-//                    pechProto->pCMD[ECH_CMDID_HEARTBEAT]->uiRecvdOptLen = 0;
-//                    memset(pechProto->pCMD[ECH_CMDID_HEARTBEAT]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
                 }
-                break;
-            }
+//                break;
+//            }
 
 
             /************ 状态******************/
@@ -423,8 +430,9 @@ void vTaskEVSERemote(void *pvParameters)
         case REMOTE_RECONNECT:
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
-            remotestat = REMOTE_NO;
             pModem->state = DS_MODEM_TCP_CLOSE;
+            vTaskDelay(1000);
+            remotestat = REMOTE_NO;
             printf_safe("State Reconnect ,Call TCP close!!\n");
             break;
         }

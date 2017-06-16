@@ -1467,6 +1467,7 @@ CONState_t CONGetState(uint8_t ucCONID)
 static void CONDelete(CON_t *pCON)
 {
     vEventGroupDelete(pCON->status.xHandleEventCharge);
+    vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
     if(pCON->order.plChargeSegment != NULL)
     {

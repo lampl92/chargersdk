@@ -11,6 +11,7 @@ typedef enum
     CPIN_READY,
     REG_LOCAl,
     REG_ROAMING,
+    REG_SEARCH,
     REG_UNKNOWN,
     CONNECT_OK,
     CONNECT_FAIL
@@ -46,6 +47,7 @@ typedef struct
 {
     uint8_t strAPN[16+1];
     uint8_t ucContext;
+    uint8_t ucTPMode;
 } ModemInfo_t;
 
 typedef struct
@@ -66,6 +68,7 @@ typedef enum
     DS_MODEM_ERR,
     DS_MODEM_TCP_ACT_PDP,
     DS_MODEM_TCP_DEACT_PDP,
+//    DS_MODEM_TRANSPARENT,
     DS_MODEM_TCP_OPEN,
     DS_MODEM_TCP_KEEP,
     DS_MODEM_TCP_CLOSE
@@ -94,7 +97,6 @@ extern DevModem_t *pModem;
 DevModem_t *DevModemCreate(void);
 DR_MODEM_e modem_open(DevModem_t *pModem);
 DR_MODEM_e modem_init(DevModem_t *pModem);
-void modem_get_info(DevModem_t *pModem);
 void Modem_Poll(DevModem_t *pModem);
 
 #endif/*_MODEM_H_*/

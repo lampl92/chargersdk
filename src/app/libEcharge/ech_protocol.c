@@ -734,11 +734,11 @@ static int recvResponse(void *pPObj,
     {
     case 2://主机回复的命令，不需要timeout 单位s。
         echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
-        echRecvCmdElem.timeout_s =  30;
+        echRecvCmdElem.timeout_s =  0;
         break;
     case 4:
         echRecvCmdElem.cmd_id = ECH_CMDID_HEARTBEAT;
-        echRecvCmdElem.timeout_s =  30;
+        echRecvCmdElem.timeout_s =  0;
         break;
     case 42:
         echRecvCmdElem.cmd_id = ECH_CMDID_STATUS;
@@ -803,6 +803,40 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     return 1;
 }
 
+/*
+写分析函数的方法
+1. 等待Mutex
+2. 初始化lRecvElem
+3. 将lRecvElem插入队尾
+4. 释放Mutex
+*/
+
+static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+{
+    echProtocol_t *pProto;
+    echCMD_t *pCMD;
+    echCmdElem_t lRecvElem;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCMD = pProto->pCMD[usSendID];
+
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
+    {
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
+    }
+
+    return 1;
+}
+#if 0
 static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -812,18 +846,23 @@ static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
 
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
+    {
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
 
-    lRecvElem.UID = 0;
-    lRecvElem.timestamp = time(NULL);
-    lRecvElem.len = pCMD->ulRecvdOptLen;
-    lRecvElem.pbuff = pCMD->ucRecvdOptData;
-    lRecvElem.status = 0;
-    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
+    }
 
     return 1;
 }
-
+#endif
 static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -835,28 +874,33 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
-
-    ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
-    ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
-    ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
-    ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
-    timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-    if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
     {
-        time(&timestamp);
+        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+        pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
+
+        ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
+        ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
+        ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
+        ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
+        timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
+        if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
+        {
+            time(&timestamp);
+        }
+        lRecvElem.UID = 0;
+        lRecvElem.timestamp = time(NULL);
+        lRecvElem.len = pCMD->ulRecvdOptLen;
+        lRecvElem.pbuff = pCMD->ucRecvdOptData;
+        lRecvElem.status = 0;
+        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+
+        xSemaphoreGive(pCMD->xMutexCmd);
     }
-    lRecvElem.UID = 0;
-    lRecvElem.timestamp = time(NULL);
-    lRecvElem.len = pCMD->ulRecvdOptLen;
-    lRecvElem.pbuff = pCMD->ucRecvdOptData;
-    lRecvElem.status = 0;
-    gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
 
     return 1;
 }
-
+#if 0
 static int analyCmdStatus(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
@@ -879,7 +923,7 @@ static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
     analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
     return 1;
 }
-
+#endif
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
@@ -961,6 +1005,8 @@ static void deleteProto(void *pPObj)
     {
         if(pProto->pCMD[i] != NULL)
         {
+            vEventGroupDelete(pProto->pCMD[i]->xHandleEventCmd);
+            vSemaphoreDelete(pProto->pCMD[i]->xMutexCmd);
             gdsl_list_free(pProto->pCMD[i]->plRecvCmd);
             free(pProto->pCMD[i]);
             pProto->pCMD[i] = NULL;
@@ -980,6 +1026,8 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, pECH_MAKE_
     }
     pECHCMD->CMDType.usSendCmd = usSendCmd;
     pECHCMD->CMDType.usRecvCmd = usRecvCmd;
+    pECHCMD->xHandleEventCmd = xEventGroupCreate();
+    pECHCMD->xMutexCmd = xSemaphoreCreateMutex();
 
     pECHCMD->plRecvCmd = gdsl_list_alloc ("CMDRecvLis", echCmdListAlloc, echCmdListFree);
     pECHCMD->makeProc = makeProc;
@@ -1017,7 +1065,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulServiceFee_shoulder = 0;
     pProto->info.ulServiceFee_off_peak = 0;
 
-    pProto->info.ulStatusCyc_ms = 15000; //状态数据上报间隔
+    pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
 
 
@@ -1026,12 +1074,12 @@ echProtocol_t *EchProtocolCreate(void)
         pProto->pCMD[i] = NULL;
     }
     //桩命令, 平台命令
-    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdReg);
+    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_HEARTBEAT] = EchCMDCreate(3, 4, makeCmdHeart, analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdStatus);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdRemoteCtrl);
-    pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdRTData);
-    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdOrder);
+    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdCommon);
 
     pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;

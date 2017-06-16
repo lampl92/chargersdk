@@ -208,6 +208,9 @@
 #define defEventBitTimerCBHeartbeat         BIT_8
 #define defEventBitTimerCBStatus            BIT_9
 
+/*pProto->pCMD[i]->xHandleEventCmd*/
+#define defEventBitProtoCmdHandled          BIT_0
+
 
 /*³äµç×®ÀàÐÍ*/
 #define defEVSEType_DC                  1

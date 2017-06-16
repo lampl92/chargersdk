@@ -47,11 +47,11 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     case UART_PORT_GPRS:
         pUART_Handle = &GPRS_UARTx_Handler;
-        for(i = 0; i < len; i++)
-        {
-            uart_putc(data[i]);
-        }
-        return i;
+//        for(i = 0; i < len; i++)
+//        {
+//            uart_putc(data[i]);
+//        }
+//        return i;
         break;
     case UART_PORT_WIFI:
         pUART_Handle = &WIFI_UARTx_Handler;
@@ -60,13 +60,16 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     }
     HAL_StatusTypeDef hal_res;
-    hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 0xFFFF);
-
-
+    hal_res = HAL_UART_Transmit(pUART_Handle, data, len, 2000);
 
     if(hal_res == HAL_OK)
     {
         return len;
+    }
+    if(hal_res == HAL_BUSY)
+    {
+        printf_safe("HAL busy!!\n");
+        while(1);
     }
 }
 
@@ -166,7 +169,7 @@ uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *pu
     ch = 0;
     i = 0;
 
-    while(readRecvQue(q, &ch, 1) == 1)
+    while(readRecvQue(q, &ch, 10) == 1)
     {
         pbuff[i] = ch;
         i++;
@@ -276,6 +279,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_10;//PIN_RX
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -349,6 +353,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_2;//PIN_RX
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(UART5_IRQn);
@@ -374,6 +379,10 @@ GPRS_USARTx_IRQHandler
 WIFI_USARTx_IRQHandler
 {
     HAL_UART_IRQHandler(&WIFI_UARTx_Handler);
+//            if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
+//        {
+//            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
+//        }
 }
 
 /**
