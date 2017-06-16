@@ -430,7 +430,7 @@ void vTaskEVSERemote(void *pvParameters)
         case REMOTE_RECONNECT:
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
-            pModem->state = DS_MODEM_TCP_CLOSE;
+            pModem->state = DS_MODEM_OFF;
             vTaskDelay(1000);
             remotestat = REMOTE_NO;
             printf_safe("State Reconnect ,Call TCP close!!\n");

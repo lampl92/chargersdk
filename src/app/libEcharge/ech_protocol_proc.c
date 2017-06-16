@@ -88,7 +88,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
                 send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
-                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
+                //uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
                 //等不等得到都置1
                 pechProtoElem->status = 1;
 
