@@ -72,7 +72,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
     { BUTTON_CreateIndirect, "退出", ID_BUTTON_0, 554, 317, 100, 36, 0, 0x0, 0 },//倒计时退出
     { BUTTON_CreateIndirect, "确定", ID_BUTTON_1, 554, 272, 100, 36, 0, 0x0, 0 },//枪锁完全锁止后的确认按钮
@@ -197,18 +197,20 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
         PutOut_Home();
     }
 
+    memset(strCSQ,'\0',strlen(strCSQ));
+    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     uxBits = xEventGroupGetBits(xHandleEventTCP);
     if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
+        strcat(strCSQ," 服务器未连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
     }
     else
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
+        strcat(strCSQ," 服务器已连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
     }
 
-    memset(strCSQ,'\0',strlen(strCSQ));
-    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
 
 

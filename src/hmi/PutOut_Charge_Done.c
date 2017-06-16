@@ -87,7 +87,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
     //{ BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 627, 342, 100, 36, 0, 0x0, 0 },//停止充电
 
@@ -138,7 +138,7 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     volatile uint32_t diffsec;
     volatile int8_t sec;
     EventBits_t uxBits;
-    uint8_t strCSQ[10];
+    uint8_t strCSQ[32];
 
     WM_HWIN hWin = pMsg->hWin;
     CaliDone_Analy(hWin);
@@ -212,18 +212,20 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         //PutOut_SelAOrB();
         PutOut_Home();
     }
+    memset(strCSQ,'\0',strlen(strCSQ));
+    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     uxBits = xEventGroupGetBits(xHandleEventTCP);
     if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
+        strcat(strCSQ," 服务器未连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
     }
     else
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
+        strcat(strCSQ," 服务器已连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
     }
 
-    memset(strCSQ,'\0',strlen(strCSQ));
-    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
 
 

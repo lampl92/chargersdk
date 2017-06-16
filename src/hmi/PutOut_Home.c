@@ -103,7 +103,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 90, 16, 0, 0x0, 0 },//网络信号强度
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
     { TEXT_CreateIndirect, "Text", ID_TEXT_5, 422, 177, 80, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 510, 177, 80, 30, 0, 0x64, 0 },
@@ -164,20 +164,21 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         PutOut_Charging();
     }
 
+    memset(strCSQ,'\0',strlen(strCSQ));
+    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     uxBits = xEventGroupGetBits(xHandleEventTCP);
     if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
+        strcat(strCSQ," 服务器未连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
     }
     else
     {
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
+        strcat(strCSQ," 服务器已连接");
+        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
     }
 
-    memset(strCSQ,'\0',strlen(strCSQ));
-    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
-
 
     //充电费和服务费的费用值显示
     sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
