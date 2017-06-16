@@ -276,7 +276,6 @@ volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //琚郴缁熻皟�??
 extern __IO uint32_t uwTick;
 void vApplicationTickHook( void )
 {
-    IWDG_Feed();
     ulHighFrequencyTimerTicks = xTaskGetTickCount();
     uwTick = ulHighFrequencyTimerTicks;
 }
