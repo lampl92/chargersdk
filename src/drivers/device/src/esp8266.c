@@ -38,7 +38,7 @@ static uint32_t wifi_UART_gets(DevWIFI_t *pWIFI, uint8_t *line, uint32_t len)
     uint32_t   cnt  = 0;
 //    if(xSemaphoreTake(pWIFI->xMutex, 10000) == pdTRUE)
 //    {
-    cnt = uart_read(UART_PORT_WIFI, line, len, 0);
+    cnt = uart_read(UART_PORT_WIFI, line, len, 100);
 //        xSemaphoreGive(pWIFI->xMutex);
     return cnt;
 //    }

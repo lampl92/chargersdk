@@ -38,7 +38,7 @@ static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
     uint32_t   cnt  = 0;
 //    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
 //    {
-    cnt = uart_read(UART_PORT_GPRS, line, len, 0);
+    cnt = uart_read(UART_PORT_GPRS, line, len, 100);
 //        xSemaphoreGive(pModem->xMutex);
     return cnt;
 //    }

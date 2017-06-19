@@ -102,7 +102,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *puiRecvdLe
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
 
-    readRecvQueEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen);
+    readRecvQueEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen, 1);
     if(*puiRecvdLen == 0)
     {
         return MT_COM_FAIL;

@@ -23,7 +23,7 @@ void cli_gprs_fnt(int argc, char **argv)
 //        HAL_UART_Transmit(&GPRS_UARTx_Handler, buff, strlen(buff), 0xFFFF);
     }
     memset(buff, 0, 20);
-    readRecvQueEx(pGprsRecvQue, buff, 0, &len);
+    readRecvQueEx(pGprsRecvQue, buff, 0, &len, 1);
     printf_safe("%s", buff);
 }
 tinysh_cmd_t cli_gprs_cmd =
