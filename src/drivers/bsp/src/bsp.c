@@ -140,7 +140,9 @@ void bsp_Init(void)
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
-    bsp_Uart_Init();   /* 初始化串口 */
+    bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
+    bsp_Uart_Init(UART_PORT_RFID, 1);
+    bsp_Uart_Init(UART_PORT_GPRS, 1);
 #ifndef EVSE_DEBUG
     IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
 #endif

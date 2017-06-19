@@ -218,7 +218,7 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_ms++;
     delay_breath++;
     pwm_samp_timer++;
-    if((pwm_samp_flag==1)&&(pwm_samp_timer>=4))
+    if((pwm_samp_flag==1)&&(pwm_samp_timer>=5))
     {
         RUN_ON;
         get_CP1();

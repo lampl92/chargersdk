@@ -38,7 +38,7 @@ static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
     uint32_t   cnt  = 0;
 //    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
 //    {
-    cnt = uart_read(UART_PORT_GPRS, line, len, 0);
+    cnt = uart_read(UART_PORT_GPRS, line, len, 100);
 //        xSemaphoreGive(pModem->xMutex);
     return cnt;
 //    }
@@ -1055,9 +1055,15 @@ void Modem_Poll(DevModem_t *pModem)
                             printf_safe("%02X ", tcp_client_recvbuf[i]);
                         }
                         printf_safe("\n");
-
-                        pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-                        memset(tcp_client_recvbuf, 0, recv_len);
+                        if(strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                        {
+                            pModem->state = DS_MODEM_TCP_CLOSE;
+                        }
+                        else
+                        {
+                            pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                        }
+                        memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
                         recv_len = 0;
                     }
                 }
@@ -1075,7 +1081,7 @@ void Modem_Poll(DevModem_t *pModem)
                     printf_safe("\n");
 
                     pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-                    memset(tcp_client_recvbuf, 0, recv_len);
+                    memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
                     recv_len = 0;
                 }
             }
@@ -1095,7 +1101,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_ERR:
-            bsp_Uart_Init();
+            bsp_Uart_Init(UART_PORT_GPRS, 2);
             ret = modem_RESET(pModem);
             if(ret == DR_MODEM_OK)
             {

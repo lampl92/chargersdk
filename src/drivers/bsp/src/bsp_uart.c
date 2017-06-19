@@ -81,7 +81,7 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     }
 }
 
-uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout)
+uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms)
 {
     Queue *pRecvQue;
     uint32_t rl = 0;//read len
@@ -104,14 +104,14 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
     default:
         break;
     }
-    readRecvQueEx(pRecvQue, data, len, &rl);
+    readRecvQueEx(pRecvQue, data, len, &rl, timeout_ms);
     return rl;
 }
 
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
+uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
     xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(time_out)
+    while(timeout_ms)
     {
         if((q->isEmpty(q)) != QUE_TRUE)
         {
@@ -119,7 +119,8 @@ uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
             xSemaphoreGive(q->xHandleMutexQue);
             return 1;
         }
-        time_out--;
+        vTaskDelay(1);
+        timeout_ms--;
     }
     xSemaphoreGive(q->xHandleMutexQue);
     return 0;
@@ -171,7 +172,7 @@ uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, ui
  * @return uint8_t 1 有数据; 0 无数据
  *
  */
-uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen)
+uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen, uint32_t timeout_ms)
 {
     uint8_t ch;
     uint32_t i;
@@ -179,7 +180,7 @@ uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *pu
     ch = 0;
     i = 0;
 
-    while(readRecvQue(q, &ch, 10) == 1)
+    while(readRecvQue(q, &ch, timeout_ms) == 1)
     {
         pbuff[i] = ch;
         i++;
@@ -217,51 +218,68 @@ uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len)
     }
 }
 
-void bsp_Uart_Init(void)
+//mode 1 创建并初始化， 2，不创建，初始化
+void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode)
 {
-    pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
-    pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
-    pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
+    switch(uartport)
+    {
+    case UART_PORT_CLI:
+        if(mode == 1)
+        {
+            pCliRecvQue = QueueCreate(CLI_QUEUE_SIZE);
+        }
+        CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
+        CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
+        CLI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+        CLI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+        CLI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+        CLI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+        CLI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        CLI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+        HAL_UART_Init(&CLI_UARTx_Handler);
+        HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1);
+        break;
+    case UART_PORT_RFID:
+        if(mode == 1)
+        {
+            pRfidRecvQue = QueueCreate(RFID_QUEUE_SIZE);
+        }
+        RFID_UARTx_Handler.Instance = RFID_USARTx_BASE;
+        RFID_UARTx_Handler.Init.BaudRate = RFID_USARTx_BAUDRATE;
+        RFID_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+        RFID_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+        RFID_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+        RFID_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+        RFID_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+        HAL_UART_Init(&RFID_UARTx_Handler);
+        HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1);
+        break;
+    case UART_PORT_GPRS:
+        if(mode == 1)
+        {
+            pGprsRecvQue = QueueCreate(GPRS_QUEUE_SIZE);
+        }
+        GPRS_UARTx_Handler.Instance = GPRS_USARTx_BASE;
+        GPRS_UARTx_Handler.Init.BaudRate = GPRS_USARTx_BAUDRATE;
+        GPRS_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+        GPRS_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+        GPRS_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+        GPRS_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+        GPRS_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        GPRS_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+        HAL_UART_Init(&GPRS_UARTx_Handler);
+        HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
+        break;
 #ifdef EVSE_DEBUG
-    pWifiRecvQue = QueueCreate(WIFI_QUEUE_SIZE);
+    case UART_PORT_WIFI:
+        if(mode == 1)
+        {
+#ifdef EVSE_DEBUG
+            pWifiRecvQue = QueueCreate(WIFI_QUEUE_SIZE);
 #endif
-
-    //uart_queue_init();
-
-    CLI_UARTx_Handler.Instance = CLI_USARTx_BASE;
-    CLI_UARTx_Handler.Init.BaudRate = CLI_USARTx_BAUDRATE;
-    CLI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    CLI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-    CLI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
-    CLI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
-    CLI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    CLI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&CLI_UARTx_Handler);
-    HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1);
-
-    RFID_UARTx_Handler.Instance = RFID_USARTx_BASE;
-    RFID_UARTx_Handler.Init.BaudRate = RFID_USARTx_BAUDRATE;
-    RFID_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    RFID_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-    RFID_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
-    RFID_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
-    RFID_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    RFID_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&RFID_UARTx_Handler);
-    HAL_UART_Receive_IT(&RFID_UARTx_Handler, (uint8_t *)RFID_RX_Buffer, 1);
-
-    GPRS_UARTx_Handler.Instance = GPRS_USARTx_BASE;
-    GPRS_UARTx_Handler.Init.BaudRate = GPRS_USARTx_BAUDRATE;
-    GPRS_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    GPRS_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-    GPRS_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
-    GPRS_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
-    GPRS_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    GPRS_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&GPRS_UARTx_Handler);
-    HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
-
-//    WIFI_UARTx_Handler.Instance = WIFI_USARTx_BASE;
+        }
+        //    WIFI_UARTx_Handler.Instance = WIFI_USARTx_BASE;
 //    WIFI_UARTx_Handler.Init.BaudRate = WIFI_USARTx_BAUDRATE;
 //    WIFI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
 //    WIFI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
@@ -271,6 +289,13 @@ void bsp_Uart_Init(void)
 //    WIFI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
 //    HAL_UART_Init(&WIFI_UARTx_Handler);
 //    HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1);
+        break;
+#endif
+    default:
+        break;
+    }
+
+    //uart_queue_init();
 
 }
 

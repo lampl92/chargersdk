@@ -1,6 +1,6 @@
 /**
 * @file EVSE.c
-* @brief EVSE³õÊ¼»¯
+* @brief EVSEåˆå§‹åŒ–
 * @author rgw
 * @version v1.0
 * @date 2017-01-22
@@ -18,9 +18,9 @@
 #include "user_app.h"
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
-//extern void read_pca9554_2(void)£»
+//extern void read_pca9554_2(void)ï¼›
 /*---------------------------------------------------------------------------/
-/                               ÉèÖÃ³äµç×®ĞÅÏ¢µ½ÅäÖÃÎÄ¼ş
+/                               è®¾ç½®å……ç”µæ¡©ä¿¡æ¯åˆ°é…ç½®æ–‡ä»¶
 /---------------------------------------------------------------------------*/
 static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam);
 static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
@@ -47,13 +47,13 @@ void testSetTemplEx(void)
     gdsl_list_free(plCfgTempl);
 }
 
-/** @todo (rgw#1#): ËùÓĞÉèÖÃ²ÎÊıÔö¼Ó·¶Î§Ğ£Ñé, ¿ÉÒÔÔÚÕâÀï½øĞĞĞ£Ñé, Ò²¿ÉÒÔÔÚ½çÃæÊäÈëµÄÊ±ºò½øĞĞĞ£Ñé.  */
+/** @todo (rgw#1#): æ‰€æœ‰è®¾ç½®å‚æ•°å¢åŠ èŒƒå›´æ ¡éªŒ, å¯ä»¥åœ¨è¿™é‡Œè¿›è¡Œæ ¡éªŒ, ä¹Ÿå¯ä»¥åœ¨ç•Œé¢è¾“å…¥çš„æ—¶å€™è¿›è¡Œæ ¡éªŒ.  */
 
-/** @brief EVSEÅäÖÃº¯Êı,
+/** @brief EVSEé…ç½®å‡½æ•°,
  *
  * @param pvEVSE void*
  * @param jnItemString uint8_t*
- * @param pvCfgParam void* µ±Ê±¶ÎÎª0Ê±ÉèÖÃÎªNULL
+ * @param pvCfgParam void* å½“æ—¶æ®µä¸º0æ—¶è®¾ç½®ä¸ºNULL
  * @param type uint8_t
  * @return ErrorCode_t
  *
@@ -98,7 +98,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgPa
             default:
                 break;
             }
-            break;//ÍË³öwhileÑ­»·
+            break;//é€€å‡ºwhileå¾ªç¯
         }
         else
         {
@@ -136,7 +136,7 @@ static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
     {
         goto exit;
     }
-    /** @todo (rgw#1#): ÔÚÕâÀï¿ÉÒÔ»ñÈ¡Ô­²ÎÊıÓëĞÂ²ÎÊı.¿ÉÒÔÍ¨¹ısend¶ÓÁĞ·½Ê½·¢ËÍµ½²Ù×÷¼ÇÂ¼ */
+    /** @todo (rgw#1#): åœ¨è¿™é‡Œå¯ä»¥è·å–åŸå‚æ•°ä¸æ–°å‚æ•°.å¯ä»¥é€šè¿‡sendé˜Ÿåˆ—æ–¹å¼å‘é€åˆ°æ“ä½œè®°å½• */
     cJSON_ReplaceItemInObject(jsEVSECfgObj, jnEVSESN, cJSON_CreateString(ptmpSN));
     errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
     if(errcode != ERR_NO)
@@ -292,7 +292,7 @@ static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
     errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
     if(errcode != ERR_NO)
     {
-//        ´Ë´¦×¢ÊÍÖ»ÎªËµÃ÷¸ÃÌõ¼şÏÂ½øĞĞµÄ²Ù×÷
+//        æ­¤å¤„æ³¨é‡Šåªä¸ºè¯´æ˜è¯¥æ¡ä»¶ä¸‹è¿›è¡Œçš„æ“ä½œ
 //        cJSON_Delete(jsTemplSegArray);
 //        return errcode;
     }
@@ -349,9 +349,9 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
     return errcode;
 }
 /*---------------------------------------------------------------------------/
-/                               ´ÓÎÄ¼ş»ñÈ¡³äµç×®ĞÅÏ¢
+/                               ä»æ–‡ä»¶è·å–å……ç”µæ¡©ä¿¡æ¯
 /---------------------------------------------------------------------------*/
-/** @brief Éè±¸Î¨Ò»ĞòÁĞºÅ,ºÍ³¤¶È
+/** @brief è®¾å¤‡å”¯ä¸€åºåˆ—å·,å’Œé•¿åº¦
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
@@ -362,9 +362,7 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
  */
 static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
 {
-    uint8_t tmpSN[defEVSESNLength];
     uint8_t tmpStrLength;
-    uint8_t tmpLength;
     uint8_t *ptmpSN;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
@@ -374,15 +372,13 @@ static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
-    memset(tmpSN, 0, defEVSESNLength);
     tmpStrLength = 0;
-    tmpLength = 0;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
 
-    /** (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡SN ²¢»ñÈ¡SN³¤¶È*/
+    /** (rgw#1#): ä»æ–‡ä»¶è·å–SN å¹¶è·å–SNé•¿åº¦*/
 
-    //- ½âÎöEVSESN
+    //- è§£æEVSESN
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSESN);
     if(jsItem == NULL)
     {
@@ -390,23 +386,16 @@ static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
     }
     ptmpSN = jsItem->valuestring;
     tmpStrLength = strlen(ptmpSN);
-    StrToHex(ptmpSN, tmpSN, tmpStrLength);
-    tmpLength = tmpStrLength >> 1;//BCD×Ö·û´®»»Ê®Áù½øÖÆºó,Õ¼ÓÃ×Ö½ÚÊı¼õ°ë
+
 #ifdef DEBUG_CFG_PARSE
-    int i;
-    printf_safe("EVSE SN =");
-    for(i = 0; i < 8; i++)
-    {
-        printf_safe(" %02d ", tmpSN[i]);
-    }
-    printf_safe("\n");
+    printf_safe("EVSE SN =%s\n, ptmpSN");
 #endif
 
     /*********************/
-    if(tmpLength <= defEVSESNLength && tmpLength > 0)
+    if(tmpStrLength <= defEVSESNLength && tmpStrLength > 0)
     {
-        pEVSE->info.ucSNLength = tmpLength;
-        memmove(pEVSE->info.ucSN, tmpSN, tmpLength);
+        pEVSE->info.ucSNLength = tmpStrLength;
+        strcpy(pEVSE->info.strSN, ptmpSN);
     }
     else
     {
@@ -415,7 +404,7 @@ static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief Æ½Ì¨·ÖÅäID
+/** @brief å¹³å°åˆ†é…ID
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
@@ -426,9 +415,7 @@ static ErrorCode_t GetSN(void *pvEVSE, void *pvCfgObj)
  */
 static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
 {
-    uint8_t tmpID[defEVSEIDLength];
     uint8_t tmpStrLength;
-    uint8_t tmpLength;
     uint8_t *ptmpID;
     ErrorCode_t errcode;
     EVSE_t *pEVSE;
@@ -438,15 +425,13 @@ static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
-    memset(tmpID, 0, defEVSEIDLength);
     tmpStrLength = 0;
-    tmpLength = 0;
 
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    /**  (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ID ²¢»ñÈ¡ID³¤¶È*/
+    /**  (rgw#1#): ä»æ–‡ä»¶è·å–ID å¹¶è·å–IDé•¿åº¦*/
 
-    //- ½âÎöEVSEID
+    //- è§£æEVSEID
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSEID);
     if(jsItem == NULL)
     {
@@ -454,24 +439,16 @@ static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
     }
     ptmpID = jsItem->valuestring;
     tmpStrLength = strlen(ptmpID);
-    StrToHex(ptmpID, tmpID, tmpStrLength);
-    tmpLength = tmpStrLength >> 1;
 
 #ifdef DEBUG_CFG_PARSE
-    int i;
-    printf_safe("EVSE ID =");
-    for(i = 0; i < 8; i++)
-    {
-        printf_safe(" %02d ", tmpID[i]);
-    }
-    printf_safe("\n");
+    printf_safe("EVSE ID = %s\n", ptmpID);
 #endif
 
     /*********************/
-    if(tmpLength <= defEVSEIDLength && tmpLength > 0)
+    if(tmpStrLength <= defEVSEIDLength && tmpStrLength > 0)
     {
-        pEVSE->info.ucIDLength = tmpLength;
-        memmove(pEVSE->info.ucID, tmpID, tmpLength);
+        pEVSE->info.ucIDLength = tmpStrLength;
+        strcpy(pEVSE->info.strID, ptmpID);
     }
     else
     {
@@ -480,12 +457,12 @@ static ErrorCode_t GetID(void *pvEVSE, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief ³äµçÉè±¸ÀàĞÍ
- *         1£ºÖ±Á÷Éè±¸
- *         2£º½»Á÷Éè±¸
- *         3£º½»Ö±Á÷Ò»ÌåÉè±¸
- *         4£ºÎŞÏßÉè±¸
- *         5£ºÆäËû
+/** @brief å……ç”µè®¾å¤‡ç±»å‹
+ *         1ï¼šç›´æµè®¾å¤‡
+ *         2ï¼šäº¤æµè®¾å¤‡
+ *         3ï¼šäº¤ç›´æµä¸€ä½“è®¾å¤‡
+ *         4ï¼šæ— çº¿è®¾å¤‡
+ *         5ï¼šå…¶ä»–
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
@@ -508,9 +485,9 @@ static ErrorCode_t GetType(void *pvEVSE, void *pvCfgObj)
     errcode = ERR_NO;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    /**  (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
+    /**  (rgw#1#): ä»æ–‡ä»¶è·å– */
 
-    //- ½âÎöEVSEType
+    //- è§£æEVSEType
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnEVSEType);
     if(jsItem == NULL)
     {
@@ -533,7 +510,7 @@ static ErrorCode_t GetType(void *pvEVSE, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief Ç¹µÄÊıÁ¿
+/** @brief æªçš„æ•°é‡
  *
  * @param pvEVSE void*
  * @return ErrorCode_t
@@ -549,11 +526,11 @@ static ErrorCode_t GetTotalCON(void *pvEVSE, void *pvCfgObj)
     cJSON *pEVSECfgObj;
 
     pEVSE = (EVSE_t *)pvEVSE;
-    tmpTotal = 0;//Ç¹µÄÊıÁ¿£¬2´ú±íÁ½°ÑÇ¹
+    tmpTotal = 0;//æªçš„æ•°é‡ï¼Œ2ä»£è¡¨ä¸¤æŠŠæª
     errcode = ERR_NO;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    /** (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
+    /** (rgw#1#): ä»æ–‡ä»¶è·å– */
 
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnTotalCON);
     if(jsItem == NULL)
@@ -576,7 +553,7 @@ static ErrorCode_t GetTotalCON(void *pvEVSE, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief ¾­Î³¶È£¬±£ÁôºóÁùÎ»
+/** @brief ç»çº¬åº¦ï¼Œä¿ç•™åå…­ä½
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
@@ -600,7 +577,7 @@ static ErrorCode_t GetLngLat(void *pvEVSE, void *pvCfgObj)
     errcode = ERR_NO;
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
-    /**  (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
+    /**  (rgw#1#): ä»æ–‡ä»¶è·å– */
 
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnLng);
     if(jsItem == NULL)
@@ -705,8 +682,8 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
 
     pEVSECfgObj = (cJSON *)pvCfgObj;
     pTemplSegList = gdsl_list_alloc ("tmpTempl", TemplSegAlloc, TemplSegFree);
-    /**  (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
-    //»ñÈ¡·şÎñ·ÑÀàĞÍ
+    /**  (rgw#1#): ä»æ–‡ä»¶è·å– */
+    //è·å–æœåŠ¡è´¹ç±»å‹
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFeeType);
     if(jsItem == NULL)
     {
@@ -714,7 +691,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
         return ERR_FILE_PARSE;
     }
     tmpServiceType = jsItem->valueint;
-    //»ñÈ¡·şÎñ·Ñ
+    //è·å–æœåŠ¡è´¹
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnServiceFee);
     if(jsItem == NULL)
     {
@@ -722,7 +699,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
         return ERR_FILE_PARSE;
     }
     tmpServiceFee = jsItem->valuedouble;
-    //»ñÈ¡Ä¬ÈÏ¶Î·ÑÂÊ
+    //è·å–é»˜è®¤æ®µè´¹ç‡
     jsItem = cJSON_GetObjectItem(pEVSECfgObj, jnDefSegFee);
     if(jsItem == NULL)
     {
@@ -730,7 +707,7 @@ static ErrorCode_t GetTempl(void *pvEVSE, void *pvCfgObj)
         return ERR_FILE_PARSE;
     }
     tmpDefSegFee = jsItem->valuedouble;
-    //»ñÈ¡¶Î·ÑÂÊ
+    //è·å–æ®µè´¹ç‡
     jsItem = pEVSECfgObj->child;
     do
     {
@@ -857,7 +834,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
 
     errcode = ERR_NO;
 
-    /*json½âÎö*/
+    /*jsonè§£æ*/
     jsEVSEObj = GetCfgObj(pathEVSECfg, &errcode);
     if(jsEVSEObj == NULL || errcode != ERR_NO)
     {
@@ -877,13 +854,13 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
 }
 
 /*---------------------------------------------------------------------------/
-/                               ´ÓÇı¶¯»ñÈ¡³äµç×®×´Ì¬
+/                               ä»é©±åŠ¨è·å–å……ç”µæ¡©çŠ¶æ€
 /---------------------------------------------------------------------------*/
 
 
-/** @brief »ñµÃ¼±Í£×´Ì¬
- *          0 ÎŞ¼±Í£
- *          1 ÓĞ¼±Í£
+/** @brief è·å¾—æ€¥åœçŠ¶æ€
+ *          0 æ— æ€¥åœ
+ *          1 æœ‰æ€¥åœ
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
  *             ERR_NO
@@ -900,7 +877,7 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     //errcode = ERR_SCRAM_FAULT;
     errcode = ERR_NO;
     tmpScramState = 0;
-    /* @todo (yuye#1#): È·ÈÏÈ¡·´ */
+    /* @todo (yuye#1#): ç¡®è®¤å–å */
 
 #ifdef DEBUG_DIAG_DUMMY
     tmpScramState = 0;
@@ -914,9 +891,9 @@ static ErrorCode_t GetScramState(void *pvEVSE)
     return errcode;
 }
 
-/** @brief ´Ó´«¸ĞÆ÷»ñÈ¡×²»ú×´Ì¬
- *          0 ÎŞ×²»ú
- *          1 ÓĞ×²»÷
+/** @brief ä»ä¼ æ„Ÿå™¨è·å–æ’æœºçŠ¶æ€
+ *          0 æ— æ’æœº
+ *          1 æœ‰æ’å‡»
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
  *             ERR_NO
@@ -932,7 +909,7 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
     tmpKnockState = 0;
-    /* @todo (yuye#1#): Ìí¼ÓÖØÁ¦´«¸ĞÆ÷Çı¶¯ */
+    /* @todo (yuye#1#): æ·»åŠ é‡åŠ›ä¼ æ„Ÿå™¨é©±åŠ¨ */
 #ifdef DEBUG_DIAG_DUMMY
 if(get_angle_max()>90)
 {
@@ -944,7 +921,7 @@ else
 }
 
 #else
-    //ÔÚÕâÌí¼Ó´úÂë
+    //åœ¨è¿™æ·»åŠ ä»£ç 
 #endif
 
     /*********************/
@@ -954,9 +931,9 @@ else
     return  errcode;
 }
 
-/** @brief »ñÈ¡±£»¤½ÓµØÁ¬ĞøĞÔ×´Ì¬
- *          0 Õı³£
- *          1 Òì³£
+/** @brief è·å–ä¿æŠ¤æ¥åœ°è¿ç»­æ€§çŠ¶æ€
+ *          0 æ­£å¸¸
+ *          1 å¼‚å¸¸
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
  *             ERR_NO
@@ -973,11 +950,11 @@ static ErrorCode_t GetPEState(void *pvEVSE)
     errcode = ERR_NO;
     tmpPEState = 0;
 
-    /* @todo (yuye#1#): Ôö¼ÓÓ²¼ş¹¦ÄÜ£¬¼ì²âPEºÍÏàĞò¡£ */
+    /* @todo (yuye#1#): å¢åŠ ç¡¬ä»¶åŠŸèƒ½ï¼Œæ£€æµ‹PEå’Œç›¸åºã€‚ */
 #ifdef DEBUG_DIAG_DUMMY
     tmpPEState = 0;
 #else
-    //ÔÚÕâÌí¼Ó´úÂë
+    //åœ¨è¿™æ·»åŠ ä»£ç 
 #endif
     /*********************/
 
@@ -986,9 +963,9 @@ static ErrorCode_t GetPEState(void *pvEVSE)
     return errcode;
 }
 
-/** @brief »ñÈ¡µôµç×´Ì¬
- *          0 Õı³£
- *          1 µôµç
+/** @brief è·å–æ‰ç”µçŠ¶æ€
+ *          0 æ­£å¸¸
+ *          1 æ‰ç”µ
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
  *             ERR_NO
@@ -1005,8 +982,8 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     errcode = ERR_NO;
     tmpOffState = 0;
 
-    /* @todo (yuye#1#): È·ÈÏµçÑ¹·¶Î§ */
-    /**  (rgw#1#): ÊµÏÖ´úÂë */
+    /* @todo (yuye#1#): ç¡®è®¤ç”µå‹èŒƒå›´ */
+    /**  (rgw#1#): å®ç°ä»£ç  */
 
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
@@ -1017,7 +994,7 @@ return ERR_POWEROFF_DECT_FAULT;
 }
 else
 {
-if(get_va() <= 100.0) //¼ì²â¼ä¸ô10mS
+if(get_va() <= 100.0) //æ£€æµ‹é—´éš”10mS
     {
         tmpOffState = 1;
     }
@@ -1035,9 +1012,9 @@ if(get_va() <= 100.0) //¼ì²â¼ä¸ô10mS
     return errcode;
 }
 
-/** @brief »ñÈ¡±ÜÀ×Æ÷×´Ì¬
- *          0 Õı³£
- *          1 Òì³£
+/** @brief è·å–é¿é›·å™¨çŠ¶æ€
+ *          0 æ­£å¸¸
+ *          1 å¼‚å¸¸
  *
  * @param pEVSE EVSE_t*
  * @return ErrorCode_t
@@ -1055,7 +1032,7 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     errcode = ERR_NO;
     tmpArresterState = 0;
 
-    /**  (rgw#1#): ÊµÏÖ´úÂë */
+    /**  (rgw#1#): å®ç°ä»£ç  */
 
 #ifdef DEBUG_DIAG_DUMMY
     tmpArresterState = 0;
@@ -1074,8 +1051,8 @@ EVSE_t *EVSECreate(void)
     EVSE_t *pEVSE;
     pEVSE = (EVSE_t *)malloc(sizeof(EVSE_t));
 
-    memset(pEVSE->info.ucSN, 0, defEVSESNLength);
-    memset(pEVSE->info.ucID, 0, defEVSEIDLength);
+    memset(pEVSE->info.strSN, 0, defEVSESNLength);
+    memset(pEVSE->info.strID, 0, defEVSEIDLength);
     pEVSE->info.ucType = defEVSEType_AC;
     pEVSE->info.ucTotalCON = 1;
     pEVSE->info.dLng = 116.275833;
@@ -1085,7 +1062,7 @@ EVSE_t *EVSECreate(void)
     pEVSE->info.dDefSegFee = 0;
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
-    /** @todo (rgw#1#): ÒÔÏÂĞŞ¸ÄÎªSet²ÎÊı */
+    /** @todo (rgw#1#): ä»¥ä¸‹ä¿®æ”¹ä¸ºSetå‚æ•° */
     pEVSE->info.SetEVSECfg = SetEVSECfg;
 //    pEVSE->info.SetSN = SetSN;
 //    pEVSE->info.SetID = SetID;
@@ -1119,7 +1096,7 @@ EVSE_t *EVSECreate(void)
 
 static void CONInit(void)
 {
-    static CON_t *pCON[1];  //ÔÚ¶ÑÖĞ¶¨Òå
+    static CON_t *pCON[1];  //åœ¨å †ä¸­å®šä¹‰
 
     pListCON = UserListCreate();
     int i;

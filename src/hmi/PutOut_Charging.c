@@ -398,9 +398,9 @@ void PutOut_Charging()
     led_ctrl(1,green,breath);
     while(1)
     {
-        GUI_Delay(500);
+        GUI_Delay(100);
         dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
+        vTaskDelay(100);
     }
 }
 // USER END

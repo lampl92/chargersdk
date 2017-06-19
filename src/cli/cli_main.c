@@ -67,7 +67,7 @@ void cli_main(void)
     cli_init();
     while(1)
     {
-        res = readRecvQueEx(pCliRecvQue, ch, 1, &l);
+        res = readRecvQueEx(pCliRecvQue, ch, 1, &l, 1);
 //        res = readRecvQue(pCliRecvQue, &ch, 1);
         if(res == 1)
         {

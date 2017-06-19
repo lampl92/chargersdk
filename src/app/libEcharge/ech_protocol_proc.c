@@ -35,9 +35,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-//        printf_safe("\n");
+        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+        printf_safe("\n");
 
         /* 遍历RecvCmd */
 
@@ -88,7 +88,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
                 send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
-                //uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
+                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
                 //等不等得到都置1
                 pechProtoElem->status = 1;
 
@@ -160,6 +160,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
 
 
-        vTaskDelay(10);
+        vTaskDelay(2000);
     }
 }

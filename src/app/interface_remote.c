@@ -372,7 +372,7 @@ ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint
 
     pbuff[39] = ctrl;
     pbuff[40] = reason;
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 20, 1);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_RTDATA, 0xffff, 0);
 
     return errcode;
 }
