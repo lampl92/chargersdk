@@ -73,7 +73,7 @@ extern Queue *pRfidRecvQue;
 extern Queue *pGprsRecvQue;
 extern Queue *pWifiRecvQue;
 
-void bsp_Uart_Init(void);
+void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode);
 uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
