@@ -75,9 +75,9 @@ extern Queue *pWifiRecvQue;
 
 void bsp_Uart_Init(void);
 uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
-uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout);
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out);
-uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen);
+uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
+uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
+uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen, uint32_t timeout_ms);
 uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len);
 uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, uint32_t *puiRecvdLen);
 

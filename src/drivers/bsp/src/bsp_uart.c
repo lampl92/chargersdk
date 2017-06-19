@@ -81,7 +81,7 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     }
 }
 
-uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout)
+uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms)
 {
     Queue *pRecvQue;
     uint32_t rl = 0;//read len
@@ -104,14 +104,14 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
     default:
         break;
     }
-    readRecvQueEx(pRecvQue, data, len, &rl);
+    readRecvQueEx(pRecvQue, data, len, &rl, timeout_ms);
     return rl;
 }
 
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
+uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
     xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(time_out)
+    while(timeout_ms)
     {
         if((q->isEmpty(q)) != QUE_TRUE)
         {
@@ -119,7 +119,8 @@ uint8_t readRecvQue(Queue *q, uint8_t *ch, uint16_t time_out)
             xSemaphoreGive(q->xHandleMutexQue);
             return 1;
         }
-        time_out--;
+        vTaskDelay(1);
+        timeout_ms--;
     }
     xSemaphoreGive(q->xHandleMutexQue);
     return 0;
@@ -171,7 +172,7 @@ uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, ui
  * @return uint8_t 1 有数据; 0 无数据
  *
  */
-uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen)
+uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen, uint32_t timeout_ms)
 {
     uint8_t ch;
     uint32_t i;
@@ -179,7 +180,7 @@ uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *pu
     ch = 0;
     i = 0;
 
-    while(readRecvQue(q, &ch, 10) == 1)
+    while(readRecvQue(q, &ch, timeout_ms) == 1)
     {
         pbuff[i] = ch;
         i++;
