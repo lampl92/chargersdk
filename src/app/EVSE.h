@@ -19,24 +19,24 @@ typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 typedef struct _TemplSeg
 {
-    time_t tStartTime;//ÓÃtime_t±íÊ¾Ê±£¬ºöÂÔÄêÔÂÈÕ£¬ÔÚÊ±¶ÎÖĞÖ»¹Ø×¢Ê±·ÖÃë
+    time_t tStartTime;//ç”¨time_tè¡¨ç¤ºæ—¶ï¼Œå¿½ç•¥å¹´æœˆæ—¥ï¼Œåœ¨æ—¶æ®µä¸­åªå…³æ³¨æ—¶åˆ†ç§’
     time_t tEndTime;
-    uint8_t strStartTime[6];//Ö»ÔÚÉèÖÃÊ±Ê¹ÓÃ "HH:MM"
-    uint8_t strEndTime[6];//Ö»ÔÚÉèÖÃÊ±Ê¹ÓÃ "HH:MM"
+    uint8_t strStartTime[6];//åªåœ¨è®¾ç½®æ—¶ä½¿ç”¨ "HH:MM"
+    uint8_t strEndTime[6];//åªåœ¨è®¾ç½®æ—¶ä½¿ç”¨ "HH:MM"
     double dSegFee;
 }TemplSeg_t;
 typedef struct _EVSEInfo
 {
-    uint8_t ucSN[defEVSESNLength+1]; //Éè±¸Î¨Ò»ĞòÁĞºÅ
+    uint8_t strSN[defEVSESNLength+1]; //è®¾å¤‡å”¯ä¸€åºåˆ—å·
     uint8_t ucSNLength;
-    uint8_t ucID[defEVSEIDLength+1]; //Æ½Ì¨·ÖÅäID
+    uint8_t strID[defEVSEIDLength+1]; //å¹³å°åˆ†é…ID
     uint8_t ucIDLength;
-    uint8_t ucType;   //1£ºÖ±Á÷Éè±¸ 2£º½»Á÷Éè±¸ 3£º½»Ö±Á÷Ò»ÌåÉè±¸ 4£ºÎŞÏßÉè±¸ 5£ºÆäËû
-    uint8_t ucTotalCON; //Ò»¹²ÓĞ¶àÉÙÇ¹
-    double dLng;      //¾­¶È£¬±£ÁôºóÁùÎ»
-    double dLat;      //Î³¶È£¬±£ÁôºóÁùÎ»
-    uint8_t ucServiceFeeType;//0:°´µ¥£¬ 1£º°´¶È
-    double  dServiceFee;                //·şÎñ·Ñ
+    uint8_t ucType;   //1ï¼šç›´æµè®¾å¤‡ 2ï¼šäº¤æµè®¾å¤‡ 3ï¼šäº¤ç›´æµä¸€ä½“è®¾å¤‡ 4ï¼šæ— çº¿è®¾å¤‡ 5ï¼šå…¶ä»–
+    uint8_t ucTotalCON; //ä¸€å…±æœ‰å¤šå°‘æª
+    double dLng;      //ç»åº¦ï¼Œä¿ç•™åå…­ä½
+    double dLat;      //çº¬åº¦ï¼Œä¿ç•™åå…­ä½
+    uint8_t ucServiceFeeType;//0:æŒ‰å•ï¼Œ 1ï¼šæŒ‰åº¦
+    double  dServiceFee;                //æœåŠ¡è´¹
     double dDefSegFee;
     gdsl_list_t plTemplSeg;
 
