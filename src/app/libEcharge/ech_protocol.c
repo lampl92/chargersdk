@@ -1047,8 +1047,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.usServerPort      = 6677;//8051;//
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
-//    strcpy(pProto->info.strKey, "0123456789abcdeg");
-    strcpy(pProto->info.strKey, "1234567890abcde2");
+    strcpy(pProto->info.strKey, "0123456789abcdeg");
+ //   strcpy(pProto->info.strKey, "1234567890abcde2");
     memset(pProto->info.strNewKey, 0, 17);
     pProto->info.tNewKeyChangeTime = 0;
     pProto->info.ucProtoVer        = 0x68;
