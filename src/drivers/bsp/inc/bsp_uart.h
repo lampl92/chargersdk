@@ -36,6 +36,11 @@ typedef enum
 #define GPRS_USARTx_IRQHandler                      void UART5_IRQHandler(void)
 #define GPRS_QUEUE_SIZE                             10000
 
+#define WIFI_USARTx_BASE                            UART5
+#define WIFI_USARTx_BAUDRATE                        115200
+#define WIFI_USARTx_IRQHandler                      void UART5_IRQHandler(void)
+#define WIFI_QUEUE_SIZE                             10000
+
 #endif
 #ifdef EVSE_DEBUG
 #define CLI_USARTx_BASE                             USART2
