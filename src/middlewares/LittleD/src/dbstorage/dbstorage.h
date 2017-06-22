@@ -62,7 +62,7 @@ typedef SD_File* db_fileref_t;
 
 #include "ff.h"
 
-typedef FIL *db_fileref_t;
+typedef FIL* db_fileref_t;
 
 #ifndef DB_STORAGE_NOFILE
 #define DB_STORAGE_NOFILE NULL
