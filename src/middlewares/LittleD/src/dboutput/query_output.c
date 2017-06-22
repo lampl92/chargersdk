@@ -32,7 +32,7 @@ void* calloc(int num, int size)
 	if (NULL == toret) return NULL;
 	for (i = 0; i < num*size; ++i)
 		toret[i] = 0;
-	
+
 	return (void*)toret;
 }
 #endif
@@ -65,7 +65,7 @@ db_int sizeQuery(db_op_base_t *op, db_tuple_t *next_t, db_query_mm_t *mmp)
 	computeWidths(op, widths);
 	db_int i;
 	int sizeRow = sizeOfRow(op, widths);
-	
+
 	db_int requiredMem = 1 + 3*sizeRow;	/* Null-byte + first row
 						   separator, attribute names row,
 						   last row separatr.*/
@@ -86,8 +86,13 @@ db_int sizeQuery(db_op_base_t *op, db_tuple_t *next_t, db_query_mm_t *mmp)
 
 void printQuery(db_op_base_t *op, db_query_mm_t *mmp)
 {
+	int i;
 	char *output = formatQuery(op, mmp);
-	PRINTF("%s\n", output);
+	for(i = 0; i < strlen(output); i++)
+    {
+        PRINTF("%c", output[i]);
+    }
+    PRINTF("\n");
 	free(output);
 }
 
@@ -111,7 +116,7 @@ char* formatQuery(db_op_base_t *op, db_query_mm_t *mmp)
 	{
 		/* Allocate enough space for the spaces, the text, and a null-byte. */
 		char *tmp = calloc(widths[i] + 3, sizeof(char));
-		
+
 		/* If the name doesn't exist, print type. */
 		if (op->header->names == NULL || op->header->names[i] == NULL
 				|| op->header->size_name == NULL
@@ -209,7 +214,7 @@ char* formatRowSeparator(db_op_base_t *op, db_int *widths)
 	db_int i, j;
 	db_int requiredMem = sizeOfRow(op, widths);
 	char *out = calloc(requiredMem+1, sizeof(char));
-	
+
 	strcat(out, "+");
 	for (i = 0; i < (db_int) op->header->num_attr; ++i)
 	{
