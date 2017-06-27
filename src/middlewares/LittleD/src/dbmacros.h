@@ -70,7 +70,7 @@
 #ifndef POINTERBYTEDIST_FUNC
 #define POINTERBYTEDIST(p1, p2) (((unsigned char*)(p1)) - ((unsigned char*)(p2)))
 #else
-#define POINTERBYTEDIST(p1, p2) pointer_byte_dist(p1, p2)
+#define POINTERBYTEDIST(p1, p2) pointer_byte_dist((p1), (p2))
 //#error "MACRO NAME CLASH ON POINTERBYTEDIST!"
 #endif
 
