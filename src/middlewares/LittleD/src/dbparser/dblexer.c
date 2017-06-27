@@ -246,7 +246,7 @@ void printtoken(db_lexer_token_t *tokenp, db_lexer_t *lexerp)
 	db_int i = tokenp->start;
 	while (i < tokenp->end && lexerp->command[i] != '\0')
 	{
-		PRINTF("%c", lexerp->command[i]);
+		DB_PRINTF("%c", lexerp->command[i]);
 		fflush(stdout);
 		++i;
 	}
