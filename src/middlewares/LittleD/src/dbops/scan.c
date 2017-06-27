@@ -54,6 +54,7 @@ db_int init_scan(scan_t *sp, char* relationName, db_query_mm_t *mmp)
 	
 	if (DB_STORAGE_NOFILE == idxmetafile)
 	{
+//	    db_fileclose(sp->relation);
 		sp->idx_meta_data.num_idx = 0;
 		return 1;
 	}
