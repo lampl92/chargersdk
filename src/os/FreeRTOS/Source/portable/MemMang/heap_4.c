@@ -300,6 +300,7 @@ void *pvReturn = NULL;
 	#endif
 
 	configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+//	xprintf("Malloc called, p = 0x%x\n", pvReturn);
 	return pvReturn;
 }
 /*-----------------------------------------------------------*/
@@ -308,7 +309,7 @@ void vPortFree( void *pv )
 {
 uint8_t *puc = ( uint8_t * ) pv;
 BlockLink_t *pxLink;
-
+//    xprintf("Free called, p = 0x%x\n", pv);
 	if( pv != NULL )
 	{
 		/* The memory being freed will have an BlockLink_t structure immediately
