@@ -24,6 +24,7 @@
 #include "db_query_mm.h"
 #include "../dbmacros.h"
 #include "../db_ctconf.h"
+#include "debug.h"
 
 /* Initialize the query memory manager instance. */
 db_int init_query_mm(db_query_mm_t *mmp, void *segment, db_int size)
@@ -43,6 +44,16 @@ db_int init_query_mm(db_query_mm_t *mmp, void *segment, db_int size)
 /* Allocating on the front stack. */
 void* db_qmm_falloc(db_query_mm_t *mmp, db_int size)
 {
+    DB_PRINTF_DEBUG("falloc called, size = %d, ", size);
+//    //fix the misaligned memory
+//    db_int blob = size + sizeof(db_int);
+//	if(blob % 4 != 0)
+//    {
+//        blob += (4 - (blob % 4));
+//    }
+//    size = blob - sizeof(db_int);
+//    DB_PRINTF_DEBUG("fix size = %d\n", size);
+//    //end fix
 	/* Check that size requested is valid. */
 	if (size > mmp->size)
 	{
@@ -88,6 +99,17 @@ void* db_qmm_falloc(db_query_mm_t *mmp, db_int size)
 /* Allocating on the back stack. */
 void* db_qmm_balloc(db_query_mm_t *mmp, db_int size)
 {
+    DB_PRINTF_DEBUG("balloc called, size = %d, ", size);
+    //fix the misaligned memory
+    db_int blob = size + sizeof(db_int);
+	if(blob % 4 != 0)
+    {
+        blob += (4 - (blob % 4));
+    }
+    size = blob - sizeof(db_int);
+    //end fix
+    DB_PRINTF_DEBUG("fix size = %d\n", size);
+    
 	/* Check that size requested is valid. */
 	if (size > mmp->size)
 	{
@@ -265,6 +287,7 @@ db_int db_qmm_bfree(db_query_mm_t *mmp, void *ptr)
 /* Extend last allocation to an additional size, if possible. */
 db_int db_qmm_fextend(db_query_mm_t *mmp, db_int size)
 {
+    DB_PRINTF_DEBUG("fextend called, size = %d\n", size);
 	/* Check that size requested is valid. */
 	if (size > mmp->size)
 	{
@@ -338,6 +361,7 @@ db_int db_qmm_fextend(db_query_mm_t *mmp, db_int size)
 /* Extend the most recently allocated memory segment on back stack. */
 void* db_qmm_bextend(db_query_mm_t *mmp, db_int size)
 {
+    DB_PRINTF_DEBUG("bextend called, size = %d\n", size);
 	/* Check that we haven't requested more memory than total size. */
 	if (size > mmp->size)
 	{
