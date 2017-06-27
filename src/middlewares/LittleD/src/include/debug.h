@@ -21,29 +21,33 @@
 */
 //*****************************************************************************
 
+#ifndef DB_DEBUG_H
+#define DB_DEBUG_H
+
 #include <stdio.h>
+#include "db_ctconf.h"
 
-#ifndef DEBUG_H
-#define DEBUG_H
-
-#define ENABLE_DEBUG
-
-#ifdef ENABLE_DEBUG
+#ifdef DB_ENABLE_DEBUG
  #define DEBUG_ENABLED (1)
-#else // ENABLE_DEBUG
+#else // DB_ENABLE_DEBUG
  #define DEBUG_ENABLED (0)
-#endif //ENABLE_DEBUG
+#endif //DB_ENABLE_DEBUG
 
 
-#define PRINTF(...) \
+#define DB_PRINTF(...) \
+    do \
+    { \
+        printf_safe(__VA_ARGS__); \
+    } while (1 == 0)
+
+#define DB_PRINTF_DEBUG(...) \
     do \
     { \
         if (0 != DEBUG_ENABLED) \
         { \
-            printf(__VA_ARGS__); \
+            printf_safe(__VA_ARGS__); \
         } \
     } while (1 == 0)
-
 
 #endif // DEBUG_H
 
