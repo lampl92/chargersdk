@@ -29,6 +29,10 @@
 #define DB_CTCONF_H
 
 /**** Configuration Options. ****/
+//#define DB_USEMALLOC
+//#define DB_ENABLE_DEBUG
+
+
 /******************************************************************************/
 /*** Options for target platform. ***/
 /* Option to compile for standard platform (average PC). */
@@ -85,7 +89,7 @@
 		namespace DB_CTCONF_OPTION_TARGET_.
 */
 #ifndef DB_CTCONF_SETTING_TARGET
-#define DB_CTCONF_SETTING_TARGET DB_CTCONF_OPTION_TARGET_STD//DB_CTCONF_OPTION_TARGET_FatFS
+#define DB_CTCONF_SETTING_TARGET DB_CTCONF_OPTION_TARGET_FatFS//DB_CTCONF_OPTION_TARGET_STD//
 #endif
 
 /*** Feature settings. ***/
