@@ -7,83 +7,125 @@
 */
 #include "includes.h"
 #include "dbparser.h"
+#include "debug.h"
 
 #define BYTES_LEN 1024
 
 int littledtest()
 {
     char          memseg[BYTES_LEN];
-	db_query_mm_t mm;
-	db_op_base_t* root;
-	db_tuple_t    tuple;
+    db_query_mm_t mm;
+    db_op_base_t* root;
+    db_tuple_t    tuple;
     int i;
     char sn[8];
     char *p;
     int id;
     int sensor_val;
     p = sn;
-    printf_safe("FILE REMOVE!!\n");
+    DB_PRINTF_DEBUG("FILE REMOVE!!\n");
     db_fileremove("sensors");
-	init_query_mm(&mm, memseg, BYTES_LEN);
-	printf_safe("CREATE TABLE!!\n");
-	parse("CREATE TABLE sensors (id INT, temp INT, SN STRING(32), power INT);", &mm);
+    vTaskDelay(10);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    DB_PRINTF_DEBUG("CREATE TABLE!!\n");
+    parse("CREATE TABLE sensors (id INT, temp INT, SN STRING(32), power INT);", &mm);
 //
     init_query_mm(&mm, memseg, BYTES_LEN);
-    printf_safe("INSERT INTO sensors!!\n");
-	parse("INSERT INTO sensors VALUES (1, 111322, '1111111' , 3);", &mm);
-//	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors VALUES (2, 89884,'2222222222' , 4);", &mm);
-//	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (3, 112);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (4, 455);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (5, 3313);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (6, 11);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (7, 99996);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (8, 6565);", &mm);
-////	init_query_mm(&mm, memseg, BYTES_LEN);
-//	parse("INSERT INTO sensors (id , temp) VALUES (9, 6565);", &mm);
+    DB_PRINTF_DEBUG("INSERT INTO sensors!!\n");
+    parse("INSERT INTO sensors VALUES (1, 111322, '1111111' , 3);", &mm); //设置全部值
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors VALUES (2, 89884,'2222222222' , 4);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (3, 112);", &mm); //设置某项值
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (4, 455);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (5, 3313);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (6, 11);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (7, 99996);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (8, 6565);", &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse("INSERT INTO sensors (id , temp) VALUES (9, 6565);", &mm);
 
 
-//	init_query_mm(&mm, memseg, BYTES_LEN);
-//	root = parse("SELECT * FROM sensors;", &mm);
-//	printQuery(root, &mm);
-//	if (root == NULL)
-//	{
-//		printf("NULL root\n");
-//	}
-//	else
-//	{
-//		init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    DB_PRINTF_DEBUG("SELECT * FROM sensors!!\n");
+  root = parse("SELECT * FROM sensors;", &mm);
+//    root = parse("SELECT * FROM sensors WHERE id < 5;", &mm);
+//  DB_PRINTF_DEBUG("printQuery!!\n");
+//  printQuery(root, &mm);
+    if (root == NULL)
+    {
+        printf("NULL root\n");
+    }
+    else
+    {
+        init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
+
+        while (next(root, &tuple, &mm) == 1)
+        {
+            id = getintbyname(&tuple, "id", root->header);
+            sensor_val = getintbyname(&tuple, "temp", root->header);
+            p = getstringbyname(&tuple, "SN", root->header);
+            printf("sensor val: %i (%i)\n", sensor_val, id);
+            printf("SN %s\n", p);
+        }
+    }
+    close_tuple(&tuple, &mm);
+    closeexecutiontree(root, &mm);
+
+//==============================================================================
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    DB_PRINTF_DEBUG("SELECT * FROM sensors!!\n");
+//  root = parse("SELECT * FROM sensors;", &mm);
+    root = parse("SELECT * FROM sensors WHERE temp > 5000;", &mm);
+//  DB_PRINTF_DEBUG("printQuery!!\n");
+//  printQuery(root, &mm);
+    if (root == NULL)
+    {
+        printf("NULL root\n");
+    }
+    else
+    {
+        init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
+
+        while (next(root, &tuple, &mm) == 1)
+        {
+            id = getintbyname(&tuple, "id", root->header);
+            sensor_val = getintbyname(&tuple, "temp", root->header);
+            p = getstringbyname(&tuple, "SN", root->header);
+            printf("sensor val: %i (%i)\n", sensor_val, id);
+            printf("SN %s\n", p);
+        }
+    }
+
+    close_tuple(&tuple, &mm);
+    closeexecutiontree(root, &mm);
+
+    //==============================================================================
+//    init_query_mm(&mm, memseg, BYTES_LEN);
+//    DB_PRINTF_DEBUG("SELECT * FROM sensors!!\n");
 //
-//        printf("num_attr = %d\n", root->header->num_attr);
-//        printf("tuple_size = %d\n", root->header->tuple_size);
+//    root = parse("SELECT * FROM sensors WHERE temp > 5000 AND id < 5;", &mm);
 //
-//		while (next(root, &tuple, &mm) == 1)
-//		{
-//			id = getintbyname(&tuple, "id", root->header);
-//			sensor_val = getintbyname(&tuple, "temp", root->header);
-//			p = getstringbyname(&tuple, "SN", root->header);
-//			printf("sensor val: %i (%i)\n", sensor_val, id);
-//			printf("SN %s\n", p);
-//		}
-//	}
-//    close_tuple(&tuple, &mm);
-//        closeexecutiontree(root, &mm);
-
-	return 0;
+//    printQuery(root, &mm);
+//    closeexecutiontree(root, &mm);
+    return 0;
 }
 
 
 static void cli_testdb_fnt(int argc, char **argv)
 {
-    littledtest();
+    int i;
+    for(i = 0; i < 1; i++)
+    {
+        littledtest();
+    }
 }
 
 tinysh_cmd_t cli_testdb_cmd = {0, "testdb", "database test", "[args]",
-                                cli_testdb_fnt, 0, 0, 0
-                               };
+                               cli_testdb_fnt, 0, 0, 0
+                              };
