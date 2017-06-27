@@ -23,6 +23,7 @@
 
 #include "dbstorage.h"
 #include "../db_ctconf.h"
+#include "debug.h"
 
 db_int db_fileexists(char *filename)
 {
@@ -39,13 +40,19 @@ db_int db_fileexists(char *filename)
     FIL check;
     FRESULT res;
     res = f_open(&check, filename, FA_OPEN_EXISTING);
-    printf_safe("openexist res = %d\n", res);
+    DB_PRINTF_DEBUG("db_fileexists called, res = %d\n", res);
     if(FR_OK == res)
     {
         f_close(&check);
         return 1;
     }
-    return 0;
+    else
+    {
+        f_close(&check);
+        DB_PRINTF_DEBUG("err openexist res = %d\n", res);
+        return 0;
+    }
+
 
 #else
 	FILE* check = fopen(filename, "rb");
@@ -71,8 +78,10 @@ db_fileref_t db_openreadfile(char *filename)
     FRESULT res;
     toret = (FIL *)malloc(sizeof(FIL));
     res = f_open(toret, filename, FA_READ);
+    DB_PRINTF_DEBUG("db_openreadfile called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err openread res = %d\n", res);
         free(toret);
         return DB_STORAGE_NOFILE;
     }
@@ -96,10 +105,11 @@ db_fileref_t db_openwritefile(char *filename)
     FIL *toret;
     FRESULT res;
     toret = (FIL *)malloc(sizeof(FIL));
-    res = f_open(toret, filename, FA_CREATE_NEW | FA_WRITE);
-    if(FR_OK != res && FR_EXIST != res)
+    res = f_open(toret, filename, FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    DB_PRINTF_DEBUG("db_openwritefile called, res = %d\n", res);
+    if(FR_OK != res)
     {
-        printf_safe("openwrite res = %d\n", res);
+        DB_PRINTF_DEBUG("err openwrite res = %d\n", res);
         free(toret);
         return DB_STORAGE_NOFILE;
     }
@@ -122,9 +132,11 @@ db_fileref_t db_openappendfile(char *filename)
     FIL *toret;
     FRESULT res;
     toret = (FIL *)malloc(sizeof(FIL));
-    res = f_open(toret, filename, FA_OPEN_APPEND);
+    res = f_open(toret, filename, FA_OPEN_APPEND | FA_WRITE | FA_READ);
+    DB_PRINTF_DEBUG("db_openappendfile called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err openappendfile res = %d\n", res);
         free(toret);
         return DB_STORAGE_NOFILE;
     }
@@ -144,8 +156,10 @@ size_t db_fileread(db_fileref_t f, unsigned char *dest, size_t numbytes)
     FRESULT res;
     UINT br;
     res = f_read(f, dest, numbytes, &br);
+    DB_PRINTF_DEBUG("db_fileread called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err fileread res = %d\n", res);
         return 0;
     }
     return (size_t)br;
@@ -164,8 +178,10 @@ size_t db_filewrite(db_fileref_t f, void *towrite, size_t numbytes)
     FRESULT res;
     UINT btw;
     res = f_write(f, towrite, numbytes, &btw);
+    DB_PRINTF_DEBUG("db_filewrite called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err filewrite res = %d\n", res);
         return 0;
     }
     return (size_t)btw;
@@ -183,8 +199,10 @@ db_int db_filerewind(db_fileref_t f)
 #elif DB_CTCONF_SETTING_TARGET == DB_CTCONF_OPTION_TARGET_FatFS
     FRESULT res;
     res = f_lseek(f, 0);
+    DB_PRINTF_DEBUG("db_filerewind called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err filerewind res = %d\n", res);
         return 0;
     }
     return 1;
@@ -204,8 +222,10 @@ db_int db_fileseek(db_fileref_t f, size_t size)
 #elif DB_CTCONF_SETTING_TARGET == DB_CTCONF_OPTION_TARGET_FatFS
     FRESULT res;
     res = f_lseek(f, size);
+    DB_PRINTF_DEBUG("db_fileseek called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err fileseek res = %d\n", res);
         return 0;
     }
     return 1;
@@ -225,8 +245,10 @@ db_int db_fileclose(db_fileref_t f)
 #elif DB_CTCONF_SETTING_TARGET == DB_CTCONF_OPTION_TARGET_FatFS
     FRESULT res;
     res = f_close(f);
+    DB_PRINTF_DEBUG("db_fileclose called, res = %d\n", res);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("err fileclose res = %d\n", res);
         return 0;
     }
     free(f);
@@ -247,6 +269,7 @@ db_int db_fileremove(char *filename)
     res = f_unlink(filename);
     if(FR_OK != res)
     {
+        DB_PRINTF_DEBUG("fileremove res = %d\n", res);
         return 0;
     }
     return 1;
