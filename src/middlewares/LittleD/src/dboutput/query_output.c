@@ -90,9 +90,9 @@ void printQuery(db_op_base_t *op, db_query_mm_t *mmp)
 	char *output = formatQuery(op, mmp);
 	for(i = 0; i < strlen(output); i++)
     {
-        PRINTF("%c", output[i]);
+        DB_PRINTF("%c", output[i]);
     }
-    PRINTF("\n");
+    DB_PRINTF("\n");
 	free(output);
 }
 
@@ -165,7 +165,7 @@ char* formatQuery(db_op_base_t *op, db_query_mm_t *mmp)
 
 void printTuple(db_tuple_t *toprint, db_op_base_t *op, db_int *widths)
 {
-	PRINTF("%s\n", formatTuple(toprint, op, widths));
+	DB_PRINTF("%s\n", formatTuple(toprint, op, widths));
 }
 
 char* formatTuple(db_tuple_t *toprint, db_op_base_t *op, db_int *widths)
@@ -205,7 +205,7 @@ char* formatTuple(db_tuple_t *toprint, db_op_base_t *op, db_int *widths)
 /* Print a formatted row separator. */
 void printRowSeparator(db_op_base_t *op, db_int *widths)
 {
-	PRINTF("%s\n", formatRowSeparator(op, widths));
+	DB_PRINTF("%s\n", formatRowSeparator(op, widths));
 }
 
 /* Make a row separator. */
