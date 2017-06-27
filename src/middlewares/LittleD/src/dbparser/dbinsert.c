@@ -311,5 +311,6 @@ db_int insert_command(db_lexer_t *lexerp, db_int end, db_query_mm_t *mmp)
 	db_qmm_ffree(mmp, toinsert);
 	mmp->last_back = freeto;
 	db_fileclose(relation);
+	freerelationheader(hp, mmp);
 	return 1;
 }
