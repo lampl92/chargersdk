@@ -6,7 +6,7 @@
 * @date 2017-06-23
 */
 
-int POINTERBYTEDIST(unsigned char *p1, unsigned char *p2)
+int pointer_byte_dist(unsigned char *p1, unsigned char *p2)
 {
     return (int)(p1 - p2);
 }

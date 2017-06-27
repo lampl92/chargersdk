@@ -23,7 +23,7 @@
 #ifndef DBMACROS_H
 #define DBMACROS_H
 
-#define _POINTERBYTEDIST
+#define POINTERBYTEDIST_FUNC
 
 /**
 @brief		Macro for moving any pointer some number of bytes cleanly.
@@ -67,11 +67,11 @@
 @param		p1	The pointer to be subtracted from.
 @param		p2	The pointer to be subtracted.
 */
-#ifndef _POINTERBYTEDIST
+#ifndef POINTERBYTEDIST_FUNC
 #define POINTERBYTEDIST(p1, p2) (((unsigned char*)(p1)) - ((unsigned char*)(p2)))
 #else
+#define POINTERBYTEDIST(p1, p2) pointer_byte_dist(p1, p2)
 //#error "MACRO NAME CLASH ON POINTERBYTEDIST!"
-int POINTERBYTEDIST(unsigned char *p1, unsigned char *p2);
 #endif
 
 /**
