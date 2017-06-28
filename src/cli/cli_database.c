@@ -134,7 +134,7 @@ static void cli_testdb_fnt(int argc, char **argv)
     int i;
     for(i = 0; i < 1; i++)
     {
-        littledtest();
+        //littledtest();
     }
 }
 
