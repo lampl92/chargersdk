@@ -11,7 +11,7 @@
 #include <time.h>
 #include "gdsl_list.h"
 
-/*停止原因*/
+/*停止类型 StopType*/
 #define defOrderStopType_Unknown        0
 #define defOrderStopType_RFID           1
 #define defOrderStopType_Full           2
@@ -31,7 +31,7 @@
 #define defOrderStopType_UnderCurr      16
 #define defOrderStopType_Knock          17
 
-/*支付方式*/
+/*支付方式 PayType*/
 #define defOrderPayType_Online          0
 #define defOrderPayType_Offline         1
 
@@ -84,10 +84,10 @@ typedef struct _OrderData
     double  dBalance;           //余额
     uint8_t ucCONID;
     //创建时
-    uint8_t ucStartType;   //4 有卡 5 无卡
     uint8_t strOrderSN[defOrderSNLength]; //交易流水号
     double dLimitFee;                      //充电截至金额
     time_t tStartTime;                    //启动充电时间
+    uint8_t ucStartType;   //4 有卡 5 无卡
     double  dStartPower;
     uint8_t ucServiceFeeType;           //服务费类型
     //充电过程

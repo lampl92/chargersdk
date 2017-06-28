@@ -252,10 +252,10 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->ucAccountStatus = 0;    //帐户状态 1：注册卡 0：未注册卡
     pOrder->dBalance = 0;           //余额
 
-    pOrder->ucStartType = 0; //4有卡 5无卡
     memset(pOrder->strOrderSN, 0, defOrderSNLength);
     pOrder->dLimitFee = 0;                    //充电金额限制
     pOrder->tStartTime = 0;                 //起始时间
+    pOrder->ucStartType = 0;        //4有卡 5无卡
     pOrder->dStartPower = 0;                //起始电表读数
     pOrder->ucServiceFeeType = 0;         //服务费类型
 
