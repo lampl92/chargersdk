@@ -152,7 +152,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 pechProtoElem->trycount++;
                 pechProtoElem->timestamp = time(NULL);
                 pechProtoElem->status = 0;
-                continue;//跳过后面的语句立即发送
+                continue;//跳过后面的语句立即发送，否则需要再等一轮
             }
 #endif
             /* 3. */
