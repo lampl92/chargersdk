@@ -306,6 +306,7 @@ void vTaskEVSERemote(void *pvParameters)
                             xTimerStop(pCON->status.xHandleTimerRTData, 100);
                             eRmtRTDataStat = REMOTERTData_STOP;
                         }
+                        //连接中断情况下，由于状态不在REGEDITED下，所以不会一直发送实时数据
                         break;
                     }
                 case REMOTERTData_STOP:
@@ -337,7 +338,7 @@ void vTaskEVSERemote(void *pvParameters)
                                 break;
                             }
                         }
-                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK);
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //告诉taskdata，RTData用完了订单数据
                         eRmtRTDataStat = REMOTERTData_IDLE;
                         break;
                     }
