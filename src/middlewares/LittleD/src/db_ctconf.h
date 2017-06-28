@@ -29,7 +29,7 @@
 #define DB_CTCONF_H
 
 /**** Configuration Options. ****/
-//#define DB_USEMALLOC
+#define DB_USEMALLOC
 //#define DB_ENABLE_DEBUG
 
 

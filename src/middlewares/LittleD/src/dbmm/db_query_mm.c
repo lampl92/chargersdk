@@ -45,15 +45,15 @@ db_int init_query_mm(db_query_mm_t *mmp, void *segment, db_int size)
 void* db_qmm_falloc(db_query_mm_t *mmp, db_int size)
 {
     DB_PRINTF_DEBUG("falloc called, size = %d, ", size);
-//    //fix the misaligned memory
-//    db_int blob = size + sizeof(db_int);
-//	if(blob % 4 != 0)
-//    {
-//        blob += (4 - (blob % 4));
-//    }
-//    size = blob - sizeof(db_int);
-//    DB_PRINTF_DEBUG("fix size = %d\n", size);
-//    //end fix
+    //fix the misaligned memory
+    db_int blob = size + sizeof(db_int);
+	if(blob % 4 != 0)
+    {
+        blob += (4 - (blob % 4));
+    }
+    size = blob - sizeof(db_int);
+    DB_PRINTF_DEBUG("fix size = %d\n", size);
+    //end fix
 	/* Check that size requested is valid. */
 	if (size > mmp->size)
 	{

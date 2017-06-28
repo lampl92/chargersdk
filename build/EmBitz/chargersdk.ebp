@@ -81,7 +81,7 @@
 			<Add option="-mfloat-abi=hard" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-O3" />
+			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -113,13 +113,15 @@
 			<Add directory="..\..\src\drivers\hal\CMSIS_RTOS" />
 			<Add directory="..\..\src\net\user" />
 			<Add directory="..\..\src\middlewares\tiny-AES128-C" />
+			<Add directory="..\..\src\middlewares\LittleD\src" />
+			<Add directory="..\..\src\middlewares\LittleD\src\include" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 			<Add library="..\..\src\hmi\dimen_barcode\ATK_QR_V1.4.lib" />
-			<Add library="C:\Program Files (x86)\EmBitz\1.11\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
+			<Add library="lib\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
@@ -253,6 +255,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_database.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_evse.c">
@@ -616,6 +621,105 @@
 		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\db_ctconf.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\db_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dberror.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\db_aggr_func_codes.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\eet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\eet.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmacros.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmacros.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\relation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\relation.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\tuple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\tuple.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\aggregate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\aggregate.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\ntjoin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\ntjoin.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\osijoin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\osijoin.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\project.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\project.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\scan.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\scan.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\select.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\select.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\sort.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\sort.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dboutput\query_output.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dboutput\query_output.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbcreate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbcreate.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbinsert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbinsert.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dblexer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dblexer.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparser.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\SD_c_iface.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\include\debug.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\mainpage.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\pstdint.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\ref.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
 			<Option compilerVar="CC" />
 		</Unit>

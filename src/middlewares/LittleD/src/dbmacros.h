@@ -23,7 +23,10 @@
 #ifndef DBMACROS_H
 #define DBMACROS_H
 
+#define MOVEPOINTERNBYTES_FUN
+#define POINTERATNBYTES_FUN
 #define POINTERBYTEDIST_FUNC
+#define MOVEPOINTERNUNITS_FUN
 
 /**
 @brief		Macro for moving any pointer some number of bytes cleanly.
@@ -37,10 +40,11 @@
 @todo		Make it so all calls to this macro actualy use
 		@ref POINTERATNBYTES.
 */
-#ifndef MOVEPOINTERNBYTES
+#ifndef MOVEPOINTERNBYTES_FUN
 #define MOVEPOINTERNBYTES(d, s, n, t) (d) = (t)(((unsigned char*)((s)))+(n))
 #else
-#error "MACRO NAME CLASH ON MOVEPOINTERNBYTES!"
+#define MOVEPOINTERNBYTES(d, s, n, t) (d) = (t)(move_pointer_n_bytes((unsigned char*)(s), (n)))
+//#error "MACRO NAME CLASH ON MOVEPOINTERNBYTES!"
 #endif
 
 /**
@@ -52,10 +56,11 @@
 @param		t	The pointer type to cast back to.  _Do not include
 			include brackets for the type._
 */
-#ifndef POINTERATNBYTES
+#ifndef POINTERATNBYTES_FUN
 #define POINTERATNBYTES(s, n, t) ((t)(((unsigned char*)((s)))+(n)))
 #else
-#error "MACRO NAME CLASH ON POINTERATNBYTES!"
+#define POINTERATNBYTES(s, n, t) ((t)(pointer_at_n_bytes((unsigned char *)(s), (n))))
+//#error "MACRO NAME CLASH ON POINTERATNBYTES!"
 #endif
 
 /**
@@ -70,7 +75,8 @@
 #ifndef POINTERBYTEDIST_FUNC
 #define POINTERBYTEDIST(p1, p2) (((unsigned char*)(p1)) - ((unsigned char*)(p2)))
 #else
-#define POINTERBYTEDIST(p1, p2) pointer_byte_dist((p1), (p2))
+int pointer_byte_dist(unsigned char *p1, unsigned char *p2);
+#define POINTERBYTEDIST(p1, p2) pointer_byte_dist((unsigned char *)(p1), (unsigned char *)(p2))
 //#error "MACRO NAME CLASH ON POINTERBYTEDIST!"
 #endif
 
@@ -90,10 +96,12 @@ pointer type @td.
 @param		td	The pointer type to cast the result to before assigning.
 			_Do not include include brackets for the type._
 */
-#ifndef MOVEPOINTERNUNITS
+#ifndef MOVEPOINTERNUNITS_FUN
 #define MOVEPOINTERNUNITS(d, s, n, td, ts) (d) = (td)(((ts)((s)))+(n))
 #else
-#error "MACRO NAME CLASH ON MOVEPOINTERUNITS!"
+#define MOVEPOINTERNUNITS(d, s, n, td, ts) (d) = (td)(move_pointer_n_units((void *)(s) , (int)(n)))
+void *move_pointer_n_units(void *s, int n);
+//#error "MACRO NAME CLASH ON MOVEPOINTERUNITS!"
 #endif
 
 #endif
