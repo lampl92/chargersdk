@@ -11,6 +11,7 @@
 
 #include "order.h"
 #include "interface.h"
+#include "utils.h"
 
 #define BYTES_LEN 1024
 
@@ -26,11 +27,11 @@ int littledtest()
     int id;
     int balance;
     p = sn;
-    DB_PRINTF_DEBUG("FILE REMOVE!!\n");
+    printf_safe("FILE REMOVE!!\n");
     db_fileremove("OrderLDBTest");
     vTaskDelay(10);
     init_query_mm(&mm, memseg, BYTES_LEN);
-    DB_PRINTF_DEBUG("CREATE TABLE!!\n");
+    printf_safe("CREATE TABLE!!\n");
 //    parse("CREATE TABLE OrderLDBTest (id INT, temp INT, SN STRING(32), power INT,a2 INT, b2 INT, c2 INT, d2 INT, e2 INT, f2 INT, g2 INT, h2 INT, i2 INT, j2 INT);", &mm);
     parse("CREATE TABLE OrderLDBTest (OrderSN       STRING(32), \
                                   CardID        STRING(32), \
@@ -54,7 +55,7 @@ int littledtest()
 
 
     init_query_mm(&mm, memseg, BYTES_LEN);
-    DB_PRINTF_DEBUG("INSERT INTO OrderLDBTest!!\n");
+    printf_safe("INSERT INTO OrderLDBTest!!\n");
     parse("INSERT INTO OrderLDBTest VALUES ('SN123123', 'id12323',12,1,'2017',1,2,3,4,5,6,7,8,9,1,2,3,4,'2018');", &mm); //设置全部值
 //    init_query_mm(&mm, memseg, BYTES_LEN);
 //    parse("INSERT INTO OrderLDBTest VALUES (2, 89884,'2222222222' , 4);", &mm);
@@ -75,12 +76,12 @@ int littledtest()
 
 
     init_query_mm(&mm, memseg, BYTES_LEN);
-    DB_PRINTF_DEBUG("SELECT * FROM OrderLDBTest!!\n");
+    printf_safe("SELECT * FROM OrderLDBTest!!\n");
     root = parse("SELECT * FROM OrderLDBTest;", &mm);
     //printQuery(root, &mm);
     if (root == NULL)
     {
-        printf("NULL root\n");
+        printf_safe("NULL root\n");
     }
     else
     {
@@ -91,8 +92,8 @@ int littledtest()
             id = getintbyname(&tuple, "CONID", root->header);
             balance = getintbyname(&tuple, "Balance", root->header);
             p = getstringbyname(&tuple, "OrderSN", root->header);
-            printf("balance: %d (%d)\n", balance, id);
-            printf("SN %s\n", p);
+            printf_safe("balance: %d (%d)\n", balance, id);
+            printf_safe("SN %s\n", p);
         }
     }
     close_tuple(&tuple, &mm);
@@ -100,11 +101,11 @@ int littledtest()
 
 //==============================================================================
     init_query_mm(&mm, memseg, BYTES_LEN);
-    DB_PRINTF_DEBUG("SELECT * FROM OrderLDBTest WHERE Balance > 0;!!\n");
+    printf_safe("SELECT * FROM OrderLDBTest WHERE Balance > 0;!!\n");
     root = parse("SELECT * FROM OrderLDBTest WHERE Balance > 0;", &mm);
     if (root == NULL)
     {
-        printf("NULL root\n");
+        printf_safe("NULL root\n");
     }
     else
     {
@@ -115,8 +116,8 @@ int littledtest()
             id = getintbyname(&tuple, "CONID", root->header);
             balance = getintbyname(&tuple, "Balance", root->header);
             p = getstringbyname(&tuple, "OrderSN", root->header);
-            printf("balance: %d (%d)\n", balance, id);
-            printf("SN %s\n", p);
+            printf_safe("balance: %d (%d)\n", balance, id);
+            printf_safe("SN %s\n", p);
         }
     }
 
@@ -124,31 +125,31 @@ int littledtest()
     closeexecutiontree(root, &mm);
 
     //==============================================================================
-//    init_query_mm(&mm, memseg, BYTES_LEN);
-//    DB_PRINTF_DEBUG("SELECT * FROM OrderLDBTest WHERE temp > 5000 AND id < 5;!!\n");
-//
-//    root = parse("SELECT * FROM OrderLDBTest WHERE temp > 5000 AND id < 5;", &mm);
-//
-//    if (root == NULL)
-//    {
-//        printf("NULL root\n");
-//    }
-//    else
-//    {
-//        init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
-//
-//        while (next(root, &tuple, &mm) == 1)
-//        {
-//            id = getintbyname(&tuple, "id", root->header);
-//            sensor_val = getintbyname(&tuple, "temp", root->header);
-//            p = getstringbyname(&tuple, "SN", root->header);
-//            printf("sensor val: %i (%i)\n", sensor_val, id);
-//            printf("SN %s\n", p);
-//        }
-//    }
-//
-//    close_tuple(&tuple, &mm);
-//    closeexecutiontree(root, &mm);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    printf_safe("SELECT * FROM OrderLDBTest WHERE Balance < 5000 AND CONID < 5;!!\n");
+
+    root = parse("SELECT * FROM OrderLDBTest WHERE Balance < 5000 AND CONID < 5;", &mm);
+
+    if (root == NULL)
+    {
+        printf_safe("NULL root\n");
+    }
+    else
+    {
+        init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
+
+        while (next(root, &tuple, &mm) == 1)
+        {
+            id = getintbyname(&tuple, "CONID", root->header);
+            balance = getintbyname(&tuple, "Balance", root->header);
+            p = getstringbyname(&tuple, "SN", root->header);
+            printf_safe("balance: %i (%i)\n", balance, id);
+            printf_safe("SN %s\n", p);
+        }
+    }
+
+    close_tuple(&tuple, &mm);
+    closeexecutiontree(root, &mm);
     return 0;
 }
 
@@ -177,7 +178,7 @@ void formatdb(void)
      //printQuery(root, &mm);
     if (root == NULL)
     {
-        printf("NULL root\n");
+        printf_safe("NULL root\n");
     }
     else
     {
@@ -188,8 +189,8 @@ void formatdb(void)
             id = getintbyname(&tuple, "CONID", root->header);
             balance = getintbyname(&tuple, "Balance", root->header);
             p = getstringbyname(&tuple, "OrderSN", root->header);
-            printf("balance: %d (%d)\n", balance, id);
-            printf("SN %s\n", p);
+            printf_safe("balance: %d (%d)\n", balance, id);
+            printf_safe("SN %s\n", p);
         }
         close_tuple(&tuple, &mm);
         closeexecutiontree(root, &mm);
@@ -206,16 +207,16 @@ static void cli_testdb_fnt(int argc, char **argv)
     OrderData_t order;
     OrderCreate(&order);
     OrderInit(&order);
+    db_fileremove("OrderDB");
     OrderDBCreate();
     start = time(NULL);
-    for(i = 0; i < 500; i++)
+    for(i = 0; i < 100; i++)
     {
         order.dBalance = 1222.33+i;
         order.ucCONID = 1;
         HexToStr(ucOrderSN, order.strOrderSN, 8);
         order.tStartTime = time(NULL)+i;
-        //vTaskDelay(1000);
-        order.tStopTime = time(NULL) +i;
+        order.tStopTime = order.tStartTime +i;
         order.dTotalFee = 100.22+i;
         order.dTotalPower = 123.32+i;
         orderaddtest(&order);
