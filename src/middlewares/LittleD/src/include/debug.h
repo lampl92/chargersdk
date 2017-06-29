@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include "db_ctconf.h"
+#include "bsp.h"
 
 #ifdef DB_ENABLE_DEBUG
  #define DEBUG_ENABLED (1)
