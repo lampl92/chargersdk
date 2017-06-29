@@ -193,6 +193,7 @@ void cli_evseorder_fnt(int argc, char **argv)
         init_query_mm(&mm, memseg, 1024);
         root = parse("SELECT * FROM OrderDB;", &mm);
         printQuery(root, &mm);
+        closeexecutiontree(root, &mm);
     }
     else
     {
