@@ -10,6 +10,92 @@
 #include "cJSON.h"
 #include "stringName.h"
 #include "utils.h"
+
+#include "dbparser.h"
+#include "debug.h"
+
+#define BYTES_LEN 1024
+
+ErrorCode_t OrderDBCreate(void)
+{
+    char memseg[BYTES_LEN];
+    db_query_mm_t mm;
+
+    if(db_fileexists("OrderDB") == 1)
+    {
+        return ERR_NO;
+    }
+    else
+    {
+        init_query_mm(&mm, memseg, BYTES_LEN);
+        DB_PRINTF_DEBUG("CREATE TABLE!!\n");
+        parse("CREATE TABLE OrderDB (OrderSN       STRING(32), \
+                                      CardID        STRING(32), \
+                                      Balance       INT, \
+                                      CONID         INT, \
+                                      StartTime     STRING(32), \
+                                      StartType     INT, \
+                                      LimitFee      INT, \
+                                      StartPower    INT, \
+                                      ServType      INT, \
+                                      TotalPower    INT, \
+                                      TotalPowerFee INT, \
+                                      TotalServFee  INT, \
+                                      TotalFee      INT, \
+                                      TotalSeg      INT, \
+                                      DefSegPower   INT, \
+                                      DefSegFee     INT, \
+                                      PayType       INT, \
+                                      StopType      INT, \
+                                      StopTime      STRING(32));", &mm);
+        return ERR_NO;
+    }
+    
+}
+
+ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
+{
+    char memseg[BYTES_LEN];
+    char cmd[BYTES_LEN] = {0};
+    char strCardID[64];
+    db_query_mm_t mm;
+    int i;
+    
+    struct tm *ts;
+    char tbuf_start [80] = {0};
+    char tbuf_stop [80] = {0};
+    
+    ts = localtime (& pOrder->tStartTime);
+    strftime (tbuf_start, sizeof (tbuf_start), "%Y-%m-%d %H:%M:%S", ts);
+    ts = localtime (& pOrder->tStopTime);
+    strftime (tbuf_stop, sizeof (tbuf_stop), "%Y-%m-%d %H:%M:%S", ts);
+    
+    HexToStr(pOrder->ucCardID, strCardID, 8);
+    memset(cmd, '\0', sizeof(cmd));
+    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0", 
+                                                             pOrder->strOrderSN,
+                                                             strCardID,
+                                                             (int)(pOrder->dBalance * 100),
+                                                             pOrder->ucCONID,
+                                                             tbuf_start,
+                                                             pOrder->ucStartType,
+                                                             (int)(pOrder->dLimitFee * 100),
+                                                             (int)(pOrder->dStartPower * 100),
+                                                             pOrder->ucServiceFeeType,
+                                                             (int)(pOrder->dTotalPower * 100),
+                                                             (int)(pOrder->dTotalPowerFee * 100),
+                                                             (int)(pOrder->dTotalServiceFee * 100),
+                                                             (int)(pOrder->dTotalFee * 100),
+                                                             pOrder->ucTotalSegment,
+                                                             (int)(pOrder->dDefSegPower * 100),
+                                                             (int)(pOrder->dDefSegFee * 100),
+                                                             pOrder->ucPayType,
+                                                             pOrder->ucStopType,
+                                                             tbuf_stop);
+    init_query_mm(&mm, memseg, BYTES_LEN);
+    parse(cmd, &mm);
+}
+#if 0
 ErrorCode_t CreateOrderFile(void)
 {
     FRESULT res;
@@ -163,3 +249,4 @@ ErrorCode_t DataDelOrder(uint32_t ulIndex)
     errcode = ERR_NO;
     return errcode;
 }
+#endif
