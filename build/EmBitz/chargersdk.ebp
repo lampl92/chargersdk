@@ -129,11 +129,7 @@
 		<Unit filename="version.h" />
 		<Unit filename="..\..\nand\system\evse.cfg" />
 		<Unit filename="..\..\nand\system\evse.cfg.templ" />
-		<Unit filename="..\..\nand\system\evse_config.xml" />
-		<Unit filename="..\..\nand\system\order.txt" />
 		<Unit filename="..\..\nand\system\order.txt.templ" />
-		<Unit filename="..\..\nand\system\order.xml" />
-		<Unit filename="..\..\nand\system\public_info.xml" />
 		<Unit filename="..\..\src\app\cfg_parse.c">
 			<Option compilerVar="CC" />
 		</Unit>

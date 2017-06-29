@@ -27,7 +27,8 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
-    THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//创建order.txt
+    //THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//创建order.txt
+    OrderDBCreate();
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
@@ -138,22 +139,23 @@ void vTaskEVSEData(void *pvParameters)
                 if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                    /* @todo (rgw#1): 在这里存储订单*/
+                    /* (rgw#1): 在这里存储订单*/
+                    OrderDBInsertItem(&(pCON->order));
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
                     OrderInit(&(pCON->order));//状态变为IDLE
                 }
-                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                 defEventBitOrder_HMIDispOK,
-                                                 pdTRUE, pdTRUE, 0);
-                if((uxBitsData & defEventBitOrder_HMIDispOK) == defEventBitOrder_HMIDispOK)
-                {
-                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                    /* @todo (rgw#1): 在这里存储订单*/
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
-                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-                    OrderInit(&(pCON->order));//状态变为IDLE
-                }
+//                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+//                                                 defEventBitOrder_HMIDispOK,
+//                                                 pdTRUE, pdTRUE, 0);
+//                if((uxBitsData & defEventBitOrder_HMIDispOK) == defEventBitOrder_HMIDispOK)
+//                {
+//                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+//                    /* @todo (rgw#1): 在这里存储订单*/
+//                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
+//                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+//                    OrderInit(&(pCON->order));//状态变为IDLE
+//                }
 
                 break;
             }
