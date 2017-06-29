@@ -24,9 +24,8 @@
 #define DBERROR_H
 
 #include "db_ctconf.h"
+#include "debug.h"
 #if DB_CTCONF_SETTING_TARGET == DB_CTCONF_OPTION_TARGET_FatFS
-#include "bsp.h"
-#define  printf    printf_safe
 #endif
 
 /**
@@ -40,7 +39,7 @@
 #if defined(DB_CTCONF_SETTING_FEATURE_ERROR_MESSAGES) && 0!=DB_CTCONF_SETTING_FEATURE_ERROR_MESSAGES
 #define DB_ERROR_MESSAGE(message, offset, command) \
 do { \
-printf("ERROR AT COLUMN %d OF \"%s\":\n\t%s\n", (offset), (command), (message)); \
+DB_PRINTF_DEBUG("ERROR AT COLUMN %d OF \"%s\":\n\t%s\n", (offset), (command), (message)); \
 } while(0)
 #else
 #define DB_ERROR_MESSAGE(message, offset, command)
