@@ -11,6 +11,7 @@
 #include "includes.h"
 
 
-ErrorCode_t CreateOrderFile(void);
-
+//ErrorCode_t CreateOrderFile(void);
+ErrorCode_t OrderDBCreate(void);
+ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder);
 #endif
