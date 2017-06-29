@@ -79,17 +79,18 @@ typedef struct _OrderData
     OrderState_t statOrder;//记录订单状态
     OrderSegState_t statOrderSeg;//记录订单时间段状态
 
-    uint8_t ucCardID[defCardIDLength];    //卡号//在taskrfid中赋值
+    uint8_t ucCardID[defCardIDLength];    //卡号//在taskrfid中赋值            2
     uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
-    double  dBalance;           //余额
-    uint8_t ucCONID;
+    double  dBalance;           //余额                                        3
+    uint8_t ucCONID;                                                            //4
     //创建时
-    uint8_t strOrderSN[defOrderSNLength]; //交易流水号
-    double dLimitFee;                      //充电截至金额
-    time_t tStartTime;                    //启动充电时间
-    uint8_t ucStartType;   //4 有卡 5 无卡
-    double  dStartPower;
-    uint8_t ucServiceFeeType;           //服务费类型
+    uint8_t strOrderSN[defOrderSNLength]; //交易流水号       DBIdx 1
+
+    time_t tStartTime;                    //启动充电时间           5
+    uint8_t ucStartType;                    //4 有卡 5 无卡         6
+    double dLimitFee;                      //充电截至金额         7
+    double  dStartPower;                                         //8
+    uint8_t ucServiceFeeType;           //服务费类型             //9
     //充电过程
     double  dTotalPower;                  //总电量
     double  dTotalPowerFee;             //总电费
@@ -103,7 +104,7 @@ typedef struct _OrderData
     //停止时
     uint8_t ucPayType;                    //支付方式
     uint8_t ucStopType;                   //停止类型
-    time_t  tStopTime;                      //停止时间
+    time_t  tStopTime;                      //停止时间          6
 
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
