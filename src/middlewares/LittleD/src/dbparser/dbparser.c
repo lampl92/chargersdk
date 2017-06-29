@@ -1491,19 +1491,19 @@ db_op_base_t* parse(char* command, db_query_mm_t* mmp)
 					if (1==valid && NULL != val && NULL != relop && NULL != attr)
 					{
 						// TODO: Move this function from osijoin to a better place.
-						db_int8 whichindex = findindexon(tables, attr);
+						db_int8 whichindex = findindexon(tables, (db_eetnode_attr_t *)attr);
 						if (-1 != whichindex)
 						{
 							/* Setup pre-condition. */
 								// TODO: In future, we might need to skip single tuple if condition is not met.  Maybe.
 							if (DB_EETNODE_OP_GTE == relop->type || DB_EETNODE_OP_EQ == relop->type)
 							{
-								tables->tuple_start = db_index_getoffset(tables, whichindex,((db_eetnode_attr_t*)attr)->pos, ((db_eetnode_dbint_t*)val)->integer, NULL, mmp);
+								tables->tuple_start = db_index_getoffset(tables, whichindex, (db_eet_t *)(db_int)(((db_eetnode_attr_t*)attr)->pos), (db_tuple_t *)(((db_eetnode_dbint_t*)val)->integer), NULL, mmp);
 								rewind_scan(tables, mmp);
 							}
 							else if (DB_EETNODE_OP_GT == relop->type)
 							{
-								tables->tuple_start = db_index_getoffset(tables,whichindex,((db_eetnode_attr_t*)attr)->pos,((db_eetnode_dbint_t*)val)->integer+1, NULL, mmp);
+								tables->tuple_start = db_index_getoffset(tables, whichindex, (db_eet_t *)(db_int)(((db_eetnode_attr_t*)attr)->pos), (db_tuple_t *)(((db_eetnode_dbint_t*)val)->integer+1), NULL, mmp);
 								rewind_scan(tables, mmp);
 							}
 							
