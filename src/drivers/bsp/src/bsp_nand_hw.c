@@ -256,10 +256,9 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
         res=NAND_WaitRB(1);         //等待RB=1
         if(res)return NSTA_TIMEOUT; //超时退出
     #else
-        bsp_DelayUS(BSP_DELAY_US_VAL);
+        NAND_Delay(BSP_DELAY_US_VAL);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     #endif
 
-    //bsp_DelayUS(30);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
     if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
     {
         //读取NAND FLASH中的值
@@ -356,7 +355,7 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
         res=NAND_WaitRB(1);         //等待RB=1
         if(res)return NSTA_TIMEOUT; //超时退出
     #else
-        bsp_DelayUS(BSP_DELAY_US_VAL);
+        NAND_Delay(BSP_DELAY_US_VAL);
     #endif
     for(i = 0; i < NumByteToRead; i++) //读取数据,每次读4字节
     {
