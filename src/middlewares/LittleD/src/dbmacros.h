@@ -23,10 +23,10 @@
 #ifndef DBMACROS_H
 #define DBMACROS_H
 
-#define MOVEPOINTERNBYTES_FUN
-#define POINTERATNBYTES_FUN
+#define MOVEPOINTERNBYTES_FUNC
+#define POINTERATNBYTES_FUNC
 #define POINTERBYTEDIST_FUNC
-#define MOVEPOINTERNUNITS_FUN
+#define MOVEPOINTERNUNITS_FUNC
 
 /**
 @brief		Macro for moving any pointer some number of bytes cleanly.
@@ -40,9 +40,10 @@
 @todo		Make it so all calls to this macro actualy use
 		@ref POINTERATNBYTES.
 */
-#ifndef MOVEPOINTERNBYTES_FUN
+#ifndef MOVEPOINTERNBYTES_FUNC
 #define MOVEPOINTERNBYTES(d, s, n, t) (d) = (t)(((unsigned char*)((s)))+(n))
 #else
+void *move_pointer_n_bytes(unsigned char *s, int n);
 #define MOVEPOINTERNBYTES(d, s, n, t) (d) = (t)(move_pointer_n_bytes((unsigned char*)(s), (n)))
 //#error "MACRO NAME CLASH ON MOVEPOINTERNBYTES!"
 #endif
@@ -56,9 +57,10 @@
 @param		t	The pointer type to cast back to.  _Do not include
 			include brackets for the type._
 */
-#ifndef POINTERATNBYTES_FUN
+#ifndef POINTERATNBYTES_FUNC
 #define POINTERATNBYTES(s, n, t) ((t)(((unsigned char*)((s)))+(n)))
 #else
+void *pointer_at_n_bytes(unsigned char *s, int n);
 #define POINTERATNBYTES(s, n, t) ((t)(pointer_at_n_bytes((unsigned char *)(s), (n))))
 //#error "MACRO NAME CLASH ON POINTERATNBYTES!"
 #endif
@@ -96,11 +98,11 @@ pointer type @td.
 @param		td	The pointer type to cast the result to before assigning.
 			_Do not include include brackets for the type._
 */
-#ifndef MOVEPOINTERNUNITS_FUN
+#ifndef MOVEPOINTERNUNITS_FUNC
 #define MOVEPOINTERNUNITS(d, s, n, td, ts) (d) = (td)(((ts)((s)))+(n))
 #else
-#define MOVEPOINTERNUNITS(d, s, n, td, ts) (d) = (td)(move_pointer_n_units((void *)(s) , (int)(n)))
 void *move_pointer_n_units(void *s, int n);
+#define MOVEPOINTERNUNITS(d, s, n, td, ts) (d) = (td)(move_pointer_n_units((void *)(s) , (int)(n)))
 //#error "MACRO NAME CLASH ON MOVEPOINTERUNITS!"
 #endif
 
