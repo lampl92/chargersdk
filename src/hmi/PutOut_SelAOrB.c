@@ -145,13 +145,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                PutOut_Home();
+                CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                PutOut_Home();
+                CreateHome();
                 break;
             }
             break;
@@ -162,13 +162,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                PutOut_Home();
+                CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 WM_DeleteWindow(pMsg->hWin);
                 GUI_EndDialog(pMsg->hWin,0);
                 vTaskDelay(500);
-                PutOut_Home();
+                CreateHome();
                 break;
             }
             break;

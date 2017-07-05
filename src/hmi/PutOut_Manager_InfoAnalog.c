@@ -60,9 +60,12 @@
 #define ID_EDIT_5  (GUI_ID_USER + 0x16)//
 #define ID_EDIT_6  (GUI_ID_USER + 0x17)//
 
-#define ID_TimerTime    0
+#define ID_TimerTime    1
+#define ID_TimerFlush   2
+#define ID_TimerSignal  3
 // USER END
-
+WM_HWIN _hWinManagerInfoAnalog;
+static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 /*********************************************************************
 *
 *       Static data
@@ -326,40 +329,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 **********************************************************************
 */
-// USER START (Optionally insert additional public code)
 /*********************************************************************
 *
-*       CreateManagerInfoAnalog
-*/
-WM_HWIN CreateManagerInfoAnalog(void);
-WM_HWIN CreateManagerInfoAnalog(void)
-{
-    WM_HWIN hWin;
-
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
-
-    return hWin;
-}
 /** @brief
  *  输出管理员界面里的信息查询模拟量部分
  * @param
  * @param
  * @return
- *
- */
-
-void PutOut_Manager_InfoAnalog()
+ *       CreateManagerInfoAnalog
+*/
+WM_HWIN CreateManagerInfoAnalog(void);
+WM_HWIN CreateManagerInfoAnalog(void)
 {
-    CreateManagerInfoAnalog();
-    while(1)
-    {
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        GUI_Delay(1000);
-    }
-}
-// USER END
+    _hWinManagerInfoAnalog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    cur_win = _hWinManagerInfoAnalog;
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerFlush,1000,0);
+    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
 
+}
 /*************************** End of file ****************************/
 
 

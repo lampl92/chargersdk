@@ -27,19 +27,30 @@
 //#define MSG_MusicStart    (GUI_ID_USER + 0x31)
 //#define MSG_NextMusic     (GUI_ID_USER + 0x32)
 //电压异常；AC温度异常；PE异常；撞击；防雷异常；停电；电流异常；频率异常
+/*********************自定义GUI消息的宏******************************
+**
+** GUI_ID_USER + 0x30 - 0x3F 可定义16个消息
+*/
+#define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //创建故障弹窗消息
+#define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //删除故障窗口消息
+#define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //跳到HOME页消息
+#define MSG_JUMPCARDINFO    (GUI_ID_USER + 0x33)    //跳到卡片信息页消息
+#define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //跳到充电中页消息
+#define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
+#define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
+
 
 extern uint8_t calebrate_done;
-struct Sys{
-    uint8_t charge_gun_num;
-}Sys_Info;
-
-struct Wait_timer{
-    uint8_t card_valid;//等待卡片无效的时间
-    uint8_t card_info;//显示卡片余额和卡号的等待时间
-    uint8_t charge_screen_lock;//充电界面锁死倒计时
-    uint8_t charge_done_exit;//充电完成界面退出倒计时
-}wait_timer;
-
+extern uint8_t winCreateFlag;
+extern WM_HWIN err_hItem;
+extern uint8_t strCSQ[10];
+extern uint8_t _secDown[10];
+extern WM_HWIN _hWinChargDone;
+extern WM_HWIN _hWinCharging;
+extern WM_HWIN _hWinCardInfo;
+extern WM_HWIN _hWinHome;
+extern WM_HWIN cur_win;
+void _cbHomeDialog(WM_MESSAGE *pMsg);
 //临时调试变量
 typedef struct
 {
@@ -57,16 +68,18 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 
-//uint8_t bitset(uint32_t var,uint8_t bitno);
-//uint8_t bitclr(uint32_t var,uint8_t bitno);
-//uint8_t bittest(uint32_t var,uint8_t bitno);
 void PutOut_SelAOrB();
-void PutOut_Home();
-void PutOut_Card_Info();
-void PutOut_Card_Valid();
-void PutOut_Charging();
-void PutOut_Charge_Done();
-void PutOut_Charging_2dimen();
+WM_HWIN CreateHome(void);
+WM_HWIN CreateRegiterDisp(void);
+WM_HWIN CreateCardInfo(void);
+WM_HWIN CreateCharging(void);
+WM_HWIN CreateChargeDone(void);
+WM_HWIN CreateManagerInfoAnalog(void);
+//void PutOut_Card_Info();
+//void PutOut_Card_Valid();
+//void PutOut_Charging();
+//void PutOut_Charge_Done();
+//void PutOut_Charging_2dimen();
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
 void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf);
@@ -78,10 +91,16 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize);
 void CaliDone_Analy(WM_HWIN hWin);
 void qrencode(uint8_t *qrcode_data,uint16_t *p,uint16_t *x,uint16_t *y);
 void display_encode(uint16_t *x,uint16_t *y,uint16_t *p);
-void PutOut_RegisterDisp();
+uint8_t _deleteWin(WM_HWIN hItem);
+void Err_Analy(WM_HWIN hWin);
+void Led_Show();
+void Errlist_flush(uint8_t *msg_err);
+void Signal_Show();
+//void PutOut_RegisterDisp();
+
 void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void ErrWindow_Show(WM_HWIN hWin);
-uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr);
-void PutOut_Manager_InfoAnalog();
+uint8_t err_window(WM_HWIN hWin);
+//void PutOut_Manager_InfoAnalog();
 uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString);
 #endif

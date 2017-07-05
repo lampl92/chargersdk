@@ -64,8 +64,12 @@
 #define ID_TEXT_18    (GUI_ID_USER + 0x1A)
 #define ID_TEXT_19    (GUI_ID_USER + 0x1B)
 
-#define ID_TimerTime    0
+#define ID_TimerTime    1
+#define ID_TimerFlush   2
+#define ID_TimerSignal  3
 // USER END
+WM_HWIN _hWinChargDone;
+static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 static uint8_t first_flag = 0;
 /*********************************************************************
 *
@@ -84,12 +88,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
-    // USER START (Optionally insert additional widgets)
+
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-    //{ BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 627, 342, 100, 36, 0, 0x0, 0 },//停止充电
 
     { BUTTON_CreateIndirect, "退出", ID_BUTTON_1, 554, 307, 100, 36, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_18, 600, 314, 61, 24, 0, 0x0, 0 },
@@ -115,8 +118,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_16, 450, 100, 70, 35, 0, 0x0, 0 },//分钟
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 500, 100, 45, 35, 0, 0x64, 0 },//秒数值
     { TEXT_CreateIndirect, "Text", ID_TEXT_17, 545, 100, 70, 35, 0, 0x0, 0 },//秒钟
-//    { TEXT_CreateIndirect, "Text", ID_TEXT_19, 300, 314, 100, 35, 0, 0x0, 0 },//正在结费中
-    // USER END
 };
 
 /*********************************************************************
@@ -125,8 +126,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogChargeDone[] =
 *
 **********************************************************************
 */
-// USER START (Optionally insert additional static code)
-static void Timer_Process(WM_MESSAGE *pMsg)
+static void Data_Process(WM_MESSAGE *pMsg)
 {
     static uint8_t timer_count = 0;
     static uint8_t num = 0;
@@ -141,8 +141,6 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     uint8_t strCSQ[32];
 
     WM_HWIN hWin = pMsg->hWin;
-    CaliDone_Analy(hWin);
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
 
     if(first_flag == 0)
     {
@@ -150,86 +148,22 @@ static void Timer_Process(WM_MESSAGE *pMsg)
         first = time(NULL);
     }
 
-//    pCON = CONGetHandle(0);
-//    now = time(NULL);
-//    diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
-//    if(diffsec > 86400)
-//    {
-//        diffsec = 86400;
-//    }
-//    hour = diffsec / 3600;
-//    min = diffsec % 3600 / 60;
-//    sec = diffsec % 3600 % 60;
-#if 0
-    sprintf(temp_buf, "%02d", hour);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
-    sprintf(temp_buf, "%02d", min);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_5), temp_buf);// min
-    sprintf(temp_buf, "%02d", sec);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), temp_buf);// sec
-
-    sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), temp_buf);
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), temp_buf);
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);
-#endif
-
-//    if((60-(uint32_t)difftime(now, first)) == 0)
-//    {
-//        WM_DeleteWindow(hWin);
-//        PutOut_Home();
-//    }
     now = time(NULL);
-//    if(first_flag == 0)
-//    {
-//        first_flag = 1;
-//        first = now;
-//    }
+
     diffsec = (uint32_t)difftime(now, first);
-//    if(diffsec > 86400)
-//    {
-//        diffsec = 86400;
-//    }
-//    hour = diffsec / 3600;
-//    min = diffsec % 3600 / 60;
-//    sec = diffsec % 3600 % 60;
+
     sec = 10 - diffsec;
     if(sec < 0)
         sec = 0;
-    xsprintf((char *)Timer_buf, "(%02dS)", sec);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_18), Timer_buf);
+    xsprintf((char *)_secDown, "(%02dS)", sec);
+    //xsprintf((char *)Timer_buf, "(%02dS)", sec);
     if(sec == 0)
     {
         first_flag = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
-        //跳出卡片信息页
-        WM_DeleteWindow(hWin);
-
-        //PutOut_SelAOrB();
-        PutOut_Home();
+        //跳到HOME
+        WM_SendMessageNoPara(hWin,MSG_JUMPHOME);
     }
-    memset(strCSQ,'\0',strlen(strCSQ));
-    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
-    uxBits = xEventGroupGetBits(xHandleEventTCP);
-    if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
-    {
-        strcat(strCSQ," 服务器未连接");
-        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
-    }
-    else
-    {
-        strcat(strCSQ," 服务器已连接");
-        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
-    }
-
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
-
-
-    ErrWindow_Show(hWin);
 }
 // USER END
 
@@ -252,12 +186,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     volatile int8_t sec;
     EventBits_t uxBits;
 
-
-    // USER START (Optionally insert additional variables)
-    // USER END
-
     switch (pMsg->MsgId)
     {
+    case WM_PAINT://MSG_UPDATEDATA:
+        /// TODO (zshare#1#): 下面的if不起作用.\
+        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+        if(_hWinCardInfo == cur_win)
+        {
+            /**< 数据处理 */
+            Data_Process(pMsg);
+            /**< 信号数据处理 */
+            Signal_Show();
+            /**< 灯光控制 */
+            Led_Show();
+            /**< 如果界面发生了切换 */
+            if(_hWinCardInfo == cur_win)
+            {
+                /**< 故障分析 */
+                Err_Analy(pMsg->hWin);
+                /**< 特殊触控点分析 */
+                CaliDone_Analy(pMsg->hWin);
+            }
+        }
+        break;
     case WM_INIT_DIALOG:
         //
         //设置本页焦点
@@ -341,7 +292,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
 
                 //PutOut_SelAOrB();
-                PutOut_Home();
+                CreateHome();
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -362,14 +313,46 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             // USER END
         }
         break;
-        // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        /* 显示时间和日期 */
-        Timer_Process(pMsg);
-        /* 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, 200);
+        if(pMsg->Data.v == _timerRTC)
+        {
+            /**< 显示时间和日期 */
+            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18), _secDown);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            WM_SendMessageNoPara(_hWinCardInfo,MSG_UPDATEDATA);
+            /**< 重启定时器 */
+            WM_RestartTimer(pMsg->Data.v, 20);
+        }
+        if(pMsg->Data.v == _timerSignal)
+        {
+            WM_RestartTimer(pMsg->Data.v, 2000);
+        }
+        if(pMsg->Data.v == _timerData)
+        {
+            //Data_Flush(pMsg);
+            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+            WM_RestartTimer(pMsg->Data.v,100);
+        }
         break;
-        // USER END
+    case MSG_CREATERRWIN:
+        /**< 故障界面不存在则创建,存在则刷新告警 */
+        err_window(pMsg->hWin);
+        break;
+    case MSG_DELERRWIN:
+        /**< 故障界面存在则删除故障界面 */
+        if(bittest(winCreateFlag,0))
+        {
+            bitclr(winCreateFlag,0);
+            GUI_EndDialog(err_hItem,0);
+            err_hItem = 0;
+        }
+        break;
+    case MSG_JUMPHOME:
+        _deleteWin(_hWinCardInfo);
+        _hWinCardInfo = 0;
+        CreateHome();
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;
@@ -382,45 +365,22 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 **********************************************************************
 */
-/*********************************************************************
-*
-*       CreateChargeDone
+/** @brief 创建充电完成界面
+ *
+ * @param
+ * @param
+ * @return
+ *       CreateChargeDone
 */
 WM_HWIN CreateChargeDone(void);
 WM_HWIN CreateChargeDone(void)
 {
-    WM_HWIN hWin;
-
-    hWin = GUI_CreateDialogBox(_aDialogChargeDone, GUI_COUNTOF(_aDialogChargeDone), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
-
-    return hWin;
+    _hWinChargDone = GUI_CreateDialogBox(_aDialogChargeDone, GUI_COUNTOF(_aDialogChargeDone), _cbDialog, WM_HBKWIN, 0, 0);
+    cur_win = _hWinChargDone;
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
+    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
 }
-
-// USER START (Optionally insert additional public code)
-
-/** @brief
- *  输出充电完成界面
- * @param
- * @param
- * @return
- *
- */
-void PutOut_Charge_Done()
-{
-    WM_HWIN hWin;
-
-    hWin = CreateChargeDone();
-    led_ctrl(1,green,keep_on);
-    while(1)
-    {
-        GUI_Delay(500);
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
-    }
-}
-// USER END
-
 /*************************** End of file ****************************/
 
 

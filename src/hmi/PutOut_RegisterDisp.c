@@ -73,47 +73,30 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 /*********************************************************************
 *
 *       Static code
-*
+*   数据处理函数
 **********************************************************************
 */
-// USER START (Optionally insert additional static code)
-static void Timer_Process(WM_MESSAGE *pMsg)
+static void Data_Process(WM_MESSAGE *pMsg)
 {
-    uint8_t i = 0;
-    uint8_t strPowerFee[10];
-    uint8_t strServiceFee[10];
-    WM_HWIN hWin_Error;
+    uint8_t strCSQ[10];
+    EventBits_t uxBits;
+
     WM_HWIN hWin = pMsg->hWin;
 
-    Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-
-    //需要增加3G模块的信号强度判断
-    switch(i % 5)
+    memset(strCSQ,'\0',strlen(strCSQ));
+    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
+    uxBits = xEventGroupGetBits(xHandleEventTCP);
+    if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
     {
-    case 0:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "信号:非常强");
-        break;
-    case 1:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "信号:一般");
-        break;
-    case 2:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "信号:差");
-        break;
-    case 3:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "信号:极差");
-        break;
-    default:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "信号:无");
-        break;
+        strcat(strCSQ," 服务器未连接");
     }
-    /// TODO (zshare#1#): 增加故障弹窗
-//    if(1)//故障
-//    {
-//        _cbDialog_Error();//hWin_Error = GUI_CreateDialogBox(_aDialogCreate_Error, GUI_COUNTOF(_aDialogCreate_Error), _cbDialog_Error, WM_HBKWIN, 0, 0);
-//    }
-}
-// USER END
+    else
+    {
+        strcat(strCSQ," 服务器已连接");
+    }
 
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
+}
 /*********************************************************************
 *
 *       _cbDialog
@@ -125,16 +108,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN      hMulti;       //多行文本
     int          NCode;
     int          Id;
-    // USER START (Optionally insert additional variables)
-    // USER END
 
     switch (pMsg->MsgId)
     {
+    case WM_PAINT:
+        /**< 数据刷新 */
+        Data_Process(pMsg);
+        /**< 故障分析 */
+        Err_Analy(pMsg->hWin);
+        /**< 灯光控制 */
+        Led_Show();
+        /**< 特殊触控点分析 */
+        CaliDone_Analy(pMsg->hWin);
+        break;
     case WM_INIT_DIALOG:
-        //
-        // Initialization of 'Framewin'
-        //
-
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
 
         hMulti = MULTIEDIT_CreateEx(100, 50, 580, 300, WM_GetClientWindow(pMsg->hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
@@ -144,9 +131,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //        MULTIEDIT_SetTextColor(hMulti,MULTIEDIT_CI_READONLY,GUI_RED);
         WM_SetFocus(hMulti);
         MULTIEDIT_SetText(hMulti,Regitster_Content);
-        //
-        // Initialization of 'Button'
-        //
+
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
                     &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
         break;
@@ -155,41 +140,44 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         NCode = pMsg->Data.v;
         switch(Id)
         {
-        case ID_BUTTON_0: // Notifications sent by 'Button'
+        case ID_BUTTON_0:
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                // USER START (Optionally insert code for reacting on notification message)
+                /**< 跳转回home首页 */
                 WM_DeleteWindow(pMsg->hWin);
-                PutOut_Home();
-                // USER END
+                CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:
-                // USER START (Optionally insert code for reacting on notification message)
-                WM_DeleteWindow(pMsg->hWin);
-                PutOut_Home();
-                // USER END
+
                 break;
-                // USER START (Optionally insert additional code for further notification handling)
-                // USER END
             }
             break;
         }
         break;
-        // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        /* 显示时间和日期 */
-        Timer_Process(pMsg);
-        /* 重启定时器 */
+        /**< 显示时间和日期 */
+        Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+        /**< 重启定时器 */
         WM_RestartTimer(pMsg->Data.v, 20);
         break;
-        // USER END
+    case MSG_CREATERRWIN:
+        /**< 故障界面不存在则创建,存在则刷新告警 */
+        err_window(pMsg->hWin);
+        break;
+    case MSG_DELERRWIN:
+        /**< 故障界面存在则删除故障界面 */
+        if(bittest(winCreateFlag,0))
+        {
+            bitclr(winCreateFlag,0);
+            GUI_EndDialog(err_hItem,0);
+        }
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;
     }
 }
-
 /*********************************************************************
 *
 *       Public code
@@ -197,8 +185,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 **********************************************************************
 */
 /*********************************************************************
-*
-*       CreateRegiterDisp
+*** @brief
+ *  卡片非法情况下显示注册流程
+ * @param
+ * @param
+ * @return
+ *
+ *
+ *  CreateRegiterDisp
 */
 WM_HWIN CreateRegiterDisp(void);
 WM_HWIN CreateRegiterDisp(void)
@@ -206,34 +200,10 @@ WM_HWIN CreateRegiterDisp(void)
     WM_HWIN hWin;
 
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
+    WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 20, 0);
 
     return hWin;
 }
-
-// USER START (Optionally insert additional public code)
-/** @brief
- *  输出充电桩欢迎界面
- * @param
- * @param
- * @return
- *
- */
-
-void PutOut_RegisterDisp()
-{
-    WM_HWIN hWin;
-    hWin = CreateRegiterDisp();
-
-    while(1)
-    {
-        GUI_Delay(500);
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
-    }
-}
-// USER END
-
 /*************************** End of file ****************************/
 
 

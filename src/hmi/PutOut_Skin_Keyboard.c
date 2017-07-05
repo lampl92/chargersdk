@@ -1105,7 +1105,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     switch(ManagerSetOptions)
     {
     case LOGIN_PASSWD:
-        (IS_jump == 0) ? (PutOut_Manager_InfoAnalog()):(PutOut_Home());
+        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHome());
     break;
 
     default:

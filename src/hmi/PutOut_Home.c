@@ -17,15 +17,11 @@
 *                                                                    *
 **********************************************************************
 */
-
-// USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "bmpdisplay.h"
 #include "touchtimer.h"
-// USER END
-
 #include "DIALOG.h"
 
 /*********************************************************************
@@ -36,15 +32,12 @@
 */
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
 #define ID_WINDOW_0     (GUI_ID_USER + 0x10)
-//#define ID_BUTTON_0     (GUI_ID_USER + 0x01)
-//#define ID_BUTTON_1     (GUI_ID_USER + 0x04)
 #define ID_BUTTON_MANAGER   (GUI_ID_USER + 0x12)
 #define ID_TEXT_0     (GUI_ID_USER + 0x11)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x0A)
 #define ID_IMAGE_1      (GUI_ID_USER + 0x14)
 #define ID_IMAGE_0_IMAGE_0     0x00
 
-// USER START (Optionally insert additional defines)
 #define ID_TEXT_1     (GUI_ID_USER + 0x0B)
 #define ID_TEXT_2     (GUI_ID_USER + 0x0C)
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
@@ -61,19 +54,9 @@
 #define ID_TEXT_B     (GUI_ID_USER + 0x04)
 #define ID_MULTIEDIT_0  (GUI_ID_USER + 0x13)
 #define ID_TimerTime    0
-
-//14行1列，14个故障项
-#define TEXT_MAX_X 1
-#define TEXT_MAX_Y 14
-#define ERROR_LINE 14
-#define ERROR_CAL 1
-//后续将编辑和文本的滚轮方式用链表进行封装
-static EDIT_Handle _aahEdit[TEXT_MAX_Y][TEXT_MAX_X];
-static TEXT_Handle _aahText[ERROR_LINE][ERROR_CAL];
-static BUTTON_Handle _framebutton;
-static int _x,_y;
-// USER END
-volatile int   Id;
+WM_HWIN cur_win;
+WM_HWIN _hWinHome;
+uint8_t strCSQ[10];
 extern uint8_t *bmpbuffer;
 extern FIL BMPFile_ENCODE;
 /*********************************************************************
@@ -82,25 +65,18 @@ extern FIL BMPFile_ENCODE;
 *
 **********************************************************************
 */
-// USER START (Optionally insert additional static data)
-// USER END
-
 /*********************************************************************
 *
 *       _aDialogCreate
+* 主窗口的结构体描述
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_1, 130, 170, 150, 150, 0, 0, 0 },//二维码显示
-//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_0, 67, 80, 250, 40, 0, 0x0, 0 },
-//    { BUTTON_CreateIndirect, "Button", ID_BUTTON_1, 404, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_B, 450, 80, 250, 40, 0, 0x0, 0 },
-    //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 245, 50, 254, 50, 0, 0x0, 0 },
-    //{ TEXT_CreateIndirect, "Text", ID_TEXT_0, 114, 299, 50, 50, 0, 0, 0 },
-    // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
@@ -111,244 +87,175 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_7, 422, 216, 80, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 510, 216, 80, 30, 0, 0x64, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_8, 598, 216, 80, 30, 0, 0x0, 0 },
-    //{ BUTTON_CreateIndirect, "Button", ID_BUTTON_MANAGER, 740, 380, 50, 50, 0, 0x0, 0 },
-    //{ MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 495, 145, 300, 250, 0, 0x0, 0 },
-    // USER END
 };
 /*********************************************************************
 *
 *       Static code
-*
+*   数据处理函数
 **********************************************************************
 */
-// USER START (Optionally insert additional static code)
-static void Timer_Process(WM_MESSAGE *pMsg)
+static void Data_Process(WM_MESSAGE *pMsg)
 {
     CON_t *pCON;
-    uint8_t strCSQ[10];
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
     WM_HWIN hWin_Error;
     EventBits_t uxBitRFID;
     EventBits_t uxBits;
+    static uint8_t flag = 1;
 
     WM_HWIN hWin = pMsg->hWin;
 
     pCON = CONGetHandle(0);
-
-    CaliDone_Analy(hWin);
-    Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-
-    //if(pCON->order.ucStartType == 4)
-    //{
-        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-                                        defEventBitGotIDtoHMI,
-                                        pdTRUE, pdTRUE, 0);
-        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
-        if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
-        {
-            //dispbmpNOFree(1,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,hWin);
-            //free(bmpBackGround);
-            //free(bmpbuffer);
-            WM_DeleteWindow(hWin);
-            PutOut_Card_Info();
-        }
-    //}
-    //else
+    /**< 刷卡充电跳页 */
+    uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
+                                    defEventBitGotIDtoHMI,
+                                    pdTRUE, pdTRUE, 0);
+    xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
+    if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
+    {
+        GUI_EndDialog(_hWinHome,0);
+        _hWinHome = 0;
+        //WM_DeleteWindow(hWin);
+        CreateCardInfo();
+        //PutOut_Card_Info();
+    }
+    /**< 扫码充电跳页 */
     if((pCON->order.ucStartType == 5)
         &&(pCON->state == STATE_CON_CHARGING))
     {
-        //free(bmpBackGround);
-        //free(bmpbuffer);
-        WM_DeleteWindow(hWin);
-        PutOut_Charging();
+        GUI_EndDialog(_hWinHome,0);
+        _hWinHome = 0;
+        //WM_DeleteWindow(hWin);
+        //PutOut_Charging();
+        CreateCharging();
     }
 
-    memset(strCSQ,'\0',strlen(strCSQ));
-    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
-    uxBits = xEventGroupGetBits(xHandleEventTCP);
-    if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
-    {
-        strcat(strCSQ," 服务器未连接");
-        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "未连接");
-    }
-    else
-    {
-        strcat(strCSQ," 服务器已连接");
-        //TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "连接");
-    }
-
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
-
-    //充电费和服务费的费用值显示
+    /**< 充电费和服务费的费用值显示 */
     sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
     sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);//电费
-    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);//服务费
-    EDIT_SetCursorAtPixel(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),100);
-
-    ErrWindow_Show(hWin);
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);/**< 电费*/
+    EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);/**< 服务费 */
 }
-// USER END
-static void _cbFrame(WM_MESSAGE * pMsg) {
-  switch (pMsg->MsgId) {
-  case WM_NOTIFY_PARENT:
-    if (pMsg->Data.v == WM_NOTIFICATION_RELEASED) {
-      int Id = WM_GetId(pMsg->hWinSrc);      // Id of widget
-        ;
-    }
-    break;
-  }
-}
-/*********************************************************************
-*
-*       _cbDialog
-*/
+/** @brief
+ *  _cbDialog 创建主窗口
+ * @param pMsg:消息体
+ * @param
+ * @return
+ *
+ */
 static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;
     WM_HWIN      hItem;
     U32          FileSize;
     int          NCode;
-    IMAGE_Handle imageHandle;
-
-    uint8_t *buf = "56";
-    // USER START (Optionally insert additional variables)
-    // USER END
+    int         Id;
 
     switch (pMsg->MsgId)
     {
+    case WM_PAINT:
+        /// TODO (zshare#1#): 下面的if不起作用.\
+        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+        if(_hWinHome == cur_win)
+        {
+            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+            /**< 数据刷新 */
+            Data_Process(pMsg);
+            /**< 信号 */
+            Signal_Show();
+            /**< 灯光控制 */
+            Led_Show();
+            /**< 如果界面发生了切换 */
+            if(_hWinHome == cur_win)
+            {
+                /**< 故障分析 */
+                Err_Analy(pMsg->hWin);
+                /**< 特殊触控点分析 */
+                CaliDone_Analy(pMsg->hWin);
+            }
+        }
+        break;
     case WM_INIT_DIALOG:
-        //
-        // Initialization of 'Framewin'
-        //
-        //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
-        //IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
-
-        //FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4);
+        /**< 创建framewin */
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
+        /**< 二维码显示 */
         IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1), bmpbuffer, BMPFile_ENCODE.obj.objsize);
-        //
-        // Initialization of 'Edit'
-        //
+        /**< text和edit的初始化 */
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, " ");
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
-        // Initialization of 'Text'
-        //
-        //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择支付方式");
+
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "充电费");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "元/度");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "服务费");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "元/度");
-        //
-        // Initialization of 'Button'
-        //
+
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &XBF24_Font, GUI_BLACK, "手机支付请扫描二维码");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
-
-        //显示二维码
-        //dispbmpNOFree(0,"system/encodeCharge.bmp", 0, 130, 170, 1, 1,pMsg->hWin);//不能释放内存,需要在切换界面时再把图片内存释放掉
-
-//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "手机支付请扫描二维码");
-//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
-//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "刷卡支付请刷卡");
-
-        //Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER), GUI_TA_HCENTER | GUI_TA_VCENTER,
-         //           &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_GREEN, BUTTON_CI_UNPRESSED, GUI_GREEN, "管理");
-        //BUTTON_SetDefaultBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER))
-        //BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_MANAGER),BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED,GUI_BLUE);
-//        WM_SetCallback(pMsg->hWin, _cbFrame);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id)
         {
+            /**< 跳转管理员界面的密码输入页 */
         case ID_BUTTON_MANAGER:
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                WM_DeleteWindow(pMsg->hWin);
+                //WM_DeleteWindow(pMsg->hWin);
+                _deleteWin(pMsg->hWin);
                 Keypad_GetValue(LOGIN_PASSWD);
                 break;
             case WM_NOTIFICATION_RELEASED:
-                WM_DeleteWindow(pMsg->hWin);
+                //WM_DeleteWindow(pMsg->hWin);
+                _deleteWin(pMsg->hWin);
                 Keypad_GetValue(LOGIN_PASSWD);
                 break;
             }
             break;
-//        case ID_BUTTON_0: // Notifications sent by 'Button'
-//            switch(NCode)
-//            {
-//            case WM_NOTIFICATION_CLICKED:
-//                // USER START (Optionally insert code for reacting on notification message)
-//                // USER END
-//                break;
-//            case WM_NOTIFICATION_RELEASED:
-//                // USER START (Optionally insert code for reacting on notification message)
-//                // USER END
-//                break;
-//                // USER START (Optionally insert additional code for further notification handling)
-//                // USER END
-//            }
-//            break;
-//        case ID_BUTTON_1: // Notifications sent by 'Button'
-//            switch(NCode)
-//            {
-//            case WM_NOTIFICATION_CLICKED:
-//                // USER START (Optionally insert code for reacting on notification message)
-//                // USER END
-//                break;
-//            case WM_NOTIFICATION_RELEASED:
-//                // USER START (Optionally insert code for reacting on notification message)
-//                // USER END
-//                break;
-//                // USER START (Optionally insert additional code for further notification handling)
-//                // USER END
-//            }
-//            break;
-            // USER START (Optionally insert additional code for further Ids)
-            // USER END
         }
         break;
-        // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        /* 显示时间和日期 */
-//        Id = WM_GetTimerId(pMsg->Data.v);
-        Timer_Process(pMsg);
-        /* 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, 200);
+        /**< 显示时间和日期 */
+        Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+        /**< 重启定时器 */
+        WM_RestartTimer(pMsg->Data.v, 20);
         break;
-        // USER END
+    case MSG_CREATERRWIN:
+        /**< 故障界面不存在则创建,存在则刷新告警 */
+        err_window(pMsg->hWin);
+        break;
+    case MSG_DELERRWIN:
+        /**< 故障界面存在则删除故障界面 */
+        if(bittest(winCreateFlag,0))
+        {
+            bitclr(winCreateFlag,0);
+            GUI_EndDialog(err_hItem,0);
+            //WM_DeleteWindow(err_hItem);
+        }
+        break;
+    case MSG_JUMPCARDINFO:
+        GUI_EndDialog(_hWinHome,0);
+        _hWinHome = 0;
+        //WM_DeleteWindow(_hWinHome);
+        CreateCardInfo();
+        break;
+    case MSG_JUMPCHAING:
+        GUI_EndDialog(_hWinHome,0);
+        _hWinHome = 0;
+        //WM_DeleteWindow(_hWinHome);
+        //PutOut_Charging();
+        CreateCharging();
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;
     }
 }
-/*********************************************************************
-*
-*       Public code
-*
-**********************************************************************
-*/
-/*********************************************************************
-*
-*       CreateFramewin
-*/
-WM_HWIN CreateFramewin(void);
-WM_HWIN CreateFramewin(void)
-{
-    WM_HWIN hWin;
-
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(hWin), ID_TimerTime, 1000, 0);
-
-    return hWin;
-}
-// USER START (Optionally insert additional public code)
 /** @brief
  *  输出充电桩欢迎界面
  * @param
@@ -356,21 +263,14 @@ WM_HWIN CreateFramewin(void)
  * @return
  *
  */
-void PutOut_Home()
+WM_HWIN CreateHome(void);
+WM_HWIN CreateHome(void)
 {
-    WM_HWIN hWin;
+    _hWinHome = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    cur_win = _hWinHome;
+    WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 20, 0);
 
-    led_ctrl(1,green,keep_on);
-    hWin = CreateFramewin();
-
-    while(1)
-    {
-        GUI_Delay(500);
-        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(500);
-    }
+    return 0;
 }
-// USER END
-
 /*************************** End of file ****************************/
 

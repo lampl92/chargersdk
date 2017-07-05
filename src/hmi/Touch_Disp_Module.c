@@ -24,12 +24,21 @@ uint8_t *Curr_err = "   电流异常\n";
 uint8_t *Freq_err = "   频率异常\n";
 
 WM_HWIN err_hItem = 0;
-static uint8_t winCreateFlag = 0;
+
+/**< winCreateFlag故障字说明
+*       bit0:故障窗口是否已经创建
+*       bit1:是否存在故障
+*/
+uint8_t winCreateFlag = 0;
+
+static EventBits_t uxBitsErrTmp;
 
 extern FIL BMPFile_BCGROUND;
 extern char *bmpBackGround;
 
 extern FIL BMPFile_ENCODE;
+
+extern uint8_t strCSQ[10];
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
 //{
 //    return ((var) |= (1<<(bitno)));
@@ -114,7 +123,33 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Time_buf, "%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
     TEXT_SetText(WM_GetDialogItem(hWin, textid1), Time_buf);
+    printf_safe("time = %s\n",Time_buf);
 }
+/**信号数据刷新
+ *
+ *
+ * @param
+ * @return
+ *
+ */
+/// TODO (zshare#1#): ///在此函数中刷新控件TEXT_SETTEXT,text3的信号后,重启定时器2(cardinfo.c中)会进hardfault
+void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
+{
+    EventBits_t uxBits;
+
+    memset(strCSQ,'\0',strlen(strCSQ));
+    sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
+    uxBits = xEventGroupGetBits(xHandleEventTCP);
+    if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
+    {
+        strcat(strCSQ," 服务器未连接");
+    }
+    else
+    {
+        strcat(strCSQ," 服务器已连接");
+    }
+}
+
 /** framewin初始化
  *
  * WM_WIN:源窗口 ,align:对齐方式,heigh:窗口高度,font:字体类型,color:字体颜色,buf:显示的文字内容
@@ -186,6 +221,27 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
     //pData = _GetImageById(imageid, &filesize);
     IMAGE_SetBMP(hItem, pData, filesize);
 }
+/** 删除窗口
+ *
+ * WM_WIN:源窗口
+ * @param
+ * @return hItem 窗口句柄
+ *
+ */
+uint8_t _deleteWin(WM_HWIN hItem)
+{
+    if(bittest(winCreateFlag,0))
+    {
+        bitclr(winCreateFlag,0);
+        GUI_EndDialog(err_hItem,0);
+    }
+    uxBitsErrTmp = 0;
+    err_hItem = 0;
+    GUI_EndDialog(hItem,0);
+    hItem = 0;
+    memset(_secDown,'\0',strlen(_secDown));
+    return hItem;
+}
 /** 解析置位数据
  * bit2 : 对充电中界面停止充电按钮解锁操作
  * bit3 : 显示故障界面的控件
@@ -200,14 +256,23 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
  */
 void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 {
+    if(bittest(calebrate_done,3) == 1)
+    {
+        bitclr(calebrate_done,3);
+        WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
+        //err_window(hWin,uxBitsErr);
+    }
     if(bittest(calebrate_done,4))
     {
         bitclr(calebrate_done,4);
-        if(bittest(winCreateFlag,0))
-        {
-            bitclr(winCreateFlag,0);
-            WM_DeleteWindow(err_hItem);
-        }
+        WM_SendMessageNoPara(hWin,MSG_DELERRWIN);
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            WM_SendMessageNoPara(cur_hWin,MSG_DELERRWIN);
+//           // WM_SendMessageNoPara(hWin,MSG_DELERRWIN);
+//            //WM_DeleteWindow(err_hItem);
+//        }
     }
     if(bittest(calebrate_done,5))
     {
@@ -230,6 +295,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     }
     if(bittest(calebrate_done,7))
     {
+        /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done,7);
         WM_DeleteWindow(hWin);
         Keypad_GetValue(LOGIN_PASSWD);
@@ -313,11 +379,10 @@ uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString)
  * @return
  *
  */
-void ErrWindow_Show(WM_HWIN hWin)
+void Err_Analy(WM_HWIN hWin)
 {
     CON_t *pCON;
     static EventBits_t uxBitsErr;
-    static EventBits_t uxBitsErrTmp;
 
     pCON = CONGetHandle(0);
 
@@ -328,8 +393,7 @@ void ErrWindow_Show(WM_HWIN hWin)
         if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
         {
             uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
-            //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
-            err_window(hWin,(uxBitsErr & ERR_SIMBOL));
+            WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
         }
     }
     else
@@ -337,17 +401,161 @@ void ErrWindow_Show(WM_HWIN hWin)
         if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
         {
             uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
-            //WM_SendMessageNoPara(hWin, WM_NOTIFY_PARENT);
-            err_window(hWin,(uxBitsErr & ERR_SIMBOL));
+            WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
         }
     }
-    if(bittest(calebrate_done,3) == 1)
+}
+/** @brief
+ *  灯光控制
+ * @param
+ * @param
+ * @return
+ *
+ */
+void Led_Show()
+{
+    CON_t *pCON;
+
+    pCON = CONGetHandle(0);
+    /**< 置位说明有故障存在闪烁红灯 */
+    if(bittest(winCreateFlag,1))
     {
-        bitclr(calebrate_done,3);
-        err_window(hWin,uxBitsErr);
+        led_ctrl(1,blue,keep_off);
+        led_ctrl(1,green,keep_off);
+        led_ctrl(1,red,flicker);
+    }
+    else
+    {
+        switch(pCON->state)
+        {
+            case STATE_CON_IDLE:
+                /**< 空闲状态 */
+                led_ctrl(1,blue,keep_off);
+                led_ctrl(1,red,keep_off);
+                led_ctrl(1,green,keep_on);
+            break;
+            case STATE_CON_CHARGING:
+                /**< 充电过程中 */
+                led_ctrl(1,blue,keep_off);
+                led_ctrl(1,red,keep_off);
+                led_ctrl(1,green,breath);
+            break;
+            default:
+                if(pCON->status.xCPState != CP_6V_PWM)
+                {
+                    /**< S1未闭合 */
+                    led_ctrl(1,red,keep_off);
+                    led_ctrl(1,green,keep_off);
+                    led_ctrl(1,blue,flicker);
+                }
+                else if(pCON->status.xPlugState == UNPLUG)
+                {
+                    /**< 等待车端插枪 */
+                    led_ctrl(1,blue,keep_off);
+                    led_ctrl(1,red,keep_off);
+                    led_ctrl(1,green,flicker);
+                }
+                /// TODO (zshare#1#): 添加桩端等待插枪蓝灯闪烁
+                else
+                {
+                    /**< 未知状态 */
+                    led_ctrl(1,blue,keep_off);
+                    led_ctrl(1,red,keep_off);
+                    led_ctrl(1,green,keep_on);
+                }
+            break;
+        }
     }
 }
+/** @brief
+ *刷新故障列表;
+ * @param msg_err:故障列表指针
+ * @param
+ * @return
+ *
+ */
 
+void Errlist_flush(uint8_t *msg_err)
+{
+    CON_t *pCON;
+    EventBits_t uxBitsErr;
+
+    ErrMultiEdit_Size.err_num = 0;
+
+    pCON = CONGetHandle(0);
+
+    uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+
+    memset(msg_err,'\0',strlen(msg_err));
+    strncat(msg_err,cur_err,strlen(cur_err));
+
+    if(((uxBitsErr >> 13) & 0x01) == 0)
+    {
+        strncat(msg_err,Scram_err,strlen(Scram_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 2) & 0x01) == 0)
+    {
+        strncat(msg_err,Volt_err,strlen(Volt_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 9) & 0x01) == 0)
+    {
+        strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 14) & 0x01) == 0)
+    {
+        strncat(msg_err,PE_err,strlen(PE_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 15) & 0x01) == 0)
+    {
+        strncat(msg_err,Knock_err,strlen(Knock_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 16) & 0x01) == 0)
+    {
+        strncat(msg_err,Arrester_err,strlen(Arrester_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 17) & 0x01) == 0)
+    {
+        strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 3) & 0x01) == 0)
+    {
+        strncat(msg_err,Curr_err,strlen(Curr_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+    if(((uxBitsErr >> 4) & 0x01) == 0)
+    {
+        strncat(msg_err,Freq_err,strlen(Freq_err));
+        ErrMultiEdit_Size.err_num++;
+    }
+
+    if(strcmp(msg_err,cur_err) == 0)
+    {
+        /**< 没有故障拼接，拼接"当前无故障"进列表，计算窗口大小 */
+        strncat(msg_err,cur_noerr,strlen(cur_noerr));
+        ErrMultiEdit_Size.xlength = 300;
+        ErrMultiEdit_Size.ylength = 24*4;
+        ErrMultiEdit_Size.xpos = 480;
+        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
+        bitclr(winCreateFlag,1);
+    }
+    else
+    {
+        /**< 有故障拼接,只计算窗口大小 */
+        ErrMultiEdit_Size.xlength = 300;
+        ErrMultiEdit_Size.ylength = 24*(ErrMultiEdit_Size.err_num+4);
+        ErrMultiEdit_Size.xpos = 480;
+        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
+        bitset(winCreateFlag,1);
+    }
+    printf_safe("msg_err = %s\n",msg_err);
+}
 /** @brief 故障弹窗内容组装
  *
  * @param
@@ -355,122 +563,43 @@ void ErrWindow_Show(WM_HWIN hWin)
  * @return
  *
  */
-uint8_t err_window(WM_HWIN hWin,EventBits_t uxBitsErr)
+uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
 {
-    CON_t *pCON;
-    uint8_t msg_err[150] = "\0";
+    uint8_t msg_err[150] = {"\0"};
+    EventBits_t uxBitsErr;
 
-    if(bittest(winCreateFlag,0))
+    //故障界面是否存在
+    if(bittest(winCreateFlag,0))//存在故障界面
     {
-        bitclr(winCreateFlag,0);
-        WM_DeleteWindow(err_hItem);
-    }
-
-    if((uxBitsErr & ERR_SIMBOL)== ERR_SIMBOL)
-    {
-        pCON = CONGetHandle(0);
-        led_ctrl(1,red,keep_off);
-        led_ctrl(1,blue,keep_off);
-        led_ctrl(1,green,keep_off);
-        switch(pCON->state)
-        {
-            case STATE_CON_IDLE:
-                led_ctrl(1,green,keep_on);
-            break;
-    //        case STATE_CON_STARTCHARGE:
-    //            led_ctrl(1,)
-            case STATE_CON_CHARGING:
-                led_ctrl(1,green,breath);
-                break;
-            default:
-                led_ctrl(1,green,keep_on);
-            break;
-        }
-
-        return 0;
-        /// TODO (zshare#1#):  //暂时处理为没有故障不显示
-        strncat(msg_err,cur_noerr,strlen(cur_noerr));
-        ErrMultiEdit_Size.xlength = 300;
-        ErrMultiEdit_Size.ylength = 24*4;
-        ErrMultiEdit_Size.xpos = 480;
-        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
+        //MULTIEDIT_SetText(err_hItem, msg_err);
+        //刷新故障列表
+        Errlist_flush(msg_err);
+        MULTIEDIT_SetText(err_hItem, msg_err);
+//        bitclr(winCreateFlag,0);
+//        GUI_EndDialog(err_hItem,0);
     }
     else
     {
-        led_ctrl(1,green,keep_off);
-        led_ctrl(1,blue,keep_off);
-        led_ctrl(1,red,flicker);
-        ErrMultiEdit_Size.err_num = 0;
-        strncat(msg_err,cur_err,strlen(cur_err));
+        //刷新故障列表
+        Errlist_flush(msg_err);
+        //创建故障界面
+        err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos, ErrMultiEdit_Size.ypos,
+                    ErrMultiEdit_Size.xlength, ErrMultiEdit_Size.ylength,
+                    hWin, WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+        bitset(winCreateFlag,0);
+        //MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
+        MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
+        WM_SetFocus(err_hItem);
+        //MULTIEDIT_SetInsertMode(err_hItem, 1);
+        MULTIEDIT_SetCursorOffset(err_hItem,0);
+        MULTIEDIT_EnableBlink(err_hItem,0,0);
 
-        if(((uxBitsErr >> 13) & 0x01) == 0)
-        {
-            strncat(msg_err,Scram_err,strlen(Scram_err));
-            ErrMultiEdit_Size.err_num++;
-        }
-                /// TODO (zshare#1#): ///电压、温度和频率异常暂时屏蔽为了送客户
+        MULTIEDIT_SetText(err_hItem, msg_err);
+        MULTIEDIT_SetCursorOffset(err_hItem,300);
 
-//        if(((uxBitsErr >> 2) & 0x01) == 0)
-//        {
-//            strncat(msg_err,Volt_err,strlen(Volt_err));
-//            ErrMultiEdit_Size.err_num++;
-//        }
-
-//        if(((uxBitsErr >> 9) & 0x01) == 0)
-//        {
-//            strncat(msg_err,ACTemp_err,strlen(ACTemp_err));
-//            ErrMultiEdit_Size.err_num++;
-//        }
-        if(((uxBitsErr >> 14) & 0x01) == 0)
-        {
-            strncat(msg_err,PE_err,strlen(PE_err));
-            ErrMultiEdit_Size.err_num++;
-        }
-        if(((uxBitsErr >> 15) & 0x01) == 0)
-        {
-            strncat(msg_err,Knock_err,strlen(Knock_err));
-            ErrMultiEdit_Size.err_num++;
-        }
-        if(((uxBitsErr >> 16) & 0x01) == 0)
-        {
-            strncat(msg_err,Arrester_err,strlen(Arrester_err));
-            ErrMultiEdit_Size.err_num++;
-        }
-        if(((uxBitsErr >> 17) & 0x01) == 0)
-        {
-            strncat(msg_err,PowerOff_err,strlen(PowerOff_err));
-            ErrMultiEdit_Size.err_num++;
-        }
-//        if(((uxBitsErr >> 3) & 0x01) == 0)
-//        {
-//            strncat(msg_err,Curr_err,strlen(Curr_err));
-//            ErrMultiEdit_Size.err_num++;
-//        }
-//        if(((uxBitsErr >> 4) & 0x01) == 0)
-//        {
-//            strncat(msg_err,Freq_err,strlen(Freq_err));
-//            ErrMultiEdit_Size.err_num++;
-//        }
-        ErrMultiEdit_Size.xlength = 300;
-        ErrMultiEdit_Size.ylength = 24*(ErrMultiEdit_Size.err_num+4);
-        ErrMultiEdit_Size.xpos = 480;
-        ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
+        WM_SetFocus(err_hItem);
+        bitclr(calebrate_done,4);
     }
-
-    err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos, ErrMultiEdit_Size.ypos, ErrMultiEdit_Size.xlength, ErrMultiEdit_Size.ylength, WM_GetClientWindow(hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
-    bitset(winCreateFlag,0);
-    MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
-    MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
-    WM_SetFocus(err_hItem);
-    MULTIEDIT_SetInsertMode(err_hItem, 1);
-    MULTIEDIT_SetCursorOffset(err_hItem,0);
-    MULTIEDIT_EnableBlink(err_hItem,0,0);
-
-    MULTIEDIT_SetText(err_hItem, msg_err);
-    MULTIEDIT_SetCursorOffset(err_hItem,300);
-
-    WM_SetFocus(err_hItem);
-    bitclr(calebrate_done,4);
 }
 
 

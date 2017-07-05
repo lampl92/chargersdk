@@ -96,14 +96,12 @@ int  GUI_TOUCH_X_MeasureX(void) {
 //        }
 //        adc_x = tp_dev.x[0];
 //        adc_y = tp_dev.y[0];
-        if(adc_x < ErrMultiEdit_Size.xpos)
+        if((adc_x < ErrMultiEdit_Size.xpos) || (adc_y < ErrMultiEdit_Size.ypos))
         {
             bitset(calebrate_done,4); //清除故障窗口
+
         }
-        else if(adc_y < ErrMultiEdit_Size.ypos)
-        {
-            bitset(calebrate_done,4);
-        }
+
         if(adc_y <= 40 && adc_y >= 0)
         {
             if(adc_x <= 40 && adc_x >= 0)

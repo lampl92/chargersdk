@@ -40,7 +40,8 @@ void MainTask(void)
 //    PutOut_Window();
 //    PutOut_Window();
 //    PutOut_Charging_2dimen();
-    PutOut_Home();
+    //CreateHome();
+    CreateCardInfo();
 //
 //    PutOut_Card_Info();
 //    PutOut_Charging();
@@ -48,5 +49,10 @@ void MainTask(void)
 //    PutOut_Charge_Done();
 //
 //	PutOut_Card_Valid();
-
+    while(1)
+    {
+        GUI_Delay(100);
+        dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+        vTaskDelay(100);
+    }
 }
