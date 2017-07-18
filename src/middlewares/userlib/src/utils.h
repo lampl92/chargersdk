@@ -10,6 +10,8 @@
 
 #include "stm32f4xx.h"
 
+char *utils_strdup(const char *s);
+
 uint16_t utils_htons(uint16_t n);
 uint16_t utils_ntohs(uint16_t n);
 uint32_t utils_htonl(uint32_t n);

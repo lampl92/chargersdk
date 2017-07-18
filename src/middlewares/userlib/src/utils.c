@@ -8,27 +8,38 @@
 #include "includes.h"
 #include "xprintf.h"
 
+char *utils_strdup(const char *s)
+{
+    size_t len = strlen(s) + 1;//计算字符串的长度
+    void *new = malloc(len);//分配一个新的空间给new
+    if(new == NULL)
+    {
+        return NULL;
+    }
+    return (char *)memcpy(new, s, len);//拷贝s数据到new中
+}
+
 uint16_t utils_htons(uint16_t n)
 {
-  return ((n & 0xff) << 8) | ((n & 0xff00) >> 8);
+    return ((n & 0xff) << 8) | ((n & 0xff00) >> 8);
 }
 
 uint16_t utils_ntohs(uint16_t n)
 {
-  return utils_htons(n);
+    return utils_htons(n);
 }
 
 uint32_t utils_htonl(uint32_t n)
 {
-  return ((n & 0xff) << 24) |
-    ((n & 0xff00) << 8) |
-    ((n & 0xff0000UL) >> 8) |
-    ((n & 0xff000000UL) >> 24);
+    return ((n & 0xff) << 24) |
+           ((n & 0xff00) << 8) |
+           ((n & 0xff0000UL) >> 8) |
+           ((n & 0xff000000UL) >> 24);
 }
 
 uint32_t utils_ntohl(uint32_t n)
 {
-  return utils_htonl(n);
+    return utils_htonl(n);
 }
 
 uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
@@ -126,7 +137,7 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
         strncpy((char *)hexbuff, src, 2);
 //        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
 //        {
-            Hex[i] = strtol(hexbuff, NULL, 16);
+        Hex[i] = strtol(hexbuff, NULL, 16);
 //        }
 //        else
 //        {
@@ -138,8 +149,12 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
 
 int utils_abs(int num)
 {
-	if(num<0)
-		return -num;
-	else
-		return num;
+    if(num < 0)
+    {
+        return -num;
+    }
+    else
+    {
+        return num;
+    }
 }
