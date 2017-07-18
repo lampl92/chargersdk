@@ -12,6 +12,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "event_groups.h"
+#include "errorcode.h"
 
 #define ECH_UNUSED_ARG(x) (void)x
 
@@ -19,7 +20,14 @@
 #define REMOTE_RECVBUFF_MAX              1500 //接收缓冲长度
 #define REMOTE_RECVDOPTDATA              1500
 
-typedef struct _ECHProtoParam
+typedef struct 
+{
+    uint8_t ucSegCont; //时段个数
+    uint8_t ucStart[5];//单位小时：如8表示从8点开始
+    uint8_t ucEnd[5];//单位小时，如9点表示到9点，但不包括9点
+}EchSegTime_t;
+
+typedef struct _echProtoInfo
 {
     uint8_t  strServerIP[15 + 1];
     uint16_t usServerPort;
@@ -42,9 +50,17 @@ typedef struct _ECHProtoParam
     uint32_t ulServiceFee_peak;
     uint32_t ulServiceFee_shoulder;
     uint32_t ulServiceFee_off_peak;
+    
+    EchSegTime_t SegTime_sharp;
+    EchSegTime_t SegTime_peak;
+    EchSegTime_t SegTime_shoulder;
+    EchSegTime_t SegTime_off_peak;
 
     uint32_t ulStatusCyc_ms;    //状态数据上报间隔，精确到秒
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s
+    
+    ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
+    ErrorCode_t (*SetProtoCfg)(void *pvProto, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
 
 } echProtoInfo_t;
 
@@ -58,10 +74,11 @@ typedef struct _ECHProtoParam
 #define ECH_CMDID_HEARTBEAT   1 //心跳
 #define ECH_CMDID_STATUS      2 //状态
 #define ECH_CMDID_REMOTE_CTRL 3 //无卡启停
-#define ECH_CMDID_RTDATA      4 //无卡启停
+#define ECH_CMDID_RTDATA      4 //实时数据
 #define ECH_CMDID_ORDER       5 //交易记录
 
-#define ECH_CMD_MAX 6
+/*命令个数*/
+#define ECH_CMD_MAX           6
 
 typedef struct
 {

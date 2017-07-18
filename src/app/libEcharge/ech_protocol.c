@@ -10,9 +10,385 @@
 #include "enc_dec.h"
 #include "libEcharge/ech_protocol_proc.h"
 
-#define defProtocolTimeout      10
+#include <string.h>
+#include "stringName.h"
+#include "cfg_parse.h"
+#include "cJSON.h"
 
+/*---------------------------------------------------------------------------/
+/                               获取协议配置信息
+/---------------------------------------------------------------------------*/
 
+#if 0
+static ErrorCode_t GetProtoInfo(uint16_t *pProtoInfoU16, uint8_t *jnName, void *pvCfgObj)
+{
+    uint16_t tmpShort;
+    ErrorCode_t errcode;
+
+    cJSON *jsItem;
+    cJSON *pProtoCfgObj;
+
+    errcode = ERR_NO;
+    tmpShort = 0;
+
+    pProtoCfgObj = (cJSON *)pvCfgObj;
+
+    //  解析Int
+    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
+    if(jsItem == NULL)
+    {
+        errcode = ERR_FILE_PARSE;
+        goto err_return;
+    }
+
+    tmpShort = (uint16_t)(jsItem->valueint);
+
+#ifdef DEBUG_CFG_PARSE_PROTO
+    printf_safe("%s\t = %d\n", jnName, tmpShort);
+#endif
+
+    /*********************/
+    *pProtoInfoU16 = tmpShort;
+
+err_return:
+    return errcode;
+}
+
+static ErrorCode_t GetProtoInfoStr(uint8_t *protoInfoStr, const uint8_t *jnName, void *pvCfgObj)
+{
+    uint8_t tmpStrLength;
+    uint8_t *ptmpStr;
+    ErrorCode_t errcode;
+
+    cJSON *jsItem;
+    cJSON *pProtoCfgObj;
+
+    errcode = ERR_NO;
+    ptmpStr = NULL;
+
+    pProtoCfgObj = (cJSON *)pvCfgObj;
+
+    //  解析string
+    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
+    if(jsItem == NULL)
+    {
+        errcode = ERR_FILE_PARSE;
+        goto err_return;
+    }
+    ptmpStr = utils_strdup(jsItem->valuestring); //strdup之后出现错误都要先free
+    if(ptmpStr == NULL)
+    {
+        errcode = ERR_MEMORY;
+        goto err_return;
+    }
+
+#ifdef DEBUG_CFG_PARSE_PROTO
+    printf_safe("%s\t = %s\n", jnName, ptmpStr);
+#endif
+
+    /*********************/
+    strcpy(protoInfoStr, ptmpStr);
+
+err_free:
+    free(ptmpStr);
+err_return:
+    return errcode;
+}
+#endif
+static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
+{
+    ErrorCode_t errcode;
+
+    cJSON *jsItem;
+    cJSON *pProtoCfgObj;
+    errcode = ERR_NO;
+
+    pProtoCfgObj = (cJSON *)pvCfgObj;
+
+    //  解析
+    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnItemName);
+    if(jsItem == NULL)
+    {
+        errcode = ERR_FILE_PARSE;
+        goto err_return;
+    }
+    switch(type)
+    {
+    case ParamTypeU8:
+        *((uint8_t *)pvProtoInfoItem) = (uint8_t)(jsItem->valueint);
+        break;
+    case ParamTypeU16:
+        *((uint16_t *)pvProtoInfoItem) = (uint16_t)(jsItem->valueint);
+        break;
+    case ParamTypeU32:
+        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valueint);
+        break;
+    case ParamTypeDouble:
+        *((double *)pvProtoInfoItem) = (double)(jsItem->valuedouble);
+        break;
+    case ParamTypeString:
+        strcpy((uint8_t *)pvProtoInfoItem, jsItem->valuestring);
+        break;
+    case ParamTypeObj:
+        *(uint32_t *)pvProtoInfoItem = (uint32_t)jsItem; //很不喜欢这种投机取巧，应为这个参数增加一个二级指针
+        break;
+    default:
+        break;
+    }
+
+//#ifdef DEBUG_CFG_PARSE_PROTO
+    switch(type)
+    {
+    case ParamTypeU8:
+        printf_safe("%s\t = %d\n", jnItemName, *((uint8_t *)pvProtoInfoItem));
+        break;
+    case ParamTypeU16:
+        printf_safe("%s\t = %d\n", jnItemName, *((uint16_t *)pvProtoInfoItem));
+        break;
+    case ParamTypeU32:
+        printf_safe("%s\t = %d\n", jnItemName, *((uint32_t *)pvProtoInfoItem));
+        break;
+    case ParamTypeDouble:
+        printf_safe("%s\t = %.2lf\n", jnItemName, *((double *)pvProtoInfoItem));
+        break;
+    case ParamTypeString:
+        printf_safe("%s\t = %s\n", jnItemName, (uint8_t *)pvProtoInfoItem);
+        break;
+    case ParamTypeObj:
+        printf_safe("%s: %x\n", jnItemName, jsItem);
+        break;
+    default:
+        break;
+    }
+//#endif
+
+    /*********************/
+
+err_return:
+    return errcode;
+}
+static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
+{
+    uint32_t ItemAddr;
+    cJSON *jsItem;
+    int i;
+    uint8_t strName[16] = {0};
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)&ItemAddr,
+                                          ParamTypeObj,
+                                          jsProtoObj,
+                                          jnNameObj),
+                ERR_LEVEL_WARNING,
+                "GetProtoCfgObj_Item");
+    jsItem = (cJSON *)ItemAddr;
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pSegTime->ucSegCont)),
+                                          ParamTypeU8,
+                                          jsItem,
+                                          jnProtoSegCont),
+                ERR_LEVEL_WARNING,
+                "GetProtoCfgObj_SegCont()");
+    for(i = 0; i < pSegTime->ucSegCont; i++)
+        //for(i = 0; i < 5; i++)
+    {
+        sprintf(strName, "Start%d", i + 1);
+        THROW_ERROR(defDevID_File,
+                    errcode = GetProtoCfgItem((void *)(&(pSegTime->ucStart[i])),
+                                              ParamTypeU8,
+                                              jsItem,
+                                              strName),
+                    ERR_LEVEL_WARNING,
+                    "GetProtoCfgObj_Start()");
+        sprintf(strName, "End%d", i + 1);
+        THROW_ERROR(defDevID_File,
+                    errcode = GetProtoCfgItem((void *)(&(pSegTime->ucEnd[i])),
+                                              ParamTypeU8,
+                                              jsItem,
+                                              strName),
+                    ERR_LEVEL_WARNING,
+                    "GetProtoCfgObj_End()");
+    }
+    return errcode;
+}
+static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
+{
+    cJSON *jsProtoObj;
+    ErrorCode_t errcode;
+    echProtocol_t *pProto;
+
+    errcode = ERR_NO;
+    pProto = (echProtocol_t *)pvProto;
+
+    /*json解析*/
+    jsProtoObj = GetCfgObj(pathProtoCfg, &errcode);
+    if(jsProtoObj == NULL || errcode != ERR_NO)
+    {
+        return errcode;
+    }
+
+    THROW_ERROR(defDevID_File, errcode = GetProtoCfgItem((void *)(pProto->info.strServerIP),
+                                         ParamTypeString,
+                                         jsProtoObj,
+                                         jnProtoServerIP),
+                ERR_LEVEL_WARNING,
+                "GetServerInfo()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.usServerPort)),
+                                          ParamTypeU16,
+                                          jsProtoObj,
+                                          jnProtoServerPort),
+                ERR_LEVEL_WARNING,
+                "GetServerPort()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(pProto->info.strUserName),
+                                          ParamTypeString,
+                                          jsProtoObj,
+                                          jnProtoUserName),
+                ERR_LEVEL_WARNING,
+                "GetUserName()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(pProto->info.strUserPwd),
+                                          ParamTypeString,
+                                          jsProtoObj,
+                                          jnProtoUserPwd),
+                ERR_LEVEL_WARNING,
+                "GetUserPwd()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(pProto->info.strKey),
+                                          ParamTypeString,
+                                          jsProtoObj,
+                                          jnProtoKey),
+                ERR_LEVEL_WARNING,
+                "GetKey()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(pProto->info.strNewKey),
+                                          ParamTypeString,
+                                          jsProtoObj,
+                                          jnProtoNewKey),
+                ERR_LEVEL_WARNING,
+                "GetNewKey()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.tNewKeyChangeTime)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoNewKeyChangeTime),
+                ERR_LEVEL_WARNING,
+                "GetNewKeyChangeTime()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ucProtoVer)),
+                                          ParamTypeU8,
+                                          jsProtoObj,
+                                          jnProtoProtoVer),
+                ERR_LEVEL_WARNING,
+                "GetProtoVer()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulHeartBeatCyc_ms)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoHeartBeatCyc_ms),
+                ERR_LEVEL_WARNING,
+                "GetHeartBeatCyc()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulStatusCyc_ms)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoStatusCyc_ms),
+                ERR_LEVEL_WARNING,
+                "GetStatusCyc()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulRTDataCyc_ms)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoRTDataCyc_ms),
+                ERR_LEVEL_WARNING,
+                "GetRTDataCyc()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ucResetAct)),
+                                          ParamTypeU8,
+                                          jsProtoObj,
+                                          jnProtoResetAct),
+                ERR_LEVEL_WARNING,
+                "GetResetAct()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_sharp)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoPowerFee_sharp),
+                ERR_LEVEL_WARNING,
+                "GetPowerFee_sharp()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_peak)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoPowerFee_peak),
+                ERR_LEVEL_WARNING,
+                "GetPowerFee_peak()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_shoulder)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoPowerFee_shoulder),
+                ERR_LEVEL_WARNING,
+                "GetPowerFee_shoulder()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_off_peak)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoPowerFee_off_peak),
+                ERR_LEVEL_WARNING,
+                "GetPowerFee_off_peak()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_sharp)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoServiceFee_sharp),
+                ERR_LEVEL_WARNING,
+                "GetServiceFee_sharp()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_peak)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoServiceFee_peak),
+                ERR_LEVEL_WARNING,
+                "GetServiceFee_peak()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_shoulder)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoServiceFee_shoulder),
+                ERR_LEVEL_WARNING,
+                "GetServiceFee_shoulder()");
+    THROW_ERROR(defDevID_File,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_off_peak)),
+                                          ParamTypeU32,
+                                          jsProtoObj,
+                                          jnProtoServiceFee_off_peak),
+                ERR_LEVEL_WARNING,
+                "GetServiceFee_off_peak()");
+    /*获取尖峰平谷时间段*/
+    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_sharp),    jnProtoSegTime_sharp);
+    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_peak),     jnProtoSegTime_peak);
+    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_shoulder), jnProtoSegTime_shoulder);
+    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_off_peak), jnProtoSegTime_off_peak);
+
+#ifdef DEBUG_CFG_PARSE
+    printf_safe("********************************\n");
+#endif
+    cJSON_Delete(jsProtoObj);
+    return errcode;
+}
+
+static ErrorCode_t SetProtoCfg(void *pvProto, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+{
+
+}
+/*---------------------------------------------------------------------------/
+/                               协议解析
+/---------------------------------------------------------------------------*/
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
     return (uint16_t)(ver + atrri + cmd + len);
@@ -1043,12 +1419,12 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");//
+    strcpy(pProto->info.strServerIP, "123.56.113.124");//"124.207.112.70");//
     pProto->info.usServerPort      = 6677;//8051;//
     strcpy(pProto->info.strUserName, "esaasusr");
     strcpy(pProto->info.strUserPwd, "esaaspasswrd");
     strcpy(pProto->info.strKey, "0123456789abcdeg");
- //   strcpy(pProto->info.strKey, "1234567890abcde2");
+//   strcpy(pProto->info.strKey, "1234567890abcde2");
     memset(pProto->info.strNewKey, 0, 17);
     pProto->info.tNewKeyChangeTime = 0;
     pProto->info.ucProtoVer        = 0x68;
@@ -1068,18 +1444,21 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
 
+    pProto->info.GetProtoCfg = GetProtoCfg;
+    pProto->info.SetProtoCfg = SetProtoCfg;
+
 
     for(i = 0; i < ECH_CMD_MAX; i++)
     {
         pProto->pCMD[i] = NULL;
     }
     //桩命令, 平台命令
-    pProto->pCMD[ECH_CMDID_REGISTER]  = EchCMDCreate(1, 2, makeCmdReg, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT] = EchCMDCreate(3, 4, makeCmdHeart, analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_STATUS]    = EchCMDCreate(41, 42, makeCmdStatus, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_RTDATA]    = EchCMDCreate(45, 0, makeCmdRTData, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_ORDER] = EchCMDCreate(46, 47, makeCmdOrder, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REGISTER]    = EchCMDCreate(1,  2,  makeCmdReg,        analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT]   = EchCMDCreate(3,  4,  makeCmdHeart,      analyCmdHeart);
+    pProto->pCMD[ECH_CMDID_STATUS]      = EchCMDCreate(41, 42, makeCmdStatus,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL] = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_RTDATA]      = EchCMDCreate(45, 0,  makeCmdRTData,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_ORDER]       = EchCMDCreate(46, 47, makeCmdOrder,      analyCmdCommon);
 
     pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;
