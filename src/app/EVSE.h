@@ -15,7 +15,7 @@
 #include "gdsl_list.h"
 
 typedef ErrorCode_t (*pEVSEGetCfg_ft)(void *pvEVSE, void *pvCfgObj);
-typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
+//typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 typedef struct _TemplSeg
 {
