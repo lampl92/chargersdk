@@ -102,16 +102,17 @@ uint8_t create_sysconf_file()
         return FALSE;
     }
 }
-void create_evsecfg_file(void)
+
+void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
     FIL f;
     UINT bw;
     FRESULT res;
-    res = f_open(&f, pathEVSECfg, FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
     case FR_OK:
-        f_write(&f, strEVSECfg, strlen(strEVSECfg), &bw);
+        f_write(&f, context, strlen(context), &bw);
         f_close(&f);
     case FR_EXIST:
     default:
@@ -157,7 +158,8 @@ void sys_Init(void)
     xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
     create_sysconf_file();
-    create_evsecfg_file();
+    create_cfg_file(pathEVSECfg, strEVSECfg);
+    create_cfg_file(pathProtoCfg, strProtoCfg);
 
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
