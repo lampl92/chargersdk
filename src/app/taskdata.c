@@ -169,6 +169,7 @@ void vTaskEVSEData(void *pvParameters)
         if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
             THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "taskdata GetEVSECfg");
+            THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskdata GetProtoCfg");
 
             for(i = 0; i < ulTotalCON; i++)
             {

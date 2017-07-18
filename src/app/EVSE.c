@@ -1118,4 +1118,5 @@ void EVSEinit(void)
     pRFIDDev = RFIDDevCreate();
 
     pechProto = EchProtocolCreate();
+    THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");
 }
