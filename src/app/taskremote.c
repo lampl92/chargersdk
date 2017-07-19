@@ -80,14 +80,14 @@ void vTaskEVSERemote(void *pvParameters)
     uxBits = 0;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
-    eRmtHeartStat = REMOTEHEART_IDLE;
+    eRmtHeartStat = REMOTEHEART_IDLE;  /** @todo (rgw#1#): 这几个状态都要转移到CON结构体中，否则多枪时状态会混乱 */
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
     eRmtOrderStat = REMOTEOrder_IDLE;
     errcode = 0;
     network_res = 0;
-    id_rmtctrl = 0;
-    ctrl_rmtctrl = 0;
+    id_rmtctrl = 0; 
+    ctrl_rmtctrl = 0;/** @todo (rgw#1#): 将与枪有关的变量转移到CON结构体中 */
     time_rmtctrl = 0;
     time_order = 0;
     order_send_count = 0;
@@ -255,6 +255,7 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     if(time(NULL) - time_rmtctrl > 30)
                     {
+                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                         eRmtCtrlStat = REMOTECTRL_FAIL;
                     }
                 }
