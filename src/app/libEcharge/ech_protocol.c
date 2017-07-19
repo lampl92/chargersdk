@@ -95,6 +95,15 @@ err_return:
     return errcode;
 }
 #endif
+/** @brief 获取ProtoCfg中参数的值
+ *
+ * @param pvProtoInfoItem void* 传入要获取的参数的指针
+ * @param type uint8_t 要获取参数的类型
+ * @param pvCfgObj void* 
+ * @param jnItemName uint8_t* 参数名称
+ * @return ErrorCode_t
+ *
+ */       
 static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
 {
     ErrorCode_t errcode;
@@ -136,7 +145,7 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
         break;
     }
 
-//#ifdef DEBUG_CFG_PARSE_PROTO
+#ifdef DEBUG_CFG_PARSE_PROTO
     switch(type)
     {
     case ParamTypeU8:
@@ -160,13 +169,21 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
     default:
         break;
     }
-//#endif
+#endif
 
     /*********************/
 
 err_return:
     return errcode;
 }
+/** @brief 获取Proto中Obj的子参数
+ *
+ * @param jsProtoObj cJSON*     Obj的父Obj
+ * @param pSegTime EchSegTime_t* Obj对应的时间段结构体
+ * @param jnNameObj uint8_t*    Obj的名称
+ * @return ErrorCode_t
+ *
+ */      
 static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
 {
     uint32_t ItemAddr;
@@ -214,6 +231,13 @@ static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uin
     }
     return errcode;
 }
+/** @brief 获取protocol.cfg全部参数
+ *
+ * @param pvProto void*
+ * @param pvCfgObj void*
+ * @return ErrorCode_t
+ *
+ */     
 static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
 {
     cJSON *jsProtoObj;
@@ -382,6 +406,16 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     return errcode;
 }
 
+/** @brief 设置参数
+ *
+ * @param jnItemString uint8_t*     要设置参数的名称 或 要设置参数所在的Obj名称
+ * @param ObjType uint8_t           要设置参数的类型 或 Obj类型
+ * @param jnSubItemString uint8_t*  假如要设置参数在另一个Obj中，则传入这个Obj中该参数的名称
+ * @param SubType uint8_t           要设置参数的类型
+ * @param pvCfgParam void*          要设置的参数
+ * @return ErrorCode_t
+ *
+ */        
 static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
 {
     cJSON *jsProtoCfgObj;
@@ -436,11 +470,20 @@ static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *
     return errcode;
 }
 
+/** @brief 测试参数设置函数
+ *
+ * @return void
+ *
+ */   
 void testSetProtoCfg()
 {
-    uint8_t param;
-    param = 3;
-    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, (void *)&param);
+    uint8_t ucParam;
+    uint32_t ulParam;
+    ucParam = 4;
+    ulParam = 232;
+    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, (void *)&ucParam);
+    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, "Start1", ParamTypeU8, (void *)&ucParam);
+    SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, (void *)&ulParam);
 }
 
 /*---------------------------------------------------------------------------/
