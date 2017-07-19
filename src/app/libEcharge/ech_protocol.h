@@ -60,7 +60,7 @@ typedef struct _echProtoInfo
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s
     
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
-    ErrorCode_t (*SetProtoCfg)(void *pvProto, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+    ErrorCode_t (*SetProtoCfg)(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
 
 } echProtoInfo_t;
 

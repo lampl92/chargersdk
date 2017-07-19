@@ -382,10 +382,67 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     return errcode;
 }
 
-static ErrorCode_t SetProtoCfg(void *pvProto, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
 {
+    cJSON *jsProtoCfgObj;
+    cJSON *jsItem;
+    ErrorCode_t errcode;
 
+    errcode = ERR_NO;
+    jsProtoCfgObj = GetCfgObj(pathProtoCfg, &errcode);
+    if(jsProtoCfgObj == NULL)
+    {
+        return errcode;
+    }
+    jsItem = jsProtoCfgObj->child;
+    do
+    {
+        if(strcmp(jsItem->string, jnItemString) == 0)
+        {
+            switch(ObjType)
+            {
+            case ParamTypeU8:
+                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
+                break;
+            case ParamTypeU16:
+                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
+                break;
+            case ParamTypeU32:
+                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
+                break;
+            case ParamTypeDouble:
+                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
+                break;
+            case ParamTypeString:
+                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                break;
+            case ParamTypeObj:
+                //subtype在这里没有使用，因为目前只有uint8一种类型
+                cJSON_ReplaceItemInObject(jsItem, jnSubItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
+                break;
+            default:
+                break;
+            }
+            break;//退出while循环
+        }
+        else
+        {
+            jsItem = jsItem->next;
+        }
+    }
+    while(jsItem != NULL);
+    errcode = SetCfgObj(pathProtoCfg, jsProtoCfgObj);
+
+    return errcode;
 }
+
+void testSetProtoCfg()
+{
+    uint8_t param;
+    param = 3;
+    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, (void *)&param);
+}
+
 /*---------------------------------------------------------------------------/
 /                               协议解析
 /---------------------------------------------------------------------------*/
