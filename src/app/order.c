@@ -11,14 +11,6 @@
 #include "cJSON.h"
 #include "cfg_parse.h"
 
-/** @brief 判断时间边界，包含little，不包含big
- *
- * @param src time_t
- * @param little time_t
- * @param big time_t
- * @return uint8_t 1:在区间中，0：不在区间中
- *
- */
 static gdsl_element_t ChargeSegAlloc(void *pChargeSeg)
 {
     gdsl_element_t copyChSeg;
@@ -33,46 +25,111 @@ static void ChargeSegFree (gdsl_element_t e)
 {
     free (e);
 }
-static uint8_t JudgeTimeInclude(time_t tSrc, time_t tStart, time_t tEnd)
+/** @brief 判断当前时间是否在时间段内
+ *
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t 1：在时间段内， 0：不在时间段内
+ *
+ */
+static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
 {
-    if(tSrc >= tStart && tSrc < tEnd)
+    struct tm *ts;
+    ts = localtime(&now);
+    if(ts->tm_hour >= ucStart && ts->tm_hour < ucEnd)
     {
         return 1;
-    }
-    else if(tSrc == tEnd)
-    {
-        return 2;//时段边界。暂时判断办法，测试时一定要充分测试系统是否可以检测到时段边界。
     }
     else
     {
         return 0;
     }
 }
+
+/** @brief 判断当前时间是否在尖峰平谷某个时间段中
+ *
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t  1：在时间段中  0：不在时间段中
+ *
+ */
+static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *pos)
+{
+    int i;
+    uint8_t isInclude = 0;
+
+    for(i = 0; i < SegTime.ucSegCont; i++)
+    {
+        isInclude = JudgeTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
+        if(isInclude == 1)
+        {
+            *pos = (uint8_t)i;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/** @brief 判断当前时间所在的尖峰平谷状态
+ *
+ * @param now time_t
+ * @param pProto echProtocol_t*
+ * @param uint8_t pos* 当前时间所时间段内置
+ * @return SegTimeState_e
+ *
+ */     
+static SegTimeState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *pos)
+{
+    
+    if(JudgeSegInclude(now, pProto->info.SegTime_sharp, pos) == 1)
+    {
+        return STATE_SEG_SHARP;
+    }
+    if(JudgeSegInclude(now, pProto->info.SegTime_peak, pos) == 1)
+    {
+        return STATE_SEG_PEAK;
+    }
+    if(JudgeSegInclude(now, pProto->info.SegTime_shoulder, pos) == 1)
+    {
+        return STATE_SEG_SHOULDER;
+    }
+    if(JudgeSegInclude(now, pProto->info.SegTime_off_peak, pos) == 1)
+    {
+        return STATE_SET_OFF_PEAK;
+    }
+}
+
 static void SegmentProc(time_t now, CON_t *pCON)
 {
-    uint32_t ulTotalTemplSegs;
-    TemplSeg_t *pTemplSeg;
-    ChargeSegment_t ChSeg;
-    ChargeSegment_t *pChSeg;
-    uint8_t ucResJudge;
-    struct tm *ts;
+
     uint8_t ucBoundaryPos;
     int i;
-
-    gdsl_list_t plChSeg;
-    gdsl_list_t plTemplSeg;
-
-    plChSeg = pCON->order.plChargeSegment;
-    plTemplSeg = pEVSE->info.plTemplSeg;
-
+    uint8_t pos;
+    SegTimeState_e statSegTime;
     ucBoundaryPos = 0;
-    ucResJudge = 0;
-    ts = localtime(&now);
-    ulTotalTemplSegs = gdsl_list_get_size(plTemplSeg);
+
+
     /*1. 段判断*/
-#ifdef DEBUG_DIAG_DUMMY
-    ulTotalTemplSegs = 0;
-#endif
+    pCON->order.statOrderSeg = JudgeSegState(now, pechProto, &pos);
+    switch(pCON->order.statOrderSeg)
+    {
+    case STATE_SEG_SHARP:
+        
+    break;
+    case STATE_SEG_PEAK:
+    break;
+    case STATE_SEG_SHOULDER:
+    break;
+    case STATE_SET_OFF_PEAK:
+    break;
+    default:
+    break;    
+    }
+    
+    
+
     if(ulTotalTemplSegs > 0)
     {
         for(i = 1; i <= ulTotalTemplSegs; i++ )
