@@ -846,9 +846,8 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
 /** @brief 设置PWM占空比 详情请看18487.1-2015 P22
  *
  * @param pvCON void*
- * @param ucLoadPercent uint8_t 负载百分比
- *                              负载100%时，PWM=53
-                                负载50%时，PWM= 27
+ * @param ucLoadPercent uint8_t 负载百分比 0 ~ 100
+ *                              
  * @return ErrorCode_t
  *
  */
@@ -861,7 +860,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpCPPWM = 53;
+    tmpCPPWM = 53; //负载100%时，PWM=53, 负载50%时，PWM= 27
     errcode = ERR_NO;
 
     /** ************* */
