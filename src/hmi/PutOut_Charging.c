@@ -195,7 +195,7 @@ static void Caculate_RTC(WM_MESSAGE *pMsg)
 
     sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), temp_buf);//充入电量
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
+    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), temp_buf);//当前服务费
     sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);//当前电费

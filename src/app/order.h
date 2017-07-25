@@ -42,10 +42,11 @@
 /*当前时间所在时间段类型*/
 typedef enum 
 {
+    STATE_SEG_IDLE,
     STATE_SEG_SHARP,
     STATE_SEG_PEAK,
     STATE_SEG_SHOULDER,
-    STATE_SET_OFF_PEAK
+    STATE_SEG_OFF_PEAK
 }SegTimeState_e;
 
 /*订单所在状态*/
@@ -66,14 +67,15 @@ typedef struct _ChargeSegInfo
     time_t tEndTime;
     double dStartPower;
     double dPower;
-    double dPowerFee;
-    double dServFee;
-}ChargeSegInfo_t;
+//    double dPowerFee;
+//    double dServFee;
+}ChargeSegStatus_t;
 
 typedef struct _OrderData
 {
     OrderState_t    statOrder;  //记录订单状态
     SegTimeState_e statOrderSeg; //记录订单时间段状态
+    uint8_t pos;//在时段中的位置，用于与now获得的pos进行对比
 
     uint8_t ucCardID[defCardIDLength]; //卡号//在taskrfid中赋值            2
     uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
@@ -86,16 +88,34 @@ typedef struct _OrderData
     uint8_t ucStartType;        //4 有卡 5 无卡         6
     double  dLimitFee;          //充电截至金额         7
     double  dStartPower;        //8
-    uint8_t ucServiceFeeType;   //服务费类型             //9
     //充电过程
     double  dTotalPower;        //总电量
     double  dTotalPowerFee;     //总电费
-    double  dTotalServiceFee;   //总服务费
+    double  dTotalServFee;   //总服务费
     double  dTotalFee;          //总费用
-    ChargeSegInfo_t chargeSegInfo_sharp[5];     //尖过程产生信息
-    ChargeSegInfo_t chargeSegInfo_peak[5];      //峰
-    ChargeSegInfo_t chargeSegInfo_shoulder[5];  //平
-    ChargeSegInfo_t chargeSegInfo_off_peak[5];  //谷
+    ChargeSegStatus_t chargeSegStatus_sharp[5];     //尖过程产生信息
+    ChargeSegStatus_t chargeSegStatus_peak[5];      //峰
+    ChargeSegStatus_t chargeSegStatus_shoulder[5];  //平
+    ChargeSegStatus_t chargeSegStatus_off_peak[5];  //谷
+    double dTotalPower_sharp;   //尖总电量
+    double dTotalPowerFee_sharp;//尖总电费
+    double dTotalServFee_sharp; //尖总服务费
+    double ulTotalTime_sharp;    //尖充电时间
+    
+    double dTotalPower_peak;
+    double dTotalPowerFee_peak;
+    double dTotalServFee_peak;
+    double ulTotalTime_peak;
+    
+    double dTotalPower_shoulder;
+    double dTotalPowerFee_shoulder;
+    double dTotalServFee_shoulder;
+    double ulTotalTime_shoulder;
+    
+    double dTotalPower_off_peak;
+    double dTotalPowerFee_off_peak;
+    double dTotalServFee_off_peak;
+    double ulTotalTime_off_peak;
     //停止时
     uint8_t         ucPayType;  //支付方式
     uint8_t         ucStopType; //停止类型
