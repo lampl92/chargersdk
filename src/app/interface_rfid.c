@@ -31,7 +31,7 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
         //vTaskDelay(200);
         bsp_DelayMS(200);
         Buzzer_control(0);
-        ulRecvdOptLen = pmt626cmd->uiRecvdOptLen;
+        ulRecvdOptLen = pmt626cmd->ulRecvdOptLen;
         memset(pRfid->status.ucCardID, 0, defCardIDLength);
         memmove(pRfid->status.ucCardID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
         memset(pmt626cmd->ucRecvdOptData, 0, ulRecvdOptLen);
