@@ -939,7 +939,7 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[32...36] 当前服务费金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServiceFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1062,7 +1062,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[38...41] 本次充电服务费总金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServiceFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];

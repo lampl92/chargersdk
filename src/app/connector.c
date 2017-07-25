@@ -661,7 +661,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     else
     {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpPower = 100;
+        tmpPower += 0.5;
     #else
         tmpPower = Get_Electricity_meter_massage_energy(ucCONID+1);
     #endif
@@ -1468,10 +1468,6 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
-    if(pCON->order.plChargeSegment != NULL)
-    {
-        gdsl_list_free(pCON->order.plChargeSegment);
-    }
     free(pCON);
     pCON = NULL;
 }

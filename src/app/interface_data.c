@@ -42,12 +42,33 @@ ErrorCode_t OrderDBCreate(void)
                                       TotalPowerFee INT, \
                                       TotalServFee  INT, \
                                       TotalFee      INT, \
-                                      TotalSeg      INT, \
-                                      DefSegPower   INT, \
-                                      DefSegFee     INT, \
+                                      PowerFee_sharp        INT, \
+                                      ServiceFee_sharp      INT, \
+                                      TotalPower_sharp      INT, \
+                                      TotalPowerFee_sharp   INT, \
+                                      TotalServFee_sharp    INT, \
+                                      TotalTime_sharp       INT, \
+                                      PowerFee_peak        INT, \
+                                      ServiceFee_peak      INT, \
+                                      TotalPower_peak      INT, \
+                                      TotalPowerFee_peak   INT, \
+                                      TotalServFee_peak    INT, \
+                                      TotalTime_peak       INT, \
+                                      PowerFee_shoulder        INT, \
+                                      ServiceFee_shoulder      INT, \
+                                      TotalPower_shoulder      INT, \
+                                      TotalPowerFee_shoulder   INT, \
+                                      TotalServFee_shoulder    INT, \
+                                      TotalTime_shoulder       INT, \
+                                      PowerFee_off_peak        INT, \
+                                      ServiceFee_off_peak      INT, \
+                                      TotalPower_off_peak      INT, \
+                                      TotalPowerFee_off_peak   INT, \
+                                      TotalServFee_off_peak    INT, \
+                                      TotalTime_off_peak       INT, \
                                       PayType       INT, \
                                       StopType      INT, \
-                                      StopTime      STRING(32));", &mm);
+                                      StopTime      STRING(32));", &mm);     
         return ERR_NO;
     }
     
@@ -72,7 +93,7 @@ ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
     
     HexToStr(pOrder->ucCardID, strCardID, 8);
     memset(cmd, '\0', sizeof(cmd));
-    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0", 
+    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0", 
                                                              pOrder->strOrderSN,
                                                              strCardID,
                                                              (int)(pOrder->dBalance * 100),
@@ -81,14 +102,39 @@ ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
                                                              pOrder->ucStartType,
                                                              (int)(pOrder->dLimitFee * 100),
                                                              (int)(pOrder->dStartPower * 100),
-                                                             pOrder->ucServiceFeeType,
                                                              (int)(pOrder->dTotalPower * 100),
                                                              (int)(pOrder->dTotalPowerFee * 100),
-                                                             (int)(pOrder->dTotalServiceFee * 100),
+                                                             (int)(pOrder->dTotalServFee * 100),
                                                              (int)(pOrder->dTotalFee * 100),
-                                                             pOrder->ucTotalSegment,
-                                                             (int)(pOrder->dDefSegPower * 100),
-                                                             (int)(pOrder->dDefSegFee * 100),
+                                                                
+                                                             (int)(pechProto->info.ulPowerFee_sharp),
+                                                             (int)(pechProto->info.ulServiceFee_sharp),
+                                                             (int)(pOrder->dTotalPower_sharp * 100),
+                                                             (int)(pOrder->dTotalPowerFee_sharp * 100),
+                                                             (int)(pOrder->dTotalServFee_sharp * 100),
+                                                             (int)(pOrder->ulTotalTime_sharp),
+
+                                                             (int)(pechProto->info.ulPowerFee_peak),
+                                                             (int)(pechProto->info.ulServiceFee_peak),
+                                                             (int)(pOrder->dTotalPower_peak * 100),
+                                                             (int)(pOrder->dTotalPowerFee_peak * 100),
+                                                             (int)(pOrder->dTotalServFee_peak * 100),
+                                                             (int)(pOrder->ulTotalTime_peak),
+
+                                                             (int)(pechProto->info.ulPowerFee_shoulder),
+                                                             (int)(pechProto->info.ulServiceFee_shoulder),
+                                                             (int)(pOrder->dTotalPower_shoulder * 100),
+                                                             (int)(pOrder->dTotalPowerFee_shoulder * 100),
+                                                             (int)(pOrder->dTotalServFee_shoulder * 100),
+                                                             (int)(pOrder->ulTotalTime_shoulder),
+                                                             
+                                                             (int)(pechProto->info.ulPowerFee_off_peak),
+                                                             (int)(pechProto->info.ulServiceFee_off_peak),
+                                                             (int)(pOrder->dTotalPower_off_peak * 100),
+                                                             (int)(pOrder->dTotalPowerFee_off_peak * 100),
+                                                             (int)(pOrder->dTotalServFee_off_peak * 100),
+                                                             (int)(pOrder->ulTotalTime_off_peak),
+                                                                                                                                                                      
                                                              pOrder->ucPayType,
                                                              pOrder->ucStopType,
                                                              tbuf_stop);

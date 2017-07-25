@@ -200,6 +200,7 @@ void cli_evseorder_fnt(int argc, char **argv)
         for(i = 0; i < pEVSE->info.ucTotalCON; i++)
         {
             pCON = CONGetHandle(i);
+            testmakeOrder(pCON, ,STATE_ORDER_TMP);
             printf_safe("名称=========状态=======   CONID %d\r\n", i);
             switch(statOrder)
             {
@@ -263,28 +264,28 @@ void cli_evseorder_fnt(int argc, char **argv)
             strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
             printf_safe("启动时间:          %s \n", buf);
             printf_safe("启动时电表读数    %.2lf\n", pCON->order.dStartPower);
-            printf_safe("服务费类型:     ");
-            switch(pCON->order.ucServiceFeeType)
-            {
-            case defOrderSerType_Order:
-                printf_safe("按单");
-                break;
-            case defOrderSerType_Power:
-                printf_safe("按度");
-                break;
-            default:
-                break;
-            }
-            printf_safe("\n");
+//            printf_safe("服务费类型:     ");
+//            switch(pCON->order.ucServiceFeeType)
+//            {
+//            case defOrderSerType_Order:
+//                printf_safe("按单");
+//                break;
+//            case defOrderSerType_Power:
+//                printf_safe("按度");
+//                break;
+//            default:
+//                break;
+//            }
+//            printf_safe("\n");
             printf_safe("========充电过程数据=========\n");
             printf_safe("总电量:       %.2lf\n", pCON->order.dTotalPower);
             printf_safe("总电费:       %.2lf\n", pCON->order.dTotalPowerFee);
-            printf_safe("总服务费:     %.2lf\n", pCON->order.dTotalServiceFee);
+            printf_safe("总服务费:     %.2lf\n", pCON->order.dTotalServFee);
             printf_safe("总费用:       %.2lf\n", pCON->order.dTotalFee);
-            printf_safe("充电明细段数: %d\n", pCON->order.ucTotalSegment);
-            printf_safe("默认段起始电量: %.2lf\n", pCON->order.dDefSegStartPower);
-            printf_safe("默认段电量:   %.2lf\n", pCON->order.dDefSegPower);
-            printf_safe("默认段电费:   %.2lf\n", pCON->order.dDefSegFee);
+//            printf_safe("充电明细段数: %d\n", pCON->order.ucTotalSegment);
+//            printf_safe("默认段起始电量: %.2lf\n", pCON->order.dDefSegStartPower);
+//            printf_safe("默认段电量:   %.2lf\n", pCON->order.dDefSegPower);
+//            printf_safe("默认段电费:   %.2lf\n", pCON->order.dDefSegFee);
             printf_safe("========停止时数据=========\n");
             if(pCON->order.ucPayType == defOrderPayType_Online)
             {

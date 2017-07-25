@@ -45,7 +45,7 @@ static uint32_t MT626Write(uint8_t *data, uint32_t len)
  * @return void
  *
  */     
-static void MT626Read(uint8_t *data, uint8_t *pRecvdLen)
+static void MT626Read(uint8_t *data, uint32_t *pRecvdLen)
 {
     readRecvQueEx(pRfidRecvQue, data, 0, pRecvdLen, 1);
 }
@@ -320,14 +320,14 @@ static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t ulRecvLen)
     {
     case MT626_READ_UID_CMD:
         ucState = pucRecvdCMD[5];
-        pMT626CMDObj->uiRecvdOptLen = 4;
+        pMT626CMDObj->ulRecvdOptLen = 4;
         break;
     case MT626_READ_CMD:
     case MT626_WRITE_CMD:
         ucState = pucRecvdCMD[7];
         if(ucState == MT_STATE_Y)
         {
-            pMT626CMDObj->uiRecvdOptLen = 16;
+            pMT626CMDObj->ulRecvdOptLen = 16;
         }
         else // 读写扇区错误
         {
@@ -337,9 +337,9 @@ static int analyRWRes(void *pObj, uint8_t ucSendID, uint32_t ulRecvLen)
     default:
         return ucState;
     }
-    for(i = 0; i < pMT626CMDObj->uiRecvdOptLen; i++)
+    for(i = 0; i < pMT626CMDObj->ulRecvdOptLen; i++)
     {
-        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(ulRecvLen - 2 - pMT626CMDObj->uiRecvdOptLen) + i]; //[ulRecvLen -2 - pMT626CMDObj->ulRecvdOptLen]为数据区起始下标
+        pMT626CMDObj ->ucRecvdOptData[i] = pucRecvdCMD[(ulRecvLen - 2 - pMT626CMDObj->ulRecvdOptLen) + i]; //[ulRecvLen -2 - pMT626CMDObj->ulRecvdOptLen]为数据区起始下标
     }
 
     return ucState;
