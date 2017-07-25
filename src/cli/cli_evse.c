@@ -176,6 +176,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
     }
 }
 
+extern ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder);
 void cli_evseorder_fnt(int argc, char **argv)
 {
     CON_t *pCON;
@@ -200,7 +201,29 @@ void cli_evseorder_fnt(int argc, char **argv)
         for(i = 0; i < pEVSE->info.ucTotalCON; i++)
         {
             pCON = CONGetHandle(i);
-            testmakeOrder(pCON, ,STATE_ORDER_TMP);
+            testmakeOrder(pCON, 0 ,STATE_ORDER_TMP);
+            testmakeOrder(pCON, 1500944498 ,STATE_ORDER_MAKE);//2017-07-25 09:01:38
+            testmakeOrder(pCON, 1500944498 ,STATE_ORDER_UPDATE);//2017-07-25 09:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500948098 ,STATE_ORDER_UPDATE);//2017-07-25 10:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500951698 ,STATE_ORDER_UPDATE);//2017-07-25 11:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500955298 ,STATE_ORDER_UPDATE);//2017-07-25 12:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500958898 ,STATE_ORDER_UPDATE);//2017-07-25 13:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500962498 ,STATE_ORDER_UPDATE);//2017-07-25 14:01:38    
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500966098 ,STATE_ORDER_UPDATE);//2017-07-25 15:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500969698 ,STATE_ORDER_UPDATE);//2017-07-25 16:01:38
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500973298 ,STATE_ORDER_UPDATE);//2017-07-25 17:01:38
+            
+            vTaskDelay(2000);
+            testmakeOrder(pCON, 1500973298 ,STATE_ORDER_FINISH);//2017-07-25 17:01:38 
+            
             printf_safe("名称=========状态=======   CONID %d\r\n", i);
             switch(statOrder)
             {
@@ -282,6 +305,30 @@ void cli_evseorder_fnt(int argc, char **argv)
             printf_safe("总电费:       %.2lf\n", pCON->order.dTotalPowerFee);
             printf_safe("总服务费:     %.2lf\n", pCON->order.dTotalServFee);
             printf_safe("总费用:       %.2lf\n", pCON->order.dTotalFee);
+            printf_safe("尖电价：      %.4lf\n", pechProto->info.ulPowerFee_sharp * 0.0001);
+            printf_safe("尖服务费单价  %.4lf\n", pechProto->info.ulServiceFee_sharp * 0.0001);
+            printf_safe("尖电量        %.2lf\n", pCON->order.dTotalPower_sharp * 0.01);
+            printf_safe("尖充电金额    %.2lf\n", pCON->order.dTotalPowerFee_sharp * 0.01);
+            printf_safe("尖服务费金额  %.2lf\n", pCON->order.dTotalServFee_sharp * 0.01);
+            printf_safe("尖充电时长    %d\n", pCON->order.ulTotalTime_sharp);
+            printf_safe("峰电价：      %.4lf\n", pechProto->info.ulPowerFee_peak * 0.0001);
+            printf_safe("峰服务费单价  %.4lf\n", pechProto->info.ulServiceFee_peak * 0.0001);
+            printf_safe("峰电量        %.2lf\n", pCON->order.dTotalPower_peak * 0.01);
+            printf_safe("峰充电金额    %.2lf\n", pCON->order.dTotalPowerFee_peak * 0.01);
+            printf_safe("峰服务费金额  %.2lf\n", pCON->order.dTotalServFee_peak * 0.01);
+            printf_safe("峰充电时长    %d\n", pCON->order.ulTotalTime_peak);      
+            printf_safe("平电价：      %.4lf\n", pechProto->info.ulPowerFee_shoulder * 0.0001);
+            printf_safe("平服务费单价  %.4lf\n", pechProto->info.ulServiceFee_shoulder * 0.0001);
+            printf_safe("平电量        %.2lf\n", pCON->order.dTotalPower_shoulder * 0.01);
+            printf_safe("平充电金额    %.2lf\n", pCON->order.dTotalPowerFee_shoulder * 0.01);
+            printf_safe("平服务费金额  %.2lf\n", pCON->order.dTotalServFee_shoulder * 0.01);
+            printf_safe("平充电时长    %d\n", pCON->order.ulTotalTime_shoulder); 
+            printf_safe("谷电价：      %.4lf\n", pechProto->info.ulPowerFee_off_peak * 0.0001);
+            printf_safe("谷服务费单价  %.4lf\n", pechProto->info.ulServiceFee_off_peak * 0.0001);
+            printf_safe("谷电量        %.2lf\n", pCON->order.dTotalPower_off_peak * 0.01);
+            printf_safe("谷充电金额    %.2lf\n", pCON->order.dTotalPowerFee_off_peak * 0.01);
+            printf_safe("谷服务费金额  %.2lf\n", pCON->order.dTotalServFee_off_peak * 0.01);
+            printf_safe("谷充电时长    %d\n", pCON->order.ulTotalTime_off_peak);                       
 //            printf_safe("充电明细段数: %d\n", pCON->order.ucTotalSegment);
 //            printf_safe("默认段起始电量: %.2lf\n", pCON->order.dDefSegStartPower);
 //            printf_safe("默认段电量:   %.2lf\n", pCON->order.dDefSegPower);

@@ -321,7 +321,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
     return errcode;
 }
 
-ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder);
+ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
 {
     ErrorCode_t errcode;
 
