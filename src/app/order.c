@@ -94,7 +94,7 @@ static SegTimeState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *
  * @return void
  *
  */
-static void SegmentProc(time_t now, CON_t *pCON)
+static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
 {
     ChargeSegStatus_t *pChargeSegStatus;
     SegTimeState_e statSegTime;
@@ -135,7 +135,8 @@ static void SegmentProc(time_t now, CON_t *pCON)
             //第一次进到这个时段
             pCON->order.pos = pos; //状态转换时已经赋过值了
             pChargeSegStatus->tStartTime = now;
-            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+//            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_PEAK:
@@ -159,7 +160,7 @@ static void SegmentProc(time_t now, CON_t *pCON)
             //第一次进到这个时段
             pCON->order.pos = pos; //状态转换时已经赋过值了
             pChargeSegStatus->tStartTime = now;
-            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_SHOULDER:
@@ -183,13 +184,13 @@ static void SegmentProc(time_t now, CON_t *pCON)
             //第一次进到这个时段
             pCON->order.pos = pos; //状态转换时已经赋过值了
             pChargeSegStatus->tStartTime = now;
-            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_OFF_PEAK:
         statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
         ///*状态 或 时段 发生转换，处理上次时段内容*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态下不会有时段转换，但也暂时保留
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_off_peak[pCON->order.pos]);
             pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
@@ -207,85 +208,97 @@ static void SegmentProc(time_t now, CON_t *pCON)
             //第一次进到这个时段
             pCON->order.pos = pos; //状态转换时已经赋过值了
             pChargeSegStatus->tStartTime = now;
-            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     default:
         break;
     }
+    if(statOrder == STATE_ORDER_FINISH)
+    {
+        pChargeSegStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
+    }
 
     /*2. 汇总时段*/
-    
+
     //sharp
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
     for(i = 0; i < pechProto->info.SegTime_sharp.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_sharp[i].dPower;
         if(pCON->order.chargeSegStatus_sharp[i].tEndTime != 0) //表示已经结束的时段
         {
-            tmpTotalTime += pCON->order.chargeSegStatus_sharp[i].tEndTime - pCON->order.chargeSegStatus_sharp[i].tStartTime;
+            tmpTotalTime += (pCON->order.chargeSegStatus_sharp[i].tEndTime - pCON->order.chargeSegStatus_sharp[i].tStartTime);
         }
     }
     pCON->order.dTotalPower_sharp = tmpTotalPower;
-    pCON->order.dTotalPowerFee_sharp = tmpTotalPower * (pechProto->info.ulPowerFee_sharp * 0.0001);
-    pCON->order.dTotalServFee_sharp = tmpTotalPower * (pechProto->info.ulServiceFee_sharp * 0.0001);
+    pCON->order.dTotalPowerFee_sharp = tmpTotalPower * pechProto->info.dPowerFee_sharp;
+    pCON->order.dTotalServFee_sharp = tmpTotalPower * pechProto->info.dServiceFee_sharp;
     pCON->order.ulTotalTime_sharp = tmpTotalTime;
-    
+
     //peak
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
     for(i = 0; i < pechProto->info.SegTime_peak.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_peak[i].dPower;
         if(pCON->order.chargeSegStatus_peak[i].tEndTime != 0) //表示已经结束的时段
         {
-            tmpTotalTime += pCON->order.chargeSegStatus_peak[i].tEndTime - pCON->order.chargeSegStatus_peak[i].tStartTime;
+            tmpTotalTime += (pCON->order.chargeSegStatus_peak[i].tEndTime - pCON->order.chargeSegStatus_peak[i].tStartTime);
         }
     }
     pCON->order.dTotalPower_peak = tmpTotalPower;
-    pCON->order.dTotalPowerFee_peak = tmpTotalPower * (pechProto->info.ulPowerFee_peak * 0.0001);
-    pCON->order.dTotalServFee_peak = tmpTotalPower * (pechProto->info.ulServiceFee_peak * 0.0001);
+    pCON->order.dTotalPowerFee_peak = tmpTotalPower * pechProto->info.dPowerFee_peak;
+    pCON->order.dTotalServFee_peak = tmpTotalPower * pechProto->info.dServiceFee_peak;
     pCON->order.ulTotalTime_peak = tmpTotalTime;
-    
+
     //shoulder
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
     for(i = 0; i < pechProto->info.SegTime_shoulder.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_shoulder[i].dPower;
         if(pCON->order.chargeSegStatus_shoulder[i].tEndTime != 0) //表示已经结束的时段
         {
-            tmpTotalTime += pCON->order.chargeSegStatus_shoulder[i].tEndTime - pCON->order.chargeSegStatus_shoulder[i].tStartTime;
+            tmpTotalTime += (pCON->order.chargeSegStatus_shoulder[i].tEndTime - pCON->order.chargeSegStatus_shoulder[i].tStartTime);
         }
     }
     pCON->order.dTotalPower_shoulder = tmpTotalPower;
-    pCON->order.dTotalPowerFee_shoulder = tmpTotalPower * (pechProto->info.ulPowerFee_shoulder * 0.0001);
-    pCON->order.dTotalServFee_shoulder = tmpTotalPower * (pechProto->info.ulServiceFee_shoulder * 0.0001);
+    pCON->order.dTotalPowerFee_shoulder = tmpTotalPower * pechProto->info.dPowerFee_shoulder;
+    pCON->order.dTotalServFee_shoulder = tmpTotalPower * pechProto->info.dServiceFee_shoulder;
     pCON->order.ulTotalTime_shoulder = tmpTotalTime;
-    
+
     //off_peak
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
     for(i = 0; i < pechProto->info.SegTime_off_peak.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_off_peak[i].dPower;
         if(pCON->order.chargeSegStatus_off_peak[i].tEndTime != 0) //表示已经结束的时段
         {
-            tmpTotalTime += pCON->order.chargeSegStatus_off_peak[i].tEndTime - pCON->order.chargeSegStatus_off_peak[i].tStartTime;
+            tmpTotalTime += (pCON->order.chargeSegStatus_off_peak[i].tEndTime - pCON->order.chargeSegStatus_off_peak[i].tStartTime);
         }
     }
     pCON->order.dTotalPower_off_peak = tmpTotalPower;
-    pCON->order.dTotalPowerFee_off_peak = tmpTotalPower * (pechProto->info.ulPowerFee_off_peak * 0.0001);
-    pCON->order.dTotalServFee_off_peak = tmpTotalPower * (pechProto->info.ulServiceFee_off_peak * 0.0001);
+    pCON->order.dTotalPowerFee_off_peak = tmpTotalPower * pechProto->info.dPowerFee_off_peak;
+    pCON->order.dTotalServFee_off_peak = tmpTotalPower * pechProto->info.dServiceFee_off_peak;
     pCON->order.ulTotalTime_off_peak = tmpTotalTime;
-    
+
     /*3. 汇总总电量*/
-    pCON->order.dTotalPower = pCON->order.dTotalPower_sharp + 
-                                pCON->order.dTotalPower_peak + 
+    pCON->order.dTotalPower = pCON->order.dTotalPower_sharp +
+                                pCON->order.dTotalPower_peak +
                                 pCON->order.dTotalPower_shoulder +
                                 pCON->order.dTotalPower_off_peak;
-    pCON->order.dTotalPowerFee = pCON->order.dTotalPowerFee_sharp + 
-                                pCON->order.dTotalPowerFee_peak + 
+    pCON->order.dTotalPowerFee = pCON->order.dTotalPowerFee_sharp +
+                                pCON->order.dTotalPowerFee_peak +
                                 pCON->order.dTotalPowerFee_shoulder +
                                 pCON->order.dTotalPowerFee_off_peak;
-    pCON->order.dTotalServFee = pCON->order.dTotalServFee_sharp + 
-                                pCON->order.dTotalServFee_peak + 
+    pCON->order.dTotalServFee = pCON->order.dTotalServFee_sharp +
+                                pCON->order.dTotalServFee_peak +
                                 pCON->order.dTotalServFee_shoulder +
                                 pCON->order.dTotalServFee_off_peak;
-                                
+
     /*4. 总费用*/
     pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
@@ -308,14 +321,15 @@ ErrorCode_t makeOrder(CON_t *pCON)
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);
         pCON->order.dStartPower = pCON->status.dChargingPower;
-        SegmentProc(pCON->order.tStartTime, pCON);
+        SegmentProc(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
-        SegmentProc(time(NULL), pCON);
+        SegmentProc(time(NULL), pCON, statOrder);
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = time(NULL);
+        SegmentProc(pCON->order.tStopTime, pCON, statOrder);
         break;
     }
     return errcode;
@@ -337,14 +351,15 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = testtime;
         pCON->order.dStartPower = pCON->status.dChargingPower;
-        SegmentProc(pCON->order.tStartTime, pCON);
+        SegmentProc(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
-        SegmentProc(testtime, pCON);
+        SegmentProc(testtime, pCON, statOrder);
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = testtime;
+        SegmentProc(pCON->order.tStopTime, pCON, statOrder);
         break;
     }
     return errcode;
@@ -391,6 +406,26 @@ void OrderInit(OrderData_t *pOrder)
         SegTimeInit(&(pOrder->chargeSegStatus_shoulder[i]));
         SegTimeInit(&(pOrder->chargeSegStatus_off_peak[i]));
     }
+
+    pOrder->dTotalPower_sharp = 0;   //尖总电量
+    pOrder->dTotalPowerFee_sharp = 0;//尖总电费
+    pOrder->dTotalServFee_sharp = 0; //尖总服务费
+    pOrder->ulTotalTime_sharp = 0;    //尖充电时间
+
+    pOrder->dTotalPower_peak = 0;
+    pOrder->dTotalPowerFee_peak = 0;
+    pOrder->dTotalServFee_peak = 0;
+    pOrder->ulTotalTime_peak = 0;
+
+    pOrder->dTotalPower_shoulder = 0;
+    pOrder->dTotalPowerFee_shoulder = 0;
+    pOrder->dTotalServFee_shoulder = 0;
+    pOrder->ulTotalTime_shoulder = 0;
+
+    pOrder->dTotalPower_off_peak = 0;
+    pOrder->dTotalPowerFee_off_peak = 0;
+    pOrder->dTotalServFee_off_peak = 0;
+    pOrder->ulTotalTime_off_peak = 0;
 
     pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
     pOrder->ucStopType = 0;                  //停止类型

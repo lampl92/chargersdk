@@ -40,7 +40,7 @@
 #define defOrderSerType_Power           1
 
 /*当前时间所在时间段类型*/
-typedef enum 
+typedef enum
 {
     STATE_SEG_IDLE,
     STATE_SEG_SHARP,
@@ -100,22 +100,22 @@ typedef struct _OrderData
     double dTotalPower_sharp;   //尖总电量
     double dTotalPowerFee_sharp;//尖总电费
     double dTotalServFee_sharp; //尖总服务费
-    double ulTotalTime_sharp;    //尖充电时间
-    
+    uint32_t ulTotalTime_sharp;    //尖充电时间
+
     double dTotalPower_peak;
     double dTotalPowerFee_peak;
     double dTotalServFee_peak;
-    double ulTotalTime_peak;
-    
+    uint32_t ulTotalTime_peak;
+
     double dTotalPower_shoulder;
     double dTotalPowerFee_shoulder;
     double dTotalServFee_shoulder;
-    double ulTotalTime_shoulder;
-    
+    uint32_t ulTotalTime_shoulder;
+
     double dTotalPower_off_peak;
     double dTotalPowerFee_off_peak;
     double dTotalServFee_off_peak;
-    double ulTotalTime_off_peak;
+    uint32_t ulTotalTime_off_peak;
     //停止时
     uint8_t         ucPayType;  //支付方式
     uint8_t         ucStopType; //停止类型
