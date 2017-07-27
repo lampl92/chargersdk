@@ -20,6 +20,7 @@ extern tinysh_cmd_t cli_evseorder_cmd;
 extern tinysh_cmd_t cli_gprs_cmd;
 extern tinysh_cmd_t cli_modeminfo_cmd;
 extern tinysh_cmd_t cli_testdb_cmd;
+extern tinysh_cmd_t cli_protoinfo_cmd;
 
 
 #endif

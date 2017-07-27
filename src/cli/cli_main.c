@@ -42,6 +42,7 @@ void cli_init(void)
     tinysh_add_command(&cli_evseorder_cmd);
     tinysh_add_command(&cli_evsestatus_cmd);
     tinysh_add_command(&cli_modeminfo_cmd);
+    tinysh_add_command(&cli_protoinfo_cmd);
     /************…Ë±∏≤‚ ‘****************/
     tinysh_add_command(&cli_gprs_cmd);
 
