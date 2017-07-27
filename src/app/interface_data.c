@@ -68,10 +68,10 @@ ErrorCode_t OrderDBCreate(void)
                                       TotalTime_off_peak       INT, \
                                       PayType       INT, \
                                       StopType      INT, \
-                                      StopTime      STRING(32));", &mm);     
+                                      StopTime      STRING(32));", &mm);
         return ERR_NO;
     }
-    
+
 }
 
 ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
@@ -81,19 +81,19 @@ ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
     char strCardID[64];
     db_query_mm_t mm;
     int i;
-    
+
     struct tm *ts;
     char tbuf_start [80] = {0};
     char tbuf_stop [80] = {0};
-    
+
     ts = localtime (& pOrder->tStartTime);
     strftime (tbuf_start, sizeof (tbuf_start), "%Y-%m-%d %H:%M:%S", ts);
     ts = localtime (& pOrder->tStopTime);
     strftime (tbuf_stop, sizeof (tbuf_stop), "%Y-%m-%d %H:%M:%S", ts);
-    
+
     HexToStr(pOrder->ucCardID, strCardID, 8);
     memset(cmd, '\0', sizeof(cmd));
-    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0", 
+    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0",
                                                              pOrder->strOrderSN,
                                                              strCardID,
                                                              (int)(pOrder->dBalance * 100),
@@ -106,35 +106,35 @@ ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
                                                              (int)(pOrder->dTotalPowerFee * 100),
                                                              (int)(pOrder->dTotalServFee * 100),
                                                              (int)(pOrder->dTotalFee * 100),
-                                                                
-                                                             (int)(pechProto->info.ulPowerFee_sharp),
-                                                             (int)(pechProto->info.ulServiceFee_sharp),
+
+                                                             (int)(pechProto->info.dPowerFee_sharp * 10000),
+                                                             (int)(pechProto->info.dServiceFee_sharp * 10000),
                                                              (int)(pOrder->dTotalPower_sharp * 100),
                                                              (int)(pOrder->dTotalPowerFee_sharp * 100),
                                                              (int)(pOrder->dTotalServFee_sharp * 100),
                                                              (int)(pOrder->ulTotalTime_sharp),
 
-                                                             (int)(pechProto->info.ulPowerFee_peak),
-                                                             (int)(pechProto->info.ulServiceFee_peak),
+                                                             (int)(pechProto->info.dPowerFee_peak * 10000),
+                                                             (int)(pechProto->info.dServiceFee_peak * 10000),
                                                              (int)(pOrder->dTotalPower_peak * 100),
                                                              (int)(pOrder->dTotalPowerFee_peak * 100),
                                                              (int)(pOrder->dTotalServFee_peak * 100),
                                                              (int)(pOrder->ulTotalTime_peak),
 
-                                                             (int)(pechProto->info.ulPowerFee_shoulder),
-                                                             (int)(pechProto->info.ulServiceFee_shoulder),
+                                                             (int)(pechProto->info.dPowerFee_shoulder * 10000),
+                                                             (int)(pechProto->info.dServiceFee_shoulder * 10000),
                                                              (int)(pOrder->dTotalPower_shoulder * 100),
                                                              (int)(pOrder->dTotalPowerFee_shoulder * 100),
                                                              (int)(pOrder->dTotalServFee_shoulder * 100),
                                                              (int)(pOrder->ulTotalTime_shoulder),
-                                                             
-                                                             (int)(pechProto->info.ulPowerFee_off_peak),
-                                                             (int)(pechProto->info.ulServiceFee_off_peak),
+
+                                                             (int)(pechProto->info.dPowerFee_off_peak * 10000),
+                                                             (int)(pechProto->info.dServiceFee_off_peak * 10000),
                                                              (int)(pOrder->dTotalPower_off_peak * 100),
                                                              (int)(pOrder->dTotalPowerFee_off_peak * 100),
                                                              (int)(pOrder->dTotalServFee_off_peak * 100),
                                                              (int)(pOrder->ulTotalTime_off_peak),
-                                                                                                                                                                      
+
                                                              pOrder->ucPayType,
                                                              pOrder->ucStopType,
                                                              tbuf_stop);
