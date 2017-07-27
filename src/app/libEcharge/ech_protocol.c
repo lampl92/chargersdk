@@ -16,7 +16,7 @@
 #include "cJSON.h"
 
 /*---------------------------------------------------------------------------/
-/                               è·å–åè®®é…ç½®ä¿¡æ¯
+/                               »ñÈ¡Ğ­ÒéÅäÖÃĞÅÏ¢
 /---------------------------------------------------------------------------*/
 
 #if 0
@@ -33,7 +33,7 @@ static ErrorCode_t GetProtoInfo(uint16_t *pProtoInfoU16, uint8_t *jnName, void *
 
     pProtoCfgObj = (cJSON *)pvCfgObj;
 
-    //  è§£æInt
+    //  ½âÎöInt
     jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
     if(jsItem == NULL)
     {
@@ -68,14 +68,14 @@ static ErrorCode_t GetProtoInfoStr(uint8_t *protoInfoStr, const uint8_t *jnName,
 
     pProtoCfgObj = (cJSON *)pvCfgObj;
 
-    //  è§£æstring
+    //  ½âÎöstring
     jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
     if(jsItem == NULL)
     {
         errcode = ERR_FILE_PARSE;
         goto err_return;
     }
-    ptmpStr = utils_strdup(jsItem->valuestring); //strdupä¹‹åå‡ºç°é”™è¯¯éƒ½è¦å…ˆfree
+    ptmpStr = utils_strdup(jsItem->valuestring); //strdupÖ®ºó³öÏÖ´íÎó¶¼ÒªÏÈfree
     if(ptmpStr == NULL)
     {
         errcode = ERR_MEMORY;
@@ -95,15 +95,15 @@ err_return:
     return errcode;
 }
 #endif
-/** @brief è·å–ProtoCfgä¸­å‚æ•°çš„å€¼
+/** @brief »ñÈ¡ProtoCfgÖĞ²ÎÊıµÄÖµ
  *
- * @param pvProtoInfoItem void* ä¼ å…¥è¦è·å–çš„å‚æ•°çš„æŒ‡é’ˆ
- * @param type uint8_t è¦è·å–å‚æ•°çš„ç±»å‹
- * @param pvCfgObj void* 
- * @param jnItemName uint8_t* å‚æ•°åç§°
+ * @param pvProtoInfoItem void* ´«ÈëÒª»ñÈ¡µÄ²ÎÊıµÄÖ¸Õë
+ * @param type uint8_t Òª»ñÈ¡²ÎÊıµÄÀàĞÍ
+ * @param pvCfgObj void*
+ * @param jnItemName uint8_t* ²ÎÊıÃû³Æ
  * @return ErrorCode_t
  *
- */       
+ */
 static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
 {
     ErrorCode_t errcode;
@@ -114,7 +114,7 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
 
     pProtoCfgObj = (cJSON *)pvCfgObj;
 
-    //  è§£æ
+    //  ½âÎö
     jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnItemName);
     if(jsItem == NULL)
     {
@@ -139,7 +139,7 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
         strcpy((uint8_t *)pvProtoInfoItem, jsItem->valuestring);
         break;
     case ParamTypeObj:
-        *(uint32_t *)pvProtoInfoItem = (uint32_t)jsItem; //å¾ˆä¸å–œæ¬¢è¿™ç§æŠ•æœºå–å·§ï¼Œåº”ä¸ºè¿™ä¸ªå‚æ•°å¢åŠ ä¸€ä¸ªäºŒçº§æŒ‡é’ˆ
+        *(uint32_t *)pvProtoInfoItem = (uint32_t)jsItem; //ºÜ²»Ï²»¶ÕâÖÖÍ¶»úÈ¡ÇÉ£¬Ó¦ÎªÕâ¸ö²ÎÊıÔö¼ÓÒ»¸ö¶ş¼¶Ö¸Õë
         break;
     default:
         break;
@@ -176,14 +176,14 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
 err_return:
     return errcode;
 }
-/** @brief è·å–Protoä¸­Objçš„å­å‚æ•°
+/** @brief »ñÈ¡ProtoÖĞObjµÄ×Ó²ÎÊı
  *
- * @param jsProtoObj cJSON*     Objçš„çˆ¶Obj
- * @param pSegTime EchSegTime_t* Objå¯¹åº”çš„æ—¶é—´æ®µç»“æ„ä½“
- * @param jnNameObj uint8_t*    Objçš„åç§°
+ * @param jsProtoObj cJSON*     ObjµÄ¸¸Obj
+ * @param pSegTime EchSegTime_t* Obj¶ÔÓ¦µÄÊ±¼ä¶Î½á¹¹Ìå
+ * @param jnNameObj uint8_t*    ObjµÄÃû³Æ
  * @return ErrorCode_t
  *
- */      
+ */
 static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
 {
     uint32_t ItemAddr;
@@ -231,13 +231,13 @@ static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uin
     }
     return errcode;
 }
-/** @brief è·å–protocol.cfgå…¨éƒ¨å‚æ•°
+/** @brief »ñÈ¡protocol.cfgÈ«²¿²ÎÊı
  *
  * @param pvProto void*
  * @param pvCfgObj void*
  * @return ErrorCode_t
  *
- */     
+ */
 static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
 {
     cJSON *jsProtoObj;
@@ -247,7 +247,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     errcode = ERR_NO;
     pProto = (echProtocol_t *)pvProto;
 
-    /*jsonè§£æ*/
+    /*json½âÎö*/
     jsProtoObj = GetCfgObj(pathProtoCfg, &errcode);
     if(jsProtoObj == NULL || errcode != ERR_NO)
     {
@@ -338,62 +338,62 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
                 ERR_LEVEL_WARNING,
                 "GetResetAct()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_sharp)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dPowerFee_sharp)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoPowerFee_sharp),
                 ERR_LEVEL_WARNING,
                 "GetPowerFee_sharp()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_peak)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dPowerFee_peak)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoPowerFee_peak),
                 ERR_LEVEL_WARNING,
                 "GetPowerFee_peak()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_shoulder)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dPowerFee_shoulder)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoPowerFee_shoulder),
                 ERR_LEVEL_WARNING,
                 "GetPowerFee_shoulder()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulPowerFee_off_peak)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dPowerFee_off_peak)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoPowerFee_off_peak),
                 ERR_LEVEL_WARNING,
                 "GetPowerFee_off_peak()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_sharp)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_sharp)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoServiceFee_sharp),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_sharp()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_peak)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_peak)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoServiceFee_peak),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_peak()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_shoulder)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_shoulder)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoServiceFee_shoulder),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_shoulder()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulServiceFee_off_peak)),
-                                          ParamTypeU32,
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_off_peak)),
+                                          ParamTypeDouble,
                                           jsProtoObj,
                                           jnProtoServiceFee_off_peak),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_off_peak()");
-    /*è·å–å°–å³°å¹³è°·æ—¶é—´æ®µ*/
+    /*»ñÈ¡¼â·åÆ½¹ÈÊ±¼ä¶Î*/
     GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_sharp),    jnProtoSegTime_sharp);
     GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_peak),     jnProtoSegTime_peak);
     GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime_shoulder), jnProtoSegTime_shoulder);
@@ -406,16 +406,16 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief è®¾ç½®å‚æ•°
+/** @brief ÉèÖÃ²ÎÊı
  *
- * @param jnItemString uint8_t*     è¦è®¾ç½®å‚æ•°çš„åç§° æˆ– è¦è®¾ç½®å‚æ•°æ‰€åœ¨çš„Objåç§°
- * @param ObjType uint8_t           è¦è®¾ç½®å‚æ•°çš„ç±»å‹ æˆ– Objç±»å‹
- * @param jnSubItemString uint8_t*  å‡å¦‚è¦è®¾ç½®å‚æ•°åœ¨å¦ä¸€ä¸ªObjä¸­ï¼Œåˆ™ä¼ å…¥è¿™ä¸ªObjä¸­è¯¥å‚æ•°çš„åç§°
- * @param SubType uint8_t           è¦è®¾ç½®å‚æ•°çš„ç±»å‹
- * @param pvCfgParam void*          è¦è®¾ç½®çš„å‚æ•°
+ * @param jnItemString uint8_t*     ÒªÉèÖÃ²ÎÊıµÄÃû³Æ »ò ÒªÉèÖÃ²ÎÊıËùÔÚµÄObjÃû³Æ
+ * @param ObjType uint8_t           ÒªÉèÖÃ²ÎÊıµÄÀàĞÍ »ò ObjÀàĞÍ
+ * @param jnSubItemString uint8_t*  ¼ÙÈçÒªÉèÖÃ²ÎÊıÔÚÁíÒ»¸öObjÖĞ£¬Ôò´«ÈëÕâ¸öObjÖĞ¸Ã²ÎÊıµÄÃû³Æ
+ * @param SubType uint8_t           ÒªÉèÖÃ²ÎÊıµÄÀàĞÍ
+ * @param pvCfgParam void*          ÒªÉèÖÃµÄ²ÎÊı
  * @return ErrorCode_t
  *
- */        
+ */
 static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
 {
     cJSON *jsProtoCfgObj;
@@ -451,13 +451,13 @@ static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *
                 cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
                 break;
             case ParamTypeObj:
-                //subtypeåœ¨è¿™é‡Œæ²¡æœ‰ä½¿ç”¨ï¼Œå› ä¸ºç›®å‰åªæœ‰uint8ä¸€ç§ç±»å‹
+                //subtypeÔÚÕâÀïÃ»ÓĞÊ¹ÓÃ£¬ÒòÎªÄ¿Ç°Ö»ÓĞuint8Ò»ÖÖÀàĞÍ
                 cJSON_ReplaceItemInObject(jsItem, jnSubItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
                 break;
             default:
                 break;
             }
-            break;//é€€å‡ºwhileå¾ªç¯
+            break;//ÍË³öwhileÑ­»·
         }
         else
         {
@@ -470,11 +470,11 @@ static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *
     return errcode;
 }
 
-/** @brief æµ‹è¯•å‚æ•°è®¾ç½®å‡½æ•°
+/** @brief ²âÊÔ²ÎÊıÉèÖÃº¯Êı
  *
  * @return void
  *
- */   
+ */
 void testSetProtoCfg()
 {
     uint8_t ucParam;
@@ -487,7 +487,7 @@ void testSetProtoCfg()
 }
 
 /*---------------------------------------------------------------------------/
-/                               åè®®è§£æ
+/                               Ğ­Òé½âÎö
 /---------------------------------------------------------------------------*/
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
@@ -511,7 +511,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     echSendCmdElem.cmd_id = usSendID;
     echSendCmdElem.len = ulSendLength;
     echSendCmdElem.pbuff = pucSendBuffer;
-    echSendCmdElem.status = 0;//0è¡¨ç¤ºæœªå‘é€  1è¡¨ç¤ºå·²å‘é€
+    echSendCmdElem.status = 0;//0±íÊ¾Î´·¢ËÍ  1±íÊ¾ÒÑ·¢ËÍ
     echSendCmdElem.trycount = 0;
     echSendCmdElem.trycountmax = trycountmax;
 
@@ -550,27 +550,27 @@ static int makeStdCmd(void *pPObj,
                                       pProto->info.strKey,
                                       ucMsgBodyCtx_enc);
 
-    //åè®®ç‰ˆæœ¬
+    //Ğ­Òé°æ±¾
     ucMsgHead[ulMsgHeadLen++] = pProto->info.ucProtoVer;
-    //æ¶ˆæ¯åŒ…å±æ€§
+    //ÏûÏ¢°üÊôĞÔ
     ucMsgHead[ulMsgHeadLen++] = 0x00;
-    //å‘½ä»¤å­—
+    //ÃüÁî×Ö
     ustmpNetSeq.usVal = htons(pCMD->CMDType.usSendCmd);
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[1];
-    //é¢„ç•™å­—æ®µ
+    //Ô¤Áô×Ö¶Î
     ultmpNetSeq.ulVal = 0;
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[1];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[2];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[3];
-    //æ¶ˆæ¯ä½“é•¿åº¦
+    //ÏûÏ¢Ìå³¤¶È
     ultmpNetSeq.ulVal = htonl(pE->info.ucIDLength + ulMsgBodyCtxLen_enc);
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[1];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[2];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[3];
-    //æ¶ˆæ¯æ ¡éªŒç 
+    //ÏûÏ¢Ğ£ÑéÂë
     ustmpNetSeq.usVal = htons(echVerifCheck(pProto->info.ucProtoVer,
                                             0,
                                             pCMD->CMDType.usSendCmd,
@@ -582,7 +582,7 @@ static int makeStdCmd(void *pPObj,
     {
         pucSendBuffer[i] = ucMsgHead[i];
     }
-    for(i = 0; i < pE->info.ucIDLength; i++)  //æ­¤å¤„å€Ÿç”¨ulMsgHeadLenè¡¨ç¤ºpucSendBufferä½ç½®ï¼Œè¿è¡Œä¹‹åulMsgHeadLenè¡¨ç¤ºçš„å°±æ˜¯åŸulMsgHeadLen + æ¡©å·é•¿åº¦
+    for(i = 0; i < pE->info.ucIDLength; i++)  //´Ë´¦½èÓÃulMsgHeadLen±íÊ¾pucSendBufferÎ»ÖÃ£¬ÔËĞĞÖ®ºóulMsgHeadLen±íÊ¾µÄ¾ÍÊÇÔ­ulMsgHeadLen + ×®ºÅ³¤¶È
     {
         pucSendBuffer[ulMsgHeadLen++] = pE->info.strID[i];
     }
@@ -591,7 +591,7 @@ static int makeStdCmd(void *pPObj,
         pucSendBuffer[ulMsgHeadLen + i] = ucMsgBodyCtx_enc[i];
     }
 
-    *pulSendLength = ulMsgHeadLen + ulMsgBodyCtxLen_enc; //æ­¤å¤„ulMsgHeadLenå·²ç»åŒ…å«äº†æ¡©å·é•¿åº¦
+    *pulSendLength = ulMsgHeadLen + ulMsgBodyCtxLen_enc; //´Ë´¦ulMsgHeadLenÒÑ¾­°üº¬ÁË×®ºÅ³¤¶È
 
     return 1;
 }
@@ -648,7 +648,7 @@ static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyC
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //ä¸è¦å¿˜è®°èµ‹å€¼
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //²»ÒªÍü¼Ç¸³Öµ
 
     return 0;
 }
@@ -676,13 +676,13 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     ulMsgBodyCtxLen_dec = 0;
     errcode = 0;
 
-    //å……ç”µæ¡©æ¥å£   0ï¼šé»˜è®¤ 1ï¼šA 2ï¼šB
+    //³äµç×®½Ó¿Ú   0£ºÄ¬ÈÏ 1£ºA 2£ºB
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
-    //é¢„çº¦çŠ¶æ€ 1ï¼šæ— é¢„çº¦  2:æœ‰é¢„çº¦
+    //Ô¤Ô¼×´Ì¬ 1£ºÎŞÔ¤Ô¼  2:ÓĞÔ¤Ô¼
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
-    //è½¦ä½çŠ¶æ€ 1ï¼šç©ºé—²   2ï¼šå ç”¨   3ï¼šæœªçŸ¥
+    //³µÎ»×´Ì¬ 1£º¿ÕÏĞ   2£ºÕ¼ÓÃ   3£ºÎ´Öª
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
-    //æ¥å£è¿æ¥çŠ¶æ€  1 ç©ºé—²ï¼Œ 2,è½¦è¿æ¥ 3 æœªçŸ¥
+    //½Ó¿ÚÁ¬½Ó×´Ì¬  1 ¿ÕÏĞ£¬ 2,³µÁ¬½Ó 3 Î´Öª
     if(pCON->status.xPlugState == UNPLUG)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
@@ -695,7 +695,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
     }
-    //æ¥å£å·¥ä½œçŠ¶æ€ 1ï¼šå……ç”µ 2:å¾…æœº 3ï¼šæ•…éšœ 4ï¼šå……ç”µç»“æŸ 5ï¼šæœªçŸ¥
+    //½Ó¿Ú¹¤×÷×´Ì¬ 1£º³äµç 2:´ı»ú 3£º¹ÊÕÏ 4£º³äµç½áÊø 5£ºÎ´Öª
     switch(pCON->state)
     {
     case STATE_CON_CHARGING:
@@ -705,7 +705,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     case STATE_CON_PLUGED:
     case STATE_CON_PRECONTRACT:
     case STATE_CON_PRECONTRACT_LOSEPLUG:
-    case STATE_CON_STARTCHARGE: //åœ¨è¿™ä¸ªçŠ¶æ€è¿˜æ²¡å¼€å§‹å……ç”µ
+    case STATE_CON_STARTCHARGE: //ÔÚÕâ¸ö×´Ì¬»¹Ã»¿ªÊ¼³äµç
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
         break;
     case STATE_CON_ERROR:
@@ -718,13 +718,13 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 5;
         break;
     }
-    //è¾“å‡ºç”µå‹xxx.x
+    //Êä³öµçÑ¹xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //A B C ç›¸ç”µå‹
+    //A B C ÏàµçÑ¹
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
@@ -739,13 +739,13 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //è¾“å‡ºç”µæµxxx.x
+    //Êä³öµçÁ÷xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //A B C ç›¸ç”µæµ
+    //A B C ÏàµçÁ÷
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
@@ -760,7 +760,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //ç»§ç”µå™¨çŠ¶æ€ 1å¼€ï¼Œ2å…³
+    //¼ÌµçÆ÷×´Ì¬ 1¿ª£¬2¹Ø
     if(pCON->status.ucRelayLState == SWITCH_ON &&
             pCON->status.ucRelayNState == SWITCH_ON)
     {
@@ -771,15 +771,15 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
     }
-    //ç³»ç»Ÿé£æœºå·¥ä½œçŠ¶æ€ 1ï¼šå¼€æœº 2ï¼šå…³æœº
+    //ÏµÍ³·ç»ú¹¤×÷×´Ì¬ 1£º¿ª»ú 2£º¹Ø»ú
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //æ¡©å®æ—¶æ¸©åº¦ xx.xxx
+    //×®ÊµÊ±ÎÂ¶È xx.xxx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dACLTemp * 1000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //æœ‰åŠŸåŠŸç‡ æ— åŠŸåŠŸç‡ xx.xxxx
+    //ÓĞ¹¦¹¦ÂÊ ÎŞ¹¦¹¦ÂÊ xx.xxxx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
@@ -789,60 +789,60 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //ç”µèƒ½è¡¨æœ‰åŠŸç”µèƒ½ xx.xx
+    //µçÄÜ±íÓĞ¹¦µçÄÜ xx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //ç”µè¡¨æ— åŠŸç”µèƒ½ xx.xx
+    //µç±íÎŞ¹¦µçÄÜ xx.xx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //SOC 1~100
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //æ•…éšœç 
+    //¹ÊÕÏÂë
     if(pEVSE->status.ulScramState == 1)
     {
-        errcode |= 1 << 0; //Bit0 æ€¥åœæ•…éšœ
+        errcode |= 1 << 0; //Bit0 ¼±Í£¹ÊÕÏ
     }
     uxBits = xEventGroupGetBits(pCON->status.xHandleEventException);
     if((uxBits & defEventBitExceptionMeter) == defEventBitExceptionMeter)
     {
-        errcode |= 1 << 1; //Bit1 ç”µè¡¨æ•…éšœ
+        errcode |= 1 << 1; //Bit1 µç±í¹ÊÕÏ
     }
     if((uxBits & defEventBitExceptionRelayPaste) == defEventBitExceptionRelayPaste)
     {
-        errcode |= 1 << 2; //Bit2 æ¥è§¦å™¨æ•…éšœ
+        errcode |= 1 << 2; //Bit2 ½Ó´¥Æ÷¹ÊÕÏ
     }
     if((uxBits & defEventBitExceptionRFID) == defEventBitExceptionRFID)
     {
-        errcode |= 1 << 3; //Bit3 è¯»å¡å™¨æ•…éšœ
+        errcode |= 1 << 3; //Bit3 ¶Á¿¨Æ÷¹ÊÕÏ
     }
     uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
     if((uxBits & defEventBitCONACTempOK) != defEventBitCONACTempOK)
     {
-        errcode |= 1 << 4; //Bit4 å†…éƒ¨è¿‡æ¸©æ•…éšœ
+        errcode |= 1 << 4; //Bit4 ÄÚ²¿¹ıÎÂ¹ÊÕÏ
     }
-    //errcode |= 1 << 5 //Bit5 è¿æ¥å™¨æ•…éšœ
+    //errcode |= 1 << 5 //Bit5 Á¬½ÓÆ÷¹ÊÕÏ
     if(pEVSE->status.ulPEState == 1)
     {
-        errcode |= 1 << 6; //Bit5 ç»ç¼˜æ•…éšœ
+        errcode |= 1 << 6; //Bit5 ¾øÔµ¹ÊÕÏ
     }
     if(pEVSE->status.ulPowerOffState == 1)
     {
-        errcode |= 1 << 7;  //Bit7 å…¶ä»–(åœ¨æ­¤å®šä¹‰ä¸ºåœç”µæ•…éšœ)
+        errcode |= 1 << 7;  //Bit7 ÆäËû(ÔÚ´Ë¶¨ÒåÎªÍ£µç¹ÊÕÏ)
     }
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = errcode;
-    //å……ç”µæ¡©å½“å‰æ—¶é—´
+    //³äµç×®µ±Ç°Ê±¼ä
     ultmpNetSeq.ulVal = htonl(time(NULL));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //ä¸è¦å¿˜è®°èµ‹å€¼
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //²»ÒªÍü¼Ç¸³Öµ
 
     return 0;
 }
@@ -869,20 +869,20 @@ static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
 
     for(i = 0; i < 14; i++)
     {
-        //[0...3] æ“ä½œID
-        //[4...11] äº¤æ˜“æµæ°´å·
-        //[12] å……ç”µæ¡©æ¥å£
-        //[13] å……ç”µæ¡©æ“ä½œ
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //ä¸å˜
+        //[0...3] ²Ù×÷ID
+        //[4...11] ½»Ò×Á÷Ë®ºÅ
+        //[12] ³äµç×®½Ó¿Ú
+        //[13] ³äµç×®²Ù×÷
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //²»±ä
     }
-    //[14] å¯åœç»“æœ
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[14];//åœ¨å‘é€å‘½ä»¤ä¹‹å‰èµ‹å€¼çš„
-    //[15] å¤±è´¥åŸå› 
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[15];//åœ¨å‘é€å‘½ä»¤ä¹‹å‰èµ‹å€¼çš„
+    //[14] ÆôÍ£½á¹û
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[14];//ÔÚ·¢ËÍÃüÁîÖ®Ç°¸³ÖµµÄ
+    //[15] Ê§°ÜÔ­Òò
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[15];//ÔÚ·¢ËÍÃüÁîÖ®Ç°¸³ÖµµÄ
     //[16] SOC
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
 
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //ä¸è¦å¿˜è®°èµ‹å€¼
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //²»ÒªÍü¼Ç¸³Öµ
 
     return 0;
 }
@@ -910,84 +910,84 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pbuff = pProto->pCMD[ECH_CMDID_RTDATA]->ucRecvdOptData;
     ulMsgBodyCtxLen_dec = 0;
 
-    //[0...7] äº¤æ˜“æµæ°´å·
+    //[0...7] ½»Ò×Á÷Ë®ºÅ
     StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
     for(i = 0; i < 8; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
-    //[8] æ¡©æ¥å£
+    //[8] ×®½Ó¿Ú
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
-    //[9...12] å½“å‰å……ç”µæ€»ç”µé‡ xxx.xx
+    //[9...12] µ±Ç°³äµç×ÜµçÁ¿ xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[13...16] å°–ç”µé‡ xxx.xx
-    //[17...20] å³°ç”µé‡
-    //[21...24] å¹³ç”µé‡
-    //[25...28] è°·ç”µé‡
+    //[13...16] ¼âµçÁ¿ xxx.xx
+    //[17...20] ·åµçÁ¿
+    //[21...24] Æ½µçÁ¿
+    //[25...28] ¹ÈµçÁ¿
     for(i = 0; i < 16; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     }
-    //[29...32] å½“å‰å……ç”µé‡‘é¢ xxx.xx
+    //[29...32] µ±Ç°³äµç½ğ¶î xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[32...36] å½“å‰æœåŠ¡è´¹é‡‘é¢ xxx.xx
+    //[32...36] µ±Ç°·şÎñ·Ñ½ğ¶î xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[37,38] å½“å‰å……ç”µæ—¶é—´
+    //[37,38] µ±Ç°³äµçÊ±¼ä
     ustmpNetSeq.usVal = htons(  time(NULL) - pCON->order.tStartTime  );
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
-    //[39] å……ç”µæ¡©çŠ¶æ€
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[39];//æ³¨æ„ä¿®æ”¹è¿™é‡Œä¹Ÿè¦ä¿®æ”¹interface_remote.cå¯¹åº”ä½ç½®
-    //[40] åœæ­¢åŸå› 
+    //[39] ³äµç×®×´Ì¬
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[39];//×¢ÒâĞŞ¸ÄÕâÀïÒ²ÒªĞŞ¸Äinterface_remote.c¶ÔÓ¦Î»ÖÃ
+    //[40] Í£Ö¹Ô­Òò
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[40];
-    //[41] å½“å‰SOC
+    //[41] µ±Ç°SOC
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[42,43] å‰©ä½™å……ç”µæ—¶é—´
+    //[42,43] Ê£Óà³äµçÊ±¼ä
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[44...47] è¾“å‡ºç”µå‹ xxx.x
+    //[44...47] Êä³öµçÑ¹ xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[48...51] è¾“å‡ºç”µæµ xxx.x
+    //[48...51] Êä³öµçÁ÷ xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[52...55] ç”µæ± ç»„æœ€ä½æ¸©åº¦
-    //[56...59] ç”µæ± ç»„æœ€é«˜æ¸©åº¦
+    //[52...55] µç³Ø×é×îµÍÎÂ¶È
+    //[56...59] µç³Ø×é×î¸ßÎÂ¶È
     for(i = 0; i < 8; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     }
-    //[60...63] å½“å‰æ—¶é—´æˆ³
+    //[60...63] µ±Ç°Ê±¼ä´Á
     ultmpNetSeq.ulVal = htonl(time(NULL));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[64...80] è½¦è¾†VINå·
+    //[64...80] ³µÁ¾VINºÅ
     for(i = 0; i < 17; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     }
 
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //ä¸è¦å¿˜è®°èµ‹å€¼
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //²»ÒªÍü¼Ç¸³Öµ
 
     return 0;
 }
@@ -1017,17 +1017,17 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
     ulMsgBodyCtxLen_dec = 0;
 
-    //[0] æœ‰å¡ 04 æ— å¡05
+    //[0] ÓĞ¿¨ 04 ÎŞ¿¨05
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
-    //[1...8] äº¤æ˜“æµæ°´å·
+    //[1...8] ½»Ò×Á÷Ë®ºÅ
     StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
     for(i = 0; i < 8; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
-    //[9] å……ç”µæ¡©æ¥å£
+    //[9] ³äµç×®½Ó¿Ú
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
-    //[10...25] å¡å·
+    //[10...25] ¿¨ºÅ
     if(pbuff[0] == 4)
     {
         HexToStr(pCON->order.ucCardID, strCardID, 8);
@@ -1043,90 +1043,90 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
             pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
         }
     }
-    //[26...29] å……ç”µå‰æ€»ç”µèƒ½ç¤ºå€¼ xxx.xx
+    //[26...29] ³äµçÇ°×ÜµçÄÜÊ¾Öµ xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[30...33] å……ç”µåç”µèƒ½æ€»ç¤ºå€¼ xxx.xx
+    //[30...33] ³äµçºóµçÄÜ×ÜÊ¾Öµ xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)((pCON->order.dStartPower + pCON->order.dTotalPower) * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[34...37] æœ¬æ¬¡å……ç”µç”µè´¹æ€»é‡‘é¢ xxx.xx
+    //[34...37] ±¾´Î³äµçµç·Ñ×Ü½ğ¶î xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[38...41] æœ¬æ¬¡å……ç”µæœåŠ¡è´¹æ€»é‡‘é¢ xxx.xx
+    //[38...41] ±¾´Î³äµç·şÎñ·Ñ×Ü½ğ¶î xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalServFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[42...45] å°–ç”µä»·       xx.xxxx
-    //[46...49] å°–æœåŠ¡è´¹å•ä»· xx.xxxx
-    //[50...53] å°–ç”µé‡       xxx.xx
-    //[54...57] å°–å……ç”µé‡‘é¢   xxx.xx
-    //[58...61] å°–æœåŠ¡è´¹é‡‘é¢ xxx.xx
-    //[62,63] å°–å……ç”µæ—¶é•¿ xx
-    //[64...85]å³°
-    //[86...107]å¹³
-    //[108...129]è°·
+    //[42...45] ¼âµç¼Û       xx.xxxx
+    //[46...49] ¼â·şÎñ·Ñµ¥¼Û xx.xxxx
+    //[50...53] ¼âµçÁ¿       xxx.xx
+    //[54...57] ¼â³äµç½ğ¶î   xxx.xx
+    //[58...61] ¼â·şÎñ·Ñ½ğ¶î xxx.xx
+    //[62,63] ¼â³äµçÊ±³¤ xx
+    //[64...85]·å
+    //[86...107]Æ½
+    //[108...129]¹È
     for(i = 0; i < 22 * 4; i++)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     }
-    //[130...133] å……ç”µå¼€å§‹æ—¶é—´
+    //[130...133] ³äµç¿ªÊ¼Ê±¼ä
     ultmpNetSeq.ulVal = htonl(pCON->order.tStartTime);
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[134,135] å……ç”µæŒç»­æ—¶é—´
+    //[134,135] ³äµç³ÖĞøÊ±¼ä
     ustmpNetSeq.usVal = htons(pCON->order.tStopTime - pCON->order.tStartTime);
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
-    //[136] åœæ­¢å……ç”µåŸå› 
+    //[136] Í£Ö¹³äµçÔ­Òò
     switch(pCON->order.ucStopType)
     {
     case defOrderStopType_RFID:
     case defOrderStopType_Remote:
-        reason = 1;//æ‰‹åŠ¨åœæ­¢
+        reason = 1;//ÊÖ¶¯Í£Ö¹
         break;
     case defOrderStopType_Full:
-        reason = 3;//å……æ»¡åœæ­¢
+        reason = 3;//³äÂúÍ£Ö¹
         break;
     case defOrderStopType_Fee:
-        reason = 4;//è¾¾åˆ°å……ç”µé‡‘é¢
+        reason = 4;//´ïµ½³äµç½ğ¶î
         break;
     case defOrderStopType_Scram:
     case defOrderStopType_NetLost:
     case defOrderStopType_Poweroff:
     case defOrderStopType_OverCurr:
     case defOrderStopType_Knock:
-        reason = 5;//å¼‚å¸¸åœæ­¢
+        reason = 5;//Òì³£Í£Ö¹
         break;
     default:
-        reason = 6;//å…¶ä»–åŸå› åœæ­¢
+        reason = 6;//ÆäËûÔ­ÒòÍ£Ö¹
         break;
     }
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = reason;
-    //[137] å½“å‰soc
+    //[137] µ±Ç°soc
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[138] çŠ¶æ€
+    //[138] ×´Ì¬
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[139...142] å……ç”µç»“æŸæ—¶é—´
+    //[139...142] ³äµç½áÊøÊ±¼ä
     ultmpNetSeq.ulVal = htonl(pCON->order.tStopTime);
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //ä¸è¦å¿˜è®°èµ‹å€¼
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //²»ÒªÍü¼Ç¸³Öµ
 
     return 0;
 }
@@ -1175,16 +1175,16 @@ static int recvResponse(void *pPObj,
 //        return ECH_ERR_VER;
 //    }
 
-    //pbuff[1] å±æ€§
+    //pbuff[1] ÊôĞÔ
 
-    //pbuff[2,3] å‘½ä»¤å­—
+    //pbuff[2,3] ÃüÁî×Ö
     ustmpNetSeq.ucVal[0] = pbuff[ulOffset + 2];
     ustmpNetSeq.ucVal[1] = pbuff[ulOffset + 3];
     echRecvCmdElem.cmd.usRecvCmd = ntohs(ustmpNetSeq.usVal);
 
-    //pbuff[4...7] é¢„ç•™å­—æ®µ
+    //pbuff[4...7] Ô¤Áô×Ö¶Î
 
-    //pbuff[8...11] æ¶ˆæ¯ä½“é•¿åº¦
+    //pbuff[8...11] ÏûÏ¢Ìå³¤¶È
     ultmpNetSeq.ucVal[0] = pbuff[ulOffset + 8];
     ultmpNetSeq.ucVal[1] = pbuff[ulOffset + 9];
     ultmpNetSeq.ucVal[2] = pbuff[ulOffset + 10];
@@ -1207,7 +1207,7 @@ static int recvResponse(void *pPObj,
     echRecvCmdElem.timestamp = time(NULL);
     switch(echRecvCmdElem.cmd.usRecvCmd)
     {
-    case 2://ä¸»æœºå›å¤çš„å‘½ä»¤ï¼Œä¸éœ€è¦timeout å•ä½sã€‚
+    case 2://Ö÷»ú»Ø¸´µÄÃüÁî£¬²»ĞèÒªtimeout µ¥Î»s¡£
         echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
         echRecvCmdElem.timeout_s =  0;
         break;
@@ -1248,7 +1248,7 @@ static int recvResponse(void *pPObj,
 /** @brief
  *
  * @param pPObj void*
- * @param usSendID uint16_t ï¼ˆè¿™é‡Œå¯èƒ½ä¼šäº§ç”Ÿç†è§£é—®é¢˜ï¼‰SendIDè¡¨ç¤ºæ”¶åˆ°çš„å›å¤å¯¹åº”çš„SendID
+ * @param usSendID uint16_t £¨ÕâÀï¿ÉÄÜ»á²úÉúÀí½âÎÊÌâ£©SendID±íÊ¾ÊÕµ½µÄ»Ø¸´¶ÔÓ¦µÄSendID
  * @param pbuff uint8_t*
  * @param ulRecvLen uint32_t
  * @return int
@@ -1264,8 +1264,8 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     time_t timestamp;
 
     pProto = (echProtocol_t *)pPObj;
-    pMsgBodyCtx_enc = pbuff + 30;         //å–å‡ºåŠ å¯†éƒ¨åˆ†buff
-    ulMsgBodyCtxLen_enc = ulRecvLen - 30; //åŠ å¯†éƒ¨åˆ†é•¿åº¦
+    pMsgBodyCtx_enc = pbuff + 30;         //È¡³ö¼ÓÃÜ²¿·Öbuff
+    ulMsgBodyCtxLen_enc = ulRecvLen - 30; //¼ÓÃÜ²¿·Ö³¤¶È
     pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
     aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
@@ -1279,11 +1279,11 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 }
 
 /*
-å†™åˆ†æå‡½æ•°çš„æ–¹æ³•
-1. ç­‰å¾…Mutex
-2. åˆå§‹åŒ–lRecvElem
-3. å°†lRecvElemæ’å…¥é˜Ÿå°¾
-4. é‡Šæ”¾Mutex
+Ğ´·ÖÎöº¯ÊıµÄ·½·¨
+1. µÈ´ıMutex
+2. ³õÊ¼»¯lRecvElem
+3. ½«lRecvElem²åÈë¶ÓÎ²
+4. ÊÍ·ÅMutex
 */
 
 static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
@@ -1359,7 +1359,7 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
         ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
         ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
         timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-        if(utils_abs(timestamp - time(NULL)) > 5)//å¤§äº5sè¿›è¡Œæ ¡æ—¶
+        if(utils_abs(timestamp - time(NULL)) > 5)//´óÓÚ5s½øĞĞĞ£Ê±
         {
             time(&timestamp);
         }
@@ -1430,7 +1430,7 @@ static void echCmdListFree (gdsl_element_t e)
     ((echCmdElem_t *)e)->pbuff = NULL;
     e = NULL;
 }
-/** @brief å¤åˆ¶å¾…æ’å…¥çš„å…ƒç´ åˆ°æ–°ç”³è¯·çš„ç©ºé—´
+/** @brief ¸´ÖÆ´ı²åÈëµÄÔªËØµ½ĞÂÉêÇëµÄ¿Õ¼ä
  *
  * @param pechCmd void*
  * @return gdsl_element_t
@@ -1531,18 +1531,18 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulHeartBeatCyc_ms = 15000;
     pProto->info.ucResetAct        = 0;
 
-    pProto->info.ulPowerFee_sharp    = 0; //å°–å³°è´¹ç‡ ç³»æ•°0.0001
-    pProto->info.ulPowerFee_peak     = 0; //å³°
-    pProto->info.ulPowerFee_shoulder = 0; //å¹³
-    pProto->info.ulPowerFee_off_peak = 0; //è°·
+    pProto->info.dPowerFee_sharp    = 0; //¼â·å·ÑÂÊ
+    pProto->info.dPowerFee_peak     = 0; //·å
+    pProto->info.dPowerFee_shoulder = 0; //Æ½
+    pProto->info.dPowerFee_off_peak = 0; //¹È
 
-    pProto->info.ulServiceFee_sharp    = 0; //ç³»æ•°0.0001
-    pProto->info.ulServiceFee_peak     = 0;
-    pProto->info.ulServiceFee_shoulder = 0;
-    pProto->info.ulServiceFee_off_peak = 0;
+    pProto->info.dServiceFee_sharp    = 0;
+    pProto->info.dServiceFee_peak     = 0;
+    pProto->info.dServiceFee_shoulder = 0;
+    pProto->info.dServiceFee_off_peak = 0;
 
-    pProto->info.ulStatusCyc_ms = 20000; //çŠ¶æ€æ•°æ®ä¸ŠæŠ¥é—´éš”
-    pProto->info.ulRTDataCyc_ms = 10000; //å®æ—¶æ•°æ®ä¸ŠæŠ¥é—´éš”  10s
+    pProto->info.ulStatusCyc_ms = 20000; //×´Ì¬Êı¾İÉÏ±¨¼ä¸ô
+    pProto->info.ulRTDataCyc_ms = 10000; //ÊµÊ±Êı¾İÉÏ±¨¼ä¸ô  10s
 
     pProto->info.GetProtoCfg = GetProtoCfg;
     pProto->info.SetProtoCfg = SetProtoCfg;
@@ -1552,7 +1552,7 @@ echProtocol_t *EchProtocolCreate(void)
     {
         pProto->pCMD[i] = NULL;
     }
-    //æ¡©å‘½ä»¤, å¹³å°å‘½ä»¤
+    //×®ÃüÁî, Æ½Ì¨ÃüÁî
     pProto->pCMD[ECH_CMDID_REGISTER]    = EchCMDCreate(1,  2,  makeCmdReg,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_HEARTBEAT]   = EchCMDCreate(3,  4,  makeCmdHeart,      analyCmdHeart);
     pProto->pCMD[ECH_CMDID_STATUS]      = EchCMDCreate(41, 42, makeCmdStatus,     analyCmdCommon);

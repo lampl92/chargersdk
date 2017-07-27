@@ -20,7 +20,7 @@
 #define REMOTE_RECVBUFF_MAX              1500 //接收缓冲长度
 #define REMOTE_RECVDOPTDATA              1500
 
-typedef struct 
+typedef struct
 {
     uint8_t ucSegCont; //时段个数
     uint8_t ucStart[5];//单位小时：如8表示从8点开始
@@ -41,16 +41,16 @@ typedef struct _echProtoInfo
     uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t  ucResetAct;        //重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
 
-    uint32_t ulPowerFee_sharp;  //尖峰费率 系数0.0001
-    uint32_t ulPowerFee_peak;   //峰
-    uint32_t ulPowerFee_shoulder; //平
-    uint32_t ulPowerFee_off_peak; //谷
+    double dPowerFee_sharp;  //尖峰费率
+    double dPowerFee_peak;   //峰
+    double dPowerFee_shoulder; //平
+    double dPowerFee_off_peak; //谷
 
-    uint32_t ulServiceFee_sharp;//系数0.0001
-    uint32_t ulServiceFee_peak;
-    uint32_t ulServiceFee_shoulder;
-    uint32_t ulServiceFee_off_peak;
-    
+    double dServiceFee_sharp;
+    double dServiceFee_peak;
+    double dServiceFee_shoulder;
+    double dServiceFee_off_peak;
+
     EchSegTime_t SegTime_sharp;
     EchSegTime_t SegTime_peak;
     EchSegTime_t SegTime_shoulder;
@@ -58,7 +58,7 @@ typedef struct _echProtoInfo
 
     uint32_t ulStatusCyc_ms;    //状态数据上报间隔，精确到秒
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s
-    
+
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
     ErrorCode_t (*SetProtoCfg)(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
 
