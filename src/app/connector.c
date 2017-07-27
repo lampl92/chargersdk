@@ -661,7 +661,8 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     else
     {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpPower += 0.5;
+        tmpPower = pCON->status.dChargingPower;
+        tmpPower += 0.1;
     #else
         tmpPower = Get_Electricity_meter_massage_energy(ucCONID+1);
     #endif
@@ -847,7 +848,7 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
  *
  * @param pvCON void*
  * @param ucLoadPercent uint8_t 负载百分比 0 ~ 100
- *                              
+ *
  * @return ErrorCode_t
  *
  */
