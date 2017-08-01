@@ -1480,17 +1480,17 @@ CON_t *CONCreate(uint8_t ucCONID )
     {
         return NULL;
     }
-    pCON->info.ucCONID = ucCONID;
-    pCON->info.ucCONType = defCONType_AC;
-    pCON->info.ucSocketType = defSocketTypeB;
-    pCON->info.dVolatageUpperLimits = 0;
-    pCON->info.dVolatageLowerLimits = 0;
-    pCON->info.dACTempUpperLimits = 0;
-    pCON->info.dACTempLowerLimits = -0;
+    pCON->info.ucCONID                = ucCONID;
+    pCON->info.ucCONType              = defCONType_AC;
+    pCON->info.ucSocketType           = defSocketTypeB;
+    pCON->info.dVolatageUpperLimits   = 0;
+    pCON->info.dVolatageLowerLimits   = 0;
+    pCON->info.dACTempUpperLimits     = 0;
+    pCON->info.dACTempLowerLimits     = -0;
     pCON->info.dSocketTempUpperLimits = 0;
     pCON->info.dSocketTempLowerLimits = 0;
-    pCON->info.dRatedCurrent = 32;
-    pCON->info.dRatedPower = 7;
+    pCON->info.dRatedCurrent          = 32;
+    pCON->info.dRatedPower            = 7;
     memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode));
 
     pCON->info.GetCONCfg = GetCONCfg;
@@ -1507,48 +1507,48 @@ CON_t *CONCreate(uint8_t ucCONID )
 //    pCON->info.SetRatedPower = SetRatedPower;
 
     //memset(pCON->status.ucHeldCardID, 0, defCardIDLength);
-    pCON->status.dACLTemp = 0;
-    pCON->status.dACNTemp = 0;
-    pCON->status.dBTypeSocketTemp1 = 0;
-    pCON->status.dBTypeSocketTemp2 = 0;
-    pCON->status.dChargingCurrent = 0;
-    pCON->status.dChargingFrequence = 0;
-    pCON->status.dChargingVoltage = 0;
-    pCON->status.dChargingPower = 0;
+    pCON->status.dACLTemp              = 0;
+    pCON->status.dACNTemp              = 0;
+    pCON->status.dBTypeSocketTemp1     = 0;
+    pCON->status.dBTypeSocketTemp2     = 0;
+    pCON->status.dChargingCurrent      = 0;
+    pCON->status.dChargingFrequence    = 0;
+    pCON->status.dChargingVoltage      = 0;
+    pCON->status.dChargingPower        = 0;
     pCON->status.xBTypeSocketLockState = 0;
-    pCON->status.xCCState = 0;
-    pCON->status.xCPState = 0;
-    pCON->status.ucLoadPercent = 100;//(%)
-    pCON->status.xPlugState = 0;
-    pCON->status.xHandleEventCharge = xEventGroupCreate();
-    pCON->status.xHandleEventOrder = xEventGroupCreate();
+    pCON->status.xCCState              = 0;
+    pCON->status.xCPState              = 0;
+    pCON->status.ucLoadPercent         = 100;//(%)
+    pCON->status.xPlugState            = 0;
+    pCON->status.xHandleEventCharge    = xEventGroupCreate();
+    pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
-    pCON->status.xHandleTimerVolt = NULL;
-    pCON->status.xHandleTimerCurr = NULL;
-    pCON->status.xHandleTimerCharge = NULL;
-    pCON->status.xHandleTimerRTData = NULL;
-    pCON->status.GetChargingVoltage = GetChargingVoltage;
-    pCON->status.GetChargingCurrent = GetChargingCurrent;
-    pCON->status.GetChargingFrequence = GetChargingFrequence;
-    pCON->status.GetChargingPower = GetChargingPower;
-    pCON->status.xVoltStat = STATE_VOLT_OK;
-    pCON->status.xCurrStat = STATE_CURR_INIT;
+    pCON->status.xHandleTimerVolt      = NULL;
+    pCON->status.xHandleTimerCurr      = NULL;
+    pCON->status.xHandleTimerCharge    = NULL;
+    pCON->status.xHandleTimerRTData    = NULL;
+    pCON->status.GetChargingVoltage    = GetChargingVoltage;
+    pCON->status.GetChargingCurrent    = GetChargingCurrent;
+    pCON->status.GetChargingFrequence  = GetChargingFrequence;
+    pCON->status.GetChargingPower      = GetChargingPower;
+    pCON->status.xVoltStat             = STATE_VOLT_OK;
+    pCON->status.xCurrStat             = STATE_CURR_INIT;
 
-    pCON->status.GetCPState = GetCPState;
-    pCON->status.SetCPSwitch = SetCPSwitch;
-    pCON->status.SetLoadPercent = SetLoadPercent;
-    pCON->status.GetCCState = GetCCState;
-    pCON->status.GetPlugState = GetPlugState;
-    pCON->status.GetBTypeSocketLock = GetBTypeSocketLock;
-    pCON->status.SetBTypeSocketLock = SetBTypeSocketLock;
-    pCON->status.GetACLTemp = GetACLTemp;
-    pCON->status.GetACNTemp = GetACNTemp;
+    pCON->status.GetCPState          = GetCPState;
+    pCON->status.SetCPSwitch         = SetCPSwitch;
+    pCON->status.SetLoadPercent      = SetLoadPercent;
+    pCON->status.GetCCState          = GetCCState;
+    pCON->status.GetPlugState        = GetPlugState;
+    pCON->status.GetBTypeSocketLock  = GetBTypeSocketLock;
+    pCON->status.SetBTypeSocketLock  = SetBTypeSocketLock;
+    pCON->status.GetACLTemp          = GetACLTemp;
+    pCON->status.GetACNTemp          = GetACNTemp;
     pCON->status.GetBTypeSocketTemp1 = GetBTypeSocketTemp1;
     pCON->status.GetBTypeSocketTemp2 = GetBTypeSocketTemp2;
-    pCON->status.StartCharge = StartCharge;
-    pCON->status.StopCharge = StopCharge;
-    pCON->status.GetRelayState = GetRelayState;
-    pCON->status.SetRelay = SetRelay;
+    pCON->status.StartCharge         = StartCharge;
+    pCON->status.StopCharge          = StopCharge;
+    pCON->status.GetRelayState       = GetRelayState;
+    pCON->status.SetRelay            = SetRelay;
 
     pCON->state = STATE_CON_IDLE;
 
