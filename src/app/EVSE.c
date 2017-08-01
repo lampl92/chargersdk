@@ -1053,13 +1053,13 @@ EVSE_t *EVSECreate(void)
 
     memset(pEVSE->info.strSN, 0, defEVSESNLength);
     memset(pEVSE->info.strID, 0, defEVSEIDLength);
-    pEVSE->info.ucType = defEVSEType_AC;
-    pEVSE->info.ucTotalCON = 1;
-    pEVSE->info.dLng = 116.275833;
-    pEVSE->info.dLat = 39.831944;
+    pEVSE->info.ucType           = defEVSEType_AC;
+    pEVSE->info.ucTotalCON       = 1;
+    pEVSE->info.dLng             = 116.275833;
+    pEVSE->info.dLat             = 39.831944;
     pEVSE->info.ucServiceFeeType = 0;
-    pEVSE->info.dServiceFee = 0;
-    pEVSE->info.dDefSegFee = 0;
+    pEVSE->info.dServiceFee      = 0;
+    pEVSE->info.dDefSegFee       = 0;
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
     /** @todo (rgw#1#): 以下修改为Set参数 */
@@ -1080,16 +1080,16 @@ EVSE_t *EVSECreate(void)
     //pEVSE->info.pTemplSeg = UserListCreate();
 
     pEVSE->status.ulArresterState = 0;
-    pEVSE->status.ulKnockState = 0;
-    pEVSE->status.ulPEState = 0;
+    pEVSE->status.ulKnockState    = 0;
+    pEVSE->status.ulPEState       = 0;
     pEVSE->status.ulPowerOffState = 0;
-    pEVSE->status.ulScramState = 0;
+    pEVSE->status.ulScramState    = 0;
 
     pEVSE->status.GetArresterState = GetArresterState;
-    pEVSE->status.GetKnockState = GetKnockState;
-    pEVSE->status.GetPEState = GetPEState;
+    pEVSE->status.GetKnockState    = GetKnockState;
+    pEVSE->status.GetPEState       = GetPEState;
     pEVSE->status.GetPowerOffState = GetPowerOffState;
-    pEVSE->status.GetScramState = GetScramState;
+    pEVSE->status.GetScramState    = GetScramState;
 
     return pEVSE;
 }
