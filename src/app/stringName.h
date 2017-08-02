@@ -58,6 +58,7 @@
 #define jnProtoKey                 "Key"
 #define jnProtoNewKey              "NewKey"
 #define jnProtoNewKeyChangeTime    "NewKeyChangeTime"
+#define jnProtoOptSN               "OptSN"
 #define jnProtoProtoVer            "ProtoVer"
 #define jnProtoHeartBeatCyc_ms     "HeartBeatCyc_ms"
 #define jnProtoStatusCyc_ms        "StatusCyc_ms"
