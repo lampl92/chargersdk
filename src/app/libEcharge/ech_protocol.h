@@ -25,11 +25,11 @@ typedef struct
     uint8_t ucSegCont; //时段个数
     uint8_t ucStart[5];//单位小时：如8表示从8点开始
     uint8_t ucEnd[5];//单位小时，如9点表示到9点，但不包括9点
-}EchSegTime_t;
+} EchSegTime_t;
 
 typedef struct _echProtoInfo
 {
-    uint8_t  strServerIP[15 + 1];
+    uint8_t  strServerIP[64 + 1]; //可以是域名，也可以是IP地址
     uint16_t usServerPort;
     uint8_t  strUserName[8 + 1];
     uint8_t  strUserPwd[12 + 1];
@@ -47,10 +47,10 @@ typedef struct _echProtoInfo
     double dPowerFee_shoulder; //平
     double dPowerFee_off_peak; //谷
 
-    double dServiceFee_sharp;
-    double dServiceFee_peak;
-    double dServiceFee_shoulder;
-    double dServiceFee_off_peak;
+    double dServFee_sharp;
+    double dServFee_peak;
+    double dServFee_shoulder;
+    double dServFee_off_peak;
 
     EchSegTime_t SegTime_sharp;
     EchSegTime_t SegTime_peak;
@@ -74,7 +74,6 @@ typedef struct _echProtoInfo
 //step.2 修改命令个数     ECH_CMD_MAX
 //step.3 编写makeCmdxxxx(),anlyCmdxxxx()
 //step.4 注册命令         在EchProtocolCreate中
-//step.5 在recvResponse()中增加回复命令字和超时时间
 //step.6 编写RemoteXXXX()和RemoteXXXXRes()  在interface_remote.c中
 //step.7 在taskremote.c中编写step.6的调用函数。
 //step.8 回顾一下注册命令是否是step.3编写的函数
@@ -88,9 +87,14 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_REMOTE_CTRL 4 //无卡启停
 #define ECH_CMDID_RTDATA      5 //实时数据
 #define ECH_CMDID_ORDER       6 //交易记录
+#define ECH_CMDID_SET_SUCC    7 //设置成功
+#define ECH_CMDID_SET_FAIL    8 //设置失败
+#define ECH_CMDID_SET_POWERFEE  9 //平台下发电价设置
+#define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
+#define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
 
 /*命令个数*/
-#define ECH_CMD_MAX           7
+#define ECH_CMD_MAX             12
 
 typedef struct
 {
@@ -99,7 +103,7 @@ typedef struct
     uint32_t len;
     uint8_t *pbuff;
     uint8_t status;
-}echCmdElem_t;
+} echCmdElem_t;
 
 typedef    int (*pECH_MAKE_PROC)  (void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen);
 typedef    int (*pECH_ANALY_PROC) (void *pPObj, uint16_t usSendID, uint8_t *pucRecvBuffer, uint32_t ulRecvLen);
@@ -113,6 +117,8 @@ typedef struct
 typedef struct _echCMD
 {
     echCMDType_t CMDType;
+
+    uint32_t ulRecvTimeout_s;
 
     uint8_t     ucRecvdOptData[REMOTE_RECVDOPTDATA];
     uint32_t    ulRecvdOptLen;

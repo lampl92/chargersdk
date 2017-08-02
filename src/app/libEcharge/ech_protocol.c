@@ -373,31 +373,31 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
                 ERR_LEVEL_WARNING,
                 "GetPowerFee_off_peak()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_sharp)),
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServFee_sharp)),
                                           ParamTypeDouble,
                                           jsProtoObj,
-                                          jnProtoServiceFee_sharp),
+                                          jnProtoServFee_sharp),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_sharp()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_peak)),
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServFee_peak)),
                                           ParamTypeDouble,
                                           jsProtoObj,
-                                          jnProtoServiceFee_peak),
+                                          jnProtoServFee_peak),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_peak()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_shoulder)),
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServFee_shoulder)),
                                           ParamTypeDouble,
                                           jsProtoObj,
-                                          jnProtoServiceFee_shoulder),
+                                          jnProtoServFee_shoulder),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_shoulder()");
     THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServiceFee_off_peak)),
+                errcode = GetProtoCfgItem((void *)(&(pProto->info.dServFee_off_peak)),
                                           ParamTypeDouble,
                                           jsProtoObj,
-                                          jnProtoServiceFee_off_peak),
+                                          jnProtoServFee_off_peak),
                 ERR_LEVEL_WARNING,
                 "GetServiceFee_off_peak()");
     /*获取尖峰平谷时间段*/
@@ -668,25 +668,6 @@ static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
-//static int makeCmdSetBodyCtx(uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
-//{
-//    uint32_t ulMsgBodyCtxLen_dec;
-//    uint8_t *pbuff;
-//    ul2uc ultmpNetSeq;
-//
-//    ulMsgBodyCtxLen_dec = 0;
-//    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
-//
-//    for(i = 0; i < 14; i++)
-//    {
-//        //[0...3] 操作ID
-//        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //不变
-//    }
-//
-//    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
-//
-//    return 0;
-//}
 static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1005,10 +986,6 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-//    for(i = 0; i < 16; i++)
-//    {
-//        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-//    }
     //[29...32] 当前充电金额 xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
@@ -1151,7 +1128,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[46...49] 尖服务费单价 xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServiceFee_sharp * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_sharp * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1186,7 +1163,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[68...71] 峰服务费单价 xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServiceFee_peak * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_peak * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1221,7 +1198,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[90...93] 平服务费单价 xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServiceFee_shoulder * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_shoulder * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1256,7 +1233,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[112...115] 谷服务费单价 xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServiceFee_off_peak * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_off_peak * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1283,10 +1260,6 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     ustmpNetSeq.usVal = htons((uint16_t)(pCON->order.ulTotalTime_off_peak));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
-//    for(i = 0; i < 22 * 4; i++)
-//    {
-//        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-//    }
     //[130...133] 充电开始时间
     ultmpNetSeq.ulVal = htonl(pCON->order.tStartTime);
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
@@ -1345,9 +1318,71 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
+
+    //pbuff[0...3] 操作ID
+    pucMsgBodyCtx_dec[0] = pbuff[0];
+    pucMsgBodyCtx_dec[1] = pbuff[1];
+    pucMsgBodyCtx_dec[2] = pbuff[2];
+    pucMsgBodyCtx_dec[3] = pbuff[3];
+
+    *pulMsgBodyCtxLen_dec = 4; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdSetResBodyCtx(pPObj, ECH_CMDID_SET_SUCC, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_SUCC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdSetResBodyCtx(pPObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+
+
+static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
+{
+    uint32_t id;
+    for(id = 0; id < ECH_CMD_MAX; id++)
+    {
+        if(pProto->pCMD[id]->CMDType.usRecvCmd == usRecvCmd)
+        {
+            return id;
+        }
+    }
+    return ECH_CMD_MAX;
+}
+static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
+{
+    uint32_t id;
+    for(id = 0; id < ECH_CMD_MAX; id++)
+    {
+        if(pProto->pCMD[id]->CMDType.usRecvCmd == usRecvCmd)
+        {
+            return pProto->pCMD[id]->ulRecvTimeout_s;
+        }
+    }
+    return 0;
+}
+#define ECH_ERR_OK      1
 #define ECH_ERR_VER     -1
 #define ECH_ERR_CHECK   -2
 #define ECH_ERR_ID      -3
+#define ECH_ERR_CMDID   -4
 
 static int recvResponse(void *pPObj,
                         void *pEObj,
@@ -1365,6 +1400,7 @@ static int recvResponse(void *pPObj,
     uint8_t EVSEID[8];
     uint32_t ulOffset;
     int i;
+    uint16_t cmd_id;
 
     pProto = (echProtocol_t *)pPObj;
     pE = (EVSE_t *)pEObj;
@@ -1377,10 +1413,6 @@ static int recvResponse(void *pPObj,
             return ECH_ERR_VER;
         }
     }
-//    if(pbuff[ulOffset] != pProto->info.ucProtoVer)
-//    {
-//        return ECH_ERR_VER;
-//    }
 
     //pbuff[1] 属性
 
@@ -1412,35 +1444,13 @@ static int recvResponse(void *pPObj,
         return ECH_ERR_ID;
     }
     echRecvCmdElem.timestamp = time(NULL);
-    switch(echRecvCmdElem.cmd.usRecvCmd)
+    cmd_id = GetCmdIDViaRecvCmd(pProto, echRecvCmdElem.cmd.usRecvCmd);
+    if(cmd_id == ECH_CMD_MAX)
     {
-    case 2://主机回复的命令，不需要timeout 单位s。
-        echRecvCmdElem.cmd_id = ECH_CMDID_REGISTER;
-        echRecvCmdElem.timeout_s =  0;
-        break;
-    case 4:
-        echRecvCmdElem.cmd_id = ECH_CMDID_HEARTBEAT;
-        echRecvCmdElem.timeout_s =  0;
-        break;
-    case 5:
-        echRecvCmdElem.cmd_id = ECH_CMDID_RESET;
-        echRecvCmdElem.timeout_s =  30;
-        break;
-    case 42:
-        echRecvCmdElem.cmd_id = ECH_CMDID_STATUS;
-        echRecvCmdElem.timeout_s =  30;
-        break;
-    case 43:
-        echRecvCmdElem.cmd_id = ECH_CMDID_REMOTE_CTRL;
-        echRecvCmdElem.timeout_s =  30;
-        break;
-    case 47:
-        echRecvCmdElem.cmd_id = ECH_CMDID_ORDER;
-        echRecvCmdElem.timeout_s =  30;
-        break;
-    default:
-        break;
+        return ECH_ERR_CMDID;
     }
+    echRecvCmdElem.cmd_id = cmd_id;
+    echRecvCmdElem.timeout_s = GetRecvTOViaRecvCmd(pProto, echRecvCmdElem.cmd.usRecvCmd);
     echRecvCmdElem.len = ulMsgBodyLen_enc + 14;
     echRecvCmdElem.pbuff = pbuff;
     echRecvCmdElem.status = 0;
@@ -1453,7 +1463,7 @@ static int recvResponse(void *pPObj,
     {
         recvResponse(pPObj, pEObj, &pbuff[ulOffset + echRecvCmdElem.len], ulRecvdLen - ulOffset - echRecvCmdElem.len, 3);
     }
-    return 1;
+    return ECH_ERR_OK;
 }
 
 /** @brief
@@ -1522,33 +1532,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
 
     return 1;
 }
-#if 0
-static int analyCmdReg(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    echProtocol_t *pProto;
-    echCMD_t *pCMD;
-    echCmdElem_t lRecvElem;
 
-    pProto = (echProtocol_t *)pPObj;
-    pCMD = pProto->pCMD[usSendID];
-
-    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
-    {
-        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-        lRecvElem.UID = 0;
-        lRecvElem.timestamp = time(NULL);
-        lRecvElem.len = pCMD->ulRecvdOptLen;
-        lRecvElem.pbuff = pCMD->ucRecvdOptData;
-        lRecvElem.status = 0;
-        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
-
-        xSemaphoreGive(pCMD->xMutexCmd);
-    }
-
-    return 1;
-}
-#endif
 static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -1703,7 +1687,11 @@ static void deleteProto(void *pPObj)
     free(pProto);
     pProto = NULL;
 }
-static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, pECH_MAKE_PROC makeProc, pECH_ANALY_PROC analyProc)
+static echCMD_t *EchCMDCreate(uint16_t usSendCmd,
+                              uint16_t usRecvCmd,
+                              uint32_t ulRecvTimeout_s,
+                              pECH_MAKE_PROC makeProc,
+                              pECH_ANALY_PROC analyProc)
 {
     echCMD_t *pECHCMD = (echCMD_t *)malloc(sizeof(echCMD_t));
     if(pECHCMD == NULL)
@@ -1712,6 +1700,9 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, pECH_MAKE_
     }
     pECHCMD->CMDType.usSendCmd = usSendCmd;
     pECHCMD->CMDType.usRecvCmd = usRecvCmd;
+
+    pECHCMD->ulRecvTimeout_s = ulRecvTimeout_s;
+
     pECHCMD->xHandleEventCmd = xEventGroupCreate();
     pECHCMD->xMutexCmd = xSemaphoreCreateMutex();
 
@@ -1748,10 +1739,10 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.dPowerFee_shoulder = 0; //平
     pProto->info.dPowerFee_off_peak = 0; //谷
 
-    pProto->info.dServiceFee_sharp    = 0;
-    pProto->info.dServiceFee_peak     = 0;
-    pProto->info.dServiceFee_shoulder = 0;
-    pProto->info.dServiceFee_off_peak = 0;
+    pProto->info.dServFee_sharp    = 0;
+    pProto->info.dServFee_peak     = 0;
+    pProto->info.dServFee_shoulder = 0;
+    pProto->info.dServFee_off_peak = 0;
 
     pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
@@ -1764,14 +1755,20 @@ echProtocol_t *EchProtocolCreate(void)
     {
         pProto->pCMD[i] = NULL;
     }
-    //注册 （桩命令, 平台命令，发送命令制作，接收分析）
-    pProto->pCMD[ECH_CMDID_REGISTER]    = EchCMDCreate(1,  2,  makeCmdReg,        analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT]   = EchCMDCreate(3,  4,  makeCmdHeart,      analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_RESET]       = EchCMDCreate(6,  5,  makeCmdReset,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_STATUS]      = EchCMDCreate(41, 42, makeCmdStatus,     analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL] = EchCMDCreate(44, 43, makeCmdRemoteCtrl, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_RTDATA]      = EchCMDCreate(45, 0,  makeCmdRTData,     analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_ORDER]       = EchCMDCreate(46, 47, makeCmdOrder,      analyCmdCommon);
+
+    //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析) //充电桩收到平台回复的命令，不需要timeout 单位s。平台主动发送的需要设置桩处理超时时间
+    pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,  2,  0,  makeCmdReg,        analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,  4,  0,  makeCmdHeart,      analyCmdHeart);
+    pProto->pCMD[ECH_CMDID_RESET]        = EchCMDCreate(6,  5,  30, makeCmdReset,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_STATUS]       = EchCMDCreate(41, 42, 30, makeCmdStatus,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]  = EchCMDCreate(44, 43, 30, makeCmdRemoteCtrl, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_RTDATA]       = EchCMDCreate(45, 0,  0,  makeCmdRTData,     NULL);
+    pProto->pCMD[ECH_CMDID_ORDER]        = EchCMDCreate(46, 47, 30, makeCmdOrder,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_SUCC]     = EchCMDCreate(7,  0,  0,  makeCmdSetSucc,    NULL);
+    pProto->pCMD[ECH_CMDID_SET_FAIL]     = EchCMDCreate(8,  0,  0,  makeCmdSetFail,    NULL);
+    pProto->pCMD[ECH_CMDID_SET_POWERFEE] = EchCMDCreate(0,  11, 30, NULL,              analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,  12, 30, NULL,              analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,  13, 30, NULL,              analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;
