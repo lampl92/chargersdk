@@ -121,7 +121,7 @@
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 			<Add library="..\..\src\hmi\dimen_barcode\ATK_QR_V1.4.lib" />
-			<Add library="lib\libm.a" />
+			<Add library="lib\armv7e-m\fpu\fpv5-sp-d16\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />

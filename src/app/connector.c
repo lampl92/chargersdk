@@ -588,7 +588,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpCurr = 32;
 #else
-        tmpCurr = Get_Electricity_meter_massage_current(ucCONID+1);
+        tmpCurr = Get_Electricity_meter_massage_current(ucCONID + 1);
 #endif
 
     }
@@ -663,9 +663,9 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpPower = pCON->status.dChargingPower;
         tmpPower += 0.1;
-    #else
-        tmpPower = Get_Electricity_meter_massage_energy(ucCONID+1);
-    #endif
+#else
+        tmpPower = Get_Electricity_meter_massage_energy(ucCONID + 1);
+#endif
     }
 
     /*********************/
@@ -739,7 +739,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else
         {
-            printf_safe("CPERR %lf\n",cp1);
+            printf_safe("CPERR %lf\n", cp1);
             tmpCPState = CP_ERR;
             return ERR_CON_CP_FAULT;
         }
@@ -867,11 +867,11 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     /** ************* */
     if(ucCONID == 0)
     {
-        TIM2->CCR1 = 1001-ucLoadPercent * 10;
+        TIM2->CCR1 = 1001 - ucLoadPercent * 10;
     }
     else if(ucCONID == 1)
     {
-        TIM4->CCR1 = 1001-ucLoadPercent * 10;
+        TIM4->CCR1 = 1001 - ucLoadPercent * 10;
     }
     //负载百分比输入范围0~1000；
     //PWM
@@ -978,7 +978,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     {
         THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCPState != CP_12V &&
-           pCON->status.xCPState != CP_12V_PWM &&
+                pCON->status.xCPState != CP_12V_PWM &&
                 pCON->status.xCPState != CP_ERR)
         {
             tmpPlugState = PLUG;
@@ -1553,10 +1553,10 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->state = STATE_CON_IDLE;
 
     pCON->status.xHandleTimerRTData = xTimerCreate("TimerRemoteRTData",
-                                                   defRemoteRTDataCyc,
-                                                   pdTRUE,
-                                                   (void *)(int)ucCONID,
-                                                   vRemoteRTDataTimerCB);
+                                      defRemoteRTDataCyc,
+                                      pdTRUE,
+                                      (void *)(int)ucCONID,
+                                      vRemoteRTDataTimerCB);
 
 
     OrderCreate(&(pCON->order));
