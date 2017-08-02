@@ -9,6 +9,8 @@
 #include "interface.h"
 #include "taskcreate.h"
 #include "taskremote.h"
+#include "cfg_parse.h"
+#include "stringName.h"
 
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 

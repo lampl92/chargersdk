@@ -41,7 +41,7 @@ ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal
 ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 
-ErrorCode_t RemoteIF_Reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ)
+ErrorCode_t RemoteIF_Reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ);
 ErrorCode_t RemoteIF_ResetRes(echProtocol_t *pProto, uint32_t *pulOptSN, int *psiRetVal);
 
 ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);

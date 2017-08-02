@@ -668,33 +668,35 @@ static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
-static int makeCmdSetBodyCtx(uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+//static int makeCmdSetBodyCtx(uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+//{
+//    uint32_t ulMsgBodyCtxLen_dec;
+//    uint8_t *pbuff;
+//    ul2uc ultmpNetSeq;
+//
+//    ulMsgBodyCtxLen_dec = 0;
+//    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
+//
+//    for(i = 0; i < 14; i++)
+//    {
+//        //[0...3] 操作ID
+//        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //不变
+//    }
+//
+//    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+//
+//    return 0;
+//}
+static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
-    uint32_t ulMsgBodyCtxLen_dec;
+    echProtocol_t *pProto;
     uint8_t *pbuff;
-    ul2uc ultmpNetSeq;
-
-    ulMsgBodyCtxLen_dec = 0;
-    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
-
-    for(i = 0; i < 14; i++)
-    {
-        //[0...3] 操作ID
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i]; //不变
-    }
-
-    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
-
-    return 0;
-}
-static int makeCmdResetBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
-{
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t *pbuff;
-    ul2uc ultmpNetSeq;
+    int i;
 
-    ulMsgBodyCtxLen_dec = 0;
+    pProto = (echProtocol_t *)pPObj;
     pbuff = pProto->pCMD[ECH_CMDID_RESET]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
 
     for(i = 0; i < 4; i++)
     {
@@ -712,7 +714,7 @@ static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_dec;
 
-    makeCmdResetBodyCtx(ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdResetBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RESET, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
@@ -1177,7 +1179,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[64...85]峰
-      //[64...67] 峰电价       xx.xxxx
+    //[64...67] 峰电价       xx.xxxx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dPowerFee_peak * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];

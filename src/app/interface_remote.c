@@ -12,6 +12,8 @@
 #include "interface.h"
 #include "mbedtls/base64.h"
 #include "utils.h"
+#include "stringName.h"
+#include "cfg_parse.h"
 
 #if 0
 ErrorCode_t RemoteInit()
