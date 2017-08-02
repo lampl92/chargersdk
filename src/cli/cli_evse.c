@@ -87,7 +87,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     printf_safe("重启标志：\t%d\n", pechProto->info.ucResetAct);
     printf_safe("=== 尖 ===\n");
     printf_safe("尖电费率：\t%.4lf\n", pechProto->info.dPowerFee_sharp);
-    printf_safe("尖服务费率：\t%.4lf\n", pechProto->info.dServiceFee_sharp);
+    printf_safe("尖服务费率：\t%.4lf\n", pechProto->info.dServFee_sharp);
     printf_safe("尖时段数量：\t%d\n", pechProto->info.SegTime_sharp.ucSegCont);
     printf_safe("时段:\t");
     for(i = 0; i < pechProto->info.SegTime_sharp.ucSegCont; i++)
@@ -97,7 +97,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     printf_safe("\n");
     printf_safe("=== 峰 ===\n");
     printf_safe("峰电费率：\t%.4lf\n", pechProto->info.dPowerFee_peak);
-    printf_safe("峰服务费率：\t%.4lf\n", pechProto->info.dServiceFee_peak);
+    printf_safe("峰服务费率：\t%.4lf\n", pechProto->info.dServFee_peak);
     printf_safe("峰时段数量：\t%d\n", pechProto->info.SegTime_peak.ucSegCont);
     printf_safe("时段: \t");
     for(i = 0; i < pechProto->info.SegTime_peak.ucSegCont; i++)
@@ -107,7 +107,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     printf_safe("\n");
     printf_safe("=== 平 ===\n");
     printf_safe("平电费率：\t%.4lf\n", pechProto->info.dPowerFee_shoulder);
-    printf_safe("平服务费率：\t%.4lf\n", pechProto->info.dServiceFee_shoulder);
+    printf_safe("平服务费率：\t%.4lf\n", pechProto->info.dServFee_shoulder);
     printf_safe("平时段数量：\t%d\n", pechProto->info.SegTime_shoulder.ucSegCont);
     printf_safe("时段: \t");
     for(i = 0; i < pechProto->info.SegTime_shoulder.ucSegCont; i++)
@@ -117,7 +117,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     printf_safe("\n");
     printf_safe("=== 谷 ===\n");
     printf_safe("谷电费率：\t%.4lf\n", pechProto->info.dPowerFee_off_peak);
-    printf_safe("谷服务费率：\t%.4lf\n", pechProto->info.dServiceFee_off_peak);
+    printf_safe("谷服务费率：\t%.4lf\n", pechProto->info.dServFee_off_peak);
     printf_safe("谷时段数量：\t%d\n", pechProto->info.SegTime_off_peak.ucSegCont);
     printf_safe("时段: \t");
     for(i = 0; i < pechProto->info.SegTime_off_peak.ucSegCont; i++)
@@ -403,7 +403,7 @@ void cli_evseorder_fnt(int argc, char **argv)
             printf_safe("总服务费:     %.2lf\n", pCON->order.dTotalServFee);
             printf_safe("总费用:       %.2lf\n", pCON->order.dTotalFee);
             printf_safe("尖电价：      %.4lf\n", pechProto->info.dPowerFee_sharp);
-            printf_safe("尖服务费单价  %.4lf\n", pechProto->info.dServiceFee_sharp);
+            printf_safe("尖服务费单价  %.4lf\n", pechProto->info.dServFee_sharp);
             printf_safe("尖电量        %.2lf\n", pCON->order.dTotalPower_sharp);
             printf_safe("尖充电金额    %.2lf\n", pCON->order.dTotalPowerFee_sharp);
             printf_safe("尖服务费金额  %.2lf\n", pCON->order.dTotalServFee_sharp);
@@ -428,7 +428,7 @@ void cli_evseorder_fnt(int argc, char **argv)
                 }
             }
             printf_safe("峰电价：      %.4lf\n", pechProto->info.dPowerFee_peak);
-            printf_safe("峰服务费单价  %.4lf\n", pechProto->info.dServiceFee_peak);
+            printf_safe("峰服务费单价  %.4lf\n", pechProto->info.dServFee_peak);
             printf_safe("峰电量        %.2lf\n", pCON->order.dTotalPower_peak);
             printf_safe("峰充电金额    %.2lf\n", pCON->order.dTotalPowerFee_peak);
             printf_safe("峰服务费金额  %.2lf\n", pCON->order.dTotalServFee_peak);
@@ -453,7 +453,7 @@ void cli_evseorder_fnt(int argc, char **argv)
                 }
             }
             printf_safe("平电价：      %.4lf\n", pechProto->info.dPowerFee_shoulder);
-            printf_safe("平服务费单价  %.4lf\n", pechProto->info.dServiceFee_shoulder);
+            printf_safe("平服务费单价  %.4lf\n", pechProto->info.dServFee_shoulder);
             printf_safe("平电量        %.2lf\n", pCON->order.dTotalPower_shoulder);
             printf_safe("平充电金额    %.2lf\n", pCON->order.dTotalPowerFee_shoulder);
             printf_safe("平服务费金额  %.2lf\n", pCON->order.dTotalServFee_shoulder);
@@ -478,7 +478,7 @@ void cli_evseorder_fnt(int argc, char **argv)
                 }
             }
             printf_safe("谷电价：      %.4lf\n", pechProto->info.dPowerFee_off_peak);
-            printf_safe("谷服务费单价  %.4lf\n", pechProto->info.dServiceFee_off_peak);
+            printf_safe("谷服务费单价  %.4lf\n", pechProto->info.dServFee_off_peak);
             printf_safe("谷电量        %.2lf\n", pCON->order.dTotalPower_off_peak);
             printf_safe("谷充电金额    %.2lf\n", pCON->order.dTotalPowerFee_off_peak);
             printf_safe("谷服务费金额  %.2lf\n", pCON->order.dTotalServFee_off_peak);

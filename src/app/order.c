@@ -234,7 +234,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     pCON->order.dTotalPower_sharp = tmpTotalPower;
     pCON->order.dTotalPowerFee_sharp = tmpTotalPower * pechProto->info.dPowerFee_sharp;
-    pCON->order.dTotalServFee_sharp = tmpTotalPower * pechProto->info.dServiceFee_sharp;
+    pCON->order.dTotalServFee_sharp = tmpTotalPower * pechProto->info.dServFee_sharp;
     pCON->order.ulTotalTime_sharp = tmpTotalTime;
 
     //peak
@@ -250,7 +250,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     pCON->order.dTotalPower_peak = tmpTotalPower;
     pCON->order.dTotalPowerFee_peak = tmpTotalPower * pechProto->info.dPowerFee_peak;
-    pCON->order.dTotalServFee_peak = tmpTotalPower * pechProto->info.dServiceFee_peak;
+    pCON->order.dTotalServFee_peak = tmpTotalPower * pechProto->info.dServFee_peak;
     pCON->order.ulTotalTime_peak = tmpTotalTime;
 
     //shoulder
@@ -266,7 +266,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     pCON->order.dTotalPower_shoulder = tmpTotalPower;
     pCON->order.dTotalPowerFee_shoulder = tmpTotalPower * pechProto->info.dPowerFee_shoulder;
-    pCON->order.dTotalServFee_shoulder = tmpTotalPower * pechProto->info.dServiceFee_shoulder;
+    pCON->order.dTotalServFee_shoulder = tmpTotalPower * pechProto->info.dServFee_shoulder;
     pCON->order.ulTotalTime_shoulder = tmpTotalTime;
 
     //off_peak
@@ -282,7 +282,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     pCON->order.dTotalPower_off_peak = tmpTotalPower;
     pCON->order.dTotalPowerFee_off_peak = tmpTotalPower * pechProto->info.dPowerFee_off_peak;
-    pCON->order.dTotalServFee_off_peak = tmpTotalPower * pechProto->info.dServiceFee_off_peak;
+    pCON->order.dTotalServFee_off_peak = tmpTotalPower * pechProto->info.dServFee_off_peak;
     pCON->order.ulTotalTime_off_peak = tmpTotalTime;
 
     /*3. 汇总总电量*/
