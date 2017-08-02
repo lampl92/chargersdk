@@ -1486,7 +1486,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->info.dVolatageUpperLimits   = 0;
     pCON->info.dVolatageLowerLimits   = 0;
     pCON->info.dACTempUpperLimits     = 0;
-    pCON->info.dACTempLowerLimits     = -0;
+    pCON->info.dACTempLowerLimits     = 0;
     pCON->info.dSocketTempUpperLimits = 0;
     pCON->info.dSocketTempLowerLimits = 0;
     pCON->info.dRatedCurrent          = 32;

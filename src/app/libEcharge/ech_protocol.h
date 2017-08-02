@@ -37,6 +37,7 @@ typedef struct _echProtoInfo
     uint8_t  strNewKey[16 + 1];
     time_t   tNewKeyChangeTime;
 
+    uint32_t ulOptSN;           //重启命令操作序列号
     uint8_t  ucProtoVer;        //协议版本号
     uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t  ucResetAct;        //重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
@@ -68,17 +69,28 @@ typedef struct _echProtoInfo
 
 /* 命令帧元素 */
 
+/*********** 增加一条命令*************/
+//step.1 添加命令字       ECH_CMDID_XXXX
+//step.2 修改命令个数     ECH_CMD_MAX
+//step.3 编写makeCmdxxxx(),anlyCmdxxxx()
+//step.4 注册命令         在EchProtocolCreate中
+//step.5 在recvResponse()中增加回复命令字和超时时间
+//step.6 编写RemoteXXXX()和RemoteXXXXRes()  在interface_remote.c中
+//step.7 在taskremote.c中编写step.6的调用函数。
+//step.8 回顾一下注册命令是否是step.3编写的函数
 
-/*命令子RecvCMDID*/
+
+/*命令字RecvCMDID*/
 #define ECH_CMDID_REGISTER    0 //注册登陆
 #define ECH_CMDID_HEARTBEAT   1 //心跳
-#define ECH_CMDID_STATUS      2 //状态
-#define ECH_CMDID_REMOTE_CTRL 3 //无卡启停
-#define ECH_CMDID_RTDATA      4 //实时数据
-#define ECH_CMDID_ORDER       5 //交易记录
+#define ECH_CMDID_RESET       2 //重启
+#define ECH_CMDID_STATUS      3 //状态
+#define ECH_CMDID_REMOTE_CTRL 4 //无卡启停
+#define ECH_CMDID_RTDATA      5 //实时数据
+#define ECH_CMDID_ORDER       6 //交易记录
 
 /*命令个数*/
-#define ECH_CMD_MAX           6
+#define ECH_CMD_MAX           7
 
 typedef struct
 {

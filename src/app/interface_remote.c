@@ -192,6 +192,66 @@ ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal 
     errcode = handle_errcode;
     return errcode;
 }
+
+/** @brief 系统重启后，发送重启结果
+ *
+ * @param pEVSE EVSE_t*
+ * @param pProto echProtocol_t*
+ * @param succ uint32_t 成功标志 1 成功，2 失败
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t RemoteIF_Reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ)
+{
+    uint8_t *pbuff;
+    uint32_t ulOptSN;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+    ul2uc ultmpNetSeq;
+
+    pbuff = pProto->pCMD[ECH_CMDID_RESET]->ucRecvdOptData;
+    //pbuff[0...3] 操作序列号
+    ultmpNetSeq.ulVal = htonl(pProto->info.ulOptSN);
+    pbuff[0] = ultmpNetSeq.ucVal[0];
+    pbuff[1] = ultmpNetSeq.ucVal[1];
+    pbuff[2] = ultmpNetSeq.ucVal[2];
+    pbuff[3] = ultmpNetSeq.ucVal[3];
+    //成功标志
+    pbuff[4] = succ;
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_RESET, 0xffff, 0);
+
+    ulOptSN = 0;
+    pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
+
+    return errcode;
+}
+ErrorCode_t RemoteIF_ResetRes(echProtocol_t *pProto, uint32_t *pulOptSN, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+    ul2uc ultmpNetSeq;
+
+    handle_errcode = RemoteResHandle(pProto, ECH_CMDID_RESET, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作序列号
+        ultmpNetSeq.ucVal[0] = pbuff[0];
+        ultmpNetSeq.ucVal[1] = pbuff[1];
+        ultmpNetSeq.ucVal[2] = pbuff[2];
+        ultmpNetSeq.ucVal[3] = pbuff[3];
+        *pulOptSN = ntohl(ultmpNetSeq.ulVal);
+        break;
+    }
+    errcode = handle_errcode;
+    return errcode;
+}
 ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     ErrorCode_t errcode;

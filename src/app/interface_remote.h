@@ -37,13 +37,21 @@ typedef struct _Heartbeat
 
 ErrorCode_t RemoteRegist(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteRegistRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+
 ErrorCode_t RemoteHeart(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteHeartRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+
+ErrorCode_t RemoteIF_Reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ)
+ErrorCode_t RemoteIF_ResetRes(echProtocol_t *pProto, uint32_t *pulOptSN, int *psiRetVal);
+
 ErrorCode_t RemoteStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
 ErrorCode_t RemoteStatusRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+
 ErrorCode_t RemoteRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ, uint8_t reason);
 ErrorCode_t RemoteRemoteCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal );
+
 ErrorCode_t RemoteRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason);
+
 ErrorCode_t RemoteOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
 ErrorCode_t RemoteOrderRes(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 

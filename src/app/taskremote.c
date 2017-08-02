@@ -53,6 +53,38 @@ typedef enum
     REMOTEOrder_WaitRecv
 } RemoteOrderState_e;
 
+void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    uint32_t ulOptSN;
+    uint8_t ucAct;
+    int res;
+
+    ulOptSN = 0;
+    ucAct = 1;
+    res = 0;
+
+    RemoteIF_ResetRes(pProto, &ulOptSN, &res);
+    if(res == 1)
+    {
+
+        pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
+        pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
+
+        HAL_NVIC_SystemReset();
+        return;
+    }
+
+    ////
+    if(pProto->info.ucResetAct == 1)
+    {
+        ucAct = 0;
+
+        pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
+        THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskremote GetProtoCfg");
+        RemoteIF_Reset(pEVSE, pProto, 1); //1 成功，2失败
+    }
+}
+
 
 void vTaskEVSERemote(void *pvParameters)
 {
@@ -86,7 +118,7 @@ void vTaskEVSERemote(void *pvParameters)
     eRmtOrderStat = REMOTEOrder_IDLE;
     errcode = 0;
     network_res = 0;
-    id_rmtctrl = 0; 
+    id_rmtctrl = 0;
     ctrl_rmtctrl = 0;/** @todo (rgw#1#): 将与枪有关的变量转移到CON结构体中 */
     time_rmtctrl = 0;
     time_order = 0;
@@ -192,6 +224,10 @@ void vTaskEVSERemote(void *pvParameters)
                 }
 //                break;
 //            }
+
+            /************ 重启******************/
+
+
 
 
             /************ 状态******************/

@@ -30,7 +30,7 @@
 
 /**** Configuration Options. ****/
 //#define DB_USEMALLOC
-//#define DB_ENABLE_DEBUG
+#define DB_ENABLE_DEBUG
 
 
 /******************************************************************************/
