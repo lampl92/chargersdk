@@ -36,7 +36,7 @@ const uint8_t *strEVSECfg = "{  \"EVSESN\":\"0102030405060708\",\
                                 \"TemplSegArray\":[]\
                             }";
 
-const uint8_t *strProtoCfg = 
+const uint8_t *strProtoCfg =
 "{ \
     \"ServerIP\": \"123.56.113.123\", \
     \"ServerPort\": 6677, \
@@ -45,6 +45,7 @@ const uint8_t *strProtoCfg =
     \"Key\": \"0123456789abcdeg\", \
     \"NewKey\": \"\", \
     \"NewKeyChangeTime\": -1, \
+    \"OptSN\": 0, \
     \"ProtoVer\": 104, \
     \"HeartBeatCyc_ms\": 15000, \
     \"StatusCyc_ms\": 20000, \
