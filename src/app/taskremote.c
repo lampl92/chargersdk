@@ -141,8 +141,8 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     int res;
-    RemoteIF_RecvReqPowerFee(pEVSE, pProto, &res);
-    RemoteIF_RecvReqPowerFee(pEVSE, pProto, &res);
+    RemoteIF_RecvReq(pEVSE, pProto, &res);
+
 }
 void vTaskEVSERemote(void *pvParameters)
 {

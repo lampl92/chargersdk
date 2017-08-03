@@ -939,25 +939,25 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     return errcode;
 }
 
-ErrorCode_t RemoteIF_SendReqFee(uint16_t usSendID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
     errcode = ERR_NO;
     
-    pProto->sendCommand(pProto, pEVSE, NULL, usSendID, 0xffff, 0);
+    pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0xffff, 0);
     
     *psiRetVal = 1;
     
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvReqPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_POWERFEE, pbuff, &len);
+    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -965,7 +965,7 @@ ErrorCode_t RemoteIF_RecvReqPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *
         errcode = handle_errcode;
         break;
     case ERR_NO:
-        RemoteIF_SendReqFee(ECH_CMDID_REQ_POWERFEE, pEVSE, pProto, psiRetVal);
+        RemoteIF_SendReqCmdid(usCmdID, pEVSE, pProto, psiRetVal);
         break;
     default:
         *psiRetVal = 0;
@@ -974,30 +974,11 @@ ErrorCode_t RemoteIF_RecvReqPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *
 
     return errcode;
 }
-
-ErrorCode_t RemoteIF_RecvReqServFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
 {
-    uint8_t pbuff[1024] = {0};
-    uint32_t len;
-    ErrorCode_t handle_errcode;
-    ErrorCode_t errcode;
-
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_SERVFEE, pbuff, &len);
-    switch(handle_errcode)
-    {
-    case ERR_REMOTE_NODATA:
-        *psiRetVal = 0;
-        errcode = handle_errcode;
-        break;
-    case ERR_NO:
-        RemoteIF_SendReqFee(ECH_CMDID_REQ_SERVFEE, pEVSE, pProto, psiRetVal);
-        break;
-    default:
-        *psiRetVal = 0;
-        break;
-    }
-
-    return errcode;
+    int res;
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_POWERFEE, pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SERVFEE, pEVSE, pProto, &res);
 }
 
 /** @brief

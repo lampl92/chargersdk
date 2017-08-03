@@ -97,6 +97,7 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_REQ_POWERFEE  14 //平台查询充电桩当前电费
 #define ECH_CMDID_REQ_SERVFEE   15 //平台查询充电桩当前服务费
 
+
 /*命令个数*/
 #define ECH_CMD_MAX             16
 
