@@ -59,6 +59,10 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
 ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
 ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
+ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+
+ErrorCode_t RemoteIF_RecvReqPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+ErrorCode_t RemoteIF_RecvReqServFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 
 ErrorCode_t RemoteGetTime(struct tm *pTimeBlock);
 ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAccountStatus, double *pdBalance);

@@ -138,7 +138,12 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 
 }
 
-
+void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    int res;
+    RemoteIF_RecvReqPowerFee(pEVSE, pProto, &res);
+    RemoteIF_RecvReqPowerFee(pEVSE, pProto, &res);
+}
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -497,6 +502,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             /******** 平台下发设置 ****************/
             taskremote_set(pEVSE, pechProto);
+            taskremote_req(pEVSE, pechProto);
 
 
             /* 获取帐户信息*/

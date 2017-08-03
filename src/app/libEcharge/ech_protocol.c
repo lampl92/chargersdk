@@ -1326,7 +1326,7 @@ static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     pProto = (echProtocol_t *)pPObj;
     pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
 
-    //pbuff[0...3] 操作ID
+    //[0...3] 操作ID
     pucMsgBodyCtx_dec[0] = pbuff[0];
     pucMsgBodyCtx_dec[1] = pbuff[1];
     pucMsgBodyCtx_dec[2] = pbuff[2];
@@ -1352,8 +1352,102 @@ static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     makeCmdSetResBodyCtx(pPObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpNetSeq;
 
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
 
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4...7]充电桩当前时间
+    ultmpNetSeq.ulVal = htonl(time(NULL));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    switch(usSendID)
+    {
+    case ECH_CMDID_REQ_POWERFEE:
+        //[8...11] 尖
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dPowerFee_sharp * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+        //[12...15] 峰
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dPowerFee_peak * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+        //[16...19] 平
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dPowerFee_shoulder * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];        
+        //[20...23] 谷
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dPowerFee_off_peak * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];        
+        break;
+    case ECH_CMDID_REQ_SERVFEE:
+        //[8...11] 尖
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_sharp * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+        //[12...15] 峰
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_peak * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+        //[16...19] 平
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_shoulder * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];        
+        //[20...23] 谷
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dServFee_off_peak * 10000));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];  
+        break;    
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+}
+static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+    
+    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+    
+    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_SERVFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SERVFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -1772,6 +1866,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,  13, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,  14, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_KEY]      = EchCMDCreate(0,  15, 30, NULL,              analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_POWERFEE] = EchCMDCreate(22, 21, 30, makeCmdReqPowerFee, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24, 23, 30, makeCmdReqServFee,  analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;
