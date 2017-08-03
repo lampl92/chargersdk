@@ -423,7 +423,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
  * @return ErrorCode_t
  *
  */
-static ErrorCode_t SetProtoCfg(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
+static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
 {
     cJSON *jsProtoCfgObj;
     cJSON *jsItem;
@@ -1756,6 +1756,7 @@ echProtocol_t *EchProtocolCreate(void)
         pProto->pCMD[i] = NULL;
     }
 
+    /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析) //充电桩收到平台回复的命令，不需要timeout 单位s。平台主动发送的需要设置桩处理超时时间
     pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,  2,  0,  makeCmdReg,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,  4,  0,  makeCmdHeart,      analyCmdHeart);
@@ -1770,6 +1771,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,  12, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,  13, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,  14, 30, NULL,              analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_KEY]      = EchCMDCreate(0,  15, 30, NULL,              analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;

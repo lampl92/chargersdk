@@ -61,7 +61,7 @@ typedef struct _echProtoInfo
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
-    ErrorCode_t (*SetProtoCfg)(uint8_t *jnItemString, uint8_t ObjType, uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
+    ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
 
 } echProtoInfo_t;
 
@@ -93,9 +93,10 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
 #define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
 #define ECH_CMDID_SET_TIMESEG   12 //平台下发尖峰平谷时间段设置
+#define ECH_CMDID_SET_KEY       13 //平台下发密钥变更
 
 /*命令个数*/
-#define ECH_CMD_MAX             13
+#define ECH_CMD_MAX             14
 
 typedef struct
 {

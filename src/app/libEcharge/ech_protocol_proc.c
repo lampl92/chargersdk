@@ -52,7 +52,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                         pechProtoElem->len);
                 if(res == 1)
                 {
-                    pechProtoElem->status = 1;
+                    pechProtoElem->status = 1; //接收协议入队等待处理
                 }
                 else//接收的协议帧序列有问题，直接删除
                 {
@@ -66,7 +66,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 gdsl_list_cursor_delete(cr);
                 continue;
             }
-#if 1
+#if 0 //接收无超时处理
             /* 2. 判断超时 */
             if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
