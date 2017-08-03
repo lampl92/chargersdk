@@ -92,9 +92,10 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_SET_POWERFEE  9 //平台下发电价设置
 #define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
 #define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
+#define ECH_CMDID_SET_TIMESEG   12 //平台下发尖峰平谷时间段设置
 
 /*命令个数*/
-#define ECH_CMD_MAX             12
+#define ECH_CMD_MAX             13
 
 typedef struct
 {

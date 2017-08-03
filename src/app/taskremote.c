@@ -55,7 +55,7 @@ typedef enum
     REMOTEOrder_WaitRecv
 } RemoteOrderState_e;
 
-void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto)
+void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 {
     uint32_t ulOptSN;
     uint8_t ucAct;
@@ -68,7 +68,11 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto)
     RemoteIF_RecvReset(pProto, &ulOptSN, &res);
     if(res == 1)
     {
-
+        if(flag_set == 0)
+        {
+            RemoteIF_SendReset(pEVSE, pProto, 2); //1 成功，2失败
+            return;
+        }
         pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
         pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
 
@@ -89,9 +93,17 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto)
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     int res;
+    EventBits_t uxBits;
+    int id;
+    uint32_t ulTotalCON;
+    CON_t *pCON;
+    uint8_t flag_set;
+
     res = 0;
-    RemoteIF_RecvSetPowerFee(pEVSE, pProto, &res);
-    RemoteIF_RecvSetServFee(pEVSE, pProto, &res);
+    flag_set = 0;//0不可设置, 1 可设置
+    ulTotalCON = pListCON->Total;
+
+    /******* 设置上报间隔************/
     RemoteIF_RecvSetCyc(pEVSE, pProto, &res);
     if(res == 1)
     {
@@ -102,6 +114,27 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
                            pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
                            100);//设置timer period ，有timer start 功能
     }
+    /******* 充电过程中不允许设置************/
+    for(id = 0; id < ulTotalCON; id++)
+    {
+        flag_set = 1;
+        pCON = CONGetHandle(id);
+        uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+        {
+            flag_set = 0;
+            break;
+        }
+    }
+
+    taskremote_reset(pEVSE, pProto, flag_set);
+    RemoteIF_RecvSetPowerFee(pEVSE, pProto, flag_set, &res);
+    RemoteIF_RecvSetServFee(pEVSE, pProto, flag_set, &res);
+    RemoteIF_RecvSetTimeSeg(pEVSE, pProto, flag_set, &res);
+
+    /******* end 充电过程中不允许设置************/
+
+
 
 }
 

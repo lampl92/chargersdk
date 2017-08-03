@@ -1769,6 +1769,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_SET_POWERFEE] = EchCMDCreate(0,  11, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,  12, 30, NULL,              analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,  13, 30, NULL,              analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,  14, 30, NULL,              analyCmdCommon);
     //end of зЂВс
 
     pProto->recvResponse = recvResponse;

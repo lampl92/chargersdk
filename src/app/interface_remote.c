@@ -525,7 +525,7 @@ ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
     return errcode;
 }
 
-ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -546,8 +546,21 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *
         errcode = handle_errcode;
         break;
     case ERR_NO:
+        if(flag_set == 0)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+            break;//直接结束 返回
+        }
         *psiRetVal = 1;
-        //pbuff[0...3] 操作ID
+
         //pbuff[4...7] 尖费率
         ultmpNetSeq.ucVal[0] = pbuff[4];
         ultmpNetSeq.ucVal[1] = pbuff[5];
@@ -607,7 +620,7 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *
 
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -628,6 +641,19 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, int *p
         errcode = handle_errcode;
         break;
     case ERR_NO:
+        if(flag_set == 0)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+            break;//直接结束 返回
+        }
         *psiRetVal = 1;
         //pbuff[0...3] 操作ID
         //pbuff[4...7] 尖服务费
@@ -697,8 +723,7 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     ErrorCode_t set_errcode_stat;
     ErrorCode_t set_errcode_rt;
     ErrorCode_t errcode;
-    ul2uc ultmpNetSeq;
-    uint8_t ultmpTimCyc_ms;
+    uint32_t ultmpTimCyc_ms;
 
     handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_CYC, pbuff, &len);
     switch(handle_errcode)
@@ -720,6 +745,118 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         //pbuff[0...3] 操作ID
         if(set_errcode_stat == ERR_NO &&
            set_errcode_stat == ERR_NO)
+        {
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_NO;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0xffff, 0);
+        }
+        else
+        {
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_FILE_RW;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t set_errcode_sharp;
+    ErrorCode_t set_errcode_peak;
+    ErrorCode_t set_errcode_shoulder;
+    ErrorCode_t set_errcode_off_peak;
+    ErrorCode_t errcode;
+    EchSegTime_t tmpSegTime;
+    uint8_t ucOffset;
+    int i;
+
+    ucOffset = 0;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_CYC, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        errcode = handle_errcode;
+        break;
+    case ERR_NO:
+        if(flag_set == 0)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+            break;//直接结束 返回
+        }
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        //pbuff[4] 尖时间段个数
+        ucOffset = 4;
+        //尖
+        tmpSegTime.ucSegCont = pbuff[ucOffset++];
+        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
+        //pbuff[5...SegCont]
+        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        {
+            tmpSegTime.ucStart[i] = pbuff[ucOffset++];
+            tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
+            pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
+            pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+        }
+        //峰
+        tmpSegTime.ucSegCont = pbuff[ucOffset++];
+        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
+        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        {
+            tmpSegTime.ucStart[i] = pbuff[ucOffset++];
+            tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
+            pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
+            pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+        }
+        //平
+        tmpSegTime.ucSegCont = pbuff[ucOffset++];
+        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
+        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        {
+            tmpSegTime.ucStart[i] = pbuff[ucOffset++];
+            tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
+            pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
+            pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+        }
+        //谷
+        tmpSegTime.ucSegCont = pbuff[ucOffset++];
+        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
+        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        {
+            tmpSegTime.ucStart[i] = pbuff[ucOffset++];
+            tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
+            pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
+            pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+        }
+
+        //pbuff[0...3] 操作ID
+        if(set_errcode_sharp == ERR_NO &&
+           set_errcode_peak == ERR_NO &&
+           set_errcode_shoulder == ERR_NO &&
+           set_errcode_off_peak == ERR_NO)
         {
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
