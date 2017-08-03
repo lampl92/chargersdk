@@ -114,7 +114,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
                            pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
                            100);//设置timer period ，有timer start 功能
     }
-    /******* 充电过程中不允许设置************/
+    /******* 判断充电过程中不允许设置************/
     for(id = 0; id < ulTotalCON; id++)
     {
         flag_set = 1;
@@ -134,7 +134,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     /******* end 充电过程中不允许设置************/
 
-
+    RemoteIF_RecvSetKey(pEVSE, pProto, &res);
 
 }
 
@@ -277,11 +277,6 @@ void vTaskEVSERemote(void *pvParameters)
             }
 //                break;
 //            }
-
-            /************ 重启******************/
-
-            taskremote_reset(pEVSE, pechProto);
-
 
             /************ 状态******************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,

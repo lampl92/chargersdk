@@ -744,7 +744,7 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
 
         //pbuff[0...3] 操作ID
         if(set_errcode_stat == ERR_NO &&
-           set_errcode_stat == ERR_NO)
+           set_errcode_rt == ERR_NO)
         {
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
@@ -785,7 +785,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     int i;
 
     ucOffset = 0;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_CYC, pbuff, &len);
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_TIMESEG, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -882,7 +882,62 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 
     return errcode;
 }
+ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t set_errcode_key;
+    ErrorCode_t set_errcode_time;
+    ErrorCode_t errcode;
+    uint8_t strTmpKey[16+1] = {0};
+    uint32_t ultmpTim;
+    ul2uc ultmpNetSeq;
+    int i;
+    uint8_t ucOffset;
 
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_KEY, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        errcode = handle_errcode;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        //pbuff[4...19] 密钥
+        ucOffset = 4;
+        for(i = 0; i < 16; i++)
+        {
+            strTmpKey[i] = pbuff[ucOffset++];
+        }
+        set_errcode_key = pProto->info.SetProtoCfg(jnProtoNewKey, ParamTypeString, NULL, 0, strTmpKey);
+        //pbuff[20...23] 密钥变更时间
+        ultmpNetSeq.ucVal[0] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[1] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[2] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[3] = pbuff[ucOffset++];
+        ultmpTim = ntohl(ultmpNetSeq.ulVal);
+        set_errcode_time = pProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &ultmpTim);
+
+        if(set_errcode_key == ERR_NO &&
+           set_errcode_time == ERR_NO)
+        {
+            errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_FILE_RW;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
 /** @brief
  *
  * @param pucID uint8_t*

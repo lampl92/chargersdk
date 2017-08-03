@@ -117,7 +117,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     case STATE_SEG_SHARP:
         statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
         ///*状态 或 时段 发生转换，处理上次时段内容*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态下不会有时段转换，但也暂时保留
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_sharp[pCON->order.pos]);
             pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
@@ -142,7 +142,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     case STATE_SEG_PEAK:
         statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
         ///*状态 或 时段 发生转换，处理上次时段内容*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态下不会有时段转换，但也暂时保留
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_peak[pCON->order.pos]);
             pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
@@ -166,7 +166,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     case STATE_SEG_SHOULDER:
         statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
         ///*状态 或 时段 发生转换，处理上次时段内容*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态下不会有时段转换，但也暂时保留
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_shoulder[pCON->order.pos]);
             pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间

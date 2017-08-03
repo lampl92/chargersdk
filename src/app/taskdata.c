@@ -9,6 +9,8 @@
 #include "taskcreate.h"
 #include "taskdata.h"
 #include "interface.h"
+#include "cfg_parse.h"
+#include "stringName.h"
 
 //#define DEBUG_NO_TASKDATA
 
@@ -32,7 +34,7 @@ void vTaskEVSEData(void *pvParameters)
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
-        /* 订单管理 */
+        /************ 订单管理 *******************/
         //1. 等待刷卡完成事件
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -162,7 +164,7 @@ void vTaskEVSEData(void *pvParameters)
         }//for CONid
 
 
-        /* 读取文件配置 */
+        /********** 读取文件配置 ***************/
         uxBitsTimer = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                           defEventBitTimerCBDataRefresh,
                                           pdTRUE, pdFALSE, 0);
@@ -177,7 +179,7 @@ void vTaskEVSEData(void *pvParameters)
                 THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING, "taskdata GetCONCfg");
             }
         }
-        /* end of 读取文件配置 */
+        /********** end of 读取文件配置 **************/
 
 //        uxBits = xEventGroupWaitBits(xHandleEventData, defEventBitAddOrder, pdTRUE, pdFALSE, 0);
 //        if((uxBits & defEventBitAddOrder) == defEventBitAddOrder)
@@ -185,6 +187,16 @@ void vTaskEVSEData(void *pvParameters)
 //            DataAddOrder();
 //            xEventGroupSetBits(xHandleEventData, defEventBitAddOrderOK);
 //        }
+        /********** 更新密钥 **************/
+        if(pechProto->info.tNewKeyChangeTime <= time(NULL))
+        {
+            //32位系统最大时间戳4294967295
+            uint32_t max_time = 4294967295;
+
+            pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
+            pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);
+        }
+
 
 #if DEBUG_DATA
 
