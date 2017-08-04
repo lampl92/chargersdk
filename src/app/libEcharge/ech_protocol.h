@@ -96,10 +96,10 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_SET_KEY       13 //平台下发密钥变更
 #define ECH_CMDID_REQ_POWERFEE  14 //平台查询充电桩当前电费
 #define ECH_CMDID_REQ_SERVFEE   15 //平台查询充电桩当前服务费
-
+#define ECH_CMDID_REQ_CYC       16 //平台查询上报时间间隔
 
 /*命令个数*/
-#define ECH_CMD_MAX             16
+#define ECH_CMD_MAX             17
 
 typedef struct
 {
