@@ -8,5 +8,8 @@
 #ifndef __ECH_GLOBALS_H
 #define __ECH_GLOBALS_H
 
+//#include "evse_config.h"
+
+#define defEchProtoSoftVerLen   defSoftVerLength
 
 #endif /* __PS_GLOBALS_H */

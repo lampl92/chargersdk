@@ -983,6 +983,7 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_CYC,      pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_TIMESEG,  pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_KEY,      pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SOFTVER,  pEVSE, pProto, &res);
 }
 
 /** @brief

@@ -9,6 +9,7 @@
 #include "interface.h"
 #include "enc_dec.h"
 #include "libEcharge/ech_protocol_proc.h"
+#include "libEcharge/ech_globals.h"
 
 #include <string.h>
 #include "stringName.h"
@@ -1541,6 +1542,8 @@ static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeCmdReqTimeSegBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_TIMESEG, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+
+
 static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1581,6 +1584,43 @@ static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeCmdReqKeyBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_KEY, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+
+
+static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    EVSE_t *pEVSE;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    int i;
+
+    pEVSE = (EVSE_t *)pEObj;
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_SOFTVER]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4...13] 软件版本号
+    for(i = 0; i < defEchProtoSoftVerLen; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pEVSE->info.strSoftVer[i]; //3.9.3135
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+}
+static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdReqSoftVerBodyCtx(pPObj, pEObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SOFTVER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2004,6 +2044,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26, 25, 30, makeCmdReqCyc,     analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28, 27, 30, makeCmdReqTimeSeg, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30, 29, 30, makeCmdReqKey,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_SOFTVER]  = EchCMDCreate(34, 33, 30, makeCmdReqSoftVer, analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;
