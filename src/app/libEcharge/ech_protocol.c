@@ -1480,7 +1480,67 @@ static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_CYC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
+static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    int i;
 
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_TIMESEG]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //尖时间段个数
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_sharp.ucSegCont;
+    //尖时起止时间段
+    for(i = 0; i < pProto->info.SegTime_sharp.ucSegCont; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_sharp.ucStart[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_sharp.ucEnd[i];
+    }
+    //峰时间段个数
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_peak.ucSegCont;
+    //峰时起止时间段
+    for(i = 0; i < pProto->info.SegTime_peak.ucSegCont; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_peak.ucStart[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_peak.ucEnd[i];
+    }
+
+    //平时间段个数
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_shoulder.ucSegCont;
+    //平时起止时间段
+    for(i = 0; i < pProto->info.SegTime_shoulder.ucSegCont; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_shoulder.ucStart[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_shoulder.ucEnd[i];
+    }
+
+    //谷时间段个数
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_off_peak.ucSegCont;
+    //谷时起止时间段
+    for(i = 0; i < pProto->info.SegTime_off_peak.ucSegCont; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_off_peak.ucStart[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.SegTime_off_peak.ucEnd[i];
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+}
+static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdReqTimeSegBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_TIMESEG, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -1902,6 +1962,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_POWERFEE] = EchCMDCreate(22, 21, 30, makeCmdReqPowerFee, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24, 23, 30, makeCmdReqServFee, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26, 25, 30, makeCmdReqCyc,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28, 27, 30, makeCmdReqTimeSeg, analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;

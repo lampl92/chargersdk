@@ -977,9 +977,11 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
 {
     int res;
+
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_POWERFEE, pEVSE, pProto, &res);
-    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SERVFEE, pEVSE, pProto, &res);
-    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_CYC, pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SERVFEE,  pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_CYC,      pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_TIMESEG,  pEVSE, pProto, &res);
 }
 
 /** @brief
