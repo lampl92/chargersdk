@@ -17,6 +17,7 @@
 #define defNodeNameLength       64
 #define defQRCodeLength         64
 #define defOrderSNLength        32
+#define defSoftVerLength        32
 
 /* µ¥Î»£ºms */
 #define defMonitorTempCyc           5000

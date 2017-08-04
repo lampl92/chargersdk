@@ -40,6 +40,8 @@ typedef struct _EVSEInfo
     double dDefSegFee;
     gdsl_list_t plTemplSeg;
 
+    uint8_t strSoftVer[defSoftVerLength+1];
+
     pEVSEGetCfg_ft GetEVSECfg;
     ErrorCode_t (*SetEVSECfg)(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
 //    pEVSESetCfg_ft SetSN;
