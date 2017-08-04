@@ -939,6 +939,97 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     return errcode;
 }
 
+ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+{
+    CON_t *pCON = NULL;
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t set_errcode;
+    ErrorCode_t errcode;
+    uint8_t id_cont;
+    uint8_t id;//本地枪ID,从0开始
+    uint8_t len_qr;
+    uint8_t qrcode[64] = {0};
+    uint8_t ucOffset;
+    int i,j;
+
+    set_errcode = ERR_NO;
+    ucOffset = 0;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_QR, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        errcode = handle_errcode;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        if(flag_set == 0)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+            break;//直接结束 返回
+        }
+        //pbuff[4] 枪口个数
+        ucOffset = 4;
+        id_cont = pbuff[ucOffset++];
+
+        for(i = 0; i < id_cont; i++)
+        {
+            //pbuff[5] 充电桩接口
+            id = EchRemoteIDtoCONID(pbuff[ucOffset++]);
+            pCON = CONGetHandle(id);
+            if(pCON == NULL)
+            {
+                set_errcode = ERR_REMOTE_PARAM;
+                break; //查无此枪, 退出循环
+            }
+            //pbuff[6] 二维码长度
+            len_qr = pbuff[ucOffset++];
+            //pbuff[7...] 二维码
+            for(j = 0; j < len_qr; j++)
+            {
+                qrcode[j] = pbuff[ucOffset++];
+            }
+            qrcode[len_qr] = '\0';
+            pCON->info.SetCONCfg(pCON, jnQRCode, qrcode, ParamTypeString);
+        }
+
+        //pbuff[0...3] 操作ID
+        if(set_errcode == ERR_NO)
+        {
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_NO;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0xffff, 0);
+        }
+        else
+        {
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_REMOTE_PARAM;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
 static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;

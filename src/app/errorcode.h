@@ -63,7 +63,8 @@ typedef enum _ErrorCode
 
     ERR_REMOTE_NODATA,  //无数据
     ERR_REMOTE_REGEDIT,  //注册失败
-    ERR_REMOTE_ORDERSN  //订单号不相等
+    ERR_REMOTE_ORDERSN,  //订单号不相等
+    ERR_REMOTE_PARAM    //协议参数与本机无法兼容
 
 } ErrorCode_t;
 

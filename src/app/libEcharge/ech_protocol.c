@@ -2024,7 +2024,7 @@ echProtocol_t *EchProtocolCreate(void)
     }
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
-    //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析) //充电桩收到平台回复的命令，不需要timeout 单位s。平台主动发送的需要设置桩处理超时时间
+    //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
     pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,  2,  0,  makeCmdReg,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,  4,  0,  makeCmdHeart,      analyCmdHeart);
     pProto->pCMD[ECH_CMDID_RESET]        = EchCMDCreate(6,  5,  30, makeCmdReset,      analyCmdCommon);
@@ -2045,6 +2045,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28, 27, 30, makeCmdReqTimeSeg, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30, 29, 30, makeCmdReqKey,     analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_SOFTVER]  = EchCMDCreate(34, 33, 30, makeCmdReqSoftVer, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_QR]       = EchCMDCreate(0,  35, 30, NULL,              analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;

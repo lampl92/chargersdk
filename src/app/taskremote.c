@@ -131,6 +131,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     RemoteIF_RecvSetPowerFee(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetServFee(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetTimeSeg(pEVSE, pProto, flag_set, &res);
+    RemoteIF_RecvSetQR(pEVSE, pProto, flag_set, &res);
 
     /******* end 充电过程中不允许设置************/
 
