@@ -1541,6 +1541,46 @@ static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeCmdReqTimeSegBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_TIMESEG, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpNetSeq;
+    int i;
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_KEY]->ucRecvdOptData;
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4...19] 密钥
+    for(i = 0; i < 16; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.strKey[i];
+    }
+    //[20...23] 密钥变更时间
+    ultmpNetSeq.ulVal = htonl(pProto->info.tNewKeyChangeTime);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
+}
+static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    makeCmdReqKeyBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_KEY, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -1963,6 +2003,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24, 23, 30, makeCmdReqServFee, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26, 25, 30, makeCmdReqCyc,     analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28, 27, 30, makeCmdReqTimeSeg, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30, 29, 30, makeCmdReqKey,     analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;
