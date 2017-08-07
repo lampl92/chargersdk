@@ -101,10 +101,11 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_REQ_KEY       18 //平台查询密钥信息
 #define ECH_CMDID_REQ_SOFTVER   19 //平台查询软件版本号
 #define ECH_CMDID_SET_QR        20 //平台设置枪口互联互通二维码
+#define ECH_CMDID_REQ_QR        21 //平台查询枪口互联互通二维码
 
 
 /*命令个数*/
-#define ECH_CMD_MAX             21
+#define ECH_CMD_MAX             22
 
 typedef struct
 {

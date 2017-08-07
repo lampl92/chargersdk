@@ -2,7 +2,7 @@
 #define VERSION_H
 
 	//Date Version Types
-	#define DATE "04"
+	#define DATE "07"
 	#define MONTH "08"
 	#define YEAR "2017"
 	#define UBUNTU_VERSION_STYLE "17.08"
@@ -18,7 +18,7 @@
 	#define REVISION 17062
 	
 	//Miscellaneous Version Types
-	#define BUILDS_COUNT 5448
+	#define BUILDS_COUNT 5449
 	#define RC_FILEVERSION 3,9,3145,17062
 	#define RC_FILEVERSION_STRING "3, 9, 3145, 17062\0"
 	#define FULLVERSION_STRING "3.9.3145.17062"

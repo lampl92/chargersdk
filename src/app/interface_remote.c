@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "stringName.h"
 #include "cfg_parse.h"
+#include "libEcharge/ech_globals.h"
 
 #if 0
 ErrorCode_t RemoteInit()
@@ -53,26 +54,6 @@ ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
     return errcode;
 }
 #endif
-
-uint8_t EchRemoteIDtoCONID(uint8_t remote_id)
-{
-    uint8_t id;
-    switch(remote_id)
-    {
-    case 0:
-    case 1:
-        id = 0;
-        break;
-    case 2:
-        id = 1;
-        break;
-    default:
-        id = 0xff;
-        break;
-    }
-    return id;
-}
-
 
 /** @brief
  *
@@ -1075,6 +1056,7 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_TIMESEG,  pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_KEY,      pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SOFTVER,  pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_QR,       pEVSE, pProto, &res);
 }
 
 /** @brief
