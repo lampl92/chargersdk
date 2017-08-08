@@ -1044,6 +1044,7 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
         break;
     case ERR_NO:
         *psiRetVal = 1;
+        pProto->info.BnWFlushListCfg(path);//设置黑白名单需要清除原有名单
         //pbuff[0...3] 操作ID
         //pbuff[4,5] 名单个数
         ucOffset = 4;
@@ -1088,7 +1089,99 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
 
     return errcode;
 }
+ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    int set_errcode;
+    ErrorCode_t errcode;
+    us2uc ustmpNetSeq;
+    uint16_t usListCont;
+    uint8_t i,j,k;          //i:名单数  j:名单字节长度  k:名单种类
+    uint8_t ucOffset = 0;
+    uint8_t strID[16+1] = {0};
+    uint8_t path[64];
 
+    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        errcode = handle_errcode;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+
+        ucOffset = 4;
+        for(k = 0; k < 2; k++) //先处理白名单 0, 再处理黑名单 1
+        {
+            if(k == 1)
+            {
+                strcpy(path, pathBlackList);
+            }
+            else if(k == 0)
+            {
+                strcpy(path, pathWhiteList);
+            }
+            //pbuff[4,5] 名单个数
+            ustmpNetSeq.ucVal[0] = pbuff[ucOffset++];
+            ustmpNetSeq.ucVal[1] = pbuff[ucOffset++];
+            usListCont = ntohs(ustmpNetSeq.usVal);
+            //卡号,16位
+            for (i = 0; i < usListCont; i++)
+            {
+                for(j = 0; j < 16; j++)
+                {
+                    strID[j] = pbuff[ucOffset++];
+                }
+                switch(usCmdID)
+                {
+                case ECH_CMDID_ADD_BNW:
+                    set_errcode = pProto->info.BnWAddListCfg(path, strID);
+                    break;
+                case ECH_CMDID_DEL_BNW:
+                    set_errcode = pProto->info.BnWDeleteListCfg(path, strID);
+                    break;
+                }
+
+                if(set_errcode == 0)
+                {
+                    break;
+                }
+            }
+        }
+
+
+        if(set_errcode == 1)
+        {
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_NO;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0xffff, 0);
+        }
+        else
+        {
+            //pbuff[0...3] 操作ID
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_REMOTE_PARAM;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
 static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
@@ -1140,6 +1233,9 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 
     RemoteIF_RecvSetBnWList(ECH_CMDID_SET_BLACK, pEVSE, pProto, &res);
     RemoteIF_RecvSetBnWList(ECH_CMDID_SET_WHITE, pEVSE, pProto, &res);
+
+    RemoteIF_RecvAddDelBnWList(ECH_CMDID_ADD_BNW, pEVSE, pProto, &res);
+    RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
 }
 
 /** @brief

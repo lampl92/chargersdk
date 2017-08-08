@@ -499,7 +499,7 @@ void testSetProtoCfg()
 /*---------------------------------------------------------------------------/
 /                               黑白名单
 /---------------------------------------------------------------------------*/
-int BnWIsListCfg(uint8_t *path, uint8_t *strID)
+static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -532,7 +532,7 @@ int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 
     return res;
 }
-int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
+static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -554,7 +554,7 @@ int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 
     return 1;
 }
-int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
+static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -576,7 +576,45 @@ int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
 
     return 1;
 }
-int BnWAddListCfg(uint8_t *path, uint8_t *strID)
+/** @brief 设置黑白名单到文件, 会覆盖原有内容
+ *
+ * @param path uint8_t*
+ * @param strID uint8_t*
+ * @return int
+ *
+ */
+static int BnWFlushListCfg(uint8_t *path)
+{
+    cJSON *jsArrayObj;
+    ErrorCode_t errcode;
+    int i;
+    int res = 1;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = cJSON_CreateArray();
+    if(jsArrayObj == NULL)
+    {
+        res = 0;
+        return res;
+    }
+
+    errcode = SetCfgObj(path, jsArrayObj);
+    if(errcode != ERR_NO)
+    {
+        res = 0;
+    }
+    return res;
+}
+/** @brief 增加黑白名单到文件, 不会覆盖
+ *
+ * @param path uint8_t*
+ * @param strID uint8_t*
+ * @return int
+ *
+ */
+static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
     ErrorCode_t errcode;
@@ -602,7 +640,7 @@ int BnWAddListCfg(uint8_t *path, uint8_t *strID)
     return res;
 }
 
-int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
+static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -674,6 +712,7 @@ void testBnWList(void)
         "0000000000000024"
     };
     uint8_t strIDCtx[17];
+    BnWFlushListCfg(pathBlackList);
     for (int i = 0; i < 20; ++i)
     {
         /* code */
@@ -2411,11 +2450,13 @@ echProtocol_t *EchProtocolCreate(void)
 
     pProto->info.GetProtoCfg = GetProtoCfg;
     pProto->info.SetProtoCfg = SetProtoCfg;
+
     pProto->info.BnWIsListCfg = BnWIsListCfg;
     pProto->info.BnWGetListCfg = BnWGetListCfg;
     pProto->info.BnWGetListSizeCfg = BnWGetListSizeCfg;
     pProto->info.BnWAddListCfg = BnWAddListCfg;
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
+    pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
     for(i = 0; i < ECH_CMD_MAX; i++)
     {
@@ -2450,6 +2491,10 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_SET_WHITE]    = EchCMDCreate(100, 99,  30, makeCmdSetWhiteRes, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_BLACK]    = EchCMDCreate(102, 101, 30, makeCmdReqBlack,    analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_WHITE]    = EchCMDCreate(104, 103, 30, makeCmdReqWhite,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_ADD_BNW]      = EchCMDCreate(0,   105, 30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_DEL_BNW]      = EchCMDCreate(0,   106, 30, NULL,               analyCmdCommon);
+
+
     //end of 注册
 
     pProto->recvResponse = recvResponse;
