@@ -5,7 +5,7 @@
 * @version v1.0
 * @date 2017-05-18
 */
-
+#include "stm32f4xx.h"
 uint8_t EchRemoteIDtoCONID(uint8_t remote_id)
 {
     uint8_t id;
