@@ -1011,6 +1011,84 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
 
     return errcode;
 }
+
+ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    int set_errcode;
+    ErrorCode_t errcode;
+    us2uc ustmpNetSeq;
+    uint16_t usListCont;
+    uint8_t i,j;
+    uint8_t ucOffset = 0;
+    uint8_t strID[16+1] = {0};
+    uint8_t path[64];
+
+    if(usCmdID == ECH_CMDID_SET_BLACK)
+    {
+        strcpy(path, pathBlackList);
+    }
+    else if(usCmdID == ECH_CMDID_SET_WHITE)
+    {
+        strcpy(path, pathWhiteList);
+    }
+
+    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        errcode = handle_errcode;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        //pbuff[4,5] 名单个数
+        ucOffset = 4;
+        ustmpNetSeq.ucVal[0] = pbuff[ucOffset++];
+        ustmpNetSeq.ucVal[1] = pbuff[ucOffset++];
+        usListCont = ntohs(ustmpNetSeq.usVal);
+        //卡号,16位
+        for (i = 0; i < usListCont; i++)
+        {
+            for(j = 0; j < 16; j++)
+            {
+                strID[j] = pbuff[ucOffset++];
+            }
+            set_errcode = pProto->info.BnWAddListCfg(path, strID);
+            if(set_errcode == 0)
+            {
+                break;
+            }
+        }
+
+        if(set_errcode == 1)
+        {
+            errcode = ERR_NO;
+            //[0...3]操作ID
+            //[4] 设置结果
+            pProto->pCMD[usCmdID]->ucRecvdOptData[4] = 1;
+            pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0xffff, 0);
+        }
+        else
+        {
+            errcode = ERR_FILE_RW;
+            //[0...3]操作ID
+            //[4] 设置结果
+            pProto->pCMD[usCmdID]->ucRecvdOptData[4] = 2;
+            pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0xffff, 0);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
 static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
@@ -1057,6 +1135,11 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_KEY,      pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SOFTVER,  pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_QR,       pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_BLACK,    pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_WHITE,    pEVSE, pProto, &res);
+
+    RemoteIF_RecvSetBnWList(ECH_CMDID_SET_BLACK, pEVSE, pProto, &res);
+    RemoteIF_RecvSetBnWList(ECH_CMDID_SET_WHITE, pEVSE, pProto, &res);
 }
 
 /** @brief

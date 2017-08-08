@@ -15,6 +15,7 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
+    testBnWList();
 }
 
 tinysh_cmd_t cli_hello_cmd =

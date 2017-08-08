@@ -160,6 +160,8 @@ void sys_Init(void)
     create_sysconf_file();
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
+    create_cfg_file(pathWhiteList, strWhiteListCfg);
+    create_cfg_file(pathBlackList, strBlackListCfg);
 
     /*---------------------------------------------------------------------------/
     /                               GUI初始化

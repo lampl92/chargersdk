@@ -12,6 +12,8 @@
 #define pathEVSECfg     "system\\evse.cfg"
 #define pathSysconf     "system\\sysconf.cfg"
 #define pathProtoCfg    "system\\protocol.cfg"
+#define pathWhiteList   "system\\whitelist.cfg"
+#define pathBlackList   "system\\blacklist.cfg"
 
 
 #define jnEVSESN        "EVSESN"

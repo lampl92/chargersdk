@@ -112,4 +112,8 @@ const uint8_t *strProtoCfg =
         \"End5\": 255 \
     } \
 }";
+
+const uint8_t *strWhiteListCfg ="[]";
+const uint8_t *strBlackListCfg ="[]";
+
 #endif

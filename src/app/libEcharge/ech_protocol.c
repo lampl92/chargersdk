@@ -497,6 +497,227 @@ void testSetProtoCfg()
 }
 
 /*---------------------------------------------------------------------------/
+/                               黑白名单
+/---------------------------------------------------------------------------*/
+int BnWIsListCfg(uint8_t *path, uint8_t *strID)
+{
+    cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
+    ErrorCode_t errcode;
+    uint16_t usTotalList;
+    int i;
+    int res;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if(jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        return 0;
+    }
+    usTotalList = cJSON_GetArraySize(jsArrayObj);
+    for(i = 0; i < usTotalList; i++)
+    {
+        res = 0;
+        jsArrayItem = cJSON_GetArrayItem(jsArrayObj, i);
+        if(strcmp(jsArrayItem->valuestring, strID) == 0)
+        {
+            res = 1;
+            break;
+        }
+    }
+
+    cJSON_Delete(jsArrayObj);
+
+    return res;
+}
+int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
+{
+    cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
+    ErrorCode_t errcode;
+    uint16_t usTotalList;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if(jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        return 0;
+    }
+    usTotalList = cJSON_GetArraySize(jsArrayObj);
+    *size = usTotalList;
+
+    cJSON_Delete(jsArrayObj);
+
+    return 1;
+}
+int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
+{
+    cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if(jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        return 0;
+    }
+
+    jsArrayItem = cJSON_GetArrayItem(jsArrayObj, idx);
+    strcpy(strID, jsArrayItem->valuestring);
+
+    cJSON_Delete(jsArrayObj);
+
+    return 1;
+}
+int BnWAddListCfg(uint8_t *path, uint8_t *strID)
+{
+    cJSON *jsArrayObj;
+    ErrorCode_t errcode;
+    int i;
+    int res = 1;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if(jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        res = 0;
+        return res;
+    }
+    cJSON_AddItemToArray(jsArrayObj, cJSON_CreateString(strID));
+
+    errcode = SetCfgObj(path, jsArrayObj);
+    if(errcode != ERR_NO)
+    {
+        res = 0;
+    }
+    return res;
+}
+
+int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
+{
+    cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
+    ErrorCode_t errcode;
+    uint16_t usTotalList;
+    int i;
+    int res;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if(jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        res = 0;
+        return res;
+    }
+    usTotalList = cJSON_GetArraySize(jsArrayObj);
+    for(i = 0; i < usTotalList; i++)
+    {
+        res = 0;
+        jsArrayItem = cJSON_GetArrayItem(jsArrayObj, i);
+        if(strcmp(jsArrayItem->valuestring, strID) == 0)
+        {
+            res = 1;
+            cJSON_DeleteItemFromArray(jsArrayObj, i);
+            break;
+        }
+    }
+
+    errcode = SetCfgObj(path, jsArrayObj);
+    if(errcode != ERR_NO)
+    {
+        res = 0;
+    }
+
+    return res;
+}
+
+void testBnWList(void)
+{
+    uint8_t total;
+    uint16_t size;
+    uint8_t *strID[24] =
+    {
+        "0000000000000001",
+        "0000000000000002",
+        "0000000000000003",
+        "0000000000000004",
+        "0000000000000005",
+        "0000000000000006",
+        "0000000000000007",
+        "0000000000000008",
+        "0000000000000009",
+        "0000000000000010",
+        "0000000000000011",
+        "0000000000000012",
+        "0000000000000013",
+        "0000000000000014",
+        "0000000000000015",
+        "0000000000000016",
+        "0000000000000017",
+        "0000000000000018",
+        "0000000000000019",
+        "0000000000000020",
+        "0000000000000021",
+        "0000000000000022",
+        "0000000000000023",
+        "0000000000000024"
+    };
+    uint8_t strIDCtx[17];
+    for (int i = 0; i < 20; ++i)
+    {
+        /* code */
+        BnWAddListCfg(pathBlackList, strID[i]);
+    }
+    for (int i = 0; i < 24; ++i)
+    {
+        /* code */
+        int res;
+        res = BnWIsListCfg(pathBlackList, strID[i]);
+        if (res == 1)
+        {
+            /* code */
+            printf_safe("%s 在列表中\n", strID[i]);
+        }
+    }
+
+    for (int i = 0; i < 10; ++i)
+    {
+        /* code */
+        BnWDeleteListCfg(pathBlackList, strID[i]);
+    }
+    for (int i = 0; i < 24; ++i)
+    {
+        /* code */
+        int res;
+        res = BnWIsListCfg(pathBlackList, strID[i]);
+        if (res == 1)
+        {
+            /* code */
+            printf_safe("%s 在列表中\n\n", strID[i]);
+        }
+    }
+
+    BnWGetListSizeCfg(pathBlackList, &size);
+    printf_safe("当前列表名单数量 %d\n", size);
+    printf_safe("Req List is:\n");
+    for(int i = 0; i < 5; i++)
+    {
+        BnWGetListCfg(pathBlackList, i, strIDCtx);
+        printf_safe("%s\n", strIDCtx);
+    }
+}
+/*---------------------------------------------------------------------------/
 /                               协议解析
 /---------------------------------------------------------------------------*/
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
@@ -1689,6 +1910,112 @@ static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeCmdReqQRBodyCtx(pPObj, pEObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_QR, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+
+static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4] 设置结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[4];
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+}
+
+static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdSetBnWResBodyCtx(pPObj, ECH_CMDID_SET_BLACK, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdSetBnWResBodyCtx(pPObj, ECH_CMDID_SET_WHITE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+
+static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    us2uc ustmpNetSeq;
+    uint16_t usListCont;
+    uint8_t i,j;
+    uint8_t ucOffset = 0;
+    uint8_t strID[16+1] = {0};
+    uint8_t path[64];
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+    if(usSendID == ECH_CMDID_REQ_BLACK)
+    {
+        strcpy(path, pathBlackList);
+    }
+    else if(usSendID == ECH_CMDID_REQ_WHITE)
+    {
+        strcpy(path, pathWhiteList);
+    }
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4, 5] 名单个数
+    ucOffset = 4;
+    pProto->info.BnWGetListSizeCfg(path, &usListCont);
+    ustmpNetSeq.usVal = htons(usListCont);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
+    //[6...]名单列表
+    for(i = 0; i < usListCont; i++)
+    {
+        pProto->info.BnWGetListCfg(path, i, strID);
+        for(j = 0; j < 16; j++)
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strID[j];
+        }
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+}
+static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdReqBnWBodyCtx(pPObj, ECH_CMDID_REQ_BLACK, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdReqBnWBodyCtx(pPObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2084,7 +2411,11 @@ echProtocol_t *EchProtocolCreate(void)
 
     pProto->info.GetProtoCfg = GetProtoCfg;
     pProto->info.SetProtoCfg = SetProtoCfg;
-
+    pProto->info.BnWIsListCfg = BnWIsListCfg;
+    pProto->info.BnWGetListCfg = BnWGetListCfg;
+    pProto->info.BnWGetListSizeCfg = BnWGetListSizeCfg;
+    pProto->info.BnWAddListCfg = BnWAddListCfg;
+    pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
 
     for(i = 0; i < ECH_CMD_MAX; i++)
     {
@@ -2093,28 +2424,32 @@ echProtocol_t *EchProtocolCreate(void)
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
-    pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,  2,  0,  makeCmdReg,        analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,  4,  0,  makeCmdHeart,      analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_RESET]        = EchCMDCreate(6,  5,  30, makeCmdReset,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_STATUS]       = EchCMDCreate(41, 42, 30, makeCmdStatus,     analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]  = EchCMDCreate(44, 43, 30, makeCmdRemoteCtrl, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_RTDATA]       = EchCMDCreate(45, 0,  0,  makeCmdRTData,     NULL);
-    pProto->pCMD[ECH_CMDID_ORDER]        = EchCMDCreate(46, 47, 30, makeCmdOrder,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_SUCC]     = EchCMDCreate(7,  0,  0,  makeCmdSetSucc,    NULL);
-    pProto->pCMD[ECH_CMDID_SET_FAIL]     = EchCMDCreate(8,  0,  0,  makeCmdSetFail,    NULL);
-    pProto->pCMD[ECH_CMDID_SET_POWERFEE] = EchCMDCreate(0,  11, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,  12, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,  13, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,  14, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_KEY]      = EchCMDCreate(0,  15, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_POWERFEE] = EchCMDCreate(22, 21, 30, makeCmdReqPowerFee, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24, 23, 30, makeCmdReqServFee, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26, 25, 30, makeCmdReqCyc,     analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28, 27, 30, makeCmdReqTimeSeg, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30, 29, 30, makeCmdReqKey,     analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_SOFTVER]  = EchCMDCreate(34, 33, 30, makeCmdReqSoftVer, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_QR]       = EchCMDCreate(0,  35, 30, NULL,              analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_QR]       = EchCMDCreate(37, 36, 30, makeCmdReqQR,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,   2,   0,  makeCmdReg,         analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,   4,   0,  makeCmdHeart,       analyCmdHeart);
+    pProto->pCMD[ECH_CMDID_RESET]        = EchCMDCreate(6,   5,   30, makeCmdReset,       analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_STATUS]       = EchCMDCreate(41,  42,  30, makeCmdStatus,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]  = EchCMDCreate(44,  43,  30, makeCmdRemoteCtrl,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_RTDATA]       = EchCMDCreate(45,  0,   0,  makeCmdRTData,      NULL);
+    pProto->pCMD[ECH_CMDID_ORDER]        = EchCMDCreate(46,  47,  30, makeCmdOrder,       analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_SUCC]     = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,     NULL);
+    pProto->pCMD[ECH_CMDID_SET_FAIL]     = EchCMDCreate(8,   0,   0,  makeCmdSetFail,     NULL);
+    pProto->pCMD[ECH_CMDID_SET_POWERFEE] = EchCMDCreate(0,   11,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,   12,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,   13,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,   14,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_KEY]      = EchCMDCreate(0,   15,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_POWERFEE] = EchCMDCreate(22,  21,  30, makeCmdReqPowerFee, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24,  23,  30, makeCmdReqServFee,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26,  25,  30, makeCmdReqCyc,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30,  29,  30, makeCmdReqKey,      analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_SOFTVER]  = EchCMDCreate(34,  33,  30, makeCmdReqSoftVer,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_QR]       = EchCMDCreate(0,   35,  30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_QR]       = EchCMDCreate(37,  36,  30, makeCmdReqQR,       analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_BLACK]    = EchCMDCreate(98,  97,  30, makeCmdSetBlackRes, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_WHITE]    = EchCMDCreate(100, 99,  30, makeCmdSetWhiteRes, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_BLACK]    = EchCMDCreate(102, 101, 30, makeCmdReqBlack,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_WHITE]    = EchCMDCreate(104, 103, 30, makeCmdReqWhite,    analyCmdCommon);
     //end of 注册
 
     pProto->recvResponse = recvResponse;

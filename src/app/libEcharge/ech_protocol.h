@@ -62,6 +62,11 @@ typedef struct _echProtoInfo
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
     ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
+    int (*BnWIsListCfg)(uint8_t *path, uint8_t *strID);
+    int (*BnWGetListSizeCfg)(uint8_t *path, uint16_t *size);
+    int (*BnWGetListCfg)(uint8_t *path, uint16_t idx, uint8_t *strID);
+    int (*BnWAddListCfg)(uint8_t *path, uint8_t *strID);
+    int (*BnWDeleteListCfg)(uint8_t *path, uint8_t *strID);
 
 } echProtoInfo_t;
 
@@ -102,10 +107,14 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_REQ_SOFTVER   19 //平台查询软件版本号
 #define ECH_CMDID_SET_QR        20 //平台设置枪口互联互通二维码
 #define ECH_CMDID_REQ_QR        21 //平台查询枪口互联互通二维码
+#define ECH_CMDID_SET_BLACK     22 //平台下发黑名单卡号
+#define ECH_CMDID_SET_WHITE     23 //平台下发白名单卡号
+#define ECH_CMDID_REQ_BLACK     24 //平台查询黑名单卡号
+#define ECH_CMDID_REQ_WHITE     25 //平台查询白名单卡号
 
 
 /*命令个数*/
-#define ECH_CMD_MAX             22
+#define ECH_CMD_MAX             26
 
 typedef struct
 {
