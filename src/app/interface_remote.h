@@ -64,7 +64,7 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
 
 ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal);
 
-ErrorCode_t RemoteGetTime(struct tm *pTimeBlock);
-ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAccountStatus, double *pdBalance);
+ErrorCode_t RemoteIF_SendCardCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid);
+ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal);
 
 #endif

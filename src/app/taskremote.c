@@ -506,23 +506,21 @@ void vTaskEVSERemote(void *pvParameters)
             taskremote_req(pEVSE, pechProto);
 
 
-            /* 获取帐户信息*/
-            uxBits = xEventGroupWaitBits(xHandleEventRemote,
-                                         defEventBitRemoteGetAccount,
-                                         pdTRUE, pdFALSE, 0);
-            if((uxBits & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
-            {
-                THROW_ERROR(defDevID_Cloud,
-                            errcode = RemoteGetBalance(pRFIDDev->order.ucCardID,
-                                                       defCardIDLength,
-                                                       &(pRFIDDev->order.ucAccountStatus),
-                                                       &(pRFIDDev->order.dBalance)),
-                            ERR_LEVEL_CRITICAL, "Remote GetBalance");
-                if(errcode == ERR_NO)
-                {
-                    xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
-                }
-            }
+            /***********获取帐户信息**********************/ //由taskrfid调用获取账户信息接口 2017年8月10日
+//            uxBits = xEventGroupWaitBits(xHandleEventRemote,
+//                                         defEventBitRemoteGetAccount,
+//                                         pdTRUE, pdFALSE, 0);
+//            if((uxBits & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
+//            {
+//                RemoteIF_SendCardCtrl(pEVSE, pechProto, pRFIDDev);
+//                THROW_ERROR(defDevID_Cloud,
+//                            errcode = RemoteIF_RecvCardCtrl(pechProto, pRFIDDev),
+//                            ERR_LEVEL_CRITICAL, "Remote GetBalance");
+//                if(errcode == ERR_NO)
+//                {
+//                    xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
+//                }
+//            }
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);

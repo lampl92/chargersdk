@@ -317,6 +317,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucAccountStatus = pRFIDDev->order.ucAccountStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
         pCON->order.ucCONID = pCON->info.ucCONID;
+        strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);

@@ -56,6 +56,8 @@ const uint8_t *strErrorCode[100] =
     "注册失败",
     "订单号不相等",
     "协议参数与本机无法兼容"
+    "卡号是白名单",
+    "卡号是黑名单"
 };
 
 void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg)

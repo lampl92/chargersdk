@@ -2055,6 +2055,61 @@ static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeCmdReqBnWBodyCtx(pPObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdCardCtrlBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    EVSE_t *pEVSE;
+    RFIDDev_t *pRfid;
+    uint8_t ucOrderSN[8];
+    uint8_t strOrderSN[17];
+    uint8_t strCardID[17];
+    uint32_t ulMsgBodyCtxLen_dec;
+    uint8_t remote_id;
+    ul2uc ultmpNetSeq;
+    int i;
+
+    pEVSE = (EVSE_t *)pEObj;
+    pRfid = (RFIDDev_t *)pCObj; //注意这里传过来的设备是刷卡板, 而不是枪, 我们要处理刷卡板里面的数据
+    ulMsgBodyCtxLen_dec = 0;
+    //[0] 充电桩接口
+    remote_id = EchCONIDtoRemoteID(pRfid->order.ucCONID, pEVSE->info.ucTotalCON);
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = remote_id;
+    //[1...16] 刷卡启动的卡号
+    HexToStr(pRfid->order.ucCardID, strCardID, 8);
+    for(i = 0;  i < 16; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+    }
+    //[17...24] 有卡充电流水号
+    ultmpNetSeq.ulVal = time(NULL); // 采用时间戳作为交易流水号, 协议中标识为BIN 8, 因此不做字节序转换
+    ucOrderSN[0] = 0;
+    ucOrderSN[1] = 0;
+    ucOrderSN[2] = 0;
+    ucOrderSN[3] = 0;
+    ucOrderSN[4] = ultmpNetSeq.ucVal[0];
+    ucOrderSN[5] = ultmpNetSeq.ucVal[1];
+    ucOrderSN[6] = ultmpNetSeq.ucVal[2];
+    ucOrderSN[7] = ultmpNetSeq.ucVal[3];
+    for (i = 0; i < 8; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+    }
+    //保存流水号到order
+    HexToStr(ucOrderSN, strOrderSN, 8);
+    strcpy(pRfid->order.strOrderSN, strOrderSN);
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdCardCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdCardCtrlBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_CTRL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2493,6 +2548,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_WHITE]    = EchCMDCreate(104, 103, 30, makeCmdReqWhite,    analyCmdCommon);
     pProto->pCMD[ECH_CMDID_ADD_BNW]      = EchCMDCreate(0,   105, 30, NULL,               analyCmdCommon);
     pProto->pCMD[ECH_CMDID_DEL_BNW]      = EchCMDCreate(0,   106, 30, NULL,               analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_CARD_CTRL]    = EchCMDCreate(90,  91,  30, makeCmdCardCtrl,    analyCmdCommon);
 
 
     //end of 注册

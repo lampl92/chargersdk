@@ -20,6 +20,9 @@ void vTaskEVSERFID(void *pvParameters)
     int i;
     EventBits_t uxBits;
     ErrorCode_t errcode;
+    int res; //remote 返回值;
+    uint32_t remote_timeout_u100ms;
+    uint8_t ucVaild = 0;//用于判断remote返回是否可以充电
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -91,25 +94,68 @@ void vTaskEVSERFID(void *pvParameters)
             }
             break;
         case STATE_RFID_NEWID:
-            uxBits = xEventGroupSync(xHandleEventRemote,
-                                     defEventBitRemoteGetAccount,
-                                     defEventBitRemoteGotAccount,
-                                     5000);//发送到Remote
-            if((uxBits & defEventBitRemoteGotAccount) == defEventBitRemoteGotAccount)
+//            uxBits = xEventGroupSync(xHandleEventRemote,
+//                                     defEventBitRemoteGetAccount,
+//                                     defEventBitRemoteGotAccount,
+//                                     5000);//发送到Remote
+            errcode = RemoteIF_SendCardCtrl(pEVSE, pechProto, pRFIDDev);
+            switch(errcode)
             {
+            case ERR_WHITE_LIST:
+                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                break;
+            case ERR_BLACK_LIST:
+                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                break;
+            case ERR_NO:
+                remote_timeout_u100ms = 0;
+                break;
+            default:
+                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                break;
+            }
+
+            do
+            {
+                remote_timeout_u100ms++;
+                if(remote_timeout_u100ms >= 100)//10s
+                {
+                    pRFIDDev->state = STATE_RFID_NOID;
+                    break;
+                }
+                errcode = RemoteIF_RecvCardCtrl(pechProto, pRFIDDev, &ucVaild, &res);
+                vTaskDelay(100);
+            }
+            while(errcode != ERR_NO || res != 1);
+            if (pRFIDDev->state == STATE_RFID_NOID)//while超时情况的额外判断,以便退出当前case
+            {
+                break;
+            }
+            if(ucVaild == 2)//e充网定义 1 可充, 2不可充
+            {
+                pRFIDDev->state == STATE_RFID_NOID;
+                break;
+            }
+
+//            if((uxBits & defEventBitRemoteGotAccount) == defEventBitRemoteGotAccount)
+//            {
                 if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
                 {
                     pRFIDDev->state = STATE_RFID_GOODID;
                 }
-                if(pRFIDDev->order.ucAccountStatus == 0)
+                else if(pRFIDDev->order.ucAccountStatus == 0)
                 {
                     pRFIDDev->state = STATE_RFID_BADID;
                 }
-                if(pRFIDDev->order.dBalance < 0)
+                else if(pRFIDDev->order.dBalance < 0)
                 {
                     pRFIDDev->state = STATE_RFID_OWE;
                 }
-            }
+                else
+                {
+                    pRFIDDev->state = STATE_RFID_NOID;
+                }
+//            }
             break;
         case STATE_RFID_OLDID:
 #ifdef DEBUG_RFID

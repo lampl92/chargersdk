@@ -2,6 +2,8 @@
 #include "utils.h"
 #include <time.h>
 
+extern void testBnWList(void);
+
 void cli_hello_fnt(int argc, char **argv)
 {
     uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};

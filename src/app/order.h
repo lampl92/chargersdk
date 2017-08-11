@@ -71,6 +71,8 @@ typedef struct _ChargeSegInfo
 //    double dServFee;
 }ChargeSegStatus_t;
 
+/** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中
+ */
 typedef struct _OrderData
 {
     OrderState_t    statOrder;  //记录订单状态

@@ -1238,31 +1238,123 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
 }
 
-/** @brief
- *
- * @param pucID uint8_t*
- * @param ucIDLength uint8_t
- * @param pucAccountStatus uint8_t*     0 未注册 、1 注册
- * @param pdBalance double*             帐户余额
- * @return ErrorCode_t
- *
- */
-ErrorCode_t RemoteGetBalance(uint8_t *pucID, uint8_t ucIDLength, uint8_t *pucAccountStatus, double *pdBalance)
+ErrorCode_t RemoteIF_SendCardCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
-    double tmpBalance;
-    uint8_t tmpAccountStat;
+    uint8_t ucOrderSN[8];
+    uint8_t strOrderSN[17];
+    uint8_t strCardID[17];
+    ul2uc ultmpNetSeq;
     ErrorCode_t errcode;
 
-    tmpAccountStat = 1;
-    tmpBalance = 888.88;
-    errcode = ERR_NO;
+    HexToStr(pRfid->order.ucCardID, strCardID, 8);
+    if(pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
+    {
+        pRfid->order.ucAccountStatus = 0;
+        pRfid->order.dBalance = 0;
 
-    /** @todo (rgw#1#): 调用云平台接口 */
+        return ERR_BLACK_LIST;
+    }
+    else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    {
+        pRfid->order.ucAccountStatus = 1;
+        pRfid->order.dBalance = 9999999;
 
-    *pucAccountStatus = tmpAccountStat;
-    *pdBalance = tmpBalance;
+        ultmpNetSeq.ulVal = time(NULL); // 采用时间戳作为交易流水号, 协议中标识为BIN 8, 因此不做字节序转换
+        ucOrderSN[0] = 0;
+        ucOrderSN[1] = 0;
+        ucOrderSN[2] = 0;
+        ucOrderSN[3] = 0;
+        ucOrderSN[4] = ultmpNetSeq.ucVal[0];
+        ucOrderSN[5] = ultmpNetSeq.ucVal[1];
+        ucOrderSN[6] = ultmpNetSeq.ucVal[2];
+        ucOrderSN[7] = ultmpNetSeq.ucVal[3];
 
-//    errcode = ERR_NET_TIMEOUT;
-//    errcode = ERR_NONET;
+        //保存流水号到order
+        HexToStr(ucOrderSN, strOrderSN, 8);
+        strcpy(pRfid->order.strOrderSN, strOrderSN);
+
+        return ERR_WHITE_LIST;
+    }
+
+    errcode = pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_CTRL, 20, 3); //注意传的参数是 pRfid
     return errcode;
 }
+ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+    uint8_t con_id;
+    uint8_t strCardID[17];
+    uint8_t strOrderCardID[17];
+    uint8_t ucOrderSN[8];
+    uint8_t strOrderSN[17];
+    ul2uc ultmpNetSeq;
+    uint8_t ucOffset;
+    int i;
+
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_CTRL, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        ucOffset = 0;
+        //pbuff[0] 充电桩接口
+        con_id = pbuff[ucOffset++];
+        if(con_id != pRfid->order.ucCONID)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        //pbuff[1...16] 卡号
+        for(i = 0; i < 16; i++)
+        {
+            strCardID[i] = pbuff[ucOffset++];
+        }
+        HexToStr(pRfid->order.ucCardID, strOrderCardID, 8);
+        if(strcmp(strCardID, strOrderCardID) != 0)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        //pbuff[17...24] 流水号
+        for(i = 0; i < 8; i++)
+        {
+            ucOrderSN[i] = pbuff[ucOffset++];
+        }
+        HexToStr(ucOrderSN, strOrderSN, 8);
+        if(strcmp(strOrderSN, pRfid->order.strOrderSN) != 0)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        //pbuff[25] 验证结果
+        *pucVaild = pbuff[ucOffset++];
+        //pbuff[26...29] 可用余额
+        ultmpNetSeq.ucVal[0] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[1] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[2] = pbuff[ucOffset++];
+        ultmpNetSeq.ucVal[3] = pbuff[ucOffset++];
+        pRfid->order.dBalance = (double)(ntohl(ultmpNetSeq.ulVal)) / 100.0;
+        if(pRfid->order.dBalance > 0)
+        {
+            pRfid->order.ucAccountStatus = 1;
+        }
+        else
+        {
+            pRfid->order.ucAccountStatus = 2;
+        }
+
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+    errcode = handle_errcode;
+    return errcode;
+}
+
