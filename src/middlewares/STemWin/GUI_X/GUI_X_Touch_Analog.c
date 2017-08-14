@@ -48,195 +48,117 @@ Purpose     : Config / System dependent externals for GUI
 #include "touch.h"
 #include "touchtimer.h"
 
-#define Y (1)
-static uint16_t adc_x,adc_y;
-static float adc_press;
-volatile static uint8_t i = 0;
+#define CALEBRATE_DEBUG 0
+#define CALEBRATE_TIME  500
+
+volatile static uint16_t adc_x,adc_y;
 static uint8_t step = 0;
+GUI_PID_STATE State = {0};
+static uint8_t _pidFlag = 0;
+static uint16_t _pidCount = 0;
+
 extern uint8_t calebrate_done;
-void GUI_TOUCH_X_ActivateX(void) {
-}
 
-void GUI_TOUCH_X_ActivateY(void) {
-}
-
-int  GUI_TOUCH_X_MeasureX(void) {
-    if(((calebrate_done&0x1) == 1)&&(PEN == 0)&&(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])))
+void GUI_TOUCH_X_ActivateX(void)
+{
+    if((calebrate_done & 0x01) == 1)//初始化完成
     {
-        Buzzer_control(1);
-
-        adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-        adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-
-        if(TP_Read_Pressure(&adc_press) == 0)
+        if((PEN == 0) && (TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
         {
-            if(adc_press >= 0)
+            _pidFlag = 1;
+            Buzzer_control(1);
+            adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+            adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+
+            if(!bittest(winCreateFlag,2))
             {
-                i = i + Y;
-                if(i == 200)//持续5S
-                {
-                    i = 0;
-                    bitset(calebrate_done,5);
-                    bitclr(calebrate_done,0);
-                }
-                if(i == 50)
-                {
-                    bitset(calebrate_done,3);
-                }
+                State.x = adc_x;
+                State.y = adc_y;
+                State.Pressed = 1;
+                GUI_PID_StoreState(&State);
+            }
+        }
+        else
+        {
+            _pidFlag = 0;
+            Buzzer_control(0);
+
+            /**< 键盘鼠标路线会触发拐角的键,
+            暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
+            if(bittest(winCreateFlag,2))
+            {
+                adc_x = 0;
+                adc_y = 0;
             }
             else
             {
-                i = 0;
+                State.Pressed = 0;
+                GUI_PID_StoreState(&State);
             }
         }
-//       if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
-//        {
-//            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-//            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-//        }
-//        adc_x = tp_dev.x[0];
-//        adc_y = tp_dev.y[0];
+    }
+}
+
+void GUI_TOUCH_X_ActivateY(void)
+{
+
+}
+
+int  GUI_TOUCH_X_MeasureX(void)
+{
+    if(_pidFlag == 1)//检测到有效坐标
+    {
         if((adc_x < ErrMultiEdit_Size.xpos) || (adc_y < ErrMultiEdit_Size.ypos))
         {
             bitset(calebrate_done,4); //清除故障窗口
-
         }
 
-        if(adc_y <= 40 && adc_y >= 0)
+        if((adc_x >= 0 && adc_x <= 40)&&(adc_y >= 0 && adc_y <= 40))
         {
-            if(adc_x <= 40 && adc_x >= 0)
-            {
-                bitset(calebrate_done,6);
-            }
-            switch(step)
-            {
-            case 0:
-                if(adc_x <= 800 && adc_x >= 400)
-                    step++;
-                else
-                    step = 0;
-            break;
-            case 1:
-                if(adc_x < 400 && adc_x >= 0)
-                {
-                    step = 0;
-                    bitset(calebrate_done,7);
-                }
-                else
-                    step = 0;
-            break;
-            }
+            bitset(calebrate_done,6);//进入首页
+        }
+
+        if((adc_x >= 400 && adc_x <= 800) && (adc_y >= 0 && adc_y <= 40))
+        {
+            step = 1;
+        }
+        else if((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40))
+        {
+            step = 2;
+            bitset(calebrate_done,7);//管理员
         }
         else
         {
             step = 0;
         }
 
+        _pidCount++;
+#if CALEBRATE_DEBUG
+        printf_safe("_pid_count = %d  ",_pidCount);
+        if(_pidCount % 10 == 0)
+            printf_safe("\n");
+#endif
+        switch(_pidCount)
+        {
+            case CALEBRATE_TIME:
+                _pidCount = 0;
+#if CALEBRATE_DEBUG
+                printf_safe("\n进入校准模式!\n");
+#endif
+                bitset(calebrate_done,5);//校准
+                bitclr(calebrate_done,0);//
+
+                _pidFlag = 0;
+                Buzzer_control(0);
+                State.Pressed = 0;
+                GUI_PID_StoreState(&State);
+            break;
+        }
     }
     else
     {
-        Buzzer_control(0);
-        adc_x = 0;
-        adc_y = 0;
+        _pidCount = 0;
     }
-
-
-//        if(TP_Read_Pressure(&adc_press) == 0)
-//        {
-//            if((adc_press > 0)&&(PEN == 0))
-//            {
-//               Buzzer_control(1);
-//            }
-//            else
-//            {
-//                Buzzer_control(0);
-//            }
-//        }
-//
-////        vTaskDelay(100);
-//
-//
-//    if(((calebrate_done&0x1) == 1)&&(PEN == 0))
-//    {
-//        if(TP_Read_Pressure(&adc_press) == 0)
-//        {
-//            if(adc_press >= 1000 && adc_press <= 6000)
-//            {
-//                i = i + Y;
-//                if(i == 200)//持续5S
-//                {
-//                    i = 0;
-//                    bitset(calebrate_done,5);
-//                    bitclr(calebrate_done,0);
-//                }
-//                if(i == 100)
-//                {
-//                    bitset(calebrate_done,3);
-//                }
-//            }
-//            else
-//            {
-//                i = 0;
-//            }
-//        }
-//        if(TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0])) //读取屏幕坐标
-//        {
-//            tp_dev.x[0] = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-//            tp_dev.y[0] = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-//        }
-//        adc_x = tp_dev.x[0];
-//        adc_y = tp_dev.y[0];
-//        if(adc_x < ErrMultiEdit_Size.xpos)
-//        {
-//            bitset(calebrate_done,4); //清除故障窗口
-//        }
-//        else if(adc_y < ErrMultiEdit_Size.ypos)
-//        {
-//            bitset(calebrate_done,4);
-//        }
-//        if(adc_y <= 40 && adc_y >= 0)
-//        {
-//            if(adc_x <= 40 && adc_x >= 0)
-//            {
-//                bitset(calebrate_done,6);
-//            }
-//            switch(step)
-//            {
-//            case 0:
-//                if(adc_x <= 800 && adc_x >= 400)
-//                    step++;
-//                else
-//                    step = 0;
-//            break;
-////            case 1:
-////                if(adc_x < 600 && adc_x >= 400)
-////                    step++;
-////                else
-////                    step = 0;
-////            break;
-//            case 1:
-//                if(adc_x < 400 && adc_x >= 0)
-//                {
-//                    step = 0;
-//                    bitset(calebrate_done,7);
-//                }
-//                else
-//                    step = 0;
-//            break;
-//
-//            }
-//        }
-//        else
-//        {
-//            step = 0;
-//        }
-//    }
-//    else
-//    {
-//        adc_x = 0;
-//        adc_y = 0;
-//    }
-
 
     return adc_x;
 }
@@ -244,5 +166,3 @@ int  GUI_TOUCH_X_MeasureX(void) {
 int  GUI_TOUCH_X_MeasureY(void) {
     return adc_y;
 }
-
-

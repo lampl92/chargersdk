@@ -145,8 +145,10 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
     if(diffsec > 86400)
     {
-        printf_safe("now = ld%,startTime = %ld\n",now,pCON->order.tStartTime);
-        while(1);
+        while(1)
+        {
+            printf_safe("now = %ld,startTime = %ld\n",now,pCON->order.tStartTime);
+        }
         diffsec = 86400;
     }
     hour = diffsec / 3600;
@@ -225,7 +227,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 信号数据处理 */
             Signal_Show();
             /**< 灯光控制 */
-            Led_Show();
+            //Led_Show();
             /**< 如果界面发生了切换 */
             if(_hWinCharging == cur_win)
             {
@@ -317,7 +319,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 对控件数据刷新 */
             Data_Flush(pMsg);
             //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-            WM_RestartTimer(pMsg->Data.v,100);
+            WM_RestartTimer(pMsg->Data.v,1000);
         }
         break;
     case MSG_CREATERRWIN:

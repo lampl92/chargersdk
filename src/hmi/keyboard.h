@@ -4,8 +4,8 @@
 #include "pyinput.h"
 #include "touchtimer.h"
 //下述定义为输入设置项的对应宏
-#define LOGIN_PASSWD 0
-
+#define LOGIN_PASSWD    0
+#define SYSSET_VALUE    1
 
 //下述定义为输入数据合法性检测返回值
 #define VALUE_OK_SAV 0
@@ -310,6 +310,6 @@ static GUI_CONST_STORAGE GUI_BITMAP bmReturn = {
 };
 
 extern uint8_t ManagerSetOptions;
-void Keypad_GetValue(uint8_t optios);
+void Keypad_GetValue(uint8_t optios,char *varname);
 #endif
 

@@ -192,7 +192,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     sec = diffsec % 3600 % 60;
 
     xsprintf((char *)_secDown, "(%02dS)", (60 - sec));
-    if(sec == 10)
+    if(sec == 59)
     {
         first_flag = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
@@ -283,10 +283,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 first_flag = 0;
-                //WM_DeleteWindow(pMsg->hWin);
-                //GUI_EndDialog(_hWinCardInfo,0);
                 _deleteWin(_hWinCardInfo);
-                //WM_DeleteWindow(_hWinCardInfo);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 CreateHome();
                 break;
@@ -299,10 +296,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                //WM_DeleteWindow(pMsg->hWin);
-                //GUI_EndDialog(_hWinCardInfo,0);
                 _deleteWin(_hWinCardInfo);
-                //WM_DeleteWindow(_hWinCardInfo);
                 CreateRegiterDisp();
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -319,7 +313,6 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
             Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), _secDown);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-//            WM_SendMessageNoPara(_hWinCardInfo,MSG_UPDATEDATA);
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
@@ -330,7 +323,6 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         if(pMsg->Data.v == _timerData)
         {
             Data_Flush(pMsg);
-            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
             WM_RestartTimer(pMsg->Data.v,100);
         }
         break;

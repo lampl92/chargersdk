@@ -102,7 +102,6 @@ static void Data_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin_Error;
     EventBits_t uxBitRFID;
     EventBits_t uxBits;
-    static uint8_t flag = 1;
 
     WM_HWIN hWin = pMsg->hWin;
 
@@ -207,12 +206,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 //WM_DeleteWindow(pMsg->hWin);
                 _deleteWin(pMsg->hWin);
-                Keypad_GetValue(LOGIN_PASSWD);
+                Keypad_GetValue(LOGIN_PASSWD," ");
                 break;
             case WM_NOTIFICATION_RELEASED:
                 //WM_DeleteWindow(pMsg->hWin);
                 _deleteWin(pMsg->hWin);
-                Keypad_GetValue(LOGIN_PASSWD);
+                Keypad_GetValue(LOGIN_PASSWD," ");
                 break;
             }
             break;
@@ -269,6 +268,7 @@ WM_HWIN CreateHome(void)
     _hWinHome = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     cur_win = _hWinHome;
     WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 20, 0);
+    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
 
     return 0;
 }

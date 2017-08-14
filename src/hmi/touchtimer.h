@@ -38,7 +38,7 @@
 #define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //跳到充电中页消息
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
-
+#define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 
 extern uint8_t calebrate_done;
 extern uint8_t winCreateFlag;
@@ -67,6 +67,22 @@ struct errMultiEdit_size{
     uint8_t err_num;
 }ErrMultiEdit_Size;
 
+struct _Disp_Status{
+    uint8_t _workStatus:2;//工作状态
+    uint8_t _scramStatus:2;//急停状态
+    uint8_t _envTempStatus:2;//环境温度
+    uint8_t _AsocketTempStatus:2;//A插座温度
+    uint8_t _BsocketTempStatus:2;//B插座温度
+    uint8_t _AplugCurrentStatus:2;//A枪输出电流
+    uint8_t _BplugCurrentStatus:2;//B枪输出电流
+    uint8_t _AplugStatus:2;//A枪枪锁
+    uint8_t _BplugStatus:2;//B枪枪锁
+    uint8_t _acVoltStatus:2;//交流电压
+    uint8_t _acCurrentStatus:2;//交流电流
+    uint8_t _spdStatus:2;//防雷器状态
+    uint8_t _outputRelayStatus:2;//输出继电器
+    uint8_t _controlPilotStatus:2;//控制导引
+}disp_Status;
 
 void PutOut_SelAOrB();
 WM_HWIN CreateHome(void);
@@ -75,6 +91,8 @@ WM_HWIN CreateCardInfo(void);
 WM_HWIN CreateCharging(void);
 WM_HWIN CreateChargeDone(void);
 WM_HWIN CreateManagerInfoAnalog(void);
+WM_HWIN CreateManagerInfoStatus(void);
+WM_HWIN CreateManagerAlarmLog(void);
 //void PutOut_Card_Info();
 //void PutOut_Card_Valid();
 //void PutOut_Charging();

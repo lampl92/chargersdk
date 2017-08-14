@@ -1,4 +1,4 @@
-/*********************************************************************
+ï»¿/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -10,14 +10,19 @@
 *        GUI_Builder for emWin version 5.30                          *
 *        Compiled Jul  1 2015, 10:50:32                              *
 *        (c) 2015 Segger Microcontroller GmbH & Co. KG               *
-*                                                                    *
+*
+*   BUTTON_0    ä¿¡æ¯æŸ¥è¯¢                                             *
+*   BUTTON_1    å†å²è®°å½•
+*   BUTTON_2    ç³»ç»Ÿé…ç½®
+*   BUTTON_3    é€€å‡º
+*   BUTTON_4    æ¨¡æ‹Ÿé‡ å‘Šè­¦è®°å½•
+*   BUTTON_5    çŠ¶æ€é‡ å……ç”µè®°å½•                                         *
 **********************************************************************
 *                                                                    *
 *        Internet: www.segger.com  Support: support@segger.com       *
 *                                                                    *
 **********************************************************************
 */
-
 // USER START (Optionally insert additional includes)
 #include "xbffontcreate.h"
 #include "touchtimer.h"
@@ -39,12 +44,12 @@
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ĞÅÏ¢
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//ÀúÊ·
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ÏµÍ³
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//ÍË³ö
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//Ä£Äâ
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//×´Ì¬
+#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ä¿¡æ¯
+#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//å†å²
+#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ç³»ç»Ÿ
+#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//é€€å‡º
+#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//æ¨¡æ‹Ÿ
+#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//çŠ¶æ€
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -64,7 +69,7 @@
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
 // USER END
-WM_HWIN _hWinManagerInfoAnalog;
+static WM_HWIN _hWinManagerInfoAnalog;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 /*********************************************************************
 *
@@ -82,32 +87,30 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
-    // USER START (Optionally insert additional widgets)
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 540, 0, 90, 16, 0, 0x0, 0 },//ÍøÂçĞÅºÅÇ¿¶È
-    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//×îµ×¶ËµÄËµÃ÷
-    { BUTTON_CreateIndirect, "ĞÅÏ¢²éÑ¯", ID_BUTTON_0, 70, 120, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "ÀúÊ·¼ÇÂ¼", ID_BUTTON_1, 70, 184, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "ÏµÍ³ÅäÖÃ", ID_BUTTON_2, 70, 247, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "ÍË    ³ö", ID_BUTTON_3, 70, 312, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Ä£ÄâÁ¿", ID_BUTTON_4, 285, 40, 140, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "×´Ì¬Á¿", ID_BUTTON_5, 491, 40, 140, 40, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "½»Á÷µçÑ¹:", ID_TEXT_5, 300, 100, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//ç½‘ç»œä¿¡å·å¼ºåº¦
+    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//æœ€åº•ç«¯çš„è¯´æ˜
+    { BUTTON_CreateIndirect, "ä¿¡æ¯æŸ¥è¯¢", ID_BUTTON_0, 50, 70, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "å†å²è®°å½•", ID_BUTTON_1, 50, 140, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "ç³»ç»Ÿé…ç½®", ID_BUTTON_2, 50, 210, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "é€€    å‡º", ID_BUTTON_3, 50, 280, 150, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "æ¨¡æ‹Ÿé‡", ID_BUTTON_4, 285, 40, 140, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "çŠ¶æ€é‡", ID_BUTTON_5, 491, 40, 140, 40, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "äº¤æµç”µå‹:", ID_TEXT_5, 300, 100, 150, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 477, 100, 100, 30, 0, 0x64, 0 },
-    { TEXT_CreateIndirect, "½»Á÷µçÁ÷:", ID_TEXT_6, 300, 140, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "³äµçµ¼ÒıµçÑ¹:", ID_TEXT_7, 300, 178, 160, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Æµ    ÂÊ:", ID_TEXT_8, 300, 216, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "A²å×ùÎÂ¶È:", ID_TEXT_9, 300, 256, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "B²å×ùÎÂ¶È:", ID_TEXT_10, 300, 296, 150, 30, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "½ÓÏßÎÂ¶È:", ID_TEXT_11, 300, 336, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "äº¤æµç”µæµ:", ID_TEXT_6, 300, 140, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "å……ç”µå¯¼å¼•ç”µå‹:", ID_TEXT_7, 300, 178, 160, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "é¢‘    ç‡:", ID_TEXT_8, 300, 216, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Aæ’åº§æ¸©åº¦:", ID_TEXT_9, 300, 256, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Bæ’åº§æ¸©åº¦:", ID_TEXT_10, 300, 296, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "æ¥çº¿æ¸©åº¦:", ID_TEXT_11, 300, 336, 150, 30, 0, 0x0, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 477, 140, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_2, 477, 178, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_3, 477, 216, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_4, 477, 256, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_5, 477, 296, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 477, 336, 100, 30, 0, 0x64, 0 },
-    // USER END
 };
 
 /*********************************************************************
@@ -116,42 +119,50 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 *
 **********************************************************************
 */
-// USER START (Optionally insert additional static code)
-// USER END
-static void Timer_Process(WM_MESSAGE *pMsg)
+static void Data_Flush(WM_MESSAGE *pMsg)
 {
-    uint8_t i = 0;
-    WM_HWIN hWin = pMsg->hWin;
+    CON_t *pCon;
+    uint8_t strTmp[10];
 
-    Caculate_RTC_Show(pMsg,ID_TEXT_1,ID_TEXT_2);
-    //ĞèÒªÔö¼Ó3GÄ£¿éµÄĞÅºÅÇ¿¶ÈÅĞ¶Ï
-    switch(i % 5)
-    {
-    case 0:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:·Ç³£Ç¿");
-        break;
-    case 1:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:Ò»°ã");
-        break;
-    case 2:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:²î");
-        break;
-    case 3:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:¼«²î");
-        break;
-    default:
-        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), "ĞÅºÅ:ÎŞ");
-        break;
-    }
+    pCon = CONGetHandle(0);
 
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"220.0V");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"32.00A");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,"12.00V");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,"50Hz");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"30.0¡æ");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"30.0¡æ");
-    Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"30.0¡æ");
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dChargingVoltage);
+    strcat(strTmp,"V");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),strTmp);
 
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dChargingCurrent);
+    strcat(strTmp,"A");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),strTmp);
+
+    /// TODO (zshare#1#): //share
+    /**< æ§åˆ¶å¯¼å¼•ç”µå‹ç¡®è®¤ */
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",Sys_samp.DC.CP1);
+    strcat(strTmp,"V");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),strTmp);
+
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dChargingFrequence);
+    strcat(strTmp,"Hz");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),strTmp);
+
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);
+    strcat(strTmp,"â„ƒ");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),strTmp);
+
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp2);
+    strcat(strTmp,"â„ƒ");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),strTmp);
+
+    /// TODO (zshare#1#): ///æ¥çº¿æ¸©åº¦
+    memset(strTmp,'\0',strlen(strTmp));
+    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);//acl or acn
+    strcat(strTmp,"â„ƒ");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),strTmp);
 }
 /*********************************************************************
 *
@@ -164,11 +175,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    // USER START (Optionally insert additional variables)
-    // USER END
 
     switch (pMsg->MsgId)
     {
+    case WM_PAINT:
+        /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.\
+        ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
+        if(_hWinManagerInfoAnalog == cur_win)
+        {
+            /**< æ•°æ®å¤„ç† */
+            //Data_Process(pMsg);
+            /**< ä¿¡å·æ•°æ®å¤„ç† */
+            Signal_Show();
+            /**< ç¯å…‰æ§åˆ¶ */
+            Led_Show();
+            /**< å¦‚æœç•Œé¢å‘ç”Ÿäº†åˆ‡æ¢ */
+            if(_hWinManagerInfoAnalog == cur_win)
+            {
+                /**< æ•…éšœåˆ†æ */
+                Err_Analy(pMsg->hWin);
+                /**< ç‰¹æ®Šè§¦æ§ç‚¹åˆ†æ */
+                CaliDone_Analy(pMsg->hWin);
+            }
+        }
+        break;
     case WM_INIT_DIALOG:
         //
         // Initialization of 'Framewin'
@@ -177,13 +207,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         //Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK,"½»Á÷µçÑ¹:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"½»Á÷µçÁ÷:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"³äµçµ¼ÒıµçÑ¹:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"Æµ    ÂÊ:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"A²å×ùÎÂ¶È:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"B²å×ùÎÂ¶È:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"½ÓÏßÎÂ¶È:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK,"äº¤æµç”µå‹:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"äº¤æµç”µæµ:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"å……ç”µå¯¼å¼•ç”µå‹:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"é¢‘    ç‡:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"Aæ’åº§æ¸©åº¦:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"Bæ’åº§æ¸©åº¦:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"æ¥çº¿æ¸©åº¦:");
         //
         // Initialization of 'Edit'
         //
@@ -198,25 +228,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"ĞÅÏ¢²éÑ¯");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"ä¿¡æ¯æŸ¥è¯¢");
+        BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),1);
+        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_PRESSED,GUI_RED);
+
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÀúÊ·²éÑ¯");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"å†å²æŸ¥è¯¢");
+
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÏµÍ³ÅäÖÃ");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"ç³»ç»Ÿé…ç½®");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"ÍË    ³ö");
+                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"é€€    å‡º");
+
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"Ä£ÄâÁ¿");
+                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"æ¨¡æ‹Ÿé‡");
+        BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),1);
+        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),BUTTON_CI_PRESSED,GUI_RED);
+
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_BLUE,"×´Ì¬Á¿");
-//        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_UNPRESSED,GUI_GREEN);
-//        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_UNPRESSED,GUI_GREEN);
-
-//         BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), BUTTON_CI_DISABLED, GUI_GREEN);
-//        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), BUTTON_CI_PRESSED, GUI_GREEN);
-//        BUTTON_SetBkColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2), BUTTON_CI_UNPRESSED, GUI_GREEN);
-
-
+                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"çŠ¶æ€é‡");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -243,8 +273,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             // USER END
             break;
           case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
+                /**< è·³è½¬åˆ°å†å²è®°å½•æŸ¥è¯¢ */
+                _deleteWin(_hWinManagerInfoAnalog);
+                CreateManagerAlarmLog();
             break;
           // USER START (Optionally insert additional code for further notification handling)
           // USER END
@@ -297,26 +328,50 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_5: // Notifications sent by 'Button'
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
+            /**< noting */
             break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
+        /// TODO (zshare#1#): ///å› ä¸ºé¼ æ ‡é‡ç½®çš„é—®é¢˜, \
+          æ‰€ä»¥éœ€è¦ç”¨åˆ°WM_NOTIFICATION_MOVED_OUTäº‹ä»¶,ä¸è§¦å‘WM_NOTIFICATION_RELEASED
+          case WM_NOTIFICATION_RELEASED://WM_NOTIFICATION_MOVED_OUT:
+            /**< è·³è½¬åˆ°çŠ¶æ€ä¿¡æ¯æŸ¥è¯¢ */
+            _deleteWin(_hWinManagerInfoAnalog);
+            CreateManagerInfoStatus();
             break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
           }
         }
         break;
-        // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        /* ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
-        Timer_Process(pMsg);
-        /* ÖØÆô¶¨Ê±Æ÷ */
-        WM_RestartTimer(pMsg->Data.v, REFLASH);
+        if(pMsg->Data.v == _timerRTC)
+        {
+            /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
+            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+            /**< é‡å¯å®šæ—¶å™¨ */
+            WM_RestartTimer(pMsg->Data.v, 20);
+        }
+        if(pMsg->Data.v == _timerSignal)
+        {
+            WM_RestartTimer(pMsg->Data.v, 2000);
+        }
+        if(pMsg->Data.v == _timerData)
+        {
+            Data_Flush(pMsg);
+            WM_RestartTimer(pMsg->Data.v,5000);
+        }
         break;
-        // USER END
+    case MSG_CREATERRWIN:
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
+        err_window(pMsg->hWin);
+        break;
+    case MSG_DELERRWIN:
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
+        if(bittest(winCreateFlag,0))
+        {
+            bitclr(winCreateFlag,0);
+            GUI_EndDialog(err_hItem,0);
+            err_hItem = 0;
+        }
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;
@@ -332,7 +387,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 /*********************************************************************
 *
 /** @brief
- *  Êä³ö¹ÜÀíÔ±½çÃæÀïµÄĞÅÏ¢²éÑ¯Ä£ÄâÁ¿²¿·Ö
+ *  è¾“å‡ºç®¡ç†å‘˜ç•Œé¢é‡Œçš„ä¿¡æ¯æŸ¥è¯¢æ¨¡æ‹Ÿé‡éƒ¨åˆ†
  * @param
  * @param
  * @return
@@ -346,7 +401,6 @@ WM_HWIN CreateManagerInfoAnalog(void)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
-
 }
 /*************************** End of file ****************************/
 

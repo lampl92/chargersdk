@@ -11,9 +11,13 @@
 #define lcd_width 800
 
 WM_HWIN hMulti=0;       //多行文本
+WM_HWIN htmpChild;      //用于存放传递过来的子窗口句柄
+WM_HWIN htmpBK;         //用于存放传递过来的背景窗口句柄
+static uint8_t htmpID;  //用于存放传递过来的设置句柄ID
 BUTTON_Handle _aahButtonOk;
 BUTTON_Handle _aahButtonCancel;
 EDIT_Handle _aahEditVar;
+EDIT_Handle _aahEditEg;//示例
 KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
@@ -1017,6 +1021,9 @@ static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
     uint16_t i = 0;
+    CON_t *pCon;
+
+    pCon = CONGetHandle(0);
 
     memset(result_input,'\0',strlen(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
@@ -1024,7 +1031,6 @@ static uint8_t Value_Check()
     switch(ManagerSetOptions)
     {
     case LOGIN_PASSWD:
-
         if(strlen(result_input) == 0)
         {
             BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
@@ -1045,26 +1051,86 @@ static uint8_t Value_Check()
             }
             return VALUE_ERROR;
         }
-    break;
-    default:/// TODO (zshare#1#): 设置数据进行检测，定义数据检测结构体?????
-        if(strcmp(result_input,"888888") == 0)
+        break;
+    case SYSSET_VALUE:
+        switch(htmpID)
         {
-
-            return VALUE_OK_SAV;
+            case 20:
+                if(SetCONCfg(pEVSE->info.strSN,"EVSESN",result_input,ParamTypeString)== ERR_NO)
+                {
+                    return VALUE_OK_SAV;
+                }
+                else
+                {
+                    return VALUE_ERROR;
+                }
+                break;
+            case 21:
+                if(SetCONCfg(pEVSE->info.ucTotalCON,"TotalCON",atoi(result_input),ParamTypeU8) == ERR_NO)
+                {
+                    return VALUE_OK_SAV;
+                }
+                else
+                {
+                    return VALUE_ERROR;
+                }
+                break;
+            case 22:
+                if(SetCONCfg(pCon->info.dVolatageLowerLimits,"VolatageLowerLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+                {
+                    return VALUE_OK_SAV;
+                }
+                else
+                {
+                    return VALUE_ERROR;
+                }
+                break;
+            case 23:
+                if(SetCONCfg(pCon->info.dVolatageUpperLimits,"VolatageUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+                {
+                    return VALUE_OK_SAV;
+                }
+                else
+                {
+                    return VALUE_ERROR;
+                }
+                break;
+            case 24:
+                break;
+            case 25:
+                break;
+            case 26:
+                if(SetCONCfg(pCon->info.dACTempUpperLimits,"ACTempUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+                {
+                    return VALUE_OK_SAV;
+                }
+                else
+                {
+                    return VALUE_ERROR;
+                }
+                break;
+            case 27:
+                break;
+            case 28:
+                break;
+            case 29:
+                break;
+            case 30:
+                break;
+            case 31:
+                break;
+            case 32:
+                break;
+            case 33:
+                break;
+            case 34:
+                break;
+            case 35:
+                break;
+            case 36:
+                break;
         }
-        else if(Value_Check() == VALUE_ERROR)
-        {
-            //MULTIEDIT_SetPrompt(hMulti,"密码错误");
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
-            BUTTON_SetText(_aahButtonOk, "数据非法");
-        }
-        else if(Value_Check() == VALUE_OK_UNSAV)
-        {
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
-            BUTTON_SetText(_aahButtonOk, "保存失败");
-        }
-    break;
-
+        break;
     }
 }
 
@@ -1105,9 +1171,14 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     switch(ManagerSetOptions)
     {
     case LOGIN_PASSWD:
+        bitclr(winCreateFlag,2);
         (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHome());
     break;
-
+    /**< 添加跳页到设置页 , */
+    case SYSSET_VALUE:
+        WM_ShowWindow(htmpBK);
+        WM_ShowWindow(htmpChild);
+    break;
     default:
     break;
     }
@@ -1136,11 +1207,11 @@ static void _cbFrame(WM_MESSAGE * pMsg)
         NCode = pMsg->Data.v;
         switch(Id)
         {
-        case GUI_ID_BUTTON0:
+        case GUI_ID_BUTTON0://确定
             switch(NCode)
-            /// TODO (zshare#1#): /*添加设置值检测合法性*/
             {
             case WM_NOTIFICATION_CLICKED:
+                /**< 进入密码、设置值操作 */
                 if(Value_Check() == VALUE_OK_SAV)
                 {
                     //跳页操作
@@ -1149,10 +1220,9 @@ static void _cbFrame(WM_MESSAGE * pMsg)
                 break;
             }
             break;
-        case GUI_ID_BUTTON1:
+        case GUI_ID_BUTTON1://取消
             switch(NCode)
             {
-            ///* TODO (zshare#1#): 没有设置或设置失败然后返回跳页操作*/
             case WM_NOTIFICATION_CLICKED:
                 Jump_Screen(pMsg->hWin,1);
                 break;
@@ -1166,7 +1236,7 @@ static void _cbFrame(WM_MESSAGE * pMsg)
     }
 }
 
-void Keypad_GetValue(uint8_t optios)
+void Keypad_GetValue(uint8_t optios,char *varname)
 {
 	WM_HWIN hFrame;
 
@@ -1233,17 +1303,113 @@ void Keypad_GetValue(uint8_t optios)
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
+
+    case SYSSET_VALUE:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"交流桩序列号");
+        TEXT_SetFont(_aahEditVar, &XBF19_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"交流桩序列号");
+        TEXT_SetFont(_aahEditEg, &XBF16_Font);
+        TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
+        TEXT_SetText(_aahEditEg,"eg,1122334455667788");
+//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+    break;
+
     default:
     break;
     }
+    bitset(winCreateFlag,2);
     /// TODO (zshare#1#): ///增加键盘值返回函数
     //MULTIEDIT_GetText(hMulti,传参数组,个数);
-
-	while(1)
-	{
-		GUI_Delay(500);
-	}
 }
+void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,uint8_t *name_p,uint8_t *eg_p)
+{
+	WM_HWIN hFrame;
+
+    ManagerSetOptions = optios;
+	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
+    htmpBK = _hbkWin;
+	htmpChild = hwin;
+    htmpID = id;
+	keypad_dev.xpos=10;
+	keypad_dev.ypos=150;
+	keypad_dev.width=780;
+	keypad_dev.height=320;
+	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
+	keypad_dev.signpad_flag=0;
+	keypad_dev.signpad_num=2;
+    keypad_dev.inputlen=0;
+    keypad_dev.pynowpage=0;
+    keypad_dev.cur_index=0;
+    keypad_dev.sta=0;
+
+	//设置keypad所使用的按钮的皮肤
+	BUTTON_SetDefaultSkin(_DrawSkinFlex_BUTTON); 	//设置BUTTON的皮肤
+	//创建keypad
+	keypad_dev.hKeypad = WM_CreateWindowAsChild(keypad_dev.xpos,keypad_dev.ypos,keypad_dev.width,keypad_dev.height, WM_HBKWIN, WM_CF_SHOW | WM_CF_STAYONTOP, _cbKeyPad, 0);
+
+	//设置notepad属性
+	BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
+	FRAMEWIN_SetDefaultSkin(FRAMEWIN_SKIN_FLEX);
+	FRAMEWIN_SetDefaultTextAlign(GUI_TA_HCENTER);
+
+	//创建FRAME窗口
+	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
+	FRAMEWIN_SetTextColor(hFrame, GUI_RED);
+	FRAMEWIN_SetFont(hFrame, &XBF24_Font);
+	FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
+
+	//创建一个multi edit(多行文本小工具)小工具
+	hMulti = MULTIEDIT_CreateEx(170, 10, 400, 100, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
+	MULTIEDIT_EnableBlink(hMulti,500,1);//开启光标,周期500ms
+    MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
+	MULTIEDIT_SetFont(hMulti, &XBF24_Font);
+	WM_SetFocus(hMulti);
+
+    _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
+    BUTTON_SetFont(_aahButtonOk, &XBF24_Font);
+    BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
+    BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
+    BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+    BUTTON_SetText(_aahButtonOk, "确定");
+
+    _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    BUTTON_SetFont(_aahButtonCancel, &XBF24_Font);
+    BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
+    BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);
+    BUTTON_SetTextColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_BLACK);
+    BUTTON_SetText(_aahButtonCancel, "取消");
+
+    /// TODO (zshare#1#): ///添加密码是否显示眼睛位图
+    //    hButton = BUTTON_CreateEx(580,45,20,20,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    //    BUTTON_SetBitmapEx(hButton, 0, &bm_bpp_off, 0, 0);
+
+    switch(ManagerSetOptions)
+    {
+    case LOGIN_PASSWD:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
+        TEXT_SetFont(_aahEditVar, &XBF24_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
+    break;
+
+    case SYSSET_VALUE:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditVar, &XBF19_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditEg, &XBF16_Font);
+        TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
+        TEXT_SetText(_aahEditEg,eg_p);
+//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+    break;
+
+    default:
+    break;
+    }
+    bitset(winCreateFlag,2);
+}
+
 
 
 

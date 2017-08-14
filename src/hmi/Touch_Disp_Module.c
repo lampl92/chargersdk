@@ -28,6 +28,7 @@ WM_HWIN err_hItem = 0;
 /**< winCreateFlag故障字说明
 *       bit0:故障窗口是否已经创建
 *       bit1:是否存在故障
+*       bit2:键盘页鼠标是否归位(0,0)1归位,0不归位
 */
 uint8_t winCreateFlag = 0;
 
@@ -123,7 +124,7 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Time_buf, "%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
     TEXT_SetText(WM_GetDialogItem(hWin, textid1), Time_buf);
-    printf_safe("time = %s\n",Time_buf);
+    //printf_safe("time = %s\n",Time_buf);
 }
 /**信号数据刷新
  *
@@ -247,7 +248,7 @@ uint8_t _deleteWin(WM_HWIN hItem)
  * bit3 : 显示故障界面的控件
  * bit4 : 删除故障界面的控件
  * bit5 : 重新校准
- * bit6 : 跳转首页选枪界面
+ * bit6 : 跳转首页选枪界面(仅限应用模式)
  * bit7 : 跳转管理员密码界面
  * WM_WIN:源窗口
  * @param
@@ -262,6 +263,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
         //err_window(hWin,uxBitsErr);
     }
+
     if(bittest(calebrate_done,4))
     {
         bitclr(calebrate_done,4);
@@ -274,6 +276,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 //            //WM_DeleteWindow(err_hItem);
 //        }
     }
+
     if(bittest(calebrate_done,5))
     {
         bitclr(calebrate_done,5);
@@ -284,21 +287,27 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         vTaskDelay(100);
         LCD_Clear(WHITE);
         TP_Adjust();
-        bitset(calebrate_done,0);
-        PutOut_SelAOrB();
+        calebrate_done = 0xff;
+        //PutOut_SelAOrB();
+        MainTask();
     }
-    if(bittest(calebrate_done,6))
-    {
-        bitclr(calebrate_done,6);
-        WM_DeleteWindow(hWin);
-        PutOut_SelAOrB();
-    }
+/// TODO (zshare#1#): ///添加跳转首页会有问题???
+
+//    if(bittest(calebrate_done,6))
+//    {
+//        bitclr(calebrate_done,6);
+//        //WM_DeleteWindow(hWin);
+//        _deleteWin(hWin);
+//        PutOut_SelAOrB();
+//    }
+
     if(bittest(calebrate_done,7))
     {
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done,7);
-        WM_DeleteWindow(hWin);
-        Keypad_GetValue(LOGIN_PASSWD);
+        //WM_DeleteWindow(hWin);
+        _deleteWin(hWin);
+        Keypad_GetValue(LOGIN_PASSWD," ");
     }
 }
 /** 生成二维码数据
@@ -582,23 +591,28 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
     {
         //刷新故障列表
         Errlist_flush(msg_err);
+        if(bittest(winCreateFlag,1))
+        {
         //创建故障界面
         err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos, ErrMultiEdit_Size.ypos,
                     ErrMultiEdit_Size.xlength, ErrMultiEdit_Size.ylength,
                     hWin, WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
         bitset(winCreateFlag,0);
-        //MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
+        MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
         MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
         WM_SetFocus(err_hItem);
-        //MULTIEDIT_SetInsertMode(err_hItem, 1);
+        MULTIEDIT_SetInsertMode(err_hItem, 1);
         MULTIEDIT_SetCursorOffset(err_hItem,0);
         MULTIEDIT_EnableBlink(err_hItem,0,0);
 
         MULTIEDIT_SetText(err_hItem, msg_err);
         MULTIEDIT_SetCursorOffset(err_hItem,300);
 
+        MULTIEDIT_SetBkColor(err_hItem,MULTIEDIT_CI_EDIT,GUI_RED);//GUI_INVALID_COLOR);
+
         WM_SetFocus(err_hItem);
         bitclr(calebrate_done,4);
+        }
     }
 }
 

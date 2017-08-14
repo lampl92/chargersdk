@@ -191,7 +191,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_PAINT://MSG_UPDATEDATA:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinCardInfo == cur_win)
+        if(_hWinChargDone == cur_win)
         {
             /**< 数据处理 */
             Data_Process(pMsg);
@@ -200,7 +200,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 灯光控制 */
             Led_Show();
             /**< 如果界面发生了切换 */
-            if(_hWinCardInfo == cur_win)
+            if(_hWinChargDone == cur_win)
             {
                 /**< 故障分析 */
                 Err_Analy(pMsg->hWin);
@@ -213,7 +213,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         //设置本页焦点
         //
-        WM_SetFocus(pMsg->hWin);
+        //WM_SetFocus(pMsg->hWin);
         //
         // Initialization of 'Framewin'
         //
@@ -253,11 +253,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,temp_buf);
 
-        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                     defEventBitOrderMakeFinish,
-                                     pdFALSE, pdTRUE, portMAX_DELAY);
-        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
-        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+//        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+//                                     defEventBitOrderMakeFinish,
+//                                     pdFALSE, pdTRUE, portMAX_DELAY);
+//        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
+//        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+        time_charge = 0;
         hour = time_charge / 3600;
         min = time_charge % 3600 / 60;
         sec = time_charge % 3600 % 60;
@@ -275,6 +276,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
                     &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
         xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
+        _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
+        _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
+        _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
         // USER END
         break;
     case WM_NOTIFY_PARENT:
@@ -377,9 +381,6 @@ WM_HWIN CreateChargeDone(void)
 {
     _hWinChargDone = GUI_CreateDialogBox(_aDialogChargeDone, GUI_COUNTOF(_aDialogChargeDone), _cbDialog, WM_HBKWIN, 0, 0);
     cur_win = _hWinChargDone;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
 }
 /*************************** End of file ****************************/
 
