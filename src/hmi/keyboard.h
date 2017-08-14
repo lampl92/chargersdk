@@ -311,5 +311,7 @@ static GUI_CONST_STORAGE GUI_BITMAP bmReturn = {
 
 extern uint8_t ManagerSetOptions;
 void Keypad_GetValue(uint8_t optios,char *varname);
+void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,uint8_t *name_p,uint8_t *eg_p);
+
 #endif
 

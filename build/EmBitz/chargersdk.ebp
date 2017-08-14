@@ -478,6 +478,9 @@
 		<Unit filename="..\..\src\hmi\lcd\touch.h" />
 		<Unit filename="..\..\src\hmi\listview.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Alarm_Log.c">
 			<Option compilerVar="CC" />
@@ -579,6 +582,9 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\test_dgus.c">
 			<Option compilerVar="CC" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">
 			<Option compilerVar="CC" />

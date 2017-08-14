@@ -93,6 +93,7 @@ WM_HWIN CreateChargeDone(void);
 WM_HWIN CreateManagerInfoAnalog(void);
 WM_HWIN CreateManagerInfoStatus(void);
 WM_HWIN CreateManagerAlarmLog(void);
+WM_HWIN CreateManagerSysSet(void);
 //void PutOut_Card_Info();
 //void PutOut_Card_Valid();
 //void PutOut_Charging();

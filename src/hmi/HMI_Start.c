@@ -46,13 +46,13 @@ void MainTask(void)
     //    PutOut_Window();
     //    PutOut_Charging_2dimen();
         //Keypad_GetValue(LOGIN_PASSWD,"");
-        //CreateHome();
+        CreateHome();
         //CreateCardInfo();
         //CreateCharging();
         //CreateChargeDone();
         //CreateManagerInfoAnalog();
         //CreateManagerInfoStatus();
-        CreateManagerAlarmLog();
+        //CreateManagerAlarmLog();
         //CreateManagerSysSet();
     //    PutOut_Card_Info();
     //    PutOut_Charging();

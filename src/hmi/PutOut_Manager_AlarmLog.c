@@ -179,7 +179,7 @@ static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
     char *p;
     int id;
     int balance;
-    int _time;
+    time_t _time;
     struct tm* _ptime;
     time_t  _psec;
 
