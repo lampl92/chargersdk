@@ -42,6 +42,14 @@ uint32_t utils_ntohl(uint32_t n)
     return utils_htonl(n);
 }
 
+/** @brief "1234567890123456"  --> bcd[0]= 0x12  bcd[1]= 0x34 ......
+ *
+ * @param Str const char*
+ * @param Des char*
+ * @param iDesLen int
+ * @return uint32_t
+ *
+ */
 uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
 {
     if (NULL == Str)
@@ -84,7 +92,7 @@ uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
     return 1;
 }
 
-
+#if 0 //这个测试有问题,先不用
 uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 {
     if (NULL == Src)
@@ -109,12 +117,21 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
     Des[iSrcLen * 2] = '\0';
     return 1;
 }
+#endif
 
 uint32_t HexToChar(uint8_t Hex, uint8_t *c)
 {
     xsprintf(c, "%02X", Hex);
 }
 
+/** @brief hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99  --> "E1FF99000..."
+ *
+ * @param Hex uint8_t*
+ * @param Str uint8_t*
+ * @param Hexlen int
+ * @return uint32_t
+ *
+ */
 uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
 {
     int i;
@@ -125,6 +142,14 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
     Str[i * 2] = '\0';
 }
 
+/** @brief "E1FF991234567890" --> hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99 ......
+ *
+ * @param Str uint8_t*
+ * @param Hex uint8_t*
+ * @param Strlen int
+ * @return uint32_t
+ *
+ */
 uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
 {
     uint8_t hexbuff[2];

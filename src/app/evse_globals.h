@@ -71,7 +71,7 @@
 
 /*------pCON->status.xHandleEventOrder*/
 #define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
-#define defEventBitOrderMakeOK          BIT_1
+#define defEventBitOrderMakeOK          BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK        BIT_2
 #define defEventBitAddOrder             BIT_3
 #define defEventBitAddOrderOK           BIT_4

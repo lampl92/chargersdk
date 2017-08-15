@@ -1558,6 +1558,9 @@ CON_t *CONCreate(uint8_t ucCONID )
                                       (void *)(int)ucCONID,
                                       vRemoteRTDataTimerCB);
 
+    pCON->status.statRemoteProc.card.stat = CARDCTRL_IDLE;
+    pCON->status.statRemoteProc.card.timestamp = 0;
+
 
     OrderCreate(&(pCON->order));
     OrderInit(&(pCON->order));

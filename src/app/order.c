@@ -315,6 +315,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
     case STATE_ORDER_TMP:
         memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
         pCON->order.ucAccountStatus = pRFIDDev->order.ucAccountStatus;
+        pCON->order.ucCardStatus = pRFIDDev->order.ucCardStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
         pCON->order.ucCONID = pCON->info.ucCONID;
         strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
@@ -387,6 +388,7 @@ void OrderInit(OrderData_t *pOrder)
 
     memset(pOrder->ucCardID, 0, defCardIDLength);//¿¨ºÅ//ÔÚtaskrfidÖÐ¸³Öµ
     pOrder->ucAccountStatus = 0;    //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 0£ºÎ´×¢²á¿¨
+    pOrder->ucCardStatus = 0;
     pOrder->dBalance = 0;           //Óà¶î
 
     memset(pOrder->strOrderSN, '\0', defOrderSNLength);

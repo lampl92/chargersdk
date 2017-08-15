@@ -115,10 +115,10 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_ADD_BNW       26 //平台新增黑白名单 BNW = Black and White
 #define ECH_CMDID_DEL_BNW       27 //平台删除黑白名单
 #define ECH_CMDID_CARD_CTRL     28 //充电桩请求有卡启动充电
-
+#define ECH_CMDID_CARD_CTRL_RES 29 //充电桩上报有卡充电启动结果
 
 /*命令个数*/
-#define ECH_CMD_MAX             29
+#define ECH_CMD_MAX             30
 
 typedef struct
 {

@@ -81,6 +81,7 @@ typedef struct _OrderData
 
     uint8_t ucCardID[defCardIDLength]; //卡号//在taskrfid中赋值            2
     uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
+    uint8_t ucCardStatus;      //0 普通用户, 1 白名单用户, 2 黑名单用户
     double  dBalance;           //余额                                        3
     uint8_t ucCONID;            //4
     //创建时

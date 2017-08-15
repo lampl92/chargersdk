@@ -67,4 +67,5 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 ErrorCode_t RemoteIF_SendCardCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid);
 ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal);
 
+ErrorCode_t RemoteIF_SendCardCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ);
 #endif

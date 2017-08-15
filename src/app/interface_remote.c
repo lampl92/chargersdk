@@ -1358,3 +1358,25 @@ ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8
     return errcode;
 }
 
+ErrorCode_t RemoteIF_SendCardCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_CARD_CTRL_RES]->ucRecvdOptData;
+    //[18] Æô¶¯½á¹û
+    if(succ == 1)
+    {
+        pbuff[18] = 1;
+    }
+    else if(succ == 0)
+    {
+        pbuff[18] = 2;
+    }
+    /*********************/
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_CTRL_RES, 30, 3);
+
+    return errcode;
+}
+

@@ -16,44 +16,7 @@
 
 //#define DEBUG_NO_TASKREMOTE
 
-typedef enum
-{
-    REMOTE_NO,
-    REMOTE_CONNECTED,
-    REMOTE_REGEDITED,
-    REMOTE_RECONNECT,
-    REMOTE_ERROR
-} RemoteState_t;
 
-typedef enum
-{
-    REMOTEHEART_IDLE,
-    REMOTEHEART_RECV
-} RemoteHeartState_e;
-
-typedef enum
-{
-    REMOTECTRL_IDLE,
-    REMOTECTRL_WAIT_START,
-    REMOTECTRL_SUCC,
-    REMOTECTRL_WAIT_STOP,
-    REMOTECTRL_STOP,
-    REMOTECTRL_FAIL
-} RemoteCtrlState_e;
-
-typedef enum
-{
-    REMOTERTData_IDLE,
-    REMOTERTData_START,
-    REMOTERTData_STOP
-} RemoteRTDataState_e;
-
-typedef enum
-{
-    REMOTEOrder_IDLE,
-    REMOTEOrder_Send,
-    REMOTEOrder_WaitRecv
-} RemoteOrderState_e;
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 {
@@ -370,6 +333,43 @@ void vTaskEVSERemote(void *pvParameters)
                 break;
             default:
                 break;
+            }
+            /***************刷卡启停********************/
+            for(i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                switch(pCON->status.statRemoteProc.card.stat)
+                {
+                case CARDCTRL_IDLE: //初始化时进入的状态
+                    break;
+                case CARDCTRL_WAIT_START:  //taskdata.c中转换的这个状态
+                    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                                                defEventBitCONStartOK,
+                                                pdFALSE, pdTRUE, 0);
+                    if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+                    {
+                        pCON->status.statRemoteProc.card.stat = CARDCTRL_SUCC;
+                    }
+                    else
+                    {
+                        if(time(NULL) - pCON->status.statRemoteProc.card.timestamp > 30)
+                        {
+                            pCON->status.statRemoteProc.card.stat = REMOTECTRL_FAIL;
+                        }
+                    }
+                    break;
+                case REMOTECTRL_WAIT_STOP:
+                    //df
+                    break;
+                case CARDCTRL_SUCC:
+                    RemoteIF_SendCardCtrlRes(pEVSE, pechProto, pCON, 1); //1， 成功
+                    eRmtCtrlStat = REMOTECTRL_IDLE;
+                    break;
+                case CARDCTRL_FAIL:
+                    RemoteIF_SendCardCtrlRes(pEVSE, pechProto, pCON, 0);//0,
+                    eRmtCtrlStat = REMOTECTRL_IDLE;
+                    break;
+                }
             }
             /***************实时数据 *******************/
             for(i = 0; i < ulTotalCON; i++)

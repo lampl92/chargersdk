@@ -2110,6 +2110,69 @@ static int makeCmdCardCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeCmdCardCtrlBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_CTRL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+static int makeCmdCardCtrlResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    CON_t *pCON;
+    EVSE_t *pEVSE;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    uint8_t strCardID[17] = {0};
+    uint8_t ucOrderSN[8] = {0};
+    ul2uc ultmpNetSeq;
+    int i;
+    EventBits_t uxBit;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCON = (CON_t *)pCObj;
+    pEVSE = (EVSE_t *)pEVSE;
+    pbuff = pProto->pCMD[ECH_CMDID_CARD_CTRL_RES]->ucRecvdOptData;  // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0] 充电桩接口
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->order.ucCONID, pEVSE->info.ucTotalCON);
+    //[1...16] 卡号
+    HexToStr(pCON->order.ucCardID, strCardID, 8);
+    for(i = 0; i < 16; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+    }
+    //[17] 卡号状态
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.ucCardStatus;
+    //[18] 启动结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[18];
+    //[19...26] 有卡充电流水号
+    StrToHex(pCON->order.strOrderSN, ucOrderSN, 16);
+    for(i = 0; i < 8; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+    }
+    //[27...30] 当前电表读数
+    uxBit = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                defEventBitOrderMakeOK,
+                                pdTRUE, pdTRUE, portMAX_DELAY);
+    if((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
+    {
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdCardCtrlRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdCardCtrlResBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_CTRL_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2549,6 +2612,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ADD_BNW]      = EchCMDCreate(0,   105, 30, NULL,               analyCmdCommon);
     pProto->pCMD[ECH_CMDID_DEL_BNW]      = EchCMDCreate(0,   106, 30, NULL,               analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_CTRL]    = EchCMDCreate(90,  91,  30, makeCmdCardCtrl,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_CARD_CTRL_RES] = EchCMDCreate(92, 93,  30, makeCmdCardCtrlRes, analyCmdCommon);
 
 
     //end of 注册

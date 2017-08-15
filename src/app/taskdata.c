@@ -60,6 +60,8 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
+                pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START;
+                pCON->status.statRemoteProc.card.timestamp = time(NULL);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUpdateOK);
                 pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;
@@ -76,7 +78,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
                 makeOrder(pCON);
-                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//目前还没有地方用
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//充电前数据准备完成, Clear in proto
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:

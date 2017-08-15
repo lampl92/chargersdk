@@ -99,15 +99,19 @@ void vTaskEVSERFID(void *pvParameters)
 //                                     defEventBitRemoteGotAccount,
 //                                     5000);//发送到Remote
             errcode = RemoteIF_SendCardCtrl(pEVSE, pechProto, pRFIDDev);
+            ucVaild = 0;
             switch(errcode)
             {
             case ERR_WHITE_LIST:
-                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                pRFIDDev->order.ucCardStatus = 1;
+                ucVaild = 1;
                 break;
             case ERR_BLACK_LIST:
-                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                pRFIDDev->order.ucCardStatus = 2;
+                ucVaild = 2;
                 break;
             case ERR_NO:
+                pRFIDDev->order.ucCardStatus = 0;
                 remote_timeout_u100ms = 0;
                 break;
             default:
@@ -126,7 +130,7 @@ void vTaskEVSERFID(void *pvParameters)
                 errcode = RemoteIF_RecvCardCtrl(pechProto, pRFIDDev, &ucVaild, &res);
                 vTaskDelay(100);
             }
-            while(errcode != ERR_NO || res != 1);
+            while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1));
             if (pRFIDDev->state == STATE_RFID_NOID)//while超时情况的额外判断,以便退出当前case
             {
                 break;
