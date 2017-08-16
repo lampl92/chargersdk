@@ -163,7 +163,10 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     }
     GPRS_set; //…œµÁ∆Ù∂Ø
     DEVDEBUG("modem Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
+//    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
+    vTaskDelay(10000);
+    modem_send_at("AT\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     switch(ret)
     {
     case DR_MODEM_OK:
@@ -728,7 +731,9 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
+    modem_send_at("AT\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+//    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
 
     return ret;
 }
