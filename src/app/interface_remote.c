@@ -434,6 +434,20 @@ ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCO
 
     return errcode;
 }
+ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_CARD_RTDATA]->ucRecvdOptData;
+
+    pbuff[55] = ctrl;
+    pbuff[56] = reason;
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_RTDATA, 0xffff, 0);
+
+    return errcode;
+}
 ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     uint8_t *pbuff;
@@ -1238,13 +1252,13 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
 }
 
-ErrorCode_t RemoteIF_SendCardCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
+ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
     uint8_t ucOrderSN[8];
     uint8_t strOrderSN[17];
     uint8_t strCardID[17];
     ul2uc ultmpNetSeq;
-    ErrorCode_t errcode;
+    ErrorCode_t errcode = ERR_NO;
 
     HexToStr(pRfid->order.ucCardID, strCardID, 8);
     if(pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
@@ -1276,10 +1290,10 @@ ErrorCode_t RemoteIF_SendCardCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_
         return ERR_WHITE_LIST;
     }
 
-    errcode = pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_CTRL, 20, 3); //注意传的参数是 pRfid
+    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 20, 3); //注意传的参数是 pRfid
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
+ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -1294,7 +1308,7 @@ ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8
     uint8_t ucOffset;
     int i;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_CTRL, pbuff, &len);
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_START, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -1358,13 +1372,13 @@ ErrorCode_t RemoteIF_RecvCardCtrl(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8
     return errcode;
 }
 
-ErrorCode_t RemoteIF_SendCardCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
 {
     uint8_t *pbuff;
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pbuff = pProto->pCMD[ECH_CMDID_CARD_CTRL_RES]->ucRecvdOptData;
+    pbuff = pProto->pCMD[ECH_CMDID_CARD_START_RES]->ucRecvdOptData;
     //[18] 启动结果
     if(succ == 1)
     {
@@ -1375,7 +1389,82 @@ ErrorCode_t RemoteIF_SendCardCtrlRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t
         pbuff[18] = 2;
     }
     /*********************/
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_CTRL_RES, 30, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_START_RES, 30, 3);
+
+    return errcode;
+}
+ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
+{
+    CON_t *pCON;
+    uint8_t id;
+
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    id = 0;
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_START_RES, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[0]);
+        pCON = CONGetHandle(id);
+        if(pCON != NULL)
+        {
+            *psiRetVal = 1;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 30, 3);
+
+    return ERR_NO;
+}
+ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
+{
+    CON_t *pCON;
+    uint8_t id;
+
+    uint8_t pbuff[1024] = {0};
+    uint32_t len;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    id = 0;
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_STOP_RES, pbuff, &len);
+    switch(handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[0]);
+        pCON = CONGetHandle(id);
+        if(pCON != NULL)
+        {
+            *psiRetVal = 1;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
 
     return errcode;
 }

@@ -98,7 +98,7 @@ void vTaskEVSERFID(void *pvParameters)
 //                                     defEventBitRemoteGetAccount,
 //                                     defEventBitRemoteGotAccount,
 //                                     5000);//·¢ËÍµ½Remote
-            errcode = RemoteIF_SendCardCtrl(pEVSE, pechProto, pRFIDDev);
+            errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);
             ucVaild = 0;
             switch(errcode)
             {
@@ -127,7 +127,7 @@ void vTaskEVSERFID(void *pvParameters)
                     pRFIDDev->state = STATE_RFID_NOID;
                     break;
                 }
-                errcode = RemoteIF_RecvCardCtrl(pechProto, pRFIDDev, &ucVaild, &res);
+                errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
                 vTaskDelay(100);
             }
             while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1));

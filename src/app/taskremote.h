@@ -7,19 +7,18 @@
 */
 #ifndef  __TASKREMOTE_H
 #define  __TASKREMOTE_H
-typedef enum _statCartCtrl
+typedef enum _statCardCtrl
 {
     CARDCTRL_IDLE,
     CARDCTRL_WAIT_START,
-    CARDCTRL_SUCC,
+    CARDCTRL_WAIT_START_RECV,
     CARDCTRL_WAIT_STOP,
-    CARDCTRL_STOP,
-    CARDCTRL_FAIL
-} statCartCtrl_e;
+    CARDCTRL_WAIT_STOP_RECV
+} statCardCtrl_e;
 
 typedef struct
 {
-    statCartCtrl_e stat;
+    statCardCtrl_e stat;
     time_t timestamp;
 }RemoteCardStatus_t;
 

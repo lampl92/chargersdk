@@ -129,6 +129,7 @@ void vTaskEVSERemote(void *pvParameters)
     uint8_t order_send_count;
     uint32_t reg_try_cnt;
     uint32_t heart_lost;
+    uint8_t rtdata_reason;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -147,6 +148,7 @@ void vTaskEVSERemote(void *pvParameters)
     order_send_count = 0;
     reg_try_cnt = 0;
     heart_lost = 0;
+    rtdata_reason = 0;
 
     while(1)
     {
@@ -293,6 +295,7 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     if(time(NULL) - time_rmtctrl > 30)
                     {
+                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                         eRmtCtrlStat = REMOTECTRL_FAIL;
                     }
                 }
@@ -308,7 +311,6 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     if(time(NULL) - time_rmtctrl > 30)
                     {
-                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                         eRmtCtrlStat = REMOTECTRL_FAIL;
                     }
                 }
@@ -344,34 +346,54 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 case CARDCTRL_WAIT_START:  //taskdata.c中转换的这个状态
                     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                                defEventBitCONStartOK,
-                                                pdFALSE, pdTRUE, 0);
+                                                 defEventBitCONStartOK,
+                                                 pdFALSE, pdTRUE, 0);
                     if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
                     {
-                        pCON->status.statRemoteProc.card.stat = CARDCTRL_SUCC;
+                        RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 1); //1， 成功
+                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                     }
                     else
                     {
                         if(time(NULL) - pCON->status.statRemoteProc.card.timestamp > 30)
                         {
-                            pCON->status.statRemoteProc.card.stat = REMOTECTRL_FAIL;
+                            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：启动充电失败未清除认证标志，导致下一辆可充电车直接充电
+                            RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 0);//0,
+                            pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                         }
                     }
                     break;
-                case REMOTECTRL_WAIT_STOP:
-                    //df
+                case CARDCTRL_WAIT_STOP:
+                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                    if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
+                    {
+                        //停止充电
+                        RemoteIF_SendCardStopRes(pEVSE, pechProto, pCON);
+                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP_RECV;
+                    }
+                    else
+                    {
+                        //...
+                    }
                     break;
-                case CARDCTRL_SUCC:
-                    RemoteIF_SendCardCtrlRes(pEVSE, pechProto, pCON, 1); //1， 成功
-                    eRmtCtrlStat = REMOTECTRL_IDLE;
+
+                case CARDCTRL_WAIT_START_RECV:
+                    RemoteIF_RecvCardStartRes(pechProto, &network_res);
+                    if(network_res == 1)
+                    {
+                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
+                    }
                     break;
-                case CARDCTRL_FAIL:
-                    RemoteIF_SendCardCtrlRes(pEVSE, pechProto, pCON, 0);//0,
-                    eRmtCtrlStat = REMOTECTRL_IDLE;
+                case CARDCTRL_WAIT_STOP_RECV:
+                    RemoteIF_RecvCardStopRes(pechProto, &network_res);
+                    if(network_res == 1)
+                    {
+                        pCON->status.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                    }
                     break;
                 }
             }
-            /***************实时数据 *******************/
+            /***************扫码实时数据 *******************/
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
@@ -409,24 +431,33 @@ void vTaskEVSERemote(void *pvParameters)
                         {
                         case defOrderStopType_RFID:
                         case defOrderStopType_Remote:
-                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, 1);//手动停止
+                            rtdata_reason = 1;
                             break;
                         case defOrderStopType_Full:
-                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, 3);//充满停止
+                            rtdata_reason = 3;
                             break;
                         case defOrderStopType_Fee:
-                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, 4);//达到充电金额
+                            rtdata_reason = 4;
                             break;
                         case defOrderStopType_Scram:
                         case defOrderStopType_NetLost:
                         case defOrderStopType_Poweroff:
                         case defOrderStopType_OverCurr:
                         case defOrderStopType_Knock:
-                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, 5);//异常停止
+                            rtdata_reason = 5;
                             break;
                         default:
-                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, 6);//其他原因停止
+                            rtdata_reason = 6;
                             break;
+                        }
+
+                        if(pCON->order.ucStartType == 4)//有卡
+                        {
+                            RemoteIF_SendCardRTData(pEVSE, pechProto, pCON, 2, rtdata_reason);
+                        }
+                        else if(pCON->order.ucStartType == 5)//无卡
+                        {
+                            RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, rtdata_reason);
                         }
                     }
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //告诉taskdata，RTData用完了订单数据
@@ -443,7 +474,14 @@ void vTaskEVSERemote(void *pvParameters)
                                              pdTRUE, pdTRUE, 0);
                 if((uxBits & defEventBitChargeRTDataTimer) == defEventBitChargeRTDataTimer)
                 {
-                    RemoteIF_SendRTData(pEVSE, pechProto, pCON, 1, 0);
+                    if(pCON->order.ucStartType == 4)//有卡
+                    {
+                        RemoteIF_SendCardRTData(pEVSE, pechProto, pCON, 1, 0);
+                    }
+                    else if(pCON->order.ucStartType == 5)//无卡
+                    {
+                        RemoteIF_SendRTData(pEVSE, pechProto, pCON, 1, 0);
+                    }
                 }
             }
 
