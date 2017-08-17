@@ -118,9 +118,12 @@ typedef struct _echProtoInfo
 #define ECH_CMDID_CARD_START_RES 29 //充电桩上报有卡充电启动结果
 #define ECH_CMDID_CARD_STOP_RES  30 //充电桩上报有卡充电停止充电
 #define ECH_CMDID_CARD_RTDATA    31 //充电桩上报有卡实时充电数据
+//---运维监控
+#define ECH_CMDID_UP_FAULT      32 //充电桩上报故障信息
+#define ECH_CMDID_UP_WARNING    33 //充电桩上报告警与保护信息
 
 /*命令个数*/
-#define ECH_CMD_MAX             32
+#define ECH_CMD_MAX             34
 
 typedef struct
 {

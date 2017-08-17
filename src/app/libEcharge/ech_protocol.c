@@ -617,7 +617,9 @@ static int BnWFlushListCfg(uint8_t *path)
 static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
     ErrorCode_t errcode;
+    uint16_t usTotalList;
     int i;
     int res = 1;
 
@@ -629,6 +631,17 @@ static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
     {
         res = 0;
         return res;
+    }
+    usTotalList = cJSON_GetArraySize(jsArrayObj);
+    for(i = 0; i < usTotalList; i++)
+    {
+        res = 0;
+        jsArrayItem = cJSON_GetArrayItem(jsArrayObj, i);
+        if(strcmp(jsArrayItem->valuestring, strID) == 0)
+        {
+            res = 1;
+            return res; //要追加的卡号已经存在于配置中
+        }
     }
     cJSON_AddItemToArray(jsArrayObj, cJSON_CreateString(strID));
 
@@ -2383,6 +2396,43 @@ static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeCmdCardStopResBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_STOP_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+
+static int makeCmdUpFaultBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    CON_t *pCON;
+    EVSE_t *pEVSE;
+    uint8_t data[6] = {0};
+    int i;
+    EventBits_t uxBits;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCON = (CON_t *)pCObj;
+    pEVSE = (EVSE_t *)pEVSE;
+
+
+
+
+
+    //[0...5] 故障码
+    for(i = 0; i < 6; i++)
+    {
+        pucMsgBodyCtx_dec[i] = data[i];
+    }
+
+    *pulMsgBodyCtxLen_dec = 6; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdUpFaultBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_FAULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2825,6 +2875,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_CARD_START_RES] = EchCMDCreate(92, 93,  30, makeCmdCardStartRes, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_STOP_RES] = EchCMDCreate(95, 96,  30, makeCmdCardStopRes, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_RTDATA]  = EchCMDCreate(94, 0,  30, makeCmdCardRTData, NULL);
+    pProto->pCMD[ECH_CMDID_UP_FAULT]  = EchCMDCreate(70, 71,  30, makeCmdUpFault, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_UP_WARNING]  = EchCMDCreate(72, 73,  30, makeCmdUpWarning, analyCmdCommon);
 
     //end of 注册
 
