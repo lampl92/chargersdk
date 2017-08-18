@@ -13,7 +13,7 @@
 #include "evse_globals.h"
 #include "task_tcp_client.h"
 #include "taskcreate.h"
-#include "lwip_init.h"
+//#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {

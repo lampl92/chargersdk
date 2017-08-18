@@ -11,7 +11,7 @@
 #include "stringName.h"
 #include "utils.h"
 
-#include "dbparser.h"
+#include "dbparser\dbparser.h"
 #include "debug.h"
 
 #define BYTES_LEN 1024

@@ -14,8 +14,8 @@
 #include "gdsl_perm.h"
 #include <time.h>
 #include "modem.h"
-#include "dbparser.h"
-#include "query_output.h"
+#include "dbparser/dbparser.h"
+#include "dboutput/query_output.h"
 
 void cli_modeminfo_fnt(int argc, char **argv)
 {
