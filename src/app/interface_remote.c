@@ -1750,7 +1750,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
 
 
     if(memcmp(pProto->status.warning, data_old_w, 6) != 0 ||
-       memcmp(pProto->status.protect, data_old_p, 6) != 0))
+       memcmp(pProto->status.protect, data_old_p, 6) != 0)
     {
         pbuff = pProto->pCMD[ECH_CMDID_UP_FAULT]->ucRecvdOptData;
         memcpy(pbuff, pProto->status.warning, 6);

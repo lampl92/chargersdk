@@ -4,7 +4,7 @@
 #include "stm32f4xx_hal.h"
 
 extern void Error_Handler(void);
-
+extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void MX_TIM2_Init(void)
 {
 
