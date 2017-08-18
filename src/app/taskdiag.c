@@ -53,6 +53,20 @@ void vTaskEVSEDiag(void *pvParameters)
                 pCON = CONGetHandle(errpack.ulDevID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
                 break;
+            case ERR_CON_CP_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCPSwitch);
+                break;
+            case ERR_CON_ACLTEMP_DECT_FAULT:
+            case ERR_CON_ACNTEMP_DECT_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempSensor);
+                break;
+            case ERR_CON_BTEMP1_DECT_FAULT:
+            case ERR_CON_BTEMP2_DECT_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionSocketTempSensor);
+                break;
             default:
                 break;
             }

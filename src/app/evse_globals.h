@@ -139,6 +139,9 @@
 #define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionRemoteStop  BIT_11
 #define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
+#define defEventBitExceptionCPSwitch    BIT_13
+#define defEventBitExceptionTempSensor  BIT_14
+#define defEventBitExceptionSocketTempSensor  BIT_15
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
 #define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)

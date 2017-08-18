@@ -1479,3 +1479,284 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
     return errcode;
 }
 
+ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    CON_t *pCON;
+    uint32_t ulTotalCON;
+    uint8_t data_old[6] = {0};
+    uint8_t *pbuff;
+    EventBits_t uxBit;
+    int i;
+
+    ulTotalCON = pListCON->Total;
+
+    memcpy(data_old, pProto->status.fault, 6);
+
+    //1-1 绝缘故障
+    if(pEVSE->status.ulPEState == 1)
+    {
+        SET_BIT(pProto->status.fault[0], BIT_0);
+    }
+    else
+    {
+        CLEAR_BIT(pProto->status.fault[0], BIT_0);
+    }
+    //1-2 输出连接器过温故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+        {
+            SET_BIT(pProto->status.fault[0], BIT_1);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[0], BIT_1);
+        }
+    }
+    //1-7 电流过大
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
+        {
+            SET_BIT(pProto->status.fault[0], BIT_6);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[0], BIT_6);
+        }
+    }
+    //1-8 电压异常
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+        {
+            SET_BIT(pProto->status.fault[0], BIT_7);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[0], BIT_7);
+        }
+    }
+    //[1]:3  2-4 电能表故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
+        if((uxBit & defEventBitExceptionMeter) != defEventBitExceptionMeter)
+        {
+            SET_BIT(pProto->status.fault[1], BIT_3);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[1], BIT_3);
+        }
+    }
+    //[1]:5 2-6 PWM切换故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
+        if((uxBit & defEventBitExceptionCPSwitch) != defEventBitExceptionCPSwitch)
+        {
+            SET_BIT(pProto->status.fault[1], BIT_5);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[1], BIT_5);
+        }
+    }
+    //[1]:6 2-7 温度传感器故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
+        if((uxBit & defEventBitExceptionTempSensor) != defEventBitExceptionTempSensor)
+        {
+            SET_BIT(pProto->status.fault[1], BIT_6);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[1], BIT_6);
+        }
+    }
+    //[1]:7 2-8 急停报警
+    if(pEVSE->status.ulScramState == 1)
+    {
+        SET_BIT(pProto->status.fault[1], BIT_7);
+    }
+    else
+    {
+        CLEAR_BIT(pProto->status.fault[1], BIT_7);
+    }
+    //[2]:0 3-1 充电枪温度传感器故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
+        if((uxBit & defEventBitExceptionSocketTempSensor) != defEventBitExceptionSocketTempSensor)
+        {
+            SET_BIT(pProto->status.fault[2], BIT_0);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[2], BIT_0);
+        }
+    }
+    //[3]:2 4-3 接触器故障
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
+        if((uxBit & defEventBitExceptionRelayPaste) != defEventBitExceptionRelayPaste)
+        {
+            SET_BIT(pProto->status.fault[3], BIT_2);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.fault[3], BIT_2);
+        }
+    }
+
+    if(memcmp(pProto->status.fault, data_old, 6) != 0)
+    {
+        pbuff = pProto->pCMD[ECH_CMDID_UP_FAULT]->ucRecvdOptData;
+        memcpy(pbuff, pProto->status.fault, 6);
+        pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_UP_FAULT, 0xffff, 0);
+    }
+
+    return ERR_NO;
+}
+
+ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    CON_t *pCON;
+    uint32_t ulTotalCON;
+    uint8_t data_old_w[6] = {0};
+    uint8_t data_old_p[6] = {0};
+    uint8_t *pbuff;
+    EventBits_t uxBit;
+    int i;
+
+    ulTotalCON = pListCON->Total;
+
+    memcpy(data_old_w, pProto->status.warning, 6);
+    memcpy(data_old_p, pProto->status.protect, 6);
+
+    //[0]:0 1-1 防雷器告警
+    if(pEVSE->status.ulArresterState == 1)
+    {
+        SET_BIT(pProto->status.warning[0], BIT_0);
+    }
+    else
+    {
+        CLEAR_BIT(pProto->status.warning[0], BIT_0);
+    }
+    //[1]:1 2-2 一般漏电
+    if(pEVSE->status.ulPEState == 1)
+    {
+        SET_BIT(pProto->status.warning[0], BIT_1);
+    }
+    else
+    {
+        CLEAR_BIT(pProto->status.warning[0], BIT_1);
+    }
+    //[1]:4 2-5 电网电压异常
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+        {
+            SET_BIT(pProto->status.warning[1], BIT_4);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.warning[1], BIT_4);
+        }
+    }
+    //[2]:7 3-8 电网频率异常
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONFreqOK) != defEventBitCONFreqOK)
+        {
+            SET_BIT(pProto->status.warning[2], BIT_7);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.warning[2], BIT_7);
+        }
+    }
+    //[3]:0 4-1 一般过载
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
+        {
+            SET_BIT(pProto->status.warning[3], BIT_0);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.warning[3], BIT_0);
+        }
+    }
+
+    //---保护信息
+    //[1]:7 2-8 电流过高保护
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
+        {
+            SET_BIT(pProto->status.protect[1], BIT_7);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.protect[1], BIT_7);
+        }
+    }
+    //[2]:0 3-1 电压过高保护
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+        {
+            SET_BIT(pProto->status.protect[2], BIT_0);
+            break;//有一个有故障就退出
+        }
+        else
+        {
+            CLEAR_BIT(pProto->status.protect[2], BIT_0);
+        }
+    }
+    //[2]:1 3-2 硬件漏电保护
+    if(pEVSE->status.ulPEState == 1)
+    {
+        SET_BIT(pProto->status.protect[2], BIT_1);
+    }
+    else
+    {
+        CLEAR_BIT(pProto->status.protect[2], BIT_1);
+    }
+
+
+    if(memcmp(pProto->status.warning, data_old_w, 6) != 0 ||
+       memcmp(pProto->status.protect, data_old_p, 6) != 0))
+    {
+        pbuff = pProto->pCMD[ECH_CMDID_UP_FAULT]->ucRecvdOptData;
+        memcpy(pbuff, pProto->status.warning, 6);
+        memcpy(&pbuff[6], pProto->status.protect, 6);
+        pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_UP_WARNING, 0xffff, 0);
+    }
+
+    return ERR_NO;
+}

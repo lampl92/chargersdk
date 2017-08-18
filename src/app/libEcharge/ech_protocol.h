@@ -71,6 +71,12 @@ typedef struct _echProtoInfo
 
 } echProtoInfo_t;
 
+typedef struct _echProtoStatus
+{
+    uint8_t fault[6];
+    uint8_t warning[6];
+    uint8_t protect[6];
+}echProtoStatus_t;
 //²Ù×÷ÐòÁÐºÅ
 
 /* ÃüÁîÖ¡ÔªËØ */
@@ -164,6 +170,7 @@ typedef struct _echCMD
 typedef struct _echProtocol
 {
     echProtoInfo_t info;
+    echProtoStatus_t status;
     echCMD_t *pCMD[ECH_CMD_MAX];
     gdsl_list_t plechSendCmd;
     gdsl_list_t plechRecvCmd;

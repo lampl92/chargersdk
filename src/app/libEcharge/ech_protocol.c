@@ -2397,27 +2397,21 @@ static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_STOP_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
 
-static int makeCmdUpFaultBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
-    CON_t *pCON;
-    EVSE_t *pEVSE;
-    uint8_t data[6] = {0};
+    uint8_t *pbuff;
     int i;
     EventBits_t uxBits;
 
     pProto = (echProtocol_t *)pPObj;
-    pCON = (CON_t *)pCObj;
-    pEVSE = (EVSE_t *)pEVSE;
 
-
-
-
+    pbuff = pProto->pCMD[ECH_CMDID_UP_FAULT]->ucRecvdOptData;  // -------注意修改ID
 
     //[0...5] 故障码
     for(i = 0; i < 6; i++)
     {
-        pucMsgBodyCtx_dec[i] = data[i];
+        pucMsgBodyCtx_dec[i] = pbuff[i];
     }
 
     *pulMsgBodyCtxLen_dec = 6; //不要忘记赋值
@@ -2430,9 +2424,42 @@ static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdUpFaultBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdUpFaultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_FAULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
 }
+
+static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    int i;
+    EventBits_t uxBits;
+
+    pProto = (echProtocol_t *)pPObj;
+
+    pbuff = pProto->pCMD[ECH_CMDID_UP_WARNING]->ucRecvdOptData;  // -------注意修改ID
+
+    //[0...5] 告警
+    //[6...11] 保护
+    for(i = 0; i < 12; i++)
+    {
+        pucMsgBodyCtx_dec[i] = pbuff[i];
+    }
+
+    *pulMsgBodyCtxLen_dec = 12; //不要忘记赋值
+
+    return 0;
+}
+static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdUpFaultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_WARNING, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+}
+
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2836,6 +2863,13 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
+    for(i = 0; i < 6; i++)
+    {
+        pProto->status.fault[i] = 0;
+        pProto->status.warning[i] = 0;
+        pProto->status.protect[i] = 0;
+    }
+
     for(i = 0; i < ECH_CMD_MAX; i++)
     {
         pProto->pCMD[i] = NULL;
@@ -2843,40 +2877,40 @@ echProtocol_t *EchProtocolCreate(void)
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
-    pProto->pCMD[ECH_CMDID_REGISTER]     = EchCMDCreate(1,   2,   0,  makeCmdReg,         analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT]    = EchCMDCreate(3,   4,   0,  makeCmdHeart,       analyCmdHeart);
-    pProto->pCMD[ECH_CMDID_RESET]        = EchCMDCreate(6,   5,   30, makeCmdReset,       analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_STATUS]       = EchCMDCreate(41,  42,  30, makeCmdStatus,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REMOTE_CTRL]  = EchCMDCreate(44,  43,  30, makeCmdRemoteCtrl,  analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_RTDATA]       = EchCMDCreate(45,  0,   0,  makeCmdRTData,      NULL);
-    pProto->pCMD[ECH_CMDID_ORDER]        = EchCMDCreate(46,  47,  30, makeCmdOrder,       analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_SUCC]     = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,     NULL);
-    pProto->pCMD[ECH_CMDID_SET_FAIL]     = EchCMDCreate(8,   0,   0,  makeCmdSetFail,     NULL);
-    pProto->pCMD[ECH_CMDID_SET_POWERFEE] = EchCMDCreate(0,   11,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_SERVFEE]  = EchCMDCreate(0,   12,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_CYC]      = EchCMDCreate(0,   13,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_TIMESEG]  = EchCMDCreate(0,   14,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_KEY]      = EchCMDCreate(0,   15,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_POWERFEE] = EchCMDCreate(22,  21,  30, makeCmdReqPowerFee, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_SERVFEE]  = EchCMDCreate(24,  23,  30, makeCmdReqServFee,  analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_CYC]      = EchCMDCreate(26,  25,  30, makeCmdReqCyc,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_TIMESEG]  = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,  analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_KEY]      = EchCMDCreate(30,  29,  30, makeCmdReqKey,      analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_SOFTVER]  = EchCMDCreate(34,  33,  30, makeCmdReqSoftVer,  analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_QR]       = EchCMDCreate(0,   35,  30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_QR]       = EchCMDCreate(37,  36,  30, makeCmdReqQR,       analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_BLACK]    = EchCMDCreate(98,  97,  30, makeCmdSetBlackRes, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_SET_WHITE]    = EchCMDCreate(100, 99,  30, makeCmdSetWhiteRes, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_BLACK]    = EchCMDCreate(102, 101, 30, makeCmdReqBlack,    analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_WHITE]    = EchCMDCreate(104, 103, 30, makeCmdReqWhite,    analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_ADD_BNW]      = EchCMDCreate(0,   105, 30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_DEL_BNW]      = EchCMDCreate(0,   106, 30, NULL,               analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_CARD_START]    = EchCMDCreate(90,  91,  30, makeCmdCardStart,    analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_CARD_START_RES] = EchCMDCreate(92, 93,  30, makeCmdCardStartRes, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_CARD_STOP_RES] = EchCMDCreate(95, 96,  30, makeCmdCardStopRes, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_CARD_RTDATA]  = EchCMDCreate(94, 0,  30, makeCmdCardRTData, NULL);
-    pProto->pCMD[ECH_CMDID_UP_FAULT]  = EchCMDCreate(70, 71,  30, makeCmdUpFault, analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_UP_WARNING]  = EchCMDCreate(72, 73,  30, makeCmdUpWarning, analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REGISTER]       = EchCMDCreate(1,   2,   0,  makeCmdReg,          analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_HEARTBEAT]      = EchCMDCreate(3,   4,   0,  makeCmdHeart,        analyCmdHeart);
+	pProto->pCMD[ECH_CMDID_RESET]          = EchCMDCreate(6,   5,   30, makeCmdReset,        analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_STATUS]         = EchCMDCreate(41,  42,  30, makeCmdStatus,       analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44,  43,  30, makeCmdRemoteCtrl,   analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_RTDATA]         = EchCMDCreate(45,  0,   0,  makeCmdRTData,       NULL);
+	pProto->pCMD[ECH_CMDID_ORDER]          = EchCMDCreate(46,  47,  30, makeCmdOrder,        analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_SUCC]       = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,      NULL);
+	pProto->pCMD[ECH_CMDID_SET_FAIL]       = EchCMDCreate(8,   0,   0,  makeCmdSetFail,      NULL);
+	pProto->pCMD[ECH_CMDID_SET_POWERFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_SERVFEE]    = EchCMDCreate(0,   12,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_CYC]        = EchCMDCreate(0,   13,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_TIMESEG]    = EchCMDCreate(0,   14,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_KEY]        = EchCMDCreate(0,   15,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_POWERFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqPowerFee,  analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_SERVFEE]    = EchCMDCreate(24,  23,  30, makeCmdReqServFee,   analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_CYC]        = EchCMDCreate(26,  25,  30, makeCmdReqCyc,       analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_TIMESEG]    = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,   analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_KEY]        = EchCMDCreate(30,  29,  30, makeCmdReqKey,       analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_SOFTVER]    = EchCMDCreate(34,  33,  30, makeCmdReqSoftVer,   analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_QR]         = EchCMDCreate(0,   35,  30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_QR]         = EchCMDCreate(37,  36,  30, makeCmdReqQR,        analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_BLACK]      = EchCMDCreate(98,  97,  30, makeCmdSetBlackRes,  analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_SET_WHITE]      = EchCMDCreate(100, 99,  30, makeCmdSetWhiteRes,  analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_BLACK]      = EchCMDCreate(102, 101, 30, makeCmdReqBlack,     analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_REQ_WHITE]      = EchCMDCreate(104, 103, 30, makeCmdReqWhite,     analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_ADD_BNW]        = EchCMDCreate(0,   105, 30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_DEL_BNW]        = EchCMDCreate(0,   106, 30, NULL,                analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_CARD_START]     = EchCMDCreate(90,  91,  30, makeCmdCardStart,    analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_CARD_START_RES] = EchCMDCreate(92,  93,  30, makeCmdCardStartRes, analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_CARD_STOP_RES]  = EchCMDCreate(95,  96,  30, makeCmdCardStopRes,  analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_CARD_RTDATA]    = EchCMDCreate(94,  0,   30, makeCmdCardRTData,   NULL);
+	pProto->pCMD[ECH_CMDID_UP_FAULT]       = EchCMDCreate(70,  71,  30, makeCmdUpFault,      analyCmdCommon);
+	pProto->pCMD[ECH_CMDID_UP_WARNING]     = EchCMDCreate(72,  73,  30, makeCmdUpWarning,    analyCmdCommon);
 
     //end of 注册
 
