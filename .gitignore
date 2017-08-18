@@ -23,3 +23,7 @@ src/net/lwip-2.0.2/test
 tags
 *.sublime-workspace
 *.bak
+.vs
+build/vs/chargesdk/Debug
+build/vs/CodeDB
+*.old
