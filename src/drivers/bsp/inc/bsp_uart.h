@@ -38,7 +38,7 @@ typedef enum
 
 #define WIFI_USARTx_BASE                            UART5
 #define WIFI_USARTx_BAUDRATE                        115200
-#define WIFI_USARTx_IRQHandler                      void UART5_IRQHandler(void)
+#define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
 #define WIFI_QUEUE_SIZE                             10000
 
 #endif

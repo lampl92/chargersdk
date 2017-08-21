@@ -1,6 +1,6 @@
 /**
 * @file bsp_usart.c
-* @brief ´®¿ÚÇý¶¯
+* @brief 串口驱动
 * @author rgw
 * @version V1.0
 * @date 2016-11-02
