@@ -843,6 +843,15 @@
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{bf6d369c-db8b-4b07-8571-a00c2352ee79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header files\Lib">
+      <UniqueIdentifier>{2b27723e-bc37-472d-bdbc-4db638b21eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\STemWin\Lib">
+      <UniqueIdentifier>{370e1608-0ac1-4107-ba0f-dbd53cddb7a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\Lib">
+      <UniqueIdentifier>{7fa10811-51f1-4555-ba15-53ddf9c39423}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -859,9 +868,6 @@
       <Filter>VisualGDB settings</Filter>
     </None>
     <None Include="stm32.mak">
-      <Filter>Make files</Filter>
-    </None>
-    <None Include="STM32F429IG_flash.lds">
       <Filter>Make files</Filter>
     </None>
   </ItemGroup>
@@ -4200,5 +4206,10 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a">
+      <Filter>Source files\middlewares\STemWin\Lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ OBJCOPY := $(TOOLCHAIN_ROOT)/bin/arm-eabi-objcopy.exe
 
 #Additional flags
 PREPROCESSOR_MACROS += ARM_MATH_CM4 STM32F429IG flash_layout STM32F429xx OS_SUPPORT USE_HAL_DRIVER
-INCLUDE_DIRS += 
+INCLUDE_DIRS += ../../../src/app ../../../src/cli ../../../src/drivers/hal/CMSIS_RTOS ../../../src/drivers/hal/CMSIS/Include ../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc ../../../src/drivers/bsp/inc ../../../src/drivers/device/inc ../../../src/os ../../../src/os/FreeRTOS/Source/include ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F ../../../src/middlewares/tinysh ../../../src/middlewares/STemWin/inc ../../../src/middlewares/STemWin/Config ../../../src/middlewares/STemWin/Demo ../../../src/middlewares/fatfs/src ../../../src/middlewares/fatfs/diskdrv ../../../src/middlewares/userlib/inc ../../../src/middlewares/cJSON ../../../src/middlewares/gdsl-1.8/src ../../../src/middlewares/gdsl-1.8/src/examples ../../../src/middlewares/STemWin/BMP ../../../src/middlewares/STemWin/XBF ../../../src/middlewares/tiny-AES128-C ../../../src/middlewares/LittleD/src ../../../src/middlewares/LittleD/src/include ../../../src/hmi ../../../src/hmi/lcd ../../../src/net/mbedTLS/include ../../../src/hmi/qrencode/inc
 LIBRARY_DIRS += 
 LIBRARY_NAMES += compactcpp
 ADDITIONAL_LINKER_INPUTS += 
@@ -29,5 +29,5 @@ CXXFLAGS +=
 ASFLAGS += -mfpu=fpv4-sp-d16
 LDFLAGS += --specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs
 COMMONFLAGS += -mcpu=cortex-m4 -mthumb -mfloat-abi=hard
-LINKER_SCRIPT := 
+LINKER_SCRIPT := STM32F429IG_flash.lds
 

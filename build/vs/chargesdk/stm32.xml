@@ -4,7 +4,7 @@
   <BspID>com.visualgdb.bsp.in-place</BspID>
   <BspVersion>1.0</BspVersion>
   <McuID>STM32F429IG</McuID>
-  <MCUDefinitionFile>STM32F4xxxx\DeviceDefinitions\stm32f429xx.xml</MCUDefinitionFile>
+  <MCUDefinitionFile>D:\DPC\workspace\Projects\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
   <MCUProperties>
     <Entries />
   </MCUProperties>
@@ -21,7 +21,38 @@
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
       </PreprocessorMacros>
-      <IncludeDirectories />
+      <IncludeDirectories>
+        <string>../../../src/app</string>
+        <string>../../../src/cli</string>
+        <string>../../../src/drivers/hal/CMSIS_RTOS</string>
+        <string>../../../src/drivers/hal/CMSIS/Include</string>
+        <string>../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include</string>
+        <string>../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc</string>
+        <string>../../../src/drivers/bsp/inc</string>
+        <string>../../../src/drivers/device/inc</string>
+        <string>../../../src/os</string>
+        <string>../../../src/os/FreeRTOS/Source/include</string>
+        <string>../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F</string>
+        <string>../../../src/middlewares/tinysh</string>
+        <string>../../../src/middlewares/STemWin/inc</string>
+        <string>../../../src/middlewares/STemWin/Config</string>
+        <string>../../../src/middlewares/STemWin/Demo</string>
+        <string>../../../src/middlewares/fatfs/src</string>
+        <string>../../../src/middlewares/fatfs/diskdrv</string>
+        <string>../../../src/middlewares/userlib/inc</string>
+        <string>../../../src/middlewares/cJSON</string>
+        <string>../../../src/middlewares/gdsl-1.8/src</string>
+        <string>../../../src/middlewares/gdsl-1.8/src/examples</string>
+        <string>../../../src/middlewares/STemWin/BMP</string>
+        <string>../../../src/middlewares/STemWin/XBF</string>
+        <string>../../../src/middlewares/tiny-AES128-C</string>
+        <string>../../../src/middlewares/LittleD/src</string>
+        <string>../../../src/middlewares/LittleD/src/include</string>
+        <string>../../../src/hmi</string>
+        <string>../../../src/hmi/lcd</string>
+        <string>../../../src/net/mbedTLS/include</string>
+        <string>../../../src/hmi/qrencode/inc</string>
+      </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>
       </AdditionalLibraries>
@@ -29,7 +60,7 @@
       <CXXFLAGS />
       <LDFLAGS>--specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs</LDFLAGS>
       <ASFLAGS>-mfpu=fpv4-sp-d16</ASFLAGS>
-      <LinkerScript />
+      <LinkerScript>STM32F429IG_flash.lds</LinkerScript>
       <COMMONFLAGS>-mcpu=cortex-m4 -mthumb -mfloat-abi=hard</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>
@@ -153,7 +184,7 @@
     <RAMSize>262144</RAMSize>
     <FLASHBase>134217728</FLASHBase>
     <RAMBase>536870912</RAMBase>
-    <MCUDefinitionFile>STM32F4xxxx\DeviceDefinitions\stm32f429xx.xml</MCUDefinitionFile>
+    <MCUDefinitionFile>D:\DPC\workspace\Projects\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
     <AdditionalSourcesRequiredForTesting>false</AdditionalSourcesRequiredForTesting>
   </InPlaceMCU>
   <MCUMakFile>stm32.mak</MCUMakFile>

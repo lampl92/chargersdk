@@ -6,8 +6,8 @@ BINARYDIR := Debug
 
 #Additional flags
 PREPROCESSOR_MACROS := DEBUG=1 DEBUG_INIT DEBUG_RFID DEBUG_MONITOR DEBUG_DATA DEBUG_DIAG DEBUG_DIAG_DUMMY DEBUG_INTERFACE_DATA __DEBUG_CFG_PARSE EVSE_DEBUG
-INCLUDE_DIRS := ../../../src/app ../../../src/cli ../../../src/drivers/hal/CMSIS_RTOS ../../../src/drivers/hal/CMSIS/Include ../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc ../../../src/drivers/bsp/inc ../../../src/drivers/device/inc ../../../src/os ../../../src/os/FreeRTOS/Source/include ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F ../../../src/middlewares/tinysh ../../../src/middlewares/STemWin/inc ../../../src/middlewares/STemWin/Config ../../../src/middlewares/STemWin/Demo ../../../src/middlewares/fatfs/src ../../../src/middlewares/fatfs/diskdrv ../../../src/middlewares/userlib/inc ../../../src/middlewares/cJSON ../../../src/middlewares/gdsl-1.8/src ../../../src/middlewares/gdsl-1.8/src/examples ../../../src/middlewares/STemWin/BMP ../../../src/middlewares/STemWin/XBF ../../../src/middlewares/tiny-AES128-C ../../../src/middlewares/LittleD/src ../../../src/middlewares/LittleD/src/include ../../../src/hmi ../../../src/hmi/lcd ../../../src/net/mbedTLS/include ../../../src/hmi/qrencode/inc
-LIBRARY_DIRS := ../../../src/middlewares/STemWin/Lib/STemWin532_CM4_OS_GCC.a ../../../src/hmi/dimen_barcode/ATK_QR_V1.4.lib ../lib/armv7e-m/fpu/fpv5-sp-d16/libm.a
+INCLUDE_DIRS := 
+LIBRARY_DIRS := 
 LIBRARY_NAMES := 
 ADDITIONAL_LINKER_INPUTS := 
 MACOS_FRAMEWORKS := 
@@ -18,7 +18,7 @@ CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O0
 ASFLAGS := 
 LDFLAGS := -Wl,-gc-sections
 COMMONFLAGS := 
-LINKER_SCRIPT := STM32F429IG_flash.lds
+LINKER_SCRIPT := 
 
 START_GROUP := -Wl,--start-group
 END_GROUP := -Wl,--end-group

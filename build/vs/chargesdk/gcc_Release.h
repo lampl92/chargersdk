@@ -209,6 +209,9 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
+#ifndef __OPTIMIZE__
+#define __OPTIMIZE__ 1
+#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -256,6 +259,9 @@
 #endif
 #ifndef __SIZEOF_POINTER__
 #define __SIZEOF_POINTER__ 4
+#endif
+#ifndef NDEBUG
+#define NDEBUG 1
 #endif
 #ifndef __GCC_ATOMIC_CHAR16_T_LOCK_FREE
 #define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
@@ -329,6 +335,9 @@
 #ifndef __ULFRACT_MIN__
 #define __ULFRACT_MIN__ 0.0ULR
 #endif
+#ifndef RELEASE
+#define RELEASE 1
+#endif
 #ifndef __ARM_PCS_VFP
 #define __ARM_PCS_VFP 1
 #endif
@@ -361,6 +370,9 @@
 #endif
 #ifndef __BIGGEST_ALIGNMENT__
 #define __BIGGEST_ALIGNMENT__ 8
+#endif
+#ifndef USE_HAL_DRIVER
+#define USE_HAL_DRIVER 1
 #endif
 #ifndef __STDC_UTF_16__
 #define __STDC_UTF_16__ 1
@@ -460,6 +472,9 @@
 #ifndef __UACCUM_MIN__
 #define __UACCUM_MIN__ 0.0UK
 #endif
+#ifndef flash_layout
+#define flash_layout 1
+#endif
 #ifndef __UACCUM_IBIT__
 #define __UACCUM_IBIT__ 16
 #endif
@@ -532,6 +547,9 @@
 #ifndef __FLT_MIN_10_EXP__
 #define __FLT_MIN_10_EXP__ (-37)
 #endif
+#ifndef OS_SUPPORT
+#define OS_SUPPORT 1
+#endif
 #ifndef __LACCUM_MIN__
 #define __LACCUM_MIN__ (-0X1P31LK-0X1P31LK)
 #endif
@@ -570,9 +588,6 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
-#endif
-#ifndef __NO_INLINE__
-#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -624,6 +639,9 @@
 #endif
 #ifndef __UQQ_IBIT__
 #define __UQQ_IBIT__ 0
+#endif
+#ifndef STM32F429xx
+#define STM32F429xx 1
 #endif
 #ifndef __DEC64_EPSILON__
 #define __DEC64_EPSILON__ 1E-15DD
@@ -1171,22 +1189,9 @@
 #ifndef __ATOMIC_RELEASE
 #define __ATOMIC_RELEASE 3
 #endif
-#ifndef NDEBUG
-#define NDEBUG 1
-#endif
-#ifndef RELEASE
-#define RELEASE 1
-#endif
-#ifndef flash_layout
-#define flash_layout 
-#endif
-#ifndef STM32F429xx
-#define STM32F429xx 
-#endif
 #endif
 
 // --- Include directories begin --- //
-//.
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
@@ -1194,10 +1199,36 @@
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32/STM32F4xxxx/STM32F4xx_HAL_Driver/Inc
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32/STM32F4xxxx/STM32F4xx_HAL_Driver/Inc/Legacy
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32/STM32F4xxxx/CMSIS_HAL/Device/ST/STM32F4xx/Include
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32/STM32F4xxxx/CMSIS_HAL/Include
+//../../../src/app
+//../../../src/cli
+//../../../src/drivers/hal/CMSIS_RTOS
+//../../../src/drivers/hal/CMSIS/Include
+//../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include
+//../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc
+//../../../src/drivers/bsp/inc
+//../../../src/drivers/device/inc
+//../../../src/os
+//../../../src/os/FreeRTOS/Source/include
+//../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F
+//../../../src/middlewares/tinysh
+//../../../src/middlewares/STemWin/inc
+//../../../src/middlewares/STemWin/Config
+//../../../src/middlewares/STemWin/Demo
+//../../../src/middlewares/fatfs/src
+//../../../src/middlewares/fatfs/diskdrv
+//../../../src/middlewares/userlib/inc
+//../../../src/middlewares/cJSON
+//../../../src/middlewares/gdsl-1.8/src
+//../../../src/middlewares/gdsl-1.8/src/examples
+//../../../src/middlewares/STemWin/BMP
+//../../../src/middlewares/STemWin/XBF
+//../../../src/middlewares/tiny-AES128-C
+//../../../src/middlewares/LittleD/src
+//../../../src/middlewares/LittleD/src/include
+//../../../src/hmi
+//../../../src/hmi/lcd
+//../../../src/net/mbedTLS/include
+//../../../src/hmi/qrencode/inc
 // --- Include directories end --- //
 
 
