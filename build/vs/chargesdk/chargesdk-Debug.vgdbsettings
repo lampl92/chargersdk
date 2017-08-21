@@ -20,7 +20,7 @@
         <Transport>BuiltinShortcut</Transport>
       </RemoteHost>
       <Command>cmd.exe</Command>
-      <Arguments>/c "$(TOOLCHAIN_ROOT)\bin\make.exe"</Arguments>
+      <Arguments>/c "$(TOOLCHAIN_ROOT)\bin\rgw-make.exe"</Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
         <Records>
@@ -159,6 +159,16 @@
         <SupportFunctionInstrumentation>false</SupportFunctionInstrumentation>
         <MeasureOverhead>true</MeasureOverhead>
       </RealTimeWatch>
+      <RTOSFeatures>
+        <RTOSFeatureSetting>
+          <FeatureID>com.sysprogs.analysis.thread.timing</FeatureID>
+          <Enabled>true</Enabled>
+        </RTOSFeatureSetting>
+        <RTOSFeatureSetting>
+          <FeatureID>com.sysprogs.analysis.freertos.queues</FeatureID>
+          <Enabled>true</Enabled>
+        </RTOSFeatureSetting>
+      </RTOSFeatures>
     </DynamicAnalysisSettings>
     <EndOfStackSymbol>_estack</EndOfStackSymbol>
   </Debug>
@@ -183,6 +193,8 @@
   <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
+    <CFLAGS>-Wno-pointer-sign</CFLAGS>
+    <CXXFLAGS>-Wno-pointer-sign</CXXFLAGS>
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
     </ExtraSettings>

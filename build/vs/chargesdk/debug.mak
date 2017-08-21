@@ -18,7 +18,7 @@ CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O0
 ASFLAGS := 
 LDFLAGS := -Wl,-gc-sections
 COMMONFLAGS := 
-LINKER_SCRIPT := 
+LINKER_SCRIPT := STM32F429IG_flash.lds
 
 START_GROUP := -Wl,--start-group
 END_GROUP := -Wl,--end-group

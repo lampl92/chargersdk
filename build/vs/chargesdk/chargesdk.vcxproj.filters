@@ -171,98 +171,11 @@
     <Filter Include="Header files\middlewares">
       <UniqueIdentifier>{0f8de8af-bc25-4cc0-8a85-49a05c5a36a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\AES">
-      <UniqueIdentifier>{ddf9e29e-b8fc-4f8b-9125-95baf2d35a7d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\middlewares\cJSON">
       <UniqueIdentifier>{5ad6eb97-44e4-4e83-a74a-1ebdf009202b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\middlewares\cJSON">
       <UniqueIdentifier>{b3e22013-3bed-49ae-bd2d-34db032e777a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin">
-      <UniqueIdentifier>{4095d78b-6b8c-4db1-9018-fcbfbe63c419}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Application">
-      <UniqueIdentifier>{fcae2fcc-b4bb-49f9-808c-43d777cdd857}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Application\GUIDemo">
-      <UniqueIdentifier>{0acb7865-bb7e-46e1-80e7-a9f3622abaad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Application\WeatherForecast">
-      <UniqueIdentifier>{6d83bea7-f6c0-4444-a148-6bfe80a6c469}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Config">
-      <UniqueIdentifier>{18d19682-410f-4ce1-bcc8-8c17039de24e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Include">
-      <UniqueIdentifier>{874d5426-418a-4cf3-9f68-e3d0ff4ba1ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample">
-      <UniqueIdentifier>{11c242a7-93f5-4e2c-a0ce-d78a7610c4cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf">
-      <UniqueIdentifier>{ba9a8b29-2e7b-420f-9b36-3516eed7b059}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_BitPlains">
-      <UniqueIdentifier>{380fcfe7-426c-4862-bb19-9d6a8cdb1d5c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_FlexColor">
-      <UniqueIdentifier>{0ffc6fae-a789-4276-833c-4194235b82fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_IST3088">
-      <UniqueIdentifier>{5437f352-7d72-44a2-a4ab-4ab19a2c6d16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_Lin">
-      <UniqueIdentifier>{d6b97503-2e04-4e72-83f0-0a7d6282b2ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13748">
-      <UniqueIdentifier>{aa33c21d-5740-45d8-9fbd-936fd2c67ccc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13781">
-      <UniqueIdentifier>{8b0c2b2a-3d24-42b2-8f22-6c6a8eab650c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D15G00">
-      <UniqueIdentifier>{6b35fb78-5f37-47f8-a3fc-19d6b684d133}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SLin">
-      <UniqueIdentifier>{09f65b3c-8daf-4b1d-9ffd-e0304c5570ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SPage">
-      <UniqueIdentifier>{94069de5-7510-4fc9-b2c6-9124e1c4d327}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SSD1926">
-      <UniqueIdentifier>{200794e2-5a68-4c97-a732-b99ef6af0a6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\LCD_X">
-      <UniqueIdentifier>{d6d8a1f6-31d1-43de-b8db-8830efd0c8f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial">
-      <UniqueIdentifier>{9c3f26db-6668-4272-8f62-2aa989d8bb97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\MEMDEV_WindowEffects">
-      <UniqueIdentifier>{e0de07df-6c4e-4e2a-b06e-ee07175b6bf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\SIM_CustomBitmapView">
-      <UniqueIdentifier>{6a4f3168-0ada-4d69-86e1-7e522b0b2f0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\VSCREEN_MultiPage">
-      <UniqueIdentifier>{5d793e8b-6c7c-4086-992f-a797c8febdc1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\WIDGET_Checkbox">
-      <UniqueIdentifier>{556165ca-5231-4287-b396-0bab72d00a0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeLarge">
-      <UniqueIdentifier>{bd4b5731-1d2b-4d80-ab12-c331b3b2b980}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeMedium">
-      <UniqueIdentifier>{28d06707-e9f4-4281-9082-4ce862fc8553}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeSmall">
-      <UniqueIdentifier>{c1bd7651-8258-489e-9cde-1d509408bf8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\ezxml">
-      <UniqueIdentifier>{892f3687-5b66-478a-84c0-4642b6250f05}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source files\middlewares\fatfs">
       <UniqueIdentifier>{201165dc-0170-4c83-8e8b-a2a6ee313d01}</UniqueIdentifier>
@@ -375,17 +288,8 @@
     <Filter Include="Header files\middlewares\LittleD\src\utils">
       <UniqueIdentifier>{13cfc0a0-420a-4fce-8c82-d13949cc0680}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\lua">
-      <UniqueIdentifier>{492b6d69-eae0-4bc1-9fca-e90f6c0c6d5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\lua\src">
-      <UniqueIdentifier>{e096faa1-44a4-4431-aafe-d7c4b789908a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\middlewares\minunit">
       <UniqueIdentifier>{e589280b-3785-4347-a643-017b67a63dbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\sqlite">
-      <UniqueIdentifier>{4c8be6b3-2160-4475-987c-e23087be4232}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source files\middlewares\STemWin">
       <UniqueIdentifier>{d21c1cd8-cc14-4948-a7cb-8d2901081754}</UniqueIdentifier>
@@ -933,6 +837,12 @@
     <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC\PIC18">
       <UniqueIdentifier>{476faccd-7261-4534-9ecb-898155dc2c2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{efd49547-8365-4ce1-9841-78374494b3fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files">
+      <UniqueIdentifier>{bf6d369c-db8b-4b07-8571-a00c2352ee79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -949,6 +859,9 @@
       <Filter>VisualGDB settings</Filter>
     </None>
     <None Include="stm32.mak">
+      <Filter>Make files</Filter>
+    </None>
+    <None Include="STM32F429IG_flash.lds">
       <Filter>Make files</Filter>
     </None>
   </ItemGroup>
@@ -1225,9 +1138,6 @@
     <ClCompile Include="..\..\..\src\app\cfg_parse.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\app\checksubject.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\connector.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1258,9 +1168,6 @@
     <ClCompile Include="..\..\..\src\app\interface_rfid.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libEcharge\ech_err.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1268,15 +1175,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libpowershare\ps_err.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libpowershare\ps_protocol.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libpowershare\ps_transportlayer.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\main.c">
@@ -1318,15 +1216,6 @@
     <ClCompile Include="..\..\..\src\app\taskrfid.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\app\task_tcp_client.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\task_tcp_client_lwip.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\testobserver.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\timercallback.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1337,9 +1226,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_database.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_db.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
@@ -1360,9 +1246,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_xml.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1370,9 +1253,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_ltdc.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
@@ -1408,12 +1288,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\lis2dh_acc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\malloc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1430,15 +1304,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\esp8266.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\gprs_m26.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\lcd_ATK7016.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c">
@@ -1465,37 +1330,10 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cec.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dac.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dac_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dcmi_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dfsdm.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
@@ -1507,58 +1345,10 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dsi.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_eth.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_fmpi2c.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_fmpi2c_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hash.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hash_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hcd.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_irda.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_lptim.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c">
@@ -1570,22 +1360,7 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp_template.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nor.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pccard.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd_ex.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c">
@@ -1594,16 +1369,10 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_qspi.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rng.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c">
@@ -1612,40 +1381,10 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sai_ex.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sd.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_smartcard.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spdifrx.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sram.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_rtc_alarm_template.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_rtc_wakeup_template.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_timebase_tim_template.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c">
@@ -1657,19 +1396,7 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_wwdg.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fsmc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_sdmmc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c">
@@ -1941,6 +1668,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
+    </ClCompile>
+    <ClCompile Include="startup_stm32f429xx.c">
+      <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2475,9 +2205,6 @@
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\app\checksubject.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\app\connector.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -2520,9 +2247,6 @@
     <ClInclude Include="..\..\..\src\app\interface_rfid.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\app\libEcharge\ech_err.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_globals.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -2530,15 +2254,6 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol_proc.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\app\libpowershare\ps_err.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\app\libpowershare\ps_globals.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\app\libpowershare\ps_protocol.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\order.h">
@@ -2577,9 +2292,6 @@
     <ClInclude Include="..\..\..\src\app\taskrfid.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\app\task_tcp_client.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\app\timercallback.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -2598,9 +2310,6 @@
     <ClInclude Include="..\..\..\src\cli\cli_rtos.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\cli\cli_xml.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -2608,9 +2317,6 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_ltdc.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_ftl.h">
@@ -2646,9 +2352,6 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\led_control.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\lis2dh.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\malloc.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -2667,13 +2370,7 @@
     <ClInclude Include="..\..\..\src\drivers\device\inc\card_m1.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\device\inc\esp8266.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\device\inc\gprs_m26.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\device\inc\lcd_ATK7016.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\device\inc\led.h">
@@ -3021,24 +2718,6 @@
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\split.h">
       <Filter>Header files\hmi\qrencode\inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\aes.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\aesopt.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\aestab.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\aes_via_ace.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\brg_endian.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\AES\brg_types.h">
-      <Filter>Header files\middlewares\AES</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h">
       <Filter>Header files\middlewares\cJSON</Filter>
     </ClInclude>
@@ -3050,333 +2729,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\cJSON\s2jdef.h">
       <Filter>Header files\middlewares\cJSON</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\GUIDemo\GUIDEMO.h">
-      <Filter>Header files\middlewares\emWin\Application\GUIDemo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\berlin_480x272.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\bmchance_of_storm40x40.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\bmcloud_lighting40x40.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\bmpartly_cloudy_day40x40.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\bmrain40x40.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\bmsun40x40.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\Font20.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\Font32.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\Font60.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\moscow_480x272.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\new_york_480x272.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\Resource.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Application\WeatherForecast\tokyo_480x272.h">
-      <Filter>Header files\middlewares\emWin\Application\WeatherForecast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Config\GUIConf.h">
-      <Filter>Header files\middlewares\emWin\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Config\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\BUTTON.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\CALENDAR.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\CHECKBOX.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\CHOOSECOLOR.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\CHOOSEFILE.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\DIALOG.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\DIALOG_Intern.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\DROPDOWN.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\EDIT.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\FRAMEWIN.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\Global.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GRAPH.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_BitPlains.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_DCache.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_Dist.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_FlexColor.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_IST3088.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_Lin.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_NoOpt_1_8.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_S1D13748.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_S1D13781.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_S1D15G00.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_SLin.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_SPage.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_SSD1926.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_Template.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_TemplateI.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUIDRV_TemplateI_Private.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_ARRAY.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_ConfDefaults.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_Debug.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_FontIntern.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_HOOK.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_Private.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_SetOrientation.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_SetOrientationCX.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_Type.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_Version.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\GUI_VNC.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\HEADER.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\ICONVIEW.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\IMAGE.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\IP_FS.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\KNOB.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD_ConfDefaults.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD_Private.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD_Protected.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD_SIM.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LCD_X.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LISTBOX.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LISTVIEW.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\LISTWHEEL.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\MENU.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\MESSAGEBOX.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\MULTIEDIT.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\MULTIPAGE.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\PROGBAR.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\RADIO.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\SCROLLBAR.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\SEGGER.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\SLIDER.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\SPINBOX.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\SWIPELIST.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\TEXT.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\TREEVIEW.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\WIDGET.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\WM.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\WM_GUI.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Include\WM_Intern.h">
-      <Filter>Header files\middlewares\emWin\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_BitPlains\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_BitPlains</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_FlexColor\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_FlexColor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_IST3088\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_IST3088</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_Lin\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_Lin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13748\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13748</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13781\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D13781</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D15G00\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_S1D15G00</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_SLin\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SLin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_SPage\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SPage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCDConf\GUIDRV_SSD1926\LCDConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCDConf\GUIDRV_SSD1926</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCD_X\LCD_X_8080_16.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCD_X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCD_X\LCD_X_8080_8.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCD_X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCD_X\LCD_X_I2C.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCD_X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\LCD_X\LCD_X_Serial_3Pin.h">
-      <Filter>Header files\middlewares\emWin\Sample\LCD_X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\MEMDEV_WindowEffects\Main.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\MEMDEV_WindowEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\SIM_CustomBitmapView\MainTask.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\SIM_CustomBitmapView</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\VSCREEN_MultiPage\Main.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\VSCREEN_MultiPage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\WIDGET_Checkbox\Main.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\WIDGET_Checkbox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeLarge\GUIConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeLarge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeMedium\GUIConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeMedium</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeSmall\GUIConf.h">
-      <Filter>Header files\middlewares\emWin\Sample\Tutorial\WIDGET_SchemeSmall</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ezxml\ezxml.h">
-      <Filter>Header files\middlewares\ezxml</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.h">
       <Filter>Header files\middlewares\fatfs\diskdrv</Filter>
@@ -3588,92 +2940,8 @@
     <ClInclude Include="..\..\..\src\middlewares\LittleD\src\utils\gen_bench_relations.h">
       <Filter>Header files\middlewares\LittleD\src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lapi.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lauxlib.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lcode.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lctype.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\ldebug.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\ldo.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lfunc.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lgc.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\llex.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\llimits.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lmem.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lobject.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lopcodes.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lparser.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lprefix.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lstate.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lstring.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\ltable.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\ltm.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lua.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lua.hpp">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\luaconf.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lualib.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lundump.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lvm.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\lua\src\lzio.h">
-      <Filter>Header files\middlewares\lua\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
       <Filter>Header files\middlewares\minunit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\sqlite\sqlite3.h">
-      <Filter>Header files\middlewares\sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\sqlite\sqlite3ext.h">
-      <Filter>Header files\middlewares\sqlite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h">
       <Filter>Header files\middlewares\STemWin\BMP</Filter>
