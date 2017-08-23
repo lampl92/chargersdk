@@ -543,6 +543,10 @@ void vTaskEVSERemote(void *pvParameters)
             taskremote_set(pEVSE, pechProto);
             taskremote_req(pEVSE, pechProto);
 
+            /******** 检测并上报故障 ****************/
+            RemoteIF_SendUpFault(pEVSE, pechProto);
+            RemoteIF_SendUpWarning(pEVSE, pechProto);
+
 
             /***********获取帐户信息**********************/ //由taskrfid调用获取账户信息接口 2017年8月10日
 //            uxBits = xEventGroupWaitBits(xHandleEventRemote,
