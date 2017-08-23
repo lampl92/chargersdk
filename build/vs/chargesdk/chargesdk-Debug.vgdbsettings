@@ -193,10 +193,19 @@
   <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
-    <CFLAGS>-Wno-pointer-sign</CFLAGS>
-    <CXXFLAGS>-Wno-pointer-sign</CXXFLAGS>
+    <CFLAGS />
+    <CXXFLAGS />
+    <ExternalSourceFileList />
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
+      <DiscoverySettings>
+        <Mode>Enabled</Mode>
+        <SearchInProjectDir>true</SearchInProjectDir>
+        <SearchInSourceDirs>true</SearchInSourceDirs>
+        <SearchInIncludeSubdirs>true</SearchInIncludeSubdirs>
+        <IgnoredDirs />
+        <IgnoredHeaders />
+      </DiscoverySettings>
     </ExtraSettings>
   </CodeSense>
 </VisualGDBProjectSettings2>
