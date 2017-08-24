@@ -542,7 +542,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpVolt = 220;
 #else
-        tmpVolt = get_va();
+        tmpVolt = Get_Electricity_meter_massage_voltage(ucCONID+1);//get_va();
 #endif
     }
     if(ucCONID == 1)

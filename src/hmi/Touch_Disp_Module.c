@@ -407,11 +407,11 @@ void Err_Analy(WM_HWIN hWin)
     }
     else
     {
-        if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
-        {
+//        if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
+ //       {
             uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
             WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
-        }
+  //      }
     }
 }
 /** @brief

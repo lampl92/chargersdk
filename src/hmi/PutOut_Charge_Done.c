@@ -353,8 +353,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_JUMPHOME:
-        _deleteWin(_hWinCardInfo);
-        _hWinCardInfo = 0;
+        _deleteWin(_hWinChargDone);
+        _hWinChargDone = 0;
         CreateHome();
         break;
     default:

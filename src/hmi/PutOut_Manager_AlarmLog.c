@@ -625,6 +625,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
+            /**< 跳转至home */
+            _deleteWin(_hWinManagerAlarmLog);
+            CreateHome();
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)

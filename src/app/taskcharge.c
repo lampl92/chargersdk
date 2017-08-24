@@ -201,7 +201,6 @@ void vTaskEVSECharge(void *pvParameters)
                         if(pCON->status.ucRelayLState == SWITCH_ON &&
                                 pCON->status.ucRelayNState == SWITCH_ON)
                         {
-                            xTimerStart(xHandleTimerChargingData, 0);
                             vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
                             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                             pCON->state = STATE_CON_CHARGING;
@@ -312,7 +311,6 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_STOPCHARGE:
-                xTimerStop(xHandleTimerChargingData, 0);
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
 

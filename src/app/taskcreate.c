@@ -267,7 +267,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerPlugState, 0);
     xTimerStart(xHandleTimerVolt, 0);
-    //xTimerStart(xHandleTimerChargingData, 0);
+    xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);

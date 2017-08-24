@@ -299,12 +299,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
-            WM_DeleteWindow(pMsg->hWin);
-            //PutOut_SelAOrB();
             // USER END
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
+            /**< 跳转至home */
+            _deleteWin(_hWinManagerInfoAnalog);
+            CreateHome();
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
