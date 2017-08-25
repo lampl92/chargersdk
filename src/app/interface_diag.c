@@ -21,11 +21,11 @@ typedef enum
     CURR_UPPER,
 } HandleCurr_t;
 
-/** @brief ±È½ÏÎÂ¶È
+/** @brief æ¯”è¾ƒæ¸©åº¦
  *
- * @param temp double   »ñÈ¡µ½µÄÎÂ¶È
- * @param lower double  ÎÂ¶ÈÏÂÏŞ
- * @param upper double  ÎÂ¶ÈÉÏÏŞ
+ * @param temp double   è·å–åˆ°çš„æ¸©åº¦
+ * @param lower double  æ¸©åº¦ä¸‹é™
+ * @param upper double  æ¸©åº¦ä¸Šé™
  * @return ErrorLevel_t
  *
  */
@@ -54,7 +54,7 @@ static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
     return templevel;
 }
 
-/** @brief ±È½ÏµçÑ¹
+/** @brief æ¯”è¾ƒç”µå‹
  *
  * @param volt double
  * @param lower double
@@ -79,10 +79,10 @@ static HandleVolt_t HandleVolt(double volt, double lower, double upper)
     }
     return voltstat;
 }
-/** @brief ±È½ÏµçÁ÷
+/** @brief æ¯”è¾ƒç”µæµ
  *
- * @param curr double       »ñÈ¡µ½µÄµçÁ÷
- * @param ratecurr double   ¶î¶¨µçÁ÷
+ * @param curr double       è·å–åˆ°çš„ç”µæµ
+ * @param ratecurr double   é¢å®šç”µæµ
  * @return HandleCurr_t
  *
  */
@@ -100,7 +100,7 @@ static HandleCurr_t HandleCurr(double curr, double ratecurr)
     return currstat;
 }
 
-/** @brief µçÑ¹ÅĞ¶Ï ±±ÆûĞèÇó P10 f)¹ıÑ¹±£»¤ g)Ç·Ñ¹±£»¤
+/** @brief ç”µå‹åˆ¤æ–­ åŒ—æ±½éœ€æ±‚ P10 f)è¿‡å‹ä¿æŠ¤ g)æ¬ å‹ä¿æŠ¤
  *
  * @param pCON CON_t*
  * @return void
@@ -167,7 +167,7 @@ void DiagVoltageError(CON_t *pCON)
                 THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
-            /** @todo (rgw#1#): ÏòÏµÍ³¸æ¾¯ */
+            /** @todo (rgw#1#): å‘ç³»ç»Ÿå‘Šè­¦ */
             /********************************/
             if(pCON->status.xVoltStat == STATE_VOLT_LOWER_Dummy)
             {
@@ -242,7 +242,7 @@ void DiagVoltageError(CON_t *pCON)
                 THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
-            /** @todo (rgw#1#): ÏµÍ³»Ö¸´   */
+            /** @todo (rgw#1#): ç³»ç»Ÿæ¢å¤   */
             /********************************/
             pCON->status.xVoltStat = STATE_VOLT_OK;
         }
@@ -272,7 +272,7 @@ void DiagVoltageError(CON_t *pCON)
         break;
     }/* end of switch(pCON->status.xVoltStat) */
 }
-/** @brief µçÁ÷ÅĞ¶Ï GB/T 18487.1-2015 A3.10.7 (P24) ÔÚ´Ë»ù´¡ÉÏÔö¼ÓÒ»´Î½µ¹¦ÂÊĞŞÕı²Ù×÷
+/** @brief ç”µæµåˆ¤æ–­ GB/T 18487.1-2015 A3.10.7 (P24) åœ¨æ­¤åŸºç¡€ä¸Šå¢åŠ ä¸€æ¬¡é™åŠŸç‡ä¿®æ­£æ“ä½œ
  *
  * @param pCON CON_t*
  * @return void
@@ -377,7 +377,7 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                /** @todo (rgw#1#): µçÁ÷´íÎó£¬HMIÌáÊ¾°ÎÇ¹ÖØĞÂ²Ù×÷ */
+                /** @todo (rgw#1#): ç”µæµé”™è¯¯ï¼ŒHMIæç¤ºæ‹”æªé‡æ–°æ“ä½œ */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 pCON->status.xCurrStat = STATE_CURR_ERROR;
             }
@@ -400,7 +400,7 @@ void DiagCurrentError(CON_t *pCON)
             break;
         }/*end of switch(xCurrStat)*/
     }/*end of (state == STATE_CON_CHARGING)*/
-    else //½øÈëµ½STATE_CURR_ERRORÇ°£¬connectorµÄ×´Ì¬Ó¦¸ÃÒÑ¾­±ä³É·ÇCHARGING×´Ì¬¡£
+    else //è¿›å…¥åˆ°STATE_CURR_ERRORå‰ï¼Œconnectorçš„çŠ¶æ€åº”è¯¥å·²ç»å˜æˆéCHARGINGçŠ¶æ€ã€‚
     {
         switch(pCON->status.xCurrStat)
         {
@@ -416,7 +416,7 @@ void DiagCurrentError(CON_t *pCON)
         }
     }
 }
-/** @brief BĞÍ²å×ùÎÂ¶ÈÓë½øÏßÎÂ¶È¼ì²â
+/** @brief Bå‹æ’åº§æ¸©åº¦ä¸è¿›çº¿æ¸©åº¦æ£€æµ‹
  *
  * @param pCON CON_t*
  * @return void
@@ -442,7 +442,7 @@ void DiagTempError(CON_t *pCON)
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         break;
     case ERR_LEVEL_CRITICAL:
-        //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+        //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
         break;
@@ -465,7 +465,7 @@ void DiagTempError(CON_t *pCON)
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         break;
     case ERR_LEVEL_CRITICAL:
-        //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+        //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
         break;
@@ -490,7 +490,7 @@ void DiagTempError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             break;
         case ERR_LEVEL_CRITICAL:
-            //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+            //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
@@ -513,7 +513,7 @@ void DiagTempError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             break;
         case ERR_LEVEL_CRITICAL:
-            //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+            //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
@@ -522,12 +522,12 @@ void DiagTempError(CON_t *pCON)
         }
         /* end of SocketTemp2 */
     }
-    else if(pCON->info.ucSocketType == defSocketTypeC) //CĞÍÁ¬½ÓÃ»ÓĞÎÂ¶È¼ì²âµã£¬Ö±½ÓÖÃÎ»OK
+    else if(pCON->info.ucSocketType == defSocketTypeC) //Cå‹è¿æ¥æ²¡æœ‰æ¸©åº¦æ£€æµ‹ç‚¹ï¼Œç›´æ¥ç½®ä½OK
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
     }
 }
-/** @brief ÆµÂÊÅĞ¶Ï
+/** @brief é¢‘ç‡åˆ¤æ–­
  *
  * @param pCON CON_t*
  * @return void
@@ -566,7 +566,7 @@ void DiagPlugError(CON_t *pCON)
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONS2Opened);
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONS2Closed);
     }
-    /** (rgw#1#):  CCºÍCP×´Ì¬ÒÑ¾­ÔÚGetPlugStateÖĞ»ñÈ¡£¬ÔÚTaskChargeÖĞÅĞ¶Ï*/
+    /** (rgw#1#):  CCå’ŒCPçŠ¶æ€å·²ç»åœ¨GetPlugStateä¸­è·å–ï¼Œåœ¨TaskChargeä¸­åˆ¤æ–­*/
 }
 void DiagLockError(CON_t *pCON)
 {
@@ -581,12 +581,12 @@ void DiagLockError(CON_t *pCON)
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
         }
     }
-    else if(pCON->info.ucSocketType == defSocketTypeC) //CĞÍÁ¬½ÓÃ»ÓĞËø£¬Ö±½ÓÖÃÎ»OK
+    else if(pCON->info.ucSocketType == defSocketTypeC) //Cå‹è¿æ¥æ²¡æœ‰é”ï¼Œç›´æ¥ç½®ä½OK
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
     }
 }
-/** @brief Ö÷Òª½øĞĞÆô¶¯Ìõ¼şÅĞ¶Ï
+/** @brief ä¸»è¦è¿›è¡Œå¯åŠ¨æ¡ä»¶åˆ¤æ–­
  *
  * @param pCON CON_t*
  * @return void

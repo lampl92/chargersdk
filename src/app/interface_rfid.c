@@ -1,6 +1,6 @@
 /**
 * @file interface_card.c
-* @brief RFIDÉäÆµ¶Á¿¨Æ÷½Ó¿Ú
+* @brief RFIDå°„é¢‘è¯»å¡å™¨æŽ¥å£
 * @author rgw
 * @version v1.0
 * @date 2017-02-06
@@ -40,7 +40,7 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
     }
     else if(state == MT_STATE_N)
     {
-        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//Çå³ýÔÚÆäËûÁ÷³ÌÖÐÎóË¢¿¨
+        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//æ¸…é™¤åœ¨å…¶ä»–æµç¨‹ä¸­è¯¯åˆ·å¡
         //pRfid->status.ucFoundCard = 0;
     }
     else if(state == MT_COM_FAIL)

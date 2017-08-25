@@ -1,6 +1,6 @@
 /**
 * @file connector.h
-* @brief ¶¨Òå³äµç½Ó¿ÚĞèÒªµÄÊı¾İÓë²Ù×÷
+* @brief å®šä¹‰å……ç”µæ¥å£éœ€è¦çš„æ•°æ®ä¸æ“ä½œ
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -19,7 +19,7 @@
 typedef enum _CONStatusType
 {
     NO_ERR = 0,
-    //CP¼ì²â
+    //CPæ£€æµ‹
     CP_ERR,
     CP_12V,
     CP_12V_PWM,
@@ -27,13 +27,13 @@ typedef enum _CONStatusType
     CP_9V_PWM,
     CP_6V,
     CP_6V_PWM,
-    //CC¼ì²â
+    //CCæ£€æµ‹
     CC_PE,
     CC_NO,
-    //²åÇ¹¼ì²â
+    //æ’æªæ£€æµ‹
     PLUG,
     UNPLUG,
-    //Ç¹Ëø
+    //æªé”
     LOCK,
     UNLOCK
 } CONStatusType_t;
@@ -42,9 +42,9 @@ typedef enum
 {
     STATE_VOLT_OK,
     STATE_VOLT_UPPER_Dummy,
-    STATE_VOLT_UPPER,  //¹ıÑ¹
+    STATE_VOLT_UPPER,  //è¿‡å‹
     STATE_VOLT_LOWER_Dummy,
-    STATE_VOLT_LOWER,   //Ç·Ñ¹
+    STATE_VOLT_LOWER,   //æ¬ å‹
     STATE_VOLT_OK_Dummy
 } VoltState_t;
 typedef enum
@@ -62,7 +62,7 @@ typedef ErrorCode_t (*pCon_ft)(void *pvCon);
 
 typedef struct _CONInfo
 {
-    uint8_t ucCONID;                // Ç¹ºÅ
+    uint8_t ucCONID;                // æªå·
     uint8_t ucCONType;
     uint8_t ucSocketType;
     double dVolatageUpperLimits;
@@ -72,7 +72,7 @@ typedef struct _CONInfo
     double dSocketTempUpperLimits;
     double dSocketTempLowerLimits;
     double dRatedCurrent;
-    double dRatedPower;                      //±£ÁôÒ»Î»Ğ¡Êı
+    double dRatedPower;                      //ä¿ç•™ä¸€ä½å°æ•°
     uint8_t strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
@@ -96,9 +96,9 @@ typedef struct _statRemote
 typedef struct _CONStatus
 {
     //uint8_t ucHeldCardID[defCardIDLength];
-    CONStatusType_t xCPState;     // ¼ì²âµã1 CP state --12V / 9V / 9V_PWM / 6V_PWM
-    uint8_t ucLoadPercent;        // ¸ºÔØ°Ù·Ö±È
-    CONStatusType_t xCCState;     // ¼ì²âµã4 CC state --PE
+    CONStatusType_t xCPState;     // æ£€æµ‹ç‚¹1 CP state --12V / 9V / 9V_PWM / 6V_PWM
+    uint8_t ucLoadPercent;        // è´Ÿè½½ç™¾åˆ†æ¯”
+    CONStatusType_t xCCState;     // æ£€æµ‹ç‚¹4 CC state --PE
     CONStatusType_t xPlugState;
     double dACLTemp;
     double dACNTemp;
@@ -112,9 +112,9 @@ typedef struct _CONStatus
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
-    TimerHandle_t xHandleTimerVolt;     //µçÑ¹×´Ì¬ÅĞ¶Ï¹ı³ÌÖĞÊ¹ÓÃ
-    TimerHandle_t xHandleTimerCurr;     //µçÁ÷×´Ì¬ÅĞ¶Ï¹ı³ÌÖĞÊ¹ÓÃ
-    TimerHandle_t xHandleTimerCharge;   //Charge×´Ì¬ÅĞ¶Ï¹ı³ÌÖĞÊ¹ÓÃ
+    TimerHandle_t xHandleTimerVolt;     //ç”µå‹çŠ¶æ€åˆ¤æ–­è¿‡ç¨‹ä¸­ä½¿ç”¨
+    TimerHandle_t xHandleTimerCurr;     //ç”µæµçŠ¶æ€åˆ¤æ–­è¿‡ç¨‹ä¸­ä½¿ç”¨
+    TimerHandle_t xHandleTimerCharge;   //ChargeçŠ¶æ€åˆ¤æ–­è¿‡ç¨‹ä¸­ä½¿ç”¨
     TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
