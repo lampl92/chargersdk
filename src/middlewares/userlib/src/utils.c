@@ -10,13 +10,13 @@
 
 char *utils_strdup(const char *s)
 {
-    size_t len = strlen(s) + 1;//¼ÆËã×Ö·û´®µÄ³¤¶È
-    void *new = malloc(len);//·ÖÅäÒ»¸öĞÂµÄ¿Õ¼ä¸ønew
+    size_t len = strlen(s) + 1;//è®¡ç®—å­—ç¬¦ä¸²çš„é•¿åº¦
+    void *new = malloc(len);//åˆ†é…ä¸€ä¸ªæ–°çš„ç©ºé—´ç»™new
     if(new == NULL)
     {
         return NULL;
     }
-    return (char *)memcpy(new, s, len);//¿½±´sÊı¾İµ½newÖĞ
+    return (char *)memcpy(new, s, len);//æ‹·è´sæ•°æ®åˆ°newä¸­
 }
 
 uint16_t utils_htons(uint16_t n)
@@ -92,7 +92,7 @@ uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
     return 1;
 }
 
-#if 0 //Õâ¸ö²âÊÔÓĞÎÊÌâ,ÏÈ²»ÓÃ
+#if 0 //è¿™ä¸ªæµ‹è¯•æœ‰é—®é¢˜,å…ˆä¸ç”¨
 uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 {
     if (NULL == Src)
@@ -182,4 +182,65 @@ int utils_abs(int num)
     {
         return num;
     }
+}
+
+static void crc32_init(uint32_t *pulCrc32Table)
+{
+    // This is the official polynomial used by CRC32 in PKZip.
+	// Often times the polynomial shown reversed as 0x04C11DB7.
+    //uint32_t ulPolynomial = 0xEDB88320;
+    uint32_t ulPolynomial = 0xEDB88320;
+    int i, j;
+
+    uint32_t ulCrc;
+    for (i = 0; i < 256; i++)
+    {
+        ulCrc = i;
+        for (j = 8; j > 0; j--)
+        {
+            if (ulCrc & 1)
+                ulCrc = (ulCrc >> 1) ^ ulPolynomial;
+            else
+                ulCrc >>= 1;
+        }
+        pulCrc32Table[i] = ulCrc;
+    }
+}
+
+static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table)
+{
+    *pulCrc32 = ((*pulCrc32) >> 8) ^ pulCrc32Table[(byte) ^ ((*pulCrc32) & 0x000000FF)];
+}
+
+int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
+{
+    FIL f;
+    FRESULT res;
+    uint8_t pbuff[1024];
+    UINT fsize;
+    UINT br;
+    uint32_t ulCrc32 = 0xFFFFFFFF;
+    uint32_t ulCrc32Table[256] = { 0 };
+    int i;
+    
+    res = f_open(&f, path, FA_OPEN_EXISTING | FA_READ);
+    if (res != FR_OK)
+    {
+        return 0;
+    }
+    fsize = f_size(&f);
+    crc32_init(ulCrc32Table);
+    res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+    while (br)
+    {
+        for (i = 0; i < br; i++)
+        {
+            CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
+        }
+        res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+    }
+    *pulCrc32 = ~ulCrc32;
+
+    f_close(&f);
+    return 1;
 }
