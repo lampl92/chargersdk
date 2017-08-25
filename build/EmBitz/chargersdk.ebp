@@ -258,6 +258,9 @@
 		<Unit filename="..\..\src\cli\cli_app.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\cli\cli_crc.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\cli\cli_database.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -105,6 +105,7 @@
     <ClCompile Include="..\..\..\src\app\timercallback.c" />
     <ClCompile Include="..\..\..\src\cli\cli_aes.c" />
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_crc.c" />
     <ClCompile Include="..\..\..\src\cli\cli_database.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
     <ClCompile Include="..\..\..\src\cli\cli_fatfs.c" />

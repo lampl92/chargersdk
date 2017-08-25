@@ -159,16 +159,6 @@
         <SupportFunctionInstrumentation>false</SupportFunctionInstrumentation>
         <MeasureOverhead>true</MeasureOverhead>
       </RealTimeWatch>
-      <RTOSFeatures>
-        <RTOSFeatureSetting>
-          <FeatureID>com.sysprogs.analysis.thread.timing</FeatureID>
-          <Enabled>true</Enabled>
-        </RTOSFeatureSetting>
-        <RTOSFeatureSetting>
-          <FeatureID>com.sysprogs.analysis.freertos.queues</FeatureID>
-          <Enabled>true</Enabled>
-        </RTOSFeatureSetting>
-      </RTOSFeatures>
     </DynamicAnalysisSettings>
     <EndOfStackSymbol>_estack</EndOfStackSymbol>
   </Debug>

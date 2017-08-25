@@ -1678,6 +1678,9 @@
     <ClCompile Include="startup_stm32f429xx.c">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_crc.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
