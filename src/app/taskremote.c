@@ -1,6 +1,6 @@
 /**
 * @file taskremote.c
-* @brief Ô¶³ÌÍ¨ĞÅµÄ²Ù×÷£¬½ÓÊÕÍ¨ĞÅÊµÌåµÄÖ¸Õë
+* @brief è¿œç¨‹é€šä¿¡çš„æ“ä½œï¼Œæ¥æ”¶é€šä¿¡å®ä½“çš„æŒ‡é’ˆ
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -12,7 +12,7 @@
 #include "cfg_parse.h"
 #include "stringName.h"
 
-/** @todo (rgw#1#): Èç¹û×´Ì¬Ê±Charging£¬ÄÇÃ´RemoteµÄ×´Ì¬Èç¹ûÊÇNo»òÕßÊÇerr³¬¹ı5·ÖÖÓ£¬ÔòÅĞ¶ÏÏµÍ³¶ÏÍø£¬Ó¦¸ÃÍ£Ö¹³äµç */
+/** @todo (rgw#1#): å¦‚æœçŠ¶æ€æ—¶Chargingï¼Œé‚£ä¹ˆRemoteçš„çŠ¶æ€å¦‚æœæ˜¯Noæˆ–è€…æ˜¯errè¶…è¿‡5åˆ†é’Ÿï¼Œåˆ™åˆ¤æ–­ç³»ç»Ÿæ–­ç½‘ï¼Œåº”è¯¥åœæ­¢å……ç”µ */
 
 //#define DEBUG_NO_TASKREMOTE
 
@@ -33,7 +33,7 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
     {
         if(flag_set == 0)
         {
-            RemoteIF_SendReset(pEVSE, pProto, 2); //1 ³É¹¦£¬2Ê§°Ü
+            RemoteIF_SendReset(pEVSE, pProto, 2); //1 æˆåŠŸï¼Œ2å¤±è´¥
             return;
         }
         pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
@@ -50,7 +50,7 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 
         pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
         THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskremote GetProtoCfg");
-        RemoteIF_SendReset(pEVSE, pProto, 1); //1 ³É¹¦£¬2Ê§°Ü
+        RemoteIF_SendReset(pEVSE, pProto, 1); //1 æˆåŠŸï¼Œ2å¤±è´¥
     }
 }
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
@@ -63,21 +63,21 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     uint8_t flag_set;
 
     res = 0;
-    flag_set = 0;//0²»¿ÉÉèÖÃ, 1 ¿ÉÉèÖÃ
+    flag_set = 0;//0ä¸å¯è®¾ç½®, 1 å¯è®¾ç½®
     ulTotalCON = pListCON->Total;
 
-    /******* ÉèÖÃÉÏ±¨¼ä¸ô************/
+    /******* è®¾ç½®ä¸ŠæŠ¥é—´éš”************/
     RemoteIF_RecvSetCyc(pEVSE, pProto, &res);
     if(res == 1)
     {
         xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
                            pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
-                           100);//ÉèÖÃtimer period £¬ÓĞtimer start ¹¦ÄÜ
+                           100);//è®¾ç½®timer period ï¼Œæœ‰timer start åŠŸèƒ½
         xTimerChangePeriod(xHandleTimerRemoteStatus,
                            pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
-                           100);//ÉèÖÃtimer period £¬ÓĞtimer start ¹¦ÄÜ
+                           100);//è®¾ç½®timer period ï¼Œæœ‰timer start åŠŸèƒ½
     }
-    /******* ÅĞ¶Ï³äµç¹ı³ÌÖĞ²»ÔÊĞíÉèÖÃ************/
+    /******* åˆ¤æ–­å……ç”µè¿‡ç¨‹ä¸­ä¸å…è®¸è®¾ç½®************/
     for(id = 0; id < ulTotalCON; id++)
     {
         flag_set = 1;
@@ -96,7 +96,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     RemoteIF_RecvSetTimeSeg(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetQR(pEVSE, pProto, flag_set, &res);
 
-    /******* end ³äµç¹ı³ÌÖĞ²»ÔÊĞíÉèÖÃ************/
+    /******* end å……ç”µè¿‡ç¨‹ä¸­ä¸å…è®¸è®¾ç½®************/
 
     RemoteIF_RecvSetKey(pEVSE, pProto, &res);
 
@@ -135,14 +135,14 @@ void vTaskEVSERemote(void *pvParameters)
     uxBits = 0;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
-    eRmtHeartStat = REMOTEHEART_IDLE;  /** @todo (rgw#1#): Õâ¼¸¸ö×´Ì¬¶¼Òª×ªÒÆµ½CON½á¹¹ÌåÖĞ£¬·ñÔò¶àÇ¹Ê±×´Ì¬»á»ìÂÒ */
+    eRmtHeartStat = REMOTEHEART_IDLE;  /** @todo (rgw#1#): è¿™å‡ ä¸ªçŠ¶æ€éƒ½è¦è½¬ç§»åˆ°CONç»“æ„ä½“ä¸­ï¼Œå¦åˆ™å¤šæªæ—¶çŠ¶æ€ä¼šæ··ä¹± */
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
     eRmtOrderStat = REMOTEOrder_IDLE;
     errcode = 0;
     network_res = 0;
     id_rmtctrl = 0;
-    ctrl_rmtctrl = 0;/** @todo (rgw#1#): ½«ÓëÇ¹ÓĞ¹ØµÄ±äÁ¿×ªÒÆµ½CON½á¹¹ÌåÖĞ */
+    ctrl_rmtctrl = 0;/** @todo (rgw#1#): å°†ä¸æªæœ‰å…³çš„å˜é‡è½¬ç§»åˆ°CONç»“æ„ä½“ä¸­ */
     time_rmtctrl = 0;
     time_order = 0;
     order_send_count = 0;
@@ -156,7 +156,7 @@ void vTaskEVSERemote(void *pvParameters)
         switch(remotestat)
         {
         case REMOTE_NO:
-            /** @todo (rgw#1#): ³¢ÊÔÁ¬½ÓÍøÂç */
+            /** @todo (rgw#1#): å°è¯•è¿æ¥ç½‘ç»œ */
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectOK,
                                          pdFALSE, pdTRUE, portMAX_DELAY);
@@ -167,17 +167,17 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_CONNECTED:
-            /********** ×¢²á **************/
+            /********** æ³¨å†Œ **************/
             RemoteIF_RecvRegist(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
                 reg_try_cnt = 0;
                 xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
                                    pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
-                                   100);//ÉèÖÃtimer period £¬ÓĞtimer start ¹¦ÄÜ
+                                   100);//è®¾ç½®timer period ï¼Œæœ‰timer start åŠŸèƒ½
                 xTimerChangePeriod(xHandleTimerRemoteStatus,
                                    pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
-                                   100);//ÉèÖÃtimer period £¬ÓĞtimer start ¹¦ÄÜ
+                                   100);//è®¾ç½®timer period ï¼Œæœ‰timer start åŠŸèƒ½
                 remotestat = REMOTE_REGEDITED;
             }
             else
@@ -208,7 +208,7 @@ void vTaskEVSERemote(void *pvParameters)
                 break;
             }
 
-            /************ ĞÄÌø ***************/
+            /************ å¿ƒè·³ ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                          defEventBitTimerCBHeartbeat,
                                          pdTRUE, pdTRUE , 0);
@@ -241,7 +241,7 @@ void vTaskEVSERemote(void *pvParameters)
             {
 //                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
 //                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
-//                                   100);//ÕâÑùµÄ»°»¹ÄÜËæÊ±¸ü¸ÄĞÄÌøÆµÂÊ²»ÓÃÖØÆô
+//                                   100);//è¿™æ ·çš„è¯è¿˜èƒ½éšæ—¶æ›´æ”¹å¿ƒè·³é¢‘ç‡ä¸ç”¨é‡å¯
                 printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
 //                    eRmtHeartStat = REMOTEHEART_IDLE;
                 heart_lost = 0;
@@ -249,7 +249,7 @@ void vTaskEVSERemote(void *pvParameters)
 //                break;
 //            }
 
-            /************ ×´Ì¬******************/
+            /************ çŠ¶æ€******************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                          defEventBitTimerCBStatus,
                                          pdTRUE, pdTRUE , 0);
@@ -262,18 +262,18 @@ void vTaskEVSERemote(void *pvParameters)
                 }
             }
 
-            /*********** Ô¶³ÌÆôÍ£*******************/
+            /*********** è¿œç¨‹å¯åœ*******************/
             switch(eRmtCtrlStat)
             {
             case REMOTECTRL_IDLE:
                 RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, &id_rmtctrl, &ctrl_rmtctrl, &network_res);
-                if(network_res == 1) //×¢ÒâÕâÀïµÄID»áÒ»Ö±´æÔÚ£¬ÔÚÆäËû×´Ì¬ÖĞÒ²¿ÉÒÔÊ¹ÓÃ
+                if(network_res == 1) //æ³¨æ„è¿™é‡Œçš„IDä¼šä¸€ç›´å­˜åœ¨ï¼Œåœ¨å…¶ä»–çŠ¶æ€ä¸­ä¹Ÿå¯ä»¥ä½¿ç”¨
                 {
                     pCON = CONGetHandle(id_rmtctrl);
                     time_rmtctrl = time(NULL);
                     if(ctrl_rmtctrl == 1)
                     {
-                        pCON->order.statOrder = STATE_ORDER_WAITSTART;//×´Ì¬´¦Àí¼ûtaskdata.cÎÄ¼ş
+                        pCON->order.statOrder = STATE_ORDER_WAITSTART;//çŠ¶æ€å¤„ç†è§taskdata.cæ–‡ä»¶
                         eRmtCtrlStat = REMOTECTRL_WAIT_START;
                     }
                     else if(ctrl_rmtctrl == 2)
@@ -295,7 +295,7 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     if(time(NULL) - time_rmtctrl > 30)
                     {
-                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix£ºÉ¨ÂëºóÆô¶¯³äµçÊ§°ÜÎ´Çå³ıÈÏÖ¤±êÖ¾£¬µ¼ÖÂÏÂÒ»Á¾¿É³äµç³µÖ±½Ó³äµç
+                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfixï¼šæ‰«ç åå¯åŠ¨å……ç”µå¤±è´¥æœªæ¸…é™¤è®¤è¯æ ‡å¿—ï¼Œå¯¼è‡´ä¸‹ä¸€è¾†å¯å……ç”µè½¦ç›´æ¥å……ç”µ
                         eRmtCtrlStat = REMOTECTRL_FAIL;
                     }
                 }
@@ -317,7 +317,7 @@ void vTaskEVSERemote(void *pvParameters)
                 break;
             case REMOTECTRL_SUCC:
                 pCON = CONGetHandle(id_rmtctrl);
-                RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 1, 0); //0£¬ Õı³£
+                RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 1, 0); //0ï¼Œ æ­£å¸¸
                 eRmtCtrlStat = REMOTECTRL_IDLE;
                 break;
             case REMOTECTRL_FAIL:
@@ -325,39 +325,39 @@ void vTaskEVSERemote(void *pvParameters)
                 uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBits & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                 {
-                    RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 3);//3, Ç¹Î´Á¬½Ó
+                    RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 3);//3, æªæœªè¿æ¥
                 }
                 else
                 {
-                    RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4£¬ ÆäËû´íÎó
+                    RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4ï¼Œ å…¶ä»–é”™è¯¯
                 }
                 eRmtCtrlStat = REMOTECTRL_IDLE;
                 break;
             default:
                 break;
             }
-            /***************Ë¢¿¨ÆôÍ£********************/
+            /***************åˆ·å¡å¯åœ********************/
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
                 switch(pCON->status.statRemoteProc.card.stat)
                 {
-                case CARDCTRL_IDLE: //³õÊ¼»¯Ê±½øÈëµÄ×´Ì¬
+                case CARDCTRL_IDLE: //åˆå§‹åŒ–æ—¶è¿›å…¥çš„çŠ¶æ€
                     break;
-                case CARDCTRL_WAIT_START:  //taskdata.cÖĞ×ª»»µÄÕâ¸ö×´Ì¬
+                case CARDCTRL_WAIT_START:  //taskdata.cä¸­è½¬æ¢çš„è¿™ä¸ªçŠ¶æ€
                     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                  defEventBitCONStartOK,
                                                  pdFALSE, pdTRUE, 0);
                     if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
                     {
-                        RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 1); //1£¬ ³É¹¦
+                        RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 1); //1ï¼Œ æˆåŠŸ
                         pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                     }
                     else
                     {
                         if(time(NULL) - pCON->status.statRemoteProc.card.timestamp > 30)
                         {
-                            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix£ºÆô¶¯³äµçÊ§°ÜÎ´Çå³ıÈÏÖ¤±êÖ¾£¬µ¼ÖÂÏÂÒ»Á¾¿É³äµç³µÖ±½Ó³äµç
+                            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfixï¼šå¯åŠ¨å……ç”µå¤±è´¥æœªæ¸…é™¤è®¤è¯æ ‡å¿—ï¼Œå¯¼è‡´ä¸‹ä¸€è¾†å¯å……ç”µè½¦ç›´æ¥å……ç”µ
                             RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 0);//0,
                             pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                         }
@@ -367,7 +367,7 @@ void vTaskEVSERemote(void *pvParameters)
                     uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                     if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
                     {
-                        //Í£Ö¹³äµç
+                        //åœæ­¢å……ç”µ
                         RemoteIF_SendCardStopRes(pEVSE, pechProto, pCON);
                         pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP_RECV;
                     }
@@ -393,7 +393,7 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 }
             }
-            /***************É¨ÂëÊµÊ±Êı¾İ *******************/
+            /***************æ‰«ç å®æ—¶æ•°æ® *******************/
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
@@ -406,12 +406,12 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         xTimerChangePeriod(pCON->status.xHandleTimerRTData,
                                            pdMS_TO_TICKS(pechProto->info.ulRTDataCyc_ms),
-                                           100);//ÉèÖÃtimer period £¬ÓĞtimer start ¹¦ÄÜ
+                                           100);//è®¾ç½®timer period ï¼Œæœ‰timer start åŠŸèƒ½
                         eRmtRTDataStat = REMOTERTData_START;
                     }
                     break;
                 }
-                case REMOTERTData_START: //ÔÚÕâÆÚ¼ä£¬ÓÉTimer·¢ËÍTimeoutÊÂ¼ş¶ÔRTData½øĞĞË¢ĞÂ
+                case REMOTERTData_START: //åœ¨è¿™æœŸé—´ï¼Œç”±Timerå‘é€Timeoutäº‹ä»¶å¯¹RTDataè¿›è¡Œåˆ·æ–°
                 {
                     uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                     if((uxBits & defEventBitCONStartOK) != defEventBitCONStartOK)
@@ -419,7 +419,7 @@ void vTaskEVSERemote(void *pvParameters)
                         xTimerStop(pCON->status.xHandleTimerRTData, 100);
                         eRmtRTDataStat = REMOTERTData_STOP;
                     }
-                    //Á¬½ÓÖĞ¶ÏÇé¿öÏÂ£¬ÓÉÓÚ×´Ì¬²»ÔÚREGEDITEDÏÂ£¬ËùÒÔ²»»áÒ»Ö±·¢ËÍÊµÊ±Êı¾İ
+                    //è¿æ¥ä¸­æ–­æƒ…å†µä¸‹ï¼Œç”±äºçŠ¶æ€ä¸åœ¨REGEDITEDä¸‹ï¼Œæ‰€ä»¥ä¸ä¼šä¸€ç›´å‘é€å®æ—¶æ•°æ®
                     break;
                 }
                 case REMOTERTData_STOP:
@@ -451,16 +451,16 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         }
 
-                        if(pCON->order.ucStartType == 4)//ÓĞ¿¨
+                        if(pCON->order.ucStartType == 4)//æœ‰å¡
                         {
                             RemoteIF_SendCardRTData(pEVSE, pechProto, pCON, 2, rtdata_reason);
                         }
-                        else if(pCON->order.ucStartType == 5)//ÎŞ¿¨
+                        else if(pCON->order.ucStartType == 5)//æ— å¡
                         {
                             RemoteIF_SendRTData(pEVSE, pechProto, pCON, 2, rtdata_reason);
                         }
                     }
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //¸æËßtaskdata£¬RTDataÓÃÍêÁË¶©µ¥Êı¾İ
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteRTDataOK); //å‘Šè¯‰taskdataï¼ŒRTDataç”¨å®Œäº†è®¢å•æ•°æ®
                     eRmtRTDataStat = REMOTERTData_IDLE;
                     break;
                 }
@@ -474,18 +474,18 @@ void vTaskEVSERemote(void *pvParameters)
                                              pdTRUE, pdTRUE, 0);
                 if((uxBits & defEventBitChargeRTDataTimer) == defEventBitChargeRTDataTimer)
                 {
-                    if(pCON->order.ucStartType == 4)//ÓĞ¿¨
+                    if(pCON->order.ucStartType == 4)//æœ‰å¡
                     {
                         RemoteIF_SendCardRTData(pEVSE, pechProto, pCON, 1, 0);
                     }
-                    else if(pCON->order.ucStartType == 5)//ÎŞ¿¨
+                    else if(pCON->order.ucStartType == 5)//æ— å¡
                     {
                         RemoteIF_SendRTData(pEVSE, pechProto, pCON, 1, 0);
                     }
                 }
             }
 
-            /******** ½»Ò×¼ÇÂ¼ ****************/
+            /******** äº¤æ˜“è®°å½• ****************/
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
@@ -505,7 +505,7 @@ void vTaskEVSERemote(void *pvParameters)
                     time_order = time(NULL);
                     eRmtOrderStat = REMOTEOrder_WaitRecv;
                     break;
-                case REMOTEOrder_WaitRecv: //ÖØ·¢Õâ²¿·Ö£¬ÏÈ²âÊÔ×Ô¶¯ÖØ·¢£¬È»ºóÔÙ²âÊÔÊÖ¶¯ÖØ·¢
+                case REMOTEOrder_WaitRecv: //é‡å‘è¿™éƒ¨åˆ†ï¼Œå…ˆæµ‹è¯•è‡ªåŠ¨é‡å‘ï¼Œç„¶åå†æµ‹è¯•æ‰‹åŠ¨é‡å‘
                     RemoteIF_RecvOrder(pEVSE, pechProto, &network_res);
                     if(network_res == 1)
                     {
@@ -539,16 +539,16 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 }//switch
             }
-            /******** Æ½Ì¨ÏÂ·¢ÉèÖÃ ****************/
+            /******** å¹³å°ä¸‹å‘è®¾ç½® ****************/
             taskremote_set(pEVSE, pechProto);
             taskremote_req(pEVSE, pechProto);
 
-            /******** ¼ì²â²¢ÉÏ±¨¹ÊÕÏ ****************/
+            /******** æ£€æµ‹å¹¶ä¸ŠæŠ¥æ•…éšœ ****************/
             RemoteIF_SendUpFault(pEVSE, pechProto);
             RemoteIF_SendUpWarning(pEVSE, pechProto);
 
 
-            /***********»ñÈ¡ÕÊ»§ĞÅÏ¢**********************/ //ÓÉtaskrfidµ÷ÓÃ»ñÈ¡ÕË»§ĞÅÏ¢½Ó¿Ú 2017Äê8ÔÂ10ÈÕ
+            /***********è·å–å¸æˆ·ä¿¡æ¯**********************/ //ç”±taskrfidè°ƒç”¨è·å–è´¦æˆ·ä¿¡æ¯æ¥å£ 2017å¹´8æœˆ10æ—¥
 //            uxBits = xEventGroupWaitBits(xHandleEventRemote,
 //                                         defEventBitRemoteGetAccount,
 //                                         pdTRUE, pdFALSE, 0);

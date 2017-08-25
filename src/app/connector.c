@@ -1,6 +1,6 @@
 /**
 * @file connector.c
-* @brief ������С��絥Ԫ��Ҫ�����������
+* @brief 定义最小充电单元需要的数据与操作
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -16,7 +16,7 @@
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
 /*---------------------------------------------------------------------------/
-/                               ���ó��ӿ���Ϣ�������ļ�
+/                               设置充电接口信息到配置文件
 /---------------------------------------------------------------------------*/
 
 ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
@@ -67,7 +67,7 @@ ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint
             default:
                 break;
             }
-            break;//�˳�whileѭ��
+            break;//退出while循环
         }
         else
         {
@@ -112,10 +112,10 @@ ErrorCode_t SetRatedPower(void *pvCON, void *pvCfgParam)
 }
 #endif
 /*---------------------------------------------------------------------------/
-/                               ���ļ���ȡ���ӿ���Ϣ
+/                               从文件获取充电接口信息
 /---------------------------------------------------------------------------*/
 
-/** @todo (rgw#1#): ����ǹ�������CONType */
+/** @todo (rgw#1#): 增加枪充电类型CONType */
 
 static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 {
@@ -134,7 +134,7 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
     if(jsItem == NULL)
     {
@@ -155,7 +155,7 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 }
 static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
 {
-    /** @todo (rgw#1#): �ú���δ���� */
+    /** @todo (rgw#1#): 该函数未测试 */
     CON_t *pCON;
     uint8_t ucCONID;
     uint8_t tmpQRCode[defQRCodeLength];
@@ -171,7 +171,7 @@ static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnQRCode);
     if(jsItem == NULL)
     {
@@ -207,7 +207,7 @@ static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): ���ļ���ȡ */
+    /** @todo (rgw#1#): 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketType);
     if(jsItem == NULL)
     {
@@ -245,7 +245,7 @@ static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): ���ļ���ȡ */
+    /** @todo (rgw#1#): 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageUpperLimits);
     if(jsItem == NULL)
     {
@@ -286,13 +286,13 @@ static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACTempUpperLim = 105;//(��)
-    tmpACTempLowerLim = -40;//(��)
+    tmpACTempUpperLim = 105;//(℃)
+    tmpACTempLowerLim = -40;//(℃)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempUpperLimits);
     if(jsItem == NULL)
     {
@@ -333,13 +333,13 @@ static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpSocketTempUpperLim = 105;//(��)
-    tmpSocketTempLowerLim = -40;//(��)
+    tmpSocketTempUpperLim = 105;//(℃)
+    tmpSocketTempLowerLim = -40;//(℃)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempUpperLimits);
     if(jsItem == NULL)
     {
@@ -384,7 +384,7 @@ static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
 
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedCurrent);
     if(jsItem == NULL)
@@ -422,7 +422,7 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ���ļ���ȡ */
+    /** 从文件获取 */
 
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedPower);
     if(jsItem == NULL)
@@ -444,7 +444,7 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
-/** @brief ��cfg�ļ���ȡ���ǹ����
+/** @brief 从cfg文件获取充电枪配置
  *
  * @param pvCON void*
  * @param pvCfgObj void* NULL
@@ -464,21 +464,21 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
 
-    /*json����*/
+    /*json解析*/
     jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
     if(jsCfgObj == NULL)
     {
-        //errcode �Ѿ���GetCfgObj�л��
+        //errcode 已经在GetCfgObj中获得
         goto exit;
     }
-    /*ȡ��CON�������*/
+    /*取出CON相关配置*/
     jsCONArray = cJSON_GetObjectItem(jsCfgObj, jnCONArray);
     if(jsCONArray == NULL)
     {
         errcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
-    iArraySize = cJSON_GetArraySize(jsCONArray);//�ж��ٸ����ǹ����
+    iArraySize = cJSON_GetArraySize(jsCONArray);//有多少个充电枪配置
     if(iArraySize != pEVSE->info.ucTotalCON)
     {
         errcode = ERR_FILE_PARAM;
@@ -504,18 +504,18 @@ exit:
     return errcode;
 }
 /*---------------------------------------------------------------------------/
-/                               ��������ȡ���ӿ�״̬
+/                               从驱动获取充电接口状态
 /---------------------------------------------------------------------------*/
 
 
 
-/** ������ ע�ⲻͬID��Ӳ���Ĳ�ͬ���� ������ */
-/** ������ ע�ⲻͬID��Ӳ���Ĳ�ͬ���� ������ */
-/** ������ ע�ⲻͬID��Ӳ���Ĳ�ͬ���� ������ */
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
+/** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 
 
 
-/** @brief ��ȡ����ѹ����⾫�� +/-0.1V
+/** @brief 获取充电电压，检测精度 +/-0.1V
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -535,7 +535,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     tmpVolt = 0;
     errcode = ERR_NO;
 
-    /** ��ȡ��ѹ */
+    /** 获取电压 */
 
     if(ucCONID == 0)
     {
@@ -557,7 +557,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     return errcode;
 }
 
-/** @brief ��ȡ����������⾫��+/-0.1A
+/** @brief 获取充电电流，检测精度+/-0.1A
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -577,7 +577,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     tmpCurr = 0;
     errcode = ERR_NO;
 
-    /** ��ȡ���� */
+    /** 获取电流 */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
         return ERR_CON_METER_FAULT;
@@ -600,7 +600,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     return errcode;
 }
 
-/** @brief ��ȡ��ԴƵ��
+/** @brief 获取电源频率
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -619,7 +619,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** @todo (yuye#1#): �ӵ����ȡ */
+    /** @todo (yuye#1#): 从电表获取 */
     //meter id 0 == CON id 0
 #ifdef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
@@ -653,7 +653,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** @todo (yuye#1#): �ӵ����ȡ */
+    /** @todo (yuye#1#): 从电表获取 */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
         return ERR_CON_METER_FAULT;
@@ -675,7 +675,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     return errcode;
 }
 
-/** @brief ��ȡCP״̬
+/** @brief 获取CP状态
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -793,10 +793,10 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     return errcode;
 }
-/** @brief ����S1����
+/** @brief 控制S1开关
  *
  * @param pvCON void*
- * @param cmd uint8_t   ���ݿ��ؿ������SWITCH_ON /SWITCH_OFF
+ * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *
  */
@@ -844,10 +844,10 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
 
     return errcode;
 }
-/** @brief ����PWMռ�ձ� �����뿴18487.1-2015 P22
+/** @brief 设置PWM占空比 详情请看18487.1-2015 P22
  *
  * @param pvCON void*
- * @param ucLoadPercent uint8_t ���ذٷֱ� 0 ~ 100
+ * @param ucLoadPercent uint8_t 负载百分比 0 ~ 100
  *
  * @return ErrorCode_t
  *
@@ -861,7 +861,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpCPPWM = 53; //����100%ʱ��PWM=53, ����50%ʱ��PWM= 27
+    tmpCPPWM = 53; //负载100%时，PWM=53, 负载50%时，PWM= 27
     errcode = ERR_NO;
 
     /** ************* */
@@ -873,7 +873,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     {
         TIM4->CCR1 = 1001 - ucLoadPercent * 10;
     }
-    //���ذٷֱ����뷶Χ0~1000��
+    //负载百分比输入范围0~1000；
     //PWM
     /*********************/
 
@@ -908,7 +908,7 @@ static ErrorCode_t GetCCState(void *pvCON)
 #else
     if(ucCONID == 0)
     {
-        if(GET_CC1 == 0) //�Ѿ�����CC1�㣬PE��������
+        if(GET_CC1 == 0) //已经连接CC1点，PE连接正常
         {
             tmpCCState = CC_PE;
         }
@@ -920,7 +920,7 @@ static ErrorCode_t GetCCState(void *pvCON)
     }
     else if(ucCONID == 1)
     {
-        if(GET_CC2 == 0) //�Ѿ�����CC1�㣬PE��������
+        if(GET_CC2 == 0) //已经连接CC1点，PE连接正常
         {
             tmpCCState = CC_PE;
         }
@@ -937,7 +937,7 @@ static ErrorCode_t GetCCState(void *pvCON)
     return errcode;
 }
 
-/** @brief ��ȡ��ǹ״̬��Ӧͬʱ������1��CC���ͼ���4��CP��
+/** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -957,7 +957,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     tmpPlugState = UNPLUG;
     errcode = ERR_NO;
 
-    /** ����ǹ״̬�����ӿ�  */
+    /** 检测插枪状态驱动接口  */
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
@@ -995,7 +995,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     return errcode;
 }
 
-/** @brief B������ǹ��״̬
+/** @brief B型连接枪锁状态
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1015,7 +1015,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
 
     if(ucCONID == 0)
     {
@@ -1051,10 +1051,10 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     return errcode;
 }
 
-/** @brief B������ǹ������
+/** @brief B型连接枪锁开关
  *
  * @param pvCON void*
- * @param cmd uint8_t   ���ؿ��ƣ�SWITCH_ON /SWITCH_OFF
+ * @param cmd uint8_t   开关控制，SWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *                  ERR_NO
  *                  ERR_CANT_LOCK
@@ -1072,7 +1072,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    /**  ִ����ֹ���� */
+    /**  执行锁止动作 */
     if(ucCONID == 0)
     {
         if(cmd == SWITCH_ON)
@@ -1100,7 +1100,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     return errcode;
 }
 
-/** @brief ��ȡL�����¶�
+/** @brief 获取L进线温度
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1120,7 +1120,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     tmpACLTemp = 0;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
@@ -1170,7 +1170,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     tmpACNTemp = 0;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
 
     //...
     if(ucCONID == 0)
@@ -1221,7 +1221,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
 
     if(ucCONID == 0)
     {
@@ -1268,7 +1268,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
 
     //...
     if(ucCONID == 0)
@@ -1298,7 +1298,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 
     return errcode;
 }
-/** @brief ��ȡ����̵���״̬
+/** @brief 获取输出继电器状态
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1318,7 +1318,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = SWITCH_OFF;
     errcode = ERR_NO;
 
-    /** ʵ�ִ���  */
+    /** 实现代码  */
 #ifdef DEBUG_DIAG_DUMMY
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
@@ -1328,8 +1328,8 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = tmpLStat;
 #endif
     /*********************/
-    /* @todo (yuye#1#): ����ճ������2017��4��10�� */
-//    if(����ճ��)
+    /* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
+//    if(触电粘连)
 //    {
 //        errcode = ERR_RELAY_PASTE;
 //    }
@@ -1346,7 +1346,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
  * @param cmd uint8_t SWITCH_ON SWITCH_OFF
  * @return ErrorCode_t
  *
- */          //K1 K2ָ����ʲô
+ */          //K1 K2指的是什么
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1359,7 +1359,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     errcode = ERR_NO;
 
 
-    /** ����K1,K2����̵��� */
+    /** 操作K1,K2输出继电器 */
     if(ucCONID == 0)
     {
         if(cmd == SWITCH_OFF)
@@ -1406,7 +1406,7 @@ static ErrorCode_t StartCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-    /**  ��������̵���������̵���״̬ */
+    /**  操作输出继电器，保存继电器状态 */
 
     errcode = SetRelay(pvCON, SWITCH_ON);
 
@@ -1432,7 +1432,7 @@ static ErrorCode_t StopCharge(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** ��������̵���������̵���״̬ */
+    /** 操作输出继电器，保存继电器状态 */
 
     errcode = SetRelay(pvCON, SWITCH_OFF);
 

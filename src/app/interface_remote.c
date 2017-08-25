@@ -1,6 +1,6 @@
 /**
 * @file interface_remote.c
-* @brief ÔÆÆ½Ì¨½Ó¿Ú
+* @brief äº‘å¹³å°æ¥å£
 * @author rgw
 * @version v1.0
 * @date 2017-02-06
@@ -31,7 +31,7 @@ ErrorCode_t RemoteInit()
     pucAESKey_BASE64 = ucAESKey_BASE64;
     mbedtls_base64_decode(ucAESKey, sizeof(ucAESKey), &olen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
     printf_safe("AESKEYBASE64 : %s\n", pucAESKey_BASE64);
-    printf_safe("AESKey £º ");
+    printf_safe("AESKey ï¼š ");
     for(i = 0; i < olen; i++)
     {
         printf_safe("%02x ", ucAESKey[i]);
@@ -46,7 +46,7 @@ ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
 
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): »ñÈ¡·şÎñÆ÷Ê±¼ä */
+    /** @todo (rgw#1#): è·å–æœåŠ¡å™¨æ—¶é—´ */
 
 
     *pTimeBlock = tmpTimeBlock;
@@ -57,7 +57,7 @@ ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
 
 /** @brief
  *
- * @param pucRetVal uint8_t*     1×¢²á³É¹¦  0×¢²áÊ§°Ü
+ * @param pucRetVal uint8_t*     1æ³¨å†ŒæˆåŠŸ  0æ³¨å†Œå¤±è´¥
  * @return ErrorCode_t
  *
  */
@@ -67,7 +67,7 @@ ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): µ÷ÓÃÆ½Ì¨×¢²á½Ó¿Ú */
+    /** @todo (rgw#1#): è°ƒç”¨å¹³å°æ³¨å†Œæ¥å£ */
     pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_REGISTER, 10, 3);
     /**********/
 
@@ -125,16 +125,16 @@ ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        switch(pbuff[0])//µÇÂ½½á¹û
+        switch(pbuff[0])//ç™»é™†ç»“æœ
         {
-        case 1: //Õı³£
+        case 1: //æ­£å¸¸
         case 3:
             errcode = ERR_NO;
             *psiRetVal = 1;
             break;
-        case 2: //Éè±¸²»´æÔÚ£¬¹Ø±ÕÁ¬½Ó
-        case 4: //ÃÜÔ¿Ê§Ğ§£¬¹Ø±ÕÁ¬½Ó
-        case 5: //ÆäËû´íÎó£¬¹Ø±ÕÁ¬½Ó
+        case 2: //è®¾å¤‡ä¸å­˜åœ¨ï¼Œå…³é—­è¿æ¥
+        case 4: //å¯†é’¥å¤±æ•ˆï¼Œå…³é—­è¿æ¥
+        case 5: //å…¶ä»–é”™è¯¯ï¼Œå…³é—­è¿æ¥
         default:
             errcode = ERR_REMOTE_REGEDIT;
             *psiRetVal = 0;
@@ -182,11 +182,11 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
     return errcode;
 }
 
-/** @brief ÏµÍ³ÖØÆôºó£¬·¢ËÍÖØÆô½á¹û
+/** @brief ç³»ç»Ÿé‡å¯åï¼Œå‘é€é‡å¯ç»“æœ
  *
  * @param pEVSE EVSE_t*
  * @param pProto echProtocol_t*
- * @param succ uint32_t ³É¹¦±êÖ¾ 1 ³É¹¦£¬2 Ê§°Ü
+ * @param succ uint32_t æˆåŠŸæ ‡å¿— 1 æˆåŠŸï¼Œ2 å¤±è´¥
  * @return ErrorCode_t
  *
  */
@@ -199,13 +199,13 @@ ErrorCode_t RemoteIF_SendReset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t su
     ul2uc ultmpNetSeq;
 
     pbuff = pProto->pCMD[ECH_CMDID_RESET]->ucRecvdOptData;
-    //pbuff[0...3] ²Ù×÷ĞòÁĞºÅ
+    //pbuff[0...3] æ“ä½œåºåˆ—å·
     ultmpNetSeq.ulVal = htonl(pProto->info.ulOptSN);
     pbuff[0] = ultmpNetSeq.ucVal[0];
     pbuff[1] = ultmpNetSeq.ucVal[1];
     pbuff[2] = ultmpNetSeq.ucVal[2];
     pbuff[3] = ultmpNetSeq.ucVal[3];
-    //³É¹¦±êÖ¾
+    //æˆåŠŸæ ‡å¿—
     pbuff[4] = succ;
     pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_RESET, 0xffff, 0);
 
@@ -230,7 +230,7 @@ ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *p
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ĞòÁĞºÅ
+        //pbuff[0...3] æ“ä½œåºåˆ—å·
         ultmpNetSeq.ucVal[0] = pbuff[0];
         ultmpNetSeq.ucVal[1] = pbuff[1];
         ultmpNetSeq.ucVal[2] = pbuff[2];
@@ -270,8 +270,8 @@ ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ĞòÁĞºÅ
-        //pbuff[4] ³äµç×®½Ó¿Ú
+        //pbuff[0...3] æ“ä½œåºåˆ—å·
+        //pbuff[4] å……ç”µæ¡©æ¥å£
         id = EchRemoteIDtoCONID(pbuff[4]);
         pCON = CONGetHandle(id);
         if(pCON != NULL)
@@ -292,7 +292,7 @@ ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     return errcode;
 }
 
-/** @brief ×®»Ø¸´Æ½Ì¨ÆôÍ£ÃüÁî
+/** @brief æ¡©å›å¤å¹³å°å¯åœå‘½ä»¤
  *
  * @param pEVSE EVSE_t*
  * @param pProto echProtocol_t*
@@ -306,8 +306,8 @@ ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    /*** ÈçÏÂ²Ù×÷ÎªÆÆ»µÁË³ÌĞò½á¹¹£¬ÓÃpCMDÖĞµÄ»º´æ¿Õ¼ä´øÈëÒ»Ğ©ĞèÒª´«µİµÄ²ÎÊı*/
-    /*** 2017Äê6ÔÂ16ÈÕ£ºÏÖÔÚpCMDµÄ»º´æ×¨ÓÃÓÚ½ÓÊÕÓë´«µİ²ÎÊı£¬³ÌĞò½á¹¹ÉÏ²»ÓÃµ£ĞÄÁË*/
+    /*** å¦‚ä¸‹æ“ä½œä¸ºç ´åäº†ç¨‹åºç»“æ„ï¼Œç”¨pCMDä¸­çš„ç¼“å­˜ç©ºé—´å¸¦å…¥ä¸€äº›éœ€è¦ä¼ é€’çš„å‚æ•°*/
+    /*** 2017å¹´6æœˆ16æ—¥ï¼šç°åœ¨pCMDçš„ç¼“å­˜ä¸“ç”¨äºæ¥æ”¶ä¸ä¼ é€’å‚æ•°ï¼Œç¨‹åºç»“æ„ä¸Šä¸ç”¨æ‹…å¿ƒäº†*/
     pbuff = pProto->pCMD[ECH_CMDID_REMOTE_CTRL]->ucRecvdOptData;
     if(succ == 1)
     {
@@ -324,17 +324,17 @@ ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
     return errcode;
 }
 
-/** @brief Æ½Ì¨ÏÂ·¢µÄÆôÍ£ÃüÁî
+/** @brief å¹³å°ä¸‹å‘çš„å¯åœå‘½ä»¤
  *
  * @param pEVSE EVSE_t*
  * @param pProto echProtocol_t*
- * @param pid uint8_t* ·µ»ØIDµ½³ÌĞò
- * @param pctrl uint8_t* ·µ»Ø²Ù×÷µ½³ÌĞò
- * @param psiRetVal int* ·µ»Ø½á¹ûµ½³ÌĞò
+ * @param pid uint8_t* è¿”å›IDåˆ°ç¨‹åº
+ * @param pctrl uint8_t* è¿”å›æ“ä½œåˆ°ç¨‹åº
+ * @param psiRetVal int* è¿”å›ç»“æœåˆ°ç¨‹åº
  * @return ErrorCode_t
  *
  */
-ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )// ¡ú_¡ú
+ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )// â†’_â†’
 {
     CON_t *pCON;
     uint8_t id;
@@ -357,42 +357,42 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        //pbuff[0...3] ²Ù×÷ID £¬²»´¦Àí£¬ÁôÔÚucRecvdOptDataÖĞ´ı»Ø¸´Ê±Ê¹ÓÃ
+        //pbuff[0...3] æ“ä½œID ï¼Œä¸å¤„ç†ï¼Œç•™åœ¨ucRecvdOptDataä¸­å¾…å›å¤æ—¶ä½¿ç”¨
 
-        //pbuff[12] ³äµç×®½Ó¿Ú
+        //pbuff[12] å……ç”µæ¡©æ¥å£
         id = EchRemoteIDtoCONID(pbuff[12]);
         pCON = CONGetHandle(id);
         if(pCON != NULL)
         {
-            //pbuff[13] ²Ù×÷ 1Æô¶¯£¬2Í£Ö¹
+            //pbuff[13] æ“ä½œ 1å¯åŠ¨ï¼Œ2åœæ­¢
             if(pbuff[13] == 1)
             {
-                //pbuff[4...11] ½»Ò×Á÷Ë®ºÅ
+                //pbuff[4...11] äº¤æ˜“æµæ°´å·
                 HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
 
                 *pctrl = pbuff[13];
 
-                //pbuff[14...17] ³äµç½ğ¶î
+                //pbuff[14...17] å……ç”µé‡‘é¢
                 ulTmp.ucVal[0] = pbuff[14];
                 ulTmp.ucVal[1] = pbuff[15];
                 ulTmp.ucVal[2] = pbuff[16];
                 ulTmp.ucVal[3] = pbuff[17];
                 dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
                 pCON->order.dLimitFee = dLimetFee;
-                pCON->order.ucStartType = 5;//RemoteÎŞ¿¨
+                pCON->order.ucStartType = 5;//Remoteæ— å¡
 
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
             else if(pbuff[13] == 2)
             {
-                /**ÔÚÕâÀïÅĞ¶Ï½»Ò×ºÅÊÇ·ñÏàµÈ */
+                /**åœ¨è¿™é‡Œåˆ¤æ–­äº¤æ˜“å·æ˜¯å¦ç›¸ç­‰ */
                 HexToStr(&pbuff[4], strOrderSN_tmp, 8);
                 if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
                 {
                     *pctrl = pbuff[13];
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                 }
-                else //¶©µ¥ºÅ²»ÏàµÈ
+                else //è®¢å•å·ä¸ç›¸ç­‰
                 {
                     *psiRetVal = 0;
                     return ERR_REMOTE_ORDERSN;
@@ -415,8 +415,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
  * @param pEVSE EVSE_t*
  * @param pProto echProtocol_t*
  * @param pCON CON_t*
- * @param ctrl uint8_t     ³äµç×®×´Ì¬ 1 ¿ª»ú£¬2 Í£»ú
- * @param reason uint8_t   Í£Ö¹Ô­Òò
+ * @param ctrl uint8_t     å……ç”µæ¡©çŠ¶æ€ 1 å¼€æœºï¼Œ2 åœæœº
+ * @param reason uint8_t   åœæ­¢åŸå› 
  * @return ErrorCode_t
  *
  */
@@ -456,7 +456,7 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON
 
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
-    pbuff[0] = pCON->order.ucStartType;//4 ÓĞ¿¨£¬5 ÎŞ¿¨
+    pbuff[0] = pCON->order.ucStartType;//4 æœ‰å¡ï¼Œ5 æ— å¡
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
 
     return errcode;
@@ -483,9 +483,9 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        //[0] ÓĞÎŞ¿¨
-        //[1...8] ½»Ò×Á÷Ë®ºÅ
-        //[9] ³äµç×®½Ó¿Ú
+        //[0] æœ‰æ— å¡
+        //[1...8] äº¤æ˜“æµæ°´å·
+        //[9] å……ç”µæ¡©æ¥å£
         id = EchRemoteIDtoCONID(pbuff[9]);
         pCON = CONGetHandle(id);
         if(pCON != NULL)
@@ -495,7 +495,7 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
             {
                 *psiRetVal = 1;
             }
-            else //¶©µ¥ºÅ²»ÏàµÈ
+            else //è®¢å•å·ä¸ç›¸ç­‰
             {
                 *psiRetVal = 0;
                 errcode = ERR_REMOTE_ORDERSN;
@@ -545,39 +545,39 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
 
             pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
-            break;//Ö±½Ó½áÊø ·µ»Ø
+            break;//ç›´æ¥ç»“æŸ è¿”å›
         }
         *psiRetVal = 1;
 
-        //pbuff[4...7] ¼â·ÑÂÊ
+        //pbuff[4...7] å°–è´¹ç‡
         ultmpNetSeq.ucVal[0] = pbuff[4];
         ultmpNetSeq.ucVal[1] = pbuff[5];
         ultmpNetSeq.ucVal[2] = pbuff[6];
         ultmpNetSeq.ucVal[3] = pbuff[7];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoPowerFee_sharp, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
-        //pbuff[8...11] ·å·ÑÂÊ
+        //pbuff[8...11] å³°è´¹ç‡
         ultmpNetSeq.ucVal[0] = pbuff[8];
         ultmpNetSeq.ucVal[1] = pbuff[9];
         ultmpNetSeq.ucVal[2] = pbuff[10];
         ultmpNetSeq.ucVal[3] = pbuff[11];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_peak = pProto->info.SetProtoCfg(jnProtoPowerFee_peak, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
-        //pbuff[12...15] Æ½·ÑÂÊ
+        //pbuff[12...15] å¹³è´¹ç‡
         ultmpNetSeq.ucVal[0] = pbuff[12];
         ultmpNetSeq.ucVal[1] = pbuff[13];
         ultmpNetSeq.ucVal[2] = pbuff[14];
         ultmpNetSeq.ucVal[3] = pbuff[15];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoPowerFee_shoulder, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
-        //pbuff[16...19] ¹È·ÑÂÊ
+        //pbuff[16...19] è°·è´¹ç‡
         ultmpNetSeq.ucVal[0] = pbuff[16];
         ultmpNetSeq.ucVal[1] = pbuff[17];
         ultmpNetSeq.ucVal[2] = pbuff[18];
@@ -585,7 +585,7 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoPowerFee_off_peak, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
 
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
         if(set_errcode_sharp == ERR_NO &&
            set_errcode_peak == ERR_NO &&
            set_errcode_shoulder == ERR_NO &&
@@ -640,39 +640,39 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
 
             pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
-            break;//Ö±½Ó½áÊø ·µ»Ø
+            break;//ç›´æ¥ç»“æŸ è¿”å›
         }
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ID
-        //pbuff[4...7] ¼â·şÎñ·Ñ
+        //pbuff[0...3] æ“ä½œID
+        //pbuff[4...7] å°–æœåŠ¡è´¹
         ultmpNetSeq.ucVal[0] = pbuff[4];
         ultmpNetSeq.ucVal[1] = pbuff[5];
         ultmpNetSeq.ucVal[2] = pbuff[6];
         ultmpNetSeq.ucVal[3] = pbuff[7];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoServFee_sharp, ParamTypeDouble, NULL, 0, &dtmpServFee);
-        //pbuff[8...11] ·å·şÎñ·Ñ
+        //pbuff[8...11] å³°æœåŠ¡è´¹
         ultmpNetSeq.ucVal[0] = pbuff[8];
         ultmpNetSeq.ucVal[1] = pbuff[9];
         ultmpNetSeq.ucVal[2] = pbuff[10];
         ultmpNetSeq.ucVal[3] = pbuff[11];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_peak = pProto->info.SetProtoCfg(jnProtoServFee_peak, ParamTypeDouble, NULL, 0, &dtmpServFee);
-        //pbuff[12...15] Æ½·şÎñ·Ñ
+        //pbuff[12...15] å¹³æœåŠ¡è´¹
         ultmpNetSeq.ucVal[0] = pbuff[12];
         ultmpNetSeq.ucVal[1] = pbuff[13];
         ultmpNetSeq.ucVal[2] = pbuff[14];
         ultmpNetSeq.ucVal[3] = pbuff[15];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoServFee_shoulder, ParamTypeDouble, NULL, 0, &dtmpServFee);
-        //pbuff[16...19] ¹È·şÎñ·Ñ
+        //pbuff[16...19] è°·æœåŠ¡è´¹
         ultmpNetSeq.ucVal[0] = pbuff[16];
         ultmpNetSeq.ucVal[1] = pbuff[17];
         ultmpNetSeq.ucVal[2] = pbuff[18];
@@ -680,7 +680,7 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
         set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoServFee_off_peak, ParamTypeDouble, NULL, 0, &dtmpServFee);
 
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
         if(set_errcode_sharp == ERR_NO &&
            set_errcode_peak == ERR_NO &&
            set_errcode_shoulder == ERR_NO &&
@@ -729,15 +729,15 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ID
-        //pbuff[4] ×´Ì¬Êı¾İÉÏ±¨¼ä¸ô
+        //pbuff[0...3] æ“ä½œID
+        //pbuff[4] çŠ¶æ€æ•°æ®ä¸ŠæŠ¥é—´éš”
         ultmpTimCyc_ms = pbuff[4] * 1000;
         set_errcode_stat = pProto->info.SetProtoCfg(jnProtoStatusCyc_ms, ParamTypeU32, NULL, 0, &ultmpTimCyc_ms);
-        //pbuff[5] ÊµÊ±Êı¾İÉÏ±¨¼ä¸ô
+        //pbuff[5] å®æ—¶æ•°æ®ä¸ŠæŠ¥é—´éš”
         ultmpTimCyc_ms = pbuff[5] * 1000;
         set_errcode_rt = pProto->info.SetProtoCfg(jnProtoRTDataCyc_ms, ParamTypeU32, NULL, 0, &ultmpTimCyc_ms);
 
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
         if(set_errcode_stat == ERR_NO &&
            set_errcode_rt == ERR_NO)
         {
@@ -792,20 +792,20 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
 
             pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
-            break;//Ö±½Ó½áÊø ·µ»Ø
+            break;//ç›´æ¥ç»“æŸ è¿”å›
         }
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ID
-        //pbuff[4] ¼âÊ±¼ä¶Î¸öÊı
+        //pbuff[0...3] æ“ä½œID
+        //pbuff[4] å°–æ—¶é—´æ®µä¸ªæ•°
         ucOffset = 4;
-        //¼â
+        //å°–
         tmpSegTime.ucSegCont = pbuff[ucOffset++];
         set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
         //pbuff[5...SegCont]
@@ -816,7 +816,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
             pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
-        //·å
+        //å³°
         tmpSegTime.ucSegCont = pbuff[ucOffset++];
         set_errcode_peak = pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
         for(i = 0; i < tmpSegTime.ucSegCont; i++)
@@ -826,7 +826,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
             pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
-        //Æ½
+        //å¹³
         tmpSegTime.ucSegCont = pbuff[ucOffset++];
         set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
         for(i = 0; i < tmpSegTime.ucSegCont; i++)
@@ -836,7 +836,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
             pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
-        //¹È
+        //è°·
         tmpSegTime.ucSegCont = pbuff[ucOffset++];
         set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
         for(i = 0; i < tmpSegTime.ucSegCont; i++)
@@ -847,7 +847,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
 
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
         if(set_errcode_sharp == ERR_NO &&
            set_errcode_peak == ERR_NO &&
            set_errcode_shoulder == ERR_NO &&
@@ -900,15 +900,15 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ID
-        //pbuff[4...19] ÃÜÔ¿
+        //pbuff[0...3] æ“ä½œID
+        //pbuff[4...19] å¯†é’¥
         ucOffset = 4;
         for(i = 0; i < 16; i++)
         {
             strTmpKey[i] = pbuff[ucOffset++];
         }
         set_errcode_key = pProto->info.SetProtoCfg(jnProtoNewKey, ParamTypeString, NULL, 0, strTmpKey);
-        //pbuff[20...23] ÃÜÔ¿±ä¸üÊ±¼ä
+        //pbuff[20...23] å¯†é’¥å˜æ›´æ—¶é—´
         ultmpNetSeq.ucVal[0] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[1] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[2] = pbuff[ucOffset++];
@@ -953,7 +953,7 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
     ErrorCode_t set_errcode;
     ErrorCode_t errcode;
     uint8_t id_cont;
-    uint8_t id;//±¾µØÇ¹ID,´Ó0¿ªÊ¼
+    uint8_t id;//æœ¬åœ°æªID,ä»0å¼€å§‹
     uint8_t len_qr;
     uint8_t qrcode[64] = {0};
     uint8_t ucOffset;
@@ -974,32 +974,32 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
 
             pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0xffff, 0);
-            break;//Ö±½Ó½áÊø ·µ»Ø
+            break;//ç›´æ¥ç»“æŸ è¿”å›
         }
-        //pbuff[4] Ç¹¿Ú¸öÊı
+        //pbuff[4] æªå£ä¸ªæ•°
         ucOffset = 4;
         id_cont = pbuff[ucOffset++];
 
         for(i = 0; i < id_cont; i++)
         {
-            //pbuff[5] ³äµç×®½Ó¿Ú
+            //pbuff[5] å……ç”µæ¡©æ¥å£
             id = EchRemoteIDtoCONID(pbuff[ucOffset++]);
             pCON = CONGetHandle(id);
             if(pCON == NULL)
             {
                 set_errcode = ERR_REMOTE_PARAM;
-                break; //²éÎŞ´ËÇ¹, ÍË³öÑ­»·
+                break; //æŸ¥æ— æ­¤æª, é€€å‡ºå¾ªç¯
             }
-            //pbuff[6] ¶şÎ¬Âë³¤¶È
+            //pbuff[6] äºŒç»´ç é•¿åº¦
             len_qr = pbuff[ucOffset++];
-            //pbuff[7...] ¶şÎ¬Âë
+            //pbuff[7...] äºŒç»´ç 
             for(j = 0; j < len_qr; j++)
             {
                 qrcode[j] = pbuff[ucOffset++];
@@ -1008,7 +1008,7 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
             pCON->info.SetCONCfg(pCON, jnQRCode, qrcode, ParamTypeString);
         }
 
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
         if(set_errcode == ERR_NO)
         {
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
@@ -1068,14 +1068,14 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        pProto->info.BnWFlushListCfg(path);//ÉèÖÃºÚ°×Ãûµ¥ĞèÒªÇå³ıÔ­ÓĞÃûµ¥
-        //pbuff[0...3] ²Ù×÷ID
-        //pbuff[4,5] Ãûµ¥¸öÊı
+        pProto->info.BnWFlushListCfg(path);//è®¾ç½®é»‘ç™½åå•éœ€è¦æ¸…é™¤åŸæœ‰åå•
+        //pbuff[0...3] æ“ä½œID
+        //pbuff[4,5] åå•ä¸ªæ•°
         ucOffset = 4;
         ustmpNetSeq.ucVal[0] = pbuff[ucOffset++];
         ustmpNetSeq.ucVal[1] = pbuff[ucOffset++];
         usListCont = ntohs(ustmpNetSeq.usVal);
-        //¿¨ºÅ,16Î»
+        //å¡å·,16ä½
         for (i = 0; i < usListCont; i++)
         {
             for(j = 0; j < 16; j++)
@@ -1092,16 +1092,16 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
         if(set_errcode == 1)
         {
             errcode = ERR_NO;
-            //[0...3]²Ù×÷ID
-            //[4] ÉèÖÃ½á¹û
+            //[0...3]æ“ä½œID
+            //[4] è®¾ç½®ç»“æœ
             pProto->pCMD[usCmdID]->ucRecvdOptData[4] = 1;
             pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0xffff, 0);
         }
         else
         {
             errcode = ERR_FILE_RW;
-            //[0...3]²Ù×÷ID
-            //[4] ÉèÖÃ½á¹û
+            //[0...3]æ“ä½œID
+            //[4] è®¾ç½®ç»“æœ
             pProto->pCMD[usCmdID]->ucRecvdOptData[4] = 2;
             pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0xffff, 0);
         }
@@ -1122,7 +1122,7 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
     ErrorCode_t errcode;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j,k;          //i:Ãûµ¥Êı  j:Ãûµ¥×Ö½Ú³¤¶È  k:Ãûµ¥ÖÖÀà
+    uint8_t i,j,k;          //i:åå•æ•°  j:åå•å­—èŠ‚é•¿åº¦  k:åå•ç§ç±»
     uint8_t ucOffset = 0;
     uint8_t strID[16+1] = {0};
     uint8_t path[64];
@@ -1136,10 +1136,10 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
         break;
     case ERR_NO:
         *psiRetVal = 1;
-        //pbuff[0...3] ²Ù×÷ID
+        //pbuff[0...3] æ“ä½œID
 
         ucOffset = 4;
-        for(k = 0; k < 2; k++) //ÏÈ´¦Àí°×Ãûµ¥ 0, ÔÙ´¦ÀíºÚÃûµ¥ 1
+        for(k = 0; k < 2; k++) //å…ˆå¤„ç†ç™½åå• 0, å†å¤„ç†é»‘åå• 1
         {
             if(k == 1)
             {
@@ -1149,11 +1149,11 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
             {
                 strcpy(path, pathWhiteList);
             }
-            //pbuff[4,5] Ãûµ¥¸öÊı
+            //pbuff[4,5] åå•ä¸ªæ•°
             ustmpNetSeq.ucVal[0] = pbuff[ucOffset++];
             ustmpNetSeq.ucVal[1] = pbuff[ucOffset++];
             usListCont = ntohs(ustmpNetSeq.usVal);
-            //¿¨ºÅ,16Î»
+            //å¡å·,16ä½
             for (i = 0; i < usListCont; i++)
             {
                 for(j = 0; j < 16; j++)
@@ -1180,7 +1180,7 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
 
         if(set_errcode == 1)
         {
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
@@ -1190,7 +1190,7 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
         }
         else
         {
-            //pbuff[0...3] ²Ù×÷ID
+            //pbuff[0...3] æ“ä½œID
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
@@ -1283,7 +1283,7 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999999;
 
-        ultmpNetSeq.ulVal = time(NULL); // ²ÉÓÃÊ±¼ä´Á×÷Îª½»Ò×Á÷Ë®ºÅ, Ğ­ÒéÖĞ±êÊ¶ÎªBIN 8, Òò´Ë²»×ö×Ö½ÚĞò×ª»»
+        ultmpNetSeq.ulVal = time(NULL); // é‡‡ç”¨æ—¶é—´æˆ³ä½œä¸ºäº¤æ˜“æµæ°´å·, åè®®ä¸­æ ‡è¯†ä¸ºBIN 8, å› æ­¤ä¸åšå­—èŠ‚åºè½¬æ¢
         ucOrderSN[0] = 0;
         ucOrderSN[1] = 0;
         ucOrderSN[2] = 0;
@@ -1293,14 +1293,14 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
         ucOrderSN[6] = ultmpNetSeq.ucVal[2];
         ucOrderSN[7] = ultmpNetSeq.ucVal[3];
 
-        //±£´æÁ÷Ë®ºÅµ½order
+        //ä¿å­˜æµæ°´å·åˆ°order
         HexToStr(ucOrderSN, strOrderSN, 8);
         strcpy(pRfid->order.strOrderSN, strOrderSN);
 
         return ERR_WHITE_LIST;
     }
 
-    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 20, 3); //×¢Òâ´«µÄ²ÎÊıÊÇ pRfid
+    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 20, 3); //æ³¨æ„ä¼ çš„å‚æ•°æ˜¯ pRfid
     return errcode;
 }
 ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
@@ -1327,14 +1327,14 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     case ERR_NO:
         *psiRetVal = 1;
         ucOffset = 0;
-        //pbuff[0] ³äµç×®½Ó¿Ú
+        //pbuff[0] å……ç”µæ¡©æ¥å£
         con_id = pbuff[ucOffset++];
         if(con_id != pRfid->order.ucCONID)
         {
             *psiRetVal = 0;
             break;
         }
-        //pbuff[1...16] ¿¨ºÅ
+        //pbuff[1...16] å¡å·
         for(i = 0; i < 16; i++)
         {
             strCardID[i] = pbuff[ucOffset++];
@@ -1345,7 +1345,7 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
             *psiRetVal = 0;
             break;
         }
-        //pbuff[17...24] Á÷Ë®ºÅ
+        //pbuff[17...24] æµæ°´å·
         for(i = 0; i < 8; i++)
         {
             ucOrderSN[i] = pbuff[ucOffset++];
@@ -1356,9 +1356,9 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
             *psiRetVal = 0;
             break;
         }
-        //pbuff[25] ÑéÖ¤½á¹û
+        //pbuff[25] éªŒè¯ç»“æœ
         *pucVaild = pbuff[ucOffset++];
-        //pbuff[26...29] ¿ÉÓÃÓà¶î
+        //pbuff[26...29] å¯ç”¨ä½™é¢
         ultmpNetSeq.ucVal[0] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[1] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[2] = pbuff[ucOffset++];
@@ -1389,7 +1389,7 @@ ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_
     errcode = ERR_NO;
 
     pbuff = pProto->pCMD[ECH_CMDID_CARD_START_RES]->ucRecvdOptData;
-    //[18] Æô¶¯½á¹û
+    //[18] å¯åŠ¨ç»“æœ
     if(succ == 1)
     {
         pbuff[18] = 1;
@@ -1422,7 +1422,7 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        //pbuff[0] ³äµç×®½Ó¿Ú
+        //pbuff[0] å……ç”µæ¡©æ¥å£
         id = EchRemoteIDtoCONID(pbuff[0]);
         pCON = CONGetHandle(id);
         if(pCON != NULL)
@@ -1463,7 +1463,7 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        //pbuff[0] ³äµç×®½Ó¿Ú
+        //pbuff[0] å……ç”µæ¡©æ¥å£
         id = EchRemoteIDtoCONID(pbuff[0]);
         pCON = CONGetHandle(id);
         if(pCON != NULL)
@@ -1492,7 +1492,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     memcpy(data_old, pProto->status.fault, 6);
 
-    //1-1 ¾øÔµ¹ÊÕÏ
+    //1-1 ç»ç¼˜æ•…éšœ
     if(pEVSE->status.ulPEState == 1)
     {
         SET_BIT(pProto->status.fault[0], BIT_0);
@@ -1501,91 +1501,91 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     {
         CLEAR_BIT(pProto->status.fault[0], BIT_0);
     }
-    //1-2 Êä³öÁ¬½ÓÆ÷¹ıÎÂ¹ÊÕÏ
+    //1-2 è¾“å‡ºè¿æ¥å™¨è¿‡æ¸©æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONACTempOK) != defEventBitCONACTempOK)
         {
             SET_BIT(pProto->status.fault[0], BIT_1);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[0], BIT_1);
         }
     }
-    //1-7 µçÁ÷¹ı´ó
+    //1-7 ç”µæµè¿‡å¤§
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
             SET_BIT(pProto->status.fault[0], BIT_6);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[0], BIT_6);
         }
     }
-    //1-8 µçÑ¹Òì³£
+    //1-8 ç”µå‹å¼‚å¸¸
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
             SET_BIT(pProto->status.fault[0], BIT_7);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[0], BIT_7);
         }
     }
-    //[1]:3  2-4 µçÄÜ±í¹ÊÕÏ
+    //[1]:3  2-4 ç”µèƒ½è¡¨æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionMeter) != defEventBitExceptionMeter)
         {
             SET_BIT(pProto->status.fault[1], BIT_3);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[1], BIT_3);
         }
     }
-    //[1]:5 2-6 PWMÇĞ»»¹ÊÕÏ
+    //[1]:5 2-6 PWMåˆ‡æ¢æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionCPSwitch) != defEventBitExceptionCPSwitch)
         {
             SET_BIT(pProto->status.fault[1], BIT_5);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[1], BIT_5);
         }
     }
-    //[1]:6 2-7 ÎÂ¶È´«¸ĞÆ÷¹ÊÕÏ
+    //[1]:6 2-7 æ¸©åº¦ä¼ æ„Ÿå™¨æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionTempSensor) != defEventBitExceptionTempSensor)
         {
             SET_BIT(pProto->status.fault[1], BIT_6);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[1], BIT_6);
         }
     }
-    //[1]:7 2-8 ¼±Í£±¨¾¯
+    //[1]:7 2-8 æ€¥åœæŠ¥è­¦
     if(pEVSE->status.ulScramState == 1)
     {
         SET_BIT(pProto->status.fault[1], BIT_7);
@@ -1594,28 +1594,28 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     {
         CLEAR_BIT(pProto->status.fault[1], BIT_7);
     }
-    //[2]:0 3-1 ³äµçÇ¹ÎÂ¶È´«¸ĞÆ÷¹ÊÕÏ
+    //[2]:0 3-1 å……ç”µæªæ¸©åº¦ä¼ æ„Ÿå™¨æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionSocketTempSensor) != defEventBitExceptionSocketTempSensor)
         {
             SET_BIT(pProto->status.fault[2], BIT_0);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.fault[2], BIT_0);
         }
     }
-    //[3]:2 4-3 ½Ó´¥Æ÷¹ÊÕÏ
+    //[3]:2 4-3 æ¥è§¦å™¨æ•…éšœ
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionRelayPaste) != defEventBitExceptionRelayPaste)
         {
             SET_BIT(pProto->status.fault[3], BIT_2);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
@@ -1648,7 +1648,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     memcpy(data_old_w, pProto->status.warning, 6);
     memcpy(data_old_p, pProto->status.protect, 6);
 
-    //[0]:0 1-1 ·ÀÀ×Æ÷¸æ¾¯
+    //[0]:0 1-1 é˜²é›·å™¨å‘Šè­¦
     if(pEVSE->status.ulArresterState == 1)
     {
         SET_BIT(pProto->status.warning[0], BIT_0);
@@ -1657,7 +1657,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     {
         CLEAR_BIT(pProto->status.warning[0], BIT_0);
     }
-    //[1]:1 2-2 Ò»°ãÂ©µç
+    //[1]:1 2-2 ä¸€èˆ¬æ¼ç”µ
     if(pEVSE->status.ulPEState == 1)
     {
         SET_BIT(pProto->status.warning[0], BIT_1);
@@ -1666,42 +1666,42 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     {
         CLEAR_BIT(pProto->status.warning[0], BIT_1);
     }
-    //[1]:4 2-5 µçÍøµçÑ¹Òì³£
+    //[1]:4 2-5 ç”µç½‘ç”µå‹å¼‚å¸¸
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
             SET_BIT(pProto->status.warning[1], BIT_4);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.warning[1], BIT_4);
         }
     }
-    //[2]:7 3-8 µçÍøÆµÂÊÒì³£
+    //[2]:7 3-8 ç”µç½‘é¢‘ç‡å¼‚å¸¸
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONFreqOK) != defEventBitCONFreqOK)
         {
             SET_BIT(pProto->status.warning[2], BIT_7);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.warning[2], BIT_7);
         }
     }
-    //[3]:0 4-1 Ò»°ã¹ıÔØ
+    //[3]:0 4-1 ä¸€èˆ¬è¿‡è½½
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
             SET_BIT(pProto->status.warning[3], BIT_0);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
@@ -1709,36 +1709,36 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
         }
     }
 
-    //---±£»¤ĞÅÏ¢
-    //[1]:7 2-8 µçÁ÷¹ı¸ß±£»¤
+    //---ä¿æŠ¤ä¿¡æ¯
+    //[1]:7 2-8 ç”µæµè¿‡é«˜ä¿æŠ¤
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
             SET_BIT(pProto->status.protect[1], BIT_7);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.protect[1], BIT_7);
         }
     }
-    //[2]:0 3-1 µçÑ¹¹ı¸ß±£»¤
+    //[2]:0 3-1 ç”µå‹è¿‡é«˜ä¿æŠ¤
     for(i = 0; i < ulTotalCON; i++)
     {
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
             SET_BIT(pProto->status.protect[2], BIT_0);
-            break;//ÓĞÒ»¸öÓĞ¹ÊÕÏ¾ÍÍË³ö
+            break;//æœ‰ä¸€ä¸ªæœ‰æ•…éšœå°±é€€å‡º
         }
         else
         {
             CLEAR_BIT(pProto->status.protect[2], BIT_0);
         }
     }
-    //[2]:1 3-2 Ó²¼şÂ©µç±£»¤
+    //[2]:1 3-2 ç¡¬ä»¶æ¼ç”µä¿æŠ¤
     if(pEVSE->status.ulPEState == 1)
     {
         SET_BIT(pProto->status.protect[2], BIT_1);
