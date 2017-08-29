@@ -111,7 +111,7 @@
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.arm.openocd.commands.autoprogram</Key>
-          <Value />
+          <Value>1</Value>
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.arm.openocd.commands.reset</Key>
