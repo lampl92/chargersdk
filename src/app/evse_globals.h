@@ -13,13 +13,6 @@
 #include "userlib_list.h"
 #include "libEcharge/ech_protocol.h"
 
-#define ParamTypeU8         1
-#define ParamTypeU16        2
-#define ParamTypeU32        3
-#define ParamTypeDouble     4
-#define ParamTypeString     5
-#define ParamTypeList       6
-
 #define SWITCH_ON   (1)
 #define SWITCH_OFF  (0)
 
@@ -60,10 +53,10 @@
 / xEventGroup
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
-#define defEventBitGotIDtoRFID          BIT_0             //»ñÈ¡µ½ID£¬·¢ËÍµ½RFIDÈÎÎñ
-#define defEventBitGotIDtoHMI           BIT_1               //»ñÈ¡µ½ID£¬·¢ËÍµ½HMI
-//#define defEventBitIsNewID              BIT_2             //´Ë¿¨ÔÚ±¾×®Ã»ÓĞË¢¹ı
-#define defEventBitGetAccountStatus     BIT_3               //»ñÈ¡ÕÊ»§×´Ì¬
+#define defEventBitGotIDtoRFID          BIT_0             //è·å–åˆ°IDï¼Œå‘é€åˆ°RFIDä»»åŠ¡
+#define defEventBitGotIDtoHMI           BIT_1               //è·å–åˆ°IDï¼Œå‘é€åˆ°HMI
+//#define defEventBitIsNewID              BIT_2             //æ­¤å¡åœ¨æœ¬æ¡©æ²¡æœ‰åˆ·è¿‡
+#define defEventBitGetAccountStatus     BIT_3               //è·å–å¸æˆ·çŠ¶æ€
 #define defEventBitRFIDNewID            BIT_4
 #define defEventBitRFIDOldID            BIT_5
 #define defEventBitGoodIDReqDisp        BIT_6
@@ -77,8 +70,8 @@
 
 
 /*------pCON->status.xHandleEventOrder*/
-#define defEventBitOrderTmp             BIT_0    //»ñÈ¡Ë¢¿¨Êı¾İºóÍ¨Öªtaskdata½«tmpOrderÌî³äµ½Ç¹µÄorderÖĞ¡£
-#define defEventBitOrderMakeOK          BIT_1
+#define defEventBitOrderTmp             BIT_0    //è·å–åˆ·å¡æ•°æ®åé€šçŸ¥taskdataå°†tmpOrderå¡«å……åˆ°æªçš„orderä¸­ã€‚
+#define defEventBitOrderMakeOK          BIT_1    //å……ç”µå‰æ•°æ®å‡†å¤‡å®Œæˆ, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK        BIT_2
 #define defEventBitAddOrder             BIT_3
 #define defEventBitAddOrderOK           BIT_4
@@ -93,8 +86,8 @@
 #define defEventBitOrderStopTypeRFIDStop    BIT_17
 #define defEventBitOrderStopTypeFull        BIT_18
 
-#define defEventBitOrderMakeFinish      BIT_19  //µÈ´ı´¦²»Çå³ı, ¸ÃÊÂ¼şÖÃÎ»ºóÕû¸ö¶©µ¥Íê³É
-#define defEventBitOrderFinishToRemote  BIT_20  //Order¶©µ¥ÃüÁîÊ¹ÓÃ£¬Ê¹ÓÃºóÇå³ı
+#define defEventBitOrderMakeFinish      BIT_19  //ç­‰å¾…å¤„ä¸æ¸…é™¤, è¯¥äº‹ä»¶ç½®ä½åæ•´ä¸ªè®¢å•å®Œæˆ
+#define defEventBitOrderFinishToRemote  BIT_20  //Orderè®¢å•å‘½ä»¤ä½¿ç”¨ï¼Œä½¿ç”¨åæ¸…é™¤
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK | defEventBitOrder_HMIDispOK)    //(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
@@ -107,8 +100,8 @@
 #define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
 #define defEventBitTCPClientSendOK      BIT_4
-#define defEventBitTCPConnectOK         BIT_5 //½ÓÊÕ²»Çå³ı£¬ ·şÎñÆ÷Á¬½Ó³É¹¦
-#define defEventBitTCPConnectFail       BIT_6 //½ÓÊÕÖ÷¶¯Çå³ı
+#define defEventBitTCPConnectOK         BIT_5 //æ¥æ”¶ä¸æ¸…é™¤ï¼Œ æœåŠ¡å™¨è¿æ¥æˆåŠŸ
+#define defEventBitTCPConnectFail       BIT_6 //æ¥æ”¶ä¸»åŠ¨æ¸…é™¤
 #define defEventBitTCPClientRecvValid   BIT_7
 #define defEventBitTCPClientFlushBuff   BIT_8
 
@@ -124,7 +117,7 @@
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
 /*------xHandleEventDiag*/
-#define defEventBitDiagTempW            BIT_0              //ÎÂ¶È±¨¾¯
+#define defEventBitDiagTempW            BIT_0              //æ¸©åº¦æŠ¥è­¦
 #define defEventBitDiagTemp             BIT_1
 #define defEventBitDiagLockState        BIT_2
 #define defEventBitDiagPlugState        BIT_3
@@ -143,15 +136,18 @@
 #define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionRelayPaste  BIT_9
 
-#define defEventBitExceptionLimitFee    BIT_10  //°ÑLimitFee·ÅÔÚÕâÀï£¬ExceptionÃû×ÖËäËµÓĞµã²»´î£¬µ«¶¼ÊÇÂú×ãÌõ¼ş¼´Í£Ö¹³äµç¡£
+#define defEventBitExceptionLimitFee    BIT_10  //æŠŠLimitFeeæ”¾åœ¨è¿™é‡Œï¼ŒExceptionåå­—è™½è¯´æœ‰ç‚¹ä¸æ­ï¼Œä½†éƒ½æ˜¯æ»¡è¶³æ¡ä»¶å³åœæ­¢å……ç”µã€‚
 #define defEventBitExceptionRemoteStop  BIT_11
-#define defEventBitExceptionRFIDStop    BIT_12  //Ë¢¿¨Í£Ö¹
+#define defEventBitExceptionRFIDStop    BIT_12  //åˆ·å¡åœæ­¢
+#define defEventBitExceptionCPSwitch    BIT_13
+#define defEventBitExceptionTempSensor  BIT_14
+#define defEventBitExceptionSocketTempSensor  BIT_15
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
 #define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
 
 /*------pCON->status.xHandleEventCharge*/
-#define defEventBitCONAuthed            BIT_0       //ÕÊ»§ÈÏÖ¤OK
+#define defEventBitCONAuthed            BIT_0       //å¸æˆ·è®¤è¯OK
 #define defEventBitCONLocked            BIT_1
 #define defEventBitCONVoltOK            BIT_2
 #define defEventBitCONCurrOK            BIT_3
@@ -212,18 +208,18 @@
 #define defEventBitProtoCmdHandled          BIT_0
 
 
-/*³äµç×®ÀàĞÍ*/
+/*å……ç”µæ¡©ç±»å‹*/
 #define defEVSEType_DC                  1
 #define defEVSEType_AC                  2
 #define defEVSEType_AC_DC               3
 #define defEVSEType_Wireless            4
 #define defEVSEType_Other               5
 
-/*³äµçÇ¹ÀàĞÍ*/
+/*å……ç”µæªç±»å‹*/
 #define defCONType_DC                   1
 #define defCONType_AC                   2
 
-/*³äµç×®½Ó¿ÚÀàĞÍ*/
+/*å……ç”µæ¡©æ¥å£ç±»å‹*/
 #define defSocketTypeB              ('B')//66
 #define defSocketTypeC              ('C')//67
 

@@ -11,7 +11,7 @@
 #include "stringName.h"
 #include "utils.h"
 
-#include "dbparser.h"
+#include "dbparser\dbparser.h"
 #include "debug.h"
 
 #define BYTES_LEN 1024
@@ -21,6 +21,7 @@ ErrorCode_t OrderDBCreate(void)
     char memseg[BYTES_LEN];
     db_query_mm_t mm;
 
+    db_fileremove("OrderDB");
     if(db_fileexists("OrderDB") == 1)
     {
         return ERR_NO;
@@ -29,28 +30,81 @@ ErrorCode_t OrderDBCreate(void)
     {
         init_query_mm(&mm, memseg, BYTES_LEN);
         DB_PRINTF_DEBUG("CREATE TABLE!!\n");
-        parse("CREATE TABLE OrderDB (OrderSN       STRING(32), \
+//        parse("CREATE TABLE OrderDB (OrderSN       STRING(32), \
+//                                      CardID        STRING(32), \
+//                                      Balance       INT, \
+//                                      CONID         INT, \
+//                                      StartTime     INT, \
+//                                      StartType     INT, \
+//                                      LimitFee      INT, \
+//                                      StartPower    INT, \
+//                                      TotalPower    INT, \
+//                                      TotalPowerFee INT, \
+//                                      TotalServFee  INT, \
+//                                      TotalFee      INT, \
+//                                      PowerFee_sharp        INT, \
+//                                      ServiceFee_sharp      INT, \
+//                                      TotalPower_sharp      INT, \
+//                                      TotalPowerFee_sharp   INT, \
+//                                      TotalServFee_sharp    INT, \
+//                                      TotalTime_sharp       INT, \
+//                                      PowerFee_peak        INT, \
+//                                      ServiceFee_peak      INT, \
+//                                      TotalPower_peak      INT, \
+//                                      TotalPowerFee_peak   INT, \
+//                                      TotalServFee_peak    INT, \
+//                                      TotalTime_peak       INT, \
+//                                      PowerFee_shoulder        INT, \
+//                                      ServiceFee_shoulder      INT, \
+//                                      TotalPower_shoulder      INT, \
+//                                      TotalPowerFee_shoulder   INT, \
+//                                      TotalServFee_shoulder    INT, \
+//                                      TotalTime_shoulder       INT, \
+//                                      PowerFee_off_peak        INT, \
+//                                      ServiceFee_off_peak      INT, \
+//                                      TotalPower_off_peak      INT, \
+//                                      TotalPowerFee_off_peak   INT, \
+//                                      TotalServFee_off_peak    INT, \
+//                                      TotalTime_off_peak       INT, \
+//                                      PayType       INT, \
+//                                      StopType      INT, \
+//                                      StopTime      INT);", &mm);
+parse("CREATE TABLE OrderDB (OrderSN       STRING(32), \
                                       CardID        STRING(32), \
                                       Balance       INT, \
                                       CONID         INT, \
-                                      StartTime     STRING(32), \
+                                      StartTime     INT, \
                                       StartType     INT, \
                                       LimitFee      INT, \
                                       StartPower    INT, \
-                                      ServType      INT, \
                                       TotalPower    INT, \
                                       TotalPowerFee INT, \
                                       TotalServFee  INT, \
                                       TotalFee      INT, \
-                                      TotalSeg      INT, \
-                                      DefSegPower   INT, \
-                                      DefSegFee     INT, \
+                                      PowerFee_sharp        INT, \
+                                      ServiceFee_sharp      INT, \
+                                      TotalPower_sharp      INT, \
+                                      TotalPowerFee_sharp   INT, \
+                                      TotalServFee_sharp    INT, \
+                                      TotalTime_sharp       INT, \
+                                      PowerFee_peak        INT, \
+                                      ServiceFee_peak      INT, \
+                                      TotalPower_peak      INT, \
+                                      TotalPowerFee_peak   INT, \
+                                      TotalServFee_peak    INT, \
+                                      TotalTime_peak       INT, \
+                                      PowerFee_shoulder        INT, \
+                                      ServiceFee_shoulder      INT, \
+                                      TotalPower_shoulder      INT, \
+                                      TotalPowerFee_shoulder   INT, \
+                                      TotalServFee_shoulder    INT, \
+                                      TotalTime_shoulder       INT, \
                                       PayType       INT, \
                                       StopType      INT, \
-                                      StopTime      STRING(32));", &mm);
+                                      StopTime      INT);", &mm);
         return ERR_NO;
     }
-    
+
 }
 
 ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
@@ -60,39 +114,58 @@ ErrorCode_t OrderDBInsertItem(OrderData_t *pOrder)
     char strCardID[64];
     db_query_mm_t mm;
     int i;
-    
+
     struct tm *ts;
     char tbuf_start [80] = {0};
     char tbuf_stop [80] = {0};
-    
+
     ts = localtime (& pOrder->tStartTime);
     strftime (tbuf_start, sizeof (tbuf_start), "%Y-%m-%d %H:%M:%S", ts);
     ts = localtime (& pOrder->tStopTime);
     strftime (tbuf_stop, sizeof (tbuf_stop), "%Y-%m-%d %H:%M:%S", ts);
-    
+
     HexToStr(pOrder->ucCardID, strCardID, 8);
     memset(cmd, '\0', sizeof(cmd));
-    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, '%s');\0", 
-                                                             pOrder->strOrderSN,
+    sprintf(cmd, "INSERT INTO OrderDB VALUES ('%s', '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d);",
+                                                             "00000",//pOrder->strOrderSN,
                                                              strCardID,
                                                              (int)(pOrder->dBalance * 100),
                                                              pOrder->ucCONID,
-                                                             tbuf_start,
+                                                             pOrder->tStartTime,
                                                              pOrder->ucStartType,
                                                              (int)(pOrder->dLimitFee * 100),
                                                              (int)(pOrder->dStartPower * 100),
-                                                             pOrder->ucServiceFeeType,
                                                              (int)(pOrder->dTotalPower * 100),
                                                              (int)(pOrder->dTotalPowerFee * 100),
-                                                             (int)(pOrder->dTotalServiceFee * 100),
+                                                             (int)(pOrder->dTotalServFee * 100),
                                                              (int)(pOrder->dTotalFee * 100),
-                                                             pOrder->ucTotalSegment,
-                                                             (int)(pOrder->dDefSegPower * 100),
-                                                             (int)(pOrder->dDefSegFee * 100),
+                                                             (int)(pechProto->info.dPowerFee_sharp * 10000),
+                                                             (int)(pechProto->info.dServFee_sharp * 10000),
+                                                             (int)(pOrder->dTotalPower_sharp * 100),
+                                                             (int)(pOrder->dTotalPowerFee_sharp * 100),
+                                                             (int)(pOrder->dTotalServFee_sharp * 100),
+                                                             (int)(pOrder->ulTotalTime_sharp),
+                                                             (int)(pechProto->info.dPowerFee_peak * 10000),
+                                                             (int)(pechProto->info.dServFee_peak * 10000),
+                                                             (int)(pOrder->dTotalPower_peak * 100),
+                                                             (int)(pOrder->dTotalPowerFee_peak * 100),
+                                                             (int)(pOrder->dTotalServFee_peak * 100),
+                                                             (int)(pOrder->ulTotalTime_peak),
+                                                             (int)(pechProto->info.dPowerFee_shoulder * 10000),
+                                                             (int)(pechProto->info.dServFee_shoulder * 10000),
+                                                             (int)(pOrder->dTotalPower_shoulder * 100),
+                                                             (int)(pOrder->dTotalPowerFee_shoulder * 100),
+                                                             (int)(pOrder->dTotalServFee_shoulder * 100),
+                                                             (int)(pOrder->ulTotalTime_shoulder),
                                                              pOrder->ucPayType,
                                                              pOrder->ucStopType,
-                                                             tbuf_stop);
+                                                             pOrder->tStopTime);
     init_query_mm(&mm, memseg, BYTES_LEN);
+    printf_safe("CMD = \n");
+    printf_safe("%s\n", cmd);
+//    parse("INSERT INTO OrderDB (Balance, CONID) VALUES (2233, 3);", &mm); //设置某项值
+//    parse("INSERT INTO OrderDB VALUES ('000000', '0000000000000000', 88800, 0, 1500944498, 0, 0, 739, 6390, 11970, 4146, 16116, 0, 1500973299);", &mm); //设置某项值
+
     parse(cmd, &mm);
 }
 #if 0

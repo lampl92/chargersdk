@@ -244,7 +244,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%.2lf", pCON->order.dTotalServiceFee);
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalServFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
         sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);

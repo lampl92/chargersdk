@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chargesdk", "chargesdk\chargesdk.vcxproj", "{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|STM32 = Debug|STM32
+		Release|STM32 = Release|STM32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|STM32.ActiveCfg = Debug|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|STM32.Build.0 = Debug|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|STM32.ActiveCfg = Release|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|STM32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_StartDate = 2000/1/1
+		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
+	EndGlobalSection
+	GlobalSection(AutomaticVersions) = postSolution
+		UpdateAssemblyVersion = True
+		UpdateAssemblyFileVersion = False
+		UpdateAssemblyInfoVersion = False
+		AdvancedSettingsExpanded = True
+		AssemblyVersionSettings = Increment.Increment.Increment.None
+	EndGlobalSection
+EndGlobal

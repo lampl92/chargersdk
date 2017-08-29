@@ -1,6 +1,6 @@
 /**
 * @file taskdata.c
-* @brief ÅäÖÃÎÄ¼ş¶ÁĞ´¡¢¶©µ¥²Ù×÷
+* @brief é…ç½®æ–‡ä»¶è¯»å†™ã€è®¢å•æ“ä½œ
 * @author rgw
 * @version v1.0
 * @date 2017-01-19
@@ -9,6 +9,8 @@
 #include "taskcreate.h"
 #include "taskdata.h"
 #include "interface.h"
+#include "cfg_parse.h"
+#include "stringName.h"
 
 //#define DEBUG_NO_TASKDATA
 
@@ -27,27 +29,27 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
-    //THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//´´½¨order.txt
+    //THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//åˆ›å»ºorder.txt
     OrderDBCreate();
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
-        /* ¶©µ¥¹ÜÀí */
-        //1. µÈ´ıË¢¿¨Íê³ÉÊÂ¼ş
+        /************ è®¢å•ç®¡ç† *******************/
+        //1. ç­‰å¾…åˆ·å¡å®Œæˆäº‹ä»¶
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
             uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                             defEventBitOrderTmp,   //RFIDÖĞ·¢³ö¸ÃÊÂ¼ş
+                                             defEventBitOrderTmp,   //RFIDä¸­å‘å‡ºè¯¥äº‹ä»¶
                                              pdTRUE, pdFALSE, 0);
             if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
             {
-                pCON->order.ucStartType = 4; //ÓĞ¿¨
+                pCON->order.ucStartType = 4; //æœ‰å¡
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 pCON->order.statOrder = STATE_ORDER_TMP;
             }
         }
-        /** @todo (rgw#1#): !!! ÕâÀïÃ»ÓĞ×öÉ¨ÂëÆô¶¯ÅĞ¶Ï¡£Ä¿Ç°ÔÚÉ¨Âë½ÓÊÜµ½¿ªÆô³äµç´¦ÖÃpCON->order.statOrder = STATE_ORDER_WAITSTART; */
+        /** @todo (rgw#1#): !!! è¿™é‡Œæ²¡æœ‰åšæ‰«ç å¯åŠ¨åˆ¤æ–­ã€‚ç›®å‰åœ¨æ‰«ç æ¥å—åˆ°å¼€å¯å……ç”µå¤„ç½®pCON->order.statOrder = STATE_ORDER_WAITSTART; */
 
         for(i = 0; i < ulTotalCON; i++)
         {
@@ -58,11 +60,13 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
+                pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START;
+                pCON->status.statRemoteProc.card.timestamp = time(NULL);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUpdateOK);
                 pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;
             case STATE_ORDER_WAITSTART:
-                //2. µÈ´ıStartChargeÊÂ¼ş
+                //2. ç­‰å¾…StartChargeäº‹ä»¶
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONStartOK,
                                                    pdFALSE, pdFALSE, 0);
@@ -72,14 +76,14 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 break;
             case STATE_ORDER_MAKE:
-                //3. ¿ªÊ¼³äµçÊ±Êı¾İ×¼±¸
+                //3. å¼€å§‹å……ç”µæ—¶æ•°æ®å‡†å¤‡
                 makeOrder(pCON);
-                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//Ä¿Ç°»¹Ã»ÓĞµØ·½ÓÃ
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//å……ç”µå‰æ•°æ®å‡†å¤‡å®Œæˆ, Clear in proto
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
-                //4. ¸üĞÂ³äµçÊı¾İ
-                /** »ñÈ¡Àë¿ªUpdateÌõ¼ş£¬½øÈëFinish×´Ì¬ */
+                //4. æ›´æ–°å……ç”µæ•°æ®
+                /** è·å–ç¦»å¼€Updateæ¡ä»¶ï¼Œè¿›å…¥FinishçŠ¶æ€ */
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
                 {
@@ -90,16 +94,16 @@ void vTaskEVSEData(void *pvParameters)
                     makeOrder(pCON);
                 }
 
-                if(pCON->order.dLimitFee != 0) //0 Ê±±íÊ¾×Ô¶¯³äÂú£¬·Ç0¼´Í£Ö¹½ğ¶î
+                if(pCON->order.dLimitFee != 0) //0 æ—¶è¡¨ç¤ºè‡ªåŠ¨å……æ»¡ï¼Œé0å³åœæ­¢é‡‘é¢
                 {
-                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // ´ïµ½³äµç½ğ¶î
+                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // è¾¾åˆ°å……ç”µé‡‘é¢
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                     }
                 }
                 break;
             case STATE_ORDER_FINISH:
-                //5. ½áÊø³äµç
+                //5. ç»“æŸå……ç”µ
                 makeOrder(pCON);
                 /************ make user happy ************/
                 if(pCON->order.dLimitFee != 0)
@@ -113,25 +117,25 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderStopType,
                                                  pdTRUE, pdFALSE, 0);
-                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //´ïµ½³äµç½ğ¶îÏŞÖÆ
+                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //è¾¾åˆ°å……ç”µé‡‘é¢é™åˆ¶
                 {
                     pCON->order.ucStopType = defOrderStopType_Fee;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //Ô¶³ÌÍ£Ö¹
+                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //è¿œç¨‹åœæ­¢
                 {
                     pCON->order.ucStopType = defOrderStopType_Remote;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //Ë¢¿¨Í£Ö¹
+                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //åˆ·å¡åœæ­¢
                 {
                     pCON->order.ucStopType = defOrderStopType_RFID;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //×Ô¶¯³äÂú
+                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //è‡ªåŠ¨å……æ»¡
                 {
                     pCON->order.ucStopType = defOrderStopType_Full;
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
-                /** @todo (rgw#1#): ´æ´¢¶©µ¥ */
+                /** @todo (rgw#1#): å­˜å‚¨è®¢å• */
 
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
@@ -139,11 +143,11 @@ void vTaskEVSEData(void *pvParameters)
                 if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                    /* (rgw#1): ÔÚÕâÀï´æ´¢¶©µ¥*/
+                    /* (rgw#1): åœ¨è¿™é‡Œå­˜å‚¨è®¢å•*/
                     OrderDBInsertItem(&(pCON->order));
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-                    OrderInit(&(pCON->order));//×´Ì¬±äÎªIDLE
+                    OrderInit(&(pCON->order));//çŠ¶æ€å˜ä¸ºIDLE
                 }
 //                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
 //                                                 defEventBitOrder_HMIDispOK,
@@ -151,10 +155,10 @@ void vTaskEVSEData(void *pvParameters)
 //                if((uxBitsData & defEventBitOrder_HMIDispOK) == defEventBitOrder_HMIDispOK)
 //                {
 //                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-//                    /* @todo (rgw#1): ÔÚÕâÀï´æ´¢¶©µ¥*/
+//                    /* @todo (rgw#1): åœ¨è¿™é‡Œå­˜å‚¨è®¢å•*/
 //                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
 //                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-//                    OrderInit(&(pCON->order));//×´Ì¬±äÎªIDLE
+//                    OrderInit(&(pCON->order));//çŠ¶æ€å˜ä¸ºIDLE
 //                }
 
                 break;
@@ -162,13 +166,14 @@ void vTaskEVSEData(void *pvParameters)
         }//for CONid
 
 
-        /* ¶ÁÈ¡ÎÄ¼şÅäÖÃ */
+        /********** è¯»å–æ–‡ä»¶é…ç½® ***************/
         uxBitsTimer = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                           defEventBitTimerCBDataRefresh,
                                           pdTRUE, pdFALSE, 0);
         if((uxBitsTimer & defEventBitTimerCBDataRefresh) == defEventBitTimerCBDataRefresh)
         {
             THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "taskdata GetEVSECfg");
+            THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskdata GetProtoCfg");
 
             for(i = 0; i < ulTotalCON; i++)
             {
@@ -176,7 +181,7 @@ void vTaskEVSEData(void *pvParameters)
                 THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING, "taskdata GetCONCfg");
             }
         }
-        /* end of ¶ÁÈ¡ÎÄ¼şÅäÖÃ */
+        /********** end of è¯»å–æ–‡ä»¶é…ç½® **************/
 
 //        uxBits = xEventGroupWaitBits(xHandleEventData, defEventBitAddOrder, pdTRUE, pdFALSE, 0);
 //        if((uxBits & defEventBitAddOrder) == defEventBitAddOrder)
@@ -184,6 +189,16 @@ void vTaskEVSEData(void *pvParameters)
 //            DataAddOrder();
 //            xEventGroupSetBits(xHandleEventData, defEventBitAddOrderOK);
 //        }
+        /********** æ›´æ–°å¯†é’¥ **************/
+        if(pechProto->info.tNewKeyChangeTime <= time(NULL))
+        {
+            //32ä½ç³»ç»Ÿæœ€å¤§æ—¶é—´æˆ³4294967295
+            uint32_t max_time = 4294967295;
+
+            pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
+            pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);
+        }
+
 
 #if DEBUG_DATA
 

@@ -13,7 +13,7 @@
 #include "evse_globals.h"
 #include "task_tcp_client.h"
 #include "taskcreate.h"
-#include "lwip_init.h"
+//#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {
@@ -35,9 +35,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-//        printf_safe("\n");
+        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+        printf_safe("\n");
 
         /* 遍历RecvCmd */
 
@@ -52,7 +52,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                         pechProtoElem->len);
                 if(res == 1)
                 {
-                    pechProtoElem->status = 1;
+                    pechProtoElem->status = 1; //接收协议入队等待处理
                 }
                 else//接收的协议帧序列有问题，直接删除
                 {
@@ -66,7 +66,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 gdsl_list_cursor_delete(cr);
                 continue;
             }
-#if 1
+#if 0 //接收无超时处理
             /* 2. 判断超时 */
             if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
@@ -146,7 +146,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
 
             }
 #if 1
-            /* 2. 判断超时 ，超时后置状态为0，再次进行发送*/
+            /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
             if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
                 pechProtoElem->trycount++;
@@ -155,7 +155,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 continue;//跳过后面的语句立即发送，否则需要再等一轮
             }
 #endif
-            /* 3. */
+            /* 4. */
             gdsl_list_cursor_step_forward (cs);
         }
 

@@ -10,7 +10,7 @@
 #include "interface.h"
 #include "cJSON.h"
 
-/** @brief ±£´æjsCfgObjµ½ÅäÖÃÎÄ¼ş,ÉèÖÃÍê±ÏºóÉ¾³ıcJSONÖ¸Õë
+/** @brief ä¿å­˜jsCfgObjåˆ°é…ç½®æ–‡ä»¶,è®¾ç½®å®Œæ¯•ååˆ é™¤cJSONæŒ‡é’ˆ
  *
  * @param path uint8_t*
  * @param jsCfgObj cJSON*
@@ -56,11 +56,11 @@ exit:
     return errcode;
 }
 
-/** @brief »ñÈ¡ÅäÖÃÎÄ¼şcJSON½á¹¹Ìå,×¢ÒâÊ¹ÓÃÍê³ÉºóĞèÒªµ÷ÓÃcJSON_Delete¶ÔcJSONÖ¸Õë½øĞĞÊÍ·Å
+/** @brief è·å–é…ç½®æ–‡ä»¶cJSONç»“æ„ä½“,æ³¨æ„ä½¿ç”¨å®Œæˆåéœ€è¦è°ƒç”¨cJSON_Deleteå¯¹cJSONæŒ‡é’ˆè¿›è¡Œé‡Šæ”¾
  *
- * @param path uint8_t* ÅäÖÃÎÄ¼ş´æ·ÅÎ»ÖÃ
- * @param perrcode ErrorCode_t* ·µ»Ø´íÎó´úÂë
- * @return cJSON* ·µ»ØcJSONÖ¸Õë
+ * @param path uint8_t* é…ç½®æ–‡ä»¶å­˜æ”¾ä½ç½®
+ * @param perrcode ErrorCode_t* è¿”å›é”™è¯¯ä»£ç 
+ * @return cJSON* è¿”å›cJSONæŒ‡é’ˆ
  *
  */
 cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
@@ -74,7 +74,7 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     cJSON *jsCfgObj = NULL;
     int i;
     *perrcode = ERR_NO;
-    /*¶ÁÈ¡ÎÄ¼ş*/
+    /*è¯»å–æ–‡ä»¶*/
     ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
     if(res != FR_OK)
     {
@@ -90,7 +90,7 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
         goto exit_read;
     }
 
-    /*json½âÎö*/
+    /*jsonè§£æ*/
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)
     {

@@ -1,12 +1,12 @@
 /**
 * @file taskcreate.c
-* @brief é’æ¶˜ç¼“æµ è¯²å§ŸTodolist ç€µåœ­åç›?
-*        1. ç€¹æ°«ç®ŸSTACKæ¾¶Ñƒçš¬
-*        2. ç€¹æ°«ç®ŸPRIORITY
-*        3. æ¾¹ç‰ˆæ§‘æµ è¯²å§Ÿ
-*        4. ç€¹æ°«ç®Ÿæµ è¯²å§Ÿé™ãƒ¦ç„?
-*        5. æµ è¯²å§Ÿéãƒ¥å½›
-*        6. é’æ¶˜ç¼“æµ è¯²å§Ÿ
+* @brief é–¸æ“ç¨‘ç¼‚æ’´ç¦’ç’‡æ’î¤Todolist éé›æ¹±é™åº£æ‚°?
+*        1. éè§„çŸ®ç» çƒ»TACKå©¢å †å†ªæ¯ˆ
+*        2. éè§„çŸ®ç» çƒ¶RIORITY
+*        3. å©¢åœ­å¢—å¦²æˆç¦’ç’‡æ’î¤
+*        4. éè§„çŸ®ç» ç†¸ç¦’ç’‡æ’î¤é–¸æ¬å„²é’?
+*        5. å¨´çŠºî‡§æ¿®ç†¼å´—éŠ‰ãƒ¥ç¶“
+*        6. é–¸æ“ç¨‘ç¼‚æ’´ç¦’ç’‡æ’î¤
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
@@ -21,7 +21,7 @@
 
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÕ»´óĞ¡
+/ ä»»åŠ¡æ ˆå¤§å°
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   2048
 #define defSTACK_TaskCLI                    (1024 * 10)
@@ -43,10 +43,10 @@
 //#define TCPIP_THREAD_STACKSIZE      512
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÓÅÏÈ¼¶
+/ ä»»åŠ¡ä¼˜å…ˆçº§
 /---------------------------------------------------------------------------*/
-//ÓÅÏÈ¼¶¹æÔòÎªÏµÍ³ÈÎÎñÓÅÏÈ¼¶µÍ£¬OTA > ³äµçÈÎÎñ > ¹ÊÕÏ´¦Àí > ÏµÍ³¼àÊÓ > Ë¢¿¨ÓëÍ¨ĞÅ > Êı¾İ´¦ÀíÓëÏµÍ³ÈÎÎñ
-#define defPRIORITY_TaskOTA                 31/* ×î¸ß*/
+//ä¼˜å…ˆçº§è§„åˆ™ä¸ºç³»ç»Ÿä»»åŠ¡ä¼˜å…ˆçº§ä½ï¼ŒOTA > å……ç”µä»»åŠ¡ > æ•…éšœå¤„ç† > ç³»ç»Ÿç›‘è§† > åˆ·å¡ä¸é€šä¿¡ > æ•°æ®å¤„ç†ä¸ç³»ç»Ÿä»»åŠ¡
+#define defPRIORITY_TaskOTA                 31/* æœ€é«˜*/
 
 #define defPRIORITY_TaskEVSECharge          27
 #define defPRIORITY_TaskEVSEDiag            25
@@ -62,14 +62,14 @@
 
 #define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
-#define defPRIORITY_TaskGUI                 4   //²»ÄÜ¸ß,GUIÈÎÎñÊ±¼äÌ«³¤,»áÓ°ÏìÓ²¼şÏìÓ¦
+#define defPRIORITY_TaskGUI                 4   //ä¸èƒ½é«˜,GUIä»»åŠ¡æ—¶é—´å¤ªé•¿,ä¼šå½±å“ç¡¬ä»¶å“åº”
 #define defPRIORITY_TaskCLI                 2
 
 //#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
 // define PPP_THREAD_PRIO          14
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÃû³Æ
+/ ä»»åŠ¡åç§°
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
@@ -88,7 +88,7 @@ const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
 //#define TCPIP_THREAD_NAME           "tcpip_thread"
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñÉùÃ÷
+/ ä»»åŠ¡å£°æ˜
 /---------------------------------------------------------------------------*/
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
@@ -107,7 +107,7 @@ void vTaskEVSEDiag(void *pvParameters);
 void vTaskEVSEData(void *pvParameters);
 
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñ¾ä±ú
+/ ä»»åŠ¡å¥æŸ„
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
@@ -125,7 +125,7 @@ static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
-/ ÈÎÎñ¼äÍ¨ĞÅ
+/ ä»»åŠ¡é—´é€šä¿¡
 /---------------------------------------------------------------------------*/
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
@@ -134,15 +134,15 @@ EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
 EventGroupHandle_t xHandleEventTCP   = NULL;
 
-//ÏÂÃæµÄEventÔÚÏàÓ¦½á¹¹ÌåÖĞ¶¨Òå
+//ä¸‹é¢çš„Eventåœ¨ç›¸åº”ç»“æ„ä½“ä¸­å®šä¹‰
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
-//¶ÓÁĞ
+//é˜Ÿåˆ—
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
-//Timer¾ä±ú
-TimerHandle_t xHandleTimerTemp = NULL; //4ä¸ªæ¸©åº?
+//Timerå¥æŸ„
+TimerHandle_t xHandleTimerTemp = NULL; //4æ¶“î…ä¿¯æ´?
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerVolt = NULL;
@@ -152,7 +152,7 @@ TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
-//conä¸­è¿˜å®šä¹‰äº†å‡ ä¸ªå®šæ—¶å™¨ï¼ŒxHandleTimerVoltï¼ŒxHandleTimerCurrï¼ŒxHandleTimerChargeåˆ†åˆ«åœ¨ä½¿ç”¨æ—¶è¿›è¡Œåˆå§‹åŒ?
+//conæ¶“î…¡ç¹•ç€¹æ°«ç®Ÿæµœå——åš‘æ¶“î„ç•¾éƒè·ºæ«’é”›å¯ˆHandleTimerVolté”›å¯ˆHandleTimerCurré”›å¯ˆHandleTimerChargeé’å——åŸ†é¦ã„¤å¨‡é¢ã„¦æ¤‚æ©æ¶œî”‘é’æ¿†îé–?
 //Mutex
 void vTaskInit(void *pvParameters)
 {
@@ -165,7 +165,7 @@ void vTaskInit(void *pvParameters)
 
     modem_open(pModem);
     modem_init(pModem);
-    Modem_Poll(pModem);//ÕâÊÇÈÎÎñ
+    Modem_Poll(pModem);//è¿™æ˜¯ä»»åŠ¡
 
 //    pWIFI = DevWifiCreate();
 //    strcpy(pWIFI->info.strSSID, "rgw");
@@ -203,7 +203,7 @@ void vTaskTouch(void *pvParameters)
             vTaskDelay(1000);
         }
 #else
-        GUI_TOUCH_Exec();//¼¤»îXYÖáµÄ²âÁ¿
+        GUI_TOUCH_Exec();//æ¿€æ´»XYè½´çš„æµ‹é‡
         vTaskDelay(10);
 #endif
     }
@@ -271,9 +271,9 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerEVSEState, 0);
     xTimerStart(xHandleTimerRFID, 0);
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //TimerHeartbeatÔ¶³Ì·şÎñÆ÷Á¬½Óºó¿ªÆô¶¨Ê±Æ÷
+    //TimerHeartbeatè¿œç¨‹æœåŠ¡å™¨è¿æ¥åå¼€å¯å®šæ—¶å™¨
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //çšî‚¤éƒ´ç¼ç†»çšŸé??
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //éæ°¼å†é–®å¯¸ç´’é”è¤æ®¶é–»??
 extern __IO uint32_t uwTick;
 void vApplicationTickHook( void )
 {

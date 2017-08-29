@@ -911,14 +911,14 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     tmpKnockState = 0;
     /* @todo (yuye#1#): 添加重力传感器驱动 */
 #ifdef DEBUG_DIAG_DUMMY
-if(get_angle_max()>90)
-{
-  return ERR_GSENSOR_FAULT;
-}
-else
-{
-  tmpKnockState = get_angle_max();
-}
+    if(get_angle_max() > 90)
+    {
+        return ERR_GSENSOR_FAULT;
+    }
+    else
+    {
+        tmpKnockState = get_angle_max();
+    }
 
 #else
     //在这添加代码
@@ -988,21 +988,21 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
-if(get_va()>=400)
-{
-return ERR_POWEROFF_DECT_FAULT;
-}
-else
-{
-if(get_va() <= 100.0) //检测间隔10mS
+    if(get_va() >= 400)
     {
-        tmpOffState = 1;
+        return ERR_POWEROFF_DECT_FAULT;
     }
-    else if((get_va() >= 180) && (get_va() <= 250))
+    else
     {
-        tmpOffState = 0;
+        if(get_va() <= 100.0) //检测间隔10mS
+        {
+            tmpOffState = 1;
+        }
+        else if((get_va() >= 180) && (get_va() <= 250))
+        {
+            tmpOffState = 0;
+        }
     }
-}
 
 #endif
     /*********************/
@@ -1053,13 +1053,13 @@ EVSE_t *EVSECreate(void)
 
     memset(pEVSE->info.strSN, 0, defEVSESNLength);
     memset(pEVSE->info.strID, 0, defEVSEIDLength);
-    pEVSE->info.ucType = defEVSEType_AC;
-    pEVSE->info.ucTotalCON = 1;
-    pEVSE->info.dLng = 116.275833;
-    pEVSE->info.dLat = 39.831944;
+    pEVSE->info.ucType           = defEVSEType_AC;
+    pEVSE->info.ucTotalCON       = 1;
+    pEVSE->info.dLng             = 116.275833;
+    pEVSE->info.dLat             = 39.831944;
     pEVSE->info.ucServiceFeeType = 0;
-    pEVSE->info.dServiceFee = 0;
-    pEVSE->info.dDefSegFee = 0;
+    pEVSE->info.dServiceFee      = 0;
+    pEVSE->info.dDefSegFee       = 0;
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
     /** @todo (rgw#1#): 以下修改为Set参数 */
@@ -1078,18 +1078,19 @@ EVSE_t *EVSECreate(void)
         return NULL;
     }
     //pEVSE->info.pTemplSeg = UserListCreate();
+    strcpy(pEVSE->info.strSoftVer, FULLVERSION_STRING);
 
     pEVSE->status.ulArresterState = 0;
-    pEVSE->status.ulKnockState = 0;
-    pEVSE->status.ulPEState = 0;
+    pEVSE->status.ulKnockState    = 0;
+    pEVSE->status.ulPEState       = 0;
     pEVSE->status.ulPowerOffState = 0;
-    pEVSE->status.ulScramState = 0;
+    pEVSE->status.ulScramState    = 0;
 
     pEVSE->status.GetArresterState = GetArresterState;
-    pEVSE->status.GetKnockState = GetKnockState;
-    pEVSE->status.GetPEState = GetPEState;
+    pEVSE->status.GetKnockState    = GetKnockState;
+    pEVSE->status.GetPEState       = GetPEState;
     pEVSE->status.GetPowerOffState = GetPowerOffState;
-    pEVSE->status.GetScramState = GetScramState;
+    pEVSE->status.GetScramState    = GetScramState;
 
     return pEVSE;
 }
@@ -1118,4 +1119,6 @@ void EVSEinit(void)
     pRFIDDev = RFIDDevCreate();
 
     pechProto = EchProtocolCreate();
+    THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");
+
 }
