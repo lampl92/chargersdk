@@ -4,7 +4,7 @@
 #include "stm32f4xx_hal.h"
 
 extern void Error_Handler(void);
-
+extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void MX_TIM2_Init(void)
 {
 
@@ -312,7 +312,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
   /* USER CODE BEGIN TIM5_IRQn 0 */
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
-  get_samp_point();
+  //get_samp_point();
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */

@@ -79,6 +79,9 @@ void vTaskEVSEMonitor(void *pvParameters)
             {
                 pCON = CONGetHandle(i);
                 THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+#ifdef EVSE_DEBUG
+                THROW_ERROR(i, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+#endif
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagVolt);
         }
@@ -92,7 +95,9 @@ void vTaskEVSEMonitor(void *pvParameters)
                 //THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, errcode = pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, errcode = pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+#ifndef EVSE_DEBUG
                 THROW_ERROR(i, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+#endif
                 if(errcode == ERR_NO)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);

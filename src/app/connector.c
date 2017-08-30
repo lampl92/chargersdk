@@ -1,6 +1,6 @@
 /**
 * @file connector.c
-* @brief ¶¨Òå×îĞ¡³äµçµ¥ÔªĞèÒªµÄÊı¾İÓë²Ù×÷
+* @brief å®šä¹‰æœ€å°å……ç”µå•å…ƒéœ€è¦çš„æ•°æ®ä¸æ“ä½œ
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -16,10 +16,10 @@
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
 /*---------------------------------------------------------------------------/
-/                               ÉèÖÃ³äµç½Ó¿ÚĞÅÏ¢µ½ÅäÖÃÎÄ¼ş
+/                               è®¾ç½®å……ç”µæ¥å£ä¿¡æ¯åˆ°é…ç½®æ–‡ä»¶
 /---------------------------------------------------------------------------*/
 
-ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsCONArray;
@@ -67,7 +67,7 @@ ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint
             default:
                 break;
             }
-            break;//ÍË³öwhileÑ­»·
+            break;//é€€å‡ºwhileå¾ªç¯
         }
         else
         {
@@ -112,10 +112,10 @@ ErrorCode_t SetRatedPower(void *pvCON, void *pvCfgParam)
 }
 #endif
 /*---------------------------------------------------------------------------/
-/                               ´ÓÎÄ¼ş»ñÈ¡³äµç½Ó¿ÚĞÅÏ¢
+/                               ä»æ–‡ä»¶è·å–å……ç”µæ¥å£ä¿¡æ¯
 /---------------------------------------------------------------------------*/
 
-/** @todo (rgw#1#): Ôö¼ÓÇ¹³äµçÀàĞÍCONType */
+/** @todo (rgw#1#): å¢åŠ æªå……ç”µç±»å‹CONType */
 
 static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 {
@@ -134,7 +134,7 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
     if(jsItem == NULL)
     {
@@ -155,7 +155,7 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 }
 static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
 {
-    /** @todo (rgw#1#): ¸Ãº¯ÊıÎ´²âÊÔ */
+    /** @todo (rgw#1#): è¯¥å‡½æ•°æœªæµ‹è¯• */
     CON_t *pCON;
     uint8_t ucCONID;
     uint8_t tmpQRCode[defQRCodeLength];
@@ -171,7 +171,7 @@ static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnQRCode);
     if(jsItem == NULL)
     {
@@ -207,7 +207,7 @@ static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
+    /** @todo (rgw#1#): ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketType);
     if(jsItem == NULL)
     {
@@ -245,7 +245,7 @@ static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ */
+    /** @todo (rgw#1#): ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageUpperLimits);
     if(jsItem == NULL)
     {
@@ -286,13 +286,13 @@ static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACTempUpperLim = 105;//(¡æ)
-    tmpACTempLowerLim = -40;//(¡æ)
+    tmpACTempUpperLim = 105;//(â„ƒ)
+    tmpACTempLowerLim = -40;//(â„ƒ)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempUpperLimits);
     if(jsItem == NULL)
     {
@@ -333,13 +333,13 @@ static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpSocketTempUpperLim = 105;//(¡æ)
-    tmpSocketTempLowerLim = -40;//(¡æ)
+    tmpSocketTempUpperLim = 105;//(â„ƒ)
+    tmpSocketTempLowerLim = -40;//(â„ƒ)
     errcode = ERR_NO;
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempUpperLimits);
     if(jsItem == NULL)
     {
@@ -384,7 +384,7 @@ static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
 
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedCurrent);
     if(jsItem == NULL)
@@ -422,7 +422,7 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
 
     pCONCfgObj = (cJSON *)pvCfgObj;
 
-    /** ´ÓÎÄ¼ş»ñÈ¡ */
+    /** ä»æ–‡ä»¶è·å– */
 
     jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedPower);
     if(jsItem == NULL)
@@ -444,7 +444,7 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
-/** @brief ´ÓcfgÎÄ¼ş»ñÈ¡³äµçÇ¹ÅäÖÃ
+/** @brief ä»cfgæ–‡ä»¶è·å–å……ç”µæªé…ç½®
  *
  * @param pvCON void*
  * @param pvCfgObj void* NULL
@@ -464,21 +464,21 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 
     pCON = (CON_t *)pvCON;
 
-    /*json½âÎö*/
+    /*jsonè§£æ*/
     jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
     if(jsCfgObj == NULL)
     {
-        //errcode ÒÑ¾­ÔÚGetCfgObjÖĞ»ñµÃ
+        //errcode å·²ç»åœ¨GetCfgObjä¸­è·å¾—
         goto exit;
     }
-    /*È¡³öCONÏà¹ØÅäÖÃ*/
+    /*å–å‡ºCONç›¸å…³é…ç½®*/
     jsCONArray = cJSON_GetObjectItem(jsCfgObj, jnCONArray);
     if(jsCONArray == NULL)
     {
         errcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
-    iArraySize = cJSON_GetArraySize(jsCONArray);//ÓĞ¶àÉÙ¸ö³äµçÇ¹ÅäÖÃ
+    iArraySize = cJSON_GetArraySize(jsCONArray);//æœ‰å¤šå°‘ä¸ªå……ç”µæªé…ç½®
     if(iArraySize != pEVSE->info.ucTotalCON)
     {
         errcode = ERR_FILE_PARAM;
@@ -504,18 +504,18 @@ exit:
     return errcode;
 }
 /*---------------------------------------------------------------------------/
-/                               ´ÓÇı¶¯»ñÈ¡³äµç½Ó¿Ú×´Ì¬
+/                               ä»é©±åŠ¨è·å–å……ç”µæ¥å£çŠ¶æ€
 /---------------------------------------------------------------------------*/
 
 
 
-/** £¡£¡£¡ ×¢Òâ²»Í¬ID¶ÔÓ²¼şµÄ²»Í¬²Ù×÷ £¡£¡£¡ */
-/** £¡£¡£¡ ×¢Òâ²»Í¬ID¶ÔÓ²¼şµÄ²»Í¬²Ù×÷ £¡£¡£¡ */
-/** £¡£¡£¡ ×¢Òâ²»Í¬ID¶ÔÓ²¼şµÄ²»Í¬²Ù×÷ £¡£¡£¡ */
+/** ï¼ï¼ï¼ æ³¨æ„ä¸åŒIDå¯¹ç¡¬ä»¶çš„ä¸åŒæ“ä½œ ï¼ï¼ï¼ */
+/** ï¼ï¼ï¼ æ³¨æ„ä¸åŒIDå¯¹ç¡¬ä»¶çš„ä¸åŒæ“ä½œ ï¼ï¼ï¼ */
+/** ï¼ï¼ï¼ æ³¨æ„ä¸åŒIDå¯¹ç¡¬ä»¶çš„ä¸åŒæ“ä½œ ï¼ï¼ï¼ */
 
 
 
-/** @brief »ñÈ¡³äµçµçÑ¹£¬¼ì²â¾«¶È +/-0.1V
+/** @brief è·å–å……ç”µç”µå‹ï¼Œæ£€æµ‹ç²¾åº¦ +/-0.1V
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -535,7 +535,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     tmpVolt = 0;
     errcode = ERR_NO;
 
-    /** »ñÈ¡µçÑ¹ */
+    /** è·å–ç”µå‹ */
 
     if(ucCONID == 0)
     {
@@ -557,7 +557,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     return errcode;
 }
 
-/** @brief »ñÈ¡³äµçµçÁ÷£¬¼ì²â¾«¶È+/-0.1A
+/** @brief è·å–å……ç”µç”µæµï¼Œæ£€æµ‹ç²¾åº¦+/-0.1A
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -577,7 +577,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     tmpCurr = 0;
     errcode = ERR_NO;
 
-    /** »ñÈ¡µçÁ÷ */
+    /** è·å–ç”µæµ */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
         return ERR_CON_METER_FAULT;
@@ -588,7 +588,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpCurr = 32;
 #else
-        tmpCurr = Get_Electricity_meter_massage_current(ucCONID+1);
+        tmpCurr = Get_Electricity_meter_massage_current(ucCONID + 1);
 #endif
 
     }
@@ -600,7 +600,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     return errcode;
 }
 
-/** @brief »ñÈ¡µçÔ´ÆµÂÊ
+/** @brief è·å–ç”µæºé¢‘ç‡
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -619,7 +619,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** @todo (yuye#1#): ´Óµç±í»ñÈ¡ */
+    /** @todo (yuye#1#): ä»ç”µè¡¨è·å– */
     //meter id 0 == CON id 0
 #ifdef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
@@ -653,7 +653,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** @todo (yuye#1#): ´Óµç±í»ñÈ¡ */
+    /** @todo (yuye#1#): ä»ç”µè¡¨è·å– */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
         return ERR_CON_METER_FAULT;
@@ -661,10 +661,11 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     else
     {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpPower = 100;
-    #else
-        tmpPower = Get_Electricity_meter_massage_energy(ucCONID+1);
-    #endif
+        tmpPower = pCON->status.dChargingPower;
+        tmpPower += 0.1;
+#else
+        tmpPower = Get_Electricity_meter_massage_energy(ucCONID + 1);
+#endif
     }
 
     /*********************/
@@ -674,7 +675,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     return errcode;
 }
 
-/** @brief »ñÈ¡CP×´Ì¬
+/** @brief è·å–CPçŠ¶æ€
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -738,7 +739,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else
         {
-            printf_safe("CPERR %lf\n",cp1);
+            printf_safe("CPERR %lf\n", cp1);
             tmpCPState = CP_ERR;
             return ERR_CON_CP_FAULT;
         }
@@ -792,10 +793,10 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     return errcode;
 }
-/** @brief ¿ØÖÆS1¿ª¹Ø
+/** @brief æ§åˆ¶S1å¼€å…³
  *
  * @param pvCON void*
- * @param cmd uint8_t   ´«µİ¿ª¹Ø¿ØÖÆÃüÁî£¬SWITCH_ON /SWITCH_OFF
+ * @param cmd uint8_t   ä¼ é€’å¼€å…³æ§åˆ¶å‘½ä»¤ï¼ŒSWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *
  */
@@ -843,12 +844,11 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
 
     return errcode;
 }
-/** @brief ÉèÖÃPWMÕ¼¿Õ±È ÏêÇéÇë¿´18487.1-2015 P22
+/** @brief è®¾ç½®PWMå ç©ºæ¯” è¯¦æƒ…è¯·çœ‹18487.1-2015 P22
  *
  * @param pvCON void*
- * @param ucLoadPercent uint8_t ¸ºÔØ°Ù·Ö±È
- *                              ¸ºÔØ100%Ê±£¬PWM=53
-                                ¸ºÔØ50%Ê±£¬PWM= 27
+ * @param ucLoadPercent uint8_t è´Ÿè½½ç™¾åˆ†æ¯” 0 ~ 100
+ *
  * @return ErrorCode_t
  *
  */
@@ -861,19 +861,19 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpCPPWM = 53;
+    tmpCPPWM = 53; //è´Ÿè½½100%æ—¶ï¼ŒPWM=53, è´Ÿè½½50%æ—¶ï¼ŒPWM= 27
     errcode = ERR_NO;
 
     /** ************* */
     if(ucCONID == 0)
     {
-        TIM2->CCR1 = 1001-ucLoadPercent * 10;
+        TIM2->CCR1 = 1001 - ucLoadPercent * 10;
     }
     else if(ucCONID == 1)
     {
-        TIM4->CCR1 = 1001-ucLoadPercent * 10;
+        TIM4->CCR1 = 1001 - ucLoadPercent * 10;
     }
-    //¸ºÔØ°Ù·Ö±ÈÊäÈë·¶Î§0~1000£»
+    //è´Ÿè½½ç™¾åˆ†æ¯”è¾“å…¥èŒƒå›´0~1000ï¼›
     //PWM
     /*********************/
 
@@ -908,7 +908,7 @@ static ErrorCode_t GetCCState(void *pvCON)
 #else
     if(ucCONID == 0)
     {
-        if(GET_CC1 == 0) //ÒÑ¾­Á¬½ÓCC1µã£¬PEÁ¬½ÓÕı³£
+        if(GET_CC1 == 0) //å·²ç»è¿æ¥CC1ç‚¹ï¼ŒPEè¿æ¥æ­£å¸¸
         {
             tmpCCState = CC_PE;
         }
@@ -920,7 +920,7 @@ static ErrorCode_t GetCCState(void *pvCON)
     }
     else if(ucCONID == 1)
     {
-        if(GET_CC2 == 0) //ÒÑ¾­Á¬½ÓCC1µã£¬PEÁ¬½ÓÕı³£
+        if(GET_CC2 == 0) //å·²ç»è¿æ¥CC1ç‚¹ï¼ŒPEè¿æ¥æ­£å¸¸
         {
             tmpCCState = CC_PE;
         }
@@ -937,7 +937,7 @@ static ErrorCode_t GetCCState(void *pvCON)
     return errcode;
 }
 
-/** @brief »ñÈ¡²åÇ¹×´Ì¬£¬Ó¦Í¬Ê±¼ì²â¼ì²âµã1£¨CC£©ºÍ¼ì²âµã4£¨CP£©
+/** @brief è·å–æ’æªçŠ¶æ€ï¼Œåº”åŒæ—¶æ£€æµ‹æ£€æµ‹ç‚¹1ï¼ˆCCï¼‰å’Œæ£€æµ‹ç‚¹4ï¼ˆCPï¼‰
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -957,7 +957,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     tmpPlugState = UNPLUG;
     errcode = ERR_NO;
 
-    /** ¼ì²â²åÇ¹×´Ì¬Çı¶¯½Ó¿Ú  */
+    /** æ£€æµ‹æ’æªçŠ¶æ€é©±åŠ¨æ¥å£  */
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
         THROW_ERROR(ucCONID, GetCCState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCC");
@@ -978,7 +978,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     {
         THROW_ERROR(ucCONID, GetCPState(pvCON), ERR_LEVEL_CRITICAL, "GetPlug->GetCP");
         if(pCON->status.xCPState != CP_12V &&
-           pCON->status.xCPState != CP_12V_PWM &&
+                pCON->status.xCPState != CP_12V_PWM &&
                 pCON->status.xCPState != CP_ERR)
         {
             tmpPlugState = PLUG;
@@ -995,7 +995,7 @@ static ErrorCode_t GetPlugState(void *pvCON)
     return errcode;
 }
 
-/** @brief BĞÍÁ¬½ÓÇ¹Ëø×´Ì¬
+/** @brief Bå‹è¿æ¥æªé”çŠ¶æ€
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1015,7 +1015,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
 
     if(ucCONID == 0)
     {
@@ -1051,10 +1051,10 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     return errcode;
 }
 
-/** @brief BĞÍÁ¬½ÓÇ¹Ëø¿ª¹Ø
+/** @brief Bå‹è¿æ¥æªé”å¼€å…³
  *
  * @param pvCON void*
- * @param cmd uint8_t   ¿ª¹Ø¿ØÖÆ£¬SWITCH_ON /SWITCH_OFF
+ * @param cmd uint8_t   å¼€å…³æ§åˆ¶ï¼ŒSWITCH_ON /SWITCH_OFF
  * @return ErrorCode_t
  *                  ERR_NO
  *                  ERR_CANT_LOCK
@@ -1072,7 +1072,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     tmpLockState = UNLOCK;
     errcode = ERR_NO;
 
-    /**  Ö´ĞĞËøÖ¹¶¯×÷ */
+    /**  æ‰§è¡Œé”æ­¢åŠ¨ä½œ */
     if(ucCONID == 0)
     {
         if(cmd == SWITCH_ON)
@@ -1100,7 +1100,7 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     return errcode;
 }
 
-/** @brief »ñÈ¡L½øÏßÎÂ¶È
+/** @brief è·å–Lè¿›çº¿æ¸©åº¦
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1120,7 +1120,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     tmpACLTemp = 0;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
@@ -1170,7 +1170,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     tmpACNTemp = 0;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
 
     //...
     if(ucCONID == 0)
@@ -1221,7 +1221,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
 
     if(ucCONID == 0)
     {
@@ -1268,7 +1268,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     tmpTemp = 0;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
 
     //...
     if(ucCONID == 0)
@@ -1298,7 +1298,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 
     return errcode;
 }
-/** @brief »ñÈ¡Êä³ö¼ÌµçÆ÷×´Ì¬
+/** @brief è·å–è¾“å‡ºç»§ç”µå™¨çŠ¶æ€
  *
  * @param pvCON void*
  * @return ErrorCode_t
@@ -1318,7 +1318,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = SWITCH_OFF;
     errcode = ERR_NO;
 
-    /** ÊµÏÖ´úÂë  */
+    /** å®ç°ä»£ç   */
 #ifdef DEBUG_DIAG_DUMMY
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
@@ -1328,8 +1328,8 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = tmpLStat;
 #endif
     /*********************/
-    /* @todo (yuye#1#): ´¥µçÕ³Á¬´¦Àí2017Äê4ÔÂ10ÈÕ */
-//    if(´¥µçÕ³Á¬)
+    /* @todo (yuye#1#): è§¦ç”µç²˜è¿å¤„ç†2017å¹´4æœˆ10æ—¥ */
+//    if(è§¦ç”µç²˜è¿)
 //    {
 //        errcode = ERR_RELAY_PASTE;
 //    }
@@ -1346,7 +1346,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
  * @param cmd uint8_t SWITCH_ON SWITCH_OFF
  * @return ErrorCode_t
  *
- */          //K1 K2Ö¸µÄÊÇÊ²Ã´
+ */          //K1 K2æŒ‡çš„æ˜¯ä»€ä¹ˆ
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1359,7 +1359,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     errcode = ERR_NO;
 
 
-    /** ²Ù×÷K1,K2Êä³ö¼ÌµçÆ÷ */
+    /** æ“ä½œK1,K2è¾“å‡ºç»§ç”µå™¨ */
     if(ucCONID == 0)
     {
         if(cmd == SWITCH_OFF)
@@ -1406,7 +1406,7 @@ static ErrorCode_t StartCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-    /**  ²Ù×÷Êä³ö¼ÌµçÆ÷£¬±£´æ¼ÌµçÆ÷×´Ì¬ */
+    /**  æ“ä½œè¾“å‡ºç»§ç”µå™¨ï¼Œä¿å­˜ç»§ç”µå™¨çŠ¶æ€ */
 
     errcode = SetRelay(pvCON, SWITCH_ON);
 
@@ -1432,7 +1432,7 @@ static ErrorCode_t StopCharge(void *pvCON)
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** ²Ù×÷Êä³ö¼ÌµçÆ÷£¬±£´æ¼ÌµçÆ÷×´Ì¬ */
+    /** æ“ä½œè¾“å‡ºç»§ç”µå™¨ï¼Œä¿å­˜ç»§ç”µå™¨çŠ¶æ€ */
 
     errcode = SetRelay(pvCON, SWITCH_OFF);
 
@@ -1469,10 +1469,6 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
-    if(pCON->order.plChargeSegment != NULL)
-    {
-        gdsl_list_free(pCON->order.plChargeSegment);
-    }
     free(pCON);
     pCON = NULL;
 }
@@ -1484,17 +1480,17 @@ CON_t *CONCreate(uint8_t ucCONID )
     {
         return NULL;
     }
-    pCON->info.ucCONID = ucCONID;
-    pCON->info.ucCONType = defCONType_AC;
-    pCON->info.ucSocketType = defSocketTypeB;
-    pCON->info.dVolatageUpperLimits = 0;
-    pCON->info.dVolatageLowerLimits = 0;
-    pCON->info.dACTempUpperLimits = 0;
-    pCON->info.dACTempLowerLimits = -0;
+    pCON->info.ucCONID                = ucCONID;
+    pCON->info.ucCONType              = defCONType_AC;
+    pCON->info.ucSocketType           = defSocketTypeB;
+    pCON->info.dVolatageUpperLimits   = 0;
+    pCON->info.dVolatageLowerLimits   = 0;
+    pCON->info.dACTempUpperLimits     = 0;
+    pCON->info.dACTempLowerLimits     = 0;
     pCON->info.dSocketTempUpperLimits = 0;
     pCON->info.dSocketTempLowerLimits = 0;
-    pCON->info.dRatedCurrent = 32;
-    pCON->info.dRatedPower = 7;
+    pCON->info.dRatedCurrent          = 32;
+    pCON->info.dRatedPower            = 7;
     memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode));
 
     pCON->info.GetCONCfg = GetCONCfg;
@@ -1511,56 +1507,59 @@ CON_t *CONCreate(uint8_t ucCONID )
 //    pCON->info.SetRatedPower = SetRatedPower;
 
     //memset(pCON->status.ucHeldCardID, 0, defCardIDLength);
-    pCON->status.dACLTemp = 0;
-    pCON->status.dACNTemp = 0;
-    pCON->status.dBTypeSocketTemp1 = 0;
-    pCON->status.dBTypeSocketTemp2 = 0;
-    pCON->status.dChargingCurrent = 0;
-    pCON->status.dChargingFrequence = 0;
-    pCON->status.dChargingVoltage = 0;
-    pCON->status.dChargingPower = 0;
+    pCON->status.dACLTemp              = 0;
+    pCON->status.dACNTemp              = 0;
+    pCON->status.dBTypeSocketTemp1     = 0;
+    pCON->status.dBTypeSocketTemp2     = 0;
+    pCON->status.dChargingCurrent      = 0;
+    pCON->status.dChargingFrequence    = 0;
+    pCON->status.dChargingVoltage      = 0;
+    pCON->status.dChargingPower        = 0;
     pCON->status.xBTypeSocketLockState = 0;
-    pCON->status.xCCState = 0;
-    pCON->status.xCPState = 0;
-    pCON->status.ucLoadPercent = 100;//(%)
-    pCON->status.xPlugState = 0;
-    pCON->status.xHandleEventCharge = xEventGroupCreate();
-    pCON->status.xHandleEventOrder = xEventGroupCreate();
+    pCON->status.xCCState              = 0;
+    pCON->status.xCPState              = 0;
+    pCON->status.ucLoadPercent         = 100;//(%)
+    pCON->status.xPlugState            = 0;
+    pCON->status.xHandleEventCharge    = xEventGroupCreate();
+    pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
-    pCON->status.xHandleTimerVolt = NULL;
-    pCON->status.xHandleTimerCurr = NULL;
-    pCON->status.xHandleTimerCharge = NULL;
-    pCON->status.xHandleTimerRTData = NULL;
-    pCON->status.GetChargingVoltage = GetChargingVoltage;
-    pCON->status.GetChargingCurrent = GetChargingCurrent;
-    pCON->status.GetChargingFrequence = GetChargingFrequence;
-    pCON->status.GetChargingPower = GetChargingPower;
-    pCON->status.xVoltStat = STATE_VOLT_OK;
-    pCON->status.xCurrStat = STATE_CURR_INIT;
+    pCON->status.xHandleTimerVolt      = NULL;
+    pCON->status.xHandleTimerCurr      = NULL;
+    pCON->status.xHandleTimerCharge    = NULL;
+    pCON->status.xHandleTimerRTData    = NULL;
+    pCON->status.GetChargingVoltage    = GetChargingVoltage;
+    pCON->status.GetChargingCurrent    = GetChargingCurrent;
+    pCON->status.GetChargingFrequence  = GetChargingFrequence;
+    pCON->status.GetChargingPower      = GetChargingPower;
+    pCON->status.xVoltStat             = STATE_VOLT_OK;
+    pCON->status.xCurrStat             = STATE_CURR_INIT;
 
-    pCON->status.GetCPState = GetCPState;
-    pCON->status.SetCPSwitch = SetCPSwitch;
-    pCON->status.SetLoadPercent = SetLoadPercent;
-    pCON->status.GetCCState = GetCCState;
-    pCON->status.GetPlugState = GetPlugState;
-    pCON->status.GetBTypeSocketLock = GetBTypeSocketLock;
-    pCON->status.SetBTypeSocketLock = SetBTypeSocketLock;
-    pCON->status.GetACLTemp = GetACLTemp;
-    pCON->status.GetACNTemp = GetACNTemp;
+    pCON->status.GetCPState          = GetCPState;
+    pCON->status.SetCPSwitch         = SetCPSwitch;
+    pCON->status.SetLoadPercent      = SetLoadPercent;
+    pCON->status.GetCCState          = GetCCState;
+    pCON->status.GetPlugState        = GetPlugState;
+    pCON->status.GetBTypeSocketLock  = GetBTypeSocketLock;
+    pCON->status.SetBTypeSocketLock  = SetBTypeSocketLock;
+    pCON->status.GetACLTemp          = GetACLTemp;
+    pCON->status.GetACNTemp          = GetACNTemp;
     pCON->status.GetBTypeSocketTemp1 = GetBTypeSocketTemp1;
     pCON->status.GetBTypeSocketTemp2 = GetBTypeSocketTemp2;
-    pCON->status.StartCharge = StartCharge;
-    pCON->status.StopCharge = StopCharge;
-    pCON->status.GetRelayState = GetRelayState;
-    pCON->status.SetRelay = SetRelay;
+    pCON->status.StartCharge         = StartCharge;
+    pCON->status.StopCharge          = StopCharge;
+    pCON->status.GetRelayState       = GetRelayState;
+    pCON->status.SetRelay            = SetRelay;
 
     pCON->state = STATE_CON_IDLE;
 
     pCON->status.xHandleTimerRTData = xTimerCreate("TimerRemoteRTData",
-                                                   defRemoteRTDataCyc,
-                                                   pdTRUE,
-                                                   (void *)(int)ucCONID,
-                                                   vRemoteRTDataTimerCB);
+                                      defRemoteRTDataCyc,
+                                      pdTRUE,
+                                      (void *)(int)ucCONID,
+                                      vRemoteRTDataTimerCB);
+
+    pCON->status.statRemoteProc.card.stat = CARDCTRL_IDLE;
+    pCON->status.statRemoteProc.card.timestamp = 0;
 
 
     OrderCreate(&(pCON->order));

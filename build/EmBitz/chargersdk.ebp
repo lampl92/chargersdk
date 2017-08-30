@@ -121,15 +121,16 @@
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 			<Add library="..\..\src\hmi\dimen_barcode\ATK_QR_V1.4.lib" />
-			<Add library="lib\libm.a" />
+			<Add library="lib\armv7e-m\fpu\fpv5-sp-d16\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="version.h" />
 		<Unit filename="..\..\nand\system\evse.cfg" />
 		<Unit filename="..\..\nand\system\evse.cfg.templ" />
 		<Unit filename="..\..\nand\system\order.txt.templ" />
+		<Unit filename="..\..\nand\system\protocol.cfg" />
+		<Unit filename="..\..\nand\system\sys.cfg" />
 		<Unit filename="..\..\src\app\cfg_parse.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -206,6 +207,9 @@
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\stringName.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\stringName.h" />
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
@@ -247,10 +251,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\timercallback.h" />
+		<Unit filename="..\..\src\app\version.h" />
 		<Unit filename="..\..\src\cli\cli_aes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_crc.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_database.c">
@@ -903,7 +911,7 @@
 			</DoxyBlocks>
 			<AutoVersioning>
 				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
-				<Settings use_defines="1" autoincrement="1" date_declarations="1" update_manifest="1" do_auto_increment="1" ask_to_increment="0" language="C" svn="0" svn_directory="" header_path="version.h" />
+				<Settings use_defines="1" autoincrement="1" date_declarations="1" update_manifest="1" do_auto_increment="1" ask_to_increment="0" language="C" svn="0" svn_directory="" header_path="..\..\src\app\version.h" />
 				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
 			</AutoVersioning>

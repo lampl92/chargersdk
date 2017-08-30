@@ -1,4 +1,4 @@
-﻿#include <stddef.h>
+#include <stddef.h>
 #include "DIALOG.h"
 #include "keyboard.h"
 #include "string.h"
@@ -7,6 +7,7 @@
 #include "xbffontcreate.h"
 #include "WM.h"
 #include "BUTTON.h"
+#include "cfg_parse.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -1056,58 +1057,58 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                if(SetCONCfg(pEVSE->info.strSN,"EVSESN",result_input,ParamTypeString)== ERR_NO)
-                {
-                    return VALUE_OK_SAV;
-                }
-                else
-                {
-                    return VALUE_ERROR;
-                }
+                //if(SetCONCfg(pEVSE->info.strSN,"EVSESN",result_input,ParamTypeString)== ERR_NO)
+//                {
+//                    return VALUE_OK_SAV;
+//                }
+//                else
+//                {
+//                    return VALUE_ERROR;
+//                }
                 break;
             case 21:
-                if(SetCONCfg(pEVSE->info.ucTotalCON,"TotalCON",atoi(result_input),ParamTypeU8) == ERR_NO)
-                {
-                    return VALUE_OK_SAV;
-                }
-                else
-                {
-                    return VALUE_ERROR;
-                }
+                //if(SetCONCfg(pEVSE->info.ucTotalCON,"TotalCON",atoi(result_input),ParamTypeU8) == ERR_NO)
+//                {
+//                    return VALUE_OK_SAV;
+//                }
+//                else
+//                {
+//                    return VALUE_ERROR;
+//                }
                 break;
             case 22:
-                if(SetCONCfg(pCon->info.dVolatageLowerLimits,"VolatageLowerLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-                {
-                    return VALUE_OK_SAV;
-                }
-                else
-                {
-                    return VALUE_ERROR;
-                }
+                //if(SetCONCfg(pCon->info.dVolatageLowerLimits,"VolatageLowerLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+//                {
+//                    return VALUE_OK_SAV;
+//                }
+//                else
+//                {
+//                    return VALUE_ERROR;
+//                }
                 break;
             case 23:
-                if(SetCONCfg(pCon->info.dVolatageUpperLimits,"VolatageUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-                {
-                    return VALUE_OK_SAV;
-                }
-                else
-                {
-                    return VALUE_ERROR;
-                }
+               // if(SetCONCfg(pCon->info.dVolatageUpperLimits,"VolatageUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+//                {
+//                    return VALUE_OK_SAV;
+//                }
+//                else
+//                {
+//                    return VALUE_ERROR;
+//                }
                 break;
             case 24:
                 break;
             case 25:
                 break;
             case 26:
-                if(SetCONCfg(pCon->info.dACTempUpperLimits,"ACTempUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-                {
-                    return VALUE_OK_SAV;
-                }
-                else
-                {
-                    return VALUE_ERROR;
-                }
+                //if(SetCONCfg(pCon->info.dACTempUpperLimits,"ACTempUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
+//                {
+//                    return VALUE_OK_SAV;
+//                }
+//                else
+//                {
+//                    return VALUE_ERROR;
+//                }
                 break;
             case 27:
                 break;

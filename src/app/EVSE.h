@@ -15,7 +15,7 @@
 #include "gdsl_list.h"
 
 typedef ErrorCode_t (*pEVSEGetCfg_ft)(void *pvEVSE, void *pvCfgObj);
-typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
+//typedef ErrorCode_t (*pEVSESetCfg_ft)(void *pvEVSE, void *pvCfgParam);
 typedef ErrorCode_t (*pEVSE_ft)(void *pvEVSE);
 typedef struct _TemplSeg
 {
@@ -39,6 +39,8 @@ typedef struct _EVSEInfo
     double  dServiceFee;                //服务费
     double dDefSegFee;
     gdsl_list_t plTemplSeg;
+
+    uint8_t strSoftVer[defSoftVerLength+1];
 
     pEVSEGetCfg_ft GetEVSECfg;
     ErrorCode_t (*SetEVSECfg)(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);

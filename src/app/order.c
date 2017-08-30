@@ -11,204 +11,301 @@
 #include "cJSON.h"
 #include "cfg_parse.h"
 
-volatile uint8_t *tmpcjson;
-
-//static void OrderDelete(OrderData_t *pOrder)
-//{
-//    gdsl_list_free(pOrder->plChargeSegment);
-//    free(pOrder);
-//}
-//
-//OrderData_t *OrderCreate(void)
-//{
-//    OrderData_t *pOrder = NULL;
-//    pOrder = (OrderData_t *)malloc(sizeof(OrderData_t));
-//    pOrder->Delete = OrderDelete;
-//    pOrder->plChargeSegment = gdsl_list_alloc("SegList",ChargeSegAlloc,ChargeSegFree);
-//    return pOrder;
-//}
-
-
-/** @brief 判断时间边界，包含little，不包含big
+/** @brief 判断当前时间是否在时间段内
  *
- * @param src time_t
- * @param little time_t
- * @param big time_t
- * @return uint8_t 1:在区间中，0：不在区间中
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t 1：在时间段内， 0：不在时间段内
  *
  */
-static gdsl_element_t ChargeSegAlloc(void *pChargeSeg)
+static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
 {
-    gdsl_element_t copyChSeg;
-    copyChSeg = (gdsl_element_t)malloc(sizeof(ChargeSegment_t));
-    if(copyChSeg != NULL)
-    {
-        memcpy(copyChSeg, pChargeSeg, sizeof(ChargeSegment_t));
-    }
-    return copyChSeg;
-}
-static void ChargeSegFree (gdsl_element_t e)
-{
-    free (e);
-}
-static uint8_t JudgeTimeInclude(time_t tSrc, time_t tStart, time_t tEnd)
-{
-    if(tSrc >= tStart && tSrc < tEnd)
+    struct tm *ts;
+    ts = localtime(&now);
+    if(ts->tm_hour >= ucStart && ts->tm_hour < ucEnd)
     {
         return 1;
-    }
-    else if(tSrc == tEnd)
-    {
-        return 2;//时段边界。暂时判断办法，测试时一定要充分测试系统是否可以检测到时段边界。
     }
     else
     {
         return 0;
     }
 }
-static void SegmentProc(time_t now, CON_t *pCON)
+
+/** @brief 判断当前时间是否在尖峰平谷某个时间段中
+ *
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t  1：在时间段中  0：不在时间段中
+ *
+ */
+static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *pos)
 {
-    uint32_t ulTotalTemplSegs;
-    TemplSeg_t *pTemplSeg;
-    ChargeSegment_t ChSeg;
-    ChargeSegment_t *pChSeg;
-    uint8_t ucResJudge;
-    struct tm *ts;
-    uint8_t ucBoundaryPos;
     int i;
+    uint8_t isInclude = 0;
 
-    gdsl_list_t plChSeg;
-    gdsl_list_t plTemplSeg;
-
-    plChSeg = pCON->order.plChargeSegment;
-    plTemplSeg = pEVSE->info.plTemplSeg;
-
-    ucBoundaryPos = 0;
-    ucResJudge = 0;
-    ts = localtime(&now);
-    ulTotalTemplSegs = gdsl_list_get_size(plTemplSeg);
-    /*1. 段判断*/
-#ifdef DEBUG_DIAG_DUMMY
-    ulTotalTemplSegs = 0;
-#endif
-    if(ulTotalTemplSegs > 0)
+    for(i = 0; i < SegTime.ucSegCont; i++)
     {
-        for(i = 1; i <= ulTotalTemplSegs; i++ )
+        isInclude = JudgeTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
+        if(isInclude == 1)
         {
-            pTemplSeg = (TemplSeg_t *)(gdsl_list_search_by_position(plTemplSeg, i));
-            ucResJudge = JudgeTimeInclude(now, pTemplSeg->tStartTime, pTemplSeg->tEndTime);
-            if(ucResJudge == 1)
-            {
-                switch(pCON->order.statOrderSeg)
-                {
-                case STATE_ORDERSEG_DEF:
-                    pCON->order.statOrderSeg = STATE_ORDERSEG_START;
-                    break;
-                case STATE_ORDERSEG_START:
-                    ChSeg.state = STATE_SEG_START;
-                    ChSeg.ucTemplPos = i;
-                    gdsl_list_insert_tail(plChSeg, &ChSeg);
-                    pCON->order.statOrderSeg = STATE_ORDERSEG_IN;
-                    break;
-                case STATE_ORDERSEG_IN:
-                    pChSeg = (ChargeSegment_t *)gdsl_list_get_tail(plChSeg);//要操作的段必然在链表尾
-                    if(pChSeg->ucTemplPos != i)//时间已经不在当前段中
-                    {
-
-//                        pChSeg->state = STATE_SEG_OUT;
-                        pCON->order.statOrderSeg = STATE_ORDERSEG_END;
-                        break;
-                    }
-                    switch(pChSeg->state)
-                    {
-                    case STATE_SEG_START:
-                        pChSeg->dSegStartPower = pCON->status.dChargingPower;
-                        pChSeg->tStartTime = now;
-                        pChSeg->state = STATE_SEG_IN;
-                        break;
-                    case STATE_SEG_IN:
-                        pChSeg->dSegPower = pCON->status.dChargingPower - pChSeg->dSegStartPower;
-                        pChSeg->dSegFee = pChSeg->dSegPower * pTemplSeg->dSegFee;
-                        break;
-                    case STATE_SEG_END:
-                        //处理见下面的流程
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-//                case STATE_ORDERSEG_END:
-//                    break;
-                default:
-                    break;
-                }
-//
-//                switch()
-//                    ChSeg.state
-//                    ChSeg->dSegStartPower =
-//                        pCON->order.dTotalPower = pCON->status.GetChargingPower - pCON->order.dStartPower;
-//                pCON->order.dTotalPowerFee = pCON->order.dTotalPower * pTemplSeg->dSegFee;
-                break;//退出循环
-            }
-            else if(ucResJudge == 2)
-            {
-                ucBoundaryPos = i;
-                pCON->order.statOrderSeg = STATE_ORDERSEG_END;
-                break;//退出循环
-            }
-            else //当前时间在所有seg中没有找到时间段，执行默认段
-            {
-                pCON->order.statOrderSeg = STATE_ORDERSEG_DEF;
-            }
+            *pos = (uint8_t)i;
+            return 1;
         }
     }
-    else//根本没有seg，需要执行默认段
+    return 0;
+}
+
+/** @brief 判断当前时间所在的尖峰平谷状态
+ *
+ * @param now time_t
+ * @param pProto echProtocol_t*
+ * @param uint8_t pos* 当前时间所时间段内置
+ * @return SegTimeState_e
+ *
+ */
+static SegTimeState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *pos)
+{
+
+    if(JudgeSegInclude(now, pProto->info.SegTime_sharp, pos) == 1)
     {
-        pCON->order.statOrderSeg = STATE_ORDERSEG_DEF;
+        return STATE_SEG_SHARP;
     }
-    /*2. 段处理*/
+    if(JudgeSegInclude(now, pProto->info.SegTime_peak, pos) == 1)
+    {
+        return STATE_SEG_PEAK;
+    }
+    if(JudgeSegInclude(now, pProto->info.SegTime_shoulder, pos) == 1)
+    {
+        return STATE_SEG_SHOULDER;
+    }
+    if(JudgeSegInclude(now, pProto->info.SegTime_off_peak, pos) == 1)
+    {
+        return STATE_SEG_OFF_PEAK;
+    }
+}
+
+/** @brief 状态与时段判处理。状态：尖峰平谷  时段：状态中的5个时段
+ *
+ * @param now time_t
+ * @param pCON CON_t*
+ * @return void
+ *
+ */
+static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
+{
+    ChargeSegStatus_t *pChargeSegStatus;
+    SegTimeState_e statSegTime;
+    int i;
+    uint8_t pos = 0;//当前时间在时段中的位置
+    statSegTime = STATE_SEG_IDLE;
+    double tmpTotalPower; //用于计算尖峰平谷总电量
+    uint32_t tmpTotalTime;  //用于计算尖峰平谷总充电时间
+
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
+    /*1. 状态判断、时段内容处理*/
+
     switch(pCON->order.statOrderSeg)
     {
-    case STATE_ORDERSEG_DEF:
-        pCON->order.dTotalPower = pCON->status.dChargingPower - pCON->order.dStartPower;
-        if(ulTotalTemplSegs == 0)
+    case STATE_SEG_IDLE:
+        pCON->order.statOrderSeg = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+        pCON->order.pos = pos;//获取当前所在时段
+        break;
+    case STATE_SEG_SHARP:
+        statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+        ///*状态 或 时段 发生转换，处理上次时段内容*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
         {
-            pCON->order.dDefSegPower = pCON->order.dTotalPower;
-            pCON->order.dDefSegFee = pCON->order.dDefSegPower * pEVSE->info.dDefSegFee;
-            pCON->order.dTotalPowerFee = pCON->order.dDefSegFee;
+            pChargeSegStatus = &(pCON->order.chargeSegStatus_sharp[pCON->order.pos]);
+            pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
+            pCON->order.statOrderSeg = statSegTime;
+            pCON->order.pos = pos;
+            break;//状态已转换，下面的没必要执行了
+        }
+        pChargeSegStatus = &(pCON->order.chargeSegStatus_sharp[pos]);
+        if(pChargeSegStatus->tStartTime > 0)
+        {
+            pChargeSegStatus->dPower = pCON->status.dChargingPower - pChargeSegStatus->dStartPower;
         }
         else
         {
-//            pCON->order.dDefSegPower = pCON->order.dTotalPower - 时段总电量;
-//            pCON->order.dDefSegFee = pCON->order.dDefSegPower * pEVSE->info.dDefSegFee;
-//            pCON->order.dTotalPowerFee = pCON->order.dDefSegFee + 时段总电费;
+            //第一次进到这个时段
+            pCON->order.pos = pos; //状态转换时已经赋过值了
+            pChargeSegStatus->tStartTime = now;
+//            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
-    case STATE_ORDERSEG_END:
-        pTemplSeg = (TemplSeg_t *)(gdsl_list_search_by_position(plTemplSeg, ucBoundaryPos));
-        pChSeg = (ChargeSegment_t *)gdsl_list_get_tail(plChSeg);//要操作的段必然在链表尾
-        pChSeg->tEndTime = now;
+    case STATE_SEG_PEAK:
+        statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+        ///*状态 或 时段 发生转换，处理上次时段内容*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
+        {
+            pChargeSegStatus = &(pCON->order.chargeSegStatus_peak[pCON->order.pos]);
+            pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
+            pCON->order.statOrderSeg = statSegTime;
+            pCON->order.pos = pos;
+            break;//状态已转换，下面的没必要执行了
+        }
+        pChargeSegStatus = &(pCON->order.chargeSegStatus_peak[pos]);
+        if(pChargeSegStatus->tStartTime > 0)
+        {
+            pChargeSegStatus->dPower = pCON->status.dChargingPower - pChargeSegStatus->dStartPower;
+        }
+        else
+        {
+            //第一次进到这个时段
+            pCON->order.pos = pos; //状态转换时已经赋过值了
+            pChargeSegStatus->tStartTime = now;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
+        }
+        break;
+    case STATE_SEG_SHOULDER:
+        statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+        ///*状态 或 时段 发生转换，处理上次时段内容*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
+        {
+            pChargeSegStatus = &(pCON->order.chargeSegStatus_shoulder[pCON->order.pos]);
+            pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
+            pCON->order.statOrderSeg = statSegTime;
+            pCON->order.pos = pos;
+            break;//状态已转换，下面的没必要执行了
+        }
+        pChargeSegStatus = &(pCON->order.chargeSegStatus_shoulder[pos]);
+        if(pChargeSegStatus->tStartTime > 0)
+        {
+            pChargeSegStatus->dPower = pCON->status.dChargingPower - pChargeSegStatus->dStartPower;
+        }
+        else
+        {
+            //第一次进到这个时段
+            pCON->order.pos = pos; //状态转换时已经赋过值了
+            pChargeSegStatus->tStartTime = now;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
+        }
+        break;
+    case STATE_SEG_OFF_PEAK:
+        statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+        ///*状态 或 时段 发生转换，处理上次时段内容*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
+        {
+            pChargeSegStatus = &(pCON->order.chargeSegStatus_off_peak[pCON->order.pos]);
+            pChargeSegStatus->tEndTime = now; //当前转换时间即上次结束时间
+            pCON->order.statOrderSeg = statSegTime;
+            pCON->order.pos = pos;
+            break;//状态已转换，下面的没必要执行了
+        }
+        pChargeSegStatus = &(pCON->order.chargeSegStatus_off_peak[pos]);
+        if(pChargeSegStatus->tStartTime > 0)
+        {
+            pChargeSegStatus->dPower = pCON->status.dChargingPower - pChargeSegStatus->dStartPower;
+        }
+        else
+        {
+            //第一次进到这个时段
+            pCON->order.pos = pos; //状态转换时已经赋过值了
+            pChargeSegStatus->tStartTime = now;
+            pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
+        }
         break;
     default:
         break;
     }
-    /*3. 服务费数据*/
-    if(pCON->order.ucServiceFeeType == defOrderSerType_Order)//按单
+    if(statOrder == STATE_ORDER_FINISH)
     {
-        pCON->order.dTotalServiceFee = pEVSE->info.dServiceFee;
+        pChargeSegStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
     }
-    else if(pCON->order.ucServiceFeeType == defOrderSerType_Power)//按度
+
+    /*2. 汇总时段*/
+
+    //sharp
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
+    for(i = 0; i < pechProto->info.SegTime_sharp.ucSegCont; i++)
     {
-        pCON->order.dTotalServiceFee = pCON->order.dTotalPower * pEVSE->info.dServiceFee;
+        tmpTotalPower += pCON->order.chargeSegStatus_sharp[i].dPower;
+        if(pCON->order.chargeSegStatus_sharp[i].tEndTime != 0) //表示已经结束的时段
+        {
+            tmpTotalTime += (pCON->order.chargeSegStatus_sharp[i].tEndTime - pCON->order.chargeSegStatus_sharp[i].tStartTime);
+        }
     }
+    pCON->order.dTotalPower_sharp = tmpTotalPower;
+    pCON->order.dTotalPowerFee_sharp = tmpTotalPower * pechProto->info.dPowerFee_sharp;
+    pCON->order.dTotalServFee_sharp = tmpTotalPower * pechProto->info.dServFee_sharp;
+    pCON->order.ulTotalTime_sharp = tmpTotalTime;
+
+    //peak
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
+    for(i = 0; i < pechProto->info.SegTime_peak.ucSegCont; i++)
+    {
+        tmpTotalPower += pCON->order.chargeSegStatus_peak[i].dPower;
+        if(pCON->order.chargeSegStatus_peak[i].tEndTime != 0) //表示已经结束的时段
+        {
+            tmpTotalTime += (pCON->order.chargeSegStatus_peak[i].tEndTime - pCON->order.chargeSegStatus_peak[i].tStartTime);
+        }
+    }
+    pCON->order.dTotalPower_peak = tmpTotalPower;
+    pCON->order.dTotalPowerFee_peak = tmpTotalPower * pechProto->info.dPowerFee_peak;
+    pCON->order.dTotalServFee_peak = tmpTotalPower * pechProto->info.dServFee_peak;
+    pCON->order.ulTotalTime_peak = tmpTotalTime;
+
+    //shoulder
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
+    for(i = 0; i < pechProto->info.SegTime_shoulder.ucSegCont; i++)
+    {
+        tmpTotalPower += pCON->order.chargeSegStatus_shoulder[i].dPower;
+        if(pCON->order.chargeSegStatus_shoulder[i].tEndTime != 0) //表示已经结束的时段
+        {
+            tmpTotalTime += (pCON->order.chargeSegStatus_shoulder[i].tEndTime - pCON->order.chargeSegStatus_shoulder[i].tStartTime);
+        }
+    }
+    pCON->order.dTotalPower_shoulder = tmpTotalPower;
+    pCON->order.dTotalPowerFee_shoulder = tmpTotalPower * pechProto->info.dPowerFee_shoulder;
+    pCON->order.dTotalServFee_shoulder = tmpTotalPower * pechProto->info.dServFee_shoulder;
+    pCON->order.ulTotalTime_shoulder = tmpTotalTime;
+
+    //off_peak
+    tmpTotalPower = 0;
+    tmpTotalTime = 0;
+    for(i = 0; i < pechProto->info.SegTime_off_peak.ucSegCont; i++)
+    {
+        tmpTotalPower += pCON->order.chargeSegStatus_off_peak[i].dPower;
+        if(pCON->order.chargeSegStatus_off_peak[i].tEndTime != 0) //表示已经结束的时段
+        {
+            tmpTotalTime += (pCON->order.chargeSegStatus_off_peak[i].tEndTime - pCON->order.chargeSegStatus_off_peak[i].tStartTime);
+        }
+    }
+    pCON->order.dTotalPower_off_peak = tmpTotalPower;
+    pCON->order.dTotalPowerFee_off_peak = tmpTotalPower * pechProto->info.dPowerFee_off_peak;
+    pCON->order.dTotalServFee_off_peak = tmpTotalPower * pechProto->info.dServFee_off_peak;
+    pCON->order.ulTotalTime_off_peak = tmpTotalTime;
+
+    /*3. 汇总总电量*/
+    pCON->order.dTotalPower = pCON->order.dTotalPower_sharp +
+                                pCON->order.dTotalPower_peak +
+                                pCON->order.dTotalPower_shoulder +
+                                pCON->order.dTotalPower_off_peak;
+    pCON->order.dTotalPowerFee = pCON->order.dTotalPowerFee_sharp +
+                                pCON->order.dTotalPowerFee_peak +
+                                pCON->order.dTotalPowerFee_shoulder +
+                                pCON->order.dTotalPowerFee_off_peak;
+    pCON->order.dTotalServFee = pCON->order.dTotalServFee_sharp +
+                                pCON->order.dTotalServFee_peak +
+                                pCON->order.dTotalServFee_shoulder +
+                                pCON->order.dTotalServFee_off_peak;
+
     /*4. 总费用*/
-    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServiceFee;
+    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
 
 ErrorCode_t makeOrder(CON_t *pCON)
 {
     OrderState_t statOrder;
-//    OrderSegState_t statOrderSeg;
     ErrorCode_t errcode;
 
     statOrder = pCON->order.statOrder;
@@ -218,21 +315,53 @@ ErrorCode_t makeOrder(CON_t *pCON)
     case STATE_ORDER_TMP:
         memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
         pCON->order.ucAccountStatus = pRFIDDev->order.ucAccountStatus;
+        pCON->order.ucCardStatus = pRFIDDev->order.ucCardStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
         pCON->order.ucCONID = pCON->info.ucCONID;
+        strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);
         pCON->order.dStartPower = pCON->status.dChargingPower;
-        pCON->order.ucServiceFeeType = pEVSE->info.ucServiceFeeType;
-        SegmentProc(pCON->order.tStartTime, pCON);
+        SegmentProc(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
-        SegmentProc(time(NULL), pCON);
+        SegmentProc(time(NULL), pCON, statOrder);
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = time(NULL);
+        SegmentProc(pCON->order.tStopTime, pCON, statOrder);
+        break;
+    }
+    return errcode;
+}
+
+ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
+{
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    switch(statOrder)
+    {
+    case STATE_ORDER_TMP:
+        memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
+        pCON->order.ucAccountStatus = 1;
+        pCON->order.dBalance = 888;
+        pCON->order.ucCONID = pCON->info.ucCONID;
+        break;
+    case STATE_ORDER_MAKE:
+        pCON->order.tStartTime = testtime;
+        pCON->order.dStartPower = pCON->status.dChargingPower;
+        SegmentProc(pCON->order.tStartTime, pCON, statOrder);
+        break;
+    case STATE_ORDER_UPDATE:
+        SegmentProc(testtime, pCON, statOrder);
+        break;
+    case STATE_ORDER_FINISH:
+        pCON->order.ucPayType = defOrderPayType_Online;
+        pCON->order.tStopTime = testtime;
+        SegmentProc(pCON->order.tStopTime, pCON, statOrder);
         break;
     }
     return errcode;
@@ -240,16 +369,26 @@ ErrorCode_t makeOrder(CON_t *pCON)
 
 void OrderCreate(OrderData_t *pOrder)
 {
-    pOrder->plChargeSegment = gdsl_list_alloc("SegList", ChargeSegAlloc, ChargeSegFree);
+    //pOrder->plChargeSegment = gdsl_list_alloc("SegList", ChargeSegAlloc, ChargeSegFree);
 }
 
+void SegTimeInit(ChargeSegStatus_t *pSegStatus)
+{
+    pSegStatus->tStartTime = 0;
+    pSegStatus->tEndTime = 0;
+    pSegStatus->dStartPower = 0;
+    pSegStatus->dPower = 0;
+}
 void OrderInit(OrderData_t *pOrder)
 {
+    int i;
     pOrder->statOrder = STATE_ORDER_IDLE;
-    pOrder->statOrderSeg = STATE_ORDERSEG_DEF;
+    pOrder->statOrderSeg = STATE_SEG_IDLE;
+    pOrder->pos = 0;
 
     memset(pOrder->ucCardID, 0, defCardIDLength);//卡号//在taskrfid中赋值
     pOrder->ucAccountStatus = 0;    //帐户状态 1：注册卡 0：未注册卡
+    pOrder->ucCardStatus = 0;
     pOrder->dBalance = 0;           //余额
 
     memset(pOrder->strOrderSN, '\0', defOrderSNLength);
@@ -257,145 +396,42 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->ucStartType = 0;        //4有卡 5无卡
     pOrder->dLimitFee = 0;                    //充电金额限制
     pOrder->dStartPower = 0;                //起始电表读数
-    pOrder->ucServiceFeeType = 0;         //服务费类型
 
     pOrder->dTotalPower = 0;                 //总电量
     pOrder->dTotalPowerFee = 0;             //总电费
-    pOrder->dTotalServiceFee = 0;               //服务费
+    pOrder->dTotalServFee = 0;               //服务费
     pOrder->dTotalFee = 0;                //总费用
-    pOrder->ucTotalSegment = 0;            //充电明细段数
-    pOrder->dDefSegStartPower = 0;          //默认段起始电表读数
-    pOrder->dDefSegPower = 0;              //默认段电量
-    pOrder->dDefSegFee = 0;               //默认段电费
+
+    for(i = 0; i < 5; i++)
+    {
+        SegTimeInit(&(pOrder->chargeSegStatus_sharp[i]));
+        SegTimeInit(&(pOrder->chargeSegStatus_peak[i]));
+        SegTimeInit(&(pOrder->chargeSegStatus_shoulder[i]));
+        SegTimeInit(&(pOrder->chargeSegStatus_off_peak[i]));
+    }
+
+    pOrder->dTotalPower_sharp = 0;   //尖总电量
+    pOrder->dTotalPowerFee_sharp = 0;//尖总电费
+    pOrder->dTotalServFee_sharp = 0; //尖总服务费
+    pOrder->ulTotalTime_sharp = 0;    //尖充电时间
+
+    pOrder->dTotalPower_peak = 0;
+    pOrder->dTotalPowerFee_peak = 0;
+    pOrder->dTotalServFee_peak = 0;
+    pOrder->ulTotalTime_peak = 0;
+
+    pOrder->dTotalPower_shoulder = 0;
+    pOrder->dTotalPowerFee_shoulder = 0;
+    pOrder->dTotalServFee_shoulder = 0;
+    pOrder->ulTotalTime_shoulder = 0;
+
+    pOrder->dTotalPower_off_peak = 0;
+    pOrder->dTotalPowerFee_off_peak = 0;
+    pOrder->dTotalServFee_off_peak = 0;
+    pOrder->ulTotalTime_off_peak = 0;
 
     pOrder->ucPayType = 0;               //支付方式 0.云平台支付 1.钱包卡支付
     pOrder->ucStopType = 0;                  //停止类型
     pOrder->tStopTime = 0;              //停止时间
 
-    if(pOrder->plChargeSegment != NULL)
-    {
-        gdsl_list_flush(pOrder->plChargeSegment);
-    }
 }
-#if 0
-void saveOrder(CON_t *pCON)
-{
-	int temp;
-    FIL fp;
-    ErrorCode_t errcode;
-    UINT bw;
-    char result;
-    uint8_t *p;
-    cJSON *pJsonRoot = NULL;
-    cJSON *jsOrderObj = NULL;
-    cJSON *pSub = NULL;
-    cJSON *pSubJson = NULL;
-    cJSON *pSubJsonSeg = NULL;
-    cJSON *seg0,*seg1,*seg2,*seg3,*seg4,*seg5,*seg6,*seg7;// = NULL;
-
-    f_open(&fp, "system/order.txt", FA_CREATE_NEW | FA_WRITE);
-
-    pJsonRoot = GetCfgObj("system/order.txt", &errcode);
-    if(pJsonRoot == NULL || errcode != ERR_NO)
-    {
-        return 1;
-    }
-    tmpcjson = cJSON_Print(pJsonRoot);
-
-    pSub = cJSON_GetObjectItem(pJsonRoot,"MaxIndex");
-
-    if(pSub == NULL)
-    {
-        cJSON_Delete(pSub);
-        return 1;
-    }
-
-    pSub->valueint = pSub->valueint+1;
-    cJSON_ReplaceItemInObject(pJsonRoot,"MaxIndex",cJSON_CreateNumber(*((uint32_t *)(pSub->valueint))));
-    jsOrderObj = cJSON_GetObjectItem(pJsonRoot,"Order");//取得数组
-
-    pSubJson = cJSON_CreateObject();
-    if(pSubJson == NULL)
-    {
-        cJSON_Delete(pSubJson);
-        return 1;
-    }
-    cJSON_AddItemToArray(pSubJson,jsOrderObj);
-
-    cJSON_AddNumberToObject(pSubJson,"Index",pSub->valueint);
-    cJSON_AddStringToObject(pSubJson, "EVSEID",&(pCON->order.ucCardID));//数据错误
-    cJSON_AddNumberToObject(pSubJson,"CONID",pCON->order.ucCONID);
-    cJSON_AddNumberToObject(pSubJson,"TotalPower",pCON->order.dTotalPower);
-    cJSON_AddNumberToObject(pSubJson,"PayType",pCON->order.ucPayType);
-    cJSON_AddNumberToObject(pSubJson,"StopType",pCON->order.ucStopType);
-    cJSON_AddStringToObject(pSubJson,"CardID",&(pCON->order.ucCardID));
-    cJSON_AddNumberToObject(pSubJson,"TotalFee",pCON->order.dTotalFee);
-    cJSON_AddStringToObject(pSubJson,"OrderSN",&(pCON->order.ucCardID));//数据错误
-    cJSON_AddNumberToObject(pSubJson,"ServiceFeeType",pCON->order.ucServiceFeeType);
-    cJSON_AddNumberToObject(pSubJson,"ServiceFee",pCON->order.dTotalServiceFee);
-    cJSON_AddNumberToObject(pSubJson,"TotalSegment",pCON->order.ucTotalSegment);
-    cJSON_AddNumberToObject(pSubJson,"DefSegPower",pCON->order.dDefSegPower);
-    cJSON_AddNumberToObject(pSubJson,"DefSegFee",pCON->order.dDefSegFee);
-
-    pSubJsonSeg = cJSON_CreateArray();
-    cJSON_AddItemToObject(pSubJson,"Segments",pSubJsonSeg);
-    seg0 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg0",seg0);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    seg1 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg1",seg1);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    seg2 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg2",seg2);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    seg3 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg3",seg3);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    seg4 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg4",seg4);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    seg5 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg5",seg5);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    seg6 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg6",seg6);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    seg7 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg7",seg7);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-
-    //p = cJSON_Print(pJsonRoot);
-//    f_write(&fp, p, strlen(p), &bw);
-
-    f_close(&fp);
-//    SetCfgObj("system/order.txt",pJsonRoot);
-
-    cJSON_Delete(pJsonRoot);
-    return 0;
-}
-#endif
-

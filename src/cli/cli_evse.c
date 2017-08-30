@@ -14,15 +14,15 @@
 #include "gdsl_perm.h"
 #include <time.h>
 #include "modem.h"
-#include "dbparser.h"
-#include "query_output.h"
+#include "dbparser/dbparser.h"
+#include "dboutput/query_output.h"
 
 void cli_modeminfo_fnt(int argc, char **argv)
 {
-    printf_safe("=============ĞÅÏ¢=============\n");
+    printf_safe("=============ä¿¡æ¯=============\n");
 
-    printf_safe("=============×´Ì¬=============\n");
-    printf_safe("²å¿¨×´Ì¬£º      ");
+    printf_safe("=============çŠ¶æ€=============\n");
+    printf_safe("æ’å¡çŠ¶æ€ï¼š      ");
     if(pModem->status.eSimStat == CPIN_READY)
     {
         printf_safe("READY\n");
@@ -31,92 +31,158 @@ void cli_modeminfo_fnt(int argc, char **argv)
     {
         printf_safe("Other\n");
     }
-    printf_safe("ÍøÂç×¢²áĞÅÏ¢£º    ");
+    printf_safe("ç½‘ç»œæ³¨å†Œä¿¡æ¯ï¼š    ");
     switch(pModem->status.eNetReg)
     {
     case REG_LOCAl:
-        printf_safe("±¾µØ¿¨\n");
+        printf_safe("æœ¬åœ°å¡\n");
         break;
     case REG_ROAMING:
-        printf_safe("ÂşÓÎ¿¨\n");
+        printf_safe("æ¼«æ¸¸å¡\n");
         break;
     default:
-        printf_safe("ÓĞÎÊÌâ\n");
+        printf_safe("æœ‰é—®é¢˜\n");
         break;
     }
-    printf_safe("GPRSÍøÂç×¢²áĞÅÏ¢£º");
+    printf_safe("GPRSç½‘ç»œæ³¨å†Œä¿¡æ¯ï¼š");
     switch(pModem->status.eGprsReg)
     {
     case REG_LOCAl:
-        printf_safe("±¾µØ¿¨\n");
+        printf_safe("æœ¬åœ°å¡\n");
         break;
     case REG_ROAMING:
-        printf_safe("ÂşÓÎ¿¨\n");
+        printf_safe("æ¼«æ¸¸å¡\n");
         break;
     default:
-        printf_safe("ÓĞÎÊÌâ\n");
+        printf_safe("æœ‰é—®é¢˜\n");
         break;
     }
-    printf_safe("ĞÅºÅÇ¿¶È£º  %d\n", pModem->status.ucSignalQuality);
-    printf_safe("±¾µØµØÖ·£º  %s\n", pModem->status.strLocIP);
+    printf_safe("ä¿¡å·å¼ºåº¦ï¼š  %d\n", pModem->status.ucSignalQuality);
+    printf_safe("æœ¬åœ°åœ°å€ï¼š  %s\n", pModem->status.strLocIP);
+}
+void cli_protoinfo_fnt(int argc, char **argv)
+{
+    char tbuf [80] = {0};
+    int i;
+    struct tm *ts;
+
+    if (pechProto->info.tNewKeyChangeTime != 0)
+    {
+        ts = localtime(&pechProto->info.tNewKeyChangeTime);
+        strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %H:%M:%S", ts);
+    }
+
+    printf_safe("=============åè®®ä¿¡æ¯=============\n");
+    printf_safe("æœåŠ¡å™¨IPï¼š\t%s\n", pechProto->info.strServerIP);
+    printf_safe("æœåŠ¡å™¨ç«¯å£ï¼š\t%d\n", pechProto->info.usServerPort);
+    printf_safe("ç”¨æˆ·åï¼š\t%s\n", pechProto->info.strUserName);
+    printf_safe("ç”¨æˆ·å¯†ç ï¼š\t%s\n", pechProto->info.strUserPwd);
+    printf_safe("å¯†é’¥ï¼š\t\t%s\n", pechProto->info.strKey);
+    printf_safe("æ–°å¯†é’¥ï¼š\t%s\n", pechProto->info.strNewKey);
+    printf_safe("å¯†é’¥æ›´æ”¹æ—¶é—´ï¼š\t%s\n", tbuf);
+    printf_safe("åè®®ç‰ˆæœ¬å·ï¼š\t%d\n", pechProto->info.ucProtoVer);
+    printf_safe("å¿ƒè·³å‘¨æœŸï¼š\t%d\n", pechProto->info.ulHeartBeatCyc_ms);
+    printf_safe("çŠ¶æ€å‘¨æœŸï¼š\t%d\n", pechProto->info.ulStatusCyc_ms);
+    printf_safe("å®æ—¶æ•°æ®å‘¨æœŸï¼š\t%d\n", pechProto->info.ulRTDataCyc_ms);
+    printf_safe("é‡å¯æ ‡å¿—ï¼š\t%d\n", pechProto->info.ucResetAct);
+    printf_safe("=== å°– ===\n");
+    printf_safe("å°–ç”µè´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dPowerFee_sharp);
+    printf_safe("å°–æœåŠ¡è´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dServFee_sharp);
+    printf_safe("å°–æ—¶æ®µæ•°é‡ï¼š\t%d\n", pechProto->info.SegTime_sharp.ucSegCont);
+    printf_safe("æ—¶æ®µ:\t");
+    for(i = 0; i < pechProto->info.SegTime_sharp.ucSegCont; i++)
+    {
+        printf_safe("%dï¼š%d-%d\t", i + 1, pechProto->info.SegTime_sharp.ucStart[i], pechProto->info.SegTime_sharp.ucEnd[i]);
+    }
+    printf_safe("\n");
+    printf_safe("=== å³° ===\n");
+    printf_safe("å³°ç”µè´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dPowerFee_peak);
+    printf_safe("å³°æœåŠ¡è´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dServFee_peak);
+    printf_safe("å³°æ—¶æ®µæ•°é‡ï¼š\t%d\n", pechProto->info.SegTime_peak.ucSegCont);
+    printf_safe("æ—¶æ®µ: \t");
+    for(i = 0; i < pechProto->info.SegTime_peak.ucSegCont; i++)
+    {
+        printf_safe("%dï¼š%d-%d\t", i + 1, pechProto->info.SegTime_peak.ucStart[i], pechProto->info.SegTime_peak.ucEnd[i]);
+    }
+    printf_safe("\n");
+    printf_safe("=== å¹³ ===\n");
+    printf_safe("å¹³ç”µè´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dPowerFee_shoulder);
+    printf_safe("å¹³æœåŠ¡è´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dServFee_shoulder);
+    printf_safe("å¹³æ—¶æ®µæ•°é‡ï¼š\t%d\n", pechProto->info.SegTime_shoulder.ucSegCont);
+    printf_safe("æ—¶æ®µ: \t");
+    for(i = 0; i < pechProto->info.SegTime_shoulder.ucSegCont; i++)
+    {
+        printf_safe("%dï¼š%d-%d\t", i + 1, pechProto->info.SegTime_shoulder.ucStart[i], pechProto->info.SegTime_shoulder.ucEnd[i]);
+    }
+    printf_safe("\n");
+    printf_safe("=== è°· ===\n");
+    printf_safe("è°·ç”µè´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dPowerFee_off_peak);
+    printf_safe("è°·æœåŠ¡è´¹ç‡ï¼š\t%.4lf\n", pechProto->info.dServFee_off_peak);
+    printf_safe("è°·æ—¶æ®µæ•°é‡ï¼š\t%d\n", pechProto->info.SegTime_off_peak.ucSegCont);
+    printf_safe("æ—¶æ®µ: \t");
+    for(i = 0; i < pechProto->info.SegTime_off_peak.ucSegCont; i++)
+    {
+        printf_safe("%dï¼š%d-%d\t", i + 1, pechProto->info.SegTime_off_peak.ucStart[i], pechProto->info.SegTime_off_peak.ucEnd[i]);
+    }
+    printf_safe("\n");
 }
 void cli_evseinfo_fnt(int argc, char **argv)
 {
     CON_t *pCON;
     int i;
     /**/
-    printf_safe("=============ÅäÖÃĞÅÏ¢=============\n");
+    printf_safe("=============é…ç½®ä¿¡æ¯=============\n");
     printf_safe("EVSE SN:       %s\n", pEVSE->info.strSN);
     /**/
     printf_safe("EVSE ID:       %s\n", pEVSE->info.strID);
     /**/
-    printf_safe("Éè±¸ÀàĞÍ£º     ");
+    printf_safe("è®¾å¤‡ç±»å‹ï¼š     ");
     switch(pEVSE->info.ucType)
     {
     case defEVSEType_DC:
-        printf_safe("Ö±Á÷³äµç×®");
+        printf_safe("ç›´æµå……ç”µæ¡©");
         break;
     case defEVSEType_AC:
-        printf_safe("½»Á÷³äµç×®");
+        printf_safe("äº¤æµå……ç”µæ¡©");
         break;
     case defEVSEType_AC_DC:
-        printf_safe("½»Ö±Á÷Ò»Ìå");
+        printf_safe("äº¤ç›´æµä¸€ä½“");
         break;
     case defEVSEType_Wireless:
-        printf_safe("ÎŞÏßÉè±¸");
+        printf_safe("æ— çº¿è®¾å¤‡");
         break;
     case defEVSEType_Other:
-        printf_safe("ÆäËû");
+        printf_safe("å…¶ä»–");
         break;
     default:
         break;
     }
     printf_safe("\n");
     /**/
-    printf_safe("³äµçÇ¹¸öÊı:     %d\n", pEVSE->info.ucTotalCON);
+    printf_safe("å……ç”µæªä¸ªæ•°:     %d\n", pEVSE->info.ucTotalCON);
     /**/
-    printf_safe("¾­Î³¶È Lng,Lat (%.6lf , %.6lf)\n", pEVSE->info.dLng, pEVSE->info.dLat);
+    printf_safe("ç»çº¬åº¦ Lng,Lat (%.6lf , %.6lf)\n", pEVSE->info.dLng, pEVSE->info.dLat);
     /**/
-    printf_safe("·şÎñ·ÑÀàĞÍ:     ");
+    printf_safe("æœåŠ¡è´¹ç±»å‹:     ");
     switch(pEVSE->info.ucServiceFeeType)
     {
     case defOrderSerType_Order:
-        printf_safe("°´µ¥");
+        printf_safe("æŒ‰å•");
         break;
     case defOrderSerType_Power:
-        printf_safe("°´¶È");
+        printf_safe("æŒ‰åº¦");
         break;
     default:
         break;
     }
     printf_safe("\n");
     /**/
-    printf_safe("·şÎñ·Ñ:         %.2lf\n", pEVSE->info.dServiceFee);
+    printf_safe("æœåŠ¡è´¹:         %.2lf\n", pEVSE->info.dServiceFee);
     /**/
-    printf_safe("Ä¬ÈÏ¶Îµç·Ñ:     %.2lf\n", pEVSE->info.dDefSegFee);
+    printf_safe("é»˜è®¤æ®µç”µè´¹:     %.2lf\n", pEVSE->info.dDefSegFee);
     /**/
     uint8_t listsize_dbg = gdsl_list_get_size(pEVSE->info.plTemplSeg);
-    printf_safe("×ÜÊ±¶Î¸öÊı:     %d\n", listsize_dbg);
+    printf_safe("æ€»æ—¶æ®µä¸ªæ•°:     %d\n", listsize_dbg);
     struct tm *ts_dbg;
     TemplSeg_t *tmlseg_dgb;
 
@@ -124,7 +190,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
     {
         tmlseg_dgb = (TemplSeg_t *)(gdsl_list_search_by_position(pEVSE->info.plTemplSeg, i));
         ts_dbg = localtime(&(tmlseg_dgb->tStartTime));
-        printf_safe("Ê±¶Î %d  StartTime:%02d:%02d | ",
+        printf_safe("æ—¶æ®µ %d  StartTime:%02d:%02d | ",
                     i , ts_dbg->tm_hour, ts_dbg->tm_min  );
         ts_dbg = localtime(&(tmlseg_dgb->tEndTime));
         printf_safe("EndTime:%02d:%02d | ",
@@ -137,164 +203,316 @@ void cli_evseinfo_fnt(int argc, char **argv)
     {
         printf_safe("\n");
         pCON = CONGetHandle(i);
-        printf_safe("[ Ç¹ID: %d ]\n", pCON->info.ucCONID);
+        printf_safe("[ æªID: %d ]\n", pCON->info.ucCONID);
 
-        printf_safe("Ç¹ÀàĞÍ:        ");
+        printf_safe("æªç±»å‹:        ");
         switch(pCON->info.ucCONType)
         {
         case defCONType_AC:
-            printf_safe("½»Á÷");
+            printf_safe("äº¤æµ");
             break;
         case defCONType_DC:
-            printf_safe("Ö±Á÷");
+            printf_safe("ç›´æµ");
             break;
         default:
             break;
         }
         printf_safe("\n");
 
-        printf_safe("½Ó¿ÚÀàĞÍ:      ");
+        printf_safe("æ¥å£ç±»å‹:      ");
         switch(pCON->info.ucSocketType)
         {
         case defSocketTypeB:
-            printf_safe("BĞÍÁ¬½Ó");
+            printf_safe("Bå‹è¿æ¥");
             break;
         case defSocketTypeC:
-            printf_safe("CĞÍÁ¬½Ó");
+            printf_safe("Cå‹è¿æ¥");
             break;
         default:
             break;
         }
         printf_safe("\n");
 
-        printf_safe("µçÑ¹·¶Î§:      %.2lf ~ %.2lf\n", pCON->info.dVolatageLowerLimits, pCON->info.dVolatageUpperLimits);
-        printf_safe("ACÎÂ¶È·¶Î§:    %.2lf ~ %.2lf\n", pCON->info.dACTempLowerLimits, pCON->info.dACTempUpperLimits);
-        printf_safe("BĞÍÇ¹ÎÂ¶È·¶Î§: %.2lf ~ %.2lf\n", pCON->info.dSocketTempLowerLimits, pCON->info.dSocketTempUpperLimits);
-        printf_safe("¶î¶¨µçÁ÷:      %.2lf\n", pCON->info.dRatedCurrent);
-        printf_safe("¶î¶¨¹¦ÂÊ:      %.2lf\n", pCON->info.dRatedPower);
+        printf_safe("ç”µå‹èŒƒå›´:      %.2lf ~ %.2lf\n", pCON->info.dVolatageLowerLimits, pCON->info.dVolatageUpperLimits);
+        printf_safe("ACæ¸©åº¦èŒƒå›´:    %.2lf ~ %.2lf\n", pCON->info.dACTempLowerLimits, pCON->info.dACTempUpperLimits);
+        printf_safe("Bå‹æªæ¸©åº¦èŒƒå›´: %.2lf ~ %.2lf\n", pCON->info.dSocketTempLowerLimits, pCON->info.dSocketTempUpperLimits);
+        printf_safe("é¢å®šç”µæµ:      %.2lf\n", pCON->info.dRatedCurrent);
+        printf_safe("é¢å®šåŠŸç‡:      %.2lf\n", pCON->info.dRatedPower);
         printf_safe("QRCode  :      %s\n", pCON->info.strQRCode);
     }
+    printf_safe("è½¯ä»¶ç‰ˆæœ¬:      %s\n", pEVSE->info.strSoftVer);
 }
 
+
+extern ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder);
 void cli_evseorder_fnt(int argc, char **argv)
 {
     CON_t *pCON;
-    OrderState_t statOrder;//¼ÇÂ¼¶©µ¥×´Ì¬
+    OrderState_t statOrder;//è®°å½•è®¢å•çŠ¶æ€
     char buf [80];
     struct tm *ts;
-    int i;
+    int i, t;
+    time_t now_dummy;
+    int id;
 
     char memseg[1024];
     db_query_mm_t mm;
     db_op_base_t* root;
-    
-    if(strcmp(argv[1], "--all") == 0)
+
+    if(strcmp(argv[1], "--all") == 0 || strcmp(argv[1], "-a") == 0 )
     {
         init_query_mm(&mm, memseg, 1024);
         root = parse("SELECT * FROM OrderDB;", &mm);
         printQuery(root, &mm);
         closeexecutiontree(root, &mm);
+        return;
     }
     else
     {
-        for(i = 0; i < pEVSE->info.ucTotalCON; i++)
+        for(id = 0; id < pEVSE->info.ucTotalCON; id++)
         {
-            pCON = CONGetHandle(i);
-            printf_safe("Ãû³Æ=========×´Ì¬=======   CONID %d\r\n", i);
+            pCON = CONGetHandle(id);
+
+            now_dummy = 1500944498;//2017-07-25 09:01:38
+//            now_dummy = 1500987698;//21 //è·¨å¤©ï¼ŒåŒæ—¶æ®µ
+//            now_dummy = 1501141978;
+//            now_dummy = 1501142404;//2017/7/27 16:0:4  //è·¨å¤©ï¼Œä¸åŒæ—¶æ®µ
+            testmakeOrder(pCON, 0 , STATE_ORDER_TMP);
+            testmakeOrder(pCON, now_dummy , STATE_ORDER_MAKE); //2017-07-25 09:01:38
+            testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE); //2017-07-25 09:01:38
+            printf_safe("start time = %d\n", clock());
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38 22
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38
+                vTaskDelay(1);
+            }
+            printf_safe("end time = %d\n", clock());
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38 23
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38 24
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38 1
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38 2
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38 3
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38 4
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38
+                vTaskDelay(1);
+            }
+            for(t = 0; t < 3600; t++)
+            {
+                testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38 5
+                testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38
+                vTaskDelay(1);
+            }
+
+            testmakeOrder(pCON, now_dummy+1 , STATE_ORDER_FINISH); //2017-07-25 17:01:39
+
+            printf_safe("åç§°=========çŠ¶æ€=======   CONID %d\r\n", id);
             switch(statOrder)
             {
             case STATE_ORDER_IDLE:
-                printf_safe("¶©µ¥×´Ì¬£ºIDLE");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tIDLE");
                 break;
             case STATE_ORDER_TMP:
-                printf_safe("¶©µ¥×´Ì¬£ºIDLE");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tIDLE");
                 break;
             case STATE_ORDER_WAITSTART:
-                printf_safe("¶©µ¥×´Ì¬£ºWAITSTART");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tWAITSTART");
                 break;
             case STATE_ORDER_MAKE:
-                printf_safe("¶©µ¥×´Ì¬£ºMAKE");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tMAKE");
                 break;
             case STATE_ORDER_UPDATE:
-                printf_safe("¶©µ¥×´Ì¬£ºUPDATE");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tUPDATE");
                 break;
             case STATE_ORDER_FINISH:
-                printf_safe("¶©µ¥×´Ì¬£ºFINISH");
+                printf_safe("è®¢å•çŠ¶æ€ï¼š\tFINISH");
                 break;
             }
+            printf_safe("\n");
             //Card ID
-            printf_safe("CardID:        ");
+            printf_safe("CardID:\t");
             for(i = 0; i < defCardIDLength; i++)
             {
                 printf_safe("%02X ", pCON->order.ucCardID[i]);
             }
             printf_safe("\n");
-            //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 2:Ç··Ñ 0£ºÎ´×¢²á¿¨
-            printf_safe("ÕË»§×´Ì¬:      ");
+            //å¸æˆ·çŠ¶æ€ 1ï¼šæ³¨å†Œå¡ 2:æ¬ è´¹ 0ï¼šæœªæ³¨å†Œå¡
+            printf_safe("è´¦æˆ·çŠ¶æ€:\t");
             switch(pCON->order.ucAccountStatus)
             {
             case 1:
-                printf_safe(" ×¢²á¿¨");
+                printf_safe("æ³¨å†Œå¡");
                 break;
             case 2:
-                printf_safe("Ç··Ñ");
+                printf_safe("æ¬ è´¹");
                 break;
             case 0:
-                printf_safe("Î´×¢²á");
+                printf_safe("æœªæ³¨å†Œ");
                 break;
             }
             printf_safe("\n");
-            //double  dBalance;           //Óà¶î
-            printf_safe("Óà¶î:            %.2lf", pCON->order.dBalance);
-            //uint8_t ucStartType;   //4 ÓĞ¿¨ 5 ÎŞ¿¨
+            //dBalance;           //ä½™é¢
+            printf_safe("ä½™é¢:\t\t%.2lf\n", pCON->order.dBalance);
+            //ucStartType;   //4 æœ‰å¡ 5 æ— å¡
             if(pCON->order.ucStartType == 4)
             {
-                printf_safe("Æô¶¯·½Ê½:        ÓĞ¿¨\n");
+                printf_safe("å¯åŠ¨æ–¹å¼:\tæœ‰å¡\n");
             }
             else
             {
-                printf_safe("Æô¶¯·½Ê½:        ÍøÂç\n");
+                printf_safe("å¯åŠ¨æ–¹å¼:\tç½‘ç»œ\n");
             }
-            //uint8_t strOrderSN[defOrderSNLength]; //½»Ò×Á÷Ë®ºÅ
-            printf_safe("½»Ò×Á÷Ë®ºÅ:         %s\n", pCON->order.strOrderSN);
-            //double dLimitFee;                      //³äµç½ØÖÁ½ğ¶î
-            printf_safe("³äµç½ØÖ¹½ğ¶î:        %.2lf\n", pCON->order.dLimitFee);
+            //strOrderSN[defOrderSNLength]; //äº¤æ˜“æµæ°´å·
+            printf_safe("äº¤æ˜“æµæ°´å·:\t%s\n", pCON->order.strOrderSN);
+            //dLimitFee;                      //å……ç”µæˆªè‡³é‡‘é¢
+            printf_safe("å……ç”µæˆªæ­¢é‡‘é¢:\t%.2lf\n", pCON->order.dLimitFee);
             ts = localtime (& pCON->order.tStartTime);
-            strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-            printf_safe("Æô¶¯Ê±¼ä:          %s \n", buf);
-            printf_safe("Æô¶¯Ê±µç±í¶ÁÊı    %.2lf\n", pCON->order.dStartPower);
-            printf_safe("·şÎñ·ÑÀàĞÍ:     ");
-            switch(pCON->order.ucServiceFeeType)
+            strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+            printf_safe("å¯åŠ¨æ—¶é—´:\t%s \n", buf);
+            printf_safe("å¯åŠ¨æ—¶ç”µè¡¨è¯»æ•°\t%.2lf\n", pCON->order.dStartPower);
+
+            printf_safe("========å……ç”µè¿‡ç¨‹æ•°æ®=========\n");
+            printf_safe("æ€»ç”µé‡:       %.2lf\n", pCON->order.dTotalPower);
+            printf_safe("æ€»ç”µè´¹:       %.2lf\n", pCON->order.dTotalPowerFee);
+            printf_safe("æ€»æœåŠ¡è´¹:     %.2lf\n", pCON->order.dTotalServFee);
+            printf_safe("æ€»è´¹ç”¨:       %.2lf\n", pCON->order.dTotalFee);
+            printf_safe("å°–ç”µä»·ï¼š      %.4lf\n", pechProto->info.dPowerFee_sharp);
+            printf_safe("å°–æœåŠ¡è´¹å•ä»·  %.4lf\n", pechProto->info.dServFee_sharp);
+            printf_safe("å°–ç”µé‡        %.2lf\n", pCON->order.dTotalPower_sharp);
+            printf_safe("å°–å……ç”µé‡‘é¢    %.2lf\n", pCON->order.dTotalPowerFee_sharp);
+            printf_safe("å°–æœåŠ¡è´¹é‡‘é¢  %.2lf\n", pCON->order.dTotalServFee_sharp);
+            printf_safe("å°–å……ç”µæ—¶é•¿    %d\n", pCON->order.ulTotalTime_sharp);
+            printf_safe("å°–è¯¦ç»†æ•°æ®ï¼š\n");
+            for(i = 0; i < 5; i++)
             {
-            case defOrderSerType_Order:
-                printf_safe("°´µ¥");
-                break;
-            case defOrderSerType_Power:
-                printf_safe("°´¶È");
-                break;
-            default:
-                break;
+                if(pCON->order.chargeSegStatus_sharp[i].tStartTime > 0)
+                {
+                    printf_safe("\tæ—¶æ®µ %d\n", i+1);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_sharp[i].tStartTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tå¼€å§‹æ—¶é—´ï¼š%s\n", buf);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_sharp[i].tEndTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tç»“æŸæ—¶é—´ï¼š%s\n", buf);
+
+                    printf_safe("\tå¼€å§‹ç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_sharp[i].dStartPower);
+                    printf_safe("\tæ—¶æ®µç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_sharp[i].dPower);
+                }
             }
-            printf_safe("\n");
-            printf_safe("========³äµç¹ı³ÌÊı¾İ=========\n");
-            printf_safe("×ÜµçÁ¿:       %.2lf\n", pCON->order.dTotalPower);
-            printf_safe("×Üµç·Ñ:       %.2lf\n", pCON->order.dTotalPowerFee);
-            printf_safe("×Ü·şÎñ·Ñ:     %.2lf\n", pCON->order.dTotalServiceFee);
-            printf_safe("×Ü·ÑÓÃ:       %.2lf\n", pCON->order.dTotalFee);
-            printf_safe("³äµçÃ÷Ï¸¶ÎÊı: %d\n", pCON->order.ucTotalSegment);
-            printf_safe("Ä¬ÈÏ¶ÎÆğÊ¼µçÁ¿: %.2lf\n", pCON->order.dDefSegStartPower);
-            printf_safe("Ä¬ÈÏ¶ÎµçÁ¿:   %.2lf\n", pCON->order.dDefSegPower);
-            printf_safe("Ä¬ÈÏ¶Îµç·Ñ:   %.2lf\n", pCON->order.dDefSegFee);
-            printf_safe("========Í£Ö¹Ê±Êı¾İ=========\n");
+            printf_safe("å³°ç”µä»·ï¼š      %.4lf\n", pechProto->info.dPowerFee_peak);
+            printf_safe("å³°æœåŠ¡è´¹å•ä»·  %.4lf\n", pechProto->info.dServFee_peak);
+            printf_safe("å³°ç”µé‡        %.2lf\n", pCON->order.dTotalPower_peak);
+            printf_safe("å³°å……ç”µé‡‘é¢    %.2lf\n", pCON->order.dTotalPowerFee_peak);
+            printf_safe("å³°æœåŠ¡è´¹é‡‘é¢  %.2lf\n", pCON->order.dTotalServFee_peak);
+            printf_safe("å³°å……ç”µæ—¶é•¿    %d\n", pCON->order.ulTotalTime_peak);
+            printf_safe("å³°è¯¦ç»†æ•°æ®ï¼š\n");
+            for(i = 0; i < 5; i++)
+            {
+                if(pCON->order.chargeSegStatus_peak[i].tStartTime > 0)
+                {
+                    printf_safe("\tæ—¶æ®µ %d\n", i+1);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_peak[i].tStartTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tå¼€å§‹æ—¶é—´ï¼š%s\n", buf);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_peak[i].tEndTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tç»“æŸæ—¶é—´ï¼š%s\n", buf);
+
+                    printf_safe("\tå¼€å§‹ç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_peak[i].dStartPower);
+                    printf_safe("\tæ—¶æ®µç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_peak[i].dPower);
+                }
+            }
+            printf_safe("å¹³ç”µä»·ï¼š      %.4lf\n", pechProto->info.dPowerFee_shoulder);
+            printf_safe("å¹³æœåŠ¡è´¹å•ä»·  %.4lf\n", pechProto->info.dServFee_shoulder);
+            printf_safe("å¹³ç”µé‡        %.2lf\n", pCON->order.dTotalPower_shoulder);
+            printf_safe("å¹³å……ç”µé‡‘é¢    %.2lf\n", pCON->order.dTotalPowerFee_shoulder);
+            printf_safe("å¹³æœåŠ¡è´¹é‡‘é¢  %.2lf\n", pCON->order.dTotalServFee_shoulder);
+            printf_safe("å¹³å……ç”µæ—¶é•¿    %d\n", pCON->order.ulTotalTime_shoulder);
+            printf_safe("å¹³è¯¦ç»†æ•°æ®ï¼š\n");
+            for(i = 0; i < 5; i++)
+            {
+                if(pCON->order.chargeSegStatus_shoulder[i].tStartTime > 0)
+                {
+                    printf_safe("\tæ—¶æ®µ %d\n", i+1);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_shoulder[i].tStartTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tå¼€å§‹æ—¶é—´ï¼š%s\n", buf);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_shoulder[i].tEndTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tç»“æŸæ—¶é—´ï¼š%s\n", buf);
+
+                    printf_safe("\tå¼€å§‹ç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_shoulder[i].dStartPower);
+                    printf_safe("\tæ—¶æ®µç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_shoulder[i].dPower);
+                }
+            }
+            printf_safe("è°·ç”µä»·ï¼š      %.4lf\n", pechProto->info.dPowerFee_off_peak);
+            printf_safe("è°·æœåŠ¡è´¹å•ä»·  %.4lf\n", pechProto->info.dServFee_off_peak);
+            printf_safe("è°·ç”µé‡        %.2lf\n", pCON->order.dTotalPower_off_peak);
+            printf_safe("è°·å……ç”µé‡‘é¢    %.2lf\n", pCON->order.dTotalPowerFee_off_peak);
+            printf_safe("è°·æœåŠ¡è´¹é‡‘é¢  %.2lf\n", pCON->order.dTotalServFee_off_peak);
+            printf_safe("è°·å……ç”µæ—¶é•¿    %d\n", pCON->order.ulTotalTime_off_peak);
+            printf_safe("è°·è¯¦ç»†æ•°æ®ï¼š\n");
+            for(i = 0; i < 5; i++)
+            {
+                if(pCON->order.chargeSegStatus_off_peak[i].tStartTime > 0)
+                {
+                    printf_safe("\tæ—¶æ®µ %d\n", i+1);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_off_peak[i].tStartTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tå¼€å§‹æ—¶é—´ï¼š%s\n", buf);
+
+                    ts = localtime (& pCON->order.chargeSegStatus_off_peak[i].tEndTime);
+                    strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+                    printf_safe("\tç»“æŸæ—¶é—´ï¼š%s\n", buf);
+
+                    printf_safe("\tå¼€å§‹ç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_off_peak[i].dStartPower);
+                    printf_safe("\tæ—¶æ®µç”µé‡ï¼š%.2lf\n", pCON->order.chargeSegStatus_off_peak[i].dPower);
+                }
+            }
+            printf_safe("========åœæ­¢æ—¶æ•°æ®=========\n");
             if(pCON->order.ucPayType == defOrderPayType_Online)
             {
-                printf_safe("Ö§¸¶·½Ê½:      ÔÚÏßÖ§¸¶\n");
+                printf_safe("æ”¯ä»˜æ–¹å¼:\tåœ¨çº¿æ”¯ä»˜\n");
             }
             else
             {
-                printf_safe("Ö§¸¶·½Ê½:      ÀëÏßÖ§¸¶\n");
+                printf_safe("æ”¯ä»˜æ–¹å¼:\tç¦»çº¿æ”¯ä»˜\n");
             }
-            printf_safe("Í£Ö¹ÀàĞÍ:         ");
+            printf_safe("åœæ­¢ç±»å‹:\t");
             switch(pCON->order.ucStopType)
             {
             case defOrderStopType_RFID:
@@ -304,45 +522,45 @@ void cli_evseorder_fnt(int argc, char **argv)
                 printf_safe("remote\n");
                 break;
             case defOrderStopType_Full:
-                printf_safe("³äÂúÍ£Ö¹\n");
+                printf_safe("å……æ»¡åœæ­¢\n");
                 break;
             case defOrderStopType_Fee:
-                printf_safe("´ïµ½³äµç½ğ¶î\n");//´ïµ½³äµç½ğ¶î
+                printf_safe("è¾¾åˆ°å……ç”µé‡‘é¢\n");//è¾¾åˆ°å……ç”µé‡‘é¢
                 break;
             case defOrderStopType_Scram:
             case defOrderStopType_NetLost:
             case defOrderStopType_Poweroff:
             case defOrderStopType_OverCurr:
             case defOrderStopType_Knock:
-                printf_safe("Òì³£Í£Ö¹\n");//Òì³£Í£Ö¹
+                printf_safe("å¼‚å¸¸åœæ­¢\n");//å¼‚å¸¸åœæ­¢
                 break;
             default:
-                printf_safe("ÆäËûÔ­ÒòÍ£Ö¹\n");;//ÆäËûÔ­ÒòÍ£Ö¹
+                printf_safe("å…¶ä»–åŸå› åœæ­¢\n");;//å…¶ä»–åŸå› åœæ­¢
                 break;
             }
             ts = localtime (& pCON->order.tStopTime);
-            strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-            printf_safe("Í£Ö¹Ê±¼ä:          %s \n", buf);
+            strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
+            printf_safe("åœæ­¢æ—¶é—´:\t%s \n", buf);
+            OrderDBInsertItem(&(pCON->order));
+            OrderInit(&(pCON->order));
         }
     }
-
-    
 }
 void cli_evsestatus_fnt(int argc, char **argv)
 {
     CON_t *pCON;
     int i;
-    printf_safe("Ãû³Æ=========×´Ì¬£¨1£ºÒì³£ 0£ºÕı³££©=======   EVSE\r\n");
-    printf_safe("·ÀÀ×£º        %d\n", pEVSE->status.ulArresterState);
-    printf_safe("·À×²½Ç¶È£º    %d\n", pEVSE->status.ulKnockState );
-    printf_safe("PE×´Ì¬£º      %d\n", pEVSE->status.ulPEState);
-    printf_safe("µôµç£º        %d\n", pEVSE->status.ulPowerOffState);
+    printf_safe("åç§°=========çŠ¶æ€ï¼ˆ1ï¼šå¼‚å¸¸ 0ï¼šæ­£å¸¸ï¼‰=======   EVSE\r\n");
+    printf_safe("é˜²é›·ï¼š        %d\n", pEVSE->status.ulArresterState);
+    printf_safe("é˜²æ’è§’åº¦ï¼š    %d\n", pEVSE->status.ulKnockState );
+    printf_safe("PEçŠ¶æ€ï¼š      %d\n", pEVSE->status.ulPEState);
+    printf_safe("æ‰ç”µï¼š        %d\n", pEVSE->status.ulPowerOffState);
     printf_safe("\n");
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        printf_safe("Ãû³Æ=========×´Ì¬=======   CONID %d\r\n", i);
-        printf_safe("CP×´Ì¬£º      ");
+        printf_safe("åç§°=========çŠ¶æ€=======   CONID %d\r\n", i);
+        printf_safe("CPçŠ¶æ€ï¼š      ");
         switch(pCON->status.xCPState)
         {
         case CP_ERR:
@@ -371,7 +589,7 @@ void cli_evsestatus_fnt(int argc, char **argv)
         }
         printf_safe("\n");
         ///////////CC
-        printf_safe("CC×´Ì¬£º      ");
+        printf_safe("CCçŠ¶æ€ï¼š      ");
         switch(pCON->status.xCCState)
         {
         case CC_NO:
@@ -385,7 +603,7 @@ void cli_evsestatus_fnt(int argc, char **argv)
         }
         printf_safe("\n");
         /////////// PLUG
-        printf_safe("²åÇ¹×´Ì¬£º    ");
+        printf_safe("æ’æªçŠ¶æ€ï¼š    ");
         switch(pCON->status.xPlugState)
         {
         case PLUG:
@@ -399,7 +617,7 @@ void cli_evsestatus_fnt(int argc, char **argv)
         }
         printf_safe("\n");
         ///////////
-        printf_safe("Ç¹Ëø×´Ì¬£º      ");
+        printf_safe("æªé”çŠ¶æ€ï¼š      ");
         switch(pCON->status.xBTypeSocketLockState)
         {
         case LOCK:
@@ -413,20 +631,29 @@ void cli_evsestatus_fnt(int argc, char **argv)
         }
         printf_safe("\n");
 
-        printf_safe("¸ºÔØ°Ù·Ö±È£º  %d\n", pCON->status.ucLoadPercent);
-        printf_safe("LÎÂ¶È£º       %.2lf\n", pCON->status.dACLTemp);
-        printf_safe("NÎÂ¶È£º       %.2lf\n", pCON->status.dACNTemp);
-        printf_safe("Ç¹×ùÎÂ¶È1£º   %.2lf\n", pCON->status.dBTypeSocketTemp1);
-        printf_safe("Ç¹×ùÎÂ¶È2£º   %.2lf\n", pCON->status.dBTypeSocketTemp2);
-        printf_safe("³äµçµçÑ¹£º    %.2lf\n", pCON->status.dChargingVoltage);
-        printf_safe("³äµçµçÁ÷£º    %.2lf\n", pCON->status.dChargingCurrent);
-        printf_safe("µçÑ¹ÆµÂÊ£º    %.2lf\n", pCON->status.dChargingFrequence);
-        printf_safe("µç±í¶ÁÊı£º    %.2lf\n", pCON->status.dChargingPower);
-        printf_safe("¼ÌµçÆ÷£º      L %d N %d\n", pCON->status.ucRelayLState, pCON->status.ucRelayNState);
+        printf_safe("è´Ÿè½½ç™¾åˆ†æ¯”ï¼š  %d\n", pCON->status.ucLoadPercent);
+        printf_safe("Læ¸©åº¦ï¼š       %.2lf\n", pCON->status.dACLTemp);
+        printf_safe("Næ¸©åº¦ï¼š       %.2lf\n", pCON->status.dACNTemp);
+        printf_safe("æªåº§æ¸©åº¦1ï¼š   %.2lf\n", pCON->status.dBTypeSocketTemp1);
+        printf_safe("æªåº§æ¸©åº¦2ï¼š   %.2lf\n", pCON->status.dBTypeSocketTemp2);
+        printf_safe("å……ç”µç”µå‹ï¼š    %.2lf\n", pCON->status.dChargingVoltage);
+        printf_safe("å……ç”µç”µæµï¼š    %.2lf\n", pCON->status.dChargingCurrent);
+        printf_safe("ç”µå‹é¢‘ç‡ï¼š    %.2lf\n", pCON->status.dChargingFrequence);
+        printf_safe("ç”µè¡¨è¯»æ•°ï¼š    %.2lf\n", pCON->status.dChargingPower);
+        printf_safe("ç»§ç”µå™¨ï¼š      L %d N %d\n", pCON->status.ucRelayLState, pCON->status.ucRelayNState);
 
         printf_safe("\n");
     }
 }
+tinysh_cmd_t cli_protoinfo_cmd =
+{
+    0,
+    "protoinfo",
+    "display proto info",
+    0,
+    cli_protoinfo_fnt,
+    "<cr>", 0, 0
+};
 tinysh_cmd_t cli_evseinfo_cmd =
 {
     0,

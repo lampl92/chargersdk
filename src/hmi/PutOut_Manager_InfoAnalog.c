@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -385,8 +385,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 **********************************************************************
 */
-/*********************************************************************
-*
+
 /** @brief
  *  输出管理员界面里的信息查询模拟量部分
  * @param
@@ -394,7 +393,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  * @return
  *       CreateManagerInfoAnalog
 */
-WM_HWIN CreateManagerInfoAnalog(void);
 WM_HWIN CreateManagerInfoAnalog(void)
 {
     _hWinManagerInfoAnalog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
