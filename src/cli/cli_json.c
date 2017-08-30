@@ -18,8 +18,22 @@ char *makeJson()
         //error happend here
         return NULL;
     }
-    cJSON_AddStringToObject(pJsonRoot, "hello", "hello world");
-    cJSON_AddNumberToObject(pJsonRoot, "number", 10010);
+    cJSON_AddStringToObject(pJsonRoot, "hello1", "hello world1");
+    cJSON_AddStringToObject(pJsonRoot, "hello2", "hello world2");
+    cJSON_AddStringToObject(pJsonRoot, "hello3", "hello world3");
+    cJSON_AddStringToObject(pJsonRoot, "hello4", "hello world4");
+    cJSON_AddStringToObject(pJsonRoot, "hello5", "hello world5");
+    cJSON_AddStringToObject(pJsonRoot, "hello6", "hello world6");
+    cJSON_AddNumberToObject(pJsonRoot, "number1", 1234);
+    cJSON_AddNumberToObject(pJsonRoot, "number2", 431);
+    cJSON_AddNumberToObject(pJsonRoot, "number3", 12.3);
+    cJSON_AddNumberToObject(pJsonRoot, "number4", 234);
+    cJSON_AddNumberToObject(pJsonRoot, "number5", 4535);
+    cJSON_AddNumberToObject(pJsonRoot, "number6", 1234);
+    cJSON_AddNumberToObject(pJsonRoot, "number7", 4543);
+    cJSON_AddNumberToObject(pJsonRoot, "number8", 567);
+    cJSON_AddNumberToObject(pJsonRoot, "number9", 234);
+    cJSON_AddNumberToObject(pJsonRoot, "number0", 45676);
     cJSON_AddBoolToObject(pJsonRoot, "bool", 1);
     cJSON *pSubJson = NULL;
     pSubJson = cJSON_CreateObject();
@@ -64,22 +78,22 @@ void parseJson(char *pMsg)
     }
 
     // get string from json
-    cJSON *pSub = cJSON_GetObjectItem(pJson, "hello");
+    cJSON *pSub = cJSON_GetObjectItem(pJson, "hello5");
     if(NULL == pSub)
     {
         //get object named "hello" faild
     }
-    printf_safe("obj_1 : %s\n", pSub->valuestring);
+    printf_safe("hello5 : %s\n", pSub->valuestring);
 
     // get number from json
-    pSub = cJSON_GetObjectItem(pJson, "number");
+    pSub = cJSON_GetObjectItem(pJson, "number8");
     if(NULL == pSub)
     {
         //get number from json faild
     }
-    printf_safe("obj_2 : %d\n", pSub->valueint);
+    printf_safe("number8 : %d\n", pSub->valueint);
     //pSub->valuedouble = 1.1;
-    cJSON_ReplaceItemInObject(pJson, "number", cJSON_CreateNumber(200));
+    cJSON_ReplaceItemInObject(pJson, "number8", cJSON_CreateNumber(200));//修改number的值
 
 
 
@@ -89,7 +103,7 @@ void parseJson(char *pMsg)
     {
         // get bool from json faild
     }
-    printf_safe("obj_3 : %d\n", pSub->valueint);
+    printf_safe("bool : %d\n", pSub->valueint);
 
 // get sub object
     pSub = cJSON_GetObjectItem(pJson, "subobj");
@@ -167,7 +181,9 @@ static void cli_makeJson_fnt(int argc, char **argv)
     int i;
 
     uint8_t *p = makeJson();
-    printf_safe("\n%s\n", p);
+    printf_safe("\n");
+    printf_safe("%s", p);
+    printf_safe("\n");
     f_open(&fp, "test.json", FA_CREATE_ALWAYS | FA_WRITE);
     f_write(&fp, p, strlen(p), &bw);
     printf_safe("写入%d字节\n", bw);

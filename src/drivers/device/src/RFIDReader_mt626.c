@@ -11,10 +11,8 @@
 #include "bsp_uart.h"
 
 /** @note (rgw#1#): 调用的外部变量与函数, 如在其他系统中使用应实现对应的函数. */
-extern UART_HandleTypeDef RFID_UARTx_Handler;
-extern Queue *pRfidRecvQue;
-extern HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 extern void vTaskDelay( const TickType_t xTicksToDelay );
+
 
 /** @brief 延时函数,用于命令传输过程中等待
  *
@@ -59,7 +57,7 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
     uint32_t ucFailedCounts;
     MT626COM_t *pMT626COMObj;
     uint8_t *pucSendBuffer;
-    HAL_StatusTypeDef hal_res;
+    uint32_t btw;
 
     ucFailedCounts = 0;
     pMT626COMObj = (MT626COM_t *)pObj;
@@ -67,55 +65,21 @@ static MT_RESULT sendCommand(void *pObj, uint8_t ucSendID, uint32_t ucSendLength
 
     do
     {
-        hal_res = HAL_UART_Transmit(&RFID_UARTx_Handler, pucSendBuffer, ucSendLength, 0xFFFF);
-        if(hal_res != HAL_OK)
+        btw =  uart_write(UART_PORT_RFID, pucSendBuffer, ucSendLength);
+        if(btw != ucSendLength)
         {
             ucFailedCounts++;
             MT626DelayMS(ucTimeOutMS);
         }
     }
-    while(hal_res != HAL_OK && ucFailedCounts < uiTryTimes);
-    if(hal_res != HAL_OK || ucFailedCounts == uiTryTimes)
+    while(btw != ucSendLength && ucFailedCounts < uiTryTimes);
+    if(btw != ucSendLength || ucFailedCounts == uiTryTimes)
     {
         return MT_COM_FAIL;
     }
     else
     {
         return MT_SUCCEED;
-    }
-
-}
-
-/** @brief 通过串口接收队列读取命令
- *
- * @param pObj void*            MT626实例
- * @param puiRecvdLen uint32_t* 返回接收到的命令长度指针
- * @return MT_RESULT            返回通讯状态
- *
- */
-static MT_RESULT recvReadEx(void *pObj, uint32_t *puiRecvdLen)
-{
-    uint8_t ch;
-    uint32_t i;
-    MT626COM_t *pMT626COM;
-
-    pMT626COM = (MT626COM_t *)pObj;
-    ch = 0;
-    i = 0;
-
-    while(readRecvQue(pRfidRecvQue, &ch, 1) == 0)
-    {
-        pMT626COM->pucRecvBuffer[i] = ch;
-        i++;
-    }
-    if(i > 0)
-    {
-        *puiRecvdLen = i;
-        return MT_SUCCEED;
-    }
-    else
-    {
-        return MT_FAIL;
     }
 
 }
@@ -138,7 +102,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *puiRecvdLe
 
     pucRecvBuffer = ((MT626COM_t *)pObj)->pucRecvBuffer;
 
-    recvReadEx(pObj, puiRecvdLen);
+    readRecvQueEx(pRfidRecvQue, pucRecvBuffer, 0, puiRecvdLen, 1);
     if(*puiRecvdLen == 0)
     {
         return MT_COM_FAIL;
@@ -445,11 +409,13 @@ static void deleteCOM(void *pObj)
         if(pMT626COMObj->pMT626CMD[i] != NULL)
         {
             free(pMT626COMObj->pMT626CMD[i]);
+            pMT626COMObj->pMT626CMD[i] = NULL;
         }
     }
     free(pMT626COMObj ->pucRecvBuffer);
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
+    pMT626COMObj = NULL;
 }
 
 /** @brief 构造MT626通讯实例
@@ -511,6 +477,7 @@ void testmt626(void)
 
     while(1)
     {
+
         //eg. 无发送数据,无返回数据
         state = TransToMT626(pmt626com, MT626_FIND_CMD, NULL, 0);
         if(state == MT_STATE_Y)

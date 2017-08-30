@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h 
+  * @file    Project/STM32F4xx_StdPeriph_Templates/stm32f4xx_it.h
   * @author  MCD Application Team
   * @version V1.0.0
   * @date    30-September-2011
@@ -17,7 +17,7 @@
   *
   * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_IT_H
@@ -25,7 +25,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
@@ -44,6 +44,7 @@ void UsageFault_Handler(void);
 void DebugMon_Handler(void);
 //void PendSV_Handler(void);
 //void SysTick_Handler(void);
+void DMA2_Stream0_IRQHandler(void);
 
 #ifdef __cplusplus
 }

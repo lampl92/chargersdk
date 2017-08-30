@@ -3,20 +3,59 @@
 #include "nand_diskio.h"
 #include "cJSON.h"
 #include "s2j.h"
+#include <time.h>
+#include "stringName.h"
+#include "factorycfg.h"
+
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
 uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 #endif
 
-Sysconf_t   xSysconf;//¥Ê∑≈œµÕ≥≥ı ºªØ≤Œ ˝
+Sysconf_t   xSysconf;//Â≠òÊîæÁ≥ªÁªüÂàùÂßãÂåñÂèÇÊï∞
 
 FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
 char NANDDISKPath[4]; /* RAM disk logical drive path */
 
-static void Error_Handler()
+extern time_t time_dat;
+extern void Error_Handler(void);
+static void fatfs_format(void)
 {
-    while(1);
+    BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
+
+    /*##-3- Create a FAT file system (format) on the logical drive #########*/
+    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT32, 0, work, sizeof(work)) != FR_OK)
+    {
+        /* FatFs Format Error */
+        Error_Handler();
+    }
+
+}
+
+void timeInit()
+{
+    time_t settime;
+    struct tm orig;
+    RTC_TimeTypeDef RTC_TimeStruct;
+    RTC_DateTypeDef RTC_DateStruct;
+
+    HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
+    HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
+
+    orig.tm_sec = RTC_TimeStruct.Seconds;
+    orig.tm_min = RTC_TimeStruct.Minutes;
+    orig.tm_hour = RTC_TimeStruct.Hours;
+    orig.tm_mday = RTC_DateStruct.Date;
+    orig.tm_mon = RTC_DateStruct.Month - 1;
+    orig.tm_year = 2000 + RTC_DateStruct.Year - 1900;
+//    orig.tm_wday = 5;
+//    orig.tm_yday = 19;
+    orig.tm_isdst = -1;
+    putenv("TZ=Etc/GMT-8");
+    tzset();
+    settime = mktime (&orig);
+    time(&settime);
 }
 
 static uint8_t create_system_dir(void)
@@ -35,9 +74,9 @@ static uint8_t create_system_dir(void)
 uint8_t create_sysconf_file()
 {
     FRESULT res;
-    FIL fil;
+    FIL f;
     uint8_t *p;
-    uint32_t bw;
+    UINT bw;
 
     s2j_create_json_obj(Sysconf_j);
     s2j_json_set_struct_element(subCalibrate_j, Sysconf_j, subCalibrate_t, &xSysconf, Calibrate_t , xCalibrate);
@@ -48,47 +87,69 @@ uint8_t create_sysconf_file()
 
     p = cJSON_Print(Sysconf_j);
     s2j_delete_json_obj(Sysconf_j);
-    res = f_open(&fil, "system/sysconf.cfg", FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&f, pathSysconf, FA_CREATE_NEW | FA_WRITE);
     switch(res)
     {
     case FR_OK:
-        f_write(&fil, p, strlen(p), (void *)&bw);
-        f_close(&fil);
+        f_write(&f, p, strlen(p), &bw);
         free(p);
+        f_close(&f);
         return TRUE;
     case FR_EXIST:
-        return FALSE;
     default:
+        free(p);
+        f_close(&f);
         return FALSE;
     }
 }
-
+void create_evsecfg_file(void)
+{
+    FIL f;
+    UINT bw;
+    FRESULT res;
+    res = f_open(&f, pathEVSECfg, FA_CREATE_NEW | FA_WRITE);
+    switch(res)
+    {
+    case FR_OK:
+        f_write(&f, strEVSECfg, strlen(strEVSECfg), &bw);
+        f_close(&f);
+    case FR_EXIST:
+    default:
+        f_close(&f);
+    }
+}
 extern void retarget_init(void);
 void sys_Init(void)
 {
+    //ifconfig_init();
+    timeInit();
     retarget_init();
 #if configAPPLICATION_ALLOCATED_HEAP == 0
-    my_mem_init(SRAMIN);            //≥ı ºªØƒ⁄≤øƒ⁄¥Ê≥ÿ
-    my_mem_init(SRAMEX);            //≥ı ºªØÕ‚≤øƒ⁄¥Ê≥ÿ
-    my_mem_init(SRAMCCM);           //≥ı ºªØCCMƒ⁄¥Ê≥ÿ
+    my_mem_init(SRAMIN);            //ÂàùÂßãÂåñÂÜÖÈÉ®ÂÜÖÂ≠òÊ±†
+    my_mem_init(SRAMEX);            //ÂàùÂßãÂåñÂ§ñÈÉ®ÂÜÖÂ≠òÊ±†
+    my_mem_init(SRAMCCM);           //ÂàùÂßãÂåñCCMÂÜÖÂ≠òÊ±†
 #endif
 
     /*---------------------------------------------------------------------------/
-    /                               FATFS≥ı ºªØ
+    /                               FATFSÂàùÂßãÂåñ
     /---------------------------------------------------------------------------*/
     /*##-1- Link the NAND disk I/O driver #######################################*/
     if(FATFS_LinkDriver(&NANDDISK_Driver, NANDDISKPath) == 0)
     {
+        //fatfs_format();
         /*##-2- Register the file system object to the FatFs module ##############*/
+        //DISABLE_INT();
         if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
         {
+            fatfs_format();
+            f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1);
             /* FatFs Initialization Error */
-            Error_Handler();
+            //Error_Handler();
         }
     }
 
     /*---------------------------------------------------------------------------/
-    /                               œµÕ≥≤Œ ˝≥ı ºªØ
+    /                               Á≥ªÁªüÂèÇÊï∞ÂàùÂßãÂåñ
     /---------------------------------------------------------------------------*/
     xSysconf.xCalibrate.ad_top = 270;
     xSysconf.xCalibrate.ad_bottom = 3865;
@@ -96,13 +157,14 @@ void sys_Init(void)
     xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
     create_sysconf_file();
+    create_evsecfg_file();
 
     /*---------------------------------------------------------------------------/
-    /                               GUI≥ı ºªØ
+    /                               GUIÂàùÂßãÂåñ
     /---------------------------------------------------------------------------*/
     WM_SetCreateFlags(WM_CF_MEMDEV);    /* Activate the use of memory device feature */
     GUI_Init();
-    WM_MULTIBUF_Enable(1);  //ø™∆ÙSTemWin∂‡ª∫≥Â,RGB∆¡ª·”√µΩ
+    WM_MULTIBUF_Enable(1);  //ÂºÄÂêØSTemWinÂ§öÁºìÂÜ≤,RGBÂ±è‰ºöÁî®Âà∞
 
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");

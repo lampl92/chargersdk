@@ -10,6 +10,6 @@
 
 
 EVSE_t *pEVSE;
-UserList_t *pListChargePoint;
+UserList_t *pListCON;
 RFIDDev_t *pRFIDDev;
-
+echProtocol_t *pechProto;

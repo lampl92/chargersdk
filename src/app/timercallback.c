@@ -11,7 +11,7 @@
 /** 定时器在taskcreate中定义和创建
  */
 
-void vChargePointTimerCB(TimerHandle_t xTimer)
+void vCONTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
 
@@ -28,6 +28,10 @@ void vChargePointTimerCB(TimerHandle_t xTimer)
     if(uxTimerID == defTIMERID_PlugState)   //50ms
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState);
+    }
+    if(uxTimerID == defTIMERID_Volt)   //50ms
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBVolt);
     }
     if(uxTimerID == defTIMERID_ChargingData) //50ms
     {
@@ -48,6 +52,15 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBDataRefresh);
     }
+    if(uxTimerID == defTIMERID_RemoteHeartbeat)//15000
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
+        xEventGroupSetBits(xHandleEventTCP,defEventBitTCPClientFlushBuff);
+    }
+    if(uxTimerID == defTIMERID_RemoteStatus)//120000
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBStatus);
+    }
 }
 
 void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
@@ -58,51 +71,72 @@ void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
 void vVoltTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
-    uint32_t ulTotalPoint = pListChargePoint->Total;
-    ChargePoint_t *pPoint = NULL;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
     uint32_t i;
 
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
 
-    for(i = 0; i < ulTotalPoint; i++)
+    for(i = 0; i < ulTotalCON; i++)
     {
         if(uxTimerID == i)
-        {   pPoint = ChargePointGetHandle(i);
-            xEventGroupSetBits(pPoint->status.xHandleEventException, defEventBitExceptionVoltTimer);
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionVoltTimer);
         }
     }
 }
 void vCurrTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
-    uint32_t ulTotalPoint = pListChargePoint->Total;
-    ChargePoint_t *pPoint = NULL;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
     uint32_t i;
 
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
 
-    for(i = 0; i < ulTotalPoint; i++)
+    for(i = 0; i < ulTotalCON; i++)
     {
         if(uxTimerID == i)
-        {   pPoint = ChargePointGetHandle(i);
-            xEventGroupSetBits(pPoint->status.xHandleEventException, defEventBitExceptionCurrTimer);
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCurrTimer);
         }
     }
 }
 void vChargeStateTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
-    uint32_t ulTotalPoint = pListChargePoint->Total;
-    ChargePoint_t *pPoint = NULL;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
     uint32_t i;
 
     uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
 
-    for(i = 0; i < ulTotalPoint; i++)
+    for(i = 0; i < ulTotalCON; i++)
     {
         if(uxTimerID == i)
-        {   pPoint = ChargePointGetHandle(i);
-            xEventGroupSetBits(pPoint->status.xHandleEventException, defEventBitExceptionChargeTimer);
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionChargeTimer);
+        }
+    }
+}
+void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
+{
+    uint32_t uxTimerID;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
+    uint32_t i;
+
+    uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
+
+    for(i = 0; i < ulTotalCON; i++)
+    {
+        if(uxTimerID == i)
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitChargeRTDataTimer);
         }
     }
 }

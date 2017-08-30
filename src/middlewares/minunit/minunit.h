@@ -9,30 +9,23 @@
 #ifndef __MINUNIT_H
 #define __MINUNIT_H
 
-/* ---------------------------------------------------------------------------*/
-/**
-* @brief 
-*
-* @param message
-* @param test
-*
-* @return 
-*/
-/* ---------------------------------------------------------------------------*/
+/** @brief
+ *
+ * @param message
+ * @param test
+ *
+ */
 #define mu_assert(message, test) do {   \
             if (!(test))                \
             return message;             \
         } while (0)
 
-/* ---------------------------------------------------------------------------*/
-/**
-* @brief 
-*
-* @param test
-*
-* @return 
-*/
-/* ---------------------------------------------------------------------------*/
+/** @brief
+ *
+ * @param test
+ * @return message
+ *
+ */
 #define mu_run_test(test) do {  \
         char *message = test(); \
         tests_run++;            \

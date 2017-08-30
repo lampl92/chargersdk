@@ -5,12 +5,7 @@
 
 FIL MyFile;          /* File object */
 
-static void Error_Handler()
-{
-    while(1);
-}
-
-
+extern void Error_Handler(void);
 static void cli_mkfs_fnt(int argc, char **argv)
 {
     BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
@@ -207,7 +202,7 @@ static void cli_cat_fnt(int argc, char **argv)
     taskEXIT_CRITICAL();
 }
 
-tinysh_cmd_t cli_cat_cmd = {0, "cat", "fatfs 文件显示", "[file]",
+tinysh_cmd_t cli_cat_cmd = {0, "cat", "fatfs 文件显示", "[eg. system\\evse.cfg]",
                             cli_cat_fnt, 0, 0, 0
                            };
 tinysh_cmd_t cli_fatfs_cmd = {0, "testfatfs", "fatfs 测试", "[none]",

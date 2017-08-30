@@ -42,18 +42,18 @@ Purpose     : Interface definition for GUIDRV_Lin driver
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
   */
-  
+
 #ifndef GUIDRV_LIN_H
 #define GUIDRV_LIN_H
-
+#include "GUI.h"
 #if defined(__cplusplus)
 extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #endif
@@ -271,4 +271,5 @@ extern const GUI_DEVICE_API GUIDRV_Lin_OSXY_32_API;
 
 #endif
 
-/*************************** End of file ****************************/
+/*************************** End of file *******************/
+

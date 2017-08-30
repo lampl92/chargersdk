@@ -8,7 +8,10 @@ static void ListDelete(void *pList)
     {
         free(((UserList_t *)pList)->pListPointArray);
     }
-    free(pList);                                     //再释放整个List类
+    if(pList != NULL)
+    {
+        free(pList);                                     //再释放整个List类
+    }
 }
 //元素增加函数
 static void ListAdd(UserList_t *pList, void *pListPoint)

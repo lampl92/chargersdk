@@ -35,7 +35,14 @@ void cli_init(void)
     tinysh_add_command(&cli_testsdram_cmd);
     tinysh_add_command(&cli_parseJson_cmd);
     tinysh_add_command(&cli_makeJson_cmd);
-
+    tinysh_add_command(&cli_aestest_cmd);
+    /************电桩信息****************/
+    tinysh_add_command(&cli_evseinfo_cmd);
+    tinysh_add_command(&cli_evseorder_cmd);
+    tinysh_add_command(&cli_evsestatus_cmd);
+    tinysh_add_command(&cli_modeminfo_cmd);
+    /************设备测试****************/
+    tinysh_add_command(&cli_gprs_cmd);
 
     /* add the foo command
     */
@@ -52,20 +59,20 @@ void cli_init(void)
 
 }
 extern Queue *pCliRecvQue;
-/** @note (rgw#1#): 应该是tinysh本身性能的问题，连续输入"?"会造成tinysh死机。 */
 void cli_main(void)
 {
-    uint8_t ch;
+    uint8_t ch[1];
+    uint32_t l;
     int8_t res;
     cli_init();
     while(1)
     {
-        res = readRecvQue(pCliRecvQue, &ch, 1);
-        if(res == 0)
+        res = readRecvQueEx(pCliRecvQue, ch, 1, &l, 1);
+//        res = readRecvQue(pCliRecvQue, &ch, 1);
+        if(res == 1)
         {
-            tinysh_char_in(ch);
+            tinysh_char_in(ch[0]);
         }
-//      tinysh_char_in((unsigned char)getchar());
         vTaskDelay(100);
     }
 }

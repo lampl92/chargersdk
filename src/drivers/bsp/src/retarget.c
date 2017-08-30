@@ -21,7 +21,7 @@ void retarget_init(void)
     xdev_out(myputc);
 }
 
-void  printf_safe(char *format, ...)
+int printf_safe(const char *format, ...)
 {
     char  buf_str[200 + 1];
     va_list   v_args;

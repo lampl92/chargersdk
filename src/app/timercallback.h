@@ -8,11 +8,12 @@
 #ifndef  __TIMERCALLBACK_H
 #define  __TIMERCALLBACK_H
 
-void vChargePointTimerCB(TimerHandle_t xTimer);
+void vCONTimerCB(TimerHandle_t xTimer);
 void vEVSETimerCB(TimerHandle_t xTimer);
 void vRFIDTimerCB(TimerHandle_t xTimer);
 void vVoltTimerCB(TimerHandle_t xTimer);
 void vCurrTimerCB(TimerHandle_t xTimer);
 void vChargeStateTimerCB(TimerHandle_t xTimer);
+void vRemoteRTDataTimerCB(TimerHandle_t xTimer);
 
 #endif

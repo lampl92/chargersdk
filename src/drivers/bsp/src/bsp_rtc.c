@@ -1,3 +1,4 @@
+#include <time.h>
 #include "bsp.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +15,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
-
+time_t time_dat;
 //RTC时间设置
 //hour,min,sec:小时,分钟,秒钟
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
@@ -64,12 +65,12 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
     //基姆拉尔森计算公式, w=0 时为 星期一
     if(m == 1 || m == 2)
     {
-            m += 12;
-            y--;
+        m += 12;
+        y--;
     }
     w = (d + 2 * m + 3 * (m + 1) / 5 + y + y / 4 - y / 100 + y / 400) % 7;
 
-    RTC_DateStructure.WeekDay = w+1;
+    RTC_DateStructure.WeekDay = w + 1;
     RTC_DateStructure.Month = month;
     RTC_DateStructure.Date = date;
     RTC_DateStructure.Year = year;
@@ -138,7 +139,7 @@ void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
     RTC_AlarmSturuct.AlarmTime.Minutes = min; //分钟
     RTC_AlarmSturuct.AlarmTime.Seconds = sec; //秒
     RTC_AlarmSturuct.AlarmTime.SubSeconds = 0;
-    RTC_AlarmSturuct.AlarmTime.TimeFormat = RTC_HOURFORMAT12_AM;
+    RTC_AlarmSturuct.AlarmTime.TimeFormat = RTC_HOURFORMAT_24;
 
     RTC_AlarmSturuct.AlarmMask = RTC_ALARMMASK_NONE; //精确匹配星期，时分秒
     RTC_AlarmSturuct.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_NONE;
@@ -147,7 +148,7 @@ void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
     RTC_AlarmSturuct.Alarm = RTC_ALARM_A;   //闹钟A
     HAL_RTC_SetAlarm_IT(&RTC_Handler, &RTC_AlarmSturuct, RTC_FORMAT_BIN);
 
-    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0x01, 0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_Alarm_IRQn, bspAlarm_PreemptPriority, bspAlarm_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
@@ -167,7 +168,7 @@ void RTC_Set_WakeUp(u32 wksel, u16 cnt)
 
     HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler, cnt, wksel);          //设置重装载值和时钟
 
-    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, 0x02, 0x02); //抢占优先级1,子优先级2
+    HAL_NVIC_SetPriority(RTC_WKUP_IRQn, bspWKUP_PreemptPriority, bspWKUP_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 }
 
@@ -192,6 +193,25 @@ void RTC_WKUP_IRQHandler(void)
 //RTC WAKE UP中断处理
 void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
-    //LED1=!LED1;
+    time_dat ++;
 }
 
+time_t time (time_t *_timer)
+{
+    struct tm *ts;
+    if(_timer != NULL)
+    {
+        time_dat = *_timer;
+        ts = localtime (_timer);
+        RTC_Set_Time(ts->tm_hour, ts->tm_min, ts->tm_sec);
+        RTC_Set_Date(ts->tm_year+1900-2000, ts->tm_mon+1, ts->tm_mday);
+    }
+    return time_dat;
+}
+extern volatile uint32_t ulHighFrequencyTimerTicks;
+clock_t clock(void)
+{
+    clock_t clock_dat;
+    clock_dat = (clock_t)ulHighFrequencyTimerTicks;
+    return clock_dat;
+}

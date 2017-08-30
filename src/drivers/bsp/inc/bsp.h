@@ -1,11 +1,11 @@
 /**
 * @file bsp.h
-* @brief ¶¨Òå°å¼¶Çı¶¯¹¦ÄÜ¿ª¹Ø,ÏàÓ¦Í·ÎÄ¼şÒıÓÃ.
+* @brief å®šä¹‰æ¿çº§é©±åŠ¨åŠŸèƒ½å¼€å…³,ç›¸åº”å¤´æ–‡ä»¶å¼•ç”¨.
 * @author rgw
 * @version v1.0
 * @date 2016-11-01
 */
-#ifndef _BSP_H_
+#ifndef _BSP_H
 #define _BSP_H
 /* Private typedef -----------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -23,45 +23,55 @@
 #define bspUSART1_PreemptPriority       3
 #define bspUSART1_SubPriority           0
 
-#define bspUSART2_PreemptPriority       4
+#define bspUSART2_PreemptPriority       15
 #define bspUSART2_SubPriority           0
 
 #define bspUSART3_PreemptPriority       5
 #define bspUSART3_SubPriority           0
 
+#define bspUART4_PreemptPriority       15
+#define bspUART4_SubPriority           0
+
+#define bspUART5_PreemptPriority       7
+#define bspUART5_SubPriority           0
+
 #define bspLTDC_PreemptPriority         15
 #define bspLTDC_SubPriority             0
 
+#define bspWKUP_PreemptPriority         6
+#define bspWKUP_SubPriority             0
 
+#define bspAlarm_PreemptPriority        8
+#define bspAlarm_SubPriority            0
 
-/* CPU¿ÕÏĞÊ±Ö´ĞĞµÄº¯Êı */
+/* CPUç©ºé—²æ—¶æ‰§è¡Œçš„å‡½æ•° */
 //#define CPU_IDLE()        bsp_Idle()
 
 #ifdef USE_FreeRTOS
-    #define DISABLE_INT()    taskENTER_CRITICAL()
-    #define ENABLE_INT()     taskEXIT_CRITICAL()
+#define DISABLE_INT()    taskENTER_CRITICAL()
+#define ENABLE_INT()     taskEXIT_CRITICAL()
 #else
-    /* ¿ª¹ØÈ«¾ÖÖĞ¶ÏµÄºê */
-    #define ENABLE_INT()    __set_PRIMASK(0)    /* Ê¹ÄÜÈ«¾ÖÖĞ¶Ï */
-    #define DISABLE_INT()   __set_PRIMASK(1)    /* ½ûÖ¹È«¾ÖÖĞ¶Ï */
+/* å¼€å…³å…¨å±€ä¸­æ–­çš„å® */
+#define ENABLE_INT()    __set_PRIMASK(0)    /* ä½¿èƒ½å…¨å±€ä¸­æ–­ */
+#define DISABLE_INT()   __set_PRIMASK(1)    /* ç¦æ­¢å…¨å±€ä¸­æ–­ */
 #endif
 
 
 /*
-    EXTI9_5_IRQHandler µÄÖĞ¶Ï·şÎñ³ÌĞò·ÖÉ¢ÔÚ¼¸¸ö¶ÀÁ¢µÄ bspÎÄ¼şÖĞ¡£
-    ĞèÒªÕûºÏµ½ stm32f4xx_it.c ÖĞ¡£
-    ¶¨ÒåÏÂÃæĞĞ±íÊ¾EXTI9_5_IRQHandlerÈë¿Úº¯Êı¼¯ÖĞ·Åµ½ stm32f4xx_it.c¡£
+    EXTI9_5_IRQHandler çš„ä¸­æ–­æœåŠ¡ç¨‹åºåˆ†æ•£åœ¨å‡ ä¸ªç‹¬ç«‹çš„ bspæ–‡ä»¶ä¸­ã€‚
+    éœ€è¦æ•´åˆåˆ° stm32f4xx_it.c ä¸­ã€‚
+    å®šä¹‰ä¸‹é¢è¡Œè¡¨ç¤ºEXTI9_5_IRQHandlerå…¥å£å‡½æ•°é›†ä¸­æ”¾åˆ° stm32f4xx_it.cã€‚
 */
 #define EXTI9_5_ISR_MOVE_OUT
 
-#define DEBUG_GPS_TO_COM1   /* ´òÓ¡GPSÊı¾İµ½´®¿Ú1 */
+#define DEBUG_GPS_TO_COM1   /* æ‰“å°GPSæ•°æ®åˆ°ä¸²å£1 */
 
 #ifndef TRUE
-    #define TRUE  1
+#define TRUE  1
 #endif
 
 #ifndef FALSE
-    #define FALSE 0
+#define FALSE 0
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -72,7 +82,8 @@
 #include <stdint.h>
 #include "errorcode.h"
 
-/* Í¨¹ıÈ¡Ïû×¢ÊÍ»òÕßÌí¼Ó×¢ÊÍµÄ·½Ê½¿ØÖÆÊÇ·ñ°üº¬µ×²ãÇı¶¯Ä£¿é */
+/* é€šè¿‡å–æ¶ˆæ³¨é‡Šæˆ–è€…æ·»åŠ æ³¨é‡Šçš„æ–¹å¼æ§åˆ¶æ˜¯å¦åŒ…å«åº•å±‚é©±åŠ¨æ¨¡å— */
+#include "bsp_gpio.h"
 #include "bsp_uart.h"
 #include "bsp_sdram.h"
 #include "bsp_dwt.h"
@@ -81,7 +92,10 @@
 #include "bsp_user_lib.h"
 #include "bsp_nand_hw.h"
 #include "bsp_nand_ftl.h"
-#include "bsp_touch_2046.h"
+#include "lcddrv.h"
+#include "touch.h"
+#include "user_app.h"
+#include "iwdg.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);
@@ -122,13 +136,13 @@ typedef __I uint32_t vuc32;
 typedef __I uint16_t vuc16;
 typedef __I uint8_t vuc8;
 
-//Î»´ø²Ù×÷,ÊµÏÖ51ÀàËÆµÄGPIO¿ØÖÆ¹¦ÄÜ
-//¾ßÌåÊµÏÖË¼Ïë,²Î¿¼<<CM3È¨ÍşÖ¸ÄÏ>>µÚÎåÕÂ(87Ò³~92Ò³).M4Í¬M3ÀàËÆ,Ö»ÊÇ¼Ä´æÆ÷µØÖ·±äÁË.
-//IO¿Ú²Ù×÷ºê¶¨Òå
+//ä½å¸¦æ“ä½œ,å®ç°51ç±»ä¼¼çš„GPIOæ§åˆ¶åŠŸèƒ½
+//å…·ä½“å®ç°æ€æƒ³,å‚è€ƒ<<CM3æƒå¨æŒ‡å—>>ç¬¬äº”ç« (87é¡µ~92é¡µ).M4åŒM3ç±»ä¼¼,åªæ˜¯å¯„å­˜å™¨åœ°å€å˜äº†.
+//IOå£æ“ä½œå®å®šä¹‰
 #define BITBAND(addr, bitnum) ((addr & 0xF0000000)+0x2000000+((addr &0xFFFFF)<<5)+(bitnum<<2))
 #define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr))
 #define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum))
-//IO¿ÚµØÖ·Ó³Éä
+//IOå£åœ°å€æ˜ å°„
 #define GPIOA_ODR_Addr    (GPIOA_BASE+20) //0x40020014
 #define GPIOB_ODR_Addr    (GPIOB_BASE+20) //0x40020414
 #define GPIOC_ODR_Addr    (GPIOC_BASE+20) //0x40020814
@@ -153,42 +167,45 @@ typedef __I uint8_t vuc8;
 #define GPIOJ_IDR_Addr    (GPIOJ_BASE+16) //0x40022410
 #define GPIOK_IDR_Addr    (GPIOK_BASE+16) //0x40022810
 
-//IO¿Ú²Ù×÷,Ö»¶Ôµ¥Ò»µÄIO¿Ú!
-//È·±£nµÄÖµĞ¡ÓÚ16!
-#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //Êä³ö
-#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //ÊäÈë
+//IOå£æ“ä½œ,åªå¯¹å•ä¸€çš„IOå£!
+//ç¡®ä¿nçš„å€¼å°äº16!
+#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //è¾“å‡º
+#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //è¾“å…¥
 
-#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //Êä³ö
-#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //ÊäÈë
+#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //è¾“å‡º
+#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //è¾“å…¥
 
-#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //Êä³ö
-#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //ÊäÈë
+#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //è¾“å‡º
+#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //è¾“å…¥
 
-#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //Êä³ö
-#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //ÊäÈë
+#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //è¾“å‡º
+#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //è¾“å…¥
 
-#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //Êä³ö
-#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //ÊäÈë
+#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //è¾“å‡º
+#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //è¾“å…¥
 
-#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //Êä³ö
-#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //ÊäÈë
+#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //è¾“å‡º
+#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //è¾“å…¥
 
-#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //Êä³ö
-#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //ÊäÈë
+#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //è¾“å‡º
+#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //è¾“å…¥
 
-#define PHout(n)   BIT_ADDR(GPIOH_ODR_Addr,n)  //Êä³ö
-#define PHin(n)    BIT_ADDR(GPIOH_IDR_Addr,n)  //ÊäÈë
+#define PHout(n)   BIT_ADDR(GPIOH_ODR_Addr,n)  //è¾“å‡º
+#define PHin(n)    BIT_ADDR(GPIOH_IDR_Addr,n)  //è¾“å…¥
 
-#define PIout(n)   BIT_ADDR(GPIOI_ODR_Addr,n)  //Êä³ö
-#define PIin(n)    BIT_ADDR(GPIOI_IDR_Addr,n)  //ÊäÈë
+#define PIout(n)   BIT_ADDR(GPIOI_ODR_Addr,n)  //è¾“å‡º
+#define PIin(n)    BIT_ADDR(GPIOI_IDR_Addr,n)  //è¾“å…¥
 
-#define PJout(n)   BIT_ADDR(GPIOJ_ODR_Addr,n)  //Êä³ö
-#define PJin(n)    BIT_ADDR(GPIOJ_IDR_Addr,n)  //ÊäÈë
+#define PJout(n)   BIT_ADDR(GPIOJ_ODR_Addr,n)  //è¾“å‡º
+#define PJin(n)    BIT_ADDR(GPIOJ_IDR_Addr,n)  //è¾“å…¥
 
-#define PKout(n)   BIT_ADDR(GPIOK_ODR_Addr,n)  //Êä³ö
-#define PKin(n)    BIT_ADDR(GPIOK_IDR_Addr,n)  //ÊäÈë
+#define PKout(n)   BIT_ADDR(GPIOK_ODR_Addr,n)  //è¾“å‡º
+#define PKin(n)    BIT_ADDR(GPIOK_IDR_Addr,n)  //è¾“å…¥
 
-void  printf_safe(char *format, ...);
+
+
+int printf_safe(const char *format, ...);
+void bsp_Error_Handler(void);
 
 #endif
 

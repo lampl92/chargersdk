@@ -22,11 +22,12 @@ int main(void)
     bsp_Init();
     sys_Init();
 
+    EVSEinit();
+
+    TaskInit();
     SysTaskCreate();
     AppTaskCreate();
     AppObjCreate();
-
-    EVSEinit();
 
     vTaskStartScheduler();
 

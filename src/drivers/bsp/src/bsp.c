@@ -1,7 +1,7 @@
 /**
 * @file bsp.c
-* @brief ÕâÊÇÓ²¼şµ×²ãÇı¶¯³ÌĞòµÄÖ÷ÎÄ¼ş¡£Ã¿¸öcÎÄ¼ş¿ÉÒÔ #include "bsp.h" À´°üº¬
-*        ËùÓĞµÄÍâÉèÇı¶¯Ä£¿é¡£
+* @brief è¿™æ˜¯ç¡¬ä»¶åº•å±‚é©±åŠ¨ç¨‹åºçš„ä¸»æ–‡ä»¶ã€‚æ¯ä¸ªcæ–‡ä»¶å¯ä»¥ #include "bsp.h" æ¥åŒ…å«
+*        æ‰€æœ‰çš„å¤–è®¾é©±åŠ¨æ¨¡å—ã€‚
 * @author rgw
 * @version v1.0
 * @date 2016-10-28
@@ -9,45 +9,9 @@
 #include "includes.h"
 #include "bsp.h"
 
-
-/* private function prototypes -----------------------------------------------*/
-static void SystemClock_Config(void);
-void Stm32_Clock_Init(uint32_t plln,uint32_t pllm,uint32_t pllp,uint32_t pllq);
-
-
-/* ---------------------------------------------------------------------------*/
-/**
-* @brief ³õÊ¼»¯ËùÓĞµÄÓ²¼şÉè±¸¡£¸Ãº¯ÊıÅäÖÃCPU¼Ä´æÆ÷ºÍÍâÉèµÄ¼Ä´æÆ÷²¢³õÊ¼»¯Ò»Ğ©
-*        È«¾Ö±äÁ¿¡£Ö»ĞèÒªµ÷ÓÃÒ»´Î
-*/
-/* ---------------------------------------------------------------------------*/
-void bsp_Init(void)
-{
-    /*
-        ÓÉÓÚST¹Ì¼ş¿âµÄÆô¶¯ÎÄ¼şÒÑ¾­Ö´ĞĞÁËCPUÏµÍ³Ê±ÖÓµÄ³õÊ¼»¯£¬ËùÒÔ²»±ØÔÙ´ÎÖØ¸´ÅäÖÃÏµÍ³Ê±ÖÓ¡£
-        Æô¶¯ÎÄ¼şÅäÖÃÁËCPUÖ÷Ê±ÖÓÆµÂÊ¡¢ÄÚ²¿Flash·ÃÎÊËÙ¶ÈºÍ¿ÉÑ¡µÄÍâ²¿SRAM FSMC³õÊ¼»¯¡£
-        
-    */
-    /* ÓÅÏÈ¼¶·Ö×éÉèÖÃÎª4£¬¿ÉÅäÖÃ0-15¼¶ÇÀÕ¼Ê½ÓÅÏÈ¼¶£¬0¼¶×ÓÓÅÏÈ¼¶£¬¼´²»´æÔÚ×ÓÓÅÏÈ¼¶¡£*/
-    
-    HAL_Init();
-    SystemClock_Config(); //ÏµÍ³Ê¼ÖÕÅäÖÃÎª180MHz
-    SystemCoreClockUpdate();    /* ¸ù¾İPLLÅäÖÃ¸üĞÂÏµÍ³Ê±ÖÓÆµÂÊ±äÁ¿ SystemCoreClock */
-    /* Enable the CRC Module */
-    __HAL_RCC_CRC_CLK_ENABLE();	//
-    bsp_RTC_Init();
-    bsp_DWT_Init();
-    bsp_SDRAM_Init();
-    bsp_Uart_Init();   /* ³õÊ¼»¯´®¿Ú */
-    //FTL_Init();ÔÚfatfsÖĞ³õÊ¼»¯
-    //bsp_LTDC_Init();//ÔÚGUIÖĞ³õÊ¼»¯
-    bsp_Touch_Init();
-    
-}
-
 /**
   * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
+  *         The system Clock is configured as follow :
   *            System Clock source            = PLL (HSE)
   *            SYSCLK(Hz)                     = 180000000
   *            HCLK(Hz)                       = 180000000
@@ -67,76 +31,123 @@ void bsp_Init(void)
   *            Fvco=Fs*(plln/pllm);
   *            SYSCLK=Fvco/pllp=Fs*(plln/(pllm*pllp));
   *            Fusb=Fvco/pllq=Fs*(plln/(pllm*pllq));
-  * 
-  *            Fvco:VCOÆµÂÊ
-  *            SYSCLK:ÏµÍ³Ê±ÖÓÆµÂÊ
-  *            Fusb:USB,SDIO,RNGµÈµÄÊ±ÖÓÆµÂÊ
-  *            Fs:PLLÊäÈëÊ±ÖÓÆµÂÊ,¿ÉÒÔÊÇHSI,HSEµÈ. 
-  *            plln:Ö÷PLL±¶ÆµÏµÊı(PLL±¶Æµ),È¡Öµ·¶Î§:64~432.
-  *            pllm:Ö÷PLLºÍÒôÆµPLL·ÖÆµÏµÊı(PLLÖ®Ç°µÄ·ÖÆµ),È¡Öµ·¶Î§:2~63.
-  *            pllp:ÏµÍ³Ê±ÖÓµÄÖ÷PLL·ÖÆµÏµÊı(PLLÖ®ºóµÄ·ÖÆµ),È¡Öµ·¶Î§:2,4,6,8.(½öÏŞÕâ4¸öÖµ!)
-  *            pllq:USB/SDIO/Ëæ»úÊı²úÉúÆ÷µÈµÄÖ÷PLL·ÖÆµÏµÊı(PLLÖ®ºóµÄ·ÖÆµ),È¡Öµ·¶Î§:2~15.
-  *            Íâ²¿¾§ÕñÎª25MµÄÊ±ºò,ÍÆ¼öÖµ:plln=360,pllm=25,pllp=2,pllq=8.
-  *            µÃµ½:Fvco=25*(360/25)=360Mhz
+  *
+  *            Fvco:VCOé¢‘ç‡
+  *            SYSCLK:ç³»ç»Ÿæ—¶é’Ÿé¢‘ç‡
+  *            Fusb:USB,SDIO,RNGç­‰çš„æ—¶é’Ÿé¢‘ç‡
+  *            Fs:PLLè¾“å…¥æ—¶é’Ÿé¢‘ç‡,å¯ä»¥æ˜¯HSI,HSEç­‰.
+  *            plln:ä¸»PLLå€é¢‘ç³»æ•°(PLLå€é¢‘),å–å€¼èŒƒå›´:64~432.
+  *            pllm:ä¸»PLLå’ŒéŸ³é¢‘PLLåˆ†é¢‘ç³»æ•°(PLLä¹‹å‰çš„åˆ†é¢‘),å–å€¼èŒƒå›´:2~63.
+  *            pllp:ç³»ç»Ÿæ—¶é’Ÿçš„ä¸»PLLåˆ†é¢‘ç³»æ•°(PLLä¹‹åçš„åˆ†é¢‘),å–å€¼èŒƒå›´:2,4,6,8.(ä»…é™è¿™4ä¸ªå€¼!)
+  *            pllq:USB/SDIO/éšæœºæ•°äº§ç”Ÿå™¨ç­‰çš„ä¸»PLLåˆ†é¢‘ç³»æ•°(PLLä¹‹åçš„åˆ†é¢‘),å–å€¼èŒƒå›´:2~15.
+  *            å¤–éƒ¨æ™¶æŒ¯ä¸º25Mçš„æ—¶å€™,æ¨èå€¼:plln=360,pllm=25,pllp=2,pllq=8.
+  *            å¾—åˆ°:Fvco=25*(360/25)=360Mhz
   *                 SYSCLK=360/2=180Mhz
   *                 Fusb=360/8=45Mhz
   *
-  *       *** Èç¹ûÒªÊ¹ÓÃUSB,NÒªÉèÖÃÎª384, Fusb = 48Mhz ***
+  *       *** å¦‚æœè¦ä½¿ç”¨USB,Nè¦è®¾ç½®ä¸º384, Fusb = 48Mhz ***
   *
   * @param  None
   * @retval None
   */
 static void SystemClock_Config(void)
 {
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_OscInitTypeDef RCC_OscInitStruct;
+    RCC_ClkInitTypeDef RCC_ClkInitStruct;
+    RCC_OscInitTypeDef RCC_OscInitStruct;
 
     uint32_t pllm = 25;
-    uint32_t plln = 384;//plln = 384Ê±,sysclk = 192Mhz, plln = 360,180Mhz,  
+    uint32_t plln = 384;//plln = 384æ—¶,sysclk = 192Mhz, plln = 360,180Mhz,
     uint32_t pllp = RCC_PLLP_DIV2;
     uint32_t pllq = 8;
-    
-  /* Enable Power Control clock */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  
-  /* The voltage scaling allows optimizing the power consumption when the device is 
-     clocked below the maximum system frequency, to update the voltage scaling value 
-     regarding system frequency refer to product datasheet.  */
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  
-  /* Enable HSE Oscillator and activate PLL with HSE as source */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = pllm;
-  RCC_OscInitStruct.PLL.PLLN = plln;
-  RCC_OscInitStruct.PLL.PLLP = pllp;
-  RCC_OscInitStruct.PLL.PLLQ = pllq;
-  if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    /* Initialization Error */
-    bsp_Error_Handler();
-  }
-  
-  if(HAL_PWREx_EnableOverDrive() != HAL_OK)//¿ªÆôOver-Driver¹¦ÄÜ,Ê¹Ö÷ÆµÄÜ¹»´ïµ½180MHz,·ñÔòÖ»ÄÜµ½168MHz
-  {
-    /* Initialization Error */
-    bsp_Error_Handler();
-  }
-  
-  /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
-     clocks dividers */
-  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;//ÉèÖÃÏµÍ³Ê±ÖÓÊ±ÖÓÔ´ÎªPLL
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-  if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)//Í¬Ê±ÉèÖÃFLASHÑÓÊ±ÖÜÆÚÎª5WS£¬Ò²¾ÍÊÇ6¸öCPUÖÜÆÚ¡£
-  {
-    /* Initialization Error */
-    bsp_Error_Handler();
-  }
+
+    /* Enable Power Control clock */
+    __HAL_RCC_PWR_CLK_ENABLE();
+
+    /* The voltage scaling allows optimizing the power consumption when the device is
+       clocked below the maximum system frequency, to update the voltage scaling value
+       regarding system frequency refer to product datasheet.  */
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+    /* Enable HSE Oscillator and activate PLL with HSE as source */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = pllm;
+    RCC_OscInitStruct.PLL.PLLN = plln;
+    RCC_OscInitStruct.PLL.PLLP = pllp;
+    RCC_OscInitStruct.PLL.PLLQ = pllq;
+    if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        /* Initialization Error */
+        bsp_Error_Handler();
+    }
+
+    if(HAL_PWREx_EnableOverDrive() != HAL_OK)//å¼€å¯Over-DriveråŠŸèƒ½,ä½¿ä¸»é¢‘èƒ½å¤Ÿè¾¾åˆ°180MHz,å¦åˆ™åªèƒ½åˆ°168MHz
+    {
+        /* Initialization Error */
+        bsp_Error_Handler();
+    }
+
+    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
+       clocks dividers */
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;//è®¾ç½®ç³»ç»Ÿæ—¶é’Ÿæ—¶é’Ÿæºä¸ºPLL
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+    if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)//åŒæ—¶è®¾ç½®FLASHå»¶æ—¶å‘¨æœŸä¸º5WSï¼Œä¹Ÿå°±æ˜¯6ä¸ªCPUå‘¨æœŸã€‚
+    {
+        /* Initialization Error */
+        bsp_Error_Handler();
+    }
+}
+
+/* ---------------------------------------------------------------------------*/
+/**
+* @brief åˆå§‹åŒ–æ‰€æœ‰çš„ç¡¬ä»¶è®¾å¤‡ã€‚è¯¥å‡½æ•°é…ç½®CPUå¯„å­˜å™¨å’Œå¤–è®¾çš„å¯„å­˜å™¨å¹¶åˆå§‹åŒ–ä¸€äº›
+*        å…¨å±€å˜é‡ã€‚åªéœ€è¦è°ƒç”¨ä¸€æ¬¡
+*/
+/* ---------------------------------------------------------------------------*/
+void bsp_Init(void)
+{
+    /*
+        ç”±äºSTå›ºä»¶åº“çš„å¯åŠ¨æ–‡ä»¶å·²ç»æ‰§è¡Œäº†CPUç³»ç»Ÿæ—¶é’Ÿçš„åˆå§‹åŒ–ï¼Œæ‰€ä»¥ä¸å¿…å†æ¬¡é‡å¤é…ç½®ç³»ç»Ÿæ—¶é’Ÿã€‚
+        å¯åŠ¨æ–‡ä»¶é…ç½®äº†CPUä¸»æ—¶é’Ÿé¢‘ç‡ã€å†…éƒ¨Flashè®¿é—®é€Ÿåº¦å’Œå¯é€‰çš„å¤–éƒ¨SRAM FSMCåˆå§‹åŒ–ã€‚
+
+    */
+    /* ä¼˜å…ˆçº§åˆ†ç»„è®¾ç½®ä¸º4ï¼Œå¯é…ç½®0-15çº§æŠ¢å å¼ä¼˜å…ˆçº§ï¼Œ0çº§å­ä¼˜å…ˆçº§ï¼Œå³ä¸å­˜åœ¨å­ä¼˜å…ˆçº§ã€‚*/
+
+    HAL_Init();
+    SystemClock_Config(); //ç³»ç»Ÿå§‹ç»ˆé…ç½®ä¸º192MHz
+    SystemCoreClockUpdate();    /* æ ¹æ®PLLé…ç½®æ›´æ–°ç³»ç»Ÿæ—¶é’Ÿé¢‘ç‡å˜é‡ SystemCoreClock */
+    /* Enable the CRC Module */
+    __HAL_RCC_CRC_CLK_ENABLE(); //
+#ifdef EVSE_DEBUG
+    bsp_GPIO_Init();
+#endif
+    bsp_RTC_Init();
+    RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //é…ç½® WAKE UP ä¸­æ–­,1 ç§’é’Ÿä¸­æ–­ä¸€æ¬¡
+    bsp_DWT_Init();
+
+    LCD_Init();
+    TP_Init();
+#ifndef DEBUG_INIT
+    Peripheral_Init();
+#endif
+    bsp_SDRAM_Init();
+
+    //FTL_Init();åœ¨fatfsä¸­åˆå§‹åŒ–
+    //bsp_LTDC_Init();//åœ¨GUIä¸­åˆå§‹åŒ–
+//    bsp_Touch_Init();
+    bsp_Uart_Init(UART_PORT_CLI, 1);   /* åˆå§‹åŒ–ä¸²å£ */
+    bsp_Uart_Init(UART_PORT_RFID, 1);
+    bsp_Uart_Init(UART_PORT_GPRS, 1);
+#ifndef EVSE_DEBUG
+    IWDG_Init(IWDG_PRESCALER_64,500);  	//Â·Ã–Ã†ÂµÃŠÃ½ÃÂª64,Ã–Ã˜Ã”Ã˜Ã–ÂµÃÂª500,Ã’Ã§Â³Ã¶ÃŠÂ±Â¼Ã¤ÃÂª1s
+#endif
+//LCD_Init();
+
 }
 
 void bsp_Error_Handler(void)
@@ -144,4 +155,3 @@ void bsp_Error_Handler(void)
     //do some alart
     while(1);
 }
-

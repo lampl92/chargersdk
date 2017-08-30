@@ -1,37 +1,15 @@
 #include "includes.h"
-
-//?-¡À¨º??¨¦?
-#define WHITE            0xFFFF
-#define BLACK            0x0000
-#define BLUE             0x001F
-#define BRED             0XF81F
-#define GRED             0XFFE0
-#define GBLUE            0X07FF
-#define RED              0xF800
-#define MAGENTA          0xF81F
-#define GREEN            0x07E0
-#define CYAN             0x7FFF
-#define YELLOW           0xFFE0
-#define BROWN            0XBC40 //¡Á?¨¦?
-#define BRRED            0XFC07 //¡Á?o¨¬¨¦?
-#define GRAY             0X8430 //?¨°¨¦?
-//GUI??¨¦?
-
-#define DARKBLUE         0X01CF //¨¦?¨¤?¨¦?
-#define LIGHTBLUE        0X7D7C //?3¨¤?¨¦?
-#define GRAYBLUE         0X5458 //?¨°¨¤?¨¦?
-//¨°?¨¦?¨¨y¨¦??aPANEL¦Ì???¨¦?
-
-#define LIGHTGREEN       0X841F //?3?¨¬¨¦?
-//#define LIGHTGRAY        0XEF5B //?3?¨°¨¦?(PANNEL)
-#define LGRAY            0XC618 //?3?¨°¨¦?(PANNEL),¡ä¡ã¨¬?¡À3?¡ã¨¦?
-
-#define LGRAYBLUE        0XA651 //?3?¨°¨¤?¨¦?(?D??2???¨¦?)
-#define LBBLUE           0X2B12 //?3¡Á?¨¤?¨¦?(????¨¬???¦Ì?¡¤¡ä¨¦?)
-
+#include "utils.h"
+#include <time.h>
 
 void cli_hello_fnt(int argc, char **argv)
 {
+    uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
+    uint8_t strCardID[defCardIDLength * 2 + 1];
+    int i;
+    HexToStr(cardid, strCardID, 8);
+    printf_safe("test strCardID = %s", strCardID);
+
     printf_safe("\nhello world\n");
     printf_safe("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
@@ -97,7 +75,7 @@ tinysh_cmd_t cli_testsdram_cmd =
     0, cli_testsdram_fnt,
     "<cr>", 0, 0
 };
-
+extern time_t time_dat;
 void cli_systemtime_fnt(int argc, char **argv)
 {
     uint8_t tbuf[40];
@@ -105,7 +83,6 @@ void cli_systemtime_fnt(int argc, char **argv)
     RTC_DateTypeDef RTC_DateStruct;
     if(argc == 1)
     {
-        taskENTER_CRITICAL();
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
         printf_safe("\n%s\n", tbuf);
@@ -114,19 +91,27 @@ void cli_systemtime_fnt(int argc, char **argv)
         printf_safe("%s\n", tbuf);
         xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
         printf_safe("%s\n", tbuf);
-        taskEXIT_CRITICAL();
+
+        printf_safe("<time.h>-----------²âÊÔ--------------\n");
+        time_t now;
+        struct tm *ts;
+        char buf [80];
+
+        now = time (NULL);
+        ts = localtime (& now);
+        strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+        printf_safe("%s \n", buf);
     }
     else if(strcmp(argv[1], "-s") == 0)
     {
+        struct tm settime_tm;
+        time_t tim_set;
         char *str = argv[2];
         //argv[2]: "2016-09-12 15:04:00"
         //str:     ^
-        taskENTER_CRITICAL();
         if(str[0] != '\"' && str[strlen(str) - 1] != '\"')
         {
-            taskENTER_CRITICAL();
             printf_safe("\nWrong command! please date --help\n");
-            taskEXIT_CRITICAL();
             return ;
         }
 
@@ -135,40 +120,48 @@ void cli_systemtime_fnt(int argc, char **argv)
         //str:        ^
         strncpy((char *)tbuf, str, 2);//"16"->tbuf
         RTC_DateStruct.Year = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_year = RTC_DateStruct.Year + 2000 - 1900;
 
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:           ^
         strncpy((char *)tbuf, str, 2);
         RTC_DateStruct.Month = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_mon = RTC_DateStruct.Month - 1;
 
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:              ^
         strncpy((char *)tbuf, str, 2);
         RTC_DateStruct.Date = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_mday = RTC_DateStruct.Date;
 
-        RTC_Set_Date(RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+        //RTC_Set_Date(RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
 
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                 ^
         strncpy((char *)tbuf, str, 2);
         RTC_TimeStruct.Hours = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_hour = RTC_TimeStruct.Hours;
 
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                    ^
         strncpy((char *)tbuf, str, 2);
         RTC_TimeStruct.Minutes = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_min = RTC_TimeStruct.Minutes;
 
         str += 3;
         //argv[2]: "2016-09-12 15:04:00"
         //str:                       ^
         strncpy((char *)tbuf, str, 2);
         RTC_TimeStruct.Seconds = (uint8_t)atoi((char *)tbuf);
+        settime_tm.tm_sec = RTC_TimeStruct.Seconds;
 
-        RTC_Set_Time(RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        //RTC_Set_Time(RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        tim_set = mktime(&settime_tm);
+        time(&tim_set);
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
         xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
@@ -178,16 +171,11 @@ void cli_systemtime_fnt(int argc, char **argv)
         printf_safe("%s\n", tbuf);
         xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
         printf_safe("%s\n", tbuf);
-        taskEXIT_CRITICAL();
-
     }
     else if(strcmp(argv[1], "--help") == 0)
     {
-        taskENTER_CRITICAL();
         printf_safe("\neg:date -s \"2016-09-12 15:04:00\"\n");
-        taskEXIT_CRITICAL();
     }
-
 }
 
 tinysh_cmd_t cli_systemdate_cmd =
@@ -242,7 +230,7 @@ static void atoxi_fnt(int argc, char **argv)
     for(i = 1; i < argc; i++)
     {
         printf_safe("\"%s\"-->%u (0x%x)\n",
-               argv[i], tinysh_atoxi(argv[i]), tinysh_atoxi(argv[i]));
+                    argv[i], tinysh_atoxi(argv[i]), tinysh_atoxi(argv[i]));
     }
 }
 

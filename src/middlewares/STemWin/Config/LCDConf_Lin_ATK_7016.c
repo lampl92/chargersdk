@@ -1,163 +1,78 @@
-/**
-  ******************************************************************************
-  * @file    lcdconf.c
-  * @author  MCD Application Team
-  * @version V1.3.5
-  * @date    03-June-2016
-  * @brief   This file implements the configuration for the GUI library
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright ?2016 STMicroelectronics International N.V.
-  * All rights reserved.</center></h2>
-  *
-  * Redistribution and use in source and binary forms, with or without
-  * modification, are permitted, provided that the following conditions are met:
-  *
-  * 1. Redistribution of source code must retain the above copyright notice,
-  *    this list of conditions and the following disclaimer.
-  * 2. Redistributions in binary form must reproduce the above copyright notice,
-  *    this list of conditions and the following disclaimer in the documentation
-  *    and/or other materials provided with the distribution.
-  * 3. Neither the name of STMicroelectronics nor the names of other
-  *    contributors to this software may be used to endorse or promote products
-  *    derived from this software without specific written permission.
-  * 4. This software, including modifications and/or derivative works of this
-  *    software, must execute solely and exclusively on microcontroller or
-  *    microprocessor devices manufactured by or for STMicroelectronics.
-  * 5. Redistribution and use of this software other than as permitted under
-  *    this license is void and will automatically terminate your rights under
-  *    this license.
-  *
-  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT
-  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-  * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
-  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT
-  * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-
-/* Includes ------------------------------------------------------------------*/
-#include "includes.h"
 #include "LCDConf.h"
 #include "GUI_Private.h"
+#include "ltdc.h"
+#include "lcd.h"
+#include "GUI.h"
+#include "GUIDRV_Lin.h"
+//////////////////////////////////////////////////////////////////////////////////
+//本程序只供学习使用，未经作者许可，不得用于其它任何用途
+//ALIENTEK STM32F429开发板
+//STemWin LCD底层驱动函数
+//正点原子@ALIENTEK
+//技术论坛:www.openedv.com
+//创建日期:2016/3/15
+//版本：V1.0
+//版权所有，盗版必究。
+//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
+//All rights reserved
+//////////////////////////////////////////////////////////////////////////////////
 
+#define XSIZE_PHYS 1024     //最大支持1024*768
+#define YSIZE_PHYS 768
 
-
-/** @addtogroup STEMWIN_LIBRARY
-* @{
-*/
-
-/** @defgroup STEMWIN_LIBRARY
-* @brief This file contains the USB Configuration
-* @{
-*/
-
-/** @defgroup STEMWIN_LIBRARY_Private_TypesDefinitions
-* @{
-*/
-/**
-* @}
-*/
-
-/** @defgroup STEMWIN_LIBRARY_Private_Defines
-* @{
-*/
-//#undef  LCD_SWAP_XY
-//#undef  LCD_MIRROR_Y
-
-//#define LCD_SWAP_XY  1
-//#define LCD_MIRROR_Y 1
-
-#define XSIZE_PHYS 1024
-#define YSIZE_PHYS 600
-
-#define NUM_BUFFERS  3 // Number of multiple buffers to be used
-#define NUM_VSCREENS 1 // Number of virtual screens to be used
-
-#define BK_COLOR GUI_DARKBLUE
+#define NUM_BUFFERS  3      //使用多缓冲时的缓冲数量
+#define NUM_VSCREENS 1      //使用虚拟屏幕是的虚拟屏幕数量
 
 #undef  GUI_NUM_LAYERS
-#define GUI_NUM_LAYERS 1
+#define GUI_NUM_LAYERS 1    //层数
 
 #define COLOR_CONVERSION_0 GUICC_M565
 #define DISPLAY_DRIVER_0   GUIDRV_LIN_16
 
 #if (GUI_NUM_LAYERS > 1)
-#define COLOR_CONVERSION_1 GUICC_M1555I
-#define DISPLAY_DRIVER_1   GUIDRV_LIN_16
+  #define COLOR_CONVERSION_1 GUICC_M1555I
+  #define DISPLAY_DRIVER_1   GUIDRV_LIN_16
 #endif
 
 #ifndef   XSIZE_PHYS
-#error Physical X size of display is not defined!
+  #error Physical X size of display is not defined!
 #endif
 #ifndef   YSIZE_PHYS
-#error Physical Y size of display is not defined!
+  #error Physical Y size of display is not defined!
 #endif
 #ifndef   NUM_VSCREENS
-#define NUM_VSCREENS 1
+  #define NUM_VSCREENS 1
 #else
-#if (NUM_VSCREENS <= 0)
-#error At least one screeen needs to be defined!
-#endif
+  #if (NUM_VSCREENS <= 0)
+    #error At least one screeen needs to be defined!
+  #endif
 #endif
 #if (NUM_VSCREENS > 1) && (NUM_BUFFERS > 1)
-#error Virtual screens and multiple buffers are not allowed!
+  #error Virtual screens and multiple buffers are not allowed!
 #endif
 
-#define LCD_LAYER0_FRAME_BUFFER_SIZE  (3*1024*1024)
-#define LCD_LAYER1_FRAME_BUFFER_SIZE  (3*1024*1024)
-
-#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)//0xC0000000~0xC02FFFFF
-#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)//0xC0300000~0xC05FFFFF
-
-
-#define rccPLLSAIN          396
-#define rccPLLSAIR          2
-#define rccPLLSAIDivR       RCC_PLLSAIDIVR_4
-
-/**
-* @}
-*/
+//LCD两层的缓冲区需要根据实际所使用的屏幕分辨率以及每层所使用的颜色格式来计算，
+//最终确定最佳的缓冲区大小,这里默认设置最大分辨率为1024*600，颜色格式为8888，
+//那么每层所需要的缓冲区就是1024*600*4=2457600=0X258000,注意mlloc.h和malloc.c
+//中的外部SDRAM内存管理池地址和大小也需要做修改！！！！
+#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)     //第一层缓冲区
+#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)     //第二层缓冲区
 
 
-/** @defgroup STEMWIN_LIBRARY_Private_Macros
-* @{
-*/
-/* Redirect bulk conversion to DMA2D routines */
 #define DEFINEDMA2D_COLORCONVERSION(PFIX, PIXELFORMAT)                                                             \
-    static void Color2IndexBulk_##PFIX##DMA2D(LCD_COLOR * pColor, void * pIndex, U32 NumItems, U8 SizeOfIndex) { \
-        DMA2D_Color2IndexBulk(pColor, pIndex, NumItems, SizeOfIndex, PIXELFORMAT);                                         \
-    }                                                                                                                   \
-    static void Index2ColorBulk_##PFIX##DMA2D(void * pIndex, LCD_COLOR * pColor, U32 NumItems, U8 SizeOfIndex) { \
-        DMA2D_Index2ColorBulk(pIndex, pColor, NumItems, SizeOfIndex, PIXELFORMAT);  \
-    }
+static void Color2IndexBulk_##PFIX##DMA2D(LCD_COLOR * pColor, void * pIndex, U32 NumItems, U8 SizeOfIndex) { \
+  DMA2D_Color2IndexBulk(pColor, pIndex, NumItems, SizeOfIndex, PIXELFORMAT);                                         \
+}                                                                                                                   \
+static void Index2ColorBulk_##PFIX##DMA2D(void * pIndex, LCD_COLOR * pColor, U32 NumItems, U8 SizeOfIndex) { \
+  DMA2D_Index2ColorBulk(pIndex, pColor, NumItems, SizeOfIndex, PIXELFORMAT);  \
+}
 
-/**
-* @}
-*/
-
-
-/** @defgroup STEMWIN_LIBRARY_Private_Variables
-* @{
-*/
-LTDC_HandleTypeDef          hltdc;
-static DMA2D_HandleTypeDef  hdma2d;
-static LCD_LayerPropTypedef layer_prop[GUI_NUM_LAYERS];
-
-static const LCD_API_COLOR_CONV *apColorConvAPI[] =
+static LCD_LayerPropTypedef     layer_prop[GUI_NUM_LAYERS];
+static const LCD_API_COLOR_CONV *apColorConvAPI[]=
 {
-    COLOR_CONVERSION_0,
+  COLOR_CONVERSION_0,
 #if GUI_NUM_LAYERS > 1
-    COLOR_CONVERSION_1,
+  COLOR_CONVERSION_1,
 #endif
 };
 
@@ -165,17 +80,9 @@ static U32 aBufferDMA2D [XSIZE_PHYS * sizeof(U32)];
 static U32 aBuffer_FG   [XSIZE_PHYS * sizeof(U32)];
 static U32 aBuffer_BG   [XSIZE_PHYS * sizeof(U32)];
 
-/**
-* @}
-*/
-
-
-/** @defgroup STEMWIN_LIBRARY_Private_FunctionPrototypes
-* @{
-*/
 static uint32_t LCD_LL_GetPixelformat(uint32_t LayerIndex);
-static void     DMA2D_CopyBuffer(uint32_t LayerIndex, void *pSrc, void *pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLineSrc, uint32_t OffLineDst);
-static void     DMA2D_FillBuffer(uint32_t LayerIndex, void *pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLine, uint32_t ColorIndex);
+static void     DMA2D_CopyBuffer(uint32_t LayerIndex, void * pSrc, void * pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLineSrc, uint32_t OffLineDst);
+static void     DMA2D_FillBuffer(uint32_t LayerIndex, void * pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLine, uint32_t ColorIndex);
 static void     LCD_LL_Init(void);
 static void     LCD_LL_LayerInit(uint32_t LayerIndex);
 
@@ -183,16 +90,16 @@ static void     CUSTOM_CopyBuffer(int32_t LayerIndex, int32_t IndexSrc, int32_t 
 static void     CUSTOM_CopyRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t xSize, int32_t ySize);
 static void     CUSTOM_FillRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t PixelIndex);
 
-static void     DMA2D_Index2ColorBulk(void *pIndex, LCD_COLOR *pColor, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat);
-static void     DMA2D_Color2IndexBulk(LCD_COLOR *pColor, void *pIndex, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat);
+static void     DMA2D_Index2ColorBulk(void * pIndex, LCD_COLOR * pColor, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat);
+static void     DMA2D_Color2IndexBulk(LCD_COLOR * pColor, void * pIndex, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat);
 
-static void BSP_LCD_DrawBitmap8bpp(int32_t LayerIndex, int32_t x, int32_t y, U8 const *p, int32_t xSize, int32_t ySize, int32_t BytesPerLine);
-static void BSP_LCD_DrawBitmap16bpp(int32_t LayerIndex, int32_t x, int32_t y, U16 const *p, int32_t xSize, int32_t ySize, int32_t BytesPerLine);
-static void DMA2D_AlphaBlendingBulk(LCD_COLOR *pColorFG, LCD_COLOR *pColorBG, LCD_COLOR *pColorDst, U32 NumItems);
-static void DMA2D_AlphaBlending(LCD_COLOR *pColorFG, LCD_COLOR *pColorBG, LCD_COLOR *pColorDst, U32 NumItems);
-static LCD_PIXELINDEX *_LCD_GetpPalConvTable(const LCD_LOGPALETTE GUI_UNI_PTR *pLogPal, const GUI_BITMAP GUI_UNI_PTR *pBitmap, int LayerIndex);
+static void LCD_DrawBitmap8bpp(int32_t LayerIndex, int32_t x, int32_t y, U8 const * p, int32_t xSize, int32_t ySize, int32_t BytesPerLine);
+static void LCD_DrawBitmap16bpp(int32_t LayerIndex, int32_t x, int32_t y, U16 const * p, int32_t xSize, int32_t ySize, int32_t BytesPerLine);
+static void DMA2D_AlphaBlendingBulk(LCD_COLOR * pColorFG, LCD_COLOR * pColorBG, LCD_COLOR * pColorDst, U32 NumItems);
+static void DMA2D_AlphaBlending(LCD_COLOR * pColorFG, LCD_COLOR * pColorBG, LCD_COLOR * pColorDst, U32 NumItems);
+static LCD_PIXELINDEX * _LCD_GetpPalConvTable(const LCD_LOGPALETTE GUI_UNI_PTR * pLogPal, const GUI_BITMAP GUI_UNI_PTR * pBitmap, int LayerIndex);
 static LCD_COLOR DMA2D_MixColors(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
-static void LCD_MixColorsBulk(U32 *pFG, U32 *pBG, U32 *pDst, unsigned OffFG, unsigned OffBG, unsigned OffDest, unsigned xSize, unsigned ySize, U8 Intens);
+static void LCD_MixColorsBulk(U32 * pFG, U32 * pBG, U32 * pDst, unsigned OffFG, unsigned OffBG, unsigned OffDest, unsigned xSize, unsigned ySize, U8 Intens);
 
 DEFINEDMA2D_COLORCONVERSION(M8888I, LTDC_PIXEL_FORMAT_ARGB8888)
 DEFINEDMA2D_COLORCONVERSION(M888,   LTDC_PIXEL_FORMAT_ARGB8888)
@@ -201,317 +108,118 @@ DEFINEDMA2D_COLORCONVERSION(M1555I, LTDC_PIXEL_FORMAT_ARGB1555)
 DEFINEDMA2D_COLORCONVERSION(M4444I, LTDC_PIXEL_FORMAT_ARGB4444)
 
 static uint32_t GetBufferSize(uint32_t LayerIndex);
-/**
-* @}
-*/
 
-/** @defgroup STEMWIN_LIBRARY_Private_Functions
-* @{
-*/
-
-/*******************************************************************************
-                       LTDC and DMA2D BSP Routines
-*******************************************************************************/
-
-//LTDC中断函数
+//LTDC中断服务函数
 void LTDC_IRQHandler(void)
 {
-    HAL_LTDC_IRQHandler(&hltdc);
+  HAL_LTDC_IRQHandler(&LTDC_Handler);
 }
 
-void LCD_BackLight(int OnOff)
-{
-    if(OnOff == 1)
-    {
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-    }
-    if(OnOff == 0)
-    {
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-    }
-}
-
-
-/**
-  * @brief DMA2D MSP Initialization
-  *        This function configures the hardware resources used in This application:
-  *           - Peripheral's clock enable
-  *           - Peripheral's GPIO Configuration
-  * @param hdma2d: DMA2D handle pointer
-  * @retval None
-  */
-void HAL_DMA2D_MspInit(DMA2D_HandleTypeDef *hdma2d)
-{
-    /* Enable peripheral */
-    __HAL_RCC_DMA2D_CLK_ENABLE();
-}
-
-/**
-  * @brief DMA2D MSP De-Initialization
-  *        This function frees the hardware resources used in This application:
-  *          - Disable the Peripheral's clock
-  * @param hdma2d: DMA2D handle pointer
-  * @retval None
-  */
-void HAL_DMA2D_MspDeInit(DMA2D_HandleTypeDef *hdma2d)
-{
-    /* Enable DMA2D reset state */
-    __HAL_RCC_DMA2D_FORCE_RESET();
-
-    /* Release DMA2D from reset state */
-    __HAL_RCC_DMA2D_RELEASE_RESET();
-}
-
-/**
-  * @brief LTDC MSP Initialization
-  *        This function configures the hardware resources used in This application:
-  *           - Peripheral's clock enable
-  *           - Peripheral's GPIO Configuration
-  * @param hltdc: LTDC handle pointer
-  * @retval None
-  */
-void HAL_LTDC_MspInit(LTDC_HandleTypeDef *hltdc)
-{
-    GPIO_InitTypeDef GPIO_Init_Structure;
-
-    /* Enable peripherals and GPIO Clocks */
-    /* Enable the LTDC Clock */
-    __HAL_RCC_LTDC_CLK_ENABLE();
-
-    /* Enable GPIO Clock */
-    __HAL_RCC_GPIOB_CLK_ENABLE();               //使能GPIOB时钟
-    __HAL_RCC_GPIOF_CLK_ENABLE();               //使能GPIOF时钟
-    __HAL_RCC_GPIOG_CLK_ENABLE();               //使能GPIOG时钟
-    __HAL_RCC_GPIOH_CLK_ENABLE();               //使能GPIOH时钟
-    __HAL_RCC_GPIOI_CLK_ENABLE();               //使能GPIOI时钟
-
-
-    /* Configure peripheral GPIO */
-    /* LTDC信号线   对应IO                             说明  */
-    /*-----------------------------------------------------------*/
-    /* LCD_CLK      PG7------ 像素时钟输出  */
-    /* LCD_HSYNC    PI10----- 水平同步  */
-    /* LCD_VSYNC    PI9------ 垂直同步  */
-    /* LCD_DE       PF10 ---- 数据使能  */
-    /* LCD_R[7:3]   PG6、PH12、PH11、PH10、PH9         红色数据线，LCD_R[2:0]未用到  */
-    /* LCD_G[7:2]   PI2、PI1、PI0、PH15、PH14、PH13    绿色数据线，LCD_G[1:0]未用到  */
-    /* LCD_B[7:3]   PI7、PI6、PI5、PI4、PG11           蓝色数据线，LCD_B[2:0]未用到  */
-
-    /* GPIOs Configuration */
-
-
-    //初始化PB5，背光引脚
-    GPIO_Init_Structure.Pin = GPIO_PIN_5;              //PB5推挽输出，控制背光
-    GPIO_Init_Structure.Mode = GPIO_MODE_OUTPUT_PP;    //推挽输出
-    GPIO_Init_Structure.Pull = GPIO_PULLUP;            //上拉
-    GPIO_Init_Structure.Speed = GPIO_SPEED_HIGH;       //高速
-    HAL_GPIO_Init(GPIOB, &GPIO_Init_Structure);
-
-    //初始化PF10
-    GPIO_Init_Structure.Pin = GPIO_PIN_10;
-    GPIO_Init_Structure.Mode = GPIO_MODE_AF_PP;        //复用
-    GPIO_Init_Structure.Pull = GPIO_NOPULL;
-    GPIO_Init_Structure.Speed = GPIO_SPEED_HIGH;       //高速
-    GPIO_Init_Structure.Alternate = GPIO_AF14_LTDC;    //复用为LTDC
-    HAL_GPIO_Init(GPIOF, &GPIO_Init_Structure);
-
-    //初始化PG6,7,11
-    GPIO_Init_Structure.Pin = GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_11;
-    HAL_GPIO_Init(GPIOG, &GPIO_Init_Structure);
-
-    //初始化PH9,10,11,12,13,14,15
-    GPIO_Init_Structure.Pin = GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | \
-                              GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15;
-    HAL_GPIO_Init(GPIOH, &GPIO_Init_Structure);
-
-    //初始化PI0,1,2,4,5,6,7,9,10
-    GPIO_Init_Structure.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_4 | GPIO_PIN_5 | \
-                              GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_9 | GPIO_PIN_10;
-    HAL_GPIO_Init(GPIOI, &GPIO_Init_Structure);
-
-    /* Set LTDC Interrupt to the lowest priority */
-    HAL_NVIC_SetPriority(LTDC_IRQn, bspLTDC_PreemptPriority, bspLTDC_SubPriority);
-
-    /* Enable LTDC Interrupt */
-    HAL_NVIC_EnableIRQ(LTDC_IRQn);
-
-
-    LCD_BackLight(1);    //开启背光
-}
-
-/**
-  * @brief LTDC MSP De-Initialization
-  *        This function frees the hardware resources used in This application:
-  *          - Disable the Peripheral's clock
-  * @param hltdc: LTDC handle pointer
-  * @retval None
-  */
-void HAL_LTDC_MspDeInit(LTDC_HandleTypeDef *hltdc)
-{
-    /* Reset peripherals */
-    /* Enable LTDC reset state */
-    __HAL_RCC_LTDC_FORCE_RESET();
-
-    /* Release LTDC from reset state */
-    __HAL_RCC_LTDC_RELEASE_RESET();
-}
-
-/**
-  * @brief  Line Event callback.
-  * @param  hltdc: pointer to a LTDC_HandleTypeDef structure that contains
-  *                the configuration information for the specified LTDC.
-  * @retval None
-  */
-void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *hltdc)
+//LTDC行事件回调函数
+//LTDC_Handler:LTDC句柄
+void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *LTDC_Handler)
 {
     uint32_t Addr;
-    uint32_t layer;
+    uint32_t layer=0;
 
-    for (layer = 0; layer < GUI_NUM_LAYERS; layer++)
+    for (layer=0;layer<GUI_NUM_LAYERS;layer++)
     {
-        if (layer_prop[layer].pending_buffer >= 0)
+        if(layer_prop[layer].pending_buffer>=0)
         {
-            /* Calculate address of buffer to be used  as visible frame buffer */
-            Addr = layer_prop[layer].address + layer_prop[layer].xSize * layer_prop[layer].ySize * layer_prop[layer].pending_buffer * layer_prop[layer].BytesPerPixel;
-            HAL_LTDC_SetAddress(hltdc, Addr, layer);
-
-            __HAL_LTDC_RELOAD_CONFIG(hltdc);
-
-            /* Notify STemWin that buffer is used */
-            GUI_MULTIBUF_ConfirmEx(layer, layer_prop[layer].pending_buffer);
-
-            /* Clear pending buffer flag of layer */
-            layer_prop[layer].pending_buffer = -1;
+            //计算显示的帧地址
+            Addr=layer_prop[layer].address + \
+                 layer_prop[layer].xSize * layer_prop[layer].ySize * layer_prop[layer].pending_buffer * layer_prop[layer].BytesPerPixel;
+            HAL_LTDC_SetAddress(LTDC_Handler,Addr,layer);//设置地址
+            __HAL_LTDC_RELOAD_CONFIG(LTDC_Handler);
+            GUI_MULTIBUF_ConfirmEx(layer,layer_prop[layer].pending_buffer);
+            layer_prop[layer].pending_buffer=-1;
         }
     }
-
-    HAL_LTDC_ProgramLineEvent(hltdc, 0);
+    HAL_LTDC_ProgramLineEvent(LTDC_Handler,0);
 }
 
-/*******************************************************************************
-                          Display configuration
-*******************************************************************************/
-/**
-  * @brief  Called during the initialization process in order to set up the
-  *          display driver configuration
-  * @param  None
-  * @retval None
-  */
+//配置程序,用于创建显示驱动器件,设置颜色转换程序和显示尺寸
 void LCD_X_Config(void)
 {
     uint32_t i;
 
-    LCD_LL_Init();
-
-    /* At first initialize use of multiple buffers on demand */
-#if (NUM_BUFFERS > 1)
-    for (i = 0; i < GUI_NUM_LAYERS; i++)
+    LCD_LL_Init ();                                 //LCD底层驱动(LTDC中断设置和DMA2D初始化)
+#if (NUM_BUFFERS>1)                                 //多缓冲
+    for (i=0;i<GUI_NUM_LAYERS; i++)
     {
         GUI_MULTIBUF_ConfigEx(i, NUM_BUFFERS);
     }
 #endif
+    //设置第一层
+    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_0,COLOR_CONVERSION_0,0,0);//创建显示驱动器件
+    GUI_SelectLayer(0);     //选中第0层
+    if(lcddev.dir==0)//竖屏
+    {
+        LCD_SetSizeEx(0,lcddev.height,lcddev.width);    //设置可见区尺寸
+        LCD_SetVSizeEx(0,lcddev.height,lcddev.width*NUM_VSCREENS);   //设置虚拟显示区尺寸
+        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //设置为竖屏
+    }else            //横屏
+    {
+    	LCD_SetSizeEx(0,lcddev.width,lcddev.height);    //设置可见区尺寸
+        LCD_SetVSizeEx(0,lcddev.width,lcddev.height*NUM_VSCREENS);   //设置虚拟显示区尺寸
+    }
+    GUI_TOUCH_Calibrate(GUI_COORD_X,0,lcddev.width,0,lcddev.width-1);
+    GUI_TOUCH_Calibrate(GUI_COORD_Y,0,lcddev.height,0,lcddev.height-1);
+#if (GUI_NUM_LAYERS>1)
 
-    /* Set display driver and color conversion for 1st layer */
-    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_0, COLOR_CONVERSION_0, 0, 0);
-
-    /* Set size of 1st layer */
-    if (LCD_GetSwapXYEx(0))
+    //设置第二层
+    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_1,COLOR_CONVERSION_1,0,1);
+    GUI_SelectLayer(1);     //选中第1层
+    if(lcddev.dir==0)//竖屏
     {
-        LCD_SetSizeEx (0, YSIZE_PHYS, XSIZE_PHYS);
-        LCD_SetVSizeEx(0, YSIZE_PHYS * NUM_VSCREENS, XSIZE_PHYS);
-    }
-    else
+        LCD_SetSizeEx(1,lcddev.height,lcddev.width);    //设置可见区尺寸
+        LCD_SetVSizeEx(1,lcddev.height,lcddev.width*NUM_VSCREENS);   //设置虚拟显示区尺寸
+        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //设置为竖屏
+    }else            //横屏
     {
-        LCD_SetSizeEx (0, XSIZE_PHYS, YSIZE_PHYS);
-        LCD_SetVSizeEx(0, XSIZE_PHYS, YSIZE_PHYS * NUM_VSCREENS);
+    	LCD_SetSizeEx(1,lcddev.width,lcddev.height);    //设置可见区尺寸
+        LCD_SetVSizeEx(1,lcddev.width,lcddev.height*NUM_VSCREENS);   //设置虚拟显示区尺寸
     }
-
-#if (GUI_NUM_LAYERS > 1)
-    /* Set display driver and color conversion for 2nd layer */
-    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_1, COLOR_CONVERSION_1, 0, 1);
-    /* Set size of 2nd layer */
-    if (LCD_GetSwapXYEx(1))
-    {
-        LCD_SetSizeEx (1, YSIZE_PHYS, XSIZE_PHYS);
-        LCD_SetVSizeEx(1, YSIZE_PHYS * NUM_VSCREENS, XSIZE_PHYS);
-    }
-    else
-    {
-        LCD_SetSizeEx (1, XSIZE_PHYS, YSIZE_PHYS);
-        LCD_SetVSizeEx(1, XSIZE_PHYS, YSIZE_PHYS * NUM_VSCREENS);
-    }
+    GUI_TOUCH_Calibrate(GUI_COORD_X,0,lcddev.width,0,lcddev.width-1);
+    GUI_TOUCH_Calibrate(GUI_COORD_Y,0,lcddev.height,0,lcddev.height-1);
 #endif
 
-    /*Initialize GUI Layer structure */
-    layer_prop[0].address = LCD_LAYER0_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER0_FRAME_BUFFER_SIZE);
-#if (GUI_NUM_LAYERS > 1)
-    layer_prop[1].address = LCD_LAYER1_FRAME_BUFFER;//(uint32_t)malloc(LCD_LAYER1_FRAME_BUFFER_SIZE);
+    layer_prop[0].address=LCD_LAYER0_FRAME_BUFFER;           //缓冲区
+#if (GUI_NUM_LAYERS>1)
+    layer_prop[1].address=LCD_LAYER1_FRAME_BUFFER;
 #endif
 
-    /* Setting up VRam address and custom functions for CopyBuffer-, CopyRect- and FillRect operations */
-    for (i = 0; i < GUI_NUM_LAYERS; i++)
+    for (i=0;i<GUI_NUM_LAYERS;i++)
     {
-        layer_prop[i].pColorConvAPI = (LCD_API_COLOR_CONV *)apColorConvAPI[i];
-
-        layer_prop[i].pending_buffer = -1;
-
-        /* Set VRAM address */
-        LCD_SetVRAMAddrEx(i, (void *)(layer_prop[i].address));
-
-        /* Remember color depth for further operations */
-        layer_prop[i].BytesPerPixel = LCD_GetBitsPerPixelEx(i) >> 3;
-
-        /* Set custom functions for several operations */
-        LCD_SetDevFunc(i, LCD_DEVFUNC_COPYBUFFER, (void(*)(void))CUSTOM_CopyBuffer);
-        LCD_SetDevFunc(i, LCD_DEVFUNC_COPYRECT,   (void(*)(void))CUSTOM_CopyRect);
-
-        /* Filling via DMA2D does only work with 16bpp or more */
-        if (LCD_LL_GetPixelformat(i) <= LTDC_PIXEL_FORMAT_ARGB4444)
+        layer_prop[i].pColorConvAPI=(LCD_API_COLOR_CONV *)apColorConvAPI[i];
+        layer_prop[i].pending_buffer=-1;
+        LCD_SetVRAMAddrEx(i,(void *)(layer_prop[i].address));
+        layer_prop[i].BytesPerPixel=LCD_GetBitsPerPixelEx(i) >> 3;
+        LCD_SetDevFunc(i,LCD_DEVFUNC_COPYBUFFER,(void(*)(void))CUSTOM_CopyBuffer);
+        LCD_SetDevFunc(i,LCD_DEVFUNC_COPYRECT,(void(*)(void))CUSTOM_CopyRect);
+        if (LCD_LL_GetPixelformat(i)<=LTDC_PIXEL_FORMAT_ARGB4444)
         {
-            LCD_SetDevFunc(i, LCD_DEVFUNC_FILLRECT, (void(*)(void))CUSTOM_FillRect);
-            LCD_SetDevFunc(i, LCD_DEVFUNC_DRAWBMP_8BPP, (void(*)(void))BSP_LCD_DrawBitmap8bpp);
+            LCD_SetDevFunc(i,LCD_DEVFUNC_FILLRECT,(void(*)(void))CUSTOM_FillRect);
+            LCD_SetDevFunc(i,LCD_DEVFUNC_DRAWBMP_8BPP,(void(*)(void))LCD_DrawBitmap8bpp);
         }
-
-        /* Set up drawing routine for 16bpp bitmap using DMA2D */
-        if (LCD_LL_GetPixelformat(i) == LTDC_PIXEL_FORMAT_RGB565)
+        if(LCD_LL_GetPixelformat(i)==LTDC_PIXEL_FORMAT_RGB565)
         {
-            LCD_SetDevFunc(i, LCD_DEVFUNC_DRAWBMP_16BPP, (void(*)(void))BSP_LCD_DrawBitmap16bpp);     /* Set up drawing routine for 16bpp bitmap using DMA2D. Makes only sense with RGB565 */
+           LCD_SetDevFunc(i,LCD_DEVFUNC_DRAWBMP_16BPP,(void(*)(void))LCD_DrawBitmap16bpp);
         }
-
-        /* Set up custom color conversion using DMA2D, works only for direct color modes because of missing LUT for DMA2D destination */
-        GUICC_M1555I_SetCustColorConv(Color2IndexBulk_M1555IDMA2D, Index2ColorBulk_M1555IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB1555 */
-        //GUICC_M565_SetCustColorConv  (Color2IndexBulk_M565DMA2D,   Index2ColorBulk_M565DMA2D);   /* Set up custom bulk color conversion using DMA2D for RGB565 */
-        GUICC_M4444I_SetCustColorConv(Color2IndexBulk_M4444IDMA2D, Index2ColorBulk_M4444IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB4444 */
-        GUICC_M888_SetCustColorConv  (Color2IndexBulk_M888DMA2D,   Index2ColorBulk_M888DMA2D);   /* Set up custom bulk color conversion using DMA2D for RGB888 */
-        GUICC_M8888I_SetCustColorConv(Color2IndexBulk_M8888IDMA2D, Index2ColorBulk_M8888IDMA2D); /* Set up custom bulk color conversion using DMA2D for ARGB8888 */
-
-        /* Set up custom alpha blending function using DMA2D */
-        GUI_SetFuncAlphaBlending(DMA2D_AlphaBlending);                                                /* Set up custom alpha blending function using DMA2D */
-
-        /* Set up custom function for translating a bitmap palette into index values.
-        Required to load a bitmap palette into DMA2D CLUT in case of a 8bpp indexed bitmap */
+        GUICC_M1555I_SetCustColorConv(Color2IndexBulk_M1555IDMA2D,Index2ColorBulk_M1555IDMA2D);
+        //GUICC_M565_SetCustColorConv(Color2IndexBulk_M565DMA2D,Index2ColorBulk_M565DMA2D);
+        GUICC_M4444I_SetCustColorConv(Color2IndexBulk_M4444IDMA2D,Index2ColorBulk_M4444IDMA2D);
+        GUICC_M888_SetCustColorConv(Color2IndexBulk_M888DMA2D,Index2ColorBulk_M888DMA2D);
+        GUICC_M8888I_SetCustColorConv(Color2IndexBulk_M8888IDMA2D,Index2ColorBulk_M8888IDMA2D);
+        GUI_SetFuncAlphaBlending(DMA2D_AlphaBlending);
         GUI_SetFuncGetpPalConvTable(_LCD_GetpPalConvTable);
-
-        /* Set up a custom function for mixing up single colors using DMA2D */
         GUI_SetFuncMixColors(DMA2D_MixColors);
-
-        /* Set up a custom function for mixing up arrays of colors using DMA2D */
         GUI_SetFuncMixColorsBulk(LCD_MixColorsBulk);
     }
 }
 
-/**
-  * @brief  This function is called by the display driver for several purposes.
-  *         To support the according task the routine needs to be adapted to
-  *         the display controller. Please note that the commands marked with
-  *         'optional' are not cogently required and should only be adapted if
-  *         the display controller supports these features
-  * @param  LayerIndex: Index of layer to be configured
-  * @param  Cmd       :Please refer to the details in the switch statement below
-  * @param  pData     :Pointer to a LCD_X_DATA structure
-  * @retval Status (-1 : Error,  0 : Ok)
-  */
-int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void *pData)
+//显示驱动回调函数
+int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData)
 {
     int32_t r = 0;
     uint32_t addr;
@@ -520,879 +228,539 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void *pData)
 
     switch (Cmd)
     {
-        case LCD_X_INITCONTROLLER:
+      case LCD_X_INITCONTROLLER:
             LCD_LL_LayerInit(LayerIndex);
             break;
-
         case LCD_X_SETORG:
-            addr = layer_prop[LayerIndex].address + ((LCD_X_SETORG_INFO *)pData)->yPos * layer_prop[LayerIndex].xSize * layer_prop[LayerIndex].BytesPerPixel;
-            HAL_LTDC_SetAddress(&hltdc, addr, LayerIndex);
+            addr=layer_prop[LayerIndex].address+((LCD_X_SETORG_INFO *)pData)->yPos*layer_prop[LayerIndex].xSize*layer_prop[LayerIndex].BytesPerPixel;
+            HAL_LTDC_SetAddress(&LTDC_Handler,addr,LayerIndex);
             break;
-
         case LCD_X_SHOWBUFFER:
-            layer_prop[LayerIndex].pending_buffer = ((LCD_X_SHOWBUFFER_INFO *)pData)->Index;
+            layer_prop[LayerIndex].pending_buffer=((LCD_X_SHOWBUFFER_INFO *)pData)->Index;
             break;
-
         case LCD_X_SETLUTENTRY:
-            HAL_LTDC_ConfigCLUT(&hltdc, (uint32_t *) & (((LCD_X_SETLUTENTRY_INFO *)pData)->Color), 1, LayerIndex);
+            HAL_LTDC_ConfigCLUT(&LTDC_Handler,(uint32_t *)&(((LCD_X_SETLUTENTRY_INFO *)pData)->Color),1,LayerIndex);
             break;
-
         case LCD_X_ON:
-            __HAL_LTDC_ENABLE(&hltdc);
+            __HAL_LTDC_ENABLE(&LTDC_Handler);
             break;
-
         case LCD_X_OFF:
-            __HAL_LTDC_DISABLE(&hltdc);
+            __HAL_LTDC_DISABLE(&LTDC_Handler);
             break;
-
         case LCD_X_SETVIS:
-            if(((LCD_X_SETVIS_INFO *)pData)->OnOff  == ENABLE )
+            if(((LCD_X_SETVIS_INFO *)pData)->OnOff==ENABLE )
             {
-                __HAL_LTDC_LAYER_ENABLE(&hltdc, LayerIndex);
+                __HAL_LTDC_LAYER_ENABLE(&LTDC_Handler,LayerIndex);
             }
             else
             {
-                __HAL_LTDC_LAYER_DISABLE(&hltdc, LayerIndex);
+                __HAL_LTDC_LAYER_DISABLE(&LTDC_Handler,LayerIndex);
             }
-            __HAL_LTDC_RELOAD_CONFIG(&hltdc);
+            __HAL_LTDC_RELOAD_CONFIG(&LTDC_Handler);
             break;
-
         case LCD_X_SETPOS:
-            HAL_LTDC_SetWindowPosition(&hltdc,
-                                       ((LCD_X_SETPOS_INFO *)pData)->xPos,
-                                       ((LCD_X_SETPOS_INFO *)pData)->yPos,
-                                       LayerIndex);
+            HAL_LTDC_SetWindowPosition(&LTDC_Handler,
+                                      ((LCD_X_SETPOS_INFO *)pData)->xPos,
+                                      ((LCD_X_SETPOS_INFO *)pData)->yPos,
+                                      LayerIndex);
             break;
-
         case LCD_X_SETSIZE:
-            GUI_GetLayerPosEx(LayerIndex, (int *)&xPos, (int *)&yPos);
-            layer_prop[LayerIndex].xSize = ((LCD_X_SETSIZE_INFO *)pData)->xSize;
-            layer_prop[LayerIndex].ySize = ((LCD_X_SETSIZE_INFO *)pData)->ySize;
-            HAL_LTDC_SetWindowPosition(&hltdc, xPos, yPos, LayerIndex);
+            GUI_GetLayerPosEx(LayerIndex,(int*)&xPos,(int*)&yPos);
+            layer_prop[LayerIndex].xSize=((LCD_X_SETSIZE_INFO *)pData)->xSize;
+            layer_prop[LayerIndex].ySize=((LCD_X_SETSIZE_INFO *)pData)->ySize;
+            HAL_LTDC_SetWindowPosition(&LTDC_Handler,xPos,yPos,LayerIndex);
             break;
-
         case LCD_X_SETALPHA:
-            HAL_LTDC_SetAlpha(&hltdc, ((LCD_X_SETALPHA_INFO *)pData)->Alpha, LayerIndex);
+            HAL_LTDC_SetAlpha(&LTDC_Handler,((LCD_X_SETALPHA_INFO *)pData)->Alpha,LayerIndex);
             break;
-
         case LCD_X_SETCHROMAMODE:
             if(((LCD_X_SETCHROMAMODE_INFO *)pData)->ChromaMode != 0)
             {
-                HAL_LTDC_EnableColorKeying(&hltdc, LayerIndex);
+                HAL_LTDC_EnableColorKeying(&LTDC_Handler,LayerIndex);
             }
             else
             {
-                HAL_LTDC_DisableColorKeying(&hltdc, LayerIndex);
+                HAL_LTDC_DisableColorKeying(&LTDC_Handler,LayerIndex);
             }
             break;
-
         case LCD_X_SETCHROMA:
-
-            Color = ((((LCD_X_SETCHROMA_INFO *)pData)->ChromaMin & 0xFF0000) >> 16) | \
-                    (((LCD_X_SETCHROMA_INFO *)pData)->ChromaMin & 0x00FF00) | \
+            Color=((((LCD_X_SETCHROMA_INFO *)pData)->ChromaMin & 0xFF0000) >> 16) |\
+                    (((LCD_X_SETCHROMA_INFO *)pData)->ChromaMin & 0x00FF00) |\
                     ((((LCD_X_SETCHROMA_INFO *)pData)->ChromaMin & 0x0000FF) << 16);
 
-            HAL_LTDC_ConfigColorKeying(&hltdc, Color, LayerIndex);
+            HAL_LTDC_ConfigColorKeying(&LTDC_Handler,Color,LayerIndex);
             break;
-
         default:
             r = -1;
     }
     return r;
 }
 
-/*******************************************************************************
-                          Static code
-*******************************************************************************/
-/**
-  * @brief  Initialize the LCD Controller.
-  * @param  LayerIndex : layer Index.
-  * @retval None
-  */
+//LTDC层配置
 static void LCD_LL_LayerInit(uint32_t LayerIndex)
 {
-    uint32_t                         i;
-    static uint32_t                  LUT[256];
-    LTDC_LayerCfgTypeDef             layer_cfg;
+    uint32_t i;
+    static uint32_t LUT[256];
+    LTDC_LayerCfgTypeDef layer_cfg;
 
-    if (LayerIndex < GUI_NUM_LAYERS)
+    if (LayerIndex<GUI_NUM_LAYERS)
     {
-        /* Layer configuration */
-        layer_cfg.WindowX0 = 0;
-        layer_cfg.WindowX1 = XSIZE_PHYS;
-        layer_cfg.WindowY0 = 0;
-        layer_cfg.WindowY1 = YSIZE_PHYS;
-        layer_cfg.PixelFormat = LCD_LL_GetPixelformat(LayerIndex);
-        layer_cfg.FBStartAdress = layer_prop[LayerIndex].address;
-        layer_cfg.Alpha = 255;
-        layer_cfg.Alpha0 = 0;
-        layer_cfg.Backcolor.Blue = 0;
-        layer_cfg.Backcolor.Green = 0;
-        layer_cfg.Backcolor.Red = 0;
-        layer_cfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA;
-        layer_cfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA;
-        layer_cfg.ImageWidth = XSIZE_PHYS;
-        layer_cfg.ImageHeight = YSIZE_PHYS;
-        HAL_LTDC_ConfigLayer(&hltdc, &layer_cfg, LayerIndex);
-
-        /* Enable LUT on demand */
-        if (LCD_GetBitsPerPixelEx(LayerIndex) <= 8)
+        layer_cfg.WindowX0=0;                                   //窗口起始X坐标
+        layer_cfg.WindowY0=0;                                   //窗口起始Y坐标
+        layer_cfg.WindowX1=lcdltdc.pwidth;                      //窗口终止X坐标
+        layer_cfg.WindowY1=lcdltdc.pheight;                     //窗口终止Y坐标
+        layer_cfg.PixelFormat=LCD_LL_GetPixelformat(LayerIndex);//像素格式
+        layer_cfg.Alpha=255;                                    //Alpha值设置，0~255,255为完全不透明
+        layer_cfg.Alpha0=0;;                                    //默认Alpha值
+        layer_cfg.Backcolor.Red=0;                              //背景颜色红色部分
+        layer_cfg.Backcolor.Green=0;                            //背景颜色绿色部分
+        layer_cfg.Backcolor.Blue=0;                             //背景颜色蓝色部分
+        layer_cfg.FBStartAdress=layer_prop[LayerIndex].address; //设置层颜色帧缓存起始地址
+        layer_cfg.BlendingFactor1=LTDC_BLENDING_FACTOR1_PAxCA;  //设置层混合系数
+        layer_cfg.BlendingFactor2=LTDC_BLENDING_FACTOR2_PAxCA;  //设置层混合系数
+        layer_cfg.ImageWidth=lcdltdc.pwidth;                    //设置颜色帧缓冲区的宽度
+        layer_cfg.ImageHeight=lcdltdc.pheight;                  //设置颜色帧缓冲区的高度
+        HAL_LTDC_ConfigLayer(&LTDC_Handler,&layer_cfg,LayerIndex);//设置所选中的层
+        if (LCD_GetBitsPerPixelEx(LayerIndex)<=8)
         {
-            /* Enable usage of LUT for all modes with <= 8bpp*/
-            HAL_LTDC_EnableCLUT(&hltdc, LayerIndex);
+            HAL_LTDC_EnableCLUT(&LTDC_Handler,LayerIndex);
         }
         else
         {
-            /* Optional CLUT initialization for AL88 mode (16bpp)*/
-            if (layer_prop[LayerIndex].pColorConvAPI == GUICC_88666I)
+            if (layer_prop[LayerIndex].pColorConvAPI==GUICC_88666I)
             {
-                HAL_LTDC_EnableCLUT(&hltdc, LayerIndex);
-
-                for (i = 0; i < 256; i++)
+                HAL_LTDC_EnableCLUT(&LTDC_Handler,LayerIndex);
+                for (i=0;i<256;i++)
                 {
-                    LUT[i] = LCD_API_ColorConv_8666.pfIndex2Color(i);
+                    LUT[i]=LCD_API_ColorConv_8666.pfIndex2Color(i);
                 }
-                HAL_LTDC_ConfigCLUT(&hltdc, LUT, 256, LayerIndex);
+                HAL_LTDC_ConfigCLUT(&LTDC_Handler,LUT,256,LayerIndex);
             }
         }
     }
 }
 
-/**
-  * @brief  Initialize the LCD Controller.
-  * @param  LayerIndex : layer Index.
-  * @retval None
-  */
+//LCD底层驱动,LTDC中断设置，DMA2D初始化
 static void LCD_LL_Init(void)
 {
-    _ltdc_dev lcdltdc;                      //管理LCD LTDC的重要参数
-    static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
+    //LTDC中断，抢占优先级1，子优先级1
+    HAL_NVIC_SetPriority(LTDC_IRQn,1,1);
+    HAL_NVIC_EnableIRQ(LTDC_IRQn);
+    HAL_LTDC_ProgramLineEvent(&LTDC_Handler,0);//开启LTDC的行中断
 
-    lcdltdc.pwidth = XSIZE_PHYS;          //面板宽度,单位:像素
-    lcdltdc.pheight = YSIZE_PHYS;          //面板高度,单位:像素
-    lcdltdc.hsw = 20;               //水平同步宽度
-    lcdltdc.vsw = 3;                //垂直同步宽度
-    lcdltdc.hbp = 140;              //水平后廊
-    lcdltdc.vbp = 20;               //垂直后廊
-    lcdltdc.hfp = 160;              //水平前廊
-    lcdltdc.vfp = 12;               //垂直前廊
-
-    /* DeInit */
-    HAL_LTDC_DeInit(&hltdc);
-
-    /* Set LCD Timings */
-    hltdc.Init.HorizontalSync = lcdltdc.hsw - 1;      //水平同步宽度
-    hltdc.Init.VerticalSync = lcdltdc.vsw - 1;        //垂直同步宽度
-    hltdc.Init.AccumulatedHBP = lcdltdc.hsw + lcdltdc.hbp - 1; //水平同步后沿宽度
-    hltdc.Init.AccumulatedVBP = lcdltdc.vsw + lcdltdc.vbp - 1; //垂直同步后沿高度
-    hltdc.Init.AccumulatedActiveW = lcdltdc.hsw + lcdltdc.hbp + lcdltdc.pwidth - 1; //有效宽度
-    hltdc.Init.AccumulatedActiveH = lcdltdc.vsw + lcdltdc.vbp + lcdltdc.pheight - 1; //有效高度
-    hltdc.Init.TotalWidth = lcdltdc.hsw + lcdltdc.hbp + lcdltdc.pwidth + lcdltdc.hfp - 1; //总宽度
-    hltdc.Init.TotalHeigh = lcdltdc.vsw + lcdltdc.vbp + lcdltdc.pheight + lcdltdc.vfp - 1; //总高度
-
-
-    /* background value */
-    hltdc.Init.Backcolor.Blue = 0;
-    hltdc.Init.Backcolor.Green = 0;
-    hltdc.Init.Backcolor.Red = 0;
-
-    /* 设置像素时钟  LCD clock configuration */
-    /* PLLSAI_VCO Input = HSE_VALUE/PLL_M = 1 MHz */
-    /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAIN = 396 MHz */
-    /* PLLLCDCLK = PLLSAI_VCO Output/PLLSAIR = 396/2 = 198 MHz */
-    /* LTDC clock frequency = PLLLCDCLK / LTDC_PLLSAI_DIVR_4 = 198/4 = 49.5 MHz */
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
-    PeriphClkInitStruct.PLLSAI.PLLSAIN = 396;
-    PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
-    PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_4;
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);//设置像素时钟  49.5MHz(45 ~ 57MHz)
-
-    /* Polarity */
-    hltdc.Init.HSPolarity = LTDC_HSPOLARITY_AL;
-    hltdc.Init.VSPolarity = LTDC_VSPOLARITY_AL;
-    hltdc.Init.DEPolarity = LTDC_DEPOLARITY_AL;
-    hltdc.Init.PCPolarity = LTDC_PCPOLARITY_IPC;
-    hltdc.Instance = LTDC;
-
-    HAL_LTDC_Init(&hltdc);
-    HAL_LTDC_ProgramLineEvent(&hltdc, 0);
-
-    /* Configure the DMA2D  default mode */
-    hdma2d.Init.Mode         = DMA2D_R2M;
-    hdma2d.Init.ColorMode    = DMA2D_RGB565;
-    hdma2d.Init.OutputOffset = 0x0;
-
-    hdma2d.Instance          = DMA2D;
-
-    if(HAL_DMA2D_Init(&hdma2d) != HAL_OK)
-    {
-        while (1);
-    }
+    //DMA2D默认设置
+    DMA2D_Handler.Instance=DMA2D;
+    DMA2D_Handler.Init.Mode=DMA2D_R2M;          //内存到存储器模式
+    DMA2D_Handler.Init.ColorMode=DMA2D_RGB565;  //RGB565模式
+    DMA2D_Handler.Init.OutputOffset=0x0;        //输出偏移为0
+    HAL_DMA2D_Init(&DMA2D_Handler);
 }
 
-/**
-  * @brief  Return Pixel format for a given layer
-  * @param  LayerIndex : Layer Index
-  * @retval Status ( 0 : 0k , 1: error)
-  */
+//返回层的颜色格式
+//返回值:1，失败；其他，颜色格式
 static uint32_t LCD_LL_GetPixelformat(uint32_t LayerIndex)
 {
-    const LCD_API_COLOR_CONV *pColorConvAPI;
-
-    if (LayerIndex >= GUI_NUM_LAYERS)
-    {
-        return 0;
-    }
-    pColorConvAPI = layer_prop[LayerIndex].pColorConvAPI;
-
-    if (pColorConvAPI == GUICC_M8888I)
-    {
-        return LTDC_PIXEL_FORMAT_ARGB8888;
-    }
-    else if (pColorConvAPI == GUICC_M888)
-    {
-        return LTDC_PIXEL_FORMAT_RGB888;
-    }
-    else if (pColorConvAPI == GUICC_M565)
-    {
-        return LTDC_PIXEL_FORMAT_RGB565;
-    }
-    else if (pColorConvAPI == GUICC_M1555I)
-    {
-        return LTDC_PIXEL_FORMAT_ARGB1555;
-    }
-    else if (pColorConvAPI == GUICC_M4444I)
-    {
-        return LTDC_PIXEL_FORMAT_ARGB4444;
-    }
-    else if (pColorConvAPI == GUICC_8666)
-    {
-        return LTDC_PIXEL_FORMAT_L8;
-    }
-    else if (pColorConvAPI == GUICC_1616I)
-    {
-        return LTDC_PIXEL_FORMAT_AL44;
-    }
-    else if (pColorConvAPI == GUICC_88666I)
-    {
-        return LTDC_PIXEL_FORMAT_AL88;
-    }
-    while (1);
+    const LCD_API_COLOR_CONV * pColorConvAPI;
+    if (LayerIndex>=GUI_NUM_LAYERS) return 0;
+    pColorConvAPI=layer_prop[LayerIndex].pColorConvAPI;
+    if(pColorConvAPI==GUICC_M8888I) return LTDC_PIXEL_FORMAT_ARGB8888;
+    else if (pColorConvAPI==GUICC_M888) return LTDC_PIXEL_FORMAT_RGB888;
+    else if (pColorConvAPI==GUICC_M565) return LTDC_PIXEL_FORMAT_RGB565;
+    else if (pColorConvAPI==GUICC_M1555I) return LTDC_PIXEL_FORMAT_ARGB1555;
+    else if (pColorConvAPI==GUICC_M4444I) return LTDC_PIXEL_FORMAT_ARGB4444;
+    return 1;
 }
 
-/*********************************************************************
-*
-*       CopyBuffer
-*/
-static void DMA2D_CopyBuffer(uint32_t LayerIndex, void *pSrc, void *pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLineSrc, uint32_t OffLineDst)
+
+//使用DMA2D将数据从一个buffer拷贝到另一个buffer中
+//LayerIndex:层索引
+//pSrc:源buffer
+//pDst:目标buffer
+//xSize:X轴大小(每行像素数)
+//ySize:Y轴大小(行数)
+//OffLineSrc:源buffer偏移地址
+//OffLineDst:目的fuffer偏移地址
+static void DMA2D_CopyBuffer(uint32_t LayerIndex,void * pSrc,void * pDst,uint32_t xSize,uint32_t ySize,uint32_t OffLineSrc,uint32_t OffLineDst)
 {
     uint32_t PixelFormat;
-
-    PixelFormat = LCD_LL_GetPixelformat(LayerIndex);
-    DMA2D->CR      = 0x00000000UL | (1 << 9);
-
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)pSrc;
-    DMA2D->OMAR    = (uint32_t)pDst;
-    DMA2D->FGOR    = OffLineSrc;
-    DMA2D->OOR     = OffLineDst;
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = PixelFormat;
-
-    /*  Set up size */
-    DMA2D->NLR     = (uint32_t)(xSize << 16) | (U16)ySize;
-
-    DMA2D->CR     |= DMA2D_CR_START;
-
-    /* Wait until transfer is done */
-    while (DMA2D->CR & DMA2D_CR_START)
+    u32 timeout=0;
+    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //获取像素格式
+    DMA2D->CR=0x00000000UL|(1<<9);                  //存储器到存储器
+    DMA2D->FGMAR=(uint32_t)pSrc;                    //设置前景层存储器地址
+    DMA2D->OMAR=(uint32_t)pDst;                     //设置输出存储器地址
+    DMA2D->FGOR=OffLineSrc;                         //设置前景层偏移
+    DMA2D->OOR=OffLineDst;                          //设置输出偏移
+    DMA2D->FGPFCCR=PixelFormat;                     //设置颜色模式
+    DMA2D->NLR=(uint32_t)(xSize<<16)|(U16)ySize;    //设置每行像素数和行数
+    DMA2D->CR|=DMA2D_CR_START;                      //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)                 //等待传输完成
     {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	                //超时退出
     }
 }
 
-/*********************************************************************
-*
-*       FillBuffer
-*/
-static void DMA2D_FillBuffer(uint32_t LayerIndex, void *pDst, uint32_t xSize, uint32_t ySize, uint32_t OffLine, uint32_t ColorIndex)
+//使用指定的颜色填充一个矩形块
+//LayerIndex:层索引
+//pDst:目标buffer，要填充的矩形
+//xSize:X轴大小(每行像素数)
+//ySize:Y轴大小(行数)
+//OffLineSrc:源buffer偏移地址
+//OffLineDst:目的fuffer偏移地址
+//ColorIndex:要填充的颜色值
+static void DMA2D_FillBuffer(uint32_t LayerIndex,void * pDst,uint32_t xSize,uint32_t ySize,uint32_t OffLine,uint32_t ColorIndex)
 {
     uint32_t PixelFormat;
-
-    PixelFormat = LCD_LL_GetPixelformat(LayerIndex);
-
-    /* Set up mode */
-    DMA2D->CR      = 0x00030000UL | (1 << 9);
-    DMA2D->OCOLR   = ColorIndex;
-
-    /* Set up pointers */
-    DMA2D->OMAR    = (uint32_t)pDst;
-
-    /* Set up offsets */
-    DMA2D->OOR     = OffLine;
-
-    /* Set up pixel format */
-    DMA2D->OPFCCR  = PixelFormat;
-
-    /*  Set up size */
-    DMA2D->NLR     = (uint32_t)(xSize << 16) | (U16)ySize;
-
-    DMA2D->CR     |= DMA2D_CR_START;
-
-    /* Wait until transfer is done */
-    while (DMA2D->CR & DMA2D_CR_START)
+    u32 timeout=0;
+    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //获取像素格式
+    DMA2D->CR=0x00030000UL|(1<<9);                  //寄存器到存储器
+    DMA2D->OCOLR=ColorIndex;                        //设置要填充的颜色
+    DMA2D->OMAR=(uint32_t)pDst;                     //设置输出寄存器地址
+    DMA2D->OOR=OffLine;                             //设置输出偏移
+    DMA2D->OPFCCR=PixelFormat;                      //设置颜色格式
+    DMA2D->NLR=(uint32_t)(xSize << 16)|(U16)ySize;  //设置每行像素数和行数
+    DMA2D->CR|=DMA2D_CR_START;                      //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)                 //等待传输完成
     {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	                //超时退出
     }
 }
 
-
-/*********************************************************************
-*
-*       GetBufferSize
-*/
+//获取buffer大小
+//返回值:buffer大小
 static uint32_t GetBufferSize(uint32_t LayerIndex)
 {
     uint32_t BufferSize;
-
-    BufferSize = layer_prop[LayerIndex].xSize * layer_prop[LayerIndex].ySize * layer_prop[LayerIndex].BytesPerPixel;
+    BufferSize = layer_prop[LayerIndex].xSize*layer_prop[LayerIndex].ySize*layer_prop[LayerIndex].BytesPerPixel;
     return BufferSize;
 }
 
-/*********************************************************************
-*
-*       CUSTOM_CopyBuffer
-*/
-static void CUSTOM_CopyBuffer(int32_t LayerIndex, int32_t IndexSrc, int32_t IndexDst)
+//用户自定义的缓冲区复制函数
+//LayerIndex:层索引
+//IndexSrc:待复制的源帧缓冲器的索引
+//IndexDst:待覆盖的目标帧缓冲器的索引
+static void CUSTOM_CopyBuffer(int32_t LayerIndex,int32_t IndexSrc,int32_t IndexDst)
 {
     uint32_t BufferSize, AddrSrc, AddrDst;
 
-    BufferSize = GetBufferSize(LayerIndex);
-    AddrSrc    = layer_prop[LayerIndex].address + BufferSize * IndexSrc;
-    AddrDst    = layer_prop[LayerIndex].address + BufferSize * IndexDst;
-    DMA2D_CopyBuffer(LayerIndex, (void *)AddrSrc, (void *)AddrDst, layer_prop[LayerIndex].xSize, layer_prop[LayerIndex].ySize, 0, 0);
-    layer_prop[LayerIndex].buffer_index = IndexDst;
+    BufferSize=GetBufferSize(LayerIndex);
+    AddrSrc=layer_prop[LayerIndex].address+BufferSize*IndexSrc;
+    AddrDst=layer_prop[LayerIndex].address+BufferSize*IndexDst;
+    DMA2D_CopyBuffer(LayerIndex,(void *)AddrSrc,(void *)AddrDst,layer_prop[LayerIndex].xSize,layer_prop[LayerIndex].ySize,0,0);
+    layer_prop[LayerIndex].buffer_index=IndexDst;
 }
 
-/*********************************************************************
-*
-*       CUSTOM_CopyRect
-*/
-/**
-  * @brief  Copy rectangle
-  * @param  LayerIndex : Layer Index
-  * @param  x0:          X0 position
-  * @param  y0:          Y0 position
-  * @param  x1:          X1 position
-  * @param  y1:          Y1 position
-  * @param  xSize:       X size.
-  * @param  ySize:       Y size.
-  * @retval None
-  */
+//用户自定义的将屏幕的一个矩形区域复制到目标位置
+//LayerIndex:层索引
+//x0:源矩形最左边的像素
+//y0:源矩形最上边的像素
+//x1:目标矩形最左边的像素
+//y1:目标矩形最上边的像素
+//xSize:矩形的X尺寸
+//ySize:矩形的Y尺寸
 static void CUSTOM_CopyRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t xSize, int32_t ySize)
 {
-    U32 AddrSrc, AddrDst;
+    uint32_t BufferSize, AddrSrc, AddrDst;
 
-    AddrSrc = layer_prop[LayerIndex].address + (y0 * layer_prop[LayerIndex].xSize + x0) * layer_prop[LayerIndex].BytesPerPixel;
-    AddrDst = layer_prop[LayerIndex].address + (y1 * layer_prop[LayerIndex].xSize + x1) * layer_prop[LayerIndex].BytesPerPixel;
-    DMA2D_CopyBuffer(LayerIndex, (void *)AddrSrc, (void *)AddrDst, xSize, ySize, layer_prop[LayerIndex].xSize - xSize, layer_prop[LayerIndex].xSize - xSize);
+    BufferSize=GetBufferSize(LayerIndex);
+    AddrSrc=layer_prop[LayerIndex].address+BufferSize*layer_prop[LayerIndex].pending_buffer+(y0*layer_prop[LayerIndex].xSize+x0)*layer_prop[LayerIndex].BytesPerPixel;
+    AddrDst=layer_prop[LayerIndex].address+BufferSize*layer_prop[LayerIndex].pending_buffer+(y1*layer_prop[LayerIndex].xSize+x1)*layer_prop[LayerIndex].BytesPerPixel;
+    DMA2D_CopyBuffer(LayerIndex,(void *)AddrSrc,(void *)AddrDst,xSize,ySize,layer_prop[LayerIndex].xSize-xSize,0);
 }
 
-/*********************************************************************
-*
-*       CUSTOM_FillRect
-*/
-static void CUSTOM_FillRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint32_t PixelIndex)
+//用户自定义的填充函数
+//LayerIndex:层索引
+//x0:屏幕坐标中待填充的最左边的坐标
+//y0:屏幕坐标中待填充的最上边的坐标
+//x1:屏幕坐标中待填充的最右边的坐标
+//y1:屏幕坐标中待填充的最下边坐标
+//PixelIndex:待填充的颜色
+static void CUSTOM_FillRect(int32_t LayerIndex,int32_t x0,int32_t y0,int32_t x1,int32_t y1,uint32_t PixelIndex)
 {
     uint32_t BufferSize, AddrDst;
     int32_t xSize, ySize;
 
-    if (GUI_GetDrawMode() == GUI_DM_XOR)
+    if (GUI_GetDrawMode()==GUI_DM_XOR)
     {
-        LCD_SetDevFunc(LayerIndex, LCD_DEVFUNC_FILLRECT, NULL);
-        LCD_FillRect(x0, y0, x1, y1);
-        LCD_SetDevFunc(LayerIndex, LCD_DEVFUNC_FILLRECT, (void(*)(void))CUSTOM_FillRect);
-    }
-    else
+        LCD_SetDevFunc(LayerIndex,LCD_DEVFUNC_FILLRECT,NULL);
+        LCD_FillRect(x0,y0,x1,y1);
+        LCD_SetDevFunc(LayerIndex,LCD_DEVFUNC_FILLRECT,(void(*)(void))CUSTOM_FillRect);
+    }else
     {
-        xSize = x1 - x0 + 1;
-        ySize = y1 - y0 + 1;
-        BufferSize = GetBufferSize(LayerIndex);
-        AddrDst = layer_prop[LayerIndex].address + BufferSize * layer_prop[LayerIndex].buffer_index + (y0 * layer_prop[LayerIndex].xSize + x0) * layer_prop[LayerIndex].BytesPerPixel;
-        DMA2D_FillBuffer(LayerIndex, (void *)AddrDst, xSize, ySize, layer_prop[LayerIndex].xSize - xSize, PixelIndex);
+        xSize=x1-x0+1;
+        ySize=y1-y0+1;
+        BufferSize=GetBufferSize(LayerIndex);
+        AddrDst=layer_prop[LayerIndex].address+BufferSize*layer_prop[LayerIndex].buffer_index+(y0 * layer_prop[LayerIndex].xSize+x0)*layer_prop[LayerIndex].BytesPerPixel;
+        DMA2D_FillBuffer(LayerIndex,(void *)AddrDst,xSize,ySize,layer_prop[LayerIndex].xSize-xSize,PixelIndex);
     }
 }
 
-/**
-  * @brief
-  * @param  pColor
-  * @param  NumItems
-  * @retval None
-  */
-static void DMA2D_LoadLUT(LCD_COLOR *pColor, uint32_t NumItems)
+//DMA2D的CLUT加载
+//pColor:CLUT存储器地址
+//NumItems:CLUT大小
+static void DMA2D_LoadLUT(LCD_COLOR * pColor,uint32_t NumItems)
 {
-    DMA2D->FGCMAR  = (uint32_t)pColor;
-
-    /*  Foreground PFC Control Register */
-    DMA2D->FGPFCCR  = LTDC_PIXEL_FORMAT_RGB888         /* Pixel format */
-                      | ((NumItems - 1) & 0xFF) << 8;   /* Number of items to load */
-    DMA2D->FGPFCCR |= (1 << 5);                       /* Start loading */
+    DMA2D->FGCMAR=(uint32_t)pColor; //设置前景层CLUT存储器地址
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_RGB888|((NumItems-1)&0xFF)<<8;//设置颜色模式和CLUT大小
+    DMA2D->FGPFCCR|=(1<<5);         //启动加载
 }
 
-/**
-  * @brief
-  * @param  pColorSrc: Source address
-  * @param  pColorDst: Destination address
-  * @param  NumItems
-  * @retval None
-  */
-static void InvertAlpha_SwapRB(LCD_COLOR *pColorSrc, LCD_COLOR *pColorDst, uint32_t NumItems)
+//交换指定地址颜色的RGB顺序并且翻转alpha值并将新得到的颜色值复制到目标地址中
+//pColorSrc:源地址
+//pColorDst:目的地址
+//NumItems:要处理的数量
+static void InvertAlpha_SwapRB(LCD_COLOR * pColorSrc, LCD_COLOR * pColorDst, uint32_t NumItems)
+{
+    uint32_t Color;
+    do
+    {
+        Color=*pColorSrc++;
+        *pColorDst++=((Color&0x000000FF)<<16)           //交换红色(R)和蓝色(B)的位置
+                    |(Color&0x0000FF00)                 //绿色(G)的位置不变
+                    |((Color&0x00FF0000)>>16)           //交换红色(R)和蓝色(B)的位置
+                    |((Color&0xFF000000)^0xFF000000);   //翻转alpha值
+    } while (--NumItems);
+}
+
+
+//反转alpha，因为DMA2D的颜色格式和STemWin的颜色格式不同，因此需要翻转alpha值使其适配STemWin
+//pColorSrc:源地址
+//pColorDst:目的地址
+//NumItems:要处理的数量
+static void InvertAlpha(LCD_COLOR * pColorSrc, LCD_COLOR * pColorDst, uint32_t NumItems)
 {
     uint32_t Color;
     do
     {
         Color = *pColorSrc++;
-        *pColorDst++ = ((Color & 0x000000FF) << 16)         /* Swap red <-> blue */
-                       |  (Color & 0x0000FF00)                /* Green */
-                       | ((Color & 0x00FF0000) >> 16)         /* Swap red <-> blue */
-                       | ((Color & 0xFF000000) ^ 0xFF000000); /* Invert alpha */
-    }
-    while (--NumItems);
+        *pColorDst++=Color^0xFF000000;//翻转alpha
+    } while (--NumItems);
 }
 
-/**
-  * @brief  Color format of DMA2D is different to STemWin color format. This routine
-  *         inverts alpha that it is compatible to STemWin and vice versa
-  * @param  pColorSrc
-  * @param  pColorDst
-  * @param  NumItems
-  * @retval None
-  */
-static void InvertAlpha(LCD_COLOR *pColorSrc, LCD_COLOR *pColorDst, uint32_t NumItems)
+//alpha混色，使用DMA2D
+//pColorFG:前景层存储器地址
+//pColorBG:背景层存储器地址
+//pColorDst:输出存储器地址
+//NumItems:行数
+static void DMA2D_AlphaBlendingBulk(LCD_COLOR *pColorFG,LCD_COLOR *pColorBG,LCD_COLOR *pColorDst,U32 NumItems)
 {
-    uint32_t Color;
-
-    do
+    u32 timeout=0;
+    DMA2D->CR=0x00020000UL|(1<<9);              //存储器到存储器并执行混合
+    DMA2D->FGMAR=(uint32_t)pColorFG;            //设置前景层存储器地址
+    DMA2D->BGMAR=(uint32_t)pColorBG;            //设置背景层存储器地址
+    DMA2D->OMAR=(uint32_t)pColorDst;            //设置输出存储器地址
+    DMA2D->FGOR=0;                              //设置前景层偏移
+    DMA2D->BGOR=0;                              //设置背景层偏移
+    DMA2D->OOR=0;                               //设置输出偏移
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //设置前景层颜色格式
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //设置背景层颜色格式
+    DMA2D->OPFCCR =LTDC_PIXEL_FORMAT_ARGB8888;  //设置输出颜色格式
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //设置行数
+    DMA2D->CR|=DMA2D_CR_START;                  //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)             //等待传输完成
     {
-        Color = *pColorSrc++;
-        *pColorDst++ = Color ^ 0xFF000000; /* Invert alpha */
+        timeout++;
+		if(timeout>0X1FFFFF)break;	            //超时退出
     }
-    while (--NumItems);
 }
 
-/**
-  * @brief
-  * @param  pColorFG
-  * @param  pColorBG
-  * @param  pColorDst
-  * @param  NumItems
-  * @retval None
-  */
-static void DMA2D_AlphaBlendingBulk(LCD_COLOR *pColorFG, LCD_COLOR *pColorBG, LCD_COLOR *pColorDst, U32 NumItems)
+//混合两种颜色,混合前景色和背景色
+//Color:前景色
+//BkColor:背景色
+//Intens:混合强度
+//返回值:混合后的颜色
+static LCD_COLOR DMA2D_MixColors(LCD_COLOR Color,LCD_COLOR BkColor,U8 Intens)
 {
-    /* Set up mode */
-    DMA2D->CR      = 0x00020000UL | (1 << 9);         /* Control Register (Memory to memory with blending of FG and BG and TCIE) */
+    uint32_t ColorFG,ColorBG,ColorDst;
+    u32 timeout=0;
+    if((BkColor&0xFF000000)==0xFF000000)return Color;//背景色透明，不需要混色
+    ColorFG=Color^0xFF000000;
+    ColorBG=BkColor^0xFF000000;
 
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)pColorFG;                   /* Foreground Memory Address Register */
-    DMA2D->BGMAR   = (uint32_t)pColorBG;                   /* Background Memory Address Register */
-    DMA2D->OMAR    = (uint32_t)pColorDst;                  /* Output Memory Address Register (Destination address) */
-
-    /* Set up offsets */
-    DMA2D->FGOR    = 0;                               /* Foreground Offset Register */
-    DMA2D->BGOR    = 0;                               /* Background Offset Register */
-    DMA2D->OOR     = 0;                               /* Output Offset Register */
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;       /* Foreground PFC Control Register (Defines the FG pixel format) */
-    DMA2D->BGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888;       /* Background PFC Control Register (Defines the BG pixel format) */
-    DMA2D->OPFCCR  = LTDC_PIXEL_FORMAT_ARGB8888;       /* Output     PFC Control Register (Defines the output pixel format) */
-
-    /* Set up size */
-    DMA2D->NLR     = (uint32_t)(NumItems << 16) | 1;       /* Number of Line Register (Size configuration of area to be transfered) */
-
-    /* Execute operation */
-
-    DMA2D->CR     |= DMA2D_CR_START;
-
-    while (DMA2D->CR & DMA2D_CR_START)
+    DMA2D->CR=0x00020000UL|(1<<9);              //存储器到存储器并执行混合
+    DMA2D->FGMAR=(uint32_t)&ColorFG;            //设置前景层存储器地址
+    DMA2D->BGMAR=(uint32_t)&ColorBG;            //设置背景层存储器地址
+    DMA2D->OMAR=(uint32_t)&ColorDst;            //设置输出存储器地址
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(1UL<<16)|((uint32_t)Intens<<24);         //设置前景层颜色格式
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(0UL<<16)|((uint32_t)(255-Intens)<<24);   //设置背景层颜色格式
+    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //设置背景层颜色格式
+    DMA2D->NLR=(uint32_t)(1<<16)|1;             //设置每行像素数和行数
+    DMA2D->CR|=DMA2D_CR_START;                  //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)             //等待传输完成
     {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	            //超时退出
     }
+    return (ColorDst^0xFF000000);               //返回混合后的颜色
 }
 
-#if defined (__GNUC__) /*!< GNU Compiler */
-#pragma GCC optimize ("O0")
-#endif
-/**
-  * @brief  Function for mixing up 2 colors with the given intensity.
-  *         If the background color is completely transparent the
-  *         foreground color should be used unchanged.
-  * @param  Color
-  * @param  BkColor
-  * @param  Intens
-  * @retval LCD_COLOR
-  */
-static LCD_COLOR DMA2D_MixColors(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens)
+//使用DMA2D进行颜色转换
+//pSrc:源颜色(前景色)
+//pDst:转换后的颜色(输出颜色)
+//PixelFormatSrc:前景层颜色格式
+//PixelFormatDst:输出颜色格式
+//NumItems:每行像素数
+static void DMA2D_ConvertColor(void * pSrc,void * pDst,uint32_t PixelFormatSrc,uint32_t PixelFormatDst,uint32_t NumItems)
 {
-    uint32_t ColorFG, ColorBG, ColorDst;
-
-    if ((BkColor & 0xFF000000) == 0xFF000000)
+    u32 timeout=0;
+    DMA2D->CR=0x00010000UL|(1<<9);              //存储器到存储器并执行FPC
+    DMA2D->FGMAR=(uint32_t)pSrc;                //前景层存储器地址
+    DMA2D->OMAR=(uint32_t)pDst;                 //输出存储器地址
+    DMA2D->FGOR=0;                              //背景层偏移
+    DMA2D->OOR=0;                               //输出偏移
+    DMA2D->FGPFCCR=PixelFormatSrc;              //前景层颜色格式
+    DMA2D->OPFCCR=PixelFormatDst;               //输出颜色格式
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //设置每行像素数和行数
+    DMA2D->CR|=DMA2D_CR_START;                  //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)             //等待传输完成
     {
-        return Color;
-    }
-    ColorFG = Color   ^ 0xFF000000;
-    ColorBG = BkColor ^ 0xFF000000;
-
-    /* Set up mode */
-    DMA2D->CR      = 0x00020000UL | (1 << 9);         /* Control Register (Memory to memory with blending of FG and BG and TCIE) */
-
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)&ColorFG;                   /* Foreground Memory Address Register */
-    DMA2D->BGMAR   = (uint32_t)&ColorBG;                   /* Background Memory Address Register */
-    DMA2D->OMAR    = (uint32_t)&ColorDst;                  /* Output Memory Address Register (Destination address) */
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888
-                     | (1UL << 16)
-                     | ((uint32_t)Intens << 24);
-    DMA2D->BGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888
-                     | (0UL << 16)
-                     | ((uint32_t)(255 - Intens) << 24);
-    DMA2D->OPFCCR  = LTDC_PIXEL_FORMAT_ARGB8888;
-
-    /* Set up size */
-    DMA2D->NLR     = (uint32_t)(1 << 16) | 1;              /* Number of Line Register (Size configuration of area to be transfered) */
-
-    /* Execute operation */
-    DMA2D->CR     |= DMA2D_CR_START;                               /* Control Register (Start operation) */
-
-    /* Wait until transfer is done */
-    while (DMA2D->CR & DMA2D_CR_START)
-    {
-    }
-
-    return (ColorDst ^ 0xFF000000);
-}
-
-/**
-  * @brief
-  * @param  pSrc
-  * @param  pDst
-  * @param  PixelFormatSrc
-  * @param  PixelFormatDst
-  * @param  NumItems
-  * @retval None
-  */
-static void DMA2D_ConvertColor(void *pSrc, void *pDst,  uint32_t PixelFormatSrc, uint32_t PixelFormatDst, uint32_t NumItems)
-{
-    /* Set up mode */
-
-    DMA2D->CR      = 0x00010000UL | (1 << 9);         /* Control Register (Memory to memory with pixel format conversion and TCIE) */
-
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)pSrc;                       /* Foreground Memory Address Register (Source address) */
-    DMA2D->OMAR    = (uint32_t)pDst;                       /* Output Memory Address Register (Destination address) */
-
-    /* Set up offsets */
-    DMA2D->FGOR    = 0;                               /* Foreground Offset Register (Source line offset) */
-    DMA2D->OOR     = 0;                               /* Output Offset Register (Destination line offset) */
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = PixelFormatSrc;                  /* Foreground PFC Control Register (Defines the input pixel format) */
-    DMA2D->OPFCCR  = PixelFormatDst;                  /* Output PFC Control Register (Defines the output pixel format) */
-
-    /* Set up size */
-    DMA2D->NLR     = (uint32_t)(NumItems << 16) | 1;       /* Number of Line Register (Size configuration of area to be transfered) */
-
-    /* Execute operation */
-    DMA2D->CR     |= DMA2D_CR_START;
-
-    while (DMA2D->CR & DMA2D_CR_START)
-    {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	            //超时退出
     }
 }
 
-/**
-  * @brief  The STemWin function LCD_GetpPalConvTable() normally translates the given colors into
-  *         index values for the display controller. In case of index based bitmaps without
-  *         transparent pixels we load the palette only to the DMA2D LUT registers to be
-  *         translated (converted) during the process of drawing via DMA2D.
-  * @param  pLogPal
-  * @param  pBitmap
-  * @param  LayerIndex
-  * @retval LCD_PIXELINDEX
-  */
-static LCD_PIXELINDEX *_LCD_GetpPalConvTable(const LCD_LOGPALETTE GUI_UNI_PTR *pLogPal, const GUI_BITMAP GUI_UNI_PTR *pBitmap, int LayerIndex)
+static LCD_PIXELINDEX * _LCD_GetpPalConvTable(const LCD_LOGPALETTE GUI_UNI_PTR * pLogPal,const GUI_BITMAP GUI_UNI_PTR * pBitmap,int LayerIndex)
 {
     void (* pFunc)(void);
     int32_t DoDefault = 0;
 
-    /* Check if we have a non transparent device independent bitmap */
     if (pBitmap->BitsPerPixel == 8)
     {
-        pFunc = LCD_GetDevFunc(LayerIndex, LCD_DEVFUNC_DRAWBMP_8BPP);
-        if (pFunc)
+        pFunc=LCD_GetDevFunc(LayerIndex, LCD_DEVFUNC_DRAWBMP_8BPP);
+        if(pFunc)
         {
-            if (pBitmap->pPal)
+            if(pBitmap->pPal)
             {
-                if (pBitmap->pPal->HasTrans)
-                {
-                    DoDefault = 1;
-                }
-            }
-            else
-            {
-                DoDefault = 1;
-            }
-        }
-        else
-        {
-            DoDefault = 1;
-        }
+                if(pBitmap->pPal->HasTrans) DoDefault = 1;
+            }else DoDefault = 1;
+        }else DoDefault = 1;
     }
-    else
-    {
-        DoDefault = 1;
-    }
-
-    /* Default palette management for other cases */
-    if (DoDefault)
-    {
-
-        /* Return a pointer to the index values to be used by the controller */
-        return LCD_GetpPalConvTable(pLogPal);
-    }
-
-    /* Convert palette colors from ARGB to ABGR */
+    else DoDefault = 1;
+    if (DoDefault) return LCD_GetpPalConvTable(pLogPal);
     InvertAlpha_SwapRB((U32 *)pLogPal->pPalEntries, aBufferDMA2D, pLogPal->NumEntries);
-
-    /* Load LUT using DMA2D */
     DMA2D_LoadLUT(aBufferDMA2D, pLogPal->NumEntries);
-
-    /* Return something not NULL */
     return aBufferDMA2D;
 }
 
-/**
-  * @brief
-  * @param  pColorFG
-  * @param  pColorBG
-  * @param  pColorDst
-  * @param  Intens
-  * @param  NumItems
-  * @retval None
-  */
-static void DMA2D_MixColorsBulk(LCD_COLOR *pColorFG, LCD_COLOR *pColorBG, LCD_COLOR *pColorDst, U8 Intens, uint32_t NumItems)
+//使用DMA2D进行颜色混合
+//pColorFG:前景色存储器地址
+//pColorBG:背景色存储器地址
+//pColorDst:输出存储器地址
+//Intens:混合强度
+//NumItems:每行像素数
+static void DMA2D_MixColorsBulk(LCD_COLOR * pColorFG, LCD_COLOR * pColorBG, LCD_COLOR * pColorDst, U8 Intens, uint32_t NumItems)
 {
-    /* Set up mode */
-    DMA2D->CR      = 0x00020000UL | (1 << 9);         /* Control Register (Memory to memory with blending of FG and BG and TCIE) */
-
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)pColorFG;                   /* Foreground Memory Address Register */
-    DMA2D->BGMAR   = (uint32_t)pColorBG;                   /* Background Memory Address Register */
-    DMA2D->OMAR    = (uint32_t)pColorDst;                  /* Output Memory Address Register (Destination address) */
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888
-                     | (1UL << 16)
-                     | ((uint32_t)Intens << 24);
-    DMA2D->BGPFCCR = LTDC_PIXEL_FORMAT_ARGB8888
-                     | (0UL << 16)
-                     | ((uint32_t)(255 - Intens) << 24);
-    DMA2D->OPFCCR  = LTDC_PIXEL_FORMAT_ARGB8888;
-
-    /* Set up size */
-    DMA2D->NLR     = (uint32_t)(NumItems << 16) | 1;              /* Number of Line Register (Size configuration of area to be transfered) */
-
-    /* Execute operation */
-    DMA2D->CR     |= DMA2D_CR_START;
-
-    while (DMA2D->CR & DMA2D_CR_START)
+    u32 timeout=0;
+    DMA2D->CR=0x00020000UL|(1<<9);              //存储器到存储器并执行混合
+    DMA2D->FGMAR=(uint32_t)pColorFG;            //设置前景色存储器地址
+    DMA2D->BGMAR=(uint32_t)pColorBG;            //设置背景色存储器地址
+    DMA2D->OMAR=(uint32_t)pColorDst;            //设置输出存储器地址
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //设置前景色颜色格式
+                    |(1UL<<16)
+                    |((uint32_t)Intens<<24);
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //设置背景色颜色格式
+                    |(0UL<<16)
+                    |((uint32_t)(255-Intens)<<24);
+    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //设置输出颜色格式
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //设置每行像素数和行数
+    DMA2D->CR|=DMA2D_CR_START;                  //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)             //等待传输完成
     {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	            //超时退出
     }
 }
 
-/**
-  * @brief
-  * @param  pColorFG
-  * @param  pColorBG
-  * @param  pColorDst
-  * @param  NumItems
-  * @retval None
-  */
-static void DMA2D_AlphaBlending(LCD_COLOR *pColorFG, LCD_COLOR *pColorBG, LCD_COLOR *pColorDst, U32 NumItems)
+//使用DMA2D进行alpha混色
+//pColorFG:前景色
+//pColorBG:背景色
+//pColorDst:输出颜色
+//NumItems:每行像素数
+static void DMA2D_AlphaBlending(LCD_COLOR *pColorFG,LCD_COLOR *pColorBG,LCD_COLOR *pColorDst,U32 NumItems)
 {
-    /* Invert alpha values */
-    InvertAlpha(pColorFG, aBuffer_FG, NumItems);
-    InvertAlpha(pColorBG, aBuffer_BG, NumItems);
-
-    /* Use DMA2D for mixing */
-    DMA2D_AlphaBlendingBulk(aBuffer_FG, aBuffer_BG, aBufferDMA2D, NumItems);
-
-    /* Invert alpha values */
-    InvertAlpha(aBufferDMA2D, pColorDst, NumItems);
+    InvertAlpha(pColorFG,aBuffer_FG,NumItems);
+    InvertAlpha(pColorBG,aBuffer_BG,NumItems);
+    DMA2D_AlphaBlendingBulk(aBuffer_FG,aBuffer_BG,aBufferDMA2D,NumItems);
+    InvertAlpha(aBufferDMA2D,pColorDst,NumItems);
 }
 
-/**
-  * @brief  This routine is used by the STemWin color conversion routines to use DMA2D for
-  *         color conversion. It converts the given index values to 32 bit colors.
-  *         Because STemWin uses ABGR internally and 0x00 and 0xFF for opaque and fully
-  *         transparent the color array needs to be converted after DMA2D has been used.
-  * @param  pIndex
-  * @param  pColor
-  * @param  NumItems
-  * @param  SizeOfIndex
-  * @param  PixelFormat
-  * @retval None
-  */
-static void DMA2D_Index2ColorBulk(void *pIndex, LCD_COLOR *pColor, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat)
+//颜色索引转换为颜色值
+static void DMA2D_Index2ColorBulk(void *pIndex,LCD_COLOR *pColor,uint32_t NumItems, U8 SizeOfIndex,uint32_t PixelFormat)
 {
-    /* Use DMA2D for the conversion */
-    DMA2D_ConvertColor(pIndex, aBufferDMA2D, PixelFormat, LTDC_PIXEL_FORMAT_ARGB8888, NumItems);
-
-    /* Convert colors from ARGB to ABGR and invert alpha values */
-    InvertAlpha_SwapRB(aBufferDMA2D, pColor, NumItems);
+    DMA2D_ConvertColor(pIndex,aBufferDMA2D,PixelFormat,LTDC_PIXEL_FORMAT_ARGB8888,NumItems);
+    InvertAlpha_SwapRB(aBufferDMA2D,pColor,NumItems);
 }
 
-/**
-  * @brief  This routine is used by the STemWin color conversion routines to use DMA2D for
-  *         color conversion. It converts the given 32 bit color array to index values.
-  *         Because STemWin uses ABGR internally and 0x00 and 0xFF for opaque and fully
-  *         transparent the given color array needs to be converted before DMA2D can be used.
-  * @param  pColor
-  * @param  pIndex
-  * @param  NumItems
-  * @param  SizeOfIndex
-  * @param  PixelFormat
-  * @retval None
-  */
-static void DMA2D_Color2IndexBulk(LCD_COLOR *pColor, void *pIndex, uint32_t NumItems, U8 SizeOfIndex, uint32_t PixelFormat)
+//颜色值转换为颜色索引
+static void DMA2D_Color2IndexBulk(LCD_COLOR *pColor,void *pIndex,uint32_t NumItems,U8 SizeOfIndex,uint32_t PixelFormat)
 {
-    /* Convert colors from ABGR to ARGB and invert alpha values */
-    InvertAlpha_SwapRB(pColor, aBufferDMA2D, NumItems);
-
-    /* Use DMA2D for the conversion */
-    DMA2D_ConvertColor(aBufferDMA2D, pIndex, LTDC_PIXEL_FORMAT_ARGB8888, PixelFormat, NumItems);
+    InvertAlpha_SwapRB(pColor,aBufferDMA2D,NumItems);
+    DMA2D_ConvertColor(aBufferDMA2D,pIndex,LTDC_PIXEL_FORMAT_ARGB8888,PixelFormat,NumItems);
 }
 
-/**
-  * @brief
-  * @param  pFG
-  * @param  pBG
-  * @param  pDst
-  * @param  OffFG
-  * @param  OffBG
-  * @param  OffDest
-  * @param  xSize
-  * @param  ySize
-  * @param  Intens
-  * @retval None
-  */
-static void LCD_MixColorsBulk(U32 *pFG, U32 *pBG, U32 *pDst, unsigned OffFG, unsigned OffBG, unsigned OffDest, unsigned xSize, unsigned ySize, U8 Intens)
+static void LCD_MixColorsBulk(U32 *pFG,U32 *pBG,U32 *pDst,unsigned OffFG,unsigned OffBG,unsigned OffDest,unsigned xSize,unsigned ySize,U8 Intens)
 {
     int32_t y;
 
     GUI_USE_PARA(OffFG);
     GUI_USE_PARA(OffDest);
-    for (y = 0; y < ySize; y++)
+    for(y=0;y<ySize;y++)
     {
-        /* Invert alpha values */
-        InvertAlpha(pFG, aBuffer_FG, xSize);
-        InvertAlpha(pBG, aBuffer_BG, xSize);
-
-        DMA2D_MixColorsBulk(aBuffer_FG, aBuffer_BG, aBufferDMA2D, Intens, xSize);
-
-        InvertAlpha(aBufferDMA2D, pDst, xSize);
-        pFG  += xSize + OffFG;
-        pBG  += xSize + OffBG;
-        pDst += xSize + OffDest;
+        InvertAlpha(pFG,aBuffer_FG,xSize);
+        InvertAlpha(pBG,aBuffer_BG,xSize);
+        DMA2D_MixColorsBulk(aBuffer_FG,aBuffer_BG,aBufferDMA2D,Intens,xSize);
+        InvertAlpha(aBufferDMA2D,pDst,xSize);
+        pFG+=xSize+OffFG;
+        pBG+=xSize+OffBG;
+        pDst+=xSize+OffDest;
     }
 }
 
-/**
-  * @brief
-  * @param  pSrc
-  * @param  pDst
-  * @param  OffSrc
-  * @param  OffDst
-  * @param  PixelFormatDst
-  * @param  xSize
-  * @param  ySize
-  * @retval None
-  */
-static void DMA2D_DrawBitmapL8(void *pSrc, void *pDst,  uint32_t OffSrc, uint32_t OffDst, uint32_t PixelFormatDst, uint32_t xSize, uint32_t ySize)
+//使用DMA2D绘制L8颜色格式的位图
+static void DMA2D_DrawBitmapL8(void * pSrc, void * pDst,  uint32_t OffSrc, uint32_t OffDst, uint32_t PixelFormatDst, uint32_t xSize, uint32_t ySize)
 {
-    /* Set up mode */
-    DMA2D->CR      = 0x00010000UL | (1 << 9);         /* Control Register (Memory to memory with pixel format conversion and TCIE) */
-
-    /* Set up pointers */
-    DMA2D->FGMAR   = (uint32_t)pSrc;                       /* Foreground Memory Address Register (Source address) */
-    DMA2D->OMAR    = (uint32_t)pDst;                       /* Output Memory Address Register (Destination address) */
-
-    /* Set up offsets */
-    DMA2D->FGOR    = OffSrc;                          /* Foreground Offset Register (Source line offset) */
-    DMA2D->OOR     = OffDst;                          /* Output Offset Register (Destination line offset) */
-
-    /* Set up pixel format */
-    DMA2D->FGPFCCR = LTDC_PIXEL_FORMAT_L8;             /* Foreground PFC Control Register (Defines the input pixel format) */
-    DMA2D->OPFCCR  = PixelFormatDst;                  /* Output PFC Control Register (Defines the output pixel format) */
-
-    /* Set up size */
-    DMA2D->NLR     = (uint32_t)(xSize << 16) | ySize;      /* Number of Line Register (Size configuration of area to be transfered) */
-
-    /* Execute operation */
-    DMA2D->CR     |= DMA2D_CR_START;                               /* Start operation */
-
-    /* Wait until transfer is done */
-    while (DMA2D->CR & DMA2D_CR_START)
+    u32 timeout=0;
+    DMA2D->CR=0x00010000UL|(1<<9);
+    DMA2D->FGMAR=(uint32_t)pSrc;
+    DMA2D->OMAR=(uint32_t)pDst;
+    DMA2D->FGOR=OffSrc;
+    DMA2D->OOR=OffDst;
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_L8;
+    DMA2D->OPFCCR=PixelFormatDst;
+    DMA2D->NLR=(uint32_t)(xSize<<16)|ySize;
+    DMA2D->CR|=DMA2D_CR_START;                  //启动DMA2D传输
+    while(DMA2D->CR&DMA2D_CR_START)             //等待传输完成
     {
+        timeout++;
+		if(timeout>0X1FFFFF)break;	            //超时退出
     }
 }
 
-/**
-  * @brief
-  * @param  LayerIndex
-  * @param  x
-  * @param  y
-  * @param  p
-  * @param  xSize
-  * @param  ySize
-  * @param  BytesPerLine
-  * @retval None
-  */
-static void BSP_LCD_DrawBitmap16bpp(int32_t LayerIndex, int32_t x, int32_t y, U16 const *p, int32_t xSize, int32_t ySize, int32_t BytesPerLine)
+//绘制16bpp位图
+static void LCD_DrawBitmap16bpp(int32_t LayerIndex,int32_t x,int32_t y,U16 const * p,int32_t xSize,int32_t ySize,int32_t BytesPerLine)
 {
     uint32_t BufferSize, AddrDst;
     int32_t OffLineSrc, OffLineDst;
 
-    BufferSize = GetBufferSize(LayerIndex);
-    AddrDst = layer_prop[LayerIndex].address + BufferSize * layer_prop[LayerIndex].buffer_index + (y * layer_prop[LayerIndex].xSize + x) * layer_prop[LayerIndex].BytesPerPixel;
-    OffLineSrc = (BytesPerLine / 2) - xSize;
-    OffLineDst = layer_prop[LayerIndex].xSize - xSize;
-    DMA2D_CopyBuffer(LayerIndex, (void *)p, (void *)AddrDst, xSize, ySize, OffLineSrc, OffLineDst);
+    BufferSize=GetBufferSize(LayerIndex);
+    AddrDst=layer_prop[LayerIndex].address+BufferSize*layer_prop[LayerIndex].buffer_index+(y*layer_prop[LayerIndex].xSize+x)*layer_prop[LayerIndex].BytesPerPixel;
+    OffLineSrc=(BytesPerLine/2)-xSize;
+    OffLineDst=layer_prop[LayerIndex].xSize-xSize;
+    DMA2D_CopyBuffer(LayerIndex,(void *)p,(void *)AddrDst,xSize,ySize,OffLineSrc,OffLineDst);
 }
 
-/**
-  * @brief
-  * @param  LayerIndex
-  * @param  x
-  * @param  y
-  * @param  p
-  * @param  xSize
-  * @param  ySize
-  * @param  BytesPerLine
-  * @retval None
-  */
-static void BSP_LCD_DrawBitmap8bpp(int32_t LayerIndex, int32_t x, int32_t y, U8 const *p, int32_t xSize, int32_t ySize, int32_t BytesPerLine)
+//绘制8bpp位图
+static void LCD_DrawBitmap8bpp(int32_t LayerIndex, int32_t x, int32_t y, U8 const * p, int32_t xSize, int32_t ySize, int32_t BytesPerLine)
 {
     uint32_t BufferSize, AddrDst;
     int32_t OffLineSrc, OffLineDst;
     uint32_t PixelFormat;
 
-    BufferSize = GetBufferSize(LayerIndex);
-    AddrDst = layer_prop[LayerIndex].address + BufferSize * layer_prop[LayerIndex].buffer_index + (y * layer_prop[LayerIndex].xSize + x) * layer_prop[LayerIndex].BytesPerPixel;
-    OffLineSrc = BytesPerLine - xSize;
-    OffLineDst = layer_prop[LayerIndex].xSize - xSize;
-    PixelFormat = LCD_LL_GetPixelformat(LayerIndex);
-    DMA2D_DrawBitmapL8((void *)p, (void *)AddrDst, OffLineSrc, OffLineDst, PixelFormat, xSize, ySize);
+    BufferSize=GetBufferSize(LayerIndex);
+    AddrDst=layer_prop[LayerIndex].address+BufferSize*layer_prop[LayerIndex].buffer_index+(y*layer_prop[LayerIndex].xSize + x)*layer_prop[LayerIndex].BytesPerPixel;
+    OffLineSrc=BytesPerLine-xSize;
+    OffLineDst=layer_prop[LayerIndex].xSize-xSize;
+    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);
+    DMA2D_DrawBitmapL8((void *)p,(void *)AddrDst,OffLineSrc,OffLineDst,PixelFormat,xSize,ySize);
 }
-/*************************** End of file ****************************/

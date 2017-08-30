@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "interface.h"
+#include "user_app.h"
 
 static ErrorCode_t MT626GetUID(void *pvRfid)
 {
@@ -26,15 +27,20 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
     state = TransToMT626(pRfid->com, MT626_READ_UID_CMD, NULL, 0);
     if(state == MT_STATE_Y)
     {
+        Buzzer_control(1);
+        //vTaskDelay(200);
+        bsp_DelayMS(200);
+        Buzzer_control(0);
         ulRecvdOptLen = pmt626cmd->uiRecvdOptLen;
-        memmove(pRfid->status.ucUID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
+        memset(pRfid->status.ucCardID, 0, defCardIDLength);
+        memmove(pRfid->status.ucCardID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
         memset(pmt626cmd->ucRecvdOptData, 0, ulRecvdOptLen);
         //pRfid->status.ucFoundCard = 1;
-        xEventGroupSetBits(pRfid->xHandleEventGroupRFID, defEventBitGotUIDtoRFID);
+        xEventGroupSetBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);
     }
     else if(state == MT_STATE_N)
     {
-        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotUIDtoRFID);//清除在其他流程中误刷卡
+        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//清除在其他流程中误刷卡
         //pRfid->status.ucFoundCard = 0;
     }
     else if(state == MT_COM_FAIL)
@@ -53,11 +59,15 @@ RFIDDev_t *RFIDDevCreate(void)
 
     pRFID = (RFIDDev_t *)malloc(sizeof(RFIDDev_t));
     pRFID->status.ucFoundCard = 0;
-    memset(pRFID->status.ucUID, 0 , defUIDLength);
+    memset(pRFID->status.ucCardID, 0 , defCardIDLength);
     pRFID->com = (void *)MT626COMCreate();
-    pRFID->status.GetUID = MT626GetUID;
+    pRFID->status.GetCardID = MT626GetUID;
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
+    pRFID->state = STATE_RFID_NOID;
+
+    OrderCreate(&(pRFID->order));
+    OrderInit(&(pRFID->order));
 
     return pRFID;
 }
