@@ -64,6 +64,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\..\..\readme.md" />
     <None Include="chargesdk-Debug.vgdbsettings" />
     <None Include="chargesdk-Release.vgdbsettings" />
     <None Include="debug.mak" />

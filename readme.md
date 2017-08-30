@@ -17,14 +17,14 @@
 
 # Components版本
 
-| HAL         | version | ref                                      |
+| Components  | version | ref                                      |
 | ----------- | ------- | ---------------------------------------- |
 | STM32CubeF4 | 1.16.0  | http://www.st.com/en/embedded-software/stm32cubef4.html |
-| FreeRTOS    | 9.0.0   |                                          |
-| fatfs       | 0.12b   |                                          |
+| FreeRTOS    | 9.0.0   | http://www.freertos.org/                 |
+| fatfs       | 0.12b   | http://elm-chan.org/fsw/ff/00index_e.html |
 | STemWin     | 5.32    |                                          |
-| lua         | 5.3.3   |                                          |
-| tinysh      | 0.1.0   |                                          |
+| lua         | 5.3.3   | https://www.lua.org/                     |
+| tinysh      | 0.1.0   | https://sourceforge.net/projects/tinysh/ |
 |             |         |                                          |
 |             |         |                                          |
 
