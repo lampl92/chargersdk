@@ -170,14 +170,13 @@
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Valid.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Charge_Done.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Charging.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Charging_2-dimen.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Home.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Machine_Error.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_SelAOrB.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
@@ -191,7 +190,6 @@
     <ClCompile Include="..\..\..\src\hmi\qrencode\src\QR_Encode.c" />
     <ClCompile Include="..\..\..\src\hmi\qrencode\src\rscode.c" />
     <ClCompile Include="..\..\..\src\hmi\qrencode\src\split.c" />
-    <ClCompile Include="..\..\..\src\hmi\Touch_Calibrate2.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\s2j.c" />
