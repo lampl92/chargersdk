@@ -8,109 +8,111 @@
 #ifndef  __FACTORYCFG_H
 #define  __FACTORYCFG_H
 
-const uint8_t *strEVSECfg = "{  \"EVSESN\":\"0102030405060708\",\
-                                \"EVSEID\":\"3000000000000004\",\
-                                \"EVSEType\":2,\
-                                \"TotalCON\":1,\
-                                \"Lng\":116.275833,\
-                                \"Lat\":39.831944,\
-                                \"ServiceFeeType\":1,\
-                                \"ServiceFee\":1,\
-                                \"DefSegFee\":1.2,\
-                                \"CONArray\":[\
-                                    {\
-                                        \"ID\":0,\
-                                        \"Type\":2,\
-                                        \"SocketType\":67,\
-                                        \"VolatageUpperLimits\":250,\
-                                        \"VolatageLowerLimits\":190,\
-                                        \"ACTempUpperLimits\":105,\
-                                        \"ACTempLowerLimits\":-40,\
-                                        \"SocketTempUpperLimits\":105,\
-                                        \"SocketTempLowerLimits\":-40,\
-                                        \"RatedCurrent\":32,\
-                                        \"RatedPower\":7,\
-                                        \"QRCode\":\"3000000000000004\"\
-                                    }\
-                                ],\
-                                \"TemplSegArray\":[]\
-                            }";
+const uint8_t *strEVSECfg = 
+"{\r\n\
+    \"EVSESN\":\"0102030405060708\",\r\n\
+    \"EVSEID\":\"3000000000000004\",\r\n\
+    \"EVSEType\":2,\r\n\
+    \"TotalCON\":1,\r\n\
+    \"Lng\":116.275833,\r\n\
+    \"Lat\":39.831944,\r\n\
+    \"ServiceFeeType\":1,\r\n\
+    \"ServiceFee\":1,\r\n\
+    \"DefSegFee\":1.2,\r\n\
+    \"CONArray\":[\r\n\
+        {\r\n\
+            \"ID\":0,\r\n\
+            \"Type\":2,\r\n\
+            \"SocketType\":67,\r\n\
+            \"VolatageUpperLimits\":250,\r\n\
+            \"VolatageLowerLimits\":190,\r\n\
+            \"ACTempUpperLimits\":105,\r\n\
+            \"ACTempLowerLimits\":-40,\r\n\
+            \"SocketTempUpperLimits\":105,\r\n\
+            \"SocketTempLowerLimits\":-40,\r\n\
+            \"RatedCurrent\":32,\r\n\
+            \"RatedPower\":7,\r\n\
+            \"QRCode\":\"3000000000000004\"\r\n\
+        }\r\n\
+    ],\r\n\
+    \"TemplSegArray\":[]\r\n\
+}";
 
 const uint8_t *strProtoCfg =
-"{ \
-    \"ServerIP\": \"123.56.113.123\", \
-    \"ServerPort\": 6677, \
-    \"UserName\": \"esaasusr\", \
-    \"UserPwd\": \"esaaspasswrd\", \
-    \"Key\": \"0123456789abcdeg\", \
-    \"NewKey\": \"\", \
-    \"NewKeyChangeTime\": -1, \
-    \"OptSN\": 0, \
-    \"ProtoVer\": 104, \
-    \"HeartBeatCyc_ms\": 15000, \
-    \"StatusCyc_ms\": 20000, \
-    \"RTDataCyc_ms\": 10000, \
-    \"ResetAct\": 0, \
-    \"PowerFee_sharp\": 0, \
-    \"PowerFee_peak\": 0, \
-    \"PowerFee_shoulder\": 0, \
-    \"PowerFee_off_peak\": 0, \
-    \"ServiceFee_sharp\": 0, \
-    \"ServiceFee_peak\": 0, \
-    \"ServiceFee_shoulder\": 0, \
-    \"ServiceFee_off_peak\": 0, \
-    \"SegTime_sharp\": { \
-        \"SegCont\": 0, \
-        \"Start1\": 255, \
-        \"End1\": 255, \
-        \"Start2\": 255, \
-        \"End2\": 255, \
-        \"Start3\": 255, \
-        \"End3\": 255, \
-        \"Start4\": 255, \
-        \"End4\": 255, \
-        \"Start5\": 255, \
-        \"End5\": 255 \
-    }, \
-    \"SegTime_peak\": { \
-        \"SegCont\": 0, \
-        \"Start1\": 255, \
-        \"End1\": 255, \
-        \"Start2\": 255, \
-        \"End2\": 255, \
-        \"Start3\": 255, \
-        \"End3\": 255, \
-        \"Start4\": 255, \
-        \"End4\": 255, \
-        \"Start5\": 255, \
-        \"End5\": 255 \
-    }, \
-    \"SegTime_shoulder\": { \
-        \"SegCont\": 0, \
-        \"Start1\": 255, \
-        \"End1\": 255, \
-        \"Start2\": 255, \
-        \"End2\": 255, \
-        \"Start3\": 255, \
-        \"End3\": 255, \
-        \"Start4\": 255, \
-        \"End4\": 255, \
-        \"Start5\": 255, \
-        \"End5\": 255 \
-    }, \
-    \"SegTime_off_peak\": { \
-        \"SegCont\": 0, \
-        \"Start1\": 255, \
-        \"End1\": 255, \
-        \"Start2\": 255, \
-        \"End2\": 255, \
-        \"Start3\": 255, \
-        \"End3\": 255, \
-        \"Start4\": 255, \
-        \"End4\": 255, \
-        \"Start5\": 255, \
-        \"End5\": 255 \
-    } \
+"{ \r\n\
+    \"ServerIP\": \"123.56.113.123\", \r\n\
+    \"ServerPort\": 6677, \r\n\
+    \"UserName\": \"esaasusr\", \r\n\
+    \"UserPwd\": \"esaaspasswrd\", \r\n\
+    \"Key\": \"0123456789abcdeg\", \r\n\
+    \"NewKey\": \"\", \r\n\
+    \"NewKeyChangeTime\": 4294967295, \r\n\
+    \"OptSN\": 0, \r\n\
+    \"ProtoVer\": 104, \r\n\
+    \"HeartBeatCyc_ms\": 15000, \r\n\
+    \"StatusCyc_ms\": 20000, \r\n\
+    \"RTDataCyc_ms\": 10000, \r\n\
+    \"ResetAct\": 0, \r\n\
+    \"PowerFee_sharp\": 0, \r\n\
+    \"PowerFee_peak\": 0, \r\n\
+    \"PowerFee_shoulder\": 0, \r\n\
+    \"PowerFee_off_peak\": 0, \r\n\
+    \"ServiceFee_sharp\": 0, \r\n\
+    \"ServiceFee_peak\": 0, \r\n\
+    \"ServiceFee_shoulder\": 0, \r\n\
+    \"ServiceFee_off_peak\": 0, \r\n\
+    \"SegTime_sharp\": { \r\n\
+        \"SegCont\": 0, \r\n\
+        \"Start1\": 255, \r\n\
+        \"End1\": 255, \r\n\
+        \"Start2\": 255, \r\n\
+        \"End2\": 255, \r\n\
+        \"Start3\": 255, \r\n\
+        \"End3\": 255, \r\n\
+        \"Start4\": 255, \r\n\
+        \"End4\": 255, \r\n\
+        \"Start5\": 255, \r\n\
+        \"End5\": 255 \r\n\
+    }, \r\n\
+    \"SegTime_peak\": { \r\n\
+        \"SegCont\": 0, \r\n\
+        \"Start1\": 255, \r\n\
+        \"End1\": 255, \r\n\
+        \"Start2\": 255, \r\n\
+        \"End2\": 255, \r\n\
+        \"Start3\": 255, \r\n\
+        \"End3\": 255, \r\n\
+        \"Start4\": 255, \r\n\
+        \"End4\": 255, \r\n\
+        \"Start5\": 255, \r\n\
+        \"End5\": 255 \r\n\
+    }, \r\n\
+    \"SegTime_shoulder\": { \r\n\
+        \"SegCont\": 0, \r\n\
+        \"Start1\": 255, \r\n\
+        \"End1\": 255, \r\n\
+        \"Start2\": 255, \r\n\
+        \"End2\": 255, \r\n\
+        \"Start3\": 255, \r\n\
+        \"End3\": 255, \r\n\
+        \"Start4\": 255, \r\n\
+        \"End4\": 255, \r\n\
+        \"Start5\": 255, \r\n\
+        \"End5\": 255 \r\n\
+    }, \r\n\
+    \"SegTime_off_peak\": { \r\n\
+        \"SegCont\": 0, \r\n\
+        \"Start1\": 255, \r\n\
+        \"End1\": 255, \r\n\
+        \"Start2\": 255, \r\n\
+        \"End2\": 255, \r\n\
+        \"Start3\": 255, \r\n\
+        \"End3\": 255, \r\n\
+        \"Start4\": 255, \r\n\
+        \"End4\": 255, \r\n\
+        \"Start5\": 255, \r\n\
+        \"End5\": 255 \r\n\
+    } \r\n\
 }";
 
 const uint8_t *strWhiteListCfg ="[]";
