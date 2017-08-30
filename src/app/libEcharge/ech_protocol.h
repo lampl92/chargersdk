@@ -16,20 +16,20 @@
 
 #define ECH_UNUSED_ARG(x) (void)x
 
-#define REMOTE_SENDBUFF_MAX              1500 //·¢ËÍ»º³å³¤¶È
-#define REMOTE_RECVBUFF_MAX              1500 //½ÓÊÕ»º³å³¤¶È
+#define REMOTE_SENDBUFF_MAX              1500 //å‘é€ç¼“å†²é•¿åº¦
+#define REMOTE_RECVBUFF_MAX              1500 //æ¥æ”¶ç¼“å†²é•¿åº¦
 #define REMOTE_RECVDOPTDATA              1500
 
 typedef struct
 {
-    uint8_t ucSegCont; //Ê±¶Î¸öÊı
-    uint8_t ucStart[5];//µ¥Î»Ğ¡Ê±£ºÈç8±íÊ¾´Ó8µã¿ªÊ¼
-    uint8_t ucEnd[5];//µ¥Î»Ğ¡Ê±£¬Èç9µã±íÊ¾µ½9µã£¬µ«²»°üÀ¨9µã
+    uint8_t ucSegCont; //æ—¶æ®µä¸ªæ•°
+    uint8_t ucStart[5];//å•ä½å°æ—¶ï¼šå¦‚8è¡¨ç¤ºä»8ç‚¹å¼€å§‹
+    uint8_t ucEnd[5];//å•ä½å°æ—¶ï¼Œå¦‚9ç‚¹è¡¨ç¤ºåˆ°9ç‚¹ï¼Œä½†ä¸åŒ…æ‹¬9ç‚¹
 } EchSegTime_t;
 
 typedef struct _echProtoInfo
 {
-    uint8_t  strServerIP[64 + 1]; //¿ÉÒÔÊÇÓòÃû£¬Ò²¿ÉÒÔÊÇIPµØÖ·
+    uint8_t  strServerIP[64 + 1]; //å¯ä»¥æ˜¯åŸŸåï¼Œä¹Ÿå¯ä»¥æ˜¯IPåœ°å€
     uint16_t usServerPort;
     uint8_t  strUserName[8 + 1];
     uint8_t  strUserPwd[12 + 1];
@@ -37,15 +37,15 @@ typedef struct _echProtoInfo
     uint8_t  strNewKey[16 + 1];
     time_t   tNewKeyChangeTime;
 
-    uint32_t ulOptSN;           //ÖØÆôÃüÁî²Ù×÷ĞòÁĞºÅ
-    uint8_t  ucProtoVer;        //Ğ­Òé°æ±¾ºÅ
-    uint32_t ulHeartBeatCyc_ms; //ĞÄÌøÖÜÆÚ ¾«È·µ½Ãë
-    uint8_t  ucResetAct;        //ÖØÆôÇ°½øĞĞÖÃÎ»£¬Ã¿´ÎÆô¶¯Èç¹û¸ÃÎ»ÖÃ1£¬Ôò·¢ËÍÖØÆô³É¹¦ÃüÁî£¬È»ºóÇåÁã¡£
+    uint32_t ulOptSN;           //é‡å¯å‘½ä»¤æ“ä½œåºåˆ—å·
+    uint8_t  ucProtoVer;        //åè®®ç‰ˆæœ¬å·
+    uint32_t ulHeartBeatCyc_ms; //å¿ƒè·³å‘¨æœŸ ç²¾ç¡®åˆ°ç§’
+    uint8_t  ucResetAct;        //é‡å¯å‰è¿›è¡Œç½®ä½ï¼Œæ¯æ¬¡å¯åŠ¨å¦‚æœè¯¥ä½ç½®1ï¼Œåˆ™å‘é€é‡å¯æˆåŠŸå‘½ä»¤ï¼Œç„¶åæ¸…é›¶ã€‚
 
-    double dPowerFee_sharp;  //¼â·å·ÑÂÊ
-    double dPowerFee_peak;   //·å
-    double dPowerFee_shoulder; //Æ½
-    double dPowerFee_off_peak; //¹È
+    double dPowerFee_sharp;  //å°–å³°è´¹ç‡
+    double dPowerFee_peak;   //å³°
+    double dPowerFee_shoulder; //å¹³
+    double dPowerFee_off_peak; //è°·
 
     double dServFee_sharp;
     double dServFee_peak;
@@ -57,8 +57,8 @@ typedef struct _echProtoInfo
     EchSegTime_t SegTime_shoulder;
     EchSegTime_t SegTime_off_peak;
 
-    uint32_t ulStatusCyc_ms;    //×´Ì¬Êı¾İÉÏ±¨¼ä¸ô£¬¾«È·µ½Ãë
-    uint32_t ulRTDataCyc_ms;    //ÊµÊ±Êı¾İÉÏ±¨¼ä¸ô  10s
+    uint32_t ulStatusCyc_ms;    //çŠ¶æ€æ•°æ®ä¸ŠæŠ¥é—´éš”ï¼Œç²¾ç¡®åˆ°ç§’
+    uint32_t ulRTDataCyc_ms;    //å®æ—¶æ•°æ®ä¸ŠæŠ¥é—´éš”  10s
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
     ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
@@ -77,58 +77,58 @@ typedef struct _echProtoStatus
     uint8_t warning[6];
     uint8_t protect[6];
 }echProtoStatus_t;
-//²Ù×÷ĞòÁĞºÅ
+//æ“ä½œåºåˆ—å·
 
-/* ÃüÁîÖ¡ÔªËØ */
+/* å‘½ä»¤å¸§å…ƒç´  */
 
-/*********** Ôö¼ÓÒ»ÌõÃüÁî*************/
-//step.1 Ìí¼ÓÃüÁî×Ö       ECH_CMDID_XXXX
-//step.2 ĞŞ¸ÄÃüÁî¸öÊı     ECH_CMD_MAX
-//step.3 ±àĞ´makeCmdxxxx(),anlyCmdxxxx()
-//step.4 ×¢²áÃüÁî         ÔÚEchProtocolCreateÖĞ
-//step.6 ±àĞ´RemoteXXXX()ºÍRemoteXXXXRes()  ÔÚinterface_remote.cÖĞ
-//step.7 ÔÚtaskremote.cÖĞ±àĞ´step.6µÄµ÷ÓÃº¯Êı¡£
-//step.8 »Ø¹ËÒ»ÏÂ×¢²áÃüÁîÊÇ·ñÊÇstep.3±àĞ´µÄº¯Êı
+/*********** å¢åŠ ä¸€æ¡å‘½ä»¤*************/
+//step.1 æ·»åŠ å‘½ä»¤å­—       ECH_CMDID_XXXX
+//step.2 ä¿®æ”¹å‘½ä»¤ä¸ªæ•°     ECH_CMD_MAX
+//step.3 ç¼–å†™makeCmdxxxx(),anlyCmdxxxx()
+//step.4 æ³¨å†Œå‘½ä»¤         åœ¨EchProtocolCreateä¸­
+//step.6 ç¼–å†™RemoteXXXX()å’ŒRemoteXXXXRes()  åœ¨interface_remote.cä¸­
+//step.7 åœ¨taskremote.cä¸­ç¼–å†™step.6çš„è°ƒç”¨å‡½æ•°ã€‚
+//step.8 å›é¡¾ä¸€ä¸‹æ³¨å†Œå‘½ä»¤æ˜¯å¦æ˜¯step.3ç¼–å†™çš„å‡½æ•°
 
 
-/*ÃüÁî×ÖRecvCMDID*/
-#define ECH_CMDID_REGISTER    0 //×¢²áµÇÂ½
-#define ECH_CMDID_HEARTBEAT   1 //ĞÄÌø
-#define ECH_CMDID_RESET       2 //ÖØÆô
-#define ECH_CMDID_STATUS      3 //×´Ì¬
-#define ECH_CMDID_REMOTE_CTRL 4 //ÎŞ¿¨ÆôÍ£
-#define ECH_CMDID_RTDATA      5 //ÊµÊ±Êı¾İ
-#define ECH_CMDID_ORDER       6 //½»Ò×¼ÇÂ¼
-#define ECH_CMDID_SET_SUCC    7 //ÉèÖÃ³É¹¦
-#define ECH_CMDID_SET_FAIL    8 //ÉèÖÃÊ§°Ü
-#define ECH_CMDID_SET_POWERFEE  9  //Æ½Ì¨ÏÂ·¢µç¼ÛÉèÖÃ
-#define ECH_CMDID_SET_SERVFEE   10 //Æ½Ì¨ÏÂ·¢·şÎñ·ÑÉèÖÃ
-#define ECH_CMDID_SET_CYC       11 //Æ½Ì¨ÏÂ·¢×´Ì¬ÉÏ±¨Ê±¼ä¼ä¸ô
-#define ECH_CMDID_SET_TIMESEG   12 //Æ½Ì¨ÏÂ·¢¼â·åÆ½¹ÈÊ±¼ä¶ÎÉèÖÃ
-#define ECH_CMDID_SET_KEY       13 //Æ½Ì¨ÏÂ·¢ÃÜÔ¿±ä¸ü
-#define ECH_CMDID_REQ_POWERFEE  14 //Æ½Ì¨²éÑ¯³äµç×®µ±Ç°µç·Ñ
-#define ECH_CMDID_REQ_SERVFEE   15 //Æ½Ì¨²éÑ¯³äµç×®µ±Ç°·şÎñ·Ñ
-#define ECH_CMDID_REQ_CYC       16 //Æ½Ì¨²éÑ¯ÉÏ±¨Ê±¼ä¼ä¸ô
-#define ECH_CMDID_REQ_TIMESEG   17 //Æ½Ì¨²éÑ¯¼â·åÆ½¹ÈÊ±¼ä¶Î
-#define ECH_CMDID_REQ_KEY       18 //Æ½Ì¨²éÑ¯ÃÜÔ¿ĞÅÏ¢
-#define ECH_CMDID_REQ_SOFTVER   19 //Æ½Ì¨²éÑ¯Èí¼ş°æ±¾ºÅ
-#define ECH_CMDID_SET_QR        20 //Æ½Ì¨ÉèÖÃÇ¹¿Ú»¥Áª»¥Í¨¶şÎ¬Âë
-#define ECH_CMDID_REQ_QR        21 //Æ½Ì¨²éÑ¯Ç¹¿Ú»¥Áª»¥Í¨¶şÎ¬Âë
-#define ECH_CMDID_SET_BLACK     22 //Æ½Ì¨ÏÂ·¢ºÚÃûµ¥¿¨ºÅ
-#define ECH_CMDID_SET_WHITE     23 //Æ½Ì¨ÏÂ·¢°×Ãûµ¥¿¨ºÅ
-#define ECH_CMDID_REQ_BLACK     24 //Æ½Ì¨²éÑ¯ºÚÃûµ¥¿¨ºÅ
-#define ECH_CMDID_REQ_WHITE     25 //Æ½Ì¨²éÑ¯°×Ãûµ¥¿¨ºÅ
-#define ECH_CMDID_ADD_BNW       26 //Æ½Ì¨ĞÂÔöºÚ°×Ãûµ¥ BNW = Black and White
-#define ECH_CMDID_DEL_BNW       27 //Æ½Ì¨É¾³ıºÚ°×Ãûµ¥
-#define ECH_CMDID_CARD_START     28 //³äµç×®ÇëÇóÓĞ¿¨Æô¶¯³äµç
-#define ECH_CMDID_CARD_START_RES 29 //³äµç×®ÉÏ±¨ÓĞ¿¨³äµçÆô¶¯½á¹û
-#define ECH_CMDID_CARD_STOP_RES  30 //³äµç×®ÉÏ±¨ÓĞ¿¨³äµçÍ£Ö¹³äµç
-#define ECH_CMDID_CARD_RTDATA    31 //³äµç×®ÉÏ±¨ÓĞ¿¨ÊµÊ±³äµçÊı¾İ
-//---ÔËÎ¬¼à¿Ø
-#define ECH_CMDID_UP_FAULT      32 //³äµç×®ÉÏ±¨¹ÊÕÏĞÅÏ¢
-#define ECH_CMDID_UP_WARNING    33 //³äµç×®ÉÏ±¨¸æ¾¯Óë±£»¤ĞÅÏ¢
+/*å‘½ä»¤å­—RecvCMDID*/
+#define ECH_CMDID_REGISTER    0 //æ³¨å†Œç™»é™†
+#define ECH_CMDID_HEARTBEAT   1 //å¿ƒè·³
+#define ECH_CMDID_RESET       2 //é‡å¯
+#define ECH_CMDID_STATUS      3 //çŠ¶æ€
+#define ECH_CMDID_REMOTE_CTRL 4 //æ— å¡å¯åœ
+#define ECH_CMDID_RTDATA      5 //å®æ—¶æ•°æ®
+#define ECH_CMDID_ORDER       6 //äº¤æ˜“è®°å½•
+#define ECH_CMDID_SET_SUCC    7 //è®¾ç½®æˆåŠŸ
+#define ECH_CMDID_SET_FAIL    8 //è®¾ç½®å¤±è´¥
+#define ECH_CMDID_SET_POWERFEE  9  //å¹³å°ä¸‹å‘ç”µä»·è®¾ç½®
+#define ECH_CMDID_SET_SERVFEE   10 //å¹³å°ä¸‹å‘æœåŠ¡è´¹è®¾ç½®
+#define ECH_CMDID_SET_CYC       11 //å¹³å°ä¸‹å‘çŠ¶æ€ä¸ŠæŠ¥æ—¶é—´é—´éš”
+#define ECH_CMDID_SET_TIMESEG   12 //å¹³å°ä¸‹å‘å°–å³°å¹³è°·æ—¶é—´æ®µè®¾ç½®
+#define ECH_CMDID_SET_KEY       13 //å¹³å°ä¸‹å‘å¯†é’¥å˜æ›´
+#define ECH_CMDID_REQ_POWERFEE  14 //å¹³å°æŸ¥è¯¢å……ç”µæ¡©å½“å‰ç”µè´¹
+#define ECH_CMDID_REQ_SERVFEE   15 //å¹³å°æŸ¥è¯¢å……ç”µæ¡©å½“å‰æœåŠ¡è´¹
+#define ECH_CMDID_REQ_CYC       16 //å¹³å°æŸ¥è¯¢ä¸ŠæŠ¥æ—¶é—´é—´éš”
+#define ECH_CMDID_REQ_TIMESEG   17 //å¹³å°æŸ¥è¯¢å°–å³°å¹³è°·æ—¶é—´æ®µ
+#define ECH_CMDID_REQ_KEY       18 //å¹³å°æŸ¥è¯¢å¯†é’¥ä¿¡æ¯
+#define ECH_CMDID_REQ_SOFTVER   19 //å¹³å°æŸ¥è¯¢è½¯ä»¶ç‰ˆæœ¬å·
+#define ECH_CMDID_SET_QR        20 //å¹³å°è®¾ç½®æªå£äº’è”äº’é€šäºŒç»´ç 
+#define ECH_CMDID_REQ_QR        21 //å¹³å°æŸ¥è¯¢æªå£äº’è”äº’é€šäºŒç»´ç 
+#define ECH_CMDID_SET_BLACK     22 //å¹³å°ä¸‹å‘é»‘åå•å¡å·
+#define ECH_CMDID_SET_WHITE     23 //å¹³å°ä¸‹å‘ç™½åå•å¡å·
+#define ECH_CMDID_REQ_BLACK     24 //å¹³å°æŸ¥è¯¢é»‘åå•å¡å·
+#define ECH_CMDID_REQ_WHITE     25 //å¹³å°æŸ¥è¯¢ç™½åå•å¡å·
+#define ECH_CMDID_ADD_BNW       26 //å¹³å°æ–°å¢é»‘ç™½åå• BNW = Black and White
+#define ECH_CMDID_DEL_BNW       27 //å¹³å°åˆ é™¤é»‘ç™½åå•
+#define ECH_CMDID_CARD_START     28 //å……ç”µæ¡©è¯·æ±‚æœ‰å¡å¯åŠ¨å……ç”µ
+#define ECH_CMDID_CARD_START_RES 29 //å……ç”µæ¡©ä¸ŠæŠ¥æœ‰å¡å……ç”µå¯åŠ¨ç»“æœ
+#define ECH_CMDID_CARD_STOP_RES  30 //å……ç”µæ¡©ä¸ŠæŠ¥æœ‰å¡å……ç”µåœæ­¢å……ç”µ
+#define ECH_CMDID_CARD_RTDATA    31 //å……ç”µæ¡©ä¸ŠæŠ¥æœ‰å¡å®æ—¶å……ç”µæ•°æ®
+//---è¿ç»´ç›‘æ§
+#define ECH_CMDID_UP_FAULT      32 //å……ç”µæ¡©ä¸ŠæŠ¥æ•…éšœä¿¡æ¯
+#define ECH_CMDID_UP_WARNING    33 //å……ç”µæ¡©ä¸ŠæŠ¥å‘Šè­¦ä¸ä¿æŠ¤ä¿¡æ¯
 
-/*ÃüÁî¸öÊı*/
+/*å‘½ä»¤ä¸ªæ•°*/
 #define ECH_CMD_MAX             34
 
 typedef struct

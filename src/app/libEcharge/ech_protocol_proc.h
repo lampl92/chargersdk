@@ -18,7 +18,7 @@ typedef struct
     uint16_t cmd_id;
     uint32_t len;
     uint8_t *pbuff;
-    uint8_t status; //Send£º1 ÒÑ·¢ËÍ£¬0 Î´·¢ËÍ   Recv£º1 ÒÑ´¦Àí 0 Î´´¦Àí
+    uint8_t status; //Sendï¼š1 å·²å‘é€ï¼Œ0 æœªå‘é€   Recvï¼š1 å·²å¤„ç† 0 æœªå¤„ç†
     uint8_t trycount;
     uint8_t trycountmax;
 }echProtoElem_t;
