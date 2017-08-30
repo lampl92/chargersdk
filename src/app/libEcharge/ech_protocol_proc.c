@@ -39,7 +39,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
         printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
         printf_safe("\n");
 
-        /* ±éÀúRecvCmd */
+        /* éåŽ†RecvCmd */
 
         gdsl_list_cursor_move_to_head (cr);
         while(pechProtoElem = gdsl_list_cursor_get_content (cr))
@@ -52,9 +52,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
                         pechProtoElem->len);
                 if(res == 1)
                 {
-                    pechProtoElem->status = 1; //½ÓÊÕÐ­ÒéÈë¶ÓµÈ´ý´¦Àí
+                    pechProtoElem->status = 1; //æŽ¥æ”¶åè®®å…¥é˜Ÿç­‰å¾…å¤„ç†
                 }
-                else//½ÓÊÕµÄÐ­ÒéÖ¡ÐòÁÐÓÐÎÊÌâ£¬Ö±½ÓÉ¾³ý
+                else//æŽ¥æ”¶çš„åè®®å¸§åºåˆ—æœ‰é—®é¢˜ï¼Œç›´æŽ¥åˆ é™¤
                 {
                     gdsl_list_cursor_delete(cr);
                     continue;
@@ -66,8 +66,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 gdsl_list_cursor_delete(cr);
                 continue;
             }
-#if 0 //½ÓÊÕÎÞ³¬Ê±´¦Àí
-            /* 2. ÅÐ¶Ï³¬Ê± */
+#if 0 //æŽ¥æ”¶æ— è¶…æ—¶å¤„ç†
+            /* 2. åˆ¤æ–­è¶…æ—¶ */
             if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
                 gdsl_list_cursor_delete(cs);
@@ -77,40 +77,40 @@ void vTaskRemoteCmdProc(void *pvParameters)
             gdsl_list_cursor_step_forward (cr);
         }
 
-        /* ±éÀúSendCmd */
+        /* éåŽ†SendCmd */
 
         gdsl_list_cursor_move_to_head (cs);
         while(pechProtoElem = gdsl_list_cursor_get_content (cs))
         {
-            /* 1. ÅÐ¶ÏÐ­ÒéÊÇ·ñ·¢ËÍ */
+            /* 1. åˆ¤æ–­åè®®æ˜¯å¦å‘é€ */
             if(pechProtoElem->status == 0)
             {
                 memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
                 send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
                 uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
-                //µÈ²»µÈµÃµ½¶¼ÖÃ1
+                //ç­‰ä¸ç­‰å¾—åˆ°éƒ½ç½®1
                 pechProtoElem->status = 1;
 
             }
-           /* 2. ÒÑ·¢ËÍ£¬ÅÐ¶Ï·¢ËÍÇé¿ö*/
+           /* 2. å·²å‘é€ï¼Œåˆ¤æ–­å‘é€æƒ…å†µ*/
             if(pechProtoElem->status == 1)
             {
-                /* ÅÐ¶ÏÃüÁî×Ö£¬
-                   Èç¹ûÊÇÇëÇóÃüÁî£¬ÔòµÈ´ýÖ÷»ú»Ø¸´
-                   Èç¹ûÊÇ»Ø¸´ÃüÁî£¬ÔòÉ¾³ý
+                /* åˆ¤æ–­å‘½ä»¤å­—ï¼Œ
+                   å¦‚æžœæ˜¯è¯·æ±‚å‘½ä»¤ï¼Œåˆ™ç­‰å¾…ä¸»æœºå›žå¤
+                   å¦‚æžœæ˜¯å›žå¤å‘½ä»¤ï¼Œåˆ™åˆ é™¤
                 */
-                #if 0 //×¢ÊÍµÄÕâ²¿·ÖµÄË¼Â·ÒÔºóÓÃÀ´¼ì²âUID
-                /** @todo (rgw#1#): ºóÆÚÐèÒªÔÚÕâÀï±È½ÏÐ­ÒéUID£¬É¾³ý½ÓÊÜµ½µÄUIDÓë·¢ËÍUIDÏàÍ¬µÄÃüÁî */
+                #if 0 //æ³¨é‡Šçš„è¿™éƒ¨åˆ†çš„æ€è·¯ä»¥åŽç”¨æ¥æ£€æµ‹UID
+                /** @todo (rgw#1#): åŽæœŸéœ€è¦åœ¨è¿™é‡Œæ¯”è¾ƒåè®®UIDï¼Œåˆ é™¤æŽ¥å—åˆ°çš„UIDä¸Žå‘é€UIDç›¸åŒçš„å‘½ä»¤ */
                 if(xSemaphoreTake(pProto->pCMD[pechProtoElem->cmd_id]->xMutexCmd, 1000) == pdTRUE)
                 {
                     ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
                     gdsl_list_cursor_move_to_head (ccmd);
                     while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
                     {
-                        if(pechCmdElem->status == 1)//ÃüÁîÔÚ¸÷Ìõresº¯ÊýÖÐÒÑ¾­±»¶ÁÈ¡²¢´¦Àí¡£
+                        if(pechCmdElem->status == 1)//å‘½ä»¤åœ¨å„æ¡reså‡½æ•°ä¸­å·²ç»è¢«è¯»å–å¹¶å¤„ç†ã€‚
                         {
-                            gdsl_list_cursor_delete(cs);//ÇëÇóÃüÁîÊÕµ½Ö÷»ú»Ø¸´, É¾³ýÃüÁî
+                            gdsl_list_cursor_delete(cs);//è¯·æ±‚å‘½ä»¤æ”¶åˆ°ä¸»æœºå›žå¤, åˆ é™¤å‘½ä»¤
                             break;
                         }
                         gdsl_list_cursor_step_forward (ccmd);
@@ -119,7 +119,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     gdsl_list_cursor_move_to_head (ccmd);
                     while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
                     {
-                        if(pechCmdElem->status == 1)//ÃüÁîÔÚ¸÷Ìõresº¯ÊýÖÐÒÑ¾­±»¶ÁÈ¡²¢´¦Àí¡£
+                        if(pechCmdElem->status == 1)//å‘½ä»¤åœ¨å„æ¡reså‡½æ•°ä¸­å·²ç»è¢«è¯»å–å¹¶å¤„ç†ã€‚
                         {
                             gdsl_list_cursor_delete(ccmd);
                             continue;
@@ -135,7 +135,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                                                 pdTRUE, pdTRUE, 0);
                 if((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
                 {
-                    gdsl_list_cursor_delete(cs);//ÇëÇóÃüÁîÊÕµ½Æ½Ì¨»Ø¸´²¢ÒÑ´¦Àí, É¾³ýÃüÁî
+                    gdsl_list_cursor_delete(cs);//è¯·æ±‚å‘½ä»¤æ”¶åˆ°å¹³å°å›žå¤å¹¶å·²å¤„ç†, åˆ é™¤å‘½ä»¤
                     continue;
                 }
                 if(pechProtoElem->trycount >= pechProtoElem->trycountmax)
@@ -146,13 +146,13 @@ void vTaskRemoteCmdProc(void *pvParameters)
 
             }
 #if 1
-            /* 3. ÅÐ¶Ï³¬Ê± £¬³¬Ê±ºóÖÃ×´Ì¬Îª0£¬ÔÙ´Î½øÐÐ·¢ËÍ*/
+            /* 3. åˆ¤æ–­è¶…æ—¶ ï¼Œè¶…æ—¶åŽç½®çŠ¶æ€ä¸º0ï¼Œå†æ¬¡è¿›è¡Œå‘é€*/
             if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
             {
                 pechProtoElem->trycount++;
                 pechProtoElem->timestamp = time(NULL);
                 pechProtoElem->status = 0;
-                continue;//Ìø¹ýºóÃæµÄÓï¾äÁ¢¼´·¢ËÍ£¬·ñÔòÐèÒªÔÙµÈÒ»ÂÖ
+                continue;//è·³è¿‡åŽé¢çš„è¯­å¥ç«‹å³å‘é€ï¼Œå¦åˆ™éœ€è¦å†ç­‰ä¸€è½®
             }
 #endif
             /* 4. */

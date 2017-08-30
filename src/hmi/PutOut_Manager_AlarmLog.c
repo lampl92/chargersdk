@@ -298,7 +298,7 @@ static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
 
             _psec = mktime(_ptime);
 
-            sprintf(sel_buf,"%d;",_psec);
+            sprintf(sel_buf,"%d;",(int)_psec);
             strcat(sel_cmd,sel_buf);
 
 //            printf_safe("\n%s\n",sel_cmd);
@@ -930,8 +930,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 *
 **********************************************************************
 */
-/*********************************************************************
-*
+
 /** @brief
  *  输出管理员界面里的信息查询告警记录部分
  * @param
@@ -946,6 +945,7 @@ WM_HWIN CreateManagerAlarmLog(void)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerSignal,5000,0);
+    return 0;
 }
 /*************************** End of file ****************************/
 
