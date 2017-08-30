@@ -27,7 +27,7 @@
 #include "DIALOG.h"
 
 #include "includes.h"
-#include "dbparser.h"
+#include "dbparser\dbparser.h"
 #include "debug.h"
 
 #include "order.h"
@@ -939,7 +939,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  * @return
  *       CreateManagerAlarmLog
 */
-WM_HWIN CreateManagerAlarmLog(void);
 WM_HWIN CreateManagerAlarmLog(void)
 {
     _hWinManagerAlarmLog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);

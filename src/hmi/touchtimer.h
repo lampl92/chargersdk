@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "interface.h"
 #include "keyboard.h"
-#include "qr_encode.h"
+#include "QR_Encode.h"
 #include "lcddrv.h"
 #include "user_app.h"
 //#include "chargepoint.h"
@@ -26,19 +26,19 @@
 #define MSG_PAINTErr      (GUI_ID_USER + 0x30)
 //#define MSG_MusicStart    (GUI_ID_USER + 0x31)
 //#define MSG_NextMusic     (GUI_ID_USER + 0x32)
-//µçÑ¹Òì³££»ACÎÂ¶ÈÒì³££»PEÒì³££»×²»÷£»·ÀÀ×Òì³££»Í£µç£»µçÁ÷Òì³££»ÆµÂÊÒì³£
-/*********************×Ô¶¨ÒåGUIÏûÏ¢µÄºê******************************
+//ç”µå‹å¼‚å¸¸ï¼›ACæ¸©åº¦å¼‚å¸¸ï¼›PEå¼‚å¸¸ï¼›æ’å‡»ï¼›é˜²é›·å¼‚å¸¸ï¼›åœç”µï¼›ç”µæµå¼‚å¸¸ï¼›é¢‘ç‡å¼‚å¸¸
+/*********************è‡ªå®šä¹‰GUIæ¶ˆæ¯çš„å®******************************
 **
-** GUI_ID_USER + 0x30 - 0x3F ¿É¶¨Òå16¸öÏûÏ¢
+** GUI_ID_USER + 0x30 - 0x3F å¯å®šä¹‰16ä¸ªæ¶ˆæ¯
 */
-#define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //´´½¨¹ÊÕÏµ¯´°ÏûÏ¢
-#define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //É¾³ı¹ÊÕÏ´°¿ÚÏûÏ¢
-#define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //Ìøµ½HOMEÒ³ÏûÏ¢
-#define MSG_JUMPCARDINFO    (GUI_ID_USER + 0x33)    //Ìøµ½¿¨Æ¬ĞÅÏ¢Ò³ÏûÏ¢
-#define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //Ìøµ½³äµçÖĞÒ³ÏûÏ¢
-#define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //¸üĞÂÊı¾İ
-#define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //Ìø×ª³äµçÍê³ÉÒ³ÏûÏ¢
-#define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //Ìø×ª¼üÅÌÒ³À´ÉèÖÃ±äÁ¿ĞÅÏ¢
+#define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //åˆ›å»ºæ•…éšœå¼¹çª—æ¶ˆæ¯
+#define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //åˆ é™¤æ•…éšœçª—å£æ¶ˆæ¯
+#define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //è·³åˆ°HOMEé¡µæ¶ˆæ¯
+#define MSG_JUMPCARDINFO    (GUI_ID_USER + 0x33)    //è·³åˆ°å¡ç‰‡ä¿¡æ¯é¡µæ¶ˆæ¯
+#define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //è·³åˆ°å……ç”µä¸­é¡µæ¶ˆæ¯
+#define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //æ›´æ–°æ•°æ®
+#define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //è·³è½¬å……ç”µå®Œæˆé¡µæ¶ˆæ¯
+#define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //è·³è½¬é”®ç›˜é¡µæ¥è®¾ç½®å˜é‡ä¿¡æ¯
 
 extern uint8_t calebrate_done;
 extern uint8_t winCreateFlag;
@@ -51,7 +51,7 @@ extern WM_HWIN _hWinCardInfo;
 extern WM_HWIN _hWinHome;
 extern WM_HWIN cur_win;
 void _cbHomeDialog(WM_MESSAGE *pMsg);
-//ÁÙÊ±µ÷ÊÔ±äÁ¿
+//ä¸´æ—¶è°ƒè¯•å˜é‡
 typedef struct
 {
     char year[5];
@@ -68,20 +68,20 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 struct _Disp_Status{
-    uint8_t _workStatus:2;//¹¤×÷×´Ì¬
-    uint8_t _scramStatus:2;//¼±Í£×´Ì¬
-    uint8_t _envTempStatus:2;//»·¾³ÎÂ¶È
-    uint8_t _AsocketTempStatus:2;//A²å×ùÎÂ¶È
-    uint8_t _BsocketTempStatus:2;//B²å×ùÎÂ¶È
-    uint8_t _AplugCurrentStatus:2;//AÇ¹Êä³öµçÁ÷
-    uint8_t _BplugCurrentStatus:2;//BÇ¹Êä³öµçÁ÷
-    uint8_t _AplugStatus:2;//AÇ¹Ç¹Ëø
-    uint8_t _BplugStatus:2;//BÇ¹Ç¹Ëø
-    uint8_t _acVoltStatus:2;//½»Á÷µçÑ¹
-    uint8_t _acCurrentStatus:2;//½»Á÷µçÁ÷
-    uint8_t _spdStatus:2;//·ÀÀ×Æ÷×´Ì¬
-    uint8_t _outputRelayStatus:2;//Êä³ö¼ÌµçÆ÷
-    uint8_t _controlPilotStatus:2;//¿ØÖÆµ¼Òı
+    uint8_t _workStatus:2;//å·¥ä½œçŠ¶æ€
+    uint8_t _scramStatus:2;//æ€¥åœçŠ¶æ€
+    uint8_t _envTempStatus:2;//ç¯å¢ƒæ¸©åº¦
+    uint8_t _AsocketTempStatus:2;//Aæ’åº§æ¸©åº¦
+    uint8_t _BsocketTempStatus:2;//Bæ’åº§æ¸©åº¦
+    uint8_t _AplugCurrentStatus:2;//Aæªè¾“å‡ºç”µæµ
+    uint8_t _BplugCurrentStatus:2;//Bæªè¾“å‡ºç”µæµ
+    uint8_t _AplugStatus:2;//Aæªæªé”
+    uint8_t _BplugStatus:2;//Bæªæªé”
+    uint8_t _acVoltStatus:2;//äº¤æµç”µå‹
+    uint8_t _acCurrentStatus:2;//äº¤æµç”µæµ
+    uint8_t _spdStatus:2;//é˜²é›·å™¨çŠ¶æ€
+    uint8_t _outputRelayStatus:2;//è¾“å‡ºç»§ç”µå™¨
+    uint8_t _controlPilotStatus:2;//æ§åˆ¶å¯¼å¼•
 }disp_Status;
 
 void PutOut_SelAOrB();

@@ -19,7 +19,7 @@
 /                               设置充电接口信息到配置文件
 /---------------------------------------------------------------------------*/
 
-ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsCONArray;
