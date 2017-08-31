@@ -91,7 +91,7 @@
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.jlink.speed</Key>
-          <Value>auto</Value>
+          <Value>10000</Value>
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.jlink.resetcommand</Key>
@@ -124,6 +124,10 @@
         <KeyValue>
           <Key>com.sysprogs.jlink.commands.afterload</Key>
           <Value />
+        </KeyValue>
+        <KeyValue>
+          <Key>SYS:DESIGN_MODE</Key>
+          <Value>1</Value>
         </KeyValue>
       </Entries>
     </DebugMethodProperties>

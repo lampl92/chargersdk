@@ -1,6 +1,6 @@
 /**
 * @file bsp_uart.h
-* @brief ´®¿ÚÇı¶¯
+* @brief ä¸²å£é©±åŠ¨
 * @author rgw
 * @version v1.0
 * @date 2016-11-01
