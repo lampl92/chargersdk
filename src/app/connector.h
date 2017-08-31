@@ -118,6 +118,7 @@ typedef struct _CONStatus
     TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
+    uint32_t ulSignalPool[5];
 
     pCon_ft GetChargingVoltage;
     pCon_ft GetChargingCurrent;

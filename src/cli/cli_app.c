@@ -9,6 +9,7 @@ void cli_hello_fnt(int argc, char **argv)
     uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
     uint8_t strCardID[defCardIDLength * 2 + 1];
     int i;
+    uint64_t ulltest;
     HexToStr(cardid, strCardID, 8);
     printf_safe("test strCardID = %s", strCardID);
 
@@ -17,7 +18,9 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
-    testBnWList();
+    //testBnWList();
+    ulltest = (uint64_t)-1;
+    printf_safe("ull = %lld\n", ulltest);
 }
 
 tinysh_cmd_t cli_hello_cmd =
@@ -31,20 +34,20 @@ tinysh_cmd_t cli_hello_cmd =
 
 
 
-//SDRAMÄÚ´æ²âÊÔ
+//SDRAMå†…å­˜æµ‹è¯•
 void fsmc_sdram_test()
 {
     u32 i = 0;
     u32 temp = 0;
-    u32 sval = 0; //ÔÚµØÖ·0¶Áµ½µÄÊı¾İ
-    printf_safe("Ã¿¸ô16K×Ö½Ú,Ğ´ÈëÒ»¸öÊı¾İ,×Ü¹²Ğ´Èë2048¸öÊı¾İ,¸ÕºÃÊÇ32M×Ö½Ú\n");
+    u32 sval = 0; //åœ¨åœ°å€0è¯»åˆ°çš„æ•°æ®
+    printf_safe("æ¯éš”16Kå­—èŠ‚,å†™å…¥ä¸€ä¸ªæ•°æ®,æ€»å…±å†™å…¥2048ä¸ªæ•°æ®,åˆšå¥½æ˜¯32Må­—èŠ‚\n");
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         *(vu32 *)(Bank5_SDRAM_ADDR + i) = temp;
         temp++;
     }
     temp = 0;
-    //ÒÀ´Î¶Á³öÖ®Ç°Ğ´ÈëµÄÊı¾İ,½øĞĞĞ£Ñé
+    //ä¾æ¬¡è¯»å‡ºä¹‹å‰å†™å…¥çš„æ•°æ®,è¿›è¡Œæ ¡éªŒ
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         sval = *(vu32 *)(Bank5_SDRAM_ADDR + i);
@@ -59,7 +62,7 @@ void fsmc_sdram_test()
         }
         temp++;
     }
-    printf_safe("SDRAM ÈİÁ¿:%dMB\r\n", i / 1024 / 1024); //´òÓ¡SDRAMÈİÁ¿
+    printf_safe("SDRAM å®¹é‡:%dMB\r\n", i / 1024 / 1024); //æ‰“å°SDRAMå®¹é‡
 }
 
 
@@ -95,7 +98,7 @@ void cli_systemtime_fnt(int argc, char **argv)
         xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
         printf_safe("%s\n", tbuf);
 
-        printf_safe("<time.h>-----------²âÊÔ--------------\n");
+        printf_safe("<time.h>-----------æµ‹è¯•--------------\n");
         time_t now;
         struct tm *ts;
         char buf [80];
