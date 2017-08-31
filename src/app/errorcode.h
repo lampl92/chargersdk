@@ -20,51 +20,51 @@
 typedef enum _ErrorCode
 {
     ERR_NO,			//No Error
-    ERR_SCRAM_FAULT,		//¼±Í£·¢Éú¹ÊÕÏ
-    ERR_GSENSOR_FAULT,		//ÖØÁ¦¼ÓËÙ¶È´«¸ÐÆ÷·¢Éú¹ÊÕÏ
-    ERR_PE_FAULT,		//±£»¤½ÓµØÁ¬ÐøÐÔ´«¸ÐÆ÷·¢Éú¹ÊÕÏ
-    ERR_POWEROFF_DECT_FAULT,	//µôµç×´Ì¬¼ì²âÆ÷·¢Éú¹ÊÕÏ
-    ERR_ARRESTER_FAULT,		//±ÜÀ×Æ÷·¢Éú¹ÊÕÏ
+    ERR_SCRAM_FAULT,		//æ€¥åœå‘ç”Ÿæ•…éšœ
+    ERR_GSENSOR_FAULT,		//é‡åŠ›åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨å‘ç”Ÿæ•…éšœ
+    ERR_PE_FAULT,		//ä¿æŠ¤æŽ¥åœ°è¿žç»­æ€§ä¼ æ„Ÿå™¨å‘ç”Ÿæ•…éšœ
+    ERR_POWEROFF_DECT_FAULT,	//æŽ‰ç”µçŠ¶æ€æ£€æµ‹å™¨å‘ç”Ÿæ•…éšœ
+    ERR_ARRESTER_FAULT,		//é¿é›·å™¨å‘ç”Ÿæ•…éšœ
 
-    ERR_CON_METER_FAULT,        //µç±íÍ¨ÐÅ¹ÊÕÏ
-    ERR_CON_CP_FAULT,           //¼ì²âCP¹ÊÕÏ
-    ERR_CON_CC_FAULT,           //¼ì²âCC¹ÊÕÏ
-    ERR_CON_PLUG_FAULT,         //²åÇ¹×´Ì¬¼ì²âÆ÷·¢Éú¹ÊÕÏ
-    ERR_CON_B_LOCK_FAULT,       //BÐÍÁ¬½ÓÇ¹Ëø×´Ì¬¼ì²âÆ÷·¢Éú¹ÊÕÏ
-    ERR_CON_CANT_LOCK,          //BÐÍÁ¬½ÓÇ¹ËøÎÞ·¨ËøÖ¹
-    ERR_CON_ACLTEMP_DECT_FAULT, //L½øÏßÎÂ¶È¼ì²â·¢Éú¹ÊÕÏ
-    ERR_CON_ACNTEMP_DECT_FAULT, //N½øÏßÎÂ¶È¼ì²â·¢Éú¹ÊÕÏ
-    ERR_CON_BTEMP1_DECT_FAULT,  //BÐÍÁ¬½ÓÎÂ¶È¼ì²âµã1·¢Éú¹ÊÕÏ
-    ERR_CON_BTEMP2_DECT_FAULT,  //BÐÍÁ¬½ÓÎÂ¶È¼ì²âµã2·¢Éú¹ÊÕÏ
-    ERR_CON_STARTCHARGE,        //¿ªÊ¼³äµç´íÎó
-    ERR_CON_STOPCHARGE,         //½áÊø³äµç´íÎó
-    ERR_RELAY_PASTE,            //  "³äµçµã ´¥µãÕ³Á¬",
+    ERR_CON_METER_FAULT,        //ç”µè¡¨é€šä¿¡æ•…éšœ
+    ERR_CON_CP_FAULT,           //æ£€æµ‹CPæ•…éšœ
+    ERR_CON_CC_FAULT,           //æ£€æµ‹CCæ•…éšœ
+    ERR_CON_PLUG_FAULT,         //æ’æžªçŠ¶æ€æ£€æµ‹å™¨å‘ç”Ÿæ•…éšœ
+    ERR_CON_B_LOCK_FAULT,       //Båž‹è¿žæŽ¥æžªé”çŠ¶æ€æ£€æµ‹å™¨å‘ç”Ÿæ•…éšœ
+    ERR_CON_CANT_LOCK,          //Båž‹è¿žæŽ¥æžªé”æ— æ³•é”æ­¢
+    ERR_CON_ACLTEMP_DECT_FAULT, //Lè¿›çº¿æ¸©åº¦æ£€æµ‹å‘ç”Ÿæ•…éšœ
+    ERR_CON_ACNTEMP_DECT_FAULT, //Nè¿›çº¿æ¸©åº¦æ£€æµ‹å‘ç”Ÿæ•…éšœ
+    ERR_CON_BTEMP1_DECT_FAULT,  //Båž‹è¿žæŽ¥æ¸©åº¦æ£€æµ‹ç‚¹1å‘ç”Ÿæ•…éšœ
+    ERR_CON_BTEMP2_DECT_FAULT,  //Båž‹è¿žæŽ¥æ¸©åº¦æ£€æµ‹ç‚¹2å‘ç”Ÿæ•…éšœ
+    ERR_CON_STARTCHARGE,        //å¼€å§‹å……ç”µé”™è¯¯
+    ERR_CON_STOPCHARGE,         //ç»“æŸå……ç”µé”™è¯¯
+    ERR_RELAY_PASTE,            //  "å……ç”µç‚¹ è§¦ç‚¹ç²˜è¿ž",
 
-    ERR_FILE_RW,		//ÎÄ¼þ¶ÁÐ´´íÎó
-    ERR_FILE_NO,		//ÎÞÄ¿±êÎÄ¼þ
-    ERR_FILE_PARSE,		//"²ÎÊý½âÎö´íÎó",
-    ERR_FILE_PARAM,		//²ÎÊýÄÚÈÝ´íÎó
-    ERR_SET_PARAM,		//ÉèÖÃ²ÎÊý·¶Î§´íÎó
-    ERR_SET_SERIALIZATION,	//JSONÐòÁÐ»¯´íÎó
-    ERR_OTHER,			//ÆäËû´íÎó
-    ERR_RFID_FAULT,		//¶Á¿¨Æ÷»ñÈ¡UID´íÎó
-    ERR_GPRS_FAULT,     //GPRSÄ£¿é¹ÊÕÏ
+    ERR_FILE_RW,		//æ–‡ä»¶è¯»å†™é”™è¯¯
+    ERR_FILE_NO,		//æ— ç›®æ ‡æ–‡ä»¶
+    ERR_FILE_PARSE,		//"å‚æ•°è§£æžé”™è¯¯",
+    ERR_FILE_PARAM,		//å‚æ•°å†…å®¹é”™è¯¯
+    ERR_SET_PARAM,		//è®¾ç½®å‚æ•°èŒƒå›´é”™è¯¯
+    ERR_SET_SERIALIZATION,	//JSONåºåˆ—åŒ–é”™è¯¯
+    ERR_OTHER,			//å…¶ä»–é”™è¯¯
+    ERR_RFID_FAULT,		//è¯»å¡å™¨èŽ·å–UIDé”™è¯¯
+    ERR_GPRS_FAULT,     //GPRSæ¨¡å—æ•…éšœ
 
-    ERR_UART_PE,		//´®¿ÚÆæÅ¼Ð£Ñé´íÎó
-    ERR_UART_NE,		//´®¿ÚÔëÉù´íÎó
-    ERR_UART_FE,		//´®¿ÚÖ¡´íÎó
-    ERR_UART_ORE,		//´®¿Ú³¬ÔØ
-    ERR_UART_DMA,		//´®¿ÚDMA´«Êä´íÎó
+    ERR_UART_PE,		//ä¸²å£å¥‡å¶æ ¡éªŒé”™è¯¯
+    ERR_UART_NE,		//ä¸²å£å™ªå£°é”™è¯¯
+    ERR_UART_FE,		//ä¸²å£å¸§é”™è¯¯
+    ERR_UART_ORE,		//ä¸²å£è¶…è½½
+    ERR_UART_DMA,		//ä¸²å£DMAä¼ è¾“é”™è¯¯
 
 
-    ERR_NONET,			//ÍøÂçÍ¨ÐÅ¹ÊÕÏ
-    ERR_NET_TIMEOUT,		//ÍøÂçÍ¨ÐÅ³¬Ê±
-    ERR_MEMORY,			//Malloc´íÎó
+    ERR_NONET,			//ç½‘ç»œé€šä¿¡æ•…éšœ
+    ERR_NET_TIMEOUT,		//ç½‘ç»œé€šä¿¡è¶…æ—¶
+    ERR_MEMORY,			//Mallocé”™è¯¯
 
-    ERR_REMOTE_NODATA,  //ÎÞÊý¾Ý
-    ERR_REMOTE_REGEDIT,  //×¢²áÊ§°Ü
-    ERR_REMOTE_ORDERSN,  //¶©µ¥ºÅ²»ÏàµÈ
-    ERR_REMOTE_PARAM,    //Ð­Òé²ÎÊýÓë±¾»úÎÞ·¨¼æÈÝ
+    ERR_REMOTE_NODATA,  //æ— æ•°æ®
+    ERR_REMOTE_REGEDIT,  //æ³¨å†Œå¤±è´¥
+    ERR_REMOTE_ORDERSN,  //è®¢å•å·ä¸ç›¸ç­‰
+    ERR_REMOTE_PARAM,    //åè®®å‚æ•°ä¸Žæœ¬æœºæ— æ³•å…¼å®¹
     ERR_WHITE_LIST,
     ERR_BLACK_LIST
 
@@ -87,8 +87,8 @@ typedef struct _ErrorPackage
     uint8_t		msg[64];
 } ErrorPackage_t;
 
-//³äµçÇ¹ID´ÓÐ¡µ½´ó¶¨Òå£¬ÆäËûÉè±¸´Ó´óÐ¡¶¨Òå
-//DevID 0~? ³äµçÇ¹ID
+//å……ç”µæžªIDä»Žå°åˆ°å¤§å®šä¹‰ï¼Œå…¶ä»–è®¾å¤‡ä»Žå¤§å°å®šä¹‰
+//DevID 0~? å……ç”µæžªID
 #define defDevID_System		248
 #define defDevID_Cloud		249
 #define defDevID_File		250
