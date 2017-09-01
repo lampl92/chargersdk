@@ -235,11 +235,11 @@
 #define defSignalEVSE_Alarm_PowerOff        BIT_3
 #define defSignalEVSE_Alarm_Arrester        BIT_4
     //[4][5]
-#define defSignalEVSE_Fault_RFID            BIT_5
-#define defSignalEVSE_Fault_Bluetooth       BIT_6
-#define defSignalEVSE_Fault_Wifi            BIT_7
-#define defSignalEVSE_Fault_GPRS            BIT_8
-#define defSignalEVSE_Fault_GSensor         BIT_9
+#define defSignalEVSE_Fault_RFID            BIT_0
+#define defSignalEVSE_Fault_Bluetooth       BIT_1
+#define defSignalEVSE_Fault_Wifi            BIT_2
+#define defSignalEVSE_Fault_GPRS            BIT_3
+#define defSignalEVSE_Fault_GSensor         BIT_4
     
 /*CON Signal Pool*/
     //[0][1]
