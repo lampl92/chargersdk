@@ -109,7 +109,7 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdFALSE, pdTRUE, 0);
                 if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
-                    pCON->status.SetLoadPercent(pCON, 53);/** @fixme (rgw#1#): 设置PWM脉宽，100%负载启动 */
+                    pCON->status.SetLoadPercent(pCON, 100);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
                     if((pCON->status.xCPState == CP_9V_PWM
