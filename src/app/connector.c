@@ -704,6 +704,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         tmpCPState = CP_6V_PWM;
 #else
         cp1 = Sys_samp.DC.CP1;//get_CP1();
+        pCON->status.dCPVolt = cp1;
         if((cp1 < 12.8f) && (cp1 > 11.2f))
         {
             if(TIM2->CCR1 != TIMER_MAX)
@@ -714,6 +715,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_12V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else if((cp1 < 9.8f) && (cp1 > 8.2f))
         {
@@ -725,6 +727,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_9V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else if((cp1 < 6.8f) && (cp1 > 5.0f))
         {
@@ -736,11 +739,13 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_6V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else
         {
             printf_safe("CPERR %lf\n", cp1);
             tmpCPState = CP_ERR;
+            pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
             return ERR_CON_CP_FAULT;
         }
 #endif
@@ -758,6 +763,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_12V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else if((cp2 < 9.8f) && (cp2 > 8.2f))
         {
@@ -769,6 +775,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_9V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else if((cp2 < 6.8f) && (cp2 > 5.2f))
         {
@@ -780,10 +787,12 @@ static ErrorCode_t GetCPState(void *pvCON)
             {
                 tmpCPState = CP_6V;
             }
+            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
         else
         {
             tmpCPState = CP_ERR;
+            pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
             return ERR_CON_CP_FAULT;
         } ;
     }
@@ -867,13 +876,13 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     /** ************* */
     if(ucCONID == 0)
     {
-        TIM2->CCR1 = 1001 - ucLoadPercent * 10;
+        TIM2->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent); //1001 - (53 * 10) * (ucLoadPercent / 100.0)
     }
     else if(ucCONID == 1)
     {
-        TIM4->CCR1 = 1001 - ucLoadPercent * 10;
+        TIM4->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent);
     }
-    //负载百分比输入范围0~1000；
+    //负载百分比输入范围0~100；
     //PWM
     /*********************/
 
@@ -910,11 +919,13 @@ static ErrorCode_t GetCCState(void *pvCON)
     {
         if(GET_CC1 == 0) //已经连接CC1点，PE连接正常
         {
-            tmpCCState = CC_PE;
+            tmpCCState = CC_PE; 
+            pCON->status.ulSignalState |= defSignalCON_State_CC;
         }
         else if(GET_CC1 == 1)
         {
             tmpCCState = CC_NO;
+            pCON->status.ulSignalState &= ~defSignalCON_State_CC;
         }
 
     }
@@ -923,10 +934,12 @@ static ErrorCode_t GetCCState(void *pvCON)
         if(GET_CC2 == 0) //已经连接CC1点，PE连接正常
         {
             tmpCCState = CC_PE;
+            pCON->status.ulSignalState |= defSignalCON_State_CC;
         }
         else if(GET_CC2 == 1)
         {
             tmpCCState = CC_NO;
+            pCON->status.ulSignalState &= ~defSignalCON_State_CC;
         }
     }
 #endif
@@ -1326,6 +1339,16 @@ static ErrorCode_t GetRelayState(void *pvCON)
 
     tmpLStat = flag_power_out_l;//Get_State_relay();//1 : switch on
     tmpNStat = tmpLStat;
+    if (tmpLStat == SWITCH_ON)
+    {
+        pCON->status.ulSignalState |= defSignalCON_State_AC_A_Relay;
+        pCON->status.ulSignalState |= defSignalCON_State_AC_N_Relay;
+    }
+    else if(tmpLStat == SWITCH_OFF)
+    {
+        pCON->status.ulSignalState &= ~defSignalCON_State_AC_A_Relay;
+        pCON->status.ulSignalState &= ~defSignalCON_State_AC_N_Relay;
+    }
 #endif
     /*********************/
     /* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
@@ -1495,18 +1518,8 @@ CON_t *CONCreate(uint8_t ucCONID )
 
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;
-//    pCON->info.SetCONType = SetCONType;
-//    pCON->info.SetSocketType = SetSocketType;
-//    pCON->info.SetVolatageUpperLimits = SetVolatageUpperLimits;
-//    pCON->info.SetVolatageLowerLimits = SetVolatageLowerLimits;
-//    pCON->info.SetACTempUpperLimits = SetACTempUpperLimits;
-//    pCON->info.SetACTempLowerLimits = SetACTempLowerLimits;
-//    pCON->info.SetSocketTempUpperLimits = SetSocketTempUpperLimits;
-//    pCON->info.SetSocketTempLowerLimits = SetSocketTempLowerLimits;
-//    pCON->info.SetRatedCurrent = SetRatedCurrent;
-//    pCON->info.SetRatedPower = SetRatedPower;
 
-    //memset(pCON->status.ucHeldCardID, 0, defCardIDLength);
+    pCON->status.dCPVolt               = 0;
     pCON->status.dACLTemp              = 0;
     pCON->status.dACNTemp              = 0;
     pCON->status.dBTypeSocketTemp1     = 0;
@@ -1533,6 +1546,9 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.GetChargingPower      = GetChargingPower;
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
+    pCON->status.ulSignalState         = 0;
+    pCON->status.ulSignalAlarm         = 0;
+    pCON->status.ulSignalFault         = 0;
 
     pCON->status.GetCPState          = GetCPState;
     pCON->status.SetCPSwitch         = SetCPSwitch;

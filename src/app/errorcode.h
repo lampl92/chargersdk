@@ -11,20 +11,20 @@
 #include	"ff.h"
 
 #define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
-                                                    ErrorCode_t _macro_errcode = _errcode;         \
-                                                    if(_macro_errcode != ERR_NO)                  \
-                                                    {                                       \
-                                                        ThrowErrorCode(_dev, _macro_errcode,_errlevel, _msg);  \
-                                                    }                                       \
-                                                }while(0);
+                                                            ErrorCode_t _macro_errcode = _errcode;         \
+                                                            if(_macro_errcode != ERR_NO)                  \
+                                                            {                                       \
+                                                                ThrowErrorCode(_dev, _macro_errcode,_errlevel, _msg);  \
+                                                            }                                       \
+                                                        }while(0);
 typedef enum _ErrorCode
 {
-    ERR_NO,			//No Error
-    ERR_SCRAM_FAULT,		//急停发生故障
-    ERR_GSENSOR_FAULT,		//重力加速度传感器发生故障
-    ERR_PE_FAULT,		//保护接地连续性传感器发生故障
+    ERR_NO,			            //No Error
+    ERR_SCRAM_FAULT,		    //急停发生故障
+    ERR_GSENSOR_FAULT,		    //重力加速度传感器发生故障
+    ERR_PE_FAULT,		        //保护接地连续性传感器发生故障
     ERR_POWEROFF_DECT_FAULT,	//掉电状态检测器发生故障
-    ERR_ARRESTER_FAULT,		//避雷器发生故障
+    ERR_ARRESTER_FAULT,		    //避雷器发生故障
 
     ERR_CON_METER_FAULT,        //电表通信故障
     ERR_CON_CP_FAULT,           //检测CP故障

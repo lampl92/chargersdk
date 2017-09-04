@@ -21,8 +21,8 @@
 #define TCP_CLIENT_BUFSIZE   1500
 DevModem_t *pModem;
 
-uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE]; //TCP¿Í»§¶Ë·¢ËÍÊı¾İ»º³å
-uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP¿Í»§¶Ë½ÓÊÕÊı¾İ»º³åÇø
+uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE]; //TCPå®¢æˆ·ç«¯å‘é€æ•°æ®ç¼“å†²
+uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCPå®¢æˆ·ç«¯æ¥æ”¶æ•°æ®ç¼“å†²åŒº
 
 uint32_t recv_len = 0;
 uint32_t send_len = 0;
@@ -44,7 +44,7 @@ static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
 //    }
 //    else
     {
-        //Ã»µÈµ½£¬Àë¿ªÁË
+        //æ²¡ç­‰åˆ°ï¼Œç¦»å¼€äº†
     }
     return cnt;
 }
@@ -74,8 +74,8 @@ static uint32_t modem_send_at(uint8_t *format, ...)
  *
  * @param      reply   The reply
  * @param      len     The length
- * @param      key     ¹Ø¼ü´Ê
- * @param      second  ÑÓÊ±Ê±¼ä
+ * @param      key     å…³é”®è¯
+ * @param      second  å»¶æ—¶æ—¶é—´
  *
  * @return     { description_of_the_return_value }
  */
@@ -92,7 +92,7 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
         n  = modem_UART_gets(pModem, reply, len);
         if ( n > 0 )
         {
-            //ÓÅÏÈÅĞ¶ÏÕâÁ½¸öÄ£¿é»áÖ÷¶¯·¢³öµÄÃüÁî
+            //ä¼˜å…ˆåˆ¤æ–­è¿™ä¸¤ä¸ªæ¨¡å—ä¼šä¸»åŠ¨å‘å‡ºçš„å‘½ä»¤
             p  = strstr(reply, "CLOSED");
             if ( p )
             {
@@ -142,7 +142,7 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
     return ret;
 }
 
-/** @brief ³õÊ¼»¯modem£¬ÖÃKey¿ªÆôÄ£¿é£¬¼ì²âAT·µ»ØÃüÁî
+/** @brief åˆå§‹åŒ–modemï¼Œç½®Keyå¼€å¯æ¨¡å—ï¼Œæ£€æµ‹ATè¿”å›å‘½ä»¤
  *
  * @param void
  * @return int
@@ -161,7 +161,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
         pModem->state = DS_MODEM_ON;
         return ret;
     }
-    GPRS_set; //ÉÏµçÆô¶¯
+    GPRS_set; //ä¸Šç”µå¯åŠ¨
     DEVDEBUG("modem Key set!: \r\n");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
     switch(ret)
@@ -179,7 +179,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ¹Ø±Õ»ØÏÔ
+/** @brief å…³é—­å›æ˜¾
  *
  * @param void
  * @return int
@@ -197,7 +197,7 @@ static DR_MODEM_e modem_disable_echo(void)
 }
 
 
-/** @brief PIN¼ì²â
+/** @brief PINæ£€æµ‹
  *
  * @param void
  * @return int
@@ -230,10 +230,10 @@ static DR_MODEM_e modem_CPIN(DevModem_t *pModem)
 }
 
 
-/** @brief ĞÅºÅÇ¿¶È¼ì²â
+/** @brief ä¿¡å·å¼ºåº¦æ£€æµ‹
  *
  * @param void
- * @return uint8_t ·µ»ØĞÅºÅÇ¿¶È  0-31£¬ÖµÔ½´óĞÅºÅÔ½ºÃ£»99£¬ÎŞĞÅºÅ»ò²»¿É¼ì²â
+ * @return uint8_t è¿”å›ä¿¡å·å¼ºåº¦  0-31ï¼Œå€¼è¶Šå¤§ä¿¡å·è¶Šå¥½ï¼›99ï¼Œæ— ä¿¡å·æˆ–ä¸å¯æ£€æµ‹
  *
  */
 static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
@@ -254,7 +254,7 @@ static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ÍøÂç×´Ì¬¼ì²â
+/** @brief ç½‘ç»œçŠ¶æ€æ£€æµ‹
  *
  * @param void
  * @return uint8_t
@@ -333,7 +333,7 @@ static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ÅäÖÃÇ°ÖÃ³¡¾°
+/** @brief é…ç½®å‰ç½®åœºæ™¯
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -375,7 +375,7 @@ DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ÉèÖÃÍ¸´«Ä£Ê½²ÎÊı
+/** @brief è®¾ç½®é€ä¼ æ¨¡å¼å‚æ•°
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -401,7 +401,7 @@ DR_MODEM_e modem_set_Transparent(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ÉèÖÃTCP/UDP½ÓÊÕÏÔÊ¾·½Ê½
+/** @brief è®¾ç½®TCP/UDPæ¥æ”¶æ˜¾ç¤ºæ–¹å¼
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -413,19 +413,19 @@ DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
     uint8_t  s[8 + 1]  = {0};
     DR_MODEM_e ret;
 
-    modem_send_at("AT+QISHOWRA=%d\r", 0);  //ÔÚ½ÓÊÕµ½µÄÊı¾İÍ·Î»ÖÃÔö¼ÓÊı¾İÀ´Ô´µÄµØÖ·ºÍ¶Ë¿ÚºÅ¡£¾ßÌåµÄ¸ñÊ½Îª£ºRECV FROM:<IP ADDRESS>:<PORT>
+    modem_send_at("AT+QISHOWRA=%d\r", 0);  //åœ¨æ¥æ”¶åˆ°çš„æ•°æ®å¤´ä½ç½®å¢åŠ æ•°æ®æ¥æºçš„åœ°å€å’Œç«¯å£å·ã€‚å…·ä½“çš„æ ¼å¼ä¸ºï¼šRECV FROM:<IP ADDRESS>:<PORT>
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    modem_send_at("AT+QISHOWPT=%d\r", 0); //ÔÚ½ÓÊÕµ½µÄÊı¾İÖ®Ç°Ôö¼Ó´«Êä²ãµÄĞ­ÒéÀàĞÍ£¬TCP»òÕßUDP¡£Õâ¸öÓ¦ÓÃ²»ÊÇºÜ¶à
+    modem_send_at("AT+QISHOWPT=%d\r", 0); //åœ¨æ¥æ”¶åˆ°çš„æ•°æ®ä¹‹å‰å¢åŠ ä¼ è¾“å±‚çš„åè®®ç±»å‹ï¼ŒTCPæˆ–è€…UDPã€‚è¿™ä¸ªåº”ç”¨ä¸æ˜¯å¾ˆå¤š
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    modem_send_at("AT+QIHEAD=%d\r", 0);  //ÔÚ½ÓÊÕµ½µÄÊı¾İÖ®Ç°Ôö¼ÓÍ·ĞÅÏ¢"IPD<len>:"
+    modem_send_at("AT+QIHEAD=%d\r", 0);  //åœ¨æ¥æ”¶åˆ°çš„æ•°æ®ä¹‹å‰å¢åŠ å¤´ä¿¡æ¯"IPD<len>:"
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
     if(ret != DR_MODEM_OK)
     {
@@ -440,7 +440,7 @@ DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief Ö´ĞĞAPN
+/** @brief æ‰§è¡ŒAPN
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -459,7 +459,7 @@ DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief ¼¤»îÒÆ¶¯³¡¾°£¬·¢ÆğGPRSÁ¬½Ó
+/** @brief æ¿€æ´»ç§»åŠ¨åœºæ™¯ï¼Œå‘èµ·GPRSè¿æ¥
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -477,7 +477,7 @@ DR_MODEM_e modem_set_QIACT(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief ¹Ø±ÕGPRSÁ¬½Ó
+/** @brief å…³é—­GPRSè¿æ¥
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -495,7 +495,7 @@ DR_MODEM_e modem_set_QIDEACT(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief »ñÈ¡locIP
+/** @brief è·å–locIP
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -613,22 +613,22 @@ static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         }
         break;
     case DR_MODEM_TIMEOUT:
-        printf_safe("Read ³¬Ê±£¡£¡\n");
+        printf_safe("Read è¶…æ—¶ï¼ï¼\n");
         break;
     case DR_MODEM_ERROR:
-        printf_safe("Read ´íÎó£¡£¡\n");
+        printf_safe("Read é”™è¯¯ï¼ï¼\n");
         break;
     case DR_MODEM_READ:
-        printf_safe("Read READ!!£¡£¡\n");
+        printf_safe("Read READ!!ï¼ï¼\n");
         break;
     case DR_MODEM_CLOSED:
-        printf_safe("Read Ê±·¢ÏÖClose\n");
+        printf_safe("Read æ—¶å‘ç°Close\n");
         break;
     }
 
     return recv_len;
 }
-/** @brief ·¢ËÍÊı¾İ£¬³¬Ê±Ê±¼ä20s
+/** @brief å‘é€æ•°æ®ï¼Œè¶…æ—¶æ—¶é—´20s
  *
  * @param pModem DevModem_t*
  * @param pbuff uint8_t*
@@ -686,7 +686,7 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
             }
         }
     }
-    else//Í¸´«Ä£Ê½
+    else//é€ä¼ æ¨¡å¼
     {
         n = modem_UART_puts(pbuff, len);
         if(n == len)
@@ -732,7 +732,7 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief »ñÈ¡½ÓÈëSTATE  M26ÃüÁî¼¯ P156
+/** @brief è·å–æ¥å…¥STATE  M26å‘½ä»¤é›† P156
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
@@ -749,7 +749,7 @@ DR_MODEM_e modem_get_STATE(DevModem_t *pModem)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "STATE", 3);
     if(ret == DR_MODEM_OK)
     {
-        sscanf(reply, "%*s%*s%s", s);///** @todo (rgw#1#): ²é¿´Ò»ÏÂÄÚ´æÖĞÕæÊµÊı¾İ */
+        sscanf(reply, "%*s%*s%s", s);///** @todo (rgw#1#): æŸ¥çœ‹ä¸€ä¸‹å†…å­˜ä¸­çœŸå®æ•°æ® */
         if(strcmp(s, "INITIAL") == 0)
         {
             pModem->status.statConStat = IP_INITIAL;
@@ -871,7 +871,7 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
 
-    /** @todo (rgw#1#): ´ÓÎÄ¼ş»ñÈ¡ÅäÖÃ */
+    /** @todo (rgw#1#): ä»æ–‡ä»¶è·å–é…ç½® */
 
     DEVDEBUG("modem init: \r\n");
     ret = modem_disable_echo();
@@ -987,7 +987,8 @@ void Modem_Poll(DevModem_t *pModem)
                 break;
             }
             break;
-        case DS_MODEM_TCP_KEEP: //ÁÙÊ±×¢ÊÍ£¬²»ÒªÉ¾
+        case DS_MODEM_TCP_KEEP: //ä¸´æ—¶æ³¨é‡Šï¼Œä¸è¦åˆ 
+            pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
 //            modem_get_STATE(pModem);
 //            if(pModem->state == PDP_DEACT)
 //            {
@@ -999,11 +1000,11 @@ void Modem_Poll(DevModem_t *pModem)
 //                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
 //                pModem->state = DS_MODEM_TCP_OPEN;
 //            }
-            //µÈ´ıremote·¢ËÍÇëÇó
+            //ç­‰å¾…remoteå‘é€è¯·æ±‚
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPClientSendReq,
                                          pdTRUE, pdTRUE, 0);
-            if((uxBits & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //ÓĞÊı¾İÒª·¢ËÍ
+            if((uxBits & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //æœ‰æ•°æ®è¦å‘é€
             {
                 ret = modem_write(pModem, tcp_client_sendbuf, send_len);
                 if(ret == DR_MODEM_OK)
@@ -1019,7 +1020,7 @@ void Modem_Poll(DevModem_t *pModem)
                 else if(ret == DR_MODEM_READ)
                 {
                     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
-// ±ğÉ¾             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READ´¦ÒÑ¾­·¢ËÍ¶ÁÊÂ¼ş£¬´Ë´¦×÷ÎªÌáÊ¾ÓÃÍ¾¡£
+// åˆ«åˆ              xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READå¤„å·²ç»å‘é€è¯»äº‹ä»¶ï¼Œæ­¤å¤„ä½œä¸ºæç¤ºç”¨é€”ã€‚
                 }
                 else if(ret == DR_MODEM_TIMEOUT)
                 {
@@ -1028,11 +1029,11 @@ void Modem_Poll(DevModem_t *pModem)
                 else
                 {
                     pModem->state = DS_MODEM_TCP_CLOSE;
-                    printf_safe("·¢ËÍÊ§°Ü\r\n");
+                    printf_safe("å‘é€å¤±è´¥\r\n");
                 }
             }
 
-            /*=== read´¦Àí ===*/
+            /*=== readå¤„ç† ===*/
             if(pModem->info.ucTPMode == 0)
             {
                 ret = modem_get_at_reply(tcp_client_recvbuf, sizeof(tcp_client_recvbuf) - 1, "+QIRDI:", 1);
@@ -1045,7 +1046,7 @@ void Modem_Poll(DevModem_t *pModem)
                                              pdTRUE, pdTRUE, 0);
                 if((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
                 {
-                    //¶ÁÈ¡´®¿ÚÊı¾İ
+                    //è¯»å–ä¸²å£æ•°æ®
                     recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                     if(recv_len > 0)
                     {
@@ -1068,7 +1069,7 @@ void Modem_Poll(DevModem_t *pModem)
                     }
                 }
             }
-            else//Í¸´«Ä£Ê½
+            else//é€ä¼ æ¨¡å¼
             {
                 recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                 if(recv_len > 0)
@@ -1088,6 +1089,7 @@ void Modem_Poll(DevModem_t *pModem)
 
             break;
         case DS_MODEM_TCP_CLOSE:
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
             xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             ret = modem_QICLOSE(pModem);
@@ -1101,6 +1103,9 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_ERR:
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
+            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
+            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             bsp_Uart_Init(UART_PORT_GPRS, 2);
             ret = modem_RESET(pModem);
             if(ret == DR_MODEM_OK)
@@ -1118,10 +1123,10 @@ void Modem_Poll(DevModem_t *pModem)
 
 //        uxBits = xEventGroupWaitBits(xHandleEventTCP,
 //                                     defEventBitTCPClientFlushBuff,
-//                                     pdTRUE, pdTRUE, 0); //¶¨Ê±ÇëÒ»´Î»º´æ
+//                                     pdTRUE, pdTRUE, 0); //å®šæ—¶è¯·ä¸€æ¬¡ç¼“å­˜
 //        if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
 //        {
-//            //printf_safe("¿´¿´ÊÇ²»ÊÇ¶¨Ê±Çå»º´æÕâÀï³öÎÊÌâÁË\n");
+//            //printf_safe("çœ‹çœ‹æ˜¯ä¸æ˜¯å®šæ—¶æ¸…ç¼“å­˜è¿™é‡Œå‡ºé—®é¢˜äº†\n");
 //            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
 //            if(recv_len > 0)
 //            {

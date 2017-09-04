@@ -156,7 +156,7 @@ void vTaskEVSERemote(void *pvParameters)
         switch(remotestat)
         {
         case REMOTE_NO:
-            /** @todo (rgw#1#): 尝试连接网络 */
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Registed;
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectOK,
                                          pdFALSE, pdTRUE, portMAX_DELAY);
@@ -198,6 +198,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_REGEDITED:
+            pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectFail,
                                          pdTRUE, pdTRUE, 0);
