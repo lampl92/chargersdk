@@ -725,7 +725,7 @@ static ErrorCode_t GetCPState(void *pvCON)
                 tmpCPState = CP_9V;
             }
         }
-        else if((cp1 < 6.8f) && (cp1 > 5.0f))
+        else if((cp1 < 6.8f) && (cp1 > 5.2f))
         {
             if(TIM2->CCR1 != TIMER_MAX)
             {

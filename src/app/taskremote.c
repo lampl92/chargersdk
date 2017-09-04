@@ -101,13 +101,29 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             /** @todo (rgw#1#): ³¢ÊÔÁ¬½ÓÍøÂç */
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPConnectOK,
-                                         pdFALSE, pdTRUE, portMAX_DELAY);
-            if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+//            uxBits = xEventGroupWaitBits(xHandleEventTCP,
+//                                         defEventBitTCPConnectOK,
+//                                         pdFALSE, pdTRUE, portMAX_DELAY);
+//            if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+//            {
+//                RemoteRegist(pEVSE, pechProto);
+//                remotestat = REMOTE_CONNECTED;
+//            }
+            uxBits = xEventGroupWaitBits(xHandleEventRemote,
+                                         defEventBitRemoteGetAccount,
+                                         pdTRUE, pdFALSE, 0);
+            if((uxBits & defEventBitRemoteGetAccount) == defEventBitRemoteGetAccount)
             {
-                RemoteRegist(pEVSE, pechProto);
-                remotestat = REMOTE_CONNECTED;
+                THROW_ERROR(defDevID_Cloud,
+                            errcode = RemoteGetBalance(pRFIDDev->order.ucCardID,
+                                                       defCardIDLength,
+                                                       &(pRFIDDev->order.ucAccountStatus),
+                                                       &(pRFIDDev->order.dBalance)),
+                            ERR_LEVEL_CRITICAL, "Remote GetBalance");
+                if(errcode == ERR_NO)
+                {
+                    xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteGotAccount);
+                }
             }
             break;
         case REMOTE_CONNECTED:

@@ -30,7 +30,7 @@
 WM_HWIN _hWinCardInfo;
 uint8_t _secDown[10];
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
-static uint8_t first_flag = 0;
+static uint8_t first_CardInfo = 0;
 /*********************************************************************
 *
 *       Defines
@@ -154,7 +154,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     EventBits_t uxBitCharge;
     CON_t *pCON;
     time_t now;
-    static time_t first;
+    static time_t first_time;
     volatile uint32_t diffsec;
     volatile uint8_t sec;
     volatile uint8_t min;
@@ -167,7 +167,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
     {
         /** 跳转充电界面 */
-        first_flag = 0;
+        first_CardInfo = 0;
         /**< 跳到充电中 */
         WM_SendMessageNoPara(hWin,MSG_JUMPCHAING);
     }
@@ -177,12 +177,12 @@ static void Data_Process(WM_MESSAGE *pMsg)
     }
 
     now = time(NULL);
-    if(first_flag == 0)
+    if(first_CardInfo == 0)
     {
-        first_flag = 1;
-        first = now;
+        first_CardInfo = 1;
+        first_time = now;
     }
-    diffsec = (uint32_t)difftime(now, first);
+    diffsec = (uint32_t)difftime(now, first_time);
     if(diffsec > 86400)
     {
         diffsec = 86400;
@@ -194,7 +194,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     xsprintf((char *)_secDown, "(%02dS)", (60 - sec));
     if(sec == 59)
     {
-        first_flag = 0;
+        first_CardInfo = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
         //跳到HOME
         WM_SendMessageNoPara(hWin,MSG_JUMPHOME);
@@ -224,7 +224,6 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
         if(_hWinCardInfo == cur_win)
         {
-            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
             /**< 数据处理 */
             Data_Process(pMsg);
             /**< 信号数据处理 */
@@ -282,7 +281,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
-                first_flag = 0;
+                first_CardInfo = 0;
                 _deleteWin(_hWinCardInfo);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 CreateHome();
@@ -349,6 +348,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         break;
     case MSG_JUMPCHAING:
         //GUI_EndDialog(_hWinCardInfo,0);
+        first_CardInfo = 0;
         _deleteWin(_hWinCardInfo);
         //WM_DeleteWindow(_hWinCardInfo);
         _hWinCardInfo = 0;

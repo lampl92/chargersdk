@@ -224,6 +224,8 @@ void DiagVoltageError(CON_t *pCON)
             break;
         case VOLT_LOWER:
         case VOLT_UPPER:
+            printf_safe("volt err = %.2lf\n", pCON->status.dChargingVoltage);
+            while(1);
             break;
         default:
             break;
@@ -292,7 +294,7 @@ void DiagCurrentError(CON_t *pCON)
     memset(strTimerName, 0, 50);
     id = pCON->info.ucCONID;
 
-    if(pCON->state == STATE_CON_CHARGING)
+    //if(pCON->state == STATE_CON_CHARGING)
     {
         currstat = HandleCurr(pCON->status.dChargingCurrent,
                               pCON->info.dRatedCurrent);
@@ -400,7 +402,7 @@ void DiagCurrentError(CON_t *pCON)
             break;
         }/*end of switch(xCurrStat)*/
     }/*end of (state == STATE_CON_CHARGING)*/
-    else //进入到STATE_CURR_ERROR前，connector的状态应该已经变成非CHARGING状态。
+    //else //进入到STATE_CURR_ERROR前，connector的状态应该已经变成非CHARGING状态。
     {
         switch(pCON->status.xCurrStat)
         {
