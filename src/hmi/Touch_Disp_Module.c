@@ -138,11 +138,13 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
 void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 {
     EventBits_t uxBits;
-
+	
     memset(strCSQ,'\0',strlen(strCSQ));
     sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
-    uxBits = xEventGroupGetBits(xHandleEventTCP);
-    if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
+    //uxBits = xEventGroupGetBits(xHandleEventTCP);
+    //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
+    
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
     {
         strcat(strCSQ," 服务器未连接");
     }
@@ -580,7 +582,7 @@ void Errlist_flush(uint8_t *msg_err)
         ErrMultiEdit_Size.ypos = (400-ErrMultiEdit_Size.ylength);
         bitset(winCreateFlag,1);
     }
-    printf_safe("msg_err = %s\n",msg_err);
+//    printf_safe("msg_err = %s\n",msg_err);
 }
 /** @brief 故障弹窗内容组装
  *

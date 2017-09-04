@@ -156,10 +156,6 @@ TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //Mutex
 void vTaskInit(void *pvParameters)
 {
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
     pModem = DevModemCreate();
     strcpy(pModem->info.strAPN, "CMNET");
     pModem->info.ucContext = 0;

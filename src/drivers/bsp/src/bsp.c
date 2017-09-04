@@ -144,7 +144,7 @@ void bsp_Init(void)
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
 #ifndef EVSE_DEBUG
-    IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
+    //IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
 #endif
 //LCD_Init();
 
