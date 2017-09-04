@@ -168,7 +168,7 @@
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitCONOrderFinish       BIT_19
-#define defEventBitChargeRTDataTimer         BIT_20
+#define defEventBitChargeRTDataTimer    BIT_20
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \
@@ -222,7 +222,84 @@
 /*充电桩接口类型*/
 #define defSocketTypeB              ('B')//66
 #define defSocketTypeC              ('C')//67
+    
+////////////////////////////////////////////
+//Signal原则：0-关  1-开  0-正常  1-异常  
+////////////////////////////////////////////
+/*EVSE Signal Pool*/
+    //ulSignalState
+#define defSignalEVSE_State_Network_Online      BIT_0//
+#define defSignalEVSE_State_Network_Registed    BIT_1//
+    //ulSignalAlarm
+#define defSignalEVSE_Alarm_Scram               BIT_0//
+#define defSignalEVSE_Alarm_Knock               BIT_1//
+#define defSignalEVSE_Alarm_PE                  BIT_2//
+#define defSignalEVSE_Alarm_PowerOff            BIT_3//
+#define defSignalEVSE_Alarm_Arrester            BIT_4//
+    //ulSignalFault
+#define defSignalEVSE_Fault_RFID                BIT_0//
+#define defSignalEVSE_Fault_Bluetooth           BIT_1
+#define defSignalEVSE_Fault_Wifi                BIT_2
+#define defSignalEVSE_Fault_GPRS                BIT_3
+#define defSignalEVSE_Fault_GSensor             BIT_4
+    
+/*CON Signal Pool*/
+    //ulSignalState
+#define defSignalCON_State_Standby              BIT_0//
+#define defSignalCON_State_Working              BIT_1//
+#define defSignalCON_State_Stopping             BIT_2//
+#define defSignalCON_State_Fault                BIT_3//
+#define defSignalCON_State_S2                   BIT_4        // 
+#define defSignalCON_State_CC                   BIT_5        //CC 状态 
+#define defSignalCON_State_Plug                 BIT_6        //插枪状态
+#define defSignalCON_State_SocketLock           BIT_7        //B型枪锁状态
+#define defSignalCON_State_AC_A_Relay           BIT_8        //A(L)继电器状态
+#define defSignalCON_State_AC_B_Relay           BIT_9        //B
+#define defSignalCON_State_AC_C_Relay           BIT_10        //C
+#define defSignalCON_State_AC_N_Relay           BIT_11        //N 继电器状态
+#define defSignalCON_State_CurrUpProtection     BIT_12       //过流保护动作@
 
+    //ulSignalAlarm
+#define defSignalCON_Alarm_SocketLock           BIT_0
+#define defSignalCON_Alarm_SocketTemp1_War      BIT_1        //
+#define defSignalCON_Alarm_SocketTemp2_War      BIT_2        //
+#define defSignalCON_Alarm_SocketTemp1_Cri      BIT_3        //
+#define defSignalCON_Alarm_SocketTemp2_Cri      BIT_4        //
+#define defSignalCON_Alarm_AC_A_Temp_War        BIT_5        //
+#define defSignalCON_Alarm_AC_B_Temp_War        BIT_6        //
+#define defSignalCON_Alarm_AC_C_Temp_War        BIT_7        //
+#define defSignalCON_Alarm_AC_N_Temp_War        BIT_8        //
+#define defSignalCON_Alarm_AC_A_Temp_Cri        BIT_9        //
+#define defSignalCON_Alarm_AC_B_Temp_Cri        BIT_10       //
+#define defSignalCON_Alarm_AC_C_Temp_Cri        BIT_11       //
+#define defSignalCON_Alarm_AC_N_Temp_Cri        BIT_12       //
+#define defSignalCON_Alarm_AC_A_VoltUp          BIT_13       //
+#define defSignalCON_Alarm_AC_B_VoltUp          BIT_14       //*
+#define defSignalCON_Alarm_AC_C_VoltUp          BIT_15       //*
+#define defSignalCON_Alarm_AC_A_VoltLow         BIT_16       //
+#define defSignalCON_Alarm_AC_B_VoltLow         BIT_17       //*
+#define defSignalCON_Alarm_AC_C_VoltLow         BIT_18       //*
+#define defSignalCON_Alarm_AC_A_CurrUp_War      BIT_19       //
+#define defSignalCON_Alarm_AC_B_CurrUp_War      BIT_20       //*
+#define defSignalCON_Alarm_AC_C_CurrUp_War      BIT_21       //*
+#define defSignalCON_Alarm_AC_A_CurrUp_Cri      BIT_22       //
+#define defSignalCON_Alarm_AC_B_CurrUp_Cri      BIT_23       //*
+#define defSignalCON_Alarm_AC_C_CurrUp_Cri      BIT_24       //*
+    //ulSignalFault
+#define defSignalCON_Fault_SocketLock           BIT_0
+#define defSignalCON_Fault_AC_A_Temp            BIT_1
+#define defSignalCON_Fault_AC_B_Temp            BIT_2
+#define defSignalCON_Fault_AC_C_Temp            BIT_3
+#define defSignalCON_Fault_AC_N_Temp            BIT_4
+#define defSignalCON_Fault_AC_A_RelayPaste      BIT_5
+#define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
+#define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
+#define defSignalCON_Fault_CP                   BIT_8        //CP传感故障
+#define defSignalCON_Fault_Plug                 BIT_9
+#define defSignalCON_Fault_Meter                BIT_10       //电表或电能芯片
+    
+    
+    
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;

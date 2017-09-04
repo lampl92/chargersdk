@@ -59,6 +59,9 @@ typedef struct _EVSEStatus
     uint32_t ulPEState;
     uint32_t ulPowerOffState;
     uint32_t ulArresterState;
+    uint32_t ulSignalState;
+    uint32_t ulSignalAlarm;
+    uint32_t ulSignalFault;
 
     pEVSE_ft GetScramState;
     pEVSE_ft GetKnockState;

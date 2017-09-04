@@ -134,9 +134,14 @@ void vTaskEVSEMonitor(void *pvParameters)
         if((uxBitsTimerCB & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
         {
             THROW_ERROR(defDevID_RFID, errcode = pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
-            if(errcode == ERR_NO)
+            if (errcode == ERR_NO)
             {
                 xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+                pEVSE->status.ulSignalFault &= ~defSignalEVSE_Fault_RFID;
+            }
+            else
+            {
+                pEVSE->status.ulSignalFault |= defSignalEVSE_Fault_RFID;
             }
         }
 

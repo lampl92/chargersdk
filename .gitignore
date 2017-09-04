@@ -25,6 +25,7 @@ tags
 *.sublime-workspace
 *.bak
 .vs
+build/vs/chargesdk/*.user
 build/vs/chargesdk/Debug
 build/vs/chargesdk/Release
 build/vs/chargesdk/VisualGDBCache

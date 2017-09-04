@@ -100,6 +100,7 @@ typedef struct _CONStatus
     uint8_t ucLoadPercent;        // 负载百分比
     CONStatusType_t xCCState;     // 检测点4 CC state --PE
     CONStatusType_t xPlugState;
+    double dCPVolt;
     double dACLTemp;
     double dACNTemp;
     double dBTypeSocketTemp1;
@@ -118,6 +119,9 @@ typedef struct _CONStatus
     TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
     uint8_t ucRelayNState;
+    uint32_t ulSignalState;
+    uint32_t ulSignalAlarm;
+    uint32_t ulSignalFault;
 
     pCon_ft GetChargingVoltage;
     pCon_ft GetChargingCurrent;

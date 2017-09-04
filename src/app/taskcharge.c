@@ -11,6 +11,38 @@
 
 //#define DEBUG_NO_TASKCHARGE
 
+static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
+{
+    switch (signal)
+    {
+        case defSignalCON_State_Standby:
+            pCON->status.ulSignalState |= defSignalCON_State_Standby;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Working;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Stopping;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Fault;
+            break;
+        case defSignalCON_State_Working:
+            pCON->status.ulSignalState &= ~defSignalCON_State_Standby;
+            pCON->status.ulSignalState |= defSignalCON_State_Working;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Stopping;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Fault;
+            break;
+        case defSignalCON_State_Stopping:
+            pCON->status.ulSignalState &= ~defSignalCON_State_Standby;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Working;
+            pCON->status.ulSignalState |= defSignalCON_State_Stopping;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Fault;
+            break;
+        case defSignalCON_State_Fault:
+            pCON->status.ulSignalState &= ~defSignalCON_State_Standby;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Working;
+            pCON->status.ulSignalState &= ~defSignalCON_State_Stopping;
+            pCON->status.ulSignalState |= defSignalCON_State_Fault;
+            break;
+    }
+
+}
+
 void vTaskEVSECharge(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -59,7 +91,8 @@ void vTaskEVSECharge(void *pvParameters)
             pCON = CONGetHandle(i);
             switch(pCON->state)
             {
-            case STATE_CON_IDLE://×´Ì¬1
+            case STATE_CON_IDLE://çŠ¶æ€1
+                SetCONSignalWorkState(pCON, defSignalCON_State_Standby);
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONPlugOK,
                                                    pdFALSE, pdFALSE, 0);
@@ -70,18 +103,18 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_PLUGED;
                 }
                 break;
-            case STATE_CON_PLUGED://×´Ì¬2
+            case STATE_CON_PLUGED://çŠ¶æ€2
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCPSwitchCondition,
                                                    pdFALSE, pdTRUE, 0);
                 if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
-                    pCON->status.SetLoadPercent(pCON, 53);/** @fixme (rgw#1#): ÉèÖÃPWMÂö¿í£¬100%¸ºÔØÆô¶¯ */
+                    pCON->status.SetLoadPercent(pCON, 53);/** @fixme (rgw#1#): è®¾ç½®PWMè„‰å®½ï¼Œ100%è´Ÿè½½å¯åŠ¨ */
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
                     if((pCON->status.xCPState == CP_9V_PWM
                        || pCON->status.xCPState == CP_6V_PWM)
-                       &&(pCON->status.xCPState != CP_12V_PWM)) //ºóÒ»ÖÖÇé¿öÊÊÓÃÓÚÎÞS2³µÁ¾, ¼´S1±ÕºÏºóÖ±½Ó½øÈë6V_PWM×´Ì¬¡£
+                       &&(pCON->status.xCPState != CP_12V_PWM)) //åŽä¸€ç§æƒ…å†µé€‚ç”¨äºŽæ— S2è½¦è¾†, å³S1é—­åˆåŽç›´æŽ¥è¿›å…¥6V_PWMçŠ¶æ€ã€‚
                     {
                         pCON->state = STATE_CON_PRECONTRACT;
                     }
@@ -93,44 +126,44 @@ void vTaskEVSECharge(void *pvParameters)
 
 //                if((uxBitsCharge & defEventBitCONVoltOK) != defEventBitCONVoltOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºµçÑ¹²»¶Ô£º%.2lf\n", pCON->status.dChargingVoltage);
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šç”µåŽ‹ä¸å¯¹ï¼š%.2lf\n", pCON->status.dChargingVoltage);
 //                }
 //                if((uxBitsCharge & defEventBitCONSocketTempOK) != defEventBitCONSocketTempOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º²å×ùÎÂ¶È²»¶Ô£º1:%.2lf 2:%.2lf\n", pCON->status.dBTypeSocketTemp1, pCON->status.dBTypeSocketTemp2);
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šæ’åº§æ¸©åº¦ä¸å¯¹ï¼š1:%.2lf 2:%.2lf\n", pCON->status.dBTypeSocketTemp1, pCON->status.dBTypeSocketTemp2);
 //                }
 //                if((uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºACÎÂ¶È²»¶Ô£ºL:%.2lf N:%.2lf\n", pCON->status.dACLTemp, pCON->status.dACNTemp);
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šACæ¸©åº¦ä¸å¯¹ï¼šL:%.2lf N:%.2lf\n", pCON->status.dACLTemp, pCON->status.dACNTemp);
 //                }
 //                if((uxBitsCharge & defEventBitEVSEScramOK) != defEventBitEVSEScramOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º¼±Í£¸æ¾¯\n");
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šæ€¥åœå‘Šè­¦\n");
 //                }
 //                if((uxBitsCharge & defEventBitEVSEPEOK) != defEventBitEVSEPEOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºPE¸æ¾¯\n");
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šPEå‘Šè­¦\n");
 //                }
 //                if((uxBitsCharge & defEventBitEVSEKnockOK) != defEventBitEVSEKnockOK)
 //                {
-//                    printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º×²»÷¸æ¾¯\n");
+//                    printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šæ’žå‡»å‘Šè­¦\n");
 //                }
 //                if((uxBitsCharge & defEventBitEVSEArresterOK) != defEventBitEVSEArresterOK)
 //                {
-//                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£º·ÀÀ×¸æ¾¯\n");
+//                     printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šé˜²é›·å‘Šè­¦\n");
 //                }
 //                if((uxBitsCharge & defEventBitEVSEPowerOffOK) != defEventBitEVSEPowerOffOK)
 //                {
-//                     printf_safe("²åÇ¹×´Ì¬ÏÂCPSwitchÊ§°Ü£ºÍ£µç¸æ¾¯\n");
+//                     printf_safe("æ’æžªçŠ¶æ€ä¸‹CPSwitchå¤±è´¥ï¼šåœç”µå‘Šè­¦\n");
 //                }
                 break;
-            case STATE_CON_PRECONTRACT://×´Ì¬2' ³äµçÉè±¸×¼±¸¾ÍÐ÷£¬µÈ´ý³µµÄS2£¬ÓÉ³µÁ¾¾ö¶¨£¬¿ÉÓÃÓÚÔ¤Ô¼³äµçµÈ
+            case STATE_CON_PRECONTRACT://çŠ¶æ€2' å……ç”µè®¾å¤‡å‡†å¤‡å°±ç»ªï¼Œç­‰å¾…è½¦çš„S2ï¼Œç”±è½¦è¾†å†³å®šï¼Œå¯ç”¨äºŽé¢„çº¦å……ç”µç­‰
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONS2Closed) == defEventBitCONS2Closed)
                 {
                     pCON->state = STATE_CON_STARTCHARGE;
                 }
-                if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //×´Ì¬1'´¥·¢Ìõ¼þ
+                if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //çŠ¶æ€1'è§¦å‘æ¡ä»¶
                 {
                     xsprintf(strTimerName, "TimerCON%d_Charge_AntiShake", i);
                     pCON->status.xHandleTimerCharge = xTimerCreate(strTimerName,
@@ -142,7 +175,7 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_PRECONTRACT_LOSEPLUG;
                 }
                 break;
-            case STATE_CON_PRECONTRACT_LOSEPLUG://×´Ì¬1' Î´Á¬½ÓPWM£¬³äµçÉè±¸×¼±¸ºÃºóÊ§È¥Á¬½Ó
+            case STATE_CON_PRECONTRACT_LOSEPLUG://çŠ¶æ€1' æœªè¿žæŽ¥PWMï¼Œå……ç”µè®¾å¤‡å‡†å¤‡å¥½åŽå¤±åŽ»è¿žæŽ¥
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                       defEventBitExceptionChargeTimer,
                                                       pdTRUE, pdFALSE, 0);
@@ -169,7 +202,7 @@ void vTaskEVSECharge(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONAuthed) == defEventBitCONAuthed)
                 {
-                    //ËøÇ¹
+                    //é”æžª
                     if(pCON->info.ucSocketType == defSocketTypeB)
                     {
                         uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
@@ -201,12 +234,12 @@ void vTaskEVSECharge(void *pvParameters)
                         if(pCON->status.ucRelayLState == SWITCH_ON &&
                                 pCON->status.ucRelayNState == SWITCH_ON)
                         {
-                            vTaskDelay(5000);//ÔÚÕâ5sÖ®¼ä£¬·ÀÖ¹RFIDÎðË¢£¬²¢µÈ´ýµçÁ÷ÎÈ¶¨¡£
-                            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfidÈÎÎñÔÚµÈ´ý
+                            vTaskDelay(5000);//åœ¨è¿™5sä¹‹é—´ï¼Œé˜²æ­¢RFIDå‹¿åˆ·ï¼Œå¹¶ç­‰å¾…ç”µæµç¨³å®šã€‚
+                            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfidä»»åŠ¡åœ¨ç­‰å¾…
                             pCON->state = STATE_CON_CHARGING;
                             printf_safe("Start Charge!\n");
                         }
-                        /** @todo (rgw#1#): Èç¹û¼ÌµçÆ÷²Ù×÷Ê§°Ü£¬×ª»»µ½ERR×´Ì¬ */
+                        /** @todo (rgw#1#): å¦‚æžœç»§ç”µå™¨æ“ä½œå¤±è´¥ï¼Œè½¬æ¢åˆ°ERRçŠ¶æ€ */
                     }
                 }
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
@@ -214,11 +247,12 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdFALSE, pdFALSE, 0);
                 if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                 {
-                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "°ÎÇ¹¹Øpwm");
+                    THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "æ‹”æžªå…³pwm");
                     pCON->state = STATE_CON_IDLE;
                 }
                 break;
             case STATE_CON_CHARGING:
+                SetCONSignalWorkState(pCON, defSignalCON_State_Working);
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                       defEventBitExceptionDevFault,
                                                       pdFALSE, pdFALSE, 0);
@@ -228,21 +262,21 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_ERROR;
                     break;
                 }
-                /*** ÅÐ¶ÏÓÃ»§Ïà¹ØÍ£Ö¹Ìõ¼þ  ***/
+                /*** åˆ¤æ–­ç”¨æˆ·ç›¸å…³åœæ­¢æ¡ä»¶  ***/
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                       defEventBitExceptionStopType,
                                                       pdTRUE, pdFALSE, 0);
-                if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //´ïµ½³äµç½ð¶îÏÞÖÆ
+                if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //è¾¾åˆ°å……ç”µé‡‘é¢é™åˆ¶
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-                if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //Ô¶³ÌÍ£Ö¹
+                if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //è¿œç¨‹åœæ­¢
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-                if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //Ë¢¿¨Í£Ö¹
+                if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //åˆ·å¡åœæ­¢
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
@@ -252,7 +286,7 @@ void vTaskEVSECharge(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 //                printf_safe("uxBitsCharge = %X\n", uxBitsCharge);
 //                printf_safe("CPCondition = %X\n", defEventBitChargeCondition);
-                if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2Ö÷¶¯¶Ï¿ª
+                if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2ä¸»åŠ¨æ–­å¼€
                 {
                     THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING S2 Open");
                     vTaskDelay(defRelayDelay);
@@ -269,11 +303,11 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
-                else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//³ýÈ¥S2Ö÷¶¯¶Ï¿ªÇé¿ö£¬Èç¹û±»¼à²âµÄµãÓÐFalse
+                else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//é™¤åŽ»S2ä¸»åŠ¨æ–­å¼€æƒ…å†µï¼Œå¦‚æžœè¢«ç›‘æµ‹çš„ç‚¹æœ‰False
                 {
                     if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
-                        //ÓÃ»§Ô­ÒòÍ£Ö¹
+                        //ç”¨æˆ·åŽŸå› åœæ­¢
                     }
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING Without \"S2 open\"");
                     vTaskDelay(defRelayDelay);
@@ -287,8 +321,8 @@ void vTaskEVSECharge(void *pvParameters)
                     {
                         uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                            defEventBitCONS2Opened,
-                                                           pdFALSE, pdTRUE, 100);//S1×ª»»µ½12VºóS2Ó¦ÔÚ100msÄÚ¶Ï¿ª£¬·ñÔòÇ¿ÖÆ´øÔØ¶Ïµç¡£
-                        //´Ë´¦Ó¦¸ÃÅÐ¶Ïuxbits£¬µ«ÔÚÕâÀïÎÞÒâÒå£¬ÒòÎªÎÞÂÛÈçºÎ100msÄÚ»òÕß100msÍâ¶¼Òª¶Ïµç¡£
+                                                           pdFALSE, pdTRUE, 100);//S1è½¬æ¢åˆ°12VåŽS2åº”åœ¨100mså†…æ–­å¼€ï¼Œå¦åˆ™å¼ºåˆ¶å¸¦è½½æ–­ç”µã€‚
+                        //æ­¤å¤„åº”è¯¥åˆ¤æ–­uxbitsï¼Œä½†åœ¨è¿™é‡Œæ— æ„ä¹‰ï¼Œå› ä¸ºæ— è®ºå¦‚ä½•100mså†…æˆ–è€…100mså¤–éƒ½è¦æ–­ç”µã€‚
                         THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
                         vTaskDelay(defRelayDelay);
                         THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
@@ -307,15 +341,15 @@ void vTaskEVSECharge(void *pvParameters)
                             pCON->state = STATE_CON_STOPCHARGE;
                         }
                     }
-                    /** @todo (rgw#1#): ºóÐø»áÔö¼ÓÅÐ¶ÏÊ§Ð§µã£¬²¢¶ÔÊ§Ð§µã½øÐÐÌáÊ¾¡£»òÕßÔÚÕâÀï²»½øÐÐÌáÊ¾£¬¶øÔÚ·¢ÏÖÊ§Ð§Ê±½øÐÐÌáÊ¾ */
+                    /** @todo (rgw#1#): åŽç»­ä¼šå¢žåŠ åˆ¤æ–­å¤±æ•ˆç‚¹ï¼Œå¹¶å¯¹å¤±æ•ˆç‚¹è¿›è¡Œæç¤ºã€‚æˆ–è€…åœ¨è¿™é‡Œä¸è¿›è¡Œæç¤ºï¼Œè€Œåœ¨å‘çŽ°å¤±æ•ˆæ—¶è¿›è¡Œæç¤º */
                 }
                 break;
             case STATE_CON_STOPCHARGE:
+                SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//æ¸…é™¤è®¤è¯æ ‡å¿—ã€‚
 
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//Çå³ýÈÏÖ¤±êÖ¾¡£
-
-                /** @todo (rgw#1#): µÈ´ý½á·Ñ
-                                    ½á·Ñ³É¹¦ºóÍ¨ÖªHMIÏÔÊ¾½á·ÑÍê³É,½øÈëidle */
+                /** @todo (rgw#1#): ç­‰å¾…ç»“è´¹
+                                    ç»“è´¹æˆåŠŸåŽé€šçŸ¥HMIæ˜¾ç¤ºç»“è´¹å®Œæˆ,è¿›å…¥idle */
 #ifdef DEBUG_DIAG_DUMMY
                 xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
 #endif
@@ -323,10 +357,10 @@ void vTaskEVSECharge(void *pvParameters)
 //                                defEventBitHMI_ChargeReqDispDone,
 //                                defeventBitHMI_ChargeReqDispDoneOK,
 //                                portMAX_DELAY );
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//Í¨ÖªHMIÏÔÊ¾½áÊø¶©µ¥
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//é€šçŸ¥HMIæ˜¾ç¤ºç»“æŸè®¢å•
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
-#ifdef RFID_ProtoOK// Ë¢¿¨Ð­ÒéÍê³ÉºóÌí¼Ó
+#ifdef RFID_ProtoOK// åˆ·å¡åè®®å®ŒæˆåŽæ·»åŠ 
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONOrderFinish,
                                                    pdTRUE, pdTRUE, portMAX_DELAY);
@@ -336,7 +370,7 @@ void vTaskEVSECharge(void *pvParameters)
 #ifdef DEBUG_DIAG_DUMMY
                             pCON->state = STATE_CON_IDLE;
 #endif
-                    //½âËø
+                    //è§£é”
                     if(pCON->info.ucSocketType == defSocketTypeB)
                     {
                         uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
@@ -360,16 +394,17 @@ void vTaskEVSECharge(void *pvParameters)
                     {
                         pCON->state = STATE_CON_IDLE;
                     }
-#ifdef RFID_ProtoOK// Ë¢¿¨Ð­ÒéÍê³ÉºóÌí¼Ó
+#ifdef RFID_ProtoOK// åˆ·å¡åè®®å®ŒæˆåŽæ·»åŠ 
                 }
 #endif
                 break;
             case STATE_CON_ERROR:
+                SetCONSignalWorkState(pCON, defSignalCON_State_Fault);
                 THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_ERROR");
                 vTaskDelay(defRelayDelay);
-                /** @todo (rgw#1#): µÈ´ýdiag´¦ÀíÍê³É */
+                /** @todo (rgw#1#): ç­‰å¾…diagå¤„ç†å®Œæˆ */
 
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//Çå³ýÈÏÖ¤±êÖ¾¡£
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//æ¸…é™¤è®¤è¯æ ‡å¿—ã€‚
 
                 pCON->state = STATE_CON_IDLE;
                 break;
