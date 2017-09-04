@@ -113,11 +113,10 @@ static void Data_Process(WM_MESSAGE *pMsg)
     xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
     if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
-        GUI_EndDialog(_hWinHome,0);
-        _hWinHome = 0;
-        //WM_DeleteWindow(hWin);
-        CreateCardInfo();
-        //PutOut_Card_Info();
+//        GUI_EndDialog(_hWinHome,0);
+//        _hWinHome = 0;
+//        CreateCardInfo();
+        WM_SendMessageNoPara(hWin,MSG_JUMPCARDINFO);
     }
     /**< 扫码充电跳页 */
     if((pCON->order.ucStartType == 5)
@@ -128,6 +127,11 @@ static void Data_Process(WM_MESSAGE *pMsg)
         //WM_DeleteWindow(hWin);
         //PutOut_Charging();
         CreateCharging();
+    }
+
+    if(pCON->state == STATE_CON_CHARGING)
+    {
+        WM_SendMessageNoPara(hWin,MSG_JUMPCHAING);
     }
 
     /**< 充电费和服务费的费用值显示 */
@@ -238,16 +242,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_JUMPCARDINFO:
-        GUI_EndDialog(_hWinHome,0);
-        _hWinHome = 0;
+//        GUI_EndDialog(_hWinHome,0);
+        _deleteWin(_hWinHome);
+        //_hWinHome = 0;
         //WM_DeleteWindow(_hWinHome);
         CreateCardInfo();
         break;
     case MSG_JUMPCHAING:
-        GUI_EndDialog(_hWinHome,0);
-        _hWinHome = 0;
+//        GUI_EndDialog(_hWinHome,0);
+//        _hWinHome = 0;
         //WM_DeleteWindow(_hWinHome);
         //PutOut_Charging();
+        _deleteWin(_hWinHome);
         CreateCharging();
         break;
     default:

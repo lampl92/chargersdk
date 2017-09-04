@@ -234,7 +234,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15),&XBF24_Font,GUI_BLACK,"小时");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&XBF24_Font,GUI_BLACK,"分");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&XBF24_Font,GUI_BLACK,"秒");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_BLACK,"(00S)");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_BLACK,"(10S)");
 //        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&XBF24_Font,GUI_RED,"正在结费中...");
         //
         // Initialization of 'Edit'
@@ -253,12 +253,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,temp_buf);
 
-//        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-//                                     defEventBitOrderMakeFinish,
-//                                     pdFALSE, pdTRUE, portMAX_DELAY);
-//        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
-//        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-        time_charge = 0;
+        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                     defEventBitOrderMakeFinish,
+                                     pdFALSE, pdTRUE, portMAX_DELAY);
+        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
+        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+//        time_charge = 0;
         hour = time_charge / 3600;
         min = time_charge % 3600 / 60;
         sec = time_charge % 3600 % 60;
@@ -276,9 +276,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
                     &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
         xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
-        _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
-        _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
-        _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
+        //_timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
+        //_timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
+        //_timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
         // USER END
         break;
     case WM_NOTIFY_PARENT:
@@ -292,10 +292,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 first_flag = 0;
-                WM_DeleteWindow(pMsg->hWin);
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
-
-                //PutOut_SelAOrB();
+                _deleteWin(_hWinChargDone);
+                _hWinChargDone = 0;
                 CreateHome();
                 // USER END
                 break;
@@ -328,16 +326,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-            //Data_Flush(pMsg);
-            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-            WM_RestartTimer(pMsg->Data.v,100);
-        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            //Data_Flush(pMsg);
+//            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//            WM_RestartTimer(pMsg->Data.v,100);
+//        }
         break;
     case MSG_CREATERRWIN:
         /**< 故障界面不存在则创建,存在则刷新告警 */
@@ -353,6 +351,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_JUMPHOME:
+        first_flag = 0;
         _deleteWin(_hWinChargDone);
         _hWinChargDone = 0;
         CreateHome();
@@ -381,6 +380,11 @@ WM_HWIN CreateChargeDone(void)
 {
     _hWinChargDone = GUI_CreateDialogBox(_aDialogChargeDone, GUI_COUNTOF(_aDialogChargeDone), _cbDialog, WM_HBKWIN, 0, 0);
     cur_win = _hWinChargDone;
+
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
+    //_timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
+    //_timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
+
 }
 /*************************** End of file ****************************/
 

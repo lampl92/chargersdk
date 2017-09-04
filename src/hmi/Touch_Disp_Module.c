@@ -33,6 +33,7 @@ WM_HWIN err_hItem = 0;
 uint8_t winCreateFlag = 0;
 
 static EventBits_t uxBitsErrTmp;
+static uint8_t timer_count = 0;//用于故障列表存在且没有故障的计时
 
 extern FIL BMPFile_BCGROUND;
 extern char *bmpBackGround;
@@ -413,6 +414,17 @@ void Err_Analy(WM_HWIN hWin)
             WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
   //      }
     }
+
+    if(!bittest(winCreateFlag,1)&&bittest(winCreateFlag,0))
+    {
+        timer_count++;
+        if(timer_count == 10)
+        {
+            timer_count = 0;
+            bitset(calebrate_done,4);
+        }
+    }
+
 }
 /** @brief
  *  灯光控制
@@ -450,19 +462,24 @@ void Led_Show()
                 led_ctrl(1,green,breath);
             break;
             default:
-                if(pCON->status.xCPState != CP_6V_PWM)
+                if(pCON->status.xPlugState == PLUG)
                 {
-                    /**< S1未闭合 */
-                    led_ctrl(1,red,keep_off);
-                    led_ctrl(1,green,keep_off);
-                    led_ctrl(1,blue,flicker);
-                }
-                else if(pCON->status.xPlugState == UNPLUG)
-                {
-                    /**< 等待车端插枪 */
-                    led_ctrl(1,blue,keep_off);
-                    led_ctrl(1,red,keep_off);
-                    led_ctrl(1,green,flicker);
+                    if(pCON->status.xCPState == CP_6V_PWM
+                        ||pCON->status.xCPState == CP_6V)
+                    {
+                        /**< 等待车端插枪 */
+                        led_ctrl(1,blue,keep_off);
+                        led_ctrl(1,red,keep_off);
+                        led_ctrl(1,green,flicker);
+                    }
+                    else if(pCON->status.xCPState == CP_9V_PWM
+                        ||pCON->status.xCPState == CP_9V)
+                    {
+                        /**< S1未闭合 */
+                        led_ctrl(1,red,keep_off);
+                        led_ctrl(1,green,keep_off);
+                        led_ctrl(1,blue,flicker);
+                    }
                 }
                 /// TODO (zshare#1#): 添加桩端等待插枪蓝灯闪烁
                 else
