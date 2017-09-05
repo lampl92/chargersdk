@@ -1,12 +1,12 @@
 /**
 * @file taskcreate.c
-* @brief 閸掓稑缂撴禒璇插Todolist 鐎靛湱鍙庣悰?
-*        1. 鐎规矮绠烻TACK婢堆冪毈
-*        2. 鐎规矮绠烶RIORITY
-*        3. 婢圭増妲戞禒璇插
-*        4. 鐎规矮绠熸禒璇插閸欍儲鐒?
-*        5. 娴犺濮熼崗銉ュ經
-*        6. 閸掓稑缂撴禒璇插
+* @brief 创建任务Todolist 对照表
+*        1. 定义STACK大小
+*        2. 定义PRIORITY
+*        3. 声明任务
+*        4. 定义任务句柄
+*        5. 任务入口
+*        6. 创建任务创建任务Todolist 对照表
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
@@ -142,7 +142,7 @@ EventGroupHandle_t xHandleEventTCP   = NULL;
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //Timer句柄
-TimerHandle_t xHandleTimerTemp = NULL; //4涓俯搴?
+TimerHandle_t xHandleTimerTemp = NULL; //4个温度
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
 TimerHandle_t xHandleTimerVolt = NULL;
@@ -152,7 +152,7 @@ TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
-//con涓繕瀹氫箟浜嗗嚑涓畾鏃跺櫒锛寈HandleTimerVolt锛寈HandleTimerCurr锛寈HandleTimerCharge鍒嗗埆鍦ㄤ娇鐢ㄦ椂杩涜鍒濆鍖?
+//con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
 void vTaskInit(void *pvParameters)
 {
@@ -277,7 +277,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //鐞氼偆閮寸紒鐔荤殶閻??
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //被系统调用
 extern __IO uint32_t uwTick;
 void vApplicationTickHook( void )
 {
