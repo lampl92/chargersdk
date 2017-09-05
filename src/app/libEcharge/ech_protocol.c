@@ -2593,15 +2593,22 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     pProto = (echProtocol_t *)pPObj;
     pMsgBodyCtx_enc = pbuff + 30;         //取出加密部分buff
     ulMsgBodyCtxLen_enc = ulRecvLen - 30; //加密部分长度
-    pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
+    if (ulMsgBodyCtxLen_enc == 0)
+    {
+        pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
+    }
+    else
+    {
+        pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
-    aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+        aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
 
-    memmove(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
-    pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
+        memmove(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+        pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
 
-    free(pMsgBodyCtx_dec);
-
+        free(pMsgBodyCtx_dec);
+    }
+    
     return 1;
 }
 
@@ -2618,6 +2625,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
     echProtocol_t *pProto;
     echCMD_t *pCMD;
     echCmdElem_t lRecvElem;
+    int i;
 
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
@@ -2625,13 +2633,25 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
     if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
     {
         analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-        lRecvElem.UID = 0;
-        lRecvElem.timestamp = time(NULL);
-        lRecvElem.len = pCMD->ulRecvdOptLen;
-        lRecvElem.pbuff = pCMD->ucRecvdOptData;
-        lRecvElem.status = 0;
-        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+        if (pCMD->ulRecvdOptLen == 0)
+        {
+            
+        }
+        else
+        {
+            printf_safe("Recv: %d\n", pCMD->CMDType.usRecvCmd);
+            for (i = 0; i < pCMD->ulRecvdOptLen; i++)
+            {
+                printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
+            }
+            printf_safe("\n");
+            lRecvElem.UID = 0;
+            lRecvElem.timestamp = time(NULL);
+            lRecvElem.len = pCMD->ulRecvdOptLen;
+            lRecvElem.pbuff = pCMD->ucRecvdOptData;
+            lRecvElem.status = 0;
+            gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
+        }
 
         xSemaphoreGive(pCMD->xMutexCmd);
     }
