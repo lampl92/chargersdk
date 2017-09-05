@@ -53,18 +53,18 @@ const uint8_t *strProtoCfg =
     \"StatusCyc_ms\": 20000,\
     \"RTDataCyc_ms\": 10000,\
     \"ResetAct\": 0,\
-    \"PowerFee_sharp\": 0,\
+    \"PowerFee_sharp\": 1,\
     \"PowerFee_peak\": 0,\
     \"PowerFee_shoulder\": 0,\
     \"PowerFee_off_peak\": 0,\
-    \"ServiceFee_sharp\": 0,\
+    \"ServiceFee_sharp\": 0.8,\
     \"ServiceFee_peak\": 0,\
     \"ServiceFee_shoulder\": 0,\
     \"ServiceFee_off_peak\": 0,\
     \"SegTime_sharp\": {\
-        \"SegCont\": 0,\
-        \"Start1\": 255,\
-        \"End1\": 255,\
+        \"SegCont\": 1,\
+        \"Start1\": 0,\
+        \"End1\": 24,\
         \"Start2\": 255,\
         \"End2\": 255,\
         \"Start3\": 255,\
