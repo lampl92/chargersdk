@@ -234,14 +234,13 @@ float get_dc_massage(uint8_t DC_channel)
 void get_CP1(void)
 {
     unsigned short i;
-    float dma_cp1_sum;
+    float dma_cp1_sum = 0;
     for(i = 0; i < samp_dma; i++)
     {
        dma_cp1_sum+=AD_samp_dma[i].CP1;
     }
     dma_cp1_sum=dma_cp1_sum/samp_dma;
     Sys_samp.DC.CP1 = dma_cp1_sum * CP1_k + 0.2;
-    dma_cp1_sum = 0;
     //return Sys_samp.DC.CP1;
 }
 
