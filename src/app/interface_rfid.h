@@ -19,6 +19,7 @@
 typedef enum _RFIDState
 {
     STATE_RFID_NOID,             //没有ID
+    STATE_RFID_TIMEOUT,             //超时
     STATE_RFID_GOTID,           //获取到ID
     STATE_RFID_OLDID,
     STATE_RFID_NEWID,
