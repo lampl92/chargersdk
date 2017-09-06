@@ -94,6 +94,7 @@ void vTaskEVSERFID(void *pvParameters)
             }
             break;
         case STATE_RFID_NEWID:
+            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
 //            uxBits = xEventGroupSync(xHandleEventRemote,
 //                                     defEventBitRemoteGetAccount,
 //                                     defEventBitRemoteGotAccount,
@@ -115,29 +116,30 @@ void vTaskEVSERFID(void *pvParameters)
                 remote_timeout_u100ms = 0;
                 break;
             default:
-                remote_timeout_u100ms = 1000;//让下面的判断超时,不执行Recv函数
+                pRFIDDev->order.ucCardStatus = 3;
                 break;
             }
 
-            do
+            while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
             {
                 remote_timeout_u100ms++;
                 if(remote_timeout_u100ms >= 100)//10s
                 {
-                    pRFIDDev->state = STATE_RFID_NOID;
+                    pRFIDDev->state = STATE_RFID_TIMEOUT;
                     break;
                 }
                 errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
                 vTaskDelay(100);
             }
-            while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1));
-            if (pRFIDDev->state == STATE_RFID_NOID)//while超时情况的额外判断,以便退出当前case
+            
+            if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
             {
+                pRFIDDev->state = STATE_RFID_NOID;
                 break;
             }
             if(ucVaild == 2)//e充网定义 1 可充, 2不可充
             {
-                pRFIDDev->state == STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_NOID;
                 break;
             }
 
@@ -209,7 +211,6 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
                                     HMI填充好选择的枪后，发送回Order队列*/
-            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitGoodIDReqDisp,
                             defEventBitGoodIDReqDispOK,

@@ -1271,14 +1271,15 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
     ErrorCode_t errcode = ERR_NO;
 
     HexToStr(pRfid->order.ucCardID, strCardID, 8);
-    if(pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
+    if (pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
     {
         pRfid->order.ucAccountStatus = 0;
         pRfid->order.dBalance = 0;
 
         return ERR_BLACK_LIST;
     }
-    else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    //else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    else if(1)    
     {
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999999;
@@ -1504,6 +1505,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //1-2 输出连接器过温故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONACTempOK) != defEventBitCONACTempOK)
         {
@@ -1518,6 +1520,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //1-7 电流过大
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
@@ -1532,6 +1535,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //1-8 电压异常
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
@@ -1546,6 +1550,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[1]:3  2-4 电能表故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionMeter) != defEventBitExceptionMeter)
         {
@@ -1560,6 +1565,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[1]:5 2-6 PWM切换故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionCPSwitch) != defEventBitExceptionCPSwitch)
         {
@@ -1574,6 +1580,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[1]:6 2-7 温度传感器故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionTempSensor) != defEventBitExceptionTempSensor)
         {
@@ -1597,6 +1604,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[2]:0 3-1 充电枪温度传感器故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionSocketTempSensor) != defEventBitExceptionSocketTempSensor)
         {
@@ -1611,6 +1619,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[3]:2 4-3 接触器故障
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
         if((uxBit & defEventBitExceptionRelayPaste) != defEventBitExceptionRelayPaste)
         {
@@ -1669,6 +1678,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[1]:4 2-5 电网电压异常
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
@@ -1683,6 +1693,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[2]:7 3-8 电网频率异常
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONFreqOK) != defEventBitCONFreqOK)
         {
@@ -1697,6 +1708,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[3]:0 4-1 一般过载
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
@@ -1713,6 +1725,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[1]:7 2-8 电流过高保护
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
         {
@@ -1727,6 +1740,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     //[2]:0 3-1 电压过高保护
     for(i = 0; i < ulTotalCON; i++)
     {
+        pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
         if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
         {
