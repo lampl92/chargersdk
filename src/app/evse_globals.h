@@ -178,6 +178,7 @@
                                         defEventBitEVSEPowerOffOK)
 //(defEventBitCONLocked |
 #define defEventBitCPSwitchCondition    (defEventBitCONVoltOK |      \
+                                        defEventBitCONCurrOK | \
                                         defEventBitCONSocketTempOK |  \
                                         defEventBitCONACTempOK |    \
                                         defEventBitCONPlugOK | \

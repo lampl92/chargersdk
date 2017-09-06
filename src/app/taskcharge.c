@@ -316,8 +316,8 @@ void vTaskEVSECharge(void *pvParameters)
 #endif
 
                     if(pCON->status.xCPState == CP_6V ||
-                            pCON->status.xCPState == CP_9V ||
-                            pCON->status.xCPState == CP_12V)
+                       pCON->status.xCPState == CP_9V ||
+                       pCON->status.xCPState == CP_12V)
                     {
                         uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                            defEventBitCONS2Opened,
@@ -335,7 +335,7 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->status.ucRelayNState = SWITCH_OFF;
 #endif
                         if(pCON->status.ucRelayLState == SWITCH_OFF &&
-                                pCON->status.ucRelayNState == SWITCH_OFF)
+                           pCON->status.ucRelayNState == SWITCH_OFF)
                         {
                             printf_safe("Other Stop Charge!\n");
                             pCON->state = STATE_CON_STOPCHARGE;

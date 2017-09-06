@@ -25,7 +25,7 @@ const uint8_t *strEVSECfg =
             \"Type\":2,\
             \"SocketType\":67,\
             \"VolatageUpperLimits\":250,\
-            \"VolatageLowerLimits\":190,\
+            \"VolatageLowerLimits\":186,\
             \"ACTempUpperLimits\":105,\
             \"ACTempLowerLimits\":-40,\
             \"SocketTempUpperLimits\":105,\

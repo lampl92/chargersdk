@@ -39,7 +39,7 @@
 
 #define defMonitorTempPeriod        10  //(¡æ)
 #define defMonitorVoltPeriod        10  //(V)
-#define defMonitorCurrPeriod        3.2 //(A)
+#define defMonitorCurrPeriod        1.1 //(±¶)           //3.2 //(A)
 #define defMonitorFreqLower         50  //(Hz)
 #define defMonitorFreqUpper         60  //(Hz)
 #define defMonitorFreqPeriod        5   //(Hz)

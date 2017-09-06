@@ -89,7 +89,8 @@ static HandleVolt_t HandleVolt(double volt, double lower, double upper)
 static HandleCurr_t HandleCurr(double curr, double ratecurr)
 {
     HandleCurr_t currstat;
-    if(curr <= ratecurr + defMonitorCurrPeriod)
+    //if(curr <= ratecurr + defMonitorCurrPeriod)
+    if(curr <= ratecurr * defMonitorCurrPeriod)
     {
         currstat = CURR_OK;
     }
