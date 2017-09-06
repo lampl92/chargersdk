@@ -74,6 +74,13 @@ void vTaskEVSEDiag(void *pvParameters)
 
         /* end of 处理系统失效故障 */
 
+//        for (i = 0; i < ulTotalCON; i++)
+//        {
+//            pCON = CONGetHandle(i);
+//            pCON->status.
+//        }
+        
+        
         /* 处理系统报警 */
         for(i = 0; i < ulTotalCON; i++)
         {
