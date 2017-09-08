@@ -20,11 +20,11 @@ extern GUI_FONT XBF36_Font;
 uint8_t Date_buf[40];
 uint8_t Time_buf[40];
 
-uint8_t Create_XBF12(uint8_t *fxpath);
-uint8_t Create_XBF14(uint8_t *fxpath);
-uint8_t Create_XBF16(uint8_t *fxpath);
-uint8_t Create_XBF19(uint8_t *fxpath);
-uint8_t Create_XBF24(uint8_t *fxpath);
-uint8_t Create_XBF36(uint8_t *fxpath);
+uint8_t Create_XBF12(char *fxpath);
+uint8_t Create_XBF14(char *fxpath);
+uint8_t Create_XBF16(char *fxpath);
+uint8_t Create_XBF19(char *fxpath);
+uint8_t Create_XBF24(char *fxpath);
+uint8_t Create_XBF36(char *fxpath);
 #endif
 

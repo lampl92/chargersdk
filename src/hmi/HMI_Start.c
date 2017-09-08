@@ -25,20 +25,20 @@ void MainTask(void)
     if(calebrate_done != 0xff)
     {
         WM_MULTIBUF_Enable(1);
-        pCON = CONGetHandle(0);/** @todo (zshare#1#): Ë«Ç¹Ê±ĞŞ¸ÄID */
+        pCON = CONGetHandle(0);/** @todo (zshare#1#): åŒæªæ—¶ä¿®æ”¹ID */
         encodetobmp("system/encodeCharge.bmp",pCON->info.strQRCode);
         //readBackGroundNOFREE("system/background.bmp");
         readBackGroundNOFREE("system/background_tree.bmp");
         readEncodeNOFREE("system/encodeCharge.bmp");
-        Create_XBF12("system/XBFËÎÌå12.xbf");//´´½¨xbf12ºÅÂ·¾¶
-        Create_XBF14("system/XBFËÎÌå14.xbf");//´´½¨XBF14ºÅÂ·¾¶
-        Create_XBF16("system/XBFËÎÌå16.xbf");//´´½¨xbf16ºÅÂ·¾¶
-        Create_XBF19("system/XBFËÎÌå19.xbf");//´´½¨xbf19ºÅÂ·¾¶
-        Create_XBF24("system/XBFËÎÌå24.xbf");//´´½¨xbf24ºÅÂ·¾¶
-        Create_XBF36("system/XBFËÎÌå36.xbf");//´´½¨xbf36ºÅÂ·¾¶
+        Create_XBF12("system/XBF_Song_12.xbf");//åˆ›å»ºxbf12å·è·¯å¾„
+        Create_XBF14("system/XBF_Song_14.xbf");//åˆ›å»ºXBF14å·è·¯å¾„
+        Create_XBF16("system/XBF_Song_16.xbf");//åˆ›å»ºxbf16å·è·¯å¾„
+        Create_XBF19("system/XBF_Song_19.xbf");//åˆ›å»ºxbf19å·è·¯å¾„
+        Create_XBF24("system/XBF_Song_24.xbf");//åˆ›å»ºxbf24å·è·¯å¾„
+        Create_XBF36("system/XBF_Song_36.xbf");//åˆ›å»ºxbf36å·è·¯å¾„
 
 
-        WM_SetDesktopColor(GUI_WHITE);//ÉèÖÃ±³¾°ÑÕÉ«
+        WM_SetDesktopColor(GUI_WHITE);//è®¾ç½®èƒŒæ™¯é¢œè‰²
 
         GUI_UC_SetEncodeUTF8();
     //    PutOut_SelAOrB();
