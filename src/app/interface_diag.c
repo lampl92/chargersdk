@@ -653,8 +653,6 @@ void DiagEVSEError(CON_t *pCON)
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEScramOK);
         pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_Scram;
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-           
     }
     if(pEVSE->status.ulPEState == 0)
     {
