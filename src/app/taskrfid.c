@@ -26,6 +26,7 @@ void vTaskEVSERFID(void *pvParameters)
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
+    res = 0;
     errcode = ERR_NO;
     while(1)
     {

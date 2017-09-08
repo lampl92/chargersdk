@@ -1342,8 +1342,8 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     EVSE_t *pEVSE;
     CON_t *pCON;
     uint8_t *pbuff;
-    uint8_t ucOrderSN[8];
-    uint8_t strCardID[17];
+    uint8_t ucOrderSN[8] = {0};
+    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
@@ -1472,8 +1472,8 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     echProtocol_t *pProto;
     CON_t *pCON;
     uint8_t *pbuff;
-    uint8_t ucOrderSN[8];
-    uint8_t strCardID[17];
+    uint8_t ucOrderSN[8] = {0};
+    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
@@ -2204,9 +2204,9 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
 {
     EVSE_t *pEVSE;
     RFIDDev_t *pRfid;
-    uint8_t ucOrderSN[8];
-    uint8_t strOrderSN[17];
-    uint8_t strCardID[17];
+    uint8_t ucOrderSN[8] = {0};
+    uint8_t strOrderSN[17] = {0};
+    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     uint8_t remote_id;
     ul2uc ultmpNetSeq;
@@ -2326,8 +2326,8 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
-    uint8_t strCardID[17];
-    uint8_t ucOrderSN[8];
+    uint8_t strCardID[17] = {0};
+    uint8_t ucOrderSN[8] = {0};
     int i;
     EventBits_t uxBits;
 
