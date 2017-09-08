@@ -121,7 +121,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                 {
-                    pCON->state = STATE_CON_IDLE;
+                    pCON->state = STATE_CON_RETURN;
                 }
 
 //                if((uxBitsCharge & defEventBitCONVoltOK) != defEventBitCONVoltOK)
@@ -186,7 +186,7 @@ void vTaskEVSECharge(void *pvParameters)
                     vTaskDelay(defRelayDelay);
                     if(pCON->status.xCPState == CP_12V)
                     {
-                        pCON->state = STATE_CON_IDLE;
+                        pCON->state = STATE_CON_RETURN;
                     }
                 }
                 else
@@ -248,7 +248,7 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                 {
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "拔枪关pwm");
-                    pCON->state = STATE_CON_IDLE;
+                    pCON->state = STATE_CON_RETURN;
                 }
                 break;
             case STATE_CON_CHARGING:
@@ -346,7 +346,6 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_STOPCHARGE:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
 
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后通知HMI显示结费完成,进入idle */
@@ -382,7 +381,7 @@ void vTaskEVSECharge(void *pvParameters)
                             if(pCON->status.xBTypeSocketLockState == UNLOCK)
                             {
                                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
-                                pCON->state = STATE_CON_IDLE;
+                                pCON->state = STATE_CON_RETURN;
                             }
                         }
                         else
@@ -392,7 +391,7 @@ void vTaskEVSECharge(void *pvParameters)
                     }
                     else if(pCON->info.ucSocketType == defSocketTypeC)
                     {
-                        pCON->state = STATE_CON_IDLE;
+                        pCON->state = STATE_CON_RETURN;
                     }
 #ifdef RFID_ProtoOK// 刷卡协议完成后添加
                 }
@@ -404,8 +403,10 @@ void vTaskEVSECharge(void *pvParameters)
                 vTaskDelay(defRelayDelay);
                 /** @todo (rgw#1#): 等待diag处理完成 */
 
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
-
+                pCON->state = STATE_CON_RETURN;
+                break;
+            case STATE_CON_RETURN:
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed); //清除认证标志
                 pCON->state = STATE_CON_IDLE;
                 break;
             }

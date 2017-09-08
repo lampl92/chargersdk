@@ -162,6 +162,7 @@ typedef enum _CONState
     STATE_CON_SuspendedEVSE,
     STATE_CON_FINISHING,
     STATE_CON_STOPCHARGE,
+    STATE_CON_RETURN,
     STATE_CON_ERROR
 } CONState_t;
 
