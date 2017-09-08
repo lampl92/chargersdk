@@ -256,26 +256,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                      defEventBitOrderMakeFinish,
                                      pdFALSE, pdTRUE, portMAX_DELAY);
-        //if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)xxx
-        time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-//        time_charge = 0;
-        hour = time_charge / 3600;
-        min = time_charge % 3600 / 60;
-        sec = time_charge % 3600 % 60;
+        if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
+        {
+                time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+    //        time_charge = 0;
+            hour = time_charge / 3600;
+            min = time_charge % 3600 / 60;
+            sec = time_charge % 3600 % 60;
 
-        memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%02d", hour);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,temp_buf);//小时
-        memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%02d", min);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,temp_buf);//分
-        memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%02d", sec);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,temp_buf);//秒
+            memset(temp_buf,'\0',strlen(temp_buf));
+            sprintf(temp_buf, "%02d", hour);
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,temp_buf);//小时
+            memset(temp_buf,'\0',strlen(temp_buf));
+            sprintf(temp_buf, "%02d", min);
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,temp_buf);//分
+            memset(temp_buf,'\0',strlen(temp_buf));
+            sprintf(temp_buf, "%02d", sec);
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,temp_buf);//秒
 
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
-        xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
+            Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
+                        &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
+            xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK); 
+            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+        }
+       
         //_timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
         //_timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
         //_timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
