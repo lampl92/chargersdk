@@ -95,7 +95,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
             break;
         }
         gdsl_list_cursor_move_to_head (cur);
-        while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+        while((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
             gdsl_list_cursor_delete(cur);
         }
@@ -1264,9 +1264,9 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 
 ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
-    uint8_t ucOrderSN[8];
-    uint8_t strOrderSN[17];
-    uint8_t strCardID[17];
+    uint8_t ucOrderSN[8] = {0};
+    uint8_t strOrderSN[17] = {0};
+    uint8_t strCardID[17] = {0};
     ul2uc ultmpNetSeq;
     ErrorCode_t errcode = ERR_NO;
 
@@ -1311,10 +1311,10 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     uint8_t con_id;
-    uint8_t strCardID[17];
-    uint8_t strOrderCardID[17];
-    uint8_t ucOrderSN[8];
-    uint8_t strOrderSN[17];
+    uint8_t strCardID[17] = {0};
+    uint8_t strOrderCardID[17] = {0};
+    uint8_t ucOrderSN[8] = {0};
+    uint8_t strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
     uint8_t ucOffset;
     int i;
@@ -1329,7 +1329,7 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         *psiRetVal = 1;
         ucOffset = 0;
         //pbuff[0] 充电桩接口
-        con_id = pbuff[ucOffset++];
+        con_id = EchRemoteIDtoCONID(pbuff[ucOffset++]);
         if(con_id != pRfid->order.ucCONID)
         {
             *psiRetVal = 0;
