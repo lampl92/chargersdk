@@ -1282,7 +1282,7 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
     else if(1)    
     {
         pRfid->order.ucAccountStatus = 1;
-        pRfid->order.dBalance = 9999999;
+        pRfid->order.dBalance = 9999.99;
 
         ultmpNetSeq.ulVal = time(NULL); // 采用时间戳作为交易流水号, 协议中标识为BIN 8, 因此不做字节序转换
         ucOrderSN[0] = 0;
