@@ -42,7 +42,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
         /* 遍历RecvCmd */
 
         gdsl_list_cursor_move_to_head (cr);
-        while(pechProtoElem = gdsl_list_cursor_get_content (cr))
+        while((pechProtoElem = gdsl_list_cursor_get_content (cr)) != NULL)
         {
             if(pechProtoElem->status == 0)
             {
