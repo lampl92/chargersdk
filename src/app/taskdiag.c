@@ -73,13 +73,21 @@ void vTaskEVSEDiag(void *pvParameters)
         }
 
         /* end of 处理系统失效故障 */
-
-//        for (i = 0; i < ulTotalCON; i++)
-//        {
-//            pCON = CONGetHandle(i);
-//            pCON->status.
-//        }
         
+        for (i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
+            {
+                if (pCON->status.ulSignalAlarm != 0 ||
+                    pCON->status.ulSignalFault != 0 ||
+                    pEVSE->status.ulSignalAlarm != 0 ||
+                    pEVSE->status.ulSignalFault != 0)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+            }
+        }
         
         /* 处理系统报警 */
         for(i = 0; i < ulTotalCON; i++)
