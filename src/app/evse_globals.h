@@ -186,7 +186,6 @@
 
 #define defEventBitChargeCondition      (defEventBitCPSwitchCondition | \
                                         defEventBitCONAuthed | \
-                                        defEventBitCONCurrOK | \
                                         defEventBitCONFreqOK | \
                                         defEventBitCONS2Closed | \
                                         defEventBitCONLocked)
