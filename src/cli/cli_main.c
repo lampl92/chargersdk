@@ -25,19 +25,19 @@ void cli_init(void)
 
     /************磁盘管理****************/
 
-    tinysh_add_command(&cli_mkfs_cmd);
-    tinysh_add_command(&cli_mount_cmd);
-    tinysh_add_command(&cli_umount_cmd);
-    tinysh_add_command(&cli_cat_cmd);
+//    tinysh_add_command(&cli_mkfs_cmd);
+//    tinysh_add_command(&cli_mount_cmd);
+//    tinysh_add_command(&cli_umount_cmd);
+//    tinysh_add_command(&cli_cat_cmd);
 
     /************系统测试****************/
-    tinysh_add_command(&cli_fatfs_cmd);
-    tinysh_add_command(&cli_testsdram_cmd);
-    tinysh_add_command(&cli_parseJson_cmd);
-    tinysh_add_command(&cli_makeJson_cmd);
-    tinysh_add_command(&cli_aestest_cmd);
-    tinysh_add_command(&cli_testdb_cmd);
-    tinysh_add_command(&cli_crctest_cmd);
+//    tinysh_add_command(&cli_fatfs_cmd);
+//    tinysh_add_command(&cli_testsdram_cmd);
+//    tinysh_add_command(&cli_parseJson_cmd);
+//    tinysh_add_command(&cli_makeJson_cmd);
+//    tinysh_add_command(&cli_aestest_cmd);
+//    tinysh_add_command(&cli_testdb_cmd);
+//    tinysh_add_command(&cli_crctest_cmd);
     /************电桩信息****************/
     tinysh_add_command(&cli_evseinfo_cmd);
     tinysh_add_command(&cli_evseorder_cmd);
@@ -45,7 +45,7 @@ void cli_init(void)
     tinysh_add_command(&cli_modeminfo_cmd);
     tinysh_add_command(&cli_protoinfo_cmd);
     /************设备测试****************/
-    tinysh_add_command(&cli_gprs_cmd);
+//    tinysh_add_command(&cli_gprs_cmd);
 
     /* add the foo command
     */
