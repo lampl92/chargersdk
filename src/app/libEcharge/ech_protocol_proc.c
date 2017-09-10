@@ -35,14 +35,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
     while(1)
     {
-        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-        printf_safe("\n");
+//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+//        printf_safe("\n");
 
         /* 遍历RecvCmd */
 
         gdsl_list_cursor_move_to_head (cr);
-        while(pechProtoElem = gdsl_list_cursor_get_content (cr))
+        while((pechProtoElem = gdsl_list_cursor_get_content (cr)) != NULL)
         {
             if(pechProtoElem->status == 0)
             {

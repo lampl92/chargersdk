@@ -374,7 +374,7 @@ void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
  * @return 0:转换保存成功，1:打开文件错误 2:
  *
  */
-uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString)
+uint8_t encodetobmp(char *filename,uint8_t *codeString)
 {
     static uint16_t p,x,y;
 

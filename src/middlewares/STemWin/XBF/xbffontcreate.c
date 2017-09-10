@@ -51,7 +51,7 @@ static int _cbGetData(volatile uint32_t Off, volatile uint16_t NumBytes, void * 
 //创建XBF12字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF12(uint8_t *fxpath)
+uint8_t Create_XBF12(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF12FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
@@ -68,7 +68,7 @@ uint8_t Create_XBF12(uint8_t *fxpath)
 //创建XBF12字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF14(uint8_t *fxpath)
+uint8_t Create_XBF14(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF14FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
@@ -86,7 +86,7 @@ uint8_t Create_XBF14(uint8_t *fxpath)
 //创建XBF16字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF16(uint8_t *fxpath)
+uint8_t Create_XBF16(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF16FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
@@ -103,7 +103,7 @@ uint8_t Create_XBF16(uint8_t *fxpath)
 //创建XBF12字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF19(uint8_t *fxpath)
+uint8_t Create_XBF19(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF19FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
@@ -121,7 +121,7 @@ uint8_t Create_XBF19(uint8_t *fxpath)
 //创建XBF24字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF24(uint8_t *fxpath)
+uint8_t Create_XBF24(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF24FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
@@ -138,7 +138,7 @@ uint8_t Create_XBF24(uint8_t *fxpath)
 //创建XBF36字体，共EMWIN使用
 //fxpath:XBF字体文件路径
 //返回值:0，成功；1，失败
-uint8_t Create_XBF36(uint8_t *fxpath)
+uint8_t Create_XBF36(char *fxpath)
 {
 	int result;
 	result = f_open(&XBF36FontFile,(const TCHAR*)fxpath,FA_READ);	//打开字库文件

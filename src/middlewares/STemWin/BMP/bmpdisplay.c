@@ -235,7 +235,7 @@ void bmpdisplay(uint8_t *ppath)
  * @return
  *  **********注意在切换界面时要使用free释放掉图片的内存
  */
-uint8_t dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
+uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
 {
 	uint16_t bread;
 	uint16_t bred;
@@ -314,7 +314,7 @@ uint8_t dispbmpNOFree(uint8_t is_free,uint8_t *BMPFileName,uint8_t mode,uint32_t
  * @return
  *
  */
-uint8_t readBackGroundNOFREE(uint8_t *BMPFileName)
+uint8_t readBackGroundNOFREE(char *BMPFileName)
 {
 	uint16_t bread;
 	char result;
@@ -343,7 +343,7 @@ uint8_t readBackGroundNOFREE(uint8_t *BMPFileName)
  * @return
  *
  */
-uint8_t readEncodeNOFREE(uint8_t *BMPFileName)
+uint8_t readEncodeNOFREE(char *BMPFileName)
 {
 	uint16_t bread;
 	char result;

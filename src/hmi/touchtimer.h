@@ -121,5 +121,5 @@ void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t tex
 void ErrWindow_Show(WM_HWIN hWin);
 uint8_t err_window(WM_HWIN hWin);
 //void PutOut_Manager_InfoAnalog();
-uint8_t encodetobmp(uint8_t *filename,uint8_t *codeString);
+uint8_t encodetobmp(char *filename,uint8_t *codeString);
 #endif
