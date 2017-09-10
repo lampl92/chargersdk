@@ -4,26 +4,26 @@
 #include "lcddrv.h"
 #include "GUIDRV_Lin.h"
 //////////////////////////////////////////////////////////////////////////////////
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F429¿ª·¢°å
-//STemWin LCDµ×²ãÇı¶¯º¯Êı
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2016/3/15
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32F429å¼€å‘æ¿
+//STemWin LCDåº•å±‚é©±åŠ¨å‡½æ•°
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2016/3/15
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 
-#define XSIZE_PHYS 1024     //×î´óÖ§³Ö1024*768
+#define XSIZE_PHYS 1024     //æœ€å¤§æ”¯æŒ1024*768
 #define YSIZE_PHYS 768
 
-#define NUM_BUFFERS  3      //Ê¹ÓÃ¶à»º³åÊ±µÄ»º³åÊıÁ¿
-#define NUM_VSCREENS 1      //Ê¹ÓÃĞéÄâÆÁÄ»ÊÇµÄĞéÄâÆÁÄ»ÊıÁ¿
+#define NUM_BUFFERS  3      //ä½¿ç”¨å¤šç¼“å†²æ—¶çš„ç¼“å†²æ•°é‡
+#define NUM_VSCREENS 1      //ä½¿ç”¨è™šæ‹Ÿå±å¹•æ˜¯çš„è™šæ‹Ÿå±å¹•æ•°é‡
 
 #undef  GUI_NUM_LAYERS
-#define GUI_NUM_LAYERS 1    //²ãÊı
+#define GUI_NUM_LAYERS 1    //å±‚æ•°
 
 #define COLOR_CONVERSION_0 GUICC_M565
 #define DISPLAY_DRIVER_0   GUIDRV_LIN_16
@@ -50,12 +50,12 @@
   #error Virtual screens and multiple buffers are not allowed!
 #endif
 
-//LCDÁ½²ãµÄ»º³åÇøĞèÒª¸ù¾İÊµ¼ÊËùÊ¹ÓÃµÄÆÁÄ»·Ö±æÂÊÒÔ¼°Ã¿²ãËùÊ¹ÓÃµÄÑÕÉ«¸ñÊ½À´¼ÆËã£¬
-//×îÖÕÈ·¶¨×î¼ÑµÄ»º³åÇø´óĞ¡,ÕâÀïÄ¬ÈÏÉèÖÃ×î´ó·Ö±æÂÊÎª1024*600£¬ÑÕÉ«¸ñÊ½Îª8888£¬
-//ÄÇÃ´Ã¿²ãËùĞèÒªµÄ»º³åÇø¾ÍÊÇ1024*600*4=2457600=0X258000,×¢Òâmlloc.hºÍmalloc.c
-//ÖĞµÄÍâ²¿SDRAMÄÚ´æ¹ÜÀí³ØµØÖ·ºÍ´óĞ¡Ò²ĞèÒª×öĞŞ¸Ä£¡£¡£¡£¡
-#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)     //µÚÒ»²ã»º³åÇø
-#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)     //µÚ¶ş²ã»º³åÇø
+//LCDä¸¤å±‚çš„ç¼“å†²åŒºéœ€è¦æ ¹æ®å®é™…æ‰€ä½¿ç”¨çš„å±å¹•åˆ†è¾¨ç‡ä»¥åŠæ¯å±‚æ‰€ä½¿ç”¨çš„é¢œè‰²æ ¼å¼æ¥è®¡ç®—ï¼Œ
+//æœ€ç»ˆç¡®å®šæœ€ä½³çš„ç¼“å†²åŒºå¤§å°,è¿™é‡Œé»˜è®¤è®¾ç½®æœ€å¤§åˆ†è¾¨ç‡ä¸º1024*600ï¼Œé¢œè‰²æ ¼å¼ä¸º8888ï¼Œ
+//é‚£ä¹ˆæ¯å±‚æ‰€éœ€è¦çš„ç¼“å†²åŒºå°±æ˜¯1024*600*4=2457600=0X258000,æ³¨æ„mlloc.hå’Œmalloc.c
+//ä¸­çš„å¤–éƒ¨SDRAMå†…å­˜ç®¡ç†æ± åœ°å€å’Œå¤§å°ä¹Ÿéœ€è¦åšä¿®æ”¹ï¼ï¼ï¼ï¼
+#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0xC0000000)     //ç¬¬ä¸€å±‚ç¼“å†²åŒº
+#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0xC0300000)     //ç¬¬äºŒå±‚ç¼“å†²åŒº
 
 
 #define DEFINEDMA2D_COLORCONVERSION(PFIX, PIXELFORMAT)                                                             \
@@ -108,14 +108,14 @@ DEFINEDMA2D_COLORCONVERSION(M4444I, LTDC_PIXEL_FORMAT_ARGB4444)
 
 static uint32_t GetBufferSize(uint32_t LayerIndex);
 
-//LTDCÖĞ¶Ï·şÎñº¯Êı
+//LTDCä¸­æ–­æœåŠ¡å‡½æ•°
 void LTDC_IRQHandler(void)
 {
   HAL_LTDC_IRQHandler(&LTDC_Handler);
 }
 
-//LTDCĞĞÊÂ¼ş»Øµ÷º¯Êı
-//LTDC_Handler:LTDC¾ä±ú
+//LTDCè¡Œäº‹ä»¶å›è°ƒå‡½æ•°
+//LTDC_Handler:LTDCå¥æŸ„
 void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *LTDC_Handler)
 {
     uint32_t Addr;
@@ -125,10 +125,10 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *LTDC_Handler)
     {
         if(layer_prop[layer].pending_buffer>=0)
         {
-            //¼ÆËãÏÔÊ¾µÄÖ¡µØÖ·
+            //è®¡ç®—æ˜¾ç¤ºçš„å¸§åœ°å€
             Addr=layer_prop[layer].address + \
                  layer_prop[layer].xSize * layer_prop[layer].ySize * layer_prop[layer].pending_buffer * layer_prop[layer].BytesPerPixel;
-            HAL_LTDC_SetAddress(LTDC_Handler,Addr,layer);//ÉèÖÃµØÖ·
+            HAL_LTDC_SetAddress(LTDC_Handler,Addr,layer);//è®¾ç½®åœ°å€
             __HAL_LTDC_RELOAD_CONFIG(LTDC_Handler);
             GUI_MULTIBUF_ConfirmEx(layer,layer_prop[layer].pending_buffer);
             layer_prop[layer].pending_buffer=-1;
@@ -137,53 +137,53 @@ void HAL_LTDC_LineEvenCallback(LTDC_HandleTypeDef *LTDC_Handler)
     HAL_LTDC_ProgramLineEvent(LTDC_Handler,0);
 }
 
-//ÅäÖÃ³ÌĞò,ÓÃÓÚ´´½¨ÏÔÊ¾Çı¶¯Æ÷¼ş,ÉèÖÃÑÕÉ«×ª»»³ÌĞòºÍÏÔÊ¾³ß´ç
+//é…ç½®ç¨‹åº,ç”¨äºåˆ›å»ºæ˜¾ç¤ºé©±åŠ¨å™¨ä»¶,è®¾ç½®é¢œè‰²è½¬æ¢ç¨‹åºå’Œæ˜¾ç¤ºå°ºå¯¸
 void LCD_X_Config(void)
 {
     uint32_t i;
 
-    LCD_LL_Init ();                                 //LCDµ×²ãÇı¶¯(LTDCÖĞ¶ÏÉèÖÃºÍDMA2D³õÊ¼»¯)
-#if (NUM_BUFFERS>1)                                 //¶à»º³å
+    LCD_LL_Init ();                                 //LCDåº•å±‚é©±åŠ¨(LTDCä¸­æ–­è®¾ç½®å’ŒDMA2Dåˆå§‹åŒ–)
+#if (NUM_BUFFERS>1)                                 //å¤šç¼“å†²
     for (i=0;i<GUI_NUM_LAYERS; i++)
     {
         GUI_MULTIBUF_ConfigEx(i, NUM_BUFFERS);
     }
 #endif
-    //ÉèÖÃµÚÒ»²ã
-    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_0,COLOR_CONVERSION_0,0,0);//´´½¨ÏÔÊ¾Çı¶¯Æ÷¼ş
-    GUI_SelectLayer(0);     //Ñ¡ÖĞµÚ0²ã
-    if(lcddev.dir==0)//ÊúÆÁ
+    //è®¾ç½®ç¬¬ä¸€å±‚
+    GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_0,COLOR_CONVERSION_0,0,0);//åˆ›å»ºæ˜¾ç¤ºé©±åŠ¨å™¨ä»¶
+    GUI_SelectLayer(0);     //é€‰ä¸­ç¬¬0å±‚
+    if(lcddev.dir==0)//ç«–å±
     {
-        LCD_SetSizeEx(0,lcddev.height,lcddev.width);    //ÉèÖÃ¿É¼ûÇø³ß´ç
-        LCD_SetVSizeEx(0,lcddev.height,lcddev.width*NUM_VSCREENS);   //ÉèÖÃĞéÄâÏÔÊ¾Çø³ß´ç
-        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //ÉèÖÃÎªÊúÆÁ
-    }else            //ºáÆÁ
+        LCD_SetSizeEx(0,lcddev.height,lcddev.width);    //è®¾ç½®å¯è§åŒºå°ºå¯¸
+        LCD_SetVSizeEx(0,lcddev.height,lcddev.width*NUM_VSCREENS);   //è®¾ç½®è™šæ‹Ÿæ˜¾ç¤ºåŒºå°ºå¯¸
+        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //è®¾ç½®ä¸ºç«–å±
+    }else            //æ¨ªå±
     {
-    	LCD_SetSizeEx(0,lcddev.width,lcddev.height);    //ÉèÖÃ¿É¼ûÇø³ß´ç
-        LCD_SetVSizeEx(0,lcddev.width,lcddev.height*NUM_VSCREENS);   //ÉèÖÃĞéÄâÏÔÊ¾Çø³ß´ç
+    	LCD_SetSizeEx(0,lcddev.width,lcddev.height);    //è®¾ç½®å¯è§åŒºå°ºå¯¸
+        LCD_SetVSizeEx(0,lcddev.width,lcddev.height*NUM_VSCREENS);   //è®¾ç½®è™šæ‹Ÿæ˜¾ç¤ºåŒºå°ºå¯¸
     }
     GUI_TOUCH_Calibrate(GUI_COORD_X,0,lcddev.width,0,lcddev.width-1);
     GUI_TOUCH_Calibrate(GUI_COORD_Y,0,lcddev.height,0,lcddev.height-1);
 #if (GUI_NUM_LAYERS>1)
 
-    //ÉèÖÃµÚ¶ş²ã
+    //è®¾ç½®ç¬¬äºŒå±‚
     GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER_1,COLOR_CONVERSION_1,0,1);
-    GUI_SelectLayer(1);     //Ñ¡ÖĞµÚ1²ã
-    if(lcddev.dir==0)//ÊúÆÁ
+    GUI_SelectLayer(1);     //é€‰ä¸­ç¬¬1å±‚
+    if(lcddev.dir==0)//ç«–å±
     {
-        LCD_SetSizeEx(1,lcddev.height,lcddev.width);    //ÉèÖÃ¿É¼ûÇø³ß´ç
-        LCD_SetVSizeEx(1,lcddev.height,lcddev.width*NUM_VSCREENS);   //ÉèÖÃĞéÄâÏÔÊ¾Çø³ß´ç
-        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //ÉèÖÃÎªÊúÆÁ
-    }else            //ºáÆÁ
+        LCD_SetSizeEx(1,lcddev.height,lcddev.width);    //è®¾ç½®å¯è§åŒºå°ºå¯¸
+        LCD_SetVSizeEx(1,lcddev.height,lcddev.width*NUM_VSCREENS);   //è®¾ç½®è™šæ‹Ÿæ˜¾ç¤ºåŒºå°ºå¯¸
+        GUI_SetOrientation(GUI_SWAP_XY|GUI_MIRROR_Y);                   //è®¾ç½®ä¸ºç«–å±
+    }else            //æ¨ªå±
     {
-    	LCD_SetSizeEx(1,lcddev.width,lcddev.height);    //ÉèÖÃ¿É¼ûÇø³ß´ç
-        LCD_SetVSizeEx(1,lcddev.width,lcddev.height*NUM_VSCREENS);   //ÉèÖÃĞéÄâÏÔÊ¾Çø³ß´ç
+    	LCD_SetSizeEx(1,lcddev.width,lcddev.height);    //è®¾ç½®å¯è§åŒºå°ºå¯¸
+        LCD_SetVSizeEx(1,lcddev.width,lcddev.height*NUM_VSCREENS);   //è®¾ç½®è™šæ‹Ÿæ˜¾ç¤ºåŒºå°ºå¯¸
     }
     GUI_TOUCH_Calibrate(GUI_COORD_X,0,lcddev.width,0,lcddev.width-1);
     GUI_TOUCH_Calibrate(GUI_COORD_Y,0,lcddev.height,0,lcddev.height-1);
 #endif
 
-    layer_prop[0].address=LCD_LAYER0_FRAME_BUFFER;           //»º³åÇø
+    layer_prop[0].address=LCD_LAYER0_FRAME_BUFFER;           //ç¼“å†²åŒº
 #if (GUI_NUM_LAYERS>1)
     layer_prop[1].address=LCD_LAYER1_FRAME_BUFFER;
 #endif
@@ -217,7 +217,7 @@ void LCD_X_Config(void)
     }
 }
 
-//ÏÔÊ¾Çı¶¯»Øµ÷º¯Êı
+//æ˜¾ç¤ºé©±åŠ¨å›è°ƒå‡½æ•°
 int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData)
 {
     int32_t r = 0;
@@ -295,7 +295,7 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData)
     return r;
 }
 
-//LTDC²ãÅäÖÃ
+//LTDCå±‚é…ç½®
 static void LCD_LL_LayerInit(uint32_t LayerIndex)
 {
     uint32_t i;
@@ -304,22 +304,22 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
 
     if (LayerIndex<GUI_NUM_LAYERS)
     {
-        layer_cfg.WindowX0=0;                                   //´°¿ÚÆğÊ¼X×ø±ê
-        layer_cfg.WindowY0=0;                                   //´°¿ÚÆğÊ¼Y×ø±ê
-        layer_cfg.WindowX1=lcdltdc.pwidth;                      //´°¿ÚÖÕÖ¹X×ø±ê
-        layer_cfg.WindowY1=lcdltdc.pheight;                     //´°¿ÚÖÕÖ¹Y×ø±ê
-        layer_cfg.PixelFormat=LCD_LL_GetPixelformat(LayerIndex);//ÏñËØ¸ñÊ½
-        layer_cfg.Alpha=255;                                    //AlphaÖµÉèÖÃ£¬0~255,255ÎªÍêÈ«²»Í¸Ã÷
-        layer_cfg.Alpha0=0;;                                    //Ä¬ÈÏAlphaÖµ
-        layer_cfg.Backcolor.Red=0;                              //±³¾°ÑÕÉ«ºìÉ«²¿·Ö
-        layer_cfg.Backcolor.Green=0;                            //±³¾°ÑÕÉ«ÂÌÉ«²¿·Ö
-        layer_cfg.Backcolor.Blue=0;                             //±³¾°ÑÕÉ«À¶É«²¿·Ö
-        layer_cfg.FBStartAdress=layer_prop[LayerIndex].address; //ÉèÖÃ²ãÑÕÉ«Ö¡»º´æÆğÊ¼µØÖ·
-        layer_cfg.BlendingFactor1=LTDC_BLENDING_FACTOR1_PAxCA;  //ÉèÖÃ²ã»ìºÏÏµÊı
-        layer_cfg.BlendingFactor2=LTDC_BLENDING_FACTOR2_PAxCA;  //ÉèÖÃ²ã»ìºÏÏµÊı
-        layer_cfg.ImageWidth=lcdltdc.pwidth;                    //ÉèÖÃÑÕÉ«Ö¡»º³åÇøµÄ¿í¶È
-        layer_cfg.ImageHeight=lcdltdc.pheight;                  //ÉèÖÃÑÕÉ«Ö¡»º³åÇøµÄ¸ß¶È
-        HAL_LTDC_ConfigLayer(&LTDC_Handler,&layer_cfg,LayerIndex);//ÉèÖÃËùÑ¡ÖĞµÄ²ã
+        layer_cfg.WindowX0=0;                                   //çª—å£èµ·å§‹Xåæ ‡
+        layer_cfg.WindowY0=0;                                   //çª—å£èµ·å§‹Yåæ ‡
+        layer_cfg.WindowX1=lcdltdc.pwidth;                      //çª—å£ç»ˆæ­¢Xåæ ‡
+        layer_cfg.WindowY1=lcdltdc.pheight;                     //çª—å£ç»ˆæ­¢Yåæ ‡
+        layer_cfg.PixelFormat=LCD_LL_GetPixelformat(LayerIndex);//åƒç´ æ ¼å¼
+        layer_cfg.Alpha=255;                                    //Alphaå€¼è®¾ç½®ï¼Œ0~255,255ä¸ºå®Œå…¨ä¸é€æ˜
+        layer_cfg.Alpha0=0;;                                    //é»˜è®¤Alphaå€¼
+        layer_cfg.Backcolor.Red=0;                              //èƒŒæ™¯é¢œè‰²çº¢è‰²éƒ¨åˆ†
+        layer_cfg.Backcolor.Green=0;                            //èƒŒæ™¯é¢œè‰²ç»¿è‰²éƒ¨åˆ†
+        layer_cfg.Backcolor.Blue=0;                             //èƒŒæ™¯é¢œè‰²è“è‰²éƒ¨åˆ†
+        layer_cfg.FBStartAdress=layer_prop[LayerIndex].address; //è®¾ç½®å±‚é¢œè‰²å¸§ç¼“å­˜èµ·å§‹åœ°å€
+        layer_cfg.BlendingFactor1=LTDC_BLENDING_FACTOR1_PAxCA;  //è®¾ç½®å±‚æ··åˆç³»æ•°
+        layer_cfg.BlendingFactor2=LTDC_BLENDING_FACTOR2_PAxCA;  //è®¾ç½®å±‚æ··åˆç³»æ•°
+        layer_cfg.ImageWidth=lcdltdc.pwidth;                    //è®¾ç½®é¢œè‰²å¸§ç¼“å†²åŒºçš„å®½åº¦
+        layer_cfg.ImageHeight=lcdltdc.pheight;                  //è®¾ç½®é¢œè‰²å¸§ç¼“å†²åŒºçš„é«˜åº¦
+        HAL_LTDC_ConfigLayer(&LTDC_Handler,&layer_cfg,LayerIndex);//è®¾ç½®æ‰€é€‰ä¸­çš„å±‚
         if (LCD_GetBitsPerPixelEx(LayerIndex)<=8)
         {
             HAL_LTDC_EnableCLUT(&LTDC_Handler,LayerIndex);
@@ -339,24 +339,24 @@ static void LCD_LL_LayerInit(uint32_t LayerIndex)
     }
 }
 
-//LCDµ×²ãÇı¶¯,LTDCÖĞ¶ÏÉèÖÃ£¬DMA2D³õÊ¼»¯
+//LCDåº•å±‚é©±åŠ¨,LTDCä¸­æ–­è®¾ç½®ï¼ŒDMA2Dåˆå§‹åŒ–
 static void LCD_LL_Init(void)
 {
-    //LTDCÖĞ¶Ï£¬ÇÀÕ¼ÓÅÏÈ¼¶1£¬×ÓÓÅÏÈ¼¶1
+    //LTDCä¸­æ–­ï¼ŒæŠ¢å ä¼˜å…ˆçº§1ï¼Œå­ä¼˜å…ˆçº§1
     HAL_NVIC_SetPriority(LTDC_IRQn,bspLTDC_PreemptPriority, bspLTDC_SubPriority);
     HAL_NVIC_EnableIRQ(LTDC_IRQn);
-    HAL_LTDC_ProgramLineEvent(&LTDC_Handler,0);//¿ªÆôLTDCµÄĞĞÖĞ¶Ï
+    HAL_LTDC_ProgramLineEvent(&LTDC_Handler,0);//å¼€å¯LTDCçš„è¡Œä¸­æ–­
 
-    //DMA2DÄ¬ÈÏÉèÖÃ
+    //DMA2Dé»˜è®¤è®¾ç½®
     DMA2D_Handler.Instance=DMA2D;
-    DMA2D_Handler.Init.Mode=DMA2D_R2M;          //ÄÚ´æµ½´æ´¢Æ÷Ä£Ê½
-    DMA2D_Handler.Init.ColorMode=DMA2D_RGB565;  //RGB565Ä£Ê½
-    DMA2D_Handler.Init.OutputOffset=0x0;        //Êä³öÆ«ÒÆÎª0
+    DMA2D_Handler.Init.Mode=DMA2D_R2M;          //å†…å­˜åˆ°å­˜å‚¨å™¨æ¨¡å¼
+    DMA2D_Handler.Init.ColorMode=DMA2D_RGB565;  //RGB565æ¨¡å¼
+    DMA2D_Handler.Init.OutputOffset=0x0;        //è¾“å‡ºåç§»ä¸º0
     HAL_DMA2D_Init(&DMA2D_Handler);
 }
 
-//·µ»Ø²ãµÄÑÕÉ«¸ñÊ½
-//·µ»ØÖµ:1£¬Ê§°Ü£»ÆäËû£¬ÑÕÉ«¸ñÊ½
+//è¿”å›å±‚çš„é¢œè‰²æ ¼å¼
+//è¿”å›å€¼:1ï¼Œå¤±è´¥ï¼›å…¶ä»–ï¼Œé¢œè‰²æ ¼å¼
 static uint32_t LCD_LL_GetPixelformat(uint32_t LayerIndex)
 {
     const LCD_API_COLOR_CONV * pColorConvAPI;
@@ -371,63 +371,63 @@ static uint32_t LCD_LL_GetPixelformat(uint32_t LayerIndex)
 }
 
 
-//Ê¹ÓÃDMA2D½«Êı¾İ´ÓÒ»¸öbuffer¿½±´µ½ÁíÒ»¸öbufferÖĞ
-//LayerIndex:²ãË÷Òı
-//pSrc:Ô´buffer
-//pDst:Ä¿±êbuffer
-//xSize:XÖá´óĞ¡(Ã¿ĞĞÏñËØÊı)
-//ySize:YÖá´óĞ¡(ĞĞÊı)
-//OffLineSrc:Ô´bufferÆ«ÒÆµØÖ·
-//OffLineDst:Ä¿µÄfufferÆ«ÒÆµØÖ·
+//ä½¿ç”¨DMA2Då°†æ•°æ®ä»ä¸€ä¸ªbufferæ‹·è´åˆ°å¦ä¸€ä¸ªbufferä¸­
+//LayerIndex:å±‚ç´¢å¼•
+//pSrc:æºbuffer
+//pDst:ç›®æ ‡buffer
+//xSize:Xè½´å¤§å°(æ¯è¡Œåƒç´ æ•°)
+//ySize:Yè½´å¤§å°(è¡Œæ•°)
+//OffLineSrc:æºbufferåç§»åœ°å€
+//OffLineDst:ç›®çš„fufferåç§»åœ°å€
 static void DMA2D_CopyBuffer(uint32_t LayerIndex,void * pSrc,void * pDst,uint32_t xSize,uint32_t ySize,uint32_t OffLineSrc,uint32_t OffLineDst)
 {
     uint32_t PixelFormat;
     u32 timeout=0;
-    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //»ñÈ¡ÏñËØ¸ñÊ½
-    DMA2D->CR=0x00000000UL|(1<<9);                  //´æ´¢Æ÷µ½´æ´¢Æ÷
-    DMA2D->FGMAR=(uint32_t)pSrc;                    //ÉèÖÃÇ°¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->OMAR=(uint32_t)pDst;                     //ÉèÖÃÊä³ö´æ´¢Æ÷µØÖ·
-    DMA2D->FGOR=OffLineSrc;                         //ÉèÖÃÇ°¾°²ãÆ«ÒÆ
-    DMA2D->OOR=OffLineDst;                          //ÉèÖÃÊä³öÆ«ÒÆ
-    DMA2D->FGPFCCR=PixelFormat;                     //ÉèÖÃÑÕÉ«Ä£Ê½
-    DMA2D->NLR=(uint32_t)(xSize<<16)|(U16)ySize;    //ÉèÖÃÃ¿ĞĞÏñËØÊıºÍĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                      //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)                 //µÈ´ı´«ÊäÍê³É
+    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //è·å–åƒç´ æ ¼å¼
+    DMA2D->CR=0x00000000UL|(1<<9);                  //å­˜å‚¨å™¨åˆ°å­˜å‚¨å™¨
+    DMA2D->FGMAR=(uint32_t)pSrc;                    //è®¾ç½®å‰æ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->OMAR=(uint32_t)pDst;                     //è®¾ç½®è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGOR=OffLineSrc;                         //è®¾ç½®å‰æ™¯å±‚åç§»
+    DMA2D->OOR=OffLineDst;                          //è®¾ç½®è¾“å‡ºåç§»
+    DMA2D->FGPFCCR=PixelFormat;                     //è®¾ç½®é¢œè‰²æ¨¡å¼
+    DMA2D->NLR=(uint32_t)(xSize<<16)|(U16)ySize;    //è®¾ç½®æ¯è¡Œåƒç´ æ•°å’Œè¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                      //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)                 //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	                //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	                //è¶…æ—¶é€€å‡º
     }
 }
 
-//Ê¹ÓÃÖ¸¶¨µÄÑÕÉ«Ìî³äÒ»¸ö¾ØĞÎ¿é
-//LayerIndex:²ãË÷Òı
-//pDst:Ä¿±êbuffer£¬ÒªÌî³äµÄ¾ØĞÎ
-//xSize:XÖá´óĞ¡(Ã¿ĞĞÏñËØÊı)
-//ySize:YÖá´óĞ¡(ĞĞÊı)
-//OffLineSrc:Ô´bufferÆ«ÒÆµØÖ·
-//OffLineDst:Ä¿µÄfufferÆ«ÒÆµØÖ·
-//ColorIndex:ÒªÌî³äµÄÑÕÉ«Öµ
+//ä½¿ç”¨æŒ‡å®šçš„é¢œè‰²å¡«å……ä¸€ä¸ªçŸ©å½¢å—
+//LayerIndex:å±‚ç´¢å¼•
+//pDst:ç›®æ ‡bufferï¼Œè¦å¡«å……çš„çŸ©å½¢
+//xSize:Xè½´å¤§å°(æ¯è¡Œåƒç´ æ•°)
+//ySize:Yè½´å¤§å°(è¡Œæ•°)
+//OffLineSrc:æºbufferåç§»åœ°å€
+//OffLineDst:ç›®çš„fufferåç§»åœ°å€
+//ColorIndex:è¦å¡«å……çš„é¢œè‰²å€¼
 static void DMA2D_FillBuffer(uint32_t LayerIndex,void * pDst,uint32_t xSize,uint32_t ySize,uint32_t OffLine,uint32_t ColorIndex)
 {
     uint32_t PixelFormat;
     u32 timeout=0;
-    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //»ñÈ¡ÏñËØ¸ñÊ½
-    DMA2D->CR=0x00030000UL|(1<<9);                  //¼Ä´æÆ÷µ½´æ´¢Æ÷
-    DMA2D->OCOLR=ColorIndex;                        //ÉèÖÃÒªÌî³äµÄÑÕÉ«
-    DMA2D->OMAR=(uint32_t)pDst;                     //ÉèÖÃÊä³ö¼Ä´æÆ÷µØÖ·
-    DMA2D->OOR=OffLine;                             //ÉèÖÃÊä³öÆ«ÒÆ
-    DMA2D->OPFCCR=PixelFormat;                      //ÉèÖÃÑÕÉ«¸ñÊ½
-    DMA2D->NLR=(uint32_t)(xSize << 16)|(U16)ySize;  //ÉèÖÃÃ¿ĞĞÏñËØÊıºÍĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                      //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)                 //µÈ´ı´«ÊäÍê³É
+    PixelFormat=LCD_LL_GetPixelformat(LayerIndex);  //è·å–åƒç´ æ ¼å¼
+    DMA2D->CR=0x00030000UL|(1<<9);                  //å¯„å­˜å™¨åˆ°å­˜å‚¨å™¨
+    DMA2D->OCOLR=ColorIndex;                        //è®¾ç½®è¦å¡«å……çš„é¢œè‰²
+    DMA2D->OMAR=(uint32_t)pDst;                     //è®¾ç½®è¾“å‡ºå¯„å­˜å™¨åœ°å€
+    DMA2D->OOR=OffLine;                             //è®¾ç½®è¾“å‡ºåç§»
+    DMA2D->OPFCCR=PixelFormat;                      //è®¾ç½®é¢œè‰²æ ¼å¼
+    DMA2D->NLR=(uint32_t)(xSize << 16)|(U16)ySize;  //è®¾ç½®æ¯è¡Œåƒç´ æ•°å’Œè¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                      //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)                 //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	                //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	                //è¶…æ—¶é€€å‡º
     }
 }
 
-//»ñÈ¡buffer´óĞ¡
-//·µ»ØÖµ:buffer´óĞ¡
+//è·å–bufferå¤§å°
+//è¿”å›å€¼:bufferå¤§å°
 static uint32_t GetBufferSize(uint32_t LayerIndex)
 {
     uint32_t BufferSize;
@@ -435,10 +435,10 @@ static uint32_t GetBufferSize(uint32_t LayerIndex)
     return BufferSize;
 }
 
-//ÓÃ»§×Ô¶¨ÒåµÄ»º³åÇø¸´ÖÆº¯Êı
-//LayerIndex:²ãË÷Òı
-//IndexSrc:´ı¸´ÖÆµÄÔ´Ö¡»º³åÆ÷µÄË÷Òı
-//IndexDst:´ı¸²¸ÇµÄÄ¿±êÖ¡»º³åÆ÷µÄË÷Òı
+//ç”¨æˆ·è‡ªå®šä¹‰çš„ç¼“å†²åŒºå¤åˆ¶å‡½æ•°
+//LayerIndex:å±‚ç´¢å¼•
+//IndexSrc:å¾…å¤åˆ¶çš„æºå¸§ç¼“å†²å™¨çš„ç´¢å¼•
+//IndexDst:å¾…è¦†ç›–çš„ç›®æ ‡å¸§ç¼“å†²å™¨çš„ç´¢å¼•
 static void CUSTOM_CopyBuffer(int32_t LayerIndex,int32_t IndexSrc,int32_t IndexDst)
 {
     uint32_t BufferSize, AddrSrc, AddrDst;
@@ -450,14 +450,14 @@ static void CUSTOM_CopyBuffer(int32_t LayerIndex,int32_t IndexSrc,int32_t IndexD
     layer_prop[LayerIndex].buffer_index=IndexDst;
 }
 
-//ÓÃ»§×Ô¶¨ÒåµÄ½«ÆÁÄ»µÄÒ»¸ö¾ØĞÎÇøÓò¸´ÖÆµ½Ä¿±êÎ»ÖÃ
-//LayerIndex:²ãË÷Òı
-//x0:Ô´¾ØĞÎ×î×ó±ßµÄÏñËØ
-//y0:Ô´¾ØĞÎ×îÉÏ±ßµÄÏñËØ
-//x1:Ä¿±ê¾ØĞÎ×î×ó±ßµÄÏñËØ
-//y1:Ä¿±ê¾ØĞÎ×îÉÏ±ßµÄÏñËØ
-//xSize:¾ØĞÎµÄX³ß´ç
-//ySize:¾ØĞÎµÄY³ß´ç
+//ç”¨æˆ·è‡ªå®šä¹‰çš„å°†å±å¹•çš„ä¸€ä¸ªçŸ©å½¢åŒºåŸŸå¤åˆ¶åˆ°ç›®æ ‡ä½ç½®
+//LayerIndex:å±‚ç´¢å¼•
+//x0:æºçŸ©å½¢æœ€å·¦è¾¹çš„åƒç´ 
+//y0:æºçŸ©å½¢æœ€ä¸Šè¾¹çš„åƒç´ 
+//x1:ç›®æ ‡çŸ©å½¢æœ€å·¦è¾¹çš„åƒç´ 
+//y1:ç›®æ ‡çŸ©å½¢æœ€ä¸Šè¾¹çš„åƒç´ 
+//xSize:çŸ©å½¢çš„Xå°ºå¯¸
+//ySize:çŸ©å½¢çš„Yå°ºå¯¸
 static void CUSTOM_CopyRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t xSize, int32_t ySize)
 {
     uint32_t BufferSize, AddrSrc, AddrDst;
@@ -468,13 +468,13 @@ static void CUSTOM_CopyRect(int32_t LayerIndex, int32_t x0, int32_t y0, int32_t 
     DMA2D_CopyBuffer(LayerIndex,(void *)AddrSrc,(void *)AddrDst,xSize,ySize,layer_prop[LayerIndex].xSize-xSize,0);
 }
 
-//ÓÃ»§×Ô¶¨ÒåµÄÌî³äº¯Êı
-//LayerIndex:²ãË÷Òı
-//x0:ÆÁÄ»×ø±êÖĞ´ıÌî³äµÄ×î×ó±ßµÄ×ø±ê
-//y0:ÆÁÄ»×ø±êÖĞ´ıÌî³äµÄ×îÉÏ±ßµÄ×ø±ê
-//x1:ÆÁÄ»×ø±êÖĞ´ıÌî³äµÄ×îÓÒ±ßµÄ×ø±ê
-//y1:ÆÁÄ»×ø±êÖĞ´ıÌî³äµÄ×îÏÂ±ß×ø±ê
-//PixelIndex:´ıÌî³äµÄÑÕÉ«
+//ç”¨æˆ·è‡ªå®šä¹‰çš„å¡«å……å‡½æ•°
+//LayerIndex:å±‚ç´¢å¼•
+//x0:å±å¹•åæ ‡ä¸­å¾…å¡«å……çš„æœ€å·¦è¾¹çš„åæ ‡
+//y0:å±å¹•åæ ‡ä¸­å¾…å¡«å……çš„æœ€ä¸Šè¾¹çš„åæ ‡
+//x1:å±å¹•åæ ‡ä¸­å¾…å¡«å……çš„æœ€å³è¾¹çš„åæ ‡
+//y1:å±å¹•åæ ‡ä¸­å¾…å¡«å……çš„æœ€ä¸‹è¾¹åæ ‡
+//PixelIndex:å¾…å¡«å……çš„é¢œè‰²
 static void CUSTOM_FillRect(int32_t LayerIndex,int32_t x0,int32_t y0,int32_t x1,int32_t y1,uint32_t PixelIndex)
 {
     uint32_t BufferSize, AddrDst;
@@ -495,127 +495,127 @@ static void CUSTOM_FillRect(int32_t LayerIndex,int32_t x0,int32_t y0,int32_t x1,
     }
 }
 
-//DMA2DµÄCLUT¼ÓÔØ
-//pColor:CLUT´æ´¢Æ÷µØÖ·
-//NumItems:CLUT´óĞ¡
+//DMA2Dçš„CLUTåŠ è½½
+//pColor:CLUTå­˜å‚¨å™¨åœ°å€
+//NumItems:CLUTå¤§å°
 static void DMA2D_LoadLUT(LCD_COLOR * pColor,uint32_t NumItems)
 {
-    DMA2D->FGCMAR=(uint32_t)pColor; //ÉèÖÃÇ°¾°²ãCLUT´æ´¢Æ÷µØÖ·
-    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_RGB888|((NumItems-1)&0xFF)<<8;//ÉèÖÃÑÕÉ«Ä£Ê½ºÍCLUT´óĞ¡
-    DMA2D->FGPFCCR|=(1<<5);         //Æô¶¯¼ÓÔØ
+    DMA2D->FGCMAR=(uint32_t)pColor; //è®¾ç½®å‰æ™¯å±‚CLUTå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_RGB888|((NumItems-1)&0xFF)<<8;//è®¾ç½®é¢œè‰²æ¨¡å¼å’ŒCLUTå¤§å°
+    DMA2D->FGPFCCR|=(1<<5);         //å¯åŠ¨åŠ è½½
 }
 
-//½»»»Ö¸¶¨µØÖ·ÑÕÉ«µÄRGBË³Ğò²¢ÇÒ·­×ªalphaÖµ²¢½«ĞÂµÃµ½µÄÑÕÉ«Öµ¸´ÖÆµ½Ä¿±êµØÖ·ÖĞ
-//pColorSrc:Ô´µØÖ·
-//pColorDst:Ä¿µÄµØÖ·
-//NumItems:Òª´¦ÀíµÄÊıÁ¿
+//äº¤æ¢æŒ‡å®šåœ°å€é¢œè‰²çš„RGBé¡ºåºå¹¶ä¸”ç¿»è½¬alphaå€¼å¹¶å°†æ–°å¾—åˆ°çš„é¢œè‰²å€¼å¤åˆ¶åˆ°ç›®æ ‡åœ°å€ä¸­
+//pColorSrc:æºåœ°å€
+//pColorDst:ç›®çš„åœ°å€
+//NumItems:è¦å¤„ç†çš„æ•°é‡
 static void InvertAlpha_SwapRB(LCD_COLOR * pColorSrc, LCD_COLOR * pColorDst, uint32_t NumItems)
 {
     uint32_t Color;
     do
     {
         Color=*pColorSrc++;
-        *pColorDst++=((Color&0x000000FF)<<16)           //½»»»ºìÉ«(R)ºÍÀ¶É«(B)µÄÎ»ÖÃ
-                    |(Color&0x0000FF00)                 //ÂÌÉ«(G)µÄÎ»ÖÃ²»±ä
-                    |((Color&0x00FF0000)>>16)           //½»»»ºìÉ«(R)ºÍÀ¶É«(B)µÄÎ»ÖÃ
-                    |((Color&0xFF000000)^0xFF000000);   //·­×ªalphaÖµ
+        *pColorDst++=((Color&0x000000FF)<<16)           //äº¤æ¢çº¢è‰²(R)å’Œè“è‰²(B)çš„ä½ç½®
+                    |(Color&0x0000FF00)                 //ç»¿è‰²(G)çš„ä½ç½®ä¸å˜
+                    |((Color&0x00FF0000)>>16)           //äº¤æ¢çº¢è‰²(R)å’Œè“è‰²(B)çš„ä½ç½®
+                    |((Color&0xFF000000)^0xFF000000);   //ç¿»è½¬alphaå€¼
     } while (--NumItems);
 }
 
 
-//·´×ªalpha£¬ÒòÎªDMA2DµÄÑÕÉ«¸ñÊ½ºÍSTemWinµÄÑÕÉ«¸ñÊ½²»Í¬£¬Òò´ËĞèÒª·­×ªalphaÖµÊ¹ÆäÊÊÅäSTemWin
-//pColorSrc:Ô´µØÖ·
-//pColorDst:Ä¿µÄµØÖ·
-//NumItems:Òª´¦ÀíµÄÊıÁ¿
+//åè½¬alphaï¼Œå› ä¸ºDMA2Dçš„é¢œè‰²æ ¼å¼å’ŒSTemWinçš„é¢œè‰²æ ¼å¼ä¸åŒï¼Œå› æ­¤éœ€è¦ç¿»è½¬alphaå€¼ä½¿å…¶é€‚é…STemWin
+//pColorSrc:æºåœ°å€
+//pColorDst:ç›®çš„åœ°å€
+//NumItems:è¦å¤„ç†çš„æ•°é‡
 static void InvertAlpha(LCD_COLOR * pColorSrc, LCD_COLOR * pColorDst, uint32_t NumItems)
 {
     uint32_t Color;
     do
     {
         Color = *pColorSrc++;
-        *pColorDst++=Color^0xFF000000;//·­×ªalpha
+        *pColorDst++=Color^0xFF000000;//ç¿»è½¬alpha
     } while (--NumItems);
 }
 
-//alpha»ìÉ«£¬Ê¹ÓÃDMA2D
-//pColorFG:Ç°¾°²ã´æ´¢Æ÷µØÖ·
-//pColorBG:±³¾°²ã´æ´¢Æ÷µØÖ·
-//pColorDst:Êä³ö´æ´¢Æ÷µØÖ·
-//NumItems:ĞĞÊı
+//alphaæ··è‰²ï¼Œä½¿ç”¨DMA2D
+//pColorFG:å‰æ™¯å±‚å­˜å‚¨å™¨åœ°å€
+//pColorBG:èƒŒæ™¯å±‚å­˜å‚¨å™¨åœ°å€
+//pColorDst:è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+//NumItems:è¡Œæ•°
 static void DMA2D_AlphaBlendingBulk(LCD_COLOR *pColorFG,LCD_COLOR *pColorBG,LCD_COLOR *pColorDst,U32 NumItems)
 {
     u32 timeout=0;
-    DMA2D->CR=0x00020000UL|(1<<9);              //´æ´¢Æ÷µ½´æ´¢Æ÷²¢Ö´ĞĞ»ìºÏ
-    DMA2D->FGMAR=(uint32_t)pColorFG;            //ÉèÖÃÇ°¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->BGMAR=(uint32_t)pColorBG;            //ÉèÖÃ±³¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->OMAR=(uint32_t)pColorDst;            //ÉèÖÃÊä³ö´æ´¢Æ÷µØÖ·
-    DMA2D->FGOR=0;                              //ÉèÖÃÇ°¾°²ãÆ«ÒÆ
-    DMA2D->BGOR=0;                              //ÉèÖÃ±³¾°²ãÆ«ÒÆ
-    DMA2D->OOR=0;                               //ÉèÖÃÊä³öÆ«ÒÆ
-    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //ÉèÖÃÇ°¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //ÉèÖÃ±³¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->OPFCCR =LTDC_PIXEL_FORMAT_ARGB8888;  //ÉèÖÃÊä³öÑÕÉ«¸ñÊ½
-    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //ÉèÖÃĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                  //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)             //µÈ´ı´«ÊäÍê³É
+    DMA2D->CR=0x00020000UL|(1<<9);              //å­˜å‚¨å™¨åˆ°å­˜å‚¨å™¨å¹¶æ‰§è¡Œæ··åˆ
+    DMA2D->FGMAR=(uint32_t)pColorFG;            //è®¾ç½®å‰æ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->BGMAR=(uint32_t)pColorBG;            //è®¾ç½®èƒŒæ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->OMAR=(uint32_t)pColorDst;            //è®¾ç½®è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGOR=0;                              //è®¾ç½®å‰æ™¯å±‚åç§»
+    DMA2D->BGOR=0;                              //è®¾ç½®èƒŒæ™¯å±‚åç§»
+    DMA2D->OOR=0;                               //è®¾ç½®è¾“å‡ºåç§»
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //è®¾ç½®å‰æ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;  //è®¾ç½®èƒŒæ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->OPFCCR =LTDC_PIXEL_FORMAT_ARGB8888;  //è®¾ç½®è¾“å‡ºé¢œè‰²æ ¼å¼
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //è®¾ç½®è¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                  //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)             //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	            //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	            //è¶…æ—¶é€€å‡º
     }
 }
 
-//»ìºÏÁ½ÖÖÑÕÉ«,»ìºÏÇ°¾°É«ºÍ±³¾°É«
-//Color:Ç°¾°É«
-//BkColor:±³¾°É«
-//Intens:»ìºÏÇ¿¶È
-//·µ»ØÖµ:»ìºÏºóµÄÑÕÉ«
+//æ··åˆä¸¤ç§é¢œè‰²,æ··åˆå‰æ™¯è‰²å’ŒèƒŒæ™¯è‰²
+//Color:å‰æ™¯è‰²
+//BkColor:èƒŒæ™¯è‰²
+//Intens:æ··åˆå¼ºåº¦
+//è¿”å›å€¼:æ··åˆåçš„é¢œè‰²
 static LCD_COLOR DMA2D_MixColors(LCD_COLOR Color,LCD_COLOR BkColor,U8 Intens)
 {
     uint32_t ColorFG,ColorBG,ColorDst;
     u32 timeout=0;
-    if((BkColor&0xFF000000)==0xFF000000)return Color;//±³¾°É«Í¸Ã÷£¬²»ĞèÒª»ìÉ«
+    if((BkColor&0xFF000000)==0xFF000000)return Color;//èƒŒæ™¯è‰²é€æ˜ï¼Œä¸éœ€è¦æ··è‰²
     ColorFG=Color^0xFF000000;
     ColorBG=BkColor^0xFF000000;
 
-    DMA2D->CR=0x00020000UL|(1<<9);              //´æ´¢Æ÷µ½´æ´¢Æ÷²¢Ö´ĞĞ»ìºÏ
-    DMA2D->FGMAR=(uint32_t)&ColorFG;            //ÉèÖÃÇ°¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->BGMAR=(uint32_t)&ColorBG;            //ÉèÖÃ±³¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->OMAR=(uint32_t)&ColorDst;            //ÉèÖÃÊä³ö´æ´¢Æ÷µØÖ·
-    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(1UL<<16)|((uint32_t)Intens<<24);         //ÉèÖÃÇ°¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(0UL<<16)|((uint32_t)(255-Intens)<<24);   //ÉèÖÃ±³¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //ÉèÖÃ±³¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->NLR=(uint32_t)(1<<16)|1;             //ÉèÖÃÃ¿ĞĞÏñËØÊıºÍĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                  //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)             //µÈ´ı´«ÊäÍê³É
+    DMA2D->CR=0x00020000UL|(1<<9);              //å­˜å‚¨å™¨åˆ°å­˜å‚¨å™¨å¹¶æ‰§è¡Œæ··åˆ
+    DMA2D->FGMAR=(uint32_t)&ColorFG;            //è®¾ç½®å‰æ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->BGMAR=(uint32_t)&ColorBG;            //è®¾ç½®èƒŒæ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->OMAR=(uint32_t)&ColorDst;            //è®¾ç½®è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(1UL<<16)|((uint32_t)Intens<<24);         //è®¾ç½®å‰æ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888|(0UL<<16)|((uint32_t)(255-Intens)<<24);   //è®¾ç½®èƒŒæ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //è®¾ç½®èƒŒæ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->NLR=(uint32_t)(1<<16)|1;             //è®¾ç½®æ¯è¡Œåƒç´ æ•°å’Œè¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                  //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)             //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	            //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	            //è¶…æ—¶é€€å‡º
     }
-    return (ColorDst^0xFF000000);               //·µ»Ø»ìºÏºóµÄÑÕÉ«
+    return (ColorDst^0xFF000000);               //è¿”å›æ··åˆåçš„é¢œè‰²
 }
 
-//Ê¹ÓÃDMA2D½øĞĞÑÕÉ«×ª»»
-//pSrc:Ô´ÑÕÉ«(Ç°¾°É«)
-//pDst:×ª»»ºóµÄÑÕÉ«(Êä³öÑÕÉ«)
-//PixelFormatSrc:Ç°¾°²ãÑÕÉ«¸ñÊ½
-//PixelFormatDst:Êä³öÑÕÉ«¸ñÊ½
-//NumItems:Ã¿ĞĞÏñËØÊı
+//ä½¿ç”¨DMA2Dè¿›è¡Œé¢œè‰²è½¬æ¢
+//pSrc:æºé¢œè‰²(å‰æ™¯è‰²)
+//pDst:è½¬æ¢åçš„é¢œè‰²(è¾“å‡ºé¢œè‰²)
+//PixelFormatSrc:å‰æ™¯å±‚é¢œè‰²æ ¼å¼
+//PixelFormatDst:è¾“å‡ºé¢œè‰²æ ¼å¼
+//NumItems:æ¯è¡Œåƒç´ æ•°
 static void DMA2D_ConvertColor(void * pSrc,void * pDst,uint32_t PixelFormatSrc,uint32_t PixelFormatDst,uint32_t NumItems)
 {
     u32 timeout=0;
-    DMA2D->CR=0x00010000UL|(1<<9);              //´æ´¢Æ÷µ½´æ´¢Æ÷²¢Ö´ĞĞFPC
-    DMA2D->FGMAR=(uint32_t)pSrc;                //Ç°¾°²ã´æ´¢Æ÷µØÖ·
-    DMA2D->OMAR=(uint32_t)pDst;                 //Êä³ö´æ´¢Æ÷µØÖ·
-    DMA2D->FGOR=0;                              //±³¾°²ãÆ«ÒÆ
-    DMA2D->OOR=0;                               //Êä³öÆ«ÒÆ
-    DMA2D->FGPFCCR=PixelFormatSrc;              //Ç°¾°²ãÑÕÉ«¸ñÊ½
-    DMA2D->OPFCCR=PixelFormatDst;               //Êä³öÑÕÉ«¸ñÊ½
-    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //ÉèÖÃÃ¿ĞĞÏñËØÊıºÍĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                  //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)             //µÈ´ı´«ÊäÍê³É
+    DMA2D->CR=0x00010000UL|(1<<9);              //å­˜å‚¨å™¨åˆ°å­˜å‚¨å™¨å¹¶æ‰§è¡ŒFPC
+    DMA2D->FGMAR=(uint32_t)pSrc;                //å‰æ™¯å±‚å­˜å‚¨å™¨åœ°å€
+    DMA2D->OMAR=(uint32_t)pDst;                 //è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGOR=0;                              //èƒŒæ™¯å±‚åç§»
+    DMA2D->OOR=0;                               //è¾“å‡ºåç§»
+    DMA2D->FGPFCCR=PixelFormatSrc;              //å‰æ™¯å±‚é¢œè‰²æ ¼å¼
+    DMA2D->OPFCCR=PixelFormatDst;               //è¾“å‡ºé¢œè‰²æ ¼å¼
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //è®¾ç½®æ¯è¡Œåƒç´ æ•°å’Œè¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                  //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)             //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	            //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	            //è¶…æ—¶é€€å‡º
     }
 }
 
@@ -642,40 +642,40 @@ static LCD_PIXELINDEX * _LCD_GetpPalConvTable(const LCD_LOGPALETTE GUI_UNI_PTR *
     return aBufferDMA2D;
 }
 
-//Ê¹ÓÃDMA2D½øĞĞÑÕÉ«»ìºÏ
-//pColorFG:Ç°¾°É«´æ´¢Æ÷µØÖ·
-//pColorBG:±³¾°É«´æ´¢Æ÷µØÖ·
-//pColorDst:Êä³ö´æ´¢Æ÷µØÖ·
-//Intens:»ìºÏÇ¿¶È
-//NumItems:Ã¿ĞĞÏñËØÊı
+//ä½¿ç”¨DMA2Dè¿›è¡Œé¢œè‰²æ··åˆ
+//pColorFG:å‰æ™¯è‰²å­˜å‚¨å™¨åœ°å€
+//pColorBG:èƒŒæ™¯è‰²å­˜å‚¨å™¨åœ°å€
+//pColorDst:è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+//Intens:æ··åˆå¼ºåº¦
+//NumItems:æ¯è¡Œåƒç´ æ•°
 static void DMA2D_MixColorsBulk(LCD_COLOR * pColorFG, LCD_COLOR * pColorBG, LCD_COLOR * pColorDst, U8 Intens, uint32_t NumItems)
 {
     u32 timeout=0;
-    DMA2D->CR=0x00020000UL|(1<<9);              //´æ´¢Æ÷µ½´æ´¢Æ÷²¢Ö´ĞĞ»ìºÏ
-    DMA2D->FGMAR=(uint32_t)pColorFG;            //ÉèÖÃÇ°¾°É«´æ´¢Æ÷µØÖ·
-    DMA2D->BGMAR=(uint32_t)pColorBG;            //ÉèÖÃ±³¾°É«´æ´¢Æ÷µØÖ·
-    DMA2D->OMAR=(uint32_t)pColorDst;            //ÉèÖÃÊä³ö´æ´¢Æ÷µØÖ·
-    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //ÉèÖÃÇ°¾°É«ÑÕÉ«¸ñÊ½
+    DMA2D->CR=0x00020000UL|(1<<9);              //å­˜å‚¨å™¨åˆ°å­˜å‚¨å™¨å¹¶æ‰§è¡Œæ··åˆ
+    DMA2D->FGMAR=(uint32_t)pColorFG;            //è®¾ç½®å‰æ™¯è‰²å­˜å‚¨å™¨åœ°å€
+    DMA2D->BGMAR=(uint32_t)pColorBG;            //è®¾ç½®èƒŒæ™¯è‰²å­˜å‚¨å™¨åœ°å€
+    DMA2D->OMAR=(uint32_t)pColorDst;            //è®¾ç½®è¾“å‡ºå­˜å‚¨å™¨åœ°å€
+    DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //è®¾ç½®å‰æ™¯è‰²é¢œè‰²æ ¼å¼
                     |(1UL<<16)
                     |((uint32_t)Intens<<24);
-    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //ÉèÖÃ±³¾°É«ÑÕÉ«¸ñÊ½
+    DMA2D->BGPFCCR=LTDC_PIXEL_FORMAT_ARGB8888   //è®¾ç½®èƒŒæ™¯è‰²é¢œè‰²æ ¼å¼
                     |(0UL<<16)
                     |((uint32_t)(255-Intens)<<24);
-    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //ÉèÖÃÊä³öÑÕÉ«¸ñÊ½
-    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //ÉèÖÃÃ¿ĞĞÏñËØÊıºÍĞĞÊı
-    DMA2D->CR|=DMA2D_CR_START;                  //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)             //µÈ´ı´«ÊäÍê³É
+    DMA2D->OPFCCR=LTDC_PIXEL_FORMAT_ARGB8888;   //è®¾ç½®è¾“å‡ºé¢œè‰²æ ¼å¼
+    DMA2D->NLR=(uint32_t)(NumItems<<16)|1;      //è®¾ç½®æ¯è¡Œåƒç´ æ•°å’Œè¡Œæ•°
+    DMA2D->CR|=DMA2D_CR_START;                  //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)             //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	            //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	            //è¶…æ—¶é€€å‡º
     }
 }
 
-//Ê¹ÓÃDMA2D½øĞĞalpha»ìÉ«
-//pColorFG:Ç°¾°É«
-//pColorBG:±³¾°É«
-//pColorDst:Êä³öÑÕÉ«
-//NumItems:Ã¿ĞĞÏñËØÊı
+//ä½¿ç”¨DMA2Dè¿›è¡Œalphaæ··è‰²
+//pColorFG:å‰æ™¯è‰²
+//pColorBG:èƒŒæ™¯è‰²
+//pColorDst:è¾“å‡ºé¢œè‰²
+//NumItems:æ¯è¡Œåƒç´ æ•°
 static void DMA2D_AlphaBlending(LCD_COLOR *pColorFG,LCD_COLOR *pColorBG,LCD_COLOR *pColorDst,U32 NumItems)
 {
     InvertAlpha(pColorFG,aBuffer_FG,NumItems);
@@ -684,14 +684,14 @@ static void DMA2D_AlphaBlending(LCD_COLOR *pColorFG,LCD_COLOR *pColorBG,LCD_COLO
     InvertAlpha(aBufferDMA2D,pColorDst,NumItems);
 }
 
-//ÑÕÉ«Ë÷Òı×ª»»ÎªÑÕÉ«Öµ
+//é¢œè‰²ç´¢å¼•è½¬æ¢ä¸ºé¢œè‰²å€¼
 static void DMA2D_Index2ColorBulk(void *pIndex,LCD_COLOR *pColor,uint32_t NumItems, U8 SizeOfIndex,uint32_t PixelFormat)
 {
     DMA2D_ConvertColor(pIndex,aBufferDMA2D,PixelFormat,LTDC_PIXEL_FORMAT_ARGB8888,NumItems);
     InvertAlpha_SwapRB(aBufferDMA2D,pColor,NumItems);
 }
 
-//ÑÕÉ«Öµ×ª»»ÎªÑÕÉ«Ë÷Òı
+//é¢œè‰²å€¼è½¬æ¢ä¸ºé¢œè‰²ç´¢å¼•
 static void DMA2D_Color2IndexBulk(LCD_COLOR *pColor,void *pIndex,uint32_t NumItems,U8 SizeOfIndex,uint32_t PixelFormat)
 {
     InvertAlpha_SwapRB(pColor,aBufferDMA2D,NumItems);
@@ -716,7 +716,7 @@ static void LCD_MixColorsBulk(U32 *pFG,U32 *pBG,U32 *pDst,unsigned OffFG,unsigne
     }
 }
 
-//Ê¹ÓÃDMA2D»æÖÆL8ÑÕÉ«¸ñÊ½µÄÎ»Í¼
+//ä½¿ç”¨DMA2Dç»˜åˆ¶L8é¢œè‰²æ ¼å¼çš„ä½å›¾
 static void DMA2D_DrawBitmapL8(void * pSrc, void * pDst,  uint32_t OffSrc, uint32_t OffDst, uint32_t PixelFormatDst, uint32_t xSize, uint32_t ySize)
 {
     u32 timeout=0;
@@ -728,15 +728,15 @@ static void DMA2D_DrawBitmapL8(void * pSrc, void * pDst,  uint32_t OffSrc, uint3
     DMA2D->FGPFCCR=LTDC_PIXEL_FORMAT_L8;
     DMA2D->OPFCCR=PixelFormatDst;
     DMA2D->NLR=(uint32_t)(xSize<<16)|ySize;
-    DMA2D->CR|=DMA2D_CR_START;                  //Æô¶¯DMA2D´«Êä
-    while(DMA2D->CR&DMA2D_CR_START)             //µÈ´ı´«ÊäÍê³É
+    DMA2D->CR|=DMA2D_CR_START;                  //å¯åŠ¨DMA2Dä¼ è¾“
+    while(DMA2D->CR&DMA2D_CR_START)             //ç­‰å¾…ä¼ è¾“å®Œæˆ
     {
         timeout++;
-		if(timeout>0X1FFFFF)break;	            //³¬Ê±ÍË³ö
+		if(timeout>0X1FFFFF)break;	            //è¶…æ—¶é€€å‡º
     }
 }
 
-//»æÖÆ16bppÎ»Í¼
+//ç»˜åˆ¶16bppä½å›¾
 static void LCD_DrawBitmap16bpp(int32_t LayerIndex,int32_t x,int32_t y,U16 const * p,int32_t xSize,int32_t ySize,int32_t BytesPerLine)
 {
     uint32_t BufferSize, AddrDst;
@@ -749,7 +749,7 @@ static void LCD_DrawBitmap16bpp(int32_t LayerIndex,int32_t x,int32_t y,U16 const
     DMA2D_CopyBuffer(LayerIndex,(void *)p,(void *)AddrDst,xSize,ySize,OffLineSrc,OffLineDst);
 }
 
-//»æÖÆ8bppÎ»Í¼
+//ç»˜åˆ¶8bppä½å›¾
 static void LCD_DrawBitmap8bpp(int32_t LayerIndex, int32_t x, int32_t y, U8 const * p, int32_t xSize, int32_t ySize, int32_t BytesPerLine)
 {
     uint32_t BufferSize, AddrDst;
