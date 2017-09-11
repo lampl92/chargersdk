@@ -85,6 +85,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             /* 1. 判断协议是否发送 */
             if(pechProtoElem->status == 0)
             {
+                printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                 memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
                 send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
