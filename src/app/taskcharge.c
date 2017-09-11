@@ -303,7 +303,7 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
-                else if((uxBitsCharge & defEventBitChargeCondition) != defEventBitChargeCondition)//除去S2主动断开情况，如果被监测的点有False
+                else if(((uxBitsCharge & (defEventBitChargeCondition)) | defEventBitCONVoltOK) != (defEventBitChargeCondition))//除去S2主动断开情况，如果被监测的点有False, 电压异常由diag处理
                 {
                     if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
