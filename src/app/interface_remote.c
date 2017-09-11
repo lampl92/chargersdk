@@ -87,9 +87,10 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     {
         cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
         gdsl_list_cursor_move_to_head (cur);
-        while(pechCmdElem = gdsl_list_cursor_get_content (cur))
+        while((pechCmdElem = gdsl_list_cursor_get_content (cur)) != NULL)
         {
-            memmove(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
+            printf_safe("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
+            memcpy(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
             *pLen = pCMD->ulRecvdOptLen;
             errcode = ERR_NO;
             break;
@@ -97,6 +98,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_head (cur);
         while((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
+            printf_safe("RemoteRecvHandle: RecvCmd %d Delete\n", pCMD->CMDType.usRecvCmd);
             gdsl_list_cursor_delete(cur);
         }
         gdsl_list_cursor_free(cur);
@@ -1278,8 +1280,8 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 
         return ERR_BLACK_LIST;
     }
-    //else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
-    else if(1)    
+    else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    //else if(1)    
     {
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
