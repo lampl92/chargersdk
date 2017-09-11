@@ -104,7 +104,7 @@ void vTaskEVSERFID(void *pvParameters)
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             if (pCON->order.statOrder != STATE_ORDER_IDLE)
             {
-                printf_safe("该接口有未完成订单!!!!");
+                printf_safe("该接口有未完成订单!!!!\n");
                 vTaskDelay(2000);
                 pRFIDDev->state = STATE_RFID_RETURN;
                 break;
