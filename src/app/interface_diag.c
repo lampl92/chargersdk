@@ -583,10 +583,12 @@ void DiagFreqError(CON_t *pCON)
             pCON->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Freq_Cri;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Freq_Cri;
     }
 }
 void DiagPlugError(CON_t *pCON)
