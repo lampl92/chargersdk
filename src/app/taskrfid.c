@@ -41,6 +41,7 @@ void vTaskEVSERFID(void *pvParameters)
             {
                 memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
                 pRFIDDev->state = STATE_RFID_GOTID;
+                xTimerStop(xHandleTimerRFID, 100); 
                 xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
                                    defEventBitGotIDtoHMI);
             }
@@ -73,7 +74,7 @@ void vTaskEVSERFID(void *pvParameters)
                     else
                     {
                         OrderInit(&(pRFIDDev->order));
-                        pRFIDDev->state = STATE_RFID_NOID;
+                        pRFIDDev->state = STATE_RFID_RETURN;
                     }
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
@@ -100,6 +101,15 @@ void vTaskEVSERFID(void *pvParameters)
 //                                     defEventBitRemoteGetAccount,
 //                                     defEventBitRemoteGotAccount,
 //                                     5000);//发送到Remote
+            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+            if (pCON->order.statOrder != STATE_ORDER_IDLE)
+            {
+                printf_safe("该接口有未完成订单!!!!");
+                vTaskDelay(2000);
+                pRFIDDev->state = STATE_RFID_RETURN;
+                break;
+                
+            }
             errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);
             ucVaild = 0;
             switch(errcode)
@@ -120,11 +130,12 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->order.ucCardStatus = 3;
                 break;
             }
-
+            errcode = ERR_REMOTE_NODATA;//初始化errorcode ；
+            res = 0;
             while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
             {
                 remote_timeout_u100ms++;
-                if(remote_timeout_u100ms >= 100)//10s
+                if(remote_timeout_u100ms >= 1000)//100s
                 {
                     pRFIDDev->state = STATE_RFID_TIMEOUT;
                     break;
@@ -135,12 +146,12 @@ void vTaskEVSERFID(void *pvParameters)
             
             if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
             {
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_RETURN;
                 break;
             }
             if(ucVaild == 2)//e充网定义 1 可充, 2不可充
             {
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_RETURN;
                 break;
             }
 
@@ -160,7 +171,7 @@ void vTaskEVSERFID(void *pvParameters)
                 }
                 else
                 {
-                    pRFIDDev->state = STATE_RFID_NOID;
+                    pRFIDDev->state = STATE_RFID_RETURN;
                 }
 //            }
             break;
@@ -192,7 +203,7 @@ void vTaskEVSERFID(void *pvParameters)
                                    defEventBitGotIDtoHMI);
                     /// TODO (zshare#1#): 增加清除位,第二次刷卡充电会直接停止 , 原因此处等待延时会一直置位 上述两个会不会有问题???????
                     xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
-                    pRFIDDev->state = STATE_RFID_NOID;
+                    pRFIDDev->state = STATE_RFID_RETURN;
                 }
 //            }
 //            else
@@ -215,7 +226,7 @@ void vTaskEVSERFID(void *pvParameters)
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitGoodIDReqDisp,
                             defEventBitGoodIDReqDispOK,
-                            portMAX_DELAY);
+                            10000);
 
 #ifdef DEBUG_RFID
             printf_safe("用户状态：");
@@ -251,7 +262,7 @@ void vTaskEVSERFID(void *pvParameters)
                             defEventBitBadIDReqDispOK,
                             portMAX_DELAY);
             OrderInit(&(pRFIDDev->order));
-            pRFIDDev->state = STATE_RFID_NOID;
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_OWE:
             /** @todo (rgw#1#): 通知HMI显示欠费 */
@@ -261,7 +272,7 @@ void vTaskEVSERFID(void *pvParameters)
                             defEventBitOwdIDReqDispOK,
                             portMAX_DELAY);
             OrderInit(&pRFIDDev->order);
-            pRFIDDev->state = STATE_RFID_NOID;
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_HOLD:
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
@@ -271,16 +282,21 @@ void vTaskEVSERFID(void *pvParameters)
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
             {
                 vTaskDelay(10000);
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_RETURN;
             }
             uxBits = xEventGroupWaitBits(xHandleEventHMI,
                                          defEventBitHMITimeOutToRFID,
                                          pdTRUE, pdTRUE,0);
             if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
             {
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_RETURN;
             }
             /** @todo (rgw#1#): 监控Charge状态，如果用户未充电前终止充电流程，则返回到NOID */
+            break;
+        case STATE_RFID_RETURN:
+            memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
+            xTimerStart(xHandleTimerRFID, 100); 
+            pRFIDDev->state = STATE_RFID_NOID;
             break;
         default:
             break;
