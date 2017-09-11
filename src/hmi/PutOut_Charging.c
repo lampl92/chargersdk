@@ -143,14 +143,14 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     now = time(NULL);
 
     diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
-    if(diffsec > 86400)
-    {
-        while(1)
-        {
-            printf_safe("now = %ld,startTime = %ld\n",now,pCON->order.tStartTime);
-        }
-        diffsec = 86400;
-    }
+//    if(diffsec > 86400)
+//    {
+//        while(1)
+//        {
+//            printf_safe("now = %ld,startTime = %ld\n",now,pCON->order.tStartTime);
+//        }
+//        diffsec = 86400;
+//    }
     hour = diffsec / 3600;
     min = diffsec % 3600 / 60;
     sec = diffsec % 3600 % 60;
