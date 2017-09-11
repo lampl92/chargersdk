@@ -1105,11 +1105,16 @@ static void CONInit(void)
 
     pListCON = UserListCreate();
     int i;
+//    double upp = 260;
+//    double low = 176;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
 
         THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
+//        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
+//        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
+        
 
         pListCON->Add(pListCON, pCON[i]);
     }
