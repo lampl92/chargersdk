@@ -88,6 +88,7 @@
 
 #define defEventBitOrderMakeFinish      BIT_19  //等待处不清除, 该事件置位后整个订单完成
 #define defEventBitOrderFinishToRemote  BIT_20  //Order订单命令使用，使用后清除
+#define defEventBitOrderFinishToAuthed  BIT_21  //Order未结束，不能进行新的Authed， 但一定要结合Order的状态进行判断
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK | defEventBitOrder_HMIDispOK)    //(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
@@ -179,6 +180,7 @@
 //(defEventBitCONLocked |
 #define defEventBitCPSwitchCondition    (defEventBitCONVoltOK |      \
                                         defEventBitCONCurrOK | \
+                                        defEventBitCONFreqOK | \
                                         defEventBitCONSocketTempOK |  \
                                         defEventBitCONACTempOK |    \
                                         defEventBitCONPlugOK | \
@@ -186,7 +188,6 @@
 
 #define defEventBitChargeCondition      (defEventBitCPSwitchCondition | \
                                         defEventBitCONAuthed | \
-                                        defEventBitCONFreqOK | \
                                         defEventBitCONS2Closed | \
                                         defEventBitCONLocked)
 
@@ -285,6 +286,10 @@
 #define defSignalCON_Alarm_AC_A_CurrUp_Cri      BIT_22       //
 #define defSignalCON_Alarm_AC_B_CurrUp_Cri      BIT_23       //*
 #define defSignalCON_Alarm_AC_C_CurrUp_Cri      BIT_24       //*
+#define defSignalCON_Alarm_AC_A_Freq_Cri      BIT_25       //
+#define defSignalCON_Alarm_AC_B_Freq_Cri      BIT_26       //*
+#define defSignalCON_Alarm_AC_C_Freq_Cri      BIT_27       //*
+
     //ulSignalFault
 #define defSignalCON_Fault_SocketLock           BIT_0
 #define defSignalCON_Fault_AC_A_Temp            BIT_1
