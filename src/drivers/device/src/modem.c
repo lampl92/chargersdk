@@ -689,9 +689,13 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     else//透传模式
     {
         n = modem_UART_puts(pbuff, len);
-        if(n == len)
+        if (n == len)
         {
             ret = DR_MODEM_OK;
+        }
+        else
+        {
+            ret = DR_MODEM_TIMEOUT;
         }
     }
 
@@ -1024,7 +1028,7 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 else if(ret == DR_MODEM_TIMEOUT)
                 {
-
+                    vTaskDelay(500);
                 }
                 else
                 {
