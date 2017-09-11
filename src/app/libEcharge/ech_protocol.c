@@ -801,6 +801,8 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
     memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
     gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
+    
+    return 0;
 }
 static int makeStdCmd(void *pPObj,
                       void *pEObj,
