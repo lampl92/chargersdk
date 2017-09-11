@@ -45,6 +45,7 @@ extern TimerHandle_t xHandleTimerChargingData;
 extern TimerHandle_t xHandleTimerRemoteHeartbeat;
 extern TimerHandle_t xHandleTimerRemoteStatus;
 extern TimerHandle_t xHandleTimerRemoteRTData;
+extern TimerHandle_t xHandleTimerRFID;
 
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;
