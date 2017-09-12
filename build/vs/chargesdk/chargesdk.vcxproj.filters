@@ -1538,6 +1538,9 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.c">
       <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\cfg_order.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">

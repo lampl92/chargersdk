@@ -117,5 +117,8 @@ const uint8_t *strProtoCfg =
 
 const uint8_t *strWhiteListCfg ="[]";
 const uint8_t *strBlackListCfg ="[]";
+    
+const uint8_t *strOrderCfg ="[]";
+const uint8_t *strLogCfg ="[]";
 
 #endif
