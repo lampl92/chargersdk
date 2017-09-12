@@ -47,11 +47,11 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     case UART_PORT_GPRS:
         pUART_Handle = &GPRS_UARTx_Handler;
-//        for(i = 0; i < len; i++)
-//        {
-//            uart_putc(data[i]);
-//        }
-//        return i;
+        for(i = 0; i < len; i++)
+        {
+            uart_putc(data[i]);
+        }
+        return i;
         break;
     case UART_PORT_WIFI:
         pUART_Handle = &WIFI_UARTx_Handler;
