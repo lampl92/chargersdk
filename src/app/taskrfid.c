@@ -135,7 +135,7 @@ void vTaskEVSERFID(void *pvParameters)
             while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
             {
                 remote_timeout_u100ms++;
-                if(remote_timeout_u100ms >= 1000)//100s
+                if(remote_timeout_u100ms >= 300)//30s
                 {
                     pRFIDDev->state = STATE_RFID_TIMEOUT;
                     break;
