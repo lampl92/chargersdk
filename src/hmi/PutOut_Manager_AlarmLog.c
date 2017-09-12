@@ -75,7 +75,7 @@
 
 #define ALARM_COLUMNS   4
 #define CHARGE_COLUMNS  20
-#define DB_DEBUG    1
+#define DB_DEBUG    0
 //6 12 10
 //1 2 1 2 1 2
 //static uint8_t _alarmLog[] = {
@@ -183,7 +183,7 @@ static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
     struct tm* _ptime;
     time_t  _psec;
 
-#if DB_DEBUG
+#if DB_DEBUG == 1
     p = sn;
     printf_safe("FILE REMOVE!!\n");
     db_fileremove("OrderLDBTest");
@@ -256,6 +256,7 @@ static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
             //故障log
         break;
         case 1:
+#if DB_DEBUG == 1
             //充电log
             memset(sel_cmd,'\0',strlen(sel_cmd));
             memset(sel_buf,'\0',strlen(sel_buf));
@@ -365,6 +366,7 @@ static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
             printf_safe("\n查找到的充电记录条数: %d 条\n",i);
             close_tuple(&tuple, &mm);
             closeexecutiontree(root, &mm);
+#endif
         break;
     }
 }

@@ -30,7 +30,7 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsData = 0;
     uxBitsCharge = 0;
     //THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//创建order.txt
-    OrderDBCreate();
+//    OrderDBCreate();
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA

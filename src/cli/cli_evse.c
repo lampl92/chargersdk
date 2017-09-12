@@ -261,10 +261,10 @@ void cli_evseorder_fnt(int argc, char **argv)
 
     if(strcmp(argv[1], "--all") == 0 || strcmp(argv[1], "-a") == 0 )
     {
-        init_query_mm(&mm, memseg, 1024);
-        root = parse("SELECT * FROM OrderDB;", &mm);
-        printQuery(root, &mm);
-        closeexecutiontree(root, &mm);
+//        init_query_mm(&mm, memseg, 1024);
+//        root = parse("SELECT * FROM OrderDB;", &mm);
+//        printQuery(root, &mm);
+//        closeexecutiontree(root, &mm);
         return;
     }
     else
@@ -541,7 +541,7 @@ void cli_evseorder_fnt(int argc, char **argv)
             ts = localtime (& pCON->order.tStopTime);
             strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
             printf_safe("停止时间:\t%s \n", buf);
-            OrderDBInsertItem(&(pCON->order));
+            //OrderDBInsertItem(&(pCON->order));
             OrderInit(&(pCON->order));
         }
     }
