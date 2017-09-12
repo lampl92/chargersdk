@@ -11,7 +11,7 @@
 const uint8_t *strEVSECfg = 
 "{\
     \"EVSESN\":\"0102030405060708\",\
-    \"EVSEID\":\"3000000000000004\",\
+    \"EVSEID\":\"3000000000000002\",\
     \"EVSEType\":2,\
     \"TotalCON\":1,\
     \"Lng\":116.275833,\
@@ -24,15 +24,15 @@ const uint8_t *strEVSECfg =
             \"ID\":0,\
             \"Type\":2,\
             \"SocketType\":67,\
-            \"VolatageUpperLimits\":250,\
-            \"VolatageLowerLimits\":186,\
+            \"VolatageUpperLimits\":260,\
+            \"VolatageLowerLimits\":176,\
             \"ACTempUpperLimits\":105,\
             \"ACTempLowerLimits\":-40,\
             \"SocketTempUpperLimits\":105,\
             \"SocketTempLowerLimits\":-40,\
             \"RatedCurrent\":32,\
             \"RatedPower\":7,\
-            \"QRCode\":\"3000000000000004\"\
+            \"QRCode\":\"3000000000000002\"\
         }\
     ],\
     \"TemplSegArray\":[]\
