@@ -459,7 +459,7 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
     pbuff[0] = pCON->order.ucStartType;//4 有卡，5 无卡
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 5);
 
     return errcode;
 }
