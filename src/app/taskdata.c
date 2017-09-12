@@ -198,7 +198,216 @@ void vTaskEVSEData(void *pvParameters)
             pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
             pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);
         }
+        
+        /********** 告警记录 **************/
+        uint32_t ulSignalOld;
+        for (i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            ulSignalOld = pCON->status.ulSignalAlarm;
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketLock) == defSignalCON_Alarm_SocketLock)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "枪锁");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "枪锁");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp1_War) == defSignalCON_Alarm_SocketTemp1_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "枪座温度1");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "枪座温度1");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp2_War) == defSignalCON_Alarm_SocketTemp2_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "枪座温度2");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "枪座温度2");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp1_Cri) == defSignalCON_Alarm_SocketTemp1_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "枪座温度1");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "枪座温度1");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp2_Cri) == defSignalCON_Alarm_SocketTemp2_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "枪座温度2");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "枪座温度2");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_War) == defSignalCON_Alarm_AC_A_Temp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "A相温度(L)");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "A相温度(L)");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_Temp_War) == defSignalCON_Alarm_AC_B_Temp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "B相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "B相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_Temp_War) == defSignalCON_Alarm_AC_C_Temp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "C相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "C相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_War) == defSignalCON_Alarm_AC_N_Temp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "N相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "N相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "A相温度(L)");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "A相温度(L)");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_Temp_Cri) == defSignalCON_Alarm_AC_B_Temp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "B相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "B相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_Temp_Cri) == defSignalCON_Alarm_AC_C_Temp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "C相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "C相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "N相温度");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "N相温度");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "A相电压过压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "A相电压过压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_VoltUp) == defSignalCON_Alarm_AC_B_VoltUp)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "B相电压过压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "B相电压过压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_VoltUp) == defSignalCON_Alarm_AC_C_VoltUp)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "C相电压过压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "C相电压过压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "A相电压欠压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "A相电压欠压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_VoltLow) == defSignalCON_Alarm_AC_B_VoltLow)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "B相电压欠压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "B相电压欠压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_VoltLow) == defSignalCON_Alarm_AC_C_VoltLow)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "C相电压欠压");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "C相电压欠压");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) == defSignalCON_Alarm_AC_A_CurrUp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "A相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "A相电流过流");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_CurrUp_War) == defSignalCON_Alarm_AC_B_CurrUp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "B相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "B相电流过流");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_CurrUp_War) == defSignalCON_Alarm_AC_C_CurrUp_War)
+            {
+                AddEVSELog(pathEVSELog, 1, 1, "C相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 1, 0, "C相电流过流");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "A相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "A相电流过流");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_B_CurrUp_Cri) == defSignalCON_Alarm_AC_B_CurrUp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "B相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "B相电流过流");   
+            }
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_C_CurrUp_Cri) == defSignalCON_Alarm_AC_C_CurrUp_Cri)
+            {
+                AddEVSELog(pathEVSELog, 2, 1, "C相电流过流");
+            }
+            else
+            {
+                AddEVSELog(pathEVSELog, 2, 0, "C相电流过流");   
+            }
 
+            }
+        }
 
 #if DEBUG_DATA
 

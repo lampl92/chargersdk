@@ -53,6 +53,7 @@
 #define jnEndTime           "EndTime"
 #define jnSegFee            "SegFee"
 
+/*order.txt*/
 #define jnOrderStartType                 "StartType"
 #define jnOrderOrderSN                   "OrderSN"
 #define jnOrderCONID                     "CONID"
@@ -91,6 +92,12 @@
 #define jnOrderSOC                       "SOC"
 #define jnOrderPayStatus                 "PayStatus"
 #define jnOrderStopTime                  "StopTime"
+
+/*evse.log*/
+#define jnLogTime        "Time"
+#define jnLogLevel       "Level"
+#define jnLogState       "State"
+#define jnLogMessage     "Message"
 
 /*protocol.cfg*/
 #define jnProtoServerIP            "ServerIP"
