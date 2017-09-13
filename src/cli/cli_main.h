@@ -22,6 +22,6 @@ extern tinysh_cmd_t cli_modeminfo_cmd;
 extern tinysh_cmd_t cli_testdb_cmd;
 extern tinysh_cmd_t cli_protoinfo_cmd;
 extern tinysh_cmd_t cli_crctest_cmd;
-
+extern tinysh_cmd_t cli_evselog_cmd;
 
 #endif

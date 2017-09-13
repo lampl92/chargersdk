@@ -644,6 +644,12 @@ void cli_evsestatus_fnt(int argc, char **argv)
         printf_safe("\n");
     }
 }
+
+extern int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end);
+void cli_evselog_fnt(int argc, char **argv)
+{
+    testSearchEVSELogByTime(pathEVSELog, 0, 0);
+}
 tinysh_cmd_t cli_protoinfo_cmd =
 {
     0,
@@ -688,4 +694,15 @@ tinysh_cmd_t cli_modeminfo_cmd =
     0,
     cli_modeminfo_fnt,
     "<cr>", 0, 0
+};
+tinysh_cmd_t cli_evselog_cmd =
+{
+    0,
+    "evselog",
+    "display evse log",
+    0,
+    cli_evselog_fnt,
+    "<cr>",
+    0,
+    0
 };

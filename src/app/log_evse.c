@@ -9,12 +9,13 @@
 #include "errorcode.h"
 #include <string.h>
 
-static cJSON *CreateNewEVSELog(uint8_t level, uint8_t state, uint8_t *msg)
+static cJSON *CreateNewEVSELog(uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
 {
     cJSON *jsNewEVSELogObj;
 
     jsNewEVSELogObj = cJSON_CreateObject();
     cJSON_AddItemToObject(jsNewEVSELogObj, jnLogTime, cJSON_CreateNumber(time(NULL)));                       //有卡无卡标志
+    cJSON_AddItemToObject(jsNewEVSELogObj, jnLogDevice, cJSON_CreateNumber(device));                         //0 EVSE 1...n 枪
     cJSON_AddItemToObject(jsNewEVSELogObj, jnLogLevel, cJSON_CreateNumber(level));                           //0 状态 1 告警 2 异常 3 故障
     cJSON_AddItemToObject(jsNewEVSELogObj, jnLogState, cJSON_CreateNumber(state));                           //0 消除 1发生
     cJSON_AddItemToObject(jsNewEVSELogObj, jnLogMessage, cJSON_CreateString(msg));                           //消息
@@ -22,7 +23,7 @@ static cJSON *CreateNewEVSELog(uint8_t level, uint8_t state, uint8_t *msg)
     return jsNewEVSELogObj;
 }
 
-ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t level, uint8_t state, uint8_t *msg)
+ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
 {
     cJSON *jsParent;
     cJSON *jsChild;
@@ -43,7 +44,7 @@ ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t level, uint8_t state, uint8_t *ms
             cJSON_DeleteItemFromArray(jsParent, i);
         }
     }
-    jsChild = CreateNewEVSELog(level, state, msg);
+    jsChild = CreateNewEVSELog(device, level, state, msg);
     cJSON_AddItemToArray(jsParent, jsChild);
     errcode = SetCfgObj(path, jsParent);
     
@@ -74,30 +75,30 @@ int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
         {
             printf_safe("**************Signal Item example Arr[%d]*************\n", i);
             jsChild = cJSON_GetArrayItem(jsParent, i);
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
-            printf_safe("StartType\t%d\n", jsItem->valueint);
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderOrderSN);
-            printf_safe("OrderSN\t%s\n", jsItem->valuestring);
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
-            printf_safe("StartTime\t%d\n", jsItem->valueint);
-            //........
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+            printf_safe("LogTime\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
+            printf_safe("LogDevice\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
+            printf_safe("Message\t%s\n", jsItem->valuestring);
+            //........其他条目
         }
     }
     else if (time_start != 0 && time_end != 0)
     {
         for (i = 0; i < ulMaxItem; i++)
         {
-            printf_safe("**************Signal Item example Arr[%d]*************\n", i);
+            printf_safe("**************Signal log example Arr[%d]*************\n", i);
             jsChild = cJSON_GetArrayItem(jsParent, i);
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
             if (jsItem->valueint <= time_end && jsItem->valueint >= time_start)
             {          
-                jsItem = cJSON_GetObjectItem(jsParent, jnOrderStartType);
-                printf_safe("StartType\t%d\n", jsItem->valueint);
-                jsItem = cJSON_GetObjectItem(jsParent, jnOrderOrderSN);
-                printf_safe("OrderSN\t%s\n", jsItem->valuestring);
-                jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
-                printf_safe("StartTime\t%d\n", jsItem->valueint);  
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+                printf_safe("LogTime\t%d\n", jsItem->valueint);
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
+                printf_safe("LogDevice\t%d\n", jsItem->valueint);
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
+                printf_safe("Message\t%s\n", jsItem->valuestring);
             }
             
             //........

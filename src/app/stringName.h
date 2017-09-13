@@ -95,6 +95,7 @@
 
 /*evse.log*/
 #define jnLogTime        "Time"
+#define jnLogDevice      "Device"
 #define jnLogLevel       "Level"
 #define jnLogState       "State"
 #define jnLogMessage     "Message"

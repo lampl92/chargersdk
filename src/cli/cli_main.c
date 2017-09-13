@@ -28,7 +28,7 @@ void cli_init(void)
 //    tinysh_add_command(&cli_mkfs_cmd);
 //    tinysh_add_command(&cli_mount_cmd);
 //    tinysh_add_command(&cli_umount_cmd);
-//    tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_cat_cmd);
 
     /************系统测试****************/
 //    tinysh_add_command(&cli_fatfs_cmd);
@@ -44,6 +44,7 @@ void cli_init(void)
     tinysh_add_command(&cli_evsestatus_cmd);
     tinysh_add_command(&cli_modeminfo_cmd);
     tinysh_add_command(&cli_protoinfo_cmd);
+    tinysh_add_command(&cli_evselog_cmd);
     /************设备测试****************/
 //    tinysh_add_command(&cli_gprs_cmd);
 

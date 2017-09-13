@@ -122,6 +122,9 @@ typedef struct _CONStatus
     uint32_t ulSignalState;
     uint32_t ulSignalAlarm;
     uint32_t ulSignalFault;
+    uint32_t ulSignalState_Old;
+    uint32_t ulSignalAlarm_Old;
+    uint32_t ulSignalFault_Old;
 
     pCon_ft GetChargingVoltage;
     pCon_ft GetChargingCurrent;
