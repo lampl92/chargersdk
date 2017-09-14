@@ -77,8 +77,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
 
         /* 遍历SendCmd */
+	    gdsl_list_cursor_move_to_head(cs);
 #if 0 //测试插入,不是正式代码
-        gdsl_list_cursor_move_to_head (cs);
         while (pechProtoElem = gdsl_list_cursor_get_content(cs))
         {
             printf_safe("Send Sequence = %d\n", pechProtoElem->cmd_id);
@@ -89,7 +89,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
         printf_safe("**************************\n");
 #else
-        while((pechProtoElem = gdsl_list_cursor_get_content (cs)) == NULL)
+        while((pechProtoElem = gdsl_list_cursor_get_content (cs)) != NULL)
         {
             /* 1. 判断协议是否发送 */
             if(pechProtoElem->status == 0)
