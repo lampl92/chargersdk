@@ -62,8 +62,8 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_TMP:
                 makeOrder(pCON);
-                pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START;
-                pCON->status.statRemoteProc.card.timestamp = time(NULL);
+                pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_START;
+                pCON->order.statRemoteProc.card.timestamp = time(NULL);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUpdateOK);
                 pCON->order.statOrder = STATE_ORDER_WAITSTART;
                 break;

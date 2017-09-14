@@ -34,12 +34,12 @@ typedef enum
 #define GPRS_USARTx_BASE                            UART5
 #define GPRS_USARTx_BAUDRATE                        115200
 #define GPRS_USARTx_IRQHandler                      void UART5_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             10000
+#define GPRS_QUEUE_SIZE                             1000
 
 #define WIFI_USARTx_BASE                            UART5
 #define WIFI_USARTx_BAUDRATE                        115200
 #define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
-#define WIFI_QUEUE_SIZE                             10000
+#define WIFI_QUEUE_SIZE                             1000
 
 #endif
 #ifdef EVSE_DEBUG
@@ -78,6 +78,7 @@ extern Queue *pRfidRecvQue;
 extern Queue *pGprsRecvQue;
 extern Queue *pWifiRecvQue;
 
+void gprs_uart_putc(uint8_t ch);
 void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode);
 uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);

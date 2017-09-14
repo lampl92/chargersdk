@@ -13,6 +13,7 @@
 #include "evse_globals.h"
 #include "task_tcp_client.h"
 #include "taskcreate.h"
+#include "modem.h"
 //#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
@@ -27,7 +28,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
     uint32_t ulRecvCmdCount;
     EventBits_t uxBitsTCP;
     int res;
-    int i;
 
     pProto = (echProtocol_t *)pvParameters;
     cs = gdsl_list_cursor_alloc (pProto->plechSendCmd);
@@ -77,7 +77,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
 
         /* 遍历SendCmd */
-	    gdsl_list_cursor_move_to_head(cs);
+        gdsl_list_cursor_move_to_head (cs);
 #if 0 //测试插入,不是正式代码
         while (pechProtoElem = gdsl_list_cursor_get_content(cs))
         {
@@ -95,10 +95,11 @@ void vTaskRemoteCmdProc(void *pvParameters)
             if(pechProtoElem->status == 0)
             {
                 printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
-                memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
-                send_len = pechProtoElem->len;
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
-                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 500);
+                //memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
+                modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
+                //send_len = pechProtoElem->len;
+                //xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
+                //uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 500);
                 //等不等得到都置1
                 pechProtoElem->status = 1;
             }

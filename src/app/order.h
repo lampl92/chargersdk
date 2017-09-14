@@ -10,6 +10,8 @@
 
 #include <time.h>
 #include "gdsl_list.h"
+#include "taskremote.h"
+
 
 /*停止类型 StopType*/
 #define defOrderStopType_Unknown        0
@@ -71,6 +73,12 @@ typedef struct _ChargeSegInfo
 //    double dServFee;
 }ChargeSegStatus_t;
 
+typedef struct _statRemote
+{
+	RemoteCardStatus_t card;
+	RemoteOrderStatus_t order;
+}statRemote_t;
+
 /** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中
  */
 typedef struct _OrderData
@@ -125,6 +133,7 @@ typedef struct _OrderData
     uint8_t         ucStopType; //停止类型
     time_t          tStopTime;  //停止时间          6
 
+	statRemote_t statRemoteProc;
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
 

@@ -64,7 +64,7 @@ Purpose     : Display controller initialization
 // Define the available number of bytes available for the GUI
 //
 #define GUI_NUMBYTES  (8*1024*1024)
-#define GUI_BLOCKSIZE 0X80  //¿é´óĞ¡
+#define GUI_BLOCKSIZE 0X80  //å—å¤§å°
 
 /*********************************************************************8*
 *       Public code
@@ -92,7 +92,7 @@ void GUI_X_Config(void) {
   //
   GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
   //
-  // ÉèÖÃ´æ´¢¿éÆ½¾ù´óĞ¡,¸ÃÇøÔ½´ó,¿ÉÓÃµÄ´æ´¢¿éÔ½ÉÙ
+  // è®¾ç½®å­˜å‚¨å—å¹³å‡å¤§å°,è¯¥åŒºè¶Šå¤§,å¯ç”¨çš„å­˜å‚¨å—è¶Šå°‘
   //
 
   GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);

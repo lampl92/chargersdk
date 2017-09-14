@@ -14,7 +14,6 @@
 #include "errorcode.h"
 #include "interface_rfid.h"
 #include "order.h"
-#include "taskremote.h"
 
 typedef enum _CONStatusType
 {
@@ -89,11 +88,6 @@ typedef struct _CONInfo
 //    pCONSetCfg_ft SetRatedPower;
 } CONInfo_t;
 
-typedef struct _statRemote
-{
-    RemoteCardStatus_t card;
-    RemoteOrderStatus_t order;
-}statRemote_t;
 typedef struct _CONStatus
 {
     //uint8_t ucHeldCardID[defCardIDLength];
@@ -149,8 +143,6 @@ typedef struct _CONStatus
     pCon_ft StopCharge;
     pCon_ft GetRelayState;
     ErrorCode_t (*SetRelay)(void *pvCON, uint8_t cmd);
-
-    statRemote_t statRemoteProc;
 
 } CONStatus_t;
 

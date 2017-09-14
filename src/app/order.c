@@ -436,4 +436,9 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->ucStopType = 0;                  //停止类型
     pOrder->tStopTime = 0;                   //停止时间
 
+	
+	pOrder->statRemoteProc.card.stat = CARDCTRL_IDLE;
+	pOrder->statRemoteProc.card.timestamp = 0;
+	pOrder->statRemoteProc.order.stat = REMOTEOrder_IDLE;
+	pOrder->statRemoteProc.order.timestamp = 0;
 }

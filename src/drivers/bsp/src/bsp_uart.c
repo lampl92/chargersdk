@@ -27,7 +27,7 @@ static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 static volatile uint8_t WIFI_RX_Buffer[1];
 
-static void uart_putc(uint8_t ch)
+void gprs_uart_putc(uint8_t ch)
 {
     while ((GPRS_USARTx_BASE->SR & USART_SR_TC) == 0)
         ;
@@ -50,7 +50,7 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         pUART_Handle = &GPRS_UARTx_Handler;
         for(i = 0; i < len; i++)
         {
-            uart_putc(data[i]);
+            gprs_uart_putc(data[i]);
         }
         return i;
         break;
