@@ -1080,13 +1080,18 @@ void Modem_Poll(DevModem_t *pModem)
                         printf_safe("%02X ", tcp_client_recvbuf[i]);
                     }
                     printf_safe("\n");
-
-                    pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                    if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                    {
+                        pModem->state = DS_MODEM_ERR;
+                    }
+                    else
+                    {
+                        pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                    }
                     memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
                     recv_len = 0;
                 }
             }
-
             break;
         case DS_MODEM_TCP_CLOSE:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
