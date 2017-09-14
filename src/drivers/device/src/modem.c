@@ -45,12 +45,17 @@ static void modem_UART_putQue(DevModem_t *pModem)
     uint8_t ch; //这里需要测试是单个字符发送还是用while全部发送后再give mutex
     if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
     {
-        if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
+	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
+	    {
+			printf_safe("Send: ");
+	    }
+        while (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
         {
             pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
-            printf_safe("%X ", ch);
+            printf_safe("%02X ", ch);
             gprs_uart_putc(ch);
         }
+	    printf_safe("\n");
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }
 }

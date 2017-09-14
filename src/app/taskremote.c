@@ -335,7 +335,7 @@ void vTaskEVSERemote(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                switch(pCON->status.statRemoteProc.card.stat)
+                switch(pCON->order.statRemoteProc.card.stat)
                 {
                 case CARDCTRL_IDLE: //初始化时进入的状态
                     break;
@@ -346,15 +346,15 @@ void vTaskEVSERemote(void *pvParameters)
                     if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
                     {
                         RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 1); //1， 成功
-                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                     }
                     else
                     {
-                        if(time(NULL) - pCON->status.statRemoteProc.card.timestamp > 30)
+                        if(time(NULL) - pCON->order.statRemoteProc.card.timestamp > 30)
                         {
                             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                             RemoteIF_SendCardStartRes(pEVSE, pechProto, pCON, 0);//0,
-                            pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
+                            pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_START_RECV;
                         }
                     }
                     break;
@@ -364,7 +364,7 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         //停止充电
                         RemoteIF_SendCardStopRes(pEVSE, pechProto, pCON);
-                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP_RECV;
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP_RECV;
                     }
                     else
                     {
@@ -376,14 +376,14 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteIF_RecvCardStartRes(pechProto, &network_res);
                     if(network_res == 1)
                     {
-                        pCON->status.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
                     }
                     break;
                 case CARDCTRL_WAIT_STOP_RECV:
                     RemoteIF_RecvCardStopRes(pechProto, &network_res);
                     if(network_res == 1)
                     {
-                        pCON->status.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
                     }
                     break;
                 }
@@ -484,19 +484,19 @@ void vTaskEVSERemote(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                switch(pCON->status.statRemoteProc.order.stat)
+                switch(pCON->order.statRemoteProc.order.stat)
                 {
                 case REMOTEOrder_IDLE:
                     uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                     if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
                     {
-                        pCON->status.statRemoteProc.order.stat = REMOTEOrder_Send;
+                        pCON->order.statRemoteProc.order.stat = REMOTEOrder_Send;
                     }
                     break;
                 case REMOTEOrder_Send:
                     RemoteIF_SendOrder(pEVSE, pechProto, pCON);
-                    pCON->status.statRemoteProc.order.timestamp = time(NULL);
-                    pCON->status.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
+                    pCON->order.statRemoteProc.order.timestamp = time(NULL);
+                    pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
                 case REMOTEOrder_WaitRecv:
                     RemoteIF_RecvOrder(pEVSE, pechProto, &network_res);
@@ -504,15 +504,15 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         pCON->order.ucPayStatus = 1;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
-                        pCON->status.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                        pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                     }
                     else if(network_res == 0)
                     {
-                        if (time(NULL) - pCON->status.statRemoteProc.order.timestamp > 60)
+                        if (time(NULL) - pCON->order.statRemoteProc.order.timestamp > 60)
                         {
                             pCON->order.ucPayStatus = 0;
                             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
-                            pCON->status.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                            pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                         }
                     }
                     break;
