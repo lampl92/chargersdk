@@ -65,11 +65,11 @@ double get_leakage_current(void)
 float get_CD4067(void)
 {
     unsigned short i;
-    for(i = 0; i < samp_sum; i++)
+    for(i = 0; i < samp_dma; i++)
     {
-        CD4067_sum += Sys_samp.DC_samp.CD4067[i];
+        CD4067_sum += AD_samp_dma[i].CD4067;
     }
-    Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
+    Sys_samp.DC.CD4067 = (CD4067_sum / samp_dma); //*temper_k;
 	CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
 }
