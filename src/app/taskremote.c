@@ -15,7 +15,7 @@
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 
 //#define DEBUG_NO_TASKREMOTE
-
+#define defRemoteMaxDelay       60000
 
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
@@ -118,15 +118,12 @@ void vTaskEVSERemote(void *pvParameters)
     RemoteHeartState_e eRmtHeartStat;
     RemoteCtrlState_e eRmtCtrlStat;
     RemoteRTDataState_e eRmtRTDataStat;
-    RemoteOrderState_e eRmtOrderStat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
     uint8_t id_rmtctrl;
     uint8_t ctrl_rmtctrl;
     time_t time_rmtctrl;
-    time_t time_order;
-    uint8_t order_send_count;
     uint32_t reg_try_cnt;
     uint32_t heart_lost;
     uint8_t rtdata_reason;
@@ -138,14 +135,11 @@ void vTaskEVSERemote(void *pvParameters)
     eRmtHeartStat = REMOTEHEART_IDLE;  /** @todo (rgw#1#): 这几个状态都要转移到CON结构体中，否则多枪时状态会混乱 */
     eRmtCtrlStat = REMOTECTRL_IDLE;
     eRmtRTDataStat = REMOTERTData_IDLE;
-    eRmtOrderStat = REMOTEOrder_IDLE;
     errcode = 0;
     network_res = 0;
     id_rmtctrl = 0;
     ctrl_rmtctrl = 0;/** @todo (rgw#1#): 将与枪有关的变量转移到CON结构体中 */
     time_rmtctrl = 0;
-    time_order = 0;
-    order_send_count = 0;
     reg_try_cnt = 0;
     heart_lost = 0;
     rtdata_reason = 0;
@@ -486,55 +480,39 @@ void vTaskEVSERemote(void *pvParameters)
                 }
             }
 
-            /******** 交易记录 ****************/
+            /******** 交易记录(订单) ****************/
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                switch(eRmtOrderStat)
+                switch(pCON->status.statRemoteProc.order.stat)
                 {
                 case REMOTEOrder_IDLE:
                     uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                     if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
                     {
-                        order_send_count = 0;
-                        eRmtOrderStat = REMOTEOrder_Send;
+                        pCON->status.statRemoteProc.order.stat = REMOTEOrder_Send;
                     }
                     break;
                 case REMOTEOrder_Send:
                     RemoteIF_SendOrder(pEVSE, pechProto, pCON);
-                    order_send_count++;
-                    time_order = time(NULL);
-                    eRmtOrderStat = REMOTEOrder_WaitRecv;
+                    pCON->status.statRemoteProc.order.timestamp = time(NULL);
+                    pCON->status.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
-                case REMOTEOrder_WaitRecv: //重发这部分，先测试自动重发，然后再测试手动重发
+                case REMOTEOrder_WaitRecv:
                     RemoteIF_RecvOrder(pEVSE, pechProto, &network_res);
                     if(network_res == 1)
                     {
+                        pCON->order.ucPayStatus = 1;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
-                        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                     defEventBitOrderFinishToRemote,
-                                                     pdTRUE, pdTRUE, portMAX_DELAY);
-                        if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
-                        {
-                            eRmtOrderStat = REMOTEOrder_IDLE;
-                        }
+                        pCON->status.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                     }
                     else if(network_res == 0)
                     {
-                        if(time(NULL) - time_order > 20)
+                        if (time(NULL) - pCON->status.statRemoteProc.order.timestamp > 60)
                         {
-                            eRmtOrderStat = REMOTEOrder_Send;
-                        }
-                        if(order_send_count > 3)
-                        {
+                            pCON->order.ucPayStatus = 0;
                             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
-                            uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                         defEventBitOrderFinishToRemote,
-                                                         pdTRUE, pdTRUE, portMAX_DELAY);
-                            if((uxBits & defEventBitOrderFinishToRemote) == defEventBitOrderFinishToRemote)
-                            {
-                                eRmtOrderStat = REMOTEOrder_IDLE;
-                            }
+                            pCON->status.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                         }
                     }
                     break;
