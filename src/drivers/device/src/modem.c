@@ -27,6 +27,33 @@ uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓�
 uint32_t recv_len = 0;
 uint32_t send_len = 0;
 
+void modem_enQue(uint8_t *pbuff, uint32_t len)
+{
+    int i;
+    if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
+    {
+        for (i = 0; i < len; i++)
+        {
+            pModem->pSendQue->EnElem(pModem->pSendQue, pbuff[i]);
+        }
+        xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
+    }
+}
+
+static void modem_UART_putQue(DevModem_t *pModem)
+{
+    uint8_t ch; //这里需要测试是单个字符发送还是用while全部发送后再give mutex
+    if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
+    {
+        if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
+        {
+            pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
+            printf_safe("%X ", ch);
+            gprs_uart_putc(ch);
+        }
+        xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
+    }
+}
 
 static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
 {
@@ -912,6 +939,14 @@ DevModem_t *DevModemCreate(void)
 {
     DevModem_t *pMod;
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
+    strcpy(pModem->info.strAPN, "CMNET");
+    pMod->info.ucContext = 0;
+    pMod->info.ucTPMode = 1;
+    pMod->status.ucSignalQuality = 0;
+    pMod->state = DS_MODEM_OFF;
+    pMod->xMutex = xSemaphoreCreateMutex();
+    pMod->pSendQue = QueueCreate(MAX_COMMAND_LEN);
+    
     return pMod;
 }
 
@@ -1005,38 +1040,38 @@ void Modem_Poll(DevModem_t *pModem)
 //                pModem->state = DS_MODEM_TCP_OPEN;
 //            }
             //等待remote发送请求
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPClientSendReq,
-                                         pdTRUE, pdTRUE, 0);
-            if((uxBits & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
-            {
-                ret = modem_write(pModem, tcp_client_sendbuf, send_len);
-                if(ret == DR_MODEM_OK)
-                {
-                    printf_safe("\nTCP Send: ");
-                    for(i = 0; i < send_len; i++)
-                    {
-                        printf_safe("%02X ", tcp_client_sendbuf[i]);
-                    }
-                    printf_safe("\n");
-                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
-                }
-                else if(ret == DR_MODEM_READ)
-                {
-                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
-// 别删             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READ处已经发送读事件，此处作为提示用途。
-                }
-                else if(ret == DR_MODEM_TIMEOUT)
-                {
-                    vTaskDelay(500);
-                }
-                else
-                {
-                    pModem->state = DS_MODEM_TCP_CLOSE;
-                    printf_safe("发送失败\r\n");
-                }
-            }
-
+//            uxBits = xEventGroupWaitBits(xHandleEventTCP,
+//                                         defEventBitTCPClientSendReq,
+//                                         pdTRUE, pdTRUE, 0);
+//            if((uxBits & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
+//            {
+//                ret = modem_write(pModem, tcp_client_sendbuf, send_len);
+//                if(ret == DR_MODEM_OK)
+//                {
+//                    printf_safe("\nTCP Send: ");
+//                    for(i = 0; i < send_len; i++)
+//                    {
+//                        printf_safe("%02X ", tcp_client_sendbuf[i]);
+//                    }
+//                    printf_safe("\n");
+//                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
+//                }
+//                else if(ret == DR_MODEM_READ)
+//                {
+//                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
+//// 别删             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READ处已经发送读事件，此处作为提示用途。
+//                }
+//                else if(ret == DR_MODEM_TIMEOUT)
+//                {
+//                    vTaskDelay(500);
+//                }
+//                else
+//                {
+//                    pModem->state = DS_MODEM_TCP_CLOSE;
+//                    printf_safe("发送失败\r\n");
+//                }
+//            }
+            modem_UART_putQue(pModem);
             /*=== read处理 ===*/
             if(pModem->info.ucTPMode == 0)
             {

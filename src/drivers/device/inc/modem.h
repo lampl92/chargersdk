@@ -3,8 +3,9 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "userlib_queue.h"
 
-#define MAX_COMMAND_LEN                  1024  /* ×î´óÃüÁî³¤¶È */
+#define MAX_COMMAND_LEN                  1024  /* æœ€å¤§å‘½ä»¤é•¿åº¦ */
 typedef enum
 {
     CPIN_OTHER,
@@ -30,17 +31,17 @@ typedef enum
 
 typedef enum
 {
-    IP_INITIAL,                      //³õÊ¼»¯
-    IP_START,                        //Æô¶¯ÈÎÎñ
-    IP_CONFIG,                       //ÅäÖÃ³¡¾°
-    IP_IND,                          //¼¤»î GPRS/CSD ³¡¾°ÖĞ
-    IP_GPRSACT,                      //½ÓÊÕ³¡¾°ÅäÖÃ
-    IP_STATUS,                       //»ñµÃ±¾µØ IP µØÖ·£¨²Î¿¼ AT+QILOCIP ÃüÁî£©
-    TCP_CONNECTING,                  //TCP Á¬½ÓÖĞ
-    //UDP_CONNECTING,                  //UDP Á¬½ÓÖĞ (ÔİÊ±ÅĞ¶Ï²»³öÀ´Õâ¸ö×´Ì¬£¬ÒòÎªÅĞ¶ÏÊ±°ÑUDP»òTCPµÄÍ·È¥µôÁË£¬Ö»ÁôÏÂConnect)
-    IP_CLOSE,                        //TCP/UDP Á¬½Ó¹Ø±Õ
-    TCP_CONNECT_OK,                      //TCP/UDP Á¬½Ó³É¹¦
-    PDP_DEACT                        //GPRS/CSD  ³¡¾°Òì³£¹Ø±Õ
+    IP_INITIAL,                      //åˆå§‹åŒ–
+    IP_START,                        //å¯åŠ¨ä»»åŠ¡
+    IP_CONFIG,                       //é…ç½®åœºæ™¯
+    IP_IND,                          //æ¿€æ´» GPRS/CSD åœºæ™¯ä¸­
+    IP_GPRSACT,                      //æ¥æ”¶åœºæ™¯é…ç½®
+    IP_STATUS,                       //è·å¾—æœ¬åœ° IP åœ°å€ï¼ˆå‚è€ƒ AT+QILOCIP å‘½ä»¤ï¼‰
+    TCP_CONNECTING,                  //TCP è¿æ¥ä¸­
+    //UDP_CONNECTING,                  //UDP è¿æ¥ä¸­ (æš‚æ—¶åˆ¤æ–­ä¸å‡ºæ¥è¿™ä¸ªçŠ¶æ€ï¼Œå› ä¸ºåˆ¤æ–­æ—¶æŠŠUDPæˆ–TCPçš„å¤´å»æ‰äº†ï¼Œåªç•™ä¸‹Connect)
+    IP_CLOSE,                        //TCP/UDP è¿æ¥å…³é—­
+    TCP_CONNECT_OK,                      //TCP/UDP è¿æ¥æˆåŠŸ
+    PDP_DEACT                        //GPRS/CSD  åœºæ™¯å¼‚å¸¸å…³é—­
 }ModemConStat_e;
 
 typedef struct
@@ -53,10 +54,10 @@ typedef struct
 typedef struct
 {
     ModemParam_e eSimStat;      //CPIN   CPIN_OTHER || CPIN_READY
-    ModemParam_e eNetReg;       //CREG ÍøÂç×¢²áĞÅÏ¢    REG_LOCAl || REG_ROAMING
-    ModemParam_e eGprsReg;      //CGREG GPRSÍøÂç×¢²áĞÅÏ¢ REG_LOCAl || REG_ROAMING
-    uint8_t ucSignalQuality;    //CSQ ĞÅºÅÇ¿¶È  rssi:0-31£¬Ô½´óÔ½ºÃ,  99 ĞÅºÅÒì³£
-    uint8_t strLocIP[15+1];     //±¾µØIP
+    ModemParam_e eNetReg;       //CREG ç½‘ç»œæ³¨å†Œä¿¡æ¯    REG_LOCAl || REG_ROAMING
+    ModemParam_e eGprsReg;      //CGREG GPRSç½‘ç»œæ³¨å†Œä¿¡æ¯ REG_LOCAl || REG_ROAMING
+    uint8_t ucSignalQuality;    //CSQ ä¿¡å·å¼ºåº¦  rssi:0-31ï¼Œè¶Šå¤§è¶Šå¥½,  99 ä¿¡å·å¼‚å¸¸
+    uint8_t strLocIP[15+1];     //æœ¬åœ°IP
     ModemParam_e eConnect;
     ModemConStat_e statConStat;
 } ModemStatus_t;
@@ -90,6 +91,7 @@ typedef struct _dev_modem
     volatile ModemState_e state;
     ModemFlag_t flag;
     SemaphoreHandle_t xMutex;
+    Queue *pSendQue;
 } DevModem_t;
 
 extern DevModem_t *pModem;
@@ -98,5 +100,6 @@ DevModem_t *DevModemCreate(void);
 DR_MODEM_e modem_open(DevModem_t *pModem);
 DR_MODEM_e modem_init(DevModem_t *pModem);
 void Modem_Poll(DevModem_t *pModem);
+void modem_enQue(uint8_t *pbuff, uint32_t len);
 
 #endif/*_MODEM_H_*/
