@@ -6,18 +6,14 @@
 extern void testBnWList(void);
 void cli_hello_fnt(int argc, char **argv)
 {
-    uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
-    uint8_t strCardID[defCardIDLength * 2 + 1] = {0};
     int i;
-    HexToStr(cardid, strCardID, 8);
-    printf_safe("test strCardID = %s", strCardID);
-
     printf_safe("\nhello world\n");
     printf_safe("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
     //testBnWList();
+#if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);
     pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REGISTER, 20, 3);//0
@@ -46,6 +42,7 @@ void cli_hello_fnt(int argc, char **argv)
     pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_RTDATA, 20, 3);//31
     pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_FAULT, 20, 3);//32
     pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_WARNING, 20, 3);//33
+#endif
 }
 
 tinysh_cmd_t cli_hello_cmd =
