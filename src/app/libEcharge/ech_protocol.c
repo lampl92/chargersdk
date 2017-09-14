@@ -782,12 +782,17 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     echProtoElem_t echSendCmdElem;
     uint8_t pucSendBuffer[REMOTE_SENDBUFF_MAX];
     uint32_t ulSendLength;
+    int res;
+    gdsl_element_t gdsl_res;
 
     pProto = (echProtocol_t *)pPObj;
     ulSendLength = 0;
 
-    pProto->pCMD[usSendID]->makeProc(pPObj, pEObj, pCObj, pucSendBuffer, &ulSendLength);
-
+    res = pProto->pCMD[usSendID]->makeProc(pPObj, pEObj, pCObj, pucSendBuffer, &ulSendLength);
+    if (res == 0)
+    {
+        return 0;
+    }
     echSendCmdElem.timestamp = time(NULL);
     echSendCmdElem.timeout_s = timeout;
     echSendCmdElem.cmd = pProto->pCMD[usSendID]->CMDType;
@@ -800,7 +805,15 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
 
     pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
     memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
-    gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
+    gdsl_res = gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
+    if (gdsl_res == NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 static int makeStdCmd(void *pPObj,
                       void *pEObj,
@@ -934,7 +947,7 @@ static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyC
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -944,6 +957,7 @@ static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     // -------注意修改ID
     makeCmdHeartBodyCtx(ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;
 }
 
 static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -966,7 +980,7 @@ static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -976,6 +990,7 @@ static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     // -------注意修改ID
     makeCmdResetBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RESET, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;
 }
 
 static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -1161,7 +1176,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1171,6 +1186,7 @@ static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     // -------注意修改ID
     makeCmdStatusBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_STATUS, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -1202,7 +1218,7 @@ static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1212,6 +1228,7 @@ static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     // -------注意修改ID
     makeCmdRemoteCtrlBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REMOTE_CTRL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1324,7 +1341,7 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1334,6 +1351,7 @@ static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     // -------注意修改ID
     makeCmdRTDataBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -1350,7 +1368,7 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     int i;
 
     pProto = (echProtocol_t *)pPObj;
-    pEVSE = (EVSE_t *)pEVSE;
+    pEVSE = (EVSE_t *)pEObj;
     pCON = (CON_t *)pCObj;
     pbuff = pProto->pCMD[ECH_CMDID_CARD_RTDATA]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
@@ -1456,7 +1474,7 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1466,6 +1484,7 @@ static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     // -------注意修改ID
     makeCmdCardRTDataBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1722,7 +1741,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;    
 }
 static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1732,6 +1751,7 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     // -------注意修改ID
     makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1748,8 +1768,8 @@ static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     pucMsgBodyCtx_dec[3] = pbuff[3];
 
     *pulMsgBodyCtxLen_dec = 4; //不要忘记赋值
-
-    return 0;
+   
+    return 1;    
 }
 static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1759,6 +1779,7 @@ static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     // -------注意修改ID
     makeCmdSetResBodyCtx(pPObj, ECH_CMDID_SET_SUCC, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_SUCC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1768,6 +1789,7 @@ static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     // -------注意修改ID
     makeCmdSetResBodyCtx(pPObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1848,6 +1870,7 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1857,6 +1880,7 @@ static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     // -------注意修改ID
     makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1866,6 +1890,7 @@ static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     // -------注意修改ID
     makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_SERVFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SERVFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdReqCycBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1889,6 +1914,7 @@ static int makeCmdReqCycBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = (uint8_t)(pProto->info.ulRTDataCyc_ms / 1000);
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1898,6 +1924,7 @@ static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     // -------注意修改ID
     makeCmdReqCycBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_CYC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -1952,6 +1979,7 @@ static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -1961,6 +1989,7 @@ static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     // -------注意修改ID
     makeCmdReqTimeSegBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_TIMESEG, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 
@@ -1995,6 +2024,7 @@ static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
+    return 1;    
 }
 static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2004,6 +2034,7 @@ static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     // -------注意修改ID
     makeCmdReqKeyBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_KEY, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 
@@ -2032,6 +2063,7 @@ static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBod
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2041,6 +2073,7 @@ static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     // -------注意修改ID
     makeCmdReqSoftVerBodyCtx(pPObj, pEObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SOFTVER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdReqQRBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2084,6 +2117,7 @@ static int makeCmdReqQRBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2093,6 +2127,7 @@ static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     // -------注意修改ID
     makeCmdReqQRBodyCtx(pPObj, pEObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_QR, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2114,6 +2149,7 @@ static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucM
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[4];
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 
 static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
@@ -2124,6 +2160,7 @@ static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     // -------注意修改ID
     makeCmdSetBnWResBodyCtx(pPObj, ECH_CMDID_SET_BLACK, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2133,6 +2170,7 @@ static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     // -------注意修改ID
     makeCmdSetBnWResBodyCtx(pPObj, ECH_CMDID_SET_WHITE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2181,6 +2219,7 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    return 1;    
 }
 static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2190,6 +2229,7 @@ static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     // -------注意修改ID
     makeCmdReqBnWBodyCtx(pPObj, ECH_CMDID_REQ_BLACK, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2199,6 +2239,7 @@ static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     // -------注意修改ID
     makeCmdReqBnWBodyCtx(pPObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2243,8 +2284,8 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     strcpy(pRfid->order.strOrderSN, strOrderSN);
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
-
-    return 0;
+   
+    return 1;    
 }
 static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2254,6 +2295,7 @@ static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     // -------注意修改ID
     makeCmdCardStartBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2270,7 +2312,7 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
 
     pProto = (echProtocol_t *)pPObj;
     pCON = (CON_t *)pCObj;
-    pEVSE = (EVSE_t *)pEVSE;
+    pEVSE = (EVSE_t *)pEObj;
     pbuff = pProto->pCMD[ECH_CMDID_CARD_START_RES]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
 
@@ -2295,8 +2337,8 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     //[27...30] 当前电表读数
     uxBit = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                 defEventBitOrderMakeOK,
-                                pdTRUE, pdTRUE, portMAX_DELAY);
-    if((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
+                                pdTRUE, pdTRUE, 10000);
+    if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
         ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
@@ -2304,19 +2346,29 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     }
+    else 
+    {
+        return 0;
+    }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdCardStartRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_dec;
+    int res;
 
     // -------注意修改ID
-    makeCmdCardStartResBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
-    makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    res = makeCmdCardStartResBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    if (res != 1)
+    {
+        return 0;
+    }
+    res = makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return res;
 }
 static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2333,7 +2385,7 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
 
     pProto = (echProtocol_t *)pPObj;
     pCON = (CON_t *)pCObj;
-    pEVSE = (EVSE_t *)pEVSE;
+    pEVSE = (EVSE_t *)pEObj;
 
     pbuff = pProto->pCMD[ECH_CMDID_CARD_STOP_RES]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
@@ -2385,7 +2437,7 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2395,6 +2447,7 @@ static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     // -------注意修改ID
     makeCmdCardStopResBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_STOP_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2416,7 +2469,7 @@ static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32
 
     *pulMsgBodyCtxLen_dec = 6; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2426,6 +2479,7 @@ static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     // -------注意修改ID
     makeCmdUpFaultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_FAULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2448,7 +2502,7 @@ static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint
 
     *pulMsgBodyCtxLen_dec = 12; //不要忘记赋值
 
-    return 0;
+    return 1;
 }
 static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
@@ -2458,6 +2512,7 @@ static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     // -------注意修改ID
     makeCmdUpFaultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_WARNING, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
 }
 
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
@@ -2482,7 +2537,7 @@ static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
             return pProto->pCMD[id]->ulRecvTimeout_s;
         }
     }
-    return 0;
+    return 1;
 }
 #define ECH_ERR_OK      1
 #define ECH_ERR_VER     -1
