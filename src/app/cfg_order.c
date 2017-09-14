@@ -121,6 +121,10 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
             printf_safe("OrderSN\t%s\n", jsItem->valuestring);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
             printf_safe("StartTime\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
+            printf_safe("TotalPowerFee\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
+            printf_safe("StopType\t%d\n", jsItem->valueint);
             //........
         }
     }
