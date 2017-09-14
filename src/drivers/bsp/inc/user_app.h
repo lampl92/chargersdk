@@ -147,9 +147,6 @@ samp Sys_samp;
 typedef struct
 {
     unsigned short CD4067;
-    unsigned short va_samp;
-    unsigned short ia_samp;
-    unsigned short leakage_current;
     unsigned short CP1;
     unsigned short CP2;
 

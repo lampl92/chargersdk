@@ -70,6 +70,7 @@ float get_CD4067(void)
         CD4067_sum += Sys_samp.DC_samp.CD4067[i];
     }
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
+	CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
 }
 /********************************
@@ -269,43 +270,7 @@ double get_CP2(void)
     num_cp2 = 0;
     return Sys_samp.DC.CP2;
 }
-void get_samp_point(void)//ÓÃÊ±30¦ÌS
-{
 
-    unsigned short i, j;
-//    RUN_ON;
-    for(i = 0; i < samp_dma; i++)
-    {
-        CD4067_sum += AD_samp_dma[i].CD4067;
-        ia_samp_sum += AD_samp_dma[i].ia_samp;
-        va_samp_sum += AD_samp_dma[i].va_samp;
-        leakage_current_sum += AD_samp_dma[i].leakage_current;
-        //CP1_sum += AD_samp_dma[i].CP1;
-      // CP2_sum += AD_samp_dma[i].CP2;
-    }
-    for(j = 0; j < samp_sum - 1; j++)
-    {
-        Sys_samp.AC_samp.ia_samp[j] = Sys_samp.AC_samp.ia_samp[j + 1];
-        Sys_samp.AC_samp.va_samp[j] = Sys_samp.AC_samp.va_samp[j + 1];
-        Sys_samp.AC_samp.leakage_current_samp[j] = Sys_samp.AC_samp.leakage_current_samp[j + 1];
-        Sys_samp.DC_samp.CD4067[j] = Sys_samp.DC_samp.CD4067[j + 1];
-       // Sys_samp.DC_samp.CP1[j] = Sys_samp.DC_samp.CP1[j + 1];
-       // Sys_samp.DC_samp.CP2[j] = Sys_samp.DC_samp.CP2[j + 1];
-    }
-    Sys_samp.AC_samp.ia_samp[samp_sum - 1] = ia_samp_sum / samp_dma;
-    Sys_samp.AC_samp.va_samp[samp_sum - 1] = va_samp_sum / samp_dma;
-    Sys_samp.AC_samp.leakage_current_samp[samp_sum - 1] = leakage_current_sum / samp_dma;
-    Sys_samp.DC_samp.CD4067[samp_sum - 1] = CD4067_sum / samp_dma;
-   // Sys_samp.DC_samp.CP1[samp_sum - 1] = CP1_sum / samp_dma;
-   // Sys_samp.DC_samp.CP2[samp_sum - 1] = CP2_sum / samp_dma;
-    CD4067_sum = 0;
-    leakage_current_sum = 0;
-    va_samp_sum = 0;
-    ia_samp_sum = 0;
-    //CP2_sum = 0;
-   // CP1_sum = 0;
-    //RUN_OFF;
-}
 void Delay_ms(unsigned long long time)
 {
     //unsigned int x, y;

@@ -13,7 +13,7 @@
 
 int main(void)
 {
-    SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
+    //SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
     /**
      * 关闭全局中断(除了NMI和HardFault), 在移植文件port.c中的
      * 函数prvStartFirstTask中会重新开启全局中断。
