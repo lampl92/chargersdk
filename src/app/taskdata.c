@@ -11,6 +11,7 @@
 #include "interface.h"
 #include "cfg_parse.h"
 #include "stringName.h"
+#include "log_evse.h"
 
 //#define DEBUG_NO_TASKDATA
 
@@ -20,25 +21,25 @@ void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
-    int i;
+    int id, i;
+    uint32_t ulSignalPoolXor;
     EventBits_t uxBitsTimer;
     EventBits_t uxBitsData;
     EventBits_t uxBitsCharge;
 
     ulTotalCON = pListCON->Total;
+    ulSignalPoolXor = 0;
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
-    //THROW_ERROR(defDevID_File, CreateOrderFile(), ERR_LEVEL_WARNING, "<taskdata> Create Order.txt");//创建order.txt
-    OrderDBCreate();
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
         /************ 订单管理 *******************/
         //1. 等待刷卡完成事件
-        for(i = 0; i < ulTotalCON; i++)
+        for(id = 0; id < ulTotalCON; id++)
         {
-            pCON = CONGetHandle(i);
+            pCON = CONGetHandle(id);
             uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                              defEventBitOrderTmp,   //RFID中发出该事件
                                              pdTRUE, pdFALSE, 0);
@@ -51,9 +52,9 @@ void vTaskEVSEData(void *pvParameters)
         }
         /** @todo (rgw#1#): !!! 这里没有做扫码启动判断。目前在扫码接受到开启充电处置pCON->order.statOrder = STATE_ORDER_WAITSTART; */
 
-        for(i = 0; i < ulTotalCON; i++)
+        for(id = 0; id < ulTotalCON; id++)
         {
-            pCON = CONGetHandle(i);
+            pCON = CONGetHandle(id);
             switch(pCON->order.statOrder)
             {
             case STATE_ORDER_IDLE:
@@ -175,9 +176,9 @@ void vTaskEVSEData(void *pvParameters)
             THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "taskdata GetEVSECfg");
             THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskdata GetProtoCfg");
 
-            for(i = 0; i < ulTotalCON; i++)
+            for(id = 0; id < ulTotalCON; id++)
             {
-                pCON = CONGetHandle(i);
+                pCON = CONGetHandle(id);
                 THROW_ERROR(defDevID_File, pCON->info.GetCONCfg(pCON, NULL), ERR_LEVEL_WARNING, "taskdata GetCONCfg");
             }
         }
@@ -198,8 +199,228 @@ void vTaskEVSEData(void *pvParameters)
             pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
             pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);
         }
-
-
+        
+        /********** 告警记录 **************/
+       
+        for (id = 0; id < ulTotalCON; id++)
+        {
+            pCON = CONGetHandle(id);
+            //proc con alarm
+            ulSignalPoolXor = pCON->status.ulSignalAlarm_Old ^ pCON->status.ulSignalAlarm;
+            if (ulSignalPoolXor != 0)
+            {
+                for (i = 0; i < 32; i++)
+                {
+                    if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                    {
+                        switch (1 << i)
+                        {
+                        case defSignalCON_Alarm_SocketLock:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪锁");
+                            break;
+                        case defSignalCON_Alarm_SocketTemp1_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
+                            break;
+                        case defSignalCON_Alarm_SocketTemp2_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
+                            break;
+                        case defSignalCON_Alarm_SocketTemp1_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
+                            break;
+                        case defSignalCON_Alarm_SocketTemp2_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
+                            break;
+                        case defSignalCON_Alarm_AC_A_Temp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_B_Temp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_C_Temp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_N_Temp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_A_Temp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_B_Temp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_C_Temp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_N_Temp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
+                            break;
+                        case defSignalCON_Alarm_AC_A_VoltUp:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压过压");
+                            break;
+                        case defSignalCON_Alarm_AC_B_VoltUp:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压过压");
+                            break;
+                        case defSignalCON_Alarm_AC_C_VoltUp:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压过压");
+                            break;
+                        case defSignalCON_Alarm_AC_A_VoltLow:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压欠压");
+                            break;
+                        case defSignalCON_Alarm_AC_B_VoltLow:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压欠压");
+                            break;
+                        case defSignalCON_Alarm_AC_C_VoltLow:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压欠压");
+                            break;
+                        case defSignalCON_Alarm_AC_A_CurrUp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
+                            break;
+                        case defSignalCON_Alarm_AC_B_CurrUp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
+                            break;
+                        case defSignalCON_Alarm_AC_C_CurrUp_War:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
+                            break;
+                        case defSignalCON_Alarm_AC_A_CurrUp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
+                            break;
+                        case defSignalCON_Alarm_AC_B_CurrUp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
+                            break;
+                        case defSignalCON_Alarm_AC_C_CurrUp_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
+                            break;
+                        default:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知告警");
+                            break;
+                            
+                        }
+                    }
+                }
+            }// if (ulSignalPoolXor != 0)
+            pCON->status.ulSignalAlarm_Old = pCON->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+            
+            //proc con fault
+            ulSignalPoolXor = pCON->status.ulSignalFault_Old ^ pCON->status.ulSignalFault;
+            if (ulSignalPoolXor != 0)
+            {
+                for (i = 0; i < 32; i++)
+                {
+                    if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                    {
+                        switch (1 << i)
+                        {
+                        case defSignalCON_Fault_SocketLock: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "枪锁");
+                            break;
+                        case defSignalCON_Fault_AC_A_Temp: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "A(L)相温度检测");
+                            break;
+                        case defSignalCON_Fault_AC_B_Temp: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "B相温度检测");
+                            break;
+                        case defSignalCON_Fault_AC_C_Temp: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "C相温度检测");
+                            break;
+                        case defSignalCON_Fault_AC_N_Temp: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "N相温度检测");
+                            break;
+                        case defSignalCON_Fault_AC_A_RelayPaste: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "A(L)相继电器粘连");
+                            break;
+                        case defSignalCON_Fault_AC_B_RelayPaste: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "B相继电器粘连");
+                            break;
+                        case defSignalCON_Fault_AC_C_RelayPaste: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "C相继电器粘连");
+                            break;
+                        case defSignalCON_Fault_CP: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "CP检测");
+                            break;
+                        case defSignalCON_Fault_Plug:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "插枪检测");
+                            break;
+                        case defSignalCON_Fault_Meter:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "电能计量故障");
+                            break;
+                        default:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, 1, "充电枪未知故障");
+                            break;
+                        }
+                    }
+                }
+            }//if (ulSignalPoolXor != 0)
+            pCON->status.ulSignalFault_Old = pCON->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        }// id
+        
+        //proc evse alarm
+        ulSignalPoolXor = pEVSE->status.ulSignalAlarm_Old ^ pEVSE->status.ulSignalAlarm;
+        if (ulSignalPoolXor != 0)
+        {
+            for (i = 0; i < 32; i++)
+            {
+                if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                {
+                    switch (1 << i)
+                    {
+                    case defSignalEVSE_Alarm_Scram: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "急停");
+                        break;
+                    case defSignalEVSE_Alarm_Knock: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "撞击");
+                        break;
+                    case defSignalEVSE_Alarm_PE: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "接地");
+                        break;
+                    case defSignalEVSE_Alarm_PowerOff: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "掉电");
+                        break;
+                    case defSignalEVSE_Alarm_Arrester: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "防雷");
+                        break;
+                    default:
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, 1, "EVSE未知告警");
+                        break;
+                    }
+                }
+            }
+        }//if (ulSignalPoolXor != 0)
+        pEVSE->status.ulSignalAlarm_Old = pEVSE->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        
+        //proc evse fault
+        ulSignalPoolXor = pEVSE->status.ulSignalFault_Old ^ pEVSE->status.ulSignalFault;
+        if (ulSignalPoolXor != 0)
+        {
+            for (i = 0; i < 32; i++)
+            {
+                if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                {
+                    switch (1 << i)
+                    {
+                    case defSignalEVSE_Fault_RFID: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "读卡器");
+                        break;
+                    case defSignalEVSE_Fault_Bluetooth: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "蓝牙");
+                        break;
+                    case defSignalEVSE_Fault_Wifi: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "WI-FI");
+                        break;
+                    case defSignalEVSE_Fault_GPRS: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "GPRS");
+                        break;
+                    case defSignalEVSE_Fault_GSensor: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "加速度传感器");
+                        break;
+                    default:
+                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, 1, "EVSE未知故障");
+                        break;
+                    }
+                }
+            }
+        }//if (ulSignalPoolXor != 0)
+        pEVSE->status.ulSignalFault_Old = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        
 #if DEBUG_DATA
 
 #endif

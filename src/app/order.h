@@ -11,7 +11,7 @@
 #include <time.h>
 #include "gdsl_list.h"
 
-/*Í£Ö¹ÀàĞÍ StopType*/
+/*åœæ­¢ç±»å‹ StopType*/
 #define defOrderStopType_Unknown        0
 #define defOrderStopType_RFID           1
 #define defOrderStopType_Full           2
@@ -31,15 +31,15 @@
 #define defOrderStopType_UnderCurr      16
 #define defOrderStopType_Knock          17
 
-/*Ö§¸¶·½Ê½ PayType*/
+/*æ”¯ä»˜æ–¹å¼ PayType*/
 #define defOrderPayType_Online          0
 #define defOrderPayType_Offline         1
 
-/*·şÎñ·ÑÀàĞÍ*/
+/*æœåŠ¡è´¹ç±»å‹*/
 #define defOrderSerType_Order           0
 #define defOrderSerType_Power           1
 
-/*µ±Ç°Ê±¼äËùÔÚÊ±¼ä¶ÎÀàĞÍ*/
+/*å½“å‰æ—¶é—´æ‰€åœ¨æ—¶é—´æ®µç±»å‹*/
 typedef enum
 {
     STATE_SEG_IDLE,
@@ -49,7 +49,7 @@ typedef enum
     STATE_SEG_OFF_PEAK
 }SegTimeState_e;
 
-/*¶©µ¥ËùÔÚ×´Ì¬*/
+/*è®¢å•æ‰€åœ¨çŠ¶æ€*/
 typedef enum _OrderState
 {
     STATE_ORDER_IDLE,
@@ -60,7 +60,7 @@ typedef enum _OrderState
     STATE_ORDER_FINISH
 }OrderState_t;
 
-/*Ã¿¸öÊ±¼ä¶ÎĞèÒª¼ÇÂ¼µÄĞÅÏ¢*/
+/*æ¯ä¸ªæ—¶é—´æ®µéœ€è¦è®°å½•çš„ä¿¡æ¯*/
 typedef struct _ChargeSegInfo
 {
     time_t tStartTime;
@@ -71,39 +71,39 @@ typedef struct _ChargeSegInfo
 //    double dServFee;
 }ChargeSegStatus_t;
 
-/** @brief  ucCardID ¡¢ucAccountStatus¡¢ dBalance¡¢ ucCONID¡¢ strOrderSN ÊÇË¢¿¨°åÒª»ñÈ¡µÄÊı¾İ, ÔÚorder½¨Á¢Ê±Ó¦¿½±´µ½CONµÄorderÖĞ
+/** @brief  ucCardID ã€ucAccountStatusã€ dBalanceã€ ucCONIDã€ strOrderSN æ˜¯åˆ·å¡æ¿è¦è·å–çš„æ•°æ®, åœ¨orderå»ºç«‹æ—¶åº”æ‹·è´åˆ°CONçš„orderä¸­
  */
 typedef struct _OrderData
 {
-    OrderState_t    statOrder;  //¼ÇÂ¼¶©µ¥×´Ì¬
-    SegTimeState_e statOrderSeg; //¼ÇÂ¼¶©µ¥Ê±¼ä¶Î×´Ì¬
-    uint8_t pos;//ÔÚÊ±¶ÎÖĞµÄÎ»ÖÃ£¬ÓÃÓÚÓënow»ñµÃµÄpos½øĞĞ¶Ô±È
+    OrderState_t    statOrder;  //è®°å½•è®¢å•çŠ¶æ€
+    SegTimeState_e statOrderSeg; //è®°å½•è®¢å•æ—¶é—´æ®µçŠ¶æ€
+    uint8_t pos;//åœ¨æ—¶æ®µä¸­çš„ä½ç½®ï¼Œç”¨äºä¸nowè·å¾—çš„posè¿›è¡Œå¯¹æ¯”
 
-    uint8_t ucCardID[defCardIDLength]; //¿¨ºÅ//ÔÚtaskrfidÖĞ¸³Öµ            2
-    uint8_t ucAccountStatus;    //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 2:Ç··Ñ 0£ºÎ´×¢²á¿¨
-    uint8_t ucCardStatus;      //0 ÆÕÍ¨ÓÃ»§, 1 °×Ãûµ¥ÓÃ»§, 2 ºÚÃûµ¥ÓÃ»§
-    double  dBalance;           //Óà¶î                                        3
+    uint8_t ucCardID[defCardIDLength]; //å¡å·//åœ¨taskrfidä¸­èµ‹å€¼            2
+    uint8_t ucAccountStatus;    //å¸æˆ·çŠ¶æ€ 1ï¼šæ³¨å†Œå¡ 2:æ¬ è´¹ 0ï¼šæœªæ³¨å†Œå¡
+    uint8_t ucCardStatus;      //0 æ™®é€šç”¨æˆ·, 1 ç™½åå•ç”¨æˆ·, 2 é»‘åå•ç”¨æˆ·
+    double  dBalance;           //ä½™é¢                                        3
     uint8_t ucCONID;            //4
-    //´´½¨Ê±
-    uint8_t strOrderSN[defOrderSNLength]; //½»Ò×Á÷Ë®ºÅ       DBIdx 1
+    //åˆ›å»ºæ—¶
+    uint8_t strOrderSN[defOrderSNLength]; //äº¤æ˜“æµæ°´å·       DBIdx 1
 
-    time_t  tStartTime;         //Æô¶¯³äµçÊ±¼ä           5
-    uint8_t ucStartType;        //4 ÓĞ¿¨ 5 ÎŞ¿¨         6
-    double  dLimitFee;          //³äµç½ØÖÁ½ğ¶î         7
+    time_t  tStartTime;         //å¯åŠ¨å……ç”µæ—¶é—´           5
+    uint8_t ucStartType;        //4 æœ‰å¡ 5 æ— å¡         6
+    double  dLimitFee;          //å……ç”µæˆªè‡³é‡‘é¢         7
     double  dStartPower;        //8
-    //³äµç¹ı³Ì
-    double  dTotalPower;        //×ÜµçÁ¿
-    double  dTotalPowerFee;     //×Üµç·Ñ
-    double  dTotalServFee;   //×Ü·şÎñ·Ñ
-    double  dTotalFee;          //×Ü·ÑÓÃ
-    ChargeSegStatus_t chargeSegStatus_sharp[5];     //¼â¹ı³Ì²úÉúĞÅÏ¢
-    ChargeSegStatus_t chargeSegStatus_peak[5];      //·å
-    ChargeSegStatus_t chargeSegStatus_shoulder[5];  //Æ½
-    ChargeSegStatus_t chargeSegStatus_off_peak[5];  //¹È
-    double dTotalPower_sharp;   //¼â×ÜµçÁ¿
-    double dTotalPowerFee_sharp;//¼â×Üµç·Ñ
-    double dTotalServFee_sharp; //¼â×Ü·şÎñ·Ñ
-    uint32_t ulTotalTime_sharp;    //¼â³äµçÊ±¼ä
+    //å……ç”µè¿‡ç¨‹
+    double  dTotalPower;        //æ€»ç”µé‡
+    double  dTotalPowerFee;     //æ€»ç”µè´¹
+    double  dTotalServFee;   //æ€»æœåŠ¡è´¹
+    double  dTotalFee;          //æ€»è´¹ç”¨
+    ChargeSegStatus_t chargeSegStatus_sharp[5];     //å°–è¿‡ç¨‹äº§ç”Ÿä¿¡æ¯
+    ChargeSegStatus_t chargeSegStatus_peak[5];      //å³°
+    ChargeSegStatus_t chargeSegStatus_shoulder[5];  //å¹³
+    ChargeSegStatus_t chargeSegStatus_off_peak[5];  //è°·
+    double dTotalPower_sharp;   //å°–æ€»ç”µé‡
+    double dTotalPowerFee_sharp;//å°–æ€»ç”µè´¹
+    double dTotalServFee_sharp; //å°–æ€»æœåŠ¡è´¹
+    uint32_t ulTotalTime_sharp;    //å°–å……ç”µæ—¶é—´
 
     double dTotalPower_peak;
     double dTotalPowerFee_peak;
@@ -119,10 +119,11 @@ typedef struct _OrderData
     double dTotalPowerFee_off_peak;
     double dTotalServFee_off_peak;
     uint32_t ulTotalTime_off_peak;
-    //Í£Ö¹Ê±
-    uint8_t         ucPayType;  //Ö§¸¶·½Ê½
-    uint8_t         ucStopType; //Í£Ö¹ÀàĞÍ
-    time_t          tStopTime;  //Í£Ö¹Ê±¼ä          6
+    //åœæ­¢æ—¶
+    uint8_t         ucPayType;  //æ”¯ä»˜æ–¹å¼
+    uint8_t         ucPayStatus;//ç»“ç®—çŠ¶æ€ 0:æœªç»“ç®—  1:å·²ç»“ç®—
+    uint8_t         ucStopType; //åœæ­¢ç±»å‹
+    time_t          tStopTime;  //åœæ­¢æ—¶é—´          6
 
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;

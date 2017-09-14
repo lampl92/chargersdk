@@ -19,7 +19,7 @@
 #define defOrderSNLength        32
 #define defSoftVerLength        32
 
-/* µ¥Î»£ºms */
+/* å•ä½ï¼šms */
 #define defMonitorTempCyc           5000
 #define defMonitorLockStateCyc      1000
 #define defMonitorPlugStateCyc      50
@@ -29,21 +29,22 @@
 #define defMonitorDataRefreshCyc    1000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
-#define defDiagCurrInitCyc          500   //ÑÓÊ±Æô¶¯µçÁ÷¼ì²â
+#define defDiagCurrInitCyc          500       //å»¶æ—¶å¯åŠ¨ç”µæµæ£€æµ‹
 #define defDiagCurrDummyCyc         2000
-#define defChargeAntiShakeCyc       1000    //²åÇ¹·À¶¶¼ì²â£¬×´Ì¬1'->×´Ì¬1Ê±µÄÑÓÊ±
+#define defChargeAntiShakeCyc       1000      //æ’æªé˜²æŠ–æ£€æµ‹ï¼ŒçŠ¶æ€1'->çŠ¶æ€1æ—¶çš„å»¶æ—¶
 #define defRelayDelay               500
-#define defRemoteHeartbeatCyc       15000    //ĞÄÌø
-#define defRemoteStatusCyc          120000    //×´Ì¬ÉÏ±¨
-#define defRemoteRTDataCyc          10000    //³äµçÊµÊ±Êı¾İ
+#define defRemoteHeartbeatCyc       15000     //å¿ƒè·³
+#define defRemoteStatusCyc          120000    //çŠ¶æ€ä¸ŠæŠ¥
+#define defRemoteRTDataCyc          10000     //å……ç”µå®æ—¶æ•°æ®
 
-#define defMonitorTempPeriod        10  //(¡æ)
+#define defMonitorTempPeriod        10  //(â„ƒ)
 #define defMonitorVoltPeriod        10  //(V)
-#define defMonitorCurrPeriod        1.1 //(±¶)           //3.2 //(A)
+#define defMonitorCurrPeriod        1.1 //(å€)           //when rate is 32 then up is 32 + 3.2 //(A)
 #define defMonitorFreqLower         50  //(Hz)
 #define defMonitorFreqUpper         50  //(Hz)
 #define defMonitorFreqPeriod        1   //(Hz)
 
-
+#define defCfgOrderMaxItem          100
+#define defCfgLogMaxItem            300
 
 #endif /* EVSE_CONFIG_H_INCLUDED */

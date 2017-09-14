@@ -35,7 +35,7 @@ error:
 	$(error Invalid configuration, please check your inputs)
 endif
 
-SOURCEFILES := ../../../src/app/cfg_parse.c ../../../src/app/connector.c ../../../src/app/errorcode.c ../../../src/app/EVSE.c ../../../src/app/evse_globals.c ../../../src/app/interface_charge.c ../../../src/app/interface_data.c ../../../src/app/interface_diag.c ../../../src/app/interface_monitor.c ../../../src/app/interface_remote.c ../../../src/app/interface_rfid.c ../../../src/app/libEcharge/ech_globals.c ../../../src/app/libEcharge/ech_protocol.c ../../../src/app/libEcharge/ech_protocol_proc.c ../../../src/app/main.c ../../../src/app/order.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/sysinit.c ../../../src/app/taskcharge.c ../../../src/app/taskcreate.c ../../../src/app/taskdata.c ../../../src/app/taskdiag.c ../../../src/app/taskmonitor.c ../../../src/app/taskOTA.c ../../../src/app/taskremote.c ../../../src/app/taskrfid.c ../../../src/app/timercallback.c ../../../src/cli/cli_aes.c ../../../src/cli/cli_app.c ../../../src/cli/cli_crc.c ../../../src/cli/cli_database.c ../../../src/cli/cli_evse.c ../../../src/cli/cli_fatfs.c ../../../src/cli/cli_gprs.c ../../../src/cli/cli_json.c ../../../src/cli/cli_main.c ../../../src/cli/cli_rtos.c ../../../src/drivers/bsp/src/bsp.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_ftl.c ../../../src/drivers/bsp/src/bsp_nand_hw.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_timer.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_uart_queue.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/electric_energy_meter.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/led_control.c ../../../src/drivers/bsp/src/myiic.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/ST_LIS2DH12.c ../../../src/drivers/bsp/src/user_app.c ../../../src/drivers/device/src/buzzer.c ../../../src/drivers/device/src/card_m1.c ../../../src/drivers/device/src/led.c ../../../src/drivers/device/src/modem.c ../../../src/drivers/device/src/RFIDReader_mt626.c ../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_msp.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/hmi/HMI_Start.c ../../../src/hmi/lcd/lcddrv.c ../../../src/hmi/lcd/ltdc.c ../../../src/hmi/lcd/touch.c ../../../src/hmi/PutOut_Alarm_Log.c ../../../src/hmi/PutOut_Card_Info.c ../../../src/hmi/PutOut_Charge_Done.c ../../../src/hmi/PutOut_Charging.c ../../../src/hmi/PutOut_Home.c ../../../src/hmi/PutOut_Manager_AlarmLog.c ../../../src/hmi/PutOut_Manager_InfoAnalog.c ../../../src/hmi/PutOut_Manager_InfoStatus.c ../../../src/hmi/PutOut_Manager_SysSet.c ../../../src/hmi/PutOut_RegisterDisp.c ../../../src/hmi/PutOut_SelAOrB.c ../../../src/hmi/PutOut_Skin_Keyboard.c ../../../src/hmi/pyinput.c ../../../src/hmi/qrencode/src/bitstream.c ../../../src/hmi/qrencode/src/mask.c ../../../src/hmi/qrencode/src/mmask.c ../../../src/hmi/qrencode/src/mqrspec.c ../../../src/hmi/qrencode/src/qrencode.c ../../../src/hmi/qrencode/src/qrspec.c ../../../src/hmi/qrencode/src/QR_Encode.c ../../../src/hmi/qrencode/src/rscode.c ../../../src/hmi/qrencode/src/split.c ../../../src/hmi/Touch_Disp_Module.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/cJSON/s2j.c ../../../src/middlewares/fatfs/diskdrv/ff_gen_drv.c ../../../src/middlewares/fatfs/diskdrv/nand_diskio.c ../../../src/middlewares/fatfs/src/diskio.c ../../../src/middlewares/fatfs/src/ff.c ../../../src/middlewares/fatfs/src/ff_ex.c ../../../src/middlewares/fatfs/src/option/syscall.c ../../../src/middlewares/fatfs/src/option/unicode.c ../../../src/middlewares/gdsl-1.8/src/gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/gdsl_perm.c ../../../src/middlewares/gdsl-1.8/src/gdsl_queue.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c ../../../src/middlewares/LittleD/src/dbmacros.c ../../../src/middlewares/LittleD/src/dbindex/dbindex.c ../../../src/middlewares/LittleD/src/dblogic/compare_tuple.c ../../../src/middlewares/LittleD/src/dblogic/eet.c ../../../src/middlewares/LittleD/src/dbmm/db_query_mm.c ../../../src/middlewares/LittleD/src/dbobjects/relation.c ../../../src/middlewares/LittleD/src/dbobjects/tuple.c ../../../src/middlewares/LittleD/src/dbops/aggregate.c ../../../src/middlewares/LittleD/src/dbops/db_ops.c ../../../src/middlewares/LittleD/src/dbops/ntjoin.c ../../../src/middlewares/LittleD/src/dbops/osijoin.c ../../../src/middlewares/LittleD/src/dbops/project.c ../../../src/middlewares/LittleD/src/dbops/scan.c ../../../src/middlewares/LittleD/src/dbops/select.c ../../../src/middlewares/LittleD/src/dbops/sort.c ../../../src/middlewares/LittleD/src/dboutput/query_output.c ../../../src/middlewares/LittleD/src/dbparser/dbcreate.c ../../../src/middlewares/LittleD/src/dbparser/dbinsert.c ../../../src/middlewares/LittleD/src/dbparser/dblexer.c ../../../src/middlewares/LittleD/src/dbparser/dbparseexpr.c ../../../src/middlewares/LittleD/src/dbparser/dbparser.c ../../../src/middlewares/LittleD/src/dbstorage/dbstorage.c ../../../src/middlewares/STemWin/BMP/bmpdisplay.c ../../../src/middlewares/STemWin/Config/GUIConf.c ../../../src/middlewares/STemWin/Config/GUIDRV_Template.c ../../../src/middlewares/STemWin/Config/LCDConf_FlexColor_Template.c ../../../src/middlewares/STemWin/Config/LCDConf_Lin_Template.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_FreeRTOS.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_Touch_Analog.c ../../../src/middlewares/STemWin/XBF/xbffontcreate.c ../../../src/middlewares/tiny-AES128-C/aes.c ../../../src/middlewares/tiny-AES128-C/enc_dec.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/xprintf.c ../../../src/net/mbedTLS/library/base64.c ../../../src/net/mbedTLS/library/platform.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_stm32f429xx.c
+SOURCEFILES := ../../../src/app/cfg_order.c ../../../src/app/cfg_parse.c ../../../src/app/connector.c ../../../src/app/errorcode.c ../../../src/app/EVSE.c ../../../src/app/evse_globals.c ../../../src/app/interface_charge.c ../../../src/app/interface_data.c ../../../src/app/interface_diag.c ../../../src/app/interface_monitor.c ../../../src/app/interface_remote.c ../../../src/app/interface_rfid.c ../../../src/app/libEcharge/ech_globals.c ../../../src/app/libEcharge/ech_protocol.c ../../../src/app/libEcharge/ech_protocol_proc.c ../../../src/app/log_evse.c ../../../src/app/main.c ../../../src/app/order.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/sysinit.c ../../../src/app/taskcharge.c ../../../src/app/taskcreate.c ../../../src/app/taskdata.c ../../../src/app/taskdiag.c ../../../src/app/taskmonitor.c ../../../src/app/taskOTA.c ../../../src/app/taskremote.c ../../../src/app/taskrfid.c ../../../src/app/timercallback.c ../../../src/cli/cli_aes.c ../../../src/cli/cli_app.c ../../../src/cli/cli_crc.c ../../../src/cli/cli_database.c ../../../src/cli/cli_evse.c ../../../src/cli/cli_fatfs.c ../../../src/cli/cli_gprs.c ../../../src/cli/cli_json.c ../../../src/cli/cli_main.c ../../../src/cli/cli_rtos.c ../../../src/drivers/bsp/src/bsp.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_ftl.c ../../../src/drivers/bsp/src/bsp_nand_hw.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_timer.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_uart_queue.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/electric_energy_meter.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/led_control.c ../../../src/drivers/bsp/src/myiic.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/ST_LIS2DH12.c ../../../src/drivers/bsp/src/user_app.c ../../../src/drivers/device/src/buzzer.c ../../../src/drivers/device/src/card_m1.c ../../../src/drivers/device/src/led.c ../../../src/drivers/device/src/modem.c ../../../src/drivers/device/src/RFIDReader_mt626.c ../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_msp.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/hmi/HMI_Start.c ../../../src/hmi/lcd/lcddrv.c ../../../src/hmi/lcd/ltdc.c ../../../src/hmi/lcd/touch.c ../../../src/hmi/PutOut_Alarm_Log.c ../../../src/hmi/PutOut_Card_Info.c ../../../src/hmi/PutOut_Charge_Done.c ../../../src/hmi/PutOut_Charging.c ../../../src/hmi/PutOut_Home.c ../../../src/hmi/PutOut_Manager_AlarmLog.c ../../../src/hmi/PutOut_Manager_InfoAnalog.c ../../../src/hmi/PutOut_Manager_InfoStatus.c ../../../src/hmi/PutOut_Manager_SysSet.c ../../../src/hmi/PutOut_RegisterDisp.c ../../../src/hmi/PutOut_SelAOrB.c ../../../src/hmi/PutOut_Skin_Keyboard.c ../../../src/hmi/pyinput.c ../../../src/hmi/qrencode/src/bitstream.c ../../../src/hmi/qrencode/src/mask.c ../../../src/hmi/qrencode/src/mmask.c ../../../src/hmi/qrencode/src/mqrspec.c ../../../src/hmi/qrencode/src/qrencode.c ../../../src/hmi/qrencode/src/qrspec.c ../../../src/hmi/qrencode/src/QR_Encode.c ../../../src/hmi/qrencode/src/rscode.c ../../../src/hmi/qrencode/src/split.c ../../../src/hmi/Touch_Disp_Module.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/cJSON/s2j.c ../../../src/middlewares/fatfs/diskdrv/ff_gen_drv.c ../../../src/middlewares/fatfs/diskdrv/nand_diskio.c ../../../src/middlewares/fatfs/src/diskio.c ../../../src/middlewares/fatfs/src/ff.c ../../../src/middlewares/fatfs/src/ff_ex.c ../../../src/middlewares/fatfs/src/option/syscall.c ../../../src/middlewares/fatfs/src/option/unicode.c ../../../src/middlewares/gdsl-1.8/src/gdsl_hash.c ../../../src/middlewares/gdsl-1.8/src/gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/gdsl_perm.c ../../../src/middlewares/gdsl-1.8/src/gdsl_queue.c ../../../src/middlewares/gdsl-1.8/src/gdsl_sort.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c ../../../src/middlewares/STemWin/BMP/bmpdisplay.c ../../../src/middlewares/STemWin/Config/GUIConf.c ../../../src/middlewares/STemWin/Config/GUIDRV_Template.c ../../../src/middlewares/STemWin/Config/LCDConf_FlexColor_Template.c ../../../src/middlewares/STemWin/Config/LCDConf_Lin_Template.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_FreeRTOS.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_Touch_Analog.c ../../../src/middlewares/STemWin/XBF/xbffontcreate.c ../../../src/middlewares/tiny-AES128-C/aes.c ../../../src/middlewares/tiny-AES128-C/enc_dec.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/xprintf.c ../../../src/net/mbedTLS/library/base64.c ../../../src/net/mbedTLS/library/platform.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_stm32f429xx.c
 EXTERNAL_LIBS := ../../../src/middlewares/STemWin/Lib/STemWin532_CM4_OS_GCC.a
 EXTERNAL_LIBS_COPIED := $(foreach lib, $(EXTERNAL_LIBS),$(BINARYDIR)/$(notdir $(lib)))
 
@@ -181,6 +181,10 @@ $(BINARYDIR)/%.o : %.cxx $(all_make_files) |$(BINARYDIR)
 #VisualGDB: GeneratedRules				#<--- All lines below are auto-generated. Remove this line to suppress auto-generation of file rules.
 
 
+$(BINARYDIR)/cfg_order.o : ../../../src/app/cfg_order.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/cfg_parse.o : ../../../src/app/cfg_parse.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -234,6 +238,10 @@ $(BINARYDIR)/ech_protocol.o : ../../../src/app/libEcharge/ech_protocol.c $(all_m
 
 
 $(BINARYDIR)/ech_protocol_proc.o : ../../../src/app/libEcharge/ech_protocol_proc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/log_evse.o : ../../../src/app/log_evse.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -681,6 +689,10 @@ $(BINARYDIR)/unicode.o : ../../../src/middlewares/fatfs/src/option/unicode.c $(a
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/gdsl_hash.o : ../../../src/middlewares/gdsl-1.8/src/gdsl_hash.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/gdsl_list.o : ../../../src/middlewares/gdsl-1.8/src/gdsl_list.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -693,99 +705,15 @@ $(BINARYDIR)/gdsl_queue.o : ../../../src/middlewares/gdsl-1.8/src/gdsl_queue.c $
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/gdsl_sort.o : ../../../src/middlewares/gdsl-1.8/src/gdsl_sort.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/_gdsl_list.o : ../../../src/middlewares/gdsl-1.8/src/_gdsl_list.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
 $(BINARYDIR)/_gdsl_node.o : ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbmacros.o : ../../../src/middlewares/LittleD/src/dbmacros.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbindex.o : ../../../src/middlewares/LittleD/src/dbindex/dbindex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/compare_tuple.o : ../../../src/middlewares/LittleD/src/dblogic/compare_tuple.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/eet.o : ../../../src/middlewares/LittleD/src/dblogic/eet.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/db_query_mm.o : ../../../src/middlewares/LittleD/src/dbmm/db_query_mm.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/relation.o : ../../../src/middlewares/LittleD/src/dbobjects/relation.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/tuple.o : ../../../src/middlewares/LittleD/src/dbobjects/tuple.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/aggregate.o : ../../../src/middlewares/LittleD/src/dbops/aggregate.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/db_ops.o : ../../../src/middlewares/LittleD/src/dbops/db_ops.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/ntjoin.o : ../../../src/middlewares/LittleD/src/dbops/ntjoin.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/osijoin.o : ../../../src/middlewares/LittleD/src/dbops/osijoin.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/project.o : ../../../src/middlewares/LittleD/src/dbops/project.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/scan.o : ../../../src/middlewares/LittleD/src/dbops/scan.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/select.o : ../../../src/middlewares/LittleD/src/dbops/select.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/sort.o : ../../../src/middlewares/LittleD/src/dbops/sort.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/query_output.o : ../../../src/middlewares/LittleD/src/dboutput/query_output.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbcreate.o : ../../../src/middlewares/LittleD/src/dbparser/dbcreate.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbinsert.o : ../../../src/middlewares/LittleD/src/dbparser/dbinsert.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dblexer.o : ../../../src/middlewares/LittleD/src/dbparser/dblexer.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbparseexpr.o : ../../../src/middlewares/LittleD/src/dbparser/dbparseexpr.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbparser.o : ../../../src/middlewares/LittleD/src/dbparser/dbparser.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/dbstorage.o : ../../../src/middlewares/LittleD/src/dbstorage/dbstorage.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 

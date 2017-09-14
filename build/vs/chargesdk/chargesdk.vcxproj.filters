@@ -213,81 +213,6 @@
     <Filter Include="Header files\middlewares\gdsl-1.8\src\examples">
       <UniqueIdentifier>{16bab13c-602f-40ec-ab07-235af80929b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\jsmn">
-      <UniqueIdentifier>{26c49adb-1c9b-413b-a5b9-890012ad5549}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\jsmn\test">
-      <UniqueIdentifier>{e72332cd-ae67-485b-805e-a42a4a356bf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD">
-      <UniqueIdentifier>{5dd9288d-32e1-4e28-b9d0-ec879cb313d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src">
-      <UniqueIdentifier>{95eef148-63e0-41e7-8237-13b26bf7b987}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD">
-      <UniqueIdentifier>{86f23c8e-8496-493c-a9e5-5d5328f83444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src">
-      <UniqueIdentifier>{ef58b707-8083-483c-8efb-f8c179d11680}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbindex">
-      <UniqueIdentifier>{9ddebbe4-9e22-42cb-831a-7508277ba420}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbindex">
-      <UniqueIdentifier>{5f7a8c24-87bd-4d55-ad79-a1c0d009b9dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dblogic">
-      <UniqueIdentifier>{4e379649-9bcc-4005-99e9-b20040be8763}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dblogic">
-      <UniqueIdentifier>{9f5bcfbd-bb2b-4c75-844f-3b4d4bc80262}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbmm">
-      <UniqueIdentifier>{65f03f91-3df7-4816-ab58-6646a93b3d61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbmm">
-      <UniqueIdentifier>{516842fe-13ab-4252-b148-9e8b2a09597e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbobjects">
-      <UniqueIdentifier>{3098de44-2c58-4ab4-8682-4394ba473920}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbobjects">
-      <UniqueIdentifier>{0f9aa9ef-9616-49cf-8926-7e6342583e64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbops">
-      <UniqueIdentifier>{c9c09253-752d-4a78-a612-e1e427d7d1bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbops">
-      <UniqueIdentifier>{b822e6a4-d13d-4852-8caf-290a0284ad46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dboutput">
-      <UniqueIdentifier>{aafa0388-fa45-4c0c-b6a9-78966f7e1e84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dboutput">
-      <UniqueIdentifier>{03a3111c-d98d-4dd7-a68a-661e163d6250}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbparser">
-      <UniqueIdentifier>{361a719a-a33b-47f9-8404-00c0854a5ff3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbparser">
-      <UniqueIdentifier>{bd1a7ec8-1113-4852-bf52-8f35f33d4eaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\LittleD\src\dbstorage">
-      <UniqueIdentifier>{a37d802b-30cb-4b39-b28c-768d6ec1610f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\dbstorage">
-      <UniqueIdentifier>{61ffeb50-d5fd-44db-b145-1241815970e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\include">
-      <UniqueIdentifier>{31ffeaca-94ee-4707-b70a-9cccad30a097}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\unit_tests">
-      <UniqueIdentifier>{7a214357-b2e5-4482-9916-dae283b1860f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\LittleD\src\utils">
-      <UniqueIdentifier>{13cfc0a0-420a-4fce-8c82-d13949cc0680}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\middlewares\minunit">
       <UniqueIdentifier>{e589280b-3785-4347-a643-017b67a63dbe}</UniqueIdentifier>
     </Filter>
@@ -1520,72 +1445,6 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c">
       <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbmacros.c">
-      <Filter>Source files\middlewares\LittleD\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex.c">
-      <Filter>Source files\middlewares\LittleD\src\dbindex</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.c">
-      <Filter>Source files\middlewares\LittleD\src\dblogic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dblogic\eet.c">
-      <Filter>Source files\middlewares\LittleD\src\dblogic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.c">
-      <Filter>Source files\middlewares\LittleD\src\dbmm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbobjects\relation.c">
-      <Filter>Source files\middlewares\LittleD\src\dbobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbobjects\tuple.c">
-      <Filter>Source files\middlewares\LittleD\src\dbobjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\aggregate.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\ntjoin.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\osijoin.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\project.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\scan.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\select.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\sort.c">
-      <Filter>Source files\middlewares\LittleD\src\dbops</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dboutput\query_output.c">
-      <Filter>Source files\middlewares\LittleD\src\dboutput</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbcreate.c">
-      <Filter>Source files\middlewares\LittleD\src\dbparser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbinsert.c">
-      <Filter>Source files\middlewares\LittleD\src\dbparser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dblexer.c">
-      <Filter>Source files\middlewares\LittleD\src\dbparser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.c">
-      <Filter>Source files\middlewares\LittleD\src\dbparser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparser.c">
-      <Filter>Source files\middlewares\LittleD\src\dbparser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.c">
-      <Filter>Source files\middlewares\LittleD\src\dbstorage</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
       <Filter>Source files\middlewares\STemWin\BMP</Filter>
     </ClCompile>
@@ -1672,6 +1531,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c">
       <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_hash.c">
+      <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.c">
+      <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\cfg_order.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\log_evse.c">
+      <Filter>Source files\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2820,126 +2691,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h">
       <Filter>Header files\middlewares\gdsl-1.8\src\examples</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\jsmn.h">
-      <Filter>Header files\middlewares\jsmn</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\test.h">
-      <Filter>Header files\middlewares\jsmn\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\testutil.h">
-      <Filter>Header files\middlewares\jsmn\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\arduinodebug.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dberror.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbmacros.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\db_ctconf.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\db_types.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\mainpage.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\pstdint.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\ref.h">
-      <Filter>Header files\middlewares\LittleD\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex.h">
-      <Filter>Header files\middlewares\LittleD\src\dbindex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex_types.h">
-      <Filter>Header files\middlewares\LittleD\src\dbindex</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.h">
-      <Filter>Header files\middlewares\LittleD\src\dblogic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\db_aggr_func_codes.h">
-      <Filter>Header files\middlewares\LittleD\src\dblogic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\eet.h">
-      <Filter>Header files\middlewares\LittleD\src\dblogic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.h">
-      <Filter>Header files\middlewares\LittleD\src\dbmm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbobjects\relation.h">
-      <Filter>Header files\middlewares\LittleD\src\dbobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbobjects\tuple.h">
-      <Filter>Header files\middlewares\LittleD\src\dbobjects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\aggregate.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops_types.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\ntjoin.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\osijoin.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\project.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\scan.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\select.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\sort.h">
-      <Filter>Header files\middlewares\LittleD\src\dbops</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dboutput\query_output.h">
-      <Filter>Header files\middlewares\LittleD\src\dboutput</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbcreate.h">
-      <Filter>Header files\middlewares\LittleD\src\dbparser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbinsert.h">
-      <Filter>Header files\middlewares\LittleD\src\dbparser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dblexer.h">
-      <Filter>Header files\middlewares\LittleD\src\dbparser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.h">
-      <Filter>Header files\middlewares\LittleD\src\dbparser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparser.h">
-      <Filter>Header files\middlewares\LittleD\src\dbparser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h">
-      <Filter>Header files\middlewares\LittleD\src\dbstorage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbstorage\SD_c_iface.h">
-      <Filter>Header files\middlewares\LittleD\src\dbstorage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\include\debug.h">
-      <Filter>Header files\middlewares\LittleD\src\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\unit_tests\CuTest.h">
-      <Filter>Header files\middlewares\LittleD\src\unit_tests</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\utils\cfs_init_test_relations.h">
-      <Filter>Header files\middlewares\LittleD\src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\utils\gen_bench_relations.h">
-      <Filter>Header files\middlewares\LittleD\src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
       <Filter>Header files\middlewares\minunit</Filter>

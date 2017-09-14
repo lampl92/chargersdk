@@ -14,8 +14,8 @@
 #include "gdsl_perm.h"
 #include <time.h>
 #include "modem.h"
-#include "dbparser/dbparser.h"
-#include "dboutput/query_output.h"
+#include "stringName.h" 
+#include "cfg_order.h"
 
 void cli_modeminfo_fnt(int argc, char **argv)
 {
@@ -245,6 +245,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
 
 
 extern ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder);
+extern int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end);
 void cli_evseorder_fnt(int argc, char **argv)
 {
     CON_t *pCON;
@@ -255,16 +256,9 @@ void cli_evseorder_fnt(int argc, char **argv)
     time_t now_dummy;
     int id;
 
-    char memseg[1024];
-    db_query_mm_t mm;
-    db_op_base_t* root;
-
     if(strcmp(argv[1], "--all") == 0 || strcmp(argv[1], "-a") == 0 )
     {
-        init_query_mm(&mm, memseg, 1024);
-        root = parse("SELECT * FROM OrderDB;", &mm);
-        printQuery(root, &mm);
-        closeexecutiontree(root, &mm);
+        testSearchOrderCfg(pathOrder, 0, 0);
         return;
     }
     else
@@ -273,62 +267,60 @@ void cli_evseorder_fnt(int argc, char **argv)
         {
             pCON = CONGetHandle(id);
 
-            now_dummy = 1500944498;//2017-07-25 09:01:38
+//            now_dummy = 1500944498;//2017-07-25 09:01:38
 //            now_dummy = 1500987698;//21 //跨天，同时段
-//            now_dummy = 1501141978;
+            now_dummy = 1501141978;
 //            now_dummy = 1501142404;//2017/7/27 16:0:4  //跨天，不同时段
             testmakeOrder(pCON, 0 , STATE_ORDER_TMP);
             testmakeOrder(pCON, now_dummy , STATE_ORDER_MAKE); //2017-07-25 09:01:38
             testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE); //2017-07-25 09:01:38
-            printf_safe("start time = %d\n", clock());
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38 22
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
-            printf_safe("end time = %d\n", clock());
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38 23
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38 24
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38 1
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38 2
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38 3
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38 4
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38 5
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38
-                vTaskDelay(1);
+//                vTaskDelay(1);
             }
 
             testmakeOrder(pCON, now_dummy+1 , STATE_ORDER_FINISH); //2017-07-25 17:01:39
@@ -541,7 +533,14 @@ void cli_evseorder_fnt(int argc, char **argv)
             ts = localtime (& pCON->order.tStopTime);
             strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
             printf_safe("停止时间:\t%s \n", buf);
-            OrderDBInsertItem(&(pCON->order));
+            printf_safe("add start time = %d\n", clock());
+            for (i = 0; i < 1; i++)
+            {
+                pCON->order.tStartTime = time(NULL) + i * 100;
+                AddOrderCfg(pathOrder, pCON, pechProto);
+            }
+            printf_safe("end time = %d\n", clock());
+            //OrderDBInsertItem(&(pCON->order));
             OrderInit(&(pCON->order));
         }
     }
@@ -645,6 +644,12 @@ void cli_evsestatus_fnt(int argc, char **argv)
         printf_safe("\n");
     }
 }
+
+extern int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end);
+void cli_evselog_fnt(int argc, char **argv)
+{
+    testSearchEVSELogByTime(pathEVSELog, 0, 0);
+}
 tinysh_cmd_t cli_protoinfo_cmd =
 {
     0,
@@ -689,4 +694,15 @@ tinysh_cmd_t cli_modeminfo_cmd =
     0,
     cli_modeminfo_fnt,
     "<cr>", 0, 0
+};
+tinysh_cmd_t cli_evselog_cmd =
+{
+    0,
+    "evselog",
+    "display evse log",
+    0,
+    cli_evselog_fnt,
+    "<cr>",
+    0,
+    0
 };

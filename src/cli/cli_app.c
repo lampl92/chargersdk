@@ -1,26 +1,48 @@
 #include "includes.h"
 #include "utils.h"
 #include <time.h>
+#include "interface.h"
 
 extern void testBnWList(void);
-
 void cli_hello_fnt(int argc, char **argv)
 {
-    uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
-    uint8_t strCardID[defCardIDLength * 2 + 1] = {0};
     int i;
-    uint64_t ulltest;
-    HexToStr(cardid, strCardID, 8);
-    printf_safe("test strCardID = %s", strCardID);
-
     printf_safe("\nhello world\n");
     printf_safe("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
     //testBnWList();
-    ulltest = (uint64_t)-1;
-    printf_safe("ull = %lld\n", ulltest);
+#if 0
+    CON_t *pCON;
+    pCON = CONGetHandle(0);
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REGISTER, 20, 3);//0
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_HEARTBEAT, 20, 3);//1
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_RESET, 20, 3);//2
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_STATUS, 20, 3);//3
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 20, 3);//4
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_RTDATA, 20, 3);//5
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);//6
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_SUCC, 20, 3);//7
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_FAIL, 20, 3);//8
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_POWERFEE, 20, 3);//14
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_SERVFEE, 20, 3);//15
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_CYC, 20, 3);//16
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_TIMESEG, 20, 3);//17
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_KEY, 20, 3);//18
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_SOFTVER, 20, 3);//19
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_QR, 20, 3);//21
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_BLACK, 20, 3);//22
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_WHITE, 20, 3);//23
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_BLACK, 20, 3);//24
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_WHITE, 20, 3);//25
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_START, 20, 3);//28
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_START_RES, 20, 3);//29
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 20, 3);//30
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_RTDATA, 20, 3);//31
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_FAULT, 20, 3);//32
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_WARNING, 20, 3);//33
+#endif
 }
 
 tinysh_cmd_t cli_hello_cmd =

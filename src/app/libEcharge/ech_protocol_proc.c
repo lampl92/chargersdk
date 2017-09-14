@@ -22,7 +22,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
     echCmdElem_t *pechCmdElem;
     gdsl_list_cursor_t cs;
     gdsl_list_cursor_t cr;
-    gdsl_list_cursor_t ccmd;
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
@@ -78,9 +77,19 @@ void vTaskRemoteCmdProc(void *pvParameters)
         }
 
         /* 遍历SendCmd */
-
+#if 0 //测试插入,不是正式代码
         gdsl_list_cursor_move_to_head (cs);
-        while(pechProtoElem = gdsl_list_cursor_get_content (cs))
+        while (pechProtoElem = gdsl_list_cursor_get_content(cs))
+        {
+            printf_safe("Send Sequence = %d\n", pechProtoElem->cmd_id);
+//            gdsl_list_cursor_delete(cs);
+            vTaskDelay(1000);
+            //continue;
+            gdsl_list_cursor_step_forward(cs);
+        }
+        printf_safe("**************************\n");
+#else
+        while((pechProtoElem = gdsl_list_cursor_get_content (cs)) == NULL)
         {
             /* 1. 判断协议是否发送 */
             if(pechProtoElem->status == 0)
@@ -89,48 +98,17 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
                 send_len = pechProtoElem->len;
                 xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
-                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
+                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 500);
                 //等不等得到都置1
                 pechProtoElem->status = 1;
-
             }
-           /* 2. 已发送，判断发送情况*/
+            /* 2. 已发送，判断发送情况*/
             if(pechProtoElem->status == 1)
             {
                 /* 判断命令字，
                    如果是请求命令，则等待主机回复
-                   如果是回复命令，则删除
+                   如果是回复命令，则直接删除
                 */
-                #if 0 //注释的这部分的思路以后用来检测UID
-                /** @todo (rgw#1#): 后期需要在这里比较协议UID，删除接受到的UID与发送UID相同的命令 */
-                if(xSemaphoreTake(pProto->pCMD[pechProtoElem->cmd_id]->xMutexCmd, 1000) == pdTRUE)
-                {
-                    ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
-                    gdsl_list_cursor_move_to_head (ccmd);
-                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
-                    {
-                        if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
-                        {
-                            gdsl_list_cursor_delete(cs);//请求命令收到主机回复, 删除命令
-                            break;
-                        }
-                        gdsl_list_cursor_step_forward (ccmd);
-                    }
-
-                    gdsl_list_cursor_move_to_head (ccmd);
-                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
-                    {
-                        if(pechCmdElem->status == 1)//命令在各条res函数中已经被读取并处理。
-                        {
-                            gdsl_list_cursor_delete(ccmd);
-                            continue;
-                        }
-                        gdsl_list_cursor_step_forward (ccmd);
-                    }
-                    gdsl_list_cursor_free(ccmd);
-                    xSemaphoreGive(pProto->xMutexCmd);
-                }
-                #endif
                 uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
                                                 defEventBitProtoCmdHandled,
                                                 pdTRUE, pdTRUE, 0);
@@ -144,7 +122,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     gdsl_list_cursor_delete(cs);
                     continue;
                 }
-
             }
 #if 1
             /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
@@ -159,7 +136,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
             /* 4. */
             gdsl_list_cursor_step_forward (cs);
         }
-
+#endif
 
         vTaskDelay(2000);
     }

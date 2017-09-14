@@ -11,12 +11,12 @@
 #include "cJSON.h"
 #include "cfg_parse.h"
 
-/** @brief ÅĞ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔÚÊ±¼ä¶ÎÄÚ
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ˜¯å¦åœ¨æ—¶é—´æ®µå†…
  *
  * @param now time_t
  * @param ucStart uint8_t
  * @param ucEnd uint8_t
- * @return uint8_t 1£ºÔÚÊ±¼ä¶ÎÄÚ£¬ 0£º²»ÔÚÊ±¼ä¶ÎÄÚ
+ * @return uint8_t 1ï¼šåœ¨æ—¶é—´æ®µå†…ï¼Œ 0ï¼šä¸åœ¨æ—¶é—´æ®µå†…
  *
  */
 static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
@@ -33,12 +33,12 @@ static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
     }
 }
 
-/** @brief ÅĞ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔÚ¼â·åÆ½¹ÈÄ³¸öÊ±¼ä¶ÎÖĞ
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ˜¯å¦åœ¨å°–å³°å¹³è°·æŸä¸ªæ—¶é—´æ®µä¸­
  *
  * @param now time_t
  * @param ucStart uint8_t
  * @param ucEnd uint8_t
- * @return uint8_t  1£ºÔÚÊ±¼ä¶ÎÖĞ  0£º²»ÔÚÊ±¼ä¶ÎÖĞ
+ * @return uint8_t  1ï¼šåœ¨æ—¶é—´æ®µä¸­  0ï¼šä¸åœ¨æ—¶é—´æ®µä¸­
  *
  */
 static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *pos)
@@ -58,11 +58,11 @@ static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *pos)
     return 0;
 }
 
-/** @brief ÅĞ¶Ïµ±Ç°Ê±¼äËùÔÚµÄ¼â·åÆ½¹È×´Ì¬
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ‰€åœ¨çš„å°–å³°å¹³è°·çŠ¶æ€
  *
  * @param now time_t
  * @param pProto echProtocol_t*
- * @param uint8_t pos* µ±Ç°Ê±¼äËùÊ±¼ä¶ÎÄÚÖÃ
+ * @param uint8_t pos* å½“å‰æ—¶é—´æ‰€æ—¶é—´æ®µå†…ç½®
  * @return SegTimeState_e
  *
  */
@@ -87,7 +87,7 @@ static SegTimeState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *
     }
 }
 
-/** @brief ×´Ì¬ÓëÊ±¶ÎÅĞ´¦Àí¡£×´Ì¬£º¼â·åÆ½¹È  Ê±¶Î£º×´Ì¬ÖĞµÄ5¸öÊ±¶Î
+/** @brief çŠ¶æ€ä¸æ—¶æ®µåˆ¤å¤„ç†ã€‚çŠ¶æ€ï¼šå°–å³°å¹³è°·  æ—¶æ®µï¼šçŠ¶æ€ä¸­çš„5ä¸ªæ—¶æ®µ
  *
  * @param now time_t
  * @param pCON CON_t*
@@ -99,31 +99,31 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     ChargeSegStatus_t *pChargeSegStatus;
     SegTimeState_e statSegTime;
     int i;
-    uint8_t pos = 0;//µ±Ç°Ê±¼äÔÚÊ±¶ÎÖĞµÄÎ»ÖÃ
+    uint8_t pos = 0;//å½“å‰æ—¶é—´åœ¨æ—¶æ®µä¸­çš„ä½ç½®
     statSegTime = STATE_SEG_IDLE;
-    double tmpTotalPower; //ÓÃÓÚ¼ÆËã¼â·åÆ½¹È×ÜµçÁ¿
-    uint32_t tmpTotalTime;  //ÓÃÓÚ¼ÆËã¼â·åÆ½¹È×Ü³äµçÊ±¼ä
+    double tmpTotalPower; //ç”¨äºè®¡ç®—å°–å³°å¹³è°·æ€»ç”µé‡
+    uint32_t tmpTotalTime;  //ç”¨äºè®¡ç®—å°–å³°å¹³è°·æ€»å……ç”µæ—¶é—´
 
     tmpTotalPower = 0;
     tmpTotalTime = 0;
-    /*1. ×´Ì¬ÅĞ¶Ï¡¢Ê±¶ÎÄÚÈİ´¦Àí*/
+    /*1. çŠ¶æ€åˆ¤æ–­ã€æ—¶æ®µå†…å®¹å¤„ç†*/
 
     switch(pCON->order.statOrderSeg)
     {
     case STATE_SEG_IDLE:
-        pCON->order.statOrderSeg = JudgeSegState(now, pechProto, &pos);//»ñÈ¡µ±Ç°ËùÔÚ×´Ì¬
-        pCON->order.pos = pos;//»ñÈ¡µ±Ç°ËùÔÚÊ±¶Î
+        pCON->order.statOrderSeg = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        pCON->order.pos = pos;//è·å–å½“å‰æ‰€åœ¨æ—¶æ®µ
         break;
     case STATE_SEG_SHARP:
-        statSegTime = JudgeSegState(now, pechProto, &pos);//»ñÈ¡µ±Ç°ËùÔÚ×´Ì¬
-        ///*×´Ì¬ »ò Ê±¶Î ·¢Éú×ª»»£¬´¦ÀíÉÏ´ÎÊ±¶ÎÄÚÈİ*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ÏàÍ¬×´Ì¬Ê±¶Î×ª»»Ö»ÓĞÔÚ 0 µãÊ±¿Ì·¢Éú
+        statSegTime = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        ///*çŠ¶æ€ æˆ– æ—¶æ®µ å‘ç”Ÿè½¬æ¢ï¼Œå¤„ç†ä¸Šæ¬¡æ—¶æ®µå†…å®¹*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ç›¸åŒçŠ¶æ€æ—¶æ®µè½¬æ¢åªæœ‰åœ¨ 0 ç‚¹æ—¶åˆ»å‘ç”Ÿ
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_sharp[pCON->order.pos]);
-            pChargeSegStatus->tEndTime = now; //µ±Ç°×ª»»Ê±¼ä¼´ÉÏ´Î½áÊøÊ±¼ä
+            pChargeSegStatus->tEndTime = now; //å½“å‰è½¬æ¢æ—¶é—´å³ä¸Šæ¬¡ç»“æŸæ—¶é—´
             pCON->order.statOrderSeg = statSegTime;
             pCON->order.pos = pos;
-            break;//×´Ì¬ÒÑ×ª»»£¬ÏÂÃæµÄÃ»±ØÒªÖ´ĞĞÁË
+            break;//çŠ¶æ€å·²è½¬æ¢ï¼Œä¸‹é¢çš„æ²¡å¿…è¦æ‰§è¡Œäº†
         }
         pChargeSegStatus = &(pCON->order.chargeSegStatus_sharp[pos]);
         if(pChargeSegStatus->tStartTime > 0)
@@ -132,23 +132,23 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
         }
         else
         {
-            //µÚÒ»´Î½øµ½Õâ¸öÊ±¶Î
-            pCON->order.pos = pos; //×´Ì¬×ª»»Ê±ÒÑ¾­¸³¹ıÖµÁË
+            //ç¬¬ä¸€æ¬¡è¿›åˆ°è¿™ä¸ªæ—¶æ®µ
+            pCON->order.pos = pos; //çŠ¶æ€è½¬æ¢æ—¶å·²ç»èµ‹è¿‡å€¼äº†
             pChargeSegStatus->tStartTime = now;
 //            pChargeSegStatus->dStartPower = pCON->order.dStartPower;
             pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_PEAK:
-        statSegTime = JudgeSegState(now, pechProto, &pos);//»ñÈ¡µ±Ç°ËùÔÚ×´Ì¬
-        ///*×´Ì¬ »ò Ê±¶Î ·¢Éú×ª»»£¬´¦ÀíÉÏ´ÎÊ±¶ÎÄÚÈİ*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ÏàÍ¬×´Ì¬Ê±¶Î×ª»»Ö»ÓĞÔÚ 0 µãÊ±¿Ì·¢Éú
+        statSegTime = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        ///*çŠ¶æ€ æˆ– æ—¶æ®µ å‘ç”Ÿè½¬æ¢ï¼Œå¤„ç†ä¸Šæ¬¡æ—¶æ®µå†…å®¹*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ç›¸åŒçŠ¶æ€æ—¶æ®µè½¬æ¢åªæœ‰åœ¨ 0 ç‚¹æ—¶åˆ»å‘ç”Ÿ
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_peak[pCON->order.pos]);
-            pChargeSegStatus->tEndTime = now; //µ±Ç°×ª»»Ê±¼ä¼´ÉÏ´Î½áÊøÊ±¼ä
+            pChargeSegStatus->tEndTime = now; //å½“å‰è½¬æ¢æ—¶é—´å³ä¸Šæ¬¡ç»“æŸæ—¶é—´
             pCON->order.statOrderSeg = statSegTime;
             pCON->order.pos = pos;
-            break;//×´Ì¬ÒÑ×ª»»£¬ÏÂÃæµÄÃ»±ØÒªÖ´ĞĞÁË
+            break;//çŠ¶æ€å·²è½¬æ¢ï¼Œä¸‹é¢çš„æ²¡å¿…è¦æ‰§è¡Œäº†
         }
         pChargeSegStatus = &(pCON->order.chargeSegStatus_peak[pos]);
         if(pChargeSegStatus->tStartTime > 0)
@@ -157,22 +157,22 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
         }
         else
         {
-            //µÚÒ»´Î½øµ½Õâ¸öÊ±¶Î
-            pCON->order.pos = pos; //×´Ì¬×ª»»Ê±ÒÑ¾­¸³¹ıÖµÁË
+            //ç¬¬ä¸€æ¬¡è¿›åˆ°è¿™ä¸ªæ—¶æ®µ
+            pCON->order.pos = pos; //çŠ¶æ€è½¬æ¢æ—¶å·²ç»èµ‹è¿‡å€¼äº†
             pChargeSegStatus->tStartTime = now;
             pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_SHOULDER:
-        statSegTime = JudgeSegState(now, pechProto, &pos);//»ñÈ¡µ±Ç°ËùÔÚ×´Ì¬
-        ///*×´Ì¬ »ò Ê±¶Î ·¢Éú×ª»»£¬´¦ÀíÉÏ´ÎÊ±¶ÎÄÚÈİ*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ÏàÍ¬×´Ì¬Ê±¶Î×ª»»Ö»ÓĞÔÚ 0 µãÊ±¿Ì·¢Éú
+        statSegTime = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        ///*çŠ¶æ€ æˆ– æ—¶æ®µ å‘ç”Ÿè½¬æ¢ï¼Œå¤„ç†ä¸Šæ¬¡æ—¶æ®µå†…å®¹*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ç›¸åŒçŠ¶æ€æ—¶æ®µè½¬æ¢åªæœ‰åœ¨ 0 ç‚¹æ—¶åˆ»å‘ç”Ÿ
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_shoulder[pCON->order.pos]);
-            pChargeSegStatus->tEndTime = now; //µ±Ç°×ª»»Ê±¼ä¼´ÉÏ´Î½áÊøÊ±¼ä
+            pChargeSegStatus->tEndTime = now; //å½“å‰è½¬æ¢æ—¶é—´å³ä¸Šæ¬¡ç»“æŸæ—¶é—´
             pCON->order.statOrderSeg = statSegTime;
             pCON->order.pos = pos;
-            break;//×´Ì¬ÒÑ×ª»»£¬ÏÂÃæµÄÃ»±ØÒªÖ´ĞĞÁË
+            break;//çŠ¶æ€å·²è½¬æ¢ï¼Œä¸‹é¢çš„æ²¡å¿…è¦æ‰§è¡Œäº†
         }
         pChargeSegStatus = &(pCON->order.chargeSegStatus_shoulder[pos]);
         if(pChargeSegStatus->tStartTime > 0)
@@ -181,22 +181,22 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
         }
         else
         {
-            //µÚÒ»´Î½øµ½Õâ¸öÊ±¶Î
-            pCON->order.pos = pos; //×´Ì¬×ª»»Ê±ÒÑ¾­¸³¹ıÖµÁË
+            //ç¬¬ä¸€æ¬¡è¿›åˆ°è¿™ä¸ªæ—¶æ®µ
+            pCON->order.pos = pos; //çŠ¶æ€è½¬æ¢æ—¶å·²ç»èµ‹è¿‡å€¼äº†
             pChargeSegStatus->tStartTime = now;
             pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
         break;
     case STATE_SEG_OFF_PEAK:
-        statSegTime = JudgeSegState(now, pechProto, &pos);//»ñÈ¡µ±Ç°ËùÔÚ×´Ì¬
-        ///*×´Ì¬ »ò Ê±¶Î ·¢Éú×ª»»£¬´¦ÀíÉÏ´ÎÊ±¶ÎÄÚÈİ*/
-        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ÏàÍ¬×´Ì¬Ê±¶Î×ª»»Ö»ÓĞÔÚ 0 µãÊ±¿Ì·¢Éú
+        statSegTime = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        ///*çŠ¶æ€ æˆ– æ—¶æ®µ å‘ç”Ÿè½¬æ¢ï¼Œå¤„ç†ä¸Šæ¬¡æ—¶æ®µå†…å®¹*/
+        if(pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ç›¸åŒçŠ¶æ€æ—¶æ®µè½¬æ¢åªæœ‰åœ¨ 0 ç‚¹æ—¶åˆ»å‘ç”Ÿ
         {
             pChargeSegStatus = &(pCON->order.chargeSegStatus_off_peak[pCON->order.pos]);
-            pChargeSegStatus->tEndTime = now; //µ±Ç°×ª»»Ê±¼ä¼´ÉÏ´Î½áÊøÊ±¼ä
+            pChargeSegStatus->tEndTime = now; //å½“å‰è½¬æ¢æ—¶é—´å³ä¸Šæ¬¡ç»“æŸæ—¶é—´
             pCON->order.statOrderSeg = statSegTime;
             pCON->order.pos = pos;
-            break;//×´Ì¬ÒÑ×ª»»£¬ÏÂÃæµÄÃ»±ØÒªÖ´ĞĞÁË
+            break;//çŠ¶æ€å·²è½¬æ¢ï¼Œä¸‹é¢çš„æ²¡å¿…è¦æ‰§è¡Œäº†
         }
         pChargeSegStatus = &(pCON->order.chargeSegStatus_off_peak[pos]);
         if(pChargeSegStatus->tStartTime > 0)
@@ -205,8 +205,8 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
         }
         else
         {
-            //µÚÒ»´Î½øµ½Õâ¸öÊ±¶Î
-            pCON->order.pos = pos; //×´Ì¬×ª»»Ê±ÒÑ¾­¸³¹ıÖµÁË
+            //ç¬¬ä¸€æ¬¡è¿›åˆ°è¿™ä¸ªæ—¶æ®µ
+            pCON->order.pos = pos; //çŠ¶æ€è½¬æ¢æ—¶å·²ç»èµ‹è¿‡å€¼äº†
             pChargeSegStatus->tStartTime = now;
             pChargeSegStatus->dStartPower = pCON->status.dChargingPower;
         }
@@ -216,10 +216,10 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     if(statOrder == STATE_ORDER_FINISH)
     {
-        pChargeSegStatus->tEndTime = now; //pChargeSegStatus Ö¸ÕëÒÑ¾­ÔÚÉÏÃæµÄswitchÖĞ»ñÈ¡£¬ËùÒÔÕâÌõÅĞ¶ÏÓï¾äÎ»ÖÃ²»ÄÜ¶¯
+        pChargeSegStatus->tEndTime = now; //pChargeSegStatus æŒ‡é’ˆå·²ç»åœ¨ä¸Šé¢çš„switchä¸­è·å–ï¼Œæ‰€ä»¥è¿™æ¡åˆ¤æ–­è¯­å¥ä½ç½®ä¸èƒ½åŠ¨
     }
 
-    /*2. »ã×ÜÊ±¶Î*/
+    /*2. æ±‡æ€»æ—¶æ®µ*/
 
     //sharp
     tmpTotalPower = 0;
@@ -227,7 +227,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     for(i = 0; i < pechProto->info.SegTime_sharp.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_sharp[i].dPower;
-        if(pCON->order.chargeSegStatus_sharp[i].tEndTime != 0) //±íÊ¾ÒÑ¾­½áÊøµÄÊ±¶Î
+        if(pCON->order.chargeSegStatus_sharp[i].tEndTime != 0) //è¡¨ç¤ºå·²ç»ç»“æŸçš„æ—¶æ®µ
         {
             tmpTotalTime += (pCON->order.chargeSegStatus_sharp[i].tEndTime - pCON->order.chargeSegStatus_sharp[i].tStartTime);
         }
@@ -243,7 +243,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     for(i = 0; i < pechProto->info.SegTime_peak.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_peak[i].dPower;
-        if(pCON->order.chargeSegStatus_peak[i].tEndTime != 0) //±íÊ¾ÒÑ¾­½áÊøµÄÊ±¶Î
+        if(pCON->order.chargeSegStatus_peak[i].tEndTime != 0) //è¡¨ç¤ºå·²ç»ç»“æŸçš„æ—¶æ®µ
         {
             tmpTotalTime += (pCON->order.chargeSegStatus_peak[i].tEndTime - pCON->order.chargeSegStatus_peak[i].tStartTime);
         }
@@ -259,7 +259,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     for(i = 0; i < pechProto->info.SegTime_shoulder.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_shoulder[i].dPower;
-        if(pCON->order.chargeSegStatus_shoulder[i].tEndTime != 0) //±íÊ¾ÒÑ¾­½áÊøµÄÊ±¶Î
+        if(pCON->order.chargeSegStatus_shoulder[i].tEndTime != 0) //è¡¨ç¤ºå·²ç»ç»“æŸçš„æ—¶æ®µ
         {
             tmpTotalTime += (pCON->order.chargeSegStatus_shoulder[i].tEndTime - pCON->order.chargeSegStatus_shoulder[i].tStartTime);
         }
@@ -275,7 +275,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     for(i = 0; i < pechProto->info.SegTime_off_peak.ucSegCont; i++)
     {
         tmpTotalPower += pCON->order.chargeSegStatus_off_peak[i].dPower;
-        if(pCON->order.chargeSegStatus_off_peak[i].tEndTime != 0) //±íÊ¾ÒÑ¾­½áÊøµÄÊ±¶Î
+        if(pCON->order.chargeSegStatus_off_peak[i].tEndTime != 0) //è¡¨ç¤ºå·²ç»ç»“æŸçš„æ—¶æ®µ
         {
             tmpTotalTime += (pCON->order.chargeSegStatus_off_peak[i].tEndTime - pCON->order.chargeSegStatus_off_peak[i].tStartTime);
         }
@@ -285,7 +285,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
     pCON->order.dTotalServFee_off_peak = tmpTotalPower * pechProto->info.dServFee_off_peak;
     pCON->order.ulTotalTime_off_peak = tmpTotalTime;
 
-    /*3. »ã×Ü×ÜµçÁ¿*/
+    /*3. æ±‡æ€»æ€»ç”µé‡*/
     pCON->order.dTotalPower = pCON->order.dTotalPower_sharp +
                                 pCON->order.dTotalPower_peak +
                                 pCON->order.dTotalPower_shoulder +
@@ -299,7 +299,7 @@ static void SegmentProc(time_t now, CON_t *pCON, OrderState_t statOrder)
                                 pCON->order.dTotalServFee_shoulder +
                                 pCON->order.dTotalServFee_off_peak;
 
-    /*4. ×Ü·ÑÓÃ*/
+    /*4. æ€»è´¹ç”¨*/
     pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
 
@@ -386,21 +386,22 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->statOrderSeg = STATE_SEG_IDLE;
     pOrder->pos = 0;
 
-    memset(pOrder->ucCardID, 0, defCardIDLength);//¿¨ºÅ//ÔÚtaskrfidÖĞ¸³Öµ
-    pOrder->ucAccountStatus = 0;    //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 0£ºÎ´×¢²á¿¨
+    memset(pOrder->ucCardID, 0, defCardIDLength);//å¡å·//åœ¨taskrfidä¸­èµ‹å€¼
+    pOrder->ucAccountStatus = 0;    //å¸æˆ·çŠ¶æ€ 1ï¼šæ³¨å†Œå¡ 0ï¼šæœªæ³¨å†Œå¡
     pOrder->ucCardStatus = 0;
-    pOrder->dBalance = 0;           //Óà¶î
+    pOrder->dBalance = 0;           //ä½™é¢
+    pOrder->ucCONID = 0;
 
     memset(pOrder->strOrderSN, '\0', defOrderSNLength);
-    pOrder->tStartTime = 0;                 //ÆğÊ¼Ê±¼ä
-    pOrder->ucStartType = 0;        //4ÓĞ¿¨ 5ÎŞ¿¨
-    pOrder->dLimitFee = 0;                    //³äµç½ğ¶îÏŞÖÆ
-    pOrder->dStartPower = 0;                //ÆğÊ¼µç±í¶ÁÊı
+    pOrder->tStartTime = 0;                   //èµ·å§‹æ—¶é—´
+    pOrder->ucStartType = 0;                  //4æœ‰å¡ 5æ— å¡
+    pOrder->dLimitFee = 0;                    //å……ç”µé‡‘é¢é™åˆ¶
+    pOrder->dStartPower = 0;                  //èµ·å§‹ç”µè¡¨è¯»æ•°
 
-    pOrder->dTotalPower = 0;                 //×ÜµçÁ¿
-    pOrder->dTotalPowerFee = 0;             //×Üµç·Ñ
-    pOrder->dTotalServFee = 0;               //·şÎñ·Ñ
-    pOrder->dTotalFee = 0;                //×Ü·ÑÓÃ
+    pOrder->dTotalPower = 0;                  //æ€»ç”µé‡
+    pOrder->dTotalPowerFee = 0;               //æ€»ç”µè´¹
+    pOrder->dTotalServFee = 0;                //æœåŠ¡è´¹
+    pOrder->dTotalFee = 0;                    //æ€»è´¹ç”¨
 
     for(i = 0; i < 5; i++)
     {
@@ -410,10 +411,10 @@ void OrderInit(OrderData_t *pOrder)
         SegTimeInit(&(pOrder->chargeSegStatus_off_peak[i]));
     }
 
-    pOrder->dTotalPower_sharp = 0;   //¼â×ÜµçÁ¿
-    pOrder->dTotalPowerFee_sharp = 0;//¼â×Üµç·Ñ
-    pOrder->dTotalServFee_sharp = 0; //¼â×Ü·şÎñ·Ñ
-    pOrder->ulTotalTime_sharp = 0;    //¼â³äµçÊ±¼ä
+    pOrder->dTotalPower_sharp = 0;   //å°–æ€»ç”µé‡
+    pOrder->dTotalPowerFee_sharp = 0;//å°–æ€»ç”µè´¹
+    pOrder->dTotalServFee_sharp = 0; //å°–æ€»æœåŠ¡è´¹
+    pOrder->ulTotalTime_sharp = 0;   //å°–å……ç”µæ—¶é—´
 
     pOrder->dTotalPower_peak = 0;
     pOrder->dTotalPowerFee_peak = 0;
@@ -430,8 +431,9 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->dTotalServFee_off_peak = 0;
     pOrder->ulTotalTime_off_peak = 0;
 
-    pOrder->ucPayType = 0;               //Ö§¸¶·½Ê½ 0.ÔÆÆ½Ì¨Ö§¸¶ 1.Ç®°ü¿¨Ö§¸¶
-    pOrder->ucStopType = 0;                  //Í£Ö¹ÀàĞÍ
-    pOrder->tStopTime = 0;              //Í£Ö¹Ê±¼ä
+    pOrder->ucPayType = 0;                   //æ”¯ä»˜æ–¹å¼ 0.äº‘å¹³å°æ”¯ä»˜ 1.é’±åŒ…å¡æ”¯ä»˜
+    pOrder->ucPayStatus = 0;                 //ç»“ç®—çŠ¶æ€ 0:æœªç»“ç®—  1:å·²ç»“ç®—
+    pOrder->ucStopType = 0;                  //åœæ­¢ç±»å‹
+    pOrder->tStopTime = 0;                   //åœæ­¢æ—¶é—´
 
 }

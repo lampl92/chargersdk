@@ -38,8 +38,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/middlewares/LittleD/src;../../../src/middlewares/LittleD/src/include;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;C:\SysGCC\arm-eabi\stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/middlewares/LittleD/src;../../../src/middlewares/LittleD/src/include;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(ProjectDir)\stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -76,6 +76,7 @@
     <Xml Include="stm32.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\app\cfg_order.c" />
     <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
     <ClCompile Include="..\..\..\src\app\connector.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
@@ -90,6 +91,7 @@
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
+    <ClCompile Include="..\..\..\src\app\log_evse.c" />
     <ClCompile Include="..\..\..\src\app\main.c" />
     <ClCompile Include="..\..\..\src\app\order.c" />
     <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c" />
@@ -201,33 +203,13 @@
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff_ex.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\syscall.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\unicode.c" />
+    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_hash.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
+    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbmacros.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dblogic\eet.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbobjects\relation.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbobjects\tuple.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\aggregate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\ntjoin.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\osijoin.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\project.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\scan.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\select.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbops\sort.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dboutput\query_output.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbinsert.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dblexer.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparser.c" />
-    <ClCompile Include="..\..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_Template.c" />
@@ -486,46 +468,6 @@
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_integers.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h" />
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\jsmn.h" />
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\test.h" />
-    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\testutil.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\arduinodebug.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dberror.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbmacros.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\db_ctconf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\db_types.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\mainpage.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\pstdint.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\ref.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbindex\dbindex_types.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\db_aggr_func_codes.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dblogic\eet.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbobjects\relation.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbobjects\tuple.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\aggregate.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\db_ops_types.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\ntjoin.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\osijoin.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\project.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\scan.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\select.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbops\sort.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dboutput\query_output.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbcreate.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbinsert.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dblexer.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbparser\dbparser.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\dbstorage\SD_c_iface.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\include\debug.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\unit_tests\CuTest.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\utils\cfs_init_test_relations.h" />
-    <ClInclude Include="..\..\..\src\middlewares\LittleD\src\utils\gen_bench_relations.h" />
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h" />

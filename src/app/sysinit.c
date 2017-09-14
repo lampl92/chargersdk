@@ -78,6 +78,7 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
     UINT bw;
     FRESULT res;
     res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
+//    res = f_open(&f, path, FA_CREATE_ALWAYS | FA_WRITE);
     switch(res)
     {
     case FR_OK:
@@ -124,6 +125,8 @@ void sys_Init(void)
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
+    create_cfg_file(pathOrder, strOrderCfg);
+    create_cfg_file(pathEVSELog, strLogCfg);
 
     /*---------------------------------------------------------------------------/
     /                               GUI初始化

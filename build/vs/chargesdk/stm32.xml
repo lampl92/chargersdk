@@ -22,6 +22,7 @@
         <string>USE_HAL_DRIVER</string>
       </PreprocessorMacros>
       <IncludeDirectories>
+        <string>.</string>
         <string>../../../src/app</string>
         <string>../../../src/cli</string>
         <string>../../../src/drivers/hal/CMSIS_RTOS</string>
