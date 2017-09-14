@@ -29,7 +29,8 @@ static volatile uint8_t WIFI_RX_Buffer[1];
 
 static void uart_putc(uint8_t ch)
 {
-    while((GPRS_USARTx_BASE->SR&0X40)==0);
+    while ((GPRS_USARTx_BASE->SR & USART_SR_TC) == 0)
+        ;
     GPRS_USARTx_BASE->DR = ch;
 }
 
