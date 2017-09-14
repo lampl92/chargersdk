@@ -79,6 +79,10 @@ int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
             printf_safe("LogTime\t%d\n", jsItem->valueint);
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
             printf_safe("LogDevice\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
+            printf_safe("LogLevel\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogState);
+            printf_safe("LogState\t%d\n", jsItem->valueint);
             jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
             printf_safe("Message\t%s\n", jsItem->valuestring);
             //........其他条目
