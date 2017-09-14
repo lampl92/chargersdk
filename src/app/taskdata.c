@@ -12,6 +12,7 @@
 #include "cfg_parse.h"
 #include "stringName.h"
 #include "log_evse.h"
+#include "cfg_order.h"
 
 //#define DEBUG_NO_TASKDATA
 
@@ -146,22 +147,10 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                     /* (rgw#1): 在这里存储订单*/
                     //OrderDBInsertItem(&(pCON->order));
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
+                    AddOrderCfg(pathOrder, pCON, pechProto);
                     xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
                     OrderInit(&(pCON->order));//状态变为IDLE
                 }
-//                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-//                                                 defEventBitOrder_HMIDispOK,
-//                                                 pdTRUE, pdTRUE, 0);
-//                if((uxBitsData & defEventBitOrder_HMIDispOK) == defEventBitOrder_HMIDispOK)
-//                {
-//                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-//                    /* @todo (rgw#1): 在这里存储订单*/
-//                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToRemote);
-//                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-//                    OrderInit(&(pCON->order));//状态变为IDLE
-//                }
-
                 break;
             }
         }//for CONid

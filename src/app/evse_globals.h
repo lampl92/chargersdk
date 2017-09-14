@@ -87,7 +87,6 @@
 #define defEventBitOrderStopTypeFull        BIT_18
 
 #define defEventBitOrderMakeFinish      BIT_19  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToRemote  BIT_20  //Order订单命令使用，使用后清除
 #define defEventBitOrderFinishToAuthed  BIT_21  //Order未结束，不能进行新的Authed， 但一定要结合Order的状态进行判断
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
