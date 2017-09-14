@@ -92,6 +92,7 @@ typedef struct _CONInfo
 typedef struct _statRemote
 {
     RemoteCardStatus_t card;
+    RemoteOrderStatus_t order;
 }statRemote_t;
 typedef struct _CONStatus
 {

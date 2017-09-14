@@ -1505,7 +1505,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     }
     pCON->info.ucCONID                = ucCONID;
     pCON->info.ucCONType              = defCONType_AC;
-    pCON->info.ucSocketType           = defSocketTypeB;
+    pCON->info.ucSocketType           = defSocketTypeC;
     pCON->info.dVolatageUpperLimits   = 0;
     pCON->info.dVolatageLowerLimits   = 0;
     pCON->info.dACTempUpperLimits     = 0;
@@ -1579,7 +1579,8 @@ CON_t *CONCreate(uint8_t ucCONID )
 
     pCON->status.statRemoteProc.card.stat = CARDCTRL_IDLE;
     pCON->status.statRemoteProc.card.timestamp = 0;
-
+    pCON->status.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+    pCON->status.statRemoteProc.order.timestamp = 0;
 
     OrderCreate(&(pCON->order));
     OrderInit(&(pCON->order));

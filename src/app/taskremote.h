@@ -1,6 +1,6 @@
 /**
 * @file taskremote.h
-* @brief Ô¶³ÌÍ¨ĞÅµÄ²Ù×÷£¬½ÓÊÕÍ¨ĞÅÊµÀıµÄÖ¸Õë
+* @brief è¿œç¨‹é€šä¿¡çš„æ“ä½œï¼Œæ¥æ”¶é€šä¿¡å®ä¾‹çš„æŒ‡é’ˆ
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -16,11 +16,23 @@ typedef enum _statCardCtrl
     CARDCTRL_WAIT_STOP_RECV
 } statCardCtrl_e;
 
+typedef enum _statRemoteOrder_e
+{
+    REMOTEOrder_IDLE,
+    REMOTEOrder_Send,
+    REMOTEOrder_WaitRecv
+} statRemoteOrder_e;
+
 typedef struct
 {
     statCardCtrl_e stat;
     time_t timestamp;
 }RemoteCardStatus_t;
+typedef struct
+{
+    statRemoteOrder_e stat;
+    time_t timestamp;
+}RemoteOrderStatus_t;
 
 typedef enum
 {
@@ -54,11 +66,5 @@ typedef enum
     REMOTERTData_STOP
 } RemoteRTDataState_e;
 
-typedef enum
-{
-    REMOTEOrder_IDLE,
-    REMOTEOrder_Send,
-    REMOTEOrder_WaitRecv
-} RemoteOrderState_e;
 
 #endif
