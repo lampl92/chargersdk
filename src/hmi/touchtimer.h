@@ -42,6 +42,7 @@
 
 extern uint8_t calebrate_done;
 extern uint8_t winCreateFlag;
+extern uint8_t winInitDone;
 extern WM_HWIN err_hItem;
 extern uint8_t strCSQ[10];
 extern uint8_t _secDown[10];

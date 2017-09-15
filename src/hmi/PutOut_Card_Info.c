@@ -56,6 +56,8 @@ static uint8_t first_CardInfo = 0;
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
+static time_t first_time = 0;
+
 // USER END
 /*********************************************************************
 *
@@ -151,10 +153,10 @@ static void Data_Flush(WM_MESSAGE *pMsg)
 
 static void Data_Process(WM_MESSAGE *pMsg)
 {
-    EventBits_t uxBitCharge;
+    EventBits_t uxBit;
     CON_t *pCON;
     time_t now;
-    static time_t first_time;
+    
     volatile uint32_t diffsec;
     volatile uint8_t sec;
     volatile uint8_t min;
@@ -163,11 +165,12 @@ static void Data_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin = pMsg->hWin;
 
     pCON = CONGetHandle(0);
-    uxBitCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-    if((uxBitCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
+    uxBit = xEventGroupGetBits(pCON->status.xHandleEventOrder);
+	if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
         /** 跳转充电界面 */
-        first_CardInfo = 0;
+	    bitclr(winInitDone, 0);
+	    first_CardInfo = 0;
         /**< 跳到充电中 */
         WM_SendMessageNoPara(hWin,MSG_JUMPCHAING);
     }
@@ -192,8 +195,10 @@ static void Data_Process(WM_MESSAGE *pMsg)
     sec = diffsec % 3600 % 60;
 
     xsprintf((char *)_secDown, "(%02dS)", (60 - sec));
+	printf_safe("now = %d, first_time = %d, sec = %d ,winInitDone = %d ,first_CardInfo = %d\n", now, first_time, sec, winInitDone, first_CardInfo);
     if(sec == 59)
     {
+	    bitclr(winInitDone,0);
         first_CardInfo = 0;
         xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
         //跳到HOME
@@ -222,21 +227,22 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
     case WM_PAINT://MSG_UPDATEDATA:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinCardInfo == cur_win)
+        if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
         {
-            /**< 数据处理 */
-            Data_Process(pMsg);
             /**< 信号数据处理 */
             Signal_Show();
             /**< 灯光控制 */
             Led_Show();
             /**< 如果界面发生了切换 */
-            if(_hWinCardInfo == cur_win)
+	        if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
             {
                 /**< 故障分析 */
                 Err_Analy(pMsg->hWin);
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
+				/**< 数据处理 */
+	            Data_Process(pMsg);
+            
             }
 //            CaliDone_Analy(pMsg->hWin);
         }
@@ -384,7 +390,8 @@ WM_HWIN CreateCardInfo(void)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerSignal,5000,0);
-    return 0;
+	bitset(winInitDone,0);
+	return 0;
 }
 
 // USER START (Optionally insert additional public code)

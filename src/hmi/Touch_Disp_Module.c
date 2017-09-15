@@ -234,6 +234,10 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize)
  */
 uint8_t _deleteWin(WM_HWIN hItem)
 {
+	if(bittest(winInitDone,0))
+	{
+		bitclr(winInitDone,0);	
+	}
     if(bittest(winCreateFlag,0))
     {
         bitclr(winCreateFlag,0);

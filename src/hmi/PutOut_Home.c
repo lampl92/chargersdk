@@ -160,7 +160,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_PAINT:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinHome == cur_win)
+        if((bittest(winInitDone,0))&&(_hWinHome == cur_win))
         {
             //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
             /**< 数据刷新 */
@@ -275,7 +275,7 @@ WM_HWIN CreateHome(void)
     cur_win = _hWinHome;
     WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 20, 0);
     dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-
+	bitset(winInitDone,0);
     return 0;
 }
 /*************************** End of file ****************************/

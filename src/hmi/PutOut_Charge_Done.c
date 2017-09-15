@@ -191,7 +191,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_PAINT://MSG_UPDATEDATA:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinChargDone == cur_win)
+        if((bittest(winInitDone,0))&&(_hWinChargDone == cur_win))
         {
             /**< 数据处理 */
             Data_Process(pMsg);
@@ -388,7 +388,7 @@ WM_HWIN CreateChargeDone(void)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
     //_timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
     //_timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
-
+	bitset(winInitDone,0);
 }
 /*************************** End of file ****************************/
 

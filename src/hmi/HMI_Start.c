@@ -7,7 +7,7 @@
 #include "interface.h"
 
 uint8_t calebrate_done = 0;
-
+uint8_t winInitDone = 0;
 static uint8_t codetest[]={
     "https://www.baidu.com"
 };
