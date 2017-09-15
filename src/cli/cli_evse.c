@@ -256,12 +256,12 @@ void cli_evseorder_fnt(int argc, char **argv)
     time_t now_dummy;
     int id;
 
-    if(strcmp(argv[1], "--all") == 0 || strcmp(argv[1], "-a") == 0 )
+    if(argc == 1 )
     {
         testSearchOrderCfg(pathOrder, 0, 0);
         return;
     }
-    else
+	else if(strcmp(argv[1], "--test") == 0 || strcmp(argv[1], "-t") == 0 )
     {
         for(id = 0; id < pEVSE->info.ucTotalCON; id++)
         {
