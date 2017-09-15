@@ -149,7 +149,7 @@ void vTaskEVSERFID(void *pvParameters)
             }
             if(ucVaild == 2)//e充网定义 1 可充, 2不可充
             {
-                pRFIDDev->state = STATE_RFID_RETURN;
+                pRFIDDev->state = STATE_RFID_BADID;
                 break;
             }
 
@@ -293,6 +293,7 @@ void vTaskEVSERFID(void *pvParameters)
             break;
         case STATE_RFID_TIMEOUT:
 	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+	        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
 	        OrderInit(&(pCON->order));
 	        pRFIDDev->state = STATE_RFID_RETURN;
 	        break;
