@@ -746,7 +746,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             printf_safe("CPERR %lf\n", cp1);
             tmpCPState = CP_ERR;
             pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
-            return ERR_CON_CP_FAULT;
+            errcode =  ERR_CON_CP_FAULT;
         }
 #endif
     }
@@ -793,7 +793,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         {
             tmpCPState = CP_ERR;
             pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
-            return ERR_CON_CP_FAULT;
+            errcode =  ERR_CON_CP_FAULT;
         } ;
     }
     /*********************/
