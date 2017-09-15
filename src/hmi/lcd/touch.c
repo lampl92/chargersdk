@@ -581,7 +581,7 @@ uint8_t TP_Get_Adjdata(void)
 
     errcode = ERR_NO;
 
-    res = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&fp, "system/CalibrationData.cfg", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
 
     if(res == FR_OK)
     {

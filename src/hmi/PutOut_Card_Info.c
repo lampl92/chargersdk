@@ -248,6 +248,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         }
         break;
     case WM_INIT_DIALOG:
+        first_CardInfo = 0;
         //
         // Initialization of 'Framewin'
         //
@@ -346,19 +347,13 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_JUMPHOME:
-        //GUI_EndDialog(_hWinCardInfo,0);
         _deleteWin(_hWinCardInfo);
-        //WM_DeleteWindow(_hWinCardInfo);
         _hWinCardInfo = 0;
         CreateHome();
         break;
     case MSG_JUMPCHAING:
-        //GUI_EndDialog(_hWinCardInfo,0);
-        first_CardInfo = 0;
         _deleteWin(_hWinCardInfo);
-        //WM_DeleteWindow(_hWinCardInfo);
         _hWinCardInfo = 0;
-        //PutOut_Charging();
         CreateCharging();
         break;
     default:
