@@ -59,6 +59,8 @@ int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
+	struct tm *ts;
+	char buf[80];
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
     {
@@ -75,8 +77,12 @@ int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
         {
             printf_safe("**************Signal Item example Arr[%d]*************\n", i);
             jsChild = cJSON_GetArrayItem(jsParent, i);
+	        
             jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
-            printf_safe("LogTime\t%d\n", jsItem->valueint);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	        printf_safe("LogTime\t%s\n", buf);
+	        
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
             printf_safe("LogDevice\t%d\n", jsItem->valueint);
             jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);

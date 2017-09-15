@@ -99,6 +99,8 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
+	struct tm *ts;
+	char buf[80];
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
     {
@@ -117,14 +119,25 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
             jsChild = cJSON_GetArrayItem(jsParent, i);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             printf_safe("StartType\t%d\n", jsItem->valueint);
+	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
+	        printf_safe("CardID\t%s\n", jsItem->valuestring);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderOrderSN);
             printf_safe("OrderSN\t%s\n", jsItem->valuestring);
+	        
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
-            printf_safe("StartTime\t%d\n", jsItem->valueint);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+            printf_safe("StartTime\t%s\n", buf);
+	        
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
-            printf_safe("TotalPowerFee\t%d\n", jsItem->valueint);
+            printf_safe("TotalPowerFee\t%d\n", jsItem->valuedouble);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
             printf_safe("StopType\t%d\n", jsItem->valueint);
+	        
+	        jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopTime);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	        printf_safe("StopTime\t%s\n", buf);
             //........
         }
     }
