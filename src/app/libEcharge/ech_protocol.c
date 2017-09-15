@@ -2337,7 +2337,7 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     //[27...30] 当前电表读数
     uxBit = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                 defEventBitOrderMakeOK,
-                                pdTRUE, pdTRUE, 10000);
+                                pdFALSE, pdTRUE, 10000);
     if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
         ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
