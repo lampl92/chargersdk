@@ -149,7 +149,9 @@ void vTaskEVSEData(void *pvParameters)
                     /* (rgw#1): 在这里存储订单*/
                     //OrderDBInsertItem(&(pCON->order));
                     AddOrderCfg(pathOrder, pCON, pechProto);
-                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+                    //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+	                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
+	                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
                     OrderInit(&(pCON->order));//状态变为IDLE
                 }
                 break;

@@ -71,6 +71,7 @@
 WM_HWIN _hWinChargDone;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 static uint8_t first_flag = 0;
+static uint8_t orderFinish = 0;
 /*********************************************************************
 *
 *       Static data
@@ -139,41 +140,48 @@ static void Data_Process(WM_MESSAGE *pMsg)
     volatile int8_t sec;
     EventBits_t uxBits;
     uint8_t strCSQ[32];
-
+	
     WM_HWIN hWin = pMsg->hWin;
     
     pCON = CONGetHandle(0);
     
-    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                defEventBitOrderMakeFinish,
-                                pdFALSE, pdTRUE, 0);
+    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+								defEventBitOrderFinishToHMI,
+                                pdTRUE, pdTRUE, 0);
     
-    if((uxBits & defEventBitCONOrderFinish) == defEventBitCONOrderFinish)//订单上传完成
-    {    
-        if (first_flag == 0)
-        {
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF36_Font, GUI_BLACK, "充电完成");
-            first_flag = 1;
-            first = time(NULL);
-        }
+	if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)//订单上传完成
+	{    
+		orderFinish = 1;
+	}
+	
+	if (orderFinish == 1)
+	{
+		if (first_flag == 0)
+		{
+			first_flag = 1;
+			first = time(NULL);
+		}
+		Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF36_Font, GUI_BLACK, "充电完成");
 
-        now = time(NULL);
+		now = time(NULL);
 
-        diffsec = (uint32_t)difftime(now, first);
+		diffsec = (uint32_t)difftime(now, first);
 
-        sec = 10 - diffsec;
-        if (sec < 0)
-            sec = 0;
-        xsprintf((char *)_secDown, "(%02dS)", sec);
-        //xsprintf((char *)Timer_buf, "(%02dS)", sec);
-        if (sec == 0)
-        {
-            first_flag = 0;
-            xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
-            //跳到HOME
-            WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
-        }
-    }
+		sec = 10 - diffsec;
+		if (sec < 0)
+			sec = 0;
+		xsprintf((char *)_secDown, "(%02dS)", sec);
+		//xsprintf((char *)Timer_buf, "(%02dS)", sec);
+		if (sec == 0)
+		{
+			orderFinish = 0;
+			first_flag = 0;
+			xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+			//跳到HOME
+			WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
+		}
+	}
+	
 }
 // USER END
 

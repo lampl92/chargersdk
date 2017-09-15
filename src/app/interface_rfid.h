@@ -18,15 +18,15 @@
 
 typedef enum _RFIDState
 {
-    STATE_RFID_NOID,             //û��ID
-    STATE_RFID_TIMEOUT,             //��ʱ
-    STATE_RFID_GOTID,           //��ȡ��ID
+    STATE_RFID_NOID,             //没有ID
+    STATE_RFID_TIMEOUT,             //超时
+    STATE_RFID_GOTID,           //获取到ID
     STATE_RFID_OLDID,
     STATE_RFID_NEWID,
-    STATE_RFID_GOODID,           //ע���ʻ�
-    STATE_RFID_BADID,           //��ע���ʻ�
-    STATE_RFID_OWE,                 //Ƿ��
-    STATE_RFID_HOLD,           //ԤԼ״̬����û��ʼ���
+    STATE_RFID_GOODID,           //注册帐户
+    STATE_RFID_BADID,           //非注册帐户
+    STATE_RFID_OWE,                 //欠费
+    STATE_RFID_HOLD,           //预约状态，还没开始充电
     STATE_RFID_RETURN
 } RFIDState_t;
 
@@ -34,6 +34,8 @@ typedef struct _RFIDDevStatus
 {
     uint8_t ucFoundCard;
     uint8_t ucCardID[defCardIDLength];
+	time_t tHoldStateStartTime;
+	uint32_t ulHoldMaxTime_s;
 
     ErrorCode_t (*GetCardID)(void *pvRFIDDev);
 }RFIDDevStatus_t;

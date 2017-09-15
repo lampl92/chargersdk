@@ -36,7 +36,7 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_NOID:
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
-                                         pdTRUE, pdFALSE, portMAX_DELAY);
+                                         pdTRUE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. 检测到卡
             {
                 memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
@@ -79,11 +79,13 @@ void vTaskEVSERFID(void *pvParameters)
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
                 {
+	                //pCON->state = STATE_CON_RETURN;
                     while(1);
                 }
                 else if(pCON->state == STATE_CON_ERROR)
                 {
-                    while(1);
+	                //pCON->state = STATE_CON_RETURN;
+	               while(1);
                 }
                 else// if(pCON->state == STATE_CON_IDLE)
                 {
@@ -189,20 +191,18 @@ void vTaskEVSERFID(void *pvParameters)
                 //等到停止充电事件的发生
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
-                //xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//清除认证标志。
-                OrderInit(&(pRFIDDev->order));
-//                pRFIDDev->state = STATE_RFID_NOID;
-                uxBits = xEventGroupWaitBits(xHandleEventHMI,
-                                            defEventBitHMITimeOutToRFID,
-                                            pdTRUE, pdTRUE, 0);
-                if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-                {
+                pRFIDDev->state = STATE_RFID_RETURN;
+////                uxBits = xEventGroupWaitBits(xHandleEventHMI,
+////                                            defEventBitHMITimeOutToRFID,
+////                                            pdTRUE, pdTRUE, 0);
+////                if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
+////                {
                     xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
                                    defEventBitGotIDtoHMI);
-                    /// TODO (zshare#1#): 增加清除位,第二次刷卡充电会直接停止 , 原因此处等待延时会一直置位 上述两个会不会有问题???????
-                    xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
-                    pRFIDDev->state = STATE_RFID_RETURN;
-                }
+////                    /// TODO (zshare#1#): 增加清除位,第二次刷卡充电会直接停止 , 原因此处等待延时会一直置位 上述两个会不会有问题???????
+////                    xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
+////                    pRFIDDev->state = STATE_RFID_RETURN;
+////                }
 //            }
 //            else
 //            {
@@ -251,6 +251,7 @@ void vTaskEVSERFID(void *pvParameters)
                             defEventBitOrderUpdateOK,
                             portMAX_DELAY);
             pRFIDDev->state = STATE_RFID_HOLD;
+	        pRFIDDev->status.tHoldStateStartTime = time(NULL);
             break;
         case STATE_RFID_BADID:
             /** @todo (rgw#1#): 通知HMI显示未注册 */
@@ -273,6 +274,11 @@ void vTaskEVSERFID(void *pvParameters)
             pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_HOLD:
+	        if (time(NULL) - pRFIDDev->status.tHoldStateStartTime > pRFIDDev->status.ulHoldMaxTime_s)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                          defEventBitCONStartOK,

@@ -648,7 +648,7 @@ uint8_t TP_Get_Adjdata(void)
 void GUI_Touch_Calibrate()
 {
 
-    tp_dev.touchtype = 1;
+    tp_dev.touchtype = 0;
 
     if(tp_dev.touchtype)//X,Y方向与屏幕相反
     {

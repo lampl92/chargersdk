@@ -110,7 +110,6 @@ static void Data_Process(WM_MESSAGE *pMsg)
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                     defEventBitGotIDtoHMI,
                                     pdTRUE, pdTRUE, 0);
-    xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,defEventBitGotIDtoHMI);
     if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
 //        GUI_EndDialog(_hWinHome,0);

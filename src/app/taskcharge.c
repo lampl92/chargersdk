@@ -11,6 +11,7 @@
 
 //#define DEBUG_NO_TASKCHARGE
 
+#define RFID_ProtoOK 
 static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
 {
     switch (signal)
@@ -360,10 +361,10 @@ void vTaskEVSECharge(void *pvParameters)
 
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
 #ifdef RFID_ProtoOK// 刷卡协议完成后添加
-                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                                   defEventBitCONOrderFinish,
-                                                   pdTRUE, pdTRUE, portMAX_DELAY);
-                if((uxBitsCharge & defEventBitCONOrderFinish) == defEventBitCONOrderFinish)
+                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                   defEventBitOrderFinishToChargetask,
+                                                   pdTRUE, pdTRUE, 10000);
+	            if ((uxBitsCharge & defEventBitOrderFinishToChargetask) == defEventBitOrderFinishToChargetask)
                 {
 #endif
 #ifdef DEBUG_DIAG_DUMMY
