@@ -287,16 +287,17 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     if(bittest(calebrate_done,5))
     {
         bitclr(calebrate_done,5);
-        WM_DeleteWindow(hWin);
+        _deleteWin(hWin);
         vTaskDelay(100);
         LCD_Init();
         TP_Init();
         vTaskDelay(100);
         LCD_Clear(WHITE);
         TP_Adjust();
-        calebrate_done = 0xff;
+//        calebrate_done = 0xff;
         //PutOut_SelAOrB();
-        MainTask();
+//        MainTask();
+	    CreateHome();
     }
 /// TODO (zshare#1#): ///添加跳转首页会有问题???
 

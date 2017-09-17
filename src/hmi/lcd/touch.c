@@ -319,7 +319,19 @@ void TP_Adjust(void)
     double fac;
     uint16_t outtime = 0;
     uint8_t tmp[4];
-
+	
+	tp_dev.touchtype = 0;
+	if (tp_dev.touchtype)//X,Y方向与屏幕相反
+	{
+		CMD_RDX = 0X90;
+		CMD_RDY = 0XD0;
+	}
+	else                   //X,Y方向与屏幕相同
+	{
+		CMD_RDX = 0XD0;
+		CMD_RDY = 0X90;
+	}
+	
     cnt = 0;
     POINT_COLOR = BLUE;
     BACK_COLOR = WHITE;
@@ -540,7 +552,8 @@ uint8_t TP_Save_Adjdata(void)
     }
 
     cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",170);
-    temp=tp_dev.xfac*100000000;
+	cJSON_AddNumberToObject(pJsonRoot, "xytype", tp_dev.touchtype);
+	temp=tp_dev.xfac*100000000;
     cJSON_AddNumberToObject(pJsonRoot,"xfac",temp);
     temp=tp_dev.yfac*100000000;
     cJSON_AddNumberToObject(pJsonRoot,"yfac",temp);
@@ -597,6 +610,7 @@ uint8_t TP_Get_Adjdata(void)
             }
 
             cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",0);
+	        cJSON_AddNumberToObject(pJsonRoot, "xytype", 0);
             cJSON_AddNumberToObject(pJsonRoot,"xfac",0);
             cJSON_AddNumberToObject(pJsonRoot,"yfac",0);
             cJSON_AddNumberToObject(pJsonRoot,"xoff",0);
@@ -624,7 +638,20 @@ uint8_t TP_Get_Adjdata(void)
     }
     if(pSub->valueint == 170)
     {
-        pSub = cJSON_GetObjectItem(jsCaliObj,"xfac");
+	    pSub = cJSON_GetObjectItem(jsCaliObj, "xytype");
+	    tp_dev.touchtype = pSub->valueint;
+	    
+	    if (tp_dev.touchtype)//X,Y方向与屏幕相反
+	    {
+		    CMD_RDX = 0X90;
+		    CMD_RDY = 0XD0;
+	    }
+	    else                   //X,Y方向与屏幕相同
+	    {
+		    CMD_RDX = 0XD0;
+		    CMD_RDY = 0X90;
+	    }
+	    pSub = cJSON_GetObjectItem(jsCaliObj,"xfac");
         tp_dev.xfac = (float)(pSub->valueint)/100000000;
 
         pSub = cJSON_GetObjectItem(jsCaliObj,"yfac");
@@ -647,25 +674,12 @@ uint8_t TP_Get_Adjdata(void)
 
 void GUI_Touch_Calibrate()
 {
-
-    tp_dev.touchtype = 0;
-
-    if(tp_dev.touchtype)//X,Y方向与屏幕相反
-    {
-        CMD_RDX = 0X90;
-        CMD_RDY = 0XD0;
-    }
-    else                   //X,Y方向与屏幕相同
-    {
-        CMD_RDX = 0XD0;
-        CMD_RDY = 0X90;
-    }
-
     LCD_Clear(WHITE);   //ÇåÆÁ
     if(TP_Get_Adjdata() != 0)//需要校准
     {
         TP_Adjust();
     }
+	
 //    while(1)
 //    {
 //        tp_dev.scan(0);

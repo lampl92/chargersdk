@@ -64,6 +64,12 @@ void MainTask(void)
     else
     {
         calebrate_done = 1;
+	    WM_MULTIBUF_Enable(1);
+	    pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
+	    WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
+
+	    GUI_UC_SetEncodeUTF8();
+
         CreateHome();
     }
 

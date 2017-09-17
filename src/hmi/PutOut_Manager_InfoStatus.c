@@ -355,17 +355,6 @@ static void Status_Content_Analy()
 *
 *       _cbDialog
 */
-const char AddressURL[] = "www.armfly.com\n"
-						  "STM32-V1\n"
-						  "STM32-V2\n"
-                          "STM32-V3\n"
-	                      "STM32-V4\n"
-                          "STM32-V5\n"
-						  "STM32-V6\n"
-						  "STM32-V7\n"
-                          "STM32-V8\n"
-	                      "STM32-V9\n"
-                          "STM32-V10\n";
 static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;

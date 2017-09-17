@@ -161,8 +161,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 			first_flag = 1;
 			first = time(NULL);
 		}
-		Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF36_Font, GUI_BLACK, "充电完成");
-
+		
 		now = time(NULL);
 
 		diffsec = (uint32_t)difftime(now, first);
@@ -176,7 +175,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 		{
 			orderFinish = 0;
 			first_flag = 0;
-			xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+//			xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
 			//跳到HOME
 			WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
 		}
@@ -346,6 +345,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18), _secDown);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
 //            WM_SendMessageNoPara(_hWinCardInfo,MSG_UPDATEDATA);
+	        if(orderFinish == 1)
+		        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), "充电完成");
+
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
