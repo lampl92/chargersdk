@@ -34,6 +34,7 @@ void vTaskEVSERFID(void *pvParameters)
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
+	        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//bugfix：避免上次刷卡处理过程中再次检测到卡，导致充电完成后再次显示卡信息
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
                                          pdTRUE, pdTRUE, portMAX_DELAY);
@@ -42,11 +43,10 @@ void vTaskEVSERFID(void *pvParameters)
                 memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
                 pRFIDDev->state = STATE_RFID_GOTID;
                 xTimerStop(xHandleTimerRFID, 100); 
-                xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
-                                   defEventBitGotIDtoHMI);
             }
             break;
         case STATE_RFID_GOTID:
+	        xEventGroupClearBits(xHandleEventHMI,defEventBitHMITimeOutToRFID);//防止其他状态产生timeout没有处理
 #ifdef DEBUG_RFID
             printf_safe("im rfid task,find card, :)\n");
             printf_safe("ID = ");
@@ -79,13 +79,13 @@ void vTaskEVSERFID(void *pvParameters)
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
                 {
-	                //pCON->state = STATE_CON_RETURN;
-                    while(1);
+	                pCON->state = STATE_CON_RETURN;
+                    //while(1);
                 }
                 else if(pCON->state == STATE_CON_ERROR)
                 {
-	                //pCON->state = STATE_CON_RETURN;
-	               while(1);
+	                pCON->state = STATE_CON_RETURN;
+	               //while(1);
                 }
                 else// if(pCON->state == STATE_CON_IDLE)
                 {
@@ -93,6 +93,8 @@ void vTaskEVSERFID(void *pvParameters)
 #ifdef DEBUG_RFID
                     printf_safe("connector %d 空闲\n", i);
 #endif
+					xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
+									   defEventBitGotIDtoHMI);
                     pRFIDDev->state = STATE_RFID_NEWID;
                 }
             }
@@ -155,25 +157,33 @@ void vTaskEVSERFID(void *pvParameters)
                 break;
             }
 
-//            if((uxBits & defEventBitRemoteGotAccount) == defEventBitRemoteGotAccount)
-//            {
-                if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
-                {
-                    pRFIDDev->state = STATE_RFID_GOODID;
-                }
-                else if(pRFIDDev->order.ucAccountStatus == 0)
-                {
-                    pRFIDDev->state = STATE_RFID_BADID;
-                }
-                else if(pRFIDDev->order.dBalance < 0)
-                {
-                    pRFIDDev->state = STATE_RFID_OWE;
-                }
-                else
-                {
-                    pRFIDDev->state = STATE_RFID_RETURN;
-                }
-//            }
+            if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
+            {
+                pRFIDDev->state = STATE_RFID_GOODID;
+            }
+            else if(pRFIDDev->order.ucAccountStatus == 0)
+            {
+                pRFIDDev->state = STATE_RFID_BADID;
+            }
+            else if(pRFIDDev->order.dBalance < 0)
+            {
+                pRFIDDev->state = STATE_RFID_OWE;
+            }
+            else
+            {
+                pRFIDDev->state = STATE_RFID_RETURN;
+            }
+	        //卡信息界面立即点退出
+	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
+		        defEventBitHMITimeOutToRFID,
+		        pdTRUE,
+		        pdTRUE,
+		        0);
+	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
             break;
         case STATE_RFID_OLDID:
 #ifdef DEBUG_RFID
@@ -181,42 +191,11 @@ void vTaskEVSERFID(void *pvParameters)
             printf_safe("等待HMI操作...\n");
 #endif
             /** @fixme (rgw#1#): 假设用户选择停止充电 */
-//            xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_RFIDOLD);
-//
-//            uxBits = xEventGroupWaitBits(xHandleEventHMI,
-//                            defEventBitHMI_ChargeReqClickOK,
-//                            pdTRUE, pdTRUE, 0);
-//            if((uxBits & defEventBitHMI_ChargeReqClickOK) == defEventBitHMI_ChargeReqClickOK)
-//            {
-                //等到停止充电事件的发生
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
                 pRFIDDev->state = STATE_RFID_RETURN;
-////                uxBits = xEventGroupWaitBits(xHandleEventHMI,
-////                                            defEventBitHMITimeOutToRFID,
-////                                            pdTRUE, pdTRUE, 0);
-////                if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-////                {
-                    xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
-                                   defEventBitGotIDtoHMI);
-////                    /// TODO (zshare#1#): 增加清除位,第二次刷卡充电会直接停止 , 原因此处等待延时会一直置位 上述两个会不会有问题???????
-////                    xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
-////                    pRFIDDev->state = STATE_RFID_RETURN;
-////                }
-//            }
-//            else
-//            {
-//                //刷卡未等待停止充电事件发生
-//                uxBits = xEventGroupWaitBits(xHandleEventHMI,
-//                                defEventBitHMI_ChargeReqLockLcdOK,
-//                                pdTRUE, pdTRUE, 0);
-//                if((uxBits & defEventBitHMI_ChargeReqLockLcdOK) == defEventBitHMI_ChargeReqLockLcdOK)
-//                {
-//                    //等到锁屏事件
-//                    pRFIDDev->state = STATE_RFID_NOID;
-//                }
-//            }
-
+                xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
+                                defEventBitGotIDtoHMI);
             break;
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
@@ -225,6 +204,17 @@ void vTaskEVSERFID(void *pvParameters)
                             defEventBitGoodIDReqDisp,
                             defEventBitGoodIDReqDispOK,
                             10000);
+			//卡信息界面立即点退出
+	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
+		        defEventBitHMITimeOutToRFID,
+		        pdTRUE,
+		        pdTRUE,
+		        0);
+	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
 
 #ifdef DEBUG_RFID
             printf_safe("用户状态：");

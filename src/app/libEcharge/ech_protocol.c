@@ -2267,6 +2267,10 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     }
     //[17...24] 有卡充电流水号
     ultmpNetSeq.ulVal = time(NULL); // 采用时间戳作为交易流水号, 协议中标识为BIN 8, 因此不做字节序转换
+	while (ultmpNetSeq.ulVal == 0)
+	{
+		printf_safe("有卡充电时， time null == 0！！！！！！\n");
+	}
     ucOrderSN[0] = 0;
     ucOrderSN[1] = 0;
     ucOrderSN[2] = 0;

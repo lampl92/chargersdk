@@ -11,7 +11,7 @@
 
 //#define DEBUG_NO_TASKCHARGE
 
-#define RFID_ProtoOK 
+//#define RFID_ProtoOK 
 static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
 {
     switch (signal)

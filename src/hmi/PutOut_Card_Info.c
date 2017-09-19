@@ -117,6 +117,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGoodIDReqDispOK);
+	    bitset(winInitDone,2);
     }
 
 
@@ -171,8 +172,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
         /** 跳转充电界面 */
 	    bitclr(winInitDone, 0);
 	    first_CardInfo = 0;
+	    bitset(winInitDone, 3);
         /**< 跳到充电中 */
-        WM_SendMessageNoPara(hWin,MSG_JUMPCHAING);
     }
     else
     {
@@ -204,6 +205,12 @@ static void Data_Process(WM_MESSAGE *pMsg)
         //跳到HOME
         WM_SendMessageNoPara(hWin,MSG_JUMPHOME);
     }
+	if (bittest(winInitDone, 2)&&bittest(winInitDone, 3))
+	{
+		bitclr(winInitDone, 2);
+		bitclr(winInitDone, 3);
+		WM_SendMessageNoPara(hWin, MSG_JUMPCHAING);		
+	}
 }
 // USER END
 /*********************************************************************
@@ -227,15 +234,17 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
     case WM_PAINT://MSG_UPDATEDATA:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
-        {
+        //if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
+        if(_hWinCardInfo == cur_win)
+	    {
             /**< 信号数据处理 */
             Signal_Show();
             /**< 灯光控制 */
             Led_Show();
             /**< 如果界面发生了切换 */
-	        if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
-            {
+	        //if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+		    if(_hWinCardInfo == cur_win)
+			{
                 /**< 故障分析 */
                 Err_Analy(pMsg->hWin);
                 /**< 特殊触控点分析 */
@@ -289,8 +298,8 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 first_CardInfo = 0;
-                _deleteWin(_hWinCardInfo);
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
+                _deleteWin(_hWinCardInfo);
                 CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:

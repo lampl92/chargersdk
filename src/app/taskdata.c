@@ -142,18 +142,22 @@ void vTaskEVSEData(void *pvParameters)
 
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
-                                                 pdTRUE, pdTRUE, 0);
-                if((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
-                {
-                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                    /* (rgw#1): 在这里存储订单*/
-                    //OrderDBInsertItem(&(pCON->order));
-                    AddOrderCfg(pathOrder, pCON, pechProto);
-                    //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
-	                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
-	                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
-                    OrderInit(&(pCON->order));//状态变为IDLE
-                }
+                                                 pdTRUE, pdTRUE, 20000);
+	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+	            {
+		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+		            /* (rgw#1): 在这里存储订单*/
+		            //OrderDBInsertItem(&(pCON->order));
+		            AddOrderCfg(pathOrder, pCON, pechProto);
+		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
+		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
+		            OrderInit(&(pCON->order));//状态变为IDLE
+	            }
+	            else
+	            {
+		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);//测试函数
+	            }
                 break;
             }
         }//for CONid
@@ -193,7 +197,7 @@ void vTaskEVSEData(void *pvParameters)
         }
         
         /********** 告警记录 **************/
-       
+#if 0
         for (id = 0; id < ulTotalCON; id++)
         {
             pCON = CONGetHandle(id);
@@ -412,7 +416,7 @@ void vTaskEVSEData(void *pvParameters)
             }
         }//if (ulSignalPoolXor != 0)
         pEVSE->status.ulSignalFault_Old = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
-        
+#endif        
 #if DEBUG_DATA
 
 #endif
