@@ -8,6 +8,8 @@
 
 uint8_t calebrate_done = 0;
 uint8_t winInitDone = 0;
+uint8_t current_page = 0;
+
 static uint8_t codetest[]={
     "https://www.baidu.com"
 };
@@ -78,5 +80,25 @@ void MainTask(void)
         GUI_Delay(100);
         //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(100);
+
+        if(bittest(winInitDone,7))
+        {
+            bitclr(winInitDone,7);
+            switch(current_page)
+            {
+                case _HOMEPAGE:
+                    CreateHome();
+                    break;
+                case _CARDINFOPAGE:
+                    CreateCardInfo();
+                    break;
+                case _CHARGINGPAGE:
+                    CreateCharging();
+                    break;
+                case _CHARGEDONEPAGE:
+                    CreateChargeDone();
+                    break;
+            }
+        }
     }
 }

@@ -121,11 +121,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     if((pCON->order.ucStartType == 5)
         &&(pCON->state == STATE_CON_CHARGING))
     {
-        GUI_EndDialog(_hWinHome,0);
-        _hWinHome = 0;
-        //WM_DeleteWindow(hWin);
-        //PutOut_Charging();
-        CreateCharging();
+        WM_SendMessageNoPara(hWin,MSG_JUMPCHAING);
     }
 
     if(pCON->state == STATE_CON_CHARGING)
@@ -245,7 +241,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _deleteWin(_hWinHome);
         //_hWinHome = 0;
         //WM_DeleteWindow(_hWinHome);
-        CreateCardInfo();
+//        CreateCardInfo();
+        current_page = _CARDINFOPAGE;
+        bitset(winInitDone,7);
         break;
     case MSG_JUMPCHAING:
 //        GUI_EndDialog(_hWinHome,0);
@@ -253,7 +251,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //WM_DeleteWindow(_hWinHome);
         //PutOut_Charging();
         _deleteWin(_hWinHome);
-        CreateCharging();
+//        CreateCharging();
+        current_page = _CHARGINGPAGE;
+        bitset(winInitDone,7);
         break;
     default:
         WM_DefaultProc(pMsg);

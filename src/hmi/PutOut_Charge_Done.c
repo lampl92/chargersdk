@@ -140,20 +140,20 @@ static void Data_Process(WM_MESSAGE *pMsg)
     volatile int8_t sec;
     EventBits_t uxBits;
     uint8_t strCSQ[32];
-	
+
     WM_HWIN hWin = pMsg->hWin;
-    
+
     pCON = CONGetHandle(0);
-    
+
     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
 								defEventBitOrderFinishToHMI,
                                 pdTRUE, pdTRUE, 0);
-    
+
 	if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)//订单上传完成
-	{    
+	{
 		orderFinish = 1;
 	}
-	
+
 	if (orderFinish == 1)
 	{
 		if (first_flag == 0)
@@ -161,7 +161,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 			first_flag = 1;
 			first = time(NULL);
 		}
-		
+
 		now = time(NULL);
 
 		diffsec = (uint32_t)difftime(now, first);
@@ -180,7 +180,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 			WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
 		}
 	}
-	
+
 }
 // USER END
 
@@ -294,10 +294,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
             Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
                         &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
-            xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK); 
+            xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
         }
-       
+
         //_timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerTime, 20, 0);
         //_timerData = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerFlush,1000,0);
         //_timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinChargDone), ID_TimerSignal,5000,0);
@@ -316,7 +316,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 _deleteWin(_hWinChargDone);
                 _hWinChargDone = 0;
-                CreateHome();
+//                CreateHome();
+                current_page = _HOMEPAGE;
+                bitset(winInitDone,7);
                 // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -379,7 +381,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         first_flag = 0;
         _deleteWin(_hWinChargDone);
         _hWinChargDone = 0;
-        CreateHome();
+//        CreateHome();
+        current_page = _HOMEPAGE;
+        bitset(winInitDone,7);
         break;
     default:
         WM_DefaultProc(pMsg);

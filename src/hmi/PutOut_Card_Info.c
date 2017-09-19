@@ -157,7 +157,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     EventBits_t uxBit;
     CON_t *pCON;
     time_t now;
-    
+
     volatile uint32_t diffsec;
     volatile uint8_t sec;
     volatile uint8_t min;
@@ -209,7 +209,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 	{
 		bitclr(winInitDone, 2);
 		bitclr(winInitDone, 3);
-		WM_SendMessageNoPara(hWin, MSG_JUMPCHAING);		
+		WM_SendMessageNoPara(hWin, MSG_JUMPCHAING);
 	}
 }
 // USER END
@@ -251,7 +251,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
                 CaliDone_Analy(pMsg->hWin);
 				/**< 数据处理 */
 	            Data_Process(pMsg);
-            
+
             }
 //            CaliDone_Analy(pMsg->hWin);
         }
@@ -300,7 +300,9 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
                 first_CardInfo = 0;
                 xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//发送HMI显示延时到事件
                 _deleteWin(_hWinCardInfo);
-                CreateHome();
+                current_page = _HOMEPAGE;
+                bitset(winInitDone,7);
+//                CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:
 
@@ -358,12 +360,16 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
     case MSG_JUMPHOME:
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateHome();
+//        CreateHome();
+        current_page = _HOMEPAGE;
+        bitset(winInitDone,7);
         break;
     case MSG_JUMPCHAING:
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateCharging();
+//        CreateCharging();
+        current_page = _CHARGINGPAGE;
+        bitset(winInitDone,7);
         break;
     default:
         WM_DefaultProc(pMsg);

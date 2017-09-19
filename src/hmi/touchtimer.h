@@ -52,6 +52,14 @@ extern WM_HWIN _hWinCardInfo;
 extern WM_HWIN _hWinHome;
 extern WM_HWIN cur_win;
 void _cbHomeDialog(WM_MESSAGE *pMsg);
+extern uint8_t current_page;
+enum{
+    _HOMEPAGE,
+    _CARDINFOPAGE,
+    _CHARGINGPAGE,
+    _CHARGEDONEPAGE,
+};
+
 //临时调试变量
 typedef struct
 {
