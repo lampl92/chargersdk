@@ -113,9 +113,8 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->status.SetLoadPercent(pCON, 100);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
-                    if((pCON->status.xCPState == CP_9V_PWM
-                       || pCON->status.xCPState == CP_6V_PWM)
-                       &&(pCON->status.xCPState != CP_12V_PWM)) //后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
+	                if ((pCON->status.xCPState == CP_9V_PWM || pCON->status.xCPState == CP_6V_PWM)//后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
+                       &&(pCON->status.xCPState != CP_12V_PWM)) 
                     {
                         pCON->state = STATE_CON_PRECONTRACT;
                     }
@@ -159,6 +158,19 @@ void vTaskEVSECharge(void *pvParameters)
 //                }
                 break;
             case STATE_CON_PRECONTRACT://状态2' 充电设备准备就绪，等待车的S2，由车辆决定，可用于预约充电等
+		        //---预备充电过程中对异常进行检测
+				uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+					defEventBitCPSwitchCondition,
+					pdFALSE, pdTRUE, 0);
+	            if ((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
+	            {
+	            }
+	            else
+	            {
+		            pCON->state = STATE_CON_RETURN;
+		            break;
+	            }
+	            //////
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONS2Closed) == defEventBitCONS2Closed)
                 {
@@ -200,6 +212,19 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_STARTCHARGE:
+	            //---准备充电再次进行检测异常
+	            uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+													defEventBitCPSwitchCondition,
+													pdFALSE, pdTRUE, 0);
+	            if ((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
+	            {
+	            }
+	            else
+	            {
+		            pCON->state = STATE_CON_RETURN;
+		            break;
+	            }
+	            /////
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONAuthed) == defEventBitCONAuthed)
                 {

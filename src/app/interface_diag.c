@@ -603,6 +603,7 @@ void DiagPlugError(CON_t *pCON)
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONPlugOK);
         pCON->status.ulSignalState &= ~defSignalCON_State_Plug;
     }
+	
     if(pCON->status.xCPState == CP_6V_PWM || pCON->status.xCPState == CP_6V)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONS2Closed);
