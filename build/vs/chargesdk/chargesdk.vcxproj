@@ -212,8 +212,6 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c" />
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_Template.c" />
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_FlexColor_Template.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_Lin_Template.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
@@ -890,7 +888,7 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC_ot.a" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

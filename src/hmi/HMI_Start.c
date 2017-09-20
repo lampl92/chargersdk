@@ -77,8 +77,10 @@ void MainTask(void)
 
     while(1)
     {
-        GUI_Delay(100);
-        //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//	    printf_safe("exec start = %d\n", clock());
+        GUI_Exec();
+//	    printf_safe("exec end = %d\n", clock());
+	    //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(100);
 
         if(bittest(winInitDone,7))

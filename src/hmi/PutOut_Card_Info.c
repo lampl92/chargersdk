@@ -234,16 +234,16 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
     case WM_PAINT://MSG_UPDATEDATA:
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        //if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
-        if(_hWinCardInfo == cur_win)
+        if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
+        //if(_hWinCardInfo == cur_win)
 	    {
             /**< 信号数据处理 */
             Signal_Show();
             /**< 灯光控制 */
             Led_Show();
             /**< 如果界面发生了切换 */
-	        //if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
-		    if(_hWinCardInfo == cur_win)
+	        if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+		    //if(_hWinCardInfo == cur_win)
 			{
                 /**< 故障分析 */
                 Err_Analy(pMsg->hWin);
@@ -358,18 +358,18 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_JUMPHOME:
+	    current_page = _HOMEPAGE;
+        bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
 //        CreateHome();
-        current_page = _HOMEPAGE;
-        bitset(winInitDone,7);
         break;
     case MSG_JUMPCHAING:
+        current_page = _CHARGINGPAGE;
+        bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
 //        CreateCharging();
-        current_page = _CHARGINGPAGE;
-        bitset(winInitDone,7);
         break;
     default:
         WM_DefaultProc(pMsg);

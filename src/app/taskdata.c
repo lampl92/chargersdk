@@ -197,7 +197,7 @@ void vTaskEVSEData(void *pvParameters)
         }
         
         /********** 告警记录 **************/
-#if 0
+#if 1
         for (id = 0; id < ulTotalCON; id++)
         {
             pCON = CONGetHandle(id);
