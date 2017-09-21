@@ -196,7 +196,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     sec = diffsec % 3600 % 60;
 
     xsprintf((char *)_secDown, "(%02dS)", (60 - sec));
-	printf_safe("now = %d, first_time = %d, sec = %d ,winInitDone = %d ,first_CardInfo = %d\n", now, first_time, sec, winInitDone, first_CardInfo);
+	//printf_safe("now = %d, first_time = %d, sec = %d ,winInitDone = %d ,first_CardInfo = %d\n", now, first_time, sec, winInitDone, first_CardInfo);
     if(sec == 59)
     {
 	    bitclr(winInitDone,0);
@@ -302,7 +302,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
                 _deleteWin(_hWinCardInfo);
                 current_page = _HOMEPAGE;
                 bitset(winInitDone,7);
-//                CreateHome();
+                CreateHome();
                 break;
             case WM_NOTIFICATION_RELEASED:
 
@@ -362,14 +362,14 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-//        CreateHome();
+        CreateHome();
         break;
     case MSG_JUMPCHAING:
         current_page = _CHARGINGPAGE;
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-//        CreateCharging();
+        CreateCharging();
         break;
     default:
         WM_DefaultProc(pMsg);

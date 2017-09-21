@@ -316,7 +316,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 _deleteWin(_hWinChargDone);
                 _hWinChargDone = 0;
-//                CreateHome();
+                CreateHome();
                 current_page = _HOMEPAGE;
                 bitset(winInitDone,7);
                 // USER END
@@ -381,7 +381,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         first_flag = 0;
         _deleteWin(_hWinChargDone);
         _hWinChargDone = 0;
-//        CreateHome();
+        CreateHome();
         current_page = _HOMEPAGE;
         bitset(winInitDone,7);
         break;

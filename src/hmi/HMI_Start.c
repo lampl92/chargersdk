@@ -82,7 +82,7 @@ void MainTask(void)
 //	    printf_safe("exec end = %d\n", clock());
 	    //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(100);
-
+#if 0
         if(bittest(winInitDone,7))
         {
             bitclr(winInitDone,7);
@@ -102,5 +102,6 @@ void MainTask(void)
                     break;
             }
         }
+#endif
     }
 }

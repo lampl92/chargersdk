@@ -187,8 +187,8 @@
                                         defEventBitEVSEReady)
 
 #define defEventBitChargeCondition      (defEventBitCPSwitchCondition | \
-                                        defEventBitCONAuthed | \
                                         defEventBitCONS2Closed | \
+                                        defEventBitCONAuthed | \
                                         defEventBitCONLocked)
 
 

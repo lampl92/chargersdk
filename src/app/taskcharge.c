@@ -214,9 +214,11 @@ void vTaskEVSECharge(void *pvParameters)
             case STATE_CON_STARTCHARGE:
 	            //---准备充电再次进行检测异常
 	            uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-													defEventBitCPSwitchCondition,
+													(defEventBitCPSwitchCondition | defEventBitCONS2Closed),
 													pdFALSE, pdTRUE, 0);
-	            if ((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
+	            //fix:增加defEventBitCONS2Closed是因为未刷卡情况下，S2闭合时会直接跳到STATE_CON_STARTCHARGE状态，再打开S2不会退出STARTCHARGE状态。
+	            //    因此增加在STATE_CON_STARTCHARGE状态中检测S2状态，闭合后退出状态。
+	            if ((uxBitsCharge & (defEventBitCPSwitchCondition | defEventBitCONS2Closed)) == (defEventBitCPSwitchCondition | defEventBitCONS2Closed))
 	            {
 	            }
 	            else
@@ -224,6 +226,7 @@ void vTaskEVSECharge(void *pvParameters)
 		            pCON->state = STATE_CON_RETURN;
 		            break;
 	            }
+	            
 	            /////
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONAuthed) == defEventBitCONAuthed)
@@ -260,7 +263,7 @@ void vTaskEVSECharge(void *pvParameters)
                         if(pCON->status.ucRelayLState == SWITCH_ON &&
                                 pCON->status.ucRelayNState == SWITCH_ON)
                         {
-                            vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
+                            //vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
                             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                             pCON->state = STATE_CON_CHARGING;
                             printf_safe("Start Charge!\n");

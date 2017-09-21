@@ -241,7 +241,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _deleteWin(_hWinHome);
         //_hWinHome = 0;
         //WM_DeleteWindow(_hWinHome);
-//        CreateCardInfo();
+        CreateCardInfo();
         current_page = _CARDINFOPAGE;
         bitset(winInitDone,7);
         break;
@@ -251,7 +251,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //WM_DeleteWindow(_hWinHome);
         //PutOut_Charging();
         _deleteWin(_hWinHome);
-//        CreateCharging();
+        CreateCharging();
         current_page = _CHARGINGPAGE;
         bitset(winInitDone,7);
         break;
