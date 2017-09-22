@@ -308,18 +308,37 @@ void led_breath_b(void)
         }
     }
 }
+/**************LED ctrl **********************/
+/*       
+#define keep_off 0
+#define keep_on  1
+#define breath   2
+#define flicker  3
+
+#define red      0
+#define green    1
+#define blue     2                                    */
+/********************************************/
 void led_ctrl(uint8_t num, uint8_t colour, uint8_t state)
 {
+	
     if(colour == red)
     {
+	    led_ctrl_g(num, keep_off);
+	    led_ctrl_b(num, keep_off);
         led_ctrl_r(num, state);
+	    
     }
     else if(colour == green)
     {
+	    led_ctrl_r(num, keep_off);
+	    led_ctrl_b(num, keep_off);
         led_ctrl_g(num, state);
     }
     else if(colour == blue)
     {
+	    led_ctrl_r(num, keep_off);
+	    led_ctrl_g(num, keep_off);
         led_ctrl_b(num, state);
     }
 }

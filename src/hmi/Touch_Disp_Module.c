@@ -448,8 +448,6 @@ void Led_Show()
     /**< 置位说明有故障存在闪烁红灯 */
     if(bittest(winCreateFlag,1))
     {
-        led_ctrl(1,blue,keep_off);
-        led_ctrl(1,green,keep_off);
         led_ctrl(1,red,flicker);
     }
     else
@@ -458,14 +456,10 @@ void Led_Show()
         {
             case STATE_CON_IDLE:
                 /**< 空闲状态 */
-                led_ctrl(1,blue,keep_off);
-                led_ctrl(1,red,keep_off);
                 led_ctrl(1,green,keep_on);
             break;
             case STATE_CON_CHARGING:
                 /**< 充电过程中 */
-                led_ctrl(1,blue,keep_off);
-                led_ctrl(1,red,keep_off);
                 led_ctrl(1,green,breath);
             break;
             default:
@@ -475,16 +469,12 @@ void Led_Show()
                         ||pCON->status.xCPState == CP_6V)
                     {
                         /**< 等待车端插枪 */
-                        led_ctrl(1,blue,keep_off);
-                        led_ctrl(1,red,keep_off);
                         led_ctrl(1,green,flicker);
                     }
                     else if(pCON->status.xCPState == CP_9V_PWM
                         ||pCON->status.xCPState == CP_9V)
                     {
                         /**< S1未闭合 */
-                        led_ctrl(1,red,keep_off);
-                        led_ctrl(1,green,keep_off);
                         led_ctrl(1,blue,flicker);
                     }
                 }
@@ -492,8 +482,6 @@ void Led_Show()
                 else
                 {
                     /**< 未知状态 */
-                    led_ctrl(1,blue,keep_off);
-                    led_ctrl(1,red,keep_off);
                     led_ctrl(1,green,keep_on);
                 }
             break;

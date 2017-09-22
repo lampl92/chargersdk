@@ -299,9 +299,10 @@
 #define defSignalCON_Fault_AC_A_RelayPaste      BIT_5
 #define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
 #define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
-#define defSignalCON_Fault_CP                   BIT_8        //CP传感故障
-#define defSignalCON_Fault_Plug                 BIT_9
-#define defSignalCON_Fault_Meter                BIT_10       //电表或电能芯片
+#define defSignalCON_Fault_AC_N_RelayPaste      BIT_8
+#define defSignalCON_Fault_CP                   BIT_9        //CP传感故障
+#define defSignalCON_Fault_Plug                 BIT_10
+#define defSignalCON_Fault_Meter                BIT_11       //电表或电能芯片
     
     
     

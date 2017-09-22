@@ -142,7 +142,7 @@ void vTaskEVSEData(void *pvParameters)
 
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
-                                                 pdTRUE, pdTRUE, 20000);
+                                                 pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
 	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
 	            {
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);

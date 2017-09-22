@@ -459,7 +459,7 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
     pbuff[0] = pCON->order.ucStartType;//4 有卡，5 无卡
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 5);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
 
     return errcode;
 }
@@ -1495,8 +1495,8 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     memcpy(data_old, pProto->status.fault, 6);
 
-    //1-1 绝缘故障
-    if(pEVSE->status.ulPEState == 1)
+    //[0]:0 1-1 绝缘故障
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PE) == defSignalEVSE_Alarm_PE)
     {
         SET_BIT(pProto->status.fault[0], BIT_0);
     }
@@ -1504,28 +1504,28 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     {
         CLEAR_BIT(pProto->status.fault[0], BIT_0);
     }
-    //1-2 输出连接器过温故障
+    //[0]:1 1-2 输出连接器过温故障
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONACTempOK) != defEventBitCONACTempOK)
-        {
+	    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri) ||
+		    ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri) )
+	    {
             SET_BIT(pProto->status.fault[0], BIT_1);
             break;//有一个有故障就退出
-        }
+	    }
         else
         {
             CLEAR_BIT(pProto->status.fault[0], BIT_1);
         }
     }
-    //1-7 电流过大
+    //[0]:6 1-7 电流过大
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
         uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
-        {
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
+	    {
             SET_BIT(pProto->status.fault[0], BIT_6);
             break;//有一个有故障就退出
         }
@@ -1534,12 +1534,12 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
             CLEAR_BIT(pProto->status.fault[0], BIT_6);
         }
     }
-    //1-8 电压异常
+    //[0]:7 1-8 电压异常
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
+	    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp) ||
+	        ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
         {
             SET_BIT(pProto->status.fault[0], BIT_7);
             break;//有一个有故障就退出
@@ -1553,8 +1553,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
-        if((uxBit & defEventBitExceptionMeter) != defEventBitExceptionMeter)
+	    if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
         {
             SET_BIT(pProto->status.fault[1], BIT_3);
             break;//有一个有故障就退出
@@ -1568,8 +1567,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
-        if((uxBit & defEventBitExceptionCPSwitch) != defEventBitExceptionCPSwitch)
+	    if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
         {
             SET_BIT(pProto->status.fault[1], BIT_5);
             break;//有一个有故障就退出
@@ -1583,8 +1581,8 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
-        if((uxBit & defEventBitExceptionTempSensor) != defEventBitExceptionTempSensor)
+	    if (((pCON->status.ulSignalFault & defSignalCON_Fault_AC_A_Temp) == defSignalCON_Fault_AC_A_Temp) ||
+	        ((pCON->status.ulSignalFault & defSignalCON_Fault_AC_N_Temp) == defSignalCON_Fault_AC_N_Temp))
         {
             SET_BIT(pProto->status.fault[1], BIT_6);
             break;//有一个有故障就退出
@@ -1595,7 +1593,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
         }
     }
     //[1]:7 2-8 急停报警
-    if(pEVSE->status.ulScramState == 1)
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
     {
         SET_BIT(pProto->status.fault[1], BIT_7);
     }
@@ -1607,9 +1605,10 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
-        if((uxBit & defEventBitExceptionSocketTempSensor) != defEventBitExceptionSocketTempSensor)
-        {
+	    
+	    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp1_Cri) == defSignalCON_Alarm_SocketTemp1_Cri) ||
+			((pCON->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp2_Cri) == defSignalCON_Alarm_SocketTemp2_Cri))
+	    {
             SET_BIT(pProto->status.fault[2], BIT_0);
             break;//有一个有故障就退出
         }
@@ -1622,9 +1621,9 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventException);
-        if((uxBit & defEventBitExceptionRelayPaste) != defEventBitExceptionRelayPaste)
-        {
+	    if (((pCON->status.ulSignalFault & defSignalCON_Fault_AC_A_RelayPaste) == defSignalCON_Fault_AC_A_RelayPaste) ||
+			((pCON->status.ulSignalFault & defSignalCON_Fault_AC_N_RelayPaste) == defSignalCON_Fault_AC_N_RelayPaste))
+	    {
             SET_BIT(pProto->status.fault[3], BIT_2);
             break;//有一个有故障就退出
         }
@@ -1660,7 +1659,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     memcpy(data_old_p, pProto->status.protect, 6);
 
     //[0]:0 1-1 防雷器告警
-    if(pEVSE->status.ulArresterState == 1)
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Arrester) == defSignalEVSE_Alarm_Arrester)
     {
         SET_BIT(pProto->status.warning[0], BIT_0);
     }
@@ -1669,7 +1668,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
         CLEAR_BIT(pProto->status.warning[0], BIT_0);
     }
     //[1]:1 2-2 一般漏电
-    if(pEVSE->status.ulPEState == 1)
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PE) == defSignalEVSE_Alarm_PE)
     {
         SET_BIT(pProto->status.warning[0], BIT_1);
     }
@@ -1681,9 +1680,9 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
-        {
+	    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp) ||
+			((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+	    {
             SET_BIT(pProto->status.warning[1], BIT_4);
             break;//有一个有故障就退出
         }
@@ -1696,8 +1695,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONFreqOK) != defEventBitCONFreqOK)
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
         {
             SET_BIT(pProto->status.warning[2], BIT_7);
             break;//有一个有故障就退出
@@ -1711,8 +1709,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) == defSignalCON_Alarm_AC_A_CurrUp_War)
         {
             SET_BIT(pProto->status.warning[3], BIT_0);
             break;//有一个有故障就退出
@@ -1728,8 +1725,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONCurrOK) != defEventBitCONCurrOK)
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
         {
             SET_BIT(pProto->status.protect[1], BIT_7);
             break;//有一个有故障就退出
@@ -1743,9 +1739,9 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBit & defEventBitCONVoltOK) != defEventBitCONVoltOK)
-        {
+	    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp) ||
+			((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+	    {
             SET_BIT(pProto->status.protect[2], BIT_0);
             break;//有一个有故障就退出
         }
@@ -1755,7 +1751,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
         }
     }
     //[2]:1 3-2 硬件漏电保护
-    if(pEVSE->status.ulPEState == 1)
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PE) == defSignalEVSE_Alarm_PE)
     {
         SET_BIT(pProto->status.protect[2], BIT_1);
     }
