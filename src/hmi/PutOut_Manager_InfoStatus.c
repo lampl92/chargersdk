@@ -207,149 +207,156 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
  */
 static void Status_Content_Analy()
 {
+	CON_t	*pcont;
+	pcont = CONGetHandle(0);
+	
     /**< 工作状态 */
-    switch(disp_Status._workStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[0][0],"空闲");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[0][0],"充电中");
-        break;
-        case 2:
-            EDIT_SetText(_aahEdit[0][0],"故障");
-        break;
-    }
-    /**< 急停状态 */
-    switch(disp_Status._scramStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[1][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[1][0],"按下");
-        break;
-    }
-    /**< 环境温度 */
-    switch(disp_Status._envTempStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[2][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[2][0],"过温");
-        break;
-    }
-    /**< A插座温度 */
-    switch(disp_Status._AsocketTempStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[3][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[3][0],"过温");
-        break;
-    }
-    /**< B插座温度 */
-    switch(disp_Status._BsocketTempStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[4][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[4][0],"过温");
-        break;
-    }
+	if ((pcont->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+	{
+		EDIT_SetText(_aahEdit[0][0], "充电中");
+	}
+	else if ((pcont->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+	{
+		EDIT_SetText(_aahEdit[0][0], "空闲");
+	}
+	else if((pcont->status.ulSignalState & defSignalCON_State_Fault) == defSignalCON_State_Fault)
+	{
+		EDIT_SetText(_aahEdit[0][0], "故障");
+	}
+
+	/**< 急停状态 */
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
+	{
+		EDIT_SetText(_aahEdit[1][0], "按下");		
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[1][0], "正常");
+	}
+
+	/**< 电表通信 */
+	if ((pcont->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
+	{
+		EDIT_SetText(_aahEdit[2][0], "故障");
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[2][0], "正常");
+	}
+	
+    /**< A插座温度1 */
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp1_Cri) == defSignalCON_Alarm_SocketTemp1_Cri)
+	{
+		EDIT_SetText(_aahEdit[3][0], "过温");
+	}
+	else 
+	{
+		EDIT_SetText(_aahEdit[3][0], "正常");		
+	}
+	
+    /**< A插座温度2 */
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp2_Cri) == defSignalCON_Alarm_SocketTemp2_Cri)
+	{
+		EDIT_SetText(_aahEdit[4][0], "过温");
+	}
+	else 
+	{
+		EDIT_SetText(_aahEdit[4][0], "正常");		
+	}
+	
     /**< A枪输出电流 */
-    switch(disp_Status._AplugCurrentStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[5][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[5][0],"过流");
-        break;
-    }
-    /**< B枪输出电流 */
-    switch(disp_Status._BplugCurrentStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[6][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[6][0],"过流");
-        break;
-    }
-    /**< A枪枪锁 */
-    switch(disp_Status._AplugStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[7][0],"解锁");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[7][0],"锁止");
-        break;
-    }
-    /**< B枪枪锁 */
-    switch(disp_Status._BplugStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[8][0],"解锁");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[8][0],"锁止");
-        break;
-    }
-    /**< 交流电压 */
-    switch(disp_Status._acVoltStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[9][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[9][0],"过压");
-        break;
-    }
-    /**< 交流电流 */
-    switch(disp_Status._acCurrentStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[10][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[10][0],"过流");
-        break;
-    }
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
+	{
+		EDIT_SetText(_aahEdit[5][0],"过流");
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[5][0], "正常");
+	}
+
+	/**< RFID */
+	if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+	{
+		EDIT_SetText(_aahEdit[6][0], "故障");
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[6][0], "正常");
+	}    
+	
+	/**< A枪枪锁 */
+	if ((pcont->status.ulSignalState & defSignalCON_State_SocketLock) == defSignalCON_State_SocketLock)
+	{
+		EDIT_SetText(_aahEdit[7][0], "锁止");	
+	}
+	else
+	{
+        EDIT_SetText(_aahEdit[7][0],"解锁");	
+	}
+	
+    /**< 枪N温度 */
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+	{
+		EDIT_SetText(_aahEdit[8][0], "过温");
+	}
+	else 
+	{
+		EDIT_SetText(_aahEdit[8][0], "正常");		
+	}
+
+	/**< 交流电压 */
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+	{
+		EDIT_SetText(_aahEdit[9][0],"过压");
+	}
+	else if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+	{
+		EDIT_SetText(_aahEdit[9][0],"欠压");	
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[9][0], "正常");		
+	}
+
+	/**< 频率 */
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
+	{
+		EDIT_SetText(_aahEdit[10][0], "异常");
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[10][0], "正常");
+	}
+	
     /**< 防雷器状态 */
-    switch(disp_Status._spdStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[11][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[11][0],"故障");
-        break;
-    }
-    /**< 输出继电器状态 */
-    switch(disp_Status._outputRelayStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[12][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[12][0],"故障");
-        break;
-    }
-    /**< 控制导引状态 */
-    switch(disp_Status._controlPilotStatus)
-    {
-        case 0:
-            EDIT_SetText(_aahEdit[13][0],"正常");
-        break;
-        case 1:
-            EDIT_SetText(_aahEdit[13][0],"故障");
-        break;
-    }
+	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Arrester) == defSignalEVSE_Alarm_Arrester)
+	{
+		EDIT_SetText(_aahEdit[11][0], "故障");		
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[11][0], "正常");
+	}
+
+	/**< 输出继电器状态 */
+	if ((pcont->status.ulSignalState & defSignalCON_State_AC_A_Relay) == defSignalCON_State_AC_A_Relay)
+	{
+		EDIT_SetText(_aahEdit[12][0], "故障");		
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[12][0], "正常");
+	}
+
+	/**< 控制导引状态 */
+	if ((pcont->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+	{
+		EDIT_SetText(_aahEdit[13][0], "故障");		
+	}
+	else
+	{
+		EDIT_SetText(_aahEdit[13][0], "正常");
+	}
 }
 /*********************************************************************
 *
@@ -420,15 +427,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
         _aahText[0][0] = TEXT_CreateEx(30, 20, 120, 25,hWindow,WM_CF_SHOW,0,13,"工作状态:");
         _aahText[1][0] = TEXT_CreateEx(30, 50, 120, 25,hWindow,WM_CF_SHOW,0,13,"急停状态:");
-        _aahText[2][0] = TEXT_CreateEx(30, 80, 120, 25,hWindow,WM_CF_SHOW,0,13,"环境温度:");
-        _aahText[3][0] = TEXT_CreateEx(30, 110, 144, 25,hWindow,WM_CF_SHOW,0,13,"A插座温度:");
-        _aahText[4][0] = TEXT_CreateEx(30, 140, 144, 25,hWindow,WM_CF_SHOW,0,13,"B插座温度:");
-        _aahText[5][0] = TEXT_CreateEx(30, 170, 168, 25,hWindow,WM_CF_SHOW,0,13,"A枪输出电流:");
-        _aahText[6][0] = TEXT_CreateEx(30, 200, 168, 25,hWindow,WM_CF_SHOW,0,13,"B枪输出电流:");
-        _aahText[7][0] = TEXT_CreateEx(30, 230, 120, 25,hWindow,WM_CF_SHOW,0,13,"A枪枪锁:");
-        _aahText[8][0] = TEXT_CreateEx(30, 260, 120, 25,hWindow,WM_CF_SHOW,0,13,"B枪枪锁:");
+        _aahText[2][0] = TEXT_CreateEx(30, 80, 120, 25,hWindow,WM_CF_SHOW,0,13,"电表状态:");
+        _aahText[3][0] = TEXT_CreateEx(30, 110, 144, 25,hWindow,WM_CF_SHOW,0,13,"插座温度1:");
+        _aahText[4][0] = TEXT_CreateEx(30, 140, 144, 25,hWindow,WM_CF_SHOW,0,13,"插座温度2:");
+        _aahText[5][0] = TEXT_CreateEx(30, 170, 168, 25,hWindow,WM_CF_SHOW,0,13,"输出电流:");
+        _aahText[6][0] = TEXT_CreateEx(30, 200, 168, 25,hWindow,WM_CF_SHOW,0,13,"RFID状态:");
+        _aahText[7][0] = TEXT_CreateEx(30, 230, 120, 25,hWindow,WM_CF_SHOW,0,13,"枪锁:");
+        _aahText[8][0] = TEXT_CreateEx(30, 260, 120, 25,hWindow,WM_CF_SHOW,0,13,"零线温度:");
         _aahText[9][0] = TEXT_CreateEx(30, 290, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电压:");
-        _aahText[10][0] = TEXT_CreateEx(30, 320, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流电流:");
+        _aahText[10][0] = TEXT_CreateEx(30, 320, 120, 25,hWindow,WM_CF_SHOW,0,13,"交流频率:");
         _aahText[11][0] = TEXT_CreateEx(30, 350, 144, 25,hWindow,WM_CF_SHOW,0,13,"防雷器状态:");
         _aahText[12][0] = TEXT_CreateEx(30, 380, 144, 25,hWindow,WM_CF_SHOW,0,13,"输出继电器:");
         _aahText[13][0] = TEXT_CreateEx(30, 410, 120, 25,hWindow,WM_CF_SHOW,0,13,"控制导引:");

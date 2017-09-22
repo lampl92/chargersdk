@@ -147,7 +147,6 @@ void vTaskEVSEData(void *pvParameters)
 	            {
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 		            /* (rgw#1): 在这里存储订单*/
-		            //OrderDBInsertItem(&(pCON->order));
 		            AddOrderCfg(pathOrder, pCON, pechProto);
 		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
@@ -156,7 +155,13 @@ void vTaskEVSEData(void *pvParameters)
 	            }
 	            else
 	            {
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);//测试函数
+		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+					/* (rgw#1): 在这里存储订单*/
+		            AddOrderCfg(pathOrder, pCON, pechProto);
+		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
+		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
+		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
                 break;
             }

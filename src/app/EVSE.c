@@ -1105,12 +1105,13 @@ EVSE_t *EVSECreate(void)
 static void CONInit(void)
 {
     static CON_t *pCON[1];  //在堆中定义
-	uint8_t str[17] = "2000000000000002";
+	uint8_t str[17] = "3000000000000002";
 
     pListCON = UserListCreate();
     int i;
 //    double upp = 260;
 //    double low = 176;
+	double temp = 95;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
@@ -1119,6 +1120,7 @@ static void CONInit(void)
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
 	    pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
+	    pCON[i]->info.SetCONCfg(pCON[i], jnACTempUpperLimits, &temp, ParamTypeDouble);
         
 
         pListCON->Add(pListCON, pCON[i]);
@@ -1126,7 +1128,7 @@ static void CONInit(void)
 }
 void EVSEinit(void)
 {
-	uint8_t str[17] = "2000000000000002";
+	uint8_t str[17] = "3000000000000002";
 	
     pEVSE = EVSECreate();
 	    pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
