@@ -554,6 +554,10 @@ void cli_evsestatus_fnt(int argc, char **argv)
     printf_safe("防撞角度：    %d\n", pEVSE->status.ulKnockState );
     printf_safe("PE状态：      %d\n", pEVSE->status.ulPEState);
     printf_safe("掉电：        %d\n", pEVSE->status.ulPowerOffState);
+	printf_safe("进线A温度：   %.2lf\n", pEVSE->status.dAC_A_Temp_IN);
+	printf_safe("进线B温度：   %.2lf\n", pEVSE->status.dAC_B_Temp_IN);
+	printf_safe("进线C温度：   %.2lf\n", pEVSE->status.dAC_C_Temp_IN);
+	printf_safe("进线N温度：   %.2lf\n", pEVSE->status.dAC_N_Temp_IN);
     printf_safe("\n");
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {

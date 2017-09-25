@@ -59,6 +59,12 @@ typedef struct _EVSEStatus
     uint32_t ulPEState;
     uint32_t ulPowerOffState;
     uint32_t ulArresterState;
+	
+	double dAC_A_Temp_IN;
+	double dAC_B_Temp_IN;
+	double dAC_C_Temp_IN;
+	double dAC_N_Temp_IN;
+	
     uint32_t ulSignalState;
     uint32_t ulSignalAlarm;
     uint32_t ulSignalFault;
@@ -71,6 +77,10 @@ typedef struct _EVSEStatus
     pEVSE_ft GetPEState;
     pEVSE_ft GetPowerOffState;
     pEVSE_ft GetArresterState;
+	pEVSE_ft GetAC_A_Temp_in;
+	pEVSE_ft GetAC_B_Temp_in;
+	pEVSE_ft GetAC_C_Temp_in;
+	pEVSE_ft GetAC_N_Temp_in;
 }EVSEStatus_t;
 
 typedef struct _EVSE

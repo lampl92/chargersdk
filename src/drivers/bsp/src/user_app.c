@@ -7,6 +7,19 @@
 #include "electric_energy_meter.h"
 #include "FreeRTOS.h"
 float frequency_test;
+samp Sys_samp;
+
+static void value_reset(void)
+{
+	Sys_samp.DC.TEMP_ARM1 = 0;
+	Sys_samp.DC.TEMP_ARM2 = 0;
+	Sys_samp.DC.TEMP_ARM3 = 0;
+	Sys_samp.DC.TEMP_ARM4 = 0;
+	Sys_samp.DC.TEMP1 = 0;
+	Sys_samp.DC.TEMP2 = 0;
+	Sys_samp.DC.TEMP3 = 0;
+	Sys_samp.DC.TEMP4 = 0;
+}
 const double  resistance[154] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
@@ -386,7 +399,7 @@ uint8_t Get_State_relay()
 }
 void Peripheral_Init(void)
 {
-
+	value_reset();
     MX_GPIO_Init();
     IIC_Init();
     PCA9554_init();

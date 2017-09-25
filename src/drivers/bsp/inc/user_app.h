@@ -61,10 +61,10 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
-#define TEMP_L_OUT 0X00
-#define TEMP_L_IN  0X01
-#define TEMP_N_OUT 0X02
-#define TEMP_N_IN  0X03
+#define TEMP_L_OUT 0X00 //市电L输入
+#define TEMP_L_IN  0X01 //    N
+#define TEMP_N_OUT 0X02 //板卡L输出
+#define TEMP_N_IN  0X03 //板卡N输出
 #define TEMP_GUN1_POSITIVE  0X04
 #define TEMP_GUN1_NEGATIVE  0X05
 #define TEMP_GUN2_POSITIVE  0X06
@@ -132,7 +132,7 @@ typedef struct
     double TEMP3;
     double TEMP4;
     double TEMP_ARM1;
-    double TEMP_ARM2;
+	double TEMP_ARM2;
     double TEMP_ARM3;
     double TEMP_ARM4;
 } DC_t;
@@ -143,7 +143,6 @@ typedef struct
     AC_t AC;
     DC_t DC;
 } samp;
-samp Sys_samp;
 typedef struct
 {
     unsigned short CD4067;
@@ -247,4 +246,5 @@ double vref,va;
 uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum,leakage_current_sum,va_samp_sum,ia_samp_sum,CP2_sum,CP1_sum,CP1_sum_sys,CP2_sum_sys;
 uint8_t   pwm_samp_timer,pwm_samp_flag;
+extern samp Sys_samp;
 #endif /* USER_APP_H_INCLUDED */

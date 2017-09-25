@@ -19,9 +19,10 @@
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
 //extern void read_pca9554_2(void)；
-/*---------------------------------------------------------------------------/
-/                               设置充电桩信息到配置文件
-/---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*                               设置充电桩信息到配置文件                    */
+/*---------------------------------------------------------------------------*/
+
 static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam);
 static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
 static void TemplSegFree (gdsl_element_t e);
@@ -348,9 +349,9 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
 
     return errcode;
 }
-/*---------------------------------------------------------------------------/
-/                               从文件获取充电桩信息
-/---------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
+/*                              从文件获取充电桩信息						*/
+/*--------------------------------------------------------------------------*/
 /** @brief 设备唯一序列号,和长度
  *
  * @param pEVSE EVSE_t*
@@ -852,11 +853,10 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cJSON_Delete(jsEVSEObj);
     return errcode;
 }
-
-/*---------------------------------------------------------------------------/
-/                               从驱动获取充电桩状态
-/---------------------------------------------------------------------------*/
-
+	
+/*--------------------------------------------------------------------------*/
+/*                              从驱动获取充电桩状态						*/
+/*--------------------------------------------------------------------------*/
 
 /** @brief 获得急停状态
  *          0 无急停
@@ -1046,6 +1046,132 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     return errcode;
 }
 
+/** @brief A输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+	tmpACNTemp = 25;
+#else
+	tmpACTemp = (double)get_dc_massage(TEMP_L_OUT); 
+	if (tmpACTemp > 200 || tmpACTemp < -40)
+	{
+		errcode = ERR_EVSE_AC_A_TEMP_DECT_FAULT;
+	}
+#endif
+
+	pEVSE->status.dAC_A_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+/** @brief B输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_B_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+	tmpACNTemp = 25;
+#else
+	tmpACTemp = 0;
+#endif
+
+	pEVSE->status.dAC_B_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+/** @brief C输入
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+	tmpACNTemp = 25;
+#else
+	tmpACTemp = 0;
+#endif
+
+	pEVSE->status.dAC_C_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+
+/** @brief N输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+	tmpACNTemp = 25;
+#else
+	tmpACTemp = (double)get_dc_massage(TEMP_L_IN); 
+	if (tmpACTemp > 200 || tmpACTemp < -40)
+	{
+		errcode = ERR_EVSE_AC_N_TEMP_DECT_FAULT;
+	}
+#endif
+
+	pEVSE->status.dAC_N_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+
 EVSE_t *EVSECreate(void)
 {
     EVSE_t *pEVSE;
@@ -1085,6 +1211,12 @@ EVSE_t *EVSECreate(void)
     pEVSE->status.ulPEState       = 0;
     pEVSE->status.ulPowerOffState = 0;
     pEVSE->status.ulScramState    = 0;
+	
+	pEVSE->status.dAC_A_Temp_IN   = 0;
+	pEVSE->status.dAC_B_Temp_IN   = 0;
+	pEVSE->status.dAC_C_Temp_IN   = 0;
+	pEVSE->status.dAC_N_Temp_IN   = 0;
+	
     pEVSE->status.ulSignalState   = 0;
     pEVSE->status.ulSignalAlarm   = 0;
     pEVSE->status.ulSignalFault   = 0;
@@ -1098,6 +1230,10 @@ EVSE_t *EVSECreate(void)
     pEVSE->status.GetPEState       = GetPEState;
     pEVSE->status.GetPowerOffState = GetPowerOffState;
     pEVSE->status.GetScramState    = GetScramState;
+	pEVSE->status.GetAC_A_Temp_in  = GetAC_A_Temp_in;
+	pEVSE->status.GetAC_B_Temp_in  = GetAC_B_Temp_in;
+	pEVSE->status.GetAC_C_Temp_in  = GetAC_C_Temp_in;
+	pEVSE->status.GetAC_N_Temp_in  = GetAC_N_Temp_in;
 
     return pEVSE;
 }

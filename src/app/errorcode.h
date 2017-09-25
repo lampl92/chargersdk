@@ -25,6 +25,10 @@ typedef enum _ErrorCode
     ERR_PE_FAULT,		        //保护接地连续性传感器发生故障
     ERR_POWEROFF_DECT_FAULT,	//掉电状态检测器发生故障
     ERR_ARRESTER_FAULT,		    //避雷器发生故障
+	ERR_EVSE_AC_A_TEMP_DECT_FAULT, //市电A进线温度检测发生故障
+	ERR_EVSE_AC_B_TEMP_DECT_FAULT, //市电B进线温度检测发生故障
+	ERR_EVSE_AC_C_TEMP_DECT_FAULT, //市电C进线温度检测发生故障
+	ERR_EVSE_AC_N_TEMP_DECT_FAULT, //市电N进线温度检测发生故障
 
     ERR_CON_METER_FAULT,        //电表通信故障
     ERR_CON_CP_FAULT,           //检测CP故障

@@ -724,9 +724,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /*记录时间  枪号  故障等级  故障状态  故障信息*/
 			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 320, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障信息", GUI_TA_HCENTER | GUI_TA_VCENTER);
 
 			/* 添加三行，调用一次函数LISTVIEW_AddRow添加一行 */

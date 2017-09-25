@@ -580,7 +580,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     /** 获取电流 */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
-        return ERR_CON_METER_FAULT;
+        errcode = ERR_CON_METER_FAULT;
     }
     else
     {
@@ -617,6 +617,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
+	tmpFreq = 0;
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
@@ -626,7 +627,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #else
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
-        return ERR_CON_METER_FAULT;
+        errcode = ERR_CON_METER_FAULT;
     }
     else
     {
@@ -651,12 +652,14 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
+	tmpPower = 0;
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
     if(Electricity_meter[ucCONID].flag.flag_erro == 1)
     {
-        return ERR_CON_METER_FAULT;
+		tmpPower = pCON->status.dChargingPower;//通信失败后，获取上次的值
+        errcode = ERR_CON_METER_FAULT;
     }
     else
     {
@@ -1139,21 +1142,17 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACLTemp = 25;
 #else
-        get_dc_massage(TEMP_L_OUT);
-        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
+	    
+//        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
+	    tmpACLTemp = (double)get_dc_massage(TEMP_N_OUT);
         if(tmpACLTemp > 100 || tmpACLTemp < -40)
         {
-            return ERR_CON_ACLTEMP_DECT_FAULT;
+            errcode = ERR_CON_ACLTEMP_DECT_FAULT;
         }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpACLTemp = get_dc_massage(TEMP_L_OUT);
-        if(tmpACLTemp > 100 || tmpACLTemp < -40)
-        {
-            return ERR_CON_ACLTEMP_DECT_FAULT;
-        }
     }
 
 
@@ -1191,21 +1190,17 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACNTemp = 25;
 #else
-        get_dc_massage(TEMP_N_OUT);
-        tmpACNTemp = (double)Sys_samp.DC.TEMP3;
+        
+        //tmpACNTemp = (double)Sys_samp.DC.TEMP3;
+	    tmpACNTemp = (double)get_dc_massage(TEMP_N_IN); 
         if(tmpACNTemp > 100 || tmpACNTemp < -40)
         {
-            return ERR_CON_ACNTEMP_DECT_FAULT;
+            errcode = ERR_CON_ACNTEMP_DECT_FAULT;
         }
 #endif
     }
     else if(ucCONID == 1)
     {
-        tmpACNTemp = get_dc_massage(TEMP_N_OUT);
-        if(tmpACNTemp > 100 || tmpACNTemp < -40)
-        {
-            return ERR_CON_ACNTEMP_DECT_FAULT;
-        }
     }
 
     /*********************/
@@ -1214,6 +1209,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 
     return errcode;
 }
+
 /** @brief
  *
  * @param pvCON void*
@@ -1244,7 +1240,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
-            return ERR_CON_BTEMP1_DECT_FAULT;
+            errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
 #endif
     }
@@ -1253,7 +1249,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
-            return ERR_CON_BTEMP1_DECT_FAULT;
+            errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
     }
     /*********************/
@@ -1292,7 +1288,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
-            return ERR_CON_BTEMP2_DECT_FAULT;
+            errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
 #endif
     }
@@ -1301,7 +1297,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
-            return ERR_CON_BTEMP2_DECT_FAULT;
+            errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
     }
 
