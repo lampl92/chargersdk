@@ -33,6 +33,12 @@
 #include "order.h"
 #include "interface.h"
 #include "utils.h"
+#include "cJSON.h"
+#include "evse_config.h"
+#include "cfg_parse.h"
+#include "stringName.h"
+#include "errorcode.h"
+#include <string.h>
 
 #define BYTES_LEN 1024
 
@@ -154,8 +160,73 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 *
 **********************************************************************
 */
-static void Data_Flush(WM_MESSAGE *pMsg)
+int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 {
+    cJSON *jsParent;
+    cJSON *jsChild;
+    cJSON *jsItem;
+    ErrorCode_t errcode;
+    uint32_t ulMaxItem;
+    int i;
+	struct tm *ts;
+	char buf[80];
+
+	if(0 == log_type)   //故障记录
+    {
+        jsParent = GetCfgObj("system\\evse.log", &errcode);
+        if (jsParent == NULL)
+        {
+            return errcode;
+        }
+        ulMaxItem  = cJSON_GetArraySize(jsParent);
+        if (ulMaxItem == 0)
+        {
+            return 0;
+        }
+        for (i = 0; i < ulMaxItem; i++)
+        {
+            //记录时间  枪号  故障等级  故障状态  故障信息
+            jsChild = cJSON_GetArrayItem(jsParent, i);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+            LISTVIEW_AddRow(hItem, NULL);
+            LISTVIEW_SetItemText(hItem, 0, i, buf);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
+            xsprintf((char *)buf, "%d", jsItem->valueint);
+            LISTVIEW_SetItemText(hItem, 1, i, buf);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
+            xsprintf((char *)buf, "%d", jsItem->valueint);
+            LISTVIEW_SetItemText(hItem, 2, i, buf);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogState);
+            xsprintf((char *)buf, "%d", jsItem->valueint);
+            LISTVIEW_SetItemText(hItem, 3, i, buf);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
+            LISTVIEW_SetItemText(hItem, 4, i, jsItem->valuestring);
+        }
+    }
+    else if(1 == log_type)
+    {
+//        jsParent = GetCfgObj(path, &errcode);
+//        if (jsParent == NULL)
+//        {
+//            return errcode;
+//        }
+//        ulMaxItem  = cJSON_GetArraySize(jsParent);
+//        if (ulMaxItem == 0)
+//        {
+//            return 0;
+//        }
+    }
+
+    cJSON_Delete(jsParent);
+
+    return errcode;
 }
 /** @brief
  *
@@ -650,12 +721,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
             }
-
+            /*记录时间  枪号  故障等级  故障状态  故障信息*/
 			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "起始时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "结束时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "告警内容", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 320, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障信息", GUI_TA_HCENTER | GUI_TA_VCENTER);
 
 			/* 添加三行，调用一次函数LISTVIEW_AddRow添加一行 */
 //			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
@@ -663,8 +735,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
 
 
-            DBselect_Data(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
-
+            //DBselect_Data(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+            Data_Flush(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 //            for(i = 0; i< 500;i++)
 //            {
 //                LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
