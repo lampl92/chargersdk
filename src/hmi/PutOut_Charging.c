@@ -162,13 +162,13 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%02d", sec);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_6), temp_buf);// sec
 
-    sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
+    sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalPower * 100) / 100.0);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), temp_buf);//充入电量
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalServFee);
+    sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalServFee * 100) / 100.0);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), temp_buf);//当前服务费
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
+    sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalPowerFee * 100) / 100.0);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);//当前电费
-    sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
+    sprintf(temp_buf, "%.2lf", ((uint32_t)(pCON->order.dTotalServFee * 100) + (uint32_t)(pCON->order.dTotalPowerFee * 100)) / 100.0);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
 }
 /** @brief 数据管理和跳页消息

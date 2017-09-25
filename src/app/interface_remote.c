@@ -360,7 +360,6 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         break;
     case ERR_NO:
         //pbuff[0...3] 操作ID ，不处理，留在ucRecvdOptData中待回复时使用
-
         //pbuff[12] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[12]);
         pCON = CONGetHandle(id);
@@ -389,7 +388,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             {
                 /**在这里判断交易号是否相等 */
                 HexToStr(&pbuff[4], strOrderSN_tmp, 8);
-                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+                if(1)
+//                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
                 {
                     *pctrl = pbuff[13];
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
@@ -1286,7 +1286,7 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
 
-        ultmpNetSeq.ulVal = time(NULL); // 采用时间戳作为交易流水号, 协议中标识为BIN 8, 因此不做字节序转换
+        ultmpNetSeq.ulVal = htonl(time(NULL)); // 采用时间戳作为交易流水号
         ucOrderSN[0] = 0;
         ucOrderSN[1] = 0;
         ucOrderSN[2] = 0;
