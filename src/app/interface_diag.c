@@ -698,3 +698,139 @@ void DiagEVSEError(CON_t *pCON)
         pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_PowerOff;
     }
 }
+#if 0
+void DiagEVSETempError(CON_t *pCON)
+{
+    ErrorLevel_t templevel;
+    int id;
+    id = pCON->info.ucCONID;
+    /* ACLTemp */
+    templevel = HandleTemp(pEVSE->status.dACLTemp,
+        pCON->info.dACTempLowerLimits,
+        pCON->info.dACTempUpperLimits);
+    switch (templevel)
+    {
+    case ERR_LEVEL_OK:
+        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+        break;
+    case ERR_LEVEL_WARNING:
+        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+        break;
+    case ERR_LEVEL_CRITICAL:
+        //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_Cri;
+        break;
+    default:
+        break;
+    }
+    /* end of ACLTemp */
+
+    /* ACNTemp */
+    templevel = HandleTemp(pCON->status.dACNTemp,
+        pCON->info.dACTempLowerLimits,
+        pCON->info.dACTempUpperLimits);
+    switch (templevel)
+    {
+    case ERR_LEVEL_OK:
+        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+        break;
+    case ERR_LEVEL_WARNING:
+        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+        break;
+    case ERR_LEVEL_CRITICAL:
+        //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_Cri;
+        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        break;
+    default:
+        break;
+    }
+    /* end of ACNTemp */
+
+    if (pCON->info.ucSocketType == defSocketTypeB)
+    {
+        /* SocketTemp1 */
+        templevel = HandleTemp(pCON->status.dBTypeSocketTemp1,
+            pCON->info.dSocketTempLowerLimits,
+            pCON->info.dSocketTempUpperLimits);
+        switch (templevel)
+        {
+        case ERR_LEVEL_OK:
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_Cri;
+            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+            break;
+        default:
+            break;
+        }
+        /* end of SocketTemp1 */
+
+        /* SocketTemp2 */
+        templevel = HandleTemp(pCON->status.dBTypeSocketTemp2,
+            pCON->info.dSocketTempLowerLimits,
+            pCON->info.dSocketTempUpperLimits);
+        switch (templevel)
+        {
+        case ERR_LEVEL_OK:
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_Cri;
+            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+            break;
+        default:
+            break;
+        }
+        /* end of SocketTemp2 */
+    }
+    else if (pCON->info.ucSocketType == defSocketTypeC) //C型连接没有温度检测点，直接置位OK
+    {
+        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
+    }
+}
+#endif

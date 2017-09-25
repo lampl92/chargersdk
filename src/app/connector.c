@@ -1144,7 +1144,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #else
 	    
 //        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
-	    tmpACLTemp = (double)get_dc_massage(TEMP_N_OUT);
+        tmpACLTemp = (double)get_dc_massage(TEMP_L_IN);
         if(tmpACLTemp > 100 || tmpACLTemp < -40)
         {
             errcode = ERR_CON_ACLTEMP_DECT_FAULT;
@@ -1192,7 +1192,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #else
         
         //tmpACNTemp = (double)Sys_samp.DC.TEMP3;
-	    tmpACNTemp = (double)get_dc_massage(TEMP_N_IN); 
+        tmpACNTemp = (double)get_dc_massage(TEMP_L_OUT); 
         if(tmpACNTemp > 100 || tmpACNTemp < -40)
         {
             errcode = ERR_CON_ACNTEMP_DECT_FAULT;
