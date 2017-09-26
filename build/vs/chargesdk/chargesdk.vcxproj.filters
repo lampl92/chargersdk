@@ -3946,6 +3946,15 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\connector_privType.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\EVSE_privType.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_define.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC_ot.a">

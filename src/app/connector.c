@@ -15,9 +15,57 @@
 #include "stringName.h"
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
-/*---------------------------------------------------------------------------/
-/                               设置充电接口信息到配置文件
-/---------------------------------------------------------------------------*/
+
+static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    CON_t *pCON;
+    
+    pCON = (CON_t *)pvDev;
+    if (block >= CON_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    pCON->status.ulSignalPool[block] |= bit;
+    
+    return 1;
+}
+static int ClrSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    CON_t *pCON;
+    
+    pCON = (CON_t *)pvDev;
+    if (block >= CON_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    pCON->status.ulSignalPool[block] &= ~bit;
+    
+    return 1;
+}
+static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    CON_t *pCON;
+    
+    pCON = (CON_t *)pvDev;
+    if (block >= CON_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    if ((pCON->status.ulSignalPool[block] & bit) == bit)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+/*---------------------------------------------------------------------------*/
+/*                               设置充电接口信息到配置文件                    */
+/*---------------------------------------------------------------------------*/
 
 static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
@@ -79,42 +127,10 @@ static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgPara
 
     return errcode;
 }
-#if 0
-ErrorCode_t SetCONType(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetSocketType(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetVolatageUpperLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetVolatageLowerLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetACTempUpperLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetACTempLowerLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetSocketTempUpperLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetSocketTempLowerLimits(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetRatedCurrent(void *pvCON, void *pvCfgParam)
-{
-}
-ErrorCode_t SetRatedPower(void *pvCON, void *pvCfgParam)
-{
-}
-#endif
-/*---------------------------------------------------------------------------/
-/                               从文件获取充电接口信息
-/---------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------*/
+/*                              从文件获取充电接口信息                         */
+/*---------------------------------------------------------------------------*/
 /** @todo (rgw#1#): 增加枪充电类型CONType */
 
 static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
@@ -503,10 +519,10 @@ exit_parse:
 exit:
     return errcode;
 }
-/*---------------------------------------------------------------------------/
-/                               从驱动获取充电接口状态
-/---------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------*/
+/*                              从驱动获取充电接口状态                         */
+/*---------------------------------------------------------------------------*/
 
 
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */

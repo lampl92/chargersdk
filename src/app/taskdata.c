@@ -374,6 +374,30 @@ void vTaskEVSEData(void *pvParameters)
                     case defSignalEVSE_Alarm_Arrester: 
                         AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "防雷");
                         break;
+                    case defSignalEVSE_Alarm_AC_A_Temp_War: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_B_Temp_War: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_C_Temp_War: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_N_Temp_War: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_A_Temp_Cri: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_B_Temp_Cri: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_C_Temp_Cri: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
+                        break;
+                    case defSignalEVSE_Alarm_AC_N_Temp_Cri: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
+                        break;
                     default:
                         AddEVSELog(pathEVSELog, 0, defLogLevelCritical, 1, "EVSE未知告警");
                         break;

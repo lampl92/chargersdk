@@ -238,10 +238,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h" />
     <ClInclude Include="..\..\..\src\app\connector.h" />
+    <ClInclude Include="..\..\..\src\app\connector_privType.h" />
     <ClInclude Include="..\..\..\src\app\errorcode.h" />
     <ClInclude Include="..\..\..\src\app\EVSE.h" />
     <ClInclude Include="..\..\..\src\app\evse_config.h" />
+    <ClInclude Include="..\..\..\src\app\evse_define.h" />
     <ClInclude Include="..\..\..\src\app\evse_globals.h" />
+    <ClInclude Include="..\..\..\src\app\EVSE_privType.h" />
     <ClInclude Include="..\..\..\src\app\factorycfg.h" />
     <ClInclude Include="..\..\..\src\app\includes.h" />
     <ClInclude Include="..\..\..\src\app\interface.h" />

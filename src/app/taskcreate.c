@@ -192,7 +192,7 @@ void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-#ifdef EVSE_NO_HMI
+#ifdef EVSE_DEBUG
         while(1)
         {
             vTaskDelay(1000);

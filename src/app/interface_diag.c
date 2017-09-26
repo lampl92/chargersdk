@@ -9,6 +9,24 @@
 #include "evse_config.h"
 #include "evse_globals.h"
 
+
+#define defDiag_EVSE_Temp_War   (defSignalEVSE_Alarm_AC_A_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_B_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_C_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_N_Temp_War )
+#define defDiag_EVSE_Temp_Cri   (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_B_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_C_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_N_Temp_Cri )
+#define defDiag_CON_Temp_War   ( defSignalCON_Alarm_AC_A_Temp_War | \
+                                 defSignalCON_Alarm_AC_B_Temp_War | \
+                                 defSignalCON_Alarm_AC_C_Temp_War | \
+                                 defSignalCON_Alarm_AC_N_Temp_War )
+#define defDiag_CON_Temp_Cri   ( defSignalCON_Alarm_AC_A_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_B_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_C_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_N_Temp_Cri )
+
 typedef enum
 {
     VOLT_OK,
@@ -299,7 +317,6 @@ void DiagCurrentError(CON_t *pCON)
     memset(strTimerName, 0, 50);
     id = pCON->info.ucCONID;
 
-    //if(pCON->state == STATE_CON_CHARGING)
     {
         currstat = HandleCurr(pCON->status.dChargingCurrent,
                               pCON->info.dRatedCurrent);
@@ -411,9 +428,9 @@ void DiagCurrentError(CON_t *pCON)
         default:
             break;
         }/*end of switch(xCurrStat)*/
-    }/*end of (state == STATE_CON_CHARGING)*/
-    //else //进入到STATE_CURR_ERROR前，connector的状态应该已经变成非CHARGING状态。
-    {
+    }
+
+    {//进入到STATE_CURR_ERROR前，connector的状态应该已经变成非CHARGING状态。
         switch(pCON->status.xCurrStat)
         {
         case STATE_CURR_ERROR:
@@ -439,67 +456,176 @@ void DiagCurrentError(CON_t *pCON)
 void DiagTempError(CON_t *pCON)
 {
     ErrorLevel_t templevel;
+    ErrorLevel_t templevel_EVSE_A;
+    ErrorLevel_t templevel_EVSE_B;
+    ErrorLevel_t templevel_EVSE_C;
+    ErrorLevel_t templevel_EVSE_N;
+    ErrorLevel_t templevel_CON_A;
+    ErrorLevel_t templevel_CON_B;
+    ErrorLevel_t templevel_CON_C;
+    ErrorLevel_t templevel_CON_N;
     int id;
     id = pCON->info.ucCONID;
-    /* ACLTemp */
-    templevel = HandleTemp(pCON->status.dACLTemp,
-                           pCON->info.dACTempLowerLimits,
-                           pCON->info.dACTempUpperLimits);
-    switch(templevel)
-    {
-    case ERR_LEVEL_OK:
-        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
-        break;
-    case ERR_LEVEL_WARNING:
-        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_War;
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
-        break;
-    case ERR_LEVEL_CRITICAL:
-        //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_Cri;
-        break;
-    default:
-        break;
-    }
-    /* end of ACLTemp */
 
-    /* ACNTemp */
-    templevel = HandleTemp(pCON->status.dACNTemp,
-                           pCON->info.dACTempLowerLimits,
-                           pCON->info.dACTempUpperLimits);
-    switch(templevel)
     {
-    case ERR_LEVEL_OK:
-        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
-        break;
-    case ERR_LEVEL_WARNING:
-        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_War;
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
-        break;
-    case ERR_LEVEL_CRITICAL:
-        //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_Cri;
-        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
-        break;
-    default:
-        break;
+        templevel_EVSE_A = HandleTemp(pEVSE->status.dAC_A_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_A)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        default:
+            break;
+        }
     }
-    /* end of ACNTemp */
+    {
+        templevel_EVSE_B = HandleTemp(pEVSE->status.dAC_B_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_B)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_EVSE_C = HandleTemp(pEVSE->status.dAC_C_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_C)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_EVSE_N = HandleTemp(pEVSE->status.dAC_N_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_N)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_CON_A = HandleTemp(pCON->status.dACLTemp,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_CON_A)
+        {
+        case ERR_LEVEL_OK:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+//    templevel_CON_B = HandleTemp(pCON->status.dACLTemp,
+//                           pCON->info.dACTempLowerLimits,
+//                           pCON->info.dACTempUpperLimits);
+//    templevel_CON_C = HandleTemp(pCON->status.dACLTemp,
+//                           pCON->info.dACTempLowerLimits,
+//                           pCON->info.dACTempUpperLimits);
+    {
+        templevel_CON_N = HandleTemp(pCON->status.dACNTemp,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_CON_N)
+        {
+        case ERR_LEVEL_OK:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    
+    {  
+        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
+          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
+            (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+            ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        }
+        else
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+    }
 
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
@@ -833,4 +959,4 @@ void DiagEVSETempError(CON_t *pCON)
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
     }
 }
-#endif
+#endif

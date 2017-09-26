@@ -10,6 +10,7 @@
 
 #include <time.h>
 #include "gdsl_list.h"
+#include "evse_config.h"
 #include "taskremote.h"
 
 
