@@ -36,8 +36,7 @@ typedef enum _ErrorCode
     ERR_CON_PLUG_FAULT,         //插枪状态检测器发生故障
     ERR_CON_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障
     ERR_CON_CANT_LOCK,          //B型连接枪锁无法锁止
-    ERR_CON_ACLTEMP_DECT_FAULT, //L进线温度检测发生故障
-    ERR_CON_ACNTEMP_DECT_FAULT, //N进线温度检测发生故障
+    ERR_CON_ACTEMP_DECT_FAULT, // 进线温度检测发生故障
     ERR_CON_BTEMP1_DECT_FAULT,  //B型连接温度检测点1发生故障
     ERR_CON_BTEMP2_DECT_FAULT,  //B型连接温度检测点2发生故障
     ERR_CON_STARTCHARGE,        //开始充电错误

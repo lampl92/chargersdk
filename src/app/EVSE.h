@@ -8,7 +8,7 @@
 #ifndef  __EVSE_H
 #define  __EVSE_H
 
-#include "EVSE_PrivType.h"
+#include "EVSE_privType.h"
 
 typedef struct _EVSE
 {
