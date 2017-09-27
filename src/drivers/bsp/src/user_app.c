@@ -20,7 +20,7 @@ static void value_reset(void)
 	Sys_samp.DC.TEMP3 = 0;
 	Sys_samp.DC.TEMP4 = 0;
 }
-const double  resistance[154] =
+const double  resistance[146] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
     201.585, 189.199, 177.617, 166.789, 156.665, 147.200, 138.349, 130.073, 122.333, 115.093,
@@ -117,7 +117,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 0:
         ad_value = (double)(ad_samp_value * 3) / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -130,7 +130,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -143,7 +143,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -156,7 +156,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -169,7 +169,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -182,7 +182,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -195,7 +195,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -208,7 +208,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j <= 146; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {

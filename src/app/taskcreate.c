@@ -37,7 +37,7 @@
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
 #define defSTACK_TaskEVSEDiag               512
-#define defSTACK_TaskEVSEData               (1024*100)
+#define defSTACK_TaskEVSEData               (1024*500)
 
 
 //#define TCPIP_THREAD_STACKSIZE      512

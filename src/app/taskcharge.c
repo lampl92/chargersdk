@@ -110,7 +110,7 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdFALSE, pdTRUE, 0);
                 if((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
                 {
-                    pCON->status.SetLoadPercent(pCON, 100);
+                    pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
                     vTaskDelay(defRelayDelay);
 	                if ((pCON->status.xCPState == CP_9V_PWM || pCON->status.xCPState == CP_6V_PWM)//后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
@@ -436,6 +436,7 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_RETURN:
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed); //清除认证标志
+                pCON->status.ucLoadPercent = 100;
                 pCON->state = STATE_CON_IDLE;
                 break;
             }

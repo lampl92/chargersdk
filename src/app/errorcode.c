@@ -89,6 +89,6 @@ void ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info)
         {
             while (*str++) ;
         }
-        printf_safe("%s, %s, rc=%u FR_%s\n", (UINT)rc, str);
+        printf_safe("\n%s, %s, rc=%u FR_%s\n", path, info,(UINT)rc, str);
     }
 }

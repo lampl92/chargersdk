@@ -240,7 +240,10 @@
 #define defSignalEVSE_Fault_Wifi                BIT_2
 #define defSignalEVSE_Fault_GPRS                BIT_3
 #define defSignalEVSE_Fault_GSensor             BIT_4
-    
+#define defSignalEVSE_Fault_AC_A_Temp           BIT_5
+#define defSignalEVSE_Fault_AC_B_Temp           BIT_6
+#define defSignalEVSE_Fault_AC_C_Temp           BIT_7
+#define defSignalEVSE_Fault_AC_N_Temp           BIT_8
 /*CON Signal Pool*/
     //ulSignalState
 #define defSignalCON_State_Standby              BIT_0//

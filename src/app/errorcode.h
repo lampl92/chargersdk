@@ -79,6 +79,7 @@ typedef enum _ErrorLevel
     ERR_LEVEL_TIPS,
     ERR_LEVEL_WARNING,
     ERR_LEVEL_CRITICAL,
+    ERR_LEVEL_FAULT,
     ERR_LEVEL_CLEAR
 } ErrorLevel_t;
 

@@ -1,6 +1,6 @@
 /**
 * @file timercallback.c
-* @brief ¶¨Ê±Æ÷»Øµ÷º¯Êý
+* @brief å®šæ—¶å™¨å›žè°ƒå‡½æ•°
 * @author rgw
 * @version v1.0
 * @date 2017-02-13
@@ -8,7 +8,7 @@
 #include "includes.h"
 #include "interface.h"
 
-/** ¶¨Ê±Æ÷ÔÚtaskcreateÖÐ¶¨ÒåºÍ´´½¨
+/** å®šæ—¶å™¨åœ¨taskcreateä¸­å®šä¹‰å’Œåˆ›å»º
  */
 
 void vCONTimerCB(TimerHandle_t xTimer)

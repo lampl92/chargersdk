@@ -93,10 +93,20 @@ void vTaskEVSEDiag(void *pvParameters)
         {
             pCON = CONGetHandle(i);
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
-            if((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
+            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
-                pCON->status.SetLoadPercent(pCON, 50);
+                if (pCON->state == STATE_CON_CHARGING)
+                {
+                    pCON->status.SetLoadPercent(pCON, 70);
+                }
             }
+//            else
+//            {
+//                if (pCON->state == STATE_CON_CHARGING)
+//                {
+//                    pCON->status.SetLoadPercent(pCON, 100);
+//                }
+//            }
         }
         /* end of 处理系统报警 */
 

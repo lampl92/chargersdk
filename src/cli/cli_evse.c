@@ -563,6 +563,7 @@ void cli_evsestatus_fnt(int argc, char **argv)
     {
         pCON = CONGetHandle(i);
         printf_safe("名称=========状态=======   CONID %d\r\n", i);
+        printf_safe("CP Volt   %.2lf\n", pCON->status.dCPVolt);
         printf_safe("CP状态：      ");
         switch(pCON->status.xCPState)
         {

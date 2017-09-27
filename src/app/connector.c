@@ -762,7 +762,12 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else
         {
-            printf_safe("CPERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
+            printf_safe("CP_ERR %lf\n", cp1);
             tmpCPState = CP_ERR;
             pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
             errcode =  ERR_CON_CP_FAULT;
@@ -1149,21 +1154,21 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACLTemp = 0;
+    tmpACLTemp = 0;//pCON->status.dACLTemp;
     errcode = ERR_NO;
 
     /** 实现代码  */
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpACLTemp = 25;
+        tmpACLTemp += 40;
 #else
 	    
 //        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
         tmpACLTemp = (double)get_dc_massage(TEMP_L_IN);
-        if(tmpACLTemp > 100 || tmpACLTemp < -40)
+        if(tmpACLTemp > 200 || tmpACLTemp < -40)
         {
-            errcode = ERR_CON_ACLTEMP_DECT_FAULT;
+            errcode = ERR_CON_ACTEMP_DECT_FAULT;
         }
 #endif
     }
@@ -1209,9 +1214,9 @@ static ErrorCode_t GetACNTemp(void *pvCON)
         
         //tmpACNTemp = (double)Sys_samp.DC.TEMP3;
         tmpACNTemp = (double)get_dc_massage(TEMP_L_OUT); 
-        if(tmpACNTemp > 100 || tmpACNTemp < -40)
+        if(tmpACNTemp > 200 || tmpACNTemp < -40)
         {
-            errcode = ERR_CON_ACNTEMP_DECT_FAULT;
+           errcode = ERR_CON_ACTEMP_DECT_FAULT;
         }
 #endif
     }
@@ -1254,7 +1259,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 200 || tmpTemp < -40)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
