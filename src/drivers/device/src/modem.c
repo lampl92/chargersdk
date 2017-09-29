@@ -1094,7 +1094,7 @@ void Modem_Poll(DevModem_t *pModem)
                     recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                     if(recv_len > 0)
                     {
-                        printf_safe("\nTCP Recv: ");
+                        printf_safe("\n\e[34;43mTCP Recv:\e[0m ");
                         for(i = 0; i < recv_len; i++)
                         {
                             printf_safe("%02X ", tcp_client_recvbuf[i]);
@@ -1102,6 +1102,7 @@ void Modem_Poll(DevModem_t *pModem)
                         printf_safe("\n");
                         if(strstr(tcp_client_recvbuf, "CLOSED") != NULL)
                         {
+                            printf_safe("\e[31;47mServer CLOSED\n\e[0m");
                             pModem->state = DS_MODEM_TCP_CLOSE;
                         }
                         else
