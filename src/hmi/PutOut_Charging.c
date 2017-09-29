@@ -170,6 +170,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_2), temp_buf);//当前电费
     sprintf(temp_buf, "%.2lf", ((uint32_t)(pCON->order.dTotalServFee * 100) + (uint32_t)(pCON->order.dTotalPowerFee * 100)) / 100.0);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_3), temp_buf);//消费总额
+//    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), strCSQ);
 }
 /** @brief 数据管理和跳页消息
  *
@@ -236,6 +237,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
             }
+            Data_Flush(pMsg);
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
         }
         break;
     case WM_INIT_DIALOG:
@@ -304,23 +307,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             /**< 显示时间和日期 */
             Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-            //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), _secDown);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-//            WM_SendMessageNoPara(_hWinCardInfo,MSG_UPDATEDATA);
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-            /**< 对控件数据刷新 */
-            Data_Flush(pMsg);
-            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-            WM_RestartTimer(pMsg->Data.v,1000);
-        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            /**< 对控件数据刷新 */
+//            Data_Flush(pMsg);
+//            //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//            WM_RestartTimer(pMsg->Data.v,1000);
+//        }
         break;
     case MSG_CREATERRWIN:
         /**< 故障界面不存在则创建,存在则刷新告警 */
@@ -370,8 +367,7 @@ WM_HWIN CreateCharging(void)
     _hWinCharging = GUI_CreateDialogBox(_aDialogCharging, GUI_COUNTOF(_aDialogCharging), _cbDialog, WM_HBKWIN, 0, 0);
     cur_win = _hWinCharging;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerSignal,5000,0);
+//    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerFlush,1000,0);
 	bitset(winInitDone,0);
 }
 /*************************** End of file ****************************/

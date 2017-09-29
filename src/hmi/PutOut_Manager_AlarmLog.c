@@ -189,27 +189,48 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             //序号 记录时间  枪号  故障等级  故障状态  故障信息
             LISTVIEW_AddRow(hItem, NULL);
 
-            xsprintf((char *)buf, "%d", i+1);
+            sprintf((char *)buf, "%d", i+1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
             jsChild = cJSON_GetArrayItem(jsParent, i);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
             LISTVIEW_SetItemText(hItem, 1, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
-            xsprintf((char *)buf, "%d", jsItem->valueint);
+            sprintf((char *)buf, "%d", jsItem->valueint);
             LISTVIEW_SetItemText(hItem, 2, i, buf);
-
+            
+            //0 状态 1 告警 2 异常 3 故障
             jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
-            xsprintf((char *)buf, "%d", jsItem->valueint);
-            LISTVIEW_SetItemText(hItem, 3, i, buf);
+            switch (jsItem->valueint)
+            {
+                case 0:
+                    LISTVIEW_SetItemText(hItem, 3, i, "状态");
+                    break;
+                case 1:
+                    LISTVIEW_SetItemText(hItem, 3, i, "告警");
+                    break;
+                case 2:
+                    LISTVIEW_SetItemText(hItem, 3, i, "异常");
+                    break;
+                case 3:
+                    LISTVIEW_SetItemText(hItem, 3, i, "故障");
+                    break;
+            }
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogState);
-            xsprintf((char *)buf, "%d", jsItem->valueint);
-            LISTVIEW_SetItemText(hItem, 4, i, buf);
+            switch (jsItem->valueint)
+            {
+                case 0:
+                    LISTVIEW_SetItemText(hItem, 4, i, "消除");
+                    break;
+                case 1:
+                    LISTVIEW_SetItemText(hItem, 4, i, "发生");
+                    break;
+            }
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
             LISTVIEW_SetItemText(hItem, 5, i, jsItem->valuestring);
@@ -232,90 +253,90 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         {
             /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
             LISTVIEW_AddRow(hItem, NULL);
-            xsprintf((char *)buf, "%d", i+1);
+            sprintf((char *)buf, "%d", i+1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
             jsChild = cJSON_GetArrayItem(jsParent, i);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             if(jsItem->valueint == 4)
             {
-                LISTVIEW_SetItemText(hItem, 0, i, "刷卡");
+                LISTVIEW_SetItemText(hItem, 1, i, "刷卡");
             }
             else
             {
-                LISTVIEW_SetItemText(hItem, 0, i, "扫码");
+                LISTVIEW_SetItemText(hItem, 1, i, "扫码");
             }
 
 	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
-            LISTVIEW_SetItemText(hItem, 0, i, jsItem->valuestring);
+            LISTVIEW_SetItemText(hItem, 2, i, jsItem->valuestring);
 
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderOrderSN);
-            LISTVIEW_SetItemText(hItem, 0, i, jsItem->valuestring);
+            LISTVIEW_SetItemText(hItem, 3, i, jsItem->valuestring);
 
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
+            LISTVIEW_SetItemText(hItem, 4, i, buf);
 
 	        jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
+            LISTVIEW_SetItemText(hItem, 5, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
             printf_safe("StopType\t%d\n", jsItem->valueint);
             switch(jsItem->valueint)
             {
                 case defOrderStopType_RFID:
-                    LISTVIEW_SetItemText(hItem, 0, i, "刷卡结束");
+                    LISTVIEW_SetItemText(hItem, 6, i, "刷卡结束");
                     break;
                 case defOrderStopType_Remote:
-                    LISTVIEW_SetItemText(hItem, 0, i, "远程结束");
+                    LISTVIEW_SetItemText(hItem, 6, i, "远程结束");
                     break;
                 case defOrderStopType_Full:
-                    LISTVIEW_SetItemText(hItem, 0, i, "充满结束");
+                    LISTVIEW_SetItemText(hItem, 6, i, "充满结束");
                     break;
                 case defOrderStopType_Fee:
-                    LISTVIEW_SetItemText(hItem, 0, i, "达到充电金额");
+                    LISTVIEW_SetItemText(hItem, 6, i, "达到充电金额");
                     break;
                 case defOrderStopType_Scram:
                 case defOrderStopType_NetLost:
                 case defOrderStopType_Poweroff:
                 case defOrderStopType_OverCurr:
                 case defOrderStopType_Knock:
-                    LISTVIEW_SetItemText(hItem, 0, i, "异常结束");
+                    LISTVIEW_SetItemText(hItem, 6, i, "异常结束");
                     break;
                 default:
-                    LISTVIEW_SetItemText(hItem, 0, i, "未知原因结束");
+                    LISTVIEW_SetItemText(hItem, 6, i, "未知原因结束");
                     break;
             }
 
             jsItem = cJSON_GetObjectItem(jsChild,jnOrderStopPower);
             jsItemTmp = cJSON_GetObjectItem(jsChild,jnOrderStartPower);
-            xsprintf((char *)buf,"%.2lf",(jsItem->valuedouble - jsItemTmp->valuedouble));
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+            sprintf((char *)buf,"%.2lf",(jsItem->valuedouble - jsItemTmp->valuedouble)*100 / 100.0);
+            LISTVIEW_SetItemText(hItem, 7, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
-            xsprintf((char *)buf,"%.2lf",jsItem->valuedouble);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+            sprintf((char *)buf,"%.2lf",jsItem->valuedouble * 100 / 100.0);
+            LISTVIEW_SetItemText(hItem, 8, i, buf);
 
             jsItemTmp = cJSON_GetObjectItem(jsChild, jnOrderTotalServFee);
-            xsprintf((char *)buf,"%.2lf",jsItemTmp->valuedouble);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+            sprintf((char *)buf,"%.2lf",jsItemTmp->valuedouble * 100 / 100.0);
+            LISTVIEW_SetItemText(hItem, 9, i, buf);
 
-            xsprintf((char *)buf,"%.2lf",jsItem->valuedouble + jsItemTmp->valuedouble);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+            sprintf((char *)buf,"%.2lf",(jsItem->valuedouble + jsItemTmp->valuedouble) * 100 / 100.0);
+            LISTVIEW_SetItemText(hItem, 10, i, buf);
 
             jsItemTmp = cJSON_GetObjectItem(jsChild, jnOrderPayStatus);
             if(jsItem->valueint == 0)
             {
-                LISTVIEW_SetItemText(hItem, 0, i, "刷卡支付");
+                LISTVIEW_SetItemText(hItem, 11, i, "刷卡支付");
             }
             else
             {
-                LISTVIEW_SetItemText(hItem, 0, i, "扫码支付");
+                LISTVIEW_SetItemText(hItem, 11, i, "扫码支付");
             }
 
         }
@@ -821,10 +842,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /*序号 记录时间  枪号  故障等级  故障状态  故障信息*/
 			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
             LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 320, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障信息", GUI_TA_HCENTER | GUI_TA_VCENTER);
 
 			/* 添加三行，调用一次函数LISTVIEW_AddRow添加一行 */
@@ -879,28 +900,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
             }
-
+            /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "订单号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "启动方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "卡号", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "余额", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "枪ID", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 240, "订单流水号", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "起始时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "起始类型", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "限制余额", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "起始电量", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "服务类型", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "充电电量", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "充电电费", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "充电服务费", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "总费用", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "时间段电量", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "时间段电费", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "支付方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "停止类型", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "结束时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-
-            DBselect_Data(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "结束类型", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总电量", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总电费", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总服务费", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总费用", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "支付方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
+            //DBselect_Data(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+            Data_Flush(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 
             break;
         /// TODO (zshare#1#): ///因为鼠标重置的问题, \

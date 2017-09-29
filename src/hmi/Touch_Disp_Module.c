@@ -117,7 +117,9 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     RTC_TimeTypeDef RTC_TimeStruct;
     RTC_DateTypeDef RTC_DateStruct;
     WM_HWIN hWin = pMsg->hWin;
-
+    uint8_t Date_buf[30];
+    uint8_t Time_buf[30];
+    
     HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Date_buf, "20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
     TEXT_SetText(WM_GetDialogItem(hWin, textid0), Date_buf);
@@ -125,7 +127,7 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Time_buf, "%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
     TEXT_SetText(WM_GetDialogItem(hWin, textid1), Time_buf);
-    //printf_safe("time = %s\n",Time_buf);
+    //printf_safe("time = %s , %02d:%02d:%02d \n", Time_buf, RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
 }
 /**信号数据刷新
  *
