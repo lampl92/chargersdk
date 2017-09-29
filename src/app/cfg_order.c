@@ -130,7 +130,9 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
             printf_safe("StartTime\t%s\n", buf);
 	        
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
-            printf_safe("TotalPowerFee\t%d\n", jsItem->valuedouble);
+            printf_safe("TotalPowerFee\t%.3lf\n", jsItem->valuedouble);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalServFee);
+            printf_safe("TotalPowerFee\t%.3lf\n", jsItem->valuedouble);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
             printf_safe("StopType\t%d\n", jsItem->valueint);
 	        
