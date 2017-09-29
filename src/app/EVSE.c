@@ -777,7 +777,7 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
     
     tmpKnockState = 0;
     /* @todo (yuye#1#): 添加重力传感器驱动 */
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
     pEVSE->status.dKnockAngle = 35;
 #else
     pEVSE->status.dKnockAngle = get_angle_max();
