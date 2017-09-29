@@ -83,7 +83,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
 
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
-    if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdTRUE)
+    if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
     {
         cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
         gdsl_list_cursor_move_to_head (cur);
@@ -107,7 +107,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         {
             xEventGroupSetBits(pCMD->xHandleEventCmd, defEventBitProtoCmdHandled);
         }
-    }
+    }//if mutex
 
     return errcode;
 }

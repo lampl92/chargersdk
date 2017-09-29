@@ -174,6 +174,8 @@ typedef struct _echProtocol
     echCMD_t *pCMD[ECH_CMD_MAX];
     gdsl_list_t plechSendCmd;
     gdsl_list_t plechRecvCmd;
+    SemaphoreHandle_t xMutexProtoSend;
+    SemaphoreHandle_t xMutexProtoRecv;
     int (*sendCommand)(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax);
     int (*recvResponse)(void *pPObj, void *pEObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax);
     void (*deleteProtocol)(void *pPObj);

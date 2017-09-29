@@ -783,7 +783,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     uint8_t pucSendBuffer[REMOTE_SENDBUFF_MAX];
     uint32_t ulSendLength;
     int res;
-    gdsl_element_t gdsl_res;
+    gdsl_element_t gdsl_res = NULL;
 
     pProto = (echProtocol_t *)pPObj;
     ulSendLength = 0;
@@ -805,7 +805,13 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
 
     pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
     memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
-    gdsl_res = gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
+    if (xSemaphoreTake(pProto->xMutexProtoSend, 10000) == pdPASS)
+    {
+        gdsl_res = gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
+        xSemaphoreGive(pProto->xMutexProtoSend);
+    }
+    
+    
     if (gdsl_res == NULL)
     {
         return 0;
@@ -2622,7 +2628,15 @@ static int recvResponse(void *pPObj,
     echRecvCmdElem.trycount = 0;
     echRecvCmdElem.trycountmax = trycountmax;
 
-    gdsl_list_insert_tail(pProto->plechRecvCmd, (void *)&echRecvCmdElem);
+    if (xSemaphoreTake(pProto->xMutexProtoRecv, 10000) == pdPASS)
+    {
+        gdsl_list_insert_tail(pProto->plechRecvCmd, (void *)&echRecvCmdElem);
+        xSemaphoreGive(pProto->xMutexProtoRecv);
+    }
+    else
+    {
+        return ECH_ERR_OK;
+    }
 
     if(ulRecvdLen - ulOffset > echRecvCmdElem.len)
     {
@@ -2689,7 +2703,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
     pProto = (echProtocol_t *)pPObj;
     pCMD = pProto->pCMD[usSendID];
 
-    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
+    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdPASS)
     {
         analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
         if (pCMD->ulRecvdOptLen == 0)
@@ -2713,7 +2727,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
         }
 
         xSemaphoreGive(pCMD->xMutexCmd);
-    }
+    }//if mutex
 
     return 1;
 }
@@ -2751,7 +2765,7 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
         gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
 
         xSemaphoreGive(pCMD->xMutexCmd);
-    }
+    }//if mutex
 
     return 1;
 }
@@ -2869,6 +2883,8 @@ static void deleteProto(void *pPObj)
     }
     gdsl_list_free(pProto->plechSendCmd);
     gdsl_list_free(pProto->plechRecvCmd);
+    vSemaphoreDelete(pProto->xMutexProtoRecv);
+    vSemaphoreDelete(pProto->xMutexProtoSend);
     free(pProto);
     pProto = NULL;
 }
@@ -2999,6 +3015,9 @@ echProtocol_t *EchProtocolCreate(void)
 
     pProto->plechRecvCmd = gdsl_list_alloc ("ProtoRecvLis", echProtoListAlloc, echProtoListFree);
     pProto->plechSendCmd = gdsl_list_alloc ("ProtoSendLis", echProtoListAlloc, echProtoListFree);
+    
+    pProto->xMutexProtoRecv = xSemaphoreCreateMutex();
+    pProto->xMutexProtoSend = xSemaphoreCreateMutex();
 
     return pProto;
 }
