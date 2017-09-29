@@ -2712,7 +2712,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
         }
         else
         {
-            printf_safe("Recv: %d\n", pCMD->CMDType.usRecvCmd);
+            printf_safe("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
                 printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
