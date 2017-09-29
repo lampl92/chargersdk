@@ -37,9 +37,9 @@ ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t st
     }
     ulMaxItem  = cJSON_GetArraySize(jsParent);
     
-    if (ulMaxItem > defCfgOrderMaxItem)
+    if (ulMaxItem > defCfgLogMaxItem)
     {
-        for (i = 0; i < 100; i++)
+        for (i = 0; i < defCfgLogRemoveOldItem; i++)
         {
             cJSON_DeleteItemFromArray(jsParent, i);
         }

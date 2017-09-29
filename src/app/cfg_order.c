@@ -79,7 +79,7 @@ ErrorCode_t  AddOrderCfg(char *path, CON_t *pCON, echProtocol_t *pProto)
     
     if (ulMaxItem > defCfgOrderMaxItem)
     {
-        for (i = 0; i < 10; i++)
+        for (i = 0; i < defCfgOrderRemoveOldItem; i++)
         {
             cJSON_DeleteItemFromArray(jsParent, i);
         }
