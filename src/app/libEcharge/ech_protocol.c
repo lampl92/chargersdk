@@ -2951,6 +2951,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
+    pProto->status.ulStatus |= defSignalCON_State_Standby;
     for(i = 0; i < 6; i++)
     {
         pProto->status.fault[i] = 0;

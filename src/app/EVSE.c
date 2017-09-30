@@ -1092,10 +1092,6 @@ EVSE_t *EVSECreate(void)
     pEVSE->status.ulSignalState   = 0;
     pEVSE->status.ulSignalAlarm   = 0;
     pEVSE->status.ulSignalFault   = 0;
-    pEVSE->status.ulSignalState_Old   = 0;
-    pEVSE->status.ulSignalAlarm_Old   = 0;
-    pEVSE->status.ulSignalFault_Old   = 0;
-    
 
     pEVSE->status.GetArresterState = GetArresterState;
     pEVSE->status.GetKnockState    = GetKnockState;

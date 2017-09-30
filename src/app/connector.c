@@ -1605,9 +1605,6 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.ulSignalState         = 0;
     pCON->status.ulSignalAlarm         = 0;
     pCON->status.ulSignalFault         = 0;
-    pCON->status.ulSignalState_Old     = 0;
-    pCON->status.ulSignalAlarm_Old     = 0;
-    pCON->status.ulSignalFault_Old     = 0;
 
     pCON->status.GetCPState          = GetCPState;
     pCON->status.SetCPSwitch         = SetCPSwitch;

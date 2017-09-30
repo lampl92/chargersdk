@@ -108,6 +108,26 @@ void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
     RemoteIF_RecvReq(pEVSE, pProto, &res);
 
 }
+// 1 更新  0 不更新
+static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
+{
+    uint32_t status_old;
+    status_old = pProto->status.ulStatus;
+    pProto->status.ulStatus = pCON->status.ulSignalState & (defSignalCON_State_Standby | \
+                                                            defSignalCON_State_Working | \
+                                                            defSignalCON_State_Stopping | \
+                                                            defSignalCON_State_Fault | \
+                                                            defSignalCON_State_Plug);
+    if (pProto->status.ulStatus  != status_old)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -253,6 +273,14 @@ void vTaskEVSERemote(void *pvParameters)
                 for(i = 0; i < ulTotalCON; i++)
                 {
                     pCON = CONGetHandle(i);
+                    RemoteIF_SendStatus(pEVSE, pechProto, pCON);
+                }
+            }
+            for (i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                if (taskremote_status_update(pechProto, pCON) == 1)
+                {
                     RemoteIF_SendStatus(pEVSE, pechProto, pCON);
                 }
             }
