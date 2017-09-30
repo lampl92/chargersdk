@@ -1154,14 +1154,14 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACLTemp = 0;//pCON->status.dACLTemp;
+    tmpACLTemp = 0;
     errcode = ERR_NO;
 
     /** 实现代码  */
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpACLTemp += 40;
+        tmpACLTemp = 40;
 #else
 	    
 //        tmpACLTemp = (double)Sys_samp.DC.TEMP1;

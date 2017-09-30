@@ -999,7 +999,7 @@ static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
 
 	    /** 实现代码  */
 #ifdef DEBUG_DIAG_DUMMY
-    tmpACTemp = 106;
+    tmpACTemp = 33;
 #else
 	tmpACTemp = 0;
 #endif
