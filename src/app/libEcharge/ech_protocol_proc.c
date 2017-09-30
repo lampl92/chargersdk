@@ -90,7 +90,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                     modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
-                    //等不等得到都置1
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
                 }
@@ -99,7 +98,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     /* 判断命令字，
                        如果是请求命令，则等待主机回复
-                       如果是回复命令，则直接删除
+                       如果是回复命令，则直接超时删除
                     */
                     uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
                         defEventBitProtoCmdHandled,
