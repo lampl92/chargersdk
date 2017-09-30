@@ -18,86 +18,10 @@
 
 
 
-/*---------------------------------------------------------------------------/
-/                               获取协议配置信息
-/---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*                               获取协议配置信息                            */
+/*---------------------------------------------------------------------------*/
 
-#if 0
-static ErrorCode_t GetProtoInfo(uint16_t *pProtoInfoU16, uint8_t *jnName, void *pvCfgObj)
-{
-    uint16_t tmpShort;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pProtoCfgObj;
-
-    errcode = ERR_NO;
-    tmpShort = 0;
-
-    pProtoCfgObj = (cJSON *)pvCfgObj;
-
-    //  解析Int
-    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
-    if(jsItem == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto err_return;
-    }
-
-    tmpShort = (uint16_t)(jsItem->valueint);
-
-#ifdef DEBUG_CFG_PARSE_PROTO
-    printf_safe("%s\t = %d\n", jnName, tmpShort);
-#endif
-
-    /*********************/
-    *pProtoInfoU16 = tmpShort;
-
-err_return:
-    return errcode;
-}
-
-static ErrorCode_t GetProtoInfoStr(uint8_t *protoInfoStr, const uint8_t *jnName, void *pvCfgObj)
-{
-    uint8_t tmpStrLength;
-    uint8_t *ptmpStr;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pProtoCfgObj;
-
-    errcode = ERR_NO;
-    ptmpStr = NULL;
-
-    pProtoCfgObj = (cJSON *)pvCfgObj;
-
-    //  解析string
-    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
-    if(jsItem == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto err_return;
-    }
-    ptmpStr = utils_strdup(jsItem->valuestring); //strdup之后出现错误都要先free
-    if(ptmpStr == NULL)
-    {
-        errcode = ERR_MEMORY;
-        goto err_return;
-    }
-
-#ifdef DEBUG_CFG_PARSE_PROTO
-    printf_safe("%s\t = %s\n", jnName, ptmpStr);
-#endif
-
-    /*********************/
-    strcpy(protoInfoStr, ptmpStr);
-
-err_free:
-    free(ptmpStr);
-err_return:
-    return errcode;
-}
-#endif
 /** @brief 获取ProtoCfg中参数的值
  *
  * @param pvProtoInfoItem void* 传入要获取的参数的指针
@@ -769,9 +693,10 @@ void testBnWList(void)
         printf_safe("%s\n", strIDCtx);
     }
 }
-/*---------------------------------------------------------------------------/
-/                               协议解析
-/---------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------*/
+/*                              协议解析                                     */
+/*---------------------------------------------------------------------------*/
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
     return (uint16_t)(ver + atrri + cmd + len);
@@ -2762,37 +2687,13 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
     return 1;
 }
-#if 0
-static int analyCmdStatus(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-    return 1;
-}
-static int analyCmdRemoteCtrl(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-    return 1;
-}
-static int analyCmdRTData(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    return 1;
-}
-static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    return 1;
-}
-#endif
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
     copyCmdElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
     if(copyCmdElem != NULL)
     {
-        memmove(copyCmdElem, e, sizeof(echCmdElem_t));
+        memcpy(copyCmdElem, e, sizeof(echCmdElem_t));
     }
     else
     {
@@ -2801,7 +2702,7 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
     copyCmdElem->pbuff = (uint8_t *)malloc(copyCmdElem->len * sizeof(uint8_t));
     if(copyCmdElem->pbuff != NULL)
     {
-        memmove(copyCmdElem->pbuff, ((echCmdElem_t *)e)->pbuff, copyCmdElem->len);
+        memcpy(copyCmdElem->pbuff, ((echCmdElem_t *)e)->pbuff, copyCmdElem->len);
     }
     else
     {
@@ -2830,7 +2731,7 @@ static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
     copyProtoElem = (echProtoElem_t *)malloc(sizeof(echProtoElem_t));
     if(copyProtoElem != NULL)
     {
-        memmove(copyProtoElem, e, sizeof(echProtoElem_t));
+        memcpy(copyProtoElem, e, sizeof(echProtoElem_t));
     }
     else
     {
@@ -2839,7 +2740,7 @@ static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
     copyProtoElem->pbuff = (uint8_t *)malloc(copyProtoElem->len * sizeof(uint8_t));
     if(copyProtoElem->pbuff != NULL)
     {
-        memmove(copyProtoElem->pbuff, ((echProtoElem_t *)e)->pbuff, copyProtoElem->len);
+        memcpy(copyProtoElem->pbuff, ((echProtoElem_t *)e)->pbuff, copyProtoElem->len);
     }
     else
     {

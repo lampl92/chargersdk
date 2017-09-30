@@ -111,7 +111,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                         printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
-
                 }
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)

@@ -75,6 +75,7 @@ static int BmpGetData(void * p, const uint8_t ** ppData, unsigned NumBytesReq, u
 //member:  缩放比例的分子项
 //denom:缩放比例的分母项
 //返回值:0 显示正常,其他 失败
+#if 0
 int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom)
 {
 	uint16_t bread;
@@ -95,7 +96,7 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
     //taskENTER_CRITICAL();	//临界区
 
 	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //读取数据
-	if(result != FR_OK) return 3;
+	if(result != FR_OK) return 3;//        ！！！！内存泄漏风险！！！！！！！
 
     //taskEXIT_CRITICAL();//退出临界区
 
@@ -131,6 +132,7 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
 	free(bmpbuffer);		//释放内存
 	return 0;
 }
+#endif
 
 //在指定位置显示无需加载到RAM中的BMP图片(需文件系统支持！对于小RAM，推荐使用此方法！)
 //BMPFileName:图片在SD卡或者其他存储设备中的路径

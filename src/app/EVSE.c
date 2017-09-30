@@ -868,6 +868,11 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
         if(get_va() <= 100.0) //检测间隔10mS
         {
             tmpOffState = 1;
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
         }
         else if((get_va() >= 180) && (get_va() <= 250))
         {
