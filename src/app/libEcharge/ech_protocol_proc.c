@@ -114,7 +114,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     }
 
                 }
-#if 1
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
                 {
@@ -127,7 +126,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     pechProtoElem->status = 0;
                     continue;//跳过后面的语句立即发送，否则需要再等一轮
                 }
-#endif
                 /* 4. */
                 gdsl_list_cursor_step_forward(cs);
             }//while
