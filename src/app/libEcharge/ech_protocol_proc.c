@@ -20,7 +20,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
 {
     echProtocol_t *pProto;
     echProtoElem_t *pechProtoElem;
-    echCmdElem_t *pechCmdElem;
     gdsl_list_cursor_t cs;
     gdsl_list_cursor_t cr;
 
@@ -34,9 +33,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
     cr = gdsl_list_cursor_alloc(pProto->plechRecvCmd);
     while (1)
     {
-//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-//        printf_safe("\n");
+        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+        printf_safe("\n");
 
         /* 遍历RecvCmd */
 
@@ -93,6 +92,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
                     //等不等得到都置1
                     pechProtoElem->status = 1;
+                    pechProtoElem->trycount++;
                 }
                 /* 2. 已发送，判断发送情况*/
                 if (pechProtoElem->status == 1)
@@ -109,19 +109,20 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     if ((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
                     {
                         gdsl_list_cursor_delete(cs);//请求命令收到平台回复并已处理, 删除命令
+                        printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
-                    if (pechProtoElem->trycount >= pechProtoElem->trycountmax)
-                    {
-                        gdsl_list_cursor_delete(cs);
-                        continue;
-                    }
+
                 }
 #if 1
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
                 {
-                    pechProtoElem->trycount++;
+                    if (pechProtoElem->trycount >= pechProtoElem->trycountmax)
+                    {
+                        gdsl_list_cursor_delete(cs);
+                        continue;
+                    }
                     pechProtoElem->timestamp = time(NULL);
                     pechProtoElem->status = 0;
                     continue;//跳过后面的语句立即发送，否则需要再等一轮
