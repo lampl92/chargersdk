@@ -24,6 +24,10 @@ void vTaskEVSEData(void *pvParameters)
     uint32_t ulTotalCON;
     int id, i;
     uint32_t ulSignalPoolXor;
+    uint32_t ulSignalCONAlarmOld_CON[8] = {0};
+    uint32_t ulSignalCONFaultOld_CON[8] = {0};
+    uint32_t ulSignalEVSEAlarmOld = 0;
+    uint32_t ulSignalEVSEFaultOld = 0;
     EventBits_t uxBitsTimer;
     EventBits_t uxBitsData;
     EventBits_t uxBitsCharge;
@@ -33,6 +37,11 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
+    if (ulTotalCON > 8)
+    {
+        while (1)
+            ;//你看, 你设置的ulSignalCONAlarmOld_CON 数组小了
+    }
     while(1)
     {
 #ifndef DEBUG_NO_TASKDATA
@@ -202,7 +211,7 @@ void vTaskEVSEData(void *pvParameters)
         {
             pCON = CONGetHandle(id);
             //proc con alarm
-            ulSignalPoolXor = pCON->status.ulSignalAlarm_Old ^ pCON->status.ulSignalAlarm;
+            ulSignalPoolXor = ulSignalCONAlarmOld_CON[id] ^ pCON->status.ulSignalAlarm;
             if (ulSignalPoolXor != 0)
             {
                 for (i = 0; i < 32; i++)
@@ -294,10 +303,10 @@ void vTaskEVSEData(void *pvParameters)
                     }
                 }
             }// if (ulSignalPoolXor != 0)
-            pCON->status.ulSignalAlarm_Old = pCON->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+            ulSignalCONAlarmOld_CON[id] = pCON->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
             
             //proc con fault
-            ulSignalPoolXor = pCON->status.ulSignalFault_Old ^ pCON->status.ulSignalFault;
+            ulSignalPoolXor = ulSignalCONFaultOld_CON[id] ^ pCON->status.ulSignalFault;
             if (ulSignalPoolXor != 0)
             {
                 for (i = 0; i < 32; i++)
@@ -346,11 +355,11 @@ void vTaskEVSEData(void *pvParameters)
                     }
                 }
             }//if (ulSignalPoolXor != 0)
-            pCON->status.ulSignalFault_Old = pCON->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+            ulSignalCONFaultOld_CON[id] = pCON->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
         }// id
         
         //proc evse alarm
-        ulSignalPoolXor = pEVSE->status.ulSignalAlarm_Old ^ pEVSE->status.ulSignalAlarm;
+        ulSignalPoolXor = ulSignalEVSEAlarmOld ^ pEVSE->status.ulSignalAlarm;
         if (ulSignalPoolXor != 0)
         {
             for (i = 0; i < 32; i++)
@@ -405,10 +414,10 @@ void vTaskEVSEData(void *pvParameters)
                 }
             }
         }//if (ulSignalPoolXor != 0)
-        pEVSE->status.ulSignalAlarm_Old = pEVSE->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        ulSignalEVSEAlarmOld = pEVSE->status.ulSignalAlarm;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
         
         //proc evse fault
-        ulSignalPoolXor = pEVSE->status.ulSignalFault_Old ^ pEVSE->status.ulSignalFault;
+        ulSignalPoolXor = ulSignalEVSEFaultOld ^ pEVSE->status.ulSignalFault;
         if (ulSignalPoolXor != 0)
         {
             for (i = 0; i < 32; i++)
@@ -439,7 +448,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
             }
         }//if (ulSignalPoolXor != 0)
-        pEVSE->status.ulSignalFault_Old = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        ulSignalEVSEFaultOld = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
 #endif        
 #if DEBUG_DATA
 

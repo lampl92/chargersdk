@@ -112,9 +112,6 @@ typedef struct _CONStatus
     uint32_t ulSignalState;
     uint32_t ulSignalAlarm;
     uint32_t ulSignalFault;
-    uint32_t ulSignalState_Old;
-    uint32_t ulSignalAlarm_Old;
-    uint32_t ulSignalFault_Old;
     uint32_t ulSignalPool[CON_MAX_SIGNAL_BLOCK];
 
     pCon_ft GetChargingVoltage;
