@@ -49,10 +49,6 @@ void vTaskEVSEDiag(void *pvParameters)
                 pCON = CONGetHandle(errpack.ulDevID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
                 break;
-            case ERR_RELAY_PASTE:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
-                break;
             case ERR_CON_CP_FAULT:
                 pCON = CONGetHandle(errpack.ulDevID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCPSwitch);

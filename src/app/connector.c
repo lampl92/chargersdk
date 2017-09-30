@@ -1449,6 +1449,13 @@ static ErrorCode_t StartCharge(void *pvCON)
     /**  操作输出继电器，保存继电器状态 */
 
     errcode = SetRelay(pvCON, SWITCH_ON);
+    vTaskDelay(defRelayDelay);
+    THROW_ERROR(ucCONID, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
+    if (pCON->status.ucRelayLState == SWITCH_ON &&
+            pCON->status.ucRelayNState == SWITCH_ON)
+    {
+        errcode = ERR_NO;
+    }
 
     /*********************/
     return errcode;
@@ -1466,15 +1473,47 @@ static ErrorCode_t StopCharge(void *pvCON)
     CON_t *pCON;
     uint8_t ucCONID;
     CONStatusType_t tmpChargeStatus;
+    EventBits_t uxBits;
     ErrorCode_t errcode;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
 
-    /** 操作输出继电器，保存继电器状态 */
+    SetCPSwitch(pCON, SWITCH_OFF);
+    vTaskDelay(defRelayDelay);
+#ifdef DEBUG_DIAG_DUMMY
+    pCON->status.xCPState = CP_12V;
+#endif
 
-    errcode = SetRelay(pvCON, SWITCH_OFF);
+    if (pCON->status.xCPState == CP_6V ||
+       pCON->status.xCPState == CP_9V ||
+       pCON->status.xCPState == CP_12V)
+    {
+        uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+            defEventBitCONS2Opened,
+            pdFALSE,
+            pdTRUE,
+            100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
+        //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
+
+        errcode = SetRelay(pvCON, SWITCH_OFF);
+        vTaskDelay(defRelayDelay);
+        THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
+#ifdef DEBUG_DIAG_DUMMY
+        pCON->status.ucRelayLState = SWITCH_OFF;
+        pCON->status.ucRelayNState = SWITCH_OFF;
+#endif
+        if (pCON->status.ucRelayLState == SWITCH_OFF &&
+            pCON->status.ucRelayNState == SWITCH_OFF)
+        {
+            errcode = ERR_NO;
+        }
+    }
+    else
+    {
+        errcode = ERR_CON_CP_SWITCH_FAULT;
+    }
 
     /*********************/
     return errcode;
