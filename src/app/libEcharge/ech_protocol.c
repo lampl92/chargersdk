@@ -1021,40 +1021,34 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //车位状态 1：空闲   2：占用   3：未知
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
     //接口连接状态  1 空闲， 2,车连接 3 未知
-    if(pCON->status.xPlugState == UNPLUG)
-    {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
-    }
-    else if(pCON->status.xPlugState == PLUG)
+    if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
     }
     else
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
     }
     //接口工作状态 1：充电 2:待机 3：故障 4：充电结束 5：未知
-    switch(pCON->state)
+    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
     {
-    case STATE_CON_CHARGING:
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
-        break;
-    case STATE_CON_IDLE:
-    case STATE_CON_PLUGED:
-    case STATE_CON_PRECONTRACT:
-    case STATE_CON_PRECONTRACT_LOSEPLUG:
-    case STATE_CON_STARTCHARGE: //在这个状态还没开始充电
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
-        break;
-    case STATE_CON_ERROR:
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Fault) == defSignalCON_State_Fault)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
-        break;
-    case STATE_CON_STOPCHARGE:
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Stopping) == defSignalCON_State_Stopping)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 4;
-        break;
-    default:
+    }
+    else
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 5;
-        break;
     }
     //输出电压xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
@@ -1141,34 +1135,33 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //SOC 1~100
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //故障码
-    if(pEVSE->status.ulScramState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
     {
         errcode |= 1 << 0; //Bit0 急停故障
     }
-    uxBits = xEventGroupGetBits(pCON->status.xHandleEventException);
-    if((uxBits & defEventBitExceptionMeter) == defEventBitExceptionMeter)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
     {
         errcode |= 1 << 1; //Bit1 电表故障
     }
-    if((uxBits & defEventBitExceptionRelayPaste) == defEventBitExceptionRelayPaste)
+    if ((pCON->status.ulSignalFault & defSignalGroupCON_Fault_AC_RelayPase) != 0)
     {
         errcode |= 1 << 2; //Bit2 接触器故障
     }
-    if((uxBits & defEventBitExceptionRFID) == defEventBitExceptionRFID)
+    if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
     {
         errcode |= 1 << 3; //Bit3 读卡器故障
     }
-    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-    if((uxBits & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+    if((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0 || 
+       (pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0)
     {
         errcode |= 1 << 4; //Bit4 内部过温故障
     }
     //errcode |= 1 << 5 //Bit5 连接器故障
-    if(pEVSE->status.ulPEState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PE) == defSignalEVSE_Alarm_PE)
     {
         errcode |= 1 << 6; //Bit5 绝缘故障
     }
-    if(pEVSE->status.ulPowerOffState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PowerOff) == defSignalEVSE_Alarm_PowerOff)
     {
         errcode |= 1 << 7;  //Bit7 其他(在此定义为停电故障)
     }
