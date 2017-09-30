@@ -101,19 +101,22 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
 
 uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
-    xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(timeout_ms)
+    if (xSemaphoreTake(q->xHandleMutexQue, 100) == pdPASS)
     {
-        if((q->isEmpty(q)) != QUE_TRUE)
+        while (timeout_ms)
         {
-            q->DeElem(q, ch);
-            xSemaphoreGive(q->xHandleMutexQue);
-            return 1;
+            if ((q->isEmpty(q)) != QUE_TRUE)
+            {
+                q->DeElem(q, ch);
+                xSemaphoreGive(q->xHandleMutexQue);
+                return 1;
+            }
+            vTaskDelay(1);
+            timeout_ms--;
         }
-        vTaskDelay(1);
-        timeout_ms--;
+        xSemaphoreGive(q->xHandleMutexQue); 
     }
-    xSemaphoreGive(q->xHandleMutexQue);
+    
     return 0;
 }
 
