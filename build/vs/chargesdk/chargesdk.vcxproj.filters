@@ -1406,9 +1406,6 @@
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c">
       <Filter>Source files\middlewares\cJSON</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\cJSON\s2j.c">
-      <Filter>Source files\middlewares\cJSON</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c">
       <Filter>Source files\middlewares\fatfs\diskdrv</Filter>
     </ClCompile>
@@ -1525,12 +1522,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c">
       <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_hash.c">
-      <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.c">
-      <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\cfg_order.c">
       <Filter>Source files\app</Filter>

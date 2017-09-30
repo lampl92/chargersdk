@@ -257,7 +257,7 @@ void MX_DMA_Init(void)
 
     /* DMA interrupt init */
     /* DMA2_Stream0_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, bspDMA2_Stream0_PreemptPriority, bspDMA2_Stream0_SubPriority);
     HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
@@ -358,7 +358,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM2_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM2_IRQn, bspTIM2_PreemptPriority, bspTIM2_SubPriority);
         HAL_NVIC_EnableIRQ(TIM2_IRQn);
         /* USER CODE BEGIN TIM2_MspInit 1 */
 
@@ -372,7 +372,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM3_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM3_IRQn, bspTIM3_PreemptPriority, bspTIM3_SubPriority);
         HAL_NVIC_EnableIRQ(TIM3_IRQn);
         /* USER CODE BEGIN TIM3_MspInit 1 */
 
@@ -386,7 +386,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM4_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM4_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM4_IRQn, bspTIM4_PreemptPriority, bspTIM4_SubPriority);
         HAL_NVIC_EnableIRQ(TIM4_IRQn);
         /* USER CODE BEGIN TIM4_MspInit 1 */
 
@@ -400,7 +400,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM5_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM5_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM5_IRQn, bspTIM5_PreemptPriority, bspTIM5_SubPriority);
         HAL_NVIC_EnableIRQ(TIM5_IRQn);
         /* USER CODE BEGIN TIM5_MspInit 1 */
 

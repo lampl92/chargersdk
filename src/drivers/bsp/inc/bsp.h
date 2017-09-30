@@ -35,14 +35,33 @@
 #define bspUART5_PreemptPriority       7
 #define bspUART5_SubPriority           0
 
-#define bspLTDC_PreemptPriority         15
+#define bspUART7_PreemptPriority       2
+#define bspUART7_SubPriority           0
+
+#define bspLTDC_PreemptPriority         5
 #define bspLTDC_SubPriority             0
 
 #define bspWKUP_PreemptPriority         6
 #define bspWKUP_SubPriority             0
 
-#define bspAlarm_PreemptPriority        8
+#define bspAlarm_PreemptPriority        6
 #define bspAlarm_SubPriority            0
+
+#define bspDMA2_Stream0_PreemptPriority        8
+#define bspDMA2_Stream0_SubPriority            0
+
+#define bspTIM2_PreemptPriority        8
+#define bspTIM2_SubPriority            0
+
+#define bspTIM3_PreemptPriority        8
+#define bspTIM3_SubPriority            0
+
+#define bspTIM4_PreemptPriority        8
+#define bspTIM4_SubPriority            0
+
+#define bspTIM5_PreemptPriority        8
+#define bspTIM5_SubPriority            0
+
 
 /* CPU空闲时执行的函数 */
 //#define CPU_IDLE()        bsp_Idle()

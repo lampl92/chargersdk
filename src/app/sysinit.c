@@ -125,6 +125,8 @@ void sys_Init(void)
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
+    f_unlink(pathEVSELog);
+    f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
 

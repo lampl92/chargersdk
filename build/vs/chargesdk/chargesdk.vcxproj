@@ -195,7 +195,6 @@
     <ClCompile Include="..\..\..\src\hmi\qrencode\src\split.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
-    <ClCompile Include="..\..\..\src\middlewares\cJSON\s2j.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\diskio.c" />
@@ -203,11 +202,9 @@
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff_ex.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\syscall.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\unicode.c" />
-    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_hash.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
-    <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c" />
