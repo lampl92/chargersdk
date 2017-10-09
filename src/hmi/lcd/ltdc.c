@@ -350,19 +350,7 @@ void LTDC_Init(void)
 
 	//lcdid=LTDC_PanelID_Read();			//读取LCD面板ID
     lcdid = 0X7084;
-	if(lcdid==0X4342)
-	{
-		lcdltdc.pwidth=480;			    //面板宽度,单位:像素
-		lcdltdc.pheight=272;		    //面板高度,单位:像素
-		lcdltdc.hsw=1;				    //水平同步宽度
-		lcdltdc.vsw=1;				    //垂直同步宽度
-		lcdltdc.hbp=40;				    //水平后廊
-		lcdltdc.vbp=8;				    //垂直后廊
-		lcdltdc.hfp=5;				    //水平前廊
-		lcdltdc.vfp=8;				    //垂直前廊
-         LTDC_Clk_Set(288,4,RCC_PLLSAIDIVR_8);   //设置像素时钟 9Mhz
-		//其他参数待定.
-	}else if(lcdid==0X7084)
+	if(lcdid==0X7084)
 	{
 		lcdltdc.pwidth=800;			    //面板宽度,单位:像素
 		lcdltdc.pheight=480;		    //面板高度,单位:像素
@@ -374,29 +362,7 @@ void LTDC_Init(void)
 		lcdltdc.vfp=22;				    //垂直前廊
         //LTDC_Clk_Set(396,3,RCC_PLLSAIDIVR_4); //设置像素时钟 33M(如果开双显,需要降低DCLK到:18.75Mhz  300/4/4,才会比较好)
         LTDC_Clk_Set(320,2,RCC_PLLSAIDIVR_4);
-	}else if(lcdid==0X7016)
-	{
-		lcdltdc.pwidth=1024;			//面板宽度,单位:像素
-		lcdltdc.pheight=600;			//面板高度,单位:像素
-        lcdltdc.hsw=20;				    //水平同步宽度
-		lcdltdc.vsw=3;				    //垂直同步宽度
-		lcdltdc.hbp=140;			    //水平后廊
-		lcdltdc.vbp=20;				    //垂直后廊
-		lcdltdc.hfp=160;			    //水平前廊
-		lcdltdc.vfp=12;				    //垂直前廊
-		LTDC_Clk_Set(360,2,RCC_PLLSAIDIVR_4);//设置像素时钟  45Mhz
-		//其他参数待定.
-	}else if(lcdid==0X7018)
-	{
-		lcdltdc.pwidth=1280;			//面板宽度,单位:像素
-		lcdltdc.pheight=800;			//面板高度,单位:像素
-		//其他参数待定.
-	}else if(lcdid==0X8017)
-	{
-		lcdltdc.pwidth=1024;			//面板宽度,单位:像素
-		lcdltdc.pheight=768;			//面板高度,单位:像素
-		//其他参数待定.
-    }
+	}
 
 	lcddev.width=lcdltdc.pwidth;
 	lcddev.height=lcdltdc.pheight;
@@ -408,13 +374,6 @@ void LTDC_Init(void)
     lcdltdc.pixsize=2;				//每个像素占2个字节
 	ltdc_framebuf[0]=(u32*)(0xc0000000);//ltdc_lcd_framebuf;
 #endif
-    if(lcdid==0X7084)
-    {
-
-    }else if(lcdid==0X4342)
-    {
-
-    }
     //LTDC配置
     LTDC_Handler.Instance=LTDC;
     LTDC_Handler.Init.HSPolarity=LTDC_HSPOLARITY_AL;         //水平同步极性

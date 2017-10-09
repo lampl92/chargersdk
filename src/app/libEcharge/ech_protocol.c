@@ -18,86 +18,10 @@
 
 
 
-/*---------------------------------------------------------------------------/
-/                               获取协议配置信息
-/---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*                               获取协议配置信息                            */
+/*---------------------------------------------------------------------------*/
 
-#if 0
-static ErrorCode_t GetProtoInfo(uint16_t *pProtoInfoU16, uint8_t *jnName, void *pvCfgObj)
-{
-    uint16_t tmpShort;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pProtoCfgObj;
-
-    errcode = ERR_NO;
-    tmpShort = 0;
-
-    pProtoCfgObj = (cJSON *)pvCfgObj;
-
-    //  解析Int
-    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
-    if(jsItem == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto err_return;
-    }
-
-    tmpShort = (uint16_t)(jsItem->valueint);
-
-#ifdef DEBUG_CFG_PARSE_PROTO
-    printf_safe("%s\t = %d\n", jnName, tmpShort);
-#endif
-
-    /*********************/
-    *pProtoInfoU16 = tmpShort;
-
-err_return:
-    return errcode;
-}
-
-static ErrorCode_t GetProtoInfoStr(uint8_t *protoInfoStr, const uint8_t *jnName, void *pvCfgObj)
-{
-    uint8_t tmpStrLength;
-    uint8_t *ptmpStr;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pProtoCfgObj;
-
-    errcode = ERR_NO;
-    ptmpStr = NULL;
-
-    pProtoCfgObj = (cJSON *)pvCfgObj;
-
-    //  解析string
-    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnName);
-    if(jsItem == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto err_return;
-    }
-    ptmpStr = utils_strdup(jsItem->valuestring); //strdup之后出现错误都要先free
-    if(ptmpStr == NULL)
-    {
-        errcode = ERR_MEMORY;
-        goto err_return;
-    }
-
-#ifdef DEBUG_CFG_PARSE_PROTO
-    printf_safe("%s\t = %s\n", jnName, ptmpStr);
-#endif
-
-    /*********************/
-    strcpy(protoInfoStr, ptmpStr);
-
-err_free:
-    free(ptmpStr);
-err_return:
-    return errcode;
-}
-#endif
 /** @brief 获取ProtoCfg中参数的值
  *
  * @param pvProtoInfoItem void* 传入要获取的参数的指针
@@ -769,9 +693,10 @@ void testBnWList(void)
         printf_safe("%s\n", strIDCtx);
     }
 }
-/*---------------------------------------------------------------------------/
-/                               协议解析
-/---------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------*/
+/*                              协议解析                                     */
+/*---------------------------------------------------------------------------*/
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
     return (uint16_t)(ver + atrri + cmd + len);
@@ -1021,40 +946,34 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //车位状态 1：空闲   2：占用   3：未知
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
     //接口连接状态  1 空闲， 2,车连接 3 未知
-    if(pCON->status.xPlugState == UNPLUG)
-    {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
-    }
-    else if(pCON->status.xPlugState == PLUG)
+    if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
     }
     else
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
     }
     //接口工作状态 1：充电 2:待机 3：故障 4：充电结束 5：未知
-    switch(pCON->state)
+    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
     {
-    case STATE_CON_CHARGING:
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
-        break;
-    case STATE_CON_IDLE:
-    case STATE_CON_PLUGED:
-    case STATE_CON_PRECONTRACT:
-    case STATE_CON_PRECONTRACT_LOSEPLUG:
-    case STATE_CON_STARTCHARGE: //在这个状态还没开始充电
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 2;
-        break;
-    case STATE_CON_ERROR:
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Fault) == defSignalCON_State_Fault)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;
-        break;
-    case STATE_CON_STOPCHARGE:
+    }
+    else if ((pCON->status.ulSignalState & defSignalCON_State_Stopping) == defSignalCON_State_Stopping)
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 4;
-        break;
-    default:
+    }
+    else
+    {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 5;
-        break;
     }
     //输出电压xxx.x
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
@@ -1141,34 +1060,33 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //SOC 1~100
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //故障码
-    if(pEVSE->status.ulScramState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
     {
         errcode |= 1 << 0; //Bit0 急停故障
     }
-    uxBits = xEventGroupGetBits(pCON->status.xHandleEventException);
-    if((uxBits & defEventBitExceptionMeter) == defEventBitExceptionMeter)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
     {
         errcode |= 1 << 1; //Bit1 电表故障
     }
-    if((uxBits & defEventBitExceptionRelayPaste) == defEventBitExceptionRelayPaste)
+    if ((pCON->status.ulSignalFault & defSignalGroupCON_Fault_AC_RelayPase) != 0)
     {
         errcode |= 1 << 2; //Bit2 接触器故障
     }
-    if((uxBits & defEventBitExceptionRFID) == defEventBitExceptionRFID)
+    if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
     {
         errcode |= 1 << 3; //Bit3 读卡器故障
     }
-    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-    if((uxBits & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+    if((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0 || 
+       (pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0)
     {
         errcode |= 1 << 4; //Bit4 内部过温故障
     }
     //errcode |= 1 << 5 //Bit5 连接器故障
-    if(pEVSE->status.ulPEState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PE) == defSignalEVSE_Alarm_PE)
     {
         errcode |= 1 << 6; //Bit5 绝缘故障
     }
-    if(pEVSE->status.ulPowerOffState == 1)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_PowerOff) == defSignalEVSE_Alarm_PowerOff)
     {
         errcode |= 1 << 7;  //Bit7 其他(在此定义为停电故障)
     }
@@ -2676,7 +2594,7 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 
         aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
 
-        memmove(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+        memcpy(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
         pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
 
         free(pMsgBodyCtx_dec);
@@ -2769,37 +2687,13 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
 
     return 1;
 }
-#if 0
-static int analyCmdStatus(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-    return 1;
-}
-static int analyCmdRemoteCtrl(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-
-    return 1;
-}
-static int analyCmdRTData(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    return 1;
-}
-static int analyCmdOrder(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
-    return 1;
-}
-#endif
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
     copyCmdElem = (echCmdElem_t *)malloc(sizeof(echCmdElem_t));
     if(copyCmdElem != NULL)
     {
-        memmove(copyCmdElem, e, sizeof(echCmdElem_t));
+        memcpy(copyCmdElem, e, sizeof(echCmdElem_t));
     }
     else
     {
@@ -2808,7 +2702,7 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
     copyCmdElem->pbuff = (uint8_t *)malloc(copyCmdElem->len * sizeof(uint8_t));
     if(copyCmdElem->pbuff != NULL)
     {
-        memmove(copyCmdElem->pbuff, ((echCmdElem_t *)e)->pbuff, copyCmdElem->len);
+        memcpy(copyCmdElem->pbuff, ((echCmdElem_t *)e)->pbuff, copyCmdElem->len);
     }
     else
     {
@@ -2837,7 +2731,7 @@ static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
     copyProtoElem = (echProtoElem_t *)malloc(sizeof(echProtoElem_t));
     if(copyProtoElem != NULL)
     {
-        memmove(copyProtoElem, e, sizeof(echProtoElem_t));
+        memcpy(copyProtoElem, e, sizeof(echProtoElem_t));
     }
     else
     {
@@ -2846,7 +2740,7 @@ static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
     copyProtoElem->pbuff = (uint8_t *)malloc(copyProtoElem->len * sizeof(uint8_t));
     if(copyProtoElem->pbuff != NULL)
     {
-        memmove(copyProtoElem->pbuff, ((echProtoElem_t *)e)->pbuff, copyProtoElem->len);
+        memcpy(copyProtoElem->pbuff, ((echProtoElem_t *)e)->pbuff, copyProtoElem->len);
     }
     else
     {
@@ -2958,6 +2852,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
+    pProto->status.ulStatus |= defSignalCON_State_Standby;
     for(i = 0; i < 6; i++)
     {
         pProto->status.fault[i] = 0;

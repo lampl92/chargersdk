@@ -127,7 +127,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void _cbWindow(WM_MESSAGE *pMsg) {
     WM_SCROLL_STATE ScrollState;
     WM_HWIN      hItem;
-    char *dest = (char *)malloc(10);
     int x, y;
     volatile int id = 0;
     volatile int v = 0;

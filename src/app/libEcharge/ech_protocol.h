@@ -73,6 +73,7 @@ typedef struct _echProtoInfo
 
 typedef struct _echProtoStatus
 {
+    uint32_t ulStatus;
     uint8_t fault[6];
     uint8_t warning[6];
     uint8_t protect[6];

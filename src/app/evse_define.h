@@ -303,9 +303,22 @@
 #define defSignalCON_Fault_CP                   BIT_9        //CP传感故障
 #define defSignalCON_Fault_Plug                 BIT_10
 #define defSignalCON_Fault_Meter                BIT_11       //电表或电能芯片
+
+#define defSignalGroupCON_Fault_AC_RelayPase       (defSignalCON_Fault_AC_A_RelayPaste | \
+                                                    defSignalCON_Fault_AC_B_RelayPaste | \
+                                                    defSignalCON_Fault_AC_C_RelayPaste | \
+                                                    defSignalCON_Fault_AC_N_RelayPaste )
     
-    
-    
+#define defSignalGroupCON_Alarm_Temp_Cri           (defSignalCON_Alarm_SocketTemp1_Cri | \
+                                                defSignalCON_Alarm_SocketTemp2_Cri | \
+                                                defSignalCON_Alarm_AC_A_Temp_Cri | \
+                                                defSignalCON_Alarm_AC_B_Temp_Cri | \
+                                                defSignalCON_Alarm_AC_C_Temp_Cri | \
+                                                defSignalCON_Alarm_AC_N_Temp_Cri)
+#define defSignalGroupEVSE_Alarm_Temp_Cri      (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
+                                                defSignalEVSE_Alarm_AC_B_Temp_Cri | \
+                                                defSignalEVSE_Alarm_AC_C_Temp_Cri | \
+                                                defSignalEVSE_Alarm_AC_N_Temp_Cri)
 #define CON_MAX_SIGNAL_BLOCK            4
 #define EVSE_MAX_SIGNAL_BLOCK           2
     

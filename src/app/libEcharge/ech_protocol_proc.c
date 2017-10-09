@@ -90,7 +90,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                     modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
-                    //等不等得到都置1
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
                 }
@@ -99,7 +98,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     /* 判断命令字，
                        如果是请求命令，则等待主机回复
-                       如果是回复命令，则直接删除
+                       如果是回复命令，则直接超时删除
                     */
                     uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
                         defEventBitProtoCmdHandled,
@@ -112,9 +111,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                         printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
-
                 }
-#if 1
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
                 {
@@ -127,7 +124,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     pechProtoElem->status = 0;
                     continue;//跳过后面的语句立即发送，否则需要再等一轮
                 }
-#endif
                 /* 4. */
                 gdsl_list_cursor_step_forward(cs);
             }//while

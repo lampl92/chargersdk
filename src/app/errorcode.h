@@ -32,6 +32,7 @@ typedef enum _ErrorCode
 
     ERR_CON_METER_FAULT,        //电表通信故障
     ERR_CON_CP_FAULT,           //检测CP故障
+    ERR_CON_CP_SWITCH_FAULT,    //CP转换故障
     ERR_CON_CC_FAULT,           //检测CC故障
     ERR_CON_PLUG_FAULT,         //插枪状态检测器发生故障
     ERR_CON_B_LOCK_FAULT,       //B型连接枪锁状态检测器发生故障

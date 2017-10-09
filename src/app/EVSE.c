@@ -868,6 +868,11 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
         if(get_va() <= 100.0) //检测间隔10mS
         {
             tmpOffState = 1;
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
         }
         else if((get_va() >= 180) && (get_va() <= 250))
         {
@@ -1092,10 +1097,6 @@ EVSE_t *EVSECreate(void)
     pEVSE->status.ulSignalState   = 0;
     pEVSE->status.ulSignalAlarm   = 0;
     pEVSE->status.ulSignalFault   = 0;
-    pEVSE->status.ulSignalState_Old   = 0;
-    pEVSE->status.ulSignalAlarm_Old   = 0;
-    pEVSE->status.ulSignalFault_Old   = 0;
-    
 
     pEVSE->status.GetArresterState = GetArresterState;
     pEVSE->status.GetKnockState    = GetKnockState;

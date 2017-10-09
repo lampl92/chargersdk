@@ -68,7 +68,7 @@ ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     errcode = ERR_NO;
 
-    /** @todo (rgw#1#): 调用平台注册接口 */
+    /** 调用平台注册接口 */
     pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_REGISTER, 10, 3);
     /**********/
 
@@ -81,15 +81,15 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     echCMD_t *pCMD;
     echCmdElem_t *pechCmdElem;
     echProtoElem_t *pechProtoElem;
-    gdsl_list_cursor_t cur;
-    gdsl_list_cursor_t cs;
+    gdsl_list_cursor_t cur;//命令队列光标
+    gdsl_list_cursor_t cs;//发送队列光标
 
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
     if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
     {
         cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
-        gdsl_list_cursor_move_to_tail (cur);//只要链表中最新接收的协议
+        gdsl_list_cursor_move_to_tail (cur);//只要链表中最新接收的协议, 因此从tail开始
         while((pechCmdElem = gdsl_list_cursor_get_content (cur)) != NULL)
         {
             printf_safe("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
@@ -106,6 +106,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         }
         gdsl_list_cursor_free(cur);
         xSemaphoreGive(pCMD->xMutexCmd);
+        
         if(errcode != ERR_REMOTE_NODATA)
         {
             if (xSemaphoreTake(pProto->xMutexProtoSend, 1000) == pdPASS)
