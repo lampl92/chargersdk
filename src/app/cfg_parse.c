@@ -36,7 +36,7 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    taskENTER_CRITICAL();
+    //taskENTER_CRITICAL();  注释掉 ，解决可能锁死的问题
     ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
     if(res != FR_OK)
     {
@@ -44,7 +44,7 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         goto exit;
     }
     ThrowFSCode(res = f_write(&f, pbuff, len, &bw), path, "SetCfgObj()-write");
-    taskEXIT_CRITICAL();
+    //taskEXIT_CRITICAL();
     if(len != bw)
     {
         errcode = ERR_FILE_RW;
