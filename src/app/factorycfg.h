@@ -26,9 +26,9 @@ const uint8_t *strEVSECfg =
             \"SocketType\":67,\
             \"VolatageUpperLimits\":260,\
             \"VolatageLowerLimits\":176,\
-            \"ACTempUpperLimits\":105,\
+            \"ACTempUpperLimits\":95,\
             \"ACTempLowerLimits\":-40,\
-            \"SocketTempUpperLimits\":105,\
+            \"SocketTempUpperLimits\":95,\
             \"SocketTempLowerLimits\":-40,\
             \"RatedCurrent\":32,\
             \"RatedPower\":7,\
@@ -50,7 +50,7 @@ const uint8_t *strProtoCfg =
     \"OptSN\": 0,\
     \"ProtoVer\": 104,\
     \"HeartBeatCyc_ms\": 15000,\
-    \"StatusCyc_ms\": 20000,\
+    \"StatusCyc_ms\": 120000,\
     \"RTDataCyc_ms\": 10000,\
     \"ResetAct\": 0,\
     \"PowerFee_sharp\": 1,\
