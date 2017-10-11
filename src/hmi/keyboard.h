@@ -33,8 +33,8 @@ typedef struct
 	u16 height;							//软键盘高度
 	WM_HWIN hKeypad;					//软键盘窗口句柄
 	WM_HWIN EngButton_Handle[35];		//英文键盘上按钮句柄
-	WM_HWIN NumButton_Handle[20];		//数字键盘上按钮句柄
-	WM_HWIN SignButton_Handle[20];		//符号键盘上按钮句柄
+	WM_HWIN NumButton_Handle[30];		//数字键盘上按钮句柄
+	WM_HWIN SignButton_Handle[30];		//符号键盘上按钮句柄
     WM_HWIN ChineseButton_Handle[25];   //中文键盘上按钮句柄
     u8      inputstr[7];                //输入字符串，最大6个字符+结束符
     u8      inputlen;                   //输入长度

@@ -67,8 +67,6 @@ extern uint8_t strCSQ[10];
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    //dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
-    //IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号:");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
@@ -319,77 +317,6 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         _deleteWin(hWin);
         Keypad_GetValue(LOGIN_PASSWD," ");
     }
-}
-/** 生成二维码数据
- *qrcode_data:需要生成二维码的字符串，p计算画笔的大小，x计算x坐标，y计算y坐标，
- *
- * @param
- * @return
- *Note:
- */
-void qrencode(uint8_t *qrcode_data,uint16_t *p,uint16_t *x,uint16_t *y)
-{
-	uint8_t i;
-
-	EncodeData((char *)qrcode_data);
-
-    LCD_Fill(130,170,130+m_nSymbleSize,170+m_nSymbleSize,WHITE);
-
-	for(i=0;i<10;i++)
-	{
-		if((m_nSymbleSize*i*2)>(130+m_nSymbleSize))	break;
-	}
-
-	*p=(i-1)*2;//点大小
-	if(m_nSymbleSize <= 250)
-    {
-        *x = 67 + ((250 - m_nSymbleSize*(*p)) / 2);
-    }
-    else
-    {
-        *x = 67 - ((m_nSymbleSize*(*p) - 250) / 2);
-    }
-
-	*y = 170;
-}
-/** 画二维码
- *x:显示二维码的左上角x 坐标，y:显示二维码的左上角y坐标，p：画笔的大小
- *
- * @param
- * @return
- *Note:
- */
-void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
-{
- 	uint8_t i,j;
-
-	for(i=0;i<m_nSymbleSize;i++)
-	{
-		for(j=0;j<m_nSymbleSize;j++)
-		{
-			if(m_byModuleData[i][j]==1)
-            {
-                LCD_Fill(*x+(*p)*i,*y+(*p)*j,*x+(*p)*(i+1)-1,*y+(*p)*(j+1)-1,BLACK);
-            }
-		}
-	}
-}
-/** 将二维码显示界面转换为图片
- *
- * @param
- * @param
- * @return 0:转换保存成功，1:打开文件错误 2:
- *
- */
-uint8_t encodetobmp(char *filename,uint8_t *codeString)
-{
-    static uint16_t p,x,y;
-
-    qrencode((uint8_t *)codeString,&p,&x,&y);
-    display_encode(&x,&y,&p);
-    vTaskDelay(500);
-    create_bmppicture(filename,x,y,p*m_nSymbleSize,p*m_nSymbleSize);
-    //create_bmppicture("system/encode_test.bmp",x,y,p*m_nSymbleSize,p*m_nSymbleSize);
 }
 /** @brief 故障弹窗弹出展示
  *

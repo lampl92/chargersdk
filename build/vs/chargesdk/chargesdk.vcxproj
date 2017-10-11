@@ -184,15 +184,6 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_SelAOrB.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\bitstream.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mask.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mmask.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mqrspec.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrencode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrspec.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\QR_Encode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\rscode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\split.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
@@ -888,7 +879,7 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC_ot.a" />
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,32 +26,27 @@ Full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
 ----------------------------------------------------------------------
-File        : GUI_SetOrientation.h
-Purpose     : Private include file for GUI_SetOrientation_xxx
+Licensing information
+Licensor:                 SEGGER Software GmbH
+Licensed to:              STMicroelectronics International NV, 39, Chemin du Champ-des Filles, 1228 Plan Les Ouates, Geneva, SWITZERLAND
+Licensed SEGGER software: emWin
+License number:           GUI-00429
+License model:            Buyout SRC [Buyout Source Code License, signed November 29th 2012]
+Licensed product:         -
+Licensed platform:        STMs ARM Cortex-M based 32 BIT CPUs
+Licensed number of seats: -
+----------------------------------------------------------------------
+Support and Update Agreement (SUA)
+SUA period:               2012-12-07 - 2017-12-31
+Contact to extend SUA:    sales@segger.com
+----------------------------------------------------------------------
+File        : GUI_GCache_Private.h
+Purpose     : Private header
 ---------------------------END-OF-HEADER------------------------------
 */
 
-/**
-  ******************************************************************************
-  * @attention
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-  
-#ifndef GUI_SETORIENTATION_H
-#define GUI_SETORIENTATION_H
+#ifndef GUI_GCACHE_PRIVATE_H
+#define GUI_GCACHE_PRIVATE_H
 
 #include "GUI_Private.h"
 
@@ -61,10 +56,7 @@ Purpose     : Private include file for GUI_SetOrientation_xxx
 *
 **********************************************************************
 */
-//
-// Use unique context identified
-//
-#define DRIVER_CONTEXT DRIVER_CONTEXT_ORIENTATION
+#define DRIVER_CONTEXT DRIVER_CONTEXT_GCACHE
 
 /*********************************************************************
 *
@@ -76,28 +68,51 @@ Purpose     : Private include file for GUI_SetOrientation_xxx
 *
 *       DRIVER_CONTEXT
 */
-typedef struct DRIVER_CONTEXT DRIVER_CONTEXT;
-
-struct DRIVER_CONTEXT {
-  void (* pfLog2Phys)(DRIVER_CONTEXT * pContext, int x, int y, int * px_phys, int * py_phys);
-  U8 * pData;
-  int BytesPerPixel;
-  int BytesPerLine;
-  int Orientation;
+typedef struct {
+  int x0, y0, x1, y1, IsDirty;
   int xSize, ySize;
-  int vxSize, vySize;
-  int PixelOffset;
-  const GUI_ORIENTATION_API * pDrawingAPI;
-};
+  int CacheLocked;
+  int MemSize;
+  int BitsPerPixel;
+  int BytesPerLine;
+  //
+  // Line buffer for reading operation
+  //
+  LCD_PIXELINDEX * pLineBuffer;
+  //
+  // Palette for drawing 'cache bitmap'
+  //
+  LCD_PIXELINDEX * pPalette;
+  //
+  // Cache management
+  //
+  void (* pfReadRect)     (GUI_DEVICE * pDevice, int x0, int y0, int x1, int y1, LCD_PIXELINDEX * pBuffer);
+  void (* pfSendCacheRect)(GUI_DEVICE * pDevice);
+  U32 * pVMEM;
+  //
+  // Drawing functions
+  //
+  void           (* pfDrawBitmap   )(GUI_DEVICE *  pDevice,  int x0, int y0, int xsize, int ysize, int BitsPerPixel, int BytesPerLine, const U8 * pData, int Diff, const LCD_PIXELINDEX * pTrans);
+  void           (* pfDrawHLine    )(GUI_DEVICE *  pDevice,  int x0, int y0,  int x1);
+  void           (* pfDrawVLine    )(GUI_DEVICE *  pDevice,  int x , int y0,  int y1);
+  void           (* pfFillRect     )(GUI_DEVICE *  pDevice,  int x0, int y0, int x1, int y1);
+  LCD_PIXELINDEX (* pfGetPixelIndex)(GUI_DEVICE *  pDevice,  int x, int y);
+  void           (* pfSetPixelIndex)(GUI_DEVICE *  pDevice,  int x, int y, LCD_PIXELINDEX ColorIndex);
+  void           (* pfXorPixel     )(GUI_DEVICE *  pDevice,  int x, int y);
+  //
+  // GetData function
+  //
+  void          *(* pfGetDevData   )(GUI_DEVICE *  pDevice,  int Index);
+} DRIVER_CONTEXT;
 
 /*********************************************************************
 *
-*       Private interface
+*       Interface
 *
 **********************************************************************
 */
-void GUI__Sort(int * p0, int * p1);
+GUI_DEVICE * GUI_GCACHE__CreateEx(int LayerIndex, const LCD_API_COLOR_CONV * pColorConvAPI, int BitsPerPixel);
 
-#endif /* GUI_SETORIENTATION_H */
+#endif
 
 /*************************** End of file ****************************/

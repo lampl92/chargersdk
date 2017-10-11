@@ -149,12 +149,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int         Id;
+    
 
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+        /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
         if((bittest(winInitDone,0))&&(_hWinHome == cur_win))
         {
             //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
@@ -172,13 +172,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
             }
-        }
+        }               
+        GUI_QR_Draw(qr_hmem,70,170);
+        GUI_DrawLine(100,100,100,200);
         break;
     case WM_INIT_DIALOG:
         /**< 创建framewin */
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-        /**< 二维码显示 */
-        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1), bmpbuffer, BMPFile_ENCODE.obj.objsize);
         /**< text和edit的初始化 */
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, " ");
