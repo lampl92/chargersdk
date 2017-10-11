@@ -43,25 +43,7 @@ void MainTask(void)
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
-    //    PutOut_SelAOrB();
-    //    PutOut_Window();
-    //    PutOut_Window();
-    //    PutOut_Charging_2dimen();
-        //Keypad_GetValue(LOGIN_PASSWD,"");
         CreateHome();
-        //CreateCardInfo();
-        //CreateCharging();
-        //CreateChargeDone();
-        //CreateManagerInfoAnalog();
-        //CreateManagerInfoStatus();
-        //CreateManagerAlarmLog();
-        //CreateManagerSysSet();
-    //    PutOut_Card_Info();
-    //    PutOut_Charging();
-    //
-    //    PutOut_Charge_Done();
-    //
-    //	PutOut_Card_Valid();
     }
     else
     {

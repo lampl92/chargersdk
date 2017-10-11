@@ -105,7 +105,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define temper_k   100
 #define CP1_k      0.0032
 #define CP2_k      0.0032//14.1/3??·???±???
-#define electricity_meter_num 256
+#define electricity_meter_num 2
 #define TIMER_MAX 1
 typedef struct
 {

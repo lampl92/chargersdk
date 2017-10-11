@@ -296,9 +296,9 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         vTaskDelay(100);
         LCD_Clear(WHITE);
         TP_Adjust();
-//        calebrate_done = 0xff;
+        calebrate_done = 1;
         //PutOut_SelAOrB();
-//        MainTask();
+        //MainTask();
 	    CreateHome();
     }
 /// TODO (zshare#1#): ///添加跳转首页会有问题???
