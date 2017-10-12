@@ -18,14 +18,12 @@
 #endif
 
 #define DEVDEBUG(msg)  do{printf_safe(msg);}while(0);
-#define TCP_CLIENT_BUFSIZE   1500
+#define TCP_CLIENT_BUFSIZE   MAX_COMMAND_LEN
 DevModem_t *pModem;
 
-uint8_t  tcp_client_sendbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端发送数据缓冲
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
 
 uint32_t recv_len = 0;
-uint32_t send_len = 0;
 
 void modem_enQue(uint8_t *pbuff, uint32_t len)
 {
@@ -195,7 +193,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     }
     GPRS_set; //上电启动
     DEVDEBUG("modem Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 10);
     switch(ret)
     {
     case DR_MODEM_OK:
@@ -764,7 +762,7 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 20);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 10);
 
     return ret;
 }
@@ -865,27 +863,27 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
         vTaskDelay(1000);
     }
     while(pModem->status.eSimStat != CPIN_READY);
-    do
-    {
-        ret = modem_get_net_reg(pModem);
-        if(ret != DR_MODEM_OK)
-        {
-            return ret;
-        }
-        vTaskDelay(1000);
-    }
-    while(pModem->status.eNetReg == REG_SEARCH );
+//    do
+//    {
+//        ret = modem_get_net_reg(pModem);
+//        if(ret != DR_MODEM_OK)
+//        {
+//            return ret;
+//        }
+//        vTaskDelay(1000);
+//    }
+//    while(pModem->status.eNetReg == REG_SEARCH );
 
-    do
-    {
-        ret = modem_get_gprs_reg(pModem);
-        if(ret != DR_MODEM_OK)
-        {
-            return ret;
-        }
-        vTaskDelay(1000);
-    }
-    while(pModem->status.eGprsReg == REG_SEARCH );
+//    do
+//    {
+//        ret = modem_get_gprs_reg(pModem);
+//        if(ret != DR_MODEM_OK)
+//        {
+//            return ret;
+//        }
+//        vTaskDelay(1000);
+//    }
+//    while(pModem->status.eGprsReg == REG_SEARCH );
     do
     {
         ret = modem_CSQ(pModem);
