@@ -30,7 +30,7 @@
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
 #define defMonitorRFIDCyc           1000
-#define defMonitorDataRefreshCyc    1000
+#define defMonitorDataRefreshCyc    5000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
 #define defDiagCurrInitCyc          500       //延时启动电流检测
