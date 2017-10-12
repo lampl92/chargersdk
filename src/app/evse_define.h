@@ -133,7 +133,7 @@
 #define defEventBitExceptionTempSensor  BIT_14
 #define defEventBitExceptionSocketTempSensor  BIT_15
 
-#define defEventBitExceptionDevFault    (defEventBitExceptionRFID |defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionDevFault    (defEventBitExceptionMeter|defEventBitExceptionRelayPaste)//defEventBitExceptionRFID |
 #define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
 
 /*------pCON->status.xHandleEventCharge*/
