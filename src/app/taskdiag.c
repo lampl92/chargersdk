@@ -96,13 +96,6 @@ void vTaskEVSEDiag(void *pvParameters)
                     pCON->status.SetLoadPercent(pCON, 70);
                 }
             }
-//            else
-//            {
-//                if (pCON->state == STATE_CON_CHARGING)
-//                {
-//                    pCON->status.SetLoadPercent(pCON, 100);
-//                }
-//            }
         }
         /* end of 处理系统报警 */
 
@@ -138,22 +131,13 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagVolt, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagVolt) == defEventBitDiagVolt)
-        {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                DiagVoltageError(pCON);
-            }
-        }
-
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
         {
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
+                DiagVoltageError(pCON);
                 DiagCurrentError(pCON);
                 DiagFreqError(pCON);
             }

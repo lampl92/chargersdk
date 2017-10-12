@@ -48,15 +48,15 @@ typedef enum
 #define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)
 #define CLI_QUEUE_SIZE                              10
 
-#define RFID_USARTx_BASE                            USART3
+#define RFID_USARTx_BASE                            USART1
 #define RFID_USARTx_BAUDRATE                        115200
-#define RFID_USARTx_IRQHandler                      void USART3_IRQHandler(void)
-#define RFID_QUEUE_SIZE                             100
+#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
+#define RFID_QUEUE_SIZE                             10000
 
-#define GPRS_USARTx_BASE                            USART1
+#define GPRS_USARTx_BASE                            USART3
 #define GPRS_USARTx_BAUDRATE                        115200
-#define GPRS_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             10000
+#define GPRS_USARTx_IRQHandler                      void USART3_IRQHandler(void)
+#define GPRS_QUEUE_SIZE                             100
 
 #define WIFI_USARTx_BASE                            UART5
 #define WIFI_USARTx_BAUDRATE                        115200

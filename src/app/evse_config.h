@@ -8,6 +8,10 @@
 #ifndef __EVSE_CONFIG_H
 #define __EVSE_CONFIG_H
 
+
+#define EVSE_USING_RFID            0
+
+
 #define defTotalCON             2
 //#define defUIDLength            4
 #define defCardIDLength         8

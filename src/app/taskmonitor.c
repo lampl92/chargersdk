@@ -72,51 +72,23 @@ void vTaskEVSEMonitor(void *pvParameters)
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
 
-        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBVolt, pdTRUE, pdFALSE, 0);
-        if((uxBitsTimerCB & defEventBitTimerCBVolt) == defEventBitTimerCBVolt)
-        {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-#ifdef EVSE_DEBUG
-                THROW_ERROR(i, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-#endif
-            }
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagVolt);
-        }
-
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                //THROW_ERROR(i, pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+                THROW_ERROR(i, errcode = pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, errcode = pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
                 THROW_ERROR(i, errcode = pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-#ifndef EVSE_DEBUG
                 THROW_ERROR(i, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-#endif
+                
                 if(errcode == ERR_NO)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
                 }
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
-        }
-        else
-        {
-            /// TODO (zshare#1#): 后续更改这块，这块会一直占用cpu
-            for(i = 0;i <ulTotalCON;i++)
-            {
-                pCON = CONGetHandle(i);
-                if(pCON->state != STATE_CON_CHARGING)
-                {
-                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
-                    xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
-                }
-            }
         }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBEVSEState, pdTRUE, pdFALSE, 0);
