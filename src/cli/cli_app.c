@@ -2,7 +2,7 @@
 #include "utils.h"
 #include <time.h>
 #include "interface.h"
-
+#include "bsp_define.h"
 extern void testBnWList(void);
 void cli_hello_fnt(int argc, char **argv)
 {

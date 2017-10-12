@@ -1,9 +1,11 @@
+#include "bsp_define.h"
 #include "bsp.h"
 #include "ST_LIS2DH12.h"
 #include "myiic.h"
 #include "user_app.h"
-#include <stdlib.h>
 #include "touch.h"
+#include <utils.h>
+#include <math.h>
 uint16_t Read_Lis2ds12(uint8_t CMD)
 {
     u8 count = 0;
@@ -58,17 +60,17 @@ float get_angle_max(void)
 {
     float angle_max;
     GET_ANGLE();
-    if(abs(angle_x)>abs(angle_y))
+    if(utils_abs(angle_x)>utils_abs(angle_y))
     {
-        angle_max=abs(angle_x);
+        angle_max=utils_abs(angle_x);
     }
     else
     {
-         angle_max=abs(angle_y);
+         angle_max=utils_abs(angle_y);
     }
-    if(angle_max<abs(angle_z))
+    if(angle_max<utils_abs(angle_z))
     {
-        angle_max=abs(angle_z);
+        angle_max=utils_abs(angle_z);
     }
 return angle_max;
 }

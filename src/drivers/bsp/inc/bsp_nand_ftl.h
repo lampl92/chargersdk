@@ -1,20 +1,22 @@
 #ifndef __BSP_NAND_FTL_H
 #define __BSP_NAND_FTL_H
 
-//Éý¼¶ËµÃ÷
+//å‡çº§è¯´æ˜Ž
 //V1.1 20160124
-//ÐÞ¸ÄFTL_CopyAndWriteToBlockºÍFTL_WriteSectorsº¯Êý,Ìá¸ß·Ç0XFFÊ±µÄÐ´ÈëËÙ¶È.
+//ä¿®æ”¹FTL_CopyAndWriteToBlockå’ŒFTL_WriteSectorså‡½æ•°,æé«˜éž0XFFæ—¶çš„å†™å…¥é€Ÿåº¦.
 //V1.2 20160520
-//1,ÐÞ¸ÄFTL_ReadSectors,Ôö¼ÓECC³ö´íÅÐ¶Ï,¼ì²â»µ¿é´¦Àí,²¢Ôö¼Ó¶à¿éÁ¬¶Á,Ìá¸ßËÙ¶È
-//2,ÐÂÔöFTL_BlockCompareºÍFTL_SearchBadBlockº¯Êý,ÓÃÓÚËÑÑ°»µ¿é
-//3,ÐÞ¸ÄFTL_Format»µ¿é¼ì²â·½Ê½,Ôö¼ÓFTL_USE_BAD_BLOCK_SEARCHºê
+//1,ä¿®æ”¹FTL_ReadSectors,å¢žåŠ ECCå‡ºé”™åˆ¤æ–­,æ£€æµ‹åå—å¤„ç†,å¹¶å¢žåŠ å¤šå—è¿žè¯»,æé«˜é€Ÿåº¦
+//2,æ–°å¢žFTL_BlockCompareå’ŒFTL_SearchBadBlockå‡½æ•°,ç”¨äºŽæœå¯»åå—
+//3,ä¿®æ”¹FTL_Formatåå—æ£€æµ‹æ–¹å¼,å¢žåŠ FTL_USE_BAD_BLOCK_SEARCHå®
 //V1.3 20160530
-//ÐÞ¸Äµ±1bit ECC´íÎó³öÏÖÊ±£¬¶ÁÈ¡2´Î£¬À´È·ÈÏ1bit ´íÎó£¬ÒÔ·À´íÎóµÄÐÞ¸ÄÊý¾Ý
+//ä¿®æ”¹å½“1bit ECCé”™è¯¯å‡ºçŽ°æ—¶ï¼Œè¯»å–2æ¬¡ï¼Œæ¥ç¡®è®¤1bit é”™è¯¯ï¼Œä»¥é˜²é”™è¯¯çš„ä¿®æ”¹æ•°æ®
 //////////////////////////////////////////////////////////////////////////////////
-#include "bsp.h"
-//»µ¿éËÑË÷¿ØÖÆ
-//Èç¹ûÉèÖÃÎª1,½«ÔÚFTL_FormatµÄÊ±ºò,ËÑÑ°»µ¿é,ºÄÊ±¾Ã(512M,3·ÖÖÓÒÔÉÏ),ÇÒ»áµ¼ÖÂRGBÆÁÂÒÉÁ
-#define FTL_USE_BAD_BLOCK_SEARCH		0		//¶¨ÒåÊÇ·ñÊ¹ÓÃ»µ¿éËÑË÷
+
+#include "stm32f4xx.h"
+
+//åå—æœç´¢æŽ§åˆ¶
+//å¦‚æžœè®¾ç½®ä¸º1,å°†åœ¨FTL_Formatçš„æ—¶å€™,æœå¯»åå—,è€—æ—¶ä¹…(512M,3åˆ†é’Ÿä»¥ä¸Š),ä¸”ä¼šå¯¼è‡´RGBå±ä¹±é—ª
+#define FTL_USE_BAD_BLOCK_SEARCH		0		//å®šä¹‰æ˜¯å¦ä½¿ç”¨åå—æœç´¢
 
 
 

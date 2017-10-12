@@ -1,5 +1,6 @@
+#include "bsp_define.h"
+#include "xprintf.h"
 #include <time.h>
-#include "bsp.h"
 
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
 time_t time_dat;

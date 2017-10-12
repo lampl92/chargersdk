@@ -1,8 +1,9 @@
-﻿#ifndef _KEYBOARD_H
+#ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 #include "DIALOG.h"
 #include "pyinput.h"
 #include "touchtimer.h"
+#include "bsp_define.h"
 //下述定义为输入设置项的对应宏
 #define LOGIN_PASSWD    0
 #define SYSSET_VALUE    1

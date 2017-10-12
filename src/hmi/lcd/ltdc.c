@@ -1,3 +1,4 @@
+#include "bsp_define.h"
 #include "ltdc.h"
 #include "lcddrv.h"
 #include "GUI.h"

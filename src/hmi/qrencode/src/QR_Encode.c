@@ -1,10 +1,10 @@
 #include "string.h"
 #include "QR_Encode.h"
-//¶şÎ¬ÂëÉú³ÉÔ­ÀíÏê¼û http://coolshell.cn/articles/10590.html#jtss-tsina
+//äºŒç»´ç ç”ŸæˆåŸç†è¯¦è§ http://coolshell.cn/articles/10590.html#jtss-tsina
 
 
 
-//P28 ±í9 QRÂë·ûºÅ¸÷°æ±¾µÄ¾À´íÌØĞ§
+//P28 è¡¨9 QRç ç¬¦å·å„ç‰ˆæœ¬çš„çº é”™ç‰¹æ•ˆ
 const QR_VERSIONINFO QR_VersonInfo[] = {{0}, // Ver.0
 										 { 1, // Ver.1
 										    26,   19,   16,   13,    9,
@@ -450,7 +450,7 @@ const QR_VERSIONINFO QR_VersonInfo[] = {{0}, // Ver.0
 										  
 };
 
-// GF(2^8) Ö¸Êı2ÏµÊı¡ª¡ª±¾Ô´¶àÏîÊ½
+// GF(2^8) æŒ‡æ•°2ç³»æ•°â€”â€”æœ¬æºå¤šé¡¹å¼
 /////////////////////////////////////////////////////////////////////////////
 const BYTE byExpToInt[] = {  1,   2,   4,   8,  16,  32,  64, 128,  29,  58, 116, 232, 205, 135,  19,  38,
 							 76, 152,  45,  90, 180, 117, 234, 201, 143,   3,   6,  12,  24,  48,  96, 192,
@@ -468,7 +468,7 @@ const BYTE byExpToInt[] = {  1,   2,   4,   8,  16,  32,  64, 128,  29,  58, 116
 							 81, 162,  89, 178, 121, 242, 249, 239, 195, 155,  43,  86, 172,  69, 138,   9,
 							 18,  36,  72, 144,  61, 122, 244, 245, 247, 243, 251, 235, 203, 139,  11,  22,
 							 44,  88, 176, 125, 250, 233, 207, 131,  27,  54, 108, 216, 173,  71, 142,   1};
-// GF(2^8) ÏµÊı2Ö¸Êı¡ª¡ª±¾Ô´¶àÏîÊ½ 
+// GF(2^8) ç³»æ•°2æŒ‡æ•°â€”â€”æœ¬æºå¤šé¡¹å¼ 
 /////////////////////////////////////////////////////////////////////////////
 const BYTE byIntToExp[] = {  0,   0,   1,  25,   2,  50,  26, 198,   3, 223,  51, 238,  27, 104, 199,  75,
 							  4, 100, 224,  14,  52, 141, 239, 129,  28, 193, 105, 248, 200,   8,  76, 113,
@@ -487,8 +487,8 @@ const BYTE byIntToExp[] = {  0,   0,   1,  25,   2,  50,  26, 198,   3, 223,  51
 							203,  89,  95, 176, 156, 169, 160,  81,  11, 245,  22, 235, 122, 117,  44, 215,
 							 79, 174, 213, 233, 230, 231, 173, 232, 116, 214, 244, 234, 168,  80,  88, 175};
 
-//¾À´íÂë×ÖµÄÉú³É¶àÏîÊ½ //P53 ¸½Â¼A
-//ÕâÊÇ¼ÓÂŞÍßÓò2^8ÒÔ    100011101         ±íÊ¾Ö÷Ä£¿é¶àÏîÊ½£º
+//çº é”™ç å­—çš„ç”Ÿæˆå¤šé¡¹å¼ //P53 é™„å½•A
+//è¿™æ˜¯åŠ ç½—ç“¦åŸŸ2^8ä»¥    100011101         è¡¨ç¤ºä¸»æ¨¡å—å¤šé¡¹å¼ï¼š
 //X^8+X^4+X^3+X^2+1
 /////////////////////////////////////////////////////////////////////////////
 const BYTE byRSExp7[]  = {87, 229, 146, 149, 238, 102,  21};
@@ -598,8 +598,8 @@ int m_nVersion;
 bool m_bAutoExtent;	
 int m_nMaskingNo;
 
-//±àÂëÊı¾İ
-//lpsSource Ô´Êı¾İ
+//ç¼–ç æ•°æ®
+//lpsSource æºæ•°æ®
 bool EncodeData(char *lpsSource)
 {
 	int i, j, nVersion=1, bAutoExtent=1, ncSource;
@@ -613,12 +613,12 @@ bool EncodeData(char *lpsSource)
 	m_nLevel = 0;
 	m_nMaskingNo = 0;
 
-	ncLength = ncSource > 0 ? ncSource : strlen(lpsSource);//¼ÆËãÒª±àÂëµÄÊı¾İµÄ³¤¶È
+	ncLength = ncSource > 0 ? ncSource : strlen(lpsSource);//è®¡ç®—è¦ç¼–ç çš„æ•°æ®çš„é•¿åº¦
 	//uprintf("ncLength = %d\n",ncLength);
 	if (ncLength == 0)
 		return FALSE; 
 
-	nEncodeVersion = GetEncodeVersion(nVersion, lpsSource, ncLength);//¼ÆËã±àÂëÊı¾İĞèÒªµÄ°æ±¾
+	nEncodeVersion = GetEncodeVersion(nVersion, lpsSource, ncLength);//è®¡ç®—ç¼–ç æ•°æ®éœ€è¦çš„ç‰ˆæœ¬
 	//uprintf("nEncodeVersion = %d\n",nEncodeVersion);
 	if (nEncodeVersion == 0)
 		return FALSE; 
@@ -740,13 +740,13 @@ bool EncodeData(char *lpsSource)
 
 	return TRUE;
 }
-//Ã¿¸ö°æ±¾³¤¶È×Ö¶ÎµÄÎ»Êı
-//nVersion	°æ±¾
-//lpsSource	Ô´Êı¾İ
-//ncLength	³¤¶È
+//æ¯ä¸ªç‰ˆæœ¬é•¿åº¦å­—æ®µçš„ä½æ•°
+//nVersion	ç‰ˆæœ¬
+//lpsSource	æºæ•°æ®
+//ncLength	é•¿åº¦
 /*
 Number of bits per length field
-Encoding		Ver.1¨C9		10¨C26		27¨C40
+Encoding		Ver.1â€“9		10â€“26		27â€“40
 Numeric			10			12			14
 Alphanumeric	9			11			13
 Byte			8			16			16
@@ -789,10 +789,10 @@ int GetEncodeVersion(int nVersion, char *lpsSource, int ncLength)
 	}
 	return 0;
 }
-//Ä£Ê½Ö¸±ê£¬±àÂëÄ£Ê½
-//lpsSource Ô´Êı¾İ
-//ncLength	Êı¾İ³¤¶È
-//nVerGroup	°æ±¾×é
+//æ¨¡å¼æŒ‡æ ‡ï¼Œç¼–ç æ¨¡å¼
+//lpsSource æºæ•°æ®
+//ncLength	æ•°æ®é•¿åº¦
+//nVerGroup	ç‰ˆæœ¬ç»„
 //bool EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 {
@@ -809,25 +809,25 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 		BYTE byMode;
 
 		if (i < ncLength - 1 && IsKanjiData(lpsSource[i], lpsSource[i + 1]))
-			byMode = QR_MODE_KANJI;				//ÈÕÎÄ
+			byMode = QR_MODE_KANJI;				//æ—¥æ–‡
 		//else if(i < ncLength - 1 && IsChineseData(lpsSource[i], lpsSource[i + 1]))
-			//byMode = QR_MODE_CHINESE;			//ÖĞÎÄ
+			//byMode = QR_MODE_CHINESE;			//ä¸­æ–‡
 		else if (IsNumeralData(lpsSource[i]))	
-			byMode = QR_MODE_NUMERAL;			//Êı×Ö
+			byMode = QR_MODE_NUMERAL;			//æ•°å­—
 		else if (IsAlphabetData(lpsSource[i]))
-			byMode = QR_MODE_ALPHABET;			//×Ö·û
+			byMode = QR_MODE_ALPHABET;			//å­—ç¬¦
 		else
-			byMode = QR_MODE_8BIT;				//×Ö½Ú
+			byMode = QR_MODE_8BIT;				//å­—èŠ‚
 
 		if (i == 0)
 			m_byBlockMode[0] = byMode;			//
 
-		if (m_byBlockMode[m_ncDataBlock] != byMode)//Èç¹ûÇ°ºóÁ½¸öÊı¾İµÄÄ£Ê½²»Ò»Ñù
+		if (m_byBlockMode[m_ncDataBlock] != byMode)//å¦‚æœå‰åä¸¤ä¸ªæ•°æ®çš„æ¨¡å¼ä¸ä¸€æ ·
 			m_byBlockMode[++m_ncDataBlock] = byMode;
 
 		++m_nBlockLength[m_ncDataBlock];
 
-		if (byMode == QR_MODE_KANJI)//Èç¹ûÊÇÈÕÎÄÄ£Ê½£¬ÄÇÃ´Ç°ºó2¸ö×Ö½ÚÎªÒ»¸öºº×Ö
+		if (byMode == QR_MODE_KANJI)//å¦‚æœæ˜¯æ—¥æ–‡æ¨¡å¼ï¼Œé‚£ä¹ˆå‰å2ä¸ªå­—èŠ‚ä¸ºä¸€ä¸ªæ±‰å­—
 		{
 			++m_nBlockLength[m_ncDataBlock];
 			++i;
@@ -843,48 +843,48 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 
 		if ((m_byBlockMode[nBlock] == QR_MODE_NUMERAL  && m_byBlockMode[nBlock + 1] == QR_MODE_ALPHABET) ||
 			(m_byBlockMode[nBlock] == QR_MODE_ALPHABET && m_byBlockMode[nBlock + 1] == QR_MODE_NUMERAL))
-		{//Èç¹ûÇ°ºó2¸öÊı¾İ¿éÎª×ÖÄ¸ºÍÊı×Ö£¬¿ÉÒÔºÏ²¢³É×ÖÄ¸Êı×ÖÄ£Ê½(×ÖÄ¸Ä£Ê½°üº¬ÁËÊı×Ö)  ¼ÆËãÊı¾İÎ»Á÷
+		{//å¦‚æœå‰å2ä¸ªæ•°æ®å—ä¸ºå­—æ¯å’Œæ•°å­—ï¼Œå¯ä»¥åˆå¹¶æˆå­—æ¯æ•°å­—æ¨¡å¼(å­—æ¯æ¨¡å¼åŒ…å«äº†æ•°å­—)  è®¡ç®—æ•°æ®ä½æµ
 			ncSrcBits = GetBitLength(m_byBlockMode[nBlock], m_nBlockLength[nBlock], nVerGroup) +
 						GetBitLength(m_byBlockMode[nBlock + 1], m_nBlockLength[nBlock + 1], nVerGroup);
 
 			ncDstBits = GetBitLength(QR_MODE_ALPHABET, m_nBlockLength[nBlock] + m_nBlockLength[nBlock + 1], nVerGroup);
 
 			if (ncSrcBits > ncDstBits)
-			{//Èç¹ûºÏ²¢Ç°´óÓÚºÏ²¢ºó³¤¶È
+			{//å¦‚æœåˆå¹¶å‰å¤§äºåˆå¹¶åé•¿åº¦
 				if (nBlock >= 1 && m_byBlockMode[nBlock - 1] == QR_MODE_8BIT)
-				{//ÅĞ¶ÏÖ®Ç°µÄÊı¾İ¿éÊÇ²»ÊÇ8bitÄ£Ê½£¬Èç¹ûÊÇµÄ»°ºÏ²¢Êı¾İ(±ØĞëÒªÓĞ3¸öÊı¾İ¿éÒÔÉÏÅĞ¶Ï)
+				{//åˆ¤æ–­ä¹‹å‰çš„æ•°æ®å—æ˜¯ä¸æ˜¯8bitæ¨¡å¼ï¼Œå¦‚æœæ˜¯çš„è¯åˆå¹¶æ•°æ®(å¿…é¡»è¦æœ‰3ä¸ªæ•°æ®å—ä»¥ä¸Šåˆ¤æ–­)
 					ncJoinFront = GetBitLength(QR_MODE_8BIT, m_nBlockLength[nBlock - 1] + m_nBlockLength[nBlock], nVerGroup) +
 								  GetBitLength(m_byBlockMode[nBlock + 1], m_nBlockLength[nBlock + 1], nVerGroup);
 
 					if (ncJoinFront > ncDstBits + GetBitLength(QR_MODE_8BIT, m_nBlockLength[nBlock - 1], nVerGroup))
-						ncJoinFront = 0; //Èç¹ûºÏ²¢ºóµÄÊı¾İ³¬¹ı³¤¶È ·Ç·¨
+						ncJoinFront = 0; //å¦‚æœåˆå¹¶åçš„æ•°æ®è¶…è¿‡é•¿åº¦ éæ³•
 				}
 				else
-					ncJoinFront = 0;//²»Âú×ãºÏ²¢µÄÌõ¼ş
+					ncJoinFront = 0;//ä¸æ»¡è¶³åˆå¹¶çš„æ¡ä»¶
 
 				if (nBlock < m_ncDataBlock - 2 && m_byBlockMode[nBlock + 2] == QR_MODE_8BIT)
-				{//Èç¹ûºóÃæµÄÊı¾İ¿éÎª8bitÄ£Ê½£¬ºÏ²¢Êı¾İ(±ØĞëÒªÓĞ3¸öÊı¾İ¿éÒÔÉÏÅĞ¶Ï)
+				{//å¦‚æœåé¢çš„æ•°æ®å—ä¸º8bitæ¨¡å¼ï¼Œåˆå¹¶æ•°æ®(å¿…é¡»è¦æœ‰3ä¸ªæ•°æ®å—ä»¥ä¸Šåˆ¤æ–­)
 					ncJoinBehind = GetBitLength(m_byBlockMode[nBlock], m_nBlockLength[nBlock], nVerGroup) +
 								   GetBitLength(QR_MODE_8BIT, m_nBlockLength[nBlock + 1] + m_nBlockLength[nBlock + 2], nVerGroup);
 
 					if (ncJoinBehind > ncDstBits + GetBitLength(QR_MODE_8BIT, m_nBlockLength[nBlock + 2], nVerGroup))
-						ncJoinBehind = 0; //Èç¹ûºÏ²¢ºóµÄÊı¾İ³¬¹ı³¤¶È ·Ç·¨
+						ncJoinBehind = 0; //å¦‚æœåˆå¹¶åçš„æ•°æ®è¶…è¿‡é•¿åº¦ éæ³•
 				}
 				else
-					ncJoinBehind = 0;//²»Âú×ãºÏ²¢µÄÌõ¼ş
+					ncJoinBehind = 0;//ä¸æ»¡è¶³åˆå¹¶çš„æ¡ä»¶
 
-				if (ncJoinFront != 0 && ncJoinBehind != 0)//Ç°ºóµÄÊı¾İ¿éºÏ²¢ºó¶¼²»Îª0
+				if (ncJoinFront != 0 && ncJoinBehind != 0)//å‰åçš„æ•°æ®å—åˆå¹¶åéƒ½ä¸ä¸º0
 				{
-					nJoinPosition = (ncJoinFront < ncJoinBehind) ? -1 : 1;//Î»ÖÃµÄ±ê¼Ç£¬Èç¹ûÇ°ÃæµÄĞ¡ÓÚºóÃæµÄÎª-1£»´óÓÚµÈÓÚÎª1
+					nJoinPosition = (ncJoinFront < ncJoinBehind) ? -1 : 1;//ä½ç½®çš„æ ‡è®°ï¼Œå¦‚æœå‰é¢çš„å°äºåé¢çš„ä¸º-1ï¼›å¤§äºç­‰äºä¸º1
 				}
 				else
-				{//Èç¹ûÓĞÒ»¸ö»òÕß¶¼Îª0		Èç¹ûÇ°Ãæ²»Îª0Îª-1£»ºóÃæ²»Îª0Îª1  ·ñÔòÎª0
+				{//å¦‚æœæœ‰ä¸€ä¸ªæˆ–è€…éƒ½ä¸º0		å¦‚æœå‰é¢ä¸ä¸º0ä¸º-1ï¼›åé¢ä¸ä¸º0ä¸º1  å¦åˆ™ä¸º0
 					nJoinPosition = (ncJoinFront != 0) ? -1 : ((ncJoinBehind != 0) ? 1 : 0);
 				}
 
 				if (nJoinPosition != 0)
-				{//Èç¹ûºÏ²¢ºóµÄÊı¾İ²»Îª0
-					if (nJoinPosition == -1)//Ç°ÃæÓĞÊı¾İ
+				{//å¦‚æœåˆå¹¶åçš„æ•°æ®ä¸ä¸º0
+					if (nJoinPosition == -1)//å‰é¢æœ‰æ•°æ®
 					{
 						m_nBlockLength[nBlock - 1] += m_nBlockLength[nBlock];
 
@@ -895,9 +895,9 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 						}
 					}
 					else
-					{//ºóÃæÓĞÊı¾İ
-						m_byBlockMode[nBlock + 1] = QR_MODE_8BIT;//ºóÃæÊı¾İ¿éÎª8BITÄ£Ê½£¬½«ĞÂµÄÊı¾İ¿éÄ£Ê½¶¨Òå³É8BIT
-						m_nBlockLength[nBlock + 1] += m_nBlockLength[nBlock + 2];//³¤¶È
+					{//åé¢æœ‰æ•°æ®
+						m_byBlockMode[nBlock + 1] = QR_MODE_8BIT;//åé¢æ•°æ®å—ä¸º8BITæ¨¡å¼ï¼Œå°†æ–°çš„æ•°æ®å—æ¨¡å¼å®šä¹‰æˆ8BIT
+						m_nBlockLength[nBlock + 1] += m_nBlockLength[nBlock + 2];//é•¿åº¦
 
 						for (i = nBlock + 2; i < m_ncDataBlock - 1; ++i)
 						{
@@ -909,9 +909,9 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 					--m_ncDataBlock;
 				}
 				else
-				{//ºÏ²¢ºóÊı¾İÒì³££¬»òÕß²»Âú×ãºÏ²¢Ìõ¼ş
+				{//åˆå¹¶åæ•°æ®å¼‚å¸¸ï¼Œæˆ–è€…ä¸æ»¡è¶³åˆå¹¶æ¡ä»¶
 					if (nBlock < m_ncDataBlock - 2 && m_byBlockMode[nBlock + 2] == QR_MODE_ALPHABET)
-					{//Èç¹ûºóÃæÒ»¿éÊı¾İÒ²ÊÇ×ÖÄ¸Êı×Ö£¬ºÏ²¢Êı¾İ
+					{//å¦‚æœåé¢ä¸€å—æ•°æ®ä¹Ÿæ˜¯å­—æ¯æ•°å­—ï¼Œåˆå¹¶æ•°æ®
 						m_nBlockLength[nBlock + 1] += m_nBlockLength[nBlock + 2];
 
 						for (i = nBlock + 2; i < m_ncDataBlock - 1; ++i)
@@ -922,7 +922,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 
 						--m_ncDataBlock;
 					}
-					//ÉèÖÃĞÂÊı¾İ¿éÎª×ÖÄ¸Êı×Ö
+					//è®¾ç½®æ–°æ•°æ®å—ä¸ºå­—æ¯æ•°å­—
 					m_byBlockMode[nBlock] = QR_MODE_ALPHABET;
 					m_nBlockLength[nBlock] += m_nBlockLength[nBlock + 1];
 
@@ -933,7 +933,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 					}
 
 					--m_ncDataBlock;
-					//Èç¹ûÇ°ÃæÒ»¿éÊı¾İÒ²ÊÇ×ÖÄ¸Êı×Ö£¬ºÏ²¢Êı¾İ
+					//å¦‚æœå‰é¢ä¸€å—æ•°æ®ä¹Ÿæ˜¯å­—æ¯æ•°å­—ï¼Œåˆå¹¶æ•°æ®
 					if (nBlock >= 1 && m_byBlockMode[nBlock - 1] == QR_MODE_ALPHABET)
 					{
 						m_nBlockLength[nBlock - 1] += m_nBlockLength[nBlock];
@@ -958,20 +958,20 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 	nBlock = 0;
 
 	while (nBlock < m_ncDataBlock - 1)
-	{//ºÏ²¢2¸ö²¿·ÖÊı¾İ
+	{//åˆå¹¶2ä¸ªéƒ¨åˆ†æ•°æ®
 		ncSrcBits = GetBitLength(m_byBlockMode[nBlock], m_nBlockLength[nBlock], nVerGroup)
 					+ GetBitLength(m_byBlockMode[nBlock + 1], m_nBlockLength[nBlock + 1], nVerGroup);
 
 		ncDstBits = GetBitLength(QR_MODE_8BIT, m_nBlockLength[nBlock] + m_nBlockLength[nBlock + 1], nVerGroup);
 
-		if (nBlock >= 1 && m_byBlockMode[nBlock - 1] == QR_MODE_8BIT)//Ç°Ò»Êı¾İ¿éÎªBITÄ£Ê½
+		if (nBlock >= 1 && m_byBlockMode[nBlock - 1] == QR_MODE_8BIT)//å‰ä¸€æ•°æ®å—ä¸ºBITæ¨¡å¼
 			ncDstBits -= (4 + nIndicatorLen8Bit[nVerGroup]);
 
 		if (nBlock < m_ncDataBlock - 2 && m_byBlockMode[nBlock + 2] == QR_MODE_8BIT)
 			ncDstBits -= (4 + nIndicatorLen8Bit[nVerGroup]);
 		
 		if (ncSrcBits > ncDstBits)
-		{//Èç¹ûºÏ²¢ºóÊı¾İÔö¼Ó£¬Ç°Ò»¿éÊı¾İÊÇ8bitÊı¾İ
+		{//å¦‚æœåˆå¹¶åæ•°æ®å¢åŠ ï¼Œå‰ä¸€å—æ•°æ®æ˜¯8bitæ•°æ®
 			if (nBlock >= 1 && m_byBlockMode[nBlock - 1] == QR_MODE_8BIT)
 			{
 				m_nBlockLength[nBlock - 1] += m_nBlockLength[nBlock];
@@ -987,7 +987,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 			}
 
 			if (nBlock < m_ncDataBlock - 2 && m_byBlockMode[nBlock + 2] == QR_MODE_8BIT)
-			{//Êı¾İ¿é+2Ò²ÊÇ8bit
+			{//æ•°æ®å—+2ä¹Ÿæ˜¯8bit
 				m_nBlockLength[nBlock + 1] += m_nBlockLength[nBlock + 2];
 
 				for (i = nBlock + 2; i < m_ncDataBlock - 1; ++i)
@@ -998,7 +998,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 
 				--m_ncDataBlock;
 			}
-			//ÉèÖÃĞÂµÄÊı¾İ¿éÎª8BITÄ£Ê½
+			//è®¾ç½®æ–°çš„æ•°æ®å—ä¸º8BITæ¨¡å¼
 			m_byBlockMode[nBlock] = QR_MODE_8BIT;
 			m_nBlockLength[nBlock] += m_nBlockLength[nBlock + 1];
 
@@ -1026,7 +1026,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 	for (i = 0; i < m_ncDataBlock && m_ncDataCodeWordBit != -1; ++i)
 	{
 		if (m_byBlockMode[i] == QR_MODE_NUMERAL)
-		{//Èç¹ûÊı¾İ¿éÊÇÊı×ÖÄ£Ê½
+		{//å¦‚æœæ•°æ®å—æ˜¯æ•°å­—æ¨¡å¼
 			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, 1, 4); 
 
 			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, (WORD)m_nBlockLength[i], nIndicatorLenNumeral[nVerGroup]);
@@ -1099,7 +1099,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 			ncComplete += m_nBlockLength[i];
 		}
 		else// if(m_byBlockMode[i] == QR_MODE_KANJI)
-		{//ÈÕ±¾Ä£Ê½
+		{//æ—¥æœ¬æ¨¡å¼
 			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, 8, 4);
 
 			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, (WORD)(m_nBlockLength[i] / 2), nIndicatorLenKanji[nVerGroup]);
@@ -1114,7 +1114,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 			ncComplete += m_nBlockLength[i];
 		}
 //		else
-//		{//ÖĞÎÄÄ£Ê½
+//		{//ä¸­æ–‡æ¨¡å¼
 //			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, 8, 4);
 
 //			m_ncDataCodeWordBit = SetBitStream(m_ncDataCodeWordBit, (WORD)(m_nBlockLength[i] / 2), nIndicatorLenKanji[nVerGroup]);
@@ -1133,7 +1133,7 @@ int EncodeSourceData(char *lpsSource, int ncLength, int nVerGroup)
 	return (m_ncDataCodeWordBit != -1);
 	//return TRUE;
 }
-//»ñÈ¡bit³¤¶È
+//è·å–bité•¿åº¦
 int GetBitLength(BYTE nMode, int ncData, int nVerGroup)
 {
 	int ncBits = 0;
@@ -1165,14 +1165,14 @@ int GetBitLength(BYTE nMode, int ncData, int nVerGroup)
 		break;
 
 	default:
-		//ncBits = 4 + nIndicatorLenKanji[nVerGroup] + (13 * (ncData / 2));//±¾³ÌĞòĞ´·¨£¿
-		ncBits = 4 + nIndicatorLenKanji[nVerGroup] + (13 * ncData);//ÎÄµµËã·¨
+		//ncBits = 4 + nIndicatorLenKanji[nVerGroup] + (13 * (ncData / 2));//æœ¬ç¨‹åºå†™æ³•ï¼Ÿ
+		ncBits = 4 + nIndicatorLenKanji[nVerGroup] + (13 * ncData);//æ–‡æ¡£ç®—æ³•
 		break;
 	}
 
 	return ncBits;
 }
-//ÉèÖÃbitÁ÷
+//è®¾ç½®bitæµ
 int SetBitStream(int nIndex, WORD wData, int ncData)
 {
 	int i;
@@ -1190,8 +1190,8 @@ int SetBitStream(int nIndex, WORD wData, int ncData)
 
 	return nIndex + ncData;
 }
-//ÊÇ²»ÊÇÊı×Ö±àÂëĞÅÏ¢
-//ÊÇ·µ»ØTRUE£¬·ñ·µ»ØFALSE
+//æ˜¯ä¸æ˜¯æ•°å­—ç¼–ç ä¿¡æ¯
+//æ˜¯è¿”å›TRUEï¼Œå¦è¿”å›FALSE
 bool IsNumeralData(unsigned char c)
 {
 	if (c >= '0' && c <= '9')
@@ -1199,8 +1199,8 @@ bool IsNumeralData(unsigned char c)
 
 	return FALSE;
 }
-//ÊÇ·ñÊÇ×Ö·û±àÂëĞÅÏ¢
-//ÊÇ·µ»ØTRUE£¬·ñ·µ»ØFALSE
+//æ˜¯å¦æ˜¯å­—ç¬¦ç¼–ç ä¿¡æ¯
+//æ˜¯è¿”å›TRUEï¼Œå¦è¿”å›FALSE
 bool IsAlphabetData(unsigned char c)
 {
 	if (c >= '0' && c <= '9')
@@ -1214,8 +1214,8 @@ bool IsAlphabetData(unsigned char c)
 
 	return FALSE;
 }
-//ÊÇ·ñÖĞÎÄºº×ÖĞÅÏ¢
-//ÊÇ·µ»ØTRUE£¬·ñ·µ»ØFALSE
+//æ˜¯å¦ä¸­æ–‡æ±‰å­—ä¿¡æ¯
+//æ˜¯è¿”å›TRUEï¼Œå¦è¿”å›FALSE
 bool IsKanjiData(unsigned char c1, unsigned char c2)
 {
 
@@ -1230,7 +1230,7 @@ bool IsKanjiData(unsigned char c1, unsigned char c2)
 }
 bool IsChineseData(unsigned char c1, unsigned char c2)
 {
-	//ÖĞÎÄÄ£Ê½
+	//ä¸­æ–‡æ¨¡å¼
 	if((c1 >= 0xa1 && c1 < 0xaa) || (c1 >= 0xb0 && c1 <= 0xfa))
 	{
 		if(c2 >= 0xa1 && c2 <= 0xfe)	return TRUE;
@@ -1239,7 +1239,7 @@ bool IsChineseData(unsigned char c1, unsigned char c2)
 }
 
 
-//×ÖÄ¸±íĞÅÏ¢×ª»¯
+//å­—æ¯è¡¨ä¿¡æ¯è½¬åŒ–
 BYTE AlphabetToBinaly(unsigned char c)
 {
 	if (c >= '0' && c <= '9') return (unsigned char)(c - '0');
@@ -1264,12 +1264,12 @@ BYTE AlphabetToBinaly(unsigned char c)
 
 	return 44;
 }
-//ÈÕÎÄÖĞÎÄĞÅÏ¢×ª»¯
-//ÈÕÎÄºÍºº×ÖµÄ±àÂë»á¼õÈ¥Ò»¸öÖµ¡£
-//Èç£ºÔÚ0X8140 to 0X9FFCÖĞµÄ×Ö·û»á¼õÈ¥8140£¬
-//ÔÚ0XE040µ½0XEBBFÖĞµÄ×Ö·ûÒª¼õÈ¥0XC140£¬
-//È»ºó°Ñ½á¹ûÇ°Á½¸ö16½øÖÆÎ»ÄÃ³öÀ´³ËÒÔ0XC0£¬
-//È»ºóÔÙ¼ÓÉÏºóÁ½¸ö16½øÖÆÎ»£¬×îºó×ª³É13bitµÄ±àÂë¡£
+//æ—¥æ–‡ä¸­æ–‡ä¿¡æ¯è½¬åŒ–
+//æ—¥æ–‡å’Œæ±‰å­—çš„ç¼–ç ä¼šå‡å»ä¸€ä¸ªå€¼ã€‚
+//å¦‚ï¼šåœ¨0X8140 to 0X9FFCä¸­çš„å­—ç¬¦ä¼šå‡å»8140ï¼Œ
+//åœ¨0XE040åˆ°0XEBBFä¸­çš„å­—ç¬¦è¦å‡å»0XC140ï¼Œ
+//ç„¶åæŠŠç»“æœå‰ä¸¤ä¸ª16è¿›åˆ¶ä½æ‹¿å‡ºæ¥ä¹˜ä»¥0XC0ï¼Œ
+//ç„¶åå†åŠ ä¸Šåä¸¤ä¸ª16è¿›åˆ¶ä½ï¼Œæœ€åè½¬æˆ13bitçš„ç¼–ç ã€‚
 WORD KanjiToBinaly(WORD wc)
 {
 	if (wc >= 0x8140 && wc <= 0x9ffc)
@@ -1280,19 +1280,19 @@ WORD KanjiToBinaly(WORD wc)
 	return (WORD)(((wc >> 8) * 0xc0) + (wc & 0x00ff));
 }
 /*
-¶ş¡¢ÖĞÎÄºº×ÖµÄÓëÈÕÎÄºº×Ö×ª»»²½ÖèÏàËÆ£º
-1¡¢¶ÔÓÚµÚÒ»×Ö½ÚÎª0xA1~0xAAÖ®¼ä,µÚ¶ş×Ö½ÚÔÚ0xA1~0xFEÖ®¼ä×Ö·û£º
-a)µÚÒ»×Ö½Ú¼õÈ¥0xA1£»
-b)ÉÏÒ»²½½á¹û³ËÒÔ0x60;
-c£©µÚ¶ş×Ö½Ú¼õÈ¥0xA1;
-d)½«b)²½ÖèµÄ½á¹û¼ÓÉÏc²½ÖèµÄ½á¹û;
-e)½«½á¹û×ª»»Îª13Î»¶ş½øÖÆ´®¡£
-1¡¢¶ÔÓÚµÚÒ»×Ö½ÚÎª0xB0~0xFAÖ®¼ä,µÚ¶ş×Ö½ÚÔÚ0xA1~0xFEÖ®¼ä×Ö·û£º
-a)µÚÒ»×Ö½Ú¼õÈ¥0xA6£»
-b)ÉÏÒ»²½½á¹û³ËÒÔ0x60;
-c£©µÚ¶ş×Ö½Ú¼õÈ¥0xA1;
-d)½«b)²½ÖèµÄ½á¹û¼ÓÉÏc²½ÖèµÄ½á¹û;
-e)½«½á¹û×ª»»Îª13Î»¶ş½øÖÆ´®
+äºŒã€ä¸­æ–‡æ±‰å­—çš„ä¸æ—¥æ–‡æ±‰å­—è½¬æ¢æ­¥éª¤ç›¸ä¼¼ï¼š
+1ã€å¯¹äºç¬¬ä¸€å­—èŠ‚ä¸º0xA1~0xAAä¹‹é—´,ç¬¬äºŒå­—èŠ‚åœ¨0xA1~0xFEä¹‹é—´å­—ç¬¦ï¼š
+a)ç¬¬ä¸€å­—èŠ‚å‡å»0xA1ï¼›
+b)ä¸Šä¸€æ­¥ç»“æœä¹˜ä»¥0x60;
+cï¼‰ç¬¬äºŒå­—èŠ‚å‡å»0xA1;
+d)å°†b)æ­¥éª¤çš„ç»“æœåŠ ä¸Šcæ­¥éª¤çš„ç»“æœ;
+e)å°†ç»“æœè½¬æ¢ä¸º13ä½äºŒè¿›åˆ¶ä¸²ã€‚
+1ã€å¯¹äºç¬¬ä¸€å­—èŠ‚ä¸º0xB0~0xFAä¹‹é—´,ç¬¬äºŒå­—èŠ‚åœ¨0xA1~0xFEä¹‹é—´å­—ç¬¦ï¼š
+a)ç¬¬ä¸€å­—èŠ‚å‡å»0xA6ï¼›
+b)ä¸Šä¸€æ­¥ç»“æœä¹˜ä»¥0x60;
+cï¼‰ç¬¬äºŒå­—èŠ‚å‡å»0xA1;
+d)å°†b)æ­¥éª¤çš„ç»“æœåŠ ä¸Šcæ­¥éª¤çš„ç»“æœ;
+e)å°†ç»“æœè½¬æ¢ä¸º13ä½äºŒè¿›åˆ¶ä¸²
 */
 WORD ChineseToBinaly(WORD wc)
 {
@@ -1306,7 +1306,7 @@ WORD ChineseToBinaly(WORD wc)
 	}
 	return (WORD)((((wc >> 8)-0xa6) * 0x60) + ((wc & 0x00ff)-0xa1));
 }
-//¾À´íÂë
+//çº é”™ç 
 void GetRSCodeWord(BYTE *lpbyRSWork, int ncDataCodeWord, int ncRSCodeWord)
 {
 	int i, j;
@@ -1334,8 +1334,8 @@ void GetRSCodeWord(BYTE *lpbyRSWork, int ncDataCodeWord, int ncRSCodeWord)
 		}
 	}
 }
-//¸ñÊ½»¯Êı¾İ´æ·Å£¬´æÔÚÓÚËùÓĞµÄ³ß´çÖĞ£¬
-//Ïê¼ûhttp://coolshell.cn/articles/10590.html#jtss-tsina
+//æ ¼å¼åŒ–æ•°æ®å­˜æ”¾ï¼Œå­˜åœ¨äºæ‰€æœ‰çš„å°ºå¯¸ä¸­ï¼Œ
+//è¯¦è§http://coolshell.cn/articles/10590.html#jtss-tsina
 void FormatModule(void)
 {
 	int i, j;
@@ -1343,7 +1343,7 @@ void FormatModule(void)
 
 	memset(m_byModuleData, 0, sizeof(m_byModuleData));
 
-	SetFunctionModule();	//Ê×ÏÈ°Ñ»Ø×ÖÍ¼°¸»¨ÔÚÈı¸ö½ÇÉÏ
+	SetFunctionModule();	//é¦–å…ˆæŠŠå›å­—å›¾æ¡ˆèŠ±åœ¨ä¸‰ä¸ªè§’ä¸Š
 
 	SetCodeWordPattern();	//
 
@@ -1382,16 +1382,16 @@ void FormatModule(void)
 		}
 	}
 }
-//ÉèÖÃ¹¦ÄÜĞÔÄ£¿éĞÅÏ¢
-//Position Detection Pattern	ÓÃÓÚ±ê¼Ç¶şÎ¬Âë¾ÙĞĞ´óĞ¡
-//Separators for Postion Detection Patterns	Èı¸ö¾Í¿ÉÒÔ±ê¼ÇÒ»¸ö¾ØĞÎ
-//Timing PatternsÒ²ÊÇÓÃÓÚ¶¨Î»µÄ¡£Ô­ÒòÊÇ¶şÎ¬ÂëÓĞ40ÖÖ³ß´ç£¬³ß´ç¹ı´óÁËºóĞèÒªÓĞ¸ù±ê×¼Ïß£¬²»È»É¨ÃèµÄÊ±ºò¿ÉÄÜ»áÉ¨ÍáÁË
-//Alignment Patterns Ö»ÓĞVersion 2ÒÔÉÏ£¨°üÀ¨Version2£©µÄ¶şÎ¬ÂëĞèÒªÕâ¸ö¶«¶«£¬Í¬ÑùÊÇÎªÁË¶¨Î»ÓÃµÄ¡£
+//è®¾ç½®åŠŸèƒ½æ€§æ¨¡å—ä¿¡æ¯
+//Position Detection Pattern	ç”¨äºæ ‡è®°äºŒç»´ç ä¸¾è¡Œå¤§å°
+//Separators for Postion Detection Patterns	ä¸‰ä¸ªå°±å¯ä»¥æ ‡è®°ä¸€ä¸ªçŸ©å½¢
+//Timing Patternsä¹Ÿæ˜¯ç”¨äºå®šä½çš„ã€‚åŸå› æ˜¯äºŒç»´ç æœ‰40ç§å°ºå¯¸ï¼Œå°ºå¯¸è¿‡å¤§äº†åéœ€è¦æœ‰æ ¹æ ‡å‡†çº¿ï¼Œä¸ç„¶æ‰«æçš„æ—¶å€™å¯èƒ½ä¼šæ‰«æ­ªäº†
+//Alignment Patterns åªæœ‰Version 2ä»¥ä¸Šï¼ˆåŒ…æ‹¬Version2ï¼‰çš„äºŒç»´ç éœ€è¦è¿™ä¸ªä¸œä¸œï¼ŒåŒæ ·æ˜¯ä¸ºäº†å®šä½ç”¨çš„ã€‚
 void SetFunctionModule(void)
 {
 	int i, j;
 
-	SetFinderPattern(0, 0);					//Èı¸ö»Ø×Ö×ø±ê
+	SetFinderPattern(0, 0);					//ä¸‰ä¸ªå›å­—åæ ‡
 	SetFinderPattern(m_nSymbleSize - 7, 0);	
 	SetFinderPattern(0, m_nSymbleSize - 7);	
 
@@ -1412,11 +1412,11 @@ void SetFunctionModule(void)
 		m_byModuleData[m_nSymbleSize - 8 + i][8] = m_byModuleData[8][m_nSymbleSize - 8 + i] = '\x20';
 	}
 
-	SetVersionPattern();	//°æ±¾ĞÅÏ¢
+	SetVersionPattern();	//ç‰ˆæœ¬ä¿¡æ¯
 
 	for (i = 0; i < QR_VersonInfo[m_nVersion].ncAlignPoint; ++i)
 	{
-		SetAlignmentPattern(QR_VersonInfo[m_nVersion].nAlignPoint[i], 6);//Ğ¡»Ø×Ö
+		SetAlignmentPattern(QR_VersonInfo[m_nVersion].nAlignPoint[i], 6);//å°å›å­—
 		SetAlignmentPattern(6, QR_VersonInfo[m_nVersion].nAlignPoint[i]);
 
 		for (j = 0; j < QR_VersonInfo[m_nVersion].ncAlignPoint; ++j)
@@ -1431,7 +1431,7 @@ void SetFunctionModule(void)
 		m_byModuleData[6][i] = (i % 2) == 0 ? '\x30' : '\x20';
 	}
 }
-//ÉèÖÃ´ó»Ø×ÖĞÅÏ¢
+//è®¾ç½®å¤§å›å­—ä¿¡æ¯
 // O X X X X X X X
 // O X O O O O O X
 // O X O X X X O X
@@ -1458,9 +1458,9 @@ void SetFinderPattern(int x, int y)
 		}
 	}
 }
-//ÉèÖÃĞ¡»Ø×ÖĞÅÏ¢
-//Alignment Patterns Ö»ÓĞVersion 2ÒÔÉÏ£¨°üÀ¨Version2£©µÄ¶şÎ¬ÂëĞèÒªÕâ¸ö¶«¶«£¬Í¬ÑùÊÇÎªÁË¶¨Î»ÓÃµÄ¡£
-//Alignment PatternsÊÇ³ıÁË3¸ö´óµÄ»Ø×Ö£¬½ÏĞ¡µÄ»Ø×Ö
+//è®¾ç½®å°å›å­—ä¿¡æ¯
+//Alignment Patterns åªæœ‰Version 2ä»¥ä¸Šï¼ˆåŒ…æ‹¬Version2ï¼‰çš„äºŒç»´ç éœ€è¦è¿™ä¸ªä¸œä¸œï¼ŒåŒæ ·æ˜¯ä¸ºäº†å®šä½ç”¨çš„ã€‚
+//Alignment Patternsæ˜¯é™¤äº†3ä¸ªå¤§çš„å›å­—ï¼Œè¾ƒå°çš„å›å­—
 // O O O X X X X X
 // O O O X O O O X
 // O O O X O X O X
@@ -1488,13 +1488,13 @@ void SetAlignmentPattern(int x, int y)
 		}
 	}
 }
-//ÉèÖÃ°æ±¾£¬ÔÚ >= Version 7ÒÔÉÏ£¬ĞèÒªÔ¤ÁôÁ½¿é3 x 6µÄÇøÓò´æ·ÅÒ»Ğ©°æ±¾ĞÅÏ¢¡£
+//è®¾ç½®ç‰ˆæœ¬ï¼Œåœ¨ >= Version 7ä»¥ä¸Šï¼Œéœ€è¦é¢„ç•™ä¸¤å—3 x 6çš„åŒºåŸŸå­˜æ”¾ä¸€äº›ç‰ˆæœ¬ä¿¡æ¯ã€‚
 void SetVersionPattern(void)
 {
 	int i, j;
 	int nVerData;
 
-	if (m_nVersion <= 6)//ÔÚ >= Version 7ÒÔÉÏ£¬ĞèÒªÔ¤ÁôÁ½¿é3 x 6µÄÇøÓò´æ·ÅÒ»Ğ©°æ±¾ĞÅÏ¢¡£
+	if (m_nVersion <= 6)//åœ¨ >= Version 7ä»¥ä¸Šï¼Œéœ€è¦é¢„ç•™ä¸¤å—3 x 6çš„åŒºåŸŸå­˜æ”¾ä¸€äº›ç‰ˆæœ¬ä¿¡æ¯ã€‚
 		return;
 
 	nVerData = m_nVersion << 12;
@@ -1518,11 +1518,11 @@ void SetVersionPattern(void)
 		}
 	}
 }
-//Èç¹ûÄãÒÔÎªÎÒÃÇ¿ÉÒÔ¿ªÊ¼»­Í¼£¬Äã¾Í´íÁË¡£
-//¶şÎ¬ÂëµÄ»ìÂÒ¼¼Êõ»¹Ã»ÓĞÍæÍê£¬Ëü»¹Òª°ÑÊı¾İÂëºÍ¾À´íÂëµÄ¸÷¸öcodewords½»Ìæ·ÅÔÚÒ»Æğ¡£
-//ÈçºÎ½»ÌæÄØ£¬¹æÔòÈçÏÂ£º
-//¶ÔÓÚÊı¾İÂë£º°ÑÃ¿¸ö¿éµÄµÚÒ»¸öcodewordsÏÈÄÃ³öÀ´°´Ë³¶ÈÅÅÁĞºÃ£¬
-//È»ºóÔÙÈ¡µÚÒ»¿éµÄµÚ¶ş¸ö£¬Èç´ËÀàÍÆ¡£Èç£ºÉÏÊöÊ¾ÀıÖĞµÄData CodewordsÈçÏÂ
+//å¦‚æœä½ ä»¥ä¸ºæˆ‘ä»¬å¯ä»¥å¼€å§‹ç”»å›¾ï¼Œä½ å°±é”™äº†ã€‚
+//äºŒç»´ç çš„æ··ä¹±æŠ€æœ¯è¿˜æ²¡æœ‰ç©å®Œï¼Œå®ƒè¿˜è¦æŠŠæ•°æ®ç å’Œçº é”™ç çš„å„ä¸ªcodewordsäº¤æ›¿æ”¾åœ¨ä¸€èµ·ã€‚
+//å¦‚ä½•äº¤æ›¿å‘¢ï¼Œè§„åˆ™å¦‚ä¸‹ï¼š
+//å¯¹äºæ•°æ®ç ï¼šæŠŠæ¯ä¸ªå—çš„ç¬¬ä¸€ä¸ªcodewordså…ˆæ‹¿å‡ºæ¥æŒ‰é¡ºåº¦æ’åˆ—å¥½ï¼Œ
+//ç„¶åå†å–ç¬¬ä¸€å—çš„ç¬¬äºŒä¸ªï¼Œå¦‚æ­¤ç±»æ¨ã€‚å¦‚ï¼šä¸Šè¿°ç¤ºä¾‹ä¸­çš„Data Codewordså¦‚ä¸‹
 void SetCodeWordPattern(void)
 {
 	int x = m_nSymbleSize;
@@ -1564,7 +1564,7 @@ void SetCodeWordPattern(void)
 		}
 	}
 }
-//ÉèÖÃÕÚ±ÎĞÅÏ¢
+//è®¾ç½®é®è”½ä¿¡æ¯
 void SetMaskingPattern(int nPatternNo)
 {
 	int i, j;
@@ -1615,7 +1615,7 @@ void SetMaskingPattern(int nPatternNo)
 		}
 	}
 }
-//ÉèÖÃ¸ñÊ½»¯ĞÅÏ¢ 
+//è®¾ç½®æ ¼å¼åŒ–ä¿¡æ¯ 
 void SetFormatInfoPattern(int nPatternNo)
 {
 	int nFormatInfo;
@@ -1745,15 +1745,15 @@ int CountPenalty(void)
 	{
 		for (j = 0; j < m_nSymbleSize - 6; ++j)
 		{
-			if (((j == 0) ||				 (! (m_byModuleData[i][j - 1] & 0x11))) && // –¾ ‚Ü‚½‚Í ƒVƒ“ƒ{ƒ‹ŠO
-											 (   m_byModuleData[i][j]     & 0x11)   && // ˆÃ - 1
-											 (! (m_byModuleData[i][j + 1] & 0x11))  && // –¾ - 1
-											 (   m_byModuleData[i][j + 2] & 0x11)   && // ˆÃ „¢
-											 (   m_byModuleData[i][j + 3] & 0x11)   && // ˆÃ „ 3
-											 (   m_byModuleData[i][j + 4] & 0x11)   && // ˆÃ „£
-											 (! (m_byModuleData[i][j + 5] & 0x11))  && // –¾ - 1
-											 (   m_byModuleData[i][j + 6] & 0x11)   && // ˆÃ - 1
-				((j == m_nSymbleSize - 7) || (! (m_byModuleData[i][j + 7] & 0x11))))   // –¾ ‚Ü‚½‚Í ƒVƒ“ƒ{ƒ‹ŠO
+			if (((j == 0) ||				 (! (m_byModuleData[i][j - 1] & 0x11))) && // æŸ§ å‚‘å¨å¼ åƒ”å„å„ƒå„–å¥œ
+											 (   m_byModuleData[i][j]     & 0x11)   && // åŸ« - 1
+											 (! (m_byModuleData[i][j + 1] & 0x11))  && // æŸ§ - 1
+											 (   m_byModuleData[i][j + 2] & 0x11)   && // åŸ« åŠ‰
+											 (   m_byModuleData[i][j + 3] & 0x11)   && // åŸ« åŠ†3
+											 (   m_byModuleData[i][j + 4] & 0x11)   && // åŸ« åŠŠ
+											 (! (m_byModuleData[i][j + 5] & 0x11))  && // æŸ§ - 1
+											 (   m_byModuleData[i][j + 6] & 0x11)   && // åŸ« - 1
+				((j == m_nSymbleSize - 7) || (! (m_byModuleData[i][j + 7] & 0x11))))   // æŸ§ å‚‘å¨å¼ åƒ”å„å„ƒå„–å¥œ
 			{
 				if (((j < 2 || ! (m_byModuleData[i][j - 2] & 0x11)) && 
 					 (j < 3 || ! (m_byModuleData[i][j - 3] & 0x11)) &&
@@ -1772,15 +1772,15 @@ int CountPenalty(void)
 	{
 		for (j = 0; j < m_nSymbleSize - 6; ++j)
 		{
-			if (((j == 0) ||				 (! (m_byModuleData[j - 1][i] & 0x11))) && // –¾ ‚Ü‚½‚Í ƒVƒ“ƒ{ƒ‹ŠO
-											 (   m_byModuleData[j]    [i] & 0x11)   && // ˆÃ - 1
-											 (! (m_byModuleData[j + 1][i] & 0x11))  && // –¾ - 1
-											 (   m_byModuleData[j + 2][i] & 0x11)   && // ˆÃ „¢
-											 (   m_byModuleData[j + 3][i] & 0x11)   && // ˆÃ „ 3
-											 (   m_byModuleData[j + 4][i] & 0x11)   && // ˆÃ „£
-											 (! (m_byModuleData[j + 5][i] & 0x11))  && // –¾ - 1
-											 (   m_byModuleData[j + 6][i] & 0x11)   && // ˆÃ - 1
-				((j == m_nSymbleSize - 7) || (! (m_byModuleData[j + 7][i] & 0x11))))   // –¾ ‚Ü‚½‚Í ƒVƒ“ƒ{ƒ‹ŠO
+			if (((j == 0) ||				 (! (m_byModuleData[j - 1][i] & 0x11))) && // æŸ§ å‚‘å¨å¼ åƒ”å„å„ƒå„–å¥œ
+											 (   m_byModuleData[j]    [i] & 0x11)   && // åŸ« - 1
+											 (! (m_byModuleData[j + 1][i] & 0x11))  && // æŸ§ - 1
+											 (   m_byModuleData[j + 2][i] & 0x11)   && // åŸ« åŠ‰
+											 (   m_byModuleData[j + 3][i] & 0x11)   && // åŸ« åŠ†3
+											 (   m_byModuleData[j + 4][i] & 0x11)   && // åŸ« åŠŠ
+											 (! (m_byModuleData[j + 5][i] & 0x11))  && // æŸ§ - 1
+											 (   m_byModuleData[j + 6][i] & 0x11)   && // åŸ« - 1
+				((j == m_nSymbleSize - 7) || (! (m_byModuleData[j + 7][i] & 0x11))))   // æŸ§ å‚‘å¨å¼ åƒ”å„å„ƒå„–å¥œ
 			{
 				if (((j < 2 || ! (m_byModuleData[j - 2][i] & 0x11)) && 
 					 (j < 3 || ! (m_byModuleData[j - 3][i] & 0x11)) &&

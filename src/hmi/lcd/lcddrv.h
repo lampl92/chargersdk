@@ -1,69 +1,69 @@
 #ifndef __LCD_H
 #define __LCD_H
 #include "stdlib.h"
-#include "includes.h"
+#include "stm32f4xx.h"
 //////////////////////////////////////////////////////////////////////////////////
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32¿ª·¢°å
-//2.8´ç/3.5´ç/4.3´ç/7´ç TFTÒº¾§Çı¶¯
-//Ö§³ÖÇı¶¯ICĞÍºÅ°üÀ¨:ILI9341/NT35310/NT35510/SSD1963µÈ
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2016/1/6
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32å¼€å‘æ¿
+//2.8å¯¸/3.5å¯¸/4.3å¯¸/7å¯¸ TFTæ¶²æ™¶é©±åŠ¨
+//æ”¯æŒé©±åŠ¨ICå‹å·åŒ…æ‹¬:ILI9341/NT35310/NT35510/SSD1963ç­‰
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2016/1/6
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved
 //////////////////////////////////////////////////////////////////////////////////
 
-//LCDÖØÒª²ÎÊı¼¯
+//LCDé‡è¦å‚æ•°é›†
 typedef struct
 {
-	uint16_t width;			//LCD ¿í¶È
-	uint16_t height;			//LCD ¸ß¶È
+	uint16_t width;			//LCD å®½åº¦
+	uint16_t height;			//LCD é«˜åº¦
 	uint16_t id;				//LCD ID
-	uint8_t  dir;			//ºáÆÁ»¹ÊÇÊúÆÁ¿ØÖÆ£º0£¬ÊúÆÁ£»1£¬ºáÆÁ¡£
-	uint16_t	wramcmd;		//¿ªÊ¼Ğ´gramÖ¸Áî
-	uint16_t setxcmd;		//ÉèÖÃx×ø±êÖ¸Áî
-	uint16_t setycmd;		//ÉèÖÃy×ø±êÖ¸Áî
+	uint8_t  dir;			//æ¨ªå±è¿˜æ˜¯ç«–å±æ§åˆ¶ï¼š0ï¼Œç«–å±ï¼›1ï¼Œæ¨ªå±ã€‚
+	uint16_t	wramcmd;		//å¼€å§‹å†™gramæŒ‡ä»¤
+	uint16_t setxcmd;		//è®¾ç½®xåæ ‡æŒ‡ä»¤
+	uint16_t setycmd;		//è®¾ç½®yåæ ‡æŒ‡ä»¤
 }_lcd_dev;
 
-//LCD²ÎÊı
-extern _lcd_dev lcddev;	//¹ÜÀíLCDÖØÒª²ÎÊı
-//LCDµÄ»­±ÊÑÕÉ«ºÍ±³¾°É«
-extern uint32_t  POINT_COLOR;//Ä¬ÈÏºìÉ«
-extern uint32_t  BACK_COLOR; //±³¾°ÑÕÉ«.Ä¬ÈÏÎª°×É«
+//LCDå‚æ•°
+extern _lcd_dev lcddev;	//ç®¡ç†LCDé‡è¦å‚æ•°
+//LCDçš„ç”»ç¬”é¢œè‰²å’ŒèƒŒæ™¯è‰²
+extern uint32_t  POINT_COLOR;//é»˜è®¤çº¢è‰²
+extern uint32_t  BACK_COLOR; //èƒŒæ™¯é¢œè‰².é»˜è®¤ä¸ºç™½è‰²
 
 //////////////////////////////////////////////////////////////////////////////////
-//-----------------MCUÆÁ LCD¶Ë¿Ú¶¨Òå----------------
-//LCD±³¹â	PB5
+//-----------------MCUå± LCDç«¯å£å®šä¹‰----------------
+//LCDèƒŒå…‰	PB5
 #define LCD_LED     PBout(5)
-//LCDµØÖ·½á¹¹Ìå
+//LCDåœ°å€ç»“æ„ä½“
 typedef struct
 {
 	uint16_t LCD_REG;
 	uint16_t LCD_RAM;
 } LCD_TypeDef;
-//Ê¹ÓÃNOR/SRAMµÄ Bank1.sector4,µØÖ·Î»HADDR[27,26]=11 A18×÷ÎªÊı¾İÃüÁîÇø·ÖÏß
-//×¢ÒâÉèÖÃÊ±STM32ÄÚ²¿»áÓÒÒÆÒ»Î»¶ÔÆä!
+//ä½¿ç”¨NOR/SRAMçš„ Bank1.sector4,åœ°å€ä½HADDR[27,26]=11 A18ä½œä¸ºæ•°æ®å‘½ä»¤åŒºåˆ†çº¿
+//æ³¨æ„è®¾ç½®æ—¶STM32å†…éƒ¨ä¼šå³ç§»ä¸€ä½å¯¹å…¶!
 #define LCD_BASE        ((uint32_t)(0x60000000 | 0x0007FFFE))
 #define LCD             ((LCD_TypeDef *) LCD_BASE)
 //////////////////////////////////////////////////////////////////////////////////
 
-//É¨Ãè·½Ïò¶¨Òå
-#define L2R_U2D  0 		//´Ó×óµ½ÓÒ,´ÓÉÏµ½ÏÂ
-#define L2R_D2U  1 		//´Ó×óµ½ÓÒ,´ÓÏÂµ½ÉÏ
-#define R2L_U2D  2 		//´ÓÓÒµ½×ó,´ÓÉÏµ½ÏÂ
-#define R2L_D2U  3 		//´ÓÓÒµ½×ó,´ÓÏÂµ½ÉÏ
+//æ‰«ææ–¹å‘å®šä¹‰
+#define L2R_U2D  0 		//ä»å·¦åˆ°å³,ä»ä¸Šåˆ°ä¸‹
+#define L2R_D2U  1 		//ä»å·¦åˆ°å³,ä»ä¸‹åˆ°ä¸Š
+#define R2L_U2D  2 		//ä»å³åˆ°å·¦,ä»ä¸Šåˆ°ä¸‹
+#define R2L_D2U  3 		//ä»å³åˆ°å·¦,ä»ä¸‹åˆ°ä¸Š
 
-#define U2D_L2R  4 		//´ÓÉÏµ½ÏÂ,´Ó×óµ½ÓÒ
-#define U2D_R2L  5 		//´ÓÉÏµ½ÏÂ,´ÓÓÒµ½×ó
-#define D2U_L2R  6 		//´ÓÏÂµ½ÉÏ,´Ó×óµ½ÓÒ
-#define D2U_R2L  7		//´ÓÏÂµ½ÉÏ,´ÓÓÒµ½×ó
+#define U2D_L2R  4 		//ä»ä¸Šåˆ°ä¸‹,ä»å·¦åˆ°å³
+#define U2D_R2L  5 		//ä»ä¸Šåˆ°ä¸‹,ä»å³åˆ°å·¦
+#define D2U_L2R  6 		//ä»ä¸‹åˆ°ä¸Š,ä»å·¦åˆ°å³
+#define D2U_R2L  7		//ä»ä¸‹åˆ°ä¸Š,ä»å³åˆ°å·¦
 
-#define DFT_SCAN_DIR  L2R_U2D  //Ä¬ÈÏµÄÉ¨Ãè·½Ïò
+#define DFT_SCAN_DIR  L2R_U2D  //é»˜è®¤çš„æ‰«ææ–¹å‘
 
-//»­±ÊÑÕÉ«
+//ç”»ç¬”é¢œè‰²
 #define WHITE         	 0xFFFF
 #define BLACK         	 0x0000
 #define BLUE         	 0x001F
@@ -75,61 +75,61 @@ typedef struct
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //×ØÉ«
-#define BRRED 			 0XFC07 //×ØºìÉ«
-#define GRAY  			 0X8430 //»ÒÉ«
-//GUIÑÕÉ«
+#define BROWN 			 0XBC40 //æ£•è‰²
+#define BRRED 			 0XFC07 //æ£•çº¢è‰²
+#define GRAY  			 0X8430 //ç°è‰²
+//GUIé¢œè‰²
 
-#define DARKBLUE      	 0X01CF	//ÉîÀ¶É«
-#define LIGHTBLUE      	 0X7D7C	//Ç³À¶É«
-#define GRAYBLUE       	 0X5458 //»ÒÀ¶É«
-//ÒÔÉÏÈıÉ«ÎªPANELµÄÑÕÉ«
+#define DARKBLUE      	 0X01CF	//æ·±è“è‰²
+#define LIGHTBLUE      	 0X7D7C	//æµ…è“è‰²
+#define GRAYBLUE       	 0X5458 //ç°è“è‰²
+//ä»¥ä¸Šä¸‰è‰²ä¸ºPANELçš„é¢œè‰²
 
-#define LIGHTGREEN     	 0X841F //Ç³ÂÌÉ«
-//#define LIGHTGRAY        0XEF5B //Ç³»ÒÉ«(PANNEL)
-#define LGRAY 			 0XC618 //Ç³»ÒÉ«(PANNEL),´°Ìå±³¾°É«
+#define LIGHTGREEN     	 0X841F //æµ…ç»¿è‰²
+//#define LIGHTGRAY        0XEF5B //æµ…ç°è‰²(PANNEL)
+#define LGRAY 			 0XC618 //æµ…ç°è‰²(PANNEL),çª—ä½“èƒŒæ™¯è‰²
 
-#define LGRAYBLUE        0XA651 //Ç³»ÒÀ¶É«(ÖĞ¼ä²ãÑÕÉ«)
-#define LBBLUE           0X2B12 //Ç³×ØÀ¶É«(Ñ¡ÔñÌõÄ¿µÄ·´É«)
+#define LGRAYBLUE        0XA651 //æµ…ç°è“è‰²(ä¸­é—´å±‚é¢œè‰²)
+#define LBBLUE           0X2B12 //æµ…æ£•è“è‰²(é€‰æ‹©æ¡ç›®çš„åè‰²)
 
-void LCD_Init(void);													   	//³õÊ¼»¯
-void LCD_DisplayOn(void);													//¿ªÏÔÊ¾
-void LCD_DisplayOff(void);													//¹ØÏÔÊ¾
-void LCD_Clear(uint32_t Color);	 												//ÇåÆÁ
-void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos);										//ÉèÖÃ¹â±ê
-void LCD_DrawPoint(uint16_t x,uint16_t y);											//»­µã
-void LCD_Fast_DrawPoint(uint16_t x,uint16_t y,uint32_t color);								//¿ìËÙ»­µã
-uint32_t  LCD_ReadPoint(uint16_t x,uint16_t y); 											//¶Áµã
-void LCD_Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r);						 			//»­Ô²
-void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);							//»­Ïß
-void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);		   				//»­¾ØĞÎ
-void LCD_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint32_t color);		   				//Ìî³äµ¥É«
-void LCD_Color_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint16_t *color);				//Ìî³äÖ¸¶¨ÑÕÉ«
-void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode);						//ÏÔÊ¾Ò»¸ö×Ö·û
-void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);  						//ÏÔÊ¾Ò»¸öÊı×Ö
-void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);				//ÏÔÊ¾ Êı×Ö
-void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p);		//ÏÔÊ¾Ò»¸ö×Ö·û´®,12/16×ÖÌå
+void LCD_Init(void);													   	//åˆå§‹åŒ–
+void LCD_DisplayOn(void);													//å¼€æ˜¾ç¤º
+void LCD_DisplayOff(void);													//å…³æ˜¾ç¤º
+void LCD_Clear(uint32_t Color);	 												//æ¸…å±
+void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos);										//è®¾ç½®å…‰æ ‡
+void LCD_DrawPoint(uint16_t x,uint16_t y);											//ç”»ç‚¹
+void LCD_Fast_DrawPoint(uint16_t x,uint16_t y,uint32_t color);								//å¿«é€Ÿç”»ç‚¹
+uint32_t  LCD_ReadPoint(uint16_t x,uint16_t y); 											//è¯»ç‚¹
+void LCD_Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r);						 			//ç”»åœ†
+void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);							//ç”»çº¿
+void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);		   				//ç”»çŸ©å½¢
+void LCD_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint32_t color);		   				//å¡«å……å•è‰²
+void LCD_Color_Fill(uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,uint16_t *color);				//å¡«å……æŒ‡å®šé¢œè‰²
+void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode);						//æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦
+void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);  						//æ˜¾ç¤ºä¸€ä¸ªæ•°å­—
+void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);				//æ˜¾ç¤º æ•°å­—
+void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p);		//æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²,12/16å­—ä½“
 
 void LCD_WriteReg(uint16_t LCD_Reg, uint16_t LCD_RegValue);
 uint16_t LCD_ReadReg(uint16_t LCD_Reg);
 void LCD_WriteRAM_Prepare(void);
 void LCD_WriteRAM(uint16_t RGB_Code);
-void LCD_SSD_BackLightSet(uint8_t pwm);							//SSD1963 ±³¹â¿ØÖÆ
-void LCD_Scan_Dir(uint8_t dir);									//ÉèÖÃÆÁÉ¨Ãè·½Ïò
-void LCD_Display_Dir(uint8_t dir);								//ÉèÖÃÆÁÄ»ÏÔÊ¾·½Ïò
-void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height);	//ÉèÖÃ´°¿Ú
-//LCD·Ö±æÂÊÉèÖÃ
-#define SSD_HOR_RESOLUTION		800		//LCDË®Æ½·Ö±æÂÊ
-#define SSD_VER_RESOLUTION		480		//LCD´¹Ö±·Ö±æÂÊ
-//LCDÇı¶¯²ÎÊıÉèÖÃ
-#define SSD_HOR_PULSE_WIDTH		1		//Ë®Æ½Âö¿í
-#define SSD_HOR_BACK_PORCH		46		//Ë®Æ½Ç°ÀÈ
-#define SSD_HOR_FRONT_PORCH		210		//Ë®Æ½ºóÀÈ
+void LCD_SSD_BackLightSet(uint8_t pwm);							//SSD1963 èƒŒå…‰æ§åˆ¶
+void LCD_Scan_Dir(uint8_t dir);									//è®¾ç½®å±æ‰«ææ–¹å‘
+void LCD_Display_Dir(uint8_t dir);								//è®¾ç½®å±å¹•æ˜¾ç¤ºæ–¹å‘
+void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height);	//è®¾ç½®çª—å£
+//LCDåˆ†è¾¨ç‡è®¾ç½®
+#define SSD_HOR_RESOLUTION		800		//LCDæ°´å¹³åˆ†è¾¨ç‡
+#define SSD_VER_RESOLUTION		480		//LCDå‚ç›´åˆ†è¾¨ç‡
+//LCDé©±åŠ¨å‚æ•°è®¾ç½®
+#define SSD_HOR_PULSE_WIDTH		1		//æ°´å¹³è„‰å®½
+#define SSD_HOR_BACK_PORCH		46		//æ°´å¹³å‰å»Š
+#define SSD_HOR_FRONT_PORCH		210		//æ°´å¹³åå»Š
 
-#define SSD_VER_PULSE_WIDTH		1		//´¹Ö±Âö¿í
-#define SSD_VER_BACK_PORCH		23		//´¹Ö±Ç°ÀÈ
-#define SSD_VER_FRONT_PORCH		22		//´¹Ö±Ç°ÀÈ
-//ÈçÏÂ¼¸¸ö²ÎÊı£¬×Ô¶¯¼ÆËã
+#define SSD_VER_PULSE_WIDTH		1		//å‚ç›´è„‰å®½
+#define SSD_VER_BACK_PORCH		23		//å‚ç›´å‰å»Š
+#define SSD_VER_FRONT_PORCH		22		//å‚ç›´å‰å»Š
+//å¦‚ä¸‹å‡ ä¸ªå‚æ•°ï¼Œè‡ªåŠ¨è®¡ç®—
 #define SSD_HT	(SSD_HOR_RESOLUTION+SSD_HOR_BACK_PORCH+SSD_HOR_FRONT_PORCH)
 #define SSD_HPS	(SSD_HOR_BACK_PORCH)
 #define SSD_VT 	(SSD_VER_RESOLUTION+SSD_VER_BACK_PORCH+SSD_VER_FRONT_PORCH)

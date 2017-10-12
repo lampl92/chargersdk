@@ -1,12 +1,12 @@
 #ifndef BSP_SDRAM_H
 #define BSP_SDRAM_H
+
 #include "stm32f4xx.h"
-#include "bsp.h"
 
-extern SDRAM_HandleTypeDef SDRAM_Handler;//SDRAM句柄
-#define Bank5_SDRAM_ADDR    ((uint32_t)(0XC0000000)) //SDRAM开始地址
+extern SDRAM_HandleTypeDef SDRAM_Handler;//SDRAM鍙ユ焺
+#define Bank5_SDRAM_ADDR    ((uint32_t)(0XC0000000)) //SDRAM寮�濮嬪湴鍧�
 
-//SDRAM配置参数
+//SDRAM閰嶇疆鍙傛暟
 
 #define SDRAM_MODEREG_BURST_LENGTH_1             ((uint16_t)0x0000)
 #define SDRAM_MODEREG_BURST_LENGTH_2             ((uint16_t)0x0001)

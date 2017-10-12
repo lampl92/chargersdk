@@ -1,5 +1,6 @@
-﻿#ifndef __PYINPUT_H
+#ifndef __PYINPUT_H
 #define __PYINPUT_H
+#include "bsp_define.h"
 #include "xbffontcreate.h"
 //拼音码表与拼音的对应表
 typedef struct

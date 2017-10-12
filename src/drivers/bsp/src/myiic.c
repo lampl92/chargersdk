@@ -1,9 +1,11 @@
 #include "myiic.h"
 #include "user_app.h"
+#include "bsp_define.h"
+#include "bsp.h"
 unsigned char pca9554_1 = 0, pca9554_2 = 0;
 extern void Delay_ms(unsigned long long);
 uint8_t test;
-void delay_us(u32 nus)
+void delay_us(uint32_t nus)
 {
 //    uint16_t i, j;
 //    j = 90 * nus;

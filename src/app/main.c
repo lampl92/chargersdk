@@ -9,6 +9,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "includes.h"
+#include "bsp_define.h"
 /* Private functions ---------------------------------------------------------*/
 
 int main(void)

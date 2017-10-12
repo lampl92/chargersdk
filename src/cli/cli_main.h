@@ -9,6 +9,7 @@
 #ifndef CLI_MAIN_H
 #define CLI_MAIN_H
 
+#include "tinysh.h"
 
 void cli_main(void);
 extern tinysh_cmd_t cli_parseJson_cmd;

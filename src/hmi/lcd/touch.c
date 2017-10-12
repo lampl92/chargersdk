@@ -1,3 +1,4 @@
+#include "bsp_define.h"
 #include "touch.h"
 #include "lcddrv.h"
 #include "stdlib.h"
@@ -5,6 +6,13 @@
 #include "GUI.h"
 #include "cJSON.h"
 #include "cfg_parse.h"
+#include "ff.h"
+#include "errorcode.h"
+#include "bsp.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "utils.h"
+#include <string.h>
 
 static float sqrt1(float x)
 {
@@ -371,14 +379,14 @@ void TP_Adjust(void)
                     break;
                 case 4:  //全部四个点已经得到
                     //对边相等
-                    tem1 = abs(pos_temp[0][0] - pos_temp[1][0]); //x1-x2
-                    tem2 = abs(pos_temp[0][1] - pos_temp[1][1]); //y1-y2
+                    tem1 = utils_abs(pos_temp[0][0] - pos_temp[1][0]); //x1-x2
+                    tem2 = utils_abs(pos_temp[0][1] - pos_temp[1][1]); //y1-y2
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d1 = sqrt(tem1 + tem2); //得到1,2的距离
 
-                    tem1 = abs(pos_temp[2][0] - pos_temp[3][0]); //x3-x4
-                    tem2 = abs(pos_temp[2][1] - pos_temp[3][1]); //y3-y4
+                    tem1 = utils_abs(pos_temp[2][0] - pos_temp[3][0]); //x3-x4
+                    tem2 = utils_abs(pos_temp[2][1] - pos_temp[3][1]); //y3-y4
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到3,4的距离
@@ -391,14 +399,14 @@ void TP_Adjust(void)
                         TP_Adj_Info_Show(pos_temp[0][0], pos_temp[0][1], pos_temp[1][0], pos_temp[1][1], pos_temp[2][0], pos_temp[2][1], pos_temp[3][0], pos_temp[3][1], fac * 100); //显示数据
                         continue;
                     }
-                    tem1 = abs(pos_temp[0][0] - pos_temp[2][0]); //x1-x3
-                    tem2 = abs(pos_temp[0][1] - pos_temp[2][1]); //y1-y3
+                    tem1 = utils_abs(pos_temp[0][0] - pos_temp[2][0]); //x1-x3
+                    tem2 = utils_abs(pos_temp[0][1] - pos_temp[2][1]); //y1-y3
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d1 = sqrt(tem1 + tem2); //得到1,3的距离
 
-                    tem1 = abs(pos_temp[1][0] - pos_temp[3][0]); //x2-x4
-                    tem2 = abs(pos_temp[1][1] - pos_temp[3][1]); //y2-y4
+                    tem1 = utils_abs(pos_temp[1][0] - pos_temp[3][0]); //x2-x4
+                    tem2 = utils_abs(pos_temp[1][1] - pos_temp[3][1]); //y2-y4
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到2,4的距离
@@ -413,14 +421,14 @@ void TP_Adjust(void)
                     }//正确了
 
                     //对角线相等
-                    tem1 = abs(pos_temp[1][0] - pos_temp[2][0]); //x1-x3
-                    tem2 = abs(pos_temp[1][1] - pos_temp[2][1]); //y1-y3
+                    tem1 = utils_abs(pos_temp[1][0] - pos_temp[2][0]); //x1-x3
+                    tem2 = utils_abs(pos_temp[1][1] - pos_temp[2][1]); //y1-y3
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d1 = sqrt(tem1 + tem2); //得到1,4的距离
 
-                    tem1 = abs(pos_temp[0][0] - pos_temp[3][0]); //x2-x4
-                    tem2 = abs(pos_temp[0][1] - pos_temp[3][1]); //y2-y4
+                    tem1 = utils_abs(pos_temp[0][0] - pos_temp[3][0]); //x2-x4
+                    tem2 = utils_abs(pos_temp[0][1] - pos_temp[3][1]); //y2-y4
                     tem1 *= tem1;
                     tem2 *= tem2;
                     d2 = sqrt(tem1 + tem2); //得到2,3的距离
@@ -439,7 +447,7 @@ void TP_Adjust(void)
 
                     tp_dev.yfac = (float)(lcddev.height - 40) / (pos_temp[2][1] - pos_temp[0][1]); //得到yfac
                     tp_dev.yoff = (lcddev.height - tp_dev.yfac * (pos_temp[2][1] + pos_temp[0][1])) / 2; //得到yoff
-                    if(abs(tp_dev.xfac) > 2 || abs(tp_dev.yfac) > 2) //触屏和预设的相反了.
+                    if(utils_abs(tp_dev.xfac) > 2 || utils_abs(tp_dev.yfac) > 2) //触屏和预设的相反了.
                     {
                         cnt = 0;
                         TP_Drow_Touch_Point(lcddev.width - 20, lcddev.height - 20, WHITE); //清除点4

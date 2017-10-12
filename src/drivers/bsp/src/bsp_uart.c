@@ -5,11 +5,14 @@
 * @version V1.0
 * @date 2016-11-02
 */
-#include "bsp.h"
+#include "bsp_define.h"
+#include "bsp_uart.h"
 #include "cli_main.h"
 #include "userlib_queue.h"
 #include "user_app.h"
-
+#include "bsp.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #include "bsp_uart_queue.h"
 
 UART_HandleTypeDef CLI_UARTx_Handler;

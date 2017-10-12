@@ -33,7 +33,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "bsp.h"
+#include "bsp_define.h"
 #include "myiic.h"
 #include "user_app.h"
 ADC_HandleTypeDef hadc1;

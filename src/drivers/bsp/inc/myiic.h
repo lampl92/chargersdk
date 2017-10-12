@@ -1,35 +1,26 @@
 #ifndef _MYIIC_H
 #define _MYIIC_H
-#include "bsp.h"
-//////////////////////////////////////////////////////////////////////////////////
-//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F429¿ª·¢°å
-//IICÇý¶¯´úÂë
-//ÕýµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2016/1/13
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2014-2024
-//All rights reserved
-//////////////////////////////////////////////////////////////////////////////////
-//IO·½ÏòÉèÖÃ
-#define SDA_IN()  {GPIOB->MODER&=~(3<<(7*2));GPIOB->MODER|=0<<7*2;}	//PH5ÊäÈëÄ£Ê½
-#define SDA_OUT() {GPIOB->MODER&=~(3<<(7*2));GPIOB->MODER|=1<<7*2;} //PH5Êä³öÄ£Ê½
-//IO²Ù×÷
+
+#include "stm32f4xx.h"
+#include "evse_define.h"
+
+//IOæ–¹å‘è®¾ç½®
+#define SDA_IN()  {GPIOB->MODER&=~(3<<(7*2));GPIOB->MODER|=0<<7*2;}	//PH5è¾“å…¥æ¨¡å¼
+#define SDA_OUT() {GPIOB->MODER&=~(3<<(7*2));GPIOB->MODER|=1<<7*2;} //PH5è¾“å‡ºæ¨¡å¼
+//IOæ“ä½œ
 #define IIC_SCL   PBout(6) //SCL
 #define IIC_SDA   PBout(7) //SDA
-#define READ_SDA  PBin(7)  //ÊäÈëSDA
+#define READ_SDA  PBin(7)  //è¾“å…¥SDA
 
-//IICËùÓÐ²Ù×÷º¯Êý
-void IIC_Init(void);                //³õÊ¼»¯IICµÄIO¿Ú
-//void IIC_Start(void);				//·¢ËÍIIC¿ªÊ¼ÐÅºÅ
-//void IIC_Stop(void);	  			//·¢ËÍIICÍ£Ö¹ÐÅºÅ
-//void IIC_Send_Byte(u8 txd);			//IIC·¢ËÍÒ»¸ö×Ö½Ú
-//u8 IIC_Read_Byte(unsigned char ack);//IIC¶ÁÈ¡Ò»¸ö×Ö½Ú
-//u8 IIC_Wait_Ack(void); 				//IICµÈ´ýACKÐÅºÅ
-//void IIC_Ack(void);					//IIC·¢ËÍACKÐÅºÅ
-//void IIC_NAck(void);				//IIC²»·¢ËÍACKÐÅºÅ
+//IICæ‰€æœ‰æ“ä½œå‡½æ•°
+void IIC_Init(void);                //åˆå§‹åŒ–IICçš„IOå£
+//void IIC_Start(void);				//å‘é€IICå¼€å§‹ä¿¡å·
+//void IIC_Stop(void);	  			//å‘é€IICåœæ­¢ä¿¡å·
+//void IIC_Send_Byte(u8 txd);			//IICå‘é€ä¸€ä¸ªå­—èŠ‚
+//u8 IIC_Read_Byte(unsigned char ack);//IICè¯»å–ä¸€ä¸ªå­—èŠ‚
+//u8 IIC_Wait_Ack(void); 				//IICç­‰å¾…ACKä¿¡å·
+//void IIC_Ack(void);					//IICå‘é€ACKä¿¡å·
+//void IIC_NAck(void);				//IICä¸å‘é€ACKä¿¡å·
 
 //void IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 //u8 IIC_Read_One_Byte(u8 daddr,u8 addr);

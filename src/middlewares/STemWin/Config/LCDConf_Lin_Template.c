@@ -3,6 +3,7 @@
 #include "ltdc.h"
 #include "lcddrv.h"
 #include "GUIDRV_Lin.h"
+#include "bsp_define.h"
 //////////////////////////////////////////////////////////////////////////////////
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F429开发板

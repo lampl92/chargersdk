@@ -15,6 +15,7 @@
 #include "stringName.h"
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
+#include "timercallback.h"
 
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {

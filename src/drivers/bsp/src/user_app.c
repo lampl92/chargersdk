@@ -6,6 +6,7 @@
 #include "bsp_timer.h"
 #include "electric_energy_meter.h"
 #include "FreeRTOS.h"
+#include "task.h"
 float frequency_test;
 samp Sys_samp;
 

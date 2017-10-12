@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "ff_gen_drv.h"
+#include "bsp_nand_hw.h"
 #include "bsp_nand_ftl.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +100,7 @@ DRESULT NAND_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 DRESULT NAND_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_ERROR;
-    if(FTL_WriteSectors((u8 *)buff, sector, 512, count) == 0)
+    if(FTL_WriteSectors((uint8_t *)buff, sector, 512, count) == 0)
     {
         res = RES_OK;
     }

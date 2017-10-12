@@ -1,4 +1,7 @@
-#include "bsp.h"
+#include "bsp_define.h"
+#include "bsp_nand_hw.h"
+#include "bsp_dwt.h"
+#include "xprintf.h"
 
 #define USE_WAITRB 0
 #define BSP_DELAY_US_VAL    30

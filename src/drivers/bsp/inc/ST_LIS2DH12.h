@@ -1,7 +1,6 @@
 #ifndef ST_LIS2DH12_H_INCLUDED
 #define ST_LIS2DH12_H_INCLUDED
 #include "stm32f4xx_hal.h"
-#include "bsp.h"
 #include <stdlib.h>
 #define radian  57.29578
 float get_angle_max(void);

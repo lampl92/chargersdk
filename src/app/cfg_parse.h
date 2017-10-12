@@ -9,6 +9,7 @@
 #define  __CFG_PARSE_H
 
 #include "cJSON.h"
+#include "errorcode.h"
 
 #define ParamTypeU8         1
 #define ParamTypeU16        2

@@ -1,5 +1,7 @@
 #include "electric_energy_meter.h"
 #include "user_app.h"
+#include "FreeRTOS.h"
+#include "task.h"
 void RS485_Init(u32 bound)
 {
     //GPIO¶Ë¿ÚÉèÖÃ
