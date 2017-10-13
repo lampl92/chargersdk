@@ -881,9 +881,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_database.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
@@ -1492,6 +1489,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\log_evse.c">
       <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
+      <Filter>Source files\cli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

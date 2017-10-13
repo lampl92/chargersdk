@@ -27,8 +27,6 @@
 #include "DIALOG.h"
 
 #include "includes.h"
-#include "dbparser\dbparser.h"
-#include "debug.h"
 
 #include "order.h"
 #include "interface.h"
@@ -346,219 +344,6 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
     return errcode;
 }
-/** @brief
- *
- * @param
- * @param
- * @return
- *
- */
-static void DBselect_Data(uint8_t log_type,WM_HWIN hItem)
-{
-    char memseg[BYTES_LEN];
-    char sel_cmd[100];
-    char _tmpBuff[100];
-    char sel_buf[20];
-    char tbuf_start[80];
-    db_query_mm_t mm;
-    db_op_base_t* root;
-    db_tuple_t    tuple;
-    int i;
-    char sn[32];
-    char *p;
-    int id;
-    int balance;
-    time_t _time;
-    struct tm* _ptime;
-    time_t  _psec;
-
-#if DB_DEBUG == 1
-    p = sn;
-    printf_safe("FILE REMOVE!!\n");
-    db_fileremove("OrderLDBTest");
-    vTaskDelay(10);
-    init_query_mm(&mm, memseg, BYTES_LEN);
-    printf_safe("CREATE TABLE!!\n");
-    parse("CREATE TABLE OrderLDBTest (OrderSN       STRING(32), \
-                                  CardID        STRING(32), \
-                                  Balance       INT, \
-                                  CONID         INT, \
-                                  StartTime     INT, \
-                                  StartType     INT, \
-                                  LimitFee      INT, \
-                                  StartPower    INT, \
-                                  ServType      INT, \
-                                  TotalPower    INT, \
-                                  TotalPowerFee INT, \
-                                  TotalServFee  INT, \
-                                  TotalFee      INT, \
-                                  TotalSeg      INT, \
-                                  DefSegPower   INT, \
-                                  DefSegFee     INT, \
-                                  PayType       INT, \
-                                  StopType      INT, \
-                                  StopTime      STRING(32));", &mm);
-
-
-    init_query_mm(&mm, memseg, BYTES_LEN);
-    printf_safe("INSERT INTO OrderLDBTest!!\n");
-    for(i = 0;i < 500;i++)
-    {
-        init_query_mm(&mm, memseg, BYTES_LEN);
-        parse("INSERT INTO OrderLDBTest VALUES ('SN123123', 'id12323',12,1,1499695984,1,2,3,4,5,6,7,8,9,1,2,3,4,'2018');", &mm); //设置全部值
-    }
-    parse("INSERT INTO OrderLDBTest VALUES ('SN123123', 'id12323',12,1,1499695984,1,2,3,4,5,6,7,8,9,1,2,3,4,'2018');", &mm); //设置全部值
-    parse("INSERT INTO OrderLDBTest VALUES ('SN123124', 'id12323',12,1,965267964,1,2,3,4,5,6,7,8,9,1,2,3,4,'2004');", &mm); //设置全部值
-    parse("INSERT INTO OrderLDBTest VALUES ('SN123125', 'id12323',12,1,1579695984,1,2,3,4,5,6,7,8,9,1,2,3,4,'2005');", &mm); //设置全部值
-
-    init_query_mm(&mm, memseg, BYTES_LEN);
-    printf_safe("SELECT * FROM OrderLDBTest!!\n");
-    root = parse("SELECT * FROM OrderLDBTest;", &mm);
-    if (root == NULL)
-    {
-        printf_safe("NULL root\n");
-    }
-    else
-    {
-        init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
-
-        while (next(root, &tuple, &mm) == 1)
-        {
-            id = getintbyname(&tuple, "CONID", root->header);
-            balance = getintbyname(&tuple, "Balance", root->header);
-            p = getstringbyname(&tuple, "OrderSN", root->header);
-            printf_safe("balance: %d (%d)\n", balance, id);
-            printf_safe("SN %s\n", p);
-            _time = getintbyname(&tuple, "StartTime", root->header);
-            //strftime (tbuf_start, sizeof (tbuf_start), "%Y-%m-%d %H:%M:%S", _time);
-            printf_safe("startTime %d\n",_time);
-            _time = getintbyname(&tuple, "StopTime", root->header);
-            printf_safe("stopTime %d\n",_time);
-        }
-    }
-    close_tuple(&tuple, &mm);
-    closeexecutiontree(root, &mm);
-#endif
-    switch(log_type)
-    {
-        case 0:
-            //故障log
-        break;
-        case 1:
-#if DB_DEBUG == 1
-            //充电log
-            memset(sel_cmd,'\0',strlen(sel_cmd));
-            memset(sel_buf,'\0',strlen(sel_buf));
-            init_query_mm(&mm, memseg, BYTES_LEN);
-            printf_safe("========================test select========================\n");
-            strcpy(sel_cmd,"SELECT * FROM OrderLDBTest WHERE StartTime >= ");
-            //关于日期的拼接
-//            strcat(sel_buf,sel_start_date.year);
-//            sprintf(sel_buf,"%s-%s-%s 00:00:00",sel_start_date.year,sel_start_date.month,sel_start_date.day);
-//            strcat(sel_cmd,sel_buf);
-
-//            strcat(sel_cmd," AND stopTime >= ");
-//
-//            memset(sel_buf,'\0',strlen(sel_buf));
-//            sprintf(sel_buf,"%s-%s-%s 00:00:00",sel_end_date.year,sel_end_date.month,sel_end_date.day);
-//            strcat(sel_cmd,sel_buf);
-            /**<  上述为拼接以标准日期形式的时间;下述改为拼接秒的形式 */
-            /**<  下述两句进行_ptime的类似初始化,不进行此操作下述赋值会死机,未接之谜 */
-            _time = time(NULL);
-            _ptime = localtime(&_time);
-//            _psec = mktime(_ptime);
-//            sprintf(sel_buf,"%d;",_psec);
-
-            _ptime->tm_year = atoi(sel_start_date.year) - 1900;
-            _ptime->tm_mon = atoi(sel_start_date.month) - 1;
-            _ptime->tm_mday = atoi(sel_start_date.day);
-            _ptime->tm_hour = 0;
-            _ptime->tm_min = 0;
-            _ptime->tm_sec = 0;
-            _ptime->tm_wday = (atoi(sel_start_date.year)-2000 + 2 * (atoi(sel_start_date.month)) + 3 * (atoi(sel_start_date.month) + 1) / 5 + atoi(sel_start_date.day) + atoi(sel_start_date.day) / 4 - atoi(sel_start_date.day) / 100 + atoi(sel_start_date.day) / 400) % 7;
-            _ptime->tm_yday = 0;
-            _ptime->tm_isdst = 0;
-
-//            printf_safe("\ntm_year = %d,tm_mon = %d,tm_mday = %d\n  \
-//                        tm_hour = %d,tm_min = %d,tm_sec = %d\n  \
-//                        tm_wday = %d,tm_yday = %d,tm_isdst = %d\n   \
-//                            ",_ptime->tm_year,_ptime->tm_mon,_ptime->tm_mday,   \
-//                            _ptime->tm_hour,_ptime->tm_min,_ptime->tm_hour,     \
-//                            _ptime->tm_wday,_ptime->tm_yday,_ptime->tm_isdst);
-
-            _psec = mktime(_ptime);
-
-            sprintf(sel_buf,"%d;",(int)_psec);
-            strcat(sel_cmd,sel_buf);
-
-//            printf_safe("\n%s\n",sel_cmd);
-            //printf_safe("SELECT * FROM OrderLDBTest WHERE startTime > 0 AND stopTime > 0\n");
-            //root = parse("SELECT * FROM OrderLDBTest WHERE StartTime > 2004;",&mm);
-            //root = parse("SELECT * FROM OrderLDBTest WHERE StartTime >= 1072886400;", &mm);
-
-            root = parse(sel_cmd,&mm);
-            if (root == NULL)
-            {
-                printf_safe("NULL root\n");
-            }
-            else
-            {
-                init_tuple(&tuple, root->header->tuple_size, root->header->num_attr, &mm);
-                i = 0;
-                while (next(root, &tuple, &mm) == 1)
-                {
-                    LISTVIEW_AddRow(hItem, NULL);
-                    xsprintf((char *)_tmpBuff, "%03d", (i+1));
-                    LISTVIEW_SetItemText(hItem, 0, i, _tmpBuff);
-                    p = getstringbyname(&tuple, "OrderSN", root->header);
-                    LISTVIEW_SetItemText(hItem, 1, i, p);
-                    p = getstringbyname(&tuple, "CardID", root->header);
-                    LISTVIEW_SetItemText(hItem, 2, i, p);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "Balance", root->header));
-                    LISTVIEW_SetItemText(hItem, 3, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "CONID", root->header));
-                    LISTVIEW_SetItemText(hItem, 4, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "StartTime", root->header));
-                    LISTVIEW_SetItemText(hItem, 5, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "StartType", root->header));
-                    LISTVIEW_SetItemText(hItem, 6, i, _tmpBuff);
-
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "LimitFee", root->header));
-                    LISTVIEW_SetItemText(hItem, 7, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "StartPower", root->header));
-                    LISTVIEW_SetItemText(hItem, 8, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "ServType", root->header));
-                    LISTVIEW_SetItemText(hItem, 9, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "TotalPower", root->header));
-                    LISTVIEW_SetItemText(hItem, 10, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "TotalPowerFee", root->header));
-                    LISTVIEW_SetItemText(hItem, 11, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "TotalServFee", root->header));
-                    LISTVIEW_SetItemText(hItem, 12, i, _tmpBuff);
-
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "TotalFee", root->header));
-                    LISTVIEW_SetItemText(hItem, 13, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "TotalSeg", root->header));
-                    LISTVIEW_SetItemText(hItem, 14, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "DefSegPower", root->header));
-                    LISTVIEW_SetItemText(hItem, 15, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "DefSegFee", root->header));
-                    LISTVIEW_SetItemText(hItem, 16, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "PayType", root->header));
-                    LISTVIEW_SetItemText(hItem, 17, i, _tmpBuff);
-                    xsprintf((char *)_tmpBuff, "%d", getintbyname(&tuple, "StopType", root->header));
-                    LISTVIEW_SetItemText(hItem, 18, i, _tmpBuff);
-                    LISTVIEW_SetItemText(hItem, 19, i, getstringbyname(&tuple, "StopTime", root->header));
-                    i++;
-                }
-            }
-            printf_safe("\n查找到的充电记录条数: %d 条\n",i);
-            close_tuple(&tuple, &mm);
-            closeexecutiontree(root, &mm);
-#endif
-        break;
-    }
-}
 
 /*********************************************************************
 *
@@ -854,7 +639,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
 
 
-            //DBselect_Data(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
             Data_Flush(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 //            for(i = 0; i< 500;i++)
 //            {
@@ -913,7 +697,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总服务费", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总费用", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "支付方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
-            //DBselect_Data(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
             Data_Flush(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 
             break;
