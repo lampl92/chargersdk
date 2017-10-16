@@ -58,13 +58,14 @@
 #define ID_TEXT_9  (GUI_ID_USER + 0x0F)//
 #define ID_TEXT_10  (GUI_ID_USER + 0x10)//
 #define ID_TEXT_11  (GUI_ID_USER + 0x11)//
+#define ID_TEXT_12  (GUI_ID_USER + 0x18)//
 #define ID_EDIT_1  (GUI_ID_USER + 0x12)//
 #define ID_EDIT_2  (GUI_ID_USER + 0x13)//
 #define ID_EDIT_3  (GUI_ID_USER + 0x14)//
 #define ID_EDIT_4  (GUI_ID_USER + 0x15)//
 #define ID_EDIT_5  (GUI_ID_USER + 0x16)//
 #define ID_EDIT_6  (GUI_ID_USER + 0x17)//
-
+#define ID_EDIT_7  (GUI_ID_USER + 0x19)//
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
@@ -105,12 +106,14 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "A插座温度:", ID_TEXT_9, 300, 256, 150, 30, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "B插座温度:", ID_TEXT_10, 300, 296, 150, 30, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "接线温度:", ID_TEXT_11, 300, 336, 150, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "接线温度:", ID_TEXT_12, 577, 100, 150, 30, 0, 0x0, 0 },    
     { EDIT_CreateIndirect, "Edit", ID_EDIT_1, 477, 140, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_2, 477, 178, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_3, 477, 216, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_4, 477, 256, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_5, 477, 296, 100, 30, 0, 0x64, 0 },
     { EDIT_CreateIndirect, "Edit", ID_EDIT_6, 477, 336, 100, 30, 0, 0x64, 0 },
+    { EDIT_CreateIndirect, "Edit", ID_EDIT_7, 680, 100, 100, 30, 0, 0x64, 0 },
 };
 
 /*********************************************************************
@@ -122,47 +125,42 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void Data_Flush(WM_MESSAGE *pMsg)
 {
     CON_t *pCon;
-    uint8_t strTmp[10];
-
+    uint8_t strTmp[30];
+    
     pCon = CONGetHandle(0);
 
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dChargingVoltage);
     strcat(strTmp,"V");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),strTmp);
 
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dChargingCurrent);
     strcat(strTmp,"A");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),strTmp);
 
-    /// TODO (zshare#1#): //share
     /**< 控制导引电压确认 */
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",Sys_samp.DC.CP1);
     strcat(strTmp,"V");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),strTmp);
 
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dChargingFrequence);
     strcat(strTmp,"Hz");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),strTmp);
 
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),strTmp);
 
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp2);
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),strTmp);
 
-    /// TODO (zshare#1#): ///接线温度
-    memset(strTmp,'\0',strlen(strTmp));
     sprintf(strTmp,"%.1f",pCon->status.dACLTemp);//acl or acn
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),strTmp);
+
+    sprintf(strTmp, "%.1f", pCon->status.dACNTemp);
+    strcat(strTmp, "℃");
+    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), strTmp);
 }
 /*********************************************************************
 *
@@ -197,6 +195,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
             }
+            Data_Flush(pMsg);
         }
         break;
     case WM_INIT_DIALOG:
@@ -211,9 +210,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"交流电流:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"充电导引电压:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"频    率:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"A插座温度:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"B插座温度:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"接线温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"继电器温度1:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"继电器温度2:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"AC温度L:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&XBF24_Font,GUI_BLACK,"AC温度N:");
         //
         // Initialization of 'Edit'
         //
@@ -224,6 +224,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7),&XBF24_Font,"00");
         //
         // Initialization of 'Button'
         //
@@ -356,7 +357,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         if(pMsg->Data.v == _timerData)
         {
-            Data_Flush(pMsg);
+            
             WM_RestartTimer(pMsg->Data.v,5000);
         }
         break;
