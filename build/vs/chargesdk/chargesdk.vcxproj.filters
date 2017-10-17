@@ -926,9 +926,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart_queue.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
@@ -1418,9 +1415,6 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
       <Filter>Source files\middlewares\STemWin\XBF</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\aes.c">
-      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c">
       <Filter>Source files\middlewares\tiny-AES128-C</Filter>
     </ClCompile>
@@ -1438,9 +1432,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\base64.c">
-      <Filter>Source files\net\mbedTLS\library</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c">
       <Filter>Source files\net\mbedTLS\library</Filter>
@@ -1489,6 +1480,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
       <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c">
+      <Filter>Source files\net\mbedTLS\library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c">
+      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
+      <Filter>Source files\app\libEcharge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3906,6 +3906,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_define.h">
       <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\libEcharge\ech_encrypt.h">
+      <Filter>Header files\app\libEcharge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,8 +10,6 @@
 #include "userlib_queue.h"
 #include "user_app.h"
 
-#include "bsp_uart_queue.h"
-
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;

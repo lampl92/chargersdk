@@ -88,6 +88,7 @@
     <ClCompile Include="..\..\..\src\app\interface_monitor.c" />
     <ClCompile Include="..\..\..\src\app\interface_remote.c" />
     <ClCompile Include="..\..\..\src\app\interface_rfid.c" />
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
@@ -125,7 +126,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart_queue.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
@@ -204,14 +204,14 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\aes.c" />
+    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c" />
     <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\base64.c" />
+    <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\croutine.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\event_groups.c" />
@@ -242,6 +242,7 @@
     <ClInclude Include="..\..\..\src\app\interface_monitor.h" />
     <ClInclude Include="..\..\..\src\app\interface_remote.h" />
     <ClInclude Include="..\..\..\src\app\interface_rfid.h" />
+    <ClInclude Include="..\..\..\src\app\libEcharge\ech_encrypt.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_globals.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol_proc.h" />

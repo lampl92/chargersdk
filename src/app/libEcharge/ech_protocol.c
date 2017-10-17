@@ -7,7 +7,7 @@
 */
 #include "utils.h"
 #include "interface.h"
-#include "enc_dec.h"
+#include "libEcharge/ech_encrypt.h"
 #include "libEcharge/ech_protocol_proc.h"
 #include "libEcharge/ech_globals.h"
 
@@ -772,7 +772,7 @@ static int makeStdCmd(void *pPObj,
     pE = (EVSE_t *)pEObj;
     ulMsgHeadLen = 0;
 
-    ulMsgBodyCtxLen_enc = aes_encrypt(pucMsgBodyCtx_dec,
+    ulMsgBodyCtxLen_enc = ech_aes_encrypt(pucMsgBodyCtx_dec,
                                       ulMsgBodyCtxLen_dec,
                                       pProto->info.strKey,
                                       ucMsgBodyCtx_enc);
@@ -2592,7 +2592,7 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     {
         pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
-        aes_decrypt(pMsgBodyCtx_enc, pProto->info.strKey, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+        ech_aes_decrypt(pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, pMsgBodyCtx_dec);
 
         memcpy(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
         pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
