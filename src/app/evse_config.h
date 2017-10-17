@@ -9,7 +9,7 @@
 #define __EVSE_CONFIG_H
 
 
-#define EVSE_USING_RFID            0
+#define EVSE_USING_RFID            1
 
 
 #define defTotalCON             2
