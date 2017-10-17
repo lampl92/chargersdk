@@ -51,6 +51,7 @@
         <string>../../../src/hmi/lcd</string>
         <string>../../../src/net/mbedTLS/include</string>
         <string>../../../src/hmi/qrencode/inc</string>
+        <string>../../../src/middlewares/STemWin/SIF</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>

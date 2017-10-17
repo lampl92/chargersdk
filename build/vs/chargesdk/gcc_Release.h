@@ -1224,12 +1224,11 @@
 //../../../src/middlewares/STemWin/BMP
 //../../../src/middlewares/STemWin/XBF
 //../../../src/middlewares/tiny-AES128-C
-//../../../src/middlewares/LittleD/src
-//../../../src/middlewares/LittleD/src/include
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
+//../../../src/middlewares/STemWin/SIF
 // --- Include directories end --- //
 
 
