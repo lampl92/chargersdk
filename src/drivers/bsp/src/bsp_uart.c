@@ -362,7 +362,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
-            //gdsl_queue_insert(queCLI, (void *)CLI_RX_Buffer);
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)

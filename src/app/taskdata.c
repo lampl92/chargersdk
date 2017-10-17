@@ -449,10 +449,8 @@ void vTaskEVSEData(void *pvParameters)
             }
         }//if (ulSignalPoolXor != 0)
         ulSignalEVSEFaultOld = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
-#endif        
-#if DEBUG_DATA
-
-#endif
+#endif //if 1
+        
 #endif //DEBUG_NO_TASKDATA
         vTaskDelay(100);
     }

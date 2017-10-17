@@ -32,7 +32,7 @@ void vTaskEVSEDiag(void *pvParameters)
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef DEBUG_DIAG
+#ifdef EVSE_DEBUG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
 #endif
@@ -153,10 +153,6 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
         /* end of 判断状态 */
-
-#if DEBUG_DIAG
-        //printf_safe("%s\n", TASKNAME_EVSEDiag);
-#endif
 #endif
         vTaskDelay(10);
     }

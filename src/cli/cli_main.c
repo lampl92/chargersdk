@@ -76,7 +76,7 @@ void cli_main(void)
         {
             tinysh_char_in(ch[0]);
         }
-        vTaskDelay(100);
+        vTaskDelay(200);
     }
 }
 

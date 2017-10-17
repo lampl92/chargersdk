@@ -11,6 +11,7 @@
 #define XMOD_NAK    0x15
 #define XMOD_CAN    0x18
 
+#define XMOD_BUFF_SIZE  1500
 extern SemaphoreHandle_t  xprintfMutex;
 
 typedef enum
@@ -22,7 +23,7 @@ typedef enum
 
 static uint32_t xmod_read(uint8_t *pbuff, uint32_t rlen)
 {
-    return uart_read(UART_PORT_CLI, pbuff, rlen, 500);    
+    return uart_read(UART_PORT_CLI, pbuff, rlen, 10);    
 }
 static uint32_t xmod_write(uint8_t *pbuff, uint32_t wlen)
 {
@@ -41,8 +42,10 @@ void xmod_parse(uint8_t *pbuff, uint8_t *data)
 
 void xmod_poll(XMOD_STATE stat)
 {
-    uint8_t buff[200] = { 0};
+    uint8_t buff[XMOD_BUFF_SIZE] = { 0 };
     uint32_t rl = 0;
+    int i = 0;
+    uint8_t ch;
     
     while (1)
     {
@@ -52,7 +55,7 @@ void xmod_poll(XMOD_STATE stat)
             break;
         case XMOD_STAT_REQ_RECV:
             xmod_write("C", 1);
-            rl = xmod_read(buff, 500);
+            rl = xmod_read(buff, XMOD_BUFF_SIZE);
             if (rl > 0)
             {
                 stat = XMOD_STAT_RECV;
@@ -60,11 +63,17 @@ void xmod_poll(XMOD_STATE stat)
             break;
         case XMOD_STAT_RECV:
             //xmod_parse()
+            ch = XMOD_ACK;
+            rl = xmod_read(buff, XMOD_BUFF_SIZE);
+            xmod_write(&ch, 1);
+            //i = 1;
             break;
         default:
             break;
-           
-            
+        }
+        if (i == 1)
+        {
+            break;
         }
     }
 }

@@ -1142,9 +1142,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_database.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
       <Filter>Source files</Filter>
     </ClCompile>
