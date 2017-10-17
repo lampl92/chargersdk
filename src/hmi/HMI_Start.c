@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "xbffontcreate.h"
+#include "siffontcreate.h"
 #include "bmpdisplay.h"
 #include "ff.h"
 #include "HMI_Start.h"
@@ -31,13 +32,17 @@ void MainTask(void)
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 8, GUI_QR_ECLEVEL_L, 0);
         readBackGroundNOFREE("system/background_tree.bmp");
-        Create_XBF12("system/XBF_Song_12.xbf");//创建xbf12号路径
-        Create_XBF14("system/XBF_Song_14.xbf");//创建XBF14号路径
-        Create_XBF16("system/XBF_Song_16.xbf");//创建xbf16号路径
-        Create_XBF19("system/XBF_Song_19.xbf");//创建xbf19号路径
-        Create_XBF24("system/XBF_Song_24.xbf");//创建xbf24号路径
-        Create_XBF36("system/XBF_Song_36.xbf");//创建xbf36号路径
+//        Create_XBF12("system/XBF_Song_12.xbf");//创建xbf12号路径
+//        Create_XBF14("system/XBF_Song_14.xbf");//创建XBF14号路径
+//        Create_XBF16("system/XBF_Song_16.xbf");//创建xbf16号路径
+//        Create_XBF19("system/XBF_Song_19.xbf");//创建xbf19号路径
+//        Create_XBF24("system/XBF_Song_24.xbf");//创建xbf24号路径
+//        Create_XBF36("system/XBF_Song_36.xbf");//创建xbf36号路径
 
+        Create_SIF12("system/SIF12.sif");
+        Create_SIF16("system/SIF16.sif");
+        Create_SIF24("system/SIF24.sif");
+        Create_SIF36("system/SIF36.sif");
 
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 

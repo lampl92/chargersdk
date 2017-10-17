@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <includes.h>
 #include "xbffontcreate.h"
+#include "siffontcreate.h"
 #include "bmpdisplay.h"
 #include "touch.h"
 #include "utils.h"

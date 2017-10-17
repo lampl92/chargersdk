@@ -66,12 +66,12 @@ extern uint8_t strCSQ[10];
  */
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
-    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
+    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&SIF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号:");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF12_Font,GUI_RED,"信号:");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF12_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&SIF12_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
 }
 //void FrameWin_Init_test(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
@@ -117,7 +117,7 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     WM_HWIN hWin = pMsg->hWin;
     uint8_t Date_buf[30];
     uint8_t Time_buf[30];
-    
+
     HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Date_buf, "20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
     TEXT_SetText(WM_GetDialogItem(hWin, textid0), Date_buf);
@@ -138,12 +138,12 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
 void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 {
     EventBits_t uxBits;
-	
+
     memset(strCSQ,'\0',strlen(strCSQ));
     sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     //uxBits = xEventGroupGetBits(xHandleEventTCP);
     //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
-    
+
     if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
     {
         strcat(strCSQ," 服务器未连接");
@@ -236,7 +236,7 @@ uint8_t _deleteWin(WM_HWIN hItem)
 {
 	if(bittest(winInitDone,0))
 	{
-		bitclr(winInitDone,0);	
+		bitclr(winInitDone,0);
 	}
     if(bittest(winCreateFlag,0))
     {
@@ -540,7 +540,7 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
                     hWin, WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
         bitset(winCreateFlag,0);
         MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
-        MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
+        MULTIEDIT_SetFont(err_hItem, &SIF24_Font);
         WM_SetFocus(err_hItem);
         MULTIEDIT_SetInsertMode(err_hItem, 1);
         MULTIEDIT_SetCursorOffset(err_hItem,0);

@@ -249,29 +249,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF36_Font, GUI_BLACK, "正在充电 ... ...");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "已充电");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "充入电量");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "当前服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9), &XBF24_Font, GUI_BLACK, "当前电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &XBF24_Font, GUI_BLACK, "消费总额");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11), &XBF24_Font, GUI_BLACK, "度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12), &XBF24_Font, GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13), &XBF24_Font, GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14), &XBF24_Font, GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15), &XBF24_Font, GUI_BLACK, "小时");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16), &XBF24_Font, GUI_BLACK, "分");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17), &XBF24_Font, GUI_BLACK, "秒");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF36_Font, GUI_BLACK, "正在充电 ... ...");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_BLACK, "已充电");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "充入电量");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "当前服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9), &SIF24_Font, GUI_BLACK, "当前电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &SIF24_Font, GUI_BLACK, "消费总额");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11), &SIF24_Font, GUI_BLACK, "度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12), &SIF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13), &SIF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14), &SIF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15), &SIF24_Font, GUI_BLACK, "小时");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16), &SIF24_Font, GUI_BLACK, "分");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17), &SIF24_Font, GUI_BLACK, "秒");
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), &XBF24_Font, "00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6), &XBF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), &SIF24_Font, "00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6), &SIF24_Font, "00");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
