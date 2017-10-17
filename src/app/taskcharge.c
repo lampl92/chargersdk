@@ -51,13 +51,13 @@ void vTaskEVSECharge(void *pvParameters)
     int i;
     EventBits_t uxBitsCharge;
     EventBits_t uxBitsException;
-    uint8_t strTimerName[50];
+//    uint8_t strTimerName[50];
     ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
     uxBitsCharge = 0;
     uxBitsException = 0;
-    memset(strTimerName, 0, 50);
+//    memset(strTimerName, 0, 50);
     errcode = ERR_NO;
 
     for(i = 0; i < ulTotalCON; i++)
@@ -174,8 +174,8 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //状态1'触发条件
                 {
-                    xsprintf(strTimerName, "TimerCON%d_Charge_AntiShake", i);
-                    pCON->status.xHandleTimerCharge = xTimerCreate(strTimerName,
+//                    xsprintf(strTimerName, "TimerCON%d_Charge_AntiShake", i);
+                    pCON->status.xHandleTimerCharge = xTimerCreate("TimerCON_Charge_AntiShake",
                                                       defChargeAntiShakeCyc,
                                                       pdFALSE,
                                                       (void *)i,
