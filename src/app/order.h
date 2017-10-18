@@ -42,15 +42,34 @@
 #define defOrderSerType_Order           0
 #define defOrderSerType_Power           1
 
+
+/*
+          +------+------+------+------+------+
+          |      |      |      |      |      |
+Segment0  |Period|      |      |      |      |
+          |      |      |      |      |      |
+          +------+------+------+------+------+
+
+          +------+------+------+------+------+
+          |      |      |      |      |      |
+Segment1  |Period|      |      |      |      |
+          |      |      |      |      |      |
+          +------+------+------+------+------+
+*/
+
+#define defOrderSegMax                  5
+#define defOrderPeriodMax               5
+
 /*当前时间所在时间段类型*/
 typedef enum
 {
-    STATE_SEG_IDLE,
-    STATE_SEG_SHARP,
+    STATE_SEG_SHARP = 0, //枚举位置用作数组标号, 因此不要修改尖峰平谷的位置
     STATE_SEG_PEAK,
     STATE_SEG_SHOULDER,
-    STATE_SEG_OFF_PEAK
-}SegTimeState_e;
+    STATE_SEG_OFF_PEAK,
+    STATE_SEG_DEFAULT,
+    STATE_SEG_IDLE
+}OrderSegState_e;
 
 /*订单所在状态*/
 typedef enum _OrderState
@@ -64,15 +83,13 @@ typedef enum _OrderState
 }OrderState_t;
 
 /*每个时间段需要记录的信息*/
-typedef struct _ChargeSegInfo
+typedef struct _ChargePeriodStatus
 {
     time_t tStartTime;
     time_t tEndTime;
     double dStartPower;
     double dPower;
-//    double dPowerFee;
-//    double dServFee;
-}ChargeSegStatus_t;
+}ChargePeriodStatus_t;
 
 typedef struct _statRemote
 {
@@ -85,7 +102,7 @@ typedef struct _statRemote
 typedef struct _OrderData
 {
     OrderState_t    statOrder;  //记录订单状态
-    SegTimeState_e statOrderSeg; //记录订单时间段状态
+    OrderSegState_e statOrderSeg; //记录订单时间段状态
     uint8_t pos;//在时段中的位置，用于与now获得的pos进行对比
 
     uint8_t ucCardID[defCardIDLength]; //卡号//在taskrfid中赋值            2
@@ -105,29 +122,12 @@ typedef struct _OrderData
     double  dTotalPowerFee;     //总电费
     double  dTotalServFee;   //总服务费
     double  dTotalFee;          //总费用
-    ChargeSegStatus_t chargeSegStatus_sharp[5];     //尖过程产生信息
-    ChargeSegStatus_t chargeSegStatus_peak[5];      //峰
-    ChargeSegStatus_t chargeSegStatus_shoulder[5];  //平
-    ChargeSegStatus_t chargeSegStatus_off_peak[5];  //谷
-    double dTotalPower_sharp;   //尖总电量
-    double dTotalPowerFee_sharp;//尖总电费
-    double dTotalServFee_sharp; //尖总服务费
-    uint32_t ulTotalTime_sharp;    //尖充电时间
+    ChargePeriodStatus_t chargeSegStatus[defOrderSegMax][defOrderPeriodMax];     //[0][0]尖第一时段 [1][0]峰第一时段 [2][1]平第二时段  过程信息
+    double dSegTotalPower[defOrderSegMax];   //分段总电量
+    double dSegTotalPowerFee[defOrderSegMax];//分段总电费
+    double dSegTotalServFee[defOrderSegMax]; //分段总服务费
+    uint32_t ulSegTotalTime[defOrderSegMax];    //分段总充电时间
 
-    double dTotalPower_peak;
-    double dTotalPowerFee_peak;
-    double dTotalServFee_peak;
-    uint32_t ulTotalTime_peak;
-
-    double dTotalPower_shoulder;
-    double dTotalPowerFee_shoulder;
-    double dTotalServFee_shoulder;
-    uint32_t ulTotalTime_shoulder;
-
-    double dTotalPower_off_peak;
-    double dTotalPowerFee_off_peak;
-    double dTotalServFee_off_peak;
-    uint32_t ulTotalTime_off_peak;
     //停止时
     uint8_t         ucPayType;  //支付方式
     uint8_t         ucPayStatus;//结算状态 0:未结算  1:已结算

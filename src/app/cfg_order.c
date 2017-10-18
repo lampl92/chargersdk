@@ -25,33 +25,33 @@ static cJSON *CreateNewOrderCfg(CON_t *pCON, echProtocol_t *pProto)
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee, cJSON_CreateNumber(pCON->order.dTotalPowerFee));                     //6 电费总金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee, cJSON_CreateNumber(pCON->order.dTotalServFee));                       //7 服务费总金额
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_sharp, cJSON_CreateNumber(pProto->info.dPowerFee_sharp));                  //8 尖电价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_sharp, cJSON_CreateNumber(pProto->info.dServFee_sharp));                    //9 尖服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_sharp, cJSON_CreateNumber(pCON->order.dTotalPower_sharp));               //10 尖电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_sharp, cJSON_CreateNumber(pCON->order.dTotalPowerFee_sharp));         //11 尖充电金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_sharp, cJSON_CreateNumber(pCON->order.dTotalServFee_sharp));           //12 尖服务费金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_sharp, cJSON_CreateNumber(pCON->order.ulTotalTime_sharp));                //13 尖充电时长
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_sharp, cJSON_CreateNumber(pProto->info.dSegPowerFee[0]));                  //8 尖电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_sharp, cJSON_CreateNumber(pProto->info.dSegServFee[0]));                    //9 尖服务费单价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_sharp, cJSON_CreateNumber(pCON->order.dSegTotalPower[0]));               //10 尖电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_sharp, cJSON_CreateNumber(pCON->order.dSegTotalPowerFee[0]));         //11 尖充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_sharp, cJSON_CreateNumber(pCON->order.dSegTotalServFee[0]));           //12 尖服务费金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_sharp, cJSON_CreateNumber(pCON->order.ulSegTotalTime[0]));                //13 尖充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_peak, cJSON_CreateNumber(pProto->info.dPowerFee_peak));                    //14 峰电价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_peak, cJSON_CreateNumber(pProto->info.dServFee_peak));                      //15 峰服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_peak, cJSON_CreateNumber(pCON->order.dTotalPower_peak));                 //16 峰电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_peak, cJSON_CreateNumber(pCON->order.dTotalPowerFee_peak));           //17 峰充电金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_peak, cJSON_CreateNumber(pCON->order.dTotalServFee_peak));             //18 峰服务费金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_peak, cJSON_CreateNumber(pCON->order.ulTotalTime_peak));                  //19 峰充电时长
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_peak, cJSON_CreateNumber(pProto->info.dSegPowerFee[1]));                    //14 峰电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_peak, cJSON_CreateNumber(pProto->info.dSegServFee[1]));                      //15 峰服务费单价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_peak, cJSON_CreateNumber(pCON->order.dSegTotalPower[1]));                 //16 峰电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_peak, cJSON_CreateNumber(pCON->order.dSegTotalPowerFee[1]));           //17 峰充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_peak, cJSON_CreateNumber(pCON->order.dSegTotalServFee[1]));             //18 峰服务费金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_peak, cJSON_CreateNumber(pCON->order.ulSegTotalTime[1]));                  //19 峰充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_shoulder, cJSON_CreateNumber(pProto->info.dPowerFee_shoulder));            //20 平电价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_shoulder, cJSON_CreateNumber(pProto->info.dServFee_shoulder));              //21 平服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_shoulder, cJSON_CreateNumber(pCON->order.dTotalPower_shoulder));         //22 平电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_shoulder, cJSON_CreateNumber(pCON->order.dTotalPowerFee_shoulder));   //23 平充电金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_shoulder, cJSON_CreateNumber(pCON->order.dTotalServFee_shoulder));     //24 平服务费金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_shoulder, cJSON_CreateNumber(pCON->order.ulTotalTime_shoulder));          //25 平充电时长
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_shoulder, cJSON_CreateNumber(pProto->info.dSegPowerFee[2]));            //20 平电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_shoulder, cJSON_CreateNumber(pProto->info.dSegServFee[2]));              //21 平服务费单价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_shoulder, cJSON_CreateNumber(pCON->order.dSegTotalPower[2]));         //22 平电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_shoulder, cJSON_CreateNumber(pCON->order.dSegTotalPowerFee[2]));   //23 平充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_shoulder, cJSON_CreateNumber(pCON->order.dSegTotalServFee[2]));     //24 平服务费金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_shoulder, cJSON_CreateNumber(pCON->order.ulSegTotalTime[2]));          //25 平充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_off_peak, cJSON_CreateNumber(pProto->info.dPowerFee_off_peak));            //26 谷电价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_off_peak, cJSON_CreateNumber(pProto->info.dServFee_off_peak));              //27 谷服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_off_peak, cJSON_CreateNumber(pCON->order.dTotalPower_off_peak));         //28 谷电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_off_peak, cJSON_CreateNumber(pCON->order.dTotalPowerFee_off_peak));   //29 谷充电金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_off_peak, cJSON_CreateNumber(pCON->order.dTotalServFee_off_peak));     //30 谷服务费金额
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_off_peak, cJSON_CreateNumber(pCON->order.ulTotalTime_off_peak));          //31 谷充电时长
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_off_peak, cJSON_CreateNumber(pProto->info.dSegPowerFee[3]));            //26 谷电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_off_peak, cJSON_CreateNumber(pProto->info.dSegServFee[3]));              //27 谷服务费单价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_off_peak, cJSON_CreateNumber(pCON->order.dSegTotalPower[3]));         //28 谷电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_off_peak, cJSON_CreateNumber(pCON->order.dSegTotalPowerFee[3]));   //29 谷充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_off_peak, cJSON_CreateNumber(pCON->order.dSegTotalServFee[3]));     //30 谷服务费金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_off_peak, cJSON_CreateNumber(pCON->order.ulSegTotalTime[3]));          //31 谷充电时长
     
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartTime, cJSON_CreateNumber(pCON->order.tStartTime));                             //32 充电开始时间
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime, cJSON_CreateNumber(pCON->order.tStopTime - pCON->order.tStartTime));     //33 充电持续时间

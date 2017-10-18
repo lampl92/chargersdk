@@ -68,7 +68,6 @@ RFIDDev_t *RFIDDevCreate(void)
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
     pRFID->state = STATE_RFID_NOID;
 
-    OrderCreate(&(pRFID->order));
     OrderInit(&(pRFID->order));
 
     return pRFID;

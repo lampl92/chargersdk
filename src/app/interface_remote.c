@@ -827,10 +827,10 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         //pbuff[4] 尖时间段个数
         ucOffset = 4;
         //尖
-        tmpSegTime.ucSegCont = pbuff[ucOffset++];
-        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
+        tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
+        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
         //pbuff[5...SegCont]
-        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
@@ -838,9 +838,9 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
         //峰
-        tmpSegTime.ucSegCont = pbuff[ucOffset++];
-        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
-        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
+        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
@@ -848,9 +848,9 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
         //平
-        tmpSegTime.ucSegCont = pbuff[ucOffset++];
-        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
-        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
+        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
@@ -858,9 +858,9 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
         }
         //谷
-        tmpSegTime.ucSegCont = pbuff[ucOffset++];
-        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucSegCont));
-        for(i = 0; i < tmpSegTime.ucSegCont; i++)
+        tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
+        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
