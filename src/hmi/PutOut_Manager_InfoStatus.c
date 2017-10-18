@@ -434,7 +434,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         for(x = 0;x < STATUE_LINE;x++)
         {
-            TEXT_SetFont(_aahText[x][0], &XBF19_Font);
+            TEXT_SetFont(_aahText[x][0], &SIF16_Font);
             TEXT_SetTextColor(_aahText[x][0], GUI_BLACK);
         }
 
@@ -460,7 +460,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 EDIT_SetText(_aahEdit[y][x],"无效");
                 EDIT_SetTextAlign(_aahEdit[y][x], GUI_TA_HCENTER | GUI_TA_VCENTER);
-                EDIT_SetFont(_aahEdit[y][x], &XBF19_Font);
+                EDIT_SetFont(_aahEdit[y][x], &SIF16_Font);
             }
         }
         WM_SetStayOnTop(hWindow,1);
@@ -486,21 +486,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"信息查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"信息查询");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_PRESSED,GUI_RED);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"模拟量");
+                    &SIF24_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"模拟量");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_RED,"状态量");
+                    &SIF24_Font,BUTTON_CI_UNPRESSED,GUI_BLUE,BUTTON_CI_UNPRESSED,GUI_RED,"状态量");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),BUTTON_CI_PRESSED,GUI_RED);
         break;

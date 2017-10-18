@@ -257,7 +257,7 @@ void changecase(u8 change_flag,BUTTON_DATA *buttondata)
 			if(i==19) continue;
 			NumToStr=(char)((int)*(buttondata[i].acLabel)+0x20);
             sprintf(buffer,"%c",NumToStr);              //转换为字符
-			BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&XBF24_Font);
+			BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&SIF24_Font);
 			BUTTON_SetText(keypad_dev.EngButton_Handle[i],buffer);
 			BUTTON_SetFocussable(keypad_dev.EngButton_Handle[i], 0);
         }
@@ -268,7 +268,7 @@ void changecase(u8 change_flag,BUTTON_DATA *buttondata)
 		for (i = 0; i < 27; i++)
 		{
 			if(i==19) continue;
-			BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&XBF24_Font);
+			BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&SIF24_Font);
 			BUTTON_SetText(keypad_dev.EngButton_Handle[i], buttondata[i].acLabel);
 			BUTTON_SetFocussable(keypad_dev.EngButton_Handle[i], 0);
 		}
@@ -288,7 +288,7 @@ void drawenglish_pad(WM_HWIN hWin)
 		//创建按钮
 		keypad_dev.EngButton_Handle[i] = BUTTON_CreateEx(_aEngButtonData[i].xPos, _aEngButtonData[i].yPos, _aEngButtonData[i].xSize, _aEngButtonData[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
-		BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&XBF24_Font);
+		BUTTON_SetFont(keypad_dev.EngButton_Handle[i],&SIF24_Font);
         BUTTON_SetText(keypad_dev.EngButton_Handle[i], _aEngButtonData[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.EngButton_Handle[i], 0);
         BUTTON_SetSkin(keypad_dev.EngButton_Handle[i], _DrawSkinFlex_BUTTON);
@@ -306,7 +306,7 @@ void drawnumber_pad(WM_HWIN hWin)
 		//创建按钮
 		keypad_dev.NumButton_Handle[i] = BUTTON_CreateEx(_aNumButtonData[i].xPos, _aNumButtonData[i].yPos, _aNumButtonData[i].xSize, _aNumButtonData[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
-		BUTTON_SetFont(keypad_dev.NumButton_Handle[i],&XBF24_Font);
+		BUTTON_SetFont(keypad_dev.NumButton_Handle[i],&SIF24_Font);
 		BUTTON_SetText(keypad_dev.NumButton_Handle[i], _aNumButtonData[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.NumButton_Handle[i], 0);
         BUTTON_SetSkin(keypad_dev.NumButton_Handle[i], _DrawSkinFlex_BUTTON);
@@ -324,7 +324,7 @@ void drawsign_pad(WM_HWIN hWin)
 		keypad_dev.SignButton_Handle[i] = BUTTON_CreateEx(_aSinButtonData[keypad_dev.signpad_flag][i].xPos, _aSinButtonData[keypad_dev.signpad_flag][i].yPos,
 											_aSinButtonData[keypad_dev.signpad_flag][i].xSize,_aSinButtonData[keypad_dev.signpad_flag][i].ySize,
 											hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
-		BUTTON_SetFont(keypad_dev.SignButton_Handle[i],&XBF24_Font);
+		BUTTON_SetFont(keypad_dev.SignButton_Handle[i],&SIF24_Font);
 		BUTTON_SetText(keypad_dev.SignButton_Handle[i],_aSinButtonData[keypad_dev.signpad_flag][i].ButString);
 		BUTTON_SetFocussable(keypad_dev.SignButton_Handle[i], 0);
         BUTTON_SetSkin(keypad_dev.SignButton_Handle[i], _DrawSkinFlex_BUTTON);
@@ -341,7 +341,7 @@ void drawchinese1_pad(WM_HWIN hWin)
 		//创建按钮
 		keypad_dev.ChineseButton_Handle[i] = BUTTON_CreateEx(_aChineseButtonData1[i].xPos, _aChineseButtonData1[i].yPos, _aChineseButtonData1[i].xSize, _aChineseButtonData1[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i);
-		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i],&XBF24_Font);
+		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i],&SIF24_Font);
 		BUTTON_SetText(keypad_dev.ChineseButton_Handle[i], _aChineseButtonData1[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.ChineseButton_Handle[i], 0);
 		BUTTON_SetSkin(keypad_dev.ChineseButton_Handle[i], _DrawSkinFlex_BUTTON);
@@ -357,7 +357,7 @@ void drawchinese2_pad(WM_HWIN hWin)
 		//创建按钮
 		keypad_dev.ChineseButton_Handle[i+12] = BUTTON_CreateEx(_aChineseButtonData2[i].xPos, _aChineseButtonData2[i].yPos, _aChineseButtonData2[i].xSize, _aChineseButtonData2[i].ySize,
                              hWin, WM_CF_SHOW | WM_CF_HASTRANS, 0, ID_BUTTON + i+12);
-		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i+12],&XBF24_Font);
+		BUTTON_SetFont(keypad_dev.ChineseButton_Handle[i+12],&SIF24_Font);
 		BUTTON_SetText(keypad_dev.ChineseButton_Handle[i+12], _aChineseButtonData2[i].ButString);
 		BUTTON_SetFocussable(keypad_dev.ChineseButton_Handle[i+12], 0);
 		BUTTON_SetSkin(keypad_dev.ChineseButton_Handle[i+12], _DrawSkinFlex_BUTTON);
@@ -843,7 +843,7 @@ void keypad_draw_hbtn(WM_HWIN *handle)
     u8 i;
     for(i=0;i<6;i++)
     {
-        BUTTON_SetFont(handle[13+i],&XBF24_Font);
+        BUTTON_SetFont(handle[13+i],&SIF24_Font);
         BUTTON_SetText(handle[13+i],(char*)keypad_dev.butname[i]);
     }
 
@@ -964,7 +964,7 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
             {
                 for(i=0;i<3;i++)
                 {
-                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&XBF24_Font);
+                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
                     if((i+3*(keypad_dev.pynowpage))>(keypad_dev.result_num-1))
                     {
                         BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
@@ -981,7 +981,7 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
             {
                 for(i=0;i<3;i++)
                 {
-                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&XBF24_Font);
+                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
                     BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
                 }
 
@@ -1268,25 +1268,25 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 	//创建FRAME窗口
 	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
 	FRAMEWIN_SetTextColor(hFrame, GUI_RED);
-	FRAMEWIN_SetFont(hFrame, &XBF24_Font);
+	FRAMEWIN_SetFont(hFrame, &SIF24_Font);
 	FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
 
 	//创建一个multi edit(多行文本小工具)小工具
 	hMulti = MULTIEDIT_CreateEx(170, 10, 400, 100, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
 	MULTIEDIT_EnableBlink(hMulti,500,1);//开启光标,周期500ms
     MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
-	MULTIEDIT_SetFont(hMulti, &XBF24_Font);
+	MULTIEDIT_SetFont(hMulti, &SIF24_Font);
 	WM_SetFocus(hMulti);
 
     _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
-    BUTTON_SetFont(_aahButtonOk, &XBF24_Font);
+    BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
     BUTTON_SetText(_aahButtonOk, "确定");
 
     _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
-    BUTTON_SetFont(_aahButtonCancel, &XBF24_Font);
+    BUTTON_SetFont(_aahButtonCancel, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_BLACK);
@@ -1300,17 +1300,17 @@ void Keypad_GetValue(uint8_t optios,char *varname)
     {
     case LOGIN_PASSWD:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
-        TEXT_SetFont(_aahEditVar, &XBF24_Font);
+        TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 
     case SYSSET_VALUE:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"交流桩序列号");
-        TEXT_SetFont(_aahEditVar, &XBF19_Font);
+        TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"交流桩序列号");
-        TEXT_SetFont(_aahEditEg, &XBF16_Font);
+        TEXT_SetFont(_aahEditEg, &SIF16_Font);
         TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
         TEXT_SetText(_aahEditEg,"eg,1122334455667788");
 //        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
@@ -1357,25 +1357,25 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
 	//创建FRAME窗口
 	hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
 	FRAMEWIN_SetTextColor(hFrame, GUI_RED);
-	FRAMEWIN_SetFont(hFrame, &XBF24_Font);
+	FRAMEWIN_SetFont(hFrame, &SIF24_Font);
 	FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
 
 	//创建一个multi edit(多行文本小工具)小工具
 	hMulti = MULTIEDIT_CreateEx(170, 10, 400, 100, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
 	MULTIEDIT_EnableBlink(hMulti,500,1);//开启光标,周期500ms
     MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
-	MULTIEDIT_SetFont(hMulti, &XBF24_Font);
+	MULTIEDIT_SetFont(hMulti, &SIF24_Font);
 	WM_SetFocus(hMulti);
 
     _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
-    BUTTON_SetFont(_aahButtonOk, &XBF24_Font);
+    BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
     BUTTON_SetText(_aahButtonOk, "确定");
 
     _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
-    BUTTON_SetFont(_aahButtonCancel, &XBF24_Font);
+    BUTTON_SetFont(_aahButtonCancel, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_BLACK);
@@ -1389,17 +1389,17 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
     {
     case LOGIN_PASSWD:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
-        TEXT_SetFont(_aahEditVar, &XBF24_Font);
+        TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 
     case SYSSET_VALUE:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
-        TEXT_SetFont(_aahEditVar, &XBF19_Font);
+        TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
-        TEXT_SetFont(_aahEditEg, &XBF16_Font);
+        TEXT_SetFont(_aahEditEg, &SIF16_Font);
         TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
         TEXT_SetText(_aahEditEg,eg_p);
 //        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");

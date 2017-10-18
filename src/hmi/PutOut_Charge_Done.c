@@ -246,8 +246,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"当前电费");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"消费总额");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"元/单");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13),&SIF24_Font,GUI_BLACK,"元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13),&SIF24_Font,GUI_BLACK,"元");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14),&SIF24_Font,GUI_BLACK,"元");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15),&SIF24_Font,GUI_BLACK,"小时");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&SIF24_Font,GUI_BLACK,"分");

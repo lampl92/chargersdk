@@ -394,29 +394,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Framewin'
         //
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF16_Font,GUI_BLACK,"起始");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF16_Font,GUI_BLACK,"终止");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF16_Font,GUI_BLACK,"起始");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF16_Font,GUI_BLACK,"终止");
         //
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"历史查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"历史查询");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),BUTTON_CI_PRESSED,GUI_RED);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF19_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
+                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF19_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
+                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
         //
         // Initialization of 'Listwheel'
         //
@@ -488,7 +488,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //        MULTIEDIT_SetAutoScrollH(hItem,1);
 //        MULTIEDIT_SetAutoScrollV(hItem,1);
 //        MULTIEDIT_SetInsertMode(hItem, 1);
-//        MULTIEDIT_SetFont(hItem, &XBF24_Font);
+//        MULTIEDIT_SetFont(hItem, &SIF24_Font);
 //        MULTIEDIT_SetCursorOffset(hItem,0);
 //        MULTIEDIT_EnableBlink(hItem,0,0);
 //        //memset(_alarmLog,'\0',strlen(_alarmLog));
@@ -501,7 +501,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
 			/* 设置列表控件中header控件的所显示文本的字体 */
 			hHeader = LISTVIEW_GetHeader(hItem);
-			HEADER_SetFont(hHeader, &XBF16_Font);
+			HEADER_SetFont(hHeader, &SIF16_Font);
 //            LISTVIEW_SetAutoScrollH(hItem,1);
 //            LISTVIEW_SetAutoScrollV(hItem,1);
 
@@ -516,7 +516,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
             //SCROLLBAR_SetDefaultWidth(15);
 			/* 设置列表控件选项中所显示文本的字体 */
-			LISTVIEW_SetFont(hItem, &XBF16_Font);
+			LISTVIEW_SetFont(hItem, &SIF16_Font);
 			/* 设置列表控件表格可见 */
 			LISTVIEW_SetGridVis(hItem, 1);
         break;

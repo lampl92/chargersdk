@@ -138,11 +138,11 @@ static void Data_Process(WM_MESSAGE *pMsg)
 void PaintQR(WM_MESSAGE * pMsg)
 {
     WM_HWIN hWin = pMsg->hWin;
-    GUI_SetColor(0x000000);
-    GUI_FillRect(125, 59, 274, 68);
-    GUI_SetColor(0x0000ff);
-    GUI_FillRect(321, 59, 335, 208);
-    GUI_QR_Draw(qr_hmem,70,170);
+//    GUI_SetColor(0x000000);
+//    GUI_FillRect(125, 59, 274, 68);
+//    GUI_SetColor(0x0000ff);
+//    GUI_FillRect(321, 59, 335, 208);
+    GUI_QR_Draw(qr_hmem,120,170);
     GUI_DrawLine(100,100,100,200);
 }
 /** @brief
@@ -189,7 +189,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 创建framewin */
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         /**< text和edit的初始化 */
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF16_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, " ");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, " ");
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
@@ -212,11 +212,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch(NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                Buzzer_control(1);
                 //WM_DeleteWindow(pMsg->hWin);
                 _deleteWin(pMsg->hWin);
                 Keypad_GetValue(LOGIN_PASSWD," ");
                 break;
             case WM_NOTIFICATION_RELEASED:
+                Buzzer_control(0);
                 //WM_DeleteWindow(pMsg->hWin);
                 _deleteWin(pMsg->hWin);
                 Keypad_GetValue(LOGIN_PASSWD," ");
