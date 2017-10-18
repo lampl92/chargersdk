@@ -372,12 +372,17 @@ void Err_Analy(WM_HWIN hWin)
 void Led_Show()
 {
     CON_t *pCON;
+    uint8_t ledSignalPool;
+    uint8_t led_signal;
+    static uint8_t led_signalold;
 
     pCON = CONGetHandle(0);
+
+    led_signal = 0;
     /**< 置位说明有故障存在闪烁红灯 */
     if(bittest(winCreateFlag,1))
     {
-        led_ctrl(1,red,flicker);
+        bitset(led_signal,0);
     }
     else
     {
@@ -385,11 +390,11 @@ void Led_Show()
         {
             case STATE_CON_IDLE:
                 /**< 空闲状态 */
-                led_ctrl(1,green,keep_on);
+                bitset(led_signal,1);
             break;
             case STATE_CON_CHARGING:
                 /**< 充电过程中 */
-                led_ctrl(1,green,breath);
+                bitset(led_signal,2);
             break;
             default:
                 if(pCON->status.xPlugState == PLUG)
@@ -398,23 +403,53 @@ void Led_Show()
                         ||pCON->status.xCPState == CP_6V)
                     {
                         /**< 等待车端插枪 */
-                        led_ctrl(1,green,flicker);
+                        bitset(led_signal,3);
                     }
                     else if(pCON->status.xCPState == CP_9V_PWM
                         ||pCON->status.xCPState == CP_9V)
                     {
                         /**< S1未闭合 */
-                        led_ctrl(1,blue,flicker);
+                        bitset(led_signal,4);
                     }
                 }
-                /// TODO (zshare#1#): 添加桩端等待插枪蓝灯闪烁
                 else
                 {
                     /**< 未知状态 */
-                    led_ctrl(1,green,keep_on);
+                    bitset(led_signal,5);
                 }
             break;
         }
+    }
+
+    ledSignalPool = led_signalold ^ led_signal;
+    if(ledSignalPool != 0)
+    {
+        if(bitset(ledSignalPool,0))
+        {
+           led_ctrl(1,red,flicker);
+        }
+        if(bitset(ledSignalPool,1))
+        {
+            led_ctrl(1,green,keep_on);
+        }
+        if(bitset(ledSignalPool,2))
+        {
+            led_ctrl(1,green,breath);
+        }
+        if(bitset(ledSignalPool,3))
+        {
+            led_ctrl(1,green,flicker);
+        }
+        if(bitset(ledSignalPool,4))
+        {
+            led_ctrl(1,blue,flicker);
+        }
+        if(bitset(ledSignalPool,5))
+        {
+           led_ctrl(1,green,keep_on);
+        }
+
+        led_signalold = led_signal;
     }
 }
 /** @brief
