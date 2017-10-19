@@ -13,7 +13,6 @@
 #include "bsp.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "bsp_uart_queue.h"
 
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
