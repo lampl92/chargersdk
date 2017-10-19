@@ -182,9 +182,6 @@
 #ifndef __FRACT_MAX__
 #define __FRACT_MAX__ 0X7FFFP-15R
 #endif
-#ifndef DEBUG_INTERFACE_DATA
-#define DEBUG_INTERFACE_DATA 1
-#endif
 #ifndef __thumb2__
 #define __thumb2__ 1
 #endif
@@ -331,9 +328,6 @@
 #endif
 #ifndef __ULFRACT_MIN__
 #define __ULFRACT_MIN__ 0.0ULR
-#endif
-#ifndef DEBUG_DATA
-#define DEBUG_DATA 1
 #endif
 #ifndef __ARM_PCS_VFP
 #define __ARM_PCS_VFP 1
@@ -487,9 +481,6 @@
 #ifndef __ULACCUM_MAX__
 #define __ULACCUM_MAX__ 0XFFFFFFFFFFFFFFFFP-32ULK
 #endif
-#ifndef DEBUG_DIAG
-#define DEBUG_DIAG 1
-#endif
 #ifndef __cpp_rvalue_reference
 #define __cpp_rvalue_reference 200610
 #endif
@@ -528,9 +519,6 @@
 #endif
 #ifndef __UFRACT_IBIT__
 #define __UFRACT_IBIT__ 0
-#endif
-#ifndef DEBUG_MONITOR
-#define DEBUG_MONITOR 1
 #endif
 #ifndef __cpp_lambdas
 #define __cpp_lambdas 200907
@@ -672,9 +660,6 @@
 #endif
 #ifndef __INT16_MAX__
 #define __INT16_MAX__ 0x7fff
-#endif
-#ifndef DEBUG_INIT
-#define DEBUG_INIT 1
 #endif
 #ifndef __SIZE_TYPE__
 #define __SIZE_TYPE__ unsigned int
@@ -1248,8 +1233,6 @@
 //../../../src/middlewares/STemWin/BMP
 //../../../src/middlewares/STemWin/XBF
 //../../../src/middlewares/tiny-AES128-C
-//../../../src/middlewares/LittleD/src
-//../../../src/middlewares/LittleD/src/include
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include

@@ -5,7 +5,7 @@
 
 static QUERESULT isFull(Queue *q)
 {
-    if(q->front == (q->rear + 1) % q->length) //ÅÐÂú
+    if(q->front == (q->rear + 1) % q->length) //åˆ¤æ»¡
     {
         return QUE_TRUE;
     }
@@ -21,12 +21,12 @@ static QUERESULT EnElem(Queue *q, QUEUETYPE elem)
         return QUE_FAIL;
     }
     q->elem[q->rear] = elem;
-    q->rear = (q->rear + 1) % q->length; //²åÈë
+    q->rear = (q->rear + 1) % q->length; //æ’å…¥
     return QUE_OK;
 }
 static QUERESULT isEmpty(Queue *q)
 {
-    if(q->front == q->rear) //ÅÐ¿Õ
+    if(q->front == q->rear) //åˆ¤ç©º
     {
         return QUE_TRUE;
     }

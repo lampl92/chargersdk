@@ -14,6 +14,5 @@ void create_bmppicture(uint8_t *filename,int x0,int y0,int Xsize,int Ysize);
 void bmpdisplay(uint8_t *ppath);
 uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin);
 uint8_t readBackGroundNOFREE(char *BMPFileName);
-uint8_t readEncodeNOFREE(char *BMPFileName);
 #endif
 

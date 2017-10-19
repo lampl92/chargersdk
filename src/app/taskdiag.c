@@ -32,7 +32,7 @@ void vTaskEVSEDiag(void *pvParameters)
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef DEBUG_DIAG
+#ifdef EVSE_DEBUG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
 #endif
@@ -96,13 +96,6 @@ void vTaskEVSEDiag(void *pvParameters)
                     pCON->status.SetLoadPercent(pCON, 70);
                 }
             }
-//            else
-//            {
-//                if (pCON->state == STATE_CON_CHARGING)
-//                {
-//                    pCON->status.SetLoadPercent(pCON, 100);
-//                }
-//            }
         }
         /* end of 处理系统报警 */
 
@@ -138,22 +131,13 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagVolt, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagVolt) == defEventBitDiagVolt)
-        {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                DiagVoltageError(pCON);
-            }
-        }
-
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
         {
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
+                DiagVoltageError(pCON);
                 DiagCurrentError(pCON);
                 DiagFreqError(pCON);
             }
@@ -169,10 +153,6 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
         /* end of 判断状态 */
-
-#if DEBUG_DIAG
-        //printf_safe("%s\n", TASKNAME_EVSEDiag);
-#endif
 #endif
         vTaskDelay(10);
     }

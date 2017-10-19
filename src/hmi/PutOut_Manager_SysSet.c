@@ -502,7 +502,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             for(y = 0;y < _SYSSTATUE_CAL;y++)
             {
-                TEXT_SetFont(_aahText[x][y], &XBF19_Font);
+                TEXT_SetFont(_aahText[x][y], &SIF16_Font);
                 TEXT_SetTextColor(_aahText[x][y], GUI_BLACK);
             }
         }
@@ -512,7 +512,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             for (x = 0; x < _SYSEDIT_MAX_X; x++)
             {
                 EDIT_SetTextAlign(_aahEdit[y][x], GUI_TA_HCENTER | GUI_TA_VCENTER);
-                EDIT_SetFont(_aahEdit[y][x], &XBF19_Font);
+                EDIT_SetFont(_aahEdit[y][x], &SIF16_Font);
             }
         }
 
@@ -521,18 +521,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"系统配置");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"系统配置");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),BUTTON_CI_PRESSED,GUI_RED);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

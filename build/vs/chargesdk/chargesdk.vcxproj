@@ -38,8 +38,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/middlewares/LittleD/src;../../../src/middlewares/LittleD/src/include;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(ProjectDir)\stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -50,8 +50,8 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/middlewares/LittleD/src;../../../src/middlewares/LittleD/src/include;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(ProjectDir)\stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
@@ -88,6 +88,7 @@
     <ClCompile Include="..\..\..\src\app\interface_monitor.c" />
     <ClCompile Include="..\..\..\src\app\interface_remote.c" />
     <ClCompile Include="..\..\..\src\app\interface_rfid.c" />
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
@@ -109,13 +110,13 @@
     <ClCompile Include="..\..\..\src\cli\cli_aes.c" />
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
     <ClCompile Include="..\..\..\src\cli\cli_crc.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_database.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
     <ClCompile Include="..\..\..\src\cli\cli_fatfs.c" />
     <ClCompile Include="..\..\..\src\cli\cli_gprs.c" />
     <ClCompile Include="..\..\..\src\cli\cli_json.c" />
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
@@ -125,7 +126,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart_queue.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
@@ -184,15 +184,6 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_SelAOrB.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\bitstream.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mask.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mmask.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mqrspec.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrencode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrspec.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\QR_Encode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\rscode.c" />
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\split.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
@@ -212,15 +203,16 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_Lin_Template.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\aes.c" />
+    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c" />
     <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\base64.c" />
+    <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\croutine.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\event_groups.c" />
@@ -251,6 +243,7 @@
     <ClInclude Include="..\..\..\src\app\interface_monitor.h" />
     <ClInclude Include="..\..\..\src\app\interface_remote.h" />
     <ClInclude Include="..\..\..\src\app\interface_rfid.h" />
+    <ClInclude Include="..\..\..\src\app\libEcharge\ech_encrypt.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_globals.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol_proc.h" />
@@ -573,6 +566,7 @@
     <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM_GUI.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM_Intern.h" />
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.h" />
     <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\aes.h" />
     <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.h" />
@@ -888,7 +882,7 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC_ot.a" />
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

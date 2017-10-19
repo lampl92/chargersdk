@@ -11,7 +11,6 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "evse_globals.h"
-#include "task_tcp_client.h"
 #include "taskcreate.h"
 #include "modem.h"
 //#include "lwip_init.h"

@@ -34,9 +34,11 @@ int printf_safe(const char *format, ...)
                     v_args);
     va_end(v_args);
 
-    xSemaphoreTake(xprintfMutex, portMAX_DELAY);
-    xprintf("%s", buf_str);
-    xSemaphoreGive(xprintfMutex);
+    if (xSemaphoreTake(xprintfMutex, 10) == pdPASS)
+    {
+        xprintf("%s", buf_str);
+        xSemaphoreGive(xprintfMutex);
+    }
 }
 
 
@@ -75,15 +77,15 @@ int _write (int fd, char *ptr, int len)
 }
 #else
 /**
-  * @brief  ÖØ¶¨Ïò±ê×¼¿âº¯Êıprintf¶ÔÓ¦µÄ»ù´¡¿âº¯Êı.
+  * @brief  é‡å®šå‘æ ‡å‡†åº“å‡½æ•°printfå¯¹åº”çš„åŸºç¡€åº“å‡½æ•°.
   * @param  None
   * @retval None
   */
 int fputc(int ch, FILE *f)
 {
     /*
-    ÓÉÓÚWindowsÖĞÖÕ¶Ë»»ĞĞÊÇ"\r\n", ¶øtinyshÖĞÈ«²¿ÓÃµÄÊÇ'\n'½áÎ²,ÎŞ·¨Íê³É»»ĞĞ,
-    ÔÚ´Ë½øĞĞ¼æÈİ
+    ç”±äºWindowsä¸­ç»ˆç«¯æ¢è¡Œæ˜¯"\r\n", è€Œtinyshä¸­å…¨éƒ¨ç”¨çš„æ˜¯'\n'ç»“å°¾,æ— æ³•å®Œæˆæ¢è¡Œ,
+    åœ¨æ­¤è¿›è¡Œå…¼å®¹
     */
 
     myputc(ch);

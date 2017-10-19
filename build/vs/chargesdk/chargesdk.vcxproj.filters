@@ -147,20 +147,11 @@
     <Filter Include="Header files\hmi\lcd">
       <UniqueIdentifier>{ac709bf5-ddf0-4559-80bd-f92ccdbef4d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\hmi\qrencode">
-      <UniqueIdentifier>{87b9b6ab-e4eb-4bb1-999a-13f5af019dcb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\hmi\qrencode">
       <UniqueIdentifier>{a1f00d80-fee7-499c-a0a6-3f74fd4a362b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\hmi\qrencode\inc">
-      <UniqueIdentifier>{8a475b41-978c-4078-9ed2-2de9352ee970}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\hmi\qrencode\inc">
       <UniqueIdentifier>{2ab26546-0edc-4829-954e-187a5e9c8994}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\hmi\qrencode\src">
-      <UniqueIdentifier>{52de8db2-d0f9-4b07-b328-eae9dcfe1617}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\hmi\qrencode\src">
       <UniqueIdentifier>{4b01defc-33f3-406b-87fa-84cdaeedd50b}</UniqueIdentifier>
@@ -774,6 +765,12 @@
     <Filter Include="Header files\middlewares\STemWin\Lib">
       <UniqueIdentifier>{7fa10811-51f1-4555-ba15-53ddf9c39423}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\STemWin\SIF">
+      <UniqueIdentifier>{46ad615a-b3d8-4bcc-994e-5bdce8505a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\SIF">
+      <UniqueIdentifier>{3668b843-55e0-4405-905b-fe35d945e264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -890,9 +887,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_database.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
@@ -936,9 +930,6 @@
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart_queue.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
@@ -1154,9 +1145,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_database.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1200,9 +1188,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart_queue.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
@@ -1376,33 +1361,6 @@
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c">
       <Filter>Source files\hmi\lcd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\bitstream.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mask.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mmask.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\mqrspec.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrencode.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\qrspec.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\QR_Encode.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\rscode.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\qrencode\src\split.c">
-      <Filter>Source files\hmi\qrencode\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c">
       <Filter>Source files\middlewares\cJSON</Filter>
     </ClCompile>
@@ -1460,9 +1418,6 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
       <Filter>Source files\middlewares\STemWin\XBF</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\aes.c">
-      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c">
       <Filter>Source files\middlewares\tiny-AES128-C</Filter>
     </ClCompile>
@@ -1480,9 +1435,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\base64.c">
-      <Filter>Source files\net\mbedTLS\library</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c">
       <Filter>Source files\net\mbedTLS\library</Filter>
@@ -1528,6 +1480,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\log_evse.c">
       <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c">
+      <Filter>Source files\net\mbedTLS\library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c">
+      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
+      <Filter>Source files\app\libEcharge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c">
+      <Filter>Source files\middlewares\STemWin\SIF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3946,9 +3913,15 @@
     <ClInclude Include="..\..\..\src\app\evse_define.h">
       <Filter>Header files\app</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\libEcharge\ech_encrypt.h">
+      <Filter>Header files\app\libEcharge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h">
+      <Filter>Header files\middlewares\STemWin\SIF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC_ot.a">
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a">
       <Filter>Source files\middlewares\STemWin\Lib</Filter>
     </Library>
   </ItemGroup>

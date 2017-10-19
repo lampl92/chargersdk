@@ -682,7 +682,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     {
 #ifdef DEBUG_DIAG_DUMMY
         tmpPower = pCON->status.dChargingPower;
-        tmpPower += 0.1;
+        tmpPower += 0.0001;
 #else
         tmpPower = Get_Electricity_meter_massage_energy(ucCONID + 1);
 #endif

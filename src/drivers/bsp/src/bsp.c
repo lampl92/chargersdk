@@ -130,9 +130,11 @@ void bsp_Init(void)
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
 
+#ifndef EVSE_DEBUG
     LCD_Init();
     TP_Init();
-#ifndef DEBUG_INIT
+#endif
+#ifndef EVSE_DEBUG
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();

@@ -29,14 +29,15 @@ void cli_init(void)
 //    tinysh_add_command(&cli_mount_cmd);
 //    tinysh_add_command(&cli_umount_cmd);
     tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_xmodem_cmd);
+    
 
     /************系统测试****************/
 //    tinysh_add_command(&cli_fatfs_cmd);
 //    tinysh_add_command(&cli_testsdram_cmd);
 //    tinysh_add_command(&cli_parseJson_cmd);
 //    tinysh_add_command(&cli_makeJson_cmd);
-//    tinysh_add_command(&cli_aestest_cmd);
-//    tinysh_add_command(&cli_testdb_cmd);
+    tinysh_add_command(&cli_aestest_cmd);
 //    tinysh_add_command(&cli_crctest_cmd);
     /************电桩信息****************/
     tinysh_add_command(&cli_evseinfo_cmd);
@@ -62,22 +63,20 @@ void cli_init(void)
     tinysh_add_command(&atoxi_cmd);
 
 }
-extern Queue *pCliRecvQue;
+
 void cli_main(void)
 {
     uint8_t ch[1];
     uint32_t l;
-    int8_t res;
     cli_init();
     while(1)
     {
-        res = readRecvQueEx(pCliRecvQue, ch, 1, &l, 1);
-//        res = readRecvQue(pCliRecvQue, &ch, 1);
-        if(res == 1)
+        l = uart_read(UART_PORT_CLI, ch, 1, 1);
+        if(l == 1)
         {
             tinysh_char_in(ch[0]);
         }
-        vTaskDelay(100);
+        vTaskDelay(200);
     }
 }
 

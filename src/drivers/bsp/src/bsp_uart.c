@@ -20,15 +20,17 @@ UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;
 UART_HandleTypeDef WIFI_UARTx_Handler;
 
-Queue *pCliRecvQue = NULL;
-Queue *pRfidRecvQue = NULL;
-Queue *pGprsRecvQue = NULL;
-Queue *pWifiRecvQue = NULL;
+static Queue *pCliRecvQue = NULL;
+static Queue *pRfidRecvQue = NULL;
+static Queue *pGprsRecvQue = NULL;
+static Queue *pWifiRecvQue = NULL;
 
 static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 static volatile uint8_t WIFI_RX_Buffer[1];
+
+static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
 
 void gprs_uart_putc(uint8_t ch)
 {
@@ -73,13 +75,14 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     if(hal_res == HAL_BUSY)
     {
         printf_safe("HAL busy!!\n");
-        while(1);
     }
+    return 0;
 }
 
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms)
 {
     Queue *pRecvQue;
+    uint8_t ch;
     uint32_t rl = 0;//read len
     switch(uartport)
     {
@@ -98,121 +101,45 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
     default:
         break;
     }
-    readRecvQueEx(pRecvQue, data, len, &rl, timeout_ms);
-    return rl;
-}
 
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
-{
-    if (xSemaphoreTake(q->xHandleMutexQue, 100) == pdPASS)
+    while (readRecvQue(pRecvQue, &ch, timeout_ms) == 1)
     {
-        while (timeout_ms)
+        data[rl] = ch;
+        rl++;
+        if (len != 0)
         {
-            if ((q->isEmpty(q)) != QUE_TRUE)
-            {
-                q->DeElem(q, ch);
-                xSemaphoreGive(q->xHandleMutexQue);
-                return 1;
-            }
-            vTaskDelay(1);
-            timeout_ms--;
-        }
-        xSemaphoreGive(q->xHandleMutexQue); 
-    }
-    
-    return 0;
-}
-
-uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, uint32_t *puiRecvdLen)
-{
-    uint8_t ch;
-    uint32_t i;
-
-    ch = 0;
-    i = 0;
-    xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(q->DeElem(q, &ch) == QUE_OK)
-    {
-        if(ch == head)
-        {
-            do
-            {
-                pbuff[i] = ch;
-                i++;
-                if(q->DeElem(q, &ch) != QUE_OK)
-                {
-                    *puiRecvdLen = 0;
-                    xSemaphoreGive(q->xHandleMutexQue);
-                    return 0;
-                }
-                if(ch == end && i != 1)
-                {
-                    pbuff[i] = ch;
-                    i++;
-                }
-            }
-            while(ch != end || i == 1);
-
-            *puiRecvdLen = i;
-            xSemaphoreGive(q->xHandleMutexQue);
-            return 1;
-        }
-    }
-    xSemaphoreGive(q->xHandleMutexQue);
-    return 0;
-}
-/** @brief
- *
- * @param pbuff uint8_t*
- * @param ulRecvLen uint32_t 取出长度,0时取出所有数据
- * @param puiRecvdLen uint32_t* 返回长度
- * @return uint8_t 1 有数据; 0 无数据
- *
- */
-uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen, uint32_t timeout_ms)
-{
-    uint8_t ch;
-    uint32_t i;
-
-    ch = 0;
-    i = 0;
-
-    while(readRecvQue(q, &ch, timeout_ms) == 1)
-    {
-        pbuff[i] = ch;
-        i++;
-        if(ulRecvLen != 0)
-        {
-            if(i == ulRecvLen)
+            if (rl == len)
             {
                 break;
             }
         }
     }
-    if(i > 0)
-    {
-        *puiRecvdLen = i;
-        return 1;
-    }
-    else
-    {
-        *puiRecvdLen = i;
-        return 0;
-    }
+
+    return rl;
 }
 
-uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len)
+static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
-    uint8_t *p;
-    p = strstr(q->elem, str);
-    if(p != NULL)
+    while (timeout_ms)
     {
-        return 1;
+        if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
+        {
+            if ((q->isEmpty(q)) == QUE_FALSE)
+            {
+                q->DeElem(q, ch);
+                xSemaphoreGive(q->xHandleMutexQue);
+                return 1;
+            }
+            else
+            {
+                xSemaphoreGive(q->xHandleMutexQue);
+                vTaskDelay(1);
+                timeout_ms--;
+            }
+        }
     }
-    else
-    {
-        return 0;
-    }
+    
+    return 0;
 }
 
 //mode 1 创建并初始化， 2，不创建，初始化
@@ -438,7 +365,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
-            //gdsl_queue_insert(queCLI, (void *)CLI_RX_Buffer);
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)

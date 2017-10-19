@@ -239,37 +239,37 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         //Initialization of 'Text'
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF36_Font,GUI_BLACK,"订单上传中。。。");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"充电时长");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"充入电量");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"当前服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"当前电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"消费总额");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&XBF24_Font,GUI_BLACK,"元/单");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13),&XBF24_Font,GUI_BLACK,"元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14),&XBF24_Font,GUI_BLACK,"元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15),&XBF24_Font,GUI_BLACK,"小时");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&XBF24_Font,GUI_BLACK,"分");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&XBF24_Font,GUI_BLACK,"秒");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&XBF24_Font,GUI_BLACK,"(10S)");
-//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&XBF24_Font,GUI_RED,"正在结费中...");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF36_Font,GUI_BLACK,"订单上传中。。。");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF24_Font,GUI_BLACK,"充电时长");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&SIF24_Font,GUI_BLACK,"充入电量");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&SIF24_Font,GUI_BLACK,"当前服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"当前电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"消费总额");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_13),&SIF24_Font,GUI_BLACK,"元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_14),&SIF24_Font,GUI_BLACK,"元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_15),&SIF24_Font,GUI_BLACK,"小时");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_16),&SIF24_Font,GUI_BLACK,"分");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_17),&SIF24_Font,GUI_BLACK,"秒");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_18),&SIF24_Font,GUI_BLACK,"(10S)");
+//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_19),&SIF24_Font,GUI_RED,"正在结费中...");
         //
         // Initialization of 'Edit'
         //
         pCON = CONGetHandle(0);
         memset(temp_buf,'\0',strlen(temp_buf));
         sprintf(temp_buf, "%.2lf",  (uint32_t)(pCON->order.dTotalPower * 100) / 100.0);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,temp_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
         sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalServFee * 100) / 100.0);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,temp_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
         sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalPowerFee * 100) / 100.0);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,temp_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
         sprintf(temp_buf, "%.2lf", ((uint32_t)(pCON->order.dTotalServFee * 100) + (uint32_t)(pCON->order.dTotalPowerFee * 100)) / 100.0);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,temp_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&SIF24_Font,temp_buf);
 
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                      defEventBitOrderMakeFinish,
@@ -284,16 +284,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
             memset(temp_buf,'\0',strlen(temp_buf));
             sprintf(temp_buf, "%02d", hour);
-            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,temp_buf);//小时
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&SIF24_Font,temp_buf);//小时
             memset(temp_buf,'\0',strlen(temp_buf));
             sprintf(temp_buf, "%02d", min);
-            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,temp_buf);//分
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&SIF24_Font,temp_buf);//分
             memset(temp_buf,'\0',strlen(temp_buf));
             sprintf(temp_buf, "%02d", sec);
-            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,temp_buf);//秒
+            Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&SIF24_Font,temp_buf);//秒
 
             Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_LEFT|GUI_TA_VCENTER,
-                        &XBF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
+                        &SIF24_Font,BUTTON_CI_DISABLED,GUI_BLUE,BUTTON_CI_DISABLED,GUI_BLUE,"退出");
             xEventGroupSetBits(xHandleEventHMI,defeventBitHMI_ChargeReqDispDoneOK);
             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
         }

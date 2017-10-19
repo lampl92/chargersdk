@@ -66,14 +66,12 @@ extern uint8_t strCSQ[10];
  */
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
-    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    //dispBackGroundNOFREE("system/background.bmp",0,40,pMsg->hWin);
-    //IMAGE_SetBMP(imageHandle, bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&SIF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号:");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF12_Font,GUI_RED,"信号:");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF12_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&SIF12_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
 }
 //void FrameWin_Init_test(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
@@ -99,10 +97,10 @@ void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t tex
 {
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     //FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&XBF14_Font,GUI_RED,"信号：强");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&XBF19_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&XBF14_Font,GUI_RED,"2017-02-28");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&XBF14_Font,GUI_RED,"14:00:00");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF12_Font,GUI_RED,"信号：强");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF12_Font,GUI_RED,"2017-02-28");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&SIF12_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
 }
 /** framewin初始化
@@ -119,7 +117,7 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
     WM_HWIN hWin = pMsg->hWin;
     uint8_t Date_buf[30];
     uint8_t Time_buf[30];
-    
+
     HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
     xsprintf((char *)Date_buf, "20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
     TEXT_SetText(WM_GetDialogItem(hWin, textid0), Date_buf);
@@ -140,12 +138,12 @@ void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1)
 void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 {
     EventBits_t uxBits;
-	
+
     memset(strCSQ,'\0',strlen(strCSQ));
     sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
     //uxBits = xEventGroupGetBits(xHandleEventTCP);
     //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
-    
+
     if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
     {
         strcat(strCSQ," 服务器未连接");
@@ -238,7 +236,7 @@ uint8_t _deleteWin(WM_HWIN hItem)
 {
 	if(bittest(winInitDone,0))
 	{
-		bitclr(winInitDone,0);	
+		bitclr(winInitDone,0);
 	}
     if(bittest(winCreateFlag,0))
     {
@@ -320,77 +318,6 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         Keypad_GetValue(LOGIN_PASSWD," ");
     }
 }
-/** 生成二维码数据
- *qrcode_data:需要生成二维码的字符串，p计算画笔的大小，x计算x坐标，y计算y坐标，
- *
- * @param
- * @return
- *Note:
- */
-void qrencode(uint8_t *qrcode_data,uint16_t *p,uint16_t *x,uint16_t *y)
-{
-	uint8_t i;
-
-	EncodeData((char *)qrcode_data);
-
-    LCD_Fill(130,170,130+m_nSymbleSize,170+m_nSymbleSize,WHITE);
-
-	for(i=0;i<10;i++)
-	{
-		if((m_nSymbleSize*i*2)>(130+m_nSymbleSize))	break;
-	}
-
-	*p=(i-1)*2;//点大小
-	if(m_nSymbleSize <= 250)
-    {
-        *x = 67 + ((250 - m_nSymbleSize*(*p)) / 2);
-    }
-    else
-    {
-        *x = 67 - ((m_nSymbleSize*(*p) - 250) / 2);
-    }
-
-	*y = 170;
-}
-/** 画二维码
- *x:显示二维码的左上角x 坐标，y:显示二维码的左上角y坐标，p：画笔的大小
- *
- * @param
- * @return
- *Note:
- */
-void display_encode(uint16_t *x,uint16_t *y,uint16_t *p)
-{
- 	uint8_t i,j;
-
-	for(i=0;i<m_nSymbleSize;i++)
-	{
-		for(j=0;j<m_nSymbleSize;j++)
-		{
-			if(m_byModuleData[i][j]==1)
-            {
-                LCD_Fill(*x+(*p)*i,*y+(*p)*j,*x+(*p)*(i+1)-1,*y+(*p)*(j+1)-1,BLACK);
-            }
-		}
-	}
-}
-/** 将二维码显示界面转换为图片
- *
- * @param
- * @param
- * @return 0:转换保存成功，1:打开文件错误 2:
- *
- */
-uint8_t encodetobmp(char *filename,uint8_t *codeString)
-{
-    static uint16_t p,x,y;
-
-    qrencode((uint8_t *)codeString,&p,&x,&y);
-    display_encode(&x,&y,&p);
-    vTaskDelay(500);
-    create_bmppicture(filename,x,y,p*m_nSymbleSize,p*m_nSymbleSize);
-    //create_bmppicture("system/encode_test.bmp",x,y,p*m_nSymbleSize,p*m_nSymbleSize);
-}
 /** @brief 故障弹窗弹出展示
  *
  * @param
@@ -445,12 +372,17 @@ void Err_Analy(WM_HWIN hWin)
 void Led_Show()
 {
     CON_t *pCON;
+    uint8_t ledSignalPool;
+    uint8_t led_signal;
+    static uint8_t led_signalold;
 
     pCON = CONGetHandle(0);
+
+    led_signal = 0;
     /**< 置位说明有故障存在闪烁红灯 */
     if(bittest(winCreateFlag,1))
     {
-        led_ctrl(1,red,flicker);
+        bitset(led_signal,0);
     }
     else
     {
@@ -458,11 +390,11 @@ void Led_Show()
         {
             case STATE_CON_IDLE:
                 /**< 空闲状态 */
-                led_ctrl(1,green,keep_on);
+                bitset(led_signal,1);
             break;
             case STATE_CON_CHARGING:
                 /**< 充电过程中 */
-                led_ctrl(1,green,breath);
+                bitset(led_signal,2);
             break;
             default:
                 if(pCON->status.xPlugState == PLUG)
@@ -471,23 +403,54 @@ void Led_Show()
                         ||pCON->status.xCPState == CP_6V)
                     {
                         /**< 等待车端插枪 */
-                        led_ctrl(1,green,flicker);
+                        bitset(led_signal,3);
                     }
                     else if(pCON->status.xCPState == CP_9V_PWM
                         ||pCON->status.xCPState == CP_9V)
                     {
                         /**< S1未闭合 */
-                        led_ctrl(1,blue,flicker);
+                        bitset(led_signal,4);
                     }
                 }
-                /// TODO (zshare#1#): 添加桩端等待插枪蓝灯闪烁
                 else
                 {
                     /**< 未知状态 */
-                    led_ctrl(1,green,keep_on);
+                    bitset(led_signal,5);
                 }
             break;
         }
+    }
+
+    ledSignalPool = led_signalold ^ led_signal;
+    if(ledSignalPool != 0)
+    {
+        ledSignalPool = ledSignalPool & led_signal;
+        if(bittest(ledSignalPool,0))
+        {
+           led_ctrl(1,red,flicker);
+        }
+        if(bittest(ledSignalPool,1))
+        {
+            led_ctrl(1,green,keep_on);
+        }
+        if(bittest(ledSignalPool,2))
+        {
+            led_ctrl(1,green,breath);
+        }
+        if(bittest(ledSignalPool,3))
+        {
+            led_ctrl(1,green,flicker);
+        }
+        if(bittest(ledSignalPool,4))
+        {
+            led_ctrl(1,blue,flicker);
+        }
+        if(bittest(ledSignalPool,5))
+        {
+           led_ctrl(1,green,keep_on);
+        }
+
+        led_signalold = led_signal;
     }
 }
 /** @brief
@@ -613,7 +576,7 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
                     hWin, WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
         bitset(winCreateFlag,0);
         MULTIEDIT_SetInsertMode(err_hItem,1);  //开启插入模式
-        MULTIEDIT_SetFont(err_hItem, &XBF24_Font);
+        MULTIEDIT_SetFont(err_hItem, &SIF24_Font);
         WM_SetFocus(err_hItem);
         MULTIEDIT_SetInsertMode(err_hItem, 1);
         MULTIEDIT_SetCursorOffset(err_hItem,0);

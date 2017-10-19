@@ -8,6 +8,14 @@
 #ifndef __EVSE_CONFIG_H
 #define __EVSE_CONFIG_H
 
+
+#define EVSE_USING_RFID             1
+#define EVSE_USING_GPRS             1
+#define EVSE_USING_GUI              1
+#define EVSE_USING_STORE_ORDER      1
+#define EVSE_USING_STORE_LOG        1
+
+
 #define defTotalCON             2
 //#define defUIDLength            4
 #define defCardIDLength         8
@@ -26,7 +34,7 @@
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
 #define defMonitorRFIDCyc           1000
-#define defMonitorDataRefreshCyc    1000
+#define defMonitorDataRefreshCyc    5000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
 #define defDiagCurrInitCyc          500       //延时启动电流检测

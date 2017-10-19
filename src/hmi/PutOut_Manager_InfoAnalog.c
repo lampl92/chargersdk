@@ -206,48 +206,46 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         //Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&XBF24_Font,GUI_BLACK,"交流电压:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&XBF24_Font,GUI_BLACK,"交流电流:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&XBF24_Font,GUI_BLACK,"充电导引电压:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&XBF24_Font,GUI_BLACK,"频    率:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&XBF24_Font,GUI_BLACK,"继电器温度1:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&XBF24_Font,GUI_BLACK,"继电器温度2:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&XBF24_Font,GUI_BLACK,"AC温度L:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&XBF24_Font,GUI_BLACK,"AC温度N:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF24_Font,GUI_BLACK,"交流电压:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF24_Font,GUI_BLACK,"交流电流:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&SIF24_Font,GUI_BLACK,"充电导引电压:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&SIF24_Font,GUI_BLACK,"频    率:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"A插座温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"B插座温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"接线温度:");
         //
         // Initialization of 'Edit'
         //
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&XBF24_Font,"00");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7),&XBF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&SIF24_Font,"00");
         //
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"信息查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"信息查询");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),BUTTON_CI_PRESSED,GUI_RED);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"模拟量");
+                    &SIF24_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_RED,"模拟量");
         BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),1);
         BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),BUTTON_CI_PRESSED,GUI_RED);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &XBF24_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"状态量");
+                    &SIF24_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"状态量");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

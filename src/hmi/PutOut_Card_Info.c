@@ -114,8 +114,8 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         pCON = CONGetHandle(0);//选择枪的时候获取pCON
         /**< 显示卡余额 */
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, " ");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, Timer_buf);
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGoodIDReqDispOK);
 	    bitset(winInitDone,2);
     }
@@ -126,7 +126,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
                                     pdTRUE, pdTRUE, 0);
     if((uxBitRFID & defEventBitBadIDReqDisp) == defEventBitBadIDReqDisp)
     {
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "此卡未注册,请查看注册流程.");
         /** @todo (zshare#1#): 未注册卡处理流程 ，处理完成之后，发送DispOK事件*/
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitBadIDReqDispOK);
     }
@@ -136,8 +136,8 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     if((uxBitRFID & defEventBitOweIDReqDisp) == defEventBitOweIDReqDisp)
     {
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "此卡已欠费");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, Timer_buf);
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "此卡已欠费");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, Timer_buf);
 
         /** @todo (zshare#1#): 定10s退出 */
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitOwdIDReqDispOK);
@@ -146,7 +146,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     /**未进GoodID ,BadID和OweID状态时显示内容*/
     if(pCON->status.xPlugState == UNPLUG)
     {
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "请连接充电插头");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "请连接充电插头");
     }
     /**end of 未进GoodID ,BadID和OweID状态时显示内容*/
 
@@ -265,27 +265,27 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF24_Font, GUI_BLACK, "卡号");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "余额");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "(60S)");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "卡号");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "余额");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "(60S)");
         //
         // Initialization of 'Edit'
         //
 
         HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, temp_buf);         //卡号
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, "?");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "正在获取账户信息...");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, temp_buf);         //卡号
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, "?");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "正在获取账户信息...");
 
         //
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
+                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
+                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
         // USER END
         break;
     case WM_NOTIFY_PARENT:

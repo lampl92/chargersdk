@@ -18,7 +18,6 @@
 #define defTIMERID_EVSEState        4
 #define defTIMERID_RFID             5
 #define defTIMERID_DATAREFRESH      6
-#define defTIMERID_Volt             7
 #define defTIMERID_RemoteHeartbeat  8
 #define defTIMERID_RemoteStatus     9
 #define defTIMERID_RemoteRTData     10

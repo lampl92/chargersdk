@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -150,11 +150,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int          NCode;
     int         Id;
 
+
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+        /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
         if((bittest(winInitDone,0))&&(_hWinHome == cur_win))
         {
             //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
@@ -172,26 +172,25 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
             }
+            GUI_QR_Draw(qr_hmem,120,170);
         }
         break;
     case WM_INIT_DIALOG:
         /**< 创建framewin */
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-        /**< 二维码显示 */
-        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1), bmpbuffer, BMPFile_ENCODE.obj.objsize);
         /**< text和edit的初始化 */
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &XBF24_Font, " ");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &XBF24_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, " ");
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &XBF24_Font, GUI_BLACK, "充电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF24_Font, GUI_BLACK, "元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &XBF24_Font, GUI_BLACK, "服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &XBF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "充电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "元/度");
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &XBF24_Font, GUI_BLACK, "手机支付请扫描二维码");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &XBF24_Font, GUI_BLACK, "刷卡支付请刷卡");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &SIF24_Font, GUI_BLACK, "手机支付请扫描二维码");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &SIF24_Font, GUI_BLACK, "刷卡支付请刷卡");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

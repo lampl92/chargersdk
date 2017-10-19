@@ -121,12 +121,13 @@ void sys_Init(void)
     xSysconf.xCalibrate.ad_left = 100;
     xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
+    //f_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
-    f_unlink(pathEVSELog);
-    f_unlink(pathOrder);
+    //f_unlink(pathEVSELog);
+    //f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
 

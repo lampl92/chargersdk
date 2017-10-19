@@ -51,7 +51,7 @@ Purpose     : Config / System dependent externals for GUI
 #define CALEBRATE_DEBUG 0
 #define CALEBRATE_TIME  500
 
-volatile static uint16_t adc_x,adc_y;
+volatile static uint16_t adc_x = 0 ,adc_y = 0;
 static uint8_t step = 0;
 GUI_PID_STATE State = {0};
 static uint8_t _pidFlag = 0;
@@ -75,7 +75,7 @@ void GUI_TOUCH_X_ActivateX(void)
                 State.x = adc_x;
                 State.y = adc_y;
                 State.Pressed = 1;
-                GUI_PID_StoreState(&State);
+                GUI_TOUCH_StoreStateEx(&State);
             }
         }
         else
@@ -87,13 +87,13 @@ void GUI_TOUCH_X_ActivateX(void)
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
             if(bittest(winCreateFlag,2))
             {
-                adc_x = 0;
-                adc_y = 0;
+//                adc_x = 0;
+//                adc_y = 0;
             }
             else
             {
                 State.Pressed = 0;
-                GUI_PID_StoreState(&State);
+                GUI_TOUCH_StoreStateEx(&State);
             }
         }
     }
@@ -151,7 +151,7 @@ int  GUI_TOUCH_X_MeasureX(void)
                 _pidFlag = 0;
                 Buzzer_control(0);
                 State.Pressed = 0;
-                GUI_PID_StoreState(&State);
+                GUI_TOUCH_StoreStateEx(&State);
             break;
         }
     }

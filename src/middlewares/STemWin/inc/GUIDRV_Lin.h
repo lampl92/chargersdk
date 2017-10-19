@@ -1,16 +1,15 @@
 /*********************************************************************
-*          Portions COPYRIGHT 2016 STMicroelectronics                *
-*          Portions SEGGER Microcontroller GmbH & Co. KG             *
+*                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2015  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2017  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.32 - Graphical user interface for embedded applications **
+** emWin V5.40 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -42,18 +41,18 @@ Purpose     : Interface definition for GUIDRV_Lin driver
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
   */
-
+  
 #ifndef GUIDRV_LIN_H
 #define GUIDRV_LIN_H
-#include "GUI.h"
+
 #if defined(__cplusplus)
 extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #endif
@@ -271,5 +270,4 @@ extern const GUI_DEVICE_API GUIDRV_Lin_OSXY_32_API;
 
 #endif
 
-/*************************** End of file *******************/
-
+/*************************** End of file ****************************/
