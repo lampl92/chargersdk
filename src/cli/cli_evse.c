@@ -267,9 +267,9 @@ void cli_evseorder_fnt(int argc, char **argv)
         {
             pCON = CONGetHandle(id);
 
-//            now_dummy = 1500944498;//2017-07-25 09:01:38
+            now_dummy = 1500944498;//2017-07-25 09:01:38
 //            now_dummy = 1500987698;//21 //跨天，同时段
-            now_dummy = 1501141978;
+//            now_dummy = 1501141978;
 //            now_dummy = 1501142404;//2017/7/27 16:0:4  //跨天，不同时段
             testmakeOrder(pCON, 0 , STATE_ORDER_TMP);
             testmakeOrder(pCON, now_dummy , STATE_ORDER_MAKE); //2017-07-25 09:01:38

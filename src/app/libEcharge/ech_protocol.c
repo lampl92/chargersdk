@@ -2809,7 +2809,7 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd,
 
 echProtocol_t *EchProtocolCreate(void)
 {
-    int i;
+    int i,j;
     echProtocol_t *pProto = (echProtocol_t *)malloc(sizeof(echProtocol_t));
     if(pProto == NULL)
     {
@@ -2832,6 +2832,12 @@ echProtocol_t *EchProtocolCreate(void)
     {
         pProto->info.dSegPowerFee[i]    = 0; //尖峰费率
         pProto->info.dSegServFee[i]    = 0;
+        for (j = 0; j < defOrderPeriodMax; j++)
+        {
+            pProto->info.SegTime[i].ucStart[j] = 0;
+            pProto->info.SegTime[i].ucEnd[j] = 0;
+        }
+        pProto->info.SegTime[i].ucPeriodCont = 0;
     }
 
     pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔

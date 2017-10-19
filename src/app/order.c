@@ -135,6 +135,8 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     uint8_t pos = 0;//当前时间在时段中的位置
     int i, j;
     double tmpTotalPower = 0; //用于计算尖峰平谷总电量
+    double tmpTotalPowerFee = 0;
+    double tmpTotalServFee = 0;
     uint32_t tmpTotalTime = 0;  //用于计算尖峰平谷总充电时间
 
     /*1. 状态判断、时段内容处理*/
@@ -189,13 +191,18 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
 
     /*3. 汇总总电量*/
+    tmpTotalPower = 0;
+    tmpTotalPowerFee = 0;
+    tmpTotalServFee = 0;
     for (i = 0; i < defOrderSegMax; i++)
     {
-        pCON->order.dTotalPower += pCON->order.dSegTotalPower[i];
-        pCON->order.dTotalPowerFee += pCON->order.dSegTotalPowerFee[i];
-        pCON->order.dTotalServFee += pCON->order.dSegTotalServFee[i];
+        tmpTotalPower += pCON->order.dSegTotalPower[i];
+        tmpTotalPowerFee += pCON->order.dSegTotalPowerFee[i];
+        tmpTotalServFee += pCON->order.dSegTotalServFee[i];
     }
-    
+    pCON->order.dTotalPower = tmpTotalPower;
+    pCON->order.dTotalPowerFee = tmpTotalPowerFee;
+    pCON->order.dTotalServFee = tmpTotalServFee;
     /*4. 总费用*/
     pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
