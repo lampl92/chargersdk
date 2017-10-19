@@ -1120,6 +1120,7 @@ static void CONInit(void)
     int i;
 //    double upp = 260;
 //    double low = 176;
+	double temp = 95;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
