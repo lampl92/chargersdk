@@ -67,7 +67,7 @@ extern uint8_t strCSQ[10];
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&SIF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-   // IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF12_Font,GUI_RED,"信号:");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF12_Font,GUI_RED,"2017-02-28");
@@ -424,27 +424,28 @@ void Led_Show()
     ledSignalPool = led_signalold ^ led_signal;
     if(ledSignalPool != 0)
     {
-        if(bitset(ledSignalPool,0))
+        ledSignalPool = ledSignalPool & led_signal;
+        if(bittest(ledSignalPool,0))
         {
            led_ctrl(1,red,flicker);
         }
-        if(bitset(ledSignalPool,1))
+        if(bittest(ledSignalPool,1))
         {
             led_ctrl(1,green,keep_on);
         }
-        if(bitset(ledSignalPool,2))
+        if(bittest(ledSignalPool,2))
         {
             led_ctrl(1,green,breath);
         }
-        if(bitset(ledSignalPool,3))
+        if(bittest(ledSignalPool,3))
         {
             led_ctrl(1,green,flicker);
         }
-        if(bitset(ledSignalPool,4))
+        if(bittest(ledSignalPool,4))
         {
             led_ctrl(1,blue,flicker);
         }
-        if(bitset(ledSignalPool,5))
+        if(bittest(ledSignalPool,5))
         {
            led_ctrl(1,green,keep_on);
         }

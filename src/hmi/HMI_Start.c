@@ -31,7 +31,7 @@ void MainTask(void)
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 6, GUI_QR_ECLEVEL_L, 0);
-        //readBackGroundNOFREE("system/background_tree.bmp");
+        readBackGroundNOFREE("system/background_tree.bmp");
 //        Create_XBF12("system/XBF_Song_12.xbf");//创建xbf12号路径
 //        Create_XBF14("system/XBF_Song_14.xbf");//创建XBF14号路径
 //        Create_XBF16("system/XBF_Song_16.xbf");//创建xbf16号路径
