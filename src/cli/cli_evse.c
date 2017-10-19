@@ -278,49 +278,49 @@ void cli_evseorder_fnt(int argc, char **argv)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38 22
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 10:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38 23
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 11:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38 24
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 12:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38 1
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 13:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38 2
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 14:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38 3
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 15:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38 4
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 16:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
             for(t = 0; t < 3600; t++)
             {
                 testmakeOrder(pCON, ++now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38 5
                 testmakeOrder(pCON, now_dummy , STATE_ORDER_UPDATE);    //2017-07-25 17:01:38
-//                vTaskDelay(1);
+                vTaskDelay(1);
             }
 
             testmakeOrder(pCON, now_dummy+1 , STATE_ORDER_FINISH); //2017-07-25 17:01:39

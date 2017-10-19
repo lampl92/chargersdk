@@ -173,7 +173,8 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     {
         tmpTotalPower = 0;
         tmpTotalTime = 0;
-        for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; i++)
+        //  ↓:j    ↓:j                                          ↓:j
+        for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; j++)
         {
             tmpTotalPower += pCON->order.chargeSegStatus[i][j].dPower;
             if(pCON->order.chargeSegStatus[i][j].tEndTime != 0) //表示已经结束的时段
