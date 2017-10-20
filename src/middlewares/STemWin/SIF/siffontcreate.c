@@ -53,7 +53,7 @@ void Create_SIF12(u8 *fxpath)
     if(SIF12FontBuff!=NULL)
     {
         //创建SIF格式字体
-        GUI_SIF_CreateFont(SIF12FontBuff,&SIF12_Font,GUI_SIF_TYPE_PROP_AA2);
+        GUI_SIF_CreateFont(SIF12FontBuff,&SIF12_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
@@ -64,7 +64,7 @@ void Create_SIF16(u8 *fxpath)
     if(SIF16FontBuff!=NULL)
     {
         //创建SIF格式字体
-        GUI_SIF_CreateFont(SIF16FontBuff,&SIF16_Font,GUI_SIF_TYPE_PROP_AA2);
+        GUI_SIF_CreateFont(SIF16FontBuff,&SIF16_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
@@ -75,7 +75,7 @@ void Create_SIF24(u8 *fxpath)
     if(SIF24FontBuff!=NULL)
     {
         //创建SIF格式字体
-        GUI_SIF_CreateFont(SIF24FontBuff,&SIF24_Font,GUI_SIF_TYPE_PROP_AA2);
+        GUI_SIF_CreateFont(SIF24FontBuff,&SIF24_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
@@ -86,6 +86,6 @@ void Create_SIF36(u8 *fxpath)
     if(SIF36FontBuff!=NULL)
     {
         //创建SIF格式字体
-        GUI_SIF_CreateFont(SIF36FontBuff,&SIF36_Font,GUI_SIF_TYPE_PROP_AA2);
+        GUI_SIF_CreateFont(SIF36FontBuff,&SIF36_Font,GUI_SIF_TYPE_PROP);
     }
 }
