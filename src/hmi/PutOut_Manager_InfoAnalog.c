@@ -210,9 +210,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF24_Font,GUI_BLACK,"交流电流:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&SIF24_Font,GUI_BLACK,"充电导引电压:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&SIF24_Font,GUI_BLACK,"频    率:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"A插座温度:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"B插座温度:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"接线温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"AC温度L:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"AC温度N:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"继电器L温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"继电器N温度:");
+
         //
         // Initialization of 'Edit'
         //
@@ -223,6 +225,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),&SIF24_Font,"00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),&SIF24_Font,"00");
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),&SIF24_Font,"00");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7),&SIF24_Font,"00");
+
         //
         // Initialization of 'Button'
         //
