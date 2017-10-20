@@ -125,7 +125,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void Data_Flush(WM_MESSAGE *pMsg)
 {
     CON_t *pCon;
-    uint8_t strTmp[30];
+    uint8_t strTmp[10];
     
     pCon = CONGetHandle(0);
 
@@ -284,6 +284,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
+              /**< 跳转到设置参数信息查询 */
+              _deleteWin(_hWinManagerInfoAnalog);
+              CreateManagerSysSet();
             // USER END
             break;
           case WM_NOTIFICATION_RELEASED:

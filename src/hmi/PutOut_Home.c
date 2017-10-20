@@ -56,6 +56,8 @@
 #define ID_TimerTime    0
 WM_HWIN cur_win;
 WM_HWIN _hWinHome;
+WM_HWIN hwinQR;
+
 uint8_t strCSQ[10];
 extern uint8_t *bmpbuffer;
 extern FIL BMPFile_ENCODE;
@@ -74,7 +76,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },//尝试bmp单独显示
-    { IMAGE_CreateIndirect, "Image", ID_IMAGE_1, 130, 170, 150, 150, 0, 0, 0 },//二维码显示
+//    { IMAGE_CreateIndirect, "Image", ID_IMAGE_1, 130, 170, 150, 150, 0, 0, 0 },//二维码显示
+//    { WINDOW_CreateIndirect, "Window",ID_WINDOW_0,120,170,80,80,WM_CF_SHOW|WM_CF_HASTRANS,0,0},
     { TEXT_CreateIndirect, "Text", ID_TEXT_A, 67, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_B, 450, 80, 250, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
@@ -135,6 +138,22 @@ static void Data_Process(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_0), strPowerFee);/**< 电费*/
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_1), strServiceFee);/**< 服务费 */
 }
+
+
+static void _cbWindowQR(WM_MESSAGE *pMsg)
+{
+    WM_HWIN hWin;
+
+    hWin = pMsg->hWin;
+    switch (pMsg->MsgId) {
+    case WM_PAINT:
+        GUI_QR_Draw(qr_hmem, 0, 0);
+        break;
+    default:
+        WM_DefaultProc(pMsg);   
+        break;
+    }
+}
 /** @brief
  *  _cbDialog 创建主窗口
  * @param pMsg:消息体
@@ -149,7 +168,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int         Id;
-
+    GUI_DRAWMODE _drawmode;
 
     switch (pMsg->MsgId)
     {
@@ -172,11 +191,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 特殊触控点分析 */
                 CaliDone_Analy(pMsg->hWin);
             }
-            GUI_QR_Draw(qr_hmem,120,170);
         }
+
         break;
     case WM_INIT_DIALOG:
         /**< 创建framewin */
+
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         /**< text和edit的初始化 */
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, " ");
@@ -191,6 +211,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &SIF24_Font, GUI_BLACK, "手机支付请扫描二维码");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &SIF24_Font, GUI_BLACK, "刷卡支付请刷卡");
+        
+        hwinQR = WM_CreateWindowAsChild(120, 170, 200, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);
+//        WM_SetUserData(pMsg->hWin, &hwinQR, sizeof(hwinQR));
+//        WM_SetFocus(hwinQR); 
+        
+//        WM_SetHasTrans(WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0));
+//        WM_SetCallback(WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0), _cbWindowQR);
+//        WM_SetFocus(WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0));
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -237,6 +265,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         break;
     case MSG_JUMPCARDINFO:
 //        GUI_EndDialog(_hWinHome,0);
+        GUI_EndDialog(hwinQR, 0);
         _deleteWin(_hWinHome);
         //_hWinHome = 0;
         //WM_DeleteWindow(_hWinHome);

@@ -879,7 +879,7 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
 			NCode = pMsg->Data.v;
 			switch (NCode)
 			{
-				case WM_NOTIFICATION_CLICKED:				//按钮被释放
+			case WM_NOTIFICATION_RELEASED://WM_NOTIFICATION_CLICKED:				//按钮被释放
 					if(keypad_dev.padtype==ENGLISH_KEYPAD)	//英文键盘
 					{
 						engkeypad_process(_aEngButtonData,Id,pMsg);		//处理英文键盘

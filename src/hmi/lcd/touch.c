@@ -155,7 +155,7 @@ uint8_t TP_Read_XY(uint16_t *x, uint16_t *y)
 //该函数能大大提高准确度
 //x,y:读取到的坐标值
 //返回值:0,失败;1,成功。
-#define ERR_RANGE 50 //误差范围
+#define ERR_RANGE 10 //误差范围
 uint8_t TP_Read_XY2(uint16_t *x, uint16_t *y)
 {
     uint16_t x1, y1;
