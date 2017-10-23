@@ -81,8 +81,12 @@
 #define defEventBitOrderFinishToHMI  BIT_16 
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
-#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK | defEventBitOrder_HMIDispOK)    //(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
-
+#if EVSE_USING_GUI
+#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
+                                      defEventBitOrder_RemoteRTDataOK | \
+                                      defEventBitOrder_HMIDispOK)
+#else#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK)
+#endif
 
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0

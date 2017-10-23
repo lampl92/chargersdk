@@ -880,6 +880,9 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
+#ifndef EVSE_USING_RFID
+#define EVSE_USING_RFID 0
+#endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
 #endif
@@ -1237,6 +1240,7 @@
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
+//../../../src/middlewares/STemWin/SIF
 // --- Include directories end --- //
 
 

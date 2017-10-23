@@ -177,29 +177,15 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-#ifdef EVSE_DEBUG
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
-#else
     MainTask();
-#endif
 }
 
 void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-#ifdef EVSE_DEBUG
-        while(1)
-        {
-            vTaskDelay(1000);
-        }
-#else
         GUI_TOUCH_Exec();//激活XY轴的测量
         vTaskDelay(10);
-#endif
     }
 }
 
@@ -211,8 +197,10 @@ void TaskInit(void)
 void SysTaskCreate (void)
 {
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
+#if EVSE_USING_GUI
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
+#endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 
     //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );

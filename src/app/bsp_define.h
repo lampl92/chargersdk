@@ -10,31 +10,31 @@
 
 /* NVIC PreemptPriority ------------------------------------------------------*/
 
-#define bspUSART1_PreemptPriority       3
+#define bspUSART1_PreemptPriority       5
 #define bspUSART1_SubPriority           0
 
-#define bspUSART2_PreemptPriority       15
+#define bspUSART2_PreemptPriority       5
 #define bspUSART2_SubPriority           0
 
 #define bspUSART3_PreemptPriority       5
 #define bspUSART3_SubPriority           0
 
-#define bspUART4_PreemptPriority       15
+#define bspUART4_PreemptPriority       5
 #define bspUART4_SubPriority           0
 
-#define bspUART5_PreemptPriority       7
+#define bspUART5_PreemptPriority       5
 #define bspUART5_SubPriority           0
 
-#define bspUART7_PreemptPriority       2
+#define bspUART7_PreemptPriority       5
 #define bspUART7_SubPriority           0
 
-#define bspLTDC_PreemptPriority         5
+#define bspLTDC_PreemptPriority         7
 #define bspLTDC_SubPriority             0
 
-#define bspWKUP_PreemptPriority         6
+#define bspWKUP_PreemptPriority         3
 #define bspWKUP_SubPriority             0
 
-#define bspAlarm_PreemptPriority        6
+#define bspAlarm_PreemptPriority        3
 #define bspAlarm_SubPriority            0
 
 #define bspDMA2_Stream0_PreemptPriority        8

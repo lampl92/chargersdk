@@ -202,10 +202,12 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
                                     HMI填充好选择的枪后，发送回Order队列*/
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitGoodIDReqDisp,
                             defEventBitGoodIDReqDispOK,
                             10000);
+#endif
 			//卡信息界面立即点退出
 	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
 		        defEventBitHMITimeOutToRFID,
@@ -248,20 +250,24 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_BADID:
             /** @todo (rgw#1#): 通知HMI显示未注册 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitBadIDReqDisp,
                             defEventBitBadIDReqDispOK,
                             portMAX_DELAY);
+#endif
             OrderInit(&(pRFIDDev->order));
             pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_OWE:
             /** @todo (rgw#1#): 通知HMI显示欠费 */
             /** @todo (rgw#1#): 等待HMI事件通知结束 */
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitOweIDReqDisp,
                             defEventBitOwdIDReqDispOK,
                             portMAX_DELAY);
+#endif
             OrderInit(&pRFIDDev->order);
             pRFIDDev->state = STATE_RFID_RETURN;
             break;

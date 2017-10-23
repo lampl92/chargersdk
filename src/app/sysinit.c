@@ -134,10 +134,11 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/
+#if EVSE_USING_GUI
     WM_SetCreateFlags(WM_CF_MEMDEV);    /* Activate the use of memory device feature */
     GUI_Init();
     WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
-
+#endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
 }

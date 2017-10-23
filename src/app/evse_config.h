@@ -8,12 +8,24 @@
 #ifndef __EVSE_CONFIG_H
 #define __EVSE_CONFIG_H
 
-
+#ifndef EVSE_USING_RFID
 #define EVSE_USING_RFID             1
+#endif
+
+#ifndef EVSE_USING_GPRS
 #define EVSE_USING_GPRS             1
+#endif
+
+#ifndef EVSE_USING_GUI
 #define EVSE_USING_GUI              1
+#endif
+
+#ifndef EVSE_USING_STORE_ORDER
 #define EVSE_USING_STORE_ORDER      1
+#endif
+#ifndef EVSE_USING_STORE_LOG
 #define EVSE_USING_STORE_LOG        1
+#endif
 
 
 #define defTotalCON             2
