@@ -65,19 +65,20 @@
 #define defEventBitAddOrder             BIT_3
 #define defEventBitAddOrderOK           BIT_4
 
-#define defEventBitOrder_HMIDispOK      BIT_7
-#define defEventBitOrder_RemoteOrderOK  BIT_8
-#define defEventBitOrder_RemoteRTDataOK BIT_9
-#define defEventBitOrder_StoreOK        BIT_10
+#define defEventBitOrder_HMIDispOK      BIT_5
+#define defEventBitOrder_RemoteOrderOK  BIT_6
+#define defEventBitOrder_RemoteRTDataOK BIT_7
+#define defEventBitOrder_StoreOK        BIT_8
 
-#define defEventBitOrderStopTypeLimitFee    BIT_15
-#define defEventBitOrderStopTypeRemoteStop  BIT_16
-#define defEventBitOrderStopTypeRFIDStop    BIT_17
-#define defEventBitOrderStopTypeFull        BIT_18
+#define defEventBitOrderStopTypeLimitFee    BIT_9
+#define defEventBitOrderStopTypeLimitTime   BIT_10
+#define defEventBitOrderStopTypeRemoteStop  BIT_11
+#define defEventBitOrderStopTypeRFIDStop    BIT_12
+#define defEventBitOrderStopTypeFull        BIT_13
 
-#define defEventBitOrderMakeFinish      BIT_19  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToChargetask  BIT_21 
-#define defEventBitOrderFinishToHMI  BIT_22 
+#define defEventBitOrderMakeFinish      BIT_14  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderFinishToChargetask  BIT_15 
+#define defEventBitOrderFinishToHMI  BIT_16 
 
 #define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK | defEventBitOrder_HMIDispOK)    //(defEventBitOrder_HMIDispOK | defEventBitOrder_RemoteOK |defEventBitOrder_StoreOK)
@@ -127,6 +128,7 @@
 #define defEventBitExceptionRelayPaste  BIT_9
 
 #define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitTime   BIT_16  //把LimitTime放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionRemoteStop  BIT_11
 #define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
 #define defEventBitExceptionCPSwitch    BIT_13

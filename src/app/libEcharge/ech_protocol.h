@@ -13,18 +13,18 @@
 #include "semphr.h"
 #include "event_groups.h"
 #include "errorcode.h"
+#include "order.h"
 
 #define ECH_UNUSED_ARG(x) (void)x
 
 #define REMOTE_SENDBUFF_MAX              1500 //发送缓冲长度
-#define REMOTE_RECVBUFF_MAX              1500 //接收缓冲长度
 #define REMOTE_RECVDOPTDATA              1500
 
 typedef struct
 {
-    uint8_t ucSegCont; //时段个数
-    uint8_t ucStart[5];//单位小时：如8表示从8点开始
-    uint8_t ucEnd[5];//单位小时，如9点表示到9点，但不包括9点
+    uint8_t ucPeriodCont; //时段个数
+    uint8_t ucStart[defOrderPeriodMax];//单位小时：如8表示从8点开始
+    uint8_t ucEnd[defOrderPeriodMax];//单位小时，如9点表示到9点，但不包括9点
 } EchSegTime_t;
 
 typedef struct _echProtoInfo
@@ -42,20 +42,9 @@ typedef struct _echProtoInfo
     uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t  ucResetAct;        //重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
 
-    double dPowerFee_sharp;  //尖峰费率
-    double dPowerFee_peak;   //峰
-    double dPowerFee_shoulder; //平
-    double dPowerFee_off_peak; //谷
-
-    double dServFee_sharp;
-    double dServFee_peak;
-    double dServFee_shoulder;
-    double dServFee_off_peak;
-
-    EchSegTime_t SegTime_sharp;
-    EchSegTime_t SegTime_peak;
-    EchSegTime_t SegTime_shoulder;
-    EchSegTime_t SegTime_off_peak;
+    double dSegPowerFee[defOrderSegMax];  //分段费率
+    double dSegServFee[defOrderSegMax];
+    EchSegTime_t SegTime[defOrderSegMax];
 
     uint32_t ulStatusCyc_ms;    //状态数据上报间隔，精确到秒
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s

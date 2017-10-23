@@ -1631,7 +1631,6 @@ CON_t *CONCreate(uint8_t ucCONID )
                                       (void *)(int)ucCONID,
                                       vRemoteRTDataTimerCB);
 
-    OrderCreate(&(pCON->order));
     OrderInit(&(pCON->order));
 
     return pCON;

@@ -259,16 +259,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         pCON = CONGetHandle(0);
         memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%.2lf",  (uint32_t)(pCON->order.dTotalPower * 100) / 100.0);
+        sprintf(temp_buf, "%.2lf",  pCON->order.dTotalPower);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalServFee * 100) / 100.0);
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalServFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%.2lf", (uint32_t)(pCON->order.dTotalPowerFee * 100) / 100.0);
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),&SIF24_Font,temp_buf);
         memset(temp_buf,'\0',strlen(temp_buf));
-        sprintf(temp_buf, "%.2lf", ((uint32_t)(pCON->order.dTotalServFee * 100) + (uint32_t)(pCON->order.dTotalPowerFee * 100)) / 100.0);
+        sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),&SIF24_Font,temp_buf);
 
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
