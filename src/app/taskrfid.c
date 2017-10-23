@@ -101,6 +101,8 @@ void vTaskEVSERFID(void *pvParameters)
             break;
         case STATE_RFID_NEWID:
             pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
+            pRFIDDev->order.dLimitFee = 0;
+            pRFIDDev->order.ulLimitTime = 0;
 //            uxBits = xEventGroupSync(xHandleEventRemote,
 //                                     defEventBitRemoteGetAccount,
 //                                     defEventBitRemoteGotAccount,

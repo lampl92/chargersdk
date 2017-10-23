@@ -77,19 +77,6 @@ static OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t 
         }
     }
     return STATE_SEG_DEFAULT;
-
-//    if(JudgeSegInclude(now, pProto->info.SegTime_peak, pos) == 1)
-//    {
-//        return STATE_SEG_PEAK;
-//    }
-//    if(JudgeSegInclude(now, pProto->info.SegTime_shoulder, pos) == 1)
-//    {
-//        return STATE_SEG_SHOULDER;
-//    }
-//    if(JudgeSegInclude(now, pProto->info.SegTime_off_peak, pos) == 1)
-//    {
-//        return STATE_SEG_OFF_PEAK;
-//    }
 }
 ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e statOrderSeg)
 {
@@ -140,7 +127,6 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     uint32_t tmpTotalTime = 0;  //用于计算尖峰平谷总充电时间
 
     /*1. 状态判断、时段内容处理*/
-
     switch(pCON->order.statOrderSeg)
     {
     case STATE_SEG_IDLE:
@@ -184,7 +170,7 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
                 tmpTotalTime += (pCON->order.chargeSegStatus[i][j].tEndTime - pCON->order.chargeSegStatus[i][j].tStartTime);
             }
         }
-        pCON->order.dSegTotalPower[i] = tmpTotalPower;
+        pCON->order.dSegTotalPower[i] = (uint32_t)(tmpTotalPower * 100) / 100.0; //防止sprintf对double精度进行四舍五入
         pCON->order.dSegTotalPowerFee[i] = tmpTotalPower * pechProto->info.dSegPowerFee[i];
         pCON->order.dSegTotalServFee[i] = tmpTotalPower * pechProto->info.dSegServFee[i];
         pCON->order.ulSegTotalTime[i] = tmpTotalTime;
@@ -201,8 +187,8 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
         tmpTotalServFee += pCON->order.dSegTotalServFee[i];
     }
     pCON->order.dTotalPower = tmpTotalPower;
-    pCON->order.dTotalPowerFee = tmpTotalPowerFee;
-    pCON->order.dTotalServFee = tmpTotalServFee;
+    pCON->order.dTotalPowerFee = (uint32_t)(tmpTotalPowerFee * 100) / 100.0;
+    pCON->order.dTotalServFee = (uint32_t)(tmpTotalServFee * 100) / 100.0;
     /*4. 总费用*/
     pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
@@ -222,6 +208,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucCardStatus = pRFIDDev->order.ucCardStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
         pCON->order.ucCONID = pCON->info.ucCONID;
+        pCON->order.dLimitFee = pRFIDDev->order.dLimitFee;
+        pCON->order.ulLimitTime = pRFIDDev->order.ulLimitTime;
         strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:

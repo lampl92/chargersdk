@@ -287,6 +287,11 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
+                if ((uxBitsException & defEventBitExceptionLimitTime) == defEventBitExceptionLimitTime)    //达到充电时间限制
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitExceptionLimitTime);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);

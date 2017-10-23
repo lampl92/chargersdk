@@ -115,7 +115,8 @@ typedef struct _OrderData
 
     time_t  tStartTime;         //启动充电时间           5
     uint8_t ucStartType;        //4 有卡 5 无卡         6
-    double  dLimitFee;          //充电截至金额         7
+    double  dLimitFee;          //充电截至金额         在远程启动和界面启动时赋值
+    uint32_t ulLimitTime;       //充电最大时间         
     double  dStartPower;        //8
     //充电过程
     double  dTotalPower;        //总电量
