@@ -201,7 +201,7 @@ void led_breath_r(void)
         if (pwm_r_flag_1 == 1)
         {
             duty_ratio_r_1--;
-            if (duty_ratio_r_1 <= 1)
+            if (duty_ratio_r_1 <= 10)
             {
                 pwm_r_flag_1 = 0;
             }
@@ -222,7 +222,7 @@ void led_breath_r(void)
         if (pwm_r_flag_2 == 1)
         {
             duty_ratio_r_2--;
-            if (duty_ratio_r_2 <= 1)
+            if (duty_ratio_r_2 <= 10)
             {
                 pwm_r_flag_2 = 0;
             }
@@ -246,7 +246,7 @@ void led_breath_g(void)
         if (pwm_g_flag_1 == 1)
         {
             duty_ratio_g_1--;
-            if (duty_ratio_g_1 <= 1)
+            if (duty_ratio_g_1 <= 10)
             {
                 pwm_g_flag_1 = 0;
             }
@@ -267,7 +267,7 @@ void led_breath_g(void)
         if (pwm_g_flag_2 == 1)
         {
             duty_ratio_g_2--;
-            if (duty_ratio_g_2 <= 1)
+            if (duty_ratio_g_2 <= 10)
             {
                 pwm_g_flag_2 = 0;
             }
@@ -291,7 +291,7 @@ void led_breath_b(void)
         if (pwm_b_flag_1 == 1)
         {
             duty_ratio_b_1--;
-            if (duty_ratio_b_1 <= 1)
+            if (duty_ratio_b_1 <= 10)
             {
                 pwm_b_flag_1 = 0;
             }
@@ -312,7 +312,7 @@ void led_breath_b(void)
         if (pwm_b_flag_2 == 1)
         {
             duty_ratio_b_2--;
-            if (duty_ratio_b_2 <= 1)
+            if (duty_ratio_b_2 <= 10)
             {
                 pwm_b_flag_2 = 0;
             }
@@ -358,7 +358,7 @@ void led_flicker_out(void)
 {
     if (flag_flicker_r_1 == 1)
     {
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED1_R_RUN;
         }
@@ -370,7 +370,7 @@ void led_flicker_out(void)
     }
     if (flag_flicker_r_2 == 1)
     {
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED2_R_RUN;
         }
@@ -383,7 +383,7 @@ void led_flicker_out(void)
     if (flag_flicker_g_1 == 1)
     {
 
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED1_G_RUN;
         }
@@ -396,7 +396,7 @@ void led_flicker_out(void)
     if (flag_flicker_g_2 == 1)
     {
 
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED2_G_RUN;
         }
@@ -409,7 +409,7 @@ void led_flicker_out(void)
     if (flag_flicker_b_1 == 1)
     {
 
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED1_B_RUN;
         }
@@ -421,7 +421,7 @@ void led_flicker_out(void)
     }
     if (flag_flicker_b_2 == 1)
     {
-        if (timer_s % 2 == 0)
+        if (timer_s % 4 == 0)
         {
             LED2_B_RUN;
         }
@@ -434,25 +434,31 @@ void led_flicker_out(void)
 }
 void led_breath_out(void)
 {
-    if (pwm_r_1 >= duty_ratio_r_1)
+    if (flag_breath_r_1 == 1)
     {
-        LED1_R_RUN;
+        if (pwm_r_1 >= duty_ratio_r_1)
+        {
+            LED1_R_RUN;
+        }
+        else
+        {
+            LED1_R_OFF;
+        }
     }
-    else
+    if (flag_breath_g_1 == 1)
     {
-        LED1_R_OFF;
+        if (pwm_g_1 >= duty_ratio_g_1)
+        {
+            LED1_G_RUN;
+        }
+        else
+        {
+            LED1_G_OFF;
+        } 
     }
-
-
-    if (pwm_g_1 >= duty_ratio_g_1)
-    {
-        LED1_G_RUN;
-    }
-    else
-    {
-        LED1_G_OFF;
-    }
-
+   
+if(flag_breath_b_1==1)
+{
     if (pwm_b_1 >= duty_ratio_b_1)
     {
         LED1_B_RUN;
@@ -460,88 +466,98 @@ void led_breath_out(void)
     else
     {
         LED1_B_OFF;
-    }
+    }   
+}   
 
 
+    if (flag_breath_r_2 == 1)
+    {
+        if (pwm_r_2 >= duty_ratio_r_2)
+        {
+            LED2_R_RUN;
+        }
+        else
+        {
+            LED2_R_OFF;
+        } 
+    }
+    
+    if (flag_breath_g_2 == 1)
+    {
+        if (pwm_g_2 >= duty_ratio_g_2)
+        {
+            LED2_G_RUN;
+        }
+        else
+        {
+            LED2_G_OFF;
+        } 
+    }
+   
 
-    if (pwm_r_2 >= duty_ratio_r_2)
+    if (flag_breath_b_2 == 1)
     {
-        LED2_R_RUN;
+        if (pwm_b_2 >= duty_ratio_b_2)
+        {
+            LED2_B_RUN;
+        }
+        else
+        {
+            LED2_B_OFF;
+        }
     }
-    else
-    {
-        LED2_R_OFF;
-    }
-
-    if (pwm_g_2 >= duty_ratio_g_2)
-    {
-        LED2_G_RUN;
-    }
-    else
-    {
-        LED2_G_OFF;
-    }
-
-
-    if (pwm_b_2 >= duty_ratio_b_2)
-    {
-        LED2_B_RUN;
-    }
-    else
-    {
-        LED2_B_OFF;
-    }
+   
 }
 void led_status_out(void)
 {
-    if (flag_satuse_r_1 == 1&&(flag_breath_r_1 == 0)&&(flag_flicker_r_1 == 0))
+    if ((flag_satuse_r_1 == 1)&&(flag_breath_r_1 == 0)&&(flag_flicker_r_1 == 0))
     {
         LED1_R_RUN;
     }
-    if (flag_satuse_r_1 == 0&&(flag_breath_r_1 == 0)&&(flag_flicker_r_1 == 0))
+    if ((flag_satuse_r_1 == 0)&&(flag_breath_r_1 == 0)&&(flag_flicker_r_1 == 0))
     {
         LED1_R_OFF;
     }
-    if (flag_satuse_g_1 == 1&&(flag_breath_g_1 == 0)&&(flag_flicker_g_1 == 0))
+    if ((flag_satuse_g_1 == 1)&&(flag_breath_g_1 == 0)&&(flag_flicker_g_1 == 0))
     {
         LED1_G_RUN;
     }
-    if (flag_satuse_g_1 == 0&&(flag_breath_r_1 == 0)&&(flag_flicker_g_1 == 0))
+    if ((flag_satuse_g_1 == 0)&&(flag_breath_g_1 == 0)&&(flag_flicker_g_1 == 0))
     {
         LED1_G_OFF;
     }
-    if (flag_satuse_b_1 == 1&&(flag_breath_b_1 == 0)&&(flag_flicker_b_1 == 0))
+    if ((flag_satuse_b_1 == 1)&&(flag_breath_b_1 == 0)&&(flag_flicker_b_1 == 0))
     {
         LED1_B_RUN;
     }
-    if (flag_satuse_b_1 == 0&&(flag_breath_b_1 == 0)&&(flag_flicker_b_1 == 0))
+    if ((flag_satuse_b_1 == 0)&&(flag_breath_b_1 == 0)&&(flag_flicker_b_1 == 0))
     {
         LED1_B_OFF;
     }
 
 
 
-    if (flag_satuse_r_2 == 1&&(flag_breath_r_2 == 0)&&(flag_flicker_r_2 == 0))
+    if ((flag_satuse_r_2 == 1)&&(flag_breath_r_2 == 0)&&(flag_flicker_r_2 == 0))
     {
         LED2_R_RUN;
     }
-    if (flag_satuse_r_2 == 0&&(flag_breath_r_2 == 0)&&(flag_flicker_r_2 == 0))
+    if ((flag_satuse_r_2 == 0)&&(flag_breath_r_2 == 0)&&(flag_flicker_r_2 == 0))
     {
         LED2_R_OFF;
     }
-    if (flag_satuse_g_2 == 1&&(flag_breath_g_2 == 0)&&(flag_flicker_g_2 == 0))
+    if ((flag_satuse_g_2 == 1)&&(flag_breath_g_2 == 0)&&(flag_flicker_g_2 == 0))
     {
         LED2_G_RUN;
     }
-    if (flag_satuse_g_2 == 0&&(flag_breath_r_2 == 0)&&(flag_flicker_g_2 == 0))
+    if ((flag_satuse_g_2 == 0)&&(flag_breath_r_2 == 0)&&(flag_flicker_g_2 == 0))
     {
         LED2_G_OFF;
     }
-    if (flag_satuse_b_2 == 1&&(flag_breath_b_2 == 0)&&(flag_flicker_b_2 == 0))
+    if ((flag_satuse_b_2 == 1)&&(flag_breath_b_2 == 0)&&(flag_flicker_b_2 == 0))
     {
         LED2_B_RUN;
     }
-    if (flag_satuse_b_2 == 0&&(flag_breath_b_2 == 0)&&(flag_flicker_b_2 == 0))
+    if ((flag_satuse_b_2 == 0)&&(flag_breath_b_2 == 0)&&(flag_flicker_b_2 == 0))
     {
         LED2_B_OFF;
     }

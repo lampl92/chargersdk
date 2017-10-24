@@ -155,6 +155,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     min = diffsec % 3600 / 60;
     sec = diffsec % 3600 % 60;
 
+    memset(temp_buf, '\0', sizeof(temp_buf));
     sprintf(temp_buf, "%02d", hour);
     EDIT_SetText(WM_GetDialogItem(hWin, ID_EDIT_4), temp_buf);//已充电时间小时
     sprintf(temp_buf, "%02d", min);

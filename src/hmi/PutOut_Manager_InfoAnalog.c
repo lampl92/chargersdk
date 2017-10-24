@@ -125,7 +125,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void Data_Flush(WM_MESSAGE *pMsg)
 {
     CON_t *pCon;
-    uint8_t strTmp[10];
+    uint8_t strTmp[30];
     
     pCon = CONGetHandle(0);
 
@@ -146,19 +146,19 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     strcat(strTmp,"Hz");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);
+    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp2);
+    sprintf(strTmp,"%.1f",pCon->status.dACNTemp);
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);//acl or acn
+    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);//acl or acn
     strcat(strTmp,"℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),strTmp);
 
-    sprintf(strTmp, "%.1f", pCon->status.dACNTemp);
+    sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp2);
     strcat(strTmp, "℃");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), strTmp);
 }

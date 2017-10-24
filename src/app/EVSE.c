@@ -859,13 +859,13 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
-    if(get_va() >= 400)
+//    if (Get_Power_Status == 1)
+//    {
+//        errcode =  ERR_POWEROFF_DECT_FAULT;
+//    }
+    //if (Get_Power_Status == 0)
     {
-        errcode =  ERR_POWEROFF_DECT_FAULT;
-    }
-    else
-    {
-        if(get_va() <= 100.0) //检测间隔10mS
+        if (Get_Power_Status == 0) //检测间隔10mS
         {
             tmpOffState = 1;
             printf_safe("Power Off!!!!\n");
@@ -874,7 +874,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
             printf_safe("Power Off!!!!\n");
             printf_safe("Power Off!!!!\n");
         }
-        else if((get_va() >= 180) && (get_va() <= 250))
+        else if(Get_Power_Status == 1)
         {
             tmpOffState = 0;
         }

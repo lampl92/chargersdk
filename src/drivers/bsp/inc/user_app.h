@@ -33,6 +33,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
+#define Get_Power_Status HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)
 
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)

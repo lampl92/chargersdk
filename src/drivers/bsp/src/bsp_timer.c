@@ -265,7 +265,7 @@ void TIM3_IRQHandler (void)//0.1ms
     {
       Power_out_l_pwm_ctrl();
     }
-	if(pwm_ms>=2000)
+	if(pwm_ms>=200)
 	{
 		pwm_ms=0;
 	}
