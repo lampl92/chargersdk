@@ -492,11 +492,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         _aahText[13][0] = TEXT_CreateEx(30, 410, _FONT_WIDTH*(strlen("获取SSID:")), 25,hWindow,WM_CF_SHOW,0,13,"获取SSID:");
         _aahEdit[13][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("获取SSID:")),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,35,strlen("woshinidaye"));
-        EDIT_SetText(_aahEdit[13][0],"woshinidaye");
+        EDIT_SetText(_aahEdit[13][0],"dpc");
 
         _aahText[14][0] = TEXT_CreateEx(30, 440, _FONT_WIDTH*(strlen("设置密码:")), 25,hWindow,WM_CF_SHOW,0,13,"设置密码:");
         _aahEdit[14][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("设置密码: ")),440, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,36,strlen("woshinidaye"));
-        EDIT_SetText(_aahEdit[14][0],"woshinidaye");
+        EDIT_SetText(_aahEdit[14][0],"1234567890");
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
