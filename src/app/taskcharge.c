@@ -174,7 +174,6 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //状态1'触发条件
                 {
-//                    xsprintf(strTimerName, "TimerCON%d_Charge_AntiShake", i);
                     pCON->status.xHandleTimerCharge = xTimerCreate("TimerCON_Charge_AntiShake",
                                                       defChargeAntiShakeCyc,
                                                       pdFALSE,

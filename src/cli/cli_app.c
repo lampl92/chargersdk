@@ -109,16 +109,22 @@ void cli_systemtime_fnt(int argc, char **argv)
     uint8_t tbuf[40];
     RTC_TimeTypeDef RTC_TimeStruct;
     RTC_DateTypeDef RTC_DateStruct;
+    int i;
     if(argc == 1)
     {
-        HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf_safe("\n%s\n", tbuf);
-        HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        printf_safe("%s\n", tbuf);
-        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        printf_safe("%s\n", tbuf);
+        for (i = 0; i < 80000; i++)
+        {
+            HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
+            sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+            printf_safe("\n%s\n", tbuf);
+            HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
+            sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+            printf_safe("%s\n", tbuf);
+            sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+            printf_safe("%s\n", tbuf);
+            //vTaskDelay(1);
+        }
+        
 
         printf_safe("<time.h>-----------测试--------------\n");
         time_t now;
@@ -192,12 +198,12 @@ void cli_systemtime_fnt(int argc, char **argv)
         time(&tim_set);
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
         printf_safe("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+        sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
         printf_safe("%s\n", tbuf);
-        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+        sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
         printf_safe("%s\n", tbuf);
     }
     else if(strcmp(argv[1], "--help") == 0)

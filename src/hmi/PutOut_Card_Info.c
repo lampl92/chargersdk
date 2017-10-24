@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -195,7 +195,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     min = diffsec % 3600 / 60;
     sec = diffsec % 3600 % 60;
 
-    xsprintf((char *)_secDown, "(%02dS)", (60 - sec));
+    sprintf((char *)_secDown, "(%02dS)", (60 - sec));
 	//printf_safe("now = %d, first_time = %d, sec = %d ,winInitDone = %d ,first_CardInfo = %d\n", now, first_time, sec, winInitDone, first_CardInfo);
     if(sec == 59)
     {

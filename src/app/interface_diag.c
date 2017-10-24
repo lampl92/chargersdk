@@ -151,7 +151,6 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             break;
         case VOLT_LOWER:
-//            xsprintf(strTimerName, "TimerCON%d_VoltLow_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltLow_Dummy",
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
@@ -161,7 +160,6 @@ void DiagVoltageError(CON_t *pCON)
             pCON->status.xVoltStat = STATE_VOLT_LOWER_Dummy;
             break;
         case VOLT_UPPER:
-//            xsprintf(strTimerName, "TimerCON%d_VoltUp_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltUp_Dummy",
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
@@ -234,7 +232,6 @@ void DiagVoltageError(CON_t *pCON)
         switch(voltstat)
         {
         case VOLT_OK://200~240
-            //xsprintf(strTimerName, "TimerCON%d_VoltOK_Dummy", id);
             pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltOK_Dummy",
                                               defDiagVoltRecoverCyc,
                                               pdFALSE,
@@ -323,7 +320,6 @@ void DiagCurrentError(CON_t *pCON)
         switch(pCON->status.xCurrStat)
         {
         case STATE_CURR_INIT:
-//            xsprintf(strTimerName, "TimerCON%d_CurrInit", id);
             pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrInit",
                                               defDiagCurrInitCyc,
                                               pdFALSE,
@@ -351,7 +347,6 @@ void DiagCurrentError(CON_t *pCON)
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 break;
             case CURR_UPPER:
-//                xsprintf(strTimerName, "TimerCON%d_CurrUp_Dummy", id);
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Dummy",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
@@ -375,7 +370,6 @@ void DiagCurrentError(CON_t *pCON)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
                 THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 30), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
-//                xsprintf(strTimerName, "TimerCON%d_CurrUp_Fix", id);
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Fix",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,

@@ -1,9 +1,13 @@
 #include "bsp_define.h"
 #include "xprintf.h"
+#include "bsp.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
 #include <time.h>
 
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
 time_t time_dat;
+SemaphoreHandle_t xMutexTimeStruct;
 //RTC时间设置
 //hour,min,sec:小时,分钟,秒钟
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
@@ -71,7 +75,8 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
 u8 bsp_RTC_Init(void)
 {
 
-
+    xMutexTimeStruct = xSemaphoreCreateMutex();
+    
     RTC_Handler.Instance = RTC;
     RTC_Handler.Init.HourFormat = RTC_HOURFORMAT_24; //RTC设置为24小时格式
     RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTC异步分频系数(1~0X7F)
@@ -202,4 +207,17 @@ clock_t clock(void)
     clock_t clock_dat;
     clock_dat = (clock_t)ulHighFrequencyTimerTicks;
     return clock_dat;
+}
+
+void printTime(time_t now)
+{
+    struct tm *ts;
+    char buf[80];
+    if (xSemaphoreTake(xMutexTimeStruct, 100) == pdPASS)
+    {
+        ts = localtime(& now);
+        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+        printf_safe("%s \n", buf);
+        xSemaphoreGive(xMutexTimeStruct);
+    }
 }

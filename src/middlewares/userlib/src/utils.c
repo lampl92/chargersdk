@@ -121,7 +121,7 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 
 uint32_t HexToChar(uint8_t Hex, uint8_t *c)
 {
-    xsprintf(c, "%02X", Hex);
+    sprintf(c, "%02X", Hex);
 }
 
 /** @brief hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99  --> "E1FF99000..."

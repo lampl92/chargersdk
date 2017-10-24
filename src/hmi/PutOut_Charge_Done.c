@@ -169,8 +169,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
 		sec = 10 - diffsec;
 		if (sec < 0)
 			sec = 0;
-		xsprintf((char *)_secDown, "(%02dS)", sec);
-		//xsprintf((char *)Timer_buf, "(%02dS)", sec);
+		sprintf((char *)_secDown, "(%02dS)", sec);
+		//sprintf((char *)Timer_buf, "(%02dS)", sec);
 		if (sec == 0)
 		{
 			orderFinish = 0;

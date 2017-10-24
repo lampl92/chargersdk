@@ -27,7 +27,7 @@ void cli_tasklist_fnt(int argc, char **argv)
     }
     FreeBytesRemaining = xPortGetFreeHeapSize();
     memused = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) * 100 / configTOTAL_HEAP_SIZE;
-    xsprintf((char *)paddr, "%d.%01d%%", memused / 10, memused % 10);
+    sprintf((char *)paddr, "%d.%01d%%", memused / 10, memused % 10);
     usedkb = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) / 1024;
     printf_safe("\nSDRAM 使用率: %s，%.2lf KB\n", paddr, usedkb);
 }

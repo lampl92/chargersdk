@@ -2670,6 +2670,12 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
         ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
         ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
         timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
+        printf_safe("server: ");
+        printTime(timestamp);
+        printf_safe("\n");
+        printf_safe("local:  ");
+        printTime(time(NULL));
+        printf_safe("\n");
         if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
         {
             time(&timestamp);
