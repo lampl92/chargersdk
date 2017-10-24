@@ -129,15 +129,15 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
-#if EVSE_USING_GUI
-    LCD_Init();
-    TP_Init();
-#endif
 #ifndef EVSE_DEBUG
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();
 
+#if EVSE_USING_GUI
+    LCD_Init();
+    TP_Init();
+#endif
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
