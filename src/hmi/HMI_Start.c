@@ -44,11 +44,21 @@ void MainTask(void)
 //        Create_SIF24("system/SIF24.sif");
 //        Create_SIF36("system/SIF36.sif");
 
-        Create_SIF12("system/wryhCX12.sif");
-        Create_SIF16("system/wryhCX16.sif");
-        Create_SIF24("system/wryhCX24.sif");
-        Create_SIF36("system/wryhCX36.sif");
+//        Create_SIF12("system/lsSIF12.sif");
+//        Create_SIF16("system/lsSIF16.sif");
+//        Create_SIF24("system/lsSIF24.sif");
+//        Create_SIF36("system/lsSIF36.sif");
 
+//        Create_SIF12("system/htSIF12.sif");
+//        Create_SIF16("system/htSIF16.sif");
+//        Create_SIF24("system/htSIF24.sif");
+//        Create_SIF36("system/htSIF36.sif");
+
+            Create_SIF12("system/stSIF12.sif");
+            Create_SIF16("system/stSIF16.sif");
+            Create_SIF24("system/stSIF24.sif");
+            Create_SIF36("system/stSIF36.sif");
+     
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();

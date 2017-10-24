@@ -69,7 +69,7 @@ void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t t
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&SIF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF16_Font,GUI_RED,"信号:");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF24_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF16_Font,GUI_RED,"2017-02-28");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&SIF16_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
@@ -98,7 +98,7 @@ void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t tex
     IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     //FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF16_Font,GUI_RED,"信号：强");
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF24_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
+    Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF16_Font,GUI_RED,"2017-02-28");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid1),&SIF16_Font,GUI_RED,"14:00:00");
     WM_SetFocus(pMsg->hWin);
