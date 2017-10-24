@@ -1,20 +1,48 @@
 #include "includes.h"
 #include "utils.h"
 #include <time.h>
-
+#include "interface.h"
+#include "bsp_define.h"
+extern void testBnWList(void);
 void cli_hello_fnt(int argc, char **argv)
 {
-    uint8_t cardid[defCardIDLength] = {0xAD, 0xCD, 0x0F, 0x12};
-    uint8_t strCardID[defCardIDLength * 2 + 1];
     int i;
-    HexToStr(cardid, strCardID, 8);
-    printf_safe("test strCardID = %s", strCardID);
-
     printf_safe("\nhello world\n");
     printf_safe("HCLK = SYSCLK = %dMHz\n", SystemCoreClock / 1000000);
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
+    //testBnWList();
+#if 0
+    CON_t *pCON;
+    pCON = CONGetHandle(0);
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REGISTER, 20, 3);//0
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_HEARTBEAT, 20, 3);//1
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_RESET, 20, 3);//2
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_STATUS, 20, 3);//3
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 20, 3);//4
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_RTDATA, 20, 3);//5
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);//6
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_SUCC, 20, 3);//7
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_FAIL, 20, 3);//8
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_POWERFEE, 20, 3);//14
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_SERVFEE, 20, 3);//15
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_CYC, 20, 3);//16
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_TIMESEG, 20, 3);//17
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_KEY, 20, 3);//18
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_SOFTVER, 20, 3);//19
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_QR, 20, 3);//21
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_BLACK, 20, 3);//22
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_SET_WHITE, 20, 3);//23
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_BLACK, 20, 3);//24
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_REQ_WHITE, 20, 3);//25
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_START, 20, 3);//28
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_START_RES, 20, 3);//29
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 20, 3);//30
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_CARD_RTDATA, 20, 3);//31
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_FAULT, 20, 3);//32
+    pechProto->sendCommand(pechProto, pEVSE, pCON, ECH_CMDID_UP_WARNING, 20, 3);//33
+#endif
 }
 
 tinysh_cmd_t cli_hello_cmd =
@@ -28,20 +56,20 @@ tinysh_cmd_t cli_hello_cmd =
 
 
 
-//SDRAMÄÚ´æ²âÊÔ
+//SDRAMå†…å­˜æµ‹è¯•
 void fsmc_sdram_test()
 {
     u32 i = 0;
     u32 temp = 0;
-    u32 sval = 0; //ÔÚµØÖ·0¶Áµ½µÄÊı¾İ
-    printf_safe("Ã¿¸ô16K×Ö½Ú,Ğ´ÈëÒ»¸öÊı¾İ,×Ü¹²Ğ´Èë2048¸öÊı¾İ,¸ÕºÃÊÇ32M×Ö½Ú\n");
+    u32 sval = 0; //åœ¨åœ°å€0è¯»åˆ°çš„æ•°æ®
+    printf_safe("æ¯éš”16Kå­—èŠ‚,å†™å…¥ä¸€ä¸ªæ•°æ®,æ€»å…±å†™å…¥2048ä¸ªæ•°æ®,åˆšå¥½æ˜¯32Må­—èŠ‚\n");
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         *(vu32 *)(Bank5_SDRAM_ADDR + i) = temp;
         temp++;
     }
     temp = 0;
-    //ÒÀ´Î¶Á³öÖ®Ç°Ğ´ÈëµÄÊı¾İ,½øĞĞĞ£Ñé
+    //ä¾æ¬¡è¯»å‡ºä¹‹å‰å†™å…¥çš„æ•°æ®,è¿›è¡Œæ ¡éªŒ
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
         sval = *(vu32 *)(Bank5_SDRAM_ADDR + i);
@@ -56,7 +84,7 @@ void fsmc_sdram_test()
         }
         temp++;
     }
-    printf_safe("SDRAM ÈİÁ¿:%dMB\r\n", i / 1024 / 1024); //´òÓ¡SDRAMÈİÁ¿
+    printf_safe("SDRAM å®¹é‡:%dMB\r\n", i / 1024 / 1024); //æ‰“å°SDRAMå®¹é‡
 }
 
 
@@ -81,18 +109,24 @@ void cli_systemtime_fnt(int argc, char **argv)
     uint8_t tbuf[40];
     RTC_TimeTypeDef RTC_TimeStruct;
     RTC_DateTypeDef RTC_DateStruct;
+    int i;
     if(argc == 1)
     {
-        HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
-        printf_safe("\n%s\n", tbuf);
-        HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
-        printf_safe("%s\n", tbuf);
-        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
-        printf_safe("%s\n", tbuf);
+        for (i = 0; i < 80000; i++)
+        {
+            HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
+            sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+            printf_safe("\n%s\n", tbuf);
+            HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
+            sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+            printf_safe("%s\n", tbuf);
+            sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+            printf_safe("%s\n", tbuf);
+            //vTaskDelay(1);
+        }
+        
 
-        printf_safe("<time.h>-----------²âÊÔ--------------\n");
+        printf_safe("<time.h>-----------æµ‹è¯•--------------\n");
         time_t now;
         struct tm *ts;
         char buf [80];
@@ -164,12 +198,12 @@ void cli_systemtime_fnt(int argc, char **argv)
         time(&tim_set);
 
         HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
+        sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
         printf_safe("\n%s\n", tbuf);
         HAL_RTC_GetDate(&RTC_Handler, &RTC_DateStruct, RTC_FORMAT_BIN);
-        xsprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
+        sprintf((char *)tbuf, "Date:20%02d-%02d-%02d", RTC_DateStruct.Year, RTC_DateStruct.Month, RTC_DateStruct.Date);
         printf_safe("%s\n", tbuf);
-        xsprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
+        sprintf((char *)tbuf, "Week:%d", RTC_DateStruct.WeekDay);
         printf_safe("%s\n", tbuf);
     }
     else if(strcmp(argv[1], "--help") == 0)

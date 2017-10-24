@@ -33,7 +33,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "bsp.h"
+#include "bsp_define.h"
 #include "myiic.h"
 #include "user_app.h"
 ADC_HandleTypeDef hadc1;
@@ -186,7 +186,7 @@ void MX_ADC1_Init(void)
     hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
     hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
     hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    hadc1.Init.NbrOfConversion = 6;
+    hadc1.Init.NbrOfConversion = 3;
     hadc1.Init.DMAContinuousRequests = ENABLE;
     hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
     if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -198,7 +198,7 @@ void MX_ADC1_Init(void)
     */
     sConfig.Channel = ADC_CHANNEL_3;
     sConfig.Rank = 1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_84CYCLES;
+    sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
     if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
     {
         Error_Handler();
@@ -206,7 +206,34 @@ void MX_ADC1_Init(void)
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
     */
-    sConfig.Channel = ADC_CHANNEL_4;
+//    sConfig.Channel = ADC_CHANNEL_4;
+//    sConfig.Rank = 2;
+//    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+    */
+//    sConfig.Channel = ADC_CHANNEL_5;
+//    sConfig.Rank = 3;
+//    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+    */
+//    sConfig.Channel = ADC_CHANNEL_6;
+//    sConfig.Rank = 4;
+//    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+    */
+    sConfig.Channel = ADC_CHANNEL_8;
     sConfig.Rank = 2;
     if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
     {
@@ -215,35 +242,8 @@ void MX_ADC1_Init(void)
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
     */
-    sConfig.Channel = ADC_CHANNEL_5;
-    sConfig.Rank = 3;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-    */
-    sConfig.Channel = ADC_CHANNEL_6;
-    sConfig.Rank = 4;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-    */
-    sConfig.Channel = ADC_CHANNEL_8;
-    sConfig.Rank = 5;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-    */
     sConfig.Channel = ADC_CHANNEL_9;
-    sConfig.Rank = 6;
+    sConfig.Rank = 3;
     if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
     {
         Error_Handler();
@@ -257,13 +257,13 @@ void MX_DMA_Init(void)
 
     /* DMA interrupt init */
     /* DMA2_Stream0_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, bspDMA2_Stream0_PreemptPriority, bspDMA2_Stream0_SubPriority);
     HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
 void DMA_START(void)
 {
-    if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, 60) != HAL_OK)
+    if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, 30) != HAL_OK)
     {
         Error_Handler();
     }
@@ -279,6 +279,7 @@ void MX_GPIO_Init(void)
     __HAL_RCC_GPIOD_CLK_ENABLE();
     __HAL_RCC_GPIOE_CLK_ENABLE();
     __HAL_RCC_GPIOF_CLK_ENABLE();
+    __HAL_RCC_GPIOG_CLK_ENABLE();
     __HAL_RCC_GPIOH_CLK_ENABLE();
     __HAL_RCC_GPIOI_CLK_ENABLE();
     /*Configure GPIO pins : PC14 PC0 PC3 PC9 */
@@ -292,7 +293,13 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT ;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = GPIO_PIN_3;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PH3 PH4 */
     GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5|GPIO_PIN_6 ;
@@ -358,7 +365,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM2_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM2_IRQn, bspTIM2_PreemptPriority, bspTIM2_SubPriority);
         HAL_NVIC_EnableIRQ(TIM2_IRQn);
         /* USER CODE BEGIN TIM2_MspInit 1 */
 
@@ -372,7 +379,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM3_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM3_IRQn, bspTIM3_PreemptPriority, bspTIM3_SubPriority);
         HAL_NVIC_EnableIRQ(TIM3_IRQn);
         /* USER CODE BEGIN TIM3_MspInit 1 */
 
@@ -386,7 +393,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM4_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM4_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM4_IRQn, bspTIM4_PreemptPriority, bspTIM4_SubPriority);
         HAL_NVIC_EnableIRQ(TIM4_IRQn);
         /* USER CODE BEGIN TIM4_MspInit 1 */
 
@@ -400,7 +407,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim_base)
         /* Peripheral clock enable */
         __HAL_RCC_TIM5_CLK_ENABLE();
         /* Peripheral interrupt init */
-        HAL_NVIC_SetPriority(TIM5_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TIM5_IRQn, bspTIM5_PreemptPriority, bspTIM5_SubPriority);
         HAL_NVIC_EnableIRQ(TIM5_IRQn);
         /* USER CODE BEGIN TIM5_MspInit 1 */
 

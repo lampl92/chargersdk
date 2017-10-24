@@ -1,6 +1,6 @@
 /**
 * @file taskdiag.c
-* @brief ÏµÍ³Õï¶ÏÈÎÎñ¡£
+* @brief ç³»ç»Ÿè¯Šæ–­ä»»åŠ¡ã€‚
 * @author rgw
 * @version v1.0
 * @date 2017-01-22
@@ -28,15 +28,15 @@ void vTaskEVSEDiag(void *pvParameters)
     while(1)
     {
 #ifndef DEBUG_NO_TASKDIAG
-        /* ´¦ÀíÏµÍ³Ê§Ğ§¹ÊÕÏ */
+        /* å¤„ç†ç³»ç»Ÿå¤±æ•ˆæ•…éšœ */
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef DEBUG_DIAG
+#ifdef EVSE_DEBUG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
 #endif
-            switch(errpack.code) // £¡£¡£¡ ÕâÀïÒ»¶¨Òª×ĞÏ¸²é¿´errpack.ulDevIDÊÇ·ñ¿ÉÒÔÓÃ×÷ CONID£¬ Ö÷ÒªÊÇ¿´Éè±¸ÊÇ·ñÊÇ¹éÊôÓÚÇ¹»¹ÊÇ×®¡£ £¡£¡£¡
+            switch(errpack.code) // ï¼ï¼ï¼ è¿™é‡Œä¸€å®šè¦ä»”ç»†æŸ¥çœ‹errpack.ulDevIDæ˜¯å¦å¯ä»¥ç”¨ä½œ CONIDï¼Œ ä¸»è¦æ˜¯çœ‹è®¾å¤‡æ˜¯å¦æ˜¯å½’å±äºæªè¿˜æ˜¯æ¡©ã€‚ ï¼ï¼ï¼
             {
             case ERR_RFID_FAULT:
                 for(i = 0; i < ulTotalCON; i++)
@@ -49,30 +49,57 @@ void vTaskEVSEDiag(void *pvParameters)
                 pCON = CONGetHandle(errpack.ulDevID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
                 break;
-            case ERR_RELAY_PASTE:
+            case ERR_CON_CP_FAULT:
                 pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRelayPaste);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCPSwitch);
+                break;
+            case ERR_CON_ACTEMP_DECT_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempSensor);
+                break;
+            case ERR_CON_BTEMP1_DECT_FAULT:
+            case ERR_CON_BTEMP2_DECT_FAULT:
+                pCON = CONGetHandle(errpack.ulDevID);
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionSocketTempSensor);
                 break;
             default:
                 break;
             }
         }
 
-        /* end of ´¦ÀíÏµÍ³Ê§Ğ§¹ÊÕÏ */
-
-        /* ´¦ÀíÏµÍ³±¨¾¯ */
+        /* end of å¤„ç†ç³»ç»Ÿå¤±æ•ˆæ•…éšœ */
+        
+        for (i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
+            {
+                if (pCON->status.ulSignalAlarm != 0 ||
+                    pCON->status.ulSignalFault != 0 ||
+                    pEVSE->status.ulSignalAlarm != 0 ||
+                    pEVSE->status.ulSignalFault != 0)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+            }
+        }
+        
+        /* å¤„ç†ç³»ç»ŸæŠ¥è­¦ */
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
-            if((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
+            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
-                pCON->status.SetLoadPercent(pCON, 50);
+                if (pCON->state == STATE_CON_CHARGING)
+                {
+                    pCON->status.SetLoadPercent(pCON, 70);
+                }
             }
         }
-        /* end of ´¦ÀíÏµÍ³±¨¾¯ */
+        /* end of å¤„ç†ç³»ç»ŸæŠ¥è­¦ */
 
-        /* Õï¶Ï¸÷×´Ì¬ */
+        /* è¯Šæ–­å„çŠ¶æ€ */
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
@@ -104,22 +131,13 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagVolt, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagVolt) == defEventBitDiagVolt)
-        {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                DiagVoltageError(pCON);
-            }
-        }
-
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
         {
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
+                DiagVoltageError(pCON);
                 DiagCurrentError(pCON);
                 DiagFreqError(pCON);
             }
@@ -131,14 +149,10 @@ void vTaskEVSEDiag(void *pvParameters)
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                DiagEVSEError(pCON);//EVSEÆô¶¯Ïà¹ØÌõ¼şÅĞ¶Ï
+                DiagEVSEError(pCON);//EVSEå¯åŠ¨ç›¸å…³æ¡ä»¶åˆ¤æ–­
             }
         }
-        /* end of ÅĞ¶Ï×´Ì¬ */
-
-#if DEBUG_DIAG
-        //printf_safe("%s\n", TASKNAME_EVSEDiag);
-#endif
+        /* end of åˆ¤æ–­çŠ¶æ€ */
 #endif
         vTaskDelay(10);
     }

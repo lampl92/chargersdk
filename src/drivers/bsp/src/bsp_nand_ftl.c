@@ -1,4 +1,9 @@
-#include "bsp.h"
+#include "bsp_define.h"
+#include "bsp_nand_hw.h"
+#include "bsp_nand_ftl.h"
+#include "xprintf.h"
+#include <stdlib.h>
+#include <string.h>
 
 //升级说明
 //V1.1 20160124

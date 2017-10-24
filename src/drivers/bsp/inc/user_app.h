@@ -33,6 +33,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
+#define Get_Power_Status HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)
 
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
@@ -61,10 +62,13 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
-#define TEMP_L_OUT 0X00
-#define TEMP_L_IN  0X01
-#define TEMP_N_OUT 0X02
-#define TEMP_N_IN  0X03
+
+
+
+#define TEMP_L_OUT 0X00 //板卡输出N
+#define TEMP_L_IN  0X01 //    L
+#define TEMP_N_OUT 0X02 //市电输入N
+#define TEMP_N_IN  0X03 //市电输入L
 #define TEMP_GUN1_POSITIVE  0X04
 #define TEMP_GUN1_NEGATIVE  0X05
 #define TEMP_GUN2_POSITIVE  0X06
@@ -102,7 +106,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define temper_k   100
 #define CP1_k      0.0032
 #define CP2_k      0.0032//14.1/3??·???±???
-#define electricity_meter_num 256
+#define electricity_meter_num 2
 #define TIMER_MAX 1
 typedef struct
 {
@@ -132,7 +136,7 @@ typedef struct
     double TEMP3;
     double TEMP4;
     double TEMP_ARM1;
-    double TEMP_ARM2;
+	double TEMP_ARM2;
     double TEMP_ARM3;
     double TEMP_ARM4;
 } DC_t;
@@ -143,13 +147,9 @@ typedef struct
     AC_t AC;
     DC_t DC;
 } samp;
-samp Sys_samp;
 typedef struct
 {
     unsigned short CD4067;
-    unsigned short va_samp;
-    unsigned short ia_samp;
-    unsigned short leakage_current;
     unsigned short CP1;
     unsigned short CP2;
 
@@ -250,4 +250,5 @@ double vref,va;
 uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum,leakage_current_sum,va_samp_sum,ia_samp_sum,CP2_sum,CP1_sum,CP1_sum_sys,CP2_sum_sys;
 uint8_t   pwm_samp_timer,pwm_samp_flag;
+extern samp Sys_samp;
 #endif /* USER_APP_H_INCLUDED */

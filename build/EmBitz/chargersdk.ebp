@@ -81,7 +81,7 @@
 			<Add option="-mfloat-abi=hard" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-O3" />
+			<Add option="-O0" />
 			<Add symbol="OS_SUPPORT" />
 			<Add symbol="USE_HAL_DRIVER" />
 			<Add symbol="STM32F429xx" />
@@ -113,25 +113,24 @@
 			<Add directory="..\..\src\drivers\hal\CMSIS_RTOS" />
 			<Add directory="..\..\src\net\user" />
 			<Add directory="..\..\src\middlewares\tiny-AES128-C" />
+			<Add directory="..\..\src\middlewares\LittleD\src" />
+			<Add directory="..\..\src\middlewares\LittleD\src\include" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_lib=d" />
 			<Add option="-eb_start_files" />
 			<Add library="..\..\src\middlewares\STemWin\Lib\STemWin532_CM4_OS_GCC.a" />
 			<Add library="..\..\src\hmi\dimen_barcode\ATK_QR_V1.4.lib" />
-			<Add library="C:\Program Files (x86)\EmBitz\1.11\share\em_armgcc\arm-none-eabi\lib\armv7e-m\fpu\libm.a" />
+			<Add library="lib\armv7e-m\fpu\fpv5-sp-d16\libm.a" />
 		</Linker>
 		<Unit filename="startup\startup_stm32f429x.S">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="version.h" />
 		<Unit filename="..\..\nand\system\evse.cfg" />
 		<Unit filename="..\..\nand\system\evse.cfg.templ" />
-		<Unit filename="..\..\nand\system\evse_config.xml" />
-		<Unit filename="..\..\nand\system\order.txt" />
 		<Unit filename="..\..\nand\system\order.txt.templ" />
-		<Unit filename="..\..\nand\system\order.xml" />
-		<Unit filename="..\..\nand\system\public_info.xml" />
+		<Unit filename="..\..\nand\system\protocol.cfg" />
+		<Unit filename="..\..\nand\system\sys.cfg" />
 		<Unit filename="..\..\src\app\cfg_parse.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -208,6 +207,9 @@
 		<Unit filename="..\..\src\app\stm32f4xx_it.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\app\stringName.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\app\stringName.h" />
 		<Unit filename="..\..\src\app\sysinit.c">
 			<Option compilerVar="CC" />
@@ -249,10 +251,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\app\timercallback.h" />
+		<Unit filename="..\..\src\app\version.h" />
 		<Unit filename="..\..\src\cli\cli_aes.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_app.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_crc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\cli\cli_database.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\cli\cli_evse.c">
@@ -451,11 +460,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\dimen_barcode\qrdecode.h" />
-		<Unit filename="..\..\src\hmi\EVSEDLG.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
 		<Unit filename="..\..\src\hmi\HMI_Start.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -481,28 +485,25 @@
 		<Unit filename="..\..\src\hmi\PutOut_Card_Info.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\PutOut_Card_Valid.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charge_Done.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Charging.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\PutOut_Charging_2-dimen.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Home.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\hmi\PutOut_Machine_Error.c">
+		<Unit filename="..\..\src\hmi\PutOut_Manager_AlarmLog.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoStatus.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Manager_SysSet.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_RegisterDisp.c">
@@ -513,11 +514,6 @@
 		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Skin_Keyboard.c">
 			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\hmi\PutOut_Window.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\pyinput.c">
 			<Option compilerVar="CC" />
@@ -559,14 +555,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\qrencode\src\split.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="..\..\src\hmi\TOUCH_Calibrate.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="..\..\src\hmi\Touch_Calibrate2.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\src\hmi\Touch_Disp_Module.c">
@@ -616,6 +604,105 @@
 		<Unit filename="..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\db_ctconf.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\db_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dberror.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbindex\dbindex_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\compare_tuple.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\db_aggr_func_codes.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\eet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dblogic\eet.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmacros.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmacros.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbmm\db_query_mm.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\relation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\relation.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\tuple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbobjects\tuple.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\aggregate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\aggregate.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\db_ops_types.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\ntjoin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\ntjoin.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\osijoin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\osijoin.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\project.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\project.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\scan.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\scan.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\select.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\select.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\sort.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbops\sort.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dboutput\query_output.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dboutput\query_output.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbcreate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbcreate.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbinsert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbinsert.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dblexer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dblexer.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparseexpr.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbparser\dbparser.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\dbstorage.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\dbstorage\SD_c_iface.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\include\debug.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\mainpage.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\pstdint.h" />
+		<Unit filename="..\..\src\middlewares\LittleD\src\ref.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -629,17 +716,6 @@
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_FlexColor_Template.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_AT070.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_ATK_7016.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="..\..\src\middlewares\STemWin\Config\LCDConf_Lin_Template.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -649,6 +725,10 @@
 		<Unit filename="..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\SIF\siffontcreate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\src\middlewares\STemWin\SIF\siffontcreate.h" />
 		<Unit filename="..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -743,9 +823,8 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Debug" active_interface="ST-link">
+				<target_debugging_settings target="Release" active_interface="J-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
-						<family_options family_id="Generic" />
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -783,8 +862,9 @@
 						</family_options>
 					</debug_interface>
 				</target_debugging_settings>
-				<target_debugging_settings target="Release" active_interface="J-link">
+				<target_debugging_settings target="Debug" active_interface="J-link">
 					<debug_interface interface_id="J-link" ip_address="localhost" ip_port="2331" path="%Software\SEGGER\J-Link:InstallPath%" executable="JLinkGDBServer.exe" description="" dont_start_server="false" backoff_time="2000" options="2" reg_filter="0" active_family="STMicroelectronics" gdb_before_conn="" gdb_after_conn="">
+						<family_options family_id="Generic" />
 						<family_options family_id="STMicroelectronics">
 							<option opt_id="ID_DEVICE" opt_value="STM32F429IG" />
 							<option opt_id="ID_JTAG_SWD" opt_value="swd" />
@@ -835,7 +915,7 @@
 			</DoxyBlocks>
 			<AutoVersioning>
 				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
-				<Settings use_defines="1" autoincrement="1" date_declarations="1" update_manifest="1" do_auto_increment="1" ask_to_increment="0" language="C" svn="0" svn_directory="" header_path="version.h" />
+				<Settings use_defines="1" autoincrement="1" date_declarations="1" update_manifest="1" do_auto_increment="1" ask_to_increment="0" language="C" svn="0" svn_directory="" header_path="..\..\src\app\version.h" />
 				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
 			</AutoVersioning>

@@ -129,10 +129,11 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
-
+#if EVSE_USING_GUI
     LCD_Init();
     TP_Init();
-#ifndef DEBUG_INIT
+#endif
+#ifndef EVSE_DEBUG
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();
@@ -144,7 +145,7 @@ void bsp_Init(void)
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
 #ifndef EVSE_DEBUG
-    IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
+    //IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
 #endif
 //LCD_Init();
 

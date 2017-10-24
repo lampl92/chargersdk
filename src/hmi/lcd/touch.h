@@ -1,52 +1,53 @@
 #ifndef __TOUCH_H__
 #define __TOUCH_H__
-#include "includes.h"
 
-#define TP_PRES_DOWN 0x80  //´¥ÆÁ±»°´ÏÂ
-#define TP_CATH_PRES 0x40  //ÓĞ°´¼ü°´ÏÂÁË
-#define CT_MAX_TOUCH  5    //µçÈİÆÁÖ§³ÖµÄµãÊı,¹Ì¶¨Îª5µã
+#include "stm32f4xx.h"
+
+#define TP_PRES_DOWN 0x80  //è§¦å±è¢«æŒ‰ä¸‹
+#define TP_CATH_PRES 0x40  //æœ‰æŒ‰é”®æŒ‰ä¸‹äº†
+#define CT_MAX_TOUCH  5    //ç”µå®¹å±æ”¯æŒçš„ç‚¹æ•°,å›ºå®šä¸º5ç‚¹
 #ifndef bitset
-#define bitset(var,bitno) ((var) |= (1<<(bitno)))           //ÖÃÎ»
+#define bitset(var,bitno) ((var) |= (1<<(bitno)))           //ç½®ä½
 #endif
 
 #ifndef bitclr
-#define bitclr(var,bitno) ((var) &= ~(1<<(bitno)))          //Çå0
+#define bitclr(var,bitno) ((var) &= ~(1<<(bitno)))          //æ¸…0
 #endif
 
 #ifndef bittest
-#define bittest(var,bitno) ((var >> bitno)& 0x01)           //Î»×´Ì¬¼ì²â
+#define bittest(var,bitno) ((var >> bitno)& 0x01)           //ä½çŠ¶æ€æ£€æµ‹
 #endif
-//´¥ÃşÆÁ¿ØÖÆÆ÷
+//è§¦æ‘¸å±æ§åˆ¶å™¨
 typedef struct
 {
-	uint8_t (*init)(void);			//³õÊ¼»¯´¥ÃşÆÁ¿ØÖÆÆ÷
-	uint8_t (*scan)(uint8_t);				//É¨Ãè´¥ÃşÆÁ.0,ÆÁÄ»É¨Ãè;1,ÎïÀí×ø±ê;
-	void (*adjust)(void);		//´¥ÃşÆÁĞ£×¼
-	uint16_t x[CT_MAX_TOUCH]; 		//µ±Ç°×ø±ê
-	uint16_t y[CT_MAX_TOUCH];		//µçÈİÆÁÓĞ×î¶à5×é×ø±ê,µç×èÆÁÔòÓÃx[0],y[0]´ú±í:´Ë´ÎÉ¨ÃèÊ±,´¥ÆÁµÄ×ø±ê,ÓÃ
-								//x[4],y[4]´æ´¢µÚÒ»´Î°´ÏÂÊ±µÄ×ø±ê.
-	uint8_t  sta;					//±ÊµÄ×´Ì¬
-								//b7:°´ÏÂ1/ËÉ¿ª0;
-	                            //b6:0,Ã»ÓĞ°´¼ü°´ÏÂ;1,ÓĞ°´¼ü°´ÏÂ.
-								//b5:±£Áô
-								//b4~b0:µçÈİ´¥ÃşÆÁ°´ÏÂµÄµãÊı(0,±íÊ¾Î´°´ÏÂ,1±íÊ¾°´ÏÂ)
-/////////////////////´¥ÃşÆÁĞ£×¼²ÎÊı(µçÈİÆÁ²»ĞèÒªĞ£×¼)//////////////////////
+	uint8_t (*init)(void);			//åˆå§‹åŒ–è§¦æ‘¸å±æ§åˆ¶å™¨
+	uint8_t (*scan)(uint8_t);				//æ‰«æè§¦æ‘¸å±.0,å±å¹•æ‰«æ;1,ç‰©ç†åæ ‡;
+	void (*adjust)(void);		//è§¦æ‘¸å±æ ¡å‡†
+	uint16_t x[CT_MAX_TOUCH]; 		//å½“å‰åæ ‡
+	uint16_t y[CT_MAX_TOUCH];		//ç”µå®¹å±æœ‰æœ€å¤š5ç»„åæ ‡,ç”µé˜»å±åˆ™ç”¨x[0],y[0]ä»£è¡¨:æ­¤æ¬¡æ‰«ææ—¶,è§¦å±çš„åæ ‡,ç”¨
+								//x[4],y[4]å­˜å‚¨ç¬¬ä¸€æ¬¡æŒ‰ä¸‹æ—¶çš„åæ ‡.
+	uint8_t  sta;					//ç¬”çš„çŠ¶æ€
+								//b7:æŒ‰ä¸‹1/æ¾å¼€0;
+	                            //b6:0,æ²¡æœ‰æŒ‰é”®æŒ‰ä¸‹;1,æœ‰æŒ‰é”®æŒ‰ä¸‹.
+								//b5:ä¿ç•™
+								//b4~b0:ç”µå®¹è§¦æ‘¸å±æŒ‰ä¸‹çš„ç‚¹æ•°(0,è¡¨ç¤ºæœªæŒ‰ä¸‹,1è¡¨ç¤ºæŒ‰ä¸‹)
+/////////////////////è§¦æ‘¸å±æ ¡å‡†å‚æ•°(ç”µå®¹å±ä¸éœ€è¦æ ¡å‡†)//////////////////////
 	float xfac;
 	float yfac;
 	short xoff;
 	short yoff;
-//ĞÂÔöµÄ²ÎÊı,µ±´¥ÃşÆÁµÄ×óÓÒÉÏÏÂÍêÈ«µßµ¹Ê±ĞèÒªÓÃµ½.
-//b0:0,ÊúÆÁ(ÊÊºÏ×óÓÒÎªX×ø±ê,ÉÏÏÂÎªY×ø±êµÄTP)
-//   1,ºáÆÁ(ÊÊºÏ×óÓÒÎªY×ø±ê,ÉÏÏÂÎªX×ø±êµÄTP)
-//b1~6:±£Áô.
-//b7:0,µç×èÆÁ
-//   1,µçÈİÆÁ
+//æ–°å¢çš„å‚æ•°,å½“è§¦æ‘¸å±çš„å·¦å³ä¸Šä¸‹å®Œå…¨é¢ å€’æ—¶éœ€è¦ç”¨åˆ°.
+//b0:0,ç«–å±(é€‚åˆå·¦å³ä¸ºXåæ ‡,ä¸Šä¸‹ä¸ºYåæ ‡çš„TP)
+//   1,æ¨ªå±(é€‚åˆå·¦å³ä¸ºYåæ ‡,ä¸Šä¸‹ä¸ºXåæ ‡çš„TP)
+//b1~6:ä¿ç•™.
+//b7:0,ç”µé˜»å±
+//   1,ç”µå®¹å±
 	uint8_t touchtype;
 }_m_tp_dev;
 
-extern _m_tp_dev tp_dev;	 	//´¥ÆÁ¿ØÖÆÆ÷ÔÚtouch.cÀïÃæ¶¨Òå
+extern _m_tp_dev tp_dev;	 	//è§¦å±æ§åˆ¶å™¨åœ¨touch.cé‡Œé¢å®šä¹‰
 
-//µç×èÆÁĞ¾Æ¬Á¬½ÓÒı½Å
+//ç”µé˜»å±èŠ¯ç‰‡è¿æ¥å¼•è„š
 //#define PEN     PHin(7)    //T_PEN
 //#define DOUT    PGin(3)    //T_MISO
 //#define TDIN    PIout(3)   //T_MOSI
@@ -59,21 +60,21 @@ extern _m_tp_dev tp_dev;	 	//´¥ÆÁ¿ØÖÆÆ÷ÔÚtouch.cÀïÃæ¶¨Òå
 #define TDIN    PGout(14)   //T_MOSI
 #define TCLK    PGout(13)   //T_SCK
 #define TCS     PFout(9)   //T_CS
-//µç×èÆÁº¯Êı
-void TP_Write_Byte(uint8_t num);						//Ïò¿ØÖÆĞ¾Æ¬Ğ´ÈëÒ»¸öÊı¾İ
-uint16_t TP_Read_AD(uint8_t CMD);							//¶ÁÈ¡AD×ª»»Öµ
-uint16_t TP_Read_XOY(uint8_t xy);							//´øÂË²¨µÄ×ø±ê¶ÁÈ¡(X/Y)
-uint8_t TP_Read_XY(uint16_t *x,uint16_t *y);					//Ë«·½Ïò¶ÁÈ¡(X+Y)
-uint8_t TP_Read_XY2(uint16_t *x,uint16_t *y);					//´ø¼ÓÇ¿ÂË²¨µÄË«·½Ïò×ø±ê¶ÁÈ¡
-void TP_Drow_Touch_Point(uint16_t x,uint16_t y,uint16_t color);//»­Ò»¸ö×ø±êĞ£×¼µã
-void TP_Draw_Big_Point(uint16_t x,uint16_t y,uint16_t color);	//»­Ò»¸ö´óµã
-uint8_t TP_Save_Adjdata(void);						//±£´æĞ£×¼²ÎÊı
-uint8_t TP_Get_Adjdata(void);						//¶ÁÈ¡Ğ£×¼²ÎÊı
-void TP_Adjust(void);							//´¥ÃşÆÁĞ£×¼
-void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t x3,uint16_t y3,uint16_t fac);//ÏÔÊ¾Ğ£×¼ĞÅÏ¢
-//µç×èÆÁ/µçÈİÆÁ ¹²ÓÃº¯Êı
-uint8_t TP_Scan(uint8_t tp);								//É¨Ãè
-uint8_t TP_Init(void);								//³õÊ¼»¯
+//ç”µé˜»å±å‡½æ•°
+void TP_Write_Byte(uint8_t num);						//å‘æ§åˆ¶èŠ¯ç‰‡å†™å…¥ä¸€ä¸ªæ•°æ®
+uint16_t TP_Read_AD(uint8_t CMD);							//è¯»å–ADè½¬æ¢å€¼
+uint16_t TP_Read_XOY(uint8_t xy);							//å¸¦æ»¤æ³¢çš„åæ ‡è¯»å–(X/Y)
+uint8_t TP_Read_XY(uint16_t *x,uint16_t *y);					//åŒæ–¹å‘è¯»å–(X+Y)
+uint8_t TP_Read_XY2(uint16_t *x,uint16_t *y);					//å¸¦åŠ å¼ºæ»¤æ³¢çš„åŒæ–¹å‘åæ ‡è¯»å–
+void TP_Drow_Touch_Point(uint16_t x,uint16_t y,uint16_t color);//ç”»ä¸€ä¸ªåæ ‡æ ¡å‡†ç‚¹
+void TP_Draw_Big_Point(uint16_t x,uint16_t y,uint16_t color);	//ç”»ä¸€ä¸ªå¤§ç‚¹
+uint8_t TP_Save_Adjdata(void);						//ä¿å­˜æ ¡å‡†å‚æ•°
+uint8_t TP_Get_Adjdata(void);						//è¯»å–æ ¡å‡†å‚æ•°
+void TP_Adjust(void);							//è§¦æ‘¸å±æ ¡å‡†
+void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t x3,uint16_t y3,uint16_t fac);//æ˜¾ç¤ºæ ¡å‡†ä¿¡æ¯
+//ç”µé˜»å±/ç”µå®¹å± å…±ç”¨å‡½æ•°
+uint8_t TP_Scan(uint8_t tp);								//æ‰«æ
+uint8_t TP_Init(void);								//åˆå§‹åŒ–
 void GUI_Touch_Calibrate();
 uint8_t TP_Read_Pressure(float *pressure);
 #endif

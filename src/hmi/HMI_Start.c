@@ -1,5 +1,6 @@
 #include "GUI.h"
 #include "xbffontcreate.h"
+#include "siffontcreate.h"
 #include "bmpdisplay.h"
 #include "ff.h"
 #include "HMI_Start.h"
@@ -7,6 +8,9 @@
 #include "interface.h"
 
 uint8_t calebrate_done = 0;
+uint8_t winInitDone = 0;
+uint8_t current_page = 0;
+GUI_HMEM    qr_hmem;
 
 static uint8_t codetest[]={
     "https://www.baidu.com"
@@ -14,39 +18,81 @@ static uint8_t codetest[]={
 void MainTask(void)
 {
     CON_t *pCON;
+
     if(calebrate_done == 0)
     {
         GUI_CURSOR_Show();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
-    pCON = CONGetHandle(0);/** @todo (zshare#1#): Ë«Ç¹Ê±ĞŞ¸ÄID */
-    encodetobmp("system/encodeCharge.bmp",pCON->info.strQRCode);
-    //readBackGroundNOFREE("system/background.bmp");
-    readBackGroundNOFREE("system/background_tree.bmp");
-    readEncodeNOFREE("system/encodeCharge.bmp");
-    Create_XBF12("system/XBFËÎÌå12.xbf");//´´½¨xbf12ºÅÂ·¾¶
-    Create_XBF14("system/XBFËÎÌå14.xbf");//´´½¨XBF14ºÅÂ·¾¶
-    Create_XBF16("system/XBFËÎÌå16.xbf");//´´½¨xbf16ºÅÂ·¾¶
-    Create_XBF19("system/XBFËÎÌå19.xbf");//´´½¨xbf19ºÅÂ·¾¶
-    Create_XBF24("system/XBFËÎÌå24.xbf");//´´½¨xbf24ºÅÂ·¾¶
-    Create_XBF36("system/XBFËÎÌå36.xbf");//´´½¨xbf36ºÅÂ·¾¶
 
+    if(calebrate_done != 0xff)
+    {
+        WM_MULTIBUF_Enable(1);
+        pCON = CONGetHandle(0);/** @todo (zshare#1#): åŒæªæ—¶ä¿®æ”¹ID */
+        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 6, GUI_QR_ECLEVEL_L, 0);
+        readBackGroundNOFREE("system/background_tree.bmp");
+//        Create_XBF12("system/XBF_Song_12.xbf");//åˆ›å»ºxbf12å·è·¯å¾„
+//        Create_XBF14("system/XBF_Song_14.xbf");//åˆ›å»ºXBF14å·è·¯å¾„
+//        Create_XBF16("system/XBF_Song_16.xbf");//åˆ›å»ºxbf16å·è·¯å¾„
+//        Create_XBF19("system/XBF_Song_19.xbf");//åˆ›å»ºxbf19å·è·¯å¾„
+//        Create_XBF24("system/XBF_Song_24.xbf");//åˆ›å»ºxbf24å·è·¯å¾„
+//        Create_XBF36("system/XBF_Song_36.xbf");//åˆ›å»ºxbf36å·è·¯å¾„
 
-    WM_SetDesktopColor(GUI_WHITE);//ÉèÖÃ±³¾°ÑÕÉ«
+//        Create_SIF12("system/SIF12.sif");
+//        Create_SIF16("system/SIF16.sif");
+//        Create_SIF24("system/SIF24.sif");
+//        Create_SIF36("system/SIF36.sif");
 
-    GUI_UC_SetEncodeUTF8();
-//    PutOut_SelAOrB();
-//    PutOut_Window();
-//    PutOut_Window();
-//    PutOut_Charging_2dimen();
-    PutOut_Home();
-//
-//    PutOut_Card_Info();
-//    PutOut_Charging();
-//
-//    PutOut_Charge_Done();
-//
-//	PutOut_Card_Valid();
+        Create_SIF12("system/wryhCX12.sif");
+        Create_SIF16("system/wryhCX16.sif");
+        Create_SIF24("system/wryhCX24.sif");
+        Create_SIF36("system/wryhCX36.sif");
 
+        WM_SetDesktopColor(GUI_WHITE);//è®¾ç½®èƒŒæ™¯é¢œè‰²
+
+        GUI_UC_SetEncodeUTF8();
+        CreateHome();
+    }
+    else
+    {
+        calebrate_done = 1;
+	    WM_MULTIBUF_Enable(1);
+	    pCON = CONGetHandle(0);/** @todo (zshare#1#): åŒæªæ—¶ä¿®æ”¹ID */
+	    WM_SetDesktopColor(GUI_WHITE);//è®¾ç½®èƒŒæ™¯é¢œè‰²
+
+	    GUI_UC_SetEncodeUTF8();
+
+        CreateHome();
+    }
+
+    while(1)
+    {
+//	    printf_safe("exec start = %d\n", clock());
+        GUI_Exec();
+//	    printf_safe("exec end = %d\n", clock());
+	    //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+        vTaskDelay(100);
+#if 0
+        if(bittest(winInitDone,7))
+        {
+            bitclr(winInitDone,7);
+            switch(current_page)
+            {
+                case _HOMEPAGE:
+                    CreateHome();
+                    break;
+                case _CARDINFOPAGE:
+                    CreateCardInfo();
+                    break;
+                case _CHARGINGPAGE:
+                    CreateCharging();
+                    break;
+                case _CHARGEDONEPAGE:
+                    CreateChargeDone();
+                    break;
+            }
+        }
+#endif
+    }
 }

@@ -1,41 +1,40 @@
 /**
 * @file bsp_usart.c
-* @brief ´®¿ÚÇý¶¯
+* @brief 串口驱动
 * @author rgw
 * @version V1.0
 * @date 2016-11-02
 */
-#include "bsp.h"
+#include "bsp_define.h"
+#include "bsp_uart.h"
 #include "cli_main.h"
 #include "userlib_queue.h"
 #include "user_app.h"
-
-#include "bsp_uart_queue.h"
+#include "bsp.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;
-#ifdef EVSE_DEBUG
 UART_HandleTypeDef WIFI_UARTx_Handler;
-#endif
 
-Queue *pCliRecvQue;
-Queue *pRfidRecvQue;
-Queue *pGprsRecvQue;
-#ifdef EVSE_DEBUG
-Queue *pWifiRecvQue;
-#endif
+static Queue *pCliRecvQue = NULL;
+static Queue *pRfidRecvQue = NULL;
+static Queue *pGprsRecvQue = NULL;
+static Queue *pWifiRecvQue = NULL;
 
 static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
-#ifdef EVSE_DEBUG
 static volatile uint8_t WIFI_RX_Buffer[1];
-#endif
 
-static void uart_putc(uint8_t ch)
+static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
+
+void gprs_uart_putc(uint8_t ch)
 {
-    while((GPRS_USARTx_BASE->SR&0X40)==0);
+    while ((GPRS_USARTx_BASE->SR & USART_SR_TC) == 0)
+        ;
     GPRS_USARTx_BASE->DR = ch;
 }
 
@@ -53,17 +52,15 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
         break;
     case UART_PORT_GPRS:
         pUART_Handle = &GPRS_UARTx_Handler;
-//        for(i = 0; i < len; i++)
-//        {
-//            uart_putc(data[i]);
-//        }
-//        return i;
+        for(i = 0; i < len; i++)
+        {
+            gprs_uart_putc(data[i]);
+        }
+        return i;
         break;
-#ifdef EVSE_DEBUG
     case UART_PORT_WIFI:
         pUART_Handle = &WIFI_UARTx_Handler;
         break;
-#endif
     default:
         break;
     }
@@ -77,13 +74,14 @@ uint32_t uart_write(UART_Portdef uartport, uint8_t *data, uint32_t len)
     if(hal_res == HAL_BUSY)
     {
         printf_safe("HAL busy!!\n");
-        while(1);
     }
+    return 0;
 }
 
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms)
 {
     Queue *pRecvQue;
+    uint8_t ch;
     uint32_t rl = 0;//read len
     switch(uartport)
     {
@@ -96,126 +94,51 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
     case UART_PORT_GPRS:
         pRecvQue = pGprsRecvQue;
         break;
-#ifdef EVSE_DEBUG
     case UART_PORT_WIFI:
         pRecvQue = pWifiRecvQue;
         break;
-#endif
     default:
         break;
     }
-    readRecvQueEx(pRecvQue, data, len, &rl, timeout_ms);
-    return rl;
-}
 
-uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
-{
-    xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(timeout_ms)
+    while (readRecvQue(pRecvQue, &ch, timeout_ms) == 1)
     {
-        if((q->isEmpty(q)) != QUE_TRUE)
+        data[rl] = ch;
+        rl++;
+        if (len != 0)
         {
-            q->DeElem(q, ch);
-            xSemaphoreGive(q->xHandleMutexQue);
-            return 1;
-        }
-        vTaskDelay(1);
-        timeout_ms--;
-    }
-    xSemaphoreGive(q->xHandleMutexQue);
-    return 0;
-}
-
-uint8_t readRecvQueProto(Queue *q, uint8_t *pbuff, uint8_t head, uint8_t end, uint32_t *puiRecvdLen)
-{
-    uint8_t ch;
-    uint32_t i;
-
-    ch = 0;
-    i = 0;
-    xSemaphoreTake(q->xHandleMutexQue, 100);
-    while(q->DeElem(q, &ch) == QUE_OK)
-    {
-        if(ch == head)
-        {
-            do
-            {
-                pbuff[i] = ch;
-                i++;
-                if(q->DeElem(q, &ch) != QUE_OK)
-                {
-                    *puiRecvdLen = 0;
-                    xSemaphoreGive(q->xHandleMutexQue);
-                    return 0;
-                }
-                if(ch == end && i != 1)
-                {
-                    pbuff[i] = ch;
-                    i++;
-                }
-            }
-            while(ch != end || i == 1);
-
-            *puiRecvdLen = i;
-            xSemaphoreGive(q->xHandleMutexQue);
-            return 1;
-        }
-    }
-    xSemaphoreGive(q->xHandleMutexQue);
-    return 0;
-}
-/** @brief
- *
- * @param pbuff uint8_t*
- * @param ulRecvLen uint32_t 取出长度,0时取出所有数据
- * @param puiRecvdLen uint32_t* 返回长度
- * @return uint8_t 1 有数据; 0 无数据
- *
- */
-uint8_t readRecvQueEx(Queue *q, uint8_t *pbuff, uint32_t ulRecvLen, uint32_t *puiRecvdLen, uint32_t timeout_ms)
-{
-    uint8_t ch;
-    uint32_t i;
-
-    ch = 0;
-    i = 0;
-
-    while(readRecvQue(q, &ch, timeout_ms) == 1)
-    {
-        pbuff[i] = ch;
-        i++;
-        if(ulRecvLen != 0)
-        {
-            if(i == ulRecvLen)
+            if (rl == len)
             {
                 break;
             }
         }
     }
-    if(i > 0)
-    {
-        *puiRecvdLen = i;
-        return 1;
-    }
-    else
-    {
-        *puiRecvdLen = i;
-        return 0;
-    }
+
+    return rl;
 }
 
-uint8_t recvStrCmp(Queue *q, uint8_t *str, uint32_t len)
+static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
-    uint8_t *p;
-    p = strstr(q->elem, str);
-    if(p != NULL)
+    while (timeout_ms)
     {
-        return 1;
+        if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
+        {
+            if ((q->isEmpty(q)) == QUE_FALSE)
+            {
+                q->DeElem(q, ch);
+                xSemaphoreGive(q->xHandleMutexQue);
+                return 1;
+            }
+            else
+            {
+                xSemaphoreGive(q->xHandleMutexQue);
+                vTaskDelay(1);
+                timeout_ms--;
+            }
+        }
     }
-    else
-    {
-        return 0;
-    }
+    
+    return 0;
 }
 
 //mode 1 创建并初始化， 2，不创建，初始化
@@ -271,26 +194,22 @@ void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode)
         HAL_UART_Init(&GPRS_UARTx_Handler);
         HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
         break;
-#ifdef EVSE_DEBUG
-    case UART_PORT_WIFI:
-        if(mode == 1)
-        {
-#ifdef EVSE_DEBUG
-            pWifiRecvQue = QueueCreate(WIFI_QUEUE_SIZE);
-#endif
-        }
-        //    WIFI_UARTx_Handler.Instance = WIFI_USARTx_BASE;
-//    WIFI_UARTx_Handler.Init.BaudRate = WIFI_USARTx_BAUDRATE;
-//    WIFI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-//    WIFI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-//    WIFI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
-//    WIFI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
-//    WIFI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-//    WIFI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-//    HAL_UART_Init(&WIFI_UARTx_Handler);
-//    HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1);
-        break;
-#endif
+//    case UART_PORT_WIFI:
+//        if(mode == 1)
+//        {
+//            pWifiRecvQue = QueueCreate(WIFI_QUEUE_SIZE);
+//        }
+//        WIFI_UARTx_Handler.Instance = WIFI_USARTx_BASE;
+//        WIFI_UARTx_Handler.Init.BaudRate = WIFI_USARTx_BAUDRATE;
+//        WIFI_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+//        WIFI_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+//        WIFI_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+//        WIFI_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+//        WIFI_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+//        WIFI_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+//        HAL_UART_Init(&WIFI_UARTx_Handler);
+//        HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1);
+//        break;
     default:
         break;
     }
@@ -412,16 +331,11 @@ GPRS_USARTx_IRQHandler
 {
     HAL_UART_IRQHandler(&GPRS_UARTx_Handler);
 }
-#ifdef EVSE_DEBUG
-WIFI_USARTx_IRQHandler
-{
-    HAL_UART_IRQHandler(&WIFI_UARTx_Handler);
-//            if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
-//        {
-//            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
-//        }
-}
-#endif
+
+//WIFI_USARTx_IRQHandler
+//{
+//    HAL_UART_IRQHandler(&WIFI_UARTx_Handler);
+//}
 /**
   * @brief  Tx Transfer completed callback
   * @param  UartHandle: UART handler.
@@ -450,7 +364,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
-            //gdsl_queue_insert(queCLI, (void *)CLI_RX_Buffer);
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)
@@ -468,15 +381,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             pGprsRecvQue->EnElem(pGprsRecvQue, GPRS_RX_Buffer[0]);
         }
     }
-#ifdef EVSE_DEBUG
-    if(huart->Instance == WIFI_USARTx_BASE)
-    {
-        if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
-        {
-            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
-        }
-    }
-#endif
+//    if(huart->Instance == WIFI_USARTx_BASE)
+//    {
+//        if(HAL_UART_Receive_IT(&WIFI_UARTx_Handler, (uint8_t *)WIFI_RX_Buffer, 1) == HAL_OK)
+//        {
+//            pWifiRecvQue->EnElem(pWifiRecvQue, WIFI_RX_Buffer[0]);
+//        }
+//    }
 }
 
 /**
@@ -496,16 +407,16 @@ can
                                             }
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-    THROW_USART_ERR(RFID, PE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(RFID, NE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(RFID, ORE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(RFID, DMA, ERR_LEVEL_TIPS);
-
-    THROW_USART_ERR(GPRS, PE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(GPRS, NE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(GPRS, FE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(GPRS, ORE, ERR_LEVEL_TIPS);
-    THROW_USART_ERR(GPRS, DMA, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(RFID, PE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(RFID, NE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(RFID, ORE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(RFID, DMA, ERR_LEVEL_TIPS);
+//
+//    THROW_USART_ERR(GPRS, PE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(GPRS, NE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(GPRS, FE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(GPRS, ORE, ERR_LEVEL_TIPS);
+//    THROW_USART_ERR(GPRS, DMA, ERR_LEVEL_TIPS);
 
 }

@@ -61,15 +61,15 @@ typedef enum
 //	uint16_t word;
 //} BYTEWORD, *PBYTEWORD;
 
-typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t uiOptionLen, uint32_t *pucSendLength);
-typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint32_t uiRecvLen);
+typedef    int (*pMT626_MAKE_PROC)  (void *pObj, uint8_t ucSendID, uint8_t *pOptionData, uint32_t ulOptionLen, uint32_t *pucSendLength);
+typedef    int (*pMT626_ANALY_PROC) (void *pObj, uint8_t ucSendID, uint32_t ulRecvLen);
 
 typedef struct _MT626CMD
 {
     uint8_t     ucParam;
     uint16_t    usLenght;
     uint8_t     ucRecvdOptData[16];//最长16个数据
-    uint32_t    uiRecvdOptLen;
+    uint32_t    ulRecvdOptLen;
 
     pMT626_MAKE_PROC  makeProc;
     pMT626_ANALY_PROC analyProc;
@@ -86,7 +86,7 @@ typedef struct _MT626COM
     void (*deleteCOM)(void *pObj);
 } MT626COM_t;
 
-int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t uiOptionLen);
+int TransToMT626(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint32_t ulOptionLen);
 MT626COM_t *MT626COMCreate(void);
 
 #endif

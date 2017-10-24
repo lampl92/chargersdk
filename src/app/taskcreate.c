@@ -1,12 +1,12 @@
 /**
 * @file taskcreate.c
-* @brief ÈçíÊ∂òÁºìÊµ†ËØ≤ÂßüTodolist ÁÄµÂú≠ÂèéÁêõ?
-*        1. ÁÄπÊ∞´ÁÆüSTACKÊæ∂—ÉÁö¨
-*        2. ÁÄπÊ∞´ÁÆüPRIORITY
-*        3. ÊæπÁâàÊßëÊµ†ËØ≤Âßü
-*        4. ÁÄπÊ∞´ÁÆüÊµ†ËØ≤ÂßüÈçô„É¶ÁÑ?
-*        5. Êµ†ËØ≤ÂßüÈçè„É•ÂΩõ
-*        6. ÈçíÊ∂òÁºìÊµ†ËØ≤Âßü
+* @brief ÂàõÂª∫‰ªªÂä°Todolist ÂØπÁÖßË°®
+*        1. ÂÆö‰πâSTACKÂ§ßÂ∞è
+*        2. ÂÆö‰πâPRIORITY
+*        3. Â£∞Êòé‰ªªÂä°
+*        4. ÂÆö‰πâ‰ªªÂä°Âè•ÊüÑ
+*        5. ‰ªªÂä°ÂÖ•Âè£
+*        6. ÂàõÂª∫‰ªªÂä°ÂàõÂª∫‰ªªÂä°Todolist ÂØπÁÖßË°®
 * @author rgw
 * @version v1.0
 * @date 2016-11-03
@@ -21,10 +21,10 @@
 
 
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒ’ª¥Û–°
+/ ‰ªªÂä°Ê†àÂ§ßÂ∞è
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   2048
-#define defSTACK_TaskCLI                    1024
+#define defSTACK_TaskCLI                    (1024 * 10)
 #define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskTouch                  512
 #define defSTACK_TaskOTA                    512
@@ -37,16 +37,16 @@
 #define defSTACK_TaskEVSECharge             512
 #define defSTACK_TaskEVSEMonitor            512
 #define defSTACK_TaskEVSEDiag               512
-#define defSTACK_TaskEVSEData               512
+#define defSTACK_TaskEVSEData               (1024*50)
 
 
 //#define TCPIP_THREAD_STACKSIZE      512
 
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒ”≈œ»º∂
+/ ‰ªªÂä°‰ºòÂÖàÁ∫ß
 /---------------------------------------------------------------------------*/
-//”≈œ»º∂πÊ‘ÚŒ™œµÕ≥»ŒŒÒ”≈œ»º∂µÕ£¨OTA > ≥‰µÁ»ŒŒÒ > π ’œ¥¶¿Ì > œµÕ≥º‡ ” > À¢ø®”ÎÕ®–≈ >  ˝æ›¥¶¿Ì”ÎœµÕ≥»ŒŒÒ
-#define defPRIORITY_TaskOTA                 31/* ◊Ó∏ﬂ*/
+//‰ºòÂÖàÁ∫ßËßÑÂàô‰∏∫Á≥ªÁªü‰ªªÂä°‰ºòÂÖàÁ∫ß‰ΩéÔºåOTA > ÂÖÖÁîµ‰ªªÂä° > ÊïÖÈöúÂ§ÑÁêÜ > Á≥ªÁªüÁõëËßÜ > Âà∑Âç°‰∏éÈÄö‰ø° > Êï∞ÊçÆÂ§ÑÁêÜ‰∏éÁ≥ªÁªü‰ªªÂä°
+#define defPRIORITY_TaskOTA                 31/* ÊúÄÈ´ò*/
 
 #define defPRIORITY_TaskEVSECharge          27
 #define defPRIORITY_TaskEVSEDiag            25
@@ -62,14 +62,14 @@
 
 #define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
-#define defPRIORITY_TaskGUI                 4   //≤ªƒ‹∏ﬂ,GUI»ŒŒÒ ±º‰Ã´≥§,ª·”∞œÏ”≤º˛œÏ”¶
+#define defPRIORITY_TaskGUI                 4   //‰∏çËÉΩÈ´ò,GUI‰ªªÂä°Êó∂Èó¥Â§™Èïø,‰ºöÂΩ±ÂìçÁ°¨‰ª∂ÂìçÂ∫î
 #define defPRIORITY_TaskCLI                 2
 
 //#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
 // define PPP_THREAD_PRIO          14
 
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒ√˚≥∆
+/ ‰ªªÂä°ÂêçÁß∞
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
@@ -88,7 +88,7 @@ const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
 const char *TASKNAME_EVSEData       = "TaskEVSEData";
 //#define TCPIP_THREAD_NAME           "tcpip_thread"
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒ…˘√˜
+/ ‰ªªÂä°Â£∞Êòé
 /---------------------------------------------------------------------------*/
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
@@ -107,7 +107,7 @@ void vTaskEVSEDiag(void *pvParameters);
 void vTaskEVSEData(void *pvParameters);
 
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒæ‰±˙
+/ ‰ªªÂä°Âè•ÊüÑ
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
@@ -125,8 +125,11 @@ static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
 static TaskHandle_t xHandleTaskEVSEDiag = NULL;
 static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
-/ »ŒŒÒº‰Õ®–≈
+/ ‰ªªÂä°Èó¥ÈÄö‰ø°
 /---------------------------------------------------------------------------*/
+SemaphoreHandle_t xMutexTimeStruct;
+
+
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
@@ -134,38 +137,32 @@ EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
 EventGroupHandle_t xHandleEventTCP   = NULL;
 
-//œ¬√ÊµƒEvent‘⁄œ‡”¶Ω·ππÃÂ÷–∂®“Â
+//‰∏ãÈù¢ÁöÑEventÂú®Áõ∏Â∫îÁªìÊûÑ‰Ωì‰∏≠ÂÆö‰πâ
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
-//∂”¡–
+//ÈòüÂàó
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
-//Timeræ‰±˙
-TimerHandle_t xHandleTimerTemp = NULL; //4‰∏™Ê∏©Â∫?
+//TimerÂè•ÊüÑ
+TimerHandle_t xHandleTimerTemp = NULL;
 TimerHandle_t xHandleTimerLockState = NULL;
 TimerHandle_t xHandleTimerPlugState = NULL;
-TimerHandle_t xHandleTimerVolt = NULL;
 TimerHandle_t xHandleTimerChargingData = NULL;
 TimerHandle_t xHandleTimerEVSEState = NULL;
 TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
-//con‰∏≠ËøòÂÆö‰πâ‰∫ÜÂá†‰∏™ÂÆöÊó∂Âô®ÔºåxHandleTimerVoltÔºåxHandleTimerCurrÔºåxHandleTimerChargeÂàÜÂà´Âú®‰ΩøÁî®Êó∂ËøõË°åÂàùÂßãÂå?
+//con‰∏≠ËøòÂÆö‰πâ‰∫ÜÂá†‰∏™ÂÆöÊó∂Âô®ÔºåxHandleTimerVoltÔºåxHandleTimerCurrÔºåxHandleTimerChargeÂàÜÂà´Âú®‰ΩøÁî®Êó∂ËøõË°åÂàùÂßãÂåñ
 //Mutex
 void vTaskInit(void *pvParameters)
 {
     pModem = DevModemCreate();
-    strcpy(pModem->info.strAPN, "CMNET");
-    pModem->info.ucContext = 0;
-    pModem->info.ucTPMode = 1;
-    pModem->status.ucSignalQuality = 0;
-    pModem->xMutex = xSemaphoreCreateMutex();
 
     modem_open(pModem);
     modem_init(pModem);
-    Modem_Poll(pModem);//’‚ «»ŒŒÒ
+    Modem_Poll(pModem);//ËøôÊòØ‰ªªÂä°
 
 //    pWIFI = DevWifiCreate();
 //    strcpy(pWIFI->info.strSSID, "rgw");
@@ -183,29 +180,15 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-#ifdef EVSE_DEBUG
-    while(1)
-    {
-        vTaskDelay(1000);
-    }
-#else
     MainTask();
-#endif
 }
 
 void vTaskTouch(void *pvParameters)
 {
     while(1)
     {
-#ifdef EVSE_DEBUG
-        while(1)
-        {
-            vTaskDelay(1000);
-        }
-#else
-        GUI_TOUCH_Exec();//º§ªÓXY÷·µƒ≤‚¡ø
+        GUI_TOUCH_Exec();//ÊøÄÊ¥ªXYËΩ¥ÁöÑÊµãÈáè
         vTaskDelay(10);
-#endif
     }
 }
 
@@ -217,8 +200,10 @@ void TaskInit(void)
 void SysTaskCreate (void)
 {
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
+#if EVSE_USING_GUI
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
+#endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 
     //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
@@ -241,6 +226,9 @@ void AppTaskCreate (void)
  */
 void AppObjCreate (void)
 {
+    xMutexTimeStruct = xSemaphoreCreateMutex();
+    
+    
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
     xHandleEventDiag = xEventGroupCreate();
@@ -255,10 +243,11 @@ void AppObjCreate (void)
     xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vCONTimerCB);
     xHandleTimerPlugState = xTimerCreate("TimerPlugState", defMonitorPlugStateCyc, pdTRUE, (void *)defTIMERID_PlugState, vCONTimerCB);
-    xHandleTimerVolt = xTimerCreate("TimerVolt", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_Volt, vCONTimerCB);
     xHandleTimerChargingData = xTimerCreate("TimerChargingData", defMonitorChargingDataCyc, pdTRUE, (void *)defTIMERID_ChargingData, vCONTimerCB);
     xHandleTimerEVSEState = xTimerCreate("TimerEVSEState", defMonitorEVSEStateCyc, pdTRUE, (void *)defTIMERID_EVSEState, vEVSETimerCB);
+#if EVSE_USING_RFID
     xHandleTimerRFID = xTimerCreate("TimerRFID", defMonitorRFIDCyc, pdTRUE, (void *)defTIMERID_RFID, vRFIDTimerCB);
+#endif
     xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", defMonitorDataRefreshCyc, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
     xHandleTimerRemoteHeartbeat = xTimerCreate("TimerHeartbeat", defRemoteHeartbeatCyc, pdTRUE, (void *)defTIMERID_RemoteHeartbeat, vEVSETimerCB);
     xHandleTimerRemoteStatus = xTimerCreate("TimerRemoteStatus", defRemoteStatusCyc, pdTRUE, (void *)defTIMERID_RemoteStatus, vEVSETimerCB);
@@ -266,14 +255,15 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
     xTimerStart(xHandleTimerPlugState, 0);
-    xTimerStart(xHandleTimerVolt, 0);
-    //xTimerStart(xHandleTimerChargingData, 0);
+    xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
+#if EVSE_USING_RFID
     xTimerStart(xHandleTimerRFID, 0);
+#endif
     xTimerStart(xHandleTimerDataRefresh, 0);
-    //TimerHeartbeat‘∂≥Ã∑˛ŒÒ∆˜¡¨Ω”∫Ûø™∆Ù∂® ±∆˜
+    //TimerHeartbeatËøúÁ®ãÊúçÂä°Âô®ËøûÊé•ÂêéÂºÄÂêØÂÆöÊó∂Âô®
 }
-volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //ÁêöÓÇ§ÈÉ¥ÁºÅÁÜªÁöüÈê??
+volatile uint32_t ulHighFrequencyTimerTicks = 0UL; //Ë¢´Á≥ªÁªüË∞ÉÁî®
 extern __IO uint32_t uwTick;
 void vApplicationTickHook( void )
 {

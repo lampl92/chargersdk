@@ -20,9 +20,13 @@ void vTaskEVSERFID(void *pvParameters)
     int i;
     EventBits_t uxBits;
     ErrorCode_t errcode;
+    int res; //remote è¿”å›å€¼;
+    uint32_t remote_timeout_u100ms;
+    uint8_t ucVaild = 0;//ç”¨äºåˆ¤æ–­remoteè¿”å›æ˜¯å¦å¯ä»¥å……ç”µ
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
+    res = 0;
     errcode = ERR_NO;
     while(1)
     {
@@ -30,18 +34,19 @@ void vTaskEVSERFID(void *pvParameters)
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
+	        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//bugfixï¼šé¿å…ä¸Šæ¬¡åˆ·å¡å¤„ç†è¿‡ç¨‹ä¸­å†æ¬¡æ£€æµ‹åˆ°å¡ï¼Œå¯¼è‡´å……ç”µå®Œæˆåå†æ¬¡æ˜¾ç¤ºå¡ä¿¡æ¯
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
-                                         pdTRUE, pdFALSE, portMAX_DELAY);
-            if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. ¼ì²âµ½¿¨
+                                         pdTRUE, pdTRUE, portMAX_DELAY);
+            if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. æ£€æµ‹åˆ°å¡
             {
                 memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
                 pRFIDDev->state = STATE_RFID_GOTID;
-                xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
-                                   defEventBitGotIDtoHMI);
+                xTimerStop(xHandleTimerRFID, 100); 
             }
             break;
         case STATE_RFID_GOTID:
+	        xEventGroupClearBits(xHandleEventHMI,defEventBitHMITimeOutToRFID);//é˜²æ­¢å…¶ä»–çŠ¶æ€äº§ç”Ÿtimeoutæ²¡æœ‰å¤„ç†
 #ifdef DEBUG_RFID
             printf_safe("im rfid task,find card, :)\n");
             printf_safe("ID = ");
@@ -51,16 +56,16 @@ void vTaskEVSERFID(void *pvParameters)
             }
             printf_safe("\n");
 #endif
-            for(i = 0; i < ulTotalCON; i++)  //2.ÅĞ¶Ï¿¨ÊÇ·ñË¢¹ı
+            for(i = 0; i < ulTotalCON; i++)  //2.åˆ¤æ–­å¡æ˜¯å¦åˆ·è¿‡
             {
                 pCON =  CONGetHandle(i);
                 if(pCON->state == STATE_CON_CHARGING)
                 {
                     if(memcmp(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength) == 0)
                     {
-                        //´Ë¿¨ÒÑË¢
+                        //æ­¤å¡å·²åˆ·
 #ifdef DEBUG_RFID
-                        printf_safe("connector %d ´Ë¿¨ÒÑË¢\n", i);
+                        printf_safe("connector %d æ­¤å¡å·²åˆ·\n", i);
 #endif
                         pRFIDDev->order.ucCONID = i;
                         pRFIDDev->state = STATE_RFID_OLDID;
@@ -69,149 +74,209 @@ void vTaskEVSERFID(void *pvParameters)
                     else
                     {
                         OrderInit(&(pRFIDDev->order));
-                        pRFIDDev->state = STATE_RFID_NOID;
+                        pRFIDDev->state = STATE_RFID_RETURN;
                     }
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
                 {
-                    while(1);
+	                pCON->state = STATE_CON_RETURN;
+                    //while(1);
                 }
                 else if(pCON->state == STATE_CON_ERROR)
                 {
-                    while(1);
+	                pCON->state = STATE_CON_RETURN;
+	               //while(1);
                 }
                 else// if(pCON->state == STATE_CON_IDLE)
                 {
-                    //Î´Ë¢¹ı¿¨
+                    //æœªåˆ·è¿‡å¡
 #ifdef DEBUG_RFID
-                    printf_safe("connector %d ¿ÕÏĞ\n", i);
+                    printf_safe("connector %d ç©ºé—²\n", i);
 #endif
+					xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
+									   defEventBitGotIDtoHMI);
                     pRFIDDev->state = STATE_RFID_NEWID;
                 }
             }
             break;
         case STATE_RFID_NEWID:
-            uxBits = xEventGroupSync(xHandleEventRemote,
-                                     defEventBitRemoteGetAccount,
-                                     defEventBitRemoteGotAccount,
-                                     5000);//·¢ËÍµ½Remote
-            if((uxBits & defEventBitRemoteGotAccount) == defEventBitRemoteGotAccount)
+            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): è¿™æ˜¯æ¨¡æ‹ŸHMIè¿”å›é€‰æ‹©ID ,é€‰å¥½æªåè¿›è¡Œå¡ä¿¡æ¯æ˜¾ç¤º*/
+            pRFIDDev->order.dLimitFee = 0;
+            pRFIDDev->order.ulLimitTime = 0;
+//            uxBits = xEventGroupSync(xHandleEventRemote,
+//                                     defEventBitRemoteGetAccount,
+//                                     defEventBitRemoteGotAccount,
+//                                     5000);//å‘é€åˆ°Remote
+            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+            if (pCON->order.statOrder != STATE_ORDER_IDLE)
             {
-                if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
-                {
-                    pRFIDDev->state = STATE_RFID_GOODID;
-                }
-                if(pRFIDDev->order.ucAccountStatus == 0)
-                {
-                    pRFIDDev->state = STATE_RFID_BADID;
-                }
-                if(pRFIDDev->order.dBalance < 0)
-                {
-                    pRFIDDev->state = STATE_RFID_OWE;
-                }
+                printf_safe("è¯¥æ¥å£æœ‰æœªå®Œæˆè®¢å•!!!!\n");
+                vTaskDelay(2000);
+                pRFIDDev->state = STATE_RFID_RETURN;
+                break;
             }
+            errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);
+            ucVaild = 0;
+            switch(errcode)
+            {
+            case ERR_WHITE_LIST:
+                pRFIDDev->order.ucCardStatus = 1;
+                ucVaild = 1;
+                break;
+            case ERR_BLACK_LIST:
+                pRFIDDev->order.ucCardStatus = 2;
+                ucVaild = 2;
+                break;
+            case ERR_NO:
+                pRFIDDev->order.ucCardStatus = 0;
+                remote_timeout_u100ms = 0;
+                break;
+            default:
+                pRFIDDev->order.ucCardStatus = 3;
+                break;
+            }
+            errcode = ERR_REMOTE_NODATA;//åˆå§‹åŒ–errorcode ï¼›
+            res = 0;
+            while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
+            {
+                remote_timeout_u100ms++;
+                if(remote_timeout_u100ms >= 300)//30s
+                {
+                    pRFIDDev->state = STATE_RFID_TIMEOUT;
+                    break;
+                }
+                errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+                vTaskDelay(100);
+            }
+            
+            if (pRFIDDev->state == STATE_RFID_TIMEOUT)//whileè¶…æ—¶æƒ…å†µçš„é¢å¤–åˆ¤æ–­,ä»¥ä¾¿é€€å‡ºå½“å‰case
+            {
+                break;
+            }
+            if(ucVaild == 2)//eå……ç½‘å®šä¹‰ 1 å¯å……, 2ä¸å¯å……
+            {
+                pRFIDDev->state = STATE_RFID_BADID;
+                break;
+            }
+
+            if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
+            {
+                pRFIDDev->state = STATE_RFID_GOODID;
+            }
+            else if(pRFIDDev->order.ucAccountStatus == 0)
+            {
+                pRFIDDev->state = STATE_RFID_BADID;
+            }
+            else if(pRFIDDev->order.dBalance < 0)
+            {
+                pRFIDDev->state = STATE_RFID_OWE;
+            }
+            else
+            {
+                pRFIDDev->state = STATE_RFID_RETURN;
+            }
+	        //å¡ä¿¡æ¯ç•Œé¢ç«‹å³ç‚¹é€€å‡º
+	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
+		        defEventBitHMITimeOutToRFID,
+		        pdTRUE,
+		        pdTRUE,
+		        0);
+	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
             break;
         case STATE_RFID_OLDID:
 #ifdef DEBUG_RFID
-            printf_safe("ÓÃ»§ÔÙ´ÎË¢¿¨\n");
-            printf_safe("µÈ´ıHMI²Ù×÷...\n");
+            printf_safe("ç”¨æˆ·å†æ¬¡åˆ·å¡\n");
+            printf_safe("ç­‰å¾…HMIæ“ä½œ...\n");
 #endif
-            /** @fixme (rgw#1#): ¼ÙÉèÓÃ»§Ñ¡ÔñÍ£Ö¹³äµç */
-//            xEventGroupSetBits(xHandleEventHMI,defEventBitHMI_RFIDOLD);
-//
-//            uxBits = xEventGroupWaitBits(xHandleEventHMI,
-//                            defEventBitHMI_ChargeReqClickOK,
-//                            pdTRUE, pdTRUE, 0);
-//            if((uxBits & defEventBitHMI_ChargeReqClickOK) == defEventBitHMI_ChargeReqClickOK)
-//            {
-                //µÈµ½Í£Ö¹³äµçÊÂ¼şµÄ·¢Éú
+            /** @fixme (rgw#1#): å‡è®¾ç”¨æˆ·é€‰æ‹©åœæ­¢å……ç”µ */
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
-                //xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//Çå³ıÈÏÖ¤±êÖ¾¡£
-                OrderInit(&(pRFIDDev->order));
-//                pRFIDDev->state = STATE_RFID_NOID;
-                uxBits = xEventGroupWaitBits(xHandleEventHMI,
-                                            defEventBitHMITimeOutToRFID,
-                                            pdTRUE, pdTRUE, 0);
-                if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-                {
-                    xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
-                                   defEventBitGotIDtoHMI);
-                    /// TODO (zshare#1#): Ôö¼ÓÇå³ıÎ»,µÚ¶ş´ÎË¢¿¨³äµç»áÖ±½ÓÍ£Ö¹ , Ô­Òò´Ë´¦µÈ´ıÑÓÊ±»áÒ»Ö±ÖÃÎ» ÉÏÊöÁ½¸ö»á²»»áÓĞÎÊÌâ???????
-                    xEventGroupClearBits(pCON->status.xHandleEventException,defEventBitExceptionRFIDStop);
-                    pRFIDDev->state = STATE_RFID_NOID;
-                }
-//            }
-//            else
-//            {
-//                //Ë¢¿¨Î´µÈ´ıÍ£Ö¹³äµçÊÂ¼ş·¢Éú
-//                uxBits = xEventGroupWaitBits(xHandleEventHMI,
-//                                defEventBitHMI_ChargeReqLockLcdOK,
-//                                pdTRUE, pdTRUE, 0);
-//                if((uxBits & defEventBitHMI_ChargeReqLockLcdOK) == defEventBitHMI_ChargeReqLockLcdOK)
-//                {
-//                    //µÈµ½ËøÆÁÊÂ¼ş
-//                    pRFIDDev->state = STATE_RFID_NOID;
-//                }
-//            }
-
+                pRFIDDev->state = STATE_RFID_RETURN;
+                xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
+                                defEventBitGotIDtoHMI);
             break;
         case STATE_RFID_GOODID:
-            /** @todo (rgw#1#): 1. ±¾ÈÎÎñ»á£¬Í¨ÖªHMIÏÔÊ¾Óà¶î£¬´ËÊ±Èç¹ûÎªË«Ç¹£¬HMIÓ¦ÌáÊ¾ÓÃ»§Ñ¡ÔñÇ¹
-                                    HMIÌî³äºÃÑ¡ÔñµÄÇ¹ºó£¬·¢ËÍ»ØOrder¶ÓÁĞ*/
-            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): ÕâÊÇÄ£ÄâHMI·µ»ØÑ¡ÔñID ,Ñ¡ºÃÇ¹ºó½øĞĞ¿¨ĞÅÏ¢ÏÔÊ¾*/
+            /** @todo (rgw#1#): 1. æœ¬ä»»åŠ¡ä¼šï¼Œé€šçŸ¥HMIæ˜¾ç¤ºä½™é¢ï¼Œæ­¤æ—¶å¦‚æœä¸ºåŒæªï¼ŒHMIåº”æç¤ºç”¨æˆ·é€‰æ‹©æª
+                                    HMIå¡«å……å¥½é€‰æ‹©çš„æªåï¼Œå‘é€å›Orderé˜Ÿåˆ—*/
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitGoodIDReqDisp,
                             defEventBitGoodIDReqDispOK,
-                            portMAX_DELAY);
+                            10000);
+#endif
+			//å¡ä¿¡æ¯ç•Œé¢ç«‹å³ç‚¹é€€å‡º
+	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
+		        defEventBitHMITimeOutToRFID,
+		        pdTRUE,
+		        pdTRUE,
+		        0);
+	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
 
 #ifdef DEBUG_RFID
-            printf_safe("ÓÃ»§×´Ì¬£º");
+            printf_safe("ç”¨æˆ·çŠ¶æ€ï¼š");
             switch(pRFIDDev->order.ucAccountStatus)
             {
             case 0:
-                printf_safe("Î´×¢²á¿¨\n");
+                printf_safe("æœªæ³¨å†Œå¡\n");
                 break;
             case 1:
-                printf_safe("×¢²á¿¨\n");
+                printf_safe("æ³¨å†Œå¡\n");
                 break;
             case 2:
-                printf_safe("Ç··Ñ¿¨\n");
+                printf_safe("æ¬ è´¹å¡\n");
                 break;
             }
-            printf_safe("Óà¶î£º%.2lf\n", pRFIDDev->order.dBalance);
-            printf_safe("ÓÃ»§Ñ¡Ôñ³äµçÇ¹ID£º%d\n", pRFIDDev->order.ucCONID);
+            printf_safe("ä½™é¢ï¼š%.2lf\n", pRFIDDev->order.dBalance);
+            printf_safe("ç”¨æˆ·é€‰æ‹©å……ç”µæªIDï¼š%d\n", pRFIDDev->order.ucCONID);
 #endif
+	        //æ­¤æ—¶å¦‚æœæ²¡æœ‰è¿›è¡Œå……ç”µï¼Œåº”åœ¨HMIå€’è®¡æ—¶å®Œæˆåé€€å‡ºåˆ°IDLEçŠ¶æ€
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             xEventGroupSync(pCON->status.xHandleEventOrder,
                             defEventBitOrderTmp,
                             defEventBitOrderUpdateOK,
                             portMAX_DELAY);
-            OrderInit(&(pRFIDDev->order));
             pRFIDDev->state = STATE_RFID_HOLD;
+	        pRFIDDev->status.tHoldStateStartTime = time(NULL);
             break;
         case STATE_RFID_BADID:
-            /** @todo (rgw#1#): Í¨ÖªHMIÏÔÊ¾Î´×¢²á */
-            /** @todo (rgw#1#): µÈ´ıHMIÊÂ¼şÍ¨Öª½áÊø */
+            /** @todo (rgw#1#): é€šçŸ¥HMIæ˜¾ç¤ºæœªæ³¨å†Œ */
+            /** @todo (rgw#1#): ç­‰å¾…HMIäº‹ä»¶é€šçŸ¥ç»“æŸ */
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitBadIDReqDisp,
                             defEventBitBadIDReqDispOK,
                             portMAX_DELAY);
+#endif
             OrderInit(&(pRFIDDev->order));
-            pRFIDDev->state = STATE_RFID_NOID;
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_OWE:
-            /** @todo (rgw#1#): Í¨ÖªHMIÏÔÊ¾Ç··Ñ */
-            /** @todo (rgw#1#): µÈ´ıHMIÊÂ¼şÍ¨Öª½áÊø */
+            /** @todo (rgw#1#): é€šçŸ¥HMIæ˜¾ç¤ºæ¬ è´¹ */
+            /** @todo (rgw#1#): ç­‰å¾…HMIäº‹ä»¶é€šçŸ¥ç»“æŸ */
+#if EVSE_USING_GUI
             xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
                             defEventBitOweIDReqDisp,
                             defEventBitOwdIDReqDispOK,
                             portMAX_DELAY);
+#endif
             OrderInit(&pRFIDDev->order);
-            pRFIDDev->state = STATE_RFID_NOID;
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_HOLD:
+	        if (time(NULL) - pRFIDDev->status.tHoldStateStartTime > pRFIDDev->status.ulHoldMaxTime_s)
+	        {
+		        pRFIDDev->state = STATE_RFID_TIMEOUT;
+		        break;
+	        }
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                          defEventBitCONStartOK,
@@ -219,16 +284,28 @@ void vTaskEVSERFID(void *pvParameters)
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
             {
                 vTaskDelay(10000);
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_RETURN;
             }
             uxBits = xEventGroupWaitBits(xHandleEventHMI,
                                          defEventBitHMITimeOutToRFID,
                                          pdTRUE, pdTRUE,0);
             if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
             {
-                pRFIDDev->state = STATE_RFID_NOID;
+                pRFIDDev->state = STATE_RFID_TIMEOUT;
             }
-            /** @todo (rgw#1#): ¼à¿ØCharge×´Ì¬£¬Èç¹ûÓÃ»§Î´³äµçÇ°ÖÕÖ¹³äµçÁ÷³Ì£¬Ôò·µ»Øµ½NOID */
+            /** @todo (rgw#1#): ç›‘æ§ChargeçŠ¶æ€ï¼Œå¦‚æœç”¨æˆ·æœªå……ç”µå‰ç»ˆæ­¢å……ç”µæµç¨‹ï¼Œåˆ™è¿”å›åˆ°NOID */
+            break;
+        case STATE_RFID_TIMEOUT:
+	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+	        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+	        OrderInit(&(pCON->order));
+	        pRFIDDev->state = STATE_RFID_RETURN;
+	        break;
+        case STATE_RFID_RETURN:
+            OrderInit(&(pRFIDDev->order));
+            memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
+            xTimerStart(xHandleTimerRFID, 100); 
+            pRFIDDev->state = STATE_RFID_NOID;
             break;
         default:
             break;

@@ -71,47 +71,18 @@ static uint8_t create_system_dir(void)
         return FALSE;
     }
 }
-uint8_t create_sysconf_file()
-{
-    FRESULT res;
-    FIL f;
-    uint8_t *p;
-    UINT bw;
 
-    s2j_create_json_obj(Sysconf_j);
-    s2j_json_set_struct_element(subCalibrate_j, Sysconf_j, subCalibrate_t, &xSysconf, Calibrate_t , xCalibrate);
-    s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_top);
-    s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_bottom);
-    s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_left);
-    s2j_json_set_basic_element(subCalibrate_j, subCalibrate_t, int, ad_right);
-
-    p = cJSON_Print(Sysconf_j);
-    s2j_delete_json_obj(Sysconf_j);
-    res = f_open(&f, pathSysconf, FA_CREATE_NEW | FA_WRITE);
-    switch(res)
-    {
-    case FR_OK:
-        f_write(&f, p, strlen(p), &bw);
-        free(p);
-        f_close(&f);
-        return TRUE;
-    case FR_EXIST:
-    default:
-        free(p);
-        f_close(&f);
-        return FALSE;
-    }
-}
-void create_evsecfg_file(void)
+void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
     FIL f;
     UINT bw;
     FRESULT res;
-    res = f_open(&f, pathEVSECfg, FA_CREATE_NEW | FA_WRITE);
+    res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
+//    res = f_open(&f, path, FA_CREATE_ALWAYS | FA_WRITE);
     switch(res)
     {
     case FR_OK:
-        f_write(&f, strEVSECfg, strlen(strEVSECfg), &bw);
+        f_write(&f, context, strlen(context), &bw);
         f_close(&f);
     case FR_EXIST:
     default:
@@ -124,12 +95,6 @@ void sys_Init(void)
     //ifconfig_init();
     timeInit();
     retarget_init();
-#if configAPPLICATION_ALLOCATED_HEAP == 0
-    my_mem_init(SRAMIN);            //初始化内部内存池
-    my_mem_init(SRAMEX);            //初始化外部内存池
-    my_mem_init(SRAMCCM);           //初始化CCM内存池
-#endif
-
     /*---------------------------------------------------------------------------/
     /                               FATFS初始化
     /---------------------------------------------------------------------------*/
@@ -156,16 +121,24 @@ void sys_Init(void)
     xSysconf.xCalibrate.ad_left = 100;
     xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
-    create_sysconf_file();
-    create_evsecfg_file();
+    //f_unlink(pathEVSECfg);
+    create_cfg_file(pathEVSECfg, strEVSECfg);
+    create_cfg_file(pathProtoCfg, strProtoCfg);
+    create_cfg_file(pathWhiteList, strWhiteListCfg);
+    create_cfg_file(pathBlackList, strBlackListCfg);
+    //f_unlink(pathEVSELog);
+    //f_unlink(pathOrder);
+    create_cfg_file(pathOrder, strOrderCfg);
+    create_cfg_file(pathEVSELog, strLogCfg);
 
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/
+#if EVSE_USING_GUI
     WM_SetCreateFlags(WM_CF_MEMDEV);    /* Activate the use of memory device feature */
     GUI_Init();
     WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
-
+#endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
 }

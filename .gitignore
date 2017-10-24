@@ -1,5 +1,6 @@
 build/Keil/output/
 build/SO/
+build/st/
 src/drivers/bsp/inc/no_use/
 src/drivers/bsp/src/not use/
 *.h~
@@ -22,3 +23,11 @@ src/net/lwip-2.0.2/doc
 src/net/lwip-2.0.2/test
 tags
 *.sublime-workspace
+*.bak
+.vs
+build/vs/chargesdk/*.user
+build/vs/chargesdk/Debug
+build/vs/chargesdk/Release
+build/vs/chargesdk/VisualGDBCache
+build/vs/CodeDB
+*.old

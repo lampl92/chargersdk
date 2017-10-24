@@ -1,26 +1,19 @@
-#include <time.h>
+#include "bsp_define.h"
+#include "xprintf.h"
 #include "bsp.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "taskcreate.h"
+#include <time.h>
 
-//////////////////////////////////////////////////////////////////////////////////
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F429¿ª·¢°å
-//RTCÇı¶¯´úÂë
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2016/1/13
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
-//All rights reserved
-//////////////////////////////////////////////////////////////////////////////////
-
-RTC_HandleTypeDef RTC_Handler;  //RTC¾ä±ú
+RTC_HandleTypeDef RTC_Handler;  //RTCå¥æŸ„
 time_t time_dat;
-//RTCÊ±¼äÉèÖÃ
-//hour,min,sec:Ğ¡Ê±,·ÖÖÓ,ÃëÖÓ
+
+//RTCæ—¶é—´è®¾ç½®
+//hour,min,sec:å°æ—¶,åˆ†é’Ÿ,ç§’é’Ÿ
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
-//·µ»ØÖµ:SUCEE(1),³É¹¦
-//       ERROR(0),½øÈë³õÊ¼»¯Ä£Ê½Ê§°Ü
+//è¿”å›å€¼:SUCEE(1),æˆåŠŸ
+//       ERROR(0),è¿›å…¥åˆå§‹åŒ–æ¨¡å¼å¤±è´¥
 HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec)
 {
     RTC_TimeTypeDef RTC_TimeStructure;
@@ -38,7 +31,7 @@ HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec)
     }
     else if(RTC_Handler.Init.HourFormat == RTC_HOURFORMAT_12)
     {
-        //TODO: ²»ÉèÖÃ12Ğ¡Ê±ÖÆ,½øĞĞ´íÎó´¦Àí
+        //TODO: ä¸è®¾ç½®12å°æ—¶åˆ¶,è¿›è¡Œé”™è¯¯å¤„ç†
         while(1);
     }
     RTC_TimeStructure.Hours = hour;
@@ -50,11 +43,11 @@ HAL_StatusTypeDef RTC_Set_Time(u8 hour, u8 min, u8 sec)
     return HAL_RTC_SetTime(&RTC_Handler, &RTC_TimeStructure, RTC_FORMAT_BIN);
 }
 
-//RTCÈÕÆÚÉèÖÃ
-//year,month,date:Äê(0~99),ÔÂ(1~12),ÈÕ(0~31)
-//week:ĞÇÆÚ(1~7,0,·Ç·¨!)
-//·µ»ØÖµ:SUCEE(1),³É¹¦
-//       ERROR(0),½øÈë³õÊ¼»¯Ä£Ê½Ê§°Ü
+//RTCæ—¥æœŸè®¾ç½®
+//year,month,date:å¹´(0~99),æœˆ(1~12),æ—¥(0~31)
+//week:æ˜ŸæœŸ(1~7,0,éæ³•!)
+//è¿”å›å€¼:SUCEE(1),æˆåŠŸ
+//       ERROR(0),è¿›å…¥åˆå§‹åŒ–æ¨¡å¼å¤±è´¥
 HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
 {
     RTC_DateTypeDef RTC_DateStructure;
@@ -62,7 +55,7 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
     y = year;
     m = month;
     d = date;
-    //»ùÄ·À­¶ûÉ­¼ÆËã¹«Ê½, w=0 Ê±Îª ĞÇÆÚÒ»
+    //åŸºå§†æ‹‰å°”æ£®è®¡ç®—å…¬å¼, w=0 æ—¶ä¸º æ˜ŸæœŸä¸€
     if(m == 1 || m == 2)
     {
         m += 12;
@@ -77,17 +70,15 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
     return HAL_RTC_SetDate(&RTC_Handler, &RTC_DateStructure, RTC_FORMAT_BIN);
 }
 
-//RTC³õÊ¼»¯
-//·µ»ØÖµ:0,³õÊ¼»¯³É¹¦;
-//       2,½øÈë³õÊ¼»¯Ä£Ê½Ê§°Ü;
+//RTCåˆå§‹åŒ–
+//è¿”å›å€¼:0,åˆå§‹åŒ–æˆåŠŸ;
+//       2,è¿›å…¥åˆå§‹åŒ–æ¨¡å¼å¤±è´¥;
 u8 bsp_RTC_Init(void)
-{
-
-
+{   
     RTC_Handler.Instance = RTC;
-    RTC_Handler.Init.HourFormat = RTC_HOURFORMAT_24; //RTCÉèÖÃÎª24Ğ¡Ê±¸ñÊ½
-    RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTCÒì²½·ÖÆµÏµÊı(1~0X7F)
-    RTC_Handler.Init.SynchPrediv = 0XFF;          //RTCÍ¬²½·ÖÆµÏµÊı(0~7FFF)
+    RTC_Handler.Init.HourFormat = RTC_HOURFORMAT_24; //RTCè®¾ç½®ä¸º24å°æ—¶æ ¼å¼
+    RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTCå¼‚æ­¥åˆ†é¢‘ç³»æ•°(1~0X7F)
+    RTC_Handler.Init.SynchPrediv = 0XFF;          //RTCåŒæ­¥åˆ†é¢‘ç³»æ•°(0~7FFF)
     RTC_Handler.Init.OutPut = RTC_OUTPUT_DISABLE;
     RTC_Handler.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
     RTC_Handler.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
@@ -96,63 +87,63 @@ u8 bsp_RTC_Init(void)
         return 2;
     }
 
-    if(HAL_RTCEx_BKUPRead(&RTC_Handler, RTC_BKP_DR0) != 0X5050) //ÊÇ·ñµÚÒ»´ÎÅäÖÃ
+    if(HAL_RTCEx_BKUPRead(&RTC_Handler, RTC_BKP_DR0) != 0X5050) //æ˜¯å¦ç¬¬ä¸€æ¬¡é…ç½®
     {
-        RTC_Set_Time(9, 34, 56);       //ÉèÖÃÊ±¼ä ,¸ù¾İÊµ¼ÊÊ±¼äĞŞ¸Ä
-        RTC_Set_Date(16, 11, 21);                        //ÉèÖÃÈÕÆÚ
-        HAL_RTCEx_BKUPWrite(&RTC_Handler, RTC_BKP_DR0, 0X5050); //±ê¼ÇÒÑ¾­³õÊ¼»¯¹ıÁË
+        RTC_Set_Time(9, 34, 56);       //è®¾ç½®æ—¶é—´ ,æ ¹æ®å®é™…æ—¶é—´ä¿®æ”¹
+        RTC_Set_Date(16, 11, 21);                        //è®¾ç½®æ—¥æœŸ
+        HAL_RTCEx_BKUPWrite(&RTC_Handler, RTC_BKP_DR0, 0X5050); //æ ‡è®°å·²ç»åˆå§‹åŒ–è¿‡äº†
     }
     return 0;
 }
 
-//RTCµ×²ãÇı¶¯£¬Ê±ÖÓÅäÖÃ
-//´Ëº¯Êı»á±»HAL_RTC_Init()µ÷ÓÃ
-//hrtc:RTC¾ä±ú
+//RTCåº•å±‚é©±åŠ¨ï¼Œæ—¶é’Ÿé…ç½®
+//æ­¤å‡½æ•°ä¼šè¢«HAL_RTC_Init()è°ƒç”¨
+//hrtc:RTCå¥æŸ„
 void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
 
-    __HAL_RCC_PWR_CLK_ENABLE();//Ê¹ÄÜµçÔ´Ê±ÖÓPWR
-    HAL_PWR_EnableBkUpAccess();//È¡Ïû±¸·İÇøÓòĞ´±£»¤
+    __HAL_RCC_PWR_CLK_ENABLE();//ä½¿èƒ½ç”µæºæ—¶é’ŸPWR
+    HAL_PWR_EnableBkUpAccess();//å–æ¶ˆå¤‡ä»½åŒºåŸŸå†™ä¿æŠ¤
 
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE; //LSEÅäÖÃ
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE; //LSEé…ç½®
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-    RCC_OscInitStruct.LSEState = RCC_LSE_ON;                //RTCÊ¹ÓÃLSE
+    RCC_OscInitStruct.LSEState = RCC_LSE_ON;                //RTCä½¿ç”¨LSE
     HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC; //ÍâÉèÎªRTC
-    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE; //RTCÊ±ÖÓÔ´ÎªLSE
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC; //å¤–è®¾ä¸ºRTC
+    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE; //RTCæ—¶é’Ÿæºä¸ºLSE
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
-    __HAL_RCC_RTC_ENABLE();//RTCÊ±ÖÓÊ¹ÄÜ
+    __HAL_RCC_RTC_ENABLE();//RTCæ—¶é’Ÿä½¿èƒ½
 }
 
-//ÉèÖÃÄÖÖÓÊ±¼ä(°´ĞÇÆÚÄÖÁå,24Ğ¡Ê±ÖÆ)
-//week:ĞÇÆÚ¼¸(1~7) @ref  RTC_WeekDay_Definitions
-//hour,min,sec:Ğ¡Ê±,·ÖÖÓ,ÃëÖÓ
+//è®¾ç½®é—¹é’Ÿæ—¶é—´(æŒ‰æ˜ŸæœŸé—¹é“ƒ,24å°æ—¶åˆ¶)
+//week:æ˜ŸæœŸå‡ (1~7) @ref  RTC_WeekDay_Definitions
+//hour,min,sec:å°æ—¶,åˆ†é’Ÿ,ç§’é’Ÿ
 void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
 {
     RTC_AlarmTypeDef RTC_AlarmSturuct;
 
-    RTC_AlarmSturuct.AlarmTime.Hours = hour; //Ğ¡Ê±
-    RTC_AlarmSturuct.AlarmTime.Minutes = min; //·ÖÖÓ
-    RTC_AlarmSturuct.AlarmTime.Seconds = sec; //Ãë
+    RTC_AlarmSturuct.AlarmTime.Hours = hour; //å°æ—¶
+    RTC_AlarmSturuct.AlarmTime.Minutes = min; //åˆ†é’Ÿ
+    RTC_AlarmSturuct.AlarmTime.Seconds = sec; //ç§’
     RTC_AlarmSturuct.AlarmTime.SubSeconds = 0;
     RTC_AlarmSturuct.AlarmTime.TimeFormat = RTC_HOURFORMAT_24;
 
-    RTC_AlarmSturuct.AlarmMask = RTC_ALARMMASK_NONE; //¾«È·Æ¥ÅäĞÇÆÚ£¬Ê±·ÖÃë
+    RTC_AlarmSturuct.AlarmMask = RTC_ALARMMASK_NONE; //ç²¾ç¡®åŒ¹é…æ˜ŸæœŸï¼Œæ—¶åˆ†ç§’
     RTC_AlarmSturuct.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_NONE;
-    RTC_AlarmSturuct.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY; //°´ĞÇÆÚ
-    RTC_AlarmSturuct.AlarmDateWeekDay = week; //ĞÇÆÚ
-    RTC_AlarmSturuct.Alarm = RTC_ALARM_A;   //ÄÖÖÓA
+    RTC_AlarmSturuct.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_WEEKDAY; //æŒ‰æ˜ŸæœŸ
+    RTC_AlarmSturuct.AlarmDateWeekDay = week; //æ˜ŸæœŸ
+    RTC_AlarmSturuct.Alarm = RTC_ALARM_A;   //é—¹é’ŸA
     HAL_RTC_SetAlarm_IT(&RTC_Handler, &RTC_AlarmSturuct, RTC_FORMAT_BIN);
 
     HAL_NVIC_SetPriority(RTC_Alarm_IRQn, bspAlarm_PreemptPriority, bspAlarm_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
 }
 
-//ÖÜÆÚĞÔ»½ĞÑ¶¨Ê±Æ÷ÉèÖÃ
+//å‘¨æœŸæ€§å”¤é†’å®šæ—¶å™¨è®¾ç½®
 /*wksel:  @ref RTCEx_Wakeup_Timer_Definitions
 #define RTC_WAKEUPCLOCK_RTCCLK_DIV16        ((uint32_t)0x00000000)
 #define RTC_WAKEUPCLOCK_RTCCLK_DIV8         ((uint32_t)0x00000001)
@@ -161,36 +152,36 @@ void RTC_Set_AlarmA(u8 week, u8 hour, u8 min, u8 sec)
 #define RTC_WAKEUPCLOCK_CK_SPRE_16BITS      ((uint32_t)0x00000004)
 #define RTC_WAKEUPCLOCK_CK_SPRE_17BITS      ((uint32_t)0x00000006)
 */
-//cnt:×Ô¶¯ÖØ×°ÔØÖµ.¼õµ½0,²úÉúÖĞ¶Ï.
+//cnt:è‡ªåŠ¨é‡è£…è½½å€¼.å‡åˆ°0,äº§ç”Ÿä¸­æ–­.
 void RTC_Set_WakeUp(u32 wksel, u16 cnt)
 {
-    __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&RTC_Handler, RTC_FLAG_WUTF);//Çå³ıRTC WAKE UPµÄ±êÖ¾
+    __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&RTC_Handler, RTC_FLAG_WUTF);//æ¸…é™¤RTC WAKE UPçš„æ ‡å¿—
 
-    HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler, cnt, wksel);          //ÉèÖÃÖØ×°ÔØÖµºÍÊ±ÖÓ
+    HAL_RTCEx_SetWakeUpTimer_IT(&RTC_Handler, cnt, wksel);          //è®¾ç½®é‡è£…è½½å€¼å’Œæ—¶é’Ÿ
 
     HAL_NVIC_SetPriority(RTC_WKUP_IRQn, bspWKUP_PreemptPriority, bspWKUP_SubPriority);
     HAL_NVIC_EnableIRQ(RTC_WKUP_IRQn);
 }
 
-//RTCÄÖÖÓÖĞ¶Ï·şÎñº¯Êı
+//RTCé—¹é’Ÿä¸­æ–­æœåŠ¡å‡½æ•°
 void RTC_Alarm_IRQHandler(void)
 {
     HAL_RTC_AlarmIRQHandler(&RTC_Handler);
 }
 
-//RTCÄÖÖÓAÖĞ¶Ï´¦Àí»Øµ÷º¯Êı
+//RTCé—¹é’ŸAä¸­æ–­å¤„ç†å›è°ƒå‡½æ•°
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
     xprintf("ALARM A!\r\n");
 }
 
-//RTC WAKE UPÖĞ¶Ï·şÎñº¯Êı
+//RTC WAKE UPä¸­æ–­æœåŠ¡å‡½æ•°
 void RTC_WKUP_IRQHandler(void)
 {
     HAL_RTCEx_WakeUpTimerIRQHandler(&RTC_Handler);
 }
 
-//RTC WAKE UPÖĞ¶Ï´¦Àí
+//RTC WAKE UPä¸­æ–­å¤„ç†
 void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
 {
     time_dat ++;
@@ -214,4 +205,17 @@ clock_t clock(void)
     clock_t clock_dat;
     clock_dat = (clock_t)ulHighFrequencyTimerTicks;
     return clock_dat;
+}
+
+void printTime(time_t now)
+{
+    struct tm *ts;
+    char buf[80];
+    if (xSemaphoreTake(xMutexTimeStruct, 100) == pdPASS)
+    {
+        ts = localtime(& now);
+        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+        printf_safe("%s \n", buf);
+        xSemaphoreGive(xMutexTimeStruct);
+    }
 }

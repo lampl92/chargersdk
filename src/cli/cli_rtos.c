@@ -14,12 +14,12 @@ void cli_tasklist_fnt(int argc, char **argv)
     printf_safe("\r\n");
     vTaskList((char *)&acTaskStatusBuffer);
     printf_safe("=================================================\r\n");
-    printf_safe("ÈÎÎñÃû      ÈÎÎñ×´Ì¬ ÓÅÏÈ¼¶   Ê£ÓàÕ» ÈÎÎñĞòºÅ\r\n");
+    printf_safe("ä»»åŠ¡å      ä»»åŠ¡çŠ¶æ€ ä¼˜å…ˆçº§   å‰©ä½™æ ˆ ä»»åŠ¡åºå·\r\n");
     for(i = 0; i < strlen(acTaskStatusBuffer); i++)
     {
         printf_safe("%c", acTaskStatusBuffer[i]);
     }
-    printf_safe("\r\nÈÎÎñÃû       ÔËĞĞ¼ÆÊı         Ê¹ÓÃÂÊ\r\n");
+    printf_safe("\r\nä»»åŠ¡å       è¿è¡Œè®¡æ•°         ä½¿ç”¨ç‡\r\n");
     vTaskGetRunTimeStats((char *)&acTaskStatusBuffer);
     for(i = 0; i < strlen(acTaskStatusBuffer); i++)
     {
@@ -27,9 +27,9 @@ void cli_tasklist_fnt(int argc, char **argv)
     }
     FreeBytesRemaining = xPortGetFreeHeapSize();
     memused = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) * 100 / configTOTAL_HEAP_SIZE;
-    xsprintf((char *)paddr, "%d.%01d%%", memused / 10, memused % 10);
+    sprintf((char *)paddr, "%d.%01d%%", memused / 10, memused % 10);
     usedkb = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) / 1024;
-    printf_safe("\nSDRAM Ê¹ÓÃÂÊ: %s£¬%.2lf KB\n", paddr, usedkb);
+    printf_safe("\nSDRAM ä½¿ç”¨ç‡: %sï¼Œ%.2lf KB\n", paddr, usedkb);
 }
 
 tinysh_cmd_t cli_tasklist_cmd =

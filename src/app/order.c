@@ -11,204 +11,191 @@
 #include "cJSON.h"
 #include "cfg_parse.h"
 
-volatile uint8_t *tmpcjson;
-
-//static void OrderDelete(OrderData_t *pOrder)
-//{
-//    gdsl_list_free(pOrder->plChargeSegment);
-//    free(pOrder);
-//}
-//
-//OrderData_t *OrderCreate(void)
-//{
-//    OrderData_t *pOrder = NULL;
-//    pOrder = (OrderData_t *)malloc(sizeof(OrderData_t));
-//    pOrder->Delete = OrderDelete;
-//    pOrder->plChargeSegment = gdsl_list_alloc("SegList",ChargeSegAlloc,ChargeSegFree);
-//    return pOrder;
-//}
-
-
-/** @brief ÅĞ¶ÏÊ±¼ä±ß½ç£¬°üº¬little£¬²»°üº¬big
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ˜¯å¦åœ¨æ—¶é—´æ®µå†…
  *
- * @param src time_t
- * @param little time_t
- * @param big time_t
- * @return uint8_t 1:ÔÚÇø¼äÖĞ£¬0£º²»ÔÚÇø¼äÖĞ
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t 1ï¼šåœ¨æ—¶é—´æ®µå†…ï¼Œ 0ï¼šä¸åœ¨æ—¶é—´æ®µå†…
  *
  */
-static gdsl_element_t ChargeSegAlloc(void *pChargeSeg)
+static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
 {
-    gdsl_element_t copyChSeg;
-    copyChSeg = (gdsl_element_t)malloc(sizeof(ChargeSegment_t));
-    if(copyChSeg != NULL)
-    {
-        memcpy(copyChSeg, pChargeSeg, sizeof(ChargeSegment_t));
-    }
-    return copyChSeg;
-}
-static void ChargeSegFree (gdsl_element_t e)
-{
-    free (e);
-}
-static uint8_t JudgeTimeInclude(time_t tSrc, time_t tStart, time_t tEnd)
-{
-    if(tSrc >= tStart && tSrc < tEnd)
+    struct tm *ts;
+    ts = localtime(&now);
+    if(ts->tm_hour >= ucStart && ts->tm_hour < ucEnd)
     {
         return 1;
-    }
-    else if(tSrc == tEnd)
-    {
-        return 2;//Ê±¶Î±ß½ç¡£ÔİÊ±ÅĞ¶Ï°ì·¨£¬²âÊÔÊ±Ò»¶¨Òª³ä·Ö²âÊÔÏµÍ³ÊÇ·ñ¿ÉÒÔ¼ì²âµ½Ê±¶Î±ß½ç¡£
     }
     else
     {
         return 0;
     }
 }
-static void SegmentProc(time_t now, CON_t *pCON)
+
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ˜¯å¦åœ¨å°–å³°å¹³è°·æŸä¸ªæ—¶é—´æ®µä¸­
+ *
+ * @param now time_t
+ * @param ucStart uint8_t
+ * @param ucEnd uint8_t
+ * @return uint8_t  1ï¼šåœ¨æ—¶é—´æ®µä¸­  0ï¼šä¸åœ¨æ—¶é—´æ®µä¸­
+ *
+ */
+static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
 {
-    uint32_t ulTotalTemplSegs;
-    TemplSeg_t *pTemplSeg;
-    ChargeSegment_t ChSeg;
-    ChargeSegment_t *pChSeg;
-    uint8_t ucResJudge;
-    struct tm *ts;
-    uint8_t ucBoundaryPos;
     int i;
+    uint8_t isInclude = 0;
 
-    gdsl_list_t plChSeg;
-    gdsl_list_t plTemplSeg;
-
-    plChSeg = pCON->order.plChargeSegment;
-    plTemplSeg = pEVSE->info.plTemplSeg;
-
-    ucBoundaryPos = 0;
-    ucResJudge = 0;
-    ts = localtime(&now);
-    ulTotalTemplSegs = gdsl_list_get_size(plTemplSeg);
-    /*1. ¶ÎÅĞ¶Ï*/
-#ifdef DEBUG_DIAG_DUMMY
-    ulTotalTemplSegs = 0;
-#endif
-    if(ulTotalTemplSegs > 0)
+    for(i = 0; i < SegTime.ucPeriodCont; i++)
     {
-        for(i = 1; i <= ulTotalTemplSegs; i++ )
+        isInclude = JudgeTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
+        if(isInclude == 1)
         {
-            pTemplSeg = (TemplSeg_t *)(gdsl_list_search_by_position(plTemplSeg, i));
-            ucResJudge = JudgeTimeInclude(now, pTemplSeg->tStartTime, pTemplSeg->tEndTime);
-            if(ucResJudge == 1)
-            {
-                switch(pCON->order.statOrderSeg)
-                {
-                case STATE_ORDERSEG_DEF:
-                    pCON->order.statOrderSeg = STATE_ORDERSEG_START;
-                    break;
-                case STATE_ORDERSEG_START:
-                    ChSeg.state = STATE_SEG_START;
-                    ChSeg.ucTemplPos = i;
-                    gdsl_list_insert_tail(plChSeg, &ChSeg);
-                    pCON->order.statOrderSeg = STATE_ORDERSEG_IN;
-                    break;
-                case STATE_ORDERSEG_IN:
-                    pChSeg = (ChargeSegment_t *)gdsl_list_get_tail(plChSeg);//Òª²Ù×÷µÄ¶Î±ØÈ»ÔÚÁ´±íÎ²
-                    if(pChSeg->ucTemplPos != i)//Ê±¼äÒÑ¾­²»ÔÚµ±Ç°¶ÎÖĞ
-                    {
-
-//                        pChSeg->state = STATE_SEG_OUT;
-                        pCON->order.statOrderSeg = STATE_ORDERSEG_END;
-                        break;
-                    }
-                    switch(pChSeg->state)
-                    {
-                    case STATE_SEG_START:
-                        pChSeg->dSegStartPower = pCON->status.dChargingPower;
-                        pChSeg->tStartTime = now;
-                        pChSeg->state = STATE_SEG_IN;
-                        break;
-                    case STATE_SEG_IN:
-                        pChSeg->dSegPower = pCON->status.dChargingPower - pChSeg->dSegStartPower;
-                        pChSeg->dSegFee = pChSeg->dSegPower * pTemplSeg->dSegFee;
-                        break;
-                    case STATE_SEG_END:
-                        //´¦Àí¼ûÏÂÃæµÄÁ÷³Ì
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-//                case STATE_ORDERSEG_END:
-//                    break;
-                default:
-                    break;
-                }
-//
-//                switch()
-//                    ChSeg.state
-//                    ChSeg->dSegStartPower =
-//                        pCON->order.dTotalPower = pCON->status.GetChargingPower - pCON->order.dStartPower;
-//                pCON->order.dTotalPowerFee = pCON->order.dTotalPower * pTemplSeg->dSegFee;
-                break;//ÍË³öÑ­»·
-            }
-            else if(ucResJudge == 2)
-            {
-                ucBoundaryPos = i;
-                pCON->order.statOrderSeg = STATE_ORDERSEG_END;
-                break;//ÍË³öÑ­»·
-            }
-            else //µ±Ç°Ê±¼äÔÚËùÓĞsegÖĞÃ»ÓĞÕÒµ½Ê±¼ä¶Î£¬Ö´ĞĞÄ¬ÈÏ¶Î
-            {
-                pCON->order.statOrderSeg = STATE_ORDERSEG_DEF;
-            }
+            *ppos = (uint8_t)i;
+            return 1;
         }
     }
-    else//¸ù±¾Ã»ÓĞseg£¬ĞèÒªÖ´ĞĞÄ¬ÈÏ¶Î
+    return 0;
+}
+
+/** @brief åˆ¤æ–­å½“å‰æ—¶é—´æ‰€åœ¨çš„å°–å³°å¹³è°·çŠ¶æ€
+ *
+ * @param now time_t
+ * @param pProto echProtocol_t*
+ * @param uint8_t pos* å½“å‰æ—¶é—´æ‰€æ—¶é—´æ®µå†…ç½®
+ * @return SegTimeState_e
+ *
+ */
+static OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
+{
+    int i;
+    for (i = 0; i < defOrderSegMax; i++)
     {
-        pCON->order.statOrderSeg = STATE_ORDERSEG_DEF;
+        if(JudgeSegInclude(now, pProto->info.SegTime[i], ppos) == 1)
+        {
+            return (OrderSegState_e)i;
+        }
     }
-    /*2. ¶Î´¦Àí*/
+    return STATE_SEG_DEFAULT;
+}
+ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e statOrderSeg)
+{
+    ChargePeriodStatus_t *pChargePeriodStatus;
+    OrderSegState_e statSegTime;
+    uint8_t pos = 0;//å½“å‰æ—¶é—´åœ¨æ—¶æ®µä¸­çš„ä½ç½®
+    
+    statSegTime = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        ///*çŠ¶æ€ æˆ– æ—¶æ®µ å‘ç”Ÿè½¬æ¢ï¼Œå¤„ç†ä¸Šæ¬¡æ—¶æ®µå†…å®¹*/
+    if (pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //ç›¸åŒçŠ¶æ€æ—¶æ®µè½¬æ¢åªæœ‰åœ¨ 0 ç‚¹æ—¶åˆ»å‘ç”Ÿ
+    {
+        pChargePeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pCON->order.pos]);
+        pChargePeriodStatus->tEndTime = now; //å½“å‰è½¬æ¢æ—¶é—´å³ä¸Šæ¬¡ç»“æŸæ—¶é—´
+        pCON->order.statOrderSeg = statSegTime;
+        pCON->order.pos = pos;
+        return pChargePeriodStatus;//çŠ¶æ€å·²è½¬æ¢ï¼Œä¸‹é¢çš„æ²¡å¿…è¦æ‰§è¡Œäº†
+    }
+    pChargePeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pos]);
+    if (pChargePeriodStatus->tStartTime > 0)
+    {
+        pChargePeriodStatus->dPower = pCON->status.dChargingPower - pChargePeriodStatus->dStartPower;
+    }
+    else
+    {
+        //ç¬¬ä¸€æ¬¡è¿›åˆ°è¿™ä¸ªæ—¶æ®µ
+        pCON->order.pos = pos; //çŠ¶æ€è½¬æ¢æ—¶å·²ç»èµ‹è¿‡å€¼äº†
+        pChargePeriodStatus->tStartTime = now;
+        pChargePeriodStatus->dStartPower = pCON->status.dChargingPower;
+    }
+    return pChargePeriodStatus;
+}
+
+/** @brief çŠ¶æ€ä¸æ—¶æ®µåˆ¤å¤„ç†ã€‚çŠ¶æ€ï¼šå°–å³°å¹³è°·  æ—¶æ®µï¼šçŠ¶æ€ä¸­çš„5ä¸ªæ—¶æ®µ
+ *
+ * @param now time_t
+ * @param pCON CON_t*
+ * @return void
+ *
+ */
+static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
+{
+    ChargePeriodStatus_t *pChargePeriodStatus;
+    uint8_t pos = 0;//å½“å‰æ—¶é—´åœ¨æ—¶æ®µä¸­çš„ä½ç½®
+    int i, j;
+    double tmpTotalPower = 0; //ç”¨äºè®¡ç®—å°–å³°å¹³è°·æ€»ç”µé‡
+    double tmpTotalPowerFee = 0;
+    double tmpTotalServFee = 0;
+    uint32_t tmpTotalTime = 0;  //ç”¨äºè®¡ç®—å°–å³°å¹³è°·æ€»å……ç”µæ—¶é—´
+
+    /*1. çŠ¶æ€åˆ¤æ–­ã€æ—¶æ®µå†…å®¹å¤„ç†*/
     switch(pCON->order.statOrderSeg)
     {
-    case STATE_ORDERSEG_DEF:
-        pCON->order.dTotalPower = pCON->status.dChargingPower - pCON->order.dStartPower;
-        if(ulTotalTemplSegs == 0)
-        {
-            pCON->order.dDefSegPower = pCON->order.dTotalPower;
-            pCON->order.dDefSegFee = pCON->order.dDefSegPower * pEVSE->info.dDefSegFee;
-            pCON->order.dTotalPowerFee = pCON->order.dDefSegFee;
-        }
-        else
-        {
-//            pCON->order.dDefSegPower = pCON->order.dTotalPower - Ê±¶Î×ÜµçÁ¿;
-//            pCON->order.dDefSegFee = pCON->order.dDefSegPower * pEVSE->info.dDefSegFee;
-//            pCON->order.dTotalPowerFee = pCON->order.dDefSegFee + Ê±¶Î×Üµç·Ñ;
-        }
+    case STATE_SEG_IDLE:
+        pCON->order.statOrderSeg = JudgeSegState(now, pechProto, &pos);//è·å–å½“å‰æ‰€åœ¨çŠ¶æ€
+        pCON->order.pos = pos;//è·å–å½“å‰æ‰€åœ¨æ—¶æ®µ
         break;
-    case STATE_ORDERSEG_END:
-        pTemplSeg = (TemplSeg_t *)(gdsl_list_search_by_position(plTemplSeg, ucBoundaryPos));
-        pChSeg = (ChargeSegment_t *)gdsl_list_get_tail(plChSeg);//Òª²Ù×÷µÄ¶Î±ØÈ»ÔÚÁ´±íÎ²
-        pChSeg->tEndTime = now;
+    case STATE_SEG_SHARP:
+        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHARP);
+        break;
+    case STATE_SEG_PEAK:
+        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_PEAK);
+        break;
+    case STATE_SEG_SHOULDER:
+        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHOULDER);
+        break;
+    case STATE_SEG_OFF_PEAK:
+        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_OFF_PEAK);
+        break;   
+    case STATE_SEG_DEFAULT:
+        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_DEFAULT);
         break;
     default:
         break;
     }
-    /*3. ·şÎñ·ÑÊı¾İ*/
-    if(pCON->order.ucServiceFeeType == defOrderSerType_Order)//°´µ¥
+    if(statOrder == STATE_ORDER_FINISH)
     {
-        pCON->order.dTotalServiceFee = pEVSE->info.dServiceFee;
+        pChargePeriodStatus->tEndTime = now; //pChargeSegStatus æŒ‡é’ˆå·²ç»åœ¨ä¸Šé¢çš„switchä¸­è·å–ï¼Œæ‰€ä»¥è¿™æ¡åˆ¤æ–­è¯­å¥ä½ç½®ä¸èƒ½åŠ¨
     }
-    else if(pCON->order.ucServiceFeeType == defOrderSerType_Power)//°´¶È
+
+    /*2. æ±‡æ€»æ—¶æ®µ*/
+    for (i = 0; i < defOrderSegMax; i++)
     {
-        pCON->order.dTotalServiceFee = pCON->order.dTotalPower * pEVSE->info.dServiceFee;
+        tmpTotalPower = 0;
+        tmpTotalTime = 0;
+        //  â†“:j    â†“:j                                          â†“:j
+        for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; j++)
+        {
+            tmpTotalPower += pCON->order.chargeSegStatus[i][j].dPower;
+            if(pCON->order.chargeSegStatus[i][j].tEndTime != 0) //è¡¨ç¤ºå·²ç»ç»“æŸçš„æ—¶æ®µ
+            {
+                tmpTotalTime += (pCON->order.chargeSegStatus[i][j].tEndTime - pCON->order.chargeSegStatus[i][j].tStartTime);
+            }
+        }
+        pCON->order.dSegTotalPower[i] = (uint32_t)(tmpTotalPower * 100) / 100.0; //é˜²æ­¢sprintfå¯¹doubleç²¾åº¦è¿›è¡Œå››èˆäº”å…¥
+        pCON->order.dSegTotalPowerFee[i] = tmpTotalPower * pechProto->info.dSegPowerFee[i];
+        pCON->order.dSegTotalServFee[i] = tmpTotalPower * pechProto->info.dSegServFee[i];
+        pCON->order.ulSegTotalTime[i] = tmpTotalTime;
     }
-    /*4. ×Ü·ÑÓÃ*/
-    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServiceFee;
+
+    /*3. æ±‡æ€»æ€»ç”µé‡*/
+    tmpTotalPower = 0;
+    tmpTotalPowerFee = 0;
+    tmpTotalServFee = 0;
+    for (i = 0; i < defOrderSegMax; i++)
+    {
+        tmpTotalPower += pCON->order.dSegTotalPower[i];
+        tmpTotalPowerFee += pCON->order.dSegTotalPowerFee[i];
+        tmpTotalServFee += pCON->order.dSegTotalServFee[i];
+    }
+    pCON->order.dTotalPower = tmpTotalPower;
+    pCON->order.dTotalPowerFee = (uint32_t)(tmpTotalPowerFee * 100) / 100.0;
+    pCON->order.dTotalServFee = (uint32_t)(tmpTotalServFee * 100) / 100.0;
+    /*4. æ€»è´¹ç”¨*/
+    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
 }
 
 ErrorCode_t makeOrder(CON_t *pCON)
 {
     OrderState_t statOrder;
-//    OrderSegState_t statOrderSeg;
     ErrorCode_t errcode;
 
     statOrder = pCON->order.statOrder;
@@ -218,184 +205,65 @@ ErrorCode_t makeOrder(CON_t *pCON)
     case STATE_ORDER_TMP:
         memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
         pCON->order.ucAccountStatus = pRFIDDev->order.ucAccountStatus;
+        pCON->order.ucCardStatus = pRFIDDev->order.ucCardStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
         pCON->order.ucCONID = pCON->info.ucCONID;
+        pCON->order.dLimitFee = pRFIDDev->order.dLimitFee;
+        pCON->order.ulLimitTime = pRFIDDev->order.ulLimitTime;
+        strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);
         pCON->order.dStartPower = pCON->status.dChargingPower;
-        pCON->order.ucServiceFeeType = pEVSE->info.ucServiceFeeType;
-        SegmentProc(pCON->order.tStartTime, pCON);
+        SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
-        SegmentProc(time(NULL), pCON);
+        SegmentUpdate(time(NULL), pCON, statOrder);
         break;
     case STATE_ORDER_FINISH:
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = time(NULL);
+        SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
         break;
     }
     return errcode;
 }
 
-void OrderCreate(OrderData_t *pOrder)
+ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
 {
-    pOrder->plChargeSegment = gdsl_list_alloc("SegList", ChargeSegAlloc, ChargeSegFree);
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    switch(statOrder)
+    {
+    case STATE_ORDER_TMP:
+        memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
+        pCON->order.ucAccountStatus = 1;
+        pCON->order.dBalance = 888;
+        pCON->order.ucCONID = pCON->info.ucCONID;
+        break;
+    case STATE_ORDER_MAKE:
+        pCON->order.tStartTime = testtime;
+        pCON->order.dStartPower = pCON->status.dChargingPower;
+        SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
+        break;
+    case STATE_ORDER_UPDATE:
+        SegmentUpdate(testtime, pCON, statOrder);
+        break;
+    case STATE_ORDER_FINISH:
+        pCON->order.ucPayType = defOrderPayType_Online;
+        pCON->order.tStopTime = testtime;
+        SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
+        break;
+    }
+    return errcode;
 }
 
 void OrderInit(OrderData_t *pOrder)
 {
+    memset(pOrder, 0, sizeof(OrderData_t));
     pOrder->statOrder = STATE_ORDER_IDLE;
-    pOrder->statOrderSeg = STATE_ORDERSEG_DEF;
-
-    memset(pOrder->ucCardID, 0, defCardIDLength);//¿¨ºÅ//ÔÚtaskrfidÖĞ¸³Öµ
-    pOrder->ucAccountStatus = 0;    //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 0£ºÎ´×¢²á¿¨
-    pOrder->dBalance = 0;           //Óà¶î
-
-    pOrder->ucStartType = 0; //4ÓĞ¿¨ 5ÎŞ¿¨
-    memset(pOrder->strOrderSN, 0, defOrderSNLength);
-    pOrder->dLimitFee = 0;                    //³äµç½ğ¶îÏŞÖÆ
-    pOrder->tStartTime = 0;                 //ÆğÊ¼Ê±¼ä
-    pOrder->dStartPower = 0;                //ÆğÊ¼µç±í¶ÁÊı
-    pOrder->ucServiceFeeType = 0;         //·şÎñ·ÑÀàĞÍ
-
-    pOrder->dTotalPower = 0;                 //×ÜµçÁ¿
-    pOrder->dTotalPowerFee = 0;             //×Üµç·Ñ
-    pOrder->dTotalServiceFee = 0;               //·şÎñ·Ñ
-    pOrder->dTotalFee = 0;                //×Ü·ÑÓÃ
-    pOrder->ucTotalSegment = 0;            //³äµçÃ÷Ï¸¶ÎÊı
-    pOrder->dDefSegStartPower = 0;          //Ä¬ÈÏ¶ÎÆğÊ¼µç±í¶ÁÊı
-    pOrder->dDefSegPower = 0;              //Ä¬ÈÏ¶ÎµçÁ¿
-    pOrder->dDefSegFee = 0;               //Ä¬ÈÏ¶Îµç·Ñ
-
-    pOrder->ucPayType = 0;               //Ö§¸¶·½Ê½ 0.ÔÆÆ½Ì¨Ö§¸¶ 1.Ç®°ü¿¨Ö§¸¶
-    pOrder->ucStopType = 0;                  //Í£Ö¹ÀàĞÍ
-    pOrder->tStopTime = 0;              //Í£Ö¹Ê±¼ä
-
-    if(pOrder->plChargeSegment != NULL)
-    {
-        gdsl_list_flush(pOrder->plChargeSegment);
-    }
+    pOrder->statOrderSeg = STATE_SEG_IDLE;
+	pOrder->statRemoteProc.card.stat = CARDCTRL_IDLE;
+	pOrder->statRemoteProc.order.stat = REMOTEOrder_IDLE;
 }
-#if 0
-void saveOrder(CON_t *pCON)
-{
-	int temp;
-    FIL fp;
-    ErrorCode_t errcode;
-    UINT bw;
-    char result;
-    uint8_t *p;
-    cJSON *pJsonRoot = NULL;
-    cJSON *jsOrderObj = NULL;
-    cJSON *pSub = NULL;
-    cJSON *pSubJson = NULL;
-    cJSON *pSubJsonSeg = NULL;
-    cJSON *seg0,*seg1,*seg2,*seg3,*seg4,*seg5,*seg6,*seg7;// = NULL;
-
-    f_open(&fp, "system/order.txt", FA_CREATE_NEW | FA_WRITE);
-
-    pJsonRoot = GetCfgObj("system/order.txt", &errcode);
-    if(pJsonRoot == NULL || errcode != ERR_NO)
-    {
-        return 1;
-    }
-    tmpcjson = cJSON_Print(pJsonRoot);
-
-    pSub = cJSON_GetObjectItem(pJsonRoot,"MaxIndex");
-
-    if(pSub == NULL)
-    {
-        cJSON_Delete(pSub);
-        return 1;
-    }
-
-    pSub->valueint = pSub->valueint+1;
-    cJSON_ReplaceItemInObject(pJsonRoot,"MaxIndex",cJSON_CreateNumber(*((uint32_t *)(pSub->valueint))));
-    jsOrderObj = cJSON_GetObjectItem(pJsonRoot,"Order");//È¡µÃÊı×é
-
-    pSubJson = cJSON_CreateObject();
-    if(pSubJson == NULL)
-    {
-        cJSON_Delete(pSubJson);
-        return 1;
-    }
-    cJSON_AddItemToArray(pSubJson,jsOrderObj);
-
-    cJSON_AddNumberToObject(pSubJson,"Index",pSub->valueint);
-    cJSON_AddStringToObject(pSubJson, "EVSEID",&(pCON->order.ucCardID));//Êı¾İ´íÎó
-    cJSON_AddNumberToObject(pSubJson,"CONID",pCON->order.ucCONID);
-    cJSON_AddNumberToObject(pSubJson,"TotalPower",pCON->order.dTotalPower);
-    cJSON_AddNumberToObject(pSubJson,"PayType",pCON->order.ucPayType);
-    cJSON_AddNumberToObject(pSubJson,"StopType",pCON->order.ucStopType);
-    cJSON_AddStringToObject(pSubJson,"CardID",&(pCON->order.ucCardID));
-    cJSON_AddNumberToObject(pSubJson,"TotalFee",pCON->order.dTotalFee);
-    cJSON_AddStringToObject(pSubJson,"OrderSN",&(pCON->order.ucCardID));//Êı¾İ´íÎó
-    cJSON_AddNumberToObject(pSubJson,"ServiceFeeType",pCON->order.ucServiceFeeType);
-    cJSON_AddNumberToObject(pSubJson,"ServiceFee",pCON->order.dTotalServiceFee);
-    cJSON_AddNumberToObject(pSubJson,"TotalSegment",pCON->order.ucTotalSegment);
-    cJSON_AddNumberToObject(pSubJson,"DefSegPower",pCON->order.dDefSegPower);
-    cJSON_AddNumberToObject(pSubJson,"DefSegFee",pCON->order.dDefSegFee);
-
-    pSubJsonSeg = cJSON_CreateArray();
-    cJSON_AddItemToObject(pSubJson,"Segments",pSubJsonSeg);
-    seg0 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg0",seg0);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg0,"StartTime",pCON->order.tStartTime);
-    seg1 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg1",seg1);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg1,"StartTime",pCON->order.tStartTime);
-    seg2 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg2",seg2);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg2,"StartTime",pCON->order.tStartTime);
-    seg3 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg3",seg3);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg3,"StartTime",pCON->order.tStartTime);
-    seg4 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg4",seg4);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg4,"StartTime",pCON->order.tStartTime);
-    seg5 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg5",seg5);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg5,"StartTime",pCON->order.tStartTime);
-    seg6 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg6",seg6);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg6,"StartTime",pCON->order.tStartTime);
-    seg7 = cJSON_CreateObject();
-    cJSON_AddItemToObject(pSubJsonSeg,"seg7",seg7);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-    cJSON_AddNumberToObject(seg7,"StartTime",pCON->order.tStartTime);
-
-    //p = cJSON_Print(pJsonRoot);
-//    f_write(&fp, p, strlen(p), &bw);
-
-    f_close(&fp);
-//    SetCfgObj("system/order.txt",pJsonRoot);
-
-    cJSON_Delete(pJsonRoot);
-    return 0;
-}
-#endif
-

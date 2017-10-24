@@ -10,8 +10,11 @@
 
 #include <time.h>
 #include "gdsl_list.h"
+#include "evse_config.h"
+#include "taskremote.h"
 
-/*Í£Ö¹Ô­Òò*/
+
+/*åœæ­¢ç±»å‹ StopType*/
 #define defOrderStopType_Unknown        0
 #define defOrderStopType_RFID           1
 #define defOrderStopType_Full           2
@@ -31,14 +34,44 @@
 #define defOrderStopType_UnderCurr      16
 #define defOrderStopType_Knock          17
 
-/*Ö§¸¶·½Ê½*/
+/*æ”¯ä»˜æ–¹å¼ PayType*/
 #define defOrderPayType_Online          0
 #define defOrderPayType_Offline         1
 
-/*·şÎñ·ÑÀàĞÍ*/
+/*æœåŠ¡è´¹ç±»å‹*/
 #define defOrderSerType_Order           0
 #define defOrderSerType_Power           1
 
+
+/*
+          +------+------+------+------+------+
+          |      |      |      |      |      |
+Segment0  |Period|      |      |      |      |
+          |      |      |      |      |      |
+          +------+------+------+------+------+
+
+          +------+------+------+------+------+
+          |      |      |      |      |      |
+Segment1  |Period|      |      |      |      |
+          |      |      |      |      |      |
+          +------+------+------+------+------+
+*/
+
+#define defOrderSegMax                  5
+#define defOrderPeriodMax               5
+
+/*å½“å‰æ—¶é—´æ‰€åœ¨æ—¶é—´æ®µç±»å‹*/
+typedef enum
+{
+    STATE_SEG_SHARP = 0, //æšä¸¾ä½ç½®ç”¨ä½œæ•°ç»„æ ‡å·, å› æ­¤ä¸è¦ä¿®æ”¹å°–å³°å¹³è°·çš„ä½ç½®
+    STATE_SEG_PEAK,
+    STATE_SEG_SHOULDER,
+    STATE_SEG_OFF_PEAK,
+    STATE_SEG_DEFAULT,
+    STATE_SEG_IDLE
+}OrderSegState_e;
+
+/*è®¢å•æ‰€åœ¨çŠ¶æ€*/
 typedef enum _OrderState
 {
     STATE_ORDER_IDLE,
@@ -48,65 +81,64 @@ typedef enum _OrderState
     STATE_ORDER_UPDATE,
     STATE_ORDER_FINISH
 }OrderState_t;
-typedef enum _OrderSegState
-{
-    STATE_ORDERSEG_DEF,          //¶©µ¥Ã»ÓĞ½øÈëSEG,ÔÚÄ¬ÈÏ¶ÎÖĞ
-    STATE_ORDERSEG_START,//¶©µ¥µÚÒ»´Î½øÈëSEG
-    STATE_ORDERSEG_IN,
 
-    STATE_ORDERSEG_END
-}OrderSegState_t;
-typedef enum _ChargeSegState
-{
-    STATE_SEG_START,//µ±Ç°SEGµÚÒ»´Î½øÈë
-    STATE_SEG_IN,
-    STATE_SEG_END
-}ChargeSegState_t;
-
-typedef struct _ChargeSegment
+/*æ¯ä¸ªæ—¶é—´æ®µéœ€è¦è®°å½•çš„ä¿¡æ¯*/
+typedef struct _ChargePeriodStatus
 {
     time_t tStartTime;
     time_t tEndTime;
-    double dSegStartPower;
-    double dSegPower;
-    double dSegFee;
-    ChargeSegState_t state;
-    uint8_t ucTemplPos;//¼ÇÂ¼µ±Ç°¶ÎÔÚTemplÖĞµÄÎ»ÖÃ£¬ÓÃÓÚÅĞ¶Ïµ±Ç°Ê±¼äÊÇ·ñÔÚµ±Ç°¶ÎÖĞ
-}ChargeSegment_t;
+    double dStartPower;
+    double dPower;
+}ChargePeriodStatus_t;
 
+typedef struct _statRemote
+{
+	RemoteCardStatus_t card;
+	RemoteOrderStatus_t order;
+}statRemote_t;
+
+/** @brief  ucCardID ã€ucAccountStatusã€ dBalanceã€ ucCONIDã€ strOrderSN æ˜¯åˆ·å¡æ¿è¦è·å–çš„æ•°æ®, åœ¨orderå»ºç«‹æ—¶åº”æ‹·è´åˆ°CONçš„orderä¸­
+ */
 typedef struct _OrderData
 {
-    OrderState_t statOrder;//¼ÇÂ¼¶©µ¥×´Ì¬
-    OrderSegState_t statOrderSeg;//¼ÇÂ¼¶©µ¥Ê±¼ä¶Î×´Ì¬
+    OrderState_t    statOrder;  //è®°å½•è®¢å•çŠ¶æ€
+    OrderSegState_e statOrderSeg; //è®°å½•è®¢å•æ—¶é—´æ®µçŠ¶æ€
+    uint8_t pos;//åœ¨æ—¶æ®µä¸­çš„ä½ç½®ï¼Œç”¨äºä¸nowè·å¾—çš„posè¿›è¡Œå¯¹æ¯”
 
-    uint8_t ucCardID[defCardIDLength];    //¿¨ºÅ//ÔÚtaskrfidÖĞ¸³Öµ
-    uint8_t ucAccountStatus;    //ÕÊ»§×´Ì¬ 1£º×¢²á¿¨ 2:Ç··Ñ 0£ºÎ´×¢²á¿¨
-    double  dBalance;           //Óà¶î
-    uint8_t ucCONID;
-    //´´½¨Ê±
-    uint8_t ucStartType;   //4 ÓĞ¿¨ 5 ÎŞ¿¨
-    uint8_t strOrderSN[defOrderSNLength]; //½»Ò×Á÷Ë®ºÅ
-    double dLimitFee;                      //³äµç½ØÖÁ½ğ¶î
-    time_t tStartTime;                    //Æô¶¯³äµçÊ±¼ä
-    double  dStartPower;
-    uint8_t ucServiceFeeType;           //·şÎñ·ÑÀàĞÍ
-    //³äµç¹ı³Ì
-    double  dTotalPower;                  //×ÜµçÁ¿
-    double  dTotalPowerFee;             //×Üµç·Ñ
-    double  dTotalServiceFee;                //×Ü·şÎñ·Ñ
-    double  dTotalFee;                      //×Ü·ÑÓÃ
-    uint8_t ucTotalSegment;             //³äµçÃ÷Ï¸¶ÎÊı
-    double  dDefSegStartPower;          //Ä¬ÈÏ¶ÎÆğÊ¼±äÁ¿¡£´Ë±äÁ¿ÎªÖĞ¼ä±äÁ¿£¬¹¦ÄÜÎª¼ÇÂ¼Ã¿Ò»´Î½øÈëÄ¬ÈÏ¶ÎÊ±µÄÆğÊ¼µçÁ¿
-    double  dDefSegPower;               //Ä¬ÈÏ¶ÎµçÁ¿
-    double  dDefSegFee;                //Ä¬ÈÏ¶Îµç·Ñ
-    gdsl_list_t plChargeSegment;
-    //Í£Ö¹Ê±
-    uint8_t ucPayType;                    //Ö§¸¶·½Ê½
-    uint8_t ucStopType;                   //Í£Ö¹ÀàĞÍ
-    time_t  tStopTime;                      //Í£Ö¹Ê±¼ä
+    uint8_t ucCardID[defCardIDLength]; //å¡å·//åœ¨taskrfidä¸­èµ‹å€¼            2
+    uint8_t ucAccountStatus;    //å¸æˆ·çŠ¶æ€ 1ï¼šæ³¨å†Œå¡ 2:æ¬ è´¹ 0ï¼šæœªæ³¨å†Œå¡
+    uint8_t ucCardStatus;      //0 æ™®é€šç”¨æˆ·, 1 ç™½åå•ç”¨æˆ·, 2 é»‘åå•ç”¨æˆ·
+    double  dBalance;           //ä½™é¢                                        3
+    uint8_t ucCONID;            //4
+    //åˆ›å»ºæ—¶
+    uint8_t strOrderSN[defOrderSNLength]; //äº¤æ˜“æµæ°´å·       DBIdx 1
 
+    time_t  tStartTime;         //å¯åŠ¨å……ç”µæ—¶é—´           5
+    uint8_t ucStartType;        //4 æœ‰å¡ 5 æ— å¡         6
+    double  dLimitFee;          //å……ç”µæˆªè‡³é‡‘é¢         åœ¨è¿œç¨‹å¯åŠ¨å’Œç•Œé¢å¯åŠ¨æ—¶èµ‹å€¼
+    uint32_t ulLimitTime;       //å……ç”µæœ€å¤§æ—¶é—´         
+    double  dStartPower;        //8
+    //å……ç”µè¿‡ç¨‹
+    double  dTotalPower;        //æ€»ç”µé‡
+    double  dTotalPowerFee;     //æ€»ç”µè´¹
+    double  dTotalServFee;   //æ€»æœåŠ¡è´¹
+    double  dTotalFee;          //æ€»è´¹ç”¨
+    ChargePeriodStatus_t chargeSegStatus[defOrderSegMax][defOrderPeriodMax];     //[0][0]å°–ç¬¬ä¸€æ—¶æ®µ [1][0]å³°ç¬¬ä¸€æ—¶æ®µ [2][1]å¹³ç¬¬äºŒæ—¶æ®µ  è¿‡ç¨‹ä¿¡æ¯
+    double dSegTotalPower[defOrderSegMax];   //åˆ†æ®µæ€»ç”µé‡
+    double dSegTotalPowerFee[defOrderSegMax];//åˆ†æ®µæ€»ç”µè´¹
+    double dSegTotalServFee[defOrderSegMax]; //åˆ†æ®µæ€»æœåŠ¡è´¹
+    uint32_t ulSegTotalTime[defOrderSegMax];    //åˆ†æ®µæ€»å……ç”µæ—¶é—´
+
+    //åœæ­¢æ—¶
+    uint8_t         ucPayType;  //æ”¯ä»˜æ–¹å¼
+    uint8_t         ucPayStatus;//ç»“ç®—çŠ¶æ€ 0:æœªç»“ç®—  1:å·²ç»“ç®—
+    uint8_t         ucStopType; //åœæ­¢ç±»å‹
+    time_t          tStopTime;  //åœæ­¢æ—¶é—´          6
+
+	statRemote_t statRemoteProc;
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
+
 
 void OrderCreate(OrderData_t *pOrder);
 void OrderInit(OrderData_t *pOrder);

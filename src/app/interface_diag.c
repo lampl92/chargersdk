@@ -9,6 +9,24 @@
 #include "evse_config.h"
 #include "evse_globals.h"
 
+
+#define defDiag_EVSE_Temp_War   (defSignalEVSE_Alarm_AC_A_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_B_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_C_Temp_War | \
+                                 defSignalEVSE_Alarm_AC_N_Temp_War )
+#define defDiag_EVSE_Temp_Cri   (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_B_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_C_Temp_Cri | \
+                                 defSignalEVSE_Alarm_AC_N_Temp_Cri )
+#define defDiag_CON_Temp_War   ( defSignalCON_Alarm_AC_A_Temp_War | \
+                                 defSignalCON_Alarm_AC_B_Temp_War | \
+                                 defSignalCON_Alarm_AC_C_Temp_War | \
+                                 defSignalCON_Alarm_AC_N_Temp_War )
+#define defDiag_CON_Temp_Cri   ( defSignalCON_Alarm_AC_A_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_B_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_C_Temp_Cri | \
+                                 defSignalCON_Alarm_AC_N_Temp_Cri )
+
 typedef enum
 {
     VOLT_OK,
@@ -21,11 +39,11 @@ typedef enum
     CURR_UPPER,
 } HandleCurr_t;
 
-/** @brief ±È½ÏÎÂ¶È
+/** @brief æ¯”è¾ƒæ¸©åº¦
  *
- * @param temp double   »ñÈ¡µ½µÄÎÂ¶È
- * @param lower double  ÎÂ¶ÈÏÂÏŞ
- * @param upper double  ÎÂ¶ÈÉÏÏŞ
+ * @param temp double   è·å–åˆ°çš„æ¸©åº¦
+ * @param lower double  æ¸©åº¦ä¸‹é™
+ * @param upper double  æ¸©åº¦ä¸Šé™
  * @return ErrorLevel_t
  *
  */
@@ -54,7 +72,7 @@ static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
     return templevel;
 }
 
-/** @brief ±È½ÏµçÑ¹
+/** @brief æ¯”è¾ƒç”µå‹
  *
  * @param volt double
  * @param lower double
@@ -79,17 +97,18 @@ static HandleVolt_t HandleVolt(double volt, double lower, double upper)
     }
     return voltstat;
 }
-/** @brief ±È½ÏµçÁ÷
+/** @brief æ¯”è¾ƒç”µæµ
  *
- * @param curr double       »ñÈ¡µ½µÄµçÁ÷
- * @param ratecurr double   ¶î¶¨µçÁ÷
+ * @param curr double       è·å–åˆ°çš„ç”µæµ
+ * @param ratecurr double   é¢å®šç”µæµ
  * @return HandleCurr_t
  *
  */
 static HandleCurr_t HandleCurr(double curr, double ratecurr)
 {
     HandleCurr_t currstat;
-    if(curr <= ratecurr + defMonitorCurrPeriod)
+    //if(curr <= ratecurr + defMonitorCurrPeriod)
+    if(curr <= ratecurr * defMonitorCurrPeriod)
     {
         currstat = CURR_OK;
     }
@@ -100,7 +119,7 @@ static HandleCurr_t HandleCurr(double curr, double ratecurr)
     return currstat;
 }
 
-/** @brief µçÑ¹ÅĞ¶Ï ±±ÆûĞèÇó P10 f)¹ıÑ¹±£»¤ g)Ç·Ñ¹±£»¤
+/** @brief ç”µå‹åˆ¤æ–­ åŒ—æ±½éœ€æ±‚ P10 f)è¿‡å‹ä¿æŠ¤ g)æ¬ å‹ä¿æŠ¤
  *
  * @param pCON CON_t*
  * @return void
@@ -110,11 +129,11 @@ void DiagVoltageError(CON_t *pCON)
 {
     HandleVolt_t voltstat;
     EventBits_t uxBitsException;
-    uint8_t strTimerName[50];
+//    uint8_t strTimerName[50];
     int id;
 
     uxBitsException = 0;
-    memset(strTimerName, 0, 50);
+//    memset(strTimerName, 0, 50);
     id = pCON->info.ucCONID;
 
     voltstat = HandleVolt(pCON->status.dChargingVoltage,
@@ -124,14 +143,15 @@ void DiagVoltageError(CON_t *pCON)
     switch(pCON->status.xVoltStat)
     {
     case STATE_VOLT_OK:
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltUp;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltLow;
         switch(voltstat)
         {
         case VOLT_OK:
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             break;
         case VOLT_LOWER:
-            xsprintf(strTimerName, "TimerCON%d_VoltLow_Dummy", id);
-            pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
+            pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltLow_Dummy",
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
                                               (void *)id,
@@ -140,8 +160,7 @@ void DiagVoltageError(CON_t *pCON)
             pCON->status.xVoltStat = STATE_VOLT_LOWER_Dummy;
             break;
         case VOLT_UPPER:
-            xsprintf(strTimerName, "TimerCON%d_VoltUp_Dummy", id);
-            pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
+            pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltUp_Dummy",
                                               defDiagVoltDummyCyc,
                                               pdFALSE,
                                               (void *)id,
@@ -167,7 +186,7 @@ void DiagVoltageError(CON_t *pCON)
                 THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
-            /** @todo (rgw#1#): ÏòÏµÍ³¸æ¾¯ */
+            /** @todo (rgw#1#): å‘ç³»ç»Ÿå‘Šè­¦ */
             /********************************/
             if(pCON->status.xVoltStat == STATE_VOLT_LOWER_Dummy)
             {
@@ -213,8 +232,7 @@ void DiagVoltageError(CON_t *pCON)
         switch(voltstat)
         {
         case VOLT_OK://200~240
-            xsprintf(strTimerName, "TimerCON%d_VoltOK_Dummy", id);
-            pCON->status.xHandleTimerVolt = xTimerCreate(strTimerName,
+            pCON->status.xHandleTimerVolt = xTimerCreate("TimerCON_VoltOK_Dummy",
                                               defDiagVoltRecoverCyc,
                                               pdFALSE,
                                               (void *)id,
@@ -223,7 +241,11 @@ void DiagVoltageError(CON_t *pCON)
             pCON->status.xVoltStat = STATE_VOLT_OK_Dummy;
             break;
         case VOLT_LOWER:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltUp;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltLow;
         case VOLT_UPPER:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltUp;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltLow;
             break;
         default:
             break;
@@ -242,7 +264,7 @@ void DiagVoltageError(CON_t *pCON)
                 THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVolt");
             }
             /********************************/
-            /** @todo (rgw#1#): ÏµÍ³»Ö¸´   */
+            /** @todo (rgw#1#): ç³»ç»Ÿæ¢å¤   */
             /********************************/
             pCON->status.xVoltStat = STATE_VOLT_OK;
         }
@@ -272,7 +294,7 @@ void DiagVoltageError(CON_t *pCON)
         break;
     }/* end of switch(pCON->status.xVoltStat) */
 }
-/** @brief µçÁ÷ÅĞ¶Ï GB/T 18487.1-2015 A3.10.7 (P24) ÔÚ´Ë»ù´¡ÉÏÔö¼ÓÒ»´Î½µ¹¦ÂÊĞŞÕı²Ù×÷
+/** @brief ç”µæµåˆ¤æ–­ GB/T 18487.1-2015 A3.10.7 (P24) åœ¨æ­¤åŸºç¡€ä¸Šå¢åŠ ä¸€æ¬¡é™åŠŸç‡ä¿®æ­£æ“ä½œ
  *
  * @param pCON CON_t*
  * @return void
@@ -283,24 +305,22 @@ void DiagCurrentError(CON_t *pCON)
     HandleCurr_t currstat;
     EventBits_t uxBitsCharge;
     EventBits_t uxBitsException;
-    uint8_t strTimerName[50];
+//    uint8_t strTimerName[50];
     int id;
 
     uxBitsCharge = 0;
     uxBitsException = 0;
     currstat = CURR_OK;
-    memset(strTimerName, 0, 50);
+//    memset(strTimerName, 0, 50);
     id = pCON->info.ucCONID;
 
-    if(pCON->state == STATE_CON_CHARGING)
     {
         currstat = HandleCurr(pCON->status.dChargingCurrent,
                               pCON->info.dRatedCurrent);
         switch(pCON->status.xCurrStat)
         {
         case STATE_CURR_INIT:
-            xsprintf(strTimerName, "TimerCON%d_CurrInit", id);
-            pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+            pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrInit",
                                               defDiagCurrInitCyc,
                                               pdFALSE,
                                               (void *)id,
@@ -319,14 +339,15 @@ void DiagCurrentError(CON_t *pCON)
             }
             break;
         case STATE_CURR_OK:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_CurrUp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_CurrUp_Cri;
             switch(currstat)
             {
             case CURR_OK:
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 break;
             case CURR_UPPER:
-                xsprintf(strTimerName, "TimerCON%d_CurrUp_Dummy", id);
-                pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+                pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Dummy",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
                                                   (void *)id,
@@ -339,15 +360,17 @@ void DiagCurrentError(CON_t *pCON)
             }
             break;
         case STATE_CURR_UPPER_Dummy:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_CurrUp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_CurrUp_Cri;
+     
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                   defEventBitExceptionCurrTimer,
                                                   pdTRUE, pdFALSE, 0);
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, 80), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
-                xsprintf(strTimerName, "TimerCON%d_CurrUp_Fix", id);
-                pCON->status.xHandleTimerCurr = xTimerCreate(strTimerName,
+                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 30), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
+                pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Fix",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
                                                   (void *)id,
@@ -377,7 +400,7 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                /** @todo (rgw#1#): µçÁ÷´íÎó£¬HMIÌáÊ¾°ÎÇ¹ÖØĞÂ²Ù×÷ */
+                /** @todo (rgw#1#): ç”µæµé”™è¯¯ï¼ŒHMIæç¤ºæ‹”æªé‡æ–°æ“ä½œ */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 pCON->status.xCurrStat = STATE_CURR_ERROR;
             }
@@ -399,12 +422,14 @@ void DiagCurrentError(CON_t *pCON)
         default:
             break;
         }/*end of switch(xCurrStat)*/
-    }/*end of (state == STATE_CON_CHARGING)*/
-    else //½øÈëµ½STATE_CURR_ERRORÇ°£¬connectorµÄ×´Ì¬Ó¦¸ÃÒÑ¾­±ä³É·ÇCHARGING×´Ì¬¡£
-    {
+    }
+
+    {//è¿›å…¥åˆ°STATE_CURR_ERRORå‰ï¼Œconnectorçš„çŠ¶æ€åº”è¯¥å·²ç»å˜æˆéCHARGINGçŠ¶æ€ã€‚
         switch(pCON->status.xCurrStat)
         {
         case STATE_CURR_ERROR:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_CurrUp_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_CurrUp_Cri;
             uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
             if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
             {
@@ -416,7 +441,7 @@ void DiagCurrentError(CON_t *pCON)
         }
     }
 }
-/** @brief BĞÍ²å×ùÎÂ¶ÈÓë½øÏßÎÂ¶È¼ì²â
+/** @brief Bå‹æ’åº§æ¸©åº¦ä¸è¿›çº¿æ¸©åº¦æ£€æµ‹
  *
  * @param pCON CON_t*
  * @return void
@@ -425,54 +450,176 @@ void DiagCurrentError(CON_t *pCON)
 void DiagTempError(CON_t *pCON)
 {
     ErrorLevel_t templevel;
+    ErrorLevel_t templevel_EVSE_A;
+    ErrorLevel_t templevel_EVSE_B;
+    ErrorLevel_t templevel_EVSE_C;
+    ErrorLevel_t templevel_EVSE_N;
+    ErrorLevel_t templevel_CON_A;
+    ErrorLevel_t templevel_CON_B;
+    ErrorLevel_t templevel_CON_C;
+    ErrorLevel_t templevel_CON_N;
     int id;
     id = pCON->info.ucCONID;
-    /* ACLTemp */
-    templevel = HandleTemp(pCON->status.dACLTemp,
-                           pCON->info.dACTempLowerLimits,
-                           pCON->info.dACTempUpperLimits);
-    switch(templevel)
-    {
-    case ERR_LEVEL_OK:
-        xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        break;
-    case ERR_LEVEL_WARNING:
-        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        break;
-    case ERR_LEVEL_CRITICAL:
-        //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(id, ERR_CON_ACLTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
-        break;
-    default:
-        break;
-    }
-    /* end of ACLTemp */
 
-    /* ACNTemp */
-    templevel = HandleTemp(pCON->status.dACNTemp,
-                           pCON->info.dACTempLowerLimits,
-                           pCON->info.dACTempUpperLimits);
-    switch(templevel)
     {
-    case ERR_LEVEL_OK:
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        break;
-    case ERR_LEVEL_WARNING:
-        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        break;
-    case ERR_LEVEL_CRITICAL:
-        //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        ThrowErrorCode(id, ERR_CON_ACNTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
-        break;
-    default:
-        break;
+        templevel_EVSE_A = HandleTemp(pEVSE->status.dAC_A_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_A)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_A_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_A_Temp_Cri;
+            break;
+        default:
+            break;
+        }
     }
-    /* end of ACNTemp */
+    {
+        templevel_EVSE_B = HandleTemp(pEVSE->status.dAC_B_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_B)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_B_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_B_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_EVSE_C = HandleTemp(pEVSE->status.dAC_C_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_C)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_C_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_C_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_EVSE_N = HandleTemp(pEVSE->status.dAC_N_Temp_IN,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_EVSE_N)
+        {
+        case ERR_LEVEL_OK:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_AC_N_Temp_War;
+            pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_AC_N_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    {
+        templevel_CON_A = HandleTemp(pCON->status.dACLTemp,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_CON_A)
+        {
+        case ERR_LEVEL_OK:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Temp_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+//    templevel_CON_B = HandleTemp(pCON->status.dACLTemp,
+//                           pCON->info.dACTempLowerLimits,
+//                           pCON->info.dACTempUpperLimits);
+//    templevel_CON_C = HandleTemp(pCON->status.dACLTemp,
+//                           pCON->info.dACTempLowerLimits,
+//                           pCON->info.dACTempUpperLimits);
+    {
+        templevel_CON_N = HandleTemp(pCON->status.dACNTemp,
+            pCON->info.dACTempLowerLimits,
+            pCON->info.dACTempUpperLimits);
+        switch (templevel_CON_N)
+        {
+        case ERR_LEVEL_OK:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_WARNING:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        case ERR_LEVEL_CRITICAL:
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_N_Temp_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_N_Temp_Cri;
+            break;
+        default:
+            break;
+        }
+    }
+    
+    {  
+        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
+          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
+            (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+            ThrowErrorCode(id, ERR_CON_ACTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        }
+        else
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+    }
 
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
@@ -484,14 +631,20 @@ void DiagTempError(CON_t *pCON)
         {
         case ERR_LEVEL_OK:
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_WARNING:
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+            //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_Cri;
             ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
@@ -507,14 +660,20 @@ void DiagTempError(CON_t *pCON)
         {
         case ERR_LEVEL_OK:
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_WARNING:
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //¿ØÖÆÄ£¿é¿ØÖÆ³äµç×®Í£»ú£¬¶Ï¿ªACÊä³ö£¬²¢Ìø×ªS1¿ª¹Ø£¬CPĞÅºÅ±£³Ö¸ßµçÆ½Êä³ö
+            //æ§åˆ¶æ¨¡å—æ§åˆ¶å……ç”µæ¡©åœæœºï¼Œæ–­å¼€ACè¾“å‡ºï¼Œå¹¶è·³è½¬S1å¼€å…³ï¼ŒCPä¿¡å·ä¿æŒé«˜ç”µå¹³è¾“å‡º
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+            pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_Cri;
             ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
@@ -522,12 +681,16 @@ void DiagTempError(CON_t *pCON)
         }
         /* end of SocketTemp2 */
     }
-    else if(pCON->info.ucSocketType == defSocketTypeC) //CĞÍÁ¬½ÓÃ»ÓĞÎÂ¶È¼ì²âµã£¬Ö±½ÓÖÃÎ»OK
+    else if(pCON->info.ucSocketType == defSocketTypeC) //Cå‹è¿æ¥æ²¡æœ‰æ¸©åº¦æ£€æµ‹ç‚¹ï¼Œç›´æ¥ç½®ä½OK
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
     }
 }
-/** @brief ÆµÂÊÅĞ¶Ï
+/** @brief é¢‘ç‡åˆ¤æ–­
  *
  * @param pCON CON_t*
  * @return void
@@ -540,10 +703,12 @@ void DiagFreqError(CON_t *pCON)
             pCON->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Freq_Cri;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Freq_Cri;
     }
 }
 void DiagPlugError(CON_t *pCON)
@@ -551,22 +716,27 @@ void DiagPlugError(CON_t *pCON)
     if(pCON->status.xPlugState == PLUG)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONPlugOK);
+        pCON->status.ulSignalState |= defSignalCON_State_Plug;
     }
     else if(pCON->status.xPlugState == UNPLUG)
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONPlugOK);
+        pCON->status.ulSignalState &= ~defSignalCON_State_Plug;
     }
+	
     if(pCON->status.xCPState == CP_6V_PWM || pCON->status.xCPState == CP_6V)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONS2Closed);
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONS2Opened);
+        pCON->status.ulSignalState |= defSignalCON_State_S2;
     }
     else
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONS2Opened);
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONS2Closed);
+        pCON->status.ulSignalState &= ~defSignalCON_State_S2;
     }
-    /** (rgw#1#):  CCºÍCP×´Ì¬ÒÑ¾­ÔÚGetPlugStateÖĞ»ñÈ¡£¬ÔÚTaskChargeÖĞÅĞ¶Ï*/
+    /** (rgw#1#):  CCå’ŒCPçŠ¶æ€å·²ç»åœ¨GetPlugStateä¸­è·å–ï¼Œåœ¨TaskChargeä¸­åˆ¤æ–­*/
 }
 void DiagLockError(CON_t *pCON)
 {
@@ -575,18 +745,21 @@ void DiagLockError(CON_t *pCON)
         if(pCON->status.xBTypeSocketLockState == LOCK)
         {
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
+            pCON->status.ulSignalState |= defSignalCON_State_SocketLock;
         }
         else
         {
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
+            pCON->status.ulSignalState &= ~defSignalCON_State_SocketLock;
         }
     }
-    else if(pCON->info.ucSocketType == defSocketTypeC) //CĞÍÁ¬½ÓÃ»ÓĞËø£¬Ö±½ÓÖÃÎ»OK
+    else if(pCON->info.ucSocketType == defSocketTypeC) //Cå‹è¿æ¥æ²¡æœ‰é”ï¼Œç›´æ¥ç½®ä½OK
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
+        pCON->status.ulSignalState |= defSignalCON_State_SocketLock;
     }
 }
-/** @brief Ö÷Òª½øĞĞÆô¶¯Ìõ¼şÅĞ¶Ï
+/** @brief ä¸»è¦è¿›è¡Œå¯åŠ¨æ¡ä»¶åˆ¤æ–­
  *
  * @param pCON CON_t*
  * @return void
@@ -597,42 +770,51 @@ void DiagEVSEError(CON_t *pCON)
     if(pEVSE->status.ulScramState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEScramOK);
-//        printf_safe("Scram == 0\n");
+        pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_Scram;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEScramOK);
+        pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_Scram;
     }
     if(pEVSE->status.ulPEState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEPEOK);
+        pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_PE;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEPEOK);
+        pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_PE;
     }
     if(pEVSE->status.ulKnockState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEKnockOK);
+        pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_Knock;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEKnockOK);
+        pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_Knock;
     }
     if(pEVSE->status.ulArresterState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEArresterOK);
+        pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_Arrester;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEArresterOK);
+        pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_Arrester;
     }
     if(pEVSE->status.ulPowerOffState == 0)
     {
         xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSEPowerOffOK);
+        pEVSE->status.ulSignalAlarm &= ~defSignalEVSE_Alarm_PowerOff;
     }
     else
     {
         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSEPowerOffOK);
+        pEVSE->status.ulSignalAlarm |= defSignalEVSE_Alarm_PowerOff;
     }
 }

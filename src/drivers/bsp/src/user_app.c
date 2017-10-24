@@ -6,8 +6,22 @@
 #include "bsp_timer.h"
 #include "electric_energy_meter.h"
 #include "FreeRTOS.h"
+#include "task.h"
 float frequency_test;
-const double  resistance[154] =
+samp Sys_samp;
+
+static void value_reset(void)
+{
+	Sys_samp.DC.TEMP_ARM1 = 0;
+	Sys_samp.DC.TEMP_ARM2 = 0;
+	Sys_samp.DC.TEMP_ARM3 = 0;
+	Sys_samp.DC.TEMP_ARM4 = 0;
+	Sys_samp.DC.TEMP1 = 0;
+	Sys_samp.DC.TEMP2 = 0;
+	Sys_samp.DC.TEMP3 = 0;
+	Sys_samp.DC.TEMP4 = 0;
+}
+const double  resistance[146] =
 {
     382.300, 358.686, 336.457, 315.560, 295.938, 277.531, 260.278, 244.117, 228.987, 214.829,
     201.585, 189.199, 177.617, 166.789, 156.665, 147.200, 138.349, 130.073, 122.333, 115.093,
@@ -65,11 +79,12 @@ double get_leakage_current(void)
 float get_CD4067(void)
 {
     unsigned short i;
-    for(i = 0; i < samp_sum; i++)
+    for(i = 0; i < samp_dma; i++)
     {
-        CD4067_sum += Sys_samp.DC_samp.CD4067[i];
+        CD4067_sum += AD_samp_dma[i].CD4067;
     }
-    Sys_samp.DC.CD4067 = (CD4067_sum / samp_sum); //*temper_k;
+    Sys_samp.DC.CD4067 = (CD4067_sum / samp_dma); //*temper_k;
+	CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
 }
 /********************************
@@ -97,13 +112,13 @@ float get_dc_massage(uint8_t DC_channel)
     Chip1.cs1_select = 1;
     write_pca9554_1();
     vTaskDelay(25);
-    ad_samp_value =get_CD4067();;
+    ad_samp_value =get_CD4067();
     switch (DC_channel)
     {
     case 0:
         ad_value = (double)(ad_samp_value * 3) / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -116,7 +131,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -129,7 +144,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -142,7 +157,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -155,7 +170,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -168,7 +183,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -181,7 +196,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -194,7 +209,7 @@ float get_dc_massage(uint8_t DC_channel)
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j <= 150; j++)
+        for(j = 0; j < 145; j++)
         {
             if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
@@ -234,14 +249,13 @@ float get_dc_massage(uint8_t DC_channel)
 void get_CP1(void)
 {
     unsigned short i;
-    float dma_cp1_sum;
+    float dma_cp1_sum = 0;
     for(i = 0; i < samp_dma; i++)
     {
        dma_cp1_sum+=AD_samp_dma[i].CP1;
     }
     dma_cp1_sum=dma_cp1_sum/samp_dma;
     Sys_samp.DC.CP1 = dma_cp1_sum * CP1_k + 0.2;
-    dma_cp1_sum = 0;
     //return Sys_samp.DC.CP1;
 }
 
@@ -270,43 +284,7 @@ double get_CP2(void)
     num_cp2 = 0;
     return Sys_samp.DC.CP2;
 }
-void get_samp_point(void)//ÓÃÊ±30¦ÌS
-{
 
-    unsigned short i, j;
-//    RUN_ON;
-    for(i = 0; i < samp_dma; i++)
-    {
-        CD4067_sum += AD_samp_dma[i].CD4067;
-        ia_samp_sum += AD_samp_dma[i].ia_samp;
-        va_samp_sum += AD_samp_dma[i].va_samp;
-        leakage_current_sum += AD_samp_dma[i].leakage_current;
-        //CP1_sum += AD_samp_dma[i].CP1;
-      // CP2_sum += AD_samp_dma[i].CP2;
-    }
-    for(j = 0; j < samp_sum - 1; j++)
-    {
-        Sys_samp.AC_samp.ia_samp[j] = Sys_samp.AC_samp.ia_samp[j + 1];
-        Sys_samp.AC_samp.va_samp[j] = Sys_samp.AC_samp.va_samp[j + 1];
-        Sys_samp.AC_samp.leakage_current_samp[j] = Sys_samp.AC_samp.leakage_current_samp[j + 1];
-        Sys_samp.DC_samp.CD4067[j] = Sys_samp.DC_samp.CD4067[j + 1];
-       // Sys_samp.DC_samp.CP1[j] = Sys_samp.DC_samp.CP1[j + 1];
-       // Sys_samp.DC_samp.CP2[j] = Sys_samp.DC_samp.CP2[j + 1];
-    }
-    Sys_samp.AC_samp.ia_samp[samp_sum - 1] = ia_samp_sum / samp_dma;
-    Sys_samp.AC_samp.va_samp[samp_sum - 1] = va_samp_sum / samp_dma;
-    Sys_samp.AC_samp.leakage_current_samp[samp_sum - 1] = leakage_current_sum / samp_dma;
-    Sys_samp.DC_samp.CD4067[samp_sum - 1] = CD4067_sum / samp_dma;
-   // Sys_samp.DC_samp.CP1[samp_sum - 1] = CP1_sum / samp_dma;
-   // Sys_samp.DC_samp.CP2[samp_sum - 1] = CP2_sum / samp_dma;
-    CD4067_sum = 0;
-    leakage_current_sum = 0;
-    va_samp_sum = 0;
-    ia_samp_sum = 0;
-    //CP2_sum = 0;
-   // CP1_sum = 0;
-    //RUN_OFF;
-}
 void Delay_ms(unsigned long long time)
 {
     //unsigned int x, y;
@@ -422,7 +400,7 @@ uint8_t Get_State_relay()
 }
 void Peripheral_Init(void)
 {
-
+	value_reset();
     MX_GPIO_Init();
     IIC_Init();
     PCA9554_init();

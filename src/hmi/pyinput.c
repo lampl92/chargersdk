@@ -1,4 +1,4 @@
-﻿#include "pymb.h"
+#include "pymb.h"
 #include "pyinput.h"
 #include "string.h"
 #include "xbffontcreate.h"

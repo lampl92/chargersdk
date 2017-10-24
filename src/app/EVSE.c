@@ -18,10 +18,58 @@
 #include "user_app.h"
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
-//extern void read_pca9554_2(void)；
-/*---------------------------------------------------------------------------/
-/                               设置充电桩信息到配置文件
-/---------------------------------------------------------------------------*/
+
+static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    EVSE_t *pEVSE;
+    
+    pEVSE = (EVSE_t *)pvDev;
+    if (block >= EVSE_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    pEVSE->status.ulSignalPool[block] |= bit;
+    
+    return 1;
+}
+static int ClrSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    EVSE_t *pEVSE;
+    
+    pEVSE = (EVSE_t *)pvDev;
+    if (block >= EVSE_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    pEVSE->status.ulSignalPool[block] &= ~bit;
+    
+    return 1;
+}
+static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+{
+    EVSE_t *pEVSE;
+    
+    pEVSE = (EVSE_t *)pvDev;
+    if (block >= EVSE_MAX_SIGNAL_BLOCK)
+    {
+        while (1)
+            ;
+    }
+    if ((pEVSE->status.ulSignalPool[block] & bit) == bit)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+/*---------------------------------------------------------------------------*/
+/*                               设置充电桩信息到配置文件                    */
+/*---------------------------------------------------------------------------*/
+
 static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgParam);
 static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
 static void TemplSegFree (gdsl_element_t e);
@@ -118,188 +166,7 @@ static cJSON *jsTemplSegArrayItemObjCreate(void)
 
     return jsTemplSegArrayItemObj;
 }
-#if 0
-static ErrorCode_t SetSN(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    ErrorCode_t errcode;
-    uint8_t *ptmpSN;
-    uint8_t tmpStrLength;
 
-    pEVSE = (EVSE_t *)pvEVSE;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    ptmpSN = (uint8_t *)pvCfgParam;
-
-    if(jsEVSECfgObj == NULL)
-    {
-        goto exit;
-    }
-    /** @todo (rgw#1#): 在这里可以获取原参数与新参数.可以通过send队列方式发送到操作记录 */
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnEVSESN, cJSON_CreateString(ptmpSN));
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-        goto exit;
-    }
-exit:
-    return errcode;
-}
-static ErrorCode_t SetID(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    ErrorCode_t errcode;
-    uint8_t *ptmpID;
-    uint8_t tmpStrLength;
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    ptmpID = (uint8_t *)pvCfgParam;
-
-    if(jsEVSECfgObj == NULL)
-    {
-        goto exit;
-    }
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnEVSEID, cJSON_CreateString(ptmpID));
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-        goto exit;
-    }
-exit:
-    return errcode;
-}
-static ErrorCode_t SetType(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    ErrorCode_t errcode;
-    uint8_t tmpType;
-
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    tmpType = *((uint8_t *)pvCfgParam);
-
-    if(jsEVSECfgObj == NULL)
-    {
-        goto exit;
-    }
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpType));
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-        goto exit;
-    }
-exit:
-    return errcode;
-}
-static ErrorCode_t SetTotalCON(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    ErrorCode_t errcode;
-    uint8_t tmpTotal;
-
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    tmpTotal = *((uint8_t *)pvCfgParam);
-
-    if(jsEVSECfgObj == NULL)
-    {
-        goto exit;
-    }
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpTotal));
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-        goto exit;
-    }
-exit:
-    return errcode;
-}
-static ErrorCode_t SetLngLat(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    ErrorCode_t errcode;
-    uint8_t tmpTotal;
-
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    tmpTotal = *((uint8_t *)pvCfgParam);
-
-    if(jsEVSECfgObj == NULL)
-    {
-        goto exit;
-    }
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTotalCON, cJSON_CreateNumber(tmpTotal));
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-        goto exit;
-    }
-exit:
-    return errcode;
-}
-
-static ErrorCode_t SetTempl(void *pvEVSE, void *pvCfgParam)
-{
-    EVSE_t *pEVSE;
-    cJSON *jsEVSECfgObj;
-    cJSON *jsTemplSegArray;
-    cJSON *jsTemplSegArrayItemObj;
-    ErrorCode_t errcode;
-    gdsl_list_t plCfgTempl;
-    TemplSeg_t *ptCfgTempl;
-    uint8_t ucTemplNum;
-    TemplSeg_t tmpTemplSeg;
-    int i;
-
-    pEVSE = (EVSE_t *)pvEVSE;
-    plCfgTempl = (gdsl_list_t)pvCfgParam;
-    errcode = ERR_NO;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-
-
-    if(jsEVSECfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsTemplSegArray = cJSON_CreateArray();
-    ucTemplNum = gdsl_list_get_size(plCfgTempl);
-    for(i = 1; i <= ucTemplNum; i++)
-    {
-        ptCfgTempl = (TemplSeg_t *)gdsl_list_search_by_position(plCfgTempl, i);
-        jsTemplSegArrayItemObj = jsTemplSegArrayItemObjCreate();
-
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnStartTime, cJSON_CreateNumber(ptCfgTempl->tStartTime));
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnEndTime, cJSON_CreateNumber(ptCfgTempl->tEndTime));
-        cJSON_AddItemToObject(jsTemplSegArrayItemObj, jnSegFee, cJSON_CreateNumber(ptCfgTempl->dSegFee));
-
-        cJSON_AddItemToArray(jsTemplSegArray, jsTemplSegArrayItemObj);
-    }
-
-    cJSON_ReplaceItemInObject(jsEVSECfgObj, jnTemplSegArray, jsTemplSegArray);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
-    if(errcode != ERR_NO)
-    {
-//        此处注释只为说明该条件下进行的操作
-//        cJSON_Delete(jsTemplSegArray);
-//        return errcode;
-    }
-    cJSON_Delete(jsTemplSegArray);
-    return errcode;
-}
-#endif
 /** @brief
  *
  * @param pvEVSE void*
@@ -348,9 +215,9 @@ static ErrorCode_t SetTemplEx(void *pvEVSE, cJSON *jsEVSECfgObj, void *pvCfgPara
 
     return errcode;
 }
-/*---------------------------------------------------------------------------/
-/                               从文件获取充电桩信息
-/---------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
+/*                              从文件获取充电桩信息						*/
+/*--------------------------------------------------------------------------*/
 /** @brief 设备唯一序列号,和长度
  *
  * @param pEVSE EVSE_t*
@@ -852,11 +719,10 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cJSON_Delete(jsEVSEObj);
     return errcode;
 }
-
-/*---------------------------------------------------------------------------/
-/                               从驱动获取充电桩状态
-/---------------------------------------------------------------------------*/
-
+	
+/*--------------------------------------------------------------------------*/
+/*                              从驱动获取充电桩状态						*/
+/*--------------------------------------------------------------------------*/
 
 /** @brief 获得急停状态
  *          0 无急停
@@ -908,22 +774,27 @@ static ErrorCode_t GetKnockState(void *pvEVSE)
 
     pEVSE = (EVSE_t *)pvEVSE;
     errcode = ERR_NO;
+    
     tmpKnockState = 0;
     /* @todo (yuye#1#): 添加重力传感器驱动 */
-#ifdef DEBUG_DIAG_DUMMY
-if(get_angle_max()>90)
-{
-  return ERR_GSENSOR_FAULT;
-}
-else
-{
-  tmpKnockState = get_angle_max();
-}
-
+#ifndef DEBUG_DIAG_DUMMY
+    pEVSE->status.dKnockAngle = 35;
 #else
-    //在这添加代码
+    pEVSE->status.dKnockAngle = get_angle_max();
 #endif
-
+    if (pEVSE->status.dKnockAngle > 90)
+    {
+        tmpKnockState = 1;
+        errcode =  ERR_GSENSOR_FAULT;
+    }
+    else if (pEVSE->status.dKnockAngle <= 35)
+    {
+        tmpKnockState = 0;
+    }
+    else
+    {
+        tmpKnockState = 1;            
+    }
     /*********************/
 
     pEVSE->status.ulKnockState = tmpKnockState;
@@ -988,21 +859,26 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
-if(get_va()>=400)
-{
-return ERR_POWEROFF_DECT_FAULT;
-}
-else
-{
-if(get_va() <= 100.0) //检测间隔10mS
+//    if (Get_Power_Status == 1)
+//    {
+//        errcode =  ERR_POWEROFF_DECT_FAULT;
+//    }
+    //if (Get_Power_Status == 0)
     {
-        tmpOffState = 1;
+        if (Get_Power_Status == 0) //检测间隔10mS
+        {
+            tmpOffState = 1;
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+            printf_safe("Power Off!!!!\n");
+        }
+        else if(Get_Power_Status == 1)
+        {
+            tmpOffState = 0;
+        }
     }
-    else if((get_va() >= 180) && (get_va() <= 250))
-    {
-        tmpOffState = 0;
-    }
-}
 
 #endif
     /*********************/
@@ -1046,6 +922,132 @@ static ErrorCode_t GetArresterState(void *pvEVSE)
     return errcode;
 }
 
+/** @brief A输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpACTemp = 25;
+#else
+    tmpACTemp = (double)get_dc_massage(TEMP_N_IN); 
+	if (tmpACTemp > 200 || tmpACTemp < -40)
+	{
+		errcode = ERR_EVSE_AC_A_TEMP_DECT_FAULT;
+	}
+#endif
+
+	pEVSE->status.dAC_A_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+/** @brief B输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_B_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpACTemp = 25;
+#else
+	tmpACTemp = 0;
+#endif
+
+	pEVSE->status.dAC_B_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+/** @brief C输入
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpACTemp = 33;
+#else
+	tmpACTemp = 0;
+#endif
+
+	pEVSE->status.dAC_C_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+
+/** @brief N输入温度
+ *
+ * @param pvEVSE void*
+ * @return ErrorCode_t
+ *                  ERR_NO
+ *                  
+ *
+ */
+static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
+{
+	EVSE_t *pEVSE;
+	double tmpACTemp;
+	ErrorCode_t errcode;
+
+	pEVSE = (EVSE_t *)pvEVSE;
+	tmpACTemp = 0;
+	errcode = ERR_NO;
+
+	    /** 实现代码  */
+#ifdef DEBUG_DIAG_DUMMY
+    tmpACTemp = 25;
+#else
+    tmpACTemp = (double)get_dc_massage(TEMP_N_OUT); 
+	if (tmpACTemp > 200 || tmpACTemp < -40)
+	{
+		errcode = ERR_EVSE_AC_N_TEMP_DECT_FAULT;
+	}
+#endif
+
+	pEVSE->status.dAC_N_Temp_IN = tmpACTemp;
+
+	return errcode;
+}
+
 EVSE_t *EVSECreate(void)
 {
     EVSE_t *pEVSE;
@@ -1053,13 +1055,13 @@ EVSE_t *EVSECreate(void)
 
     memset(pEVSE->info.strSN, 0, defEVSESNLength);
     memset(pEVSE->info.strID, 0, defEVSEIDLength);
-    pEVSE->info.ucType = defEVSEType_AC;
-    pEVSE->info.ucTotalCON = 1;
-    pEVSE->info.dLng = 116.275833;
-    pEVSE->info.dLat = 39.831944;
+    pEVSE->info.ucType           = defEVSEType_AC;
+    pEVSE->info.ucTotalCON       = 1;
+    pEVSE->info.dLng             = 116.275833;
+    pEVSE->info.dLat             = 39.831944;
     pEVSE->info.ucServiceFeeType = 0;
-    pEVSE->info.dServiceFee = 0;
-    pEVSE->info.dDefSegFee = 0;
+    pEVSE->info.dServiceFee      = 0;
+    pEVSE->info.dDefSegFee       = 0;
 
     pEVSE->info.GetEVSECfg = GetEVSECfg;
     /** @todo (rgw#1#): 以下修改为Set参数 */
@@ -1078,18 +1080,33 @@ EVSE_t *EVSECreate(void)
         return NULL;
     }
     //pEVSE->info.pTemplSeg = UserListCreate();
+    strcpy(pEVSE->info.strSoftVer, FULLVERSION_STRING);
 
     pEVSE->status.ulArresterState = 0;
-    pEVSE->status.ulKnockState = 0;
-    pEVSE->status.ulPEState = 0;
+    pEVSE->status.ulKnockState    = 0;
+    pEVSE->status.ulPEState       = 0;
     pEVSE->status.ulPowerOffState = 0;
-    pEVSE->status.ulScramState = 0;
+    pEVSE->status.ulScramState    = 0;
+	
+    pEVSE->status.dKnockAngle     = 0;
+	pEVSE->status.dAC_A_Temp_IN   = 0;
+	pEVSE->status.dAC_B_Temp_IN   = 0;
+	pEVSE->status.dAC_C_Temp_IN   = 0;
+	pEVSE->status.dAC_N_Temp_IN   = 0;
+	
+    pEVSE->status.ulSignalState   = 0;
+    pEVSE->status.ulSignalAlarm   = 0;
+    pEVSE->status.ulSignalFault   = 0;
 
     pEVSE->status.GetArresterState = GetArresterState;
-    pEVSE->status.GetKnockState = GetKnockState;
-    pEVSE->status.GetPEState = GetPEState;
+    pEVSE->status.GetKnockState    = GetKnockState;
+    pEVSE->status.GetPEState       = GetPEState;
     pEVSE->status.GetPowerOffState = GetPowerOffState;
-    pEVSE->status.GetScramState = GetScramState;
+    pEVSE->status.GetScramState    = GetScramState;
+	pEVSE->status.GetAC_A_Temp_in  = GetAC_A_Temp_in;
+	pEVSE->status.GetAC_B_Temp_in  = GetAC_B_Temp_in;
+	pEVSE->status.GetAC_C_Temp_in  = GetAC_C_Temp_in;
+	pEVSE->status.GetAC_N_Temp_in  = GetAC_N_Temp_in;
 
     return pEVSE;
 }
@@ -1097,25 +1114,38 @@ EVSE_t *EVSECreate(void)
 static void CONInit(void)
 {
     static CON_t *pCON[1];  //在堆中定义
+	uint8_t str[17] = "2000000000000002";
 
     pListCON = UserListCreate();
     int i;
+//    double upp = 260;
+//    double low = 176;
+	double temp = 95;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
 
         THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
+//        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
+//        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
+	    //pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
+        
 
         pListCON->Add(pListCON, pCON[i]);
     }
 }
 void EVSEinit(void)
 {
+	uint8_t str[17] = "2000000000000002";
+	
     pEVSE = EVSECreate();
+	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 
     pRFIDDev = RFIDDevCreate();
 
     pechProto = EchProtocolCreate();
+    THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");
+
 }

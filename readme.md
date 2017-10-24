@@ -10,32 +10,21 @@
 
 ### MCU
 
-+ STM32F407xx
 + STM32F429xx
 
 ### HAL
 + USE_HAL_DRIVER
 
-## 1. 使用MDK时,不选择使用use MicroLib
-
 # Components版本
 
-|HAL					|	version		|ref|
-|---------------		|---------------|---|
-|CMSIS					|				|STM32Cube_FW_F4_V1.13.1
-|CMSIS_RTOS				|				|STM32Cube_FW_F4_V1.13.1\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS
-|STM32F4xx_HAL_Driver	|				|STM32Cube_FW_F4_V1.13.1
+| Components  | version | ref                                      |
+| ----------- | ------- | ---------------------------------------- |
+| STM32CubeF4 | 1.16.0  | http://www.st.com/en/embedded-software/stm32cubef4.html |
+| FreeRTOS    | 9.0.0   | http://www.freertos.org/                 |
+| fatfs       | 0.12b   | http://elm-chan.org/fsw/ff/00index_e.html |
+| STemWin     | 5.32    |                                          |
+| lua         | 5.3.3   | https://www.lua.org/                     |
+| tinysh      | 0.1.0   | https://sourceforge.net/projects/tinysh/ |
+|             |         |                                          |
+|             |         |                                          |
 
-
-# 组件版本
-
-|component		|	version		|ref|
-|---------------|---------------|---|
-|FreeRTOS 		|	9.0.0		|
-|lwip			|	1.4.1		|
-|fatfs			|	0.12b		|[fatfs](http://elm-chan.org/fsw/ff/00index_e.html)
-|STemWin		|	5.32		|STM32Cube_FW_F4_V1.13.1
-|lua			|	5.3.3		|
-|jsmn			|		
-|tinysh			|	0.1.0		|
-|sqlite			|	3.15.1		|

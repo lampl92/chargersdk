@@ -1,6 +1,6 @@
 /**
 * @file interface_card.c
-* @brief RFIDÉäÆµ¶Á¿¨Æ÷½Ó¿Ú
+* @brief RFIDå°„é¢‘è¯»å¡å™¨æŽ¥å£
 * @author rgw
 * @version v1.0
 * @date 2017-02-06
@@ -31,7 +31,7 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
         //vTaskDelay(200);
         bsp_DelayMS(200);
         Buzzer_control(0);
-        ulRecvdOptLen = pmt626cmd->uiRecvdOptLen;
+        ulRecvdOptLen = pmt626cmd->ulRecvdOptLen;
         memset(pRfid->status.ucCardID, 0, defCardIDLength);
         memmove(pRfid->status.ucCardID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
         memset(pmt626cmd->ucRecvdOptData, 0, ulRecvdOptLen);
@@ -40,7 +40,7 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
     }
     else if(state == MT_STATE_N)
     {
-        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//Çå³ýÔÚÆäËûÁ÷³ÌÖÐÎóË¢¿¨
+        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//æ¸…é™¤åœ¨å…¶ä»–æµç¨‹ä¸­è¯¯åˆ·å¡
         //pRfid->status.ucFoundCard = 0;
     }
     else if(state == MT_COM_FAIL)
@@ -60,13 +60,14 @@ RFIDDev_t *RFIDDevCreate(void)
     pRFID = (RFIDDev_t *)malloc(sizeof(RFIDDev_t));
     pRFID->status.ucFoundCard = 0;
     memset(pRFID->status.ucCardID, 0 , defCardIDLength);
+	pRFID->status.tHoldStateStartTime = 0;
+	pRFID->status.ulHoldMaxTime_s = 60;
     pRFID->com = (void *)MT626COMCreate();
     pRFID->status.GetCardID = MT626GetUID;
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
     pRFID->state = STATE_RFID_NOID;
 
-    OrderCreate(&(pRFID->order));
     OrderInit(&(pRFID->order));
 
     return pRFID;

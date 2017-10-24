@@ -4,7 +4,7 @@
 #include "stm32f4xx_hal.h"
 
 extern void Error_Handler(void);
-
+extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void MX_TIM2_Init(void)
 {
 
@@ -218,7 +218,7 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_ms++;
     delay_breath++;
     pwm_samp_timer++;
-    if((pwm_samp_flag==1)&&(pwm_samp_timer>=5))
+    if((pwm_samp_flag==1)&&(pwm_samp_timer>=3))
     {
         RUN_ON;
         get_CP1();
@@ -265,7 +265,7 @@ void TIM3_IRQHandler (void)//0.1ms
     {
       Power_out_l_pwm_ctrl();
     }
-	if(pwm_ms>=2000)
+	if(pwm_ms>=200)
 	{
 		pwm_ms=0;
 	}
@@ -312,7 +312,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
   /* USER CODE BEGIN TIM5_IRQn 0 */
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
-  get_samp_point();
+  //get_samp_point();
   /* USER CODE BEGIN TIM5_IRQn 1 */
 
   /* USER CODE END TIM5_IRQn 1 */

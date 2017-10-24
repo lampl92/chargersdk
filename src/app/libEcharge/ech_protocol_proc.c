@@ -11,154 +11,123 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "evse_globals.h"
-#include "task_tcp_client.h"
 #include "taskcreate.h"
-#include "lwip_init.h"
+#include "modem.h"
+//#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {
     echProtocol_t *pProto;
     echProtoElem_t *pechProtoElem;
-    echCmdElem_t *pechCmdElem;
     gdsl_list_cursor_t cs;
     gdsl_list_cursor_t cr;
-    gdsl_list_cursor_t ccmd;
 
     uint32_t ulSendCmdCount;
     uint32_t ulRecvCmdCount;
     EventBits_t uxBitsTCP;
     int res;
-    int i;
 
     pProto = (echProtocol_t *)pvParameters;
-    cs = gdsl_list_cursor_alloc (pProto->plechSendCmd);
-    cr = gdsl_list_cursor_alloc (pProto->plechRecvCmd);
-    while(1)
+    cs = gdsl_list_cursor_alloc(pProto->plechSendCmd);
+    cr = gdsl_list_cursor_alloc(pProto->plechRecvCmd);
+    while (1)
     {
-        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
-        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
-        printf_safe("\n");
+//        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
+//        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
+//        printf_safe("\n");
 
-        /* ±éÀúRecvCmd */
+        /* éåŽ†RecvCmd */
 
-        gdsl_list_cursor_move_to_head (cr);
-        while(pechProtoElem = gdsl_list_cursor_get_content (cr))
+        if (xSemaphoreTake(pProto->xMutexProtoRecv, 1000) == pdPASS)
         {
-            if(pechProtoElem->status == 0)
+            gdsl_list_cursor_move_to_head(cr);
+            while ((pechProtoElem = gdsl_list_cursor_get_content(cr)) != NULL)
             {
-                res = pProto->pCMD[pechProtoElem->cmd_id]->analyProc(pProto,
+                if (pechProtoElem->status == 0)
+                {
+                    res = pProto->pCMD[pechProtoElem->cmd_id]->analyProc(pProto,
                         pechProtoElem->cmd_id,
                         pechProtoElem->pbuff,
                         pechProtoElem->len);
-                if(res == 1)
-                {
-                    pechProtoElem->status = 1;
+                    if (res == 1)
+                    {
+                        pechProtoElem->status = 1; //æŽ¥æ”¶åè®®å…¥é˜Ÿç­‰å¾…å¤„ç†
+                    }
+                    else//æŽ¥æ”¶çš„åè®®å¸§åºåˆ—æœ‰é—®é¢˜ï¼Œç›´æŽ¥åˆ é™¤
+                    {
+                        gdsl_list_cursor_delete(cr);
+                        continue;
+                    }
                 }
-                else//½ÓÊÕµÄÐ­ÒéÖ¡ÐòÁÐÓÐÎÊÌâ£¬Ö±½ÓÉ¾³ý
+
+                if (pechProtoElem->status == 1)
                 {
                     gdsl_list_cursor_delete(cr);
                     continue;
                 }
-            }
-
-            if(pechProtoElem->status == 1)
-            {
-                gdsl_list_cursor_delete(cr);
-                continue;
-            }
-#if 1
-            /* 2. ÅÐ¶Ï³¬Ê± */
-            if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
-            {
-                gdsl_list_cursor_delete(cs);
-                continue;
-            }
-#endif
-            gdsl_list_cursor_step_forward (cr);
-        }
-
-        /* ±éÀúSendCmd */
-
-        gdsl_list_cursor_move_to_head (cs);
-        while(pechProtoElem = gdsl_list_cursor_get_content (cs))
-        {
-            /* 1. ÅÐ¶ÏÐ­ÒéÊÇ·ñ·¢ËÍ */
-            if(pechProtoElem->status == 0)
-            {
-                memmove(tcp_client_sendbuf, pechProtoElem->pbuff, pechProtoElem->len);
-                send_len = pechProtoElem->len;
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendReq);
-                uxBitsTCP = xEventGroupWaitBits(xHandleEventTCP, defEventBitTCPClientSendOK, pdTRUE, pdTRUE, 200);
-                //µÈ²»µÈµÃµ½¶¼ÖÃ1
-                pechProtoElem->status = 1;
-
-            }
-           /* 2. ÒÑ·¢ËÍ£¬ÅÐ¶Ï·¢ËÍÇé¿ö*/
-            if(pechProtoElem->status == 1)
-            {
-                /* ÅÐ¶ÏÃüÁî×Ö£¬
-                   Èç¹ûÊÇÇëÇóÃüÁî£¬ÔòµÈ´ýÖ÷»ú»Ø¸´
-                   Èç¹ûÊÇ»Ø¸´ÃüÁî£¬ÔòÉ¾³ý
-                */
-                #if 0 //×¢ÊÍµÄÕâ²¿·ÖµÄË¼Â·ÒÔºóÓÃÀ´¼ì²âUID
-                /** @todo (rgw#1#): ºóÆÚÐèÒªÔÚÕâÀï±È½ÏÐ­ÒéUID£¬É¾³ý½ÓÊÜµ½µÄUIDÓë·¢ËÍUIDÏàÍ¬µÄÃüÁî */
-                if(xSemaphoreTake(pProto->pCMD[pechProtoElem->cmd_id]->xMutexCmd, 1000) == pdTRUE)
-                {
-                    ccmd = gdsl_list_cursor_alloc(pProto->pCMD[pechProtoElem->cmd_id]->plRecvCmd);
-                    gdsl_list_cursor_move_to_head (ccmd);
-                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
-                    {
-                        if(pechCmdElem->status == 1)//ÃüÁîÔÚ¸÷Ìõresº¯ÊýÖÐÒÑ¾­±»¶ÁÈ¡²¢´¦Àí¡£
-                        {
-                            gdsl_list_cursor_delete(cs);//ÇëÇóÃüÁîÊÕµ½Ö÷»ú»Ø¸´, É¾³ýÃüÁî
-                            break;
-                        }
-                        gdsl_list_cursor_step_forward (ccmd);
-                    }
-
-                    gdsl_list_cursor_move_to_head (ccmd);
-                    while(pechCmdElem = gdsl_list_cursor_get_content(ccmd))
-                    {
-                        if(pechCmdElem->status == 1)//ÃüÁîÔÚ¸÷Ìõresº¯ÊýÖÐÒÑ¾­±»¶ÁÈ¡²¢´¦Àí¡£
-                        {
-                            gdsl_list_cursor_delete(ccmd);
-                            continue;
-                        }
-                        gdsl_list_cursor_step_forward (ccmd);
-                    }
-                    gdsl_list_cursor_free(ccmd);
-                    xSemaphoreGive(pProto->xMutexCmd);
-                }
-                #endif
-                uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
-                                                defEventBitProtoCmdHandled,
-                                                pdTRUE, pdTRUE, 0);
-                if((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
-                {
-                    gdsl_list_cursor_delete(cs);//ÇëÇóÃüÁîÊÕµ½Æ½Ì¨»Ø¸´²¢ÒÑ´¦Àí, É¾³ýÃüÁî
-                    continue;
-                }
-                if(pechProtoElem->trycount >= pechProtoElem->trycountmax)
+#if 0 //æŽ¥æ”¶æ— è¶…æ—¶å¤„ç†
+                /* 2. åˆ¤æ–­è¶…æ—¶ */
+                if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
                 {
                     gdsl_list_cursor_delete(cs);
                     continue;
                 }
-
-            }
-#if 1
-            /* 2. ÅÐ¶Ï³¬Ê± £¬³¬Ê±ºóÖÃ×´Ì¬Îª0£¬ÔÙ´Î½øÐÐ·¢ËÍ*/
-            if((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
-            {
-                pechProtoElem->trycount++;
-                pechProtoElem->timestamp = time(NULL);
-                pechProtoElem->status = 0;
-                continue;//Ìø¹ýºóÃæµÄÓï¾äÁ¢¼´·¢ËÍ
-            }
 #endif
-            /* 3. */
-            gdsl_list_cursor_step_forward (cs);
-        }
+                gdsl_list_cursor_step_forward(cr);
+            }//while
+            xSemaphoreGive(pProto->xMutexProtoRecv);
+        }//if mutex
 
+        /* éåŽ†SendCmd */
+        if (xSemaphoreTake(pProto->xMutexProtoSend, 1000) == pdPASS)
+        {
+            gdsl_list_cursor_move_to_head(cs);
+            while ((pechProtoElem = gdsl_list_cursor_get_content(cs)) != NULL)
+            {
+                /* 1. åˆ¤æ–­åè®®æ˜¯å¦å‘é€ */
+                if (pechProtoElem->status == 0)
+                {
+                    printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                    modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
+                    pechProtoElem->status = 1;
+                    pechProtoElem->trycount++;
+                }
+                /* 2. å·²å‘é€ï¼Œåˆ¤æ–­å‘é€æƒ…å†µ*/
+                if (pechProtoElem->status == 1)
+                {
+                    /* åˆ¤æ–­å‘½ä»¤å­—ï¼Œ
+                       å¦‚æžœæ˜¯è¯·æ±‚å‘½ä»¤ï¼Œåˆ™ç­‰å¾…ä¸»æœºå›žå¤
+                       å¦‚æžœæ˜¯å›žå¤å‘½ä»¤ï¼Œåˆ™ç›´æŽ¥è¶…æ—¶åˆ é™¤
+                    */
+                    uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
+                        defEventBitProtoCmdHandled,
+                        pdTRUE,
+                        pdTRUE,
+                        0);
+                    if ((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
+                    {
+                        gdsl_list_cursor_delete(cs);//è¯·æ±‚å‘½ä»¤æ”¶åˆ°å¹³å°å›žå¤å¹¶å·²å¤„ç†, åˆ é™¤å‘½ä»¤
+                        printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                        continue;
+                    }
+                }
+                /* 3. åˆ¤æ–­è¶…æ—¶ ï¼Œè¶…æ—¶åŽç½®çŠ¶æ€ä¸º0ï¼Œå†æ¬¡è¿›è¡Œå‘é€*/
+                if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
+                {
+                    if (pechProtoElem->trycount >= pechProtoElem->trycountmax)
+                    {
+                        gdsl_list_cursor_delete(cs);
+                        continue;
+                    }
+                    pechProtoElem->timestamp = time(NULL);
+                    pechProtoElem->status = 0;
+                    continue;//è·³è¿‡åŽé¢çš„è¯­å¥ç«‹å³å‘é€ï¼Œå¦åˆ™éœ€è¦å†ç­‰ä¸€è½®
+                }
+                /* 4. */
+                gdsl_list_cursor_step_forward(cs);
+            }//while
+            xSemaphoreGive(pProto->xMutexProtoSend);
+        }//if mutex
 
         vTaskDelay(2000);
     }

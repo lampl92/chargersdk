@@ -11,38 +11,43 @@
 void tinysh_char_out(unsigned char c)
 {
     //xputc(c);
-    printf_safe("%c",c);//ÎªÈ·±£Ïß³Ì°²È«£¬²»ÒªÖ±½ÓÊ¹ÓÃ´®¿ÚÊä³ö¡£
+    printf_safe("%c",c);//ä¸ºç¡®ä¿çº¿ç¨‹å®‰å…¨ï¼Œä¸è¦ç›´æ¥ä½¿ç”¨ä¸²å£è¾“å‡ºã€‚
 }
 
 
 void cli_init(void)
 {
     tinysh_set_prompt("\n[charger]$ ");
-    /************ÏµÍ³ĞÅÏ¢****************/
+    /************ç³»ç»Ÿä¿¡æ¯****************/
     tinysh_add_command(&cli_hello_cmd);
     tinysh_add_command(&cli_systemdate_cmd);
     tinysh_add_command(&cli_tasklist_cmd);
 
-    /************´ÅÅÌ¹ÜÀí****************/
+    /************ç£ç›˜ç®¡ç†****************/
 
-    tinysh_add_command(&cli_mkfs_cmd);
-    tinysh_add_command(&cli_mount_cmd);
-    tinysh_add_command(&cli_umount_cmd);
+//    tinysh_add_command(&cli_mkfs_cmd);
+//    tinysh_add_command(&cli_mount_cmd);
+//    tinysh_add_command(&cli_umount_cmd);
     tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_xmodem_cmd);
+    
 
-    /************ÏµÍ³²âÊÔ****************/
-    tinysh_add_command(&cli_fatfs_cmd);
-    tinysh_add_command(&cli_testsdram_cmd);
-    tinysh_add_command(&cli_parseJson_cmd);
-    tinysh_add_command(&cli_makeJson_cmd);
+    /************ç³»ç»Ÿæµ‹è¯•****************/
+//    tinysh_add_command(&cli_fatfs_cmd);
+//    tinysh_add_command(&cli_testsdram_cmd);
+//    tinysh_add_command(&cli_parseJson_cmd);
+//    tinysh_add_command(&cli_makeJson_cmd);
     tinysh_add_command(&cli_aestest_cmd);
-    /************µç×®ĞÅÏ¢****************/
+//    tinysh_add_command(&cli_crctest_cmd);
+    /************ç”µæ¡©ä¿¡æ¯****************/
     tinysh_add_command(&cli_evseinfo_cmd);
     tinysh_add_command(&cli_evseorder_cmd);
     tinysh_add_command(&cli_evsestatus_cmd);
     tinysh_add_command(&cli_modeminfo_cmd);
-    /************Éè±¸²âÊÔ****************/
-    tinysh_add_command(&cli_gprs_cmd);
+    tinysh_add_command(&cli_protoinfo_cmd);
+    tinysh_add_command(&cli_evselog_cmd);
+    /************è®¾å¤‡æµ‹è¯•****************/
+//    tinysh_add_command(&cli_gprs_cmd);
 
     /* add the foo command
     */
@@ -58,22 +63,20 @@ void cli_init(void)
     tinysh_add_command(&atoxi_cmd);
 
 }
-extern Queue *pCliRecvQue;
+
 void cli_main(void)
 {
     uint8_t ch[1];
     uint32_t l;
-    int8_t res;
     cli_init();
     while(1)
     {
-        res = readRecvQueEx(pCliRecvQue, ch, 1, &l, 1);
-//        res = readRecvQue(pCliRecvQue, &ch, 1);
-        if(res == 1)
+        l = uart_read(UART_PORT_CLI, ch, 1, 1);
+        if(l == 1)
         {
             tinysh_char_in(ch[0]);
         }
-        vTaskDelay(100);
+        vTaskDelay(200);
     }
 }
 

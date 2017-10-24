@@ -1,5 +1,7 @@
 #include "electric_energy_meter.h"
 #include "user_app.h"
+#include "FreeRTOS.h"
+#include "task.h"
 void RS485_Init(u32 bound)
 {
     //GPIO¶Ë¿ÚÉèÖÃ
@@ -28,7 +30,7 @@ void RS485_Init(u32 bound)
     __HAL_UART_DISABLE_IT(&UART7_RS485Handler,UART_IT_TC);
 	__HAL_UART_ENABLE_IT(&UART7_RS485Handler,UART_IT_RXNE);//¿ªÆô½ÓÊÕÖÐ¶Ï
 	HAL_NVIC_EnableIRQ(UART7_IRQn);				        //Ê¹ÄÜUSART1ÖÐ¶Ï
-	HAL_NVIC_SetPriority(UART7_IRQn,0,0);			        //ÇÀÕ¼ÓÅÏÈ¼¶3£¬×ÓÓÅÏÈ¼¶3
+    HAL_NVIC_SetPriority(UART7_IRQn, bspUART7_PreemptPriority, bspUART7_SubPriority);			        //ÇÀÕ¼ÓÅÏÈ¼¶3£¬×ÓÓÅÏÈ¼¶3
     RS485_DIS;
    // RS485_EN;                                //ÉèÖÃÎª½ÓÊÕÄ£Ê½
 }

@@ -1,16 +1,17 @@
 #ifndef __QRENCODE_H
 #define __QRENCODE_H
 #include "integer.h"
-#include "bsp.h"
+#include "bsp_define.h"
+#include <stdbool.h>
 //typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 #define min(a,b)	(((a) < (b)) ? (a) : (b))
-//4ÖÖ¾À´íµÈ¼¶£¬¿É»Ö¸´µÄÂë×Ö±ÈÀýÎª£º
-#define QR_LEVEL_L	0	//7%µÄ×ÖÂë¿É±»ÐÞÕý
-#define QR_LEVEL_M	1	//15%µÄ×ÖÂë¿É±»ÐÞÕý
-#define QR_LEVEL_Q	2	//25%µÄ×ÖÂë¿É±»ÐÞÕý
-#define QR_LEVEL_H	3	//30%µÄ×ÖÂë¿É±»ÐÞÕý
+//4ç§çº é”™ç­‰çº§ï¼Œå¯æ¢å¤çš„ç å­—æ¯”ä¾‹ä¸ºï¼š
+#define QR_LEVEL_L	0	//7%çš„å­—ç å¯è¢«ä¿®æ­£
+#define QR_LEVEL_M	1	//15%çš„å­—ç å¯è¢«ä¿®æ­£
+#define QR_LEVEL_Q	2	//25%çš„å­—ç å¯è¢«ä¿®æ­£
+#define QR_LEVEL_H	3	//30%çš„å­—ç å¯è¢«ä¿®æ­£
 
-//±àÂëÐÎÊ½
+//ç¼–ç å½¢å¼
 #define QR_MODE_NUMERAL		0
 #define QR_MODE_ALPHABET	1
 #define QR_MODE_8BIT		2
@@ -18,54 +19,54 @@
 #define QR_MODE_CHINESE		4
 
 //Number of bits per length field
-//Encoding		Ver.1¨C9		10¨C26		27¨C40
+//Encoding		Ver.1â€“9		10â€“26		27â€“40
 //Numeric		10			12			14
 //Alphanumeric	9			11			13
 //Byte			8			16			16
 //Kanji			8			10			12
 //Chinese
-//P17 ×Ö·û¼ÆÊýÖ¸Ê¾µÄÎ»Êý
+//P17 å­—ç¬¦è®¡æ•°æŒ‡ç¤ºçš„ä½æ•°
 #define QR_VRESION_S	0
 #define QR_VRESION_M	1
 #define QR_VRESION_L	2
 
 #define QR_MARGIN	4
-#define	QR_VER1_SIZE	21// °æ±¾µÄÐÐÁÐÊý
+#define	QR_VER1_SIZE	21// ç‰ˆæœ¬çš„è¡Œåˆ—æ•°
 
-#define MAX_ALLCODEWORD		3706//400// //P14,P35 Êý¾ÝÈÝÁ¿[Âë×Ö]* (E) (VER:40), ËùÓÐÂë×ÖÎª8Î»
-#define MAX_DATACODEWORD	2956//400// //P27     ×î´óÐÅÏ¢Âë×Ó(Ver£º40-L)£¬ËùÓÐÂë×ÖÎª8Î»
-#define MAX_CODEBLOCK		153	//×î´ó¾À´íÂë×Ö Ver£º36.37.38_L_µÚ¶þ¿é
-#define MAX_MODULESIZE		177	// 21:Version=1,×î´ó×Ö·û=17(8.5¸öºº×Ö)
-								// 25:Version=2,×î´ó×Ö·û=32(16¸öºº×Ö)
-								// 29:Version=3,×î´ó×Ö·û=49(24.5¸öºº×Ö)
-								// 33:Version=4,×î´ó×Ö·û=78(39¸öºº×Ö)
-								// 37:Version=5,×î´ó×Ö·û=106(53¸öºº×Ö)
-								// 41:Version=6,×î´ó×Ö·û=134(67¸öºº×Ö)
-							 	// 45:Version=7,×î´ó×Ö·û=154(77¸öºº×Ö)
-							 	// 49:Version=8,×î´ó×Ö·û=192(96¸öºº×Ö)
+#define MAX_ALLCODEWORD		3706//400// //P14,P35 æ•°æ®å®¹é‡[ç å­—]* (E) (VER:40), æ‰€æœ‰ç å­—ä¸º8ä½
+#define MAX_DATACODEWORD	2956//400// //P27     æœ€å¤§ä¿¡æ¯ç å­(Verï¼š40-L)ï¼Œæ‰€æœ‰ç å­—ä¸º8ä½
+#define MAX_CODEBLOCK		153	//æœ€å¤§çº é”™ç å­— Verï¼š36.37.38_L_ç¬¬äºŒå—
+#define MAX_MODULESIZE		177	// 21:Version=1,æœ€å¤§å­—ç¬¦=17(8.5ä¸ªæ±‰å­—)
+								// 25:Version=2,æœ€å¤§å­—ç¬¦=32(16ä¸ªæ±‰å­—)
+								// 29:Version=3,æœ€å¤§å­—ç¬¦=49(24.5ä¸ªæ±‰å­—)
+								// 33:Version=4,æœ€å¤§å­—ç¬¦=78(39ä¸ªæ±‰å­—)
+								// 37:Version=5,æœ€å¤§å­—ç¬¦=106(53ä¸ªæ±‰å­—)
+								// 41:Version=6,æœ€å¤§å­—ç¬¦=134(67ä¸ªæ±‰å­—)
+							 	// 45:Version=7,æœ€å¤§å­—ç¬¦=154(77ä¸ªæ±‰å­—)
+							 	// 49:Version=8,æœ€å¤§å­—ç¬¦=192(96ä¸ªæ±‰å­—)
 								// 53:
-//#define	MAX_MODULESIZE	177//P14 Ã¿±ßµÄÄ£¿éÊý£¨A£© (VER:40   ) Ver£º40 = 21+£¨Ver-1£©*4
+//#define	MAX_MODULESIZE	177//P14 æ¯è¾¹çš„æ¨¡å—æ•°ï¼ˆAï¼‰ (VER:40   ) Verï¼š40 = 21+ï¼ˆVer-1ï¼‰*4
 
 extern int m_nSymbleSize;
 extern BYTE m_byModuleData[MAX_MODULESIZE][MAX_MODULESIZE];
 /////////////////////////////////////////////////////////////////////////////
 typedef struct
 {
-	u16 ncRSBlock;		//¾À´íµÄ¿éÊý
-	u16 ncAllCodeWord;	//Âë×Ö×ÜÊý
-	u16 ncDataCodeWord;	//Ö¸¶¨¾À´íµÈ¼¶ÏÂµÄÊý¾ÝÂë×ÖÊý
+	u16 ncRSBlock;		//çº é”™çš„å—æ•°
+	u16 ncAllCodeWord;	//ç å­—æ€»æ•°
+	u16 ncDataCodeWord;	//æŒ‡å®šçº é”™ç­‰çº§ä¸‹çš„æ•°æ®ç å­—æ•°
 }RS_BLOCKINFO;
 typedef struct
 {
 	u16 nVersionNo;			//ver 1~40
-	u16 ncAllCodeWord; 		//Âë×Ö×ÜÊý=Êý¾ÝÂë×Ö+¾À´íÂë×Ö
+	u16 ncAllCodeWord; 		//ç å­—æ€»æ•°=æ•°æ®ç å­—+çº é”™ç å­—
 
-	u16 ncDataCodeWord[4];	//Ö¸¶¨¾À´íµÈ¼¶ÏÂµÄÊý¾ÝÂë×Ö(0=L,1=M,2=Q,3=H)
-	u16 ncAlignPoint;		//P61 ±íE1 Ð£ÕýÍ¼ÐÎ ¸öÊý
-	u16 nAlignPoint[6];		//P61 ±íE1 Ð£ÕýÍ¼ÐÎ	ÐÐÁÐ×ø±ê
+	u16 ncDataCodeWord[4];	//æŒ‡å®šçº é”™ç­‰çº§ä¸‹çš„æ•°æ®ç å­—(0=L,1=M,2=Q,3=H)
+	u16 ncAlignPoint;		//P61 è¡¨E1 æ ¡æ­£å›¾å½¢ ä¸ªæ•°
+	u16 nAlignPoint[6];		//P61 è¡¨E1 æ ¡æ­£å›¾å½¢	è¡Œåˆ—åæ ‡
 	//(0=L,1=M,2=Q,3=H)
-	RS_BLOCKINFO RS_BlockInfo1[4];	//¾À´í¿é1
-	RS_BLOCKINFO RS_BlockInfo2[4];	//¾À´í¿é2
+	RS_BLOCKINFO RS_BlockInfo1[4];	//çº é”™å—1
+	RS_BLOCKINFO RS_BlockInfo2[4];	//çº é”™å—2
 }QR_VERSIONINFO;
 
 bool EncodeData(char *lpsSource);
