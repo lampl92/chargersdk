@@ -175,11 +175,13 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         jsParent = GetCfgObj("system\\evse.log", &errcode);
         if (jsParent == NULL)
         {
+            cJSON_Delete(jsParent);
             return errcode;
         }
         ulMaxItem  = cJSON_GetArraySize(jsParent);
         if (ulMaxItem == 0)
         {
+            cJSON_Delete(jsParent);
             return 0;
         }
         for (i = 0; i < ulMaxItem; i++)
@@ -239,11 +241,13 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         jsParent = GetCfgObj("system\\order.txt", &errcode);
         if (jsParent == NULL)
         {
+            cJSON_Delete(jsParent);
             return errcode;
         }
         ulMaxItem  = cJSON_GetArraySize(jsParent);
         if (ulMaxItem == 0)
         {
+            cJSON_Delete(jsParent);
             return 0;
         }
 
@@ -579,7 +583,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_2: // Notifications sent by 'Button'
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
-            /**< 跳转到模拟量信息查询 */
+            /**< 跳转到设置参数信息查询 */
             _deleteWin(_hWinManagerAlarmLog);
             CreateManagerSysSet();
             break;
@@ -628,7 +632,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
             LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "枪号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "设备", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障信息", GUI_TA_HCENTER | GUI_TA_VCENTER);

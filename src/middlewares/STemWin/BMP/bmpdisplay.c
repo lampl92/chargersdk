@@ -331,7 +331,7 @@ uint8_t readBackGroundNOFREE(char *BMPFileName)
 	{
         return 2;//分配失败
 	}
-
+    printf_safe("bmp_file = %d\n", BMPFile_BCGROUND.obj.objsize);
 	result = f_read(&BMPFile_BCGROUND,bmpBackGround,BMPFile_BCGROUND.obj.objsize,(UINT *)&bread); //读取数据
 	if(result != FR_OK) return 3;
 

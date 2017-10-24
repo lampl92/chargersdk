@@ -550,7 +550,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
-            // USER END
+            /**< 跳转到设置参数信息查询 */
+              _deleteWin(_hWinManagerInfoStatus);
+              CreateManagerSysSet();
+              // USER END
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)

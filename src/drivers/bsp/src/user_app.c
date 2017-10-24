@@ -112,7 +112,7 @@ float get_dc_massage(uint8_t DC_channel)
     Chip1.cs1_select = 1;
     write_pca9554_1();
     vTaskDelay(25);
-    ad_samp_value =get_CD4067();;
+    ad_samp_value =get_CD4067();
     switch (DC_channel)
     {
     case 0:

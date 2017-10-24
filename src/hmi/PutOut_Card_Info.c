@@ -82,7 +82,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCardInfo[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
     { BUTTON_CreateIndirect, "退出", ID_BUTTON_0, 554, 317, 100, 36, 0, 0x0, 0 },//倒计时退出
-    { BUTTON_CreateIndirect, "确定", ID_BUTTON_1, 554, 272, 100, 36, 0, 0x0, 0 },//枪锁完全锁止后的确认按钮
+//    { BUTTON_CreateIndirect, "确定", ID_BUTTON_1, 554, 272, 100, 36, 0, 0x0, 0 },//枪锁完全锁止后的确认按钮
     { TEXT_CreateIndirect, "Text", ID_TEXT_5, 600, 324, 61, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_6, 223, 228, 500, 61, 0, 0x0, 0 },//是否提示余额不足
     { TEXT_CreateIndirect, "Text", ID_TEXT_0, 222, 149, 80, 30, 0, 0x0, 0 }, //卡号
@@ -281,8 +281,8 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
+//                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
                     &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");

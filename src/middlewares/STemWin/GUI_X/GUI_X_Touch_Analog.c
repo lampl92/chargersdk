@@ -63,19 +63,22 @@ void GUI_TOUCH_X_ActivateX(void)
 {
     if((calebrate_done & 0x01) == 1)//初始化完成
     {
-        if((PEN == 0) && (TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
+        if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
         {
-            _pidFlag = 1;
-            Buzzer_control(1);
-            adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-            adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-
-            if(!bittest(winCreateFlag,2))
+            if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
             {
-                State.x = adc_x;
-                State.y = adc_y;
-                State.Pressed = 1;
-                GUI_TOUCH_StoreStateEx(&State);
+                _pidFlag = 1;
+                Buzzer_control(1);
+                adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+                adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+
+                if (!bittest(winCreateFlag, 2))
+                {
+                    State.x = adc_x;
+                    State.y = adc_y;
+                    State.Pressed = 1;
+                    GUI_TOUCH_StoreStateEx(&State);
+                }
             }
         }
         else
@@ -85,17 +88,20 @@ void GUI_TOUCH_X_ActivateX(void)
 
             /**< 键盘鼠标路线会触发拐角的键,
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
-            if(bittest(winCreateFlag,2))
+            if (bittest(winCreateFlag, 2))
             {
-//                adc_x = 0;
-//                adc_y = 0;
+                State.Pressed = 0;
+                GUI_TOUCH_StoreStateEx(&State);
+
+                adc_x = 569;
+                adc_y = 60;
             }
             else
             {
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
             }
-        }
+        }        
     }
 }
 
