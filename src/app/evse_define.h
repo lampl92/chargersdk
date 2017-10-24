@@ -85,7 +85,8 @@
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK | \
                                       defEventBitOrder_HMIDispOK)
-#else#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK)
+#else
+#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | defEventBitOrder_RemoteRTDataOK)
 #endif
 
 /*------xHandleEventRemote*/

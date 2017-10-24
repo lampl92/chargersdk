@@ -123,13 +123,12 @@ void bsp_Init(void)
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
     /* Enable the CRC Module */
     __HAL_RCC_CRC_CLK_ENABLE(); //
-    bsp_DWT_Init();
-    bsp_SDRAM_Init();
 #ifdef EVSE_DEBUG
     bsp_GPIO_Init();
 #endif
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
+    bsp_DWT_Init();
 #if EVSE_USING_GUI
     LCD_Init();
     TP_Init();
@@ -137,6 +136,7 @@ void bsp_Init(void)
 #ifndef EVSE_DEBUG
     Peripheral_Init();
 #endif
+    bsp_SDRAM_Init();
 
     //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化

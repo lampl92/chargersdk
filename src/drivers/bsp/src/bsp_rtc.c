@@ -3,11 +3,12 @@
 #include "bsp.h"
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "taskcreate.h"
 #include <time.h>
 
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
 time_t time_dat;
-SemaphoreHandle_t xMutexTimeStruct;
+
 //RTC时间设置
 //hour,min,sec:小时,分钟,秒钟
 //ampm:@RTC_AM_PM_Definitions:RTC_HOURFORMAT12_AM/RTC_HOURFORMAT12_PM
@@ -73,10 +74,7 @@ HAL_StatusTypeDef RTC_Set_Date(u8 year, u8 month, u8 date)
 //返回值:0,初始化成功;
 //       2,进入初始化模式失败;
 u8 bsp_RTC_Init(void)
-{
-
-    xMutexTimeStruct = xSemaphoreCreateMutex();
-    
+{   
     RTC_Handler.Instance = RTC;
     RTC_Handler.Init.HourFormat = RTC_HOURFORMAT_24; //RTC设置为24小时格式
     RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTC异步分频系数(1~0X7F)

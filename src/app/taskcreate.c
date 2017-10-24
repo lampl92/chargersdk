@@ -127,6 +127,9 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
+SemaphoreHandle_t xMutexTimeStruct;
+
+
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
 EventGroupHandle_t xHandleEventDiag = NULL;
@@ -223,6 +226,9 @@ void AppTaskCreate (void)
  */
 void AppObjCreate (void)
 {
+    xMutexTimeStruct = xSemaphoreCreateMutex();
+    
+    
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
     xHandleEventDiag = xEventGroupCreate();
