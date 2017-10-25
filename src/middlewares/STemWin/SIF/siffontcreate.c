@@ -2,90 +2,90 @@
 #include "ff.h"
 #include "bsp_define.h"
 
-//×ÖÌå¶¨Òå
+//å­—ä½“å®šä¹‰
 GUI_FONT SIF12_Font;
 GUI_FONT SIF16_Font;
 GUI_FONT SIF24_Font;
 GUI_FONT SIF36_Font;
 
-//×ÖÌåÎÄ¼ş
+//å­—ä½“æ–‡ä»¶
 FIL SIF12FontFile;
 FIL SIF16FontFile;
 FIL SIF24FontFile;
 FIL SIF36FontFile;
 
-//×Ö¿âÎÄ¼ş»º³åÇø
+//å­—åº“æ–‡ä»¶ç¼“å†²åŒº
 u8 *SIF12FontBuff;
 u8 *SIF16FontBuff;
 u8 *SIF24FontBuff;
 u8 *SIF36FontBuff;
 
-//SD¿¨»ñÈ¡×Ö¿âÎÄ¼ş
-//fxpath:×Ö¿âÂ·¾¶
-//buffer:×Ö¿âÎÄ¼ş»º³åÇø
-//files:ÎÄ¼ş
-//·µ»ØÖµ:0£¬Ê§°Ü£»ÆäËû£¬µÃµ½µÄ×Ö¿âÎÄ¼ş
+//SDå¡è·å–å­—åº“æ–‡ä»¶
+//fxpath:å­—åº“è·¯å¾„
+//buffer:å­—åº“æ–‡ä»¶ç¼“å†²åŒº
+//files:æ–‡ä»¶
+//è¿”å›å€¼:0ï¼Œå¤±è´¥ï¼›å…¶ä»–ï¼Œå¾—åˆ°çš„å­—åº“æ–‡ä»¶
 u8 *GetFont_Info(u8 *fxpath,FIL files)
 {
     int result;
 	u16 bread;
 	u8 *FontBuffer;
 
-	result=f_open(&files,(const TCHAR*)fxpath,FA_READ);	//´ò¿ª×Ö¿âÎÄ¼ş
-	FontBuffer=malloc(files.obj.objsize); //´ÓÍâ²¿SDRAMÉêÇëÄÚ´æ
+	result=f_open(&files,(const TCHAR*)fxpath,FA_READ);	//æ‰“å¼€å­—åº“æ–‡ä»¶
+	FontBuffer=malloc(files.obj.objsize); //ä»å¤–éƒ¨SDRAMç”³è¯·å†…å­˜
 
     if(FontBuffer==NULL)
 	{
-		printf("ÄÚ´æÉêÇëÊ§°Ü\r\n");
-		FontBuffer=NULL;	//ÄÚ´æÉêÇëÊ§°Ü
+		printf("å†…å­˜ç”³è¯·å¤±è´¥\r\n");
+		FontBuffer=NULL;	//å†…å­˜ç”³è¯·å¤±è´¥
 	}
 
-	result = f_read(&files,FontBuffer,files.obj.objsize,(UINT *)&bread); //¶ÁÈ¡Êı¾İ
+	result = f_read(&files,FontBuffer,files.obj.objsize,(UINT *)&bread); //è¯»å–æ•°æ®
 	if(result != FR_OK) FontBuffer=NULL;
 
     return FontBuffer;
 }
 
-//´´½¨SIF12×ÖÌå£¬¹©EMWINÊ¹ÓÃ
+//åˆ›å»ºSIF12å­—ä½“ï¼Œä¾›EMWINä½¿ç”¨
 void Create_SIF12(u8 *fxpath)
 {
     SIF12FontBuff=GetFont_Info(fxpath,SIF12FontFile);
     if(SIF12FontBuff!=NULL)
     {
-        //´´½¨SIF¸ñÊ½×ÖÌå
+        //åˆ›å»ºSIFæ ¼å¼å­—ä½“
         GUI_SIF_CreateFont(SIF12FontBuff,&SIF12_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
-//´´½¨SIF16×ÖÌå£¬¹©EMWINÊ¹ÓÃ
+//åˆ›å»ºSIF16å­—ä½“ï¼Œä¾›EMWINä½¿ç”¨
 void Create_SIF16(u8 *fxpath)
 {
     SIF16FontBuff=GetFont_Info(fxpath,SIF16FontFile);
     if(SIF16FontBuff!=NULL)
     {
-        //´´½¨SIF¸ñÊ½×ÖÌå
+        //åˆ›å»ºSIFæ ¼å¼å­—ä½“
         GUI_SIF_CreateFont(SIF16FontBuff,&SIF16_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
-//´´½¨SIF24×ÖÌå£¬¹©EMWINÊ¹ÓÃ
+//åˆ›å»ºSIF24å­—ä½“ï¼Œä¾›EMWINä½¿ç”¨
 void Create_SIF24(u8 *fxpath)
 {
     SIF24FontBuff=GetFont_Info(fxpath,SIF24FontFile);
     if(SIF24FontBuff!=NULL)
     {
-        //´´½¨SIF¸ñÊ½×ÖÌå
+        //åˆ›å»ºSIFæ ¼å¼å­—ä½“
         GUI_SIF_CreateFont(SIF24FontBuff,&SIF24_Font,GUI_SIF_TYPE_PROP);
     }
 }
 
-//´´½¨SIF36×ÖÌå£¬¹©EMWINÊ¹ÓÃ
+//åˆ›å»ºSIF36å­—ä½“ï¼Œä¾›EMWINä½¿ç”¨
 void Create_SIF36(u8 *fxpath)
 {
     SIF36FontBuff=GetFont_Info(fxpath,SIF36FontFile);
     if(SIF36FontBuff!=NULL)
     {
-        //´´½¨SIF¸ñÊ½×ÖÌå
+        //åˆ›å»ºSIFæ ¼å¼å­—ä½“
         GUI_SIF_CreateFont(SIF36FontBuff,&SIF36_Font,GUI_SIF_TYPE_PROP);
     }
 }

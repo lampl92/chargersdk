@@ -1,8 +1,7 @@
 #include "bsp.h"
 #include "xprintf.h"
+#include "taskcreate.h"
 extern UART_HandleTypeDef CLI_UARTx_Handler;
-
-SemaphoreHandle_t  xprintfMutex = NULL;
 
 void myputc(uint8_t ch)
 {
@@ -12,8 +11,6 @@ void myputc(uint8_t ch)
 #if 1
 void retarget_init(void)
 {
-    xprintfMutex = xSemaphoreCreateMutex();
-
     if(xprintfMutex == NULL)
     {
         //

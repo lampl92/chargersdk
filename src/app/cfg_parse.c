@@ -36,14 +36,18 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
+    taskENTER_CRITICAL(); 
     ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
+    f_sync(&f);
+    taskEXIT_CRITICAL();
     if(res != FR_OK)
     {
         errcode = ERR_FILE_RW;
         goto exit;
     }
-    taskENTER_CRITICAL();  //注释掉 ，解决可能锁死的问题
+    taskENTER_CRITICAL(); 
     ThrowFSCode(res = f_write(&f, pbuff, len, &bw), path, "SetCfgObj()-write");
+    f_sync(&f); 
     taskEXIT_CRITICAL();
     if(len != bw)
     {
@@ -51,8 +55,8 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         goto exit_write;
     }
 exit_write:
-    free(pbuff);
     f_close(&f);
+    free(pbuff);
 exit:
     cJSON_Delete(jsCfgObj);
     return errcode;
@@ -77,7 +81,9 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     int i;
     *perrcode = ERR_NO;
     /*读取文件*/
+    taskENTER_CRITICAL();
     ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
+    taskEXIT_CRITICAL();
     if(res != FR_OK)
     {
         *perrcode = ERR_FILE_RW;
@@ -85,7 +91,9 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     }
     fsize = f_size(&f);
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
+    taskENTER_CRITICAL();
     ThrowFSCode(res = f_read(&f, rbuff, fsize, &br), path, "GetCfgObj-read");
+    taskEXIT_CRITICAL();
     if(fsize != br)
     {
         *perrcode = ERR_FILE_RW;
@@ -101,8 +109,8 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     }
 exit_read:
 exit_parse:
-    free(rbuff);
     f_close(&f);
+    free(rbuff);
 exit:
     return jsCfgObj;
 }

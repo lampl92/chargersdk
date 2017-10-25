@@ -25,7 +25,7 @@ static void fatfs_format(void)
     BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
 
     /*##-3- Create a FAT file system (format) on the logical drive #########*/
-    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT32, 0, work, sizeof(work)) != FR_OK)
+    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT, 0, work, sizeof(work)) != FR_OK)
     {
         /* FatFs Format Error */
         Error_Handler();
@@ -90,11 +90,8 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
     }
 }
 extern void retarget_init(void);
-void sys_Init(void)
+void fs_init(void)
 {
-    //ifconfig_init();
-    timeInit();
-    retarget_init();
     /*---------------------------------------------------------------------------/
     /                               FATFS初始化
     /---------------------------------------------------------------------------*/
@@ -112,7 +109,12 @@ void sys_Init(void)
             //Error_Handler();
         }
     }
-
+}
+void sys_Init(void)
+{
+    //ifconfig_init();
+    timeInit();
+    retarget_init();
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
@@ -123,11 +125,12 @@ void sys_Init(void)
     create_system_dir();
     //f_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
+    //f_unlink(pathProtoCfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
     //f_unlink(pathEVSELog);
-    //f_unlink(pathOrder);
+    f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
 

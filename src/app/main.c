@@ -22,14 +22,12 @@ int main(void)
     DISABLE_INT();
 
     bsp_Init();
-    sys_Init();
+    //sys_Init();
 
-    EVSEinit();
+    //EVSEinit();
 
     TaskInit();
-    SysTaskCreate();
-    AppTaskCreate();
-    AppObjCreate();
+
 
     vTaskStartScheduler();
 

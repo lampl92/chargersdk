@@ -45,7 +45,7 @@
 #define defMonitorPlugStateCyc      50
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
-#define defMonitorRFIDCyc           1000
+#define defMonitorRFIDCyc           100
 #define defMonitorDataRefreshCyc    5000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
@@ -64,9 +64,9 @@
 #define defMonitorFreqUpper         50  //(Hz)
 #define defMonitorFreqPeriod        1   //(Hz)
 
-#define defCfgOrderMaxItem          20
+#define defCfgOrderMaxItem          50
 #define defCfgOrderRemoveOldItem    10
-#define defCfgLogMaxItem            50
+#define defCfgLogMaxItem            100
 #define defCfgLogRemoveOldItem      10
 
 #endif /* EVSE_CONFIG_H_INCLUDED */

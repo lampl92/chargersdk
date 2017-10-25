@@ -24,7 +24,7 @@
 / 任务栈大小
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   2048
-#define defSTACK_TaskCLI                    (1024 * 10)
+#define defSTACK_TaskCLI                    (1024 * 50)
 #define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskTouch                  512
 #define defSTACK_TaskOTA                    512
@@ -128,6 +128,8 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务间通信
 /---------------------------------------------------------------------------*/
 SemaphoreHandle_t xMutexTimeStruct;
+SemaphoreHandle_t xMutexNandHW;
+SemaphoreHandle_t  xprintfMutex = NULL;
 
 
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
@@ -156,8 +158,16 @@ TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
+extern void fs_init(void);
 void vTaskInit(void *pvParameters)
 {
+    AppObjCreate();
+    fs_init();
+    sys_Init();
+    EVSEinit();
+    SysTaskCreate();
+    AppTaskCreate();
+    
     pModem = DevModemCreate();
 
     modem_open(pModem);
@@ -227,7 +237,8 @@ void AppTaskCreate (void)
 void AppObjCreate (void)
 {
     xMutexTimeStruct = xSemaphoreCreateMutex();
-    
+    xMutexNandHW = xSemaphoreCreateMutex();
+    xprintfMutex = xSemaphoreCreateMutex();
     
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
