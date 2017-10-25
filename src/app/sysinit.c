@@ -96,6 +96,7 @@ void fs_init(void)
     if (res != FR_OK)
     {
         fs_mkfs();
+        f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
     }
 }
 void sys_Init(void)
