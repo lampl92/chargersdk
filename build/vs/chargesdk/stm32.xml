@@ -38,8 +38,7 @@
         <string>../../../src/middlewares/STemWin/inc</string>
         <string>../../../src/middlewares/STemWin/Config</string>
         <string>../../../src/middlewares/STemWin/Demo</string>
-        <string>../../../src/middlewares/fatfs/src</string>
-        <string>../../../src/middlewares/fatfs/diskdrv</string>
+        <string>../../../src/middlewares/ff13a/source</string>
         <string>../../../src/middlewares/userlib/inc</string>
         <string>../../../src/middlewares/cJSON</string>
         <string>../../../src/middlewares/gdsl-1.8/src</string>

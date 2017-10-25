@@ -19,7 +19,7 @@ extern Sysconf_t   xSysconf;
 
 
 extern FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
-extern char NANDDISKPath[4]; /* RAM disk logical drive path */
+extern char NANDDISKPath[10]; /* RAM disk logical drive path */
 
 uint8_t write_sysconf_xml(void);
 uint8_t read_sysconf_xml(void);

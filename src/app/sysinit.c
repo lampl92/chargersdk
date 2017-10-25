@@ -1,8 +1,7 @@
 #include "includes.h"
-#include "ff_gen_drv.h"
+#include "ff.h"
 #include "nand_diskio.h"
 #include "cJSON.h"
-#include "s2j.h"
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
@@ -15,14 +14,14 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 
 Sysconf_t   xSysconf;//存放系统初始化参数
 
-FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
-char NANDDISKPath[4]; /* RAM disk logical drive path */
+FATFS NANDDISKFatFs;  /* File system object for Nand disk logical drive */
+char NANDDISKPath[10] = "0:/"; /* Nand disk logical drive path */
 
 extern time_t time_dat;
 extern void Error_Handler(void);
-static void fatfs_format(void)
+static void fs_mkfs(void)
 {
-    BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
+    BYTE work[4096]; /* Work area (larger is better for processing time) */
 
     /*##-3- Create a FAT file system (format) on the logical drive #########*/
     if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT, 0, work, sizeof(work)) != FR_OK)
@@ -92,22 +91,11 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
 extern void retarget_init(void);
 void fs_init(void)
 {
-    /*---------------------------------------------------------------------------/
-    /                               FATFS初始化
-    /---------------------------------------------------------------------------*/
-    /*##-1- Link the NAND disk I/O driver #######################################*/
-    if(FATFS_LinkDriver(&NANDDISK_Driver, NANDDISKPath) == 0)
+    FRESULT res;
+    res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
+    if (res != FR_OK)
     {
-        //fatfs_format();
-        /*##-2- Register the file system object to the FatFs module ##############*/
-        //DISABLE_INT();
-        if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
-        {
-            fatfs_format();
-            f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1);
-            /* FatFs Initialization Error */
-            //Error_Handler();
-        }
+        fs_mkfs();
     }
 }
 void sys_Init(void)

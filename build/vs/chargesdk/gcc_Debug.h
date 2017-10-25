@@ -734,7 +734,7 @@
 #define __INT_FAST16_MAX__ 0x7fffffff
 #endif
 #ifndef EVSE_USING_GUI
-#define EVSE_USING_GUI 1
+#define EVSE_USING_GUI 0
 #endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
@@ -1230,8 +1230,7 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/fatfs/src
-//../../../src/middlewares/fatfs/diskdrv
+//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src

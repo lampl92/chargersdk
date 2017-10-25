@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/ff13a/source;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -186,13 +186,12 @@
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff_ex.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\syscall.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\unicode.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\diskio.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffsystem.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffunicode.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff_ex.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
@@ -427,16 +426,12 @@
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2j.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2jdef.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\usbh_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ffconf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff_ex.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\diskio.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ffconf.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff_ex.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\acconfig.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\config.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl.h" />
@@ -883,6 +878,10 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\middlewares\ff13a\source\00history.txt" />
+    <Text Include="..\..\..\src\middlewares\ff13a\source\00readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

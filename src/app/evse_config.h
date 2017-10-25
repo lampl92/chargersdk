@@ -22,7 +22,8 @@
 
 #ifndef EVSE_USING_STORE_ORDER
 #define EVSE_USING_STORE_ORDER      1
-#endif
+#endif
+
 #ifndef EVSE_USING_STORE_LOG
 #define EVSE_USING_STORE_LOG        1
 #endif
