@@ -9,11 +9,14 @@ Ultralightweight JSON parser in ANSI C.
   * [Building](#building)
   * [Some JSON](#some-json)
   * [Here's the structure](#heres-the-structure)
+  * [Caveats](#caveats)
   * [Enjoy cJSON!](#enjoy-cjson)
 
 ## License
 
->  Copyright (c) 2009-2016 Dave Gamble
+MIT License
+
+>  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 >
 >  Permission is hereby granted, free of charge, to any person obtaining a copy
 >  of this software and associated documentation files (the "Software"), to deal
@@ -62,7 +65,7 @@ Because the entire library is only one C file and one header file, you can just 
 cJSON is written in ANSI C (C89) in order to support as many platforms and compilers as possible.
 
 #### CMake
-With CMake, cJSON supports a full blown build system. This way you get the most features. With CMake it is recommended to do an out of tree build, meaning the compiled files are put in a directory separate from the source files. So in order to build cJSON with CMake on a Unix platform, make a `build` directory and run CMake inside it.
+With CMake, cJSON supports a full blown build system. This way you get the most features. CMake with an equal or higher version than 2.8.5 is supported. With CMake it is recommended to do an out of tree build, meaning the compiled files are put in a directory separate from the source files. So in order to build cJSON with CMake on a Unix platform, make a `build` directory and run CMake inside it.
 
 ```
 mkdir build
@@ -82,11 +85,14 @@ You can change the build process with a list of different options that you can p
 * `-DENABLE_CJSON_TEST=On`: Enable building the tests. (on by default)
 * `-DENABLE_CJSON_UTILS=On`: Enable building cJSON_Utils. (off by default)
 * `-DENABLE_TARGET_EXPORT=On`: Enable the export of CMake targets. Turn off if it makes problems. (on by default)
-* `-DENABLE_CUSTOM_COMPILER_FLAGS=On`: Enable custom compiler flags (currently for Clang and GCC). Turn off if it makes problems. (on by default)
+* `-DENABLE_CUSTOM_COMPILER_FLAGS=On`: Enable custom compiler flags (currently for Clang, GCC and MSVC). Turn off if it makes problems. (on by default)
 * `-DENABLE_VALGRIND=On`: Run tests with [valgrind](http://valgrind.org). (off by default)
 * `-DENABLE_SANITIZERS=On`: Compile cJSON with [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) and [UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html) enabled (if possible). (off by default)
+* `-DENABLE_SAFE_STACK`: Enable the [SafeStack](https://clang.llvm.org/docs/SafeStack.html) instrumentation pass. Currently only works with the Clang compiler. (off by default)
 * `-DBUILD_SHARED_LIBS=On`: Build the shared libraries. (on by default)
+* `-DBUILD_SHARED_AND_STATIC_LIBS=On`: Build both shared and static libraries. (off by default)
 * `-DCMAKE_INSTALL_PREFIX=/usr`: Set a prefix for the installation.
+* `-DENABLE_LOCALES=On`: Enable the usage of localeconv method. ( on by default )
 
 If you are packaging cJSON for a distribution of Linux, you would probably take these steps for example:
 ```
@@ -97,10 +103,8 @@ make
 make DESTDIR=$pkgdir install
 ```
 
-CMake supports a lot of different platforms, not only UNIX Makefiles, but only UNIX Makefiles have been tested. It works on GNU/Linux and has been confirmed to compile on some versions of macOS, Cygwin, FreeBSD, Solaris and OpenIndiana.
-
 #### Makefile
-If you don't have CMake available, but still have make. You can use the makefile to build cJSON:
+If you don't have CMake available, but still have GNU make. You can use the makefile to build cJSON:
 
 Run this command in the directory with the source code and it will automatically compile static and shared libraries and a little test program.
 
@@ -137,14 +141,20 @@ This is an object. We're in C. We don't have objects. But we do have structs.
 What's the framerate?
 
 ```c
-cJSON *format = cJSON_GetObjectItem(root, "format");
-int framerate = cJSON_GetObjectItem(format, "frame rate")->valueint;
+cJSON *format = cJSON_GetObjectItemCaseSensitive(root, "format");
+cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame rate");
+double framerate = 0;
+if (cJSON_IsNumber(framerate_item))
+{
+  framerate = framerate_item->valuedouble;
+}
 ```
 
 Want to change the framerate?
 
 ```c
-cJSON_GetObjectItem(format, "frame rate")->valueint = 25;
+cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame rate");
+cJSON_SetNumberValue(framerate_item, 25);
 ```
 
 Back to disk?
@@ -203,7 +213,7 @@ typedef struct cJSON {
     int type;
 
     char *valuestring;
-    int valueint;
+    int valueint; /* writing to valueint is DEPRECATED, please use cJSON_SetNumberValue instead */
     double valuedouble;
 
     char *string;
@@ -219,8 +229,7 @@ A `child` entry will have `prev == 0`, but next potentially points on. The last 
 The type expresses *Null*/*True*/*False*/*Number*/*String*/*Array*/*Object*, all of which are `#defined` in
 `cJSON.h`.
 
-A *Number* has `valueint` and `valuedouble`. If you're expecting an `int`, read `valueint`, if not read
-`valuedouble`.
+A *Number* has `valueint` and `valuedouble`. `valueint` is a relict of the past, so always use `valuedouble`.
 
 Any entry which is in the linked list which is the child of an object will have a `string`
 which is the "name" of the entry. When I said "name" in the above example, that's `string`.
@@ -237,8 +246,8 @@ void parse_and_callback(cJSON *item, const char *prefix)
 {
     while (item)
     {
-        char *newprefix = malloc(strlen(prefix) + strlen(item->name) + 2);
-        sprintf(newprefix, "%s/%s", prefix, item->name);
+        char *newprefix = malloc(strlen(prefix) + strlen(item->string) + 2);
+        sprintf(newprefix, "%s/%s", prefix, item->string);
         int dorecurse = callback(newprefix, item->type, item);
         if (item->child && dorecurse)
         {
@@ -261,22 +270,22 @@ int callback(const char *name, int type, cJSON *item)
     {
         /* populate name */
     }
-    else if (!strcmp(name, "format/type")
+    else if (!strcmp(name, "format/type"))
     {
         /* handle "rect" */ }
-    else if (!strcmp(name, "format/width")
+    else if (!strcmp(name, "format/width"))
     {
         /* 800 */
     }
-    else if (!strcmp(name, "format/height")
+    else if (!strcmp(name, "format/height"))
     {
         /* 600 */
     }
-    else if (!strcmp(name, "format/interlace")
+    else if (!strcmp(name, "format/interlace"))
     {
         /* false */
     }
-    else if (!strcmp(name, "format/frame rate")
+    else if (!strcmp(name, "format/frame rate"))
     {
         /* 24 */
     }
@@ -369,6 +378,46 @@ The `test.c` code shows how to handle a bunch of typical cases. If you uncomment
 the code, it'll load, parse and print a bunch of test files, also from [json.org](http://json.org),
 which are more complex than I'd care to try and stash into a `const char array[]`.
 
+### Caveats
+
+#### Zero Character
+
+cJSON doesn't support strings that contain the zero character `'\0'` or `\u0000`. This is impossible with the current API because strings are zero terminated.
+
+#### Character Encoding
+
+cJSON only supports UTF-8 encoded input. In most cases it doesn't reject invalid UTF-8 as input though, it just propagates it through as is. As long as the input doesn't contain invalid UTF-8, the output will always be valid UTF-8.
+
+#### C Standard
+
+cJSON is written in ANSI C (or C89, C90). If your compiler or C library doesn't follow this standard, correct behavior is not guaranteed.
+
+NOTE: ANSI C is not C++ therefore it shouldn't be compiled with a C++ compiler. You can compile it with a C compiler and link it with your C++ code however. Although compiling with a C++ compiler might work, correct behavior is not guaranteed.
+
+#### Floating Point Numbers
+
+cJSON does not officially support any `double` implementations other than IEEE754 double precision floating point numbers. It might still work with other implementations but bugs with these will be considered invalid.
+
+The maximum length of a floating point literal that cJSON supports is currently 63 characters.
+
+#### Deep Nesting Of Arrays And Objects
+
+cJSON doesn't support arrays and objects that are nested too deeply because this would result in a stack overflow. To prevent this cJSON limits the depth to `CJSON_NESTING_LIMIT` which is 1000 by default but can be changed at compile time.
+
+#### Thread Safety
+
+In general cJSON is **not thread safe**.
+
+However it is thread safe under the following conditions:
+* `cJSON_GetErrorPtr` is never used (the `return_parse_end` parameter of `cJSON_ParseWithOpts` can be used instead)
+* `cJSON_InitHooks` is only ever called before using cJSON in any threads.
+* `setlocale` is never called before all calls to cJSON functions have returned.
+
+#### Case Sensitivity
+
+When cJSON was originally created, it didn't follow the JSON standard and didn't make a distinction between uppercase and lowercase letters. If you want the correct, standard compliant, behavior, you need to use the `CaseSensitive` functions where available.
+
 # Enjoy cJSON!
 
 - Dave Gamble, Aug 2009
+- [cJSON contributors](CONTRIBUTORS.md)
