@@ -2676,8 +2676,10 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
         printf_safe("local:  ");
         printTime(time(NULL));
         printf_safe("\n");
-        if(utils_abs(timestamp - time(NULL)) > 5)//大于5s进行校时
+        if(utils_abs(timestamp - time(NULL)) > 1000)//大于5s进行校时
         {
+            while (1)
+                ;
             time(&timestamp);
         }
         lRecvElem.UID = 0;
