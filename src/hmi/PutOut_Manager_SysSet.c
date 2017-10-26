@@ -130,6 +130,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     int x, y;
     volatile int id = 0;
     volatile int v = 0;
+    uint8_t _tmpBuff[50];
 
     switch (pMsg->MsgId)
     {
@@ -186,6 +187,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
 
                         Keypad_GetValueTest(SYSSET_VALUE,20,hWindow,_hWinManagerSysSet,"交流桩序列号","eg,1122334455667788");
                         //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
+                        EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
                     }
                 break;
                 case 21:
@@ -195,6 +197,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(_hWinManagerSysSet);
 
                         Keypad_GetValueTest(SYSSET_VALUE,21,hWindow,_hWinManagerSysSet,"充电枪个数","eg,1");
+                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
+                        sprintf(_tmpBuff,"%d",pEVSE->info.ucTotalCON);
+                        EDIT_SetText(_aahEdit[1][0],_tmpBuff);
                     }
                 break;
                 case 22:
@@ -204,6 +209,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(_hWinManagerSysSet);
 
                         Keypad_GetValueTest(SYSSET_VALUE,22,hWindow,_hWinManagerSysSet,"交流电压范围下限","eg,200");
+                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
+                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
+                        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
                     }
                 break;
                 case 23:
@@ -213,6 +221,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(_hWinManagerSysSet);
 
                         Keypad_GetValueTest(SYSSET_VALUE,23,hWindow,_hWinManagerSysSet,"交流电压范围上限","eg,260");
+                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
+                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
+                        EDIT_SetText(_aahEdit[2][1],_tmpBuff);
                     }
                 break;
                 case 24:
@@ -240,6 +251,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(_hWinManagerSysSet);
 
                         Keypad_GetValueTest(SYSSET_VALUE,26,hWindow,_hWinManagerSysSet,"过温告警值","eg,80");
+                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
+                        sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
+                        EDIT_SetText(_aahEdit[4][0],_tmpBuff);
                     }
                 break;
                 case 27:
