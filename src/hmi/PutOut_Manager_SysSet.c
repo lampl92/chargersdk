@@ -392,6 +392,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case WM_INIT_DIALOG:
+        _x = 0;
+        _y = 0;
+
         //
         // Initialization of 'Framewin'
         //

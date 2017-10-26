@@ -359,6 +359,22 @@ static void Status_Content_Analy()
 }
 /*********************************************************************
 *
+*       删除控件
+*/
+static void _deleteWiget()
+{
+    uint8_t i, j;
+    for (i = 0; i < EDIT_MAX_X; i++)
+    {
+        for (j = 0; j < EDIT_MAX_Y; j++)
+        {
+            GUI_EndDialog(_aahText[j][i],0);
+            GUI_EndDialog(_aahEdit[j][i],0);
+        }
+    }
+}
+/*********************************************************************
+*
 *       _cbDialog
 */
 static void _cbDialog(WM_MESSAGE *pMsg)
@@ -401,6 +417,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case WM_INIT_DIALOG:
+        _x = 0;
+        _y = 0;
         //
         // Initialization of 'Framewin'
         //
@@ -538,6 +556,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           case WM_NOTIFICATION_RELEASED:
                 /**< 跳转到历史记录查询 */
                 WM_SetStayOnTop(hWindow,0);
+                _deleteWiget();
+                GUI_EndDialog(wScroll,0);
+                GUI_EndDialog(hScroll,0);
                 GUI_EndDialog(hWindow,0);
                 _deleteWin(_hWinManagerInfoStatus);
                 CreateManagerAlarmLog();
@@ -551,6 +572,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           case WM_NOTIFICATION_CLICKED:
             // USER START (Optionally insert code for reacting on notification message)
             /**< 跳转到设置参数信息查询 */
+              WM_SetStayOnTop(hWindow, 0);
+              _deleteWiget();
+              GUI_EndDialog(wScroll, 0);
+              GUI_EndDialog(hScroll, 0);
+              GUI_EndDialog(hWindow,0);              
               _deleteWin(_hWinManagerInfoStatus);
               CreateManagerSysSet();
               // USER END
@@ -573,6 +599,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             // USER START (Optionally insert code for reacting on notification message)
             /**< 跳转至home */
             WM_SetStayOnTop(hWindow,0);
+              _deleteWiget();
+              GUI_EndDialog(wScroll, 0);
+              GUI_EndDialog(hScroll, 0);
             GUI_EndDialog(hWindow,0);
             _deleteWin(_hWinManagerInfoStatus);
             CreateHome();
@@ -591,6 +620,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           case WM_NOTIFICATION_RELEASED:
                 /**< 跳转到模拟量信息查询 */
                 WM_SetStayOnTop(hWindow,0);
+              _deleteWiget();
+              GUI_EndDialog(wScroll, 0);
+              GUI_EndDialog(hScroll, 0);
                 GUI_EndDialog(hWindow,0);
                 _deleteWin(_hWinManagerInfoStatus);
                 CreateManagerInfoAnalog();

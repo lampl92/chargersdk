@@ -1120,7 +1120,7 @@ static void CONInit(void)
     int i;
 //    double upp = 260;
 //    double low = 176;
-	double temp = 95;
+	double temp = 32;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
@@ -1128,6 +1128,7 @@ static void CONInit(void)
         THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
+        //pCON[i]->info .SetCONCfg (pCON[i], jnRatedCurrent, &temp, ParamTypeDouble);
 	    //pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
         
 

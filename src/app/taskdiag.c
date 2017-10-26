@@ -93,7 +93,7 @@ void vTaskEVSEDiag(void *pvParameters)
             {
                 if (pCON->state == STATE_CON_CHARGING)
                 {
-                    pCON->status.SetLoadPercent(pCON, 70);
+                    pCON->status.SetLoadPercent(pCON, 90);
                 }
             }
         }

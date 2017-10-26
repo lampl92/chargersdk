@@ -68,7 +68,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 /*                               设置充电接口信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
 
-static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsCONArray;

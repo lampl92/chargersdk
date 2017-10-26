@@ -156,7 +156,7 @@ void DiagVoltageError(CON_t *pCON)
                                               pdFALSE,
                                               (void *)id,
                                               vVoltTimerCB);
-            xTimerStart(pCON->status.xHandleTimerVolt, 0);
+            xTimerStart(pCON->status.xHandleTimerVolt, 100);
             pCON->status.xVoltStat = STATE_VOLT_LOWER_Dummy;
             break;
         case VOLT_UPPER:
@@ -165,7 +165,7 @@ void DiagVoltageError(CON_t *pCON)
                                               pdFALSE,
                                               (void *)id,
                                               vVoltTimerCB);
-            xTimerStart(pCON->status.xHandleTimerVolt, 0);
+            xTimerStart(pCON->status.xHandleTimerVolt, 100);
             pCON->status.xVoltStat = STATE_VOLT_UPPER_Dummy;
             break;
         default:
@@ -179,7 +179,7 @@ void DiagVoltageError(CON_t *pCON)
                                               pdTRUE, pdFALSE, 0);
         if((uxBitsException & defEventBitExceptionVoltTimer) == defEventBitExceptionVoltTimer)
         {
-            xTimerDelete(pCON->status.xHandleTimerVolt, 0);
+            xTimerDelete(pCON->status.xHandleTimerVolt, 100);
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
@@ -202,7 +202,7 @@ void DiagVoltageError(CON_t *pCON)
             switch(voltstat)
             {
             case VOLT_OK:
-                xTimerDelete(pCON->status.xHandleTimerVolt, 0);
+                xTimerDelete(pCON->status.xHandleTimerVolt, 100);
                 pCON->status.xVoltStat = STATE_VOLT_OK;
                 break;
             case VOLT_LOWER:
@@ -237,7 +237,7 @@ void DiagVoltageError(CON_t *pCON)
                                               pdFALSE,
                                               (void *)id,
                                               vVoltTimerCB);
-            xTimerStart(pCON->status.xHandleTimerVolt, 0);
+            xTimerStart(pCON->status.xHandleTimerVolt, 100);
             pCON->status.xVoltStat = STATE_VOLT_OK_Dummy;
             break;
         case VOLT_LOWER:
@@ -257,7 +257,7 @@ void DiagVoltageError(CON_t *pCON)
                                               pdTRUE, pdFALSE, 0);
         if((uxBitsException & defEventBitExceptionVoltTimer) == defEventBitExceptionVoltTimer)
         {
-            xTimerDelete(pCON->status.xHandleTimerVolt, 0);
+            xTimerDelete(pCON->status.xHandleTimerVolt, 100);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
@@ -278,11 +278,11 @@ void DiagVoltageError(CON_t *pCON)
             case VOLT_OK://200~240
                 break;
             case VOLT_LOWER:
-                xTimerDelete(pCON->status.xHandleTimerVolt, 0);
+                xTimerDelete(pCON->status.xHandleTimerVolt, 100);
                 pCON->status.xVoltStat = STATE_VOLT_LOWER;
                 break;
             case VOLT_UPPER:
-                xTimerDelete(pCON->status.xHandleTimerVolt, 0);
+                xTimerDelete(pCON->status.xHandleTimerVolt, 100);
                 pCON->status.xVoltStat = STATE_VOLT_UPPER;
                 break;
             default:
@@ -325,16 +325,16 @@ void DiagCurrentError(CON_t *pCON)
                                               pdFALSE,
                                               (void *)id,
                                               vCurrTimerCB);
-            xTimerStart(pCON->status.xHandleTimerCurr, 0);
+            xTimerStart(pCON->status.xHandleTimerCurr, 100);
             pCON->status.xCurrStat = STATE_CURR_DELAY;
             break;
         case STATE_CURR_DELAY:
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                   defEventBitExceptionCurrTimer,
-                                                  pdTRUE, pdFALSE, 0);
+                                                  pdTRUE, pdTRUE, 0);
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
-                xTimerDelete(pCON->status.xHandleTimerCurr, 0);
+                xTimerDelete(pCON->status.xHandleTimerCurr, 100);
                 pCON->status.xCurrStat = STATE_CURR_OK;
             }
             break;
@@ -352,7 +352,7 @@ void DiagCurrentError(CON_t *pCON)
                                                   pdFALSE,
                                                   (void *)id,
                                                   vCurrTimerCB);
-                xTimerStart(pCON->status.xHandleTimerCurr, 0);
+                xTimerStart(pCON->status.xHandleTimerCurr, 100);
                 pCON->status.xCurrStat = STATE_CURR_UPPER_Dummy;
                 break;
             default:
@@ -365,25 +365,26 @@ void DiagCurrentError(CON_t *pCON)
      
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                   defEventBitExceptionCurrTimer,
-                                                  pdTRUE, pdFALSE, 0);
+                                                  pdTRUE, pdTRUE, 0);
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
-                xTimerDelete(pCON->status.xHandleTimerCurr, 0);
-                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 30), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
+                xTimerDelete(pCON->status.xHandleTimerCurr, 100);
+                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 10), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Fix",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
                                                   (void *)id,
                                                   vCurrTimerCB);
-                xTimerStart(pCON->status.xHandleTimerCurr, 0);
+                xTimerStart(pCON->status.xHandleTimerCurr, 100);
                 pCON->status.xCurrStat = STATE_CURR_UPPER_Fix;
+                break;
             }
             else
             {
                 switch(currstat)
                 {
                 case CURR_OK:
-                    xTimerDelete(pCON->status.xHandleTimerCurr, 0);
+                    xTimerDelete(pCON->status.xHandleTimerCurr, 100);
                     pCON->status.xCurrStat = STATE_CURR_OK;
                     break;
                 case CURR_UPPER:
@@ -396,20 +397,21 @@ void DiagCurrentError(CON_t *pCON)
         case STATE_CURR_UPPER_Fix:
             uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
                                                   defEventBitExceptionCurrTimer,
-                                                  pdTRUE, pdFALSE, 0);
+                                                  pdTRUE, pdTRUE, 0);
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
-                xTimerDelete(pCON->status.xHandleTimerCurr, 0);
+                xTimerDelete(pCON->status.xHandleTimerCurr, 100);
                 /** @todo (rgw#1#): 电流错误，HMI提示拔枪重新操作 */
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 pCON->status.xCurrStat = STATE_CURR_ERROR;
+                break;
             }
             else
             {
                 switch(currstat)
                 {
                 case CURR_OK:
-                    xTimerDelete(pCON->status.xHandleTimerCurr, 0);
+                    xTimerDelete(pCON->status.xHandleTimerCurr, 100);
                     pCON->status.xCurrStat = STATE_CURR_OK;
                     break;
                 case CURR_UPPER:
