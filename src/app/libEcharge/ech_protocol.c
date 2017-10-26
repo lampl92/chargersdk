@@ -700,7 +700,7 @@ static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t
 {
     return (uint16_t)(ver + atrri + cmd + len);
 }
-static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout, uint8_t trycountmax)
+static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout_s, uint8_t trycountmax)
 {
     echProtocol_t *pProto;
     echProtoElem_t echSendCmdElem;
@@ -718,7 +718,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
         return 0;
     }
     echSendCmdElem.timestamp = time(NULL);
-    echSendCmdElem.timeout_s = timeout;
+    echSendCmdElem.timeout_s = timeout_s;
     echSendCmdElem.cmd = pProto->pCMD[usSendID]->CMDType;
     echSendCmdElem.cmd_id = usSendID;
     echSendCmdElem.len = ulSendLength;
@@ -734,7 +734,6 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
         gdsl_res = gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
         xSemaphoreGive(pProto->xMutexProtoSend);
     }
-    
     
     if (gdsl_res == NULL)
     {
@@ -2676,10 +2675,8 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
         printf_safe("local:  ");
         printTime(time(NULL));
         printf_safe("\n");
-        if(utils_abs(timestamp - time(NULL)) > 1000)//大于5s进行校时
+        if(utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
         {
-            while (1)
-                ;
             time(&timestamp);
         }
         lRecvElem.UID = 0;
