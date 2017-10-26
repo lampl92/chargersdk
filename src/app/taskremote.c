@@ -230,20 +230,12 @@ void vTaskEVSERemote(void *pvParameters)
             if((uxBits & defEventBitTimerCBHeartbeat) == defEventBitTimerCBHeartbeat)
             {
                 RemoteIF_SendHeart(pEVSE, pechProto);
-//                xTimerStop(xHandleTimerRemoteHeartbeat, 100);
-//                eRmtHeartStat = REMOTEHEART_RECV;
             }
 
-//            switch(eRmtHeartStat)
-//            {
-//            case REMOTEHEART_IDLE:
-//                break;
-//            case REMOTEHEART_RECV:
             RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
                 heart_lost++;
-//                    printf_safe("heart_lost = %d\n",heart_lost);
                 if(heart_lost > 750)
                 {
                     heart_lost = 0;
@@ -254,15 +246,9 @@ void vTaskEVSERemote(void *pvParameters)
             }
             else
             {
-//                    xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
-//                                   pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
-//                                   100);//这样的话还能随时更改心跳频率不用重启
                 printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
-//                    eRmtHeartStat = REMOTEHEART_IDLE;
                 heart_lost = 0;
             }
-//                break;
-//            }
 
             /************ 状态******************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
@@ -565,6 +551,8 @@ void vTaskEVSERemote(void *pvParameters)
             vTaskDelay(1000);
             remotestat = REMOTE_NO;
             printf_safe("State Reconnect ,Call TCP close!!\n");
+            break;
+        case REMOTE_ERROR:
             break;
         }
 

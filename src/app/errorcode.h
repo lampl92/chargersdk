@@ -89,7 +89,7 @@ typedef struct _ErrorPackage
     uint32_t		ulDevID;
     ErrorCode_t		code;
     ErrorLevel_t	level;
-    uint8_t		msg[64];
+    char		msg[64];
 } ErrorPackage_t;
 
 //充电枪ID从小到大定义，其他设备从大小定义
@@ -104,9 +104,9 @@ typedef struct _ErrorPackage
 #define defDevID_EVSE		255	//0xff
 
 
-extern const uint8_t	*strErrorCode[];
+extern const char	*strErrorCode[];
 
-void	ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg);
+void	ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, char *msg);
 void	ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info);
 
 #endif

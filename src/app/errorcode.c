@@ -11,7 +11,7 @@
 //
 //  !!! 一定要保证code的 **顺序** 与头文件定义一致
 //
-const uint8_t *strErrorCode[100] =
+const char *strErrorCode[100] =
 {
     "无故障",
     "急停检测发生故障",
@@ -64,7 +64,7 @@ const uint8_t *strErrorCode[100] =
     "卡号是黑名单"
 };
 
-void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg)
+void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, char *msg)
 {
     ErrorPackage_t package;
 
