@@ -2568,7 +2568,7 @@ static int recvResponse(void *pPObj,
 /** @brief
  *
  * @param pPObj void*
- * @param usCmdID uint16_t SendID表示收到的回复对应的SendID
+ * @param usCmdID uint16_t
  * @param pbuff uint8_t*
  * @param ulRecvLen uint32_t
  * @return int
