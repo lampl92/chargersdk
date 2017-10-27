@@ -69,19 +69,9 @@ static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
 
 static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
 {
-    uint32_t   cnt  = 0;
-//    if(xSemaphoreTake(pModem->xMutex, 10000) == pdTRUE)
-//    {
-    cnt = uart_read(UART_PORT_GPRS, line, len, 100);
-//        xSemaphoreGive(pModem->xMutex);
-    return cnt;
-//    }
-//    else
-    {
-        //没等到，离开了
-    }
-    return cnt;
+    return uart_read(UART_PORT_GPRS, line, len, 100);
 }
+
 static uint32_t modem_send_at(uint8_t *format, ...)
 {
     uint8_t     cmd[MAX_COMMAND_LEN + 1]  = {0};

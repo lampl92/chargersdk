@@ -5,7 +5,7 @@
 #include "semphr.h"
 #include "userlib_queue.h"
 
-#define MAX_COMMAND_LEN                  1024  /* 最大命令长度 */
+#define MAX_COMMAND_LEN                  1500  /* 最大命令长度 */
 typedef enum
 {
     CPIN_OTHER,
