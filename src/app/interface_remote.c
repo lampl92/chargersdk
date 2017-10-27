@@ -17,45 +17,6 @@
 #include "libEcharge/ech_globals.h"
 #include "libEcharge/ech_protocol_proc.h"
 
-#if 0
-ErrorCode_t RemoteInit()
-{
-    uint8_t  ucAESKey_BASE64[] = "oFqTg0a0VrjiVU76M1WRVw==";
-    uint8_t *pucAESKey_BASE64;
-
-    pucAESKey_BASE64 = ucAESKey_BASE64;
-
-    uint8_t ucAESKey[64];
-    uint8_t ucAESKeyLen;
-    uint8_t olen;
-    int i;
-    pucAESKey_BASE64 = ucAESKey_BASE64;
-    mbedtls_base64_decode(ucAESKey, sizeof(ucAESKey), &olen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
-    printf_safe("AESKEYBASE64 : %s\n", pucAESKey_BASE64);
-    printf_safe("AESKey ： ");
-    for(i = 0; i < olen; i++)
-    {
-        printf_safe("%02x ", ucAESKey[i]);
-    }
-    printf_safe("\n");
-}
-
-ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
-{
-    struct tm tmpTimeBlock;
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-
-    /** @todo (rgw#1#): 获取服务器时间 */
-
-
-    *pTimeBlock = tmpTimeBlock;
-
-    return errcode;
-}
-#endif
-
 /** @brief
  *
  * @param pucRetVal uint8_t*     1注册成功  0注册失败
