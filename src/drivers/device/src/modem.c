@@ -961,6 +961,7 @@ void Modem_Poll(DevModem_t *pModem)
 {
     EventBits_t uxBits;
     DR_MODEM_e ret;
+    int resp;
     int i;
     while(1)
     {
@@ -1109,7 +1110,27 @@ void Modem_Poll(DevModem_t *pModem)
                         }
                         else
                         {
-                            pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                            resp = pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
+                            switch (resp)
+                            {
+                            case 1:
+                                break;
+                            case -1:
+                                printf_safe("接收协议版本不正确\n");
+                                break;
+                            case -2:
+                                printf_safe("接收协议校验码错误\n");
+                                break;
+                            case -3:
+                                printf_safe("接收协议枪ID错误\n");
+                                break;
+                            case -4:
+                                printf_safe("接收协议命令字错误\n");
+                                break;
+                            case -5:
+                                printf_safe("接收协议长度错误\n");
+                                break;
+                            }
                         }
                         memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
                         recv_len = 0;

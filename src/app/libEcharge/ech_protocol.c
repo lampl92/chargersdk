@@ -700,7 +700,7 @@ static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t
 {
     return (uint16_t)(ver + atrri + cmd + len);
 }
-static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID, uint32_t timeout_s, uint8_t trycountmax)
+static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, uint32_t timeout_s, uint8_t trycountmax)
 {
     echProtocol_t *pProto;
     echProtoElem_t echSendCmdElem;
@@ -712,23 +712,23 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
     pProto = (echProtocol_t *)pPObj;
     ulSendLength = 0;
 
-    res = pProto->pCMD[usSendID]->makeProc(pPObj, pEObj, pCObj, pucSendBuffer, &ulSendLength);
+    res = pProto->pCMD[usCmdID]->makeProc(pPObj, pEObj, pCObj, pucSendBuffer, &ulSendLength);
     if (res == 0)
     {
         return 0;
     }
     echSendCmdElem.timestamp = time(NULL);
     echSendCmdElem.timeout_s = timeout_s;
-    echSendCmdElem.cmd = pProto->pCMD[usSendID]->CMDType;
-    echSendCmdElem.cmd_id = usSendID;
+    echSendCmdElem.cmd = pProto->pCMD[usCmdID]->CMDType;
+    echSendCmdElem.cmd_id = usCmdID;
     echSendCmdElem.len = ulSendLength;
     echSendCmdElem.pbuff = pucSendBuffer;
     echSendCmdElem.status = 0;//0表示未发送  1表示已发送
     echSendCmdElem.trycount = 0;
     echSendCmdElem.trycountmax = trycountmax;
 
-    pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
-    memset(pProto->pCMD[usSendID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
+    pProto->pCMD[usCmdID]->ulRecvdOptLen = 0;
+    memset(pProto->pCMD[usCmdID]->ucRecvdOptData, 0, REMOTE_RECVDOPTDATA);
     if (xSemaphoreTake(pProto->xMutexProtoSend, 10000) == pdPASS)
     {
         gdsl_res = gdsl_list_insert_tail(pProto->plechSendCmd, (void *)&echSendCmdElem);
@@ -746,7 +746,7 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usSendID,
 }
 static int makeStdCmd(void *pPObj,
                       void *pEObj,
-                      uint16_t usSendID,
+                      uint16_t usCmdID,
                       uint8_t *pucMsgBodyCtx_dec,
                       uint32_t ulMsgBodyCtxLen_dec,
                       uint8_t *pucSendBuffer,
@@ -766,7 +766,7 @@ static int makeStdCmd(void *pPObj,
     ul2uc ultmpNetSeq;
 
     pProto = (echProtocol_t *)pPObj;
-    pCMD = pProto->pCMD[usSendID];
+    pCMD = pProto->pCMD[usCmdID];
     pE = (EVSE_t *)pEObj;
     ulMsgHeadLen = 0;
 
@@ -1675,13 +1675,13 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
-static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
     uint8_t *pbuff;
 
     pProto = (echProtocol_t *)pPObj;
-    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
 
     //[0...3] 操作ID
     pucMsgBodyCtx_dec[0] = pbuff[0];
@@ -1713,7 +1713,7 @@ static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
-static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
     uint8_t *pbuff;
@@ -1721,7 +1721,7 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     ul2uc ultmpNetSeq;
 
     pProto = (echProtocol_t *)pPObj;
-    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
 
     //[0...3] 操作ID
@@ -1735,7 +1735,7 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    switch(usSendID)
+    switch(usCmdID)
     {
     case ECH_CMDID_REQ_POWERFEE:
         //[8...11] 尖
@@ -2052,14 +2052,14 @@ static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     return 1;    
 }
 
-static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
 
     pProto = (echProtocol_t *)pPObj;
-    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
 
     //[0...3] 操作ID
@@ -2095,7 +2095,7 @@ static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     return 1;    
 }
 
-static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
     uint8_t *pbuff;
@@ -2108,13 +2108,13 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usSendID, uint8_t *pucMsgB
     uint8_t path[64];
 
     pProto = (echProtocol_t *)pPObj;
-    pbuff = pProto->pCMD[usSendID]->ucRecvdOptData;  // -------注意修改ID
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
-    if(usSendID == ECH_CMDID_REQ_BLACK)
+    if(usCmdID == ECH_CMDID_REQ_BLACK)
     {
         strcpy(path, pathBlackList);
     }
-    else if(usSendID == ECH_CMDID_REQ_WHITE)
+    else if(usCmdID == ECH_CMDID_REQ_WHITE)
     {
         strcpy(path, pathWhiteList);
     }
@@ -2470,6 +2470,7 @@ static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 #define ECH_ERR_CHECK   -2
 #define ECH_ERR_ID      -3
 #define ECH_ERR_CMDID   -4
+#define ECH_ERR_LEN     -5
 
 static int recvResponse(void *pPObj,
                         void *pEObj,
@@ -2516,7 +2517,10 @@ static int recvResponse(void *pPObj,
     ultmpNetSeq.ucVal[2] = pbuff[ulOffset + 10];
     ultmpNetSeq.ucVal[3] = pbuff[ulOffset + 11];
     ulMsgBodyLen_enc = ntohl(ultmpNetSeq.ulVal);
-
+    if (ulRecvdLen < ulMsgBodyLen_enc + 14)
+    {
+        return ECH_ERR_LEN;
+    }
     //pbuff[12,13] Checksum
     ustmpNetSeq.ucVal[0] = pbuff[ulOffset + 12];
     ustmpNetSeq.ucVal[1] = pbuff[ulOffset + 13];
@@ -2564,13 +2568,13 @@ static int recvResponse(void *pPObj,
 /** @brief
  *
  * @param pPObj void*
- * @param usSendID uint16_t （这里可能会产生理解问题）SendID表示收到的回复对应的SendID
+ * @param usCmdID uint16_t SendID表示收到的回复对应的SendID
  * @param pbuff uint8_t*
  * @param ulRecvLen uint32_t
  * @return int
  *
  */
-static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
     uint8_t *pMsgBodyCtx_enc;
@@ -2584,7 +2588,7 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
     ulMsgBodyCtxLen_enc = ulRecvLen - 30; //加密部分长度
     if (ulMsgBodyCtxLen_enc == 0)
     {
-        pProto->pCMD[usSendID]->ulRecvdOptLen = 0;
+        pProto->pCMD[usCmdID]->ulRecvdOptLen = 0;
     }
     else
     {
@@ -2592,8 +2596,8 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 
         ech_aes_decrypt(pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, pMsgBodyCtx_dec);
 
-        memcpy(pProto->pCMD[usSendID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
-        pProto->pCMD[usSendID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
+        memcpy(pProto->pCMD[usCmdID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
+        pProto->pCMD[usCmdID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
 
         free(pMsgBodyCtx_dec);
     }
@@ -2609,7 +2613,7 @@ static int analyStdRes(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t 
 4. 释放Mutex
 */
 
-static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
     echCMD_t *pCMD;
@@ -2617,11 +2621,11 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
     int i;
 
     pProto = (echProtocol_t *)pPObj;
-    pCMD = pProto->pCMD[usSendID];
+    pCMD = pProto->pCMD[usCmdID];
 
     if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdPASS)
     {
-        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+        analyStdRes(pPObj, usCmdID, pbuff, ulRecvLen);
         if (pCMD->ulRecvdOptLen == 0)
         {
             
@@ -2648,7 +2652,7 @@ static int analyCmdCommon(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32
     return 1;
 }
 
-static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_t ulRecvLen)
+static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
     echCMD_t *pCMD;
@@ -2658,10 +2662,10 @@ static int analyCmdHeart(void *pPObj, uint16_t usSendID, uint8_t *pbuff, uint32_
     echCmdElem_t lRecvElem;
 
     pProto = (echProtocol_t *)pPObj;
-    pCMD = pProto->pCMD[usSendID];
+    pCMD = pProto->pCMD[usCmdID];
     if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
     {
-        analyStdRes(pPObj, usSendID, pbuff, ulRecvLen);
+        analyStdRes(pPObj, usCmdID, pbuff, ulRecvLen);
         pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
 
         ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
