@@ -162,7 +162,6 @@ extern void fs_init(void);
 void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
-    fs_init();
     sys_Init();
     EVSEinit();
     SysTaskCreate();

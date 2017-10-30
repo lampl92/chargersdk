@@ -5,7 +5,7 @@
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
-
+#include "cfg_sys.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -92,6 +92,7 @@ extern void retarget_init(void);
 void fs_init(void)
 {
     FRESULT res;
+    //fs_mkfs();
     res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
     if (res != FR_OK)
     {
@@ -101,16 +102,13 @@ void fs_init(void)
 }
 void sys_Init(void)
 {
+    fs_init();
     //ifconfig_init();
     timeInit();
     retarget_init();
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-    xSysconf.xCalibrate.ad_top = 270;
-    xSysconf.xCalibrate.ad_bottom = 3865;
-    xSysconf.xCalibrate.ad_left = 100;
-    xSysconf.xCalibrate.ad_right  = 3964;
     create_system_dir();
     //f_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
@@ -122,7 +120,13 @@ void sys_Init(void)
     //f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
+    f_unlink(pathSysCfg);
+    f_unlink(pathFTPCfg);
+    create_cfg_file(pathSysCfg, strSysCfg);
+    create_cfg_file(pathFTPCfg, strFtpCfg);
 
+    SysCfgInit(&xSysconf);
+    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/

@@ -115,6 +115,41 @@ const uint8_t *strProtoCfg =
     }\
 }";
 
+const uint8_t *strFtpCfg =
+"{\n \
+    \"Server\": \"123.56.106.11\",\n \
+    \"Port\": 21,\n \
+    \"Username\" : \"username\",\n \
+    \"Password\" : \"password\",\n \
+    \"NewVersion\" : \"1234567890\",\n \
+    \"NewFilename\" : \"1234567890\",\n \
+    \"DownloadStart\" : 0,\n \
+    \"DownloadStatus\": 123\n \
+}\n";
+
+const uint8_t *strSysCfg =
+"{\n \
+    \"chargesdk_bin\" : 0,\n \
+    \"evse_cfg\" : 0,\n \
+    \"protocol_cfg\" : 0,\n \
+    \"sys_cfg\" : 0,\n \
+    \"blacklist_cfg\" : 0,\n \
+    \"whitelist_cfg\" : 0,\n \
+    \"DispSleepTime\" : 60,\n \
+    \"touchtype\": 8,\n \
+    \"is_calibrate\": 8,\n \
+    \"xfac\": 12.12,\n \
+    \"yfac\": 12.12,\n \
+    \"xoff\": 16,\n \
+    \"yoff\": 16,\n \
+    \"Version\":\"0.2.1.2552\",\n \
+    \"USE_GPRSModem\":2,\n \
+    \"USE_Meter\": 1,\n \
+    \"USE_RFID\": 1,\n \
+    \"USE_GUI\":1\n \
+}\n";
+   
+        
 const uint8_t *strWhiteListCfg ="[]";
 const uint8_t *strBlackListCfg ="[]";
     

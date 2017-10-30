@@ -1,28 +1,17 @@
 #ifndef __SYSINIT_H
 #define __SYSINIT_H
 
-typedef struct
-{
-    uint16_t ad_top;
-    uint16_t ad_bottom;
-    uint16_t ad_left;
-    uint16_t ad_right;
-} Calibrate_t;
+#include "cfg_sys.h"
 
-typedef struct
-{
-    Calibrate_t xCalibrate;
-
-} Sysconf_t;
-
-extern Sysconf_t   xSysconf;
+#define defSysModuleGPRS    2//3G :3  2G:2
+#define defSysModuleMeter   1//1 电表  2计量芯片
 
 
 extern FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
 extern char NANDDISKPath[10]; /* RAM disk logical drive path */
 
-uint8_t write_sysconf_xml(void);
-uint8_t read_sysconf_xml(void);
+extern Sysconf_t   xSysconf;//存放系统初始化参数
+
 void sys_Init(void);
 
 #endif

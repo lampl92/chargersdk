@@ -1490,6 +1490,12 @@
     <ClCompile Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.c">
       <Filter>Source files\middlewares\ff13a\source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_ftp.c">
+      <Filter>Source files\app\libEcharge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\cfg_sys.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">

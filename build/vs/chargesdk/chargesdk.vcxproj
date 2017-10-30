@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\app\cfg_order.c" />
     <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
+    <ClCompile Include="..\..\..\src\app\cfg_sys.c" />
     <ClCompile Include="..\..\..\src\app\connector.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
     <ClCompile Include="..\..\..\src\app\EVSE.c" />
@@ -89,6 +90,7 @@
     <ClCompile Include="..\..\..\src\app\interface_remote.c" />
     <ClCompile Include="..\..\..\src\app\interface_rfid.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c" />
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_ftp.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
