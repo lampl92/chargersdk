@@ -2381,7 +2381,6 @@ static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32
     echProtocol_t *pProto;
     uint8_t *pbuff;
     int i;
-    EventBits_t uxBits;
 
     pProto = (echProtocol_t *)pPObj;
 
@@ -2440,7 +2439,50 @@ static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_WARNING, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+static int makeCmdSetOTABodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
 
+    pProto = (echProtocol_t *)pPObj;
+
+    pbuff = pProto->pCMD[ECH_CMDID_SET_OTA]->ucRecvdOptData;  // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4] 结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[4];
+    
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    
+    return 1;
+}
+static int makeCmdSetOTA(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdSetOTABodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_OTA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;   
+}
+static int makeCmdReqOTA_DW(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    return 1;
+}
+static int makeCmdOTA_Start(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    return 1;
+}
+static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    return 1;
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2852,6 +2894,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
     pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
 
+    EchFtpInit(&pProto->info.ftp);
+    
     pProto->info.GetProtoCfg = GetProtoCfg;
     pProto->info.SetProtoCfg = SetProtoCfg;
 
@@ -2911,8 +2955,12 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_CARD_RTDATA]    = EchCMDCreate(94,  0,   30, makeCmdCardRTData,   NULL);
     pProto->pCMD[ECH_CMDID_UP_FAULT]       = EchCMDCreate(70,  71,  30, makeCmdUpFault,      analyCmdCommon);
     pProto->pCMD[ECH_CMDID_UP_WARNING]     = EchCMDCreate(72,  73,  30, makeCmdUpWarning,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_OTA]        = EchCMDCreate(111, 110, 30, makeCmdSetOTA,       analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_OTA_DW]     = EchCMDCreate(113, 112, 30, makeCmdSetOTA, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_OTA_START]      = EchCMDCreate(114, 115, 30, makeCmdSetOTA, analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_OTA_RESULT]     = EchCMDCreate(116, 117, 30, makeCmdSetOTA, analyCmdCommon);
 
-    //end of 注册
+    //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 
     pProto->recvResponse = recvResponse;
     pProto->sendCommand = sendCommand;

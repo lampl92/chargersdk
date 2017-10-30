@@ -128,6 +128,23 @@ static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
     }
 }
 
+static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    ErrorCode_t errcode;
+    int network_res = 0;
+    
+    errcode = RemoteIF_RecvSetOTA(pechProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 1);
+    }
+    else if (errcode == ERR_FILE_RW && network_res == 1)
+    {
+        RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 0);
+    }
+    return 1;
+}
+
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -556,6 +573,9 @@ void vTaskEVSERemote(void *pvParameters)
 
 
             /***********获取帐户信息**********************/ //由taskrfid调用获取账户信息接口 2017年8月10日
+            
+            /******** OTA ****************/
+            taskremote_ota(pEVSE, pechProto);
 
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:

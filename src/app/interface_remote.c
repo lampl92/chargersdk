@@ -10,12 +10,12 @@
 #include "includes.h"
 #include "bsp.h"
 #include "interface.h"
-#include "mbedtls/base64.h"
 #include "utils.h"
 #include "stringName.h"
 #include "cfg_parse.h"
 #include "libEcharge/ech_globals.h"
 #include "libEcharge/ech_protocol_proc.h"
+#include "libEcharge/ech_ftp.h"
 
 /** @brief
  *
@@ -1755,4 +1755,102 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     }
 
     return ERR_NO;
+}
+
+ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint32_t ftp_len = 0;
+    uint8_t i, j;
+    uint8_t ucOffset = 0;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode, errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0...3] 操作ID
+        ucOffset = 4;
+        EchFtpInit(&pProto->info.ftp);
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            pProto->info.ftp.strNewVersion[i] = pbuff[ucOffset++]; 
+        }
+        //ftp地址长度
+        ftp_len = pbuff[ucOffset++];
+        //ftp地址
+        for (i = 0; i < ftp_len; i++)
+        {
+            pProto->info.ftp.strServer[i] = pbuff[ucOffset++];
+        }
+        //登录ftp账号
+        for (i = 0; i < 8; i++)
+        {
+            pProto->info.ftp.strUser[i] = pbuff[ucOffset++];
+        }
+        //登录ftp密码
+        for (i = 0; i < 8; i++)
+        {
+            pProto->info.ftp.strPassword[i] = pbuff[ucOffset++];
+        }
+        //软件包名称
+        for (i = 0; i < 10; i++)
+        {
+            pProto->info.ftp.strNewFileName[i] = pbuff[ucOffset++];
+        }
+        //存储FTP数据
+        errcode_ver = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strNewVersion), ParamTypeString);
+        errcode_ser = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strServer), ParamTypeString);
+        errcode_usr = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strUser), ParamTypeString);
+        errcode_pass = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strPassword), ParamTypeString);
+        errcode_fil = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strNewFileName), ParamTypeString);
+        if (errcode_ver == ERR_NO &&
+            errcode_ser == ERR_NO &&
+            errcode_usr == ERR_NO &&
+            errcode_pass == ERR_NO &&
+            errcode_fil == ERR_NO)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+        }
+        else
+        {
+            *psiRetVal = 1;
+            errcode = ERR_FILE_RW;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_SET_OTA]->ucRecvdOptData;
+    if (succ == 1)
+    {
+        pbuff[4] = 1;
+    }
+    else if (succ == 0)
+    {
+        pbuff[4] = 2;
+    }
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_SET_OTA, 0, 1);
+
+    return errcode;
 }
