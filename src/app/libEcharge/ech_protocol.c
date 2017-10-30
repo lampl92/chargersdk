@@ -15,6 +15,7 @@
 #include "stringName.h"
 #include "cfg_parse.h"
 #include "cJSON.h"
+#include "sysinit.h"
 
 
 
@@ -1981,7 +1982,7 @@ static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBod
     //[4...13] 软件版本号
     for(i = 0; i < 10; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pEVSE->info.strSoftVer[i]; //eg. 3.9.3135.17 in version.h
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = xSysconf.strVersion[i]; //eg. 3.9.3135.17 in version.h
     }
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值

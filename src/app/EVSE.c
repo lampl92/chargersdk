@@ -1080,7 +1080,6 @@ EVSE_t *EVSECreate(void)
         return NULL;
     }
     //pEVSE->info.pTemplSeg = UserListCreate();
-    strcpy(pEVSE->info.strSoftVer, FULLVERSION_STRING);
 
     pEVSE->status.ulArresterState = 0;
     pEVSE->status.ulKnockState    = 0;
