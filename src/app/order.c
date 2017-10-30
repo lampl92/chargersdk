@@ -80,33 +80,33 @@ static OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t 
 }
 ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e statOrderSeg)
 {
-    ChargePeriodStatus_t *pChargePeriodStatus;
-    OrderSegState_e statSegTime;
+    ChargePeriodStatus_t *pPeriodStatus;
+    OrderSegState_e statSegNow;
     uint8_t pos = 0;//当前时间在时段中的位置
     
-    statSegTime = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
+    statSegNow = JudgeSegState(now, pechProto, &pos);//获取当前所在状态
         ///*状态 或 时段 发生转换，处理上次时段内容*/
-    if (pCON->order.statOrderSeg != statSegTime || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
+    if (pCON->order.statOrderSeg != statSegNow || pCON->order.pos != pos) //相同状态时段转换只有在 0 点时刻发生
     {
-        pChargePeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pCON->order.pos]);
-        pChargePeriodStatus->tEndTime = now; //当前转换时间即上次结束时间
-        pCON->order.statOrderSeg = statSegTime;
+        pPeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pCON->order.pos]);
+        pPeriodStatus->tEndTime = now; //当前转换时间即上次结束时间
+        pCON->order.statOrderSeg = statSegNow;
         pCON->order.pos = pos;
-        return pChargePeriodStatus;//状态已转换，下面的没必要执行了
+        return pPeriodStatus;//状态已转换，下面的没必要执行了
     }
-    pChargePeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pos]);
-    if (pChargePeriodStatus->tStartTime > 0)
+    pPeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pos]);
+    if (pPeriodStatus->tStartTime > 0)
     {
-        pChargePeriodStatus->dPower = pCON->status.dChargingPower - pChargePeriodStatus->dStartPower;
+        pPeriodStatus->dPower = pCON->status.dChargingPower - pPeriodStatus->dStartPower;
     }
     else
     {
         //第一次进到这个时段
         pCON->order.pos = pos; //状态转换时已经赋过值了
-        pChargePeriodStatus->tStartTime = now;
-        pChargePeriodStatus->dStartPower = pCON->status.dChargingPower;
+        pPeriodStatus->tStartTime = now;
+        pPeriodStatus->dStartPower = pCON->status.dChargingPower;
     }
-    return pChargePeriodStatus;
+    return pPeriodStatus;
 }
 
 /** @brief 状态与时段判处理。状态：尖峰平谷  时段：状态中的5个时段
@@ -118,7 +118,7 @@ ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e stat
  */
 static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
 {
-    ChargePeriodStatus_t *pChargePeriodStatus;
+    ChargePeriodStatus_t *pPeriodStatus;
     uint8_t pos = 0;//当前时间在时段中的位置
     int i, j;
     double tmpTotalPower = 0; //用于计算尖峰平谷总电量
@@ -134,26 +134,27 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
         pCON->order.pos = pos;//获取当前所在时段
         break;
     case STATE_SEG_SHARP:
-        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHARP);
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHARP);
         break;
     case STATE_SEG_PEAK:
-        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_PEAK);
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_PEAK);
         break;
     case STATE_SEG_SHOULDER:
-        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHOULDER);
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_SHOULDER);
         break;
     case STATE_SEG_OFF_PEAK:
-        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_OFF_PEAK);
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_OFF_PEAK);
         break;   
     case STATE_SEG_DEFAULT:
-        pChargePeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_DEFAULT);
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_DEFAULT);
         break;
     default:
+        pPeriodStatus = PeriodUpdate(now, pCON, STATE_SEG_DEFAULT);
         break;
     }
     if(statOrder == STATE_ORDER_FINISH)
     {
-        pChargePeriodStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
+        pPeriodStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
     }
 
     /*2. 汇总时段*/
@@ -165,7 +166,7 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
         for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; j++)
         {
             tmpTotalPower += pCON->order.chargeSegStatus[i][j].dPower;
-            if(pCON->order.chargeSegStatus[i][j].tEndTime != 0) //表示已经结束的时段
+            if (pCON->order.chargeSegStatus[i][j].tEndTime != 0) //不为0表示时段已经结束
             {
                 tmpTotalTime += (pCON->order.chargeSegStatus[i][j].tEndTime - pCON->order.chargeSegStatus[i][j].tStartTime);
             }
