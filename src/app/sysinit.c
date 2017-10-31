@@ -120,8 +120,8 @@ void sys_Init(void)
     //f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
-    f_unlink(pathSysCfg);
-    f_unlink(pathFTPCfg);
+//    f_unlink(pathSysCfg);
+//    f_unlink(pathFTPCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
 

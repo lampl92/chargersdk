@@ -7,10 +7,14 @@
 #include "user_app.h"
 #include "taskcreate.h"
 #include "evse_define.h"
-
+#include "utils.h"
+#include "stringName.h"
+#include "cfg_parse.h"
 
 #include "FreeRTOS.h"
 #include "event_groups.h"
+
+#include "ff.h"
 
 #ifdef EVSE_DEBUG
 
@@ -843,6 +847,89 @@ DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
     return ret;
 }
 
+
+DR_MODEM_e modem_set_QFTPUSER(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPUSER=\"%s\"\r", pechProto->info.ftp.strUser);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+DR_MODEM_e modem_set_QFTPPASS(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPPASS=\"%s\"\r", pechProto->info.ftp.strPassword);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+DR_MODEM_e modem_set_QFTPOPEN(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPOPEN=\"%s\",%d\r", pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPOPEN", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_QFTPPATH(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPPATH=\"/%s/\"\r", pechProto->info.ftp.strNewVersion);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPPATH", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_QFTPGET(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPGET=\"%s\"\r", pechProto->info.ftp.strNewFileName);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_QFTPCLOSE(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPCLOSE\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPCLOSE", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_FTP(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    modem_set_QFTPUSER(pModem);
+    modem_set_QFTPPASS(pModem);
+    modem_set_QFTPOPEN(pModem);
+    modem_set_QFTPPATH(pModem);
+    ret = modem_set_QFTPGET(pModem);
+    return ret;
+}
 DR_MODEM_e modem_get_info(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -953,6 +1040,17 @@ void Modem_Poll(DevModem_t *pModem)
     DR_MODEM_e ret;
     int resp;
     int i;
+    
+    FIL f;
+    UINT bw;
+    FRESULT fres;
+    char filepath[64 + 1];
+    uint32_t crc32_calc, crc32_orig;
+    char ch_crc32[9] = { 0 };
+    ul2uc ul2ucCrc32;
+    
+    
+    uint32_t ulRecvFileSize = 0;
     while(1)
     {
         switch(pModem->state)
@@ -981,7 +1079,14 @@ void Modem_Poll(DevModem_t *pModem)
             ret = modem_set_PDP(pModem);
             if(ret == DR_MODEM_OK)
             {
-                pModem->state = DS_MODEM_TCP_OPEN;
+                if (pechProto->info.ftp.ucDownloadStart == 1)
+                {
+                    pModem->state = DS_MODEM_FTP_OPEN;
+                }
+                else
+                {
+                    pModem->state = DS_MODEM_TCP_OPEN;
+                }
             }
             else
             {
@@ -1163,6 +1268,89 @@ void Modem_Poll(DevModem_t *pModem)
             else
             {
                 pModem->state = DS_MODEM_TCP_DEACT_PDP;
+            }
+            break;
+        case DS_MODEM_FTP_OPEN:
+            ret = modem_set_FTP(pModem);
+            if (ret == DR_MODEM_OK)
+            {
+                pModem->state = DS_MODEM_FTP_GET;
+            }
+            break;
+        case DS_MODEM_FTP_GET:
+            sprintf(filepath, "system\\%s", pechProto->info.ftp.strNewFileName);
+            fres = f_open(&f, filepath, FA_CREATE_ALWAYS | FA_WRITE);
+            if (fres != FR_OK)
+            {
+                pModem->state = DS_MODEM_FTP_GET;//有待商榷
+                break;
+            }
+            while (1)
+            {
+                recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+                ulRecvFileSize += recv_len;
+                printf_safe("recv = %d\n", recv_len);                
+                printf_safe("total= %d\n", ulRecvFileSize);
+                if (strstr(tcp_client_recvbuf, "+QFTPGET:") != NULL)
+                {
+                    memset(tcp_client_recvbuf, 0, MAX_COMMAND_LEN);
+                    ulRecvFileSize = 0;
+                    taskENTER_CRITICAL();
+                    f_close(&f);
+                    taskEXIT_CRITICAL();
+                    pModem->state = DS_MODEM_FTP_CHECK;
+                    break;
+                }
+                else
+                {
+                    if (recv_len > 0)
+                    {
+                        taskENTER_CRITICAL();
+                        fres = f_write(&f, tcp_client_recvbuf, recv_len, &bw);
+                        taskEXIT_CRITICAL();
+                    }
+                }
+            }
+            break;
+        case DS_MODEM_FTP_CHECK:
+            for (i = 0; i < 8; i++)
+            {
+                ch_crc32[i] = pechProto->info.ftp.strNewFileName[i + 2];
+            }
+            StrToHex(ch_crc32, ul2ucCrc32.ucVal, strlen(ch_crc32));
+            crc32_orig = ntohl(ul2ucCrc32.ulVal);
+            GetFileCrc32(filepath, &crc32_calc);
+            printf_safe("crc32_calc = %x\n", crc32_calc);
+            printf_safe("crc32_orgi = %x\n", crc32_orig);
+            if (crc32_calc == crc32_orig)
+            {
+                taskENTER_CRITICAL();
+                f_unlink("system\\chargesdk.bin.new");
+                f_rename(filepath, "system\\chargesdk.bin.new");
+                taskEXIT_CRITICAL();
+                xSysconf.xUpFlag.chargesdk_bin = 1;
+                pechProto->info.ftp.ucDownloadStart = 0;
+                xSysconf.SetSysCfg(
+                    jnSysChargersdk_bin, 
+                    (void *)&(xSysconf.xUpFlag.chargesdk_bin), 
+                    ParamTypeU8);
+                pechProto->info.ftp.SetFtpCfg(
+                    jnFtpDownloadStart,       
+                    (void *)&(pechProto->info.ftp.ucDownloadStart), 
+                    ParamTypeU8);
+                NVIC_SystemReset();
+            }
+            else
+            {
+                pModem->state = DS_MODEM_FTP_REGET;
+                break;
+            }
+            break;
+        case DS_MODEM_FTP_REGET:
+            ret = modem_set_QFTPGET(pModem);
+            if (ret == DR_MODEM_OK)
+            {
+                pModem->state = DS_MODEM_FTP_GET;
             }
             break;
         case DS_MODEM_ERR:

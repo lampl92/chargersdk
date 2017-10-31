@@ -23,7 +23,7 @@
 /*---------------------------------------------------------------------------/
 / 任务栈大小
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskInit                   2048
+#define defSTACK_TaskInit                   (1024*10)
 #define defSTACK_TaskCLI                    (1024 * 50)
 #define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskTouch                  512

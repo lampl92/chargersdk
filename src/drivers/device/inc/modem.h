@@ -5,7 +5,7 @@
 #include "semphr.h"
 #include "userlib_queue.h"
 
-#define MAX_COMMAND_LEN                  1500  /* 最大命令长度 */
+#define MAX_COMMAND_LEN                  5000  /* 最大命令长度 */
 typedef enum
 {
     CPIN_OTHER,
@@ -72,7 +72,11 @@ typedef enum
 //    DS_MODEM_TRANSPARENT,
     DS_MODEM_TCP_OPEN,
     DS_MODEM_TCP_KEEP,
-    DS_MODEM_TCP_CLOSE
+    DS_MODEM_TCP_CLOSE,
+    DS_MODEM_FTP_OPEN,
+    DS_MODEM_FTP_GET,
+    DS_MODEM_FTP_REGET,
+    DS_MODEM_FTP_CHECK
 }ModemState_e;
 
 
