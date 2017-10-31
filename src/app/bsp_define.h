@@ -16,13 +16,13 @@
 #define bspUSART2_PreemptPriority       5
 #define bspUSART2_SubPriority           0
 
-#define bspUSART3_PreemptPriority       5
+#define bspUSART3_PreemptPriority       1
 #define bspUSART3_SubPriority           0
 
 #define bspUART4_PreemptPriority       5
 #define bspUART4_SubPriority           0
 
-#define bspUART5_PreemptPriority       5
+#define bspUART5_PreemptPriority       1
 #define bspUART5_SubPriority           0
 
 #define bspUART7_PreemptPriority       5
