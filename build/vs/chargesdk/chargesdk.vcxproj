@@ -571,8 +571,8 @@
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h" />
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\userlib\src\utils.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\autoip.h" />

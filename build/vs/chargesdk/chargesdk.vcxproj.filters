@@ -243,9 +243,6 @@
     <Filter Include="Source files\middlewares\userlib\src">
       <UniqueIdentifier>{f3253615-fa8d-4f4c-b6e6-970ebfb06ae0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\userlib\src">
-      <UniqueIdentifier>{0a42b53c-b932-4ebd-b992-18218c7dd59f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\net">
       <UniqueIdentifier>{e5cd4835-132d-4191-bd66-27f32af041b8}</UniqueIdentifier>
     </Filter>
@@ -2959,9 +2956,6 @@
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\src\utils.h">
-      <Filter>Header files\middlewares\userlib\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwipopts.h">
       <Filter>Header files\net\lwip-1.4.1\src\include</Filter>
     </ClInclude>
@@ -3906,6 +3900,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h">
       <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
