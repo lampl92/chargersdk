@@ -1127,7 +1127,7 @@ static void CONInit(void)
         THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
-	    //pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
+	    pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
         
 
         pListCON->Add(pListCON, pCON[i]);
@@ -1138,7 +1138,7 @@ void EVSEinit(void)
 	uint8_t str[17] = "2000000000000002";
 	
     pEVSE = EVSECreate();
-	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
+	    pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 

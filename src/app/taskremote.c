@@ -133,7 +133,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     int network_res = 0;
     
-    errcode = RemoteIF_RecvSetOTA(pechProto, &network_res);
+    errcode = RemoteIF_RecvSetOTA(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 1);
@@ -141,6 +141,12 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     else if (errcode == ERR_FILE_RW && network_res == 1)
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 0);
+    }
+    
+    errcode = RemoteIF_RecvReqOTA_DW(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        RemoteIF_SendReqOTA_DW(pEVSE, pProto, NULL);
     }
     return 1;
 }
