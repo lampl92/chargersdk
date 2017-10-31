@@ -86,4 +86,7 @@ ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *
 ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
 ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal);
 
+ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ);
+ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal);
+
 #endif

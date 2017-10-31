@@ -2507,7 +2507,6 @@ static int makeCmdReqOTA_DW(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
 static int makeCmdOTA_StartBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
-    uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
     int i;
     
@@ -2534,8 +2533,53 @@ static int makeCmdOTA_Start(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_OTA_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+static int makeCmdOTA_ResultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    int i;
+    char file_id[3] = { 0};
+    uint8_t succ = 2;
+    
+    pProto = (echProtocol_t *)pPObj;
+
+    pbuff = pProto->pCMD[ECH_CMDID_OTA_RESULT]->ucRecvdOptData;  // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+    //[0...9] 软件版本号
+    for (i = 0; i < 10; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pProto->info.ftp.strNewVersion[i];
+    }
+    //[10...19] 当前软件版本号
+    for (i = 0; i < 10; i++)
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = xSysconf.strVersion[i];
+    }
+    //[20] 升级结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[20];
+    //[21] 失败原因
+    if (pbuff[20] == 1)//成功
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;//0. 升级成功
+    }
+    else if (pbuff[20] == 2)//失败
+    {
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 3;//3. 其他错误
+    }
+    
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
+    
+    return 1;
+}
 static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdOTA_ResultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_OTA_RESULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)

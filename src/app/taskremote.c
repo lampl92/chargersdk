@@ -128,10 +128,35 @@ static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
     }
 }
 
+int CheckSysUpFlags(void)
+{
+    int succ = 2;
+
+    switch (xSysconf.xUpFlag.chargesdk_bin)
+    {
+    case 0://无需升级
+        succ = 0;
+        break;
+    case 1://待升级
+        succ = 0;
+        break;
+    case 2://升级成功
+        succ = 1;
+        break;
+    case 3://升级失败
+        succ = 2;
+        break;
+    default:
+        succ = 0;
+        break;
+    }
+    return succ;
+}
 static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode, errcode_sdt;
     int network_res = 0;
+    int succ;
     /*1. 平台下发升级命令*/
     errcode = RemoteIF_RecvSetOTA(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
@@ -161,6 +186,20 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     if (errcode == ERR_NO && network_res == 1)
     {
         RemoteIF_SendReqOTA_DW(pEVSE, pProto, NULL);
+    }
+    
+    /*升级结果*/
+    succ = CheckSysUpFlags();
+    if (succ != 0)
+    {
+        RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
+    }
+    errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        //happy time;
+        xSysconf.xUpFlag.chargesdk_bin = 0;
+        xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
     }
     return 1;
 }
