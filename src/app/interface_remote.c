@@ -1766,7 +1766,7 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
     uint8_t ucOffset = 0;
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
-    ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil, errcode_stat, errcode_sdt;
+    ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil, errcode_stat;
 
     errcode = ERR_NO;
     handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
@@ -1808,21 +1808,18 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
         }
         //存储FTP数据
         pProto->info.ftp.ucDownloadStatus = 1;
-        pProto->info.ftp.ucDownloadStart = 1;
         errcode_ver = pProto->info.ftp.SetFtpCfg(jnFtpNewVersion, (void *)(pProto->info.ftp.strNewVersion), ParamTypeString);
         errcode_ser = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strServer), ParamTypeString);
         errcode_usr = pProto->info.ftp.SetFtpCfg(jnFtpUsername, (void *)(pProto->info.ftp.strUser), ParamTypeString);
         errcode_pass = pProto->info.ftp.SetFtpCfg(jnFtpPassword, (void *)(pProto->info.ftp.strPassword), ParamTypeString);
         errcode_fil = pProto->info.ftp.SetFtpCfg(jnFtpNewFilename, (void *)(pProto->info.ftp.strNewFileName), ParamTypeString);
         errcode_stat = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStatus, (void *)&(pProto->info.ftp.ucDownloadStatus), ParamTypeU8);
-        errcode_sdt = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStart, (void *)&(pProto->info.ftp.ucDownloadStart), ParamTypeU8);
         if (errcode_ver == ERR_NO &&
             errcode_ser == ERR_NO &&
             errcode_usr == ERR_NO &&
             errcode_pass == ERR_NO &&
             errcode_fil == ERR_NO &&
-            errcode_stat == ERR_NO &&
-            errcode_sdt == ERR_NO)
+            errcode_stat == ERR_NO)
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
@@ -1918,6 +1915,58 @@ ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *
     pbuff[4] = pProto->info.ftp.ucDownloadStatus;
 
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REQ_OTA_DW, 0, 1);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint8_t ucOffset = 0;
+    int i;
+    uint8_t tmpVersion[10 + 1] = { 0 };
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_START, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        ucOffset = 0;
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            tmpVersion[i] = pbuff[ucOffset++]; 
+        }
+        if (strcmp(tmpVersion, pProto->info.ftp.strNewVersion) == 0)
+        {
+            errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_REMOTE_PARAM;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_START, 0, 1);
 
     return errcode;
 }

@@ -130,17 +130,31 @@ static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
 
 static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
-    ErrorCode_t errcode;
+    ErrorCode_t errcode, errcode_sdt;
     int network_res = 0;
-    
+    /*1. 平台下发升级命令*/
     errcode = RemoteIF_RecvSetOTA(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 1);
+        /*2. 充电桩上报进入升级状态*/
+        RemoteIF_SendOTA_Start(pEVSE, pProto, NULL);
     }
     else if (errcode == ERR_FILE_RW && network_res == 1)
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 0);
+    }
+    /*3. 平台回复充电桩进入升级状态, 之后重启进入*/
+    errcode = RemoteIF_RecvOTA_Start(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        pProto->info.ftp.ucDownloadStart = 1;
+        errcode_sdt = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStart, (void *)&(pProto->info.ftp.ucDownloadStart), ParamTypeU8);
+        if (errcode_sdt == ERR_NO)
+        {
+            HAL_NVIC_SystemReset();
+            return 1;//Goodbye :)
+        }
     }
     
     errcode = RemoteIF_RecvReqOTA_DW(pProto, &network_res);
