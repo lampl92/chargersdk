@@ -160,14 +160,7 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
     for(i = 0; i < Strlen / 2; i++)
     {
         strncpy((char *)hexbuff, src, 2);
-//        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
-//        {
         Hex[i] = strtol(hexbuff, NULL, 16);
-//        }
-//        else
-//        {
-//            Hex[i] = strtol(hexbuff, NULL, 10);
-//        }
         src += 2;
     }
 }
@@ -230,14 +223,18 @@ int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
     }
     fsize = f_size(&f);
     crc32_init(ulCrc32Table);
+    taskENTER_CRITICAL();
     res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+    taskEXIT_CRITICAL();
     while (br)
     {
         for (i = 0; i < br; i++)
         {
             CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
         }
+        taskENTER_CRITICAL();
         res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+        taskEXIT_CRITICAL();
     }
     *pulCrc32 = ~ulCrc32;
 
