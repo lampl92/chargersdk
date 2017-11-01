@@ -96,6 +96,13 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
                 jnSysChargersdk_bin);
     THROW_ERROR(defDevID_File,
                 errcode = GetSysCfgItem(jsSysObj,
+                                        jnSysChargersdk_bin_crc32,                  
+                                        (void *)&(pSysconf->xUpFlag.chargesdk_bin_crc32),
+                                        ParamTypeU32),
+                ERR_LEVEL_WARNING,
+                jnSysChargersdk_bin_crc32);
+    THROW_ERROR(defDevID_File,
+                errcode = GetSysCfgItem(jsSysObj,
                                         jnSysEvse_cfg,                  
                                         (void *)&(pSysconf->xUpFlag.evse_cfg),
                                         ParamTypeU8),

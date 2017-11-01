@@ -130,6 +130,7 @@ const uint8_t *strFtpCfg =
 const uint8_t *strSysCfg =
 "{\n \
     \"chargesdk_bin\" : 0,\n \
+    \"chargesdk_bin_crc32\" : 1901693291,\n \
     \"evse_cfg\" : 0,\n \
     \"protocol_cfg\" : 0,\n \
     \"sys_cfg\" : 0,\n \

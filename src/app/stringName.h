@@ -113,6 +113,7 @@
 
 /*sys.cfg*/
 #define jnSysChargersdk_bin    "chargesdk_bin"
+#define jnSysChargersdk_bin_crc32    "chargesdk_bin_crc32"
 #define jnSysEvse_cfg          "evse_cfg"
 #define jnSysProtocol_cfg      "protocol_cfg"
 #define jnSysSys_cfg           "sys_cfg"
