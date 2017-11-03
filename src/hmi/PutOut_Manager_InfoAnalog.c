@@ -210,10 +210,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF24_Font,GUI_BLACK,"交流电流:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7),&SIF24_Font,GUI_BLACK,"充电导引电压:");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8),&SIF24_Font,GUI_BLACK,"频    率:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"AC温度L:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"AC温度N:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"继电器L温度:");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"继电器N温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9),&SIF24_Font,GUI_BLACK,"输入端子L温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10),&SIF24_Font,GUI_BLACK,"输入端子N温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_11),&SIF24_Font,GUI_BLACK,"输出端子L温度:");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_12),&SIF24_Font,GUI_BLACK,"输出端子N温度:");
 
         //
         // Initialization of 'Edit'

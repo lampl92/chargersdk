@@ -209,8 +209,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "服务费");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "元/度");
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &SIF24_Font, GUI_BLACK, "手机支付请扫描二维码");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &SIF24_Font, GUI_BLACK, "刷卡支付请刷卡");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &SIF24_Font, GUI_BLACK, "充电请扫描二维码");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &SIF24_Font, GUI_BLACK, "充电请刷卡");
         
         hwinQR = WM_CreateWindowAsChild(120, 170, 200, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);
 //        WM_SetUserData(pMsg->hWin, &hwinQR, sizeof(hwinQR));
