@@ -144,9 +144,13 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     }
     pCON = CONGetHandle(0);//选择枪的时候获取pCON
     /**未进GoodID ,BadID和OweID状态时显示内容*/
-    if(pCON->status.xPlugState == UNPLUG)
+    if (pCON->status.xPlugState == UNPLUG)
     {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "请连接充电插头");
+    }
+    else if (pCON->status.xPlugState == PLUG)
+    {
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "车辆确认中");        
     }
     /**end of 未进GoodID ,BadID和OweID状态时显示内容*/
 

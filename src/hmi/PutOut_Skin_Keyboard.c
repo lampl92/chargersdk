@@ -5,6 +5,7 @@
 #include "stdlib.h"
 #include "pyinput.h"
 #include "xbffontcreate.h"
+#include "stringName.h"
 #include "WM.h"
 #include "BUTTON.h"
 #include "cfg_parse.h"
@@ -1021,6 +1022,10 @@ static void _cbBk(WM_MESSAGE * pMsg)
 static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
+    uint8_t tmpU8;
+    uint16_t tmpU16;
+    uint32_t tmpU32;
+    double tmpDouble;
     uint16_t i = 0;
     CON_t *pCon;
 
@@ -1057,79 +1062,60 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                //if(SetCONCfg(pEVSE->info.strSN,"EVSESN",result_input,ParamTypeString)== ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);   
                 break;
             case 21:
-                //if(SetCONCfg(pEVSE->info.ucTotalCON,"TotalCON",atoi(result_input),ParamTypeU8) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                tmpU8 = atoi(result_input);
+                pEVSE->info.SetEVSECfg(pEVSE, jnTotalCON, &tmpU8, ParamTypeU8);   
                 break;
             case 22:
-                //if(SetCONCfg(pCon->info.dVolatageLowerLimits,"VolatageLowerLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
                 break;
             case 23:
-               // if(SetCONCfg(pCon->info.dVolatageUpperLimits,"VolatageUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
                 break;
-            case 24:
+            case 24://电流下限 去掉
                 break;
-            case 25:
+            case 25://出场设置额定电流
+            
                 break;
             case 26:
-                //if(SetCONCfg(pCon->info.dACTempUpperLimits,"ACTempUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);                
                 break;
-            case 27:
+            case 27://背光时间
+                
                 break;
             case 28:
+            
                 break;
             case 29:
                 break;
-            case 30:
+            case 30://本机IP做显示 更改为服务器IP pechProto->info.strServerIP
+                //pModem->status.strLocIP;
                 break;
-            case 31:
+            case 31://ziwangyanma duqiao
                 break;
-            case 32:
+            case 32://wangguan dudiao
                 break;
-            case 33:
+            case 33://mac dudiao
                 break;
-            case 34:
+            case 34://
+                tmpU16 = (uint16_t)atoi(result_input);
+                pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
                 break;
-            case 35:
+            case 35://user name
+                pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
                 break;
-            case 36:
+            case 36://user passwd
+                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
                 break;
+            //user miyao
+            //pechProto->info.SetProtoCfg(pechProto, jnProtoKey, result_input, ParamTypeString);
+                
+            
         }
         break;
     }
@@ -1177,6 +1163,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:
+        bitclr(winCreateFlag, 2);
         WM_ShowWindow(htmpBK);
         WM_ShowWindow(htmpChild);
     break;
