@@ -242,8 +242,10 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     u8 eccstart = 0;    //第一个ECC值所属的地址范围
     u8 errsta = 0;
     u8 *p;
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
         //发送地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
@@ -328,8 +330,10 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
         {
             errsta = NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return errsta;  //成功
 }
 //读取NAND Flash的指定页指定列的数据(main区和spare区都可以使用此函数),并对比(FTL管理时需要)
@@ -346,8 +350,10 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
 #if USE_WAITRB
     u8 res = 0;
 #endif
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
         //发送地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
@@ -380,11 +386,15 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
         *NumByteEqual = i;                  //与CmpVal值相同的个数
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;   //成功
 }
 //在NAND一页中写入指定个字节的数据(main区和spare区都可以使用此函数)
@@ -400,9 +410,10 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
     u8 res = 0;
     u8 eccnum = 0;      //需要计算的ECC个数，每NAND_ECC_SECTOR_SIZE字节计算一个ecc
     u8 eccstart = 0;    //第一个ECC值所属的地址范围
-
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
         //发送地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
@@ -453,11 +464,15 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;//成功
 }
 //在NAND一页中的指定地址开始,写入指定长度的恒定数字
@@ -470,8 +485,10 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
 u8 NAND_WritePageConst(u32 PageNum, u16 ColNum, u32 cval, u16 NumByteToWrite)
 {
     u16 i = 0;
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
         //发送地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
@@ -487,11 +504,15 @@ u8 NAND_WritePageConst(u32 PageNum, u16 ColNum, u32 cval, u16 NumByteToWrite)
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;//成功
 }
 //将一页数据拷贝到另一页,不写入新数据
@@ -513,8 +534,10 @@ u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
     {
         return NSTA_ERROR;    //不在同一个plane内
     }
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
         //发送源页地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
@@ -547,11 +570,15 @@ u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //NAND未准备好
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;//成功
 }
 
@@ -578,8 +605,10 @@ u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *
     {
         return NSTA_ERROR;    //不在同一个plane内
     }
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
         //发送源页地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
@@ -654,11 +683,15 @@ u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;   //成功
 }
 //读取spare区中的数据
@@ -713,8 +746,10 @@ u8 NAND_EraseBlock(u32 BlockNum)
     {
         BlockNum <<= 6;
     }
+#if USE_FreeRTOS
     if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
+#endif
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE0;
         //发送块地址
         *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)BlockNum;
@@ -723,11 +758,15 @@ u8 NAND_EraseBlock(u32 BlockNum)
         *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE1;
         if (NAND_WaitForReady() != NSTA_READY)
         {
+#if USE_FreeRTOS
             xSemaphoreGive(xMutexNandHW);
+#endif
             return NSTA_ERROR;    //失败
         }
+#if USE_FreeRTOS
         xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;   //成功
 }
 //全片擦除NAND FLASH

@@ -30,12 +30,15 @@ int printf_safe(const char *format, ...)
                     (char const *) format,
                     v_args);
     va_end(v_args);
-
+#if USE_FreeRTOS
     if (xSemaphoreTake(xprintfMutex, 10) == pdPASS)
     {
+#endif
         xprintf("%s", buf_str);
+#if USE_FreeRTOS
         xSemaphoreGive(xprintfMutex);
     }
+#endif
 }
 
 

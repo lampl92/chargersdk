@@ -6,7 +6,6 @@
 /* Public define -------------------------------------------------------------*/
 #define STM32F4
 //#define STM32F0
-#define USE_FreeRTOS
 
 /* NVIC PreemptPriority ------------------------------------------------------*/
 
@@ -56,7 +55,7 @@
 /* CPU空闲时执行的函数 */
 //#define CPU_IDLE()        bsp_Idle()
 
-#ifdef USE_FreeRTOS
+#if USE_FreeRTOS
 #define DISABLE_INT()    taskENTER_CRITICAL()
 #define ENABLE_INT()     taskEXIT_CRITICAL()
 #else

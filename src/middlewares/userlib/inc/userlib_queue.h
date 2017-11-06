@@ -28,7 +28,9 @@ typedef struct _Queue
     int length;
     int front;
     int rear;
+#if USE_FreeRTOS
     SemaphoreHandle_t xHandleMutexQue;
+#endif
     QUERESULT (*isFull)(struct _Queue *q);
     QUERESULT (*EnElem)(struct _Queue *q, QUEUETYPE elem);
     QUERESULT (*isEmpty)(struct _Queue *q);

@@ -1,0 +1,2419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{6684e960-a95f-4547-b832-da07357f8c2b}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;txt</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{e06d518c-95c2-4140-827d-67f14dbd0700}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{91cd961e-2540-4200-8ae3-9a86f96bc5a6}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Make files">
+      <UniqueIdentifier>{04992dfd-727e-47db-ab36-ea0f2de2ab13}</UniqueIdentifier>
+      <Extensions>*.mak</Extensions>
+    </Filter>
+    <Filter Include="VisualGDB settings">
+      <UniqueIdentifier>{341e03ba-1a94-459b-85cb-777daa664f12}</UniqueIdentifier>
+      <Extensions>*.vgdbsettings</Extensions>
+    </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{9635b285-30d9-463a-8144-a962b880a032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files">
+      <UniqueIdentifier>{94b53759-2d52-4c1e-89de-11c61ebde725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\app">
+      <UniqueIdentifier>{63ee4faa-1457-45ee-b2dd-27b896c74370}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\app">
+      <UniqueIdentifier>{836a3545-7077-416d-b5e3-41517a534bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers">
+      <UniqueIdentifier>{54944d7d-00b6-4be1-8605-56cc2fc348ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\bsp">
+      <UniqueIdentifier>{c871852f-32d1-41b6-acfc-f09e6d189c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\bsp\inc">
+      <UniqueIdentifier>{5899a781-9061-4868-8704-728487f0a4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers">
+      <UniqueIdentifier>{994689ff-49eb-459a-ab8f-bcca825508c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\bsp">
+      <UniqueIdentifier>{dc56c3cf-9fb6-43eb-ad9a-3c3a7111c593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\bsp\src">
+      <UniqueIdentifier>{c62f01f4-b5b9-4007-876a-28c60dc0360f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\device">
+      <UniqueIdentifier>{1282b497-fe3d-4c26-aefb-265630786a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\device\inc">
+      <UniqueIdentifier>{639c10fa-409f-480c-ab8a-af8edd8bf871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\device">
+      <UniqueIdentifier>{1bc07c95-8dcc-42e9-a678-94ae7eec3895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\device\src">
+      <UniqueIdentifier>{8580eb9d-8803-4fca-a101-0b14788cd10e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal">
+      <UniqueIdentifier>{11e75a73-0a64-4570-a5b0-a110414030a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS">
+      <UniqueIdentifier>{7db6fc8a-fd2b-4237-8f80-c97a2b9697bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS\Device">
+      <UniqueIdentifier>{b963ff6f-679a-4129-bbe9-9e61d9fb548e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS\Device\ST">
+      <UniqueIdentifier>{6d32d56b-4c14-4c52-b9ec-634a5dcf146e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx">
+      <UniqueIdentifier>{abf9303c-7de4-4072-8a4d-bac0b1d7fc84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include">
+      <UniqueIdentifier>{8a3dd264-de17-4798-a7b2-8db3ffa74e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal">
+      <UniqueIdentifier>{02c68024-357e-4ee7-bf37-8f2592634e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS">
+      <UniqueIdentifier>{eb3a1001-abc0-42dc-92c1-3d2da8f78eb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS\Device">
+      <UniqueIdentifier>{e33e8520-dadb-4fce-8c8c-31a6602c6d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST">
+      <UniqueIdentifier>{f7e75075-22b1-4c80-9703-6af526cf019d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx">
+      <UniqueIdentifier>{46946bb5-10ab-4c3c-a76b-24df539abded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source">
+      <UniqueIdentifier>{dd7e94bf-07b2-40d1-8c14-ab8c18fb51eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates">
+      <UniqueIdentifier>{1cea8b2c-80a5-4b03-936d-6f4e1c2c8b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS\Include">
+      <UniqueIdentifier>{a2b078fe-9928-4a15-9a34-ae99eb556821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\CMSIS_RTOS">
+      <UniqueIdentifier>{51f3e5a9-6fff-4357-beb8-139e7e4756dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\STM32F4xx_HAL_Driver">
+      <UniqueIdentifier>{f220392c-1ffd-4eb8-9f22-c0107bf9f9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc">
+      <UniqueIdentifier>{899a4a69-ef57-41fe-826d-4f90941d365b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc\Legacy">
+      <UniqueIdentifier>{8cbec6f7-5729-4b3a-b523-2406b938fa91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\STM32F4xx_HAL_Driver">
+      <UniqueIdentifier>{d3c33736-3933-462e-83f7-a6457536fee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\drivers\hal\STM32F4xx_HAL_Driver\Src">
+      <UniqueIdentifier>{99313b10-5970-434b-bd7a-a8cacef2fbf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares">
+      <UniqueIdentifier>{364f47d0-8a63-45d9-9ef5-2a7ea6f36fcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares">
+      <UniqueIdentifier>{e60493da-773b-4751-b3f8-177f4b74739b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\AES">
+      <UniqueIdentifier>{509e5255-9bab-4537-86de-1b1bbda95c14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\cJSON">
+      <UniqueIdentifier>{4f8b36ac-817c-4a18-85ba-ac32a5e52496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\cJSON">
+      <UniqueIdentifier>{3c0b5f57-5847-4047-a75d-b780cea20a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\ezxml">
+      <UniqueIdentifier>{91ce6614-1daf-4662-9174-39952c1279a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\fatfs">
+      <UniqueIdentifier>{d81143a6-e66a-4844-b027-6ad10eab4808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\fatfs\diskdrv">
+      <UniqueIdentifier>{b5fa3da4-4bbb-45cd-9d1d-d4f8de10e6c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\fatfs\src">
+      <UniqueIdentifier>{24a70824-69d4-4e85-b019-4ebbc2014c1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\ff13a">
+      <UniqueIdentifier>{5e8cff05-a84c-476c-b8e2-4d59519cd701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\ff13a\source">
+      <UniqueIdentifier>{8700d00a-caad-43fd-97fd-87d434f20b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\ff13a">
+      <UniqueIdentifier>{b3aafa88-b7d1-468c-aa8b-d17652415c18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\ff13a\source">
+      <UniqueIdentifier>{2a24c231-6119-405b-8518-a144c5964064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\gdsl-1.8">
+      <UniqueIdentifier>{f5e7dab6-4179-4683-a89e-f30beddad033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\gdsl-1.8\src">
+      <UniqueIdentifier>{cabf7678-5a27-4ef2-98dd-42497d5fd318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\gdsl-1.8\src\examples">
+      <UniqueIdentifier>{75077383-5758-467f-bba4-0a852663a222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\jsmn">
+      <UniqueIdentifier>{57e5d8b1-6fa0-4f98-afd2-a8cc5da76cc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\jsmn\test">
+      <UniqueIdentifier>{e40df10a-d05a-4cc7-ad2c-edab046ec238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\lua">
+      <UniqueIdentifier>{233c8e21-bf8a-4b24-89b0-70e04cc089dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\lua\src">
+      <UniqueIdentifier>{d463d85f-db0f-4ba0-9fe1-03fdd1c0180c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\minunit">
+      <UniqueIdentifier>{85235f9d-258e-4cdf-8d9d-7e7cb13737a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\sqlite">
+      <UniqueIdentifier>{dbb04520-ef69-4edb-93ff-d119cb4c8c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin">
+      <UniqueIdentifier>{44b5a761-057d-472f-8224-44ef6eb17b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\BMP">
+      <UniqueIdentifier>{62a40190-25a2-4c89-a7a9-fddf70fd38b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\Config">
+      <UniqueIdentifier>{cffdad10-d055-470b-9d27-8f32c098678a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\Demo">
+      <UniqueIdentifier>{dba72d04-afb8-422c-821f-5bc7b4cb0bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\inc">
+      <UniqueIdentifier>{33aa7f13-ac4d-4b5a-b814-c33fc48acca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\SIF">
+      <UniqueIdentifier>{53d5f544-66ce-4ce6-a6eb-eddc56ea7d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\XBF">
+      <UniqueIdentifier>{5f5f347f-cefc-4d70-92c4-b30180ea2429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\tiny-AES128-C">
+      <UniqueIdentifier>{11dadd8a-3e8a-4c9d-a990-21216f1ca87a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\tinysh">
+      <UniqueIdentifier>{bf898b22-e9cf-4be4-a7da-d7247ffe24c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\tinysh">
+      <UniqueIdentifier>{b45d442e-b835-4ba2-9730-91edb3d18c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\userlib">
+      <UniqueIdentifier>{34509bb3-d996-4549-80be-bb13e6b7daef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\userlib\inc">
+      <UniqueIdentifier>{7435eca3-852f-4e04-b5c5-c1a37a613fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\userlib">
+      <UniqueIdentifier>{175ff9ac-7142-48ff-bb86-a9363c678ada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\userlib\src">
+      <UniqueIdentifier>{16de4caa-abf4-4bb0-825a-090d1d3cfe44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os">
+      <UniqueIdentifier>{20c57a7d-964a-406e-8359-166068cf3c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os">
+      <UniqueIdentifier>{307d3326-d719-4057-b0a1-dcd6993aefb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS">
+      <UniqueIdentifier>{67671578-f829-40d3-9df0-73a3a4728ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS\Source">
+      <UniqueIdentifier>{3f99e1b1-eeda-4459-b0a4-fa213100d864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS">
+      <UniqueIdentifier>{c616a2f0-6528-47f9-994c-865edfe56395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source">
+      <UniqueIdentifier>{ed7ad9b0-0017-4df0-96e4-f92dff279d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\include">
+      <UniqueIdentifier>{5c06ae69-67bf-4f49-88a1-b77bb95cdd1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS\Source\portable">
+      <UniqueIdentifier>{620bb3d3-9d43-453f-8dcd-8315ec8bad14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable">
+      <UniqueIdentifier>{281a2223-a5c5-427f-a544-b8e6058ab8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC">
+      <UniqueIdentifier>{8a8f00b3-2907-4d3c-85ad-f208f045e7bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS">
+      <UniqueIdentifier>{466fb85d-642b-45e6-8f49-5948f0ce7ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\common">
+      <UniqueIdentifier>{9ae085aa-4cab-4f58-96aa-dddbfe7fa9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186">
+      <UniqueIdentifier>{527c35f0-12a4-4e6b-97b2-c5fcd8b4f668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC">
+      <UniqueIdentifier>{d222b54d-b1bd-4008-a7f5-1d833f308ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS">
+      <UniqueIdentifier>{1ce8bae1-820f-42c7-9388-2508686c3ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\ARM_CM4F">
+      <UniqueIdentifier>{c74911dc-e45b-48d9-8e17-34b0b3e1e1ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4">
+      <UniqueIdentifier>{99a8cabd-0939-4944-b36c-9f22f39390e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\MSP430X">
+      <UniqueIdentifier>{0a49d26c-b6aa-464d-ad3a-4ca375596da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior">
+      <UniqueIdentifier>{990c69da-a484-45ed-806c-14b5682eb410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1">
+      <UniqueIdentifier>{cc70ee28-6d36-4e6e-9cc7-2edc6b286d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2">
+      <UniqueIdentifier>{cf99d234-7c2f-4e13-9bfa-c03e06d4860f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\HCS12">
+      <UniqueIdentifier>{53527c26-a5bb-4825-9b07-cd26d7da7414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS\Source\portable\GCC">
+      <UniqueIdentifier>{b77660e9-544f-483d-a8bd-3a14b72b9a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC">
+      <UniqueIdentifier>{07d890bb-95e0-40de-8009-c740fdd1eef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008">
+      <UniqueIdentifier>{01e7d1d5-3394-4ed7-88a7-237ac6d67a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S">
+      <UniqueIdentifier>{dccbeb3c-7bb7-448d-bbb5-ef5013cf07cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000">
+      <UniqueIdentifier>{ed06718b-96e3-494c-a14c-0d017dea2b82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx">
+      <UniqueIdentifier>{b1724d2b-5eb3-4565-a481-0877a5ff5148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT">
+      <UniqueIdentifier>{7b65a4f2-a382-48d1-bbfd-1853642e2bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA9">
+      <UniqueIdentifier>{7e295dfb-84bd-44f0-9569-ffd81065ddc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM0">
+      <UniqueIdentifier>{53a318e3-09be-4658-9314-ac3fec3428f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3">
+      <UniqueIdentifier>{4b308861-cc73-42ab-96e7-66736495bc37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU">
+      <UniqueIdentifier>{ab8b6f0f-36db-4200-bdee-34cfdc3bd439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F">
+      <UniqueIdentifier>{7d2f5f58-3b1d-4ebf-804e-d4a0eb5e7b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F">
+      <UniqueIdentifier>{de1f2fe2-7860-4bd4-aa90-7abc106d99c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU">
+      <UniqueIdentifier>{a05b69fd-029a-4108-8841-330a77777d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7">
+      <UniqueIdentifier>{99da1c1a-a1c6-4ffa-8b63-c9910c3cd996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1">
+      <UniqueIdentifier>{184ba83d-67b2-46da-9516-beb7ce2ccfd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CR5">
+      <UniqueIdentifier>{92cf13dc-120e-4dea-82da-2871f5d22f90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC">
+      <UniqueIdentifier>{0c13127a-87ce-4357-be1a-05508324b285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ATMega323">
+      <UniqueIdentifier>{a7d4b010-c546-498f-86c1-f7d01a10bc9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\AVR32_UC3">
+      <UniqueIdentifier>{8ad8266e-b6f4-4650-a093-07e4564078e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ColdFire_V2">
+      <UniqueIdentifier>{95c584db-7291-43a1-8093-0f745d424632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3">
+      <UniqueIdentifier>{2d7b9710-ff20-43a0-9ae4-f37527394992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\H8S2329">
+      <UniqueIdentifier>{4d987c28-5fb3-4e34-8376-bf53d43ac8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\HCS12">
+      <UniqueIdentifier>{33ea7d85-7003-469a-9c5b-385a7a603381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat">
+      <UniqueIdentifier>{c56eb0af-4c9d-4ed5-97bf-c35e8c84b881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MCF5235">
+      <UniqueIdentifier>{c6fcca4b-3742-4261-9c3b-eca9f1ffbd4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlaze">
+      <UniqueIdentifier>{45ecdc59-32da-41b2-8fc6-3a04faf63cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8">
+      <UniqueIdentifier>{ad4fe2cb-e694-4837-b386-4cc6bac5247d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9">
+      <UniqueIdentifier>{f3d29bf7-ceea-4c2f-ba30-8a5a49be293c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MSP430F449">
+      <UniqueIdentifier>{0404e05b-8d28-499f-be47-0587806be2f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\NiosII">
+      <UniqueIdentifier>{63237b03-5b19-4307-8019-5498592f3c8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx">
+      <UniqueIdentifier>{ab143c86-7fa9-4c7d-85d8-21157caf80e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx">
+      <UniqueIdentifier>{96d5a9f9-04fb-4c5f-a592-621bb28afe24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RL78">
+      <UniqueIdentifier>{e6005394-21db-4bad-a629-620a969749a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX100">
+      <UniqueIdentifier>{01ef7ba8-79cf-4cfb-9347-cb539ec90d68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX600">
+      <UniqueIdentifier>{3d1c588c-b494-4925-ac8c-d540d2dfddc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX600v2">
+      <UniqueIdentifier>{659dbfe2-8bc5-4bf3-8323-74c385778f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\STR75x">
+      <UniqueIdentifier>{b46c3468-b79d-456a-8141-e67e74db2a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\TriCore_1782">
+      <UniqueIdentifier>{814e1cb1-426e-4891-8b16-91cb16298a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR">
+      <UniqueIdentifier>{9e484b93-5411-4bb2-b15e-3ca544305387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\78K0R">
+      <UniqueIdentifier>{c534f6ae-dcca-4cb5-a1f6-a8df7349244f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC">
+      <UniqueIdentifier>{7820848a-f4d0-4f39-826e-e10c5fd2dbe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9">
+      <UniqueIdentifier>{ff950ac0-d5d8-4b0e-b6b8-e818392d5a9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM0">
+      <UniqueIdentifier>{e6d531c2-f685-4d14-833e-6aa84204e329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM3">
+      <UniqueIdentifier>{14518793-889f-423d-bcae-e7ae537e4d88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM4F">
+      <UniqueIdentifier>{e15e437b-ceb9-4315-83c3-711be16aae23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7">
+      <UniqueIdentifier>{a030c187-74e9-44a5-828b-ed1e68807da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1">
+      <UniqueIdentifier>{9f46e9df-ddc6-4b3e-9cf6-c3fc910b3703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC">
+      <UniqueIdentifier>{eff8cb18-6bcf-4f88-b33d-642652d208d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ATMega323">
+      <UniqueIdentifier>{847accb4-d414-41e2-b33a-91a3317d53bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64">
+      <UniqueIdentifier>{00aa14c1-2ba1-442a-8198-143da5450d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE">
+      <UniqueIdentifier>{e30367d6-59fb-4570-9a45-4ff0927c04a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AVR32_UC3">
+      <UniqueIdentifier>{1f156dcf-4550-4ad0-8c0c-205eda3e0e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\LPC2000">
+      <UniqueIdentifier>{dc048e14-a886-4b53-984d-59da6f18f3a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\MSP430">
+      <UniqueIdentifier>{0cecd7ac-9070-481c-b21d-ff85d2baa623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\MSP430X">
+      <UniqueIdentifier>{dac014df-83bb-46ff-9e3f-7e5967a6d880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RL78">
+      <UniqueIdentifier>{37ea112a-f876-439b-a484-fe474fcdac58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RX100">
+      <UniqueIdentifier>{a5ff285a-c26c-4c49-b93c-f32175dbbef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RX600">
+      <UniqueIdentifier>{e5932b66-ad2a-49b9-a054-c6aa35e823da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RXv2">
+      <UniqueIdentifier>{4196f342-67d8-4cbe-bca1-f174435977ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR71x">
+      <UniqueIdentifier>{073084f7-088c-4a74-b3d5-7ff597e0558d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR75x">
+      <UniqueIdentifier>{e75586b5-e644-49f6-ad59-097dca89a935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR91x">
+      <UniqueIdentifier>{a6b3cbd3-7cd0-4f6f-a331-e00061bd6c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\V850ES">
+      <UniqueIdentifier>{07ee52a8-df9e-44a9-9435-cfe21b86ce27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\os\FreeRTOS\Source\portable\MemMang">
+      <UniqueIdentifier>{67df81ec-05b6-4095-ace3-1ada12472bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MikroC">
+      <UniqueIdentifier>{df937254-3922-43a2-9d29-3ba7c19e5b0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F">
+      <UniqueIdentifier>{6d6fb1ce-a46e-4791-8194-66e56c082626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB">
+      <UniqueIdentifier>{6911365f-b4d5-457b-b778-23ad81697933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F">
+      <UniqueIdentifier>{581d95ec-2627-4aed-b4e1-817dbbb1bad7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC">
+      <UniqueIdentifier>{6f232e86-1e40-4e29-8603-87c083d1d84f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx">
+      <UniqueIdentifier>{aa4f1344-dc69-4917-849e-5344c8ec7fd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX">
+      <UniqueIdentifier>{160a59ac-74a2-4c22-96cf-e140679bc3ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ">
+      <UniqueIdentifier>{4e8680da-55c3-4271-9d13-469dde95dccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\MSVC-MingW">
+      <UniqueIdentifier>{a8b47ec1-0d2b-40c1-b5f0-31fd03e550ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom">
+      <UniqueIdentifier>{253e96c7-ffcb-46bf-8f72-08be11a03a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS">
+      <UniqueIdentifier>{aed8944f-d0db-476e-b4d5-f84246f063cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common">
+      <UniqueIdentifier>{69011a21-173a-41c5-8a4e-1f9b754f973d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186">
+      <UniqueIdentifier>{70125213-56f4-439e-bda1-7cb43300bb51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC">
+      <UniqueIdentifier>{f541dd4c-4af7-479b-af6a-ed1c5769ce21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm">
+      <UniqueIdentifier>{241b1f02-8623-4106-a9e0-8abc32ec093b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE">
+      <UniqueIdentifier>{7ff0386a-ba1d-459f-806f-e03e9311da39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested">
+      <UniqueIdentifier>{c4df657e-aec3-4074-b7ec-9b780556b355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small">
+      <UniqueIdentifier>{3380525f-3651-414d-8520-fe757907bb84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas">
+      <UniqueIdentifier>{ddc56ac2-5db7-4a2b-af3d-f2726de46d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX100">
+      <UniqueIdentifier>{9a14007e-c656-41ba-aaab-850179bc7550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX200">
+      <UniqueIdentifier>{bdb29ea7-9123-45ae-b7c3-4c12b6ba78b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX600">
+      <UniqueIdentifier>{6cb264ad-f731-43d3-90e7-adff29e1b33d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX600v2">
+      <UniqueIdentifier>{ecd163d7-3d20-4be3-b4f6-5e29c07dae18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU">
+      <UniqueIdentifier>{b5a80960-1e4e-4726-b82f-c97d9be236d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Rowley">
+      <UniqueIdentifier>{c1438ae5-acef-4cac-9f63-638069bc08ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449">
+      <UniqueIdentifier>{98e294cb-3042-48e8-be56-07a6233ac3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS">
+      <UniqueIdentifier>{73809e89-65b5-4833-b550-6b003db2a958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx">
+      <UniqueIdentifier>{9978635a-7163-44f7-8e48-3b719216a280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CA9">
+      <UniqueIdentifier>{2ed3901f-86ee-4b48-95d9-d6017553c6d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM0">
+      <UniqueIdentifier>{152db57e-b33d-4ad9-ac2d-be1e280d7419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM3">
+      <UniqueIdentifier>{143a4807-fef5-45ca-8ef2-0f9c2dfb6976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F">
+      <UniqueIdentifier>{24c58853-bad7-40cf-9e9d-4c9932426e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU">
+      <UniqueIdentifier>{9215d126-3073-4217-ae2f-defd3eb68cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7">
+      <UniqueIdentifier>{0a9cc2c6-5f32-4fd3-b68b-18a545c90cf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1">
+      <UniqueIdentifier>{7e6c172d-2dd3-49d5-8b8f-6f9768995437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\SDCC">
+      <UniqueIdentifier>{d596c6a5-a4a5-4d11-bfdf-aea5eaac2825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\SDCC\Cygnal">
+      <UniqueIdentifier>{7e670018-2157-4ab0-87e4-7330b92c9299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune">
+      <UniqueIdentifier>{0a005367-b1c1-45ff-8de2-08ffd68b62d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune\MB91460">
+      <UniqueIdentifier>{60289a7d-7bf7-4178-b16b-78a1e3b9e2bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune\MB96340">
+      <UniqueIdentifier>{a687ec6f-0fad-4c06-8c32-9760c3dd6d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Tasking">
+      <UniqueIdentifier>{dd097ffa-b5cf-415e-ba76-7858fb2d9a46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F">
+      <UniqueIdentifier>{681503cf-537f-49b0-b8cf-b8819b56921a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC">
+      <UniqueIdentifier>{aaf90715-4ade-4d3d-99ff-134dc0aa8cb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC\PIC18">
+      <UniqueIdentifier>{a2fc23f0-0df4-4f33-9e28-ead531c42f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\bootldr">
+      <UniqueIdentifier>{3a209f14-c5ff-4561-9411-991498001f32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\bootldr">
+      <UniqueIdentifier>{3918cb77-2a80-4c38-8080-fd2b4fe8880a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+    <None Include="debug.mak">
+      <Filter>Make files</Filter>
+    </None>
+    <None Include="bootldr-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="release.mak">
+      <Filter>Make files</Filter>
+    </None>
+    <None Include="bootldr-Release.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="stm32.mak">
+      <Filter>Make files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="stm32.xml">
+      <Filter>VisualGDB settings</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\app\cfg_parse.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\cfg_sys.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\errorcode.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\stringName.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskOTA.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
+      <Filter>Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c">
+      <Filter>Source files\middlewares\cJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\00history.txt">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\00readme.txt">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\diskio.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffsystem.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffunicode.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff_ex.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.c">
+      <Filter>Source files\middlewares\ff13a\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c">
+      <Filter>Source files\middlewares\tinysh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\croutine.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\event_groups.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\list.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\queue.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\readme.txt">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\tasks.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c">
+      <Filter>Source files\os\FreeRTOS\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c">
+      <Filter>Source files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
+      <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bootldr\ldr_taskcreate.c">
+      <Filter>Source files\bootldr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bootldr\ldr_bsp.c">
+      <Filter>Source files\bootldr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bootldr\ldr_main.c">
+      <Filter>Source files\bootldr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bootldr\ldr_sysinit.c">
+      <Filter>Source files\bootldr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chargesdk\startup_stm32f429xx.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\app\bsp_define.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\cfg_order.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\cfg_parse.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\cfg_sys.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\connector.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\connector_privType.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\errorcode.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\EVSE.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_config.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_define.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_globals.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\EVSE_privType.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\factorycfg.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\includes.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\interface.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\log_evse.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\order.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\stm32f4xx_it.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\stringName.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\sysinit.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\taskcreate.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\taskOTA.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\timercallback.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\version.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_ftl.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_hw.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_sdram.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_timer.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\led_control.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\lis2dh.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\malloc.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\myiic.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\ST_LIS2DH12.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\user_app.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\buzzer.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\card_m1.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\esp8266.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\gprs_m26.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\lcd_ATK7016.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\led.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\modem.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\RFIDReader_mt626.h">
+      <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\stm32f429xx.h">
+      <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h">
+      <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h">
+      <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\arm_common_tables.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\arm_const_structs.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\arm_math.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\cmsis_armcc.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\cmsis_armcc_V6.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\cmsis_gcc.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cm0.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cm0plus.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cm3.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cm4.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cm7.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cmFunc.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cmInstr.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_cmSimd.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_sc000.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Include\core_sc300.h">
+      <Filter>Header files\drivers\hal\CMSIS\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.h">
+      <Filter>Header files\drivers\hal\CMSIS_RTOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_can.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cec.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_conf.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_conf_template.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dfsdm.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma2d.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dsi.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_eth.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_irda.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_lptim.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nand.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nor.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pccard.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_qspi.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rng.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sd.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sdram.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_smartcard.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spdifrx.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sram.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_wwdg.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_adc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_bus.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_cortex.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_crc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dac.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dma.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_dma2d.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_exti.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fmc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fsmc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_gpio.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_i2c.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_iwdg.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_lptim.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_pwr.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rcc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rng.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_rtc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_sdmmc.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_spi.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_system.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_tim.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usart.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_utils.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_wwdg.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32_assert_template.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h">
+      <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\aes.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\aesopt.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\aestab.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\aes_via_ace.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\brg_endian.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\AES\brg_types.h">
+      <Filter>Header files\middlewares\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h">
+      <Filter>Header files\middlewares\cJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h">
+      <Filter>Header files\middlewares\cJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ezxml\ezxml.h">
+      <Filter>Header files\middlewares\ezxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.h">
+      <Filter>Header files\middlewares\fatfs\diskdrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.h">
+      <Filter>Header files\middlewares\fatfs\diskdrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\usbh_diskio.h">
+      <Filter>Header files\middlewares\fatfs\diskdrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\diskio.h">
+      <Filter>Header files\middlewares\fatfs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff.h">
+      <Filter>Header files\middlewares\fatfs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ffconf.h">
+      <Filter>Header files\middlewares\fatfs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff_ex.h">
+      <Filter>Header files\middlewares\fatfs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\integer.h">
+      <Filter>Header files\middlewares\fatfs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\diskio.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ffconf.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff_ex.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\integer.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h">
+      <Filter>Header files\middlewares\ff13a\source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\acconfig.h">
+      <Filter>Header files\middlewares\gdsl-1.8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\config.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_2darray.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_bstree.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_hash.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_heap.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_interval_heap.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_macros.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_rbtree.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_sort.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_stack.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_types.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_bintree.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_bstree.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_integers.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src\examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h">
+      <Filter>Header files\middlewares\gdsl-1.8\src\examples</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\jsmn\jsmn.h">
+      <Filter>Header files\middlewares\jsmn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\test.h">
+      <Filter>Header files\middlewares\jsmn\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\jsmn\test\testutil.h">
+      <Filter>Header files\middlewares\jsmn\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lapi.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lauxlib.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lcode.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lctype.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\ldebug.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\ldo.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lfunc.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lgc.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\llex.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\llimits.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lmem.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lobject.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lopcodes.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lparser.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lprefix.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lstate.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lstring.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\ltable.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\ltm.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lua.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lua.hpp">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\luaconf.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lualib.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lundump.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lvm.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\lua\src\lzio.h">
+      <Filter>Header files\middlewares\lua\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
+      <Filter>Header files\middlewares\minunit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\sqlite\sqlite3.h">
+      <Filter>Header files\middlewares\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\sqlite\sqlite3ext.h">
+      <Filter>Header files\middlewares\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h">
+      <Filter>Header files\middlewares\STemWin\BMP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_LTDC.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_Template.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\LCDConf.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_ATK_7016.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Demo\GUIDEMO.h">
+      <Filter>Header files\middlewares\STemWin\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\BUTTON.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\BUTTON_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\CALENDAR.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\CHECKBOX.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\CHECKBOX_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\CHOOSECOLOR.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\CHOOSEFILE.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\DIALOG.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\DIALOG_Intern.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\DROPDOWN.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\DROPDOWN_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\EDIT.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\EDIT_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\FRAMEWIN.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\FRAMEWIN_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\Global.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GRAPH.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GRAPH_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_DCache.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_DCache_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Dist.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_FlexColor.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_FlexColor_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin_Opt_16.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin_Opt_24.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin_Opt_32.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin_Opt_8.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Lin_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_NoOpt_1_8.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_Template.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_TemplateI.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIDRV_TemplateI_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUIMTDRV_TangoC32.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUITDRV_ADS7846.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_ARRAY.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_ARRAY_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_BMP_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_ConfDefaults.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_Debug.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_FontIntern.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_GCache_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_GIF_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_HOOK.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_JPEG_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_SetOrientation.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_SetOrientationCX.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_SIM_Win32.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_SPRITE_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_Type.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_Version.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI_VNC.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI__BiDi2_Brackets_800.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\GUI__BiDi2_Types_800.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\HEADER.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\HEADER_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\ICONVIEW.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\ICONVIEW_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\IMAGE.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\IMAGE_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\IP_FS.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\KNOB.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\KNOB_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LCD.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LCD_ConfDefaults.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LCD_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LCD_Protected.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LCD_SIM.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTBOX.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTBOX_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTVIEW.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTVIEW_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTWHEEL.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\LISTWHEEL_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MENU.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MENU_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MESSAGEBOX.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MULTIEDIT.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MULTIPAGE.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\MULTIPAGE_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\PROGBAR.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\PROGBAR_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\RADIO.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\RADIO_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SCROLLBAR.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SCROLLBAR_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SEGGER.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SLIDER.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SLIDER_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SPINBOX.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SPINBOX_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SWIPELIST.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\SWIPELIST_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\TEXT.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\TEXT_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\TREEVIEW.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\TREEVIEW_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WIDGET.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WINDOW_Private.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM_GUI.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\inc\WM_Intern.h">
+      <Filter>Header files\middlewares\STemWin\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h">
+      <Filter>Header files\middlewares\STemWin\SIF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.h">
+      <Filter>Header files\middlewares\STemWin\XBF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\aes.h">
+      <Filter>Header files\middlewares\tiny-AES128-C</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.h">
+      <Filter>Header files\middlewares\tiny-AES128-C</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h">
+      <Filter>Header files\middlewares\tinysh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
+      <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOSConfig.h">
+      <Filter>Header files\os</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\deprecated_definitions.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\event_groups.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\FreeRTOS.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\list.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\mpu_prototypes.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\mpu_wrappers.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\portable.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\projdefs.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\queue.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\semphr.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\StackMacros.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\task.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\timers.h">
+      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\common\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186\prtmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC\prtmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\MSP430X\data_model.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\MSP430X</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\MSP430X\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\MSP430X</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\HCS12\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\HCS12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\AT91SAM7X256.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\ioat91sam7x256.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\lib_AT91SAM7X256.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CA9\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM0\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CR5\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CR5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ATMega323\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ATMega323</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\AVR32_UC3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\AVR32_UC3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ColdFire_V2\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ColdFire_V2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\H8S2329\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\H8S2329</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\HCS12\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\HCS12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\IA32_flat\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\IA32_flat\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MCF5235\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MCF5235</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlaze\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlaze</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MSP430F449\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MSP430F449</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\NiosII\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\NiosII</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx\FPU_Macros.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx\FPU_Macros.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RL78\isr_support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RL78</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RL78\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RL78</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX100\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX100</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX600\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX600</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX600v2\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX600v2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\STR75x\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\STR75x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\TriCore_1782\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\TriCore_1782</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\78K0R\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\78K0R</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\78K0R\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\78K0R</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC\portASM.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA9\portASM.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA9\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM0\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ATMega323\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ATMega323</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7S64.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7S64_inc.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X128.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X128_inc.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X256.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X256_inc.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7S64.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7X128.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7X256.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AVR32_UC3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AVR32_UC3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\LPC2000\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\LPC2000</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\LPC2000\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\LPC2000</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430X\data_model.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430X</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430X\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430X</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RL78\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RL78</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RL78\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RL78</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RX100\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RX100</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RX600\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RX600</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RXv2\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RXv2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR71x\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR71x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR71x\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR71x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR75x\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR75x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR75x\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR75x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR91x\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR91x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR91x\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR91x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\V850ES\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\V850ES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\V850ES\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\V850ES</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC18F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC18F\stdio.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ\ISR_Support.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MSVC-MingW\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\MSVC-MingW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX100\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX100</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX200\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX200</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX600\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX600</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX600v2\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX600v2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Rowley\MSP430F449\portasm.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Rowley\MSP430F449\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CA9\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CA9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM0\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM3\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\SDCC\Cygnal\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\SDCC\Cygnal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Softune\MB91460\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Softune\MB91460</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Softune\MB96340\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Softune\MB96340</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\addFreeRTOS.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
+      <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

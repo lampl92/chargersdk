@@ -209,6 +209,9 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
+#ifndef __OPTIMIZE__
+#define __OPTIMIZE__ 1
+#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -256,6 +259,9 @@
 #endif
 #ifndef __SIZEOF_POINTER__
 #define __SIZEOF_POINTER__ 4
+#endif
+#ifndef NDEBUG
+#define NDEBUG 1
 #endif
 #ifndef __GCC_ATOMIC_CHAR16_T_LOCK_FREE
 #define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
@@ -329,6 +335,9 @@
 #ifndef __ULFRACT_MIN__
 #define __ULFRACT_MIN__ 0.0ULR
 #endif
+#ifndef RELEASE
+#define RELEASE 1
+#endif
 #ifndef __ARM_PCS_VFP
 #define __ARM_PCS_VFP 1
 #endif
@@ -361,9 +370,6 @@
 #endif
 #ifndef __BIGGEST_ALIGNMENT__
 #define __BIGGEST_ALIGNMENT__ 8
-#endif
-#ifndef USE_HAL_DRIVER
-#define USE_HAL_DRIVER 1
 #endif
 #ifndef __STDC_UTF_16__
 #define __STDC_UTF_16__ 1
@@ -538,9 +544,6 @@
 #ifndef __FLT_MIN_10_EXP__
 #define __FLT_MIN_10_EXP__ (-37)
 #endif
-#ifndef OS_SUPPORT
-#define OS_SUPPORT 1
-#endif
 #ifndef __LACCUM_MIN__
 #define __LACCUM_MIN__ (-0X1P31LK-0X1P31LK)
 #endif
@@ -579,9 +582,6 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
-#endif
-#ifndef __NO_INLINE__
-#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -670,9 +670,6 @@
 #ifndef __UDQ_FBIT__
 #define __UDQ_FBIT__ 64
 #endif
-#ifndef DEBUG
-#define DEBUG 1
-#endif
 #ifndef __INT8_TYPE__
 #define __INT8_TYPE__ signed char
 #endif
@@ -690,9 +687,6 @@
 #endif
 #ifndef __LLFRACT_FBIT__
 #define __LLFRACT_FBIT__ 63
-#endif
-#ifndef DEBUG_RFID
-#define DEBUG_RFID 1
 #endif
 #ifndef __FLT_RADIX__
 #define __FLT_RADIX__ 2
@@ -732,9 +726,6 @@
 #endif
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
-#endif
-#ifndef EVSE_USING_GUI
-#define EVSE_USING_GUI 0
 #endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
@@ -883,9 +874,6 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
-#ifndef EVSE_USING_RFID
-#define EVSE_USING_RFID 0
-#endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
 #endif
@@ -915,9 +903,6 @@
 #endif
 #ifndef __INT64_TYPE__
 #define __INT64_TYPE__ long long int
-#endif
-#ifndef EVSE_DEBUG
-#define EVSE_DEBUG 1
 #endif
 #ifndef __FLT_MAX_EXP__
 #define __FLT_MAX_EXP__ 128
@@ -1009,9 +994,6 @@
 #ifndef __LLACCUM_IBIT__
 #define __LLACCUM_IBIT__ 32
 #endif
-#ifndef DEBUG_DIAG_DUMMY
-#define DEBUG_DIAG_DUMMY 1
-#endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
 #endif
@@ -1066,9 +1048,6 @@
 #ifndef __cpp_constexpr
 #define __cpp_constexpr 201304
 #endif
-#ifndef USE_FreeRTOS
-#define USE_FreeRTOS 1
-#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1116,9 +1095,6 @@
 #endif
 #ifndef __PTRDIFF_TYPE__
 #define __PTRDIFF_TYPE__ int
-#endif
-#ifndef __DEBUG_CFG_PARSE
-#define __DEBUG_CFG_PARSE 1
 #endif
 #ifndef __LLFRACT_MIN__
 #define __LLFRACT_MIN__ (-0.5LLR-0.5LLR)
@@ -1210,7 +1186,7 @@
 #endif
 
 // --- Include directories begin --- //
-//.
+//..
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward

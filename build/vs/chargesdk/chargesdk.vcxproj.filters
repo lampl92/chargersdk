@@ -792,264 +792,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\app\cfg_parse.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\connector.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\errorcode.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\EVSE.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\evse_globals.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_charge.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_data.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_diag.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_monitor.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_remote.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\interface_rfid.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\main.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\order.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\stringName.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\sysinit.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskcharge.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskcreate.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskdata.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskdiag.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskmonitor.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskOTA.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskremote.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\taskrfid.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\timercallback.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c">
-      <Filter>Source files\app\libEcharge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c">
-      <Filter>Source files\app\libEcharge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
-      <Filter>Source files\app\libEcharge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_aes.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_app.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_evse.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_fatfs.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_gprs.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_json.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_main.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_rtos.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\ST_LIS2DH12.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\user_app.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\buzzer.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\led.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\modem.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
-      <Filter>Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c">
-      <Filter>Source files\drivers\hal\CMSIS_RTOS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
-      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\cfg_parse.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\connector.c">
@@ -1492,6 +1234,264 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\cfg_sys.c">
       <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\buzzer.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\cfg_parse.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_aes.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_app.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_evse.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_fatfs.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_gprs.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_json.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_main.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_rtos.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c">
+      <Filter>Source files\drivers\hal\CMSIS_RTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\connector.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c">
+      <Filter>Source files\app\libEcharge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c">
+      <Filter>Source files\app\libEcharge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
+      <Filter>Source files\app\libEcharge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\errorcode.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\EVSE.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\evse_globals.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_charge.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_data.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_diag.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_monitor.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_remote.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\interface_rfid.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_msp.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_nand.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rtc_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sdram.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskcharge.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskrfid.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskremote.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskOTA.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskmonitor.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskdiag.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskdata.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\taskcreate.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\sysinit.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\stringName.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\order.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\user_app.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\modem.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ST_LIS2DH12.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\timercallback.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\led.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\main.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
+      <Filter>Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

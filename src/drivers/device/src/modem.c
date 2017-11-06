@@ -36,21 +36,27 @@ uint32_t recv_len = 0;
 void modem_enQue(uint8_t *pbuff, uint32_t len)
 {
     int i;
+#if USE_FreeRTOS
     if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
     {
+#endif
         for (i = 0; i < len; i++)
         {
             pModem->pSendQue->EnElem(pModem->pSendQue, pbuff[i]);
         }
+#if USE_FreeRTOS
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }
+#endif
 }
 
 static void modem_UART_putQue(DevModem_t *pModem)
 {
     uint8_t ch; //这里需要测试是单个字符发送还是用while全部发送后再give mutex
+#if USE_FreeRTOS
     if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
     {
+#endif
 	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
 	    {
 			printf_safe("Send: ");
@@ -62,8 +68,10 @@ static void modem_UART_putQue(DevModem_t *pModem)
             gprs_uart_putc(ch);
         }
 	    printf_safe("\n");
+#if USE_FreeRTOS
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }
+#endif
 }
 
 static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
