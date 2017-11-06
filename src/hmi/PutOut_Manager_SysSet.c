@@ -131,7 +131,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     volatile int id = 0;
     volatile int v = 0;
     uint8_t _tmpBuff[50];
-
+    CON_t *pCon;
+    pCon = CONGetHandle(0);
+    
     switch (pMsg->MsgId)
     {
         case WM_NOTIFY_PARENT:
