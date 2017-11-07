@@ -241,3 +241,19 @@ int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
     f_close(&f);
     return 1;
 }
+
+int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
+{
+    uint32_t ulCrc32 = 0xFFFFFFFF;
+    uint32_t ulCrc32Table[256] = { 0 };
+    int i;
+    
+    crc32_init(ulCrc32Table);
+    for (i = 0; i < size; i++)
+    {
+        CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
+    }
+    *pulCrc32 = ~ulCrc32;
+
+    return 1;
+}
