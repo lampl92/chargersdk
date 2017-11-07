@@ -16,6 +16,7 @@
 #define pathProtoCfg       "system\\protocol.cfg"
 #define pathWhiteList      "system\\whitelist.cfg"
 #define pathBlackList      "system\\blacklist.cfg"
+#define pathBin            "system\\chargesdk.bin.new"
 
 
 #define jnEVSESN        "EVSESN"
