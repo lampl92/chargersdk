@@ -12,8 +12,11 @@
 #include "bsp_define.h"
 /* Private functions ---------------------------------------------------------*/
 
+extern void *g_pfnVectors[];
+
 int main(void)
 {
+    SCB->VTOR |= (uint32_t)&g_pfnVectors;
     //SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
     /**
      * 关闭全局中断(除了NMI和HardFault), 在移植文件port.c中的

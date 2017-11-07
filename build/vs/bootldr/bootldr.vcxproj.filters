@@ -871,6 +871,9 @@
     <ClCompile Include="..\chargesdk\startup_stm32f429xx.c">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\bsp_define.h">
@@ -2414,6 +2417,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_stmflash.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -784,6 +784,7 @@
       <Filter>Make files</Filter>
     </None>
     <None Include="..\..\..\readme.md" />
+    <None Include="STM32F429IG_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">

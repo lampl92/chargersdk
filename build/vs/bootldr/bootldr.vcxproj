@@ -95,6 +95,7 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
@@ -189,6 +190,7 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\lis2dh.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\malloc.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\myiic.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_stmflash.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\ST_LIS2DH12.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\user_app.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\buzzer.h" />

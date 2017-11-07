@@ -31,6 +31,9 @@ static ErrorCode_t GetSysCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCf
         break;
     case ParamTypeU32:
         *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valueint);
+        break;    
+    case ParamTypeS32:
+        *((int32_t *)pvCfgItem) = (int32_t)(jsItem->valueint);
         break;
     case ParamTypeDouble:
         *((double *)pvCfgItem) = (double)(jsItem->valuedouble);
@@ -98,7 +101,7 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
                 errcode = GetSysCfgItem(jsSysObj,
                                         jnSysChargersdk_bin_crc32,                  
                                         (void *)&(pSysconf->xUpFlag.chargesdk_bin_crc32),
-                                        ParamTypeU32),
+                                        ParamTypeDouble),
                 ERR_LEVEL_WARNING,
                 jnSysChargersdk_bin_crc32);
     THROW_ERROR(defDevID_File,
@@ -254,6 +257,9 @@ ErrorCode_t SetSysCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
                 break;
             case ParamTypeU32:
                 cJSON_ReplaceItemInObject(jsSysCfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
+                break;            
+            case ParamTypeS32:
+                cJSON_ReplaceItemInObject(jsSysCfgObj, jnItemString, cJSON_CreateNumber(*((int32_t *)pvCfgParam)));
                 break;
             case ParamTypeDouble:
                 cJSON_ReplaceItemInObject(jsSysCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));

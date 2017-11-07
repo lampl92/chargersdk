@@ -107,9 +107,9 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-    create_system_dir();
-
-    create_cfg_file(pathSysCfg, strSysCfg);
+//    create_system_dir();
+//
+//    create_cfg_file(pathSysCfg, strSysCfg);
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);

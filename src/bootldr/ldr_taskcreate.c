@@ -15,115 +15,51 @@
 #include "interface.h"
 #include "cli_main.h"
 #include "timercallback.h"
-#include "gprs_m26.h"
 #include "bsp.h"
-#include "modem.h"
+#include "utils.h"
+#include "stringName.h"
+#include "bsp_stmflash.h"
+#include "cfg_parse.h"
 
+#define APP_ADDRESS         ADDR_FLASH_SECTOR_6
 
 /*---------------------------------------------------------------------------/
 / 任务栈大小
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   (1024*10)
 #define defSTACK_TaskCLI                    (1024 * 50)
-#define defSTACK_TaskGUI                    (1024*10)
-#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskOTA                    512
-#define defSTACK_TaskPPP                    (1024*10)
-#define defSTACK_TaskTCPClient               (1024*10)
-#define defSTACK_TaskRemoteCmdProc          (1024*10)
-
-#define defSTACK_TaskEVSERemote             (1024*10)
-#define defSTACK_TaskEVSERFID               512
-#define defSTACK_TaskEVSECharge             512
-#define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEDiag               512
-#define defSTACK_TaskEVSEData               (1024*50)
-
-
-//#define TCPIP_THREAD_STACKSIZE      512
 
 /*---------------------------------------------------------------------------/
 / 任务优先级
 /---------------------------------------------------------------------------*/
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
 #define defPRIORITY_TaskOTA                 31/* 最高*/
-
-#define defPRIORITY_TaskEVSECharge          27
-#define defPRIORITY_TaskEVSEDiag            25
-#define defPRIORITY_TaskEVSEMonitor         23
-//#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 22
-#define defPRIORITY_TaskEVSERFID            20
-#define defPRIORITY_TaskEVSERemote          18
-#define defPRIORITY_TaskEVSEData            16
-
-#define defPRIORITY_TaskPPP                 14
-#define defPRIORITY_TaskTCPClient           12
-#define defPRIORITY_TaskRemoteCmdProc       19
-
 #define defPRIORITY_TaskInit                10
-#define defPRIORITY_TaskTouch               6
-#define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
 #define defPRIORITY_TaskCLI                 2
-
-//#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
-// define PPP_THREAD_PRIO          14
 
 /*---------------------------------------------------------------------------/
 / 任务名称
 /---------------------------------------------------------------------------*/
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
-const char *TASKNAME_GUI            = "TaskGUI";
-const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
-const char *TASKNAME_PPP            = "TaskPPP";
-const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
-const char *TASKNAME_RemoteCmdProc  = "TaskRemoteCmdProc" ;
 
-const char *TASKNAME_EVSERemote     = "TaskEVSERemote";
-const char *TASKNAME_EVSERFID       = "TaskEVSERFID";
-const char *TASKNAME_EVSECharge     = "TaskEVSECharge";
-const char *TASKNAME_EVSEMonitor    = "TaskEVSEMonitor";
-const char *TASKNAME_EVSEDiag       = "TaskEVSEDiag";
-const char *TASKNAME_EVSEData       = "TaskEVSEData";
-//#define TCPIP_THREAD_NAME           "tcpip_thread"
+
+
 /*---------------------------------------------------------------------------/
 / 任务声明
 /---------------------------------------------------------------------------*/
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
-void vTaskGUI(void *pvParameters);
-void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
-void vTaskPPP(void *pvParameters);
-void vTaskTCPClient(void *pvParameters);
-void vTaskRemoteCmdProc(void *pvParameters);
-
-void vTaskEVSERemote(void *pvParameters);
-void vTaskEVSERFID(void *pvParameters);
-void vTaskEVSECharge(void *pvParameters);
-void vTaskEVSEMonitor(void *pvParameters);
-void vTaskEVSEDiag(void *pvParameters);
-void vTaskEVSEData(void *pvParameters);
 
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
-static TaskHandle_t xHandleTaskGUI = NULL;
-static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
-static TaskHandle_t xHandleTaskPPP = NULL;
-static TaskHandle_t xHandleTaskTCPClient = NULL;
-static TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
-
-static TaskHandle_t xHandleTaskEVSERemote = NULL;
-static TaskHandle_t xHandleTaskEVSERFID = NULL;
-static TaskHandle_t xHandleTaskEVSECharge = NULL;
-static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
-static TaskHandle_t xHandleTaskEVSEDiag = NULL;
-static TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
@@ -147,16 +83,108 @@ QueueHandle_t xHandleQueueErrorPackage = NULL;
 //Mutex
 extern void fs_init(void);
 extern void *_app_start[];
+
+uint8_t *GetFileBuffer(char *path, uint32_t *psize)
+{
+    FIL f;
+    FSIZE_t size;
+    UINT br;
+    FRESULT fres;
+    
+    uint8_t *pbuff = NULL;
+    
+    fres = f_open(&f, path, FA_OPEN_EXISTING | FA_READ);
+    if (fres != FR_OK)
+    {
+        printf_safe("No %s!\n", path);
+    }
+    size = f_size(&f);
+    pbuff = (uint8_t *)malloc(size * sizeof(uint8_t));
+    if (pbuff == NULL)
+    {
+        printf_safe("Malloc error!\n");
+        f_close(&f);
+        return NULL;
+    }
+    fres = f_read(&f, pbuff, size, &br);
+    if (size == br)
+    {
+        f_close(&f);
+        *psize = size;
+        return pbuff;
+    }
+    else
+    {
+        f_close(&f);
+        *psize = 0;
+        free(pbuff);
+        pbuff = NULL;
+        return NULL;
+    }
+}
+
+
 void vTaskInit(void *pvParameters)
 {
+    uint8_t *pucBinBuffer;
+    uint32_t size;
+    ul2uc xBinBuffer;
+    uint32_t crc32;
+    uint32_t trymax = 5;
+    uint32_t tryread;
+    uint8_t upflag;
+    
     AppObjCreate();
     sys_Init();
     SysTaskCreate();
     while (1)
     {
+        tryread = 0;
+        upflag = 0;
+        if (xSysconf.xUpFlag.chargesdk_bin == 1)
+        {
+            do
+            {
+                ++tryread;
+                pucBinBuffer = GetFileBuffer(pathBin, &size);
+                printf_safe("Get Buffer OK!\n");
 
-        //((void(*)())_app_start[1])();
-        vTaskDelay(1000);
+                if (pucBinBuffer != NULL && size > 0)
+                {
+                    GetBufferCrc32(pucBinBuffer, size, &crc32);
+                    if (crc32 != (uint32_t)xSysconf.xUpFlag.chargesdk_bin_crc32)
+                    {
+                        printf_safe("Get Crc32 Err!\n");
+                        free(pucBinBuffer);
+                        size = 0;
+                        continue;
+                    }
+                    else
+                    {
+                        printf_safe("Get Crc32 OK!\n");
+                        STMFLASH_Write(APP_ADDRESS, (uint32_t *)pucBinBuffer, size / 4);
+                        free(pucBinBuffer);
+                        upflag = 2;
+                        break;
+                    }
+                }
+            } while (tryread <= trymax);  
+        }
+        else if (xSysconf.xUpFlag.chargesdk_bin == 0 || xSysconf.xUpFlag.chargesdk_bin == 2)
+        {
+            printf_safe("direct app_start!\n");
+            ((void(*)())_app_start[1])();
+        }
+        
+        if (upflag == 2)
+        {
+            xSysconf.xUpFlag.chargesdk_bin = 2;
+            xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
+            printf_safe("up OK, app_start!\n");
+            ((void(*)())_app_start[1])();
+        }
+       
+        vTaskDelay(5000);
     }
 }
 void vTaskCLI(void *pvParameters)

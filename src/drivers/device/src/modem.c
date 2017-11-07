@@ -1054,6 +1054,7 @@ void Modem_Poll(DevModem_t *pModem)
     FRESULT fres;
     char filepath[64 + 1];
     uint32_t crc32_calc, crc32_orig;
+    double dcrc32_calc;
     char ch_crc32[9] = { 0 };
     ul2uc ul2ucCrc32;
     
@@ -1333,7 +1334,8 @@ void Modem_Poll(DevModem_t *pModem)
             if (crc32_calc == crc32_orig)
             {
                 taskENTER_CRITICAL();
-                xSysconf.SetSysCfg(jnSysChargersdk_bin_crc32, (void*)&crc32_calc, ParamTypeU32);
+                dcrc32_calc = (uint32_t)crc32_calc;
+                xSysconf.SetSysCfg(jnSysChargersdk_bin_crc32, (void*)&dcrc32_calc, ParamTypeDouble);
                 f_unlink("system\\chargesdk.bin.new");
                 f_rename(filepath, "system\\chargesdk.bin.new");
                 taskEXIT_CRITICAL();
