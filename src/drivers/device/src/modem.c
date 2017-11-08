@@ -199,7 +199,7 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     }
     GPRS_set; //上电启动
     DEVDEBUG("modem Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 10);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
     switch(ret)
     {
     case DR_MODEM_OK:
@@ -239,7 +239,32 @@ static DR_MODEM_e modem_disable_echo(void)
  * @return int
  *
  */
-static DR_MODEM_e modem_CPIN(DevModem_t *pModem)
+static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+CPIN?\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+", 3);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        if (strstr(reply, "READY") != NULL)
+        {
+            pModem->status.eSimStat = CPIN_READY;
+        }
+        else
+        {
+            pModem->status.eSimStat = CPIN_OTHER;
+        }
+        break;
+    default:
+        ret = DR_MODEM_ERROR;
+        break;
+    }
+    return ret;
+}
+static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
@@ -494,14 +519,29 @@ DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
 
     return ret;
 }
+DR_MODEM_e modem3G_set_QICSGP(DevModem_t *pModem)
+{
 
+}
 /** @brief 激活移动场景，发起GPRS连接
  *
  * @param pModem DevModem_t*
  * @return DR_MODEM_e
  *
  */
-DR_MODEM_e modem_set_QIACT(DevModem_t *pModem)
+DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QIACT=%d\r", 1);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 150);
+
+    return ret;
+}
+DR_MODEM_e M26_QIACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[8 + 1]  = {0};
@@ -519,7 +559,19 @@ DR_MODEM_e modem_set_QIACT(DevModem_t *pModem)
  * @return DR_MODEM_e
  *
  */
-DR_MODEM_e modem_set_QIDEACT(DevModem_t *pModem)
+DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QIDEACT=%d\r", 1);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 150);
+
+    return ret;
+}
+DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[8 + 1]  = {0};
@@ -537,7 +589,7 @@ DR_MODEM_e modem_set_QIDEACT(DevModem_t *pModem)
  * @return DR_MODEM_e
  *
  */
-DR_MODEM_e modem_get_LOCIP(DevModem_t *pModem)
+DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[8 + 1]  = {0};
@@ -553,8 +605,77 @@ DR_MODEM_e modem_get_LOCIP(DevModem_t *pModem)
     }
     return ret;
 }
+DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    uint8_t *p;
+    DR_MODEM_e ret;
 
-DR_MODEM_e modem_set_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
+    modem_send_at("AT+QIACT?\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QIACT:", 3);
+    if (ret == DR_MODEM_OK)
+    {
+        sscanf(reply, "%*s %*d,%*d,%*d,%*[\"]%[^\"]", pModem->status.strLocIP);
+    }
+    return ret;
+}
+DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QIOPEN=%d,%d,\"%s\",\"%s\",%d,%d,%d\r",
+        pModem->info.ucContext,
+        0,
+        "TCP",
+        pProto->info.strServerIP,
+        pProto->info.usServerPort,
+        0,
+        2);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
+    if (ret == DR_MODEM_OK)
+    {
+        if (pModem->info.ucTPMode == 0)
+        {
+            sscanf(reply, "%*s%s", s);
+            if (strcmp(s, "OK") == 0) //"CONNECT OK"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+            else if (strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            {
+                pModem->status.eConnect = CONNECT_FAIL;
+            }
+            else if (strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+        }
+        else
+        {
+            sscanf(reply, "%s", s);
+            if (strcmp(s, "CONNECT") == 0) //"CONNECT OK"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+            sscanf(reply, "%*s%s", s);
+            if (strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            {
+                pModem->status.eConnect = CONNECT_FAIL;
+            }
+            else if (strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            {
+                pModem->status.eConnect = CONNECT_OK;
+            }
+        }
+    }
+    return ret;
+}
+DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[8 + 1]  = {0};
@@ -603,7 +724,7 @@ DR_MODEM_e modem_set_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
     }
     return ret;
 }
-DR_MODEM_e modem_QISACK(DevModem_t *pModem)
+DR_MODEM_e M26_QISACK(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
@@ -616,7 +737,7 @@ DR_MODEM_e modem_QISACK(DevModem_t *pModem)
     }
     return ret;
 }
-DR_MODEM_e modem_QISEND(DevModem_t *pModem, uint32_t len)
+DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
@@ -626,7 +747,7 @@ DR_MODEM_e modem_QISEND(DevModem_t *pModem, uint32_t len)
 
     return ret;
 }
-static uint32_t modem_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
+static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint32_t recv_len = 0;
@@ -685,7 +806,7 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
     {
         do
         {
-            ret = modem_QISACK(pModem);
+            ret = M26_QISACK(pModem);
             if(ret == DR_MODEM_READ)
             {
                 return ret;
@@ -707,7 +828,7 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 
         if(ret == DR_MODEM_OK)
         {
-            ret = modem_QISEND(pModem, len);
+            ret = M26_QISEND(pModem, len);
             if(ret != DR_MODEM_OK)
             {
                 return ret;
@@ -741,15 +862,25 @@ uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
     if(pModem->info.ucTPMode == 0)
     {
-        return modem_QIRD(pModem, pbuff, len);
+        return M26_QIRD(pModem, pbuff, len);
     }
     else
     {
         return modem_UART_gets(pModem, pbuff, len);
     }
 }
+DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
 
-DR_MODEM_e modem_QICLOSE(DevModem_t *pModem)
+    modem_send_at("AT+QICLOSE=%d\r", 0);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 10);
+
+    return ret;
+}
+DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[8 + 1]  = {0};
@@ -768,7 +899,7 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 10);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
 
     return ret;
 }
@@ -778,7 +909,7 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
  * @return DR_MODEM_e
  *
  */
-DR_MODEM_e modem_get_STATE(DevModem_t *pModem)
+DR_MODEM_e M26_STATE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     uint8_t  s[16 + 1]  = {0};
@@ -834,6 +965,21 @@ DR_MODEM_e modem_get_STATE(DevModem_t *pModem)
     return ret;
 }
 
+DR_MODEM_e modem3G_set_PDP(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    ret = UC15_QIACT(pModem);
+    if (ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    ret = UC15_LOCIP(pModem);
+    if (ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    return ret;
+}
 DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -842,12 +988,12 @@ DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
     {
         return ret;
     }
-    ret = modem_set_QIACT(pModem);
+    ret = M26_QIACT(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
     }
-    ret = modem_get_LOCIP(pModem);
+    ret = M26_LOCIP(pModem);
     if(ret != DR_MODEM_OK)
     {
         return ret;
@@ -944,7 +1090,14 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
 
     do
     {
-        ret = modem_CPIN(pModem);
+        if (xSysconf.xModule.use_gprs == 2)
+        {
+            ret = M26_CPIN(pModem);
+        }
+        else if (xSysconf.xModule.use_gprs == 3)
+        {
+            ret = UC15_CPIN(pModem);
+        }
         if(ret != DR_MODEM_OK)
         {
             return ret;
@@ -1009,21 +1162,28 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
         return ret;
     }
 
-    ret = modem_set_context(pModem);
-    if(ret != DR_MODEM_OK)
+    if (pModem->info.ucTPMode == 0 && xSysconf.xModule.use_gprs == 2)
     {
-        return ret;
+        ret = modem_set_RecvType(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
     }
-    ret = modem_set_RecvType(pModem);
-    if(ret != DR_MODEM_OK)
+    if (xSysconf.xModule.use_gprs == 2)
     {
-        return ret;
+        ret = modem_set_context(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        ret = modem_set_Transparent(pModem);
+        if(ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
     }
-    ret = modem_set_Transparent(pModem);
-    if(ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
+   
     return ret;
 }
 
@@ -1032,7 +1192,14 @@ DevModem_t *DevModemCreate(void)
     DevModem_t *pMod;
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
     strcpy(pModem->info.strAPN, "CMNET");
-    pMod->info.ucContext = 0;
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        pMod->info.ucContext = 0;
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        pMod->info.ucContext = 1;
+    }
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
     pMod->state = DS_MODEM_OFF;
@@ -1085,7 +1252,14 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_ACT_PDP:
-            ret = modem_set_PDP(pModem);
+            if (xSysconf.xModule.use_gprs == 2)
+            {
+                ret = modem_set_PDP(pModem);
+            }
+            else if (xSysconf.xModule.use_gprs == 3)
+            {
+                ret = modem3G_set_PDP(pModem);
+            }
             if(ret == DR_MODEM_OK)
             {
                 if (pechProto->info.ftp.ucDownloadStart == 1)
@@ -1103,7 +1277,14 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_DEACT_PDP:
-            ret = modem_set_QIDEACT(pModem);
+            if (xSysconf.xModule.use_gprs == 2)
+            {
+                ret = M26_QIDEACT(pModem);
+            }
+            else if (xSysconf.xModule.use_gprs == 3)
+            {
+                ret = UC15_QIDEACT(pModem);
+            }
             if(ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_TCP_ACT_PDP;
@@ -1114,7 +1295,14 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_TCP_OPEN:
-            ret = modem_set_TCPOPEN(pModem, pechProto);
+            if (xSysconf.xModule.use_gprs == 2)
+            {
+                ret = M26_TCPOPEN(pModem, pechProto);
+            }
+            else if (xSysconf.xModule.use_gprs == 3)
+            {
+                ret = UC15_TCPOPEN(pModem, pechProto);
+            }
             switch(pModem->status.eConnect)
             {
             case CONNECT_OK:
@@ -1123,7 +1311,7 @@ void Modem_Poll(DevModem_t *pModem)
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
             case CONNECT_FAIL:
-                modem_get_STATE(pModem);
+                M26_STATE(pModem);
                 if(pModem->status.statConStat == TCP_CONNECTING)
                 {
                     pModem->state = DS_MODEM_TCP_CLOSE;
@@ -1269,7 +1457,14 @@ void Modem_Poll(DevModem_t *pModem)
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
             xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
-            ret = modem_QICLOSE(pModem);
+            if (xSysconf.xModule.use_gprs == 2)
+            {
+                ret = M26_QICLOSE(pModem);
+            }
+            else if (xSysconf.xModule.use_gprs == 3)
+            {
+                ret = UC15_QICLOSE(pModem);
+            }
             if(ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_TCP_OPEN;
