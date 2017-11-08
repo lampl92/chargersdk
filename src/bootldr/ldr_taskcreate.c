@@ -21,7 +21,7 @@
 #include "bsp_stmflash.h"
 #include "cfg_parse.h"
 
-#define APP_ADDRESS         ADDR_FLASH_SECTOR_6
+#define APP_ADDRESS         ADDR_FLASH_SECTOR_5
 
 /*---------------------------------------------------------------------------/
 / 任务栈大小
