@@ -70,6 +70,7 @@
     <None Include="Makefile" />
     <None Include="release.mak" />
     <None Include="stm32.mak" />
+    <None Include="bootldr_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml" />
@@ -96,7 +97,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c" />
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c" />
@@ -147,7 +147,8 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
-    <ClCompile Include="..\chargesdk\startup_stm32f429xx.c" />
+    <ClCompile Include="startup_bootldr.c" />
+    <ClCompile Include="system_bootldr.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\bsp_define.h" />

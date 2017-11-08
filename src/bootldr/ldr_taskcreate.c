@@ -131,7 +131,7 @@ void vTaskInit(void *pvParameters)
     ul2uc xBinBuffer;
     uint32_t crc32;
     uint32_t trymax = 5;
-    uint32_t tryread;
+    uint32_t tryread = 0;
     uint8_t upflag;
     
     AppObjCreate();
@@ -139,11 +139,10 @@ void vTaskInit(void *pvParameters)
     SysTaskCreate();
     while (1)
     {
-        tryread = 0;
-        upflag = 0;
-        if (xSysconf.xUpFlag.chargesdk_bin == 1)
+        if (tryread <= trymax)
         {
-            do
+            upflag = 0;
+            if (xSysconf.xUpFlag.chargesdk_bin == 1)
             {
                 ++tryread;
                 pucBinBuffer = GetFileBuffer(pathBin, &size);
@@ -157,34 +156,39 @@ void vTaskInit(void *pvParameters)
                         printf_safe("Get Crc32 Err!\n");
                         free(pucBinBuffer);
                         size = 0;
-                        continue;
                     }
                     else
                     {
-                        printf_safe("Get Crc32 OK!\n");
+                        printf_safe("Get Crc32 OK! crc32 = %x\n", crc32);
                         STMFLASH_Write(APP_ADDRESS, (uint32_t *)pucBinBuffer, size / 4);
                         free(pucBinBuffer);
                         upflag = 2;
-                        break;
                     }
                 }
-            } while (tryread <= trymax);  
-        }
-        else if (xSysconf.xUpFlag.chargesdk_bin == 0 || xSysconf.xUpFlag.chargesdk_bin == 2)
-        {
-            printf_safe("direct app_start!\n");
-            ((void(*)())_app_start[1])();
-        }
+            }
+            else if (xSysconf.xUpFlag.chargesdk_bin == 0 || xSysconf.xUpFlag.chargesdk_bin == 2)
+            {
+                printf_safe("direct app_start!\n");
+                asm("cpsid i");
+                asm("ldr sp, =_estack");
+                ((void(*)())_app_start[1])();
+            }
         
-        if (upflag == 2)
+            if (upflag == 2)
+            {
+                xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&upflag, ParamTypeU8);
+                printf_safe("up OK, app_start!\n");
+                asm("cpsid i");
+                asm("ldr sp, =_estack");
+                ((void(*)())_app_start[1])();
+            }
+        }
+        else
         {
-            xSysconf.xUpFlag.chargesdk_bin = 2;
-            xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
-            printf_safe("up OK, app_start!\n");
-            ((void(*)())_app_start[1])();
+            printf_safe("升级失败, 请手动重启或检查待升级固件!\n");
         }
        
-        vTaskDelay(5000);
+        vTaskDelay(1000);
     }
 }
 void vTaskCLI(void *pvParameters)

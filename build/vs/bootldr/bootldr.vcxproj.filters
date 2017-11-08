@@ -84,24 +84,6 @@
     <Filter Include="Source files\drivers\hal">
       <UniqueIdentifier>{02c68024-357e-4ee7-bf37-8f2592634e7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS">
-      <UniqueIdentifier>{eb3a1001-abc0-42dc-92c1-3d2da8f78eb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device">
-      <UniqueIdentifier>{e33e8520-dadb-4fce-8c8c-31a6602c6d21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST">
-      <UniqueIdentifier>{f7e75075-22b1-4c80-9703-6af526cf019d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx">
-      <UniqueIdentifier>{46946bb5-10ab-4c3c-a76b-24df539abded}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source">
-      <UniqueIdentifier>{dd7e94bf-07b2-40d1-8c14-ab8c18fb51eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates">
-      <UniqueIdentifier>{1cea8b2c-80a5-4b03-936d-6f4e1c2c8b0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\drivers\hal\CMSIS\Include">
       <UniqueIdentifier>{a2b078fe-9928-4a15-9a34-ae99eb556821}</UniqueIdentifier>
     </Filter>
@@ -648,6 +630,7 @@
     <None Include="stm32.mak">
       <Filter>Make files</Filter>
     </None>
+    <None Include="bootldr_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -702,9 +685,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c">
       <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
-      <Filter>Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
@@ -868,11 +848,14 @@
     <ClCompile Include="..\..\..\src\bootldr\ldr_sysinit.c">
       <Filter>Source files\bootldr</Filter>
     </ClCompile>
-    <ClCompile Include="..\chargesdk\startup_stm32f429xx.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c">
       <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="system_bootldr.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="startup_bootldr.c">
+      <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

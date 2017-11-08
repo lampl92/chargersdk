@@ -60,7 +60,7 @@
       <CXXFLAGS />
       <LDFLAGS>--specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs</LDFLAGS>
       <ASFLAGS>-mfpu=fpv4-sp-d16</ASFLAGS>
-      <LinkerScript>STM32F429IG_flash.lds</LinkerScript>
+      <LinkerScript>bootldr_flash.lds</LinkerScript>
       <COMMONFLAGS>-mcpu=cortex-m4 -mthumb -mfloat-abi=hard</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>

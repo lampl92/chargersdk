@@ -90,24 +90,6 @@
     <Filter Include="Source files\drivers\hal">
       <UniqueIdentifier>{9be8341a-a8db-492e-a58d-99f2af0238f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS">
-      <UniqueIdentifier>{666ed595-c0d5-408e-99bc-b09eb2ec037a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device">
-      <UniqueIdentifier>{b2aa8233-407d-4113-b82e-c210ebf46dde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST">
-      <UniqueIdentifier>{6cd16bbe-726d-4222-9082-459a1ecd2fab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx">
-      <UniqueIdentifier>{6f30f444-0f57-494a-8ac5-cbcc2cdd129c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source">
-      <UniqueIdentifier>{97c554d0-d1ba-4548-8dbe-db2e5c796148}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates">
-      <UniqueIdentifier>{a252f3cd-3c92-4f75-b197-a73df6345e49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\drivers\hal\CMSIS\Include">
       <UniqueIdentifier>{f3830450-aaf1-46af-a85d-109cda846e1a}</UniqueIdentifier>
     </Filter>
@@ -784,7 +766,7 @@
       <Filter>Make files</Filter>
     </None>
     <None Include="..\..\..\readme.md" />
-    <None Include="STM32F429IG_flash.lds" />
+    <None Include="chargersdk_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -832,9 +814,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\app\main.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\order.c">
@@ -964,9 +943,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c">
@@ -1178,9 +1154,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
-    </ClCompile>
-    <ClCompile Include="startup_stm32f429xx.c">
-      <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_crc.c">
       <Filter>Source files\cli</Filter>
@@ -1482,17 +1455,20 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\app\main.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
-      <Filter>Source files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates</Filter>
+    <ClCompile Include="system_chargersdk.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="startup_chargersdk.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\app_main.c">
+      <Filter>Source files\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

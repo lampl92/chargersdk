@@ -29,5 +29,5 @@ CXXFLAGS +=
 ASFLAGS += -mfpu=fpv4-sp-d16
 LDFLAGS += --specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs
 COMMONFLAGS += -mcpu=cortex-m4 -mthumb -mfloat-abi=hard
-LINKER_SCRIPT := STM32F429IG_flash.lds
+LINKER_SCRIPT := chargersdk_flash.lds
 
