@@ -177,7 +177,17 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
     DEVDEBUG(("%s\r\n\r\n", reply));
     return ret;
 }
+DR_MODEM_e modem_quit(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
 
+    modem_send_at("++++++");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
 /** @brief 初始化modem，置Key开启模块，检测AT返回命令
  *
  * @param void
@@ -192,10 +202,19 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     DEVDEBUG("modem open: \r\n");
     modem_send_at("AT\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
-    if(ret == DR_MODEM_OK)
+    if (ret == DR_MODEM_OK)
     {
         pModem->state = DS_MODEM_ON;
         return ret;
+    }
+    else
+    {
+        ret = modem_quit(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            pModem->state = DS_MODEM_ON;
+            return ret;
+        }
     }
     GPRS_set; //上电启动
     DEVDEBUG("modem Key set!: \r\n");
@@ -965,44 +984,100 @@ DR_MODEM_e M26_STATE(DevModem_t *pModem)
     return ret;
 }
 
-DR_MODEM_e modem3G_set_PDP(DevModem_t *pModem)
-{
-    DR_MODEM_e ret;
-    ret = UC15_QIACT(pModem);
-    if (ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
-    ret = UC15_LOCIP(pModem);
-    if (ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
-    return ret;
-}
 DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
-    ret = modem_set_QIREGAPP(pModem);
-    if(ret != DR_MODEM_OK)
+    if (xSysconf.xModule.use_gprs == 2)
     {
-        return ret;
+        ret = modem_set_QIREGAPP(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        ret = M26_QIACT(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        ret = M26_LOCIP(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
     }
-    ret = M26_QIACT(pModem);
-    if(ret != DR_MODEM_OK)
+    else if (xSysconf.xModule.use_gprs == 3)
     {
-        return ret;
+        ret = UC15_QIACT(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
+        ret = UC15_LOCIP(pModem);
+        if (ret != DR_MODEM_OK)
+        {
+            return ret;
+        }
     }
-    ret = M26_LOCIP(pModem);
-    if(ret != DR_MODEM_OK)
-    {
-        return ret;
-    }
+    
     return ret;
 }
 
+DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, uint8_t param)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+    if (usr != NULL)
+    {
+        modem_send_at("AT+QFTPCFG=\"%s\",\"%s\",\"%s\"\r", cmd, usr, pass);
+    }
+    else
+    {
+        modem_send_at("AT+QFTPCFG=\"%s\",%d\r", cmd, param);
+    }
 
-DR_MODEM_e modem_set_QFTPUSER(DevModem_t *pModem)
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+
+DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPOPEN=\"%s\",%d\r", server, port);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPOPEN:", 20);
+
+    return ret;
+}
+DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPCWD=\"/%s/\"\r", path);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPCWD", 20);
+
+    return ret;
+}
+DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPGET=\"%s\",\"%s\"\r", pechProto->info.ftp.strNewFileName, "COM:");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 20);
+
+    return ret;
+}
+DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1014,7 +1089,7 @@ DR_MODEM_e modem_set_QFTPUSER(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_QFTPPASS(DevModem_t *pModem)
+DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1026,7 +1101,7 @@ DR_MODEM_e modem_set_QFTPPASS(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_QFTPOPEN(DevModem_t *pModem)
+DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1038,7 +1113,7 @@ DR_MODEM_e modem_set_QFTPOPEN(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_QFTPPATH(DevModem_t *pModem)
+DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1050,7 +1125,7 @@ DR_MODEM_e modem_set_QFTPPATH(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_QFTPGET(DevModem_t *pModem)
+DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1062,7 +1137,20 @@ DR_MODEM_e modem_set_QFTPGET(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_QFTPCLOSE(DevModem_t *pModem)
+DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        ret = M26_QICLOSE(pModem);
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        ret = UC15_QICLOSE(pModem);
+    }
+    return ret;
+}
+DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
@@ -1074,14 +1162,41 @@ DR_MODEM_e modem_set_QFTPCLOSE(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_FTP(DevModem_t *pModem)
+DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPCLOSE\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPCLOSE", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
-    modem_set_QFTPUSER(pModem);
-    modem_set_QFTPPASS(pModem);
-    modem_set_QFTPOPEN(pModem);
-    modem_set_QFTPPATH(pModem);
-    ret = modem_set_QFTPGET(pModem);
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        M26_QFTPUSER(pModem);
+        M26_QFTPPASS(pModem);
+        M26_QFTPOPEN(pModem);
+        M26_QFTPPATH(pModem);
+        ret = M26_QFTPGET(pModem);
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        UC15_QFTPCFG(pModem, "contextid", NULL, NULL, 1);
+        UC15_QFTPCFG(pModem, "account", pechProto->info.ftp.strUser, pechProto->info.ftp.strPassword, 0);
+        UC15_QFTPCFG(pModem, "filetype", NULL, NULL, 1);
+        UC15_QFTPCFG(pModem, "transmode", NULL, NULL, 1);
+        UC15_QFTPCFG(pModem, "rsptimeout", NULL, NULL, 90);
+        UC15_QFTPOPEN(pModem, pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
+        UC15_QFTPCWD(pModem, pechProto->info.ftp.strNewVersion);
+        ret = UC15_QFTPGET(pModem);
+    }
+
     return ret;
 }
 DR_MODEM_e modem_get_info(DevModem_t *pModem)
@@ -1224,6 +1339,7 @@ void Modem_Poll(DevModem_t *pModem)
     double dcrc32_calc;
     char ch_crc32[9] = { 0 };
     ul2uc ul2ucCrc32;
+    uint8_t *pucFileBuffer;
     
     
     uint32_t ulRecvFileSize = 0;
@@ -1244,22 +1360,15 @@ void Modem_Poll(DevModem_t *pModem)
             ret = modem_init(pModem);
             if(ret == DR_MODEM_OK)
             {
-                pModem->state = DS_MODEM_TCP_ACT_PDP;
+                pModem->state = DS_MODEM_ACT_PDP;
             }
             else
             {
                 pModem->state = DS_MODEM_ERR;
             }
             break;
-        case DS_MODEM_TCP_ACT_PDP:
-            if (xSysconf.xModule.use_gprs == 2)
-            {
-                ret = modem_set_PDP(pModem);
-            }
-            else if (xSysconf.xModule.use_gprs == 3)
-            {
-                ret = modem3G_set_PDP(pModem);
-            }
+        case DS_MODEM_ACT_PDP:
+            ret = modem_set_PDP(pModem);
             if(ret == DR_MODEM_OK)
             {
                 if (pechProto->info.ftp.ucDownloadStart == 1)
@@ -1276,7 +1385,7 @@ void Modem_Poll(DevModem_t *pModem)
                 pModem->state = DS_MODEM_ERR;
             }
             break;
-        case DS_MODEM_TCP_DEACT_PDP:
+        case DS_MODEM_DEACT_PDP:
             if (xSysconf.xModule.use_gprs == 2)
             {
                 ret = M26_QIDEACT(pModem);
@@ -1287,7 +1396,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             if(ret == DR_MODEM_OK)
             {
-                pModem->state = DS_MODEM_TCP_ACT_PDP;
+                pModem->state = DS_MODEM_ACT_PDP;
             }
             else
             {
@@ -1319,7 +1428,7 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 else
                 {
-                    pModem->state = DS_MODEM_TCP_DEACT_PDP;
+                    pModem->state = DS_MODEM_DEACT_PDP;
                 }
                 break;
             default:
@@ -1471,14 +1580,18 @@ void Modem_Poll(DevModem_t *pModem)
             }
             else
             {
-                pModem->state = DS_MODEM_TCP_DEACT_PDP;
+                pModem->state = DS_MODEM_DEACT_PDP;
             }
             break;
         case DS_MODEM_FTP_OPEN:
-            ret = modem_set_FTP(pModem);
+            ret = modem_set_FTPOPEN(pModem);
             if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_FTP_GET;
+            }
+            else
+            {
+                pModem->state = DS_MODEM_FTP_CLOSE;
             }
             break;
         case DS_MODEM_FTP_GET:
@@ -1553,10 +1666,17 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_REGET:
-            ret = modem_set_QFTPGET(pModem);
+            ret = UC15_QFTPGET(pModem);
             if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_FTP_GET;
+            }
+            break;
+        case DS_MODEM_FTP_CLOSE:
+            ret = modem_set_ftpclose(pModem);
+            if (ret == DR_MODEM_OK)
+            {
+                pModem->state = DS_MODEM_DEACT_PDP;
             }
             break;
         case DS_MODEM_ERR:
