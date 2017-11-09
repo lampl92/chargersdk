@@ -1,7 +1,10 @@
 #include "bsp_define.h"
 #include "bsp_nand_hw.h"
 #include "bsp_dwt.h"
-#include "xprintf.h"
+#include "bsp.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "taskcreate.h"
 
 #define USE_WAITRB 0
 #define BSP_DELAY_US_VAL    30
@@ -204,13 +207,14 @@ u8 NAND_Reset(void)
 u8 NAND_WaitRB(vu8 rb)
 {
     vu16 time = 0;
-    while(time < 20)
+    while(time < 30)
     {
         time++;
         if(NAND_RB == rb)
         {
             return 0;
         }
+        bsp_DelayUS(1);
     }
     return 1;
 }
@@ -238,90 +242,98 @@ u8 NAND_ReadPage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToRead)
     u8 eccstart = 0;    //第一个ECC值所属的地址范围
     u8 errsta = 0;
     u8 *p;
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
-    //发送地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
-    //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
-    //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
-    //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
-    //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
-    //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    //TODO:如果发现nand错误, 将下面的等待RB换成延时函数
-    #if USE_WAITRB
-        res=NAND_WaitRB(0);         //等待RB=0
-        if(res)return NSTA_TIMEOUT; //超时退出
-        //下面2行代码是真正判断NAND是否准备好的
-        res=NAND_WaitRB(1);         //等待RB=1
-        if(res)return NSTA_TIMEOUT; //超时退出
-    #else
-        NAND_Delay(BSP_DELAY_US_VAL);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
-    #endif
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
+    {
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
+        //发送地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
+        //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
+        //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
+        //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
+        //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
+        //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
+        //TODO:如果发现nand错误, 将下面的等待RB换成延时函数
+        #if USE_WAITRB
+            res=NAND_WaitRB(0);         //等待RB=0
+            if(res)return NSTA_TIMEOUT; //超时退出
+            //下面2行代码是真正判断NAND是否准备好的
+            res=NAND_WaitRB(1);         //等待RB=1
+            if(res)return NSTA_TIMEOUT; //超时退出
+        #else
+            NAND_Delay(BSP_DELAY_US_VAL);//tWB+tR+tRR = 100ns+25us(without internal ECC)+20ns
+        #endif
 
-    if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
-    {
-        //读取NAND FLASH中的值
-        for(i = 0; i < NumByteToRead; i++)
+        if(NumByteToRead % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
         {
-            *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
-        }
-    }
-    else
-    {
-        eccnum = NumByteToRead / NAND_ECC_SECTOR_SIZE;      //得到ecc计算次数
-        eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
-        p = pBuffer;
-        for(res = 0; res < eccnum; res++)
-        {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //读取NAND_ECC_SECTOR_SIZE个数据
+            //读取NAND FLASH中的值
+            for(i = 0; i < NumByteToRead; i++)
             {
                 *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
             }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //等待FIFO空
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
         }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //从spare区的0X10位置开始读取之前存储的ecc值
-        NAND_Delay(30);//等待tADL
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X05;           //随机读指令
-        //发送地址
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0XE0;           //开始读数据
-        NAND_Delay(30);//等待tADL
-        pBuffer = (u8 *)&nand_dev.ecc_rdbuf[eccstart];
-        for(i = 0; i < 4 * eccnum; i++)                     //读取保存的ECC值
+        else
         {
-            *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
-        }
-        for(i = 0; i < eccnum; i++)                         //检验ECC
-        {
-            if(nand_dev.ecc_rdbuf[i + eccstart] != nand_dev.ecc_hdbuf[i + eccstart]) //不相等,需要校正
+            eccnum = NumByteToRead / NAND_ECC_SECTOR_SIZE;      //得到ecc计算次数
+            eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
+            p = pBuffer;
+            for(res = 0; res < eccnum; res++)
             {
-                xprintf("err hd,rd:0x%x,0x%x\r\n", nand_dev.ecc_hdbuf[i + eccstart], nand_dev.ecc_rdbuf[i + eccstart]);
-                xprintf("eccnum,eccstart:%d,%d\r\n", eccnum, eccstart);
-                xprintf("PageNum,ColNum:%d,%d\r\n", PageNum, ColNum);
-                res = NAND_ECC_Correction(p + NAND_ECC_SECTOR_SIZE * i, nand_dev.ecc_rdbuf[i + eccstart], nand_dev.ecc_hdbuf[i + eccstart]); //ECC校验
-                if(res)
+                FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
+                for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //读取NAND_ECC_SECTOR_SIZE个数据
                 {
-                    errsta = NSTA_ECC2BITERR;    //标记2BIT及以上ECC错误
+                    *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
                 }
-                else
+                while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //等待FIFO空
+                nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
+                FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
+            }
+            i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //从spare区的0X10位置开始读取之前存储的ecc值
+            NAND_Delay(30);//等待tADL
+            *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X05;           //随机读指令
+            //发送地址
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
+            *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0XE0;           //开始读数据
+            NAND_Delay(30);//等待tADL
+            pBuffer = (u8 *)&nand_dev.ecc_rdbuf[eccstart];
+            for(i = 0; i < 4 * eccnum; i++)                     //读取保存的ECC值
+            {
+                *(vu8 *)pBuffer++ = *(vu8 *)NAND_ADDRESS;
+            }
+            for(i = 0; i < eccnum; i++)                         //检验ECC
+            {
+                if(nand_dev.ecc_rdbuf[i + eccstart] != nand_dev.ecc_hdbuf[i + eccstart]) //不相等,需要校正
                 {
-                    errsta = NSTA_ECC1BITERR;    //标记1BIT ECC错误
+                    printf_safe("err hd,rd:0x%x,0x%x\r\n", nand_dev.ecc_hdbuf[i + eccstart], nand_dev.ecc_rdbuf[i + eccstart]);
+                    printf_safe("eccnum,eccstart:%d,%d\r\n", eccnum, eccstart);
+                    printf_safe("PageNum,ColNum:%d,%d\r\n", PageNum, ColNum);
+                    res = NAND_ECC_Correction(p + NAND_ECC_SECTOR_SIZE * i, nand_dev.ecc_rdbuf[i + eccstart], nand_dev.ecc_hdbuf[i + eccstart]); //ECC校验
+                    if(res)
+                    {
+                        errsta = NSTA_ECC2BITERR;    //标记2BIT及以上ECC错误
+                    }
+                    else
+                    {
+                        errsta = NSTA_ECC1BITERR;    //标记1BIT ECC错误
+                    }
                 }
             }
         }
+        if(NAND_WaitForReady() != NSTA_READY)
+        {
+            errsta = NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        errsta = NSTA_ERROR;    //失败
-    }
+#endif
     return errsta;  //成功
 }
 //读取NAND Flash的指定页指定列的数据(main区和spare区都可以使用此函数),并对比(FTL管理时需要)
@@ -338,40 +350,51 @@ u8 NAND_ReadPageComp(u32 PageNum, u16 ColNum, u32 CmpVal, u16 NumByteToRead, u16
 #if USE_WAITRB
     u8 res = 0;
 #endif
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
-    //发送地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
-    //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
-    //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
-    //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
-    //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
-    //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    #if USE_WAITRB
-        res=NAND_WaitRB(0);         //等待RB=0
-        if(res)return NSTA_TIMEOUT; //超时退出
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
+    {
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_A;
+        //发送地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_AREA_TRUE1;
+        //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
+        //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
+        //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
+        //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
+        //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
+        #if USE_WAITRB
+        res = NAND_WaitRB(0);         //等待RB=0
+        if (res)return NSTA_TIMEOUT; //超时退出
         //下面2行代码是真正判断NAND是否准备好的
-        res=NAND_WaitRB(1);         //等待RB=1
-        if(res)return NSTA_TIMEOUT; //超时退出
+        res = NAND_WaitRB(1);         //等待RB=1
+        if (res)return NSTA_TIMEOUT; //超时退出
     #else
         NAND_Delay(BSP_DELAY_US_VAL);
     #endif
-    for(i = 0; i < NumByteToRead; i++) //读取数据,每次读4字节
-    {
-        if(*(vu32 *)NAND_ADDRESS != CmpVal)
+        for (i = 0; i < NumByteToRead; i++) //读取数据,每次读4字节
         {
-            break;    //如果有任何一个值,与CmpVal不相等,则退出.
+            if (*(vu32 *)NAND_ADDRESS != CmpVal)
+            {
+                break;    //如果有任何一个值,与CmpVal不相等,则退出.
+            }
         }
+        *NumByteEqual = i;                  //与CmpVal值相同的个数
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
-    *NumByteEqual = i;                  //与CmpVal值相同的个数
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        return NSTA_ERROR;    //失败
-    }
+#endif
     return 0;   //成功
 }
 //在NAND一页中写入指定个字节的数据(main区和spare区都可以使用此函数)
@@ -387,58 +410,69 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
     u8 res = 0;
     u8 eccnum = 0;      //需要计算的ECC个数，每NAND_ECC_SECTOR_SIZE字节计算一个ecc
     u8 eccstart = 0;    //第一个ECC值所属的地址范围
-
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
-    //发送地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    NAND_Delay(30);//等待tADL
-    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
-        for(i = 0; i < NumByteToWrite; i++) //写入数据
-        {
-            *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
-        }
-    }
-    else
-    {
-        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //得到ecc计算次数
-        eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
-        for(res = 0; res < eccnum; res++)
-        {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //写入NAND_ECC_SECTOR_SIZE个数据
-            {
-                *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
-            }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //等待FIFO空
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
-        }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //计算写入ECC的spare区地址
-        NAND_Delay(30);//等待
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //随机写指令
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
         //发送地址
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
         NAND_Delay(30);//等待tADL
-        pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
-        for(i = 0; i < eccnum; i++)             //写入ECC
+        if (NumByteToWrite % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
         {
-            for(res = 0; res < 4; res++)
+            for (i = 0; i < NumByteToWrite; i++) //写入数据
             {
                 *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
             }
         }
+        else
+        {
+            eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //得到ecc计算次数
+            eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
+            for (res = 0; res < eccnum; res++)
+            {
+                FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
+                for (i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //写入NAND_ECC_SECTOR_SIZE个数据
+                {
+                    *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
+                }
+                while (!(FMC_Bank2_3->SR3 & (1 << 6)))
+                    ;          //等待FIFO空
+                nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
+                FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
+            }
+            i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //计算写入ECC的spare区地址
+            NAND_Delay(30);//等待
+            *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //随机写指令
+            //发送地址
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
+            NAND_Delay(30);//等待tADL
+            pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
+            for (i = 0; i < eccnum; i++)             //写入ECC
+            {
+                for (res = 0; res < 4; res++)
+                {
+                    *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
+                }
+            }
+        }
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        return NSTA_ERROR;    //失败
-    }
+#endif
     return 0;//成功
 }
 //在NAND一页中的指定地址开始,写入指定长度的恒定数字
@@ -451,23 +485,34 @@ u8 NAND_WritePage(u32 PageNum, u16 ColNum, u8 *pBuffer, u16 NumByteToWrite)
 u8 NAND_WritePageConst(u32 PageNum, u16 ColNum, u32 cval, u16 NumByteToWrite)
 {
     u16 i = 0;
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
-    //发送地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
-    NAND_Delay(30);//等待tADL
-    for(i = 0; i < NumByteToWrite; i++) //写入数据,每次写4字节
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
-        *(vu32 *)NAND_ADDRESS = cval;
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE0;
+        //发送地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(PageNum >> 16);
+        NAND_Delay(30);//等待tADL
+        for (i = 0; i < NumByteToWrite; i++) //写入数据,每次写4字节
+        {
+            *(vu32 *)NAND_ADDRESS = cval;
+        }
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_WRITE_TURE1;
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        return NSTA_ERROR;    //失败
-    }
+#endif
     return 0;//成功
 }
 //将一页数据拷贝到另一页,不写入新数据
@@ -489,40 +534,51 @@ u8 NAND_CopyPageWithoutWrite(u32 Source_PageNum, u32 Dest_PageNum)
     {
         return NSTA_ERROR;    //不在同一个plane内
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
-    //发送源页地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //发送命令0X35
-    //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
-    //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
-    //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
-    //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
-    //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    #if USE_WAITRB
-        res=NAND_WaitRB(0);         //等待RB=0
-        if(res)return NSTA_TIMEOUT; //超时退出
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
+    {
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
+        //发送源页地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //发送命令0X35
+        //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
+        //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
+        //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
+        //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
+        //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
+        #if USE_WAITRB
+        res = NAND_WaitRB(0);         //等待RB=0
+        if (res)return NSTA_TIMEOUT; //超时退出
         //下面2行代码是真正判断NAND是否准备好的
-        res=NAND_WaitRB(1);         //等待RB=1
-        if(res)return NSTA_TIMEOUT; //超时退出
+        res = NAND_WaitRB(1);         //等待RB=1
+        if (res)return NSTA_TIMEOUT; //超时退出
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
-    //发送目的页地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        return NSTA_ERROR;    //NAND未准备好
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
+        //发送目的页地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //NAND未准备好
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;//成功
 }
 
@@ -549,81 +605,93 @@ u8 NAND_CopyPageWithWrite(u32 Source_PageNum, u32 Dest_PageNum, u16 ColNum, u8 *
     {
         return NSTA_ERROR;    //不在同一个plane内
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
-    //发送源页地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //发送命令0X35
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
+    {
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD0; //发送命令0X00
+        //发送源页地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)0;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Source_PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Source_PageNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD1; //发送命令0X35
 
-    //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
-    //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
-    //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
-    //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
-    //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
-    #if USE_WAITRB
-        res=NAND_WaitRB(0);         //等待RB=0
-        if(res)return NSTA_TIMEOUT; //超时退出
+            //下面两行代码是等待R/B引脚变为低电平，其实主要起延时作用的，等待NAND操作R/B引脚。因为我们是通过
+            //将STM32的NWAIT引脚(NAND的R/B引脚)配置为普通IO，代码中通过读取NWAIT引脚的电平来判断NAND是否准备
+            //就绪的。这个也就是模拟的方法，所以在速度很快的时候有可能NAND还没来得及操作R/B引脚来表示NAND的忙
+            //闲状态，结果我们就读取了R/B引脚,这个时候肯定会出错的，事实上确实是会出错!大家也可以将下面两行
+            //代码换成延时函数,只不过这里我们为了效率所以没有用延时函数。
+            #if USE_WAITRB
+        res = NAND_WaitRB(0);         //等待RB=0
+        if (res)return NSTA_TIMEOUT; //超时退出
         //下面2行代码是真正判断NAND是否准备好的
-        res=NAND_WaitRB(1);         //等待RB=1
-        if(res)return NSTA_TIMEOUT; //超时退出
+        res = NAND_WaitRB(1);         //等待RB=1
+        if (res)return NSTA_TIMEOUT; //超时退出
     #else
         bsp_DelayUS(BSP_DELAY_US_VAL);
     #endif
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
-    //发送目的页地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
-    //发送页内列地址
-    NAND_Delay(30);//等待tADL
-    if(NumByteToWrite % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
-    {
-        for(i = 0; i < NumByteToWrite; i++) //写入数据
-        {
-            *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
-        }
-    }
-    else
-    {
-        eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //得到ecc计算次数
-        eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
-        for(res = 0; res < eccnum; res++)
-        {
-            FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
-            for(i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //写入NAND_ECC_SECTOR_SIZE个数据
-            {
-                *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
-            }
-            while(!(FMC_Bank2_3->SR3 & (1 << 6)));          //等待FIFO空
-            nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
-            FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
-        }
-        i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //计算写入ECC的spare区地址
-        NAND_Delay(30);//等待
-        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //随机写指令
-        //发送地址
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
-        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD2; //发送命令0X85
+        //发送目的页地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)ColNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(ColNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)Dest_PageNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(Dest_PageNum >> 16);
+        //发送页内列地址
         NAND_Delay(30);//等待tADL
-        pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
-        for(i = 0; i < eccnum; i++)             //写入ECC
+        if (NumByteToWrite % NAND_ECC_SECTOR_SIZE) //不是NAND_ECC_SECTOR_SIZE的整数倍，不进行ECC校验
         {
-            for(res = 0; res < 4; res++)
+            for (i = 0; i < NumByteToWrite; i++) //写入数据
             {
                 *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
             }
         }
+        else
+        {
+            eccnum = NumByteToWrite / NAND_ECC_SECTOR_SIZE;     //得到ecc计算次数
+            eccstart = ColNum / NAND_ECC_SECTOR_SIZE;
+            for (res = 0; res < eccnum; res++)
+            {
+                FMC_Bank2_3->PCR3 |= 1 << 6;                    //使能ECC校验
+                for (i = 0; i < NAND_ECC_SECTOR_SIZE; i++)       //写入NAND_ECC_SECTOR_SIZE个数据
+                {
+                    *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
+                }
+                while (!(FMC_Bank2_3->SR3 & (1 << 6)))
+                    ;          //等待FIFO空
+                nand_dev.ecc_hdbuf[res + eccstart] = FMC_Bank2_3->ECCR3; //读取硬件计算后的ECC值
+                FMC_Bank2_3->PCR3 &= ~(1 << 6);                 //禁止ECC校验
+            }
+            i = nand_dev.page_mainsize + 0X10 + eccstart * 4;   //计算写入ECC的spare区地址
+            NAND_Delay(30);//等待
+            *(vu8 *)(NAND_ADDRESS | NAND_CMD) = 0X85;           //随机写指令
+            //发送地址
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)i;
+            *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(i >> 8);
+            NAND_Delay(30);//等待tADL
+            pBuffer = (u8 *)&nand_dev.ecc_hdbuf[eccstart];
+            for (i = 0; i < eccnum; i++)             //写入ECC
+            {
+                for (res = 0; res < 4; res++)
+                {
+                    *(vu8 *)NAND_ADDRESS = *(vu8 *)pBuffer++;
+                }
+            }
+        }
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_MOVEDATA_CMD3; //发送命令0X10
-    if(NAND_WaitForReady() != NSTA_READY)
-    {
-        return NSTA_ERROR;    //失败
-    }
+#endif
     return 0;   //成功
 }
 //读取spare区中的数据
@@ -678,16 +746,27 @@ u8 NAND_EraseBlock(u32 BlockNum)
     {
         BlockNum <<= 6;
     }
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE0;
-    //发送块地址
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)BlockNum;
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 8);
-    *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 16);
-    *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE1;
-    if(NAND_WaitForReady() != NSTA_READY)
+#if USE_FreeRTOS
+    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
     {
-        return NSTA_ERROR;    //失败
+#endif
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE0;
+        //发送块地址
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)BlockNum;
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 8);
+        *(vu8 *)(NAND_ADDRESS | NAND_ADDR) = (u8)(BlockNum >> 16);
+        *(vu8 *)(NAND_ADDRESS | NAND_CMD) = NAND_ERASE1;
+        if (NAND_WaitForReady() != NSTA_READY)
+        {
+#if USE_FreeRTOS
+            xSemaphoreGive(xMutexNandHW);
+#endif
+            return NSTA_ERROR;    //失败
+        }
+#if USE_FreeRTOS
+        xSemaphoreGive(xMutexNandHW);
     }
+#endif
     return 0;   //成功
 }
 //全片擦除NAND FLASH
@@ -700,7 +779,7 @@ void NAND_EraseChip(void)
         status = NAND_EraseBlock(i);
         if(status)
         {
-            xprintf("Erase %d block fail!!，错误码为%d\r\n", i, status);    //擦除失败
+            printf_safe("Erase %d block fail!!，错误码为%d\r\n", i, status);    //擦除失败
         }
     }
 }
@@ -745,13 +824,13 @@ u8 NAND_ECC_Correction(u8 *data_buf, u32 eccrd, u32 ecccl)
     if(eccchk == 0XFFF) //全1,说明只有1bit ECC错误
     {
         errorpos = eccrdo ^ eccclo;
-        xprintf("errorpos:%d\r\n", errorpos);
+        printf_safe("errorpos:%d\r\n", errorpos);
         bytepos = errorpos / 8;
         data_buf[bytepos] ^= 1 << (errorpos % 8);
     }
     else                //不是全1,说明至少有2bit ECC错误,无法修复
     {
-        xprintf("2bit ecc error or more\r\n");
+        printf_safe("2bit ecc error or more\r\n");
         return 1;
     }
     return 0;

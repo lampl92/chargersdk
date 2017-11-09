@@ -1,6 +1,5 @@
 #include "includes.h"
 #include "ff.h"
-#include "ff_gen_drv.h"
 #include "nand_diskio.h"
 
 FIL MyFile;          /* File object */
@@ -8,7 +7,7 @@ FIL MyFile;          /* File object */
 extern void Error_Handler(void);
 static void cli_mkfs_fnt(int argc, char **argv)
 {
-    BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
+    BYTE work[4096]; /* Work area (larger is better for processing time) */
     char format;
     taskENTER_CRITICAL();
     if(strcmp(argv[1], "-t") == 0)
@@ -49,7 +48,7 @@ static void cli_mkfs_fnt(int argc, char **argv)
         }
         else
         {
-            printf_safe("\n¸ñÊ½»¯Íê³É,µ±Ç°ÎÄ¼şÏµÍ³%s\n", argv[2]);
+            printf_safe("\næ ¼å¼åŒ–å®Œæˆ,å½“å‰æ–‡ä»¶ç³»ç»Ÿ%s\n", argv[2]);
         }
     }
     else if(strcmp(argv[1], "--help") == 0)
@@ -202,18 +201,18 @@ static void cli_cat_fnt(int argc, char **argv)
     taskEXIT_CRITICAL();
 }
 
-tinysh_cmd_t cli_cat_cmd = {0, "cat", "fatfs ÎÄ¼şÏÔÊ¾", "[eg. system\\evse.cfg]",
+tinysh_cmd_t cli_cat_cmd = {0, "cat", "fatfs æ–‡ä»¶æ˜¾ç¤º", "[eg. system\\evse.cfg]",
                             cli_cat_fnt, 0, 0, 0
                            };
-tinysh_cmd_t cli_fatfs_cmd = {0, "testfatfs", "fatfs ²âÊÔ", "[none]",
+tinysh_cmd_t cli_fatfs_cmd = {0, "testfatfs", "fatfs æµ‹è¯•", "[none]",
                               cli_testfatfs_fnt, 0, 0, 0
                              };
-tinysh_cmd_t cli_mkfs_cmd = {0, "mkfs", "ÖÆ×÷ÎÄ¼şÏµÍ³, Ê¹ÓÃÇ°Çë²é¿´°ïÖú --help", "--help",
+tinysh_cmd_t cli_mkfs_cmd = {0, "mkfs", "åˆ¶ä½œæ–‡ä»¶ç³»ç»Ÿ, ä½¿ç”¨å‰è¯·æŸ¥çœ‹å¸®åŠ© --help", "--help",
                              cli_mkfs_fnt, 0, 0, 0
                             };
-tinysh_cmd_t cli_mount_cmd = {0, "mount", "¹ÒÔÚ´ÅÅÌ, Ê¹ÓÃÇ°Çë²é¿´°ïÖú --help", "--help",
+tinysh_cmd_t cli_mount_cmd = {0, "mount", "æŒ‚åœ¨ç£ç›˜, ä½¿ç”¨å‰è¯·æŸ¥çœ‹å¸®åŠ© --help", "--help",
                               cli_mount_fnt, 0, 0, 0
                              };
-tinysh_cmd_t cli_umount_cmd = {0, "umount", "Ğ¶ÔØ´ÅÅÌ, Ê¹ÓÃÇ°Çë²é¿´°ïÖú --help", "--help",
+tinysh_cmd_t cli_umount_cmd = {0, "umount", "å¸è½½ç£ç›˜, ä½¿ç”¨å‰è¯·æŸ¥çœ‹å¸®åŠ© --help", "--help",
                                cli_umount_fnt, 0, 0, 0
                               };

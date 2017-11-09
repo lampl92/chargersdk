@@ -6,7 +6,6 @@
 /* Public define -------------------------------------------------------------*/
 #define STM32F4
 //#define STM32F0
-#define USE_FreeRTOS
 
 /* NVIC PreemptPriority ------------------------------------------------------*/
 
@@ -16,13 +15,13 @@
 #define bspUSART2_PreemptPriority       5
 #define bspUSART2_SubPriority           0
 
-#define bspUSART3_PreemptPriority       5
+#define bspUSART3_PreemptPriority       1
 #define bspUSART3_SubPriority           0
 
 #define bspUART4_PreemptPriority       5
 #define bspUART4_SubPriority           0
 
-#define bspUART5_PreemptPriority       5
+#define bspUART5_PreemptPriority       1
 #define bspUART5_SubPriority           0
 
 #define bspUART7_PreemptPriority       5
@@ -56,7 +55,7 @@
 /* CPU空闲时执行的函数 */
 //#define CPU_IDLE()        bsp_Idle()
 
-#ifdef USE_FreeRTOS
+#if USE_FreeRTOS
 #define DISABLE_INT()    taskENTER_CRITICAL()
 #define ENABLE_INT()     taskEXIT_CRITICAL()
 #else

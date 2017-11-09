@@ -1080,7 +1080,6 @@ EVSE_t *EVSECreate(void)
         return NULL;
     }
     //pEVSE->info.pTemplSeg = UserListCreate();
-    strcpy(pEVSE->info.strSoftVer, FULLVERSION_STRING);
 
     pEVSE->status.ulArresterState = 0;
     pEVSE->status.ulKnockState    = 0;
@@ -1140,7 +1139,7 @@ void EVSEinit(void)
 	uint8_t str[17] = "2000000000000002";
 	
     pEVSE = EVSECreate();
-	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
+	    pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 
@@ -1148,5 +1147,5 @@ void EVSEinit(void)
 
     pechProto = EchProtocolCreate();
     THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");
-
+    THROW_ERROR(defDevID_File, pechProto->info.ftp.GetFtpCfg((void *)&(pechProto->info.ftp), NULL), ERR_LEVEL_WARNING, "EVSEinit GetFtpCfg");
 }

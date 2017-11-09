@@ -34,6 +34,8 @@ extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
 extern SemaphoreHandle_t xMutexTimeStruct;
+extern SemaphoreHandle_t xMutexNandHW;
+extern SemaphoreHandle_t xprintfMutex;
 
 extern EventGroupHandle_t xHandleEventTimerCBNotify;
 extern EventGroupHandle_t xHandleEventData;

@@ -5,7 +5,7 @@
 #include "semphr.h"
 #include "userlib_queue.h"
 
-#define MAX_COMMAND_LEN                  1024  /* 最大命令长度 */
+#define MAX_COMMAND_LEN                  5000  /* 最大命令长度 */
 typedef enum
 {
     CPIN_OTHER,
@@ -16,7 +16,7 @@ typedef enum
     REG_UNKNOWN,
     CONNECT_OK,
     CONNECT_FAIL
-}ModemParam_e;
+} ModemParam_e;
 
 /* error code */
 typedef enum
@@ -42,7 +42,7 @@ typedef enum
     IP_CLOSE,                        //TCP/UDP 连接关闭
     TCP_CONNECT_OK,                      //TCP/UDP 连接成功
     PDP_DEACT                        //GPRS/CSD  场景异常关闭
-}ModemConStat_e;
+} ModemConStat_e;
 
 typedef struct
 {
@@ -67,13 +67,19 @@ typedef enum
     DS_MODEM_OFF,
     DS_MODEM_ON,
     DS_MODEM_ERR,
-    DS_MODEM_TCP_ACT_PDP,
-    DS_MODEM_TCP_DEACT_PDP,
+    DS_MODEM_ACT_PDP,
+    DS_MODEM_DEACT_PDP,
 //    DS_MODEM_TRANSPARENT,
     DS_MODEM_TCP_OPEN,
     DS_MODEM_TCP_KEEP,
-    DS_MODEM_TCP_CLOSE
-}ModemState_e;
+    DS_MODEM_TCP_CLOSE,
+    DS_MODEM_FTP_OPEN,
+    DS_MODEM_FTP_CLOSE,
+    DS_MODEM_FTP_GET,
+    DS_MODEM_FTP_REGET,
+    DS_MODEM_FTP_CHECK,
+    DS_MODEM_FTP_ERR
+} ModemState_e;
 
 
 typedef struct
@@ -82,7 +88,7 @@ typedef struct
     uint32_t acked;
     uint32_t nAcked;
     uint32_t readable;
-}ModemFlag_t;
+} ModemFlag_t;
 
 typedef struct _dev_modem
 {
@@ -92,6 +98,7 @@ typedef struct _dev_modem
     ModemFlag_t flag;
     SemaphoreHandle_t xMutex;
     Queue *pSendQue;
+
 } DevModem_t;
 
 extern DevModem_t *pModem;

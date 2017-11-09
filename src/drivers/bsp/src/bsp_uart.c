@@ -121,21 +121,29 @@ static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
     while (timeout_ms)
     {
+#if USE_FreeRTOS
         if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
         {
+#endif
             if ((q->isEmpty(q)) == QUE_FALSE)
             {
                 q->DeElem(q, ch);
+#if USE_FreeRTOS
                 xSemaphoreGive(q->xHandleMutexQue);
+#endif
                 return 1;
             }
             else
             {
+#if USE_FreeRTOS
                 xSemaphoreGive(q->xHandleMutexQue);
+#endif
                 vTaskDelay(1);
                 timeout_ms--;
             }
+#if USE_FreeRTOS
         }
+#endif
     }
     
     return 0;

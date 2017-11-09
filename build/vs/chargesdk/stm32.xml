@@ -20,6 +20,7 @@
         <string>STM32F429xx</string>
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
+        <string>USE_FreeRTOS=1</string>
       </PreprocessorMacros>
       <IncludeDirectories>
         <string>.</string>
@@ -38,8 +39,7 @@
         <string>../../../src/middlewares/STemWin/inc</string>
         <string>../../../src/middlewares/STemWin/Config</string>
         <string>../../../src/middlewares/STemWin/Demo</string>
-        <string>../../../src/middlewares/fatfs/src</string>
-        <string>../../../src/middlewares/fatfs/diskdrv</string>
+        <string>../../../src/middlewares/ff13a/source</string>
         <string>../../../src/middlewares/userlib/inc</string>
         <string>../../../src/middlewares/cJSON</string>
         <string>../../../src/middlewares/gdsl-1.8/src</string>
@@ -60,7 +60,7 @@
       <CXXFLAGS />
       <LDFLAGS>--specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs</LDFLAGS>
       <ASFLAGS>-mfpu=fpv4-sp-d16</ASFLAGS>
-      <LinkerScript>STM32F429IG_flash.lds</LinkerScript>
+      <LinkerScript>chargersdk_flash.lds</LinkerScript>
       <COMMONFLAGS>-mcpu=cortex-m4 -mthumb -mfloat-abi=hard</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>

@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/ff13a/source;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -71,6 +71,7 @@
     <None Include="Makefile" />
     <None Include="release.mak" />
     <None Include="stm32.mak" />
+    <None Include="chargersdk_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml" />
@@ -78,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\app\cfg_order.c" />
     <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
+    <ClCompile Include="..\..\..\src\app\cfg_sys.c" />
     <ClCompile Include="..\..\..\src\app\connector.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
     <ClCompile Include="..\..\..\src\app\EVSE.c" />
@@ -89,11 +91,12 @@
     <ClCompile Include="..\..\..\src\app\interface_remote.c" />
     <ClCompile Include="..\..\..\src\app\interface_rfid.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c" />
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_ftp.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
     <ClCompile Include="..\..\..\src\app\log_evse.c" />
-    <ClCompile Include="..\..\..\src\app\main.c" />
+    <ClCompile Include="..\..\..\src\app\app_main.c" />
     <ClCompile Include="..\..\..\src\app\order.c" />
     <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c" />
     <ClCompile Include="..\..\..\src\app\stringName.c" />
@@ -139,7 +142,6 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
@@ -186,13 +188,12 @@
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff_ex.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\syscall.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\unicode.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\diskio.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffsystem.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffunicode.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff_ex.c" />
+    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
@@ -222,7 +223,8 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
-    <ClCompile Include="startup_stm32f429xx.c" />
+    <ClCompile Include="startup_chargersdk.c" />
+    <ClCompile Include="system_chargersdk.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h" />
@@ -427,16 +429,12 @@
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2j.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2jdef.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\usbh_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ffconf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff_ex.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\diskio.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ffconf.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff_ex.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\acconfig.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\config.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl.h" />
@@ -574,8 +572,8 @@
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h" />
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\userlib\src\utils.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\autoip.h" />
@@ -883,6 +881,10 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\middlewares\ff13a\source\00history.txt" />
+    <Text Include="..\..\..\src\middlewares\ff13a\source\00readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

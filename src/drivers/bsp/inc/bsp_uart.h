@@ -17,7 +17,7 @@ typedef enum
     UART_PORT_GPRS,
     UART_PORT_RFID,
     UART_PORT_WIFI
-}UART_Portdef;
+} UART_Portdef;
 
 #ifndef EVSE_DEBUG
 #define CLI_USARTx_BASE                             UART4
@@ -55,7 +55,7 @@ typedef enum
 #define GPRS_USARTx_BASE                            USART3
 #define GPRS_USARTx_BAUDRATE                        115200
 #define GPRS_USARTx_IRQHandler                      void USART3_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             1000
+#define GPRS_QUEUE_SIZE                             (1024*1024)
 
 #define WIFI_USARTx_BASE                            UART5
 #define WIFI_USARTx_BAUDRATE                        115200

@@ -128,6 +128,87 @@ static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
     }
 }
 
+int CheckSysUpFlags(void)
+{
+    int succ = 2;
+
+    switch (xSysconf.xUpFlag.chargesdk_bin)
+    {
+    case 0://无需升级
+        succ = 0;
+        break;
+    case 1://待升级
+        succ = 0;
+        break;
+    case 2://升级成功
+        succ = 1;
+        break;
+    case 3://升级失败
+        succ = 2;
+        break;
+    default:
+        succ = 0;
+        break;
+    }
+    return succ;
+}
+static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    ErrorCode_t errcode, errcode_sdt;
+    int network_res = 0;
+    int succ;
+    /*1. 平台下发升级命令*/
+    errcode = RemoteIF_RecvSetOTA(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 1);
+        /*2. 充电桩上报进入升级状态*/
+        RemoteIF_SendOTA_Start(pEVSE, pProto, NULL);
+    }
+    else if (errcode == ERR_FILE_RW && network_res == 1)
+    {
+        RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 0);
+    }
+    /*3. 平台回复充电桩进入升级状态, 之后重启进入*/
+    errcode = RemoteIF_RecvOTA_Start(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        pProto->info.ftp.ucDownloadStart = 1;
+        errcode_sdt = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStart, (void *)&(pProto->info.ftp.ucDownloadStart), ParamTypeU8);
+        if (errcode_sdt == ERR_NO)
+        {
+            HAL_NVIC_SystemReset();
+            return 1;//Goodbye :)
+        }
+    }
+    
+    errcode = RemoteIF_RecvReqOTA_DW(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        RemoteIF_SendReqOTA_DW(pEVSE, pProto, NULL);
+    }
+    
+    /*升级结果*/
+    succ = CheckSysUpFlags();
+    if (succ != 0)
+    {
+        RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
+        xSysconf.xUpFlag.chargesdk_bin = 0;
+    }
+    if (succ == 2)
+    {
+        xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
+        xSysconf.GetSysCfg(&xSysconf, NULL);
+    }
+    errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
+    if (errcode == ERR_NO && network_res == 1)
+    {
+        //happy time;
+        xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
+    }
+    return 1;
+}
+
 void vTaskEVSERemote(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -542,6 +623,9 @@ void vTaskEVSERemote(void *pvParameters)
 
 
             /***********获取帐户信息**********************/ //由taskrfid调用获取账户信息接口 2017年8月10日
+            
+            /******** OTA ****************/
+            taskremote_ota(pEVSE, pechProto);
 
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
