@@ -26,7 +26,9 @@
 #endif
 
 #define DEVDEBUG(msg)  do{printf_safe(msg);}while(0);
-#define TCP_CLIENT_BUFSIZE   MAX_COMMAND_LEN
+
+#define TCP_CLIENT_BUFSIZE           MAX_COMMAND_LEN
+#define QUE_BUFSIZE                  5000
 DevModem_t *pModem;
 
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
@@ -79,9 +81,9 @@ static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
     return uart_write(UART_PORT_GPRS, pbuff, len);
 }
 
-static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *line, uint32_t len)
+static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
 {
-    return uart_read(UART_PORT_GPRS, line, len, 100);
+    return uart_read(UART_PORT_GPRS, rbuff, len, 100);
 }
 
 static uint32_t modem_send_at(uint8_t *format, ...)
@@ -184,7 +186,7 @@ DR_MODEM_e modem_quit(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("++++++");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "\r\n", 3);
 
     return ret;
 }
@@ -1046,11 +1048,25 @@ DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
+    uint32_t a, b;
 
     modem_send_at("AT+QFTPOPEN=\"%s\",%d\r", server, port);
 
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPOPEN:", 20);
-
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPOPEN", 20);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "%*s %d,%d", &a, &b);
+        if (a == 0 && b == 0)
+        {
+            ret = DR_MODEM_OK;
+        }
+        else
+        {
+            ret = DR_MODEM_ERROR;
+        }
+        break;
+    }
     return ret;
 }
 DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
@@ -1058,11 +1074,25 @@ DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
+    uint32_t a, b;
 
     modem_send_at("AT+QFTPCWD=\"/%s/\"\r", path);
 
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPCWD", 20);
-
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPCWD", 10);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "%*s %d,%d", &a, &b);
+        if (a == 0 && b == 0)
+        {
+            ret = DR_MODEM_OK;
+        }
+        else
+        {
+            ret = DR_MODEM_ERROR;
+        }
+        break;
+    }
     return ret;
 }
 DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
@@ -1073,7 +1103,7 @@ DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
 
     modem_send_at("AT+QFTPGET=\"%s\",\"%s\"\r", pechProto->info.ftp.strNewFileName, "COM:");
 
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 20);
+    ret = modem_get_at_reply(reply, 11, "CONNECT", 20);
 
     return ret;
 }
@@ -1106,11 +1136,25 @@ DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
-
+    uint32_t a;
+    
     modem_send_at("AT+QFTPOPEN=\"%s\",%d\r", pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPOPEN", 20);
-
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "+QFTPOPEN:%d", &a);
+        if (a == 0)
+        {
+            ret = DR_MODEM_OK;
+        }
+        else
+        {
+            ret = DR_MODEM_ERROR;
+        }
+        break;
+    }
     return ret;
 }
 DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
@@ -1118,11 +1162,25 @@ DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
-
+    uint32_t a;
+    
     modem_send_at("AT+QFTPPATH=\"/%s/\"\r", pechProto->info.ftp.strNewVersion);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+QFTPPATH", 20);
-
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "+QFTPPATH:%d", &a);
+        if (a == 0)
+        {
+            ret = DR_MODEM_OK;
+        }
+        else
+        {
+            ret = DR_MODEM_ERROR;
+        }
+        break;
+    }
     return ret;
 }
 DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
@@ -1133,7 +1191,7 @@ DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
 
     modem_send_at("AT+QFTPGET=\"%s\"\r", pechProto->info.ftp.strNewFileName);
 
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 20);
+    ret = modem_get_at_reply(reply, 11, "CONNECT", 20);
 
     return ret;
 }
@@ -1181,9 +1239,15 @@ DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
     {
         M26_QFTPUSER(pModem);
         M26_QFTPPASS(pModem);
-        M26_QFTPOPEN(pModem);
-        M26_QFTPPATH(pModem);
+        ret = M26_QFTPOPEN(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
+        ret = M26_QFTPPATH(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
         ret = M26_QFTPGET(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
     }
     else if (xSysconf.xModule.use_gprs == 3)
     {
@@ -1192,9 +1256,15 @@ DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
         UC15_QFTPCFG(pModem, "filetype", NULL, NULL, 1);
         UC15_QFTPCFG(pModem, "transmode", NULL, NULL, 1);
         UC15_QFTPCFG(pModem, "rsptimeout", NULL, NULL, 90);
-        UC15_QFTPOPEN(pModem, pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
-        UC15_QFTPCWD(pModem, pechProto->info.ftp.strNewVersion);
+        ret = UC15_QFTPOPEN(pModem, pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
+        if (ret != DR_MODEM_OK)
+            return ret;
+        ret = UC15_QFTPCWD(pModem, pechProto->info.ftp.strNewVersion);
+        if (ret != DR_MODEM_OK)
+            return ret;
         ret = UC15_QFTPGET(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
     }
 
     return ret;
@@ -1340,16 +1410,21 @@ void Modem_Poll(DevModem_t *pModem)
     char ch_crc32[9] = { 0 };
     ul2uc ul2ucCrc32;
     uint8_t *pucFileBuffer;
+    uint8_t *pucQueBuffer;
+    uint32_t ulPos = 0;
+    
+    uint32_t ulReGetCnt = 0;
+    uint32_t ulReOpenCnt = 0;
     
     
     uint32_t ulRecvFileSize = 0;
     while(1)
     {
-        switch(pModem->state)
+        switch (pModem->state)
         {
         case DS_MODEM_OFF:
             ret = modem_open(pModem);
-            if(ret != DR_MODEM_OK)
+            if (ret != DR_MODEM_OK)
             {
                 GPRS_reset;
                 DEVDEBUG("modem Key reset!: \r\n");
@@ -1358,7 +1433,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_ON:
             ret = modem_init(pModem);
-            if(ret == DR_MODEM_OK)
+            if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_ACT_PDP;
             }
@@ -1369,7 +1444,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_ACT_PDP:
             ret = modem_set_PDP(pModem);
-            if(ret == DR_MODEM_OK)
+            if (ret == DR_MODEM_OK)
             {
                 if (pechProto->info.ftp.ucDownloadStart == 1)
                 {
@@ -1394,7 +1469,7 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 ret = UC15_QIDEACT(pModem);
             }
-            if(ret == DR_MODEM_OK)
+            if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_ACT_PDP;
             }
@@ -1412,7 +1487,7 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 ret = UC15_TCPOPEN(pModem, pechProto);
             }
-            switch(pModem->status.eConnect)
+            switch (pModem->status.eConnect)
             {
             case CONNECT_OK:
                 xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
@@ -1421,7 +1496,7 @@ void Modem_Poll(DevModem_t *pModem)
                 break;
             case CONNECT_FAIL:
                 M26_STATE(pModem);
-                if(pModem->status.statConStat == TCP_CONNECTING)
+                if (pModem->status.statConStat == TCP_CONNECTING)
                 {
                     pModem->state = DS_MODEM_TCP_CLOSE;
                     printf_safe("State TCP open Fail ,Call TCP close!!\n");
@@ -1482,29 +1557,31 @@ void Modem_Poll(DevModem_t *pModem)
 //            }
             modem_UART_putQue(pModem);
             /*=== read处理 ===*/
-            if(pModem->info.ucTPMode == 0)
+            if (pModem->info.ucTPMode == 0)
             {
                 ret = modem_get_at_reply(tcp_client_recvbuf, sizeof(tcp_client_recvbuf) - 1, "+QIRDI:", 1);
-                if(ret == DR_MODEM_READ)
+                if (ret == DR_MODEM_READ)
                 {
                     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid);
                 }
                 uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                             defEventBitTCPClientRecvValid,
-                                             pdTRUE, pdTRUE, 0);
-                if((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
+                    defEventBitTCPClientRecvValid,
+                    pdTRUE,
+                    pdTRUE,
+                    0);
+                if ((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
                 {
                     //读取串口数据
                     recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-                    if(recv_len > 0)
+                    if (recv_len > 0)
                     {
                         printf_safe("\n\e[34;43mTCP Recv:\e[0m ");
-                        for(i = 0; i < recv_len; i++)
+                        for (i = 0; i < recv_len; i++)
                         {
                             printf_safe("%02X ", tcp_client_recvbuf[i]);
                         }
                         printf_safe("\n");
-                        if(strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                        if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
                         {
                             printf_safe("\e[31;47mServer CLOSED\n\e[0m");
                             pModem->state = DS_MODEM_TCP_CLOSE;
@@ -1541,10 +1618,10 @@ void Modem_Poll(DevModem_t *pModem)
             else//透传模式
             {
                 recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-                if(recv_len > 0)
+                if (recv_len > 0)
                 {
                     printf_safe("\nTCP Recv: ");
-                    for(i = 0; i < recv_len; i++)
+                    for (i = 0; i < recv_len; i++)
                     {
                         printf_safe("%02X ", tcp_client_recvbuf[i]);
                     }
@@ -1574,7 +1651,7 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 ret = UC15_QICLOSE(pModem);
             }
-            if(ret == DR_MODEM_OK)
+            if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_TCP_OPEN;
             }
@@ -1584,6 +1661,13 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_OPEN:
+            ulReOpenCnt++;
+            if (ulReOpenCnt >= 5)
+            {
+                ulReOpenCnt = 0;
+                pModem->state = DS_MODEM_FTP_ERR;
+                break;
+            }
             ret = modem_set_FTPOPEN(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -1595,6 +1679,9 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_GET:
+            ulReGetCnt++;//FTPGet次数
+            pucFileBuffer = (uint8_t *)malloc(1024);
+            pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
             sprintf(filepath, "system\\%s", pechProto->info.ftp.strNewFileName);
             fres = f_open(&f, filepath, FA_CREATE_ALWAYS | FA_WRITE);
             if (fres != FR_OK)
@@ -1604,17 +1691,23 @@ void Modem_Poll(DevModem_t *pModem)
             }
             while (1)
             {
-                recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+                recv_len = modem_read(pModem, pucQueBuffer, QUE_BUFSIZE);
                 ulRecvFileSize += recv_len;
-                printf_safe("recv = %d\n", recv_len);                
-                printf_safe("total= %d\n", ulRecvFileSize);
-                if (strstr(tcp_client_recvbuf, "+QFTPGET:") != NULL)
+                if (strstr(pucQueBuffer, "+QFTPGET:") != NULL)
                 {
-                    memset(tcp_client_recvbuf, 0, MAX_COMMAND_LEN);
-                    ulRecvFileSize = 0;
+                    for (i = 0; i < recv_len; i++)
+                    {
+                        printf_safe("%c", pucQueBuffer[i]);
+                    }
+                    ulRecvFileSize -= recv_len;//减去最后模块返回命令的长度
                     taskENTER_CRITICAL();
+                    fres = f_write(&f, pucFileBuffer, ulRecvFileSize, &bw);
                     f_close(&f);
                     taskEXIT_CRITICAL();
+                    free(pucFileBuffer);
+                    free(pucQueBuffer);
+                    ulRecvFileSize = 0;
+                    ulPos = 0;
                     pModem->state = DS_MODEM_FTP_CHECK;
                     break;
                 }
@@ -1622,9 +1715,17 @@ void Modem_Poll(DevModem_t *pModem)
                 {
                     if (recv_len > 0)
                     {
+                        printf_safe("recv = %d\n", recv_len);                
+                        printf_safe("total= %d\n", ulRecvFileSize);
+//                        for (i = 0; i < recv_len; i++)
+//                        {
+//                            printf_safe("%02X ", pucQueBuffer[i]);
+//                        }
                         taskENTER_CRITICAL();
-                        fres = f_write(&f, tcp_client_recvbuf, recv_len, &bw);
+                        pucFileBuffer = realloc(pucFileBuffer, ulRecvFileSize);
+                        memcpy(pucFileBuffer + ulPos, pucQueBuffer, recv_len);
                         taskEXIT_CRITICAL();
+                        ulPos += recv_len;
                     }
                 }
             }
@@ -1666,6 +1767,12 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_REGET:
+            if (ulReGetCnt >= 5)
+            {
+                ulReGetCnt = 0;
+                pModem->state = DS_MODEM_FTP_ERR;
+                break;
+            }
             ret = UC15_QFTPGET(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -1678,6 +1785,19 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 pModem->state = DS_MODEM_DEACT_PDP;
             }
+            break;
+        case DS_MODEM_FTP_ERR:
+            xSysconf.xUpFlag.chargesdk_bin = 3;
+            pechProto->info.ftp.ucDownloadStart = 0;
+            xSysconf.SetSysCfg(
+                jnSysChargersdk_bin, 
+                (void *)&(xSysconf.xUpFlag.chargesdk_bin), 
+                ParamTypeU8);
+            pechProto->info.ftp.SetFtpCfg(
+                jnFtpDownloadStart,       
+                (void *)&(pechProto->info.ftp.ucDownloadStart), 
+                ParamTypeU8);
+            pModem->state = DS_MODEM_FTP_CLOSE;
             break;
         case DS_MODEM_ERR:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
@@ -1722,6 +1842,6 @@ void Modem_Poll(DevModem_t *pModem)
 
         //modem_get_info(pModem);
 
-        vTaskDelay(500);
+        vTaskDelay(100);
     }
 }
