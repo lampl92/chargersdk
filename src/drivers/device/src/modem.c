@@ -291,7 +291,7 @@ static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("AT+CPIN?\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CPIN:", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+", 3);
     switch(ret)
     {
     case DR_MODEM_OK:
@@ -1144,7 +1144,7 @@ DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
     switch (ret)
     {
     case DR_MODEM_OK:
-        sscanf(reply, "+QFTPOPEN:%d", &a);
+        sscanf(reply, "%*[^:]:%d", &a);
         if (a == 0)
         {
             ret = DR_MODEM_OK;
@@ -1195,19 +1195,7 @@ DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
 
     return ret;
 }
-DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
-{
-    DR_MODEM_e ret;
-    if (xSysconf.xModule.use_gprs == 2)
-    {
-        ret = M26_QICLOSE(pModem);
-    }
-    else if (xSysconf.xModule.use_gprs == 3)
-    {
-        ret = UC15_QICLOSE(pModem);
-    }
-    return ret;
-}
+
 DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1232,6 +1220,19 @@ DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
 
     return ret;
 }
+DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        ret = M26_QFTPCLOSE(pModem);
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        ret = UC15_QFTPCLOSE(pModem);
+    }
+    return ret;
+}
 DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1240,12 +1241,6 @@ DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
         M26_QFTPUSER(pModem);
         M26_QFTPPASS(pModem);
         ret = M26_QFTPOPEN(pModem);
-        if (ret != DR_MODEM_OK)
-            return ret;
-        ret = M26_QFTPPATH(pModem);
-        if (ret != DR_MODEM_OK)
-            return ret;
-        ret = M26_QFTPGET(pModem);
         if (ret != DR_MODEM_OK)
             return ret;
     }
@@ -1259,6 +1254,24 @@ DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
         ret = UC15_QFTPOPEN(pModem, pechProto->info.ftp.strServer, pechProto->info.ftp.usPort);
         if (ret != DR_MODEM_OK)
             return ret;
+    }
+
+    return ret;
+}
+DR_MODEM_e modem_set_FTPGET(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        ret = M26_QFTPPATH(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
+        ret = M26_QFTPGET(pModem);
+        if (ret != DR_MODEM_OK)
+            return ret;
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
         ret = UC15_QFTPCWD(pModem, pechProto->info.ftp.strNewVersion);
         if (ret != DR_MODEM_OK)
             return ret;
@@ -1669,6 +1682,12 @@ void Modem_Poll(DevModem_t *pModem)
                 break;
             }
             ret = modem_set_FTPOPEN(pModem);
+            if (ret != DR_MODEM_OK)
+            {
+                pModem->state = DS_MODEM_DEACT_PDP;
+                break;
+            }
+            ret = modem_set_FTPGET(pModem);
             if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_FTP_GET;
