@@ -195,6 +195,11 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
         RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
         xSysconf.xUpFlag.chargesdk_bin = 0;
     }
+    if (succ == 2)
+    {
+        xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
+        xSysconf.GetSysCfg(&xSysconf, NULL);
+    }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {

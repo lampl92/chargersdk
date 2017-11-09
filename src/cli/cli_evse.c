@@ -240,6 +240,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
         printf_safe("额定功率:      %.2lf\n", pCON->info.dRatedPower);
         printf_safe("QRCode  :      %s\n", pCON->info.strQRCode);
     }
+    printf_safe("Version:%s\n", xSysconf.strVersion);
 }
 
 
