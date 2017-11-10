@@ -17,7 +17,7 @@
  * @return ErrorCode_t
  *
  */
-ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
+ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
     FIL f;
     FRESULT res;
@@ -69,7 +69,7 @@ exit:
  * @return cJSON* 返回cJSON指针
  *
  */
-cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
+cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
     FIL f;
     FRESULT res;

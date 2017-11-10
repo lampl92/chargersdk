@@ -64,7 +64,7 @@ const uint8_t *strErrorCode[100] =
     "卡号是黑名单"
 };
 
-void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg)
+void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, char *msg)
 {
     ErrorPackage_t package;
 
@@ -76,7 +76,7 @@ void ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel
     xQueueSend(xHandleQueueErrorPackage, (void *)&package, 0);
 }
 
-void ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info)
+void ThrowFSCode (FRESULT rc, char *path, char *info)
 {
     const char *str =
         "OK\0" "DISK_ERR\0" "INT_ERR\0" "NOT_READY\0" "NO_FILE\0" "NO_PATH\0"

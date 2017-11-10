@@ -1107,6 +1107,31 @@ DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
 
     return ret;
 }
+DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+QFTPGET=\"%s\"\r", pechProto->info.ftp.strNewFileName);
+
+    ret = modem_get_at_reply(reply, 11, "CONNECT", 20);
+
+    return ret;
+}
+DR_MODEM_e modem_set_ftpget(DevModem_t *pModem)
+{
+    DR_MODEM_e ret;
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        ret = M26_QFTPGET(pModem);
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        ret = UC15_QFTPGET(pModem);
+    }
+    return ret;
+}
 DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1181,18 +1206,6 @@ DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
         }
         break;
     }
-    return ret;
-}
-DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
-{
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
-    DR_MODEM_e ret;
-
-    modem_send_at("AT+QFTPGET=\"%s\"\r", pechProto->info.ftp.strNewFileName);
-
-    ret = modem_get_at_reply(reply, 11, "CONNECT", 20);
-
     return ret;
 }
 
@@ -1792,7 +1805,7 @@ void Modem_Poll(DevModem_t *pModem)
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }
-            ret = UC15_QFTPGET(pModem);
+            ret = modem_set_ftpget(pModem);
             if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_FTP_GET;

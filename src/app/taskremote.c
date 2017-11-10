@@ -198,13 +198,13 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     if (succ == 1)//succ == 1 升级成功
     {
         xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
-        xSysconf.GetSysCfg(&xSysconf, NULL);
     }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {
         //happy time;
         xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
+        xSysconf.GetSysCfg(&xSysconf, NULL);
     }
     return 1;
 }
