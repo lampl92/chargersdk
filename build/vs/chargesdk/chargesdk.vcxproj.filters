@@ -711,9 +711,6 @@
     <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC\PIC18">
       <UniqueIdentifier>{476faccd-7261-4534-9ecb-898155dc2c2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\Device-specific files">
-      <UniqueIdentifier>{efd49547-8365-4ce1-9841-78374494b3fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{bf6d369c-db8b-4b07-8571-a00c2352ee79}</UniqueIdentifier>
     </Filter>

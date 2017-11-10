@@ -209,9 +209,6 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
-#ifndef __OPTIMIZE__
-#define __OPTIMIZE__ 1
-#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -588,6 +585,9 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
+#endif
+#ifndef __NO_INLINE__
+#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -1054,6 +1054,9 @@
 #ifndef __cpp_constexpr
 #define __cpp_constexpr 201304
 #endif
+#ifndef USE_FreeRTOS
+#define USE_FreeRTOS 1
+#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1215,8 +1218,7 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/fatfs/src
-//../../../src/middlewares/fatfs/diskdrv
+//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src

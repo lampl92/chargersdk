@@ -1113,7 +1113,7 @@ EVSE_t *EVSECreate(void)
 static void CONInit(void)
 {
     static CON_t *pCON[1];  //在堆中定义
-	uint8_t str[17] = "2000000000000002";
+	uint8_t str[17] = "3000000000000002";
 
     pListCON = UserListCreate();
     int i;
@@ -1135,7 +1135,7 @@ static void CONInit(void)
 }
 void EVSEinit(void)
 {
-	uint8_t str[17] = "2000000000000002";
+	uint8_t str[17] = "3000000000000002";
 	
     pEVSE = EVSECreate();
 	    pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);

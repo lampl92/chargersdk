@@ -195,7 +195,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
         RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
         xSysconf.xUpFlag.chargesdk_bin = 0;
     }
-    if (succ == 2)
+    if (succ == 1)//succ == 1 升级成功
     {
         xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
         xSysconf.GetSysCfg(&xSysconf, NULL);

@@ -209,9 +209,6 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
-#ifndef __OPTIMIZE__
-#define __OPTIMIZE__ 1
-#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -370,6 +367,9 @@
 #endif
 #ifndef __BIGGEST_ALIGNMENT__
 #define __BIGGEST_ALIGNMENT__ 8
+#endif
+#ifndef USE_HAL_DRIVER
+#define USE_HAL_DRIVER 1
 #endif
 #ifndef __STDC_UTF_16__
 #define __STDC_UTF_16__ 1
@@ -544,6 +544,9 @@
 #ifndef __FLT_MIN_10_EXP__
 #define __FLT_MIN_10_EXP__ (-37)
 #endif
+#ifndef OS_SUPPORT
+#define OS_SUPPORT 1
+#endif
 #ifndef __LACCUM_MIN__
 #define __LACCUM_MIN__ (-0X1P31LK-0X1P31LK)
 #endif
@@ -582,6 +585,9 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
+#endif
+#ifndef __NO_INLINE__
+#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -726,6 +732,9 @@
 #endif
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
+#endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
 #endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
@@ -1048,6 +1057,9 @@
 #ifndef __cpp_constexpr
 #define __cpp_constexpr 201304
 #endif
+#ifndef USE_FreeRTOS
+#define USE_FreeRTOS 1
+#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1186,7 +1198,7 @@
 #endif
 
 // --- Include directories begin --- //
-//..
+//.
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
