@@ -45,7 +45,7 @@ typedef struct
     UpgradeFlag_t xUpFlag;
     ModuleSelect_t xModule;
     ErrorCode_t(*GetSysCfg)(void *pvSys, void *pvCfgObj);
-    ErrorCode_t(*SetSysCfg)(uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+    ErrorCode_t(*SetSysCfg)(char *jnItemString, void *pvCfgParam, uint8_t type);
     
 } Sysconf_t;
 
