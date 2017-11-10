@@ -1054,6 +1054,9 @@
 #ifndef __cpp_constexpr
 #define __cpp_constexpr 201304
 #endif
+#ifndef USE_FreeRTOS
+#define USE_FreeRTOS 1
+#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1215,8 +1218,7 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/fatfs/src
-//../../../src/middlewares/fatfs/diskdrv
+//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src

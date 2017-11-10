@@ -21,9 +21,6 @@
       <UniqueIdentifier>{341e03ba-1a94-459b-85cb-777daa664f12}</UniqueIdentifier>
       <Extensions>*.vgdbsettings</Extensions>
     </Filter>
-    <Filter Include="Source files\Device-specific files">
-      <UniqueIdentifier>{9635b285-30d9-463a-8144-a962b880a032}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{94b53759-2d52-4c1e-89de-11c61ebde725}</UniqueIdentifier>
     </Filter>

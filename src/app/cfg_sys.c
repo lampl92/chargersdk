@@ -4,7 +4,7 @@
 #include "cfg_parse.h"
 #include <string.h>
 
-static ErrorCode_t GetSysCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCfgItem, uint8_t type)
+static ErrorCode_t GetSysCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
 {
     ErrorCode_t errcode;
 
@@ -230,7 +230,7 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
 
 
 
-ErrorCode_t SetSysCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsSysCfgObj;
     cJSON *jsItem;

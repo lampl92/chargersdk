@@ -107,6 +107,6 @@ typedef struct _ErrorPackage
 extern const char	*strErrorCode[];
 
 void	ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, char *msg);
-void	ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info);
+void	ThrowFSCode (FRESULT rc, char *path, char *info);
 
 #endif
