@@ -168,9 +168,9 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     uint32_t ulMaxItem;
     int i = 0,j = 0;
 	struct tm *ts;
-    struct tm *ts_end;
 	struct tm *ts_start;
-	char buf[80];
+	struct tm *ts_end;
+	char buf[80] = "\0";
 
 	if(0 == log_type)   //故障记录
     {
@@ -186,7 +186,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             cJSON_Delete(jsParent);
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
-            
+
             return 0;
         }
 
@@ -249,7 +249,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             //序号 记录时间  枪号  故障等级  故障状态  故障信息
             LISTVIEW_AddRow(hItem, NULL);
 
-            sprintf((char *)buf, "%d", j);
+            sprintf((char *)buf, "%d", i);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
