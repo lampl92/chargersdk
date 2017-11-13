@@ -358,7 +358,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
             jsChild = cJSON_GetArrayItem(jsParent, j);
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
 
             //判断起始年
