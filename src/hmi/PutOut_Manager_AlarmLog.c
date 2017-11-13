@@ -166,8 +166,10 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     cJSON *jsItemTmp;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
-    int i;
+    int i,j = 0;
 	struct tm *ts;
+	struct tm *ts_start;
+	struct tm *ts_end;
 	char buf[80];
 
 	if(0 == log_type)   //故障记录
@@ -184,15 +186,68 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             cJSON_Delete(jsParent);
             return 0;
         }
-        for (i = 0; i < ulMaxItem; i++)
+
+        ts_start->tm_year = atoi(sel_start_date.year);
+        ts_start->tm_mon = atoi(sel_start_date.month);
+        ts_start->tm_mday = atoi(sel_start_date.day);
+
+        ts_end->tm_year = atoi(sel_end_date.year);
+        ts_end->tm_mon = atoi(sel_end_date.month);
+        ts_end->tm_mday = atoi(sel_end_date.day);
+
+        for (j = 0; j < ulMaxItem; j++)
         {
+            jsChild = cJSON_GetArrayItem(jsParent, j);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+
+            //判断起始年
+            if(ts->tm_year < ts_start->tm_year)
+            {
+                continue;
+            }
+            else if(ts->tm_year == ts_start->tm_year)
+            {
+                if(ts->tm_mon < ts_start->tm_mon)
+                {
+                    continue;
+                }
+                else if(ts->tm_mon == ts_start->tm_mon)
+                {
+                    if(ts->tm_mday < ts_start->tm_mday)
+                    {
+                        continue;
+                    }
+                }
+            }
+            //判断截止年
+            if(ts->tm_year > ts_end->tm_year)
+            {
+                continue;
+            }
+            else if(ts->tm_year == ts_end->tm_year)
+            {
+                if(ts->tm_mon > ts_end->tm_mon)
+                {
+                    continue;
+                }
+                else if(ts->tm_mon == ts_end->tm_mon)
+                {
+                    if(ts->tm_mday > ts_end->tm_mday)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            i++;
+
             //序号 记录时间  枪号  故障等级  故障状态  故障信息
             LISTVIEW_AddRow(hItem, NULL);
 
-            sprintf((char *)buf, "%d", i+1);
+            sprintf((char *)buf, "%d", j);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
-
-            jsChild = cJSON_GetArrayItem(jsParent, i);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
@@ -202,7 +257,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
             sprintf((char *)buf, "%d", jsItem->valueint);
             LISTVIEW_SetItemText(hItem, 2, i, buf);
-            
+
             //0 状态 1 告警 2 异常 3 故障
             jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
             switch (jsItem->valueint)
@@ -251,14 +306,69 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             return 0;
         }
 
-        for (i = 0; i < ulMaxItem; i++)
+        ts_start->tm_year = atoi(sel_start_date.year);
+        ts_start->tm_mon = atoi(sel_start_date.month);
+        ts_start->tm_mday = atoi(sel_start_date.day);
+
+        ts_end->tm_year = atoi(sel_end_date.year);
+        ts_end->tm_mon = atoi(sel_end_date.month);
+        ts_end->tm_mday = atoi(sel_end_date.day);
+
+        for (j = 0; j < ulMaxItem; j++)
         {
+
+            jsChild = cJSON_GetArrayItem(jsParent, j);
+
+            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+	        ts = localtime((time_t*)&(jsItem->valueint));
+
+            //判断起始年
+            if(ts->tm_year < ts_start->tm_year)
+            {
+                continue;
+            }
+            else if(ts->tm_year == ts_start->tm_year)
+            {
+                if(ts->tm_mon < ts_start->tm_mon)
+                {
+                    continue;
+                }
+                else if(ts->tm_mon == ts_start->tm_mon)
+                {
+                    if(ts->tm_mday < ts_start->tm_mday)
+                    {
+                        continue;
+                    }
+                }
+            }
+            //判断截止年
+            if(ts->tm_year > ts_end->tm_year)
+            {
+                continue;
+            }
+            else if(ts->tm_year == ts_end->tm_year)
+            {
+                if(ts->tm_mon > ts_end->tm_mon)
+                {
+                    continue;
+                }
+                else if(ts->tm_mon == ts_end->tm_mon)
+                {
+                    if(ts->tm_mday > ts_end->tm_mday)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            i++;
+
             /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
             LISTVIEW_AddRow(hItem, NULL);
-            sprintf((char *)buf, "%d", i+1);
+            sprintf((char *)buf, "%d", i);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
-            jsChild = cJSON_GetArrayItem(jsParent, i);
+
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             if(jsItem->valueint == 4)
             {
