@@ -7,7 +7,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Block Size in Bytes */
-#define BLOCK_SIZE                512
+#define SECTOR_SIZE                512
 
 /* Private variables ---------------------------------------------------------*/
 /* Disk status */
@@ -59,7 +59,7 @@ DRESULT NAND_disk_read(BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_ERROR;
 
-    if(FTL_ReadSectors(buff, sector, BLOCK_SIZE, count) == 0)
+    if(FTL_ReadSectors(buff, sector, SECTOR_SIZE, count) == 0)
     {
         res = RES_OK;
     }
@@ -81,7 +81,7 @@ DRESULT NAND_disk_read(BYTE *buff, DWORD sector, UINT count)
 DRESULT NAND_disk_write(const BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_ERROR;
-    if (FTL_WriteSectors((uint8_t *)buff, sector, BLOCK_SIZE, count) == 0)
+    if (FTL_WriteSectors((uint8_t *)buff, sector, SECTOR_SIZE, count) == 0)
     {
         res = RES_OK;
     }
@@ -115,15 +115,15 @@ DRESULT NAND_disk_ioctl(BYTE cmd, void *buff)
             res = RES_OK;
             break;
         case GET_SECTOR_SIZE:
-            *(WORD *)buff = BLOCK_SIZE;
+            *(WORD *)buff = SECTOR_SIZE;
             res = RES_OK;
             break;
         case GET_BLOCK_SIZE:
-             *(WORD *)buff = nand_dev.page_mainsize / BLOCK_SIZE;
+            *(WORD *)buff = nand_dev.page_mainsize / SECTOR_SIZE;
             res = RES_OK;
             break;
         case GET_SECTOR_COUNT:
-            *(DWORD *)buff = nand_dev.valid_blocknum * nand_dev.block_pagenum * nand_dev.page_mainsize / BLOCK_SIZE;
+            *(DWORD *)buff = nand_dev.valid_blocknum * nand_dev.block_pagenum * nand_dev.page_mainsize / SECTOR_SIZE;
             res = RES_OK;
             break;
         default:
