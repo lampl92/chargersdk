@@ -166,10 +166,10 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     cJSON *jsItemTmp;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
-    int i,j = 0;
+    int i = 0,j = 0;
 	struct tm *ts;
+    struct tm *ts_end;
 	struct tm *ts_start;
-	struct tm *ts_end;
 	char buf[80];
 
 	if(0 == log_type)   //故障记录
@@ -184,6 +184,9 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         if (ulMaxItem == 0)
         {
             cJSON_Delete(jsParent);
+            LISTVIEW_AddRow(hItem, NULL);
+            LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
+            
             return 0;
         }
 
@@ -191,7 +194,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         ts_start->tm_mon = atoi(sel_start_date.month);
         ts_start->tm_mday = atoi(sel_start_date.day);
 
-        ts_end->tm_year = atoi(sel_end_date.year);
+        ts_end->tm_year = atoi("2017");
         ts_end->tm_mon = atoi(sel_end_date.month);
         ts_end->tm_mday = atoi(sel_end_date.day);
 
@@ -203,17 +206,17 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 	        ts = localtime((time_t*)&(jsItem->valueint));
 
             //判断起始年
-            if(ts->tm_year < ts_start->tm_year)
+            if((ts->tm_year+1900) < ts_start->tm_year)
             {
                 continue;
             }
-            else if(ts->tm_year == ts_start->tm_year)
+            else if((ts->tm_year+1900) == ts_start->tm_year)
             {
-                if(ts->tm_mon < ts_start->tm_mon)
+                if((ts->tm_mon+1) < ts_start->tm_mon)
                 {
                     continue;
                 }
-                else if(ts->tm_mon == ts_start->tm_mon)
+                else if((ts->tm_mon+1) == ts_start->tm_mon)
                 {
                     if(ts->tm_mday < ts_start->tm_mday)
                     {
@@ -222,17 +225,17 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                 }
             }
             //判断截止年
-            if(ts->tm_year > ts_end->tm_year)
+            if((ts->tm_year+1900) > ts_end->tm_year)
             {
                 continue;
             }
-            else if(ts->tm_year == ts_end->tm_year)
+            else if((ts->tm_year+1900) == ts_end->tm_year)
             {
-                if(ts->tm_mon > ts_end->tm_mon)
+                if((ts->tm_mon+1) > ts_end->tm_mon)
                 {
                     continue;
                 }
-                else if(ts->tm_mon == ts_end->tm_mon)
+                else if((ts->tm_mon+1) == ts_end->tm_mon)
                 {
                     if(ts->tm_mday > ts_end->tm_mday)
                     {
@@ -323,17 +326,17 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 	        ts = localtime((time_t*)&(jsItem->valueint));
 
             //判断起始年
-            if(ts->tm_year < ts_start->tm_year)
+            if((ts->tm_year+1900) < ts_start->tm_year)
             {
                 continue;
             }
-            else if(ts->tm_year == ts_start->tm_year)
+            else if((ts->tm_year+1900) == ts_start->tm_year)
             {
-                if(ts->tm_mon < ts_start->tm_mon)
+                if((ts->tm_mon+1) < ts_start->tm_mon)
                 {
                     continue;
                 }
-                else if(ts->tm_mon == ts_start->tm_mon)
+                else if((ts->tm_mon+1) == ts_start->tm_mon)
                 {
                     if(ts->tm_mday < ts_start->tm_mday)
                     {
@@ -342,17 +345,17 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                 }
             }
             //判断截止年
-            if(ts->tm_year > ts_end->tm_year)
+            if((ts->tm_year+1900) > ts_end->tm_year)
             {
                 continue;
             }
-            else if(ts->tm_year == ts_end->tm_year)
+            else if((ts->tm_year+1900) == ts_end->tm_year)
             {
-                if(ts->tm_mon > ts_end->tm_mon)
+                if((ts->tm_mon+1) > ts_end->tm_mon)
                 {
                     continue;
                 }
-                else if(ts->tm_mon == ts_end->tm_mon)
+                else if((ts->tm_mon+1) == ts_end->tm_mon)
                 {
                     if(ts->tm_mday > ts_end->tm_mday)
                     {
@@ -547,6 +550,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //        LISTWHEEL_SetLineHeight(hItem,30);
             //设置选中的条目的文本颜色
             LISTWHEEL_SetTextColor(hItem,LISTWHEEL_CI_SEL,GUI_RED);
+            LISTWHEEL_SetVelocity(hItem, 100);
         }
         //设置起始年listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0);
