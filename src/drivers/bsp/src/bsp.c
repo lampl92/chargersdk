@@ -138,7 +138,6 @@ void bsp_Init(void)
     LCD_Init();
     TP_Init();
 #endif
-    //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
     bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
@@ -147,8 +146,6 @@ void bsp_Init(void)
 #ifndef EVSE_DEBUG
     //IWDG_Init(IWDG_PRESCALER_64,500);  	
 #endif
-//LCD_Init();
-
 }
 
 void bsp_Error_Handler(void)

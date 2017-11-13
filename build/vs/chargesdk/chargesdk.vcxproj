@@ -123,8 +123,7 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c" />
@@ -270,8 +269,7 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_ftl.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_hw.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_sdram.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_timer.h" />

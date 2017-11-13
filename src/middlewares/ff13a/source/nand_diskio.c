@@ -1,8 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "diskio.h"
-#include "bsp_nand_hw.h"
-#include "bsp_nand_ftl.h"
+#include "bsp_nand_flash.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -25,8 +24,8 @@ DSTATUS NAND_disk_initialize(void)
     int retval;
     Stat = STA_NOINIT;
 
-    retval = FTL_Init();
-    if(retval == 0)
+    retval = NAND_Init();
+    if (retval == NAND_OK)
     {
         Stat &= ~STA_NOINIT;
     }
@@ -36,7 +35,6 @@ DSTATUS NAND_disk_initialize(void)
 
 /**
   * @brief  Gets Disk Status
-  * @param  lun : not used
   * @retval DSTATUS: Operation status
   */
 DSTATUS NAND_disk_status(void)
@@ -59,7 +57,7 @@ DRESULT NAND_disk_read(BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_ERROR;
 
-    if(FTL_ReadSectors(buff, sector, SECTOR_SIZE, count) == 0)
+    if(NAND_ReadMultiSectors(buff, sector, SECTOR_SIZE, count) == NAND_OK)
     {
         res = RES_OK;
     }
@@ -81,7 +79,7 @@ DRESULT NAND_disk_read(BYTE *buff, DWORD sector, UINT count)
 DRESULT NAND_disk_write(const BYTE *buff, DWORD sector, UINT count)
 {
     DRESULT res = RES_ERROR;
-    if (FTL_WriteSectors((uint8_t *)buff, sector, SECTOR_SIZE, count) == 0)
+    if (NAND_WriteMultiSectors((uint8_t *)buff, sector, SECTOR_SIZE, count) == NAND_OK)
     {
         res = RES_OK;
     }
@@ -119,11 +117,11 @@ DRESULT NAND_disk_ioctl(BYTE cmd, void *buff)
             res = RES_OK;
             break;
         case GET_BLOCK_SIZE:
-            *(WORD *)buff = nand_dev.page_mainsize / SECTOR_SIZE;
+            *(WORD *)buff = NAND_PAGE_SIZE / SECTOR_SIZE;
             res = RES_OK;
             break;
         case GET_SECTOR_COUNT:
-            *(DWORD *)buff = nand_dev.valid_blocknum * nand_dev.block_pagenum * nand_dev.page_mainsize / SECTOR_SIZE;
+            *(DWORD *)buff = NAND_FormatCapacity() / SECTOR_SIZE;
             res = RES_OK;
             break;
         default:

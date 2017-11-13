@@ -1,11 +1,11 @@
 #include "includes.h"
 #include "ff.h"
-#include "nand_diskio.h"
 #include "cJSON.h"
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
 #include "cfg_sys.h"
+#include "bsp_nand_flash.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -93,6 +93,8 @@ void fs_init(void)
 {
     FRESULT res;
     //fs_mkfs();
+    NAND_Init();
+    NAND_Format();
     res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
     if (res != FR_OK)
     {

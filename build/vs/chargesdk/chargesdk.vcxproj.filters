@@ -1467,6 +1467,9 @@
     <ClCompile Include="..\..\..\src\app\app_main.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
@@ -3877,6 +3880,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
