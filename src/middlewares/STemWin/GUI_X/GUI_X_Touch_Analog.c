@@ -72,7 +72,7 @@ void GUI_TOUCH_X_ActivateX(void)
                 adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
                 adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
 
-                if (!bittest(winCreateFlag, 2))
+                //if (!bittest(winCreateFlag, 2))
                 {
                     State.x = adc_x;
                     State.y = adc_y;
@@ -83,21 +83,17 @@ void GUI_TOUCH_X_ActivateX(void)
         }
         else
         {
-            _pidFlag = 0;
-            Buzzer_control(0);
-
             /**< 键盘鼠标路线会触发拐角的键,
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
-            if (bittest(winCreateFlag, 2))
+            if (_pidFlag == 1)
             {
-                State.Pressed = 0;
-                GUI_TOUCH_StoreStateEx(&State);
-
-                adc_x = 569;
-                adc_y = 60;
-            }
-            else
-            {
+                _pidFlag = 0;
+                Buzzer_control(0);
+                if (bittest(winCreateFlag, 2))
+                {
+                    State.x = 400;
+                    State.y = 60;
+                }
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
             }
@@ -128,7 +124,7 @@ int  GUI_TOUCH_X_MeasureX(void)
         {
             step = 1;
         }
-        else if((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40))
+        else if((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40)&&(step == 1))
         {
             step = 2;
             bitset(calebrate_done,7);//管理员
