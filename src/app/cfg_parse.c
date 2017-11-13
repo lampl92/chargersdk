@@ -36,10 +36,10 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    taskENTER_CRITICAL(); 
+    //taskENTER_CRITICAL(); 
     ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
     f_sync(&f);
-    taskEXIT_CRITICAL();
+    //taskEXIT_CRITICAL();
     if(res != FR_OK)
     {
         errcode = ERR_FILE_RW;
@@ -81,9 +81,10 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     int i;
     *perrcode = ERR_NO;
     /*读取文件*/
-    taskENTER_CRITICAL();
+    //taskENTER_CRITICAL();
     ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
-    taskEXIT_CRITICAL();
+    f_sync(&f);
+    //taskEXIT_CRITICAL();
     if(res != FR_OK)
     {
         *perrcode = ERR_FILE_RW;
