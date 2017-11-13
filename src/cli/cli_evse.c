@@ -534,12 +534,18 @@ void cli_evseorder_fnt(int argc, char **argv)
             strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
             printf_safe("停止时间:\t%s \n", buf);
             printf_safe("add start time = %d\n", clock());
-            for (i = 0; i < 1000; i++)
+            if (argc == 3 && atoi(argv[2]) > 0)
             {
-                pCON->order.tStartTime = time(NULL) + i * 100;
-                AddOrderCfg(pathOrder, pCON, pechProto);
-                printf_safe("Add %d\n", i);
+                int j;
+                j = atoi(argv[2]);
+                for (i = 0; i < j; i++)
+                {
+                    pCON->order.tStartTime = time(NULL) + i * 100;
+                    AddOrderCfg(pathOrder, pCON, pechProto);
+                    printf_safe("Add %d\n", i);
+                }  
             }
+            
             printf_safe("end time = %d\n", clock());
             OrderInit(&(pCON->order));
         }
