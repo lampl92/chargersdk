@@ -733,6 +733,9 @@
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
 #endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
+#endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
 #endif

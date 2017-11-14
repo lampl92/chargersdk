@@ -92,7 +92,6 @@ extern void retarget_init(void);
 void fs_init(void)
 {
     FRESULT res;
-    //fs_mkfs();
     NAND_Init();
     NAND_Format();
     res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
