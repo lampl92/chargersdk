@@ -2,6 +2,7 @@
 #define YAFFS_CONFIG_H
 
 #define NO_inline
+#define LOFF_T_32_BIT
     
 #define CONFIG_YAFFS_DIRECT
 #define CONFIG_YAFFS_YAFFS2

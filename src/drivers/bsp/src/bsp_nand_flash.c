@@ -986,7 +986,7 @@ uint8_t NAND_Init(void)
     
     NAND_DelayMS(100);
 
-    Status = NAND_BuildLUT();	/* 建立块管理表 LUT = Look up table */
+    //Status = NAND_BuildLUT();	/* 建立块管理表 LUT = Look up table */
     return Status;
 }
 

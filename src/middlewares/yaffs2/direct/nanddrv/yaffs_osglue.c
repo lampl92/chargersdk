@@ -139,9 +139,12 @@ void yaffsfs_LockInit(void)
 
 #include "cmsis_os.h"
 
-static osMutexDef_t mutex1;
+static void bg_gc_func(const void *dummy);
+
+osMutexDef(mutex1);
 static osMutexId mutex1_id;
-static osThreadDef_t bc_gc_thread;
+osThreadDef(yaffs_bc_gc, bg_gc_func, osPriorityLow, 1, 1024);
+//static osThreadDef_t bc_gc_thread;
 
 void yaffsfs_Lock(void)
 {
@@ -153,7 +156,7 @@ void yaffsfs_Unlock(void)
     osMutexRelease(mutex1_id);
 }
 
-static void *bg_gc_func(void *dummy)
+static void bg_gc_func(const void *dummy)
 {
     struct yaffs_dev *dev;
     int urgent = 0;
@@ -185,16 +188,15 @@ static void *bg_gc_func(void *dummy)
             osDelay(5000);
     }
 
-    	/* Don't ever return. */
-    return NULL;
+    /* Don't ever return. */
 }
 
 void yaffsfs_LockInit(void)
 {
     /* Initialise lock */
-    mutex1_id = osMutexCreate(&mutex1);
+    mutex1_id = osMutexCreate(osMutex(mutex1));
     /* Sneak in starting a background gc thread too */
-    osThreadCreate(&bc_gc_thread, NULL);
+    osThreadCreate(osThread(yaffs_bc_gc), NULL);
 }
 #endif
 

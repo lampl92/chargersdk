@@ -15,11 +15,12 @@
 #ifndef __NAND_CHIP_H__
 #define __NAND_CHIP_H__
 
+#include "chip_mt29.h"
 #include <stdint.h>
 
 struct nand_chip {
 	void *private_data;
-
+    
 	void (*set_ale)(struct nand_chip * this, int high);
 	void (*set_cle)(struct nand_chip * this, int high);
 

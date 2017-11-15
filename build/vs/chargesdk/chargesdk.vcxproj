@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
@@ -213,9 +214,11 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffscfg2k.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\chip_mt29.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_mt29_drv.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nand_drv.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_osglue.c" />
-    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\optional_sort\qsort.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_attribs.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_error.c" />
@@ -224,6 +227,7 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_guts.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nameval.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nand.c" />

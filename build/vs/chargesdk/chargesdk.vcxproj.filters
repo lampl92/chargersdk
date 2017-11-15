@@ -762,9 +762,6 @@
     <Filter Include="Header files\middlewares\yaffs2\direct\nanddrv">
       <UniqueIdentifier>{108db386-0fc6-440b-8d22-df6c0ec7209b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\middlewares\yaffs2\direct\optional_sort">
-      <UniqueIdentifier>{2386d838-20b4-4a8e-92c4-d1448776a5b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\middlewares\yaffs2\direct\optional_sort">
       <UniqueIdentifier>{6dc41298-71d8-4c50-86aa-da1ba8aa03be}</UniqueIdentifier>
     </Filter>
@@ -1551,8 +1548,20 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_osglue.c">
       <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\optional_sort\qsort.c">
-      <Filter>Source files\middlewares\yaffs2\direct\optional_sort</Filter>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffscfg2k.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\chip_mt29.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_mt29_drv.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

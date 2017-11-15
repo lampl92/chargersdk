@@ -38,6 +38,7 @@ void cli_init(void)
 //    tinysh_add_command(&cli_parseJson_cmd);
 //    tinysh_add_command(&cli_makeJson_cmd);
     tinysh_add_command(&cli_aestest_cmd);
+    tinysh_add_command(&cli_yaffs2test_cmd);
 //    tinysh_add_command(&cli_crctest_cmd);
     /************电桩信息****************/
     tinysh_add_command(&cli_evseinfo_cmd);

@@ -218,7 +218,7 @@ static int yaffs_nand_drv_Initialise(struct yaffs_dev *dev)
 {
 	struct nand_chip *chip = dev_to_chip(dev);
 
-	(void)chip;
+    ((nand_priv_t*)(chip->private_data))->nand_init();
 	return YAFFS_OK;
 }
 
@@ -242,7 +242,7 @@ int yaffs_nand_install_drv(struct yaffs_dev *dev, struct nand_chip *chip)
 
 	if(!buffer || !ctxt)
 		goto fail;
-
+    
 	drv->drv_write_chunk_fn = yaffs_nand_drv_WriteChunk;
 	drv->drv_read_chunk_fn = yaffs_nand_drv_ReadChunk;
 	drv->drv_erase_fn = yaffs_nand_drv_EraseBlock;

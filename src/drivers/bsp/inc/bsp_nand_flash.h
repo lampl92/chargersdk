@@ -256,5 +256,4 @@ void NAND_DispParamPage(void);
 void NAND_ScanAllBadBlock(void);
 uint8_t NAND_GetBlockInfo(NAND_BLOCK_INFO_T *_pInfo);
 void NAND_MarkBadBlock(uint32_t _ulBlockNo);
-
 #endif /* __FSMC_NAND_H */

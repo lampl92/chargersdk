@@ -14,11 +14,11 @@
  */
 
 
-#ifndef __YAFFS_M18_DRV_H__
-#define __YAFFS_M18_DRV_H__
+#ifndef __YAFFS_MT29_DRV_H__
+#define __YAFFS_MT29_DRV_H__
 
 struct yaffs_dev;
-struct yaffs_dev *yaffs_m18_install_drv(const char *name);
+struct yaffs_dev *yaffs_mt29_install_drv(const char *name);
 
 #endif
 

@@ -21,7 +21,7 @@ struct nanddrv_transfer {
 	int offset;
 	int nbytes;
 };
-
+int nanddrv_initialise(void);
 int nanddrv_read_tr(struct nand_chip *this, int page,
 		struct nanddrv_transfer *tr, int n_tr);
 int nanddrv_write_tr(struct nand_chip *this, int page,

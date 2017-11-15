@@ -21,11 +21,9 @@
 #include "yaffscfg.h"
 #include "yaffs_guts.h"
 #include "yaffsfs.h"
-#include "yaffs_fileem2k.h"
-#include "yaffs_nandemul2k.h"
 #include "yaffs_trace.h"
 #include "yaffs_osglue.h"
-#include "yaffs_nandsim_file.h"
+
 
 
 #include <errno.h>
@@ -46,10 +44,7 @@ unsigned yaffs_trace_mask =
 
 /* Configure the devices that will be used */
 
-#include "yaffs_flashif2.h"
-#include "yaffs_m18_drv.h"
-#include "yaffs_nor_drv.h"
-#include "yaffs_nand_drv.h"
+#include "yaffs_mt29_drv.h"
 
 int yaffs_start_up(void)
 {
@@ -63,10 +58,7 @@ int yaffs_start_up(void)
 	yaffsfs_OSInitialisation();
 
 	/* Install the various devices and their device drivers */
-	yflash2_install_drv("yflash2");
-	yaffs_m18_install_drv("M18-1");
-	yaffs_nor_install_drv("nor");
-	yaffs_nandsim_install_drv("nand", "emfile-nand", 256);
+    yaffs_mt29_install_drv("MT29F4G08");
 
 	return 0;
 }
