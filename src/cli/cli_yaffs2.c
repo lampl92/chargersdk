@@ -2,8 +2,8 @@
 #include "bsp.h"
 #include "tinysh.h"
 
-#define YAFFS_MOUNT_POINT "/yaffs2/"
-#define FILE_PATH "/yaffs2/foo.txt"
+#define YAFFS_MOUNT_POINT "/nand/"
+#define FILE_PATH "/nand/foo.txt"
 
 int random_seed;
 int simulate_power_failure = 0;
@@ -13,6 +13,9 @@ int yaffs2_main()
 {
     int output = 0;
     int output2 = 0;
+    u8 str[] = "Yaffs test OK!\n";
+    u8 rbuff[64] = { 0};
+    u32 bw, br;
     yaffs_start_up();
 
     printf_safe("\n\n starting test\n");
@@ -35,6 +38,7 @@ int yaffs2_main()
         printf_safe("error\n yaffs failed to create the file: %s\nerror\n", FILE_PATH);
         return (0);
     }
+    bw = yaffs_write(output, str, strlen(str));
     output2 = yaffs_close(output);
     if (output2 >= 0) {  
         printf_safe("file closed: %s\n", FILE_PATH); 
@@ -69,6 +73,10 @@ int yaffs2_main()
         printf_safe("error\n yaffs failed to create the file: %s\nerror\n", FILE_PATH);
         return (0);
     }
+ 
+    br = yaffs_read(output, rbuff, 64);
+    printf_safe("bw = %d, br = %d, str=%s\n", bw, br, rbuff);
+    
     //close the file.
     output2 = yaffs_close(output);
     if (output2 >= 0) {  

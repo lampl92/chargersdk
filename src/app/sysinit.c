@@ -103,10 +103,15 @@ void fs_init(void)
 }
 void sys_Init(void)
 {
+#if 0
     fs_init();
+#endif
     //ifconfig_init();
     timeInit();
     retarget_init();
+    yaffs2_main();
+    //yaffs2test_main(NULL, NULL);
+#if 0
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
@@ -138,4 +143,5 @@ void sys_Init(void)
 #endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
+#endif
 }

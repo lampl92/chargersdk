@@ -58,7 +58,7 @@ int yaffs_start_up(void)
 	yaffsfs_OSInitialisation();
 
 	/* Install the various devices and their device drivers */
-    yaffs_mt29_install_drv("MT29F4G08");
+    yaffs_mt29_install_drv("nand");
 
 	return 0;
 }

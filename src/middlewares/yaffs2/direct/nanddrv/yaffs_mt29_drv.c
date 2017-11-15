@@ -68,11 +68,12 @@ struct yaffs_dev *yaffs_mt29_install_drv(const char *name)
 	param->name = name_copy;
 
 	param->total_bytes_per_chunk = 2048;
-	param->chunks_per_block =64;
+	param->chunks_per_block = 64;
 	param->n_reserved_blocks = 2;
 	param->start_block = 0; // Can use block 0
 	param->end_block = 4095; // Last block
 	param->use_nand_ecc = 1; // use YAFFS's ECC
+    param->is_yaffs2 = 1;
 	param->n_caches = 10;
 	param->disable_soft_del = 1;
     

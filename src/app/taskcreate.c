@@ -163,6 +163,7 @@ void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
+#if 0
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
@@ -172,6 +173,11 @@ void vTaskInit(void *pvParameters)
     modem_open(pModem);
     modem_init(pModem);
     Modem_Poll(pModem);//这是任务
+#else    while (1)
+    {
+        vTaskDelay(1000);
+    }
+#endif
 
 //    pWIFI = DevWifiCreate();
 //    strcpy(pWIFI->info.strSSID, "rgw");

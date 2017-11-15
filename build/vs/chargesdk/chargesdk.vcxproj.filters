@@ -1563,6 +1563,9 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.c">
       <Filter>Source files\middlewares\yaffs2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\yaffs2test.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
