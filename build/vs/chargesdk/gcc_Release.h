@@ -209,6 +209,9 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
+#ifndef __OPTIMIZE__
+#define __OPTIMIZE__ 1
+#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -585,9 +588,6 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
-#endif
-#ifndef __NO_INLINE__
-#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -1229,6 +1229,8 @@
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/middlewares/STemWin/TTF
+//../../../src/middlewares/STemWin/TTF/TrueType
 // --- Include directories end --- //
 
 

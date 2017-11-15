@@ -52,6 +52,8 @@
         <string>../../../src/net/mbedTLS/include</string>
         <string>../../../src/hmi/qrencode/inc</string>
         <string>../../../src/middlewares/STemWin/SIF</string>
+        <string>../../../src/middlewares/STemWin/TTF</string>
+        <string>../../../src/middlewares/STemWin/TTF/TrueType</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>

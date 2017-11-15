@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "xbffontcreate.h"
 #include "siffontcreate.h"
+#include "ttffontcreate.h"
 #include "bmpdisplay.h"
 #include "ff.h"
 #include "HMI_Start.h"
@@ -59,6 +60,9 @@ void MainTask(void)
             Create_SIF24("system/stSIF24.sif");
             Create_SIF36("system/stSIF36.sif");
      
+          //创建ttf字体
+        Create_TTFFont("system/TTF/calibrib.ttf");
+        
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();

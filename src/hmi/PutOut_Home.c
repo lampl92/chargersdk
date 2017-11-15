@@ -199,18 +199,18 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
         /**< text和edit的初始化 */
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, " ");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &TTF24_Font, " ");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &TTF24_Font, " ");
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), GUI_TA_RIGHT | GUI_TA_VCENTER);
         EDIT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), GUI_TA_RIGHT | GUI_TA_VCENTER);
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "充电费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_BLACK, "元/度");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "服务费");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &TTF24_Font, GUI_BLACK, "充电费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &TTF24_Font, GUI_BLACK, "元/度");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &TTF24_Font, GUI_BLACK, "服务费");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &TTF24_Font, GUI_BLACK, "元/度");
 
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &SIF24_Font, GUI_BLACK, "充电请扫描二维码");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &SIF24_Font, GUI_BLACK, "充电请刷卡");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_A), &TTF24_Font, GUI_BLACK, "充电请扫描二维码");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_B), &TTF24_Font, GUI_BLACK, "充电请刷卡");
         
         hwinQR = WM_CreateWindowAsChild(120, 170, 200, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);
 //        WM_SetUserData(pMsg->hWin, &hwinQR, sizeof(hwinQR));

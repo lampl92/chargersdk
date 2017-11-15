@@ -3,7 +3,7 @@
   <ItemGroup>
     <Filter Include="Source files">
       <UniqueIdentifier>{22fe100e-014d-4a0f-8397-40cbd4bf574f}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;txt</Extensions>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;txt;TXT</Extensions>
     </Filter>
     <Filter Include="Header files">
       <UniqueIdentifier>{7451bbd5-4b02-42a4-ace0-e47fd9dee241}</UniqueIdentifier>
@@ -771,6 +771,27 @@
     <Filter Include="Header files\middlewares\STemWin\SIF">
       <UniqueIdentifier>{3668b843-55e0-4405-905b-fe35d945e264}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\STemWin\TrueType">
+      <UniqueIdentifier>{e561f732-3794-4162-9706-3b6eeac3ef7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\TrueType">
+      <UniqueIdentifier>{d2aac3e1-74b3-4322-a73f-6d04897c6fdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\STemWin\TrueType\Doc">
+      <UniqueIdentifier>{6d9e1413-f31e-465a-9010-ea3042d262ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\STemWin\TTF">
+      <UniqueIdentifier>{44f85c3c-d3d4-4cbd-8775-a6fae2ebd0ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\TTF">
+      <UniqueIdentifier>{35c398db-dcf5-46bf-8940-f3a2d2311625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\TTF\TrueType">
+      <UniqueIdentifier>{eb25b399-7a60-4626-897e-f4c0d4280e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\TTF\TrueType\TrueType">
+      <UniqueIdentifier>{45491795-3c16-4687-9643-2d4f8a2d37ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -1495,6 +1516,387 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c">
       <Filter>Source files\middlewares\STemWin\SIF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autofit.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cff.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbase.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftinit.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttype1.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\GUI_TTF.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfr.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshinter.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnames.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\raster.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\smooth.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\truetype.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1cid.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type42.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.c">
+      <Filter>Source files\middlewares\STemWin\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\BDF.TXT">
+      <Filter>Source files\middlewares\STemWin\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\FTL.TXT">
+      <Filter>Source files\middlewares\STemWin\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\GPL.TXT">
+      <Filter>Source files\middlewares\STemWin\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\PCF.TXT">
+      <Filter>Source files\middlewares\STemWin\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\ReadMe.txt">
+      <Filter>Source files\middlewares\STemWin\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\ttffontcreate.c">
+      <Filter>Source files\middlewares\STemWin\TTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autofit.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cff.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbase.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftinit.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttype1.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\GUI_TTF.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfr.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshinter.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnames.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\raster.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\smooth.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\truetype.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1cid.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type42.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\BDF.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\FTL.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\GPL.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\PCF.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\ReadMe.txt">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autofit.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cff.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbase.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftinit.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttype1.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\GUI_TTF.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfr.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshinter.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnames.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\raster.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\smooth.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\truetype.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type1cid.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\type42.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.c">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\BDF.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\FTL.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\GPL.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\PCF.TXT">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\ReadMe.txt">
+      <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3919,10 +4321,1749 @@
     <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h">
       <Filter>Header files\middlewares\STemWin\SIF</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afangles.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afcjk.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afdummy.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aferrors.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afglobal.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afhints.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aflatin.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afloader.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmodule.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmparse.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aftypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afwarp.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autohint.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdferror.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffcmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfferrs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffgload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffparse.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftoken.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ciderrs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidgload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidparse.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidriver.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidtoken.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fnterrs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\freetype.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ft2build.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcalc.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccache.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccback.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcerror.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcglyph.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftchapters.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcimage.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmanag.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmru.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftconfig.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcsbits.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdriver.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrdef.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrors.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgloadr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgrays.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftheader.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftimage.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftincrem.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlist.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmac.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmemory.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmisc.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodapi.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmoderr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodule.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoption.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoutln.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftraster.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrend1.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrender.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrfork.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftserv.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsizes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmerrs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmooth.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsnames.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstdlib.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstream.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrace.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrigon.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftvalid.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftzopen.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infblock.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infcodes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infutil.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\internal.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcferror.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfread.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcftypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfutil.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrcmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrerror.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrgload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrsbit.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrtypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxerr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxmod.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psconv.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshalgo.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshglob.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshints.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshmod.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshnterr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshrec.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psmodule.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnamerr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pstables.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\rasterrs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfdriver.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sferrors.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svbdf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgldict.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgxval.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svkern.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svmm.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svotval.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpfr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpostnm.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpscmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpsinfo.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svsfnt.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svtteng.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svxf86nm.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1afm.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1cmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1decode.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1driver.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1errors.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1gload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1load.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1objs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1parse.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tables.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tokens.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1types.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42drivr.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42error.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42objs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42parse.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42types.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttbdf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttdriver.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tterrors.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgxvar.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinffixed.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinftrees.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinterp.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttkern.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttmtx.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttnameid.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttobjs.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpload.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpost.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit0.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttables.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttags.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttypes.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttunpat.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzconf.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzlib.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzutil.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.h">
+      <Filter>Header files\middlewares\STemWin\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\ttffontcreate.h">
+      <Filter>Header files\middlewares\STemWin\TTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afangles.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afcjk.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afdummy.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aferrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afglobal.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afhints.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aflatin.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afloader.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afwarp.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autohint.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdferror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfferrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftoken.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ciderrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidtoken.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fnterrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\freetype.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ft2build.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcalc.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccache.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccback.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcerror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcglyph.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftchapters.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcimage.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmanag.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmru.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftconfig.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcsbits.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrdef.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgloadr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgrays.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftheader.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftimage.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftincrem.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlist.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmac.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmemory.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmisc.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodapi.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmoderr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoption.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoutln.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftraster.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrend1.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrender.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrfork.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftserv.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsizes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmerrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmooth.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsnames.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstdlib.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstream.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrace.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrigon.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftvalid.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftzopen.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infblock.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infcodes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\internal.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcferror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfread.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrerror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrsbit.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrtypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxerr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxmod.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psconv.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshalgo.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshglob.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshints.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshmod.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshnterr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshrec.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnamerr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pstables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\rasterrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sferrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgldict.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgxval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svkern.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svmm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svotval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpfr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpostnm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpscmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpsinfo.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svsfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svtteng.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svxf86nm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1afm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1cmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1decode.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1driver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1errors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1gload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1load.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1objs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1parse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tokens.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1types.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42drivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42error.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42objs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42parse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42types.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tterrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgxvar.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinffixed.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinftrees.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinterp.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttkern.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttmtx.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttnameid.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpost.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit0.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttags.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttunpat.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzconf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzlib.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afangles.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afcjk.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afdummy.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aferrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afglobal.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afhints.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aflatin.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afloader.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afmparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\aftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\afwarp.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\autohint.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\bdferror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfferrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cffparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftoken.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cfftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ciderrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidparse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\cidtoken.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fnterrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\freetype.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ft2build.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbbox.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftbitmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcache.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcalc.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccache.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftccback.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcerror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcglyph.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftchapters.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcimage.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmanag.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcmru.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftconfig.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftcsbits.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdebug.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrdef.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fterrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgloadr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftglyph.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgrays.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgxval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftgzip.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftheader.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftimage.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftincrem.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlist.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftlzw.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmac.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmemory.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmisc.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodapi.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmoderr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoption.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftotval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftoutln.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftpfr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftraster.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrend1.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrender.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftrfork.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftserv.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsizes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmerrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsmooth.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsnames.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstdlib.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstream.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftstroke.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsynth.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftsystem.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrace.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttrigon.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\fttypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftvalid.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftxf86.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ftzopen.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infblock.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infcodes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\infutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\internal.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcferror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfread.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcftypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pcfutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrdrivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrerror.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrsbit.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pfrtypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psaux.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxerr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psauxmod.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psconv.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshalgo.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshglob.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshints.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshmod.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshnterr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pshrec.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psmodule.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psnamerr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\psobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\pstables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\rasterrs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sferrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\sfobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgldict.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svgxval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svkern.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svmm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svotval.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpfr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpostnm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpscmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svpsinfo.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svsfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svtteng.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svwinfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\svxf86nm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1afm.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1cmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1decode.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1driver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1errors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1gload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1load.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1objs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1parse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1tokens.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t1types.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42drivr.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42error.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42objs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42parse.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\t42types.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttbdf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttcmap.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttdriver.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tterrors.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttgxvar.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinffixed.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinftrees.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttinterp.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttkern.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttmtx.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttnameid.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttobjs.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpload.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttpost.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttsbit0.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttables.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttags.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\tttypes.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttunpat.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzconf.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzlib.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\ttzutil.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.h">
+      <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a">
       <Filter>Source files\middlewares\STemWin\Lib</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="chargesdk.rc">
+      <Filter>Resource files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
