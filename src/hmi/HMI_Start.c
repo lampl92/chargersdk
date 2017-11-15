@@ -61,7 +61,7 @@ void MainTask(void)
             Create_SIF36("system/stSIF36.sif");
      
           //创建ttf字体
-        Create_TTFFont("system/TTF/kaitiyuhongliang.ttf");
+        Create_TTFFont("system/TTF/lilingetetijianti.ttf");
         
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 

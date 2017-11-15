@@ -115,7 +115,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         /**< 显示卡余额 */
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, " ");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, Timer_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &TTF24_Font, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGoodIDReqDispOK);
 	    bitset(winInitDone,2);
     }
@@ -137,7 +137,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     {
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "此卡已欠费");
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, Timer_buf);
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &TTF24_Font, Timer_buf);
 
         /** @todo (zshare#1#): 定10s退出 */
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitOwdIDReqDispOK);
@@ -269,27 +269,27 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Text'
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "卡号");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_BLACK, "余额");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_BLACK, "元");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "(60S)");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &TTF24_Font, GUI_BLACK, "卡号");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &TTF24_Font, GUI_BLACK, "余额");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &TTF24_Font, GUI_BLACK, "元");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &TTF24_Font, GUI_BLACK, "(60S)");
         //
         // Initialization of 'Edit'
         //
 
         HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, temp_buf);         //卡号
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, "?");
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &TTF24_Font, temp_buf);         //卡号
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &TTF24_Font, "?");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "正在获取账户信息...");
 
         //
         // Initialization of 'Button'
         //
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_LEFT | GUI_TA_VCENTER,
-//                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
+//                    &TTF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "注册流程");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
+                    &TTF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
         // USER END
         break;
     case WM_NOTIFY_PARENT:
