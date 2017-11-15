@@ -744,6 +744,30 @@
     <Filter Include="Header files\middlewares\ff13a\source">
       <UniqueIdentifier>{f977ecc8-cb4a-48a1-a770-fb610f44016b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\yaffs2">
+      <UniqueIdentifier>{30f3014a-1627-4a50-a77e-d7cd337cc507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\yaffs2">
+      <UniqueIdentifier>{963cfba7-c402-4ada-9d50-a2bcb237ba2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\yaffs2\direct">
+      <UniqueIdentifier>{bb02cce3-4f78-4990-b888-a93e73fce03a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\yaffs2\direct">
+      <UniqueIdentifier>{1e18dad6-6188-4501-beb1-f1e1417293f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\yaffs2\direct\nanddrv">
+      <UniqueIdentifier>{61e4a310-0963-48df-8cb1-3802e8401dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\yaffs2\direct\nanddrv">
+      <UniqueIdentifier>{108db386-0fc6-440b-8d22-df6c0ec7209b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\yaffs2\direct\optional_sort">
+      <UniqueIdentifier>{2386d838-20b4-4a8e-92c4-d1448776a5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\yaffs2\direct\optional_sort">
+      <UniqueIdentifier>{6dc41298-71d8-4c50-86aa-da1ba8aa03be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -883,12 +907,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c">
@@ -1470,6 +1488,78 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_allocator.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_attribs.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_guts.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nameval.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nand.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags1.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags2.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_summary.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_tagscompat.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_tagsmarshall.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.c">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.c">
+      <Filter>Source files\middlewares\yaffs2\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_attribs.c">
+      <Filter>Source files\middlewares\yaffs2\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_error.c">
+      <Filter>Source files\middlewares\yaffs2\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.c">
+      <Filter>Source files\middlewares\yaffs2\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nand_drv.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_osglue.c">
+      <Filter>Source files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\optional_sort\qsort.c">
+      <Filter>Source files\middlewares\yaffs2\direct\optional_sort</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
@@ -1587,12 +1677,6 @@
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_ftl.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_hw.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h">
@@ -3884,6 +3968,153 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\moduleconfig.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_allocator.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_attribs.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_getblockinfo.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_guts.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_linux.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_mtdif.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_nameval.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_nand.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags1.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags2.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_summary.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_tagscompat.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_tagsmarshall.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_trace.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_multi.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_single.h">
+      <Filter>Header files\middlewares\yaffs2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffscfg.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif2.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_list.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_nandemul2k.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_osglue.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\ydirectenv.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yportenv.h">
+      <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim_file.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandstore_file.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nand_chip.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nand_store.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_fileem2k.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_m18_drv.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nandsim_file.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nand_drv.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nor_drv.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_ramdisk.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\ynorsim.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yramsim.h">
+      <Filter>Header files\middlewares\yaffs2\direct\nanddrv</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a">
@@ -3896,6 +4127,12 @@
     </Text>
     <Text Include="..\..\..\src\middlewares\ff13a\source\00readme.txt">
       <Filter>Source files\middlewares\ff13a\source</Filter>
+    </Text>
+    <Text Include="..\..\..\src\middlewares\yaffs2\version.txt">
+      <Filter>Source files\middlewares\yaffs2</Filter>
+    </Text>
+    <Text Include="..\..\..\src\middlewares\yaffs2\direct\README.txt">
+      <Filter>Source files\middlewares\yaffs2\direct</Filter>
     </Text>
   </ItemGroup>
 </Project>
