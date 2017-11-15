@@ -17,23 +17,7 @@
 #ifndef __YPORTENV_H__
 #define __YPORTENV_H__
 
-#ifndef CONFIG_YAFFS_DIRECT
-#define CONFIG_YAFFS_DIRECT
-#endif
-
-#ifndef CONFIG_YAFFS_DEFINES_TYPES
-#define CONFIG_YAFFS_DEFINES_TYPES
-#endif
-
-#ifndef CONFIG_YAFFS_PROVIDE_DEFS
-#define CONFIG_YAFFS_PROVIDE_DEFS
-#endif
-
-#ifndef CONFIG_YAFFSFS_PROVIDE_VALUES
-#define CONFIG_YAFFSFS_PROVIDE_VALUES
-#endif
-
-typedef unsigned long loff_t;
+#include "yaffs_config.h"
 
 /* Definition of types */
 #ifdef CONFIG_YAFFS_DEFINES_TYPES
@@ -347,13 +331,13 @@ struct iattr {
 #define Y_DUMP_STACK() do { } while (0)
 #endif
 
-#ifndef BUG
-#define BUG() do {\
-	yaffs_trace(YAFFS_TRACE_BUG,\
-		"==>> yaffs bug: " __FILE__ " %d",\
-		__LINE__);\
-	Y_DUMP_STACK();\
-} while (0)
-#endif
+//#ifndef BUG
+//#define BUG() do {\
+//	yaffs_trace(YAFFS_TRACE_BUG,\
+//		"==>> yaffs bug: " __FILE__ " %d",\
+//		__LINE__);\
+//	Y_DUMP_STACK();\
+//} while (0)
+//#endif
 
 #endif

@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/ff13a/source;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/ff13a/source;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -221,7 +221,6 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_error.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_allocator.c" />
-    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_attribs.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.c" />
@@ -612,6 +611,7 @@
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yramsim.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffscfg.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_config.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif2.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.h" />
@@ -957,7 +957,6 @@
     <Text Include="..\..\..\src\middlewares\ff13a\source\00history.txt" />
     <Text Include="..\..\..\src\middlewares\ff13a\source\00readme.txt" />
     <Text Include="..\..\..\src\middlewares\yaffs2\direct\README.txt" />
-    <Text Include="..\..\..\src\middlewares\yaffs2\version.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

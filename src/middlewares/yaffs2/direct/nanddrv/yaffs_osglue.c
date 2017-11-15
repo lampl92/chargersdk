@@ -23,6 +23,9 @@
 
 #include <errno.h>
 #include <unistd.h>
+#include <time.h>
+
+#include "bsp.h"
 
 /*
  * yaffsfs_SetError() and yaffsfs_GetError()
@@ -70,7 +73,7 @@ int yaffsfs_CheckMemRegion(const void *addr, size_t size, int write_request)
  * If we use pthreads then we also start a background gc thread.
  */
 
-#if 1
+#if 0
 
 #include <pthread.h>
 
@@ -134,16 +137,64 @@ void yaffsfs_LockInit(void)
 
 #else
 
+#include "cmsis_os.h"
+
+static osMutexDef_t mutex1;
+static osMutexId mutex1_id;
+static osThreadDef_t bc_gc_thread;
+
 void yaffsfs_Lock(void)
 {
+    osMutexWait(mutex1_id, osWaitForever);
 }
 
 void yaffsfs_Unlock(void)
 {
+    osMutexRelease(mutex1_id);
+}
+
+static void *bg_gc_func(void *dummy)
+{
+    struct yaffs_dev *dev;
+    int urgent = 0;
+    int result;
+    int next_urgent;
+
+    (void)dummy;
+
+    	/* Sleep for a bit to allow start up */
+    osDelay(2000);
+
+
+    while (1) {
+    	/* Iterate through devices, do bg gc updating ungency */
+        yaffs_dev_rewind();
+        next_urgent = 0;
+
+        while ((dev = yaffs_next_dev()) != NULL) {
+            result = yaffs_do_background_gc_reldev(dev, urgent);
+            if (result > 0)
+                next_urgent = 1;
+        }
+
+        urgent = next_urgent;
+
+        if (next_urgent)
+            osDelay(1000);
+        else
+            osDelay(5000);
+    }
+
+    	/* Don't ever return. */
+    return NULL;
 }
 
 void yaffsfs_LockInit(void)
 {
+    /* Initialise lock */
+    mutex1_id = osMutexCreate(&mutex1);
+    /* Sneak in starting a background gc thread too */
+    osThreadCreate(&bc_gc_thread, NULL);
 }
 #endif
 
@@ -212,7 +263,7 @@ void yaffsfs_OSInitialisation(void)
 
 void yaffs_bug_fn(const char *file_name, int line_no)
 {
-	printf("yaffs bug detected %s:%d\n",
+	printf_safe("yaffs bug detected %s:%d\n",
 		file_name, line_no);
 	assert(0);
 }
