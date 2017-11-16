@@ -40,11 +40,11 @@ void timeInit()
     time(&settime);
 }
 
-static uint8_t create_system_dir(void)
+uint8_t create_system_dir(void)
 {
     int res;
     
-    yaffs_mkdir(pathSystemDir, 0);
+    yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
     res = yaffsfs_GetLastError();
     switch(res)
     {
@@ -68,6 +68,7 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
     case 0:
         bw = yaffs_write(fd, context, strlen(context));
         yaffs_close(fd);
+        break;
     case -EEXIST:
         yaffs_close(fd);
         break;
@@ -80,6 +81,8 @@ void yaffs_init(void)
 {
     int res;
     yaffs_start_up();
+    yaffs_set_trace(0);
+    //yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
     res = yaffs_mount(YAFFS_MOUNT_POINT);
     if (res != 0)
     {
@@ -89,30 +92,45 @@ void yaffs_init(void)
 }
 void sys_Init(void)
 {
+    int res;
     yaffs_init();
     //ifconfig_init();
     timeInit();
     retarget_init();
+#if 1
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
+//    dump_directory_tree(YAFFS_MOUNT_POINT);
+//    res = yaffs_unlink(pathEVSECfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathProtoCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathWhiteList);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathBlackList);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathEVSELog);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathOrder);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathSysCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathFTPCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_rmdir(pathSystemDir);
+//    res = yaffsfs_GetLastError();
+//    dump_directory_tree(YAFFS_MOUNT_POINT);
     create_system_dir();
-    yaffs_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
-    yaffs_unlink(pathProtoCfg);
-    yaffs_unlink(pathWhiteList);
-    yaffs_unlink(pathBlackList);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
-    yaffs_unlink(pathEVSELog);
-    yaffs_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
-    yaffs_unlink(pathSysCfg);
-    yaffs_unlink(pathFTPCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
+    dump_directory_tree(YAFFS_MOUNT_POINT);
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
@@ -126,4 +144,5 @@ void sys_Init(void)
 #endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
+#endif
 }

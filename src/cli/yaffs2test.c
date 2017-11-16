@@ -611,7 +611,7 @@ void dump_directory_tree_worker(const char *dname,int recursive)
 
 }
 
-static void dump_directory_tree(const char *dname)
+void dump_directory_tree(const char *dname)
 {
 	dump_directory_tree_worker(dname,1);
 	printf_safe("\n");

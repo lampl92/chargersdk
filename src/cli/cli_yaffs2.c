@@ -3,7 +3,7 @@
 #include "tinysh.h"
 
 #define YAFFS_MOUNT_POINT "/nand/"
-#define FILE_PATH "foo.txt"
+#define FILE_PATH "/nand/system/foo.txt"
 
 int random_seed;
 int simulate_power_failure = 0;
@@ -21,7 +21,7 @@ int yaffs2_main()
     printf_safe("\n\n starting test\n");
     yaffs_set_trace(0);
     output = yaffs_mount(YAFFS_MOUNT_POINT);
-
+    create_system_dir();
     if (output >= 0) {  
         printf_safe("yaffs mounted: %s\n", YAFFS_MOUNT_POINT); 
     }
@@ -65,7 +65,7 @@ int yaffs2_main()
         return (0);
     }
     //now open the existing file.
-    output = yaffs_open(FILE_PATH, O_RDWR, S_IREAD | S_IWRITE);
+    output = yaffs_open(FILE_PATH, O_RDWR, 0);
     if (output >= 0) {  
         printf_safe("file created: %s\n", FILE_PATH); 
     }
