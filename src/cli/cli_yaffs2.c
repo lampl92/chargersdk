@@ -3,7 +3,7 @@
 #include "tinysh.h"
 
 #define YAFFS_MOUNT_POINT "/nand/"
-#define FILE_PATH "/nand/foo.txt"
+#define FILE_PATH "foo.txt"
 
 int random_seed;
 int simulate_power_failure = 0;

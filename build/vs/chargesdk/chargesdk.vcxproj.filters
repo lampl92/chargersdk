@@ -726,9 +726,6 @@
     <Filter Include="Header files\middlewares\STemWin\SIF">
       <UniqueIdentifier>{3668b843-55e0-4405-905b-fe35d945e264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\middlewares\ff13a">
-      <UniqueIdentifier>{e48dddda-b918-4faa-a684-1057aacc9fd1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\middlewares\ff13a">
       <UniqueIdentifier>{27996e35-e362-4998-822f-b770bb802323}</UniqueIdentifier>
     </Filter>
@@ -737,9 +734,6 @@
     </Filter>
     <Filter Include="Header files\middlewares\ff13a\documents\res">
       <UniqueIdentifier>{898836bc-f1ad-4d39-ab28-c5596a0fab18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\ff13a\source">
-      <UniqueIdentifier>{935ff2a1-3f40-4b25-b6b8-ceb06b3a882d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\middlewares\ff13a\source">
       <UniqueIdentifier>{f977ecc8-cb4a-48a1-a770-fb610f44016b}</UniqueIdentifier>
@@ -1199,24 +1193,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c">
       <Filter>Source files\middlewares\STemWin\SIF</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\diskio.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffsystem.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ffunicode.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\ff_ex.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.c">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_ftp.c">
       <Filter>Source files\app\libEcharge</Filter>
@@ -4125,12 +4101,6 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\..\src\middlewares\ff13a\source\00history.txt">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </Text>
-    <Text Include="..\..\..\src\middlewares\ff13a\source\00readme.txt">
-      <Filter>Source files\middlewares\ff13a\source</Filter>
-    </Text>
     <Text Include="..\..\..\src\middlewares\yaffs2\direct\README.txt">
       <Filter>Source files\middlewares\yaffs2\direct</Filter>
     </Text>

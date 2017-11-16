@@ -1,11 +1,10 @@
 #include "includes.h"
-#include "ff.h"
+#include "yaffsfs.h"
 #include "cJSON.h"
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
 #include "cfg_sys.h"
-#include "bsp_nand_flash.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -13,9 +12,6 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 #endif
 
 Sysconf_t   xSysconf;//存放系统初始化参数
-
-FATFS NANDDISKFatFs;  /* File system object for Nand disk logical drive */
-char NANDDISKPath[10] = "0:/"; /* Nand disk logical drive path */
 
 extern time_t time_dat;
 extern void Error_Handler(void);
@@ -59,12 +55,13 @@ void timeInit()
 
 static uint8_t create_system_dir(void)
 {
-    FRESULT res;
-    res = f_mkdir("system");
+    int res;
+    
+    res = yaffs_mkdir("system", 0);
     switch(res)
     {
-    case FR_OK:
-    case FR_EXIST:
+    case 0:
+    case EEXIST:
         return TRUE;
     default:
         return FALSE;
@@ -73,27 +70,25 @@ static uint8_t create_system_dir(void)
 
 void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
-    FIL f;
-    UINT bw;
-    FRESULT res;
-    res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
-//    res = f_open(&f, path, FA_CREATE_ALWAYS | FA_WRITE);
+    uint32_t bw;
+    int fd;
+    int res;
+    fd = yaffs_open(path, O_CREAT | O_WRONLY, S_IWRITE);
+    res = yaffsfs_GetLastError();
     switch(res)
     {
-    case FR_OK:
-        f_write(&f, context, strlen(context), &bw);
-        f_close(&f);
-    case FR_EXIST:
+    case 0:
+        bw = yaffs_write(fd, context, strlen(context));
+        yaffs_close(fd);
+    case EEXIST:
     default:
-        f_close(&f);
+        yaffs_close(fd);
     }
 }
 extern void retarget_init(void);
-void fs_init(void)
+void yaffs_init(void)
 {
-    FRESULT res;
-    NAND_Init();
-    NAND_Format();
+    int res;
     res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
     if (res != FR_OK)
     {
@@ -103,15 +98,10 @@ void fs_init(void)
 }
 void sys_Init(void)
 {
-#if 0
-    fs_init();
-#endif
+    yaffs_init();
     //ifconfig_init();
     timeInit();
     retarget_init();
-    
-    //yaffs2test_main(NULL, NULL);
-#if 0
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
@@ -143,5 +133,4 @@ void sys_Init(void)
 #endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
-#endif
 }

@@ -1233,7 +1233,6 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src
