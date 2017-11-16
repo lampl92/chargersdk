@@ -268,7 +268,7 @@ WM_HWIN CreateManagerBottom(void)
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerSignal,5000,0);
     
     //建立一个ICONVIEW作为主界面
-    IconviewWin = ICONVIEW_CreateEx(0,0,                    //左上角坐标
+    IconviewWin = ICONVIEW_CreateEx(0,100,                    //左上角坐标
         800,250,                        //小工具的水平和垂直尺寸
         _hWinManagerBottom,                      //父窗口为背景窗口
         WM_CF_SHOW|WM_CF_HASTRANS,      
@@ -282,46 +282,46 @@ WM_HWIN CreateManagerBottom(void)
     ICONVIEW_SetSpace(IconviewWin, GUI_COORD_Y, 15);
     ICONVIEW_SetIconAlign(IconviewWin, ICONVIEW_IA_HCENTER | ICONVIEW_IA_VCENTER);
 
-    if (!iconRead("system/ICON/home.bmp", pBitmapHome->pData))
+    if (!iconRead("system/ICON/home.bmp", &pBitmapHome))
     {
-        createIcon(pBitmapHome,64,64,256,32,pBitmapHome->pData);    
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapHome, "返回");
+        createIcon(&pBitmapHome,64,64,256,32);    
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "返回");
     }
     
-    if (!iconRead("system/ICON/log.bmp", pBitmapLog->pData))
+    if (!iconRead("system/ICON/log.bmp", pBitmapLog.pData))
     {
-        createIcon(pBitmapLog, 64, 64, 256, 32, pBitmapLog->pData);    
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapLog, "记录");
+        createIcon(&pBitmapLog, 64, 64, 256, 32);    
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapLog, "记录");
     }
     
-    if (!iconRead("system/ICON/netinfo.bmp", pBitmapNet->pData))
+    if (!iconRead("system/ICON/netinfo.bmp", pBitmapNet.pData))
     {
-        createIcon(pBitmapNet, 64, 64, 256, 32, pBitmapNet->pData);    
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapNet, "网络");
+        createIcon(&pBitmapNet, 64, 64, 256, 32);    
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapNet, "网络");
     } 
 
-    if (!iconRead("system/ICON/evseinfo.bmp", pBitmapEvseInfo->pData))
+    if (!iconRead("system/ICON/evseinfo.bmp", pBitmapEvseInfo.pData))
     {
-        createIcon(pBitmapEvseInfo, 64, 64, 256, 32, pBitmapEvseInfo->pData);    
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapEvseInfo, "桩体");
+        createIcon(&pBitmapEvseInfo, 64, 64, 256, 32);    
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapEvseInfo, "桩体");
     } 
     
-    if (!iconRead("system/ICON/baseinfo.bmp", pBitmapBaseInfo->pData))
+    if (!iconRead("system/ICON/baseinfo.bmp", pBitmapBaseInfo.pData))
     {
-        createIcon(pBitmapBaseInfo, 64, 64, 256, 32, pBitmapBaseInfo->pData); 
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapBaseInfo, "基本");
+        createIcon(&pBitmapBaseInfo, 64, 64, 256, 32); 
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "基本");
     }
     
-    if (!iconRead("system/ICON/sysset.bmp", pBitmapSys->pData))
+    if (!iconRead("system/ICON/sysset.bmp", pBitmapSys.pData))
     {
-        createIcon(pBitmapSys, 64, 64, 256, 32, pBitmapSys->pData); 
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapSys, "设置");
+        createIcon(&pBitmapSys, 64, 64, 256, 32); 
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapSys, "设置");
     }
     
-    if (!iconRead("system/ICON/rotate.bmp", pBitmapRotate->pData))
+    if (!iconRead("system/ICON/rotate.bmp", pBitmapRotate.pData))
     {
-        createIcon(pBitmapRotate, 64, 64, 256, 32, pBitmapRotate->pData);    
-        ICONVIEW_AddBitmapItem(IconviewWin, pBitmapRotate, "翻转");
+        createIcon(&pBitmapRotate, 64, 64, 256, 32);    
+        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapRotate, "翻转");
     }
 }
 /*************************** End of file ****************************/
