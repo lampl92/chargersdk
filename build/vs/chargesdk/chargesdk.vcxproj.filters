@@ -792,6 +792,12 @@
     <Filter Include="Header files\middlewares\STemWin\TTF\TrueType\TrueType">
       <UniqueIdentifier>{45491795-3c16-4687-9643-2d4f8a2d37ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\STemWin\ICON">
+      <UniqueIdentifier>{1b8562ed-d80d-4613-8fc1-8e8524aaaece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\STemWin\ICON">
+      <UniqueIdentifier>{48613ac6-7fb8-4df2-a4b7-c822b71ac0c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -1897,6 +1903,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\Doc\ReadMe.txt">
       <Filter>Source files\middlewares\STemWin\TTF\TrueType\TrueType\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Bottom.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\ICON\iconBitMap.c">
+      <Filter>Source files\middlewares\STemWin\ICON</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6054,6 +6066,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\TTF\TrueType\winfnt.h">
       <Filter>Header files\middlewares\STemWin\TTF\TrueType\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\ICON\iconBitMap.h">
+      <Filter>Header files\middlewares\STemWin\ICON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

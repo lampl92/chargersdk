@@ -1231,6 +1231,7 @@
 //../../../src/middlewares/STemWin/SIF
 //../../../src/middlewares/STemWin/TTF
 //../../../src/middlewares/STemWin/TTF/TrueType
+//../../../src/middlewares/STemWin/ICON
 // --- Include directories end --- //
 
 

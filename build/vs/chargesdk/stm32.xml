@@ -54,6 +54,7 @@
         <string>../../../src/middlewares/STemWin/SIF</string>
         <string>../../../src/middlewares/STemWin/TTF</string>
         <string>../../../src/middlewares/STemWin/TTF/TrueType</string>
+        <string>../../../src/middlewares/STemWin/ICON</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>

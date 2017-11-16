@@ -7,6 +7,7 @@
 #include "xbffontcreate.h"
 #include "siffontcreate.h"
 #include "ttffontcreate.h"
+#include "iconBitMap.h"
 #include "bmpdisplay.h"
 #include "touch.h"
 #include "utils.h"
@@ -87,6 +88,7 @@ WM_HWIN CreateManagerInfoAnalog(void);
 WM_HWIN CreateManagerInfoStatus(void);
 WM_HWIN CreateManagerAlarmLog(void);
 WM_HWIN CreateManagerSysSet(void);
+WM_HWIN CreateManagerBottom(void);
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
 void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf);
