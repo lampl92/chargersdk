@@ -173,8 +173,10 @@ void vTaskInit(void *pvParameters)
     modem_open(pModem);
     modem_init(pModem);
     Modem_Poll(pModem);//这是任务
-#else    while (1)
+#else
+    while (1)
     {
+        yaffs2_main();
         vTaskDelay(1000);
     }
 #endif

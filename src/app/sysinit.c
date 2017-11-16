@@ -109,7 +109,7 @@ void sys_Init(void)
     //ifconfig_init();
     timeInit();
     retarget_init();
-    yaffs2_main();
+    
     //yaffs2test_main(NULL, NULL);
 #if 0
     /*---------------------------------------------------------------------------/
