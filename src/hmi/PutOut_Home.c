@@ -17,7 +17,6 @@
 *                                                                    *
 **********************************************************************
 */
-#include "xbffontcreate.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "bmpdisplay.h"
@@ -60,7 +59,6 @@ WM_HWIN hwinQR;
 
 uint8_t strCSQ[10];
 extern uint8_t *bmpbuffer;
-extern FIL BMPFile_ENCODE;
 /*********************************************************************
 *
 *       Static data

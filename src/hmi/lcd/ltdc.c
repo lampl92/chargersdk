@@ -1,3 +1,4 @@
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "ltdc.h"
 #include "lcddrv.h"

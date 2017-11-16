@@ -3,12 +3,12 @@
 #include "GUI.h"
 #include "includes.h"
 
-extern FIL XBF12FontFile;
-extern FIL XBF14FontFile;
-extern FIL XBF16FontFile;
-extern FIL XBF19FontFile;
-extern FIL XBF24FontFile;
-extern FIL XBF36FontFile;
+extern int XBF12FontFile;
+extern int XBF14FontFile;
+extern int XBF16FontFile;
+extern int XBF19FontFile;
+extern int XBF24FontFile;
+extern int XBF36FontFile;
 
 extern GUI_FONT XBF12_Font;
 extern GUI_FONT XBF14_Font;

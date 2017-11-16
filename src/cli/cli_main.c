@@ -2,8 +2,6 @@
 #include "tinysh.h"
 #include "cli_app.h"
 #include "cli_rtos.h"
-#include "cli_fatfs.h"
-#include "cli_xml.h"
 #include "cli_main.h"
 #include "bsp_uart.h"
 #include "userlib_queue.h"
@@ -28,7 +26,7 @@ void cli_init(void)
 //    tinysh_add_command(&cli_mkfs_cmd);
 //    tinysh_add_command(&cli_mount_cmd);
 //    tinysh_add_command(&cli_umount_cmd);
-    tinysh_add_command(&cli_cat_cmd);
+//    tinysh_add_command(&cli_cat_cmd);
     tinysh_add_command(&cli_xmodem_cmd);
     
 
@@ -37,8 +35,8 @@ void cli_init(void)
 //    tinysh_add_command(&cli_testsdram_cmd);
 //    tinysh_add_command(&cli_parseJson_cmd);
 //    tinysh_add_command(&cli_makeJson_cmd);
-    tinysh_add_command(&cli_aestest_cmd);
-    tinysh_add_command(&cli_yaffs2test_cmd);
+//    tinysh_add_command(&cli_aestest_cmd);
+//    tinysh_add_command(&cli_yaffs2test_cmd);
 //    tinysh_add_command(&cli_crctest_cmd);
     /************电桩信息****************/
     tinysh_add_command(&cli_evseinfo_cmd);

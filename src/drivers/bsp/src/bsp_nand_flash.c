@@ -1,5 +1,6 @@
 #include "bsp.h"
 #include "bsp_define.h"
+#include "sys_types.h"
 #include "bsp_nand_flash.h"
 #include "FreeRTOS.h"
 #include "semphr.h"

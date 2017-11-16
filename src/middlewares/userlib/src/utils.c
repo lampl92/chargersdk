@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "xprintf.h"
+#include "yaffsfs.h"
 
 char *utils_strdup(const char *s)
 {
@@ -207,24 +208,27 @@ static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32
 
 int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
+    int res;
     uint8_t pbuff[1024];
-    UINT fsize;
-    UINT br;
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t br;
     uint32_t ulCrc32 = 0xFFFFFFFF;
     uint32_t ulCrc32Table[256] = { 0 };
     int i;
     
-    res = f_open(&f, path, FA_OPEN_EXISTING | FA_READ);
-    if (res != FR_OK)
+    fd = yaffs_open(path, O_EXCL|O_RDONLY, 0);
+    res = yaffsfs_GetLastError();
+    if (res != 0)
     {
         return 0;
     }
-    fsize = f_size(&f);
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
     crc32_init(ulCrc32Table);
     taskENTER_CRITICAL();
-    res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+    br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
     taskEXIT_CRITICAL();
     while (br)
     {
@@ -233,12 +237,12 @@ int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
             CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
         }
         taskENTER_CRITICAL();
-        res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+        br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
         taskEXIT_CRITICAL();
     }
     *pulCrc32 = ~ulCrc32;
 
-    f_close(&f);
+    yaffs_close(fd);
     return 1;
 }
 

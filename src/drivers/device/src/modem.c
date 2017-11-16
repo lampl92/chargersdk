@@ -14,7 +14,7 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 
-#include "ff.h"
+#include "yaffsfs.h"
 
 #ifdef EVSE_DEBUG
 
@@ -1427,9 +1427,9 @@ void Modem_Poll(DevModem_t *pModem)
     int resp;
     int i;
     
-    FIL f;
-    UINT bw;
-    FRESULT fres;
+    int fd;
+    uint32_t bw;
+    int fres;
     char filepath[64 + 1];
     uint32_t crc32_calc, crc32_orig;
     double dcrc32_calc;
@@ -1715,8 +1715,9 @@ void Modem_Poll(DevModem_t *pModem)
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
             sprintf(filepath, "system\\%s", pechProto->info.ftp.strNewFileName);
-            fres = f_open(&f, filepath, FA_CREATE_ALWAYS | FA_WRITE);
-            if (fres != FR_OK)
+            fd = yaffs_open(filepath, O_CREAT | O_TRUNC | O_WRONLY , 0);
+            fres = yaffsfs_GetLastError();
+            if (fres != 0)
             {
                 pModem->state = DS_MODEM_FTP_GET;//有待商榷
                 break;
@@ -1733,8 +1734,8 @@ void Modem_Poll(DevModem_t *pModem)
                     }
                     ulRecvFileSize -= recv_len;//减去最后模块返回命令的长度
                     taskENTER_CRITICAL();
-                    fres = f_write(&f, pucFileBuffer, ulRecvFileSize, &bw);
-                    f_close(&f);
+                    bw = yaffs_write(fd, pucFileBuffer, ulRecvFileSize);
+                    yaffs_close(fd);
                     taskEXIT_CRITICAL();
                     free(pucFileBuffer);
                     free(pucQueBuffer);
@@ -1777,8 +1778,8 @@ void Modem_Poll(DevModem_t *pModem)
                 taskENTER_CRITICAL();
                 dcrc32_calc = (uint32_t)crc32_calc;
                 xSysconf.SetSysCfg(jnSysChargersdk_bin_crc32, (void*)&dcrc32_calc, ParamTypeDouble);
-                f_unlink("system\\chargesdk.bin.new");
-                f_rename(filepath, "system\\chargesdk.bin.new");
+                yaffs_unlink(pathBin);
+                yaffs_rename(filepath, pathBin);
                 taskEXIT_CRITICAL();
                 xSysconf.xUpFlag.chargesdk_bin = 1;
                 pechProto->info.ftp.ucDownloadStart = 0;

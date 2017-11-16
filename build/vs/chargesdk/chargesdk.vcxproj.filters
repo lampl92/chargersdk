@@ -195,14 +195,8 @@
     <Filter Include="Header files\middlewares\STemWin\inc">
       <UniqueIdentifier>{9cab0cbe-411f-4a39-9840-ce77ef536fa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\middlewares\STemWin\XBF">
-      <UniqueIdentifier>{2664e874-9ebb-43a6-91c1-73d3bd22e1b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\middlewares\STemWin\XBF">
       <UniqueIdentifier>{84d2b761-42fb-4888-bf60-8a1289b08b78}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\middlewares\tiny-AES128-C">
-      <UniqueIdentifier>{73fc3fe5-598f-407e-916c-ace0a32fb68a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\middlewares\tiny-AES128-C">
       <UniqueIdentifier>{daeea64c-08e4-4d12-b36d-bac04859b29a}</UniqueIdentifier>
@@ -879,9 +873,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_fatfs.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_gprs.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -1116,12 +1107,6 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c">
       <Filter>Source files\middlewares\STemWin\GUI_X</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c">
-      <Filter>Source files\middlewares\STemWin\XBF</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c">
-      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c">
       <Filter>Source files\middlewares\tinysh</Filter>
     </ClCompile>
@@ -1164,9 +1149,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_crc.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -1184,9 +1166,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c">
       <Filter>Source files\net\mbedTLS\library</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c">
-      <Filter>Source files\middlewares\tiny-AES128-C</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
       <Filter>Source files\app\libEcharge</Filter>
@@ -1651,33 +1630,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\cli\cli_rtos.h">
       <Filter>Header files\cli</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_sdram.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_timer.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart_queue.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
@@ -4093,6 +4045,39 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_config.h">
       <Filter>Header files\middlewares\yaffs2\direct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_sdram.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_timer.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart_queue.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\sys_types.h">
+      <Filter>Header files\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@
 #include "stringName.h"
 #include "interface.h"
 #include "cJSON.h"
+#include "yaffsfs.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -19,11 +20,11 @@
  */
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
+    int res;
     uint8_t *pbuff;
     uint32_t len;
-    UINT bw;
+    uint32_t bw;
     ErrorCode_t errcode;
 
     pbuff = NULL;
@@ -36,18 +37,17 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    //taskENTER_CRITICAL(); 
-    ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
-    f_sync(&f);
-    //taskEXIT_CRITICAL();
-    if(res != FR_OK)
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_WRONLY, S_IWRITE);
+    ThrowFSCode(res = yaffsfs_GetLastError(), path, "SetCfgObj()-open");
+    if(res != 0)
     {
         errcode = ERR_FILE_RW;
         goto exit;
     }
     taskENTER_CRITICAL(); 
-    ThrowFSCode(res = f_write(&f, pbuff, len, &bw), path, "SetCfgObj()-write");
-    f_sync(&f); 
+    bw = yaffs_write(fd, pbuff, len);
+    ThrowFSCode(res = yaffsfs_GetLastError(), path, "SetCfgObj()-write");
+    yaffs_sync(path); 
     taskEXIT_CRITICAL();
     if(len != bw)
     {
@@ -55,7 +55,7 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         goto exit_write;
     }
 exit_write:
-    f_close(&f);
+    yaffs_close(fd);
     free(pbuff);
 exit:
     cJSON_Delete(jsCfgObj);
@@ -71,29 +71,32 @@ exit:
  */
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
+    int res;
     uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t  br;   //byte read
 
     cJSON *jsCfgObj = NULL;
     int i;
     *perrcode = ERR_NO;
     /*读取文件*/
-    //taskENTER_CRITICAL();
-    ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
-    f_sync(&f);
-    //taskEXIT_CRITICAL();
-    if(res != FR_OK)
+    fd = yaffs_open(path, O_RDWR, 0);
+    ThrowFSCode(res = yaffsfs_GetLastError(), path, "GetCfgObj-open");
+    if(res != 0)
     {
         *perrcode = ERR_FILE_RW;
         goto exit;
     }
-    fsize = f_size(&f);
+    //fsize = yaffs_lseek(fd, 0, SEEK_END);
+    //yaffs_lseek(fd, 0, SEEK_SET);
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
     taskENTER_CRITICAL();
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br), path, "GetCfgObj-read");
+    br = yaffs_read(fd, rbuff, fsize);
+    ThrowFSCode(res = yaffsfs_GetLastError(), path, "GetCfgObj-read");
     taskEXIT_CRITICAL();
     if(fsize != br)
     {
@@ -110,7 +113,7 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     }
 exit_read:
 exit_parse:
-    f_close(&f);
+    yaffs_close(fd);
     free(rbuff);
 exit:
     return jsCfgObj;

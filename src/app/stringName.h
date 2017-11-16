@@ -8,15 +8,18 @@
 #ifndef STRINGNAME_H_INCLUDED
 #define STRINGNAME_H_INCLUDED
 
-#define pathOrder          "system\\order.txt"
-#define pathEVSELog        "system\\evse.log"
-#define pathEVSECfg        "system\\evse.cfg"
-#define pathSysCfg         "system\\sys.cfg"
-#define pathFTPCfg         "system\\ftp.cfg"
-#define pathProtoCfg       "system\\protocol.cfg"
-#define pathWhiteList      "system\\whitelist.cfg"
-#define pathBlackList      "system\\blacklist.cfg"
-#define pathBin            "system\\chargesdk.bin.new"
+#define pathOrder           "/nand/system/order.txt"
+#define pathEVSELog         "/nand/system/evse.log"
+#define pathEVSECfg         "/nand/system/evse.cfg"
+#define pathSysCfg          "/nand/system/sys.cfg"
+#define pathFTPCfg          "/nand/system/ftp.cfg"
+#define pathProtoCfg        "/nand/system/protocol.cfg"
+#define pathWhiteList       "/nand/system/whitelist.cfg"
+#define pathBlackList       "/nand/system/blacklist.cfg"
+#define pathBin             "/nand/system/chargesdk.bin.new"
+
+#define YAFFS_MOUNT_POINT   "/nand/"
+#define pathSystemDir       "/nand/system"
 
 
 #define jnEVSESN        "EVSESN"

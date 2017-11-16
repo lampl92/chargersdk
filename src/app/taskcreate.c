@@ -158,12 +158,11 @@ TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
-extern void fs_init(void);
 void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
-#if 0
+#if 1
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();

@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"

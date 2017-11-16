@@ -1,11 +1,12 @@
 #include "bmpdisplay.h"
 #include "GUI.h"
 #include "DIALOG.h"
+#include "yaffsfs.h"
 
-static FIL BMPFile;
-FIL BMPFile_BCGROUND;
-FIL BMPFile_ENCODE;
-static FIL ScrSortFile;                 //ÆÁÄ»½ØÍ¼ÎÄ¼ş
+static int BMPFile;
+int BMPFile_BCGROUND;
+int BMPFile_ENCODE;
+static int ScrSortFile;                 //å±å¹•æˆªå›¾æ–‡ä»¶
 static char bmpBuffer[BMPPERLINESIZE];
 char *bmpbuffer;
 char *bmpBackGround;
@@ -35,46 +36,46 @@ char *bmpBackGround;
 * Return value:
 *   Number of data bytes available.
 */
-static int BmpGetData(void * p, const uint8_t ** ppData, unsigned NumBytesReq, uint32_t Off)
+static int BmpGetData(void *p, const uint8_t ** ppData, unsigned NumBytesReq, unsigned long Off)
 {
 	static int readaddress=0;
-	FIL * phFile;
-	UINT NumBytesRead;
+	int * phFile;
+	uint32_t NumBytesRead;
 
-	phFile = (FIL *)p;
+	phFile = (int *)p;
 
 	if (NumBytesReq > sizeof(bmpBuffer))
 	{
 		NumBytesReq = sizeof(bmpBuffer);
 	}
 
-	//ÒÆ¶¯Ö¸Õëµ½Ó¦¸Ã¶ÁÈ¡µÄÎ»ÖÃ
+	//ç§»åŠ¨æŒ‡é’ˆåˆ°åº”è¯¥è¯»å–çš„ä½ç½®
 	if(Off == 1) readaddress = 0;
 	else readaddress=Off;
 
-    taskENTER_CRITICAL();	//ÁÙ½çÇø
+    taskENTER_CRITICAL();	//ä¸´ç•ŒåŒº
 
-	f_lseek(phFile,readaddress);
+	yaffs_lseek(*phFile, readaddress, SEEK_SET);
 
-	//¶ÁÈ¡Êı¾İµ½»º³åÇøÖĞ
-	f_read(phFile,bmpBuffer,NumBytesReq,&NumBytesRead);
+	//è¯»å–æ•°æ®åˆ°ç¼“å†²åŒºä¸­
+    NumBytesRead = yaffs_read(*phFile, bmpBuffer, NumBytesReq);
 
-    taskEXIT_CRITICAL();	//ÍË³öÁÙ½çÇø
+    taskEXIT_CRITICAL();	//é€€å‡ºä¸´ç•ŒåŒº
 
 	*ppData = (uint8_t *)bmpBuffer;
-	return NumBytesRead;//·µ»Ø¶ÁÈ¡µ½µÄ×Ö½ÚÊı
+	return NumBytesRead;//è¿”å›è¯»å–åˆ°çš„å­—èŠ‚æ•°
 }
 
-//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾¼ÓÔØµ½RAMÖĞµÄBMPÍ¼Æ¬
-//BMPFileName:Í¼Æ¬ÔÚSD¿¨»òÕßÆäËû´æ´¢Éè±¸ÖĞµÄÂ·¾¶(ĞèÎÄ¼şÏµÍ³Ö§³Ö£¡)
-//mode:ÏÔÊ¾Ä£Ê½
-//		0 ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾£¬ÓÉ²ÎÊıx,yÈ·¶¨ÏÔÊ¾Î»ÖÃ
-//		1 ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬£¬µ±Ñ¡Ôñ´ËÄ£Ê½µÄÊ±ºò²ÎÊıx,yÎŞĞ§¡£
-//x:Í¼Æ¬×óÉÏ½ÇÔÚLCDÖĞµÄxÖáÎ»ÖÃ(µ±²ÎÊımodeÎª1Ê±£¬´Ë²ÎÊıÎŞĞ§)
-//y:Í¼Æ¬×óÉÏ½ÇÔÚLCDÖĞµÄyÖáÎ»ÖÃ(µ±²ÎÊımodeÎª1Ê±£¬´Ë²ÎÊıÎŞĞ§)
-//member:  Ëõ·Å±ÈÀıµÄ·Ö×ÓÏî
-//denom:Ëõ·Å±ÈÀıµÄ·ÖÄ¸Ïî
-//·µ»ØÖµ:0 ÏÔÊ¾Õı³£,ÆäËû Ê§°Ü
+//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºåŠ è½½åˆ°RAMä¸­çš„BMPå›¾ç‰‡
+//BMPFileName:å›¾ç‰‡åœ¨SDå¡æˆ–è€…å…¶ä»–å­˜å‚¨è®¾å¤‡ä¸­çš„è·¯å¾„(éœ€æ–‡ä»¶ç³»ç»Ÿæ”¯æŒï¼)
+//mode:æ˜¾ç¤ºæ¨¡å¼
+//		0 åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºï¼Œç”±å‚æ•°x,yç¡®å®šæ˜¾ç¤ºä½ç½®
+//		1 åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡ï¼Œå½“é€‰æ‹©æ­¤æ¨¡å¼çš„æ—¶å€™å‚æ•°x,yæ— æ•ˆã€‚
+//x:å›¾ç‰‡å·¦ä¸Šè§’åœ¨LCDä¸­çš„xè½´ä½ç½®(å½“å‚æ•°modeä¸º1æ—¶ï¼Œæ­¤å‚æ•°æ— æ•ˆ)
+//y:å›¾ç‰‡å·¦ä¸Šè§’åœ¨LCDä¸­çš„yè½´ä½ç½®(å½“å‚æ•°modeä¸º1æ—¶ï¼Œæ­¤å‚æ•°æ— æ•ˆ)
+//member:  ç¼©æ”¾æ¯”ä¾‹çš„åˆ†å­é¡¹
+//denom:ç¼©æ”¾æ¯”ä¾‹çš„åˆ†æ¯é¡¹
+//è¿”å›å€¼:0 æ˜¾ç¤ºæ­£å¸¸,å…¶ä»– å¤±è´¥
 #if 0
 int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom)
 {
@@ -86,39 +87,39 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
 	int XSize,YSize;
 	float Xflag,Yflag;
 
-	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//´ò¿ªÎÄ¼ş
-	//ÎÄ¼ş´ò¿ª´íÎó»òÕßÎÄ¼ş´óÓÚBMPMEMORYSIZE
+	result = yaffs_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//æ‰“å¼€æ–‡ä»¶
+	//æ–‡ä»¶æ‰“å¼€é”™è¯¯æˆ–è€…æ–‡ä»¶å¤§äºBMPMEMORYSIZE
 	if((result != FR_OK) || (BMPFile.obj.objsize>BMPMEMORYSIZE)) 	return 1;
 
-	bmpbuffer = malloc(BMPFile.obj.objsize);//ÉêÇëÄÚ´æ
+	bmpbuffer = malloc(BMPFile.obj.objsize);//ç”³è¯·å†…å­˜
 	if(bmpbuffer == NULL) return 2;
 
-    //taskENTER_CRITICAL();	//ÁÙ½çÇø
+    //taskENTER_CRITICAL();	//ä¸´ç•ŒåŒº
 
-	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //¶ÁÈ¡Êı¾İ
-	if(result != FR_OK) return 3;//        £¡£¡£¡£¡ÄÚ´æĞ¹Â©·çÏÕ£¡£¡£¡£¡£¡£¡£¡
+	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(uint32_t *)&bread); //è¯»å–æ•°æ®
+	if(result != FR_OK) return 3;//        ï¼ï¼ï¼ï¼å†…å­˜æ³„æ¼é£é™©ï¼ï¼ï¼ï¼ï¼ï¼ï¼
 
-    //taskEXIT_CRITICAL();//ÍË³öÁÙ½çÇø
+    //taskEXIT_CRITICAL();//é€€å‡ºä¸´ç•ŒåŒº
 
 	switch(mode)
 	{
-		case 0:	//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Í¼Æ¬
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 0:	//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºå›¾ç‰‡
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
-				GUI_BMP_Draw(bmpbuffer,x,y);	//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾BMPÍ¼Æ¬
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+				GUI_BMP_Draw(bmpbuffer,x,y);	//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºBMPå›¾ç‰‡
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				GUI_BMP_DrawScaled(bmpbuffer,x,y,member,denom);
 			}
 			break;
-		case 1:	//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
-			XSize = GUI_BMP_GetXSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄXÖá´óĞ¡
-			YSize = GUI_BMP_GetYSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄYÖá´óĞ¡
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 1:	//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
+			XSize = GUI_BMP_GetXSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Xè½´å¤§å°
+			YSize = GUI_BMP_GetYSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Yè½´å¤§å°
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
-				//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
+				//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
 				//GUI_BMP_Draw(bmpbuffer,(lcddev.width-XSize)/2-1,(lcddev.height-YSize)/2-1);
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				//Xflag = (float)XSize*((float)member/(float)denom);
 				//Yflag = (float)YSize*((float)member/(float)denom);
@@ -128,51 +129,53 @@ int dispbmp(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,i
 			}
 			break;
 	}
-	f_close(&BMPFile);				//¹Ø±ÕBMPFileÎÄ¼ş
-	free(bmpbuffer);		//ÊÍ·ÅÄÚ´æ
+	yaffs_close(BMPFile);				//å…³é—­BMPFileæ–‡ä»¶
+	free(bmpbuffer);		//é‡Šæ”¾å†…å­˜
 	return 0;
 }
 #endif
 
-//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾ÎŞĞè¼ÓÔØµ½RAMÖĞµÄBMPÍ¼Æ¬(ĞèÎÄ¼şÏµÍ³Ö§³Ö£¡¶ÔÓÚĞ¡RAM£¬ÍÆ¼öÊ¹ÓÃ´Ë·½·¨£¡)
-//BMPFileName:Í¼Æ¬ÔÚSD¿¨»òÕßÆäËû´æ´¢Éè±¸ÖĞµÄÂ·¾¶
-//mode:ÏÔÊ¾Ä£Ê½
-//		0 ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾£¬ÓĞ²ÎÊıx,yÈ·¶¨ÏÔÊ¾Î»ÖÃ
-//		1 ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬£¬µ±Ñ¡Ôñ´ËÄ£Ê½µÄÊ±ºò²ÎÊıx,yÎŞĞ§¡£
-//x:Í¼Æ¬×óÉÏ½ÇÔÚLCDÖĞµÄxÖáÎ»ÖÃ(µ±²ÎÊımodeÎª1Ê±£¬´Ë²ÎÊıÎŞĞ§)
-//y:Í¼Æ¬×óÉÏ½ÇÔÚLCDÖĞµÄyÖáÎ»ÖÃ(µ±²ÎÊımodeÎª1Ê±£¬´Ë²ÎÊıÎŞĞ§)
-//member:  Ëõ·Å±ÈÀıµÄ·Ö×ÓÏî
-//denom:Ëõ·Å±ÈÀıµÄ·ÖÄ¸Ïî
-//·µ»ØÖµ:0 ÏÔÊ¾Õı³£,ÆäËû Ê§°Ü
+//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºæ— éœ€åŠ è½½åˆ°RAMä¸­çš„BMPå›¾ç‰‡(éœ€æ–‡ä»¶ç³»ç»Ÿæ”¯æŒï¼å¯¹äºå°RAMï¼Œæ¨èä½¿ç”¨æ­¤æ–¹æ³•ï¼)
+//BMPFileName:å›¾ç‰‡åœ¨SDå¡æˆ–è€…å…¶ä»–å­˜å‚¨è®¾å¤‡ä¸­çš„è·¯å¾„
+//mode:æ˜¾ç¤ºæ¨¡å¼
+//		0 åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºï¼Œæœ‰å‚æ•°x,yç¡®å®šæ˜¾ç¤ºä½ç½®
+//		1 åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡ï¼Œå½“é€‰æ‹©æ­¤æ¨¡å¼çš„æ—¶å€™å‚æ•°x,yæ— æ•ˆã€‚
+//x:å›¾ç‰‡å·¦ä¸Šè§’åœ¨LCDä¸­çš„xè½´ä½ç½®(å½“å‚æ•°modeä¸º1æ—¶ï¼Œæ­¤å‚æ•°æ— æ•ˆ)
+//y:å›¾ç‰‡å·¦ä¸Šè§’åœ¨LCDä¸­çš„yè½´ä½ç½®(å½“å‚æ•°modeä¸º1æ—¶ï¼Œæ­¤å‚æ•°æ— æ•ˆ)
+//member:  ç¼©æ”¾æ¯”ä¾‹çš„åˆ†å­é¡¹
+//denom:ç¼©æ”¾æ¯”ä¾‹çš„åˆ†æ¯é¡¹
+//è¿”å›å€¼:0 æ˜¾ç¤ºæ­£å¸¸,å…¶ä»– å¤±è´¥
 int dispbmpex(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom)
 {
 	char result;
 	int XSize,YSize;
 	float Xflag,Yflag;
 
-	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//´ò¿ªÎÄ¼ş
-	//ÎÄ¼ş´ò¿ª´íÎó
-	if(result != FR_OK) 	return 1;
+    BMPFile = yaffs_open(BMPFileName, O_RDONLY, 0);	//æ‰“å¼€æ–‡ä»¶
+    result = yaffsfs_GetLastError();
+	//æ–‡ä»¶æ‰“å¼€é”™è¯¯
+	if(result != 0) 	
+    	return 1;
 
 	switch(mode)
 	{
-		case 0:	//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Í¼Æ¬
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 0:	//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºå›¾ç‰‡
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
-				GUI_BMP_DrawEx(BmpGetData,&BMPFile,x,y);//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾BMPÍ¼Æ¬
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+				GUI_BMP_DrawEx(BmpGetData,&BMPFile,x,y);//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºBMPå›¾ç‰‡
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				GUI_BMP_DrawScaledEx(BmpGetData,&BMPFile,x,y,member,denom);
 			}
 			break;
-		case 1:	//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
-			XSize = GUI_BMP_GetXSizeEx(BmpGetData,&BMPFile);	//»ñÈ¡Í¼Æ¬µÄXÖá´óĞ¡
-			YSize = GUI_BMP_GetYSizeEx(BmpGetData,&BMPFile);	//»ñÈ¡Í¼Æ¬µÄYÖá´óĞ¡
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 1:	//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
+			XSize = GUI_BMP_GetXSizeEx(BmpGetData,&BMPFile);	//è·å–å›¾ç‰‡çš„Xè½´å¤§å°
+			YSize = GUI_BMP_GetYSizeEx(BmpGetData,&BMPFile);	//è·å–å›¾ç‰‡çš„Yè½´å¤§å°
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
-				//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
+				//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
 				//GUI_BMP_DrawEx(BmpGetData,&BMPFile,(lcddev.width-XSize)/2-1,(lcddev.height-YSize)/2-1);
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				//Xflag = (float)XSize*((float)member/(float)denom);
 				//Yflag = (float)YSize*((float)member/(float)denom);
@@ -182,19 +185,19 @@ int dispbmpex(uint8_t *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member
 			}
 			break;
 	}
-	f_close(&BMPFile);		//¹Ø±ÕBMPFileÎÄ¼ş
+	yaffs_close(BMPFile);		//å…³é—­BMPFileæ–‡ä»¶
 	return 0;
 }
 
-//´Ëº¯Êı±»GUI_BMP_Serialize()µ÷ÓÃ£¬ÓÃÀ´ÏòÎÄ¼şĞ´Èë×Ö½Ú
+//æ­¤å‡½æ•°è¢«GUI_BMP_Serialize()è°ƒç”¨ï¼Œç”¨æ¥å‘æ–‡ä»¶å†™å…¥å­—èŠ‚
 static void _WriteByte2File(uint8_t Data, void * p)
 {
-	UINT nWritten;
-	f_write((FIL*)p,&Data,1,&nWritten);
+	uint32_t nWritten;
+    nWritten = yaffs_write(*(int*)p, &Data, 1);
 }
 
-//µÃµ½Ò»¸öÎÄ¼şÃû
-//pname:µÃµ½µÄÎÄ¼şÃû
+//å¾—åˆ°ä¸€ä¸ªæ–‡ä»¶å
+//pname:å¾—åˆ°çš„æ–‡ä»¶å
 void emwinbmp_new_pathname(uint8_t *pname,uint8_t *ppath)
 {
     uint8_t res;
@@ -202,30 +205,33 @@ void emwinbmp_new_pathname(uint8_t *pname,uint8_t *ppath)
     while(index<0XFFFF)
     {
         sprintf((char*)pname,ppath,index);
-        res=f_open(&ScrSortFile,(const TCHAR*)pname,FA_READ);//³¢ÊÔ´ò¿ªÕâ¸öÎÄ¼ş
-        if(res==FR_NO_FILE)break;   //¸ÄÎÄ¼şÃû²»´æÔÚ=ÕıÊÇÎÒÃÇĞèÒªµÄ
-        else if(res==FR_OK) f_close(&ScrSortFile);//Èç¹û´ò¿ª³É¹¦£¬¾Í¹Ø±Õµô
+        ScrSortFile = yaffs_open(pname, O_RDONLY, 0);//å°è¯•æ‰“å¼€è¿™ä¸ªæ–‡ä»¶
+        res = yaffsfs_GetLastError();
+        if(res!=0)
+            break;   //æ”¹æ–‡ä»¶åä¸å­˜åœ¨=æ­£æ˜¯æˆ‘ä»¬éœ€è¦çš„
+        else if(res==0) 
+            yaffs_close(ScrSortFile);//å¦‚æœæ‰“å¼€æˆåŠŸï¼Œå°±å…³é—­æ‰
         index++;
     }
 }
-//Éú³ÉÒ»¸öBMPÍ¼Æ¬£¬±£´æµ½SD¿¨ÖĞ,ÊµÏÖÆÁÄ»½ØÍ¼¹¦ÄÜ£¡
-//*filepath:ÎÄ¼şÂ·¾¶
-//x0:´´½¨BMPÎÄ¼şµÄXÆğÊ¼Î»ÖÃ
-//y0:´´½¨BMPÎÄ¼şµÄYÆğÊ¼Î»ÖÃ
-//Xsize:XµÄ´óĞ¡
-//Ysize:YµÄ´óĞ¡
+//ç”Ÿæˆä¸€ä¸ªBMPå›¾ç‰‡ï¼Œä¿å­˜åˆ°SDå¡ä¸­,å®ç°å±å¹•æˆªå›¾åŠŸèƒ½ï¼
+//*filepath:æ–‡ä»¶è·¯å¾„
+//x0:åˆ›å»ºBMPæ–‡ä»¶çš„Xèµ·å§‹ä½ç½®
+//y0:åˆ›å»ºBMPæ–‡ä»¶çš„Yèµ·å§‹ä½ç½®
+//Xsize:Xçš„å¤§å°
+//Ysize:Yçš„å¤§å°
 void create_bmppicture(uint8_t *filename,int x0,int y0,int Xsize,int Ysize)
 {
-	static FIL hFile;
-	//´´½¨Ò»¸öÎÄ¼ş£¬Â·¾¶Îªfilename,Èç¹ûÎÄ¼şÔ­±¾¾Í´æÔÚµÄ»°»á±»ĞÂ½¨µÄÎÄ¼ş¸²¸Çµô£¡
-	f_open(&hFile,(const TCHAR*)filename,FA_READ|FA_WRITE|FA_CREATE_ALWAYS);
+	static int hFile;
+	//åˆ›å»ºä¸€ä¸ªæ–‡ä»¶ï¼Œè·¯å¾„ä¸ºfilename,å¦‚æœæ–‡ä»¶åŸæœ¬å°±å­˜åœ¨çš„è¯ä¼šè¢«æ–°å»ºçš„æ–‡ä»¶è¦†ç›–æ‰ï¼
+    hFile = yaffs_open(filename, O_CREAT|O_TRUNC|O_RDWR,0);
 	GUI_BMP_SerializeEx(_WriteByte2File,x0,y0,Xsize,Ysize,&hFile);
-	f_close(&hFile);	//¹Ø±ÕÎÄ¼ş
+	yaffs_close(hFile);	//å…³é—­æ–‡ä»¶
 }
 
 void bmpdisplay(uint8_t *ppath)
 {
-    //GUI_DispStringHCenterAt("ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Ò»ÕÅ¼ÓÔØµ½RAMÖĞµÄBMPÍ¼Æ¬",400,5);
+    //GUI_DispStringHCenterAt("åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºä¸€å¼ åŠ è½½åˆ°RAMä¸­çš„BMPå›¾ç‰‡",400,5);
     dispbmp(ppath,0,0,0,1,1);
     //GUI_Clear();
 }
@@ -235,7 +241,7 @@ void bmpdisplay(uint8_t *ppath)
  * @param
  * @param
  * @return
- *  **********×¢ÒâÔÚÇĞ»»½çÃæÊ±ÒªÊ¹ÓÃfreeÊÍ·ÅµôÍ¼Æ¬µÄÄÚ´æ
+ *  **********æ³¨æ„åœ¨åˆ‡æ¢ç•Œé¢æ—¶è¦ä½¿ç”¨freeé‡Šæ”¾æ‰å›¾ç‰‡çš„å†…å­˜
  */
 uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,uint32_t y,int member,int denom,WM_HWIN hWin)
 {
@@ -247,6 +253,7 @@ uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,
 	float Xflag,Yflag;
 	WM_HWIN      hItem;
 	IMAGE_Handle imageHandle;
+    struct yaffs_stat st;
 
 //    if(is_free == 1)
 //    {
@@ -254,49 +261,54 @@ uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,
 //        return 0;
 //    }
 
-	result = f_open(&BMPFile,(const TCHAR*)BMPFileName,FA_READ);	//´ò¿ªÎÄ¼ş
-	//ÎÄ¼ş´ò¿ª´íÎó»òÕßÎÄ¼ş´óÓÚBMPMEMORYSIZE
-	if((result != FR_OK) || (BMPFile.obj.objsize>BMPMEMORYSIZE)) 	return 1;
+    yaffs_stat(BMPFileName, &st);
+    BMPFile = yaffs_open(BMPFileName, O_RDONLY, 0);	//æ‰“å¼€æ–‡ä»¶
+    result = yaffsfs_GetLastError();
+	//æ–‡ä»¶æ‰“å¼€é”™è¯¯æˆ–è€…æ–‡ä»¶å¤§äºBMPMEMORYSIZE
+	if((result != 0) || (st.st_size>BMPMEMORYSIZE)) 	
+    	return 1;
 
-	bmpbuffer = malloc(BMPFile.obj.objsize);//ÉêÇëÄÚ´æ
+    bmpbuffer = malloc(st.st_size);//ç”³è¯·å†…å­˜
 
 	if(bmpbuffer == NULL)
 	{
-        return 2;//·ÖÅäÊ§°Ü
+        return 2;//åˆ†é…å¤±è´¥
 	}
 
-    //taskENTER_CRITICAL();	//ÁÙ½çÇø
+    //taskENTER_CRITICAL();	//ä¸´ç•ŒåŒº
 
-	result = f_read(&BMPFile,bmpbuffer,BMPFile.obj.objsize,(UINT *)&bread); //¶ÁÈ¡Êı¾İ
-	if(result != FR_OK) return 3;
+    bread = yaffs_read(BMPFile, bmpbuffer, st.st_size); //è¯»å–æ•°æ®
+    result = yaffsfs_GetLastError();
+	if(result != 0) 
+    	return 3;
 
-    //taskEXIT_CRITICAL();//ÍË³öÁÙ½çÇø
+    //taskEXIT_CRITICAL();//é€€å‡ºä¸´ç•ŒåŒº
 
 	switch(mode)
 	{
-		case 0:	//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Í¼Æ¬
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 0:	//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºå›¾ç‰‡
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
 //			    hItem = WM_GetDialogItem(hWin, (GUI_ID_USER + 0x0A));
-                XSize = GUI_BMP_GetXSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄXÖá´óĞ¡
-                YSize = GUI_BMP_GetYSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄYÖá´óĞ¡
+                XSize = GUI_BMP_GetXSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Xè½´å¤§å°
+                YSize = GUI_BMP_GetYSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Yè½´å¤§å°
                 imageHandle = IMAGE_CreateEx(x,y,XSize,YSize,
                                      hWin,WM_CF_SHOW,IMAGE_CF_TILE,GUI_ID_IMAGE0);
 
-				IMAGE_SetBMP(imageHandle, bmpbuffer, BMPFile.obj.objsize);//GUI_BMP_Draw(bmpbuffer,x,y);	//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾BMPÍ¼Æ¬
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+				IMAGE_SetBMP(imageHandle, bmpbuffer, st.st_size);//GUI_BMP_Draw(bmpbuffer,x,y);	//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºBMPå›¾ç‰‡
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				GUI_BMP_DrawScaled(bmpbuffer,x,y,member,denom);
 			}
 			break;
-		case 1:	//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
-			XSize = GUI_BMP_GetXSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄXÖá´óĞ¡
-			YSize = GUI_BMP_GetYSize(bmpbuffer);	//»ñÈ¡Í¼Æ¬µÄYÖá´óĞ¡
-			if((member == 1) && (denom == 1)) //ÎŞĞèËõ·Å£¬Ö±½Ó»æÖÆ
+		case 1:	//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
+			XSize = GUI_BMP_GetXSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Xè½´å¤§å°
+			YSize = GUI_BMP_GetYSize(bmpbuffer);	//è·å–å›¾ç‰‡çš„Yè½´å¤§å°
+			if((member == 1) && (denom == 1)) //æ— éœ€ç¼©æ”¾ï¼Œç›´æ¥ç»˜åˆ¶
 			{
-				//ÔÚLCDÖĞ¼äÏÔÊ¾Í¼Æ¬
+				//åœ¨LCDä¸­é—´æ˜¾ç¤ºå›¾ç‰‡
 				//GUI_BMP_Draw(bmpbuffer,(lcddev.width-XSize)/2-1,(lcddev.height-YSize)/2-1);
-			}else //·ñÔòÍ¼Æ¬ĞèÒªËõ·Å
+			}else //å¦åˆ™å›¾ç‰‡éœ€è¦ç¼©æ”¾
 			{
 				//Xflag = (float)XSize*((float)member/(float)denom);
 				//Yflag = (float)YSize*((float)member/(float)denom);
@@ -306,12 +318,12 @@ uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,
 			}
 			break;
 	}
-	f_close(&BMPFile);				//¹Ø±ÕBMPFileÎÄ¼ş
+	yaffs_close(BMPFile);				//å…³é—­BMPFileæ–‡ä»¶
 	return 0;
 }
-/** @brief ÏÔÊ¾±³¾°Í¼Æ¬
+/** @brief æ˜¾ç¤ºèƒŒæ™¯å›¾ç‰‡
  *
- * @param Â·¾¶£»×óÉÏ½ÇÎ»ÖÃ£»¾ä±ú
+ * @param è·¯å¾„ï¼›å·¦ä¸Šè§’ä½ç½®ï¼›å¥æŸ„
  * @param
  * @return
  *
@@ -320,21 +332,26 @@ uint8_t readBackGroundNOFREE(char *BMPFileName)
 {
 	uint16_t bread;
 	char result;
+    struct yaffs_stat st;
 
-	result = f_open(&BMPFile_BCGROUND,(const TCHAR*)BMPFileName,FA_READ);	//´ò¿ªÎÄ¼ş
-	//ÎÄ¼ş´ò¿ª´íÎó»òÕßÎÄ¼ş´óÓÚBMPMEMORYSIZE
-	if((result != FR_OK) || (BMPFile_BCGROUND.obj.objsize>BMPMEMORYSIZE)) 	return 1;
+    yaffs_stat(BMPFileName, &st);
+    BMPFile_BCGROUND = yaffs_open(BMPFileName, O_RDONLY, 0);	//æ‰“å¼€æ–‡ä»¶
+    result = yaffsfs_GetLastError();
+	//æ–‡ä»¶æ‰“å¼€é”™è¯¯æˆ–è€…æ–‡ä»¶å¤§äºBMPMEMORYSIZE
+	if((result != 0) || (st.st_size>BMPMEMORYSIZE)) 	
+    	return 1;
 
-	bmpBackGround = malloc(BMPFile_BCGROUND.obj.objsize);//ÉêÇëÄÚ´æ
+    bmpBackGround = malloc(st.st_size);//ç”³è¯·å†…å­˜
 
 	if(bmpBackGround == NULL)
 	{
-        return 2;//·ÖÅäÊ§°Ü
+        return 2;//åˆ†é…å¤±è´¥
 	}
     //printf_safe("bmp_file = %d\n", BMPFile_BCGROUND.obj.objsize);
-	result = f_read(&BMPFile_BCGROUND,bmpBackGround,BMPFile_BCGROUND.obj.objsize,(UINT *)&bread); //¶ÁÈ¡Êı¾İ
-	if(result != FR_OK) return 3;
+    bread = yaffs_read(BMPFile_BCGROUND, bmpBackGround, st.st_size); //è¯»å–æ•°æ®
+	if(result != 0) 
+    	return 3;
 
-	f_close(&BMPFile_BCGROUND);				//¹Ø±ÕBMPFileÎÄ¼ş
+	yaffs_close(BMPFile_BCGROUND);				//å…³é—­BMPFileæ–‡ä»¶
 	return 0;
 }

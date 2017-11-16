@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -23,7 +23,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "SCROLLBAR.h"
 // USER END

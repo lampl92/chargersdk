@@ -14,19 +14,6 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 Sysconf_t   xSysconf;//存放系统初始化参数
 
 extern time_t time_dat;
-extern void Error_Handler(void);
-static void fs_mkfs(void)
-{
-    BYTE work[4096]; /* Work area (larger is better for processing time) */
-
-    /*##-3- Create a FAT file system (format) on the logical drive #########*/
-    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT, 0, work, sizeof(work)) != FR_OK)
-    {
-        /* FatFs Format Error */
-        Error_Handler();
-    }
-
-}
 
 void timeInit()
 {
@@ -57,11 +44,12 @@ static uint8_t create_system_dir(void)
 {
     int res;
     
-    res = yaffs_mkdir("system", 0);
+    yaffs_mkdir(pathSystemDir, 0);
+    res = yaffsfs_GetLastError();
     switch(res)
     {
     case 0:
-    case EEXIST:
+    case -EEXIST:
         return TRUE;
     default:
         return FALSE;
@@ -73,27 +61,30 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
     uint32_t bw;
     int fd;
     int res;
-    fd = yaffs_open(path, O_CREAT | O_WRONLY, S_IWRITE);
+    fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
     res = yaffsfs_GetLastError();
     switch(res)
     {
     case 0:
         bw = yaffs_write(fd, context, strlen(context));
         yaffs_close(fd);
-    case EEXIST:
-    default:
+    case -EEXIST:
         yaffs_close(fd);
+        break;
+    default:
+        break;
     }
 }
 extern void retarget_init(void);
 void yaffs_init(void)
 {
     int res;
-    res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
-    if (res != FR_OK)
+    yaffs_start_up();
+    res = yaffs_mount(YAFFS_MOUNT_POINT);
+    if (res != 0)
     {
-        fs_mkfs();
-        f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
+        yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
+        yaffs_mount(YAFFS_MOUNT_POINT);
     }
 }
 void sys_Init(void)
@@ -106,18 +97,20 @@ void sys_Init(void)
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
     create_system_dir();
-    //f_unlink(pathEVSECfg);
+    yaffs_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
-    //f_unlink(pathProtoCfg);
+    yaffs_unlink(pathProtoCfg);
+    yaffs_unlink(pathWhiteList);
+    yaffs_unlink(pathBlackList);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
-    f_unlink(pathEVSELog);
-    f_unlink(pathOrder);
+    yaffs_unlink(pathEVSELog);
+    yaffs_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
-//    f_unlink(pathSysCfg);
-//    f_unlink(pathFTPCfg);
+    yaffs_unlink(pathSysCfg);
+    yaffs_unlink(pathFTPCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
 

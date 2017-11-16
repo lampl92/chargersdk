@@ -1,18 +1,12 @@
 #include "siffontcreate.h"
-#include "ff.h"
-#include "bsp_define.h"
+#include "yaffsfs.h"
+#include "sys_types.h"
 
 //字体定义
 GUI_FONT SIF12_Font;
 GUI_FONT SIF16_Font;
 GUI_FONT SIF24_Font;
 GUI_FONT SIF36_Font;
-
-//字体文件
-FIL SIF12FontFile;
-FIL SIF16FontFile;
-FIL SIF24FontFile;
-FIL SIF36FontFile;
 
 //字库文件缓冲区
 u8 *SIF12FontBuff;
@@ -25,31 +19,41 @@ u8 *SIF36FontBuff;
 //buffer:字库文件缓冲区
 //files:文件
 //返回值:0，失败；其他，得到的字库文件
-u8 *GetFont_Info(u8 *fxpath,FIL files)
+u8 *GetFont_Info(u8 *fxpath)
 {
+    int fd;
     int result;
 	u16 bread;
+    int fsize;
+    struct yaffs_stat st;
 	u8 *FontBuffer;
 
-	result=f_open(&files,(const TCHAR*)fxpath,FA_READ);	//打开字库文件
-	FontBuffer=malloc(files.obj.objsize); //从外部SDRAM申请内存
+	fd=yaffs_open(fxpath, O_RDONLY, 0);	//打开字库文件
+    yaffs_stat(fxpath, &st);
+    fsize = st.st_size;
+    FontBuffer = malloc(fsize); //从外部SDRAM申请内存
 
     if(FontBuffer==NULL)
 	{
 		printf("内存申请失败\r\n");
-		FontBuffer=NULL;	//内存申请失败
+    	return FontBuffer;
 	}
 
-	result = f_read(&files,FontBuffer,files.obj.objsize,(UINT *)&bread); //读取数据
-	if(result != FR_OK) FontBuffer=NULL;
-
+    bread = yaffs_read(fd, FontBuffer, fsize); //读取数据
+    result = yaffsfs_GetLastError();
+    if (result != 0) 
+    {
+        free(FontBuffer);
+    	FontBuffer=NULL;
+    }
+    yaffs_close(fd);
     return FontBuffer;
 }
 
 //创建SIF12字体，供EMWIN使用
 void Create_SIF12(u8 *fxpath)
 {
-    SIF12FontBuff=GetFont_Info(fxpath,SIF12FontFile);
+    SIF12FontBuff=GetFont_Info(fxpath);
     if(SIF12FontBuff!=NULL)
     {
         //创建SIF格式字体
@@ -60,7 +64,7 @@ void Create_SIF12(u8 *fxpath)
 //创建SIF16字体，供EMWIN使用
 void Create_SIF16(u8 *fxpath)
 {
-    SIF16FontBuff=GetFont_Info(fxpath,SIF16FontFile);
+    SIF16FontBuff=GetFont_Info(fxpath);
     if(SIF16FontBuff!=NULL)
     {
         //创建SIF格式字体
@@ -71,7 +75,7 @@ void Create_SIF16(u8 *fxpath)
 //创建SIF24字体，供EMWIN使用
 void Create_SIF24(u8 *fxpath)
 {
-    SIF24FontBuff=GetFont_Info(fxpath,SIF24FontFile);
+    SIF24FontBuff=GetFont_Info(fxpath);
     if(SIF24FontBuff!=NULL)
     {
         //创建SIF格式字体
@@ -82,7 +86,7 @@ void Create_SIF24(u8 *fxpath)
 //创建SIF36字体，供EMWIN使用
 void Create_SIF36(u8 *fxpath)
 {
-    SIF36FontBuff=GetFont_Info(fxpath,SIF36FontFile);
+    SIF36FontBuff=GetFont_Info(fxpath);
     if(SIF36FontBuff!=NULL)
     {
         //创建SIF格式字体

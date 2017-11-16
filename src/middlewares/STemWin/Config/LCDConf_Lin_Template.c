@@ -4,18 +4,7 @@
 #include "lcddrv.h"
 #include "GUIDRV_Lin.h"
 #include "bsp_define.h"
-//////////////////////////////////////////////////////////////////////////////////
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F429开发板
-//STemWin LCD底层驱动函数
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2016/3/15
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved
-//////////////////////////////////////////////////////////////////////////////////
+#include "sys_types.h"
 
 #define XSIZE_PHYS 1024     //最大支持1024*768
 #define YSIZE_PHYS 768

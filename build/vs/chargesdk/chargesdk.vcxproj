@@ -110,13 +110,8 @@
     <ClCompile Include="..\..\..\src\app\taskremote.c" />
     <ClCompile Include="..\..\..\src\app\taskrfid.c" />
     <ClCompile Include="..\..\..\src\app\timercallback.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_aes.c" />
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_crc.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_fatfs.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_gprs.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_json.c" />
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
@@ -200,9 +195,6 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
@@ -274,6 +266,7 @@
     <ClInclude Include="..\..\..\src\app\stm32f4xx_it.h" />
     <ClInclude Include="..\..\..\src\app\stringName.h" />
     <ClInclude Include="..\..\..\src\app\sysinit.h" />
+    <ClInclude Include="..\..\..\src\app\sys_types.h" />
     <ClInclude Include="..\..\..\src\app\taskcharge.h" />
     <ClInclude Include="..\..\..\src\app\taskcreate.h" />
     <ClInclude Include="..\..\..\src\app\taskdata.h" />
@@ -285,10 +278,10 @@
     <ClInclude Include="..\..\..\src\app\timercallback.h" />
     <ClInclude Include="..\..\..\src\app\version.h" />
     <ClInclude Include="..\..\..\src\cli\cli_app.h" />
-    <ClInclude Include="..\..\..\src\cli\cli_fatfs.h" />
     <ClInclude Include="..\..\..\src\cli\cli_main.h" />
     <ClInclude Include="..\..\..\src\cli\cli_rtos.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h" />

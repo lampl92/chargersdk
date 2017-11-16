@@ -6,7 +6,7 @@
 * @date 2017-03-17
 */
 #include "includes.h"
-#include "ff.h"
+#include "yaffsfs.h"
 #include "utils.h"
 
 void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc)
@@ -65,13 +65,14 @@ int testcrc()
     printf_safe("clock = %d\n", clock()-clocknow);
 
 }
+#if 0
 int testcrchal()
 {
-    FIL f;
-    FRESULT res;
+    int fd;
+    int res;
     uint8_t *pbuff;
-    UINT size;
-    UINT br;
+    uint32_t size;
+    uint32_t br;
     CRC_HandleTypeDef CrcHandle;
     uint32_t ulCrc32_hal = 0xFFFFFFFF;
     int i;
@@ -84,7 +85,7 @@ int testcrchal()
         printf_safe("HAL_CRC init error!\n");
         return 0;
     }
-    res = f_open(&f, "chargesdk.bin", FA_OPEN_EXISTING | FA_READ);
+    fd = yaffs_open(&f, "chargesdk.bin", FA_OPEN_EXISTING | FA_READ);
     size = f_size(&f);
 
     pbuff = (uint8_t *)malloc(size * sizeof(uint8_t));
@@ -103,11 +104,11 @@ int testcrchal()
     free(pbuff);
     return 1;
 }
-
+#endif
 static void cli_crctest_fnt(int argc, char **argv)
 {
     testcrc();
-    testcrchal();
+    //testcrchal();
 }
 
 tinysh_cmd_t cli_crctest_cmd = {
