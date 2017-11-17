@@ -93,10 +93,10 @@ void yaffs_init(void)
 void sys_Init(void)
 {
     int res;
-    yaffs_init();
     //ifconfig_init();
     timeInit();
     retarget_init();
+    yaffs_init();
 #if 1
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
