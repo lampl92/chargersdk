@@ -4085,9 +4085,4 @@
       <Filter>Source files\middlewares\STemWin\Lib</Filter>
     </Library>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\..\..\src\middlewares\yaffs2\direct\README.txt">
-      <Filter>Source files\middlewares\yaffs2\direct</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

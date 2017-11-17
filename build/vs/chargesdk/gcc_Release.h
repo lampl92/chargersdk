@@ -1221,7 +1221,6 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src
@@ -1234,6 +1233,9 @@
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/middlewares/yaffs2
+//../../../src/middlewares/yaffs2/direct
+//../../../src/middlewares/yaffs2/direct/nanddrv
 // --- Include directories end --- //
 
 
