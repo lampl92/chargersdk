@@ -56,30 +56,30 @@ uint8_t Create_TTFFont(uint8_t *fxpath)
     Cs3.PixelHeight	= 36;
     Cs3.FaceIndex	= 0;
 	
-    result = GUI_TTF_CreateFont(&TTF12_Font, &Cs0);	//创建字体
-    if (result) 
-    {
-        free(TtfBuffer);
-        return 5;	//字体创建失败        
-    }
-    result = GUI_TTF_CreateFont(&TTF18_Font, &Cs1);	//创建字体
-    if (result) 
-    {
-        free(TtfBuffer);
-        return 6;	//字体创建失败
-    }
-    result = GUI_TTF_CreateFont(&TTF24_Font, &Cs2);	//创建字体
-    if (result) 
-    {
-        free(TtfBuffer);
-        return 7;	//字体创建失败
-    }
-    result = GUI_TTF_CreateFont(&TTF36_Font, &Cs3);	//创建字体
-    if (result) 
-    {
-        free(TtfBuffer);
-        return 8;	//字体创建失败        
-    }
+//    result = GUI_TTF_CreateFont(&TTF12_Font, &Cs0);	//创建字体
+//    if (result) 
+//    {
+//        free(TtfBuffer);
+//        return 5;	//字体创建失败        
+//    }
+//    result = GUI_TTF_CreateFont(&TTF18_Font, &Cs1);	//创建字体
+//    if (result) 
+//    {
+//        free(TtfBuffer);
+//        return 6;	//字体创建失败
+//    }
+//    result = GUI_TTF_CreateFont(&TTF24_Font, &Cs2);	//创建字体
+//    if (result) 
+//    {
+//        free(TtfBuffer);
+//        return 7;	//字体创建失败
+//    }
+//    result = GUI_TTF_CreateFont(&TTF36_Font, &Cs3);	//创建字体
+//    if (result) 
+//    {
+//        free(TtfBuffer);
+//        return 8;	//字体创建失败        
+//    }
     return 0;
 }
 

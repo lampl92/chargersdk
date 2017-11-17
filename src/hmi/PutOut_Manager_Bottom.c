@@ -171,7 +171,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // Initialization of 'Framewin'
         //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
+//        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
 
         break;
     case WM_NOTIFY_PARENT:
@@ -263,66 +263,112 @@ WM_HWIN CreateManagerBottom(void)
     uint8_t i = 0;
     _hWinManagerBottom = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     cur_win = _hWinManagerBottom;
+    //WM_SetCallback(WM_HBKWIN, _cbDialog);
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerSignal,5000,0);
     
     //建立一个ICONVIEW作为主界面
     IconviewWin = ICONVIEW_CreateEx(0,100,                    //左上角坐标
-        800,250,                        //小工具的水平和垂直尺寸
-        _hWinManagerBottom,                      //父窗口为背景窗口
+        800,300,                        //小工具的水平和垂直尺寸
+        WM_GetClientWindow(_hWinManagerBottom),                      //父窗口为背景窗口
         WM_CF_SHOW|WM_CF_HASTRANS,      
         ICONVIEW_CF_AUTOSCROLLBAR_V,    //自动增加垂直滚动条
         ID_ICONVIEW_0,                  //小工具ID
-        100,                            //图标的水平尺寸为100
-        100);                           //图标的垂直尺寸为100
+        80,                            //图标的水平尺寸为100
+        80);                           //图标的垂直尺寸为100
     ICONVIEW_SetFont(IconviewWin, &SIF16_Font);
-    ICONVIEW_SetBkColor(IconviewWin, ICONVIEW_CI_SEL, GUI_WHITE | 0X70000000);
+    ICONVIEW_SetBkColor(IconviewWin, ICONVIEW_CI_SEL, GUI_BLUE);
     ICONVIEW_SetSpace(IconviewWin, GUI_COORD_X, 15);
     ICONVIEW_SetSpace(IconviewWin, GUI_COORD_Y, 15);
     ICONVIEW_SetIconAlign(IconviewWin, ICONVIEW_IA_HCENTER | ICONVIEW_IA_VCENTER);
+    ICONVIEW_EnableStreamAuto();
+    iconBitmapInit();
+    
+    //ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "RETURN");
+    //ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "基本");
+    
+        uint32_t bread;
+        uint32_t bwrite;
+        uint8_t result;
+        FIL iconFile;
+    
+        result = f_open(&iconFile, "system/ICON/home.bmp", FA_READ);	//打开文件
+        //文件打开错误或者文件大于BMPMEMORYSIZE
+        if ((result != FR_OK) || (iconFile.obj.objsize > ICONMEMORYSIZE)) 	return 1;
 
-    if (!iconRead("system/ICON/home.bmp", &pBitmapHome))
-    {
-        createIcon(&pBitmapHome,64,64,256,32);    
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "返回");
-    }
-    
-    if (!iconRead("system/ICON/log.bmp", pBitmapLog.pData))
-    {
-        createIcon(&pBitmapLog, 64, 64, 256, 32);    
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapLog, "记录");
-    }
-    
-    if (!iconRead("system/ICON/netinfo.bmp", pBitmapNet.pData))
-    {
-        createIcon(&pBitmapNet, 64, 64, 256, 32);    
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapNet, "网络");
-    } 
+        pBitmapHome.pData = malloc(iconFile.obj.objsize);//申请内存
 
-    if (!iconRead("system/ICON/evseinfo.bmp", pBitmapEvseInfo.pData))
-    {
-        createIcon(&pBitmapEvseInfo, 64, 64, 256, 32);    
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapEvseInfo, "桩体");
-    } 
+        if (pBitmapHome.pData == NULL)
+        {
+            return 2;//分配失败
+        }
+  
+        result = f_read(&iconFile, (void *)pBitmapHome.pData, iconFile.obj.objsize, (UINT *)&bread); //读取数据
+        if (result != FR_OK) 
+        {
+            free(pBitmapHome.pData);
+            return 3;
+        }
+        pBitmapHome.XSize = 61;//GUI_BMP_GetXSize(pBitmapHome.pData);
+        pBitmapHome.YSize = 58;//GUI_BMP_GetYSize(pBitmapHome.pData);
+        pBitmapHome.BytesPerLine = 183;//xper;//一行位图数据含有的字节数
+        pBitmapHome.BitsPerPixel = 24;//pInfo.BitsPerPixel;    
+        pBitmapHome.pPal = NULL;
+        pBitmapHome.pMethods = GUI_DRAW_BMP24;
+        //pBitmapHome.pData = pBitmapHome.pData;//(unsigned char *)_acbaseinfo;
     
-    if (!iconRead("system/ICON/baseinfo.bmp", pBitmapBaseInfo.pData))
+        f_close(&iconFile);				//关闭BMPFile文件
+
+    
+    
+    //if (!iconRead("system/ICON/home.bmp", &pBitmapHome))
     {
-        createIcon(&pBitmapBaseInfo, 64, 64, 256, 32); 
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "基本");
+        //createIcon(&pBitmapHome,100,100,256,32);    
+        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "返回"))
+        {
+            printf_safe("chenggong!\n");
+        }
     }
     
-    if (!iconRead("system/ICON/sysset.bmp", pBitmapSys.pData))
-    {
-        createIcon(&pBitmapSys, 64, 64, 256, 32); 
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapSys, "设置");
-    }
-    
-    if (!iconRead("system/ICON/rotate.bmp", pBitmapRotate.pData))
-    {
-        createIcon(&pBitmapRotate, 64, 64, 256, 32);    
-        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapRotate, "翻转");
-    }
+//    if (!iconRead("system/ICON/log.bmp", &pBitmapLog))
+//    {
+//        createIcon(&pBitmapLog, 64, 64, 256, 32);    
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapLog, "记录");
+//    }
+//    
+//    if (!iconRead("system/ICON/netinfo.bmp", &pBitmapNet))
+//    {
+//        createIcon(&pBitmapNet, 64, 64, 256, 32);
+//        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapNet, "网络"))
+//        {
+//            printf_safe("chengogng!\n");
+//        }
+//    } 
+//
+//    if (!iconRead("system/ICON/evseinfo.bmp", &pBitmapEvseInfo))
+//    {
+//        createIcon(&pBitmapEvseInfo, 64, 64, 256, 32);    
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapEvseInfo, "桩体");
+//    } 
+//    
+//    if (!iconRead("system/ICON/baseinfo.bmp", &pBitmapBaseInfo))
+//    {
+//        createIcon(&pBitmapBaseInfo, 64, 64, 256, 32); 
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "基本");
+//    }
+//    
+//    if (!iconRead("system/ICON/sysset.bmp", &pBitmapSys))
+//    {
+//        createIcon(&pBitmapSys, 64, 64, 256, 32); 
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapSys, "设置");
+//    }
+//    
+//    if (!iconRead("system/ICON/rotate.bmp", &pBitmapRotate))
+//    {
+//        createIcon(&pBitmapRotate, 64, 64, 256, 32);    
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapRotate, "翻转");
+//    }
 }
 /*************************** End of file ****************************/
 

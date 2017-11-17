@@ -17,5 +17,5 @@ extern GUI_BITMAP 	pBitmapSys;//系统设置信息
 
 extern uint8_t iconRead(uint8_t *fPath, GUI_BITMAP *bitmap);
 extern void createIcon(GUI_BITMAP *bitmap, uint16_t xsize, uint16_t ysize, uint16_t xper, uint16_t yper);
-
+extern void iconBitmapInit();
 #endif
