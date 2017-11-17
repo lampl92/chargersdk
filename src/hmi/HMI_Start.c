@@ -9,6 +9,10 @@
 #include "interface.h"
 
 uint8_t calebrate_done = 0;
+/*bit0:标识开始重绘
+bit2:卡余额充足
+bit3:准备充电的订单初始化完成
+*/
 uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
@@ -59,10 +63,14 @@ void MainTask(void)
             Create_SIF16("system/stSIF16.sif");
             Create_SIF24("system/stSIF24.sif");
             Create_SIF36("system/stSIF36.sif");
+<<<<<<< 08acd5f01eadab3d3feb4c855e769cccb9ac4e52
      
           //创建ttf字体
         Create_TTFFont("system/TTF/lilingetetijianti.ttf");
         
+=======
+
+>>>>>>> 9330d8a416d333b09d838e7d6b721fefb743c278
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
