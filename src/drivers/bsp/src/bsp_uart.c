@@ -119,6 +119,10 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
 
 static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
+    if (timeout_ms == 0)
+    {
+        timeout_ms = 1;
+    }
     while (timeout_ms)
     {
 #if USE_FreeRTOS
