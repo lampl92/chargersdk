@@ -8,6 +8,13 @@
  */
 
 #include "ymodem.h"
+#include "bsp.h"
+#include <stdlib.h>
+
+#if USE_FreeRTOS
+#include "FreeRTOS.h"
+#include "semphr.h"
+#endif
 
 static const uint16_t ccitt_table[256] = {
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
@@ -51,15 +58,18 @@ uint16_t CRC16(unsigned char *q, int len)
         crc = (crc << 8) ^ ccitt_table[((crc >> 8) ^ *q++) & 0xff];
     return crc;
 }
-
+static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
+{
+    return uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);    
+}
+static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
+{
+    return uart_write(UART_PORT_CLI, pbuff, wlen);
+    
+}
 // we could only use global varible because we could not use
 // rt_device_t->user_data(it is used by the serial driver)...
 static struct rym_ctx *_rym_the_ctx;
-
-static rym_err_t _rym_rx_ind(rt_device_t dev, uint32_t size)
-{
-    return rt_sem_release(&_rym_the_ctx->sem);
-}
 
 /* SOH/STX + seq + payload + crc */
 #define _RYM_SOH_PKG_SZ (1+2+128+2)
@@ -67,25 +77,16 @@ static rym_err_t _rym_rx_ind(rt_device_t dev, uint32_t size)
 
 static enum rym_code _rym_read_code(
         struct rym_ctx *ctx,
-        rt_tick_t timeout)
+        uint32_t timeout)
 {
-    /* Fast path */
-    if (rt_device_read(ctx->dev, 0, ctx->buf, 1) == 1)
+    if (ymod_read(ctx->buf, 1, timeout) == 1)
+    {
         return *ctx->buf;
-
-    /* Slow path */
-    do {
-        uint32_t rsz;
-
-        /* No data yet, wait for one */
-        if (rt_sem_take(&ctx->sem, timeout) != RT_EOK)
-            return RYM_CODE_NONE;
-
-        /* Try to read one */
-        rsz = rt_device_read(ctx->dev, 0, ctx->buf, 1);
-        if (rsz == 1)
-            return *ctx->buf;
-    } while (1);
+    }
+    else
+    {
+        return RYM_CODE_NONE;
+    }
 }
 
 /* the caller should at least alloc _RYM_STX_PKG_SZ buffer */
@@ -96,21 +97,22 @@ static uint32_t _rym_read_data(
     /* we should already have had the code */
     uint8_t *buf = ctx->buf + 1;
     uint32_t readlen = 0;
+    uint32_t currlen = 0;
 
     do
     {
-        readlen += rt_device_read(ctx->dev,
-                0, buf+readlen, len-readlen);
-        if (readlen >= len)
-            return readlen;
-    } while (rt_sem_take(&ctx->sem, RYM_WAIT_CHR_TICK) == RT_EOK);
+        readlen = ymod_read(buf + currlen, len - currlen, RYM_WAIT_CHR_TICK);
+        currlen += readlen;
+        if (currlen >= len)
+            return currlen;
+    } while (readlen > 0);
 
-    return readlen;
+    return currlen;
 }
 
-static uint32_t _rym_putchar(struct rym_ctx *ctx, uint8_t code)
+static uint32_t _rym_putchar(uint8_t code)
 {
-    rt_device_write(ctx->dev, 0, &code, sizeof(code));
+    ymod_write(&code, sizeof(code));
     return 1;
 }
 
@@ -126,9 +128,8 @@ static rym_err_t _rym_do_handshake(
     /* send C every second, so the sender could know we are waiting for it. */
     for (i = 0; i < tm_sec; i++)
     {
-        _rym_putchar(ctx, RYM_CODE_C);
-        code = _rym_read_code(ctx,
-                RYM_CHD_INTV_TICK);
+        _rym_putchar(RYM_CODE_C);
+        code = _rym_read_code(ctx, RYM_CHD_INTV_TICK);
         if (code == RYM_CODE_SOH)
             break;
     }
@@ -200,8 +201,8 @@ static rym_err_t _rym_trans_data(
 
 static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
 {
-    _rym_putchar(ctx, RYM_CODE_ACK);
-    _rym_putchar(ctx, RYM_CODE_C);
+    _rym_putchar(RYM_CODE_ACK);
+    _rym_putchar(RYM_CODE_C);
     ctx->stage = RYM_STAGE_ESTABLISHED;
 
     while (1)
@@ -210,8 +211,7 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
         enum rym_code code;
         uint32_t data_sz, i;
 
-        code = _rym_read_code(ctx,
-                RYM_WAIT_PKG_TICK);
+        code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
         switch (code)
         {
         case RYM_CODE_SOH:
@@ -234,11 +234,11 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
         case RYM_CODE_CAN:
             /* the spec require multiple CAN */
             for (i = 0; i < RYM_END_SESSION_SEND_CAN_NUM; i++) {
-                _rym_putchar(ctx, RYM_CODE_CAN);
+                _rym_putchar(RYM_CODE_CAN);
             }
             return -RYM_ERR_CAN;
         case RYM_CODE_ACK:
-            _rym_putchar(ctx, RYM_CODE_ACK);
+            _rym_putchar(RYM_CODE_ACK);
             break;
         default:
             // wrong code
@@ -259,13 +259,13 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
     if (ctx->on_end)
         ctx->on_end(ctx, ctx->buf+3, 128);
 
-    _rym_putchar(ctx, RYM_CODE_NAK);
+    _rym_putchar(RYM_CODE_NAK);
     code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
     if (code != RYM_CODE_EOT)
         return -RYM_ERR_CODE;
 
-    _rym_putchar(ctx, RYM_CODE_ACK);
-    _rym_putchar(ctx, RYM_CODE_C);
+    _rym_putchar(RYM_CODE_ACK);
+    _rym_putchar(RYM_CODE_C);
 
     code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
     if (code != RYM_CODE_SOH)
@@ -290,7 +290,7 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
     ctx->stage = RYM_STAGE_FINISHED;
 
     /* put the last ACK */
-    _rym_putchar(ctx, RYM_CODE_ACK);
+    _rym_putchar(RYM_CODE_ACK);
 
     return RT_EOK;
 }
@@ -304,7 +304,7 @@ static rym_err_t _rym_do_recv(
     ctx->stage = RYM_STAGE_NONE;
 
     ctx->buf = malloc(_RYM_STX_PKG_SZ);
-    if (ctx->buf == RT_NULL)
+    if (ctx->buf == NULL)
         return -RT_ENOMEM;
 
     err = _rym_do_handshake(ctx, handshake_timeout);
@@ -317,61 +317,25 @@ static rym_err_t _rym_do_recv(
 
     return _rym_do_fin(ctx);
 }
-
-rym_err_t rym_recv_on_device(
-        struct rym_ctx *ctx,
-        rt_device_t dev,
-        uint16_t oflag,
-        rym_callback on_begin,
-        rym_callback on_data,
-        rym_callback on_end,
-        int handshake_timeout)
+extern SemaphoreHandle_t  xprintfMutex;
+rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_callback on_data, rym_callback on_end, int handshake_timeout)
 {
     rym_err_t res;
-    rym_err_t (*odev_rx_ind)(rt_device_t dev, uint32_t size);
-    uint16_t odev_flag;
-    int int_lvl;
-
-    RT_ASSERT(_rym_the_ctx == 0);
     _rym_the_ctx = ctx;
 
     ctx->on_begin = on_begin;
     ctx->on_data  = on_data;
     ctx->on_end   = on_end;
-    ctx->dev      = dev;
-    rt_sem_init(&ctx->sem, "rymsem", 0, RT_IPC_FLAG_FIFO);
-
-    odev_rx_ind = dev->rx_indicate;
-    /* no data should be received before the device has been fully setted up.
-     */
-    int_lvl = rt_hw_interrupt_disable();
-    rt_device_set_rx_indicate(dev, _rym_rx_ind);
-
-    odev_flag = dev->flag;
-    /* make sure the device don't change the content. */
-    dev->flag &= ~RT_DEVICE_FLAG_STREAM;
-    rt_hw_interrupt_enable(int_lvl);
-
-    res = rt_device_open(dev, oflag);
-    if (res != RT_EOK)
-        goto __exit;
-
+#if USE_FreeRTOS
+    xSemaphoreTake(xprintfMutex, portMAX_DELAY);
+#endif
     res = _rym_do_recv(ctx, handshake_timeout);
+#if USE_FreeRTOS
+    xSemaphoreGive(xprintfMutex);
+#endif
 
-    rt_device_close(dev);
-
-__exit:
-    /* no rx_ind should be called before the callback has been fully detached.
-     */
-    int_lvl = rt_hw_interrupt_disable();
-    rt_sem_detach(&ctx->sem);
-
-    dev->flag = odev_flag;
-    rt_device_set_rx_indicate(dev, odev_rx_ind);
-    rt_hw_interrupt_enable(int_lvl);
-
-    rt_free(ctx->buf);
-    _rym_the_ctx = RT_NULL;
+    free(ctx->buf);
+    _rym_the_ctx = NULL;
 
     return res;
 }

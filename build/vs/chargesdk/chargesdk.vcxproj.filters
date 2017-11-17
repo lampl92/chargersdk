@@ -1521,6 +1521,15 @@
     <ClCompile Include="..\..\..\src\cli\yaffs2test.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_ymodem.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\tofile.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\ymodem.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h">
@@ -4078,6 +4087,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\sys_types.h">
       <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\cli\ymodem.h">
+      <Filter>Source files\cli</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

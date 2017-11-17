@@ -1,17 +1,8 @@
+/* The word "RYM" is stand for "Real-YModem". */
 #ifndef __YMODEM_H__
 #define __YMODEM_H__
-/*
- * File      : ymodem.h
- * COPYRIGHT (C) 2012, Shanghai Real-Thread Technology Co., Ltd
- *
- * Change Logs:
- * Date           Author       Notes
- * 2013-04-14     Grissiom     initial implementation
- */
 
-#include "rtthread.h"
-
-/* The word "RYM" is stand for "Real-YModem". */
+#include "stm32f4xx.h"
 
 #define RYM_TICK_PER_SECOND 1000
 typedef long                            rym_err_t;      /**< Nbit CPU related date type */
@@ -149,7 +140,7 @@ struct rym_ctx
  * @param handshake_timeout the timeout when hand shaking. The unit is in
  * second.
  */
-rym_err_t rym_recv_on_device(struct rym_ctx *ctx, rt_device_t dev, rt_uint16_t oflag,
+rym_err_t rym_recv_on_device(struct rym_ctx *ctx, rt_device_t dev, uint16_t oflag,
         rym_callback on_begin, rym_callback on_data, rym_callback on_end,
         int handshake_timeout);
 

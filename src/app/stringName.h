@@ -19,7 +19,7 @@
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
 #define YAFFS_MOUNT_POINT   "/nand/"
-#define pathSystemDir       "/nand/system"
+#define pathSystemDir       "/nand/system/"
 
 
 #define jnEVSESN        "EVSESN"
