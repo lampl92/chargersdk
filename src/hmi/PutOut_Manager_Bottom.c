@@ -1,4 +1,4 @@
-/*********************************************************************
+ï»¿/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -11,12 +11,12 @@
 *        Compiled Jul  1 2015, 10:50:32                              *
 *        (c) 2015 Segger Microcontroller GmbH & Co. KG               *
 *
-*   BUTTON_0    ÐÅÏ¢²éÑ¯                                             *
-*   BUTTON_1    ÀúÊ·¼ÇÂ¼
-*   BUTTON_2    ÏµÍ³ÅäÖÃ
-*   BUTTON_3    ÍË³ö
-*   BUTTON_4    Ä£ÄâÁ¿ ¸æ¾¯¼ÇÂ¼
-*   BUTTON_5    ×´Ì¬Á¿ ³äµç¼ÇÂ¼                                         *
+*   BUTTON_0    ä¿¡æ¯æŸ¥è¯¢                                             *
+*   BUTTON_1    åŽ†å²è®°å½•
+*   BUTTON_2    ç³»ç»Ÿé…ç½®
+*   BUTTON_3    é€€å‡º
+*   BUTTON_4    æ¨¡æ‹Ÿé‡ å‘Šè­¦è®°å½•
+*   BUTTON_5    çŠ¶æ€é‡ å……ç”µè®°å½•                                         *
 **********************************************************************
 *                                                                    *
 *        Internet: www.segger.com  Support: support@segger.com       *
@@ -44,12 +44,12 @@
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ÐÅÏ¢
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//ÀúÊ·
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ÏµÍ³
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//ÍË³ö
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//Ä£Äâ
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//×´Ì¬
+#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ä¿¡æ¯
+#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//åŽ†å²
+#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ç³»ç»Ÿ
+#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//é€€å‡º
+#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//æ¨¡æ‹Ÿ
+#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//çŠ¶æ€
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -72,7 +72,7 @@
 // USER END
 #define ID_ICONVIEW_0   (GUI_ID_USER + 0x1D)
 
-WM_HWIN IconviewWin;    //ICONVIEW¿Ø¼þ´°¿Ú
+WM_HWIN IconviewWin;    //ICONVIEWæŽ§ä»¶çª—å£
 
 static WM_HWIN _hWinManagerBottom;
 static WM_HTIMER _timerRTC, _timerData, _timerSignal;
@@ -94,8 +94,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//ÍøÂçÐÅºÅÇ¿¶È
-    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//×îµ×¶ËµÄËµÃ÷
+    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//ç½‘ç»œä¿¡å·å¼ºåº¦
+    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//æœ€åº•ç«¯çš„è¯´æ˜Ž
 };
 
 /*********************************************************************
@@ -119,7 +119,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     strcat(strTmp, "A");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), strTmp);
 
-    /**< ¿ØÖÆµ¼ÒýµçÑ¹È·ÈÏ */
+    /**< æŽ§åˆ¶å¯¼å¼•ç”µåŽ‹ç¡®è®¤ */
     sprintf(strTmp, "%.1f", Sys_samp.DC.CP1);
     strcat(strTmp, "V");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2), strTmp);
@@ -129,19 +129,19 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3), strTmp);
 
     sprintf(strTmp, "%.1f", pCon->status.dACLTemp);
-    strcat(strTmp, "¡æ");
+    strcat(strTmp, "â„ƒ");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4), strTmp);
 
     sprintf(strTmp, "%.1f", pCon->status.dACNTemp);
-    strcat(strTmp, "¡æ");
+    strcat(strTmp, "â„ƒ");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5), strTmp);
 
     sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp1);//acl or acn
-    strcat(strTmp, "¡æ");
+    strcat(strTmp, "â„ƒ");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6), strTmp);
 
     sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp2);
-    strcat(strTmp, "¡æ");
+    strcat(strTmp, "â„ƒ");
     EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), strTmp);
 }
 /*********************************************************************
@@ -160,8 +160,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        /// TODO (zshare#1#): ÏÂÃæµÄif²»Æð×÷ÓÃ.\
-        µ«ÊÇifÀïÇ¶Ì×µÄifÆð×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æð×÷ÓÃµÄif
+        /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.\
+        ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
         if(_hWinManagerBottom == cur_win)
         {
 
@@ -178,8 +178,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id) {
-            case ID_ICONVIEW_0:	//ICONVIEW0¿Ø¼þ
-				switch(NCode)	//Í¨Öª´úÂë
+            case ID_ICONVIEW_0:	//ICONVIEW0æŽ§ä»¶
+				switch(NCode)	//é€šçŸ¥ä»£ç 
 				{
 					case WM_NOTIFICATION_CLICKED:
 						break;
@@ -188,16 +188,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 						switch(Iconview0_Sel)
 						{
 //							case 0:		//APP0
-//                                if(BagAPPWin==NULL)CreateBagAPP();      //´´½¨BagAPP
+//                                if(BagAPPWin==NULL)CreateBagAPP();      //åˆ›å»ºBagAPP
 //								break;
 //							case 1:		//APP1
-//                                if(BookAPPWin==NULL)CreateBookAPP();    //´´½¨BookAPP
+//                                if(BookAPPWin==NULL)CreateBookAPP();    //åˆ›å»ºBookAPP
 //								break;
 //                            case 2:		//APP2
-//                                if(BookshAPPWin==NULL)CreateBookshAPP();    //´´½¨BookshAPP
+//                                if(BookshAPPWin==NULL)CreateBookshAPP();    //åˆ›å»ºBookshAPP
 //								break;
 //                            case 3:		//APP3
-//                                if(BrowerAPPWin==NULL)CreateBrowerAPP();    //´´½¨BrowerAPP
+//                                if(BrowerAPPWin==NULL)CreateBrowerAPP();    //åˆ›å»ºBrowerAPP
 //								break;
 						}
 						break;
@@ -209,10 +209,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if(pMsg->Data.v == _timerRTC)
         {
-            /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
+            /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
             Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< ÖØÆô¶¨Ê±Æ÷ */
+            /**< é‡å¯å®šæ—¶å™¨ */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
         if(pMsg->Data.v == _timerSignal)
@@ -226,11 +226,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_CREATERRWIN:
-        /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ÐÂ¸æ¾¯ */
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
         err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ý¹ÊÕÏ½çÃæ */
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
         if(bittest(winCreateFlag,0))
         {
             bitclr(winCreateFlag,0);
@@ -252,7 +252,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 
 /** @brief
- *  Êä³ö¹ÜÀíÔ±½çÃæÀïµÄÐÅÏ¢²éÑ¯Ä£ÄâÁ¿²¿·Ö
+ *  è¾“å‡ºç®¡ç†å‘˜ç•Œé¢é‡Œçš„ä¿¡æ¯æŸ¥è¯¢æ¨¡æ‹Ÿé‡éƒ¨åˆ†
  * @param
  * @param
  * @return
@@ -268,15 +268,15 @@ WM_HWIN CreateManagerBottom(void)
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerBottom), ID_TimerSignal,5000,0);
     
-    //½¨Á¢Ò»¸öICONVIEW×÷ÎªÖ÷½çÃæ
-    IconviewWin = ICONVIEW_CreateEx(0,100,                    //×óÉÏ½Ç×ø±ê
-        800,300,                        //Ð¡¹¤¾ßµÄË®Æ½ºÍ´¹Ö±³ß´ç
-        WM_GetClientWindow(_hWinManagerBottom),                      //¸¸´°¿ÚÎª±³¾°´°¿Ú
+    //å»ºç«‹ä¸€ä¸ªICONVIEWä½œä¸ºä¸»ç•Œé¢
+    IconviewWin = ICONVIEW_CreateEx(0,100,                    //å·¦ä¸Šè§’åæ ‡
+        800,300,                        //å°å·¥å…·çš„æ°´å¹³å’Œåž‚ç›´å°ºå¯¸
+        WM_GetClientWindow(_hWinManagerBottom),                      //çˆ¶çª—å£ä¸ºèƒŒæ™¯çª—å£
         WM_CF_SHOW|WM_CF_HASTRANS,      
-        ICONVIEW_CF_AUTOSCROLLBAR_V,    //×Ô¶¯Ôö¼Ó´¹Ö±¹ö¶¯Ìõ
-        ID_ICONVIEW_0,                  //Ð¡¹¤¾ßID
-        80,                            //Í¼±êµÄË®Æ½³ß´çÎª100
-        80);                           //Í¼±êµÄ´¹Ö±³ß´çÎª100
+        ICONVIEW_CF_AUTOSCROLLBAR_V,    //è‡ªåŠ¨å¢žåŠ åž‚ç›´æ»šåŠ¨æ¡
+        ID_ICONVIEW_0,                  //å°å·¥å…·ID
+        150,                            //å›¾æ ‡çš„æ°´å¹³å°ºå¯¸ä¸º100
+        150);                           //å›¾æ ‡çš„åž‚ç›´å°ºå¯¸ä¸º100
     ICONVIEW_SetFont(IconviewWin, &SIF16_Font);
     ICONVIEW_SetBkColor(IconviewWin, ICONVIEW_CI_SEL, GUI_BLUE);
     ICONVIEW_SetSpace(IconviewWin, GUI_COORD_X, 15);
@@ -285,62 +285,27 @@ WM_HWIN CreateManagerBottom(void)
     ICONVIEW_EnableStreamAuto();
     iconBitmapInit();
     
-    //ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "RETURN");
-    //ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "»ù±¾");
-    
-        uint32_t bread;
-        uint32_t bwrite;
-        uint8_t result;
-        FIL iconFile;
-    
-        result = f_open(&iconFile, "system/ICON/home.bmp", FA_READ);	//´ò¿ªÎÄ¼þ
-        //ÎÄ¼þ´ò¿ª´íÎó»òÕßÎÄ¼þ´óÓÚBMPMEMORYSIZE
-        if ((result != FR_OK) || (iconFile.obj.objsize > ICONMEMORYSIZE)) 	return 1;
-
-        pBitmapHome.pData = malloc(iconFile.obj.objsize);//ÉêÇëÄÚ´æ
-
-        if (pBitmapHome.pData == NULL)
-        {
-            return 2;//·ÖÅäÊ§°Ü
-        }
-  
-        result = f_read(&iconFile, (void *)pBitmapHome.pData, iconFile.obj.objsize, (UINT *)&bread); //¶ÁÈ¡Êý¾Ý
-        if (result != FR_OK) 
-        {
-            free(pBitmapHome.pData);
-            return 3;
-        }
-        pBitmapHome.XSize = 61;//GUI_BMP_GetXSize(pBitmapHome.pData);
-        pBitmapHome.YSize = 58;//GUI_BMP_GetYSize(pBitmapHome.pData);
-        pBitmapHome.BytesPerLine = 183;//xper;//Ò»ÐÐÎ»Í¼Êý¾Ýº¬ÓÐµÄ×Ö½ÚÊý
-        pBitmapHome.BitsPerPixel = 24;//pInfo.BitsPerPixel;    
-        pBitmapHome.pPal = NULL;
-        pBitmapHome.pMethods = GUI_DRAW_BMP24;
-        //pBitmapHome.pData = pBitmapHome.pData;//(unsigned char *)_acbaseinfo;
-    
-        f_close(&iconFile);				//¹Ø±ÕBMPFileÎÄ¼þ
-
-    
-    
-    //if (!iconRead("system/ICON/home.bmp", &pBitmapHome))
-    {
-        //createIcon(&pBitmapHome,100,100,256,32);    
-        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "·µ»Ø"))
-        {
-            printf_safe("chenggong!\n");
-        }
-    }
+    ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "RETURN");
+    ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "åŸºæœ¬");
+//    if (!iconRead("system/ICON/home.bmp", &pBitmapHome))
+//    {
+//        //createIcon(&pBitmapHome,100,100,256,32);    
+//        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapHome, "è¿”å›ž"))
+//        {
+//            printf_safe("chenggong!\n");
+//        }
+//    }
     
 //    if (!iconRead("system/ICON/log.bmp", &pBitmapLog))
 //    {
 //        createIcon(&pBitmapLog, 64, 64, 256, 32);    
-//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapLog, "¼ÇÂ¼");
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapLog, "è®°å½•");
 //    }
 //    
 //    if (!iconRead("system/ICON/netinfo.bmp", &pBitmapNet))
 //    {
 //        createIcon(&pBitmapNet, 64, 64, 256, 32);
-//        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapNet, "ÍøÂç"))
+//        if (!ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapNet, "ç½‘ç»œ"))
 //        {
 //            printf_safe("chengogng!\n");
 //        }
@@ -349,25 +314,25 @@ WM_HWIN CreateManagerBottom(void)
 //    if (!iconRead("system/ICON/evseinfo.bmp", &pBitmapEvseInfo))
 //    {
 //        createIcon(&pBitmapEvseInfo, 64, 64, 256, 32);    
-//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapEvseInfo, "×®Ìå");
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapEvseInfo, "æ¡©ä½“");
 //    } 
 //    
 //    if (!iconRead("system/ICON/baseinfo.bmp", &pBitmapBaseInfo))
 //    {
 //        createIcon(&pBitmapBaseInfo, 64, 64, 256, 32); 
-//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "»ù±¾");
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapBaseInfo, "åŸºæœ¬");
 //    }
 //    
 //    if (!iconRead("system/ICON/sysset.bmp", &pBitmapSys))
 //    {
 //        createIcon(&pBitmapSys, 64, 64, 256, 32); 
-//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapSys, "ÉèÖÃ");
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapSys, "è®¾ç½®");
 //    }
 //    
 //    if (!iconRead("system/ICON/rotate.bmp", &pBitmapRotate))
 //    {
 //        createIcon(&pBitmapRotate, 64, 64, 256, 32);    
-//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapRotate, "·­×ª");
+//        ICONVIEW_AddBitmapItem(IconviewWin, &pBitmapRotate, "ç¿»è½¬");
 //    }
 }
 /*************************** End of file ****************************/
