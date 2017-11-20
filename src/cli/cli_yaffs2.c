@@ -1,6 +1,7 @@
 #include "yaffsfs.h"
 #include "bsp.h"
 #include "tinysh.h"
+#include "yaffs2msic.h"
 
 #define YAFFS_MOUNT_POINT "/nand/"
 #define FILE_PATH "/nand/system/foo.txt"
@@ -9,6 +10,84 @@ int random_seed;
 int simulate_power_failure = 0;
 
 
+void cli_ls_fn(int argc, char **argv)
+{
+    dump_directory_tree(YAFFS_MOUNT_POINT);
+}
+void cli_file_fn(int argc, char **argv)
+{
+    char path[64] = "/nand/system/";
+    if (argc == 2)
+    {
+        strcat(path, argv[1]);
+        dump_file(path);
+    }
+}
+void cli_cat_fn(int argc, char **argv)
+{
+    char path[64] = "/nand/system/";
+    if (argc == 2)
+    {
+        strcat(path, argv[1]);
+        dump_file_data(path);
+    }
+}
+void cli_rm_fn(int argc, char **argv)
+{
+    char path[64] = "/nand/system/";
+    if (argc == 2)
+    {
+        strcat(path, argv[1]);
+        yaffs_unlink(path);
+    }
+}
+
+tinysh_cmd_t cli_ls_cmd =
+{
+    0,
+    "ls",
+    "dump directory tree",
+    0,
+    cli_ls_fn,
+    "<cr>",
+    0,
+    0
+};
+
+tinysh_cmd_t cli_file_cmd =
+{
+    0,
+    "file",
+    "dump file info",
+    0,
+    cli_file_fn,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_cat_cmd =
+{
+    0,
+    "cat",
+    "dump file data",
+    0,
+    cli_cat_fn,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_rm_cmd =
+{
+    0,
+    "rm",
+    "remove file",
+    0,
+    cli_rm_fn,
+    "<cr>",
+    0,
+    0
+};
+extern void create_system_dir(void);
 int yaffs2_main()
 {
     int output = 0;

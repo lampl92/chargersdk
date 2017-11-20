@@ -20,8 +20,9 @@
 #include "stringName.h"
 #include "bsp_stmflash.h"
 #include "cfg_parse.h"
+#include "yaffsfs.h"
 
-#define APP_ADDRESS         ADDR_FLASH_SECTOR_5
+#define APP_ADDRESS         ADDR_FLASH_SECTOR_6
 
 /*---------------------------------------------------------------------------/
 / 任务栈大小
@@ -86,36 +87,40 @@ extern void *_app_start[];
 
 uint8_t *GetFileBuffer(char *path, uint32_t *psize)
 {
-    FIL f;
-    FSIZE_t size;
-    UINT br;
-    FRESULT fres;
+    int fd;
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t br;
+    int fres;
     
     uint8_t *pbuff = NULL;
     
-    fres = f_open(&f, path, FA_OPEN_EXISTING | FA_READ);
-    if (fres != FR_OK)
+    fd = yaffs_open(path, O_EXCL | O_RDONLY, 0);
+    fres = yaffsfs_GetLastError();
+    if (fres != 0)
     {
         printf_safe("No %s!\n", path);
+        return NULL;
     }
-    size = f_size(&f);
-    pbuff = (uint8_t *)malloc(size * sizeof(uint8_t));
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
+    pbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
     if (pbuff == NULL)
     {
         printf_safe("Malloc error!\n");
-        f_close(&f);
+        yaffs_close(fd);
         return NULL;
     }
-    fres = f_read(&f, pbuff, size, &br);
-    if (size == br)
+    br = yaffs_read(fd, pbuff, fsize);
+    if (fsize == br)
     {
-        f_close(&f);
-        *psize = size;
+        yaffs_close(fd);
+        *psize = fsize;
         return pbuff;
     }
     else
     {
-        f_close(&f);
+        yaffs_close(fd);
         *psize = 0;
         free(pbuff);
         pbuff = NULL;
@@ -123,7 +128,7 @@ uint8_t *GetFileBuffer(char *path, uint32_t *psize)
     }
 }
 
-
+uint32_t initstart;
 void vTaskInit(void *pvParameters)
 {
     uint8_t *pucBinBuffer;
@@ -134,11 +139,30 @@ void vTaskInit(void *pvParameters)
     uint32_t tryread = 0;
     uint8_t upflag;
     
+    char cli_std[1];
+    uint32_t cli_std_len;
+    
     AppObjCreate();
     sys_Init();
-    SysTaskCreate();
     while (1)
     {
+        cli_std_len = uart_read(UART_PORT_CLI, cli_std, 1, 3000);
+        if (cli_std_len >= 1 && cli_std[0] == 'c')
+        {
+            cli_std[0] = 0;
+            cli_std_len = 0;
+            SysTaskCreate();
+            printf_safe("task init sleep.zZ\n");
+            while (1)
+            {
+                if (initstart == 1)
+                {
+                    initstart = 0;
+                    break;
+                }
+                vTaskDelay(100);
+            }
+        }
         if (tryread <= trymax)
         {
             upflag = 0;
@@ -193,7 +217,7 @@ void vTaskInit(void *pvParameters)
 }
 void vTaskCLI(void *pvParameters)
 {
-    //cli_main();
+    cli_main();
 }
 
 
@@ -204,7 +228,7 @@ void TaskInit(void)
 
 void SysTaskCreate (void)
 {
-    //xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
+    xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
     //xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 }
 

@@ -27,6 +27,10 @@ void cli_init(void)
 //    tinysh_add_command(&cli_mount_cmd);
 //    tinysh_add_command(&cli_umount_cmd);
 //    tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_ls_cmd);
+    tinysh_add_command(&cli_file_cmd);
+    tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_rm_cmd);
     tinysh_add_command(&cli_ymodem_cmd);
     
 

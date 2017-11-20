@@ -11,7 +11,7 @@ TARGETTYPE := APP
 
 to_lowercase = $(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(subst G,g,$(subst H,h,$(subst I,i,$(subst J,j,$(subst K,k,$(subst L,l,$(subst M,m,$(subst N,n,$(subst O,o,$(subst P,p,$(subst Q,q,$(subst R,r,$(subst S,s,$(subst T,t,$(subst U,u,$(subst V,v,$(subst W,w,$(subst X,x,$(subst Y,y,$(subst Z,z,$1))))))))))))))))))))))))))
 
-CONFIG ?= DEBUG
+CONFIG ?= RELEASE
 
 CONFIGURATION_FLAGS_FILE := $(call to_lowercase,$(CONFIG)).mak
 
@@ -35,7 +35,7 @@ error:
 	$(error Invalid configuration, please check your inputs)
 endif
 
-SOURCEFILES := ../../../src/app/cfg_parse.c ../../../src/app/cfg_sys.c ../../../src/app/errorcode.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/taskOTA.c ../../../src/bootldr/ldr_bsp.c ../../../src/bootldr/ldr_main.c ../../../src/bootldr/ldr_sysinit.c ../../../src/bootldr/ldr_taskcreate.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_ftl.c ../../../src/drivers/bsp/src/bsp_nand_hw.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/bsp_stmflash.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/ff13a/source/diskio.c ../../../src/middlewares/ff13a/source/ff.c ../../../src/middlewares/ff13a/source/ffsystem.c ../../../src/middlewares/ff13a/source/ffunicode.c ../../../src/middlewares/ff13a/source/ff_ex.c ../../../src/middlewares/ff13a/source/nand_diskio.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/xprintf.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_bootldr.c system_bootldr.c
+SOURCEFILES := ../../../src/cli/ldr_cli_bootldr.c ../../../src/app/cfg_parse.c ../../../src/app/cfg_sys.c ../../../src/app/errorcode.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/taskOTA.c ../../../src/bootldr/ldr_bsp.c ../../../src/bootldr/ldr_main.c ../../../src/bootldr/ldr_sysinit.c ../../../src/bootldr/ldr_taskcreate.c ../../../src/cli/cli_app.c ../../../src/cli/cli_rtos.c ../../../src/cli/cli_yaffs2.c ../../../src/cli/cli_ymodem.c ../../../src/cli/ldr_cli_main.c ../../../src/cli/tofile.c ../../../src/cli/yaffs2msic.c ../../../src/cli/ymodem.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_flash.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/bsp_stmflash.c ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/xprintf.c ../../../src/middlewares/yaffs2/direct/nanddrv/chip_mt29.c ../../../src/middlewares/yaffs2/direct/nanddrv/nanddrv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffscfg2k.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_mt29_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_nand_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_osglue.c ../../../src/middlewares/yaffs2/direct/yaffsfs.c ../../../src/middlewares/yaffs2/direct/yaffs_attribs.c ../../../src/middlewares/yaffs2/direct/yaffs_error.c ../../../src/middlewares/yaffs2/direct/yaffs_hweight.c ../../../src/middlewares/yaffs2/yaffs_allocator.c ../../../src/middlewares/yaffs2/yaffs_bitmap.c ../../../src/middlewares/yaffs2/yaffs_checkptrw.c ../../../src/middlewares/yaffs2/yaffs_ecc.c ../../../src/middlewares/yaffs2/yaffs_endian.c ../../../src/middlewares/yaffs2/yaffs_guts.c ../../../src/middlewares/yaffs2/yaffs_nameval.c ../../../src/middlewares/yaffs2/yaffs_nand.c ../../../src/middlewares/yaffs2/yaffs_packedtags1.c ../../../src/middlewares/yaffs2/yaffs_packedtags2.c ../../../src/middlewares/yaffs2/yaffs_summary.c ../../../src/middlewares/yaffs2/yaffs_tagscompat.c ../../../src/middlewares/yaffs2/yaffs_tagsmarshall.c ../../../src/middlewares/yaffs2/yaffs_verify.c ../../../src/middlewares/yaffs2/yaffs_yaffs1.c ../../../src/middlewares/yaffs2/yaffs_yaffs2.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_bootldr.c system_bootldr.c
 EXTERNAL_LIBS := 
 EXTERNAL_LIBS_COPIED := $(foreach lib, $(EXTERNAL_LIBS),$(BINARYDIR)/$(notdir $(lib)))
 
@@ -181,6 +181,10 @@ $(BINARYDIR)/%.o : %.cxx $(all_make_files) |$(BINARYDIR)
 #VisualGDB: GeneratedRules				#<--- All lines below are auto-generated. Remove this line to suppress auto-generation of file rules.
 
 
+$(BINARYDIR)/ldr_cli_bootldr.o : ../../../src/cli/ldr_cli_bootldr.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/cfg_parse.o : ../../../src/app/cfg_parse.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -221,6 +225,38 @@ $(BINARYDIR)/ldr_taskcreate.o : ../../../src/bootldr/ldr_taskcreate.c $(all_make
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/cli_app.o : ../../../src/cli/cli_app.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cli_rtos.o : ../../../src/cli/cli_rtos.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cli_yaffs2.o : ../../../src/cli/cli_yaffs2.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cli_ymodem.o : ../../../src/cli/cli_ymodem.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ldr_cli_main.o : ../../../src/cli/ldr_cli_main.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tofile.o : ../../../src/cli/tofile.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs2msic.o : ../../../src/cli/yaffs2msic.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ymodem.o : ../../../src/cli/ymodem.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/bsp_dwt.o : ../../../src/drivers/bsp/src/bsp_dwt.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -229,11 +265,7 @@ $(BINARYDIR)/bsp_gpio.o : ../../../src/drivers/bsp/src/bsp_gpio.c $(all_make_fil
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/bsp_nand_ftl.o : ../../../src/drivers/bsp/src/bsp_nand_ftl.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/bsp_nand_hw.o : ../../../src/drivers/bsp/src/bsp_nand_hw.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/bsp_nand_flash.o : ../../../src/drivers/bsp/src/bsp_nand_flash.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -262,6 +294,10 @@ $(BINARYDIR)/retarget.o : ../../../src/drivers/bsp/src/retarget.c $(all_make_fil
 
 
 $(BINARYDIR)/bsp_stmflash.o : ../../../src/drivers/bsp/src/bsp_stmflash.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cmsis_os.o : ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -377,30 +413,6 @@ $(BINARYDIR)/cJSON.o : ../../../src/middlewares/cJSON/cJSON.c $(all_make_files) 
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/diskio.o : ../../../src/middlewares/ff13a/source/diskio.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/ff.o : ../../../src/middlewares/ff13a/source/ff.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/ffsystem.o : ../../../src/middlewares/ff13a/source/ffsystem.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/ffunicode.o : ../../../src/middlewares/ff13a/source/ffunicode.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/ff_ex.o : ../../../src/middlewares/ff13a/source/ff_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/nand_diskio.o : ../../../src/middlewares/ff13a/source/nand_diskio.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
 $(BINARYDIR)/tinysh.o : ../../../src/middlewares/tinysh/tinysh.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -418,6 +430,110 @@ $(BINARYDIR)/utils.o : ../../../src/middlewares/userlib/src/utils.c $(all_make_f
 
 
 $(BINARYDIR)/xprintf.o : ../../../src/middlewares/userlib/src/xprintf.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/chip_mt29.o : ../../../src/middlewares/yaffs2/direct/nanddrv/chip_mt29.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/nanddrv.o : ../../../src/middlewares/yaffs2/direct/nanddrv/nanddrv.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffscfg2k.o : ../../../src/middlewares/yaffs2/direct/nanddrv/yaffscfg2k.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_mt29_drv.o : ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_mt29_drv.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_nand_drv.o : ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_nand_drv.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_osglue.o : ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_osglue.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffsfs.o : ../../../src/middlewares/yaffs2/direct/yaffsfs.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_attribs.o : ../../../src/middlewares/yaffs2/direct/yaffs_attribs.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_error.o : ../../../src/middlewares/yaffs2/direct/yaffs_error.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_hweight.o : ../../../src/middlewares/yaffs2/direct/yaffs_hweight.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_allocator.o : ../../../src/middlewares/yaffs2/yaffs_allocator.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_bitmap.o : ../../../src/middlewares/yaffs2/yaffs_bitmap.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_checkptrw.o : ../../../src/middlewares/yaffs2/yaffs_checkptrw.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_ecc.o : ../../../src/middlewares/yaffs2/yaffs_ecc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_endian.o : ../../../src/middlewares/yaffs2/yaffs_endian.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_guts.o : ../../../src/middlewares/yaffs2/yaffs_guts.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_nameval.o : ../../../src/middlewares/yaffs2/yaffs_nameval.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_nand.o : ../../../src/middlewares/yaffs2/yaffs_nand.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_packedtags1.o : ../../../src/middlewares/yaffs2/yaffs_packedtags1.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_packedtags2.o : ../../../src/middlewares/yaffs2/yaffs_packedtags2.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_summary.o : ../../../src/middlewares/yaffs2/yaffs_summary.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_tagscompat.o : ../../../src/middlewares/yaffs2/yaffs_tagscompat.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_tagsmarshall.o : ../../../src/middlewares/yaffs2/yaffs_tagsmarshall.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_verify.o : ../../../src/middlewares/yaffs2/yaffs_verify.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_yaffs1.o : ../../../src/middlewares/yaffs2/yaffs_yaffs1.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yaffs_yaffs2.o : ../../../src/middlewares/yaffs2/yaffs_yaffs2.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 

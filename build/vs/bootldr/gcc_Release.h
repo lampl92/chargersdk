@@ -1221,19 +1221,19 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/ff13a/source
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src
 //../../../src/middlewares/gdsl-1.8/src/examples
 //../../../src/middlewares/STemWin/BMP
-//../../../src/middlewares/STemWin/XBF
-//../../../src/middlewares/tiny-AES128-C
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/middlewares/yaffs2
+//../../../src/middlewares/yaffs2/direct
+//../../../src/middlewares/yaffs2/direct/nanddrv
 // --- Include directories end --- //
 
 

@@ -26,6 +26,11 @@ extern tinysh_cmd_t cli_crctest_cmd;
 extern tinysh_cmd_t cli_evselog_cmd;
 extern tinysh_cmd_t cli_ymodem_cmd;
 extern tinysh_cmd_t cli_yaffs2test_cmd;
+extern tinysh_cmd_t cli_ls_cmd;
+extern tinysh_cmd_t cli_file_cmd;
+extern tinysh_cmd_t cli_cat_cmd;
+extern tinysh_cmd_t cli_rm_cmd;
+
 
 
 #endif

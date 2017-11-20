@@ -1,6 +1,5 @@
 #include "includes.h"
-#include "ff.h"
-#include "nand_diskio.h"
+#include "yaffsfs.h"
 #include "cJSON.h"
 #include <time.h>
 #include "stringName.h"
@@ -14,22 +13,7 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 
 Sysconf_t   xSysconf;//存放系统初始化参数
 
-FATFS NANDDISKFatFs;  /* File system object for Nand disk logical drive */
-char NANDDISKPath[10] = "0:/"; /* Nand disk logical drive path */
-
 extern time_t time_dat;
-static void fs_mkfs(void)
-{
-    BYTE work[4096]; /* Work area (larger is better for processing time) */
-
-    /*##-3- Create a FAT file system (format) on the logical drive #########*/
-    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT, 0, work, sizeof(work)) != FR_OK)
-    {
-        /* FatFs Format Error */
-        bsp_Error_Handler();
-    }
-
-}
 
 void timeInit()
 {
@@ -56,14 +40,16 @@ void timeInit()
     time(&settime);
 }
 
-static uint8_t create_system_dir(void)
+uint8_t create_system_dir(void)
 {
-    FRESULT res;
-    res = f_mkdir("system");
-    switch(res)
+    int res;
+    
+    yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
+    res = yaffsfs_GetLastError();
+    switch (res)
     {
-    case FR_OK:
-    case FR_EXIST:
+    case 0:
+    case -EEXIST:
         return TRUE;
     default:
         return FALSE;
@@ -72,44 +58,49 @@ static uint8_t create_system_dir(void)
 
 void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
-    FIL f;
-    UINT bw;
-    FRESULT res;
-    res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
-//    res = f_open(&f, path, FA_CREATE_ALWAYS | FA_WRITE);
-    switch(res)
+    uint32_t bw;
+    int fd;
+    int res;
+    fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
+    res = yaffsfs_GetLastError();
+    switch (res)
     {
-    case FR_OK:
-        f_write(&f, context, strlen(context), &bw);
-        f_close(&f);
-    case FR_EXIST:
+    case 0:
+        bw = yaffs_write(fd, context, strlen(context));
+        yaffs_close(fd);
+        break;
+    case -EEXIST:
+        yaffs_close(fd);
+        break;
     default:
-        f_close(&f);
+        break;
     }
 }
 extern void retarget_init(void);
-void fs_init(void)
+void yaffs_init(void)
 {
-    FRESULT res;
-    //fs_mkfs();
-    res = f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
-    if (res != FR_OK)
+    int res;
+    yaffs_start_up();
+    yaffs_set_trace(0);
+    //yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
+    res = yaffs_mount(YAFFS_MOUNT_POINT);
+    if (res != 0)
     {
-        fs_mkfs();
-        f_mount(&NANDDISKFatFs, NANDDISKPath, 1);
+        yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
+        yaffs_mount(YAFFS_MOUNT_POINT);
     }
 }
 void sys_Init(void)
 {
-    fs_init();
+    int res;
     timeInit();
     retarget_init();
+    yaffs_init();
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-//    create_system_dir();
-//
-//    create_cfg_file(pathSysCfg, strSysCfg);
+    create_system_dir();
+    create_cfg_file(pathSysCfg, strSysCfg);
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);

@@ -125,23 +125,27 @@ int check_pattern_file(char *fn)
 int dump_file_data(char *fn)
 {
 	int h;
-	int i = 0;
+//	int i = 0;
 	int ok = 1;
 	unsigned char b;
 
 	h = yaffs_open(fn, O_RDWR,0);
 
-
+    if (h < 0)
+    {
+        printf_safe("*****\nDump file %s does not exist\n", fn);
+        return -1;
+    }
 	printf_safe("%s\n",fn);
 	while(yaffs_read(h,&b,1)> 0)
 	{
-		printf_safe("%02x",b);
-		i++;
-		if(i > 32)
-		{
-		   printf_safe("\n");
-		   i = 0;;
-		 }
+		printf_safe("%c",b);
+//		i++;
+//		if(i > 32)
+//		{
+//		   printf_safe("\n");
+//		   i = 0;;
+//		 }
 	}
 	printf_safe("\n");
 	yaffs_close(h);
@@ -165,10 +169,11 @@ void dump_file(const char *fn)
 	{
 		size = yaffs_lseek(h,0,SEEK_SET);
 		printf_safe("*****\nDump file %s size %d\n",fn,size);
-		for(i = 0; i < size; i++)
-		{
-
-		}
+//		for(i = 0; i < size; i++)
+//		{
+//
+//		}
+    	yaffs_close(h);
 	}
 }
 
