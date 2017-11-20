@@ -72,9 +72,7 @@ static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
 // rt_device_t->user_data(it is used by the serial driver)...
 static struct rym_ctx *_rym_the_ctx;
 
-/* SOH/STX + seq + payload + crc */
-#define _RYM_SOH_PKG_SZ (1+2+128+2)
-#define _RYM_STX_PKG_SZ (1+2+1024+2)
+
 
 static enum rym_code _rym_read_code(
         struct rym_ctx *ctx,
@@ -124,6 +122,7 @@ static rym_err_t _rym_do_handshake(
     enum rym_code code;
     uint32_t i;
     uint16_t recv_crc, cal_crc;
+    uint32_t pkg_sz;
 
     ctx->stage = RYM_STAGE_ESTABLISHING;
     /* send C every second, so the sender could know we are waiting for it. */
@@ -131,29 +130,45 @@ static rym_err_t _rym_do_handshake(
     {
         _rym_putchar(RYM_CODE_C);
         code = _rym_read_code(ctx, RYM_CHD_INTV_TICK);
-        if (code == RYM_CODE_STX)
+        if (code == RYM_CODE_SOH)
+        {
+            pkg_sz = _RYM_SOH_PKG_SZ;
             break;
+        }
+        if (code == RYM_CODE_STX)
+        {            
+            pkg_sz = _RYM_STX_PKG_SZ;
+            break;    
+        }
     }
     if (i == tm_sec)
         return -RYM_ERR_TMO;
 
-    i = _rym_read_data(ctx, _RYM_STX_PKG_SZ-1);
-    if (i != (_RYM_STX_PKG_SZ-1))
+    i = _rym_read_data(ctx, pkg_sz - 1);
+    if (i != (pkg_sz - 1))
         return -RYM_ERR_DSZ;
 
     /* sanity check */
     if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
         return -RYM_ERR_SEQ;
 
-    recv_crc = (uint16_t)(*(ctx->buf+_RYM_STX_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_STX_PKG_SZ-1);
-    cal_crc = CRC16(ctx->buf+3, _RYM_STX_PKG_SZ-5);
+    recv_crc = (uint16_t)(*(ctx->buf + pkg_sz - 2) << 8) | *(ctx->buf + pkg_sz - 1);
+    cal_crc = CRC16(ctx->buf + 3, pkg_sz - 5);
     if (recv_crc != cal_crc)
         return -RYM_ERR_CRC;
-
-    /* congratulations, check passed. */
-    if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf+3, 1024) != RYM_CODE_ACK)
-        return -RYM_ERR_CAN;
-
+    
+    if (ctx->buf[3] == 0) 
+    {
+        _rym_putchar(RYM_CODE_ACK);
+        ctx->stage = RYM_STAGE_FINISHED;
+        return RT_EEMPTY;
+    }
+    else
+    {
+        /* congratulations, check passed. */
+        if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf + 3, 1024) != RYM_CODE_ACK)
+            return -RYM_ERR_CAN;
+    }
     return RT_EOK;
 }
 
@@ -162,7 +177,7 @@ static rym_err_t _rym_trans_data(
         uint32_t data_sz,
         enum rym_code *code)
 {
-    const uint32_t tsz = 2+data_sz+2;
+    const uint32_t tsz = 2 + data_sz + 2;
     uint16_t recv_crc;
 
     /* seq + data + crc */
@@ -188,13 +203,13 @@ static rym_err_t _rym_trans_data(
     ctx->stage = RYM_STAGE_TRANSMITTING;
 
     /* sanity check */
-    recv_crc = (uint16_t)(*(ctx->buf+tsz-1) << 8) | *(ctx->buf+tsz);
-    if (recv_crc != CRC16(ctx->buf+3, data_sz))
+    recv_crc = (uint16_t)(*(ctx->buf + tsz - 1) << 8) | *(ctx->buf + tsz);
+    if (recv_crc != CRC16(ctx->buf + 3, data_sz))
         return -RYM_ERR_CRC;
 
     /* congratulations, check passed. */
     if (ctx->on_data)
-        *code = ctx->on_data(ctx, ctx->buf+3, data_sz);
+        *code = ctx->on_data(ctx, ctx->buf + 3, data_sz);
     else
         *code = RYM_CODE_ACK;
     return RT_EOK;
@@ -204,6 +219,7 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
 {
     _rym_putchar(RYM_CODE_ACK);
     _rym_putchar(RYM_CODE_C);
+
     ctx->stage = RYM_STAGE_ESTABLISHED;
 
     while (1)
@@ -255,10 +271,11 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
     uint32_t i;
 
     ctx->stage = RYM_STAGE_FINISHING;
+
     /* we already got one EOT in the caller. invoke the callback if there is
      * one. */
     if (ctx->on_end)
-        ctx->on_end(ctx, ctx->buf+3, 128);
+        ctx->on_end(ctx, ctx->buf + 3, 128);
 
     _rym_putchar(RYM_CODE_NAK);
     code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
@@ -266,32 +283,28 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
         return -RYM_ERR_CODE;
 
     _rym_putchar(RYM_CODE_ACK);
-    _rym_putchar(RYM_CODE_C);
+//    _rym_putchar(RYM_CODE_C);
 
-    code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
-    if (code != RYM_CODE_SOH)
-        return -RYM_ERR_CODE;
+//    code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
+//    if (code != RYM_CODE_SOH)
+//        return -RYM_ERR_CODE;
 
-    i = _rym_read_data(ctx, _RYM_SOH_PKG_SZ-1);
-    if (i != (_RYM_SOH_PKG_SZ-1))
-        return -RYM_ERR_DSZ;
+//    i = _rym_read_data(ctx, _RYM_SOH_PKG_SZ - 1);
+//    if (i != (_RYM_SOH_PKG_SZ - 1))
+//        return -RYM_ERR_DSZ;
+//
+//    if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
+//        return -RYM_ERR_SEQ;
+//
+//    recv_crc = (uint16_t)(*(ctx->buf + _RYM_SOH_PKG_SZ - 2) << 8) | *(ctx->buf + _RYM_SOH_PKG_SZ - 1);
+//    if (recv_crc != CRC16(ctx->buf + 3, _RYM_SOH_PKG_SZ - 5))
+//        return -RYM_ERR_CRC;
 
-    /* sanity check
-     *
-     * TODO: multiple files transmission
-     */
-    if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
-        return -RYM_ERR_SEQ;
-
-    recv_crc = (uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
-    if (recv_crc != CRC16(ctx->buf+3, _RYM_SOH_PKG_SZ-5))
-        return -RYM_ERR_CRC;
-
-    /* congratulations, check passed. */
-    ctx->stage = RYM_STAGE_FINISHED;
-
-    /* put the last ACK */
-    _rym_putchar(RYM_CODE_ACK);
+//    /* congratulations, check passed. */
+//    ctx->stage = RYM_STAGE_FINISHED;
+//
+//    /* put the last ACK */
+//    _rym_putchar(RYM_CODE_ACK);
 
     return RT_EOK;
 }
@@ -304,11 +317,9 @@ static rym_err_t _rym_do_recv(
 
     ctx->stage = RYM_STAGE_NONE;
 
-    ctx->buf = malloc(_RYM_STX_PKG_SZ);
-    if (ctx->buf == NULL)
-        return -RT_ENOMEM;
-
     err = _rym_do_handshake(ctx, handshake_timeout);
+    if (err == RT_EEMPTY)
+        return RT_EEMPTY;
     if (err != RT_EOK)
         return err;
 
@@ -322,7 +333,6 @@ extern SemaphoreHandle_t  xprintfMutex;
 rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_callback on_data, rym_callback on_end, int handshake_timeout)
 {
     rym_err_t res;
-    _rym_the_ctx = ctx;
 
     ctx->on_begin = on_begin;
     ctx->on_data  = on_data;
@@ -332,13 +342,14 @@ rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_ca
     xSemaphoreTake(xprintfMutex, portMAX_DELAY);
 #endif
     res = _rym_do_recv(ctx, handshake_timeout);
+    while (res == RT_EOK)
+    {
+        res = _rym_do_recv(ctx, 1);
+    }
 #if USE_FreeRTOS
     xSemaphoreGive(xprintfMutex);
     taskEXIT_CRITICAL();
 #endif
-
-    free(ctx->buf);
-    _rym_the_ctx = NULL;
 
     return res;
 }

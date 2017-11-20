@@ -73,18 +73,23 @@ rym_err_t rym_write_to_file(void)
 {
     rym_err_t res;
     struct custom_ctx *ctx = malloc(sizeof(*ctx));
-
+    ctx->parent.buf = malloc(_RYM_STX_PKG_SZ);
+    if (ctx->parent.buf == NULL)
+        return -RT_ENOMEM;
+    
+    
     printf_safe("enter ymodem recv file mode\n");
     
     res = rym_recv_on_device(&ctx->parent, _rym_bg, _rym_tof, _rym_end, 1000);
 
     /* there is no Ymodem traffic on the line so print out info. */
     printf_safe("ymodem exit, code: %d\n", res);
-    if (res == 0)
-    {
-        printf_safe("file %s created\n", ctx->fpath);
-    }
+//    if (res == 0)
+//    {
+//        printf_safe("file %s created\n", ctx->fpath);
+//    }
 
+    free(ctx->parent.buf);
     free(ctx);
 
     return res;

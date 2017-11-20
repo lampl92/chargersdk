@@ -7,6 +7,10 @@
 #define RYM_TICK_PER_SECOND 1000
 typedef long                            rym_err_t;      /**< Nbit CPU related date type */
 
+/* SOH/STX + seq + payload + crc */
+#define _RYM_SOH_PKG_SZ (1+2+128+2)
+#define _RYM_STX_PKG_SZ (1+2+1024+2)
+
 enum rym_code {
     RYM_CODE_NONE = 0x00,
     RYM_CODE_SOH  = 0x01,
