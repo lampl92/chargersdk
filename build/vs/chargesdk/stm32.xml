@@ -44,14 +44,11 @@
         <string>../../../src/middlewares/gdsl-1.8/src</string>
         <string>../../../src/middlewares/gdsl-1.8/src/examples</string>
         <string>../../../src/middlewares/STemWin/BMP</string>
-        <string>../../../src/middlewares/STemWin/XBF</string>
-        <string>../../../src/middlewares/tiny-AES128-C</string>
         <string>../../../src/hmi</string>
         <string>../../../src/hmi/lcd</string>
         <string>../../../src/net/mbedTLS/include</string>
         <string>../../../src/hmi/qrencode/inc</string>
         <string>../../../src/middlewares/STemWin/SIF</string>
-        <string>../../../src/middlewares/tiny-AES128-C</string>
         <string>../../../src/hmi</string>
         <string>../../../src/hmi/lcd</string>
         <string>../../../src/net/mbedTLS/include</string>

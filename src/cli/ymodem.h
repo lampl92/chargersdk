@@ -109,10 +109,6 @@ struct rym_ctx
     enum rym_stage stage;
     /* user could get the error content through this */
     uint8_t *buf;
-
-    struct rt_semaphore sem;
-
-    rt_device_t dev;
 };
 
 /** recv a file on device dev with ymodem session ctx.
@@ -140,8 +136,7 @@ struct rym_ctx
  * @param handshake_timeout the timeout when hand shaking. The unit is in
  * second.
  */
-rym_err_t rym_recv_on_device(struct rym_ctx *ctx, rt_device_t dev, uint16_t oflag,
-        rym_callback on_begin, rym_callback on_data, rym_callback on_end,
+rym_err_t rym_recv_on_device(struct rym_ctx *ctx, rym_callback on_begin, rym_callback on_data, rym_callback on_end,
         int handshake_timeout);
 
 #endif

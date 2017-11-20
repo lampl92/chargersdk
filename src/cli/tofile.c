@@ -2,6 +2,7 @@
 #include "yaffsfs.h"
 #include "stringName.h"
 #include "bsp.h"
+#include "FreeRTOS.h"
 #include <stdlib.h>
 
 struct custom_ctx
@@ -21,7 +22,7 @@ static enum rym_code _rym_bg(
     strcpy(cctx->fpath, pathSystemDir);
     /* the buf should be the file name */
     strcat(cctx->fpath, (const char*)buf);
-    cctx->fd = yaffs_open(cctx->fpath, O_CREAT | O_WRONLY | O_TRUNC, 0);
+    cctx->fd = yaffs_open(cctx->fpath, O_CREAT | O_RDWR | O_TRUNC, S_IWRITE | S_IREAD);
     if (cctx->fd < 0)
     {
         rym_err_t err = yaffsfs_GetLastError();
@@ -74,7 +75,7 @@ rym_err_t rym_write_to_file(void)
     struct custom_ctx *ctx = malloc(sizeof(*ctx));
 
     printf_safe("进入 ymodem 接收文件模式\n");
-
+    
     res = rym_recv_on_device(&ctx->parent, _rym_bg, _rym_tof, _rym_end, 1000);
 
     /* there is no Ymodem traffic on the line so print out info. */

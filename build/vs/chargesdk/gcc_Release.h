@@ -1226,8 +1226,6 @@
 //../../../src/middlewares/gdsl-1.8/src
 //../../../src/middlewares/gdsl-1.8/src/examples
 //../../../src/middlewares/STemWin/BMP
-//../../../src/middlewares/STemWin/XBF
-//../../../src/middlewares/tiny-AES128-C
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include

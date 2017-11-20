@@ -7,7 +7,7 @@ void cli_ymodem_fnt(int argc, char **argv)
     rym_write_to_file();
 }
 
-tinysh_cmd_t cli_xmodem_cmd =
+tinysh_cmd_t cli_ymodem_cmd =
 {
     0,
     "ry",

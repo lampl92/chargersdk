@@ -14,6 +14,7 @@
 #if USE_FreeRTOS
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "task.h"
 #endif
 
 static const uint16_t ccitt_table[256] = {
@@ -130,27 +131,27 @@ static rym_err_t _rym_do_handshake(
     {
         _rym_putchar(RYM_CODE_C);
         code = _rym_read_code(ctx, RYM_CHD_INTV_TICK);
-        if (code == RYM_CODE_SOH)
+        if (code == RYM_CODE_STX)
             break;
     }
     if (i == tm_sec)
         return -RYM_ERR_TMO;
 
-    i = _rym_read_data(ctx, _RYM_SOH_PKG_SZ-1);
-    if (i != (_RYM_SOH_PKG_SZ-1))
+    i = _rym_read_data(ctx, _RYM_STX_PKG_SZ-1);
+    if (i != (_RYM_STX_PKG_SZ-1))
         return -RYM_ERR_DSZ;
 
     /* sanity check */
     if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
         return -RYM_ERR_SEQ;
 
-    recv_crc = (uint16_t)(*(ctx->buf+_RYM_SOH_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_SOH_PKG_SZ-1);
-    cal_crc = CRC16(ctx->buf+3, _RYM_SOH_PKG_SZ-5);
+    recv_crc = (uint16_t)(*(ctx->buf+_RYM_STX_PKG_SZ-2) << 8) | *(ctx->buf+_RYM_STX_PKG_SZ-1);
+    cal_crc = CRC16(ctx->buf+3, _RYM_STX_PKG_SZ-5);
     if (recv_crc != cal_crc)
         return -RYM_ERR_CRC;
 
     /* congratulations, check passed. */
-    if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf+3, 128) != RYM_CODE_ACK)
+    if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf+3, 1024) != RYM_CODE_ACK)
         return -RYM_ERR_CAN;
 
     return RT_EOK;
@@ -327,11 +328,13 @@ rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_ca
     ctx->on_data  = on_data;
     ctx->on_end   = on_end;
 #if USE_FreeRTOS
+    taskENTER_CRITICAL();
     xSemaphoreTake(xprintfMutex, portMAX_DELAY);
 #endif
     res = _rym_do_recv(ctx, handshake_timeout);
 #if USE_FreeRTOS
     xSemaphoreGive(xprintfMutex);
+    taskEXIT_CRITICAL();
 #endif
 
     free(ctx->buf);
