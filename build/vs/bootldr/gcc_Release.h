@@ -1214,7 +1214,7 @@
 //../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc
 //../../../src/drivers/bsp/inc
 //../../../src/drivers/device/inc
-//../../../src/os
+//../../../src/os/FreeRTOS
 //../../../src/os/FreeRTOS/Source/include
 //../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F
 //../../../src/middlewares/tinysh

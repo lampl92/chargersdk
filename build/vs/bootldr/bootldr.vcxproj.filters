@@ -920,6 +920,9 @@
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c">
+      <Filter>Source files\os\FreeRTOS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\bsp_define.h">
@@ -1843,9 +1846,6 @@
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOSConfig.h">
-      <Filter>Header files\os</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h">
       <Filter>Header files\os\FreeRTOS\Source\include</Filter>
     </ClInclude>
@@ -2469,6 +2469,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\cli\ymodem.h">
       <Filter>Header files\middlewares\cli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h">
+      <Filter>Header files\os\FreeRTOS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

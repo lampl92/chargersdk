@@ -32,7 +32,7 @@
         <string>../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc</string>
         <string>../../../src/drivers/bsp/inc</string>
         <string>../../../src/drivers/device/inc</string>
-        <string>../../../src/os</string>
+        <string>../../../src/os/FreeRTOS</string>
         <string>../../../src/os/FreeRTOS/Source/include</string>
         <string>../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F</string>
         <string>../../../src/middlewares/tinysh</string>
