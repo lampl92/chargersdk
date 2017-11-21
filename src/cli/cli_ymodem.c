@@ -10,7 +10,7 @@ void cli_ymodem_fnt(int argc, char **argv)
 tinysh_cmd_t cli_ymodem_cmd =
 {
     0,
-    "ry",
+    "rb",
     "ymodem trans",
     0,
     cli_ymodem_fnt,

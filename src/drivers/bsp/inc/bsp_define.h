@@ -12,7 +12,7 @@
 #define bspUSART1_PreemptPriority       5
 #define bspUSART1_SubPriority           0
 
-#define bspUSART2_PreemptPriority       5
+#define bspUSART2_PreemptPriority       1
 #define bspUSART2_SubPriority           0
 
 #define bspUSART3_PreemptPriority       1

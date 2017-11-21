@@ -160,7 +160,7 @@ void vTaskInit(void *pvParameters)
                     initstart = 0;
                     break;
                 }
-                vTaskDelay(100);
+                vTaskDelay(1000);
             }
         }
         if (tryread <= trymax)

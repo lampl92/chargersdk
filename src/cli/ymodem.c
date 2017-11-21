@@ -61,11 +61,19 @@ uint16_t CRC16(unsigned char *q, int len)
 }
 static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
 {
-    return uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);    
+    uint32_t len;
+    taskENTER_CRITICAL();
+    len = uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);    
+    taskEXIT_CRITICAL();
+    return len;
 }
 static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
 {
-    return uart_write(UART_PORT_CLI, pbuff, wlen);
+    uint32_t len;
+    taskENTER_CRITICAL();
+    len = uart_write(UART_PORT_CLI, pbuff, wlen);
+    taskEXIT_CRITICAL();
+    return len;
     
 }
 // we could only use global varible because we could not use
@@ -239,13 +247,27 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
             break;
         case RYM_CODE_EOT:
             return RT_EOK;
+        case RYM_CODE_CAN:
+            return -RYM_ERR_CAN;
         default:
-            return -RYM_ERR_CODE;
+            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, 100) != 0)
+                ;
+            memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
+            _rym_putchar(RYM_CODE_NAK);
+            continue;
+//            return -RYM_ERR_CODE;
         };
 
         err = _rym_trans_data(ctx, data_sz, &code);
         if (err != RT_EOK)
-            return err;
+        {
+            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, 100) != 0)
+                ;
+            memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
+            _rym_putchar(RYM_CODE_NAK);
+            continue;
+            //return err;
+        }
         switch (code)
         {
         case RYM_CODE_CAN:
@@ -283,28 +305,6 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
         return -RYM_ERR_CODE;
 
     _rym_putchar(RYM_CODE_ACK);
-//    _rym_putchar(RYM_CODE_C);
-
-//    code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
-//    if (code != RYM_CODE_SOH)
-//        return -RYM_ERR_CODE;
-
-//    i = _rym_read_data(ctx, _RYM_SOH_PKG_SZ - 1);
-//    if (i != (_RYM_SOH_PKG_SZ - 1))
-//        return -RYM_ERR_DSZ;
-//
-//    if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
-//        return -RYM_ERR_SEQ;
-//
-//    recv_crc = (uint16_t)(*(ctx->buf + _RYM_SOH_PKG_SZ - 2) << 8) | *(ctx->buf + _RYM_SOH_PKG_SZ - 1);
-//    if (recv_crc != CRC16(ctx->buf + 3, _RYM_SOH_PKG_SZ - 5))
-//        return -RYM_ERR_CRC;
-
-//    /* congratulations, check passed. */
-//    ctx->stage = RYM_STAGE_FINISHED;
-//
-//    /* put the last ACK */
-//    _rym_putchar(RYM_CODE_ACK);
 
     return RT_EOK;
 }
@@ -338,7 +338,7 @@ rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_ca
     ctx->on_data  = on_data;
     ctx->on_end   = on_end;
 #if USE_FreeRTOS
-    taskENTER_CRITICAL();
+    //taskENTER_CRITICAL();
     xSemaphoreTake(xprintfMutex, portMAX_DELAY);
 #endif
     res = _rym_do_recv(ctx, handshake_timeout);
@@ -348,7 +348,7 @@ rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_ca
     }
 #if USE_FreeRTOS
     xSemaphoreGive(xprintfMutex);
-    taskEXIT_CRITICAL();
+    //taskEXIT_CRITICAL();
 #endif
 
     return res;
