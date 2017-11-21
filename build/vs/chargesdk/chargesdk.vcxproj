@@ -118,7 +118,7 @@
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
-    <ClCompile Include="..\..\..\src\cli\yaffs2test.c" />
+    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />

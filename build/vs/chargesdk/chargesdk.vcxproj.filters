@@ -1506,9 +1506,6 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.c">
       <Filter>Source files\middlewares\yaffs2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\yaffs2test.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
@@ -1520,6 +1517,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c">
       <Filter>Source files\os\FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c">
+      <Filter>Source files\cli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
