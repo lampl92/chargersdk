@@ -5,7 +5,7 @@
 BINARYDIR := Release
 
 #Additional flags
-PREPROCESSOR_MACROS := NDEBUG=1 RELEASE=1 EVSE_USING_GUI=0
+PREPROCESSOR_MACROS := NDEBUG=1 RELEASE=1
 INCLUDE_DIRS := 
 LIBRARY_DIRS := 
 LIBRARY_NAMES := 
@@ -13,8 +13,8 @@ ADDITIONAL_LINKER_INPUTS :=
 MACOS_FRAMEWORKS := 
 LINUX_PACKAGES := 
 
-CFLAGS := -ggdb -ffunction-sections -O0
-CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O0
+CFLAGS := -ggdb -ffunction-sections -O2
+CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O2
 ASFLAGS := 
 LDFLAGS := -Wl,-gc-sections
 COMMONFLAGS := 

@@ -1203,19 +1203,10 @@
     <ClCompile Include="..\..\..\src\app\cfg_parse.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_aes.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_evse.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_gprs.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_json.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_main.c">
@@ -1692,9 +1683,6 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\cli\cli_app.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\cli\cli_fatfs.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\cli\cli_main.h">
