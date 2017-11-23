@@ -803,9 +803,6 @@
     <ClCompile Include="..\..\..\src\bootldr\ldr_sysinit.c">
       <Filter>Source files\bootldr</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
     <ClCompile Include="system_bootldr.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -922,6 +919,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c">
       <Filter>Source files\os\FreeRTOS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_cpu_flash.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\stm32f4xx_flash.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2290,9 +2293,6 @@
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_stmflash.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\moduleconfig.h">
       <Filter>Header files\yaffs2</Filter>
     </ClInclude>
@@ -2471,6 +2471,9 @@
       <Filter>Header files\os\FreeRTOS</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_cpu_flash.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
   </ItemGroup>

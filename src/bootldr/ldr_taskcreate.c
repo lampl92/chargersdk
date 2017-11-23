@@ -18,7 +18,7 @@
 #include "bsp.h"
 #include "utils.h"
 #include "stringName.h"
-#include "bsp_stmflash.h"
+#include "bsp_cpu_flash.h"
 #include "cfg_parse.h"
 #include "yaffsfs.h"
 
@@ -188,7 +188,7 @@ void vTaskInit(void *pvParameters)
                     else
                     {
                         printf_safe("Get Crc32 OK! crc32 = %x\n", crc32);
-                        STMFLASH_Write(APP_ADDRESS, (uint32_t *)pucBinBuffer, size / 4);
+                        bsp_WriteCpuFlash(APP_ADDRESS, pucBinBuffer, size);
                         free(pucBinBuffer);
                         upflag = 2;
                     }

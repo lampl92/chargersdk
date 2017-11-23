@@ -95,6 +95,7 @@
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\yaffs2msic.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_cpu_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c" />
@@ -104,7 +105,7 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_stmflash.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\stm32f4xx_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
@@ -209,6 +210,7 @@
     <ClInclude Include="..\..\..\src\cli\cli_ymodem.h" />
     <ClInclude Include="..\..\..\src\cli\ymodem.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_cpu_flash.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h" />
@@ -224,7 +226,6 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\lis2dh.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\malloc.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\myiic.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_stmflash.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\ST_LIS2DH12.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\user_app.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\buzzer.h" />
