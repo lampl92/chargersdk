@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "errorcode.h"
+#include "yaffsfs.h"
 
 //
 //  !!! 一定要保证code的 **顺序** 与头文件定义一致
@@ -80,6 +81,6 @@ void ThrowFSCode (int rc, char *path, char *info)
 {
     if(rc != 0)
     {
-        printf_safe("\n%s, %s, rc = %d\n", path, info, rc);
+        printf_safe("\n%s, %s, rc = %s\n", path, info, yaffs_error_to_str(rc));
     }
 }

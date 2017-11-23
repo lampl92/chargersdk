@@ -925,9 +925,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\app\bsp_define.h">
-      <Filter>Header files\app</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\app\cfg_order.h">
       <Filter>Header files\app</Filter>
     </ClInclude>
@@ -2472,6 +2469,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h">
       <Filter>Header files\os\FreeRTOS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h">
+      <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

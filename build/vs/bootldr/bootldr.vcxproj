@@ -179,7 +179,6 @@
     <ClCompile Include="system_bootldr.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\app\bsp_define.h" />
     <ClInclude Include="..\..\..\src\app\cfg_order.h" />
     <ClInclude Include="..\..\..\src\app\cfg_parse.h" />
     <ClInclude Include="..\..\..\src\app\cfg_sys.h" />
@@ -210,6 +209,7 @@
     <ClInclude Include="..\..\..\src\cli\cli_ymodem.h" />
     <ClInclude Include="..\..\..\src\cli\ymodem.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h" />

@@ -91,12 +91,15 @@ uint8_t *GetFileBuffer(char *path, uint32_t *psize)
     uint32_t fsize;
     struct yaffs_stat st;
     uint32_t br;
-    int fres;
+    int fres = 0;
     
     uint8_t *pbuff = NULL;
     
     fd = yaffs_open(path, O_EXCL | O_RDONLY, 0);
-    fres = yaffsfs_GetLastError();
+    if (fd < 0)
+    {
+        fres = yaffs_get_error();
+    }
     if (fres != 0)
     {
         printf_safe("No %s!\n", path);
@@ -157,6 +160,7 @@ void vTaskInit(void *pvParameters)
             {
                 if (initstart == 1)
                 {
+                    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
                     initstart = 0;
                     break;
                 }

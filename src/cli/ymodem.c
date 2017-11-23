@@ -17,7 +17,8 @@
 #include "task.h"
 #endif
 
-static const uint16_t ccitt_table[256] = {
+static const uint16_t ccitt_table[256] =
+{
     0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
     0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
     0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
@@ -62,9 +63,9 @@ uint16_t CRC16(unsigned char *q, int len)
 static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
 {
     uint32_t len;
-    taskENTER_CRITICAL();
-    len = uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);    
-    taskEXIT_CRITICAL();
+    //taskENTER_CRITICAL();
+    len = uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);
+    //taskEXIT_CRITICAL();
     return len;
 }
 static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
@@ -74,7 +75,7 @@ static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
     len = uart_write(UART_PORT_CLI, pbuff, wlen);
     taskEXIT_CRITICAL();
     return len;
-    
+
 }
 // we could only use global varible because we could not use
 // rt_device_t->user_data(it is used by the serial driver)...
@@ -83,8 +84,8 @@ static struct rym_ctx *_rym_the_ctx;
 
 
 static enum rym_code _rym_read_code(
-        struct rym_ctx *ctx,
-        uint32_t timeout)
+    struct rym_ctx *ctx,
+    uint32_t timeout)
 {
     if (ymod_read(ctx->buf, 1, timeout) == 1)
     {
@@ -98,8 +99,8 @@ static enum rym_code _rym_read_code(
 
 /* the caller should at least alloc _RYM_STX_PKG_SZ buffer */
 static uint32_t _rym_read_data(
-        struct rym_ctx *ctx,
-        uint32_t len)
+    struct rym_ctx *ctx,
+    uint32_t len)
 {
     /* we should already have had the code */
     uint8_t *buf = ctx->buf + 1;
@@ -112,7 +113,8 @@ static uint32_t _rym_read_data(
         currlen += readlen;
         if (currlen >= len)
             return currlen;
-    } while (readlen > 0);
+    }
+    while (readlen > 0);
 
     return currlen;
 }
@@ -124,8 +126,8 @@ static uint32_t _rym_putchar(uint8_t code)
 }
 
 static rym_err_t _rym_do_handshake(
-        struct rym_ctx *ctx,
-        int tm_sec)
+    struct rym_ctx *ctx,
+    int tm_sec)
 {
     enum rym_code code;
     uint32_t i;
@@ -144,9 +146,9 @@ static rym_err_t _rym_do_handshake(
             break;
         }
         if (code == RYM_CODE_STX)
-        {            
+        {
             pkg_sz = _RYM_STX_PKG_SZ;
-            break;    
+            break;
         }
     }
     if (i == tm_sec)
@@ -164,8 +166,8 @@ static rym_err_t _rym_do_handshake(
     cal_crc = CRC16(ctx->buf + 3, pkg_sz - 5);
     if (recv_crc != cal_crc)
         return -RYM_ERR_CRC;
-    
-    if (ctx->buf[3] == 0) 
+
+    if (ctx->buf[3] == 0)
     {
         _rym_putchar(RYM_CODE_ACK);
         ctx->stage = RYM_STAGE_FINISHED;
@@ -181,9 +183,9 @@ static rym_err_t _rym_do_handshake(
 }
 
 static rym_err_t _rym_trans_data(
-        struct rym_ctx *ctx,
-        uint32_t data_sz,
-        enum rym_code *code)
+    struct rym_ctx *ctx,
+    uint32_t data_sz,
+    enum rym_code *code)
 {
     const uint32_t tsz = 2 + data_sz + 2;
     uint16_t recv_crc;
@@ -250,7 +252,7 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
         case RYM_CODE_CAN:
             return -RYM_ERR_CAN;
         default:
-            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, 100) != 0)
+            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, RYM_WAIT_PKG_TICK) != 0)
                 ;
             memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
             _rym_putchar(RYM_CODE_NAK);
@@ -261,7 +263,7 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
         err = _rym_trans_data(ctx, data_sz, &code);
         if (err != RT_EOK)
         {
-            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, 100) != 0)
+            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, RYM_WAIT_PKG_TICK) != 0)
                 ;
             memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
             _rym_putchar(RYM_CODE_NAK);
@@ -272,7 +274,8 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
         {
         case RYM_CODE_CAN:
             /* the spec require multiple CAN */
-            for (i = 0; i < RYM_END_SESSION_SEND_CAN_NUM; i++) {
+            for (i = 0; i < RYM_END_SESSION_SEND_CAN_NUM; i++)
+            {
                 _rym_putchar(RYM_CODE_CAN);
             }
             return -RYM_ERR_CAN;
@@ -310,8 +313,8 @@ static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
 }
 
 static rym_err_t _rym_do_recv(
-        struct rym_ctx *ctx,
-        int handshake_timeout)
+    struct rym_ctx *ctx,
+    int handshake_timeout)
 {
     rym_err_t err;
 

@@ -119,11 +119,16 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
 
 static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
-    if (timeout_ms == 0)
+    uint32_t ulNumber10US;
+    if (timeout_ms > 0)
     {
-        timeout_ms = 1;
+        ulNumber10US = timeout_ms * 100;
     }
-    while (timeout_ms)
+    else
+    {
+        ulNumber10US = 100;
+    }
+    while (ulNumber10US)
     {
 #if USE_FreeRTOS
         if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
@@ -141,9 +146,12 @@ static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
             {
 #if USE_FreeRTOS
                 xSemaphoreGive(q->xHandleMutexQue);
+//                vTaskDelay(1);
+                bsp_DelayUS(10);
+#else
+                bsp_DelayMS(1);
 #endif
-                vTaskDelay(1);
-                timeout_ms--;
+                ulNumber10US--;
             }
 #if USE_FreeRTOS
         }

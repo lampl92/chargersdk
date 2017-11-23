@@ -549,7 +549,7 @@ uint8_t TP_Save_Adjdata(void)
 	int temp;
     int fd;
     uint32_t bw;
-    char result;
+    int result = 0;
     uint8_t *p;
     cJSON *pJsonRoot = NULL;
 
@@ -571,8 +571,11 @@ uint8_t TP_Save_Adjdata(void)
 
     cJSON_AddNumberToObject(pJsonRoot,"yoff",tp_dev.yoff);
 
-    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT|O_TRUNC|O_RDWR,0);
-    result = yaffsfs_GetLastError();
+    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT | O_TRUNC | O_RDWR, S_IREAD | S_IWRITE);
+    if (fd < 0)
+    {
+        result = yaffsfs_GetLastError();
+    }
 	//文件打开错误或者文件大于BMPMEMORYSIZE
 	if(result != 0)
     {
@@ -597,7 +600,7 @@ uint8_t TP_Get_Adjdata(void)
     cJSON *jsCaliObj;
     ErrorCode_t errcode;
     cJSON * pSub;
-    uint8_t res;
+    int res = 0;
     int fd;
     uint32_t bw;
     uint8_t *p;
@@ -605,8 +608,11 @@ uint8_t TP_Get_Adjdata(void)
 
     errcode = ERR_NO;
 
-    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT | O_TRUNC | O_RDWR, 0);
-    res = yaffsfs_GetLastError();
+    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT | O_TRUNC | O_RDWR, S_IREAD | S_IWRITE);
+    if (fd < 0)
+    {
+        res = yaffsfs_GetLastError();
+    }
 
     if(res == 0)
     {

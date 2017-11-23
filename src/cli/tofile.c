@@ -25,7 +25,7 @@ static enum rym_code _rym_bg(
     cctx->fd = yaffs_open(cctx->fpath, O_CREAT | O_RDWR | O_TRUNC, S_IWRITE | S_IREAD);
     if (cctx->fd < 0)
     {
-        rym_err_t err = yaffsfs_GetLastError();
+        rym_err_t err = yaffs_get_error();
         printf_safe("error creating file: %d\n", err);
         printf_safe("abort transmission\n");
         return RYM_CODE_CAN;

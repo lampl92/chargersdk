@@ -42,11 +42,13 @@ void timeInit()
 
 uint8_t create_system_dir(void)
 {
-    int res;
-    
-    yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
-    res = yaffsfs_GetLastError();
-    switch(res)
+    int res = 0;
+    res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
+    if (res != 0)
+    {
+        res = yaffs_get_error();
+    }
+    switch (res)
     {
     case 0:
     case -EEXIST:
@@ -56,25 +58,28 @@ uint8_t create_system_dir(void)
     }
 }
 
+
 void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
     uint32_t bw;
     int fd;
-    int res;
+    int res = 0;
     fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
-    res = yaffsfs_GetLastError();
-    switch(res)
+    if (fd < 0)
+    {
+        res = yaffs_get_error();
+    }
+    switch (res)
     {
     case 0:
         bw = yaffs_write(fd, context, strlen(context));
-        yaffs_close(fd);
         break;
     case -EEXIST:
-        yaffs_close(fd);
         break;
     default:
         break;
     }
+    yaffs_close(fd);
 }
 extern void retarget_init(void);
 void yaffs_init(void)

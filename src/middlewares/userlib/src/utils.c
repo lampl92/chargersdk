@@ -209,7 +209,7 @@ static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32
 int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
 {
     int fd;
-    int res;
+    int res = 0;
     uint8_t pbuff[1024];
     uint32_t fsize;
     struct yaffs_stat st;
@@ -218,8 +218,11 @@ int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
     uint32_t ulCrc32Table[256] = { 0 };
     int i;
     
-    fd = yaffs_open(path, O_EXCL|O_RDONLY, 0);
-    res = yaffsfs_GetLastError();
+    fd = yaffs_open(path, O_RDONLY, 0);
+    if (fd < 0)
+    {
+        res = yaffs_get_error();
+    }
     if (res != 0)
     {
         return 0;

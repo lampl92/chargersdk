@@ -23,7 +23,7 @@ typedef enum
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
-#define CLI_QUEUE_SIZE                              10
+#define CLI_QUEUE_SIZE                              1500
 
 #define RFID_USARTx_BASE                            USART1
 #define RFID_USARTx_BAUDRATE                        115200

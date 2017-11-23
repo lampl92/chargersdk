@@ -164,6 +164,7 @@ to exclude the API function. */
 #define INCLUDE_xTimerPendFunctionCall          1
 /* events */
 #define INCLUDE_xEventGroupSetBitFromISR        1
+#define INCLUDE_xQueueGetMutexHolder            1
 
 
 
