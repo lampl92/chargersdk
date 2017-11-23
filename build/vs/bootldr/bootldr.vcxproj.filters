@@ -923,9 +923,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_cpu_flash.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\stm32f4xx_flash.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_order.h">

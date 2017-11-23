@@ -105,7 +105,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\stm32f4xx_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
