@@ -2,7 +2,7 @@
 #include "utils.h"
 #include <time.h>
 #include "interface.h"
-#include "bsp_define.h"
+#include "sys_types.h"
 extern void testBnWList(void);
 void cli_hello_fnt(int argc, char **argv)
 {
@@ -112,7 +112,7 @@ void cli_systemtime_fnt(int argc, char **argv)
     int i;
     if(argc == 1)
     {
-        for (i = 0; i < 80000; i++)
+        for (i = 0; i < 1; i++)
         {
             HAL_RTC_GetTime(&RTC_Handler, &RTC_TimeStruct, RTC_FORMAT_BIN);
             sprintf((char *)tbuf, "Time:%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);

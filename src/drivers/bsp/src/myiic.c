@@ -1,5 +1,6 @@
 #include "myiic.h"
 #include "user_app.h"
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "bsp.h"
 unsigned char pca9554_1 = 0, pca9554_2 = 0;

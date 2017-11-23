@@ -1,3 +1,4 @@
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "touch.h"
 #include "lcddrv.h"
@@ -6,12 +7,12 @@
 #include "GUI.h"
 #include "cJSON.h"
 #include "cfg_parse.h"
-#include "ff.h"
 #include "errorcode.h"
 #include "bsp.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "utils.h"
+#include "yaffsfs.h"
 #include <string.h>
 
 static float sqrt1(float x)
@@ -546,9 +547,9 @@ void Load_Drow_Dialog(void)
 uint8_t TP_Save_Adjdata(void)
 {
 	int temp;
-    FIL fp;
-    UINT bw;
-    char result;
+    int fd;
+    uint32_t bw;
+    int result = 0;
     uint8_t *p;
     cJSON *pJsonRoot = NULL;
 
@@ -570,16 +571,20 @@ uint8_t TP_Save_Adjdata(void)
 
     cJSON_AddNumberToObject(pJsonRoot,"yoff",tp_dev.yoff);
 
-    result = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_ALWAYS | FA_WRITE);
+    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT | O_TRUNC | O_RDWR, S_IREAD | S_IWRITE);
+    if (fd < 0)
+    {
+        result = yaffsfs_GetLastError();
+    }
 	//文件打开错误或者文件大于BMPMEMORYSIZE
-	if(result != FR_OK)
+	if(result != 0)
     {
         return 1;
     }
     p = cJSON_Print(pJsonRoot);
-    f_write(&fp, p, strlen(p), &bw);
+    bw = yaffs_write(fd, p, strlen(p));
 
-    f_close(&fp);
+    yaffs_close(fd);
     cJSON_Delete(pJsonRoot);
     return 0;
 }
@@ -595,18 +600,24 @@ uint8_t TP_Get_Adjdata(void)
     cJSON *jsCaliObj;
     ErrorCode_t errcode;
     cJSON * pSub;
-    uint8_t res;
-    FIL fp;
-    UINT bw;
+    int res = 0;
+    int fd;
+    uint32_t bw;
     uint8_t *p;
+    struct yaffs_stat st;
 
     errcode = ERR_NO;
 
-    res = f_open(&fp, "system/CalibrationData.cfg", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
-
-    if(res == FR_OK)
+    fd = yaffs_open("/nand/system/CalibrationData.cfg", O_CREAT | O_TRUNC | O_RDWR, S_IREAD | S_IWRITE);
+    if (fd < 0)
     {
-        if(f_size(&fp) == 0)
+        res = yaffsfs_GetLastError();
+    }
+
+    if(res == 0)
+    {
+        yaffs_stat("/nand/system/CalibrationData.cfg", &st);
+        if(st.st_size == 0)
         {
             cJSON *pJsonRoot = NULL;
 
@@ -625,14 +636,14 @@ uint8_t TP_Get_Adjdata(void)
             cJSON_AddNumberToObject(pJsonRoot,"yoff",0);
 
             p = cJSON_Print(pJsonRoot);
-            f_write(&fp, p, strlen(p), &bw);
+            bw = yaffs_write(fd, p, strlen(p));
             cJSON_Delete(pJsonRoot);
             free(p);
-            f_close(&fp);
+            yaffs_close(fd);
         }
     }
 
-    jsCaliObj = GetCfgObj("system/CalibrationData.cfg", &errcode);
+    jsCaliObj = GetCfgObj("/nand/system/CalibrationData.cfg", &errcode);
 
     if(jsCaliObj == NULL || errcode != ERR_NO)
     {

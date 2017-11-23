@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 // USER END
 
@@ -127,13 +126,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hMulti = MULTIEDIT_CreateEx(100, 50, 580, 300, WM_GetClientWindow(pMsg->hWin), WM_CF_SHOW, 0, GUI_ID_MULTIEDIT0, 100, NULL);
         //MULTIEDIT_EnableBlink(hMulti,500,1);			//开启光标,周期500ms
         MULTIEDIT_SetInsertMode(hMulti,1);  //开启插入模式
-        MULTIEDIT_SetFont(hMulti, &XBF24_Font);
+        MULTIEDIT_SetFont(hMulti, &SIF24_Font);
 //        MULTIEDIT_SetTextColor(hMulti,MULTIEDIT_CI_READONLY,GUI_RED);
         WM_SetFocus(hMulti);
         MULTIEDIT_SetText(hMulti,Regitster_Content);
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
+                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "退出");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

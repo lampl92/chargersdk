@@ -1,8 +1,7 @@
 #include "GUI.h"
-#include "xbffontcreate.h"
 #include "siffontcreate.h"
 #include "bmpdisplay.h"
-#include "ff.h"
+#include "yaffsfs.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "interface.h"
@@ -54,10 +53,10 @@ void MainTask(void)
 //        Create_SIF24("system/htSIF24.sif");
 //        Create_SIF36("system/htSIF36.sif");
 
-            Create_SIF12("system/stSIF12.sif");
-            Create_SIF16("system/stSIF16.sif");
-            Create_SIF24("system/stSIF24.sif");
-            Create_SIF36("system/stSIF36.sif");
+        Create_SIF12("/nand/system/stSIF12.sif");
+        Create_SIF16("/nand/system/stSIF16.sif");
+        Create_SIF24("/nand/system/stSIF24.sif");
+        Create_SIF36("/nand/system/stSIF36.sif");
      
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 

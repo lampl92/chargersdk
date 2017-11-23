@@ -1,6 +1,8 @@
 #ifndef __HMI_START_H
 #define __HMI_START_H
 
+#include "GUI.h"
+
 extern GUI_HMEM    qr_hmem;
 
 void MainTask(void);

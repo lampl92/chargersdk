@@ -1,7 +1,8 @@
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "bsp_nand_hw.h"
 #include "bsp_nand_ftl.h"
-#include "xprintf.h"
+#include "bsp.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -49,19 +50,19 @@ u8 FTL_Init(void)
     //FTL_Format();
     if(temp)
     {
-        xprintf("format nand flash...\r\n");
+        printf_safe("format nand flash...\r\n");
         temp = FTL_Format();   //格式化NAND
         if(temp)
         {
-            xprintf("format failed!\r\n");
+            printf_safe("format failed!\r\n");
             return 2;
         }
     }
     else    //创建LUT表成功
     {
-        xprintf("total block num:%d\r\n", nand_dev.block_totalnum);
-        xprintf("good block num:%d\r\n", nand_dev.good_blocknum);
-        xprintf("valid block num:%d\r\n", nand_dev.valid_blocknum);
+        printf_safe("total block num:%d\r\n", nand_dev.block_totalnum);
+        printf_safe("good block num:%d\r\n", nand_dev.good_blocknum);
+        printf_safe("valid block num:%d\r\n", nand_dev.valid_blocknum);
     }
     return 0;
 }
@@ -207,7 +208,7 @@ retry:
     {
         FTL_UsedBlockMark(unusedblock);     //标记块已经使用
         NAND_EraseBlock(source_block);      //擦除源块
-        //xprintf("\r\ncopy block %d to block %d\r\n",source_block,unusedblock);//打印调试信息
+        //printf_safe("\r\ncopy block %d to block %d\r\n",source_block,unusedblock);//打印调试信息
         for(i = 0; i < nand_dev.block_totalnum; i++) //修正LUT表，用unusedblock替换source_block
         {
             if(nand_dev.lut[i] == source_block)
@@ -411,7 +412,7 @@ u8 FTL_CreateLUT(u8 mode)
         }
         else
         {
-            xprintf("bad block index:%d\r\n", i);
+            printf_safe("bad block index:%d\r\n", i);
         }
     }
     //LUT表建立完成以后检查有效块个数
@@ -455,7 +456,7 @@ u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
         res = NAND_EraseBlock(blockx);
         if(res)
         {
-            xprintf("error erase block:%d\r\n", i);
+            printf_safe("error erase block:%d\r\n", i);
         }
         else
         {
@@ -468,7 +469,7 @@ u8 FTL_BlockCompare(u32 blockx, u32 cmpval)
             }
         }
     }
-    xprintf("bad block checked:%d\r\n", blockx);
+    printf_safe("bad block checked:%d\r\n", blockx);
     return 1;
 }
 //FTL初始化时，搜寻所有坏块,使用:擦-写-读 方式
@@ -545,7 +546,7 @@ u8 FTL_Format(void)
             temp = NAND_EraseBlock(i);
             if(temp)                        //擦除失败,认为坏块
             {
-                xprintf("Bad block:%d\r\n", i);
+                printf_safe("Bad block:%d\r\n", i);
                 FTL_BadBlockMark(i);        //标记是坏块
             }
             else
@@ -555,7 +556,7 @@ u8 FTL_Format(void)
         }
     }
 #endif
-    xprintf("good_blocknum:%d\r\n", nand_dev.good_blocknum);
+    printf_safe("good_blocknum:%d\r\n", nand_dev.good_blocknum);
     if(nand_dev.good_blocknum < 100)
     {
         return 1;    //如果好块的数量少于100，则NAND Flash报废

@@ -1,32 +1,39 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chargesdk", "chargesdk\chargesdk.vcxproj", "{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bootldr", "bootldr\bootldr.vcxproj", "{F0BAF0A2-2509-49F2-88BC-5B7198B92027}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|STM32 = Debug|STM32
+		Debug|x86 = Debug|x86
 		Release|STM32 = Release|STM32
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|STM32.ActiveCfg = Debug|Win32
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|STM32.Build.0 = Debug|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|x86.ActiveCfg = Debug|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Debug|x86.Build.0 = Debug|Win32
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|STM32.ActiveCfg = Release|Win32
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|STM32.Build.0 = Release|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|x86.ActiveCfg = Release|Win32
+		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|x86.Build.0 = Release|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|STM32.ActiveCfg = Debug|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|x86.ActiveCfg = Debug|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|x86.Build.0 = Debug|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|STM32.ActiveCfg = Release|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|x86.ActiveCfg = Release|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_StartDate = 2000/1/1
 		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
-	EndGlobalSection
-	GlobalSection(AutomaticVersions) = postSolution
-		UpdateAssemblyVersion = True
-		UpdateAssemblyFileVersion = False
-		UpdateAssemblyInfoVersion = False
-		AdvancedSettingsExpanded = True
-		AssemblyVersionSettings = Increment.Increment.Increment.None
+		BuildVersion_StartDate = 2000/1/1
 	EndGlobalSection
 EndGlobal

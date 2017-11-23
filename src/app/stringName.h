@@ -8,13 +8,18 @@
 #ifndef STRINGNAME_H_INCLUDED
 #define STRINGNAME_H_INCLUDED
 
-#define pathOrder       "system\\order.txt"
-#define pathEVSELog     "system\\evse.log"
-#define pathEVSECfg     "system\\evse.cfg"
-#define pathSysconf     "system\\sysconf.cfg"
-#define pathProtoCfg    "system\\protocol.cfg"
-#define pathWhiteList   "system\\whitelist.cfg"
-#define pathBlackList   "system\\blacklist.cfg"
+#define pathOrder           "/nand/system/order.txt"
+#define pathEVSELog         "/nand/system/evse.log"
+#define pathEVSECfg         "/nand/system/evse.cfg"
+#define pathSysCfg          "/nand/system/sys.cfg"
+#define pathFTPCfg          "/nand/system/ftp.cfg"
+#define pathProtoCfg        "/nand/system/protocol.cfg"
+#define pathWhiteList       "/nand/system/whitelist.cfg"
+#define pathBlackList       "/nand/system/blacklist.cfg"
+#define pathBin             "/nand/system/chargesdk.bin.new"
+
+#define YAFFS_MOUNT_POINT   "/nand/"
+#define pathSystemDir       "/nand/system/"
 
 
 #define jnEVSESN        "EVSESN"
@@ -99,6 +104,38 @@
 #define jnLogLevel       "Level"
 #define jnLogState       "State"
 #define jnLogMessage     "Message"
+
+/*ftp.cfg*/
+#define jnFtpServer         "Server"
+#define jnFtpPort           "Port"
+#define jnFtpUsername       "Username"
+#define jnFtpPassword       "Password"
+#define jnFtpNewVersion     "NewVersion"
+#define jnFtpNewFilename    "NewFilename"
+#define jnFtpDownloadStart  "DownloadStart"
+#define jnFtpDownloadStatus "DownloadStatus"
+
+/*sys.cfg*/
+#define jnSysChargersdk_bin    "chargesdk_bin"
+#define jnSysChargersdk_bin_crc32    "chargesdk_bin_crc32"
+#define jnSysEvse_cfg          "evse_cfg"
+#define jnSysProtocol_cfg      "protocol_cfg"
+#define jnSysSys_cfg           "sys_cfg"
+#define jnSysBlacklist_cfg     "blacklist_cfg"
+#define jnSysWhitelist_cfg     "whitelist_cfg"
+#define jnSysDispSleepTime     "DispSleepTime"
+#define jnSystouchtype         "touchtype"
+#define jnSysis_calibrate      "is_calibrate"
+#define jnSysxfac              "xfac"
+#define jnSysyfac              "yfac"
+#define jnSysxoff              "xoff"
+#define jnSysyoff              "yoff"
+#define jnSysVersion           "Version"
+#define jnSysUSE_GPRSModem         "USE_GPRSModem"
+#define jnSysUSE_Meter             "USE_Meter"
+#define jnSysUSE_RFID           "USE_RFID"
+#define jnSysUSE_GUI           "USE_GUI"
+
 
 /*protocol.cfg*/
 #define jnProtoServerIP            "ServerIP"

@@ -5,7 +5,6 @@
 * @version v1.0
 * @date 2017-03-02
 */
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "DIALOG.h"
 
@@ -35,10 +34,10 @@ uint8_t winCreateFlag = 0;
 static EventBits_t uxBitsErrTmp;
 static uint8_t timer_count = 0;//用于故障列表存在且没有故障的计时
 
-extern FIL BMPFile_BCGROUND;
+extern int BMPFile_BCGROUND;
 extern char *bmpBackGround;
 
-extern FIL BMPFile_ENCODE;
+extern int BMPFile_ENCODE;
 
 extern uint8_t strCSQ[10];
 //uint8_t bitset(uint32_t var,uint8_t bitno)            //置位
@@ -67,7 +66,7 @@ extern uint8_t strCSQ[10];
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
     FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&SIF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
-    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    //IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF16_Font,GUI_RED,"信号:");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0),&SIF16_Font,GUI_RED,"2017-02-28");
@@ -95,7 +94,7 @@ void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t t
  */
 void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack)
 {
-    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
+    //IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), bmpBackGround, BMPFile_BCGROUND.obj.objsize);
     //FrameWin_Show(pMsg->hWin,GUI_TA_HCENTER | GUI_TA_VCENTER,40,&XBF24_Font,GUI_RED,"欢迎使用北京动力源交流充电桩");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid2),&SIF16_Font,GUI_RED,"信号：强");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3),&SIF16_Font,GUI_BLACK,"感谢您为空气的清新奉献一份力量");

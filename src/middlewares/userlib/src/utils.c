@@ -7,6 +7,7 @@
 */
 #include "includes.h"
 #include "xprintf.h"
+#include "yaffsfs.h"
 
 char *utils_strdup(const char *s)
 {
@@ -160,14 +161,7 @@ uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
     for(i = 0; i < Strlen / 2; i++)
     {
         strncpy((char *)hexbuff, src, 2);
-//        if(hexbuff[0] > 'A' || hexbuff[1] > 'A')
-//        {
         Hex[i] = strtol(hexbuff, NULL, 16);
-//        }
-//        else
-//        {
-//            Hex[i] = strtol(hexbuff, NULL, 10);
-//        }
         src += 2;
     }
 }
@@ -214,33 +208,59 @@ static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32
 
 int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
+    int res = 0;
     uint8_t pbuff[1024];
-    UINT fsize;
-    UINT br;
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t br;
     uint32_t ulCrc32 = 0xFFFFFFFF;
     uint32_t ulCrc32Table[256] = { 0 };
     int i;
     
-    res = f_open(&f, path, FA_OPEN_EXISTING | FA_READ);
-    if (res != FR_OK)
+    fd = yaffs_open(path, O_RDONLY, 0);
+    if (fd < 0)
+    {
+        res = yaffs_get_error();
+    }
+    if (res != 0)
     {
         return 0;
     }
-    fsize = f_size(&f);
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
     crc32_init(ulCrc32Table);
-    res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+    taskENTER_CRITICAL();
+    br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
+    taskEXIT_CRITICAL();
     while (br)
     {
         for (i = 0; i < br; i++)
         {
             CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
         }
-        res = f_read(&f, (void *)pbuff, sizeof(pbuff), &br);
+        taskENTER_CRITICAL();
+        br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
+        taskEXIT_CRITICAL();
     }
     *pulCrc32 = ~ulCrc32;
 
-    f_close(&f);
+    yaffs_close(fd);
+    return 1;
+}
+
+int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
+{
+    uint32_t ulCrc32 = 0xFFFFFFFF;
+    uint32_t ulCrc32Table[256] = { 0 };
+    int i;
+    
+    crc32_init(ulCrc32Table);
+    for (i = 0; i < size; i++)
+    {
+        CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
+    }
+    *pulCrc32 = ~ulCrc32;
+
     return 1;
 }
