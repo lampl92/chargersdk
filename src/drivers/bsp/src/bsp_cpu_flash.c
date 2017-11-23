@@ -1,211 +1,153 @@
 #include "bsp.h"
 #include "bsp_cpu_flash.h"
 
+uint32_t ADDR_FLASH_SECTOR[] = 
+{ 
+    0x08000000,
+    0x08004000,
+    0x08008000,
+    0x0800C000,
+    0x08010000,
+    0x08020000,
+    0x08040000,
+    0x08060000,
+    0x08080000,
+    0x080A0000,
+    0x080C0000,
+    0x080E0000
+};
 /**
-  * @brief  Unlocks the FLASH control register access
+  * @brief  Gets the sector of a given address
   * @param  None
-  * @retval None
+  * @retval The sector of a given address
   */
-void FLASH_Unlock(void)
+static uint32_t GetSector(uint32_t Address)
 {
-    if ((FLASH->CR & FLASH_CR_LOCK) != RESET)
-    {
-      /* Authorize the FLASH Registers access */
-        FLASH->KEYR = FLASH_KEY1;
-        FLASH->KEYR = FLASH_KEY2;
-    }  
-}
-
-/**
-  * @brief  Locks the FLASH control register access
-  * @param  None
-  * @retval None
-  */
-void FLASH_Lock(void)
-{
-  /* Set the LOCK Bit to lock the FLASH Registers access */
-    FLASH->CR |= FLASH_CR_LOCK;
-}
-/**
-  * @brief  Clears the FLASH's pending flags.
-  * @param  FLASH_FLAG: specifies the FLASH flags to clear.
-  *          This parameter can be any combination of the following values:
-  *            @arg FLASH_FLAG_EOP: FLASH End of Operation flag 
-  *            @arg FLASH_FLAG_OPERR: FLASH operation Error flag 
-  *            @arg FLASH_FLAG_WRPERR: FLASH Write protected error flag 
-  *            @arg FLASH_FLAG_PGAERR: FLASH Programming Alignment error flag 
-  *            @arg FLASH_FLAG_PGPERR: FLASH Programming Parallelism error flag
-  *            @arg FLASH_FLAG_PGSERR: FLASH Programming Sequence error flag
-  *            @arg FLASH_FLAG_RDERR: FLASH Read Protection error flag (STM32F42xx/43xxx and STM32F401xx/411xE devices)   
-  * @retval None
-  */
-void FLASH_ClearFlag(uint32_t FLASH_FLAG)
-{
-  /* Check the parameters */
-    assert_param(IS_FLASH_CLEAR_FLAG(FLASH_FLAG));
+    uint32_t sector = 0;
   
-    /* Clear the flags */
-    FLASH->SR = FLASH_FLAG;
+    if ((Address < ADDR_FLASH_SECTOR_1) && (Address >= ADDR_FLASH_SECTOR_0))
+    {
+        sector = FLASH_SECTOR_0;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_2) && (Address >= ADDR_FLASH_SECTOR_1))
+    {
+        sector = FLASH_SECTOR_1;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_3) && (Address >= ADDR_FLASH_SECTOR_2))
+    {
+        sector = FLASH_SECTOR_2;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_4) && (Address >= ADDR_FLASH_SECTOR_3))
+    {
+        sector = FLASH_SECTOR_3;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_5) && (Address >= ADDR_FLASH_SECTOR_4))
+    {
+        sector = FLASH_SECTOR_4;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_6) && (Address >= ADDR_FLASH_SECTOR_5))
+    {
+        sector = FLASH_SECTOR_5;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_7) && (Address >= ADDR_FLASH_SECTOR_6))
+    {
+        sector = FLASH_SECTOR_6;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_8) && (Address >= ADDR_FLASH_SECTOR_7))
+    {
+        sector = FLASH_SECTOR_7;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_9) && (Address >= ADDR_FLASH_SECTOR_8))
+    {
+        sector = FLASH_SECTOR_8;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_10) && (Address >= ADDR_FLASH_SECTOR_9))
+    {
+        sector = FLASH_SECTOR_9;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_11) && (Address >= ADDR_FLASH_SECTOR_10))
+    {
+        sector = FLASH_SECTOR_10;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_12) && (Address >= ADDR_FLASH_SECTOR_11))
+    {
+        sector = FLASH_SECTOR_11;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_13) && (Address >= ADDR_FLASH_SECTOR_12))
+    {
+        sector = FLASH_SECTOR_12;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_14) && (Address >= ADDR_FLASH_SECTOR_13))
+    {
+        sector = FLASH_SECTOR_13;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_15) && (Address >= ADDR_FLASH_SECTOR_14))
+    {
+        sector = FLASH_SECTOR_14;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_16) && (Address >= ADDR_FLASH_SECTOR_15))
+    {
+        sector = FLASH_SECTOR_15;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_17) && (Address >= ADDR_FLASH_SECTOR_16))
+    {
+        sector = FLASH_SECTOR_16;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_18) && (Address >= ADDR_FLASH_SECTOR_17))
+    {
+        sector = FLASH_SECTOR_17;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_19) && (Address >= ADDR_FLASH_SECTOR_18))
+    {
+        sector = FLASH_SECTOR_18;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_20) && (Address >= ADDR_FLASH_SECTOR_19))
+    {
+        sector = FLASH_SECTOR_19;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_21) && (Address >= ADDR_FLASH_SECTOR_20))
+    {
+        sector = FLASH_SECTOR_20;  
+    } 
+    else if ((Address < ADDR_FLASH_SECTOR_22) && (Address >= ADDR_FLASH_SECTOR_21))
+    {
+        sector = FLASH_SECTOR_21;  
+    }
+    else if ((Address < ADDR_FLASH_SECTOR_23) && (Address >= ADDR_FLASH_SECTOR_22))
+    {
+        sector = FLASH_SECTOR_22;  
+    }
+    else/*(Address < FLASH_END_ADDR) && (Address >= ADDR_FLASH_SECTOR_23))*/
+    {
+        sector = FLASH_SECTOR_23;  
+    }
+
+    return sector;
 }
-/*
-*********************************************************************************************************
-*	函 数 名: bsp_GetSector
-*	功能说明: 根据地址计算扇区首地址
-*	形    参:  无
-*	返 回 值: 扇区首地址
-*********************************************************************************************************
-*/
-uint32_t bsp_GetSector(uint32_t Address)
+
+/**
+  * @brief  Gets sector Size
+  * @param  None
+  * @retval The size of a given sector
+  */
+static uint32_t GetSectorSize(uint32_t Sector)
 {
-	uint32_t sector = 0;
-
-	if((Address < ADDR_FLASH_SECTOR_1) && (Address >= ADDR_FLASH_SECTOR_0))
-	{
-		sector = FLASH_Sector_0;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_2) && (Address >= ADDR_FLASH_SECTOR_1))
-	{
-		sector = FLASH_Sector_1;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_3) && (Address >= ADDR_FLASH_SECTOR_2))
-	{
-		sector = FLASH_Sector_2;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_4) && (Address >= ADDR_FLASH_SECTOR_3))
-	{
-		sector = FLASH_Sector_3;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_5) && (Address >= ADDR_FLASH_SECTOR_4))
-	{
-		sector = FLASH_Sector_4;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_6) && (Address >= ADDR_FLASH_SECTOR_5))
-	{
-		sector = FLASH_Sector_5;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_7) && (Address >= ADDR_FLASH_SECTOR_6))
-	{
-		sector = FLASH_Sector_6;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_8) && (Address >= ADDR_FLASH_SECTOR_7))
-	{
-		sector = FLASH_Sector_7;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_9) && (Address >= ADDR_FLASH_SECTOR_8))
-	{
-		sector = FLASH_Sector_8;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_10) && (Address >= ADDR_FLASH_SECTOR_9))
-	{
-		sector = FLASH_Sector_9;
-	}
-	else if((Address < ADDR_FLASH_SECTOR_11) && (Address >= ADDR_FLASH_SECTOR_10))
-	{
-		sector = FLASH_Sector_10;
-	}
-	else	/*(Address < FLASH_END_ADDR) && (Address >= ADDR_FLASH_SECTOR_11))*/
-	{
-		sector = FLASH_Sector_11;
-	}
-
-	return sector;
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: bsp_ReadCpuFlash
-*	功能说明: 读取CPU Flash的内容
-*	形    参:  _ucpDst : 目标缓冲区
-*			 _ulFlashAddr : 起始地址
-*			 _ulSize : 数据大小（单位是字节）
-*	返 回 值: 0=成功，1=失败
-*********************************************************************************************************
-*/
-uint8_t bsp_ReadCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpDst, uint32_t _ulSize)
-{
-	uint32_t i;
-
-	/* 如果偏移地址超过芯片容量，则不改写输出缓冲区 */
-	if (_ulFlashAddr + _ulSize > FLASH_BASE_ADDR + FLASH_SIZE)
-	{
-		return 1;
-	}
-
-	/* 长度为0时不继续操作,否则起始地址为奇地址会出错 */
-	if (_ulSize == 0)
-	{
-		return 1;
-	}
-
-	for (i = 0; i < _ulSize; i++)
-	{
-		*_ucpDst++ = *(uint8_t *)_ulFlashAddr++;
-	}
-
-	return 0;
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: bsp_CmpCpuFlash
-*	功能说明: 比较Flash指定地址的数据.
-*	形    参: _ulFlashAddr : Flash地址
-*			 _ucpBuf : 数据缓冲区
-*			 _ulSize : 数据大小（单位是字节）
-*	返 回 值:
-*			FLASH_IS_EQU		0   Flash内容和待写入的数据相等，不需要擦除和写操作
-*			FLASH_REQ_WRITE		1	Flash不需要擦除，直接写
-*			FLASH_REQ_ERASE		2	Flash需要先擦除,再写
-*			FLASH_PARAM_ERR		3	函数参数错误
-*********************************************************************************************************
-*/
-uint8_t bsp_CmpCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpBuf, uint32_t _ulSize)
-{
-	uint32_t i;
-	uint8_t ucIsEqu;	/* 相等标志 */
-	uint8_t ucByte;
-
-	/* 如果偏移地址超过芯片容量，则不改写输出缓冲区 */
-	if (_ulFlashAddr + _ulSize > FLASH_BASE_ADDR + FLASH_SIZE)
-	{
-		return FLASH_PARAM_ERR;		/*　函数参数错误　*/
-	}
-
-	/* 长度为0时返回正确 */
-	if (_ulSize == 0)
-	{
-		return FLASH_IS_EQU;		/* Flash内容和待写入的数据相等 */
-	}
-
-	ucIsEqu = 1;			/* 先假设所有字节和待写入的数据相等，如果遇到任何一个不相等，则设置为 0 */
-	for (i = 0; i < _ulSize; i++)
-	{
-		ucByte = *(uint8_t *)_ulFlashAddr;
-
-		if (ucByte != *_ucpBuf)
-		{
-			if (ucByte != 0xFF)
-			{
-				return FLASH_REQ_ERASE;		/* 需要擦除后再写 */
-			}
-			else
-			{
-				ucIsEqu = 0;	/* 不相等，需要写 */
-			}
-		}
-
-		_ulFlashAddr++;
-		_ucpBuf++;
-	}
-
-	if (ucIsEqu == 1)
-	{
-		return FLASH_IS_EQU;	/* Flash内容和待写入的数据相等，不需要擦除和写操作 */
-	}
-	else
-	{
-		return FLASH_REQ_WRITE;	/* Flash不需要擦除，直接写 */
-	}
+    uint32_t sectorsize = 0x00;
+    if ((Sector == FLASH_SECTOR_0) || (Sector == FLASH_SECTOR_1) || (Sector == FLASH_SECTOR_2) ||\
+       (Sector == FLASH_SECTOR_3) || (Sector == FLASH_SECTOR_12) || (Sector == FLASH_SECTOR_13) ||\
+       (Sector == FLASH_SECTOR_14) || (Sector == FLASH_SECTOR_15))
+    {
+        sectorsize = 16 * 1024;
+    }
+    else if ((Sector == FLASH_SECTOR_4) || (Sector == FLASH_SECTOR_16))
+    {
+        sectorsize = 64 * 1024;
+    }
+    else
+    {
+        sectorsize = 128 * 1024;
+    }  
+    return sectorsize;
 }
 
 /*
@@ -222,6 +164,10 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 {
 	uint32_t i;
 	uint8_t ucRet;
+    FLASH_EraseInitTypeDef EraseInitStruct;
+
+    uint32_t FirstSector = 0, NbOfSectors = 0, Address = 0;
+    uint32_t SectorError = 0;
 
 	/* 如果偏移地址超过芯片容量，则不改写输出缓冲区 */
 	if (_ulFlashAddr + _ulSize > FLASH_BASE_ADDR + FLASH_SIZE)
@@ -234,39 +180,54 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 	{
 		return 0;
 	}
-
-	ucRet = bsp_CmpCpuFlash(_ulFlashAddr, _ucpSrc, _ulSize);
-
-	if (ucRet == FLASH_IS_EQU)
-	{
-		return 0;
-	}
-
-	__set_PRIMASK(1);  		/* 关中断 */
-
+    __set_PRIMASK(1);  		/* 关中断 */
 	/* FLASH 解锁 */
-	FLASH_Unlock();
+	HAL_FLASH_Unlock();
+    __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
 
-  	/* Clear pending flags (if any) */
-	FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
-                  FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
+  /* Get the 1st sector to erase */
+    FirstSector = GetSector(_ulFlashAddr);
+    /* Get the number of sector to erase from 1st sector*/
+    NbOfSectors = GetSector(ADDR_FLASH_SECTOR_11  +  GetSectorSize(ADDR_FLASH_SECTOR_11) - 1) - FirstSector + 1;
 
-	/* 需要擦除 */
-	if (ucRet == FLASH_REQ_ERASE)
-	{
-		FLASH_EraseSector(bsp_GetSector(_ulFlashAddr), VoltageRange_3);
-	}
+      /* Fill EraseInit structure*/
+    EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
+    EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+    EraseInitStruct.Sector = FirstSector;
+    EraseInitStruct.NbSectors = 1;
+    if (HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError) != HAL_OK)
+    {
+        printf_safe("erase error!!!\n");
+    }
+      /* Note: If an erase operation in Flash memory also concerns data in the data or instruction cache,
+     you have to make sure that these data are rewritten before they are accessed during code
+     execution. If this cannot be done safely, it is recommended to flush the caches by setting the
+     DCRST and ICRST bits in the FLASH_CR register. */
+    __HAL_FLASH_DATA_CACHE_DISABLE();
+    __HAL_FLASH_INSTRUCTION_CACHE_DISABLE();
+
+    __HAL_FLASH_DATA_CACHE_RESET();
+    __HAL_FLASH_INSTRUCTION_CACHE_RESET();
+
+    __HAL_FLASH_INSTRUCTION_CACHE_ENABLE();
+    __HAL_FLASH_DATA_CACHE_ENABLE();
+    FLASH_WaitForLastOperation(50000);                //等待上次操作完成
+
+    
+
 
 	/* 按字节模式编程（为提高效率，可以按字编程，一次写入4字节） */
 	for (i = 0; i < _ulSize; i++)
 	{
-		FLASH_ProgramByte(_ulFlashAddr++, *_ucpSrc++);
+    	HAL_FLASH_Program(FLASH_TYPEPROGRAM_BYTE, _ulFlashAddr, *_ucpSrc);
+    	_ulFlashAddr++;
+    	_ucpSrc++;
 	}
 
   	/* Flash 加锁，禁止写Flash控制寄存器 */
-  	FLASH_Lock();
-
-  	__set_PRIMASK(0);  		/* 开中断 */
-
+  	HAL_FLASH_Lock();
+    
+    __set_PRIMASK(0);  		/* 开中断 */
+    
 	return 0;
 }
