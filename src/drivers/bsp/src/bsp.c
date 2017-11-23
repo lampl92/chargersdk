@@ -83,11 +83,11 @@ static void SystemClock_Config(void)
         bsp_Error_Handler();
     }
 
-    if(HAL_PWREx_EnableOverDrive() != HAL_OK)//开启Over-Driver功能,使主频能够达到180MHz,否则只能到168MHz
-    {
-        /* Initialization Error */
-        bsp_Error_Handler();
-    }
+//    if(HAL_PWREx_EnableOverDrive() != HAL_OK)//开启Over-Driver功能,使主频能够达到180MHz,否则只能到168MHz
+//    {
+//        /* Initialization Error */
+//        bsp_Error_Handler();
+//    }
 
     /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
        clocks dividers */
