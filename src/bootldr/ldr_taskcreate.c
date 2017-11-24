@@ -22,7 +22,6 @@
 #include "cfg_parse.h"
 #include "yaffsfs.h"
 
-#define APP_ADDRESS         ADDR_FLASH_SECTOR_6
 
 /*---------------------------------------------------------------------------/
 / 任务栈大小
@@ -84,6 +83,7 @@ QueueHandle_t xHandleQueueErrorPackage = NULL;
 //Mutex
 extern void fs_init(void);
 extern void *_app_start[];
+#define APP_ADDRESS         (uint32_t)_app_start
 
 uint8_t *GetFileBuffer(char *path, uint32_t *psize)
 {
@@ -129,6 +129,13 @@ uint8_t *GetFileBuffer(char *path, uint32_t *psize)
         pbuff = NULL;
         return NULL;
     }
+}
+
+void Jump_To_APP(void)
+{
+    asm("cpsid i");
+    asm("ldr sp, =_estack");
+    ((void(*)())_app_start[1])();
 }
 
 uint32_t initstart;
@@ -197,18 +204,14 @@ void vTaskInit(void *pvParameters)
             else if (xSysconf.xUpFlag.chargesdk_bin == 0 || xSysconf.xUpFlag.chargesdk_bin == 2)
             {
                 printf_safe("direct app_start!\n");
-                asm("cpsid i");
-                asm("ldr sp, =_estack");
-                ((void(*)())_app_start[1])();
+                Jump_To_APP();
             }
         
             if (upflag == 2)
             {
                 xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&upflag, ParamTypeU8);
                 printf_safe("up OK, app_start!\n");
-                asm("cpsid i");
-                asm("ldr sp, =_estack");
-                ((void(*)())_app_start[1])();
+                Jump_To_APP();
             }
         }
         else

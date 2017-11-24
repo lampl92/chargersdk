@@ -194,7 +194,7 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
     EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
     EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
     EraseInitStruct.Sector = FirstSector;
-    EraseInitStruct.NbSectors = 1;
+    EraseInitStruct.NbSectors = NbOfSectors;
     if (HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError) != HAL_OK)
     {
         printf_safe("erase error!!!\n");

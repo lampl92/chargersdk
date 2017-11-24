@@ -12,10 +12,9 @@
 #include "bsp_define.h"
 /* Private functions ---------------------------------------------------------*/
 
-extern void *g_pfnVectors[];
-
 int main(void)
 {
+    extern void *g_pfnVectors[];
     SCB->VTOR = (uint32_t)&g_pfnVectors;
     //SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
     /**
@@ -25,12 +24,8 @@ int main(void)
     DISABLE_INT();
 
     bsp_Init();
-    //sys_Init();
-
-    //EVSEinit();
 
     TaskInit();
-
 
     vTaskStartScheduler();
 

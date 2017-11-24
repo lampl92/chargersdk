@@ -7,7 +7,7 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-	FLASH (RX)   : ORIGIN = 0x08040000, LENGTH = 2M
+	FLASH (RX)   : ORIGIN = 0x08040000, LENGTH = 1M-0x40000 
 	SRAM (RWX)   : ORIGIN = 0x20000000, LENGTH = 192K
 	CCMRAM (RWX) : ORIGIN = 0x10000000, LENGTH = 64K
 }
@@ -16,6 +16,17 @@ _estack = 0x20030000;
 
 SECTIONS
 {
+
+	  /*Other sections not related with VTRAM may go here before the RAMVectorTable definition*/
+ /*
+	.bootldr :
+	{
+		. = ALIGN(4);
+		KEEP(*(.bootldr))
+		FILL(0xFFFFFFFF)
+		. = 0x40000;
+	} > FLASH
+*/
 	.isr_vector :
 	{
 		. = ALIGN(4);

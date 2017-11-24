@@ -16,7 +16,7 @@
       <PreprocessorMacros>
         <string>ARM_MATH_CM4</string>
         <string>STM32F429IG</string>
-        <string>sram_layout</string>
+        <string>flash_layout</string>
         <string>STM32F429xx</string>
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>

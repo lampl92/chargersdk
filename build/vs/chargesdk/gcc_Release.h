@@ -395,9 +395,6 @@
 #ifndef __INT_FAST32_MAX__
 #define __INT_FAST32_MAX__ 0x7fffffff
 #endif
-#ifndef sram_layout
-#define sram_layout 1
-#endif
 #ifndef __DBL_HAS_INFINITY__
 #define __DBL_HAS_INFINITY__ 1
 #endif
@@ -474,6 +471,9 @@
 #endif
 #ifndef __UACCUM_MIN__
 #define __UACCUM_MIN__ 0.0UK
+#endif
+#ifndef flash_layout
+#define flash_layout 1
 #endif
 #ifndef __UACCUM_IBIT__
 #define __UACCUM_IBIT__ 16
