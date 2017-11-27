@@ -36,8 +36,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { IMAGE_CreateIndirect, "SignalImage", ID_IMAGE_1, 755, 3, 40, 29, 0, 0, 0 },
     { TEXT_CreateIndirect, "Date", ID_TEXT_0, 4, 4, 120, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Time", ID_TEXT_1, 136, 4, 120, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "CardNumber", ID_TEXT_2, 250, 160, 280, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Balance", ID_TEXT_3, 250, 220, 280, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "CardNumber", ID_TEXT_2, 326, 165, 280, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Balance", ID_TEXT_3, 326, 223, 280, 24, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "PromptImage", ID_IMAGE_2, 240, 316, 319, 59, 0, 0, 0 },
 };
 static void Data_Flush(WM_MESSAGE *pMsg)
