@@ -105,16 +105,7 @@ static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
-    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
-    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-    { BUTTON_CreateIndirect, "信息查询", ID_BUTTON_0, 50, 70, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "历史记录", ID_BUTTON_1, 50, 140, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "系统配置", ID_BUTTON_2, 50, 210, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "退    出", ID_BUTTON_3, 50, 280, 150, 50, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
 };
 /*******************************************************************
 *
@@ -132,7 +123,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     uint8_t _tmpBuff[50];
     CON_t *pCon;
     pCon = CONGetHandle(0);
-    
+
     switch (pMsg->MsgId)
     {
         case WM_NOTIFY_PARENT:
@@ -409,14 +400,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_INIT_DIALOG:
         _x = 0;
         _y = 0;
-
-        //
-        // Initialization of 'Framewin'
-        //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-
         // 创建窗口250
-        hWindow = WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
+        hWindow = WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0);//WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
         //创建水平滑轮
         hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
         //设置滑轮条目数量
@@ -680,15 +665,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  *
  *       CreateManagerSysSet
 */
-WM_HWIN CreateManagerSysSet(void);
-WM_HWIN CreateManagerSysSet(void)
+WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin)
 {
-//    CON_t *pCon;
-//    pCon = CONGetHandle(0);
-//    SetCONCfg(pCon,"SocketType",'B',ParamTypeU8);
-//    SetCONCfg(pEVSE->info.dDefSegFee,"DefSegFee","123456",ParamTypeString);
-
-    _hWinManagerSysSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _hWinManagerSysSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
     cur_win = _hWinManagerSysSet;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerFlush,1000,0);

@@ -99,7 +99,7 @@ static WM_HWIN _hWinManagerInfoStatus;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x0, 0 },
     { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
 };
 
@@ -320,9 +320,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  * @return
  *       CreateManagerInfoAnalog
 */
-WM_HWIN CreateManagerInfoAnalog(void)
+WM_HWIN CreateManagerInfoAnalog(WM_HWIN srcHwin)
 {
-    _hWinManagerInfoAnalog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _hWinManagerInfoAnalog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerFlush,1000,0);
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);

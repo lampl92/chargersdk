@@ -497,6 +497,9 @@
 		<Unit filename="..\..\src\hmi\PutOut_Manager_AlarmLog.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="..\..\src\hmi\PutOut_Manager_Common.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
 			<Option compilerVar="CC" />
 		</Unit>

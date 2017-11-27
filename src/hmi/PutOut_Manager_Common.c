@@ -167,21 +167,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
         MULTIPAGE_SetFont(hItem, &SIF16_Font);
 
-        hWinPage = CreateManagerInfoAnalog();
+        hWinPage = CreateManagerInfoAnalog(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "模拟量");
 
-        hWinPage = CreateManagerInfoStatus();
+        hWinPage = CreateManagerInfoStatus(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态量");
 
-//        hWinPage = CreateWindowPage3();
-//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "记录查询");
-//
+        hWinPage = CreateManagerLogDate(pMsg->hWin);
+        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "记录查询");
+
 //        hWinPage = CreateWindowPage4();
 //        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "费率查询");
-//
-//        hWinPage = CreateWindowPage5();
-//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统配置");
-//
+
+        hWinPage = CreateWindowPage5();
+        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统配置");
+
 //        hWinPage = CreateWindowPage6();
 //        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪A配置");
         break;

@@ -454,9 +454,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  * @return
  *       CreateManagerInfoStatus
 */
-WM_HWIN CreateManagerInfoStatus(void)
+WM_HWIN CreateManagerInfoStatus(WM_HWIN srcHwin)
 {
-    _hWinManagerInfoStatus = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _hWinManagerInfoStatus = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerFlush,1000,0);
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
