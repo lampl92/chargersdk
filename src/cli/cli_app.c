@@ -54,7 +54,22 @@ tinysh_cmd_t cli_hello_cmd =
     "<cr>", 0, 0
 };
 
+void cli_reboot_fnt(int argc, char **argv)
+{
+    NVIC_SystemReset();
+}
 
+tinysh_cmd_t cli_reboot_cmd =
+{
+    0,
+    "reboot",
+    "reboot system",
+    0,
+    cli_reboot_fnt,
+    "<cr>",
+    0,
+    0
+};
 
 //SDRAM内存测试
 void fsmc_sdram_test()

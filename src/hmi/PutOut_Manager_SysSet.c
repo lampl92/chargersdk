@@ -616,7 +616,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             WM_SetStayOnTop(hWindow,0);
             GUI_EndDialog(hWindow,0);
             _deleteWin(_hWinManagerSysSet);
-            CreateHome();
+            CreateHomePage();
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)

@@ -22,7 +22,7 @@ EDIT_Handle _aahEditEg;//示例
 KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
-uint8_t *passwd = "8888";
+uint8_t *passwd = "888888";
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
@@ -1158,7 +1158,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     {
     case LOGIN_PASSWD:
         bitclr(winCreateFlag,2);
-        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHome());
+        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHomePage());
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:
@@ -1233,15 +1233,8 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 	keypad_dev.ypos=150;
 	keypad_dev.width=780;
 	keypad_dev.height=320;
-//    if (ManagerSetOptions == LOGIN_PASSWD)
-//    {
-//        keypad_dev.padtype = NUMBER_KEYPAD;				//默认为數字鍵盤 
-//    }
-//    else
-//    {
-        keypad_dev.padtype = ENGLISH_KEYPAD;				//默认为英文键盘            
-//    }	
-    keypad_dev.signpad_flag=0;
+	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
+	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;
     keypad_dev.inputlen=0;
     keypad_dev.pynowpage=0;
@@ -1295,7 +1288,6 @@ void Keypad_GetValue(uint8_t optios,char *varname)
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
         TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
-        MULTIEDIT_SetMaxNumChars(_aahEditVar, 4);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 
@@ -1330,15 +1322,8 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
 	keypad_dev.ypos=150;
 	keypad_dev.width=780;
 	keypad_dev.height=320;
-//    if (ManagerSetOptions == LOGIN_PASSWD)
-//    {
-//        keypad_dev.padtype = NUMBER_KEYPAD;				//默认为數字鍵盤 
-//    }
-//    else
-//    {
-        keypad_dev.padtype = ENGLISH_KEYPAD;				//默认为英文键盘            
-//    }
-    keypad_dev.signpad_flag=0;
+	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
+	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;
     keypad_dev.inputlen=0;
     keypad_dev.pynowpage=0;
@@ -1392,7 +1377,6 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
         TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
-        MULTIEDIT_SetMaxNumChars(_aahEditVar, 4);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 

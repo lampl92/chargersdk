@@ -1023,28 +1023,10 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Charge_Done.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Charging.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Home.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_SelAOrB.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c">
@@ -1514,6 +1496,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\HomePage.c">
+      <Filter>Source files\hmi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

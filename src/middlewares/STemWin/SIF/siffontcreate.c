@@ -40,9 +40,9 @@ u8 *GetFont_Info(u8 *fxpath)
 	}
 
     bread = yaffs_read(fd, FontBuffer, fsize); //读取数据
-    result = yaffsfs_GetLastError();
-    if (result != 0) 
+    if (bread != fsize)
     {
+        ThrowFSCode(result = yaffs_get_error(), fxpath, "GetFont_Info()-read");
         free(FontBuffer);
     	FontBuffer=NULL;
     }

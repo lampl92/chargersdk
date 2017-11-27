@@ -310,7 +310,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             // USER START (Optionally insert code for reacting on notification message)
             /**< 跳转至home */
             _deleteWin(_hWinManagerInfoAnalog);
-            CreateHome();
+            CreateHomePage();
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
@@ -351,7 +351,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             /**< 显示时间和日期 */
             Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
         }

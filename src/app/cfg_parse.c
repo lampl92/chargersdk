@@ -37,7 +37,7 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_WRONLY, S_IWRITE);
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
         ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-open");
@@ -49,7 +49,6 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
     }
     taskENTER_CRITICAL(); 
     bw = yaffs_write(fd, pbuff, len);
-    yaffs_sync(path); 
     taskEXIT_CRITICAL();
     if(len != bw)
     {

@@ -42,7 +42,7 @@ void timeInit()
 
 uint8_t create_system_dir(void)
 {
-    int res = 0;
+    int res = 1;
     res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
     if (res != 0)
     {
@@ -63,7 +63,7 @@ void create_cfg_file(const uint8_t *path, const uint8_t *context)
 {
     uint32_t bw;
     int fd;
-    int res = 0;
+    int res = 1;
     fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {

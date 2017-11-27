@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -603,7 +603,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
               GUI_EndDialog(hScroll, 0);
             GUI_EndDialog(hWindow,0);
             _deleteWin(_hWinManagerInfoStatus);
-            CreateHome();
+            CreateHomePage();
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)

@@ -30,6 +30,7 @@ extern tinysh_cmd_t cli_ls_cmd;
 extern tinysh_cmd_t cli_file_cmd;
 extern tinysh_cmd_t cli_cat_cmd;
 extern tinysh_cmd_t cli_rm_cmd;
+extern tinysh_cmd_t cli_reboot_cmd;
 
 
 

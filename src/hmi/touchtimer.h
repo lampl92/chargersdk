@@ -39,19 +39,22 @@
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 
-extern uint8_t calebrate_done;
+extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;
 extern uint8_t winInitDone;
 extern WM_HWIN err_hItem;
-extern uint8_t strCSQ[10];
+extern uint8_t strCSQ[32];
 extern uint8_t _secDown[10];
 extern WM_HWIN _hWinChargDone;
 extern WM_HWIN _hWinCharging;
 extern WM_HWIN _hWinCardInfo;
 extern WM_HWIN _hWinHome;
 extern WM_HWIN cur_win;
+extern WM_HWIN _hWinAdvertizement;
 void _cbHomeDialog(WM_MESSAGE *pMsg);
 extern uint8_t current_page;
+extern uint8_t Timer_buf[32];
+extern uint8_t AdvertisementRecordFlag;
 enum{
     _HOMEPAGE,
     _CARDINFOPAGE,
@@ -76,6 +79,12 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 void PutOut_SelAOrB();
+WM_HWIN CreateHomePage(void);
+WM_HWIN CreateCardInfoPage(void);
+WM_HWIN CreateChargingPage(void);
+WM_HWIN CreateChargeDonePage(void);
+WM_HWIN CreateAdvertisementPage(void);
+WM_HWIN CreateAdvertisement(void);
 WM_HWIN CreateHome(void);
 WM_HWIN CreateRegiterDisp(void);
 WM_HWIN CreateCardInfo(void);
@@ -98,6 +107,7 @@ void Err_Analy(WM_HWIN hWin);
 void Led_Show();
 void Errlist_flush(uint8_t *msg_err);
 void Signal_Show();
+int getSignalIntensity();
 
 void Window_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void ErrWindow_Show(WM_HWIN hWin);

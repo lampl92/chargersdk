@@ -145,7 +145,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 /**< 跳转回home首页 */
                 WM_DeleteWindow(pMsg->hWin);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
 
