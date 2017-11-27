@@ -1715,10 +1715,10 @@ void Modem_Poll(DevModem_t *pModem)
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
             sprintf(filepath, "system\\%s", pechProto->info.ftp.strNewFileName);
-            fd = yaffs_open(filepath, O_CREAT | O_TRUNC | O_WRONLY , 0);
-            fres = yaffsfs_GetLastError();
-            if (fres != 0)
+            fd = yaffs_open(filepath, O_CREAT | O_TRUNC | O_WRONLY , S_IWRITE | S_IREAD);
+            if (fd < 0)
             {
+                ThrowFSCode(fres = yaffs_get_error(), filepath, "ModemFTP-open");
                 pModem->state = DS_MODEM_FTP_GET;//有待商榷
                 break;
             }
