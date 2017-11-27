@@ -39,6 +39,8 @@
 #define pathCartoonImage1           "/nand/system/CartoonImage1.bmp"
 #define pathCartoonImage2           "/nand/system/CartoonImage2.bmp"
 #define pathCartoonImage3           "/nand/system/CartoonImage3.bmp"
+#define pathCartoonImage4           "/nand/system/CartoonImage4.bmp"
+#define pathCartoonImage5           "/nand/system/CartoonImage5.bmp"
 #define pathStopByCardImage         "/nand/system/StopByCardImage.bmp"
 #define pathStopByQRImage           "/nand/system/StopByQRImage.bmp"
 #define pathChargingVoidImage       "/nand/system/ChargingVoidImage.bmp"
@@ -46,7 +48,7 @@
 #define pathChargeDoneImage         "/nand/system/ChargeDoneImage.bmp"
 #define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
 #define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
-#define pathDevErrImage             "/nand/system/DevErrImage.bmp"
+#define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"
 #define pathMoneyNotEnoughImage     "/nand/system/MoneyNotEnoughImage.bmp"
 #define pathChargeDoneVoidImage     "/nand/system/ChargeDoneVoidImage.bmp"
         

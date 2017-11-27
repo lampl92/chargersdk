@@ -35,6 +35,8 @@ p_inf *cartoonImage0;
 p_inf *cartoonImage1;
 p_inf *cartoonImage2;
 p_inf *cartoonImage3;
+p_inf *cartoonImage4;
+p_inf *cartoonImage5;
 p_inf *StopByCardImage;
 p_inf *StopByQRImage;
 p_inf *ChargingVoidImage;
@@ -90,6 +92,8 @@ void MainTask(void)
         cartoonImage1 = readPicInf(pathCartoonImage1);
         cartoonImage2 = readPicInf(pathCartoonImage2);
         cartoonImage3 = readPicInf(pathCartoonImage3);
+        cartoonImage4 = readPicInf(pathCartoonImage4);
+        cartoonImage5 = readPicInf(pathCartoonImage5);
         StopByCardImage = readPicInf(pathStopByCardImage);
         StopByQRImage = readPicInf(pathStopByQRImage);
         ChargingVoidImage = readPicInf(pathChargingVoidImage);
@@ -97,7 +101,7 @@ void MainTask(void)
         ChargeDoneImage = readPicInf(pathChargeDoneImage);
         NormalDoneImage = readPicInf(pathNormalDoneImage);
         FullDoneImage = readPicInf(pathFullDoneImage);
-        DevErrDoneImage = readPicInf(pathDevErrImage);
+        DevErrDoneImage = readPicInf(pathDevErrDoneImage);
         MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughImage);
         ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
         
