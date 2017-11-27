@@ -254,7 +254,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         if (pMsg->Data.v == _timerCortoon)
         {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-            if ((cartoonflag == 4) || (cartoonflag > 3))
+            if ((cartoonflag == 6) || (cartoonflag > 5))
             {
                 cartoonflag = 0;
             }
@@ -274,12 +274,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 IMAGE_SetBMP(hItem, cartoonImage3->pfilestring, cartoonImage3->pfilesize);
             }
-            else
+            else if(cartoonflag == 4)
             {
-                IMAGE_SetBMP(hItem, cartoonImage3->pfilestring, cartoonImage3->pfilesize);
+                IMAGE_SetBMP(hItem, cartoonImage4->pfilestring, cartoonImage4->pfilesize);
+            }
+            else if(cartoonflag == 5)
+            {
+                IMAGE_SetBMP(hItem, cartoonImage5->pfilestring, cartoonImage5->pfilesize);
             }
             cartoonflag++;    
-            WM_RestartTimer(pMsg->Data.v, 1000);
+            WM_RestartTimer(pMsg->Data.v, 500);
         }
         if (pMsg->Data.v == _timerText)
         {

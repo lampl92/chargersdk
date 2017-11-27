@@ -36,6 +36,8 @@ extern p_inf *cartoonImage0;
 extern p_inf *cartoonImage1;
 extern p_inf *cartoonImage2;
 extern p_inf *cartoonImage3;
+extern p_inf *cartoonImage4;
+extern p_inf *cartoonImage5;
 extern p_inf *StopByCardImage;
 extern p_inf *StopByQRImage;
 extern p_inf *ChargingVoidImage;
