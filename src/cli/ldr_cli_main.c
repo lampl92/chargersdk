@@ -28,6 +28,9 @@ void cli_init(void)
     tinysh_add_command(&cli_cat_cmd);
     tinysh_add_command(&cli_rm_cmd);
     tinysh_add_command(&cli_ymodem_cmd);
+    tinysh_add_command(&cli_reboot_cmd);
+    tinysh_add_command(&cli_format_cmd);
+    
 }
 
 void cli_main(void)

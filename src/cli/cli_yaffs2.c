@@ -41,7 +41,10 @@ void cli_rm_fn(int argc, char **argv)
         yaffs_unlink(path);
     }
 }
-
+void cli_format_fn(int argc, char **argv)
+{
+    yaffs_format(YAFFS_MOUNT_POINT, 1, 0, 1);
+}
 tinysh_cmd_t cli_ls_cmd =
 {
     0,
@@ -83,6 +86,17 @@ tinysh_cmd_t cli_rm_cmd =
     "remove file",
     0,
     cli_rm_fn,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_format_cmd =
+{
+    0,
+    "format",
+    "format and remount",
+    0,
+    cli_format_fn,
     "<cr>",
     0,
     0
