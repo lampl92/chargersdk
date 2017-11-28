@@ -23,8 +23,8 @@ static WM_HWIN hwinQR;//二维码句柄
 
 int SignalFlag = 0;//信号图标刷新标志
 
-static float preServiceFee = 0;
-static float prePowerFee = 0;
+float preServiceFee = 0;
+float prePowerFee = 0;
 
 //home界面资源表
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {

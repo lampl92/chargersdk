@@ -303,6 +303,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPHOME:
+        prePowerFee = 0;
+        preServiceFee = 0;
         current_page = _HOMEPAGE;
         bitset(winInitDone, 7);
         EventFlag = 0;

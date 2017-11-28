@@ -102,7 +102,7 @@ void MainTask(void)
         NormalDoneImage = readPicInf(pathNormalDoneImage);
         FullDoneImage = readPicInf(pathFullDoneImage);
         DevErrDoneImage = readPicInf(pathDevErrDoneImage);
-        MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughImage);
+        MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
         ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
         
         AdvertisementImage = readPicInf(pathAdvertisementImage);
@@ -135,7 +135,7 @@ void MainTask(void)
         GUI_Exec();
 //	    printf_safe("exec end = %d\n", clock());
 	    //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
-        vTaskDelay(100);
+        vTaskDelay(10);
 #if 0
         if (bittest(winInitDone, 7))
         {

@@ -285,6 +285,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
             break;
         case MSG_JUMPHOME:
+            prePowerFee = 0;
+            preServiceFee = 0;
             first_flag = 0;
             EventChargeDoneFlag = 0;
             _deleteWin(_hWinChargDone);

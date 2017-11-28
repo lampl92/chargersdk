@@ -83,6 +83,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch (Id)
             {
             case ID_IMAGE_0:
+                prePowerFee = 0;
+                preServiceFee = 0;
                 AdvertisementRecordFlag = 0;
                 _deleteWin(_hWinAdvertizement);
                 _hWinAdvertizement = 0;
@@ -116,6 +118,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPHOME:
+        prePowerFee = 0;
+        preServiceFee = 0;
         bitclr(winInitDone, 0);
         AdvertisementRecordFlag = 0;
        _deleteWin(_hWinAdvertizement);

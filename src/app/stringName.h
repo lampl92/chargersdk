@@ -49,7 +49,7 @@
 #define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
 #define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
 #define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"
-#define pathMoneyNotEnoughImage     "/nand/system/MoneyNotEnoughImage.bmp"
+#define pathMoneyNotEnoughDoneImage     "/nand/system/MoneyNotEnoughDoneImage.bmp"
 #define pathChargeDoneVoidImage     "/nand/system/ChargeDoneVoidImage.bmp"
         
 #define pathAdvertisementImage      "/nand/system/AdvertisementImage.bmp"
