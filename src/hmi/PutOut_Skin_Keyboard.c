@@ -1122,7 +1122,7 @@ static uint8_t Value_Check()
         {
             case 20:
                 tmpU8 = atoi(result_input);
-                pCon->info.SetCONCfg(pCon, jnType, &tmpU8, ParamTypeU8);
+                pCon->info.SetCONCfg(pCon, jnQRCode, &tmpU8, ParamTypeU8);
                 break;
             case 21:
                 pEVSE->info.SetEVSECfg(pEVSE, jnSocketType, result_input, ParamTypeString);

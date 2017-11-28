@@ -100,7 +100,7 @@ static int _x,_y;
 #define conSocketTempLowerLimits "交流输出端子温度下限"
 #define conRatedCurrent "额定电流"
 #define conRatedPower "额定功率"
-//#define conQRCode "QRCode"
+#define conQRCode "QRCode"
 
 static WM_HWIN hWindow;
 static WM_HWIN _hWinManagerSocketSet;
@@ -191,7 +191,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
 //                       _deleteWin(_hWinManagerSocketSet);
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSocketSet);
-                        Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerSocketSet,conType,"eg,2");
+                        Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerSocketSet,conQRCode,"eg,200000000000003");
                         //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
                         EDIT_SetText(_aahEdit[0][0],pCon->info.ucCONType);
                     }
@@ -392,9 +392,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建编辑区
         /**< 20-50编辑区ID */
         //枪类型
-        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(conType)), 25,hWindow,WM_CF_SHOW,0,13,conType);
-        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conType)), 20, _WORD_WIDTH*(strlen("2")), 25,hWindow,WM_CF_SHOW,0,20,strlen("2"));
-        EDIT_SetText(_aahEdit[0][0],pCon->info.ucCONType);
+        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(conQRCode)), 25,hWindow,WM_CF_SHOW,0,13,conQRCode);
+        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conQRCode)), 20, _WORD_WIDTH*(strlen("2000000000000003")), 25,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));
+        EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
         //枪锁类型
         _aahText[1][0] = TEXT_CreateEx(30, 50, _FONT_WIDTH*(strlen(conSocketType)), 25,hWindow,WM_CF_SHOW,0,13,conSocketType);
         _aahEdit[1][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketType)), 50, _WORD_WIDTH*(strlen("255")) , 25,hWindow,WM_CF_SHOW,0,21,strlen("255"));

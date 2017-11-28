@@ -82,10 +82,24 @@ static int _x,_y;
 #define ID_EDIT_5  (GUI_ID_USER + 0x16)//
 #define ID_EDIT_6  (GUI_ID_USER + 0x17)//
 #define ID_MULTIEDIT_0 (GUI_ID_USER + 0x18)
-
+#define ID_CHECKBOX_0 (GUI_ID_USER + 0x19)
+#define ID_CHECKBOX_1 (GUI_ID_USER + 0x1A)
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
+
+#define sysEVSESN "交流桩SN"   \\\"0102030405060708\",\
+#define sysEVSEID "交流桩ID"   \\\"3000000000000002\",\
+#define sysServerIP "服务器IP" \\\ \"123.56.113.123\",\
+#define sysServerPort "服务器端口"   \\\ 6677,\
+#define sysUserName "用户名"   \\\ \"esaasusr\",\
+#define sysUserPwd "用户密码"   \\\ \"esaaspasswrd\",\      *******
+#define sysDispSleepTime "屏保时间" \\\ 60,\n \
+#define sysUSEGPRSModem "GPRS类型"   \\\2,\n \
+
+#define sysEVSEName "7kW交流充电桩"
+#define sysProtoVer "协议版本"\\\ 104,\
+#define sysVersion "软件版本"\\\"0.2.1.2552\",\n \
 // USER END
 static WM_HWIN hWindow;
 static WM_HWIN _hWinManagerSysSet;
@@ -106,6 +120,8 @@ static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, 45, 42, 90, 32, 0, 0x0, 0 },
+	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, 45, 104, 90, 32, 0, 0x0, 0 },
 };
 /*******************************************************************
 *
@@ -421,85 +437,40 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 13文本固定id */
         //创建编辑区
         /**< 20-50编辑区ID */
-        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen("交流桩序列号:")), 25,hWindow,WM_CF_SHOW,0,13,"交流桩序列号:");
-        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("交流桩序列号:")), 20, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
+        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(sysEVSESN)), 25,hWindow,WM_CF_SHOW,0,13,sysEVSESN);
+        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysEVSESN)), 20, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
         EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
 
-        _aahText[1][0] = TEXT_CreateEx(30, 50, _FONT_WIDTH*(strlen("充电枪个数:")), 25,hWindow,WM_CF_SHOW,0,13,"充电枪个数:");
-        _aahEdit[1][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("充电枪个数:")), 50, _WORD_WIDTH*(strlen("255")) , 25,hWindow,WM_CF_SHOW,0,21,strlen("255"));
-        _aahText[1][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("充电枪个数:"))+_WORD_WIDTH*(strlen("255")), 50, _WORD_WIDTH*strlen("个"), 25,hWindow,WM_CF_SHOW,0,13,"个");
+        _aahText[1][0] = TEXT_CreateEx(30, 50, _FONT_WIDTH*(strlen(sysEVSEID)), 25,hWindow,WM_CF_SHOW,0,13,sysEVSEID);
+        _aahEdit[1][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysEVSEID)), 50, _WORD_WIDTH*(strlen("1122334455667788")) , 25,hWindow,WM_CF_SHOW,0,21,strlen("1122334455667788"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%d",pEVSE->info.ucTotalCON);
-        printf_safe("pEVSE->info.ucTotalCON = %s\n",_tmpBuff);
+        sprintf(_tmpBuff,"%d",pEVSE->info.strID);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
 
-        _aahText[2][0] = TEXT_CreateEx(30, 80, _FONT_WIDTH*(strlen("交流电压范围:")), 25,hWindow,WM_CF_SHOW,0,13,"交流电压范围:");
-        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("交流电压范围:")),80, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
-        _aahText[2][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("交流电压范围:"))+_WORD_WIDTH*(strlen("255.5")), 80, _FONT_WIDTH*(strlen(" ~ ")), 25,hWindow,WM_CF_SHOW,0,13," ~ ");
-        _aahEdit[2][1] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("交流电压范围:"))+_WORD_WIDTH*(strlen("255.5"))+_FONT_WIDTH*(strlen(" ~  ")),80, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,23,strlen("255.5"));
-        _aahText[2][2] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("交流电压范围:"))+_WORD_WIDTH*(strlen("255.5"))+_FONT_WIDTH*(strlen(" ~ "))+_WORD_WIDTH*strlen("255.5"),80,_WORD_WIDTH*(strlen(" V")),25,hWindow,WM_CF_SHOW,0,13," V");
-        memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
-        printf_safe("pCon->info.dVolatageLowerLimits = %s\n",_tmpBuff);
-        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
-        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
-        printf_safe("pCon->info.dVolatageUpperLimits = %s\n",_tmpBuff);
-        EDIT_SetText(_aahEdit[2][1],_tmpBuff);
+        _aahText[2][0] = TEXT_CreateEx(30, 260, _FONT_WIDTH*(strlen(sysServerIP)), 25,hWindow,WM_CF_SHOW,0,13,sysServerIP);
+        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,30,strlen("255.255.255.255"));
+        EDIT_SetText(_aahEdit[2][0],pechProto->info.strServerIP);
 
-        _aahText[3][0] = TEXT_CreateEx(30, 110, _FONT_WIDTH*(strlen("交流电流范围:")), 25,hWindow,WM_CF_SHOW,0,13,"交流电流范围:");
-        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("交流电流范围:")),110, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,24,strlen("255.5"));
-        _aahText[3][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("交流电流范围:"))+_WORD_WIDTH*(strlen("255.5")), 110, _FONT_WIDTH*(strlen(" ~ ")), 25,hWindow,WM_CF_SHOW,0,13," ~ ");
-        _aahEdit[3][1] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("交流电流范围:"))+_WORD_WIDTH*(strlen("255.5"))+_FONT_WIDTH*(strlen(" ~  ")),110, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,25,strlen("255.5"));
-        _aahText[3][2] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("交流电流范围:"))+_WORD_WIDTH*(strlen("255.5"))+_FONT_WIDTH*(strlen(" ~ "))+_WORD_WIDTH*strlen("255.5"),110,_WORD_WIDTH*(strlen(" A")),25,hWindow,WM_CF_SHOW,0,13," A");
-        EDIT_SetText(_aahEdit[3][0],"12.5");
-        EDIT_SetText(_aahEdit[3][1],"45.5");
+        _aahText[3][0] = TEXT_CreateEx(30, 380, _FONT_WIDTH*(strlen(sysServerPort)), 25,hWindow,WM_CF_SHOW,0,13,sysServerPort);
+        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerPort)), 380, _WORD_WIDTH*strlen("8080"), 25,hWindow,WM_CF_SHOW,0,34,strlen("8080"));
+        EDIT_SetText(_aahEdit[3][0],pechProto->info.usServerPort);
 
-        _aahText[4][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen("过温告警值:")), 25,hWindow,WM_CF_SHOW,0,13,"过温告警值:");
-        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("过温告警值:")), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,26,strlen("145.4"));
-        _aahText[4][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("过温告警值:"))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" ℃")), 25,hWindow,WM_CF_SHOW,0,13,"℃");
-        sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
-        EDIT_SetText(_aahEdit[4][0],_tmpBuff);
+        _aahText[4][0] = TEXT_CreateEx(30, 410, _FONT_WIDTH*(strlen(sysUserName)), 25,hWindow,WM_CF_SHOW,0,13,sysUserName);
+        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserName)),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,35,strlen("woshinidaye"));
+        EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
 
-        _aahText[5][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen("屏保时间:")), 25,hWindow,WM_CF_SHOW,0,13,"屏保时间:");
-        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("屏保时间:")), 170, _WORD_WIDTH*(strlen("100")), 25,hWindow,WM_CF_SHOW,0,27,strlen("100"));
-        _aahText[5][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen("屏保时间:"))+_WORD_WIDTH*(strlen("100")), 170, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
-        EDIT_SetText(_aahEdit[5][0],"60");
+        _aahText[5][0] = TEXT_CreateEx(30, 440, _FONT_WIDTH*(strlen(sysUserPwd)), 25,hWindow,WM_CF_SHOW,0,13,sysUserPwd);
+        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserPwd)),440, _WORD_WIDTH*strlen("******"), 25,hWindow,WM_CF_SHOW,0,36,strlen("******"));
+        EDIT_SetText(_aahEdit[5][0],"******");
 
-        _aahText[6][0] = TEXT_CreateEx(30, 200, _FONT_WIDTH*(strlen("电表地址:")), 25,hWindow,WM_CF_SHOW,0,13,"电表地址:");
-        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("电表地址:")), 200, _WORD_WIDTH*(strlen("255")), 25,hWindow,WM_CF_SHOW,0,28,strlen("255"));
-        EDIT_SetText(_aahEdit[6][0],"255");
+        _aahText[6][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysDispSleepTime)), 25,hWindow,WM_CF_SHOW,0,13,sysDispSleepTime);
+        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime)), 170, _WORD_WIDTH*(strlen("100")), 25,hWindow,WM_CF_SHOW,0,27,strlen("100"));
+        _aahText[6][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime))+_WORD_WIDTH*(strlen("100")), 170, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
+        EDIT_SetText(_aahEdit[6][0],"50");//pEVSE->info.);
 
-        _aahText[7][0] = TEXT_CreateEx(30, 230, _FONT_WIDTH*(strlen("电表波特率:")), 25,hWindow,WM_CF_SHOW,0,13,"电表波特率:");
-        _aahEdit[7][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("电表波特率:")),230, _WORD_WIDTH*(strlen("115200")), 25,hWindow,WM_CF_SHOW,0,29,strlen("115200"));
-        EDIT_SetText(_aahEdit[7][0],"115200");
+        _aahText[7][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), 25,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
+        //初始化复选框
 
-        _aahText[8][0] = TEXT_CreateEx(30, 260, _FONT_WIDTH*(strlen("本机IP:")), 25,hWindow,WM_CF_SHOW,0,13,"本机IP:");
-        _aahEdit[8][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("本机IP: ")),260, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,30,strlen("255.255.255.255"));
-        EDIT_SetText(_aahEdit[8][0],"255.255.255.255");
-
-        _aahText[9][0] = TEXT_CreateEx(30, 290, _FONT_WIDTH*(strlen("子网掩码:")), 25,hWindow,WM_CF_SHOW,0,13,"子网掩码:");
-        _aahEdit[9][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("子网掩码:")), 290, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,31,strlen("255.255.255.255"));
-        EDIT_SetText(_aahEdit[9][0],"255.255.255.255");
-
-        _aahText[10][0] = TEXT_CreateEx(30, 320, _FONT_WIDTH*(strlen("网关:")), 25,hWindow,WM_CF_SHOW,0,13,"网关:");
-        _aahEdit[10][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("网关:")),320, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,32,strlen("255.255.255.255"));
-        EDIT_SetText(_aahEdit[10][0],"255.255.255.255");
-
-        _aahText[11][0] = TEXT_CreateEx(30, 350, _FONT_WIDTH*(strlen("MAC地址:")), 25,hWindow,WM_CF_SHOW,0,13,"MAC地址:");
-        _aahEdit[11][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("MAC地址: ")),350, _WORD_WIDTH*strlen("00:00:00:00:00:00"), 25,hWindow,WM_CF_SHOW,0,33,strlen("00:00:00:00:00:00"));
-        EDIT_SetText(_aahEdit[11][0],"00:00:00:00:00:00");
-
-        _aahText[12][0] = TEXT_CreateEx(30, 380, _FONT_WIDTH*(strlen("服务器端口:")), 25,hWindow,WM_CF_SHOW,0,13,"服务器端口:");
-        _aahEdit[12][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("服务器端口:")), 380, _WORD_WIDTH*strlen("8080"), 25,hWindow,WM_CF_SHOW,0,34,strlen("8080"));
-        EDIT_SetText(_aahEdit[12][0],"8080");
-
-        _aahText[13][0] = TEXT_CreateEx(30, 410, _FONT_WIDTH*(strlen("获取SSID:")), 25,hWindow,WM_CF_SHOW,0,13,"获取SSID:");
-        _aahEdit[13][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("获取SSID:")),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,35,strlen("woshinidaye"));
-        EDIT_SetText(_aahEdit[13][0],"dpc");
-
-        _aahText[14][0] = TEXT_CreateEx(30, 440, _FONT_WIDTH*(strlen("设置密码:")), 25,hWindow,WM_CF_SHOW,0,13,"设置密码:");
-        _aahEdit[14][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen("设置密码: ")),440, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,36,strlen("woshinidaye"));
-        EDIT_SetText(_aahEdit[14][0],"1234567890");
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
