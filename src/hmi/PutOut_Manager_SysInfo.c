@@ -112,6 +112,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 static void Status_Content_Analy(WM_MESSAGE *pMsg)
 {
     CON_t *pCon;
+    uint8_t tmp[10];
     uint8_t buf[50];
     WM_HWIN hItem;
 
@@ -119,7 +120,9 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     /**< 协议版本 */
     memset(buf,'\0',sizeof(buf));
     strcpy(buf,sysInfoProtoVer);
-    strcpy(buf,pechProto->info.ucProtoVer);
+    memset(tmp,'\0',sizeof(tmp));
+    sprintf(tmp,"%d",pechProto->info.ucProtoVer);
+    strcat((buf,tmp);
     LISTVIEW_SetItemText(hItem, 0, 1, sysInfoProtoVer);
     LISTVIEW_AddRow(hItem, NULL);//增加一行
     /**< 软件版本 */
@@ -143,6 +146,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     uint16_t     i,_strNum[3];
 	volatile HEADER_Handle hHeader;
 	uint8_t    buf[50];
+	uint8_t    tmp[10];
 //	static char  Value = 0;
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
@@ -212,8 +216,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 协议版本 */
         memset(buf,'\0',sizeof(buf));
         strcpy(buf,sysInfoProtoVer);
-        strcpy(buf,pechProto->info.ucProtoVer);
-        LISTVIEW_SetItemText(hItem, 0, 1, sysInfoProtoVer);
+        memset(tmp,'\0',sizeof(tmp));
+        sprintf(tmp,"%d",pechProto->info.ucProtoVer);
+        strcat((buf,tmp);
+        LISTVIEW_SetItemText(hItem, 0, 1, buf);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 软件版本 */
         memset(buf,'\0',sizeof(buf));
