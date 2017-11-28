@@ -99,8 +99,8 @@ static WM_HWIN _hWinManagerInfoAnalog;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 40, 800, 300, 0, 0x0, 0 },
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 800, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************

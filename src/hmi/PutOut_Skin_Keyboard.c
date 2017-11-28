@@ -1158,7 +1158,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     {
     case LOGIN_PASSWD:
         bitclr(winCreateFlag,2);
-        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHomePage());
+        (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:

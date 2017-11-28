@@ -45,7 +45,7 @@
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0     (GUI_ID_USER + 0x00)
 // USER START (Optionally insert additional defines)
 #define ID_IMAGE_0    (GUI_ID_USER + 0x1C)
 #define ID_TEXT_1     (GUI_ID_USER + 0x0B)
@@ -127,7 +127,7 @@ static uint8_t list_end_index[3];
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
     { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 290, 25, 43, 50, 0, 0x0, 0 },
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 340, 25, 20, 50, 0, 0x0, 0 },
@@ -907,26 +907,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        WM_SetFocus(_hWinManagerAlarmLog);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerAlarmLog == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerAlarmLog == cur_win)
-            {
-                /**< 故障分析 */
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
+//        WM_SetFocus(_hWinManagerAlarmLog);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerAlarmLog == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerAlarmLog == cur_win)
+//            {
+//                /**< 故障分析 */
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
         break;
     case WM_INIT_DIALOG:
         //
@@ -1069,8 +1069,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             /**< 跳转到模拟量信息查询 */
-            _deleteWin(_hWinManagerAlarmLog);
-            CreateManagerInfoAnalog();
+//            _deleteWin(_hWinManagerAlarmLog);
+//            CreateManagerInfoAnalog();
             break;
           // USER START (Optionally insert additional code for further notification handling)
           // USER END
@@ -1094,8 +1094,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             /**< 跳转到设置参数信息查询 */
-            _deleteWin(_hWinManagerAlarmLog);
-            CreateManagerSysSet();
+//            _deleteWin(_hWinManagerAlarmLog);
+            //CreateManagerSysSet();
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
@@ -1116,7 +1116,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
             /**< 跳转至home */
-            _deleteWin(_hWinManagerAlarmLog);
+//            _deleteWin(_hWinManagerAlarmLog);
             CreateHomePage();
             // USER END
             break;
@@ -1450,13 +1450,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  * @return
  *       CreateManagerLogDate
 */
-WM_HWIN CreateManagerLogDate(HM_HWIN srcHwin)
+WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin)
 {
     _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
     cur_win = _hWinManagerLogDate;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerSignal,5000,0);
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerFlush, 1000, 0);
+    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerSignal, 5000, 0);
     return 0;
 }
 /*************************** End of file ****************************/

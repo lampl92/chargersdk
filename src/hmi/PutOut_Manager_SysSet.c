@@ -53,7 +53,7 @@ static int _x,_y;
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0     (GUI_ID_USER + 0x00)
 #define ID_IMAGE_0     (GUI_ID_USER + 0x1C)
 // USER START (Optionally insert additional defines)
 #define ID_TEXT_1     (GUI_ID_USER + 0x0B)
@@ -549,7 +549,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SetStayOnTop(hWindow,0);
                 GUI_EndDialog(hWindow,0);
                 _deleteWin(_hWinManagerSysSet);
-                CreateManagerInfoAnalog();
+                //CreateManagerInfoAnalog();
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
