@@ -1067,7 +1067,7 @@ static uint8_t Value_Check()
                 pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
                 break;
             case 22:
-                pechProto->info.SetCONCfg(pechProto, jnProtoServerIP, result_input, ParamTypeString);
+                pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
                 break;
             case 23://
                 tmpU16 = (uint16_t)atoi(result_input);

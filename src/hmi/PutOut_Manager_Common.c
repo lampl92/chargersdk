@@ -123,8 +123,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hWinPage = CreateManagerSysSet(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "厂商配置");
 
-        hWinPage = CreateManagerSysInfo;
-        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
+//        hWinPage = CreateManagerSysInfo(pMsg->hWin);
+//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
 
         MULTIPAGE_SelectPage(hItem,0);
 

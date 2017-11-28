@@ -13,6 +13,7 @@
 #include "lcddrv.h"
 #include "user_app.h"
 #include "stringName.h"
+#include "cfg_parse.h"
 //#include "chargepoint.h"
 
 #define PAGE_HOME 0

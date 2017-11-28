@@ -455,7 +455,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 case WM_NOTIFICATION_CLICKED:
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
                     Index = CHECKBOX_GetState(hItem);
-                    if(Index == 1)&&(!bittest(_checkbox,1))
+                    if((Index == 1)&&(!bittest(_checkbox,1)))
                     {
                         bitset(_checkbox,1);
                         bitclr(_checkbox,0);
@@ -496,7 +496,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SetStayOnTop(hWindow,0);
                 GUI_EndDialog(hWindow,0);
                 _deleteWin(_hWinManagerSysSet);
-                CreateManagerAlarmLog();
+//                CreateManagerAlarmLog();
             break;
           case WM_NOTIFICATION_RELEASED:
 
