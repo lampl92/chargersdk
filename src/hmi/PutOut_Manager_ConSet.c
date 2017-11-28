@@ -509,7 +509,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SetStayOnTop(hWindow,0);
                 GUI_EndDialog(hWindow,0);
                 _deleteWin(_hWinManagerSocketSet);
-                CreateManagerAlarmLog();
+//                CreateManagerAlarmLog();
             break;
           case WM_NOTIFICATION_RELEASED:
 

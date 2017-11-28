@@ -181,6 +181,7 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
