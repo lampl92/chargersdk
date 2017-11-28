@@ -303,26 +303,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        WM_SetFocus(_hWinManagerAlarmLog);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerAlarmLog == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerAlarmLog == cur_win)
-            {
-                /**< 故障分析 */
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
+//        WM_SetFocus(_hWinManagerAlarmLog);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerAlarmLog == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerAlarmLog == cur_win)
+//            {
+//                /**< 故障分析 */
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
         break;
     case WM_INIT_DIALOG:
         //
@@ -456,9 +456,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 WM_HWIN CreateManagerInfoStatus(WM_HWIN srcHwin)
 {
+<<<<<<< 21c8026e334e09f9dca16a8a11997dd5323d0e01
     _hWinManagerInfoStatus = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerFlush,1000,0);
+=======
+    _hWinManagerInfoStatus = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoStatus), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoStatus), ID_TimerFlush, 1000, 0);
+>>>>>>> 9b9fef590bb44cfbe358a3ff2b2b04867b6f0c6e
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
     return 0;
 }

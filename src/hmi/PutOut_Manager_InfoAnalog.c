@@ -92,7 +92,7 @@
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
-static WM_HWIN _hWinManagerInfoStatus;
+static WM_HWIN _hWinManagerInfoAnalog;
 /*********************************************************************
 *
 *       _aDialogCreate
@@ -184,26 +184,26 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        WM_SetFocus(_hWinManagerAlarmLog);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerAlarmLog == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerAlarmLog == cur_win)
-            {
-                /**< 故障分析 */
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
+//        WM_SetFocus(_hWinManagerAlarmLog);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerAlarmLog == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerAlarmLog == cur_win)
+//            {
+//                /**< 故障分析 */
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
         break;
     case WM_INIT_DIALOG:
         //

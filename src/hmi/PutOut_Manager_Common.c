@@ -79,46 +79,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 *
 **********************************************************************
 */
-static void Data_Flush(WM_MESSAGE *pMsg)
-{
-    CON_t *pCon;
-    uint8_t strTmp[30];
-
-    pCon = CONGetHandle(0);
-
-    sprintf(strTmp,"%.1f",pCon->status.dChargingVoltage);
-    strcat(strTmp,"V");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0),strTmp);
-
-    sprintf(strTmp,"%.1f",pCon->status.dChargingCurrent);
-    strcat(strTmp,"A");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1),strTmp);
-
-    /**< 控制导引电压确认 */
-    sprintf(strTmp,"%.1f",Sys_samp.DC.CP1);
-    strcat(strTmp,"V");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_2),strTmp);
-
-    sprintf(strTmp,"%.1f",pCon->status.dChargingFrequence);
-    strcat(strTmp,"Hz");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_3),strTmp);
-
-    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);
-    strcat(strTmp,"℃");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_4),strTmp);
-
-    sprintf(strTmp,"%.1f",pCon->status.dACNTemp);
-    strcat(strTmp,"℃");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_5),strTmp);
-
-    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);//acl or acn
-    strcat(strTmp,"℃");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_6),strTmp);
-
-    sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp2);
-    strcat(strTmp, "℃");
-    EDIT_SetText(WM_GetDialogItem(pMsg->hWin, ID_EDIT_7), strTmp);
-}
 /*********************************************************************
 *
 *       _cbDialog
@@ -131,30 +91,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int          NCode;
     int          Id;
     int          page;
+    WM_HWIN     hWinPage;
 
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerInfoAnalog == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerInfoAnalog == cur_win)
-            {
-                /**< 故障分析 */
-                Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-            Data_Flush(pMsg);
-        }
         break;
     case WM_INIT_DIALOG:
         //
