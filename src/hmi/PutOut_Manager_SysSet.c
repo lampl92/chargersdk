@@ -46,7 +46,7 @@ static uint8_t _aahSysSet[_SYSEDIT_MAX_Y];
 static EDIT_Handle   _aahEdit[_SYSEDIT_MAX_Y][_SYSEDIT_MAX_X];
 static TEXT_Handle   _aahText[_SYSSTATUE_LINE][_SYSSTATUE_CAL];
 static int _x,_y;
-
+static uint8_t _checkbox;
 /*********************************************************************
 *
 *       Defines
@@ -377,7 +377,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    int x, y;
+    int x, y,Index;
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     char _tmpBuff[50];
@@ -470,7 +470,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         _aahText[7][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), 25,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
         //初始化复选框
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
+        CHECKBOX_SetText(hItem, "2G");
+        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
+        if(xSysconf.xModule.use_gprs == 1)
+        {
+            CHECKBOX_SetState(hItem,1);
+        }
+    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
+        xSysconf.ulDispSleepTime_s
 
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
+        CHECKBOX_SetText(hItem, "4G");
+        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
+        CHECKBOX_SetState(hItem,0);
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
@@ -491,28 +504,58 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
 
         WM_SetStayOnTop(hWindow,1);
-        //
-        // Initialization of 'Button'
-        //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
-
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"历史查询");
-
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"系统配置");
-        BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),1);
-        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),BUTTON_CI_PRESSED,GUI_RED);
-
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
 
         switch(Id) {
+        case ID_CHECKBOX_0:
+            switch(NCode)
+            {
+                case WM_NOTIFICATION_CLICKED:
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
+                    Index = CHECKBOX_GetState(hItem);
+                    if((Index == 1)&&bittest(_checkbox,0))
+                    {
+
+                        pEVSE->info.SetEVSECfg(pEVSE, jnSocketType, result_input, ParamTypeString);
+                    }
+                    else
+                    {
+                    }
+                    break;
+                case WM_NOTIFICATION_RELEASED:
+                    break;
+                case WM_NOTIFICATION_VALUE_CHANGED:
+                    break;
+            }
+            break;
+
+        case ID_CHECKBOX_1:
+            switch(NCode)
+            {
+                case WM_NOTIFICATION_CLICKED:
+                    hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
+                    Index = CHECKBOX_GetState(hItem);
+                    if(Index == 1)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+
+                case WM_NOTIFICATION_RELEASED:
+                    break;
+
+                case WM_NOTIFICATION_VALUE_CHANGED:
+                    break;
+
+            }
+            break;
         case ID_BUTTON_0: // Notifications sent by 'Button'
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
