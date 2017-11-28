@@ -122,7 +122,7 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     strcpy(buf,sysInfoProtoVer);
     memset(tmp,'\0',sizeof(tmp));
     sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-    strcat((buf,tmp);
+    strcat(buf,tmp);
     LISTVIEW_SetItemText(hItem, 0, 1, buf);
     LISTVIEW_AddRow(hItem, NULL);//增加一行
     /**< 软件版本 */
@@ -218,7 +218,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         strcpy(buf,sysInfoProtoVer);
         memset(tmp,'\0',sizeof(tmp));
         sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-        strcat((buf,tmp);
+        strcat(buf,tmp);
         LISTVIEW_SetItemText(hItem, 0, 1, buf);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 软件版本 */
