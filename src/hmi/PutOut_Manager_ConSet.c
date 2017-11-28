@@ -392,71 +392,71 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建编辑区
         /**< 20-50编辑区ID */
         //枪类型
-        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(conQRCode)), 25,hWindow,WM_CF_SHOW,0,13,conQRCode);
-        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conQRCode)), 20, _WORD_WIDTH*(strlen("2000000000000003")), 25,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));
+        _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conQRCode);
+        _aahEdit[0][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("2000000000000003")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));
         EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
         //枪锁类型
-        _aahText[1][0] = TEXT_CreateEx(30, 50, _FONT_WIDTH*(strlen(conSocketType)), 25,hWindow,WM_CF_SHOW,0,13,conSocketType);
-        _aahEdit[1][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketType)), 50, _WORD_WIDTH*(strlen("255")) , 25,hWindow,WM_CF_SHOW,0,21,strlen("255"));
+        _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(conSocketType)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketType);
+        _aahEdit[1][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketType)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("255")) , GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,21,strlen("255"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pCon->info.ucSocketType);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
         //电压上限
-        _aahText[2][0] = TEXT_CreateEx(30, 80, _FONT_WIDTH*(strlen(conVolatageUpperLimits)), 25,hWindow,WM_CF_SHOW,0,13,conVolatageUpperLimits);
-        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conVolatageUpperLimits)),80, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
-        _aahText[2][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conVolatageUpperLimits))+_WORD_WIDTH*(strlen("255.5")),80,_WORD_WIDTH*(strlen(" V")),25,hWindow,WM_CF_SHOW,0,13," V");
+        _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(conVolatageUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conVolatageUpperLimits);
+        _aahEdit[2][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageUpperLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
+        _aahText[2][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageUpperLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
         //电压下限
-        _aahText[3][0] = TEXT_CreateEx(30, 80, _FONT_WIDTH*(strlen(conVolatageLowerLimits)), 25,hWindow,WM_CF_SHOW,0,13,conVolatageLowerLimits);
-        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conVolatageLowerLimits)),80, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,23,strlen("255.5"));
-        _aahText[3][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conVolatageLowerLimits))+_WORD_WIDTH*(strlen("255.5")),80,_WORD_WIDTH*(strlen(" V")),25,hWindow,WM_CF_SHOW,0,13," V");
+        _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _FONT_WIDTH*(strlen(conVolatageLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conVolatageLowerLimits);
+        _aahEdit[3][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageLowerLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,23,strlen("255.5"));
+        _aahText[3][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageLowerLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
         EDIT_SetText(_aahEdit[3][0],_tmpBuff);
         //电流上限
-        _aahText[4][0] = TEXT_CreateEx(30, 80, _FONT_WIDTH*(strlen(conACCurrentUpperLimits)), 25,hWindow,WM_CF_SHOW,0,13,conACCurrentUpperLimits);
-        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conACCurrentUpperLimits)),80, _WORD_WIDTH*(strlen("255.5")), 25,hWindow,WM_CF_SHOW,0,24,strlen("255.5"));
-        _aahText[4][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conACCurrentUpperLimits))+_WORD_WIDTH*(strlen("255.5")),80,_WORD_WIDTH*(strlen(" A")),25,hWindow,WM_CF_SHOW,0,13," A");
+        _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _FONT_WIDTH*(strlen(conACCurrentUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACCurrentUpperLimits);
+        _aahEdit[4][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACCurrentUpperLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,24,strlen("255.5"));
+        _aahText[4][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACCurrentUpperLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4,_WORD_WIDTH*(strlen(" A")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," A");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         /// TODO (zshare#1#): 电流上限设置值？？？？？
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[4][0],_tmpBuff);
         //交流输入端子温度上限
-        _aahText[5][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conACTempUpperLimits)), 25,hWindow,WM_CF_SHOW,0,13,conACTempUpperLimits);
-        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conACTempUpperLimits)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,25,strlen("145.4"));
-        _aahText[5][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conACTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" ℃")), 25,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACTempUpperLimits);
+        _aahEdit[5][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,25,strlen("145.4"));
+        _aahText[5][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
         EDIT_SetText(_aahEdit[5][0],_tmpBuff);
         //交流输入端子温度下限
-        _aahText[6][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conACTempLowerLimits)), 25,hWindow,WM_CF_SHOW,0,13,conACTempLowerLimits);
-        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conACTempLowerLimits)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,26,strlen("145.4"));
-        _aahText[6][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conACTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" ℃")), 25,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen(conACTempLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACTempLowerLimits);
+        _aahEdit[6][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempLowerLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,26,strlen("145.4"));
+        _aahText[6][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
         //交流输出端子温度上限
-        _aahText[7][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conSocketTempUpperLimits)), 25,hWindow,WM_CF_SHOW,0,13,conSocketTempUpperLimits);
-        _aahEdit[7][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketTempUpperLimits)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,27,strlen("145.4"));
-        _aahText[7][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" ℃")), 25,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketTempUpperLimits);
+        _aahEdit[7][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,27,strlen("145.4"));
+        _aahText[7][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
         EDIT_SetText(_aahEdit[7][0],_tmpBuff);
         //交流输出端子温度下限
-        _aahText[8][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conSocketTempLowerLimits)), 25,hWindow,WM_CF_SHOW,0,13,conSocketTempLowerLimits);
-        _aahEdit[8][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketTempLowerLimits)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,28,strlen("145.4"));
-        _aahText[8][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conSocketTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" ℃")), 25,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _FONT_WIDTH*(strlen(conSocketTempLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketTempLowerLimits);
+        _aahEdit[8][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempLowerLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,28,strlen("145.4"));
+        _aahText[8][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
         EDIT_SetText(_aahEdit[8][0],_tmpBuff);
         //额定电流
-        _aahText[9][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conRatedCurrent)), 25,hWindow,WM_CF_SHOW,0,13,conRatedCurrent);
-        _aahEdit[9][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conRatedCurrent)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,29,strlen("145.4"));
-        _aahText[9][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conRatedCurrent))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" A")), 25,hWindow,WM_CF_SHOW,0,13,"A");
+        _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedCurrent);
+        _aahEdit[9][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,29,strlen("145.4"));
+        _aahText[9][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedCurrent))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"A");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[9][0],_tmpBuff);
         //额定功率
-        _aahText[10][0] = TEXT_CreateEx(30, 140, _FONT_WIDTH*(strlen(conRatedPower)), 25,hWindow,WM_CF_SHOW,0,13,conRatedPower);
-        _aahEdit[10][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(conRatedPower)), 140, _WORD_WIDTH*(strlen("145.4")), 25,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
-        _aahText[10][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(conRatedPower))+_WORD_WIDTH*strlen("145.4"), 140, _WORD_WIDTH*(strlen(" kW")), 25,hWindow,WM_CF_SHOW,0,13,"kW");
+        _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedPower);
+        _aahEdit[10][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
+        _aahText[10][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedPower))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0],_tmpBuff);
 
