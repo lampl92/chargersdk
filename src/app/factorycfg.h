@@ -137,12 +137,12 @@ const uint8_t *strSysCfg =
     \"blacklist_cfg\" : 0,\n \
     \"whitelist_cfg\" : 0,\n \
     \"DispSleepTime\" : 60,\n \
-    \"touchtype\": 8,\n \
-    \"is_calibrate\": 8,\n \
-    \"xfac\": 12.12,\n \
-    \"yfac\": 12.12,\n \
-    \"xoff\": 16,\n \
-    \"yoff\": 16,\n \
+    \"touchtype\": 0,\n \
+    \"is_calibrate\": 170,\n \
+    \"xfac\": -0.21276596188545227,\n \
+    \"yfac\": 0.1423487514257431,\n \
+    \"xoff\": 830,\n \
+    \"yoff\": 65486,\n \
     \"Version\":\"0.2.1.2552\",\n \
     \"USE_GPRSModem\":2,\n \
     \"USE_Meter\": 1,\n \
