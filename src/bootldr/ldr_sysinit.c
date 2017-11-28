@@ -42,7 +42,7 @@ void timeInit()
 
 uint8_t create_system_dir(void)
 {
-    int res = 0;
+    int res = 1;
     res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
     if (res != 0)
     {
@@ -58,11 +58,11 @@ uint8_t create_system_dir(void)
     }
 }
 
-void create_cfg_file(const uint8_t *path, const uint8_t *context)
+void create_cfg_file(const char *path, const uint8_t *context)
 {
     uint32_t bw;
     int fd;
-    int res = 0;
+    int res = 1;
     fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
@@ -105,7 +105,7 @@ void sys_Init(void)
     /---------------------------------------------------------------------------*/
     create_system_dir();
     //yaffs_unlink(pathSysCfg);
-    //create_cfg_file(pathSysCfg, strSysCfg);
+    create_cfg_file(pathSysCfg, strSysCfg);
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);

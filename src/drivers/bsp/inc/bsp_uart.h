@@ -76,5 +76,6 @@ void gprs_uart_putc(uint8_t ch);
 void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode);
 uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
+uint32_t uart_read_ymodem(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 
 #endif

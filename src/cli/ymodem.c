@@ -64,7 +64,7 @@ static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
 {
     uint32_t len;
     //taskENTER_CRITICAL();
-    len = uart_read(UART_PORT_CLI, pbuff, rlen, timeout_ms);
+    len = uart_read_ymodem(UART_PORT_CLI, pbuff, rlen, timeout_ms);
     //taskEXIT_CRITICAL();
     return len;
 }

@@ -30,6 +30,7 @@
 #define TCP_CLIENT_BUFSIZE           MAX_COMMAND_LEN
 #define QUE_BUFSIZE                  5000
 DevModem_t *pModem;
+uint32_t ulTaskDelay_ms = 1000;
 
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
 
@@ -1711,14 +1712,17 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_GET:
+            ulTaskDelay_ms = 100;
             ulReGetCnt++;//FTPGet次数
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
-            sprintf(filepath, "system\\%s", pechProto->info.ftp.strNewFileName);
+            sprintf(filepath, "%s%s", pathSystemDir, pechProto->info.ftp.strNewFileName);
             fd = yaffs_open(filepath, O_CREAT | O_TRUNC | O_WRONLY , S_IWRITE | S_IREAD);
             if (fd < 0)
             {
                 ThrowFSCode(fres = yaffs_get_error(), filepath, "ModemFTP-open");
+                free(pucFileBuffer);
+                free(pucQueBuffer);
                 pModem->state = DS_MODEM_FTP_GET;//有待商榷
                 break;
             }
@@ -1742,6 +1746,7 @@ void Modem_Poll(DevModem_t *pModem)
                     ulRecvFileSize = 0;
                     ulPos = 0;
                     pModem->state = DS_MODEM_FTP_CHECK;
+                    ulTaskDelay_ms = 1000;
                     break;
                 }
                 else
@@ -1875,6 +1880,6 @@ void Modem_Poll(DevModem_t *pModem)
 
         //modem_get_info(pModem);
 
-        vTaskDelay(100);
+        vTaskDelay(ulTaskDelay_ms);
     }
 }

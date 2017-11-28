@@ -30,7 +30,7 @@ uint8_t isEVSEWorking(void)
     for (id = 0; id < ulTotalCON; id++)
     {
         pCON = CONGetHandle(id);
-        if ((pCON->status.ulSignalState | defSignalCON_State_Standby) != defSignalCON_State_Standby)
+        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
         {
             return 1;
         } 
