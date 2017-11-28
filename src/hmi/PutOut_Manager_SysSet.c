@@ -120,8 +120,8 @@ static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, 45, 42, 90, 32, 0, 0x0, 0 },
-	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, 45, 104, 90, 32, 0, 0x0, 0 },
+	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
+	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)) + 90, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
 };
 /*******************************************************************
 *
@@ -202,7 +202,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
 
                         Keypad_GetValueTest(SYSSET_VALUE,21,hWindow,_hWinManagerSysSet,sysEVSEID,"eg,1122334455667788");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%d",pEVSE->info.ucTotalCON);
+                        sprintf(_tmpBuff,"%d",pEVSE->info.strID);
                         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
                     }
                 break;
@@ -345,44 +345,44 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建编辑区
         /**< 20-50编辑区ID */
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-        _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(sysEVSESN)), 25,hWindow,WM_CF_SHOW,0,13,sysEVSESN);
-        _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysEVSESN)), 20, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
+        _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysEVSESN);
+        _aahEdit[0][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
         EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
 
-        _aahText[1][0] = TEXT_CreateEx(30, 50, _FONT_WIDTH*(strlen(sysEVSEID)), 25,hWindow,WM_CF_SHOW,0,13,sysEVSEID);
-        _aahEdit[1][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysEVSEID)), 50, _WORD_WIDTH*(strlen("1122334455667788")) , 25,hWindow,WM_CF_SHOW,0,21,strlen("1122334455667788"));
+        _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysEVSEID);
+        _aahEdit[1][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysEVSEID)), 50, _WORD_WIDTH*(strlen("1122334455667788")) , GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,21,strlen("1122334455667788"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pEVSE->info.strID);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
 
-        _aahText[2][0] = TEXT_CreateEx(30, 260, _FONT_WIDTH*(strlen(sysServerIP)), 25,hWindow,WM_CF_SHOW,0,13,sysServerIP);
-        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,22,strlen("255.255.255.255"));
+        _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(sysServerIP)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerIP);
+        _aahEdit[2][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,22,strlen("255.255.255.255"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
 
-        _aahText[3][0] = TEXT_CreateEx(30, 380, _FONT_WIDTH*(strlen(sysServerPort)), 25,hWindow,WM_CF_SHOW,0,13,sysServerPort);
-        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerPort)), 380, _WORD_WIDTH*strlen("8080"), 25,hWindow,WM_CF_SHOW,0,23,strlen("8080"));
+        _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerPort);
+        _aahEdit[3][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _WORD_WIDTH*strlen("8080"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,23,strlen("8080"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
         EDIT_SetText(_aahEdit[3][0],_tmpBuff);
 
-        _aahText[4][0] = TEXT_CreateEx(30, 410, _FONT_WIDTH*(strlen(sysUserName)), 25,hWindow,WM_CF_SHOW,0,13,sysUserName);
-        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserName)),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,24,strlen("woshinidaye"));
+        _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _FONT_WIDTH*(strlen(sysUserName)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUserName);
+        _aahEdit[4][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysUserName)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _WORD_WIDTH*strlen("woshinidaye"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,24,strlen("woshinidaye"));
         EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
 
-        _aahText[5][0] = TEXT_CreateEx(30, 440, _FONT_WIDTH*(strlen(sysUserPwd)), 25,hWindow,WM_CF_SHOW,0,13,sysUserPwd);
-        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserPwd)),440, _WORD_WIDTH*strlen("******"), 25,hWindow,WM_CF_SHOW,0,25,strlen("******"));
+        _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _FONT_WIDTH*(strlen(sysUserPwd)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUserPwd);
+        _aahEdit[5][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysUserPwd)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*strlen("******"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,25,strlen("******"));
         EDIT_SetText(_aahEdit[5][0],"******");
 
-        _aahText[6][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysDispSleepTime)), 25,hWindow,WM_CF_SHOW,0,13,sysDispSleepTime);
-        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime)), 170, _WORD_WIDTH*(strlen("100")), 25,hWindow,WM_CF_SHOW,0,26,strlen("100"));
-        _aahText[6][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime))+_WORD_WIDTH*(strlen("100")), 170, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
+        _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysDispSleepTime);
+        _aahEdit[6][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,26,strlen("100"));
+        _aahText[6][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysDispSleepTime))+_WORD_WIDTH*(strlen("100")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
 
-        _aahText[7][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), 25,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
+        _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
         //初始化复选框
         _checkbox = 0;
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);

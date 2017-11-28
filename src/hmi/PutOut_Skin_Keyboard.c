@@ -1061,60 +1061,28 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
                 break;
             case 21:
-                tmpU8 = atoi(result_input);
-                pEVSE->info.SetEVSECfg(pEVSE, jnTotalCON, &tmpU8, ParamTypeU8);
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
                 break;
             case 22:
-                tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                pechProto->info.SetCONCfg(pechProto, jnProtoServerIP, result_input, ParamTypeString);
                 break;
-            case 23:
-                tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
-                break;
-            case 24://电流下限 去掉
-                break;
-            case 25://出场设置额定电流
-
-                break;
-            case 26:
-                tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
-                break;
-            case 27://背光时间
-
-                break;
-            case 28:
-
-                break;
-            case 29:
-                break;
-            case 30://本机IP做显示 更改为服务器IP pechProto->info.strServerIP
-                //pModem->status.strLocIP;
-                break;
-            case 31://ziwangyanma duqiao
-                break;
-            case 32://wangguan dudiao
-                break;
-            case 33://mac dudiao
-                break;
-            case 34://
+            case 23://
                 tmpU16 = (uint16_t)atoi(result_input);
                 pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
                 break;
-            case 35://user name
+            case 24://user name
                 pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
                 break;
-            case 36://user passwd
+            case 25://user passwd
                 pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
                 break;
-            //user miyao
-            //pechProto->info.SetProtoCfg(pechProto, jnProtoKey, result_input, ParamTypeString);
-
-
+            case 26://屏保时间
+                tmpU32 = atoi(result_input);
+                xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+                break;
         }
         break;
     case CONSET_VALUE:

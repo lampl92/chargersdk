@@ -12,10 +12,8 @@
 #include "keyboard.h"
 #include "lcddrv.h"
 #include "user_app.h"
+#include "stringName.h"
 //#include "chargepoint.h"
-#define EXIT_DISP_DELAY 60
-#define REFLASH 20
-#define GUN_NUM 2
 
 #define PAGE_HOME 0
 #define PAGE_CARD_VALID 1
@@ -26,6 +24,10 @@
 //#define MSG_MusicStart    (GUI_ID_USER + 0x31)
 //#define MSG_NextMusic     (GUI_ID_USER + 0x32)
 //电压异常；AC温度异常；PE异常；撞击；防雷异常；停电；电流异常；频率异常
+#define GUI_MANAGER_XLEFT 30    //管理员界面左上角X位置
+#define GUI_MANAGER_YLEFT 20    //管理员界面左上角Y位置
+
+#define GUI_MANAGER_YOFF 25     //管理员界面相关配置中每行的宽度
 /*********************自定义GUI消息的宏******************************
 **
 ** GUI_ID_USER + 0x30 - 0x3F 可定义16个消息
