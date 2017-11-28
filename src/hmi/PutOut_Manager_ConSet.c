@@ -193,7 +193,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(_hWinManagerSocketSet);
                         Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerSocketSet,conQRCode,"eg,200000000000003");
                         //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
-                        EDIT_SetText(_aahEdit[0][0],pCon->info.ucCONType);
+                        EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
                     }
                 break;
                 case 21:
