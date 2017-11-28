@@ -1457,7 +1457,7 @@ WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerFlush, 1000, 0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerSignal, 5000, 0);
-    return 0;
+    return _hWinManagerLogDate;
 }
 /*************************** End of file ****************************/
 

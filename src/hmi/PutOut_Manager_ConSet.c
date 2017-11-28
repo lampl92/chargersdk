@@ -103,7 +103,7 @@ static int _x,_y;
 #define conQRCode "QRCode"
 
 static WM_HWIN hWindow;
-static WM_HWIN _hWinManagerSocketSet;
+static WM_HWIN _hWinManagerConSet;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 
 /*********************************************************************
@@ -188,10 +188,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         //WM_SendMessageNoPara(hWin,MSG_JUMPKEYPAD);
 //                        WM_SetStayOnTop(hWindow,0);
 //                        GUI_EndDialog(hWindow,0);
-//                       _deleteWin(_hWinManagerSocketSet);
+//                       _deleteWin(_hWinManagerConSet);
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
-                        Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerSocketSet,conQRCode,"eg,200000000000003");
+                        WM_HideWindow(_hWinManagerConSet);
+                        Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerConSet,conQRCode,"eg,200000000000003");
                         //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
                         EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
                     }
@@ -200,9 +200,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,21,hWindow,_hWinManagerSocketSet,conSocketType,"eg,66");
+                        Keypad_GetValueTest(CONSET_VALUE,21,hWindow,_hWinManagerConSet,conSocketType,"eg,66");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
                         sprintf(_tmpBuff,"%d",pCon->info.ucSocketType);
                         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
@@ -212,9 +212,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,22,hWindow,_hWinManagerSocketSet,conVolatageUpperLimits,"eg,250");
+                        Keypad_GetValueTest(CONSET_VALUE,22,hWindow,_hWinManagerConSet,conVolatageUpperLimits,"eg,250");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
                         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
                         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
@@ -224,9 +224,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,23,hWindow,_hWinManagerSocketSet,conVolatageLowerLimits,"eg,190");
+                        Keypad_GetValueTest(CONSET_VALUE,23,hWindow,_hWinManagerConSet,conVolatageLowerLimits,"eg,190");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
                         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
                         EDIT_SetText(_aahEdit[3][0],_tmpBuff);
@@ -236,9 +236,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,24,hWindow,_hWinManagerSocketSet,conACCurrentUpperLimits,"eg,38");
+                        Keypad_GetValueTest(CONSET_VALUE,24,hWindow,_hWinManagerConSet,conACCurrentUpperLimits,"eg,38");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
                         EDIT_SetText(_aahEdit[4][0],_tmpBuff);
                     }
@@ -247,9 +247,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,25,hWindow,_hWinManagerSocketSet,conACTempUpperLimits,"eg,105");
+                        Keypad_GetValueTest(CONSET_VALUE,25,hWindow,_hWinManagerConSet,conACTempUpperLimits,"eg,105");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
                         EDIT_SetText(_aahEdit[5][0],_tmpBuff);
                     }
@@ -258,9 +258,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,26,hWindow,_hWinManagerSocketSet,conACTempLowerLimits,"eg,-40");
+                        Keypad_GetValueTest(CONSET_VALUE,26,hWindow,_hWinManagerConSet,conACTempLowerLimits,"eg,-40");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
                         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
                     }
@@ -269,9 +269,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,27,hWindow,_hWinManagerSocketSet,conSocketTempUpperLimits,"eg,105");
+                        Keypad_GetValueTest(CONSET_VALUE,27,hWindow,_hWinManagerConSet,conSocketTempUpperLimits,"eg,105");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
                         EDIT_SetText(_aahEdit[7][0],_tmpBuff);
                     }
@@ -280,9 +280,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,28,hWindow,_hWinManagerSocketSet,conSocketTempLowerLimits,"eg,-40");
+                        Keypad_GetValueTest(CONSET_VALUE,28,hWindow,_hWinManagerConSet,conSocketTempLowerLimits,"eg,-40");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
                         EDIT_SetText(_aahEdit[8][0],_tmpBuff);
                     }
@@ -291,9 +291,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,29,hWindow,_hWinManagerSocketSet,conRatedCurrent,"eg,32");
+                        Keypad_GetValueTest(CONSET_VALUE,29,hWindow,_hWinManagerConSet,conRatedCurrent,"eg,32");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
                         EDIT_SetText(_aahEdit[9][0],_tmpBuff);
                     }
@@ -302,9 +302,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
                         WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSocketSet);
+                        WM_HideWindow(_hWinManagerConSet);
 
-                        Keypad_GetValueTest(CONSET_VALUE,30,hWindow,_hWinManagerSocketSet,conRatedPower,"7");
+                        Keypad_GetValueTest(CONSET_VALUE,30,hWindow,_hWinManagerConSet,conRatedPower,"7");
                         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
                         EDIT_SetText(_aahEdit[10][0],_tmpBuff);
                     }
@@ -348,7 +348,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         WM_SetFocus(pMsg->hWin);
         /// TODO (zshare#1#): 下面的if不起作用.\
         但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerSocketSet == cur_win)
+        if(_hWinManagerConSet == cur_win)
         {
             /**< 数据处理 */
             //Data_Process(pMsg);
@@ -357,7 +357,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 灯光控制 */
             Led_Show();
             /**< 如果界面发生了切换 */
-            if(_hWinManagerSocketSet == cur_win)
+            if(_hWinManagerConSet == cur_win)
             {
                 /**< 故障分析 */
                 /// TODO (zshare#1#): 滑轮页均不对故障处理.故障界面被滑轮页覆盖
@@ -491,7 +491,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 跳转到信息查询 */
                 WM_SetStayOnTop(hWindow,0);
                 GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerSocketSet);
+                _deleteWin(_hWinManagerConSet);
                 //CreateManagerInfoAnalog();
             break;
           case WM_NOTIFICATION_RELEASED:
@@ -508,7 +508,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 /**< 跳转到历史记录查询 */
                 WM_SetStayOnTop(hWindow,0);
                 GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerSocketSet);
+                _deleteWin(_hWinManagerConSet);
 //                CreateManagerAlarmLog();
             break;
           case WM_NOTIFICATION_RELEASED:
@@ -543,7 +543,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             /**< 跳转至home */
             WM_SetStayOnTop(hWindow,0);
             GUI_EndDialog(hWindow,0);
-            _deleteWin(_hWinManagerSocketSet);
+            _deleteWin(_hWinManagerConSet);
             CreateHomePage();
             // USER END
             break;
@@ -610,11 +610,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin)
 {
-    _hWinManagerSocketSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-    cur_win = _hWinManagerSocketSet;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSocketSet), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSocketSet), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSocketSet), ID_TimerSignal,5000,0);
+    _hWinManagerConSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
+    cur_win = _hWinManagerConSet;
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerFlush,1000,0);
+    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerSignal,5000,0);
+    return _hWinManagerConSet;
 }
 /*************************** End of file ****************************/
 

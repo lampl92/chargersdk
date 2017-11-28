@@ -598,6 +598,7 @@ WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin)
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerFlush,1000,0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerSignal,5000,0);
+    return _hWinManagerSysSet;
 }
 /*************************** End of file ****************************/
 
