@@ -123,7 +123,7 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     memset(tmp,'\0',sizeof(tmp));
     sprintf(tmp,"%d",pechProto->info.ucProtoVer);
     strcat((buf,tmp);
-    LISTVIEW_SetItemText(hItem, 0, 1, sysInfoProtoVer);
+    LISTVIEW_SetItemText(hItem, 0, 1, buf);
     LISTVIEW_AddRow(hItem, NULL);//增加一行
     /**< 软件版本 */
     memset(buf,'\0',sizeof(buf));
