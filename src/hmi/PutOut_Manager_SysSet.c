@@ -88,18 +88,18 @@ static uint8_t _checkbox;
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
 
-#define sysEVSESN "交流桩SN"   \\\"0102030405060708\",\
-#define sysEVSEID "交流桩ID"   \\\"3000000000000002\",\
-#define sysServerIP "服务器IP" \\\ \"123.56.113.123\",\
-#define sysServerPort "服务器端口"   \\\ 6677,\
-#define sysUserName "用户名"   \\\ \"esaasusr\",\
-#define sysUserPwd "用户密码"   \\\ \"esaaspasswrd\",\      *******
-#define sysDispSleepTime "屏保时间" \\\ 60,\n \
-#define sysUSEGPRSModem "GPRS类型"   \\\2,\n \
+#define sysEVSESN "交流桩SN"
+#define sysEVSEID "交流桩ID"
+#define sysServerIP "服务器IP"
+#define sysServerPort "服务器端口"
+#define sysUserName "用户名"
+#define sysUserPwd "用户密码"
+#define sysDispSleepTime "屏保时间"
+#define sysUSEGPRSModem "GPRS类型"
 
 #define sysEVSEName "7kW交流充电桩"
-#define sysProtoVer "协议版本"\\\ 104,\
-#define sysVersion "软件版本"\\\"0.2.1.2552\",\n \
+#define sysProtoVer "协议版本"
+#define sysVersion "软件版本"
 // USER END
 static WM_HWIN hWindow;
 static WM_HWIN _hWinManagerSysSet;
@@ -186,14 +186,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 case 20:
                     if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                     {
-                        //WM_SendMessageNoPara(hWin,MSG_JUMPKEYPAD);
-//                        WM_SetStayOnTop(hWindow,0);
-//                        GUI_EndDialog(hWindow,0);
-//                       _deleteWin(_hWinManagerSysSet);
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,20,hWindow,_hWinManagerSysSet,"交流桩序列号","eg,1122334455667788");
+                        Keypad_GetValueTest(SYSSET_VALUE,20,hWindow,_hWinManagerSysSet,sysEVSESN,"eg,1122334455667788");
                         //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
                         EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
                     }
@@ -204,7 +200,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,21,hWindow,_hWinManagerSysSet,"充电枪个数","eg,1");
+                        Keypad_GetValueTest(SYSSET_VALUE,21,hWindow,_hWinManagerSysSet,sysEVSEID,"eg,1122334455667788");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
                         sprintf(_tmpBuff,"%d",pEVSE->info.ucTotalCON);
                         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
@@ -216,9 +212,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,22,hWindow,_hWinManagerSysSet,"交流电压范围下限","eg,200");
+                        Keypad_GetValueTest(SYSSET_VALUE,22,hWindow,_hWinManagerSysSet,sysServerIP,"eg,192.168.1.101");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
+                        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
                         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
                     }
                 break;
@@ -228,10 +224,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,23,hWindow,_hWinManagerSysSet,"交流电压范围上限","eg,260");
+                        Keypad_GetValueTest(SYSSET_VALUE,23,hWindow,_hWinManagerSysSet,sysServerPort,"eg,8080");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
-                        EDIT_SetText(_aahEdit[2][1],_tmpBuff);
+                        sprintf(_tmpBuff,"%.1f",pechProto->info.usServerPort);
+                        EDIT_SetText(_aahEdit[3][0],_tmpBuff);
                     }
                 break;
                 case 24:
@@ -240,7 +236,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,24,hWindow,_hWinManagerSysSet,"交流电流范围下限","eg,4.0");
+                        Keypad_GetValueTest(SYSSET_VALUE,24,hWindow,_hWinManagerSysSet,sysUserName,"eg,dpc");
+                        EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
                     }
                 break;
                 case 25:
@@ -249,7 +246,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,25,hWindow,_hWinManagerSysSet,"交流电流范围上限","eg,60");
+                        Keypad_GetValueTest(SYSSET_VALUE,25,hWindow,_hWinManagerSysSet,sysUserPwd,"eg,8888");
+                        EDIT_SetText(_aahEdit[5][0],"******");
                     }
                 break;
                 case 26:
@@ -258,103 +256,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         WM_HideWindow(hWindow);
                         WM_HideWindow(_hWinManagerSysSet);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,26,hWindow,_hWinManagerSysSet,"过温告警值","eg,80");
+                        Keypad_GetValueTest(SYSSET_VALUE,26,hWindow,_hWinManagerSysSet,sysDispSleepTime,"eg,5");
                         memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
+                        sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
                         EDIT_SetText(_aahEdit[4][0],_tmpBuff);
                     }
                 break;
-                case 27:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,27,hWindow,_hWinManagerSysSet,"屏保时间","eg,60");
-                    }
-                break;
-                case 28:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,28,hWindow,_hWinManagerSysSet,"电表地址","eg,1");
-                    }
-                break;
-                case 29:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,29,hWindow,_hWinManagerSysSet,"电表波特率","eg,115200");
-                    }
-                break;
-                case 30:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,30,hWindow,_hWinManagerSysSet,"本机IP","eg,192.168.1.14");
-                    }
-                break;
-                case 31:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,31,hWindow,_hWinManagerSysSet,"子网掩码","eg,255.255.255.0");
-                    }
-                break;
-                case 32:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,32,hWindow,_hWinManagerSysSet,"网关","eg,192.168.1.1");
-                    }
-                break;
-                case 33:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,33,hWindow,_hWinManagerSysSet,"MAC地址","eg,01:8a:03:9b:05:09");
-                    }
-                break;
-                case 34:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,34,hWindow,_hWinManagerSysSet,"服务器端口","eg,8080");
-                    }
-                break;
-                case 35:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,35,hWindow,_hWinManagerSysSet,"获取SSID","eg,dpc");
-                    }
-                break;
-                case 36:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
-
-                        Keypad_GetValueTest(SYSSET_VALUE,36,hWindow,_hWinManagerSysSet,"设置密码","eg,dpc123");
-                    }
-                break;
-
             }
             break;
         case WM_PAINT:
@@ -437,6 +344,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 13文本固定id */
         //创建编辑区
         /**< 20-50编辑区ID */
+        xSysconf.GetSysCfg((void *)&xSysconf, NULL);
         _aahText[0][0] = TEXT_CreateEx(30, 20, _FONT_WIDTH*(strlen(sysEVSESN)), 25,hWindow,WM_CF_SHOW,0,13,sysEVSESN);
         _aahEdit[0][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysEVSESN)), 20, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
         EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
@@ -448,37 +356,47 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
 
         _aahText[2][0] = TEXT_CreateEx(30, 260, _FONT_WIDTH*(strlen(sysServerIP)), 25,hWindow,WM_CF_SHOW,0,13,sysServerIP);
-        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,30,strlen("255.255.255.255"));
-        EDIT_SetText(_aahEdit[2][0],pechProto->info.strServerIP);
+        _aahEdit[2][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), 25,hWindow,WM_CF_SHOW,0,22,strlen("255.255.255.255"));
+        memset(_tmpBuff,'\0',strlen(_tmpBuff));
+        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
+        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
 
         _aahText[3][0] = TEXT_CreateEx(30, 380, _FONT_WIDTH*(strlen(sysServerPort)), 25,hWindow,WM_CF_SHOW,0,13,sysServerPort);
-        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerPort)), 380, _WORD_WIDTH*strlen("8080"), 25,hWindow,WM_CF_SHOW,0,34,strlen("8080"));
-        EDIT_SetText(_aahEdit[3][0],pechProto->info.usServerPort);
+        _aahEdit[3][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysServerPort)), 380, _WORD_WIDTH*strlen("8080"), 25,hWindow,WM_CF_SHOW,0,23,strlen("8080"));
+        memset(_tmpBuff,'\0',strlen(_tmpBuff));
+        sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
+        EDIT_SetText(_aahEdit[3][0],_tmpBuff);
 
         _aahText[4][0] = TEXT_CreateEx(30, 410, _FONT_WIDTH*(strlen(sysUserName)), 25,hWindow,WM_CF_SHOW,0,13,sysUserName);
-        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserName)),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,35,strlen("woshinidaye"));
+        _aahEdit[4][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserName)),410, _WORD_WIDTH*strlen("woshinidaye"), 25,hWindow,WM_CF_SHOW,0,24,strlen("woshinidaye"));
         EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
 
         _aahText[5][0] = TEXT_CreateEx(30, 440, _FONT_WIDTH*(strlen(sysUserPwd)), 25,hWindow,WM_CF_SHOW,0,13,sysUserPwd);
-        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserPwd)),440, _WORD_WIDTH*strlen("******"), 25,hWindow,WM_CF_SHOW,0,36,strlen("******"));
+        _aahEdit[5][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysUserPwd)),440, _WORD_WIDTH*strlen("******"), 25,hWindow,WM_CF_SHOW,0,25,strlen("******"));
         EDIT_SetText(_aahEdit[5][0],"******");
 
         _aahText[6][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysDispSleepTime)), 25,hWindow,WM_CF_SHOW,0,13,sysDispSleepTime);
-        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime)), 170, _WORD_WIDTH*(strlen("100")), 25,hWindow,WM_CF_SHOW,0,27,strlen("100"));
+        _aahEdit[6][0] = EDIT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime)), 170, _WORD_WIDTH*(strlen("100")), 25,hWindow,WM_CF_SHOW,0,26,strlen("100"));
         _aahText[6][1] = TEXT_CreateEx(30+_FONT_WIDTH*(strlen(sysDispSleepTime))+_WORD_WIDTH*(strlen("100")), 170, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
-        EDIT_SetText(_aahEdit[6][0],"50");//pEVSE->info.);
+        memset(_tmpBuff,'\0',strlen(_tmpBuff));
+        sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
+        EDIT_SetText(_aahEdit[6][0],_tmpBuff);
 
         _aahText[7][0] = TEXT_CreateEx(30, 170, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), 25,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
         //初始化复选框
+        _checkbox = 0;
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetText(hItem, "2G");
         CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
-        if(xSysconf.xModule.use_gprs == 1)
+        if(xSysconf.xModule.use_gprs == 0)
         {
             CHECKBOX_SetState(hItem,1);
+            bitset(_checkbox,0);
         }
-    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-        xSysconf.ulDispSleepTime_s
+        else
+        {
+            CHECKBOX_SetState(hItem,0);
+        }
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
         CHECKBOX_SetText(hItem, "4G");
@@ -516,13 +434,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 case WM_NOTIFICATION_CLICKED:
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
                     Index = CHECKBOX_GetState(hItem);
-                    if((Index == 1)&&bittest(_checkbox,0))
+                    if((Index == 1)&&(!bittest(_checkbox,0)))
                     {
-
-                        pEVSE->info.SetEVSECfg(pEVSE, jnSocketType, result_input, ParamTypeString);
-                    }
-                    else
-                    {
+                        bitset(_checkbox,0);
+                        bitclr(_checkbox,1);
+                        Index = 0;
+                        xSysconf.SetSysCfg(jnSysUSE_GPRSModem,(void *)&Index,ParamTypeU8);
                     }
                     break;
                 case WM_NOTIFICATION_RELEASED:
@@ -538,13 +455,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 case WM_NOTIFICATION_CLICKED:
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
                     Index = CHECKBOX_GetState(hItem);
-                    if(Index == 1)
+                    if(Index == 1)&&(!bittest(_checkbox,1))
                     {
-
-                    }
-                    else
-                    {
-
+                        bitset(_checkbox,1);
+                        bitclr(_checkbox,0);
+                        Index = 1;
+                        xSysconf.SetSysCfg(jnSysUSE_GPRSModem,(void *)&Index,ParamTypeU8);
                     }
                     break;
 
