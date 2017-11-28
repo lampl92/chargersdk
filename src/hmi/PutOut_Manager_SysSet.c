@@ -96,10 +96,6 @@ static uint8_t _checkbox;
 #define sysUserPwd "用户密码"
 #define sysDispSleepTime "屏保时间"
 #define sysUSEGPRSModem "GPRS类型"
-
-#define sysEVSEName "7kW交流充电桩"
-#define sysProtoVer "协议版本"
-#define sysVersion "软件版本"
 // USER END
 static WM_HWIN hWindow;
 static WM_HWIN _hWinManagerSysSet;
