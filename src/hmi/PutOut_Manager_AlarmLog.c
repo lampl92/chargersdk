@@ -1452,7 +1452,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin)
 {
-    _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
+    _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
     cur_win = _hWinManagerLogDate;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerFlush, 1000, 0);

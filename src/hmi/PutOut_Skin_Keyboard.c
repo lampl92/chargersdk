@@ -1061,11 +1061,11 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);   
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
                 break;
             case 21:
                 tmpU8 = atoi(result_input);
-                pEVSE->info.SetEVSECfg(pEVSE, jnTotalCON, &tmpU8, ParamTypeU8);   
+                pEVSE->info.SetEVSECfg(pEVSE, jnTotalCON, &tmpU8, ParamTypeU8);
                 break;
             case 22:
                 tmpDouble = atof(result_input);
@@ -1078,17 +1078,17 @@ static uint8_t Value_Check()
             case 24://电流下限 去掉
                 break;
             case 25://出场设置额定电流
-            
+
                 break;
             case 26:
                 tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);                
+                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
                 break;
             case 27://背光时间
-                
+
                 break;
             case 28:
-            
+
                 break;
             case 29:
                 break;
@@ -1113,8 +1113,56 @@ static uint8_t Value_Check()
                 break;
             //user miyao
             //pechProto->info.SetProtoCfg(pechProto, jnProtoKey, result_input, ParamTypeString);
-                
-            
+
+
+        }
+        break;
+    case CONSET_VALUE:
+        switch(htmpID)
+        {
+            case 20:
+                tmpU8 = atoi(result_input);
+                pCon->info.SetCONCfg(pCon, jnType, &tmpU8, ParamTypeU8);
+                break;
+            case 21:
+                pEVSE->info.SetEVSECfg(pEVSE, jnSocketType, result_input, ParamTypeString);
+                break;
+            case 22:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 23:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 24://电流上限
+                //tmpDouble = atof(result_input);
+                //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 25://交流输入端子温度上限
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 26:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 27://交流输出端子温度上限
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 28:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                break;
+            case 29:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnRatedCurrent, &tmpDouble, ParamTypeDouble);
+                break;
+            case 30:
+                tmpDouble = atof(result_input);
+                pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
+                break;
         }
         break;
     }
@@ -1162,6 +1210,12 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:
+        bitclr(winCreateFlag, 2);
+        WM_ShowWindow(htmpBK);
+        WM_ShowWindow(htmpChild);
+    break;
+    /**< 添加跳页到设置页 , */
+    case CONSET_VALUE:
         bitclr(winCreateFlag, 2);
         WM_ShowWindow(htmpBK);
         WM_ShowWindow(htmpChild);
@@ -1381,6 +1435,17 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
     break;
 
     case SYSSET_VALUE:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditVar, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditEg, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
+        TEXT_SetText(_aahEditEg,eg_p);
+//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+    break;
+
+    case CONSET_VALUE:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
         TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);

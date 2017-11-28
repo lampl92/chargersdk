@@ -120,11 +120,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //        hWinPage = CreateWindowPage4();
 //        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "费率查询");
 
-//        hWinPage = CreateWindowPage5();
+//        hWinPage = CreateManagerSysSet(pMsg->hWin);
 //        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统配置");
 
-//        hWinPage = CreateWindowPage6();
-//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪A配置");
+        hWinPage = CreateManagerConSet(pMsg->hWin);
+        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪A配置");
+        MULTIPAGE_SelectPage(hItem,0);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

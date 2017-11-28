@@ -95,6 +95,7 @@ WM_HWIN CreateManagerInfoStatus(WM_HWIN srcHwin);
 WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin);
 //WM_HWIN CreateManagerAlarmLog();
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin);
+WM_HWIN CreateManagerConSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerCommon(void);
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
