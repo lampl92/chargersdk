@@ -1063,26 +1063,45 @@ static uint8_t Value_Check()
         {
             case 20:
                 pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
+                memset(pEVSE->info.strSN,'\0',strlen(pEVSE->info.strSN));
+                strcpy(pEVSE->info.strSN,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID0);
                 break;
             case 21:
                 pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                memset(pEVSE->info.strID,'\0',strlen(pEVSE->info.strID));
+                strcpy(pEVSE->info.strID,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID1);
                 break;
             case 22:
                 pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strServerIP,'\0',strlen(pechProto->info.strServerIP));
+                strcpy(pechProto->info.strServerIP,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID2);
                 break;
             case 23://
                 tmpU16 = (uint16_t)atoi(result_input);
                 pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
+                pechProto->info.usServerPort = tmpU16;
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID3);
                 break;
             case 24://user name
                 pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strUserName,'\0',strlen(pechProto->info.strUserName));
+                strcpy(pechProto->info.strUserName,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID4);
                 break;
             case 25://user passwd
                 pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
+                memset(pechProto->info.strUserPwd,'\0',strlen(pechProto->info.strUserPwd));
+                strcpy(pechProto->info.strUserPwd,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID5);
                 break;
             case 26://屏保时间
                 tmpU32 = atoi(result_input);
                 xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+                xSysconf.ulDispSleepTime_s = tmpU32;
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID6);
                 break;
         }
         break;
@@ -1091,47 +1110,68 @@ static uint8_t Value_Check()
         {
             case 20:
                 pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
+                memset(pCon->info.strQRCode,'\0',sizeof(pCon->info.strQRCode));
+                strcpy(pCon->info.strQRCode,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID0);
                 break;
             case 21:
-                pEVSE->info.SetEVSECfg(pEVSE, jnSocketType, result_input, ParamTypeString);
+                pCon->info.SetCONCfg(pCon, jnSocketType, result_input, ParamTypeString);
+                memset(pCon->info.ucSocketType,'\0',sizeof(pCon->info.ucSocketType));
+                strcpy(pCon->info.ucSocketType,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID1);
                 break;
             case 22:
                 tmpDouble = atof(result_input);
+                pCon->info.dVolatageUpperLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID2);
                 break;
             case 23:
                 tmpDouble = atof(result_input);
+                pCon->info.dVolatageLowerLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID3);
                 break;
             case 24://电流上限
                 //tmpDouble = atof(result_input);
                 //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID4);
                 break;
             case 25://交流输入端子温度上限
                 tmpDouble = atof(result_input);
+                pCon->info.dACTempUpperLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID5);
                 break;
             case 26:
                 tmpDouble = atof(result_input);
+                pCon->info.dACTempLowerLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID6);
                 break;
             case 27://交流输出端子温度上限
                 tmpDouble = atof(result_input);
+                pCon->info.dSocketTempUpperLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID7);
                 break;
             case 28:
                 tmpDouble = atof(result_input);
+                pCon->info.dSocketTempLowerLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID8);
                 break;
             case 29:
                 tmpDouble = atof(result_input);
+                pCon->info.dRatedCurrent = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnRatedCurrent, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETID9);
                 break;
             case 30:
                 tmpDouble = atof(result_input);
-                pCon->info.dRatedPower = tmpDouble; 
+                pCon->info.dRatedPower = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
-                WM_SendMessageNoPara(htmpChild, MSG_SYSSETIDF);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETIDA);
                 break;
         }
         break;

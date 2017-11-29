@@ -54,7 +54,22 @@
 #define MSG_SYSSETID4       (GUI_ID_USER + 0x44)
 
 
-#define MSG_SYSSETIDF       (GUI_ID_USER + 0x4F)
+#define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
+#define MSG_MANAGERSETID1       (GUI_ID_USER + 0x41)
+#define MSG_MANAGERSETID2       (GUI_ID_USER + 0x42)
+#define MSG_MANAGERSETID3       (GUI_ID_USER + 0x43)
+#define MSG_MANAGERSETID4       (GUI_ID_USER + 0x44)
+#define MSG_MANAGERSETID5       (GUI_ID_USER + 0x45)
+#define MSG_MANAGERSETID6       (GUI_ID_USER + 0x46)
+#define MSG_MANAGERSETID7       (GUI_ID_USER + 0x47)
+#define MSG_MANAGERSETID8       (GUI_ID_USER + 0x48)
+#define MSG_MANAGERSETID9       (GUI_ID_USER + 0x49)
+#define MSG_MANAGERSETIDA       (GUI_ID_USER + 0x4A)
+#define MSG_MANAGERSETIDB       (GUI_ID_USER + 0x4B)
+#define MSG_MANAGERSETIDC       (GUI_ID_USER + 0x4C)
+#define MSG_MANAGERSETIDD       (GUI_ID_USER + 0x4D)
+#define MSG_MANAGERSETIDE       (GUI_ID_USER + 0x4E)
+#define MSG_MANAGERSETIDF       (GUI_ID_USER + 0x4F)
 
 
 extern uint16_t calebrate_done;

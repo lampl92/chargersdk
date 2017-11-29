@@ -259,6 +259,31 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             GUI_SetBkColor(GUI_WHITE);
             GUI_Clear();
             break;
+        case MSG_SYSSETID0:
+            EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
+            break;
+        case MSG_SYSSETID1:
+            sprintf(_tmpBuff,"%d",pEVSE->info.strID);
+            EDIT_SetText(_aahEdit[1][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID2:
+            sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
+            EDIT_SetText(_aahEdit[2][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID3:
+            sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
+            EDIT_SetText(_aahEdit[3][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID4:
+            EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
+            break;
+        case MSG_SYSSETID5:
+            EDIT_SetText(_aahEdit[5][0],"******");
+            break;
+        case MSG_SYSSETID6:
+            sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
+            EDIT_SetText(_aahEdit[6][0],_tmpBuff);
+            break;
         default:
             WM_DefaultProc(pMsg);
     }

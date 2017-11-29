@@ -120,35 +120,35 @@ static void Data_Flush()
 {
     CON_t *pCon;
     uint8_t _tmpBuff[50];
-    
+
     pCon = CONGetHandle(0);
-    
+
     EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
-        
+
     memset(_tmpBuff, '\0', sizeof(_tmpBuff));
     sprintf(_tmpBuff, "%d", pCon->info.ucSocketType);
     EDIT_SetText(_aahEdit[1][0], _tmpBuff);
-        
+
     EDIT_SetText(_aahEdit[2][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
     EDIT_SetText(_aahEdit[3][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
     EDIT_SetText(_aahEdit[4][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
     EDIT_SetText(_aahEdit[5][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
     EDIT_SetText(_aahEdit[6][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
     EDIT_SetText(_aahEdit[7][0], _tmpBuff);
-       
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
     EDIT_SetText(_aahEdit[8][0], _tmpBuff);
-        
+
     sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
     EDIT_SetText(_aahEdit[9][0], _tmpBuff);
 
@@ -172,7 +172,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     volatile int v = 0;
     uint8_t _tmpBuff[50];
     CON_t *pCon;
-    
+
     pCon = CONGetHandle(0);
 
     switch (pMsg->MsgId)
@@ -352,12 +352,52 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             GUI_SetBkColor(GUI_WHITE);
             GUI_Clear();
             break;
-        case MSG_SYSSETIDF:
+        case MSG_SYSSETID0:
+            EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
+            break;
+        case MSG_SYSSETID1:
+            sprintf(_tmpBuff,"%c",pCon->info.ucSocketType);
+            EDIT_SetText(_aahEdit[1][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID2:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
+            EDIT_SetText(_aahEdit[2][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID3:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
+            EDIT_SetText(_aahEdit[3][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID4:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
+            EDIT_SetText(_aahEdit[4][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID5:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
+            EDIT_SetText(_aahEdit[5][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID6:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
+            EDIT_SetText(_aahEdit[6][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID7:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
+            EDIT_SetText(_aahEdit[7][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID8:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
+            EDIT_SetText(_aahEdit[8][0],_tmpBuff);
+            break;
+        case MSG_SYSSETID9:
+            sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
+            EDIT_SetText(_aahEdit[9][0],_tmpBuff);
+            break;
+        case MSG_SYSSETIDA:
             sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
-            EDIT_SetText(_aahEdit[10][0], _tmpBuff);            
+            EDIT_SetText(_aahEdit[10][0], _tmpBuff);
             break;
         default:
             WM_DefaultProc(pMsg);
+            break;
     }
 }
 /*********************************************************************
@@ -526,25 +566,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         WM_SetStayOnTop(hWindow,1);
         break;
         // USER START (Optionally insert additional message handling)
-    case WM_TIMER:
-//        if(pMsg->Data.v == _timerRTC)
-//        {
-//            /**< 显示时间和日期 */
-//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-//            /**< 重启定时器 */
-//            WM_RestartTimer(pMsg->Data.v, 20);
-//        }
-//        if(pMsg->Data.v == _timerSignal)
-//        {
-//            WM_RestartTimer(pMsg->Data.v, 2000);
-//        }
-        if(pMsg->Data.v == _timerData)
-        {
-            Data_Flush();
-            WM_RestartTimer(pMsg->Data.v,1000);
-        }
-        break;
     case MSG_CREATERRWIN:
         /**< 故障界面不存在则创建,存在则刷新告警 */
         err_window(pMsg->hWin);
@@ -583,9 +604,6 @@ WM_HWIN CreateManagerConSet(WM_HWIN srcHwin)
 {
     _hWinManagerConSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
     cur_win = _hWinManagerConSet;
-//    _timerRTC = WM_CreateTimer(_hWinManagerConSet, ID_TimerTime, 20, 0);
-//    _timerData = WM_CreateTimer(_hWinManagerConSet, ID_TimerFlush,1000,0);
-//    _timerSignal = WM_CreateTimer(_hWinManagerConSet, ID_TimerSignal,5000,0);
     return _hWinManagerConSet;
 }
 /*************************** End of file ****************************/
