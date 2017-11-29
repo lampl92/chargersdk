@@ -50,6 +50,7 @@
 // USER END
 static WM_HWIN _hWinManagerCommon;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
+volatile static int page = 0;
 /*********************************************************************
 *
 *       Static data
@@ -90,7 +91,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    int          page;
     WM_HWIN     hWinPage;
 
     switch (pMsg->MsgId)
@@ -141,27 +141,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
-            page = MULTIPAGE_GetSelection(WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0));
-            switch(page)
-            {
-            case 0:
-                //发送对应页初始化的消息
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            }
+//            page = MULTIPAGE_GetSelection(WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0));
+//            switch(page)
+//            {
+//            case 0:
+//                //发送对应页初始化的消息
+//                WM_SendMessageNoPara(_hWinManagerCommon,0);
+//                break;
+//            case 1:
+//                WM_SendMessageNoPara(_hWinManagerCommon, 1);
+//                break;
+//            case 2:
+//                break;
+//            case 3:
+//                break;
+//            case 4:
+//                break;
+//            case 5:
+//                break;
+//            case 6:
+//                break;
+//            case 7:
+//                break;
+//            }
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
