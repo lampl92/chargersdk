@@ -100,7 +100,7 @@ static WM_HWIN _hWinManagerInfoAnalog;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 40, 800, 300, 0, 0x0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 800, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -127,36 +127,36 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 
     sprintf(strTmp,"%.1f",pCon->status.dChargingVoltage);
     strcat(strTmp,"V");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 1, 0, strTmp);
 
     sprintf(strTmp,"%.1f",pCon->status.dChargingCurrent);
     strcat(strTmp,"A");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 3, 0, strTmp);
 
     /**< 控制导引电压确认 */
     sprintf(strTmp,"%.1f",Sys_samp.DC.CP1);
     strcat(strTmp,"V");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 1, 1, strTmp);
 
     sprintf(strTmp,"%.1f",pCon->status.dChargingFrequence);
     strcat(strTmp,"Hz");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 3, 1, strTmp);
 
     sprintf(strTmp,"%.1f",pCon->status.dACLTemp);
     strcat(strTmp,"℃");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 1, 2, strTmp);
 
     sprintf(strTmp,"%.1f",pCon->status.dACNTemp);
     strcat(strTmp,"℃");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 3, 2, strTmp);
 
     sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);//acl or acn
     strcat(strTmp,"℃");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 1, 3, strTmp);
 
     sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp2);
     strcat(strTmp, "℃");
-    LISTVIEW_SetItemText(hItem, 0, 0, strTmp);
+    LISTVIEW_SetItemText(hItem, 3, 3, strTmp);
 }
 
 /*********************************************************************
@@ -215,12 +215,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         HEADER_SetFont(hHeader, &SIF16_Font);
 
         /*srollbar*/
-        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
-        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
-        SCROLLBAR_SetWidth(hScroll,20);
-        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
-        SCROLLBAR_SetWidth(wScroll,20);
+//        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
+//        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
+//        SCROLLBAR_SetWidth(hScroll,20);
+//        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+//        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
+//        SCROLLBAR_SetWidth(wScroll,20);
         /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
@@ -233,13 +233,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
         }
-        /*状态量   状态值     状态量     状态值     状态量     状态值*/
+        /*模拟量   模拟值     模拟量     模拟值*/
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 工作状态 */
