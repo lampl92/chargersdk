@@ -8,6 +8,7 @@
 #include "WM.h"
 #include "BUTTON.h"
 #include "cfg_parse.h"
+#include "touchtimer.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -1128,7 +1129,9 @@ static uint8_t Value_Check()
                 break;
             case 30:
                 tmpDouble = atof(result_input);
+                pCon->info.dRatedPower = tmpDouble; 
                 pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_SYSSETIDF);
                 break;
         }
         break;

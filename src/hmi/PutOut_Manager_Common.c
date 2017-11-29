@@ -48,7 +48,7 @@
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
 // USER END
-static WM_HWIN _hWinManagerCommon;
+WM_HWIN _hWinManagerCommon;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 volatile static int page = 0;
 /*********************************************************************
@@ -71,7 +71,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-	{ MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 0, 0, 800, 320, 0, 0x0, 0 },//multipage
+	{ MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 0, 0, 800, 360, 0, 0x0, 0 },//multipage
 };
 
 /*********************************************************************
@@ -106,7 +106,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //初始化所有的page
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
-        MULTIPAGE_SetFont(hItem, &SIF16_Font);
+        MULTIPAGE_SetFont(hItem, &SIF24_Font);
 
         hWinPage = CreateManagerInfoAnalog(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "模拟量");

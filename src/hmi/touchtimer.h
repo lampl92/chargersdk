@@ -28,7 +28,11 @@
 #define GUI_MANAGER_XLEFT 30    //管理员界面左上角X位置
 #define GUI_MANAGER_YLEFT 20    //管理员界面左上角Y位置
 
-#define GUI_MANAGER_YOFF 25     //管理员界面相关配置中每行的宽度
+#define GUI_MANAGER_YOFF 40     //管理员界面相关配置中每行的宽度
+#define GUI_MANAGER_YSIZE 35    //管理员界面相关配置中每行的edit的宽度
+#define HSCROLL_WIDTH   30  //水平滑轮宽度
+#define WSCROLL_WIDTH   30  //垂直滑轮宽度
+
 /*********************自定义GUI消息的宏******************************
 **
 ** GUI_ID_USER + 0x30 - 0x3F 可定义16个消息
@@ -41,6 +45,17 @@
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
+
+
+#define MSG_SYSSETID0       (GUI_ID_USER + 0x40)
+#define MSG_SYSSETID1       (GUI_ID_USER + 0x41)
+#define MSG_SYSSETID2       (GUI_ID_USER + 0x42)
+#define MSG_SYSSETID3       (GUI_ID_USER + 0x43)
+#define MSG_SYSSETID4       (GUI_ID_USER + 0x44)
+
+
+#define MSG_SYSSETIDF       (GUI_ID_USER + 0x4F)
+
 
 extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;
@@ -58,6 +73,7 @@ void _cbHomeDialog(WM_MESSAGE *pMsg);
 extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
+extern WM_HWIN _hWinManagerCommon;
 enum{
     _HOMEPAGE,
     _CARDINFOPAGE,

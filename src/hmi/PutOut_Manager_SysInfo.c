@@ -79,9 +79,12 @@
 #define CHARGE_COLUMNS  20
 #define DB_DEBUG    0
 
+#define sysInfoName "系统信息"
 #define sysInfoEVSEName "系统名称:7kW交流充电桩"
 #define sysInfoProtoVer "协议版本:"
 #define sysInfoVersion "软件版本:"
+
+#define GUI_MANAGERSYSINFO_XLENTH 400
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
@@ -93,7 +96,7 @@ static WM_HWIN _hWinManagerSysInfo;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 40, 800, 300, 0, 0x0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 800, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, GUI_MANAGERSYSINFO_XLENTH, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -189,12 +192,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         HEADER_SetFont(hHeader, &SIF16_Font);
 
         /*srollbar*/
-        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
-        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
-        SCROLLBAR_SetWidth(hScroll,20);
-        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
-        SCROLLBAR_SetWidth(wScroll,20);
+//        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
+//        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
+//        SCROLLBAR_SetWidth(hScroll,20);
+//        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+//        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
+//        SCROLLBAR_SetWidth(wScroll,20);
         /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
@@ -207,7 +210,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
         }
-        /*增加一列*/
+        
+        /*增加一列*/        
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 7kW交流充电桩 */
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);

@@ -35,13 +35,13 @@
 ********************************************************************
 */
 /*编辑窗口14行1列，状态项14个*/
-#define _SYSEDIT_MAX_X 5
-#define _SYSEDIT_MAX_Y 16
-#define _SYSSTATUE_LINE 20
-#define _SYSSTATUE_CAL 5
+#define _SYSEDIT_MAX_X 2
+#define _SYSEDIT_MAX_Y 11
+#define _SYSSTATUE_LINE 11
+#define _SYSSTATUE_CAL 3
 //后续将编辑和文本的滚轮方式用链表进行封装
-#define _FONT_WIDTH 7
-#define _WORD_WIDTH 12
+#define _FONT_WIDTH 24
+#define _WORD_WIDTH 20
 static uint8_t _aahSysSet[_SYSEDIT_MAX_Y];
 static EDIT_Handle   _aahEdit[_SYSEDIT_MAX_Y][_SYSEDIT_MAX_X];
 static TEXT_Handle   _aahText[_SYSSTATUE_LINE][_SYSSTATUE_CAL];
@@ -61,12 +61,6 @@ static int _x,_y;
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//信息
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//历史
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//系统
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//退出
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//模拟
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//状态
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -105,7 +99,6 @@ static int _x,_y;
 static WM_HWIN hWindow;
 static WM_HWIN _hWinManagerConSet;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
-
 /*********************************************************************
 *
 *       Static data
@@ -120,8 +113,50 @@ static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 20, 40, 700, 300, 0, 0x0, 0  },
 };
+
+static void Data_Flush()
+{
+    CON_t *pCon;
+    uint8_t _tmpBuff[50];
+    
+    pCon = CONGetHandle(0);
+    
+    EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
+        
+    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+    sprintf(_tmpBuff, "%d", pCon->info.ucSocketType);
+    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
+        
+    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
+    EDIT_SetText(_aahEdit[5][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
+    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
+    EDIT_SetText(_aahEdit[7][0], _tmpBuff);
+       
+    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
+    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
+        
+    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+    EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+
+    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+    EDIT_SetText(_aahEdit[10][0], _tmpBuff);
+
+}
+
 /*******************************************************************
 *
 *       _cbWindow
@@ -137,6 +172,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     volatile int v = 0;
     uint8_t _tmpBuff[50];
     CON_t *pCon;
+    
     pCon = CONGetHandle(0);
 
     switch (pMsg->MsgId)
@@ -182,132 +218,132 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         }
                     }
                 break;
-                case 20:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        //WM_SendMessageNoPara(hWin,MSG_JUMPKEYPAD);
-//                        WM_SetStayOnTop(hWindow,0);
-//                        GUI_EndDialog(hWindow,0);
-//                       _deleteWin(_hWinManagerConSet);
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
-                        Keypad_GetValueTest(CONSET_VALUE,20,hWindow,_hWinManagerConSet,conQRCode,"eg,200000000000003");
-                        //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
-                        EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
-                    }
+            case 20:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    //WM_SendMessageNoPara(hWin,MSG_JUMPKEYPAD);
+                    //                        WM_SetStayOnTop(_hWinManagerConSet,0);
+                    //                        GUI_EndDialog(_hWinManagerConSet,0);
+                    //                       _deleteWin(_hWinManagerCommon);
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(CONSET_VALUE, 20, _hWinManagerConSet, _hWinManagerCommon, conQRCode, "eg,200000000000003");
+                    //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
+                    EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
+                }
                 break;
-                case 21:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 21:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,21,hWindow,_hWinManagerConSet,conSocketType,"eg,66");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%d",pCon->info.ucSocketType);
-                        EDIT_SetText(_aahEdit[1][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 21, _hWinManagerConSet, _hWinManagerCommon, conSocketType, "eg,66");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%d", pCon->info.ucSocketType);
+                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
+                }
                 break;
-                case 22:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 22:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,22,hWindow,_hWinManagerConSet,conVolatageUpperLimits,"eg,250");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
-                        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 22, _hWinManagerConSet, _hWinManagerCommon, conVolatageUpperLimits, "eg,250");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
+                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
+                }
                 break;
-                case 23:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 23:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,23,hWindow,_hWinManagerConSet,conVolatageLowerLimits,"eg,190");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
-                        EDIT_SetText(_aahEdit[3][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 23, _hWinManagerConSet, _hWinManagerCommon, conVolatageLowerLimits, "eg,190");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
+                }
                 break;
-                case 24:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 24:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,24,hWindow,_hWinManagerConSet,conACCurrentUpperLimits,"eg,38");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
-                        EDIT_SetText(_aahEdit[4][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 24, _hWinManagerConSet, _hWinManagerCommon, conACCurrentUpperLimits, "eg,38");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
+                }
                 break;
-                case 25:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 25:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,25,hWindow,_hWinManagerConSet,conACTempUpperLimits,"eg,105");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
-                        EDIT_SetText(_aahEdit[5][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet, _hWinManagerCommon, conACTempUpperLimits, "eg,105");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
+                    EDIT_SetText(_aahEdit[5][0], _tmpBuff);
+                }
                 break;
-                case 26:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 26:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,26,hWindow,_hWinManagerConSet,conACTempLowerLimits,"eg,-40");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
-                        EDIT_SetText(_aahEdit[6][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conACTempLowerLimits, "eg,-40");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
+                    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
+                }
                 break;
-                case 27:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 27:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,27,hWindow,_hWinManagerConSet,conSocketTempUpperLimits,"eg,105");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
-                        EDIT_SetText(_aahEdit[7][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 27, _hWinManagerConSet, _hWinManagerCommon, conSocketTempUpperLimits, "eg,105");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
+                    EDIT_SetText(_aahEdit[7][0], _tmpBuff);
+                }
                 break;
-                case 28:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 28:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,28,hWindow,_hWinManagerConSet,conSocketTempLowerLimits,"eg,-40");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
-                        EDIT_SetText(_aahEdit[8][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 28, _hWinManagerConSet, _hWinManagerCommon, conSocketTempLowerLimits, "eg,-40");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
+                    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
+                }
                 break;
-                case 29:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 29:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,29,hWindow,_hWinManagerConSet,conRatedCurrent,"eg,32");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
-                        EDIT_SetText(_aahEdit[9][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 29, _hWinManagerConSet, _hWinManagerCommon, conRatedCurrent, "eg,32");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+                    EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+                }
                 break;
-                case 30:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerConSet);
+            case 30:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerConSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(CONSET_VALUE,30,hWindow,_hWinManagerConSet,conRatedPower,"7");
-                        sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
-                        EDIT_SetText(_aahEdit[10][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(CONSET_VALUE, 30, _hWinManagerConSet, _hWinManagerCommon, conRatedPower, "7");
+                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+                    EDIT_SetText(_aahEdit[10][0], _tmpBuff);
+                }
                 break;
             }
             break;
@@ -315,6 +351,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             /**< 绘制滑轮围绕区颜色 */
             GUI_SetBkColor(GUI_WHITE);
             GUI_Clear();
+            break;
+        case MSG_SYSSETIDF:
+            sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+            EDIT_SetText(_aahEdit[10][0], _tmpBuff);            
             break;
         default:
             WM_DefaultProc(pMsg);
@@ -331,7 +371,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    int x, y;
+    int x, y,_editxoff = 0;
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     char _tmpBuff[50];
@@ -351,7 +391,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         if(_hWinManagerConSet == cur_win)
         {
             /**< 数据处理 */
-            //Data_Process(pMsg);
+//            Data_Flush();
             /**< 信号数据处理 */
             Signal_Show();
             /**< 灯光控制 */
@@ -371,92 +411,97 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _x = 0;
         _y = 0;
         // 创建窗口250
-        hWindow = WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0);//WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
-        //创建水平滑轮
-        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
-        //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(hScroll, _SYSEDIT_MAX_X);
-        //设置页尺寸
-        //SCROLLBAR_SetPageSize(hScroll, 220);
-        SCROLLBAR_SetWidth(hScroll,20);
+        hWindow = pMsg->hWin;//WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
+        WM_SetCallback(pMsg->hWin,&_cbWindow);
+//        //创建水平滑轮
+//        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
+//        //设置滑轮条目数量
+//        SCROLLBAR_SetNumItems(hScroll, _SYSEDIT_MAX_X);
+//        //设置页尺寸
+//        //SCROLLBAR_SetPageSize(hScroll, 220);
+//        SCROLLBAR_SetWidth(hScroll,HSCROLL_WIDTH);
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(wScroll, 25*10);
+        SCROLLBAR_SetNumItems(wScroll, 25*8);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
-        SCROLLBAR_SetWidth(wScroll,20);
+        SCROLLBAR_SetWidth(wScroll,WSCROLL_WIDTH);
 
         //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
         /**< 13文本固定id */
         //创建编辑区
         /**< 20-50编辑区ID */
         //枪类型
+        _editxoff = GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conQRCode)) + 100;
+        //可以创建一个固定长度的text 和 edit
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conQRCode);
-        _aahEdit[0][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("2000000000000003")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));
+        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("2000000000000003")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));
         EDIT_SetText(_aahEdit[0][0],pCon->info.strQRCode);
         //枪锁类型
+//        _aahText[1][0] = strlen(conQRCode); //= 6// qrcode
+//        _aahEdit[1][0] = strlen(conSocketType);// = 12 枪锁类型
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(conSocketType)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketType);
-        _aahEdit[1][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketType)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("255")) , GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,21,strlen("255"));
+        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("255")) , GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,21,strlen("255"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%d",pCon->info.ucSocketType);
+        sprintf(_tmpBuff,"%c",pCon->info.ucSocketType);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
         //电压上限
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(conVolatageUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conVolatageUpperLimits);
-        _aahEdit[2][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageUpperLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
-        _aahText[2][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageUpperLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
+        _aahEdit[2][0] = EDIT_CreateEx(_editxoff,GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
+        _aahText[2][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
         //电压下限
         _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _FONT_WIDTH*(strlen(conVolatageLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conVolatageLowerLimits);
-        _aahEdit[3][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageLowerLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,23,strlen("255.5"));
-        _aahText[3][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conVolatageLowerLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
+        _aahEdit[3][0] = EDIT_CreateEx(_editxoff,GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,23,strlen("255.5"));
+        _aahText[3][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3,_WORD_WIDTH*(strlen(" V")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," V");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
         EDIT_SetText(_aahEdit[3][0],_tmpBuff);
         //电流上限
         _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _FONT_WIDTH*(strlen(conACCurrentUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACCurrentUpperLimits);
-        _aahEdit[4][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACCurrentUpperLimits)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,24,strlen("255.5"));
-        _aahText[4][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACCurrentUpperLimits))+_WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4,_WORD_WIDTH*(strlen(" A")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," A");
+        _aahEdit[4][0] = EDIT_CreateEx(_editxoff,GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,24,strlen("255.5"));
+        _aahText[4][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4,_WORD_WIDTH*(strlen(" A")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," A");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         /// TODO (zshare#1#): 电流上限设置值？？？？？
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[4][0],_tmpBuff);
         //交流输入端子温度上限
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACTempUpperLimits);
-        _aahEdit[5][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,25,strlen("145.4"));
-        _aahText[5][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,25,strlen("145.4"));
+        _aahText[5][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
         EDIT_SetText(_aahEdit[5][0],_tmpBuff);
         //交流输入端子温度下限
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen(conACTempLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACTempLowerLimits);
-        _aahEdit[6][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempLowerLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,26,strlen("145.4"));
-        _aahText[6][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conACTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,26,strlen("145.4"));
+        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
         //交流输出端子温度上限
         _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketTempUpperLimits);
-        _aahEdit[7][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,27,strlen("145.4"));
-        _aahText[7][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempUpperLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,27,strlen("145.4"));
+        _aahText[7][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
         EDIT_SetText(_aahEdit[7][0],_tmpBuff);
         //交流输出端子温度下限
         _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _FONT_WIDTH*(strlen(conSocketTempLowerLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketTempLowerLimits);
-        _aahEdit[8][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempLowerLimits)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,28,strlen("145.4"));
-        _aahText[8][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conSocketTempLowerLimits))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
+        _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,28,strlen("145.4"));
+        _aahText[8][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
         EDIT_SetText(_aahEdit[8][0],_tmpBuff);
         //额定电流
         _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedCurrent);
-        _aahEdit[9][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,29,strlen("145.4"));
-        _aahText[9][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedCurrent))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"A");
+        _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,29,strlen("145.4"));
+        _aahText[9][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"A");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[9][0],_tmpBuff);
         //额定功率
         _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedPower);
-        _aahEdit[10][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
-        _aahText[10][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conRatedPower))+_WORD_WIDTH*strlen("145.4"), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
+        _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
+        _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0],_tmpBuff);
 
@@ -464,7 +509,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             for(y = 0;y < _SYSSTATUE_CAL;y++)
             {
-                TEXT_SetFont(_aahText[x][y], &SIF16_Font);
+                TEXT_SetFont(_aahText[x][y], &SIF24_Font);
                 TEXT_SetTextColor(_aahText[x][y], GUI_BLACK);
             }
         }
@@ -474,104 +519,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             for (x = 0; x < _SYSEDIT_MAX_X; x++)
             {
                 EDIT_SetTextAlign(_aahEdit[y][x], GUI_TA_HCENTER | GUI_TA_VCENTER);
-                EDIT_SetFont(_aahEdit[y][x], &SIF16_Font);
+                EDIT_SetFont(_aahEdit[y][x], &SIF24_Font);
                 WIDGET_SetEffect(_aahEdit[y][x], &WIDGET_Effect_3D);//不需要设置的就改成 &WIDGET_Effect_None模式
             }
         }
         WM_SetStayOnTop(hWindow,1);
         break;
-    case WM_NOTIFY_PARENT:
-        Id    = WM_GetId(pMsg->hWinSrc);
-        NCode = pMsg->Data.v;
-
-        switch(Id) {
-        case ID_BUTTON_0: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-                /**< 跳转到信息查询 */
-                WM_SetStayOnTop(hWindow,0);
-                GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerConSet);
-                //CreateManagerInfoAnalog();
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_1: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-                /**< 跳转到历史记录查询 */
-                WM_SetStayOnTop(hWindow,0);
-                GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerConSet);
-//                CreateManagerAlarmLog();
-            break;
-          case WM_NOTIFICATION_RELEASED:
-
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_2: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_3: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            /**< 跳转至home */
-            WM_SetStayOnTop(hWindow,0);
-            GUI_EndDialog(hWindow,0);
-            _deleteWin(_hWinManagerConSet);
-            CreateHomePage();
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        }
-        break;
         // USER START (Optionally insert additional message handling)
     case WM_TIMER:
-        if(pMsg->Data.v == _timerRTC)
-        {
-            /**< 显示时间和日期 */
-            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< 重启定时器 */
-            WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
         if(pMsg->Data.v == _timerData)
         {
-            //Data_Flush(pMsg);
-            //Status_Content_Analy();
-            WM_RestartTimer(pMsg->Data.v,3000);
+            Data_Flush();
+            WM_RestartTimer(pMsg->Data.v,1000);
         }
         break;
     case MSG_CREATERRWIN:
@@ -612,9 +583,9 @@ WM_HWIN CreateManagerConSet(WM_HWIN srcHwin)
 {
     _hWinManagerConSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
     cur_win = _hWinManagerConSet;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerConSet), ID_TimerSignal,5000,0);
+//    _timerRTC = WM_CreateTimer(_hWinManagerConSet, ID_TimerTime, 20, 0);
+//    _timerData = WM_CreateTimer(_hWinManagerConSet, ID_TimerFlush,1000,0);
+//    _timerSignal = WM_CreateTimer(_hWinManagerConSet, ID_TimerSignal,5000,0);
     return _hWinManagerConSet;
 }
 /*************************** End of file ****************************/

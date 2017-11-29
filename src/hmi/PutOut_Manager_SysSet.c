@@ -40,8 +40,8 @@
 #define _SYSSTATUE_LINE 20
 #define _SYSSTATUE_CAL 5
 //后续将编辑和文本的滚轮方式用链表进行封装
-#define _FONT_WIDTH 7
-#define _WORD_WIDTH 12
+#define _FONT_WIDTH 24
+#define _WORD_WIDTH 20
 static uint8_t _aahSysSet[_SYSEDIT_MAX_Y];
 static EDIT_Handle   _aahEdit[_SYSEDIT_MAX_Y][_SYSEDIT_MAX_X];
 static TEXT_Handle   _aahText[_SYSSTATUE_LINE][_SYSSTATUE_CAL];
@@ -61,12 +61,6 @@ static uint8_t _checkbox;
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//信息
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//历史
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//系统
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//退出
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//模拟
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//状态
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -115,9 +109,9 @@ static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
-	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)) + 90, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 20, 40, 700, 300, 0, 0x0, 0 },
+//	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
+//	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)) + 90, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
 };
 /*******************************************************************
 *
@@ -179,84 +173,84 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                         }
                     }
                 break;
-                case 20:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 20:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,20,hWindow,_hWinManagerSysSet,sysEVSESN,"eg,1122334455667788");
-                        //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
-                        EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "eg,1122334455667788");
+                    //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
+                    EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
+                }
                 break;
-                case 21:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 21:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,21,hWindow,_hWinManagerSysSet,sysEVSEID,"eg,1122334455667788");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%d",pEVSE->info.strID);
-                        EDIT_SetText(_aahEdit[1][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "eg,1122334455667788");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
+                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
+                }
                 break;
-                case 22:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 22:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,22,hWindow,_hWinManagerSysSet,sysServerIP,"eg,192.168.1.101");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
-                        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "eg,192.168.1.101");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
+                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
+                }
                 break;
-                case 23:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 23:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,23,hWindow,_hWinManagerSysSet,sysServerPort,"eg,8080");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%.1f",pechProto->info.usServerPort);
-                        EDIT_SetText(_aahEdit[3][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "eg,8080");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
+                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
+                }
                 break;
-                case 24:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 24:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,24,hWindow,_hWinManagerSysSet,sysUserName,"eg,dpc");
-                        EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "eg,dpc");
+                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
+                }
                 break;
-                case 25:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 25:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,25,hWindow,_hWinManagerSysSet,sysUserPwd,"eg,8888");
-                        EDIT_SetText(_aahEdit[5][0],"******");
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "eg,8888");
+                    EDIT_SetText(_aahEdit[5][0], "******");
+                }
                 break;
-                case 26:
-                    if(pMsg->Data.v == WM_NOTIFICATION_CLICKED)
-                    {
-                        WM_HideWindow(hWindow);
-                        WM_HideWindow(_hWinManagerSysSet);
+            case 26:
+                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                        Keypad_GetValueTest(SYSSET_VALUE,26,hWindow,_hWinManagerSysSet,sysDispSleepTime,"eg,5");
-                        memset(_tmpBuff,'\0',sizeof(_tmpBuff));
-                        sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
-                        EDIT_SetText(_aahEdit[4][0],_tmpBuff);
-                    }
+                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "eg,5");
+                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
+                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
+                }
                 break;
             }
             break;
@@ -280,7 +274,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    int x, y,Index;
+    int x, y,Index,_editxoff = 0;
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     char _tmpBuff[50];
@@ -293,87 +287,89 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        //LCD_SetCursor(0,200);
-        WM_SetFocus(pMsg->hWin);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerSysSet == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerSysSet == cur_win)
-            {
-                /**< 故障分析 */
-                /// TODO (zshare#1#): 滑轮页均不对故障处理.故障界面被滑轮页覆盖
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
+//        //LCD_SetCursor(0,200);
+//        WM_SetFocus(pMsg->hWin);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerSysSet == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerSysSet == cur_win)
+//            {
+//                /**< 故障分析 */
+//                /// TODO (zshare#1#): 滑轮页均不对故障处理.故障界面被滑轮页覆盖
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
         break;
     case WM_INIT_DIALOG:
         _x = 0;
         _y = 0;
         // 创建窗口250
-        hWindow = WM_GetDialogItem(pMsg->hWin, ID_WINDOW_0);//WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
+        hWindow = pMsg->hWin;//WM_CreateWindow(230, 70, 520, 350, WM_CF_SHOW, &_cbWindow, 0);
+        WM_SetCallback(pMsg->hWin, &_cbWindow);
         //创建水平滑轮
-        hScroll = SCROLLBAR_CreateAttached(hWindow, 0);//水平滑轮
-        //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(hScroll, _SYSEDIT_MAX_X);
-        //设置页尺寸
-        //SCROLLBAR_SetPageSize(hScroll, 220);
-        SCROLLBAR_SetWidth(hScroll,20);
+//        hScroll = SCROLLBAR_CreateAttached(pMsg->hWin, 0);//水平滑轮
+//        //设置滑轮条目数量
+//        SCROLLBAR_SetNumItems(hScroll, _SYSEDIT_MAX_X);
+//        //设置页尺寸
+//        //SCROLLBAR_SetPageSize(hScroll, 220);
+//        SCROLLBAR_SetWidth(hScroll,20);
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
         SCROLLBAR_SetNumItems(wScroll, 25*10);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
-        SCROLLBAR_SetWidth(wScroll,20);
+        SCROLLBAR_SetWidth(wScroll,WSCROLL_WIDTH);
 
         //创建文本区 -- 24号字体 4-96 5-120 6-144 7-168 8-192
         /**< 13文本固定id */
         //创建编辑区
         /**< 20-50编辑区ID */
+        _editxoff = GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysServerPort))/3;
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysEVSESN);
-        _aahEdit[0][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("1122334455667788")), 25,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
+        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,20,strlen("1122334455667788"));
         EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
 
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysEVSEID);
-        _aahEdit[1][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysEVSEID)), 50, _WORD_WIDTH*(strlen("1122334455667788")) , GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,21,strlen("1122334455667788"));
+        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("1122334455667788"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pEVSE->info.strID);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
 
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(sysServerIP)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerIP);
-        _aahEdit[2][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysServerIP)),260, _WORD_WIDTH*(strlen("255.255.255.255")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,22,strlen("255.255.255.255"));
+        _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("255.255.255.255")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("255.255.255.255"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
         EDIT_SetText(_aahEdit[2][0],_tmpBuff);
 
         _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerPort);
-        _aahEdit[3][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _WORD_WIDTH*strlen("8080"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,23,strlen("8080"));
+        _aahEdit[3][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*strlen("8080"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 23, strlen("8080"));
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
         EDIT_SetText(_aahEdit[3][0],_tmpBuff);
 
         _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _FONT_WIDTH*(strlen(sysUserName)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUserName);
-        _aahEdit[4][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysUserName)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4, _WORD_WIDTH*strlen("woshinidaye"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,24,strlen("woshinidaye"));
+        _aahEdit[4][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _WORD_WIDTH*strlen("woshinidaye"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 24, strlen("woshinidaye"));
         EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
 
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _FONT_WIDTH*(strlen(sysUserPwd)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUserPwd);
-        _aahEdit[5][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysUserPwd)),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*strlen("******"), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,25,strlen("******"));
+        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*strlen("******"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, strlen("******"));
         EDIT_SetText(_aahEdit[5][0],"******");
 
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysDispSleepTime);
-        _aahEdit[6][0] = EDIT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,26,strlen("100"));
-        _aahText[6][1] = TEXT_CreateEx(GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(sysDispSleepTime))+_WORD_WIDTH*(strlen("100")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _FONT_WIDTH*(strlen("分")), 25,hWindow,WM_CF_SHOW,0,13,"分");
+        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("100"));
+        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "分");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
@@ -403,7 +399,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             for(y = 0;y < _SYSSTATUE_CAL;y++)
             {
-                TEXT_SetFont(_aahText[x][y], &SIF16_Font);
+                TEXT_SetFont(_aahText[x][y], &SIF24_Font);
                 TEXT_SetTextColor(_aahText[x][y], GUI_BLACK);
             }
         }
@@ -413,7 +409,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             for (x = 0; x < _SYSEDIT_MAX_X; x++)
             {
                 EDIT_SetTextAlign(_aahEdit[y][x], GUI_TA_HCENTER | GUI_TA_VCENTER);
-                EDIT_SetFont(_aahEdit[y][x], &SIF16_Font);
+                EDIT_SetFont(_aahEdit[y][x], &SIF24_Font);
             }
         }
 
@@ -468,72 +464,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
             }
             break;
-        case ID_BUTTON_0: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-                /**< 跳转到信息查询 */
-                WM_SetStayOnTop(hWindow,0);
-                GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerSysSet);
-                //CreateManagerInfoAnalog();
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_1: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-                /**< 跳转到历史记录查询 */
-                WM_SetStayOnTop(hWindow,0);
-                GUI_EndDialog(hWindow,0);
-                _deleteWin(_hWinManagerSysSet);
-//                CreateManagerAlarmLog();
-            break;
-          case WM_NOTIFICATION_RELEASED:
-
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_2: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
-        case ID_BUTTON_3: // Notifications sent by 'Button'
-          switch(NCode) {
-          case WM_NOTIFICATION_CLICKED:
-            // USER START (Optionally insert code for reacting on notification message)
-            // USER END
-            break;
-          case WM_NOTIFICATION_RELEASED:
-            // USER START (Optionally insert code for reacting on notification message)
-            /**< 跳转至home */
-            WM_SetStayOnTop(hWindow,0);
-            GUI_EndDialog(hWindow,0);
-            _deleteWin(_hWinManagerSysSet);
-            CreateHomePage();
-            // USER END
-            break;
-          // USER START (Optionally insert additional code for further notification handling)
-          // USER END
-          }
-          break;
         }
         break;
         // USER START (Optionally insert additional message handling)
