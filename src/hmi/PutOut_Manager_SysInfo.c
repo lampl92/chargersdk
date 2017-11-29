@@ -210,8 +210,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
         }
-        
-        /*增加一列*/        
+
+        /*增加一列*/
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行

@@ -126,6 +126,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hWinPage = CreateManagerSysInfo(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
 
+//        hWinPage = CreateManagerExit(pMsg->hWin);
+//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "退出管理员");
+
         MULTIPAGE_SelectPage(hItem,0);
 
         break;
@@ -141,29 +144,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
-//            page = MULTIPAGE_GetSelection(WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0));
-//            switch(page)
-//            {
-//            case 0:
-//                //发送对应页初始化的消息
+            page = MULTIPAGE_GetSelection(WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0));
+            switch(page)
+            {
+            case 0:
+                //发送对应页初始化的消息
 //                WM_SendMessageNoPara(_hWinManagerCommon,0);
-//                break;
-//            case 1:
+                break;
+            case 1:
 //                WM_SendMessageNoPara(_hWinManagerCommon, 1);
-//                break;
-//            case 2:
-//                break;
-//            case 3:
-//                break;
-//            case 4:
-//                break;
-//            case 5:
-//                break;
-//            case 6:
-//                break;
-//            case 7:
-//                break;
-//            }
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            }
             // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
