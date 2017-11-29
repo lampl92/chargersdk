@@ -241,19 +241,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         break;
     }
     case WM_TIMER:
-        if(pMsg->Data.v == _timerRTC)
-        {
-            /**< 显示时间和日期 */
-            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< 重启定时器 */
-            WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
         if(pMsg->Data.v == _timerData)
         {
             Status_Content_Analy(pMsg);
@@ -296,7 +296,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin)
 {
     _hWinManagerSysInfo = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerTime, 20, 0);
+//    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerFlush,1000,0);
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
     return _hWinManagerSysInfo;

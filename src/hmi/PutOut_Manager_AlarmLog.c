@@ -1415,38 +1415,38 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     }
-    case WM_TIMER:
-        if(pMsg->Data.v == _timerRTC)
-        {
-            /**< 显示时间和日期 */
-            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< 重启定时器 */
-            WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-            //Data_Flush(pMsg);
-            WM_RestartTimer(pMsg->Data.v,5000);
-        }
-        break;
-    case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
-        break;
-    case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if(bittest(winCreateFlag,0))
-        {
-            bitclr(winCreateFlag,0);
-            GUI_EndDialog(err_hItem,0);
-            err_hItem = 0;
-        }
-        break;
+//    case WM_TIMER:
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            //Data_Flush(pMsg);
+//            WM_RestartTimer(pMsg->Data.v,5000);
+//        }
+//        break;
+//    case MSG_CREATERRWIN:
+//        /**< 故障界面不存在则创建,存在则刷新告警 */
+//        err_window(pMsg->hWin);
+//        break;
+//    case MSG_DELERRWIN:
+//        /**< 故障界面存在则删除故障界面 */
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            GUI_EndDialog(err_hItem,0);
+//            err_hItem = 0;
+//        }
+//        break;
     default:
         WM_DefaultProc(pMsg);
         break;

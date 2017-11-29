@@ -423,30 +423,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
     switch (pMsg->MsgId)
     {
-    case WM_PAINT:
-        //LCD_SetCursor(0,200);
-        WM_SetFocus(pMsg->hWin);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerConSet == cur_win)
-        {
-            /**< 数据处理 */
-//            Data_Flush();
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerConSet == cur_win)
-            {
-                /**< 故障分析 */
-                /// TODO (zshare#1#): 滑轮页均不对故障处理.故障界面被滑轮页覆盖
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
-        break;
+//    case WM_PAINT:
+//        //LCD_SetCursor(0,200);
+//        WM_SetFocus(pMsg->hWin);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerConSet == cur_win)
+//        {
+//            /**< 数据处理 */
+////            Data_Flush();
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerConSet == cur_win)
+//            {
+//                /**< 故障分析 */
+//                /// TODO (zshare#1#): 滑轮页均不对故障处理.故障界面被滑轮页覆盖
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
+//        break;
     case WM_INIT_DIALOG:
         _x = 0;
         _y = 0;
@@ -566,19 +566,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         WM_SetStayOnTop(hWindow,1);
         break;
         // USER START (Optionally insert additional message handling)
-    case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
-        break;
-    case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if(bittest(winCreateFlag,0))
-        {
-            bitclr(winCreateFlag,0);
-            GUI_EndDialog(err_hItem,0);
-            err_hItem = 0;
-        }
-        break;
+//    case MSG_CREATERRWIN:
+//        /**< 故障界面不存在则创建,存在则刷新告警 */
+//        err_window(pMsg->hWin);
+//        break;
+//    case MSG_DELERRWIN:
+//        /**< 故障界面存在则删除故障界面 */
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            GUI_EndDialog(err_hItem,0);
+//            err_hItem = 0;
+//        }
+//        break;
     default:
         WM_DefaultProc(pMsg);
         break;

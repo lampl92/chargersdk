@@ -492,39 +492,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
         // USER START (Optionally insert additional message handling)
-    case WM_TIMER:
-        if(pMsg->Data.v == _timerRTC)
-        {
-            /**< 显示时间和日期 */
-            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< 重启定时器 */
-            WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-            //Data_Flush(pMsg);
-            //Status_Content_Analy();
-            WM_RestartTimer(pMsg->Data.v,3000);
-        }
-        break;
-    case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
-        break;
-    case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if(bittest(winCreateFlag,0))
-        {
-            bitclr(winCreateFlag,0);
-            GUI_EndDialog(err_hItem,0);
-            err_hItem = 0;
-        }
-        break;
+//    case WM_TIMER:
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            //Data_Flush(pMsg);
+//            //Status_Content_Analy();
+//            WM_RestartTimer(pMsg->Data.v,3000);
+//        }
+//        break;
+//    case MSG_CREATERRWIN:
+//        /**< 故障界面不存在则创建,存在则刷新告警 */
+//        err_window(pMsg->hWin);
+//        break;
+//    case MSG_DELERRWIN:
+//        /**< 故障界面存在则删除故障界面 */
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            GUI_EndDialog(err_hItem,0);
+//            err_hItem = 0;
+//        }
+//        break;
     default:
         WM_DefaultProc(pMsg);
         break;
@@ -550,9 +550,9 @@ WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin)
 {
     _hWinManagerSysSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
     cur_win = _hWinManagerSysSet;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerSignal,5000,0);
+//    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerTime, 20, 0);
+//    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerFlush,1000,0);
+//    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerSignal,5000,0);
     return _hWinManagerSysSet;
 }
 /*************************** End of file ****************************/
