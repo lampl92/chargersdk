@@ -91,7 +91,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
         bitset(EventChargeDoneFlag, 0);
     }
 
-    if ((orderFinish == 1) && pCON->status.xPlugState == UNPLUG)
+ //   if ((orderFinish == 1) && pCON->status.xPlugState == UNPLUG)
+    if ((orderFinish == 1))
     {
         if (first_flag == 0)
         {
@@ -103,7 +104,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
         diffsec = (uint32_t)difftime(now, first);
 
-        sec = 1 - diffsec;
+        sec = 3 - diffsec;
         if (sec < 0)
             sec = 0;
         sprintf((char *)_secDown, "(%02dS)", sec);

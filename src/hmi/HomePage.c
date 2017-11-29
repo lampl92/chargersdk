@@ -51,7 +51,12 @@ static void Data_Process(WM_MESSAGE *pMsg)
         pdTRUE,
         pdTRUE,
         0);
-    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI) && (SignalIntensity > 0))
+//    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI) && (SignalIntensity > 0))
+//    {
+//        WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
+//    }
+    
+    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI))
     {
         WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
     }
