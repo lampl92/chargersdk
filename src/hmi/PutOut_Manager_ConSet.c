@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *

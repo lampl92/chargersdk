@@ -1,4 +1,4 @@
-/*********************************************************************
+ï»¿/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -52,12 +52,12 @@
 #define ID_TEXT_3     (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4     (GUI_ID_USER + 0x0E)
 
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ÐÅÏ¢
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//ÀúÊ·
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ÏµÍ³
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//ÍË³ö
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//Ä£Äâ
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//×´Ì¬
+#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//ä¿¡æ¯
+#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//åŽ†å²
+#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//ç³»ç»Ÿ
+#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//é€€å‡º
+#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//æ¨¡æ‹Ÿ
+#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//çŠ¶æ€
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
 #define ID_TEXT_6  (GUI_ID_USER + 0x08)//
@@ -79,9 +79,9 @@
 #define CHARGE_COLUMNS  20
 #define DB_DEBUG    0
 
-#define sysInfoEVSEName "ÏµÍ³Ãû³Æ:7kW½»Á÷³äµç×®"
-#define sysInfoProtoVer "Ð­Òé°æ±¾:"
-#define sysInfoVersion "Èí¼þ°æ±¾:"
+#define sysInfoEVSEName "ç³»ç»Ÿåç§°:7kWäº¤æµå……ç”µæ¡©"
+#define sysInfoProtoVer "åè®®ç‰ˆæœ¬:"
+#define sysInfoVersion "è½¯ä»¶ç‰ˆæœ¬:"
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
@@ -102,7 +102,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 *
 **********************************************************************
 */
-/** @brief ×´Ì¬ÄÚÈÝ±à¼­·ÖÎö
+/** @brief çŠ¶æ€å†…å®¹ç¼–è¾‘åˆ†æž
  *
  * @param
  * @param
@@ -117,15 +117,15 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     WM_HWIN hItem;
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-    /**< Ð­Òé°æ±¾ */
+    /**< åè®®ç‰ˆæœ¬ */
     memset(buf,'\0',sizeof(buf));
     strcpy(buf,sysInfoProtoVer);
     memset(tmp,'\0',sizeof(tmp));
     sprintf(tmp,"%d",pechProto->info.ucProtoVer);
     strcat(buf,tmp);
     LISTVIEW_SetItemText(hItem, 0, 1, buf);
-    LISTVIEW_AddRow(hItem, NULL);//Ôö¼ÓÒ»ÐÐ
-    /**< Èí¼þ°æ±¾ */
+    LISTVIEW_AddRow(hItem, NULL);//å¢žåŠ ä¸€è¡Œ
+    /**< è½¯ä»¶ç‰ˆæœ¬ */
     memset(buf,'\0',sizeof(buf));
     strcpy(buf,sysInfoVersion);
     strcpy(buf,xSysconf.strVersion);
@@ -159,47 +159,47 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_PAINT:
 //        WM_SetFocus(_hWinManagerAlarmLog);
-//        /// TODO (zshare#1#): ÏÂÃæµÄif²»Æð×÷ÓÃ.\
-//        µ«ÊÇifÀïÇ¶Ì×µÄifÆð×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æð×÷ÓÃµÄif
+//        /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.\
+//        ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
 //        if(_hWinManagerAlarmLog == cur_win)
 //        {
-//            /**< Êý¾Ý´¦Àí */
+//            /**< æ•°æ®å¤„ç† */
 //            //Data_Process(pMsg);
-//            /**< ÐÅºÅÊý¾Ý´¦Àí */
+//            /**< ä¿¡å·æ•°æ®å¤„ç† */
 //            Signal_Show();
-//            /**< µÆ¹â¿ØÖÆ */
+//            /**< ç¯å…‰æŽ§åˆ¶ */
 //            Led_Show();
-//            /**< Èç¹û½çÃæ·¢ÉúÁËÇÐ»» */
+//            /**< å¦‚æžœç•Œé¢å‘ç”Ÿäº†åˆ‡æ¢ */
 //            if(_hWinManagerAlarmLog == cur_win)
 //            {
-//                /**< ¹ÊÕÏ·ÖÎö */
+//                /**< æ•…éšœåˆ†æž */
 //                //Err_Analy(pMsg->hWin);
-//                /**< ÌØÊâ´¥¿Øµã·ÖÎö */
+//                /**< ç‰¹æ®Šè§¦æŽ§ç‚¹åˆ†æž */
 //                CaliDone_Analy(pMsg->hWin);
 //            }
 //        }
         break;
     case WM_INIT_DIALOG:
         //
-        // ³õÊ¼ÁÐ±í¿Ø¼þ
+        // åˆå§‹åˆ—è¡¨æŽ§ä»¶
         //
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-        /* ÉèÖÃÁÐ±í¿Ø¼þÖÐheader¿Ø¼þµÄËùÏÔÊ¾ÎÄ±¾µÄ×ÖÌå */
+        /* è®¾ç½®åˆ—è¡¨æŽ§ä»¶ä¸­headeræŽ§ä»¶çš„æ‰€æ˜¾ç¤ºæ–‡æœ¬çš„å­—ä½“ */
         hHeader = LISTVIEW_GetHeader(hItem);
         HEADER_SetFont(hHeader, &SIF16_Font);
 
         /*srollbar*/
-        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//Ë®Æ½»¬ÂÖ
+        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//æ°´å¹³æ»‘è½®
         SCROLLBAR_SetNumItems(hScroll, 30 * 4);
         SCROLLBAR_SetWidth(hScroll,20);
-        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//´¹Ö±»¬ÂÖ
+        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//åž‚ç›´æ»‘è½®
         SCROLLBAR_SetNumItems(wScroll, 30 * 20);
         SCROLLBAR_SetWidth(wScroll,20);
         /*end*/
 
-        /* ÉèÖÃÁÐ±í¿Ø¼þÑ¡ÏîÖÐËùÏÔÊ¾ÎÄ±¾µÄ×ÖÌå */
+        /* è®¾ç½®åˆ—è¡¨æŽ§ä»¶é€‰é¡¹ä¸­æ‰€æ˜¾ç¤ºæ–‡æœ¬çš„å­—ä½“ */
         LISTVIEW_SetFont(hItem, &SIF16_Font);
-        /* ÉèÖÃÁÐ±í¿Ø¼þ±í¸ñ¿É¼û */
+        /* è®¾ç½®åˆ—è¡¨æŽ§ä»¶è¡¨æ ¼å¯è§ */
         LISTVIEW_SetGridVis(hItem, 1);
 
         column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
@@ -207,21 +207,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
         }
-        /*Ôö¼ÓÒ»ÁÐ*/
-        LISTVIEW_AddRow(hItem, NULL);//Ôö¼ÓÒ»ÐÐ
-        /**< 7kW½»Á÷³äµç×® */
+        /*å¢žåŠ ä¸€åˆ—*/
+        LISTVIEW_AddRow(hItem, NULL);//å¢žåŠ ä¸€è¡Œ
+        /**< 7kWäº¤æµå……ç”µæ¡© */
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);
         LISTVIEW_SetItemText(hItem, 0, 0, sysInfoEVSEName);
-        LISTVIEW_AddRow(hItem, NULL);//Ôö¼ÓÒ»ÐÐ
-        /**< Ð­Òé°æ±¾ */
+        LISTVIEW_AddRow(hItem, NULL);//å¢žåŠ ä¸€è¡Œ
+        /**< åè®®ç‰ˆæœ¬ */
         memset(buf,'\0',sizeof(buf));
         strcpy(buf,sysInfoProtoVer);
         memset(tmp,'\0',sizeof(tmp));
         sprintf(tmp,"%d",pechProto->info.ucProtoVer);
         strcat(buf,tmp);
         LISTVIEW_SetItemText(hItem, 0, 1, buf);
-        LISTVIEW_AddRow(hItem, NULL);//Ôö¼ÓÒ»ÐÐ
-        /**< Èí¼þ°æ±¾ */
+        LISTVIEW_AddRow(hItem, NULL);//å¢žåŠ ä¸€è¡Œ
+        /**< è½¯ä»¶ç‰ˆæœ¬ */
         memset(buf,'\0',sizeof(buf));
         strcpy(buf,sysInfoVersion);
         strcpy(buf,xSysconf.strVersion);
@@ -237,10 +237,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if(pMsg->Data.v == _timerRTC)
         {
-            /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
+            /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
             Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
            // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< ÖØÆô¶¨Ê±Æ÷ */
+            /**< é‡å¯å®šæ—¶å™¨ */
             WM_RestartTimer(pMsg->Data.v, 20);
         }
         if(pMsg->Data.v == _timerSignal)
@@ -255,11 +255,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     case MSG_CREATERRWIN:
-        /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ÐÂ¸æ¾¯ */
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
         err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ý¹ÊÕÏ½çÃæ */
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
         if(bittest(winCreateFlag,0))
         {
             bitclr(winCreateFlag,0);
@@ -281,7 +281,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 
 /** @brief
- *  Êä³ö¹ÜÀíÔ±½çÃæÀïµÄÐÅÏ¢×´Ì¬Á¿²¿·Ö
+ *  è¾“å‡ºç®¡ç†å‘˜ç•Œé¢é‡Œçš„ä¿¡æ¯çŠ¶æ€é‡éƒ¨åˆ†
  * @param
  * @param
  * @return

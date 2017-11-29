@@ -137,14 +137,15 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "TO", ID_TEXT_6, 400, 40, 50, 20, 0, 0x0, 0 },
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_4, 500, 25, 20, 50, 0, 0x0, 0 },
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_5, 525, 25, 20, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "查询时间", ID_BUTTON_3, 20, 20, 80, 20, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "查询告警", ID_BUTTON_4, 550, 20, 80, 30, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "查询充电", ID_BUTTON_5, 550, 52, 80, 30, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
 {
-    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+//    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+//    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
 };
 
 
@@ -1033,6 +1034,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /* 设置列表控件表格可见 */
         LISTVIEW_SetGridVis(hItem, 1);
         WM_HideWindow(hItem);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        WM_HideWindow(hItem);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -1115,10 +1119,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
-            /**< 跳转至home */
-//            _deleteWin(_hWinManagerAlarmLog);
-            CreateHomePage();
-            // USER END
+              //隐藏查询时间button，listview，展示时间滚轮
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_0));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_1));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_2));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_3));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_4));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_5));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
+
+              WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
+              WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+              // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
           // USER END
@@ -1146,6 +1161,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
             WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
 
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
             WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 
             /**< get到现有表格的行列数 */
@@ -1220,6 +1236,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
             WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
 
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
             WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 
             column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
