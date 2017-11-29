@@ -106,7 +106,7 @@ static WM_HWIN _hWinManagerInfoStatus;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -334,12 +334,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         HEADER_SetFont(hHeader, &SIF16_Font);
 
         /*srollbar*/
-        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
-        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
-        SCROLLBAR_SetWidth(hScroll,20);
-        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
-        SCROLLBAR_SetWidth(wScroll,20);
+//        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
+//        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
+//        SCROLLBAR_SetWidth(hScroll,20);
+//        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+//        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
+//        SCROLLBAR_SetWidth(wScroll,20);
         /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
