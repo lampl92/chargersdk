@@ -91,6 +91,124 @@ ErrorCode_t  AddOrderCfg(char *path, CON_t *pCON, echProtocol_t *pProto)
     return errcode;
 }
 
+ErrorCode_t GetOrderCfgItem(void *pvCfgObj, uint32_t i, char *jnItemName, void *pvCfgItem, uint8_t type)
+{
+    cJSON *jsItem;
+    ErrorCode_t errcode;
+    
+    jsItem = cJSON_GetArrayItem(pvCfgObj, i);
+    if (jsItem == NULL)
+    {
+        errcode = ERR_FILE_PARSE;
+        goto err_return;
+    }
+    switch (type)
+    {       
+    case ParamTypeU8:
+        *((uint8_t *)pvCfgItem) = (uint8_t)(jsItem->valueint);
+        break;
+    case ParamTypeU16:
+        *((uint16_t *)pvCfgItem) = (uint16_t)(jsItem->valueint);
+        break;
+    case ParamTypeU32:
+        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valueint);
+        break;    
+    case ParamTypeS32:
+        *((int32_t *)pvCfgItem) = (int32_t)(jsItem->valueint);
+        break;
+    case ParamTypeDouble:
+        *((double *)pvCfgItem) = (double)(jsItem->valuedouble);
+        break;
+    case ParamTypeString:
+        strcpy((uint8_t *)pvCfgItem, jsItem->valuestring);
+        break;
+    default:
+        break;
+    }
+err_return:
+    return errcode;
+}
+
+ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
+{
+    cJSON *jsParent;
+    cJSON *jsChild;
+    ErrorCode_t errcode;
+    uint32_t ulMaxItem;
+    int i;
+    uint8_t ucPayStatus;
+    char strCardID[17] = { 0 };
+    double dStopPower;
+    
+    jsParent = GetCfgObj(path, &errcode);
+    if (jsParent == NULL)
+    {
+        return errcode;
+    }
+    ulMaxItem  = cJSON_GetArraySize(jsParent);
+    
+    for (i = 0; i < ulMaxItem; i++)
+    {
+        errcode = GetOrderCfgItem(jsParent, i, jnOrderPayStatus, &ucPayStatus, ParamTypeU8);
+        if (errcode != ERR_NO)
+        {
+            cJSON_Delete(jsParent);
+            return errcode;
+        }
+        if (ucPayStatus == 0)
+        {
+            break;
+        }
+    }
+    if (i < ulMaxItem)
+    {
+        GetOrderCfgItem(jsParent, i, jnOrderStartType, &pOrder->ucStartType, ParamTypeU8);
+        GetOrderCfgItem(jsParent, i, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
+        GetOrderCfgItem(jsParent, i, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
+        pOrder->ucCONID = pOrder->ucCONID - 1;
+        GetOrderCfgItem(jsParent, i, jnOrderCardID, strCardID, ParamTypeString);
+        StrToHex(strCardID, pOrder->ucCardID, strlen(strCardID));
+        GetOrderCfgItem(jsParent, i, jnOrderStartPower, &pOrder->dStartPower, ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderStopPower, &dStopPower, ParamTypeDouble);
+        pOrder->dTotalPower = dStopPower - pOrder->dStartPower;
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPowerFee, &pOrder->dTotalPowerFee, ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalServFee, &pOrder->dTotalServFee, ParamTypeDouble);
+
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPower_sharp, &pOrder->dSegTotalPower[0], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPowerFee_sharp, &pOrder->dSegTotalPowerFee[0], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalServFee_sharp, &pOrder->dSegTotalServFee[0], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalTime_sharp, &pOrder->ulSegTotalTime[0], ParamTypeDouble);
+        
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPower_peak, &pOrder->dSegTotalPower[1], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPowerFee_peak, &pOrder->dSegTotalPowerFee[1], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalServFee_peak, &pOrder->dSegTotalServFee[1], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalTime_peak, &pOrder->ulSegTotalTime[1], ParamTypeDouble);
+        
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPower_shoulder, &pOrder->dSegTotalPower[2], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPowerFee_shoulder, &pOrder->dSegTotalPowerFee[2], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalServFee_shoulder, &pOrder->dSegTotalServFee[2], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalTime_shoulder, &pOrder->ulSegTotalTime[2], ParamTypeDouble);
+        
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPower_off_peak, &pOrder->dSegTotalPower[3], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalPowerFee_off_peak, &pOrder->dSegTotalPowerFee[3], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalServFee_off_peak, &pOrder->dSegTotalServFee[3], ParamTypeDouble);
+        GetOrderCfgItem(jsParent, i, jnOrderTotalTime_off_peak, &pOrder->ulSegTotalTime[3], ParamTypeDouble);
+        
+        GetOrderCfgItem(jsParent, i, jnOrderStartTime, &pOrder->tStartTime, ParamTypeU32);
+        GetOrderCfgItem(jsParent, i, jnOrderStopType, &pOrder->ucStopType, ParamTypeU8);
+        GetOrderCfgItem(jsParent, i, jnOrderPayStatus, &pOrder->ucPayStatus, ParamTypeU8);
+        GetOrderCfgItem(jsParent, i, jnOrderStopTime, &pOrder->tStopTime, ParamTypeU32);
+    }
+    else
+    {
+        cJSON_Delete(jsParent);
+        return ERR_OTHER;
+    }
+    cJSON_DeleteItemFromArray(jsParent, i);
+    errcode = SetCfgObj(path, jsParent);
+    
+    return errcode;
+}
 int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
 {
     cJSON *jsParent;
