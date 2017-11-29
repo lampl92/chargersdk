@@ -128,7 +128,7 @@ static uint8_t list_end_index[3];
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 290, 25, 43, 50, 0, 0x0, 0 },
     { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 340, 25, 20, 50, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Date", ID_TEXT_5, 243, 40, 50, 31, 0, 0x0, 0 },

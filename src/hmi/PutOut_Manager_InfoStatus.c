@@ -354,11 +354,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         /*状态量   状态值     状态量     状态值     状态量     状态值*/
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 工作状态 */
