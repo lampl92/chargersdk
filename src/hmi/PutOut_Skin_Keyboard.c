@@ -1031,7 +1031,7 @@ static uint8_t Value_Check()
 
     pCon = CONGetHandle(0);
 
-    memset(result_input,'\0',strlen(result_input));
+    memset(result_input,'\0',sizeof(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
 
     switch(ManagerSetOptions)
