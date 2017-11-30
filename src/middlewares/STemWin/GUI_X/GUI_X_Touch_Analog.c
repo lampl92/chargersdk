@@ -148,7 +148,10 @@ int  GUI_TOUCH_X_MeasureX(void)
         else if ((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40))
         {
             step = 2;
-            bitset(calebrate_done, 7);//管理员
+            if (!bittest(calebrate_done, 8))
+            {
+                bitset(calebrate_done, 7);//管理员
+            }
         }
         else
         {

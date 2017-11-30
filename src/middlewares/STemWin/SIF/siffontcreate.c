@@ -23,7 +23,7 @@ u8 *GetFont_Info(u8 *fxpath)
 {
     int fd;
     int result;
-	u16 bread;
+	u32 bread;
     int fsize;
     struct yaffs_stat st;
 	u8 *FontBuffer;
