@@ -69,7 +69,9 @@ static void Data_Process(WM_MESSAGE *pMsg)
         pdTRUE,
         pdTRUE,
         0);
-    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
+    //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
+    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//订单上传完成
+
     {
         if (pCON->order.ucStopType == defOrderStopType_Full)
         {
@@ -267,8 +269,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     PreSignalIntensity = SignalIntensity;
                     SignalFlag = 0;
                 }
-                    SignalFlag++;
-                /**< 重启定时器 */
+                SignalFlag++;
+/**< 重启定时器 */
                 WM_RestartTimer(pMsg->Data.v, 300);
             }
             break;

@@ -42,21 +42,15 @@ static void Data_Process(WM_MESSAGE *pMsg)
 {
     CON_t *pCON;
     EventBits_t uxBitRFID;
+    
     WM_HWIN hWin = pMsg->hWin;
     pCON = CONGetHandle(0);
-    SignalIntensity = getSignalIntensity();
+    
     /*如果刷卡，发送跳页消息*/
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-        defEventBitGotIDtoHMI,
-        pdTRUE,
-        pdTRUE,
-        0);
-//    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI) && (SignalIntensity > 0))
-//    {
-//        WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
-//    }
-    
-    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI))
+                                defEventBitGotIDtoHMI,  
+                                pdTRUE, pdTRUE, 0);    
+    if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
         WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
     }
