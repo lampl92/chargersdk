@@ -96,7 +96,7 @@ WM_HWIN _hWinManagerSysInfo;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 40, 800, 300, 0, 0x0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, GUI_MANAGERSYSINFO_XLENTH, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, GUI_MANAGERSYSINFO_XLENTH, 180, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -189,7 +189,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
         /* 设置列表控件中header控件的所显示文本的字体 */
         hHeader = LISTVIEW_GetHeader(hItem);
-        HEADER_SetFont(hHeader, &SIF16_Font);
+        HEADER_SetFont(hHeader, &SIF36_Font);
 
         /*srollbar*/
 //        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
@@ -201,7 +201,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
-        LISTVIEW_SetFont(hItem, &SIF16_Font);
+        LISTVIEW_SetFont(hItem, &SIF36_Font);
         /* 设置列表控件表格可见 */
         LISTVIEW_SetGridVis(hItem, 1);
 

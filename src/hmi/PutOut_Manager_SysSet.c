@@ -263,12 +263,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
             break;
         case MSG_MANAGERSETID1:
-            sprintf(_tmpBuff,"%d",pEVSE->info.strID);
-            EDIT_SetText(_aahEdit[1][0],_tmpBuff);
+            EDIT_SetText(_aahEdit[1][0], pEVSE->info.strID);
             break;
         case MSG_MANAGERSETID2:
-            sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
-            EDIT_SetText(_aahEdit[2][0],_tmpBuff);
+            EDIT_SetText(_aahEdit[2][0], pechProto->info.strServerIP);
             break;
         case MSG_MANAGERSETID3:
             sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
@@ -351,7 +349,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(wScroll, 25*10);
+        SCROLLBAR_SetNumItems(wScroll, 25*5);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
         SCROLLBAR_SetWidth(wScroll,WSCROLL_WIDTH);
@@ -368,15 +366,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysEVSEID);
         _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("1122334455667788"));
-        memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%d",pEVSE->info.strID);
-        EDIT_SetText(_aahEdit[1][0],_tmpBuff);
+        EDIT_SetText(_aahEdit[1][0], pEVSE->info.strID);
 
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(sysServerIP)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerIP);
         _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("255.255.255.255")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("255.255.255.255"));
-        memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
-        EDIT_SetText(_aahEdit[2][0],_tmpBuff);
+//        memset(_tmpBuff,'\0',strlen(_tmpBuff));
+//        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
+        EDIT_SetText(_aahEdit[2][0], pechProto->info.strServerIP);
 
         _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*3, _FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysServerPort);
         _aahEdit[3][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*strlen("8080"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 23, strlen("8080"));
@@ -400,7 +396,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
         //GPRS模块选择 暂时不能设置 需要将设置项进行两种分类，一种模拟量 一种状态量
         _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
-        _aahEdit[7][1] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("2G")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("2G"));
+        _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("2G")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 27, strlen("2G"));
+        EDIT_SetText(_aahEdit[7][0], "2G");
+        EDIT_SetBkColor(_aahEdit[7][0], EDIT_CI_ENABLED, GUI_GRAY);
           //初始化复选框
 //        _checkbox = 0;
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
@@ -436,6 +434,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 EDIT_SetTextAlign(_aahEdit[y][x], GUI_TA_HCENTER | GUI_TA_VCENTER);
                 EDIT_SetFont(_aahEdit[y][x], &SIF24_Font);
+                WIDGET_SetEffect(_aahEdit[y][x], &WIDGET_Effect_3D);//不需要设置的就改成 &WIDGET_Effect_None模式
             }
         }
 

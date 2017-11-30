@@ -228,8 +228,6 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
                     Keypad_GetValueTest(CONSET_VALUE, 20, _hWinManagerConSet, _hWinManagerCommon, conQRCode, "eg,200000000000003");
-                    //Keypad_GetValue(CONSET_VALUE,"交流桩序列号");
-                    EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
                 }
                 break;
             case 21:
@@ -238,10 +236,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(CONSET_VALUE, 21, _hWinManagerConSet, _hWinManagerCommon, conSocketType, "eg,66");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%d", pCon->info.ucSocketType);
-                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
+                    Keypad_GetValueTest(CONSET_VALUE, 21, _hWinManagerConSet, _hWinManagerCommon, conSocketType, "Note: B or C");
                 }
                 break;
             case 22:
@@ -271,12 +266,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             case 24:
                 if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 24, _hWinManagerConSet, _hWinManagerCommon, conACCurrentUpperLimits, "eg,38");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
-                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
+                    //电流过流值不可设 == 由额定电流计算得到
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 24, _hWinManagerConSet, _hWinManagerCommon, conACCurrentUpperLimits, "eg,38");
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+//                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
                 }
                 break;
             case 25:
@@ -326,23 +322,19 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             case 29:
                 if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 29, _hWinManagerConSet, _hWinManagerCommon, conRatedCurrent, "eg,32");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
-                    EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 29, _hWinManagerConSet, _hWinManagerCommon, conRatedCurrent, "eg,32");
                 }
                 break;
             case 30:
                 if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 30, _hWinManagerConSet, _hWinManagerCommon, conRatedPower, "7");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
-                    EDIT_SetText(_aahEdit[10][0], _tmpBuff);
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 30, _hWinManagerConSet, _hWinManagerCommon, conRatedPower, "7");
                 }
                 break;
             }
@@ -506,8 +498,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[4][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")),GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*4,_WORD_WIDTH*(strlen(" A")),GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13," A");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         /// TODO (zshare#1#): 电流上限设置值？？？？？
-        sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
+        sprintf(_tmpBuff,"%.1f",(pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[4][0], EDIT_CI_ENABLED, GUI_GRAY);
         //交流输入端子温度上限
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conACTempUpperLimits);
         _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,25,strlen("145.4"));
@@ -538,12 +531,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[9][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"A");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[9][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[9][0], EDIT_CI_ENABLED, GUI_GRAY);
         //额定功率
         _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedPower);
         _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
         _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {

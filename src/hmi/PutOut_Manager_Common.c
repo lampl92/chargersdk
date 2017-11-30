@@ -149,7 +149,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_RELEASED:
                 WM_SendMessageNoPara(_hWinManagerInfoAnalog, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerInfoStatus, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerLog, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerLogDate, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);

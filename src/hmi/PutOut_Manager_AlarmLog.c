@@ -86,8 +86,8 @@
 // 01  2017-06-07 12:13:34  2017-06-08 12:13:23  急停故障"
 //};
 // USER END
-static WM_HWIN _hWinManagerLogDate;
-WM_HWIN _hWinManagerLog;
+WM_HWIN _hWinManagerLogDate;
+static WM_HWIN _hWinManagerLog;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
 /*********************************************************************
@@ -128,19 +128,25 @@ static uint8_t list_end_index[3];
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
+#define LISTWHEEL_XLEFTOFF  80 
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
     { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 290, 25, 43, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 340, 25, 20, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Date", ID_TEXT_5, 243, 40, 50, 31, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_2, 365, 25, 20, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_3, 450, 25, 43, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "TO", ID_TEXT_6, 400, 40, 50, 20, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_4, 500, 25, 20, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_5, 525, 25, 20, 50, 0, 0x0, 0 },
+    
+    { TEXT_CreateIndirect, "Date", ID_TEXT_5, 100 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
+
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 190 - LISTWHEEL_XLEFTOFF, 60, 90, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 280 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_2, 330 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+
+    { TEXT_CreateIndirect, "TO", ID_TEXT_6, 400 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
+
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_3, 490 - LISTWHEEL_XLEFTOFF, 60, 90, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_4, 580 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_5, 630 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    
     { BUTTON_CreateIndirect, "查询时间", ID_BUTTON_3, 20, 20, 80, 20, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "查询告警", ID_BUTTON_4, 550, 20, 80, 30, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "查询充电", ID_BUTTON_5, 550, 52, 80, 30, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "查询告警", ID_BUTTON_4, 700 - LISTWHEEL_XLEFTOFF, 100, 160, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "查询充电", ID_BUTTON_5, 700 - LISTWHEEL_XLEFTOFF, 170, 160, 40, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
@@ -934,16 +940,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // 初始化window 选择查询时间段日期的window
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF16_Font,GUI_BLACK,"起始");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF16_Font,GUI_BLACK,"终止");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF36_Font, GUI_BLACK, "信息");//起始");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_BLACK, "信息");//终止");
         //
         // Initialization of 'Button'
         //
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
         //
         // Initialization of 'Listwheel'
         //
@@ -952,10 +958,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0+i);
             //设置字体
-            LISTWHEEL_SetFont(hItem,&GUI_FontComic18B_ASCII);
+            LISTWHEEL_SetFont(hItem, &SIF36_Font);//GUI_FontComic36B_ASCII);
             LISTWHEEL_SetTextAlign(hItem,GUI_TA_VCENTER | GUI_TA_VERTICAL);
             //设置吸附位置
-            LISTWHEEL_SetSnapPosition(hItem,15);
+            LISTWHEEL_SetSnapPosition(hItem,80);
             //设置绘制数据项所使用的行高
         //        LISTWHEEL_SetLineHeight(hItem,30);
             //设置选中的条目的文本颜色

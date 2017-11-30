@@ -84,7 +84,7 @@ extern uint8_t AdvertisementRecordFlag;
 extern WM_HWIN _hWinManagerCommon;
 extern WM_HWIN _hWinManagerInfoAnalog;
 extern WM_HWIN _hWinManagerInfoStatus;
-extern WM_HWIN _hWinManagerLog;
+extern WM_HWIN _hWinManagerLogDate;
 extern WM_HWIN _hWinManagerConSet;
 extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
