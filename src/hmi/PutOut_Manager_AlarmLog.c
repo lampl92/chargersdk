@@ -176,7 +176,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
 	if(0 == log_type)   //故障记录
     {
-        jsParent = GetCfgObj("system\\evse.log", &errcode);
+        jsParent = GetCfgObj(pathEVSELog, &errcode);
         if (jsParent == NULL)
         {
             cJSON_Delete(jsParent);
@@ -242,7 +242,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     }
     else if(1 == log_type)
     {
-        jsParent = GetCfgObj("system\\order.txt", &errcode);
+        jsParent = GetCfgObj(pathOrder, &errcode);
         if (jsParent == NULL)
         {
             cJSON_Delete(jsParent);
@@ -940,8 +940,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //
         // 初始化window 选择查询时间段日期的window
         //
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF36_Font, GUI_BLACK, "信息");//起始");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_BLACK, "信息");//终止");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF36_Font, GUI_BLACK, "起始");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_BLACK, "终止");
         //
         // Initialization of 'Button'
         //
