@@ -106,7 +106,7 @@ WM_HWIN _hWinManagerInfoStatus;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 480, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 540, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -146,61 +146,61 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	/**< 急停状态 */
 	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
 	{
-		LISTVIEW_SetItemText(hItem, 3, 0, "按下");
+    	LISTVIEW_SetItemText(hItem, 3, 0, "×");//"按下");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 3, 0, "正常");
+    	LISTVIEW_SetItemText(hItem, 3, 0, "√");//"正常");
 	}
 
 	/**< 电表通信 */
 	if ((pcont->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
 	{
-		LISTVIEW_SetItemText(hItem, 5, 0, "故障");
+    	LISTVIEW_SetItemText(hItem, 5, 0, "×");//"故障");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 5, 0, "正常");
+		LISTVIEW_SetItemText(hItem, 5, 0, "√");//"正常");
 	}
 
     /**< A插座温度1 */
 	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp1_Cri) == defSignalCON_Alarm_SocketTemp1_Cri)
 	{
-		LISTVIEW_SetItemText(hItem, 1, 1, "过温");
+    	LISTVIEW_SetItemText(hItem, 1, 1, "×");//"过温");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 1, 1, "正常");
+    	LISTVIEW_SetItemText(hItem, 1, 1, "√");//"正常");
 	}
 
     /**< A插座温度2 */
 	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_SocketTemp2_Cri) == defSignalCON_Alarm_SocketTemp2_Cri)
 	{
-		LISTVIEW_SetItemText(hItem, 3, 1, "过温");
+    	LISTVIEW_SetItemText(hItem, 3, 1, "×");//"过温");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 3, 1, "正常");
+    	LISTVIEW_SetItemText(hItem, 3, 1, "√");//"正常");
 	}
 
     /**< A枪输出电流 */
 	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
 	{
-		LISTVIEW_SetItemText(hItem, 5, 1,"过流");
+    	LISTVIEW_SetItemText(hItem, 5, 1, "×");//"过流");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 5, 1, "正常");
+    	LISTVIEW_SetItemText(hItem, 5, 1, "√");//"正常");
 	}
 
 	/**< RFID */
 	if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
 	{
-		LISTVIEW_SetItemText(hItem, 1, 2, "故障");
+    	LISTVIEW_SetItemText(hItem, 1, 2, "×");//"故障");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 1, 2, "正常");
+    	LISTVIEW_SetItemText(hItem, 1, 2, "√");//"正常");
 	}
 
 	/**< A枪枪锁 */
@@ -216,11 +216,11 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     /**< 枪N温度 */
 	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
 	{
-		LISTVIEW_SetItemText(hItem, 5, 2, "过温");
+    	LISTVIEW_SetItemText(hItem, 5, 2, "×");//"过温");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 5, 2, "正常");
+    	LISTVIEW_SetItemText(hItem, 5, 2, "√");//"正常");
 	}
 
 	/**< 交流电压 */
@@ -240,41 +240,41 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	/**< 频率 */
 	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
 	{
-		LISTVIEW_SetItemText(hItem, 3, 3, "异常");
+    	LISTVIEW_SetItemText(hItem, 3, 3, "×");//"异常");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 3, 3, "正常");
+    	LISTVIEW_SetItemText(hItem, 3, 3, "√");//"正常");
 	}
 
     /**< 防雷器状态 */
 	if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Arrester) == defSignalEVSE_Alarm_Arrester)
 	{
-		LISTVIEW_SetItemText(hItem, 5, 3, "故障");
+    	LISTVIEW_SetItemText(hItem, 5, 3, "×");//"故障");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 5, 3, "正常");
+    	LISTVIEW_SetItemText(hItem, 5, 3, "√");//"正常");
 	}
 
 	/**< 输出继电器状态 */
 	if ((pcont->status.ulSignalState & defSignalCON_State_AC_A_Relay) == defSignalCON_State_AC_A_Relay)
 	{
-		LISTVIEW_SetItemText(hItem, 1, 4, "故障");
+    	LISTVIEW_SetItemText(hItem, 1, 4, "×");//"故障");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 1, 4, "正常");
+    	LISTVIEW_SetItemText(hItem, 1, 4, "√");//"正常");
 	}
 
 	/**< 控制导引状态 */
 	if ((pcont->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
 	{
-		LISTVIEW_SetItemText(hItem, 3, 4, "故障");
+    	LISTVIEW_SetItemText(hItem, 3, 4, "×");//"故障");
 	}
 	else
 	{
-		LISTVIEW_SetItemText(hItem, 3, 4, "正常");
+    	LISTVIEW_SetItemText(hItem, 3, 4, "√");//"正常");
 	}
 }
 
@@ -353,11 +353,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
         }
         /*状态量   状态值     状态量     状态值     状态量     状态值*/
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行

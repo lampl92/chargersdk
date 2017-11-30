@@ -1117,7 +1117,7 @@ static uint8_t Value_Check()
             case 21:
                 pCon->info.SetCONCfg(pCon, jnSocketType, result_input, ParamTypeString);
                 memset(pCon->info.ucSocketType,'\0',sizeof(pCon->info.ucSocketType));
-                strcpy(pCon->info.ucSocketType,result_input);
+                pCon->info.ucSocketType = result_input[0];
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
                 break;
             case 22:
