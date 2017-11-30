@@ -86,7 +86,8 @@
 // 01  2017-06-07 12:13:34  2017-06-08 12:13:23  急停故障"
 //};
 // USER END
-static WM_HWIN _hWinManagerLogDate,_hWinManagerLog;
+static WM_HWIN _hWinManagerLogDate;
+WM_HWIN _hWinManagerLog;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
 /*********************************************************************
@@ -1447,6 +1448,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //            err_hItem = 0;
 //        }
 //        break;
+    case MSG_DELETEMANAGERWIN:
+        GUI_EndDialog(_hWinManagerLog,0);
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;

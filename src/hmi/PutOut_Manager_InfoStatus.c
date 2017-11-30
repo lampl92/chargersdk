@@ -98,7 +98,7 @@
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
-static WM_HWIN _hWinManagerInfoStatus;
+WM_HWIN _hWinManagerInfoStatus;
 /*********************************************************************
 *
 *       _aDialogCreate
@@ -433,6 +433,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             GUI_EndDialog(err_hItem,0);
             err_hItem = 0;
         }
+        break;
+    case MSG_DELETEMANAGERWIN:
+        GUI_EndDialog(_hWinManagerInfoStatus, 0);
         break;
     default:
         WM_DefaultProc(pMsg);

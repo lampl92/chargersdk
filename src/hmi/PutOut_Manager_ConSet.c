@@ -97,7 +97,7 @@ static int _x,_y;
 #define conQRCode "QRCode"
 
 static WM_HWIN hWindow;
-static WM_HWIN _hWinManagerConSet;
+WM_HWIN _hWinManagerConSet;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 /*********************************************************************
 *
@@ -352,46 +352,46 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             GUI_SetBkColor(GUI_WHITE);
             GUI_Clear();
             break;
-        case MSG_SYSSETID0:
+        case MSG_MANAGERSETID0:
             EDIT_SetText(_aahEdit[0][0], pCon->info.strQRCode);
             break;
-        case MSG_SYSSETID1:
+        case MSG_MANAGERSETID1:
             sprintf(_tmpBuff,"%c",pCon->info.ucSocketType);
             EDIT_SetText(_aahEdit[1][0],_tmpBuff);
             break;
-        case MSG_SYSSETID2:
+        case MSG_MANAGERSETID2:
             sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageUpperLimits);
             EDIT_SetText(_aahEdit[2][0],_tmpBuff);
             break;
-        case MSG_SYSSETID3:
+        case MSG_MANAGERSETID3:
             sprintf(_tmpBuff,"%.1f",pCon->info.dVolatageLowerLimits);
             EDIT_SetText(_aahEdit[3][0],_tmpBuff);
             break;
-        case MSG_SYSSETID4:
+        case MSG_MANAGERSETID4:
             sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
             EDIT_SetText(_aahEdit[4][0],_tmpBuff);
             break;
-        case MSG_SYSSETID5:
+        case MSG_MANAGERSETID5:
             sprintf(_tmpBuff,"%.1f",pCon->info.dACTempUpperLimits);
             EDIT_SetText(_aahEdit[5][0],_tmpBuff);
             break;
-        case MSG_SYSSETID6:
+        case MSG_MANAGERSETID6:
             sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
             EDIT_SetText(_aahEdit[6][0],_tmpBuff);
             break;
-        case MSG_SYSSETID7:
+        case MSG_MANAGERSETID7:
             sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempUpperLimits);
             EDIT_SetText(_aahEdit[7][0],_tmpBuff);
             break;
-        case MSG_SYSSETID8:
+        case MSG_MANAGERSETID8:
             sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
             EDIT_SetText(_aahEdit[8][0],_tmpBuff);
             break;
-        case MSG_SYSSETID9:
+        case MSG_MANAGERSETID9:
             sprintf(_tmpBuff,"%.1f",pCon->info.dRatedCurrent);
             EDIT_SetText(_aahEdit[9][0],_tmpBuff);
             break;
-        case MSG_SYSSETIDA:
+        case MSG_MANAGERSETIDA:
             sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
             EDIT_SetText(_aahEdit[10][0], _tmpBuff);
             break;

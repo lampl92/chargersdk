@@ -43,7 +43,7 @@
 #define ID_TEXT_3     (GUI_ID_USER + 0x04)
 #define ID_TEXT_4     (GUI_ID_USER + 0x05)
 #define ID_MULTIPAGE_0 (GUI_ID_USER + 0x06)
-
+#define ID_BUTTON_0     (GUI_ID_USER + 0x07)
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
@@ -72,6 +72,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
 	{ MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 0, 0, 800, 360, 0, 0x0, 0 },//multipage
+    { BUTTON_CreateIndirect, "退出管理", ID_BUTTON_0, 700, 380, 100, 30, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -131,11 +132,33 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         MULTIPAGE_SelectPage(hItem,0);
 
+        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_HCENTER|GUI_TA_VCENTER,
+            &SIF24_Font,BUTTON_CI_UNPRESSED, GUI_BLACK, BUTTON_CI_UNPRESSED,GUI_BLACK, "退出管理");
+
+        
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id) {
+        case ID_BUTTON_0:	//退出管理员进行的相关控件的删除操作
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                WM_SendMessageNoPara(_hWinManagerInfoAnalog, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerInfoStatus, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerLog, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);
+
+                GUI_EndDialog(_hWinManagerCommon, 0);
+                CreateHomePage();
+                break;
+            }
+            break;
         case ID_MULTIPAGE_0: // Notifications sent by 'Button'
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:

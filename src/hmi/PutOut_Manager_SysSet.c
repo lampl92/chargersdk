@@ -92,7 +92,7 @@ static uint8_t _checkbox;
 #define sysUSEGPRSModem "GPRS类型"
 // USER END
 static WM_HWIN hWindow;
-static WM_HWIN _hWinManagerSysSet;
+WM_HWIN _hWinManagerSysSet;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 
 /*********************************************************************
@@ -259,28 +259,28 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             GUI_SetBkColor(GUI_WHITE);
             GUI_Clear();
             break;
-        case MSG_SYSSETID0:
+        case MSG_MANAGERSETID0:
             EDIT_SetText(_aahEdit[0][0],pEVSE->info.strSN);
             break;
-        case MSG_SYSSETID1:
+        case MSG_MANAGERSETID1:
             sprintf(_tmpBuff,"%d",pEVSE->info.strID);
             EDIT_SetText(_aahEdit[1][0],_tmpBuff);
             break;
-        case MSG_SYSSETID2:
+        case MSG_MANAGERSETID2:
             sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
             EDIT_SetText(_aahEdit[2][0],_tmpBuff);
             break;
-        case MSG_SYSSETID3:
+        case MSG_MANAGERSETID3:
             sprintf(_tmpBuff,"%d",pechProto->info.usServerPort);
             EDIT_SetText(_aahEdit[3][0],_tmpBuff);
             break;
-        case MSG_SYSSETID4:
+        case MSG_MANAGERSETID4:
             EDIT_SetText(_aahEdit[4][0],pechProto->info.strUserName);
             break;
-        case MSG_SYSSETID5:
+        case MSG_MANAGERSETID5:
             EDIT_SetText(_aahEdit[5][0],"******");
             break;
-        case MSG_SYSSETID6:
+        case MSG_MANAGERSETID6:
             sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
             EDIT_SetText(_aahEdit[6][0],_tmpBuff);
             break;
@@ -398,27 +398,28 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
-
+        //GPRS模块选择 暂时不能设置 需要将设置项进行两种分类，一种模拟量 一种状态量
         _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
-        //初始化复选框
-        _checkbox = 0;
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-        CHECKBOX_SetText(hItem, "2G");
-        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
-        if(xSysconf.xModule.use_gprs == 0)
-        {
-            CHECKBOX_SetState(hItem,1);
-            bitset(_checkbox,0);
-        }
-        else
-        {
-            CHECKBOX_SetState(hItem,0);
-        }
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-        CHECKBOX_SetText(hItem, "4G");
-        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
-        CHECKBOX_SetState(hItem,0);
+        _aahEdit[7][1] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("2G")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("2G"));
+          //初始化复选框
+//        _checkbox = 0;
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
+//        CHECKBOX_SetText(hItem, "2G");
+//        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
+//        if(xSysconf.xModule.use_gprs == 0)
+//        {
+//            CHECKBOX_SetState(hItem,1);
+//            bitset(_checkbox,0);
+//        }
+//        else
+//        {
+//            CHECKBOX_SetState(hItem,0);
+//        }
+//
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
+//        CHECKBOX_SetText(hItem, "4G");
+//        CHECKBOX_SetFont(hItem, GUI_FONT_24B_ASCII);
+//        CHECKBOX_SetState(hItem,0);
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
@@ -525,6 +526,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //            err_hItem = 0;
 //        }
 //        break;
+    case MSG_DELETEMANAGERWIN:
+        GUI_EndDialog(_hWinManagerSysSet, 0);
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;

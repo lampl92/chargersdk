@@ -45,14 +45,7 @@
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
-
-
-#define MSG_SYSSETID0       (GUI_ID_USER + 0x40)
-#define MSG_SYSSETID1       (GUI_ID_USER + 0x41)
-#define MSG_SYSSETID2       (GUI_ID_USER + 0x42)
-#define MSG_SYSSETID3       (GUI_ID_USER + 0x43)
-#define MSG_SYSSETID4       (GUI_ID_USER + 0x44)
-
+#define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
 
 #define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
 #define MSG_MANAGERSETID1       (GUI_ID_USER + 0x41)
@@ -89,6 +82,13 @@ extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
 extern WM_HWIN _hWinManagerCommon;
+extern WM_HWIN _hWinManagerInfoAnalog;
+extern WM_HWIN _hWinManagerInfoStatus;
+extern WM_HWIN _hWinManagerLog;
+extern WM_HWIN _hWinManagerConSet;
+extern WM_HWIN _hWinManagerSysSet;
+extern WM_HWIN _hWinManagerSysInfo;
+    
 enum{
     _HOMEPAGE,
     _CARDINFOPAGE,
