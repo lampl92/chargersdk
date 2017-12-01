@@ -44,7 +44,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "TotalPower", ID_TEXT_5, 161, 231, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalServFee", ID_TEXT_6, 582, 161, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalPowerFee", ID_TEXT_7, 582, 221, 48, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "TotalFee", ID_TEXT_8, 582, 320, 282, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "TotalFee", ID_TEXT_8, 582, 301, 282, 24, 0, 0x0, 0 },
 };
 
 static void Data_Process(WM_MESSAGE *pMsg)
@@ -176,13 +176,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
-        sprintf(temp_buf, "%.2lf", pCON->order.dTotalPower);
+        sprintf(temp_buf, "%%3.1f", pCON->order.dTotalPower);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_RED, temp_buf);//充入电量
-        sprintf(temp_buf, "%.2lf", pCON->order.dTotalServFee);
+        sprintf(temp_buf, "%%3.1f", pCON->order.dTotalServFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_RED, temp_buf);//服务费
-        sprintf(temp_buf, "%.2lf", pCON->order.dTotalPowerFee);
+        sprintf(temp_buf, "%3.1f", pCON->order.dTotalPowerFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_RED, temp_buf);//电费
-        sprintf(temp_buf, "%.2lf", pCON->order.dTotalFee);
+        sprintf(temp_buf, "%3.1f", pCON->order.dTotalFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_RED, temp_buf);//消费总额  
         pCON = CONGetHandle(0);
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
@@ -199,13 +199,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             sec = time_charge % 3600 % 60;
 
             memset(temp_buf, '\0', strlen(temp_buf));
-            sprintf(temp_buf, "%02d", hour);
+            sprintf(temp_buf, "% 2d", hour);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_RED, temp_buf);//hour
             memset(temp_buf, '\0', strlen(temp_buf));
-            sprintf(temp_buf, "%02d", min);
+            sprintf(temp_buf, "% 2dd", min);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_RED, temp_buf);// min
             memset(temp_buf, '\0', strlen(temp_buf));
-            sprintf(temp_buf, "%02d", sec);
+            sprintf(temp_buf, "% 2dd", sec);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_RED, temp_buf);// sec
             
             xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);

@@ -15,6 +15,11 @@ WM_HWIN cur_win;//记录当前界面
 int SignalIntensity;
 int PreSignalIntensity;
 
+//int QR_Width;//NUmber of "Moudle"
+//int QR_Size;//Size of Bitmap in pixels
+
+GUI_QR_INFO QR_info;
+
 p_inf *HomeImage;
 p_inf *SignalImage0;
 p_inf *SignalImage1;
@@ -69,6 +74,7 @@ void MainTask(void)
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 6, GUI_QR_ECLEVEL_L, 0);
+        GUI_QR_GetInfo(qr_hmem, &QR_info);
 
 
         SignalImage0 = readPicInf(pathSignalImage0);

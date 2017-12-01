@@ -86,7 +86,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "%2.1f", pCON->status.dChargingCurrent);//充电电流   
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), temp_buf);
 //    pCON->status.GetChargingPower(pCON);
-    sprintf(temp_buf, "%d", (int)pCON->status.dChargingPower);
+    sprintf(temp_buf, "%d", (int)(pCON->status.dChargingVoltage * pCON->status.dChargingCurrent));
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_6), temp_buf);//充电功率
     sprintf(temp_buf, "%3.1f", pCON->order.dTotalPower);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_7), temp_buf);//充入电量

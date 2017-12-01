@@ -93,6 +93,8 @@ extern WM_HWIN _hWinManagerConSet;
 extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 
+GUI_QR_INFO QR_info;
+
 enum{
     _HOMEPAGE,
     _CARDINFOPAGE,
