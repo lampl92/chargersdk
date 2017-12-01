@@ -1,0 +1,2 @@
+cd .\chargesdk
+make.bat

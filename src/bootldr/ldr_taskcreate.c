@@ -217,7 +217,7 @@ void vTaskInit(void *pvParameters)
         }
         else
         {
-            printf_safe("升级失败, 请手动重启或检查待升级固件!\n");
+            printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
         }
        
         vTaskDelay(1000);

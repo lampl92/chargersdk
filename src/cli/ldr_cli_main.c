@@ -30,6 +30,7 @@ void cli_init(void)
     tinysh_add_command(&cli_ymodem_cmd);
     tinysh_add_command(&cli_reboot_cmd);
     tinysh_add_command(&cli_format_cmd);
+    tinysh_add_command(&cli_set_crc32_cmd);
     
 }
 
