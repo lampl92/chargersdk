@@ -179,6 +179,7 @@
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />

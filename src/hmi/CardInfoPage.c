@@ -148,6 +148,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       //
       // Initialization of 'CardInfoImage'
       //
+        first_CardInfo = 0;
         HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");

@@ -63,22 +63,16 @@ void create_cfg_file(const char *path, const uint8_t *context)
     uint32_t bw;
     int fd;
     int res = 1;
-    fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
+    fd = yaffs_open(path, O_CREAT | O_EXCL | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
         res = yaffs_get_error();
     }
-    switch (res)
+    else
     {
-    case 0:
         bw = yaffs_write(fd, context, strlen(context));
-        break;
-    case -EEXIST:
-        break;
-    default:
-        break;
+        yaffs_close(fd);
     }
-    yaffs_close(fd);
 }
 extern void retarget_init(void);
 void yaffs_init(void)

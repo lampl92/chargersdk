@@ -69,7 +69,9 @@ static void Data_Process(WM_MESSAGE *pMsg)
         pdTRUE,
         pdTRUE,
         0);
-    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
+    //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
+    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//订单上传完成
+
     {
         if (pCON->order.ucStopType == defOrderStopType_Full)
         {
@@ -91,7 +93,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
         bitset(EventChargeDoneFlag, 0);
     }
 
-    if ((orderFinish == 1) && pCON->status.xPlugState == UNPLUG)
+ //   if ((orderFinish == 1) && pCON->status.xPlugState == UNPLUG)
+    if ((orderFinish == 1))
     {
         if (first_flag == 0)
         {
@@ -103,7 +106,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
         diffsec = (uint32_t)difftime(now, first);
 
-        sec = 1 - diffsec;
+        sec = 3 - diffsec;
         if (sec < 0)
             sec = 0;
         sprintf((char *)_secDown, "(%02dS)", sec);
@@ -266,8 +269,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     PreSignalIntensity = SignalIntensity;
                     SignalFlag = 0;
                 }
-                    SignalFlag++;
-                /**< 重启定时器 */
+                SignalFlag++;
+/**< 重启定时器 */
                 WM_RestartTimer(pMsg->Data.v, 300);
             }
             break;

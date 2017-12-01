@@ -42,16 +42,15 @@ static void Data_Process(WM_MESSAGE *pMsg)
 {
     CON_t *pCON;
     EventBits_t uxBitRFID;
+    
     WM_HWIN hWin = pMsg->hWin;
     pCON = CONGetHandle(0);
-    SignalIntensity = getSignalIntensity();
+    
     /*如果刷卡，发送跳页消息*/
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-        defEventBitGotIDtoHMI,
-        pdTRUE,
-        pdTRUE,
-        0);
-    if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI) && (SignalIntensity > 0))
+                                defEventBitGotIDtoHMI,  
+                                pdTRUE, pdTRUE, 0);    
+    if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
         WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
     }
@@ -150,15 +149,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     /**< 显示时间和日期 */
         Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
         //费用显示
-        if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
-        {
-            prePowerFee = pEVSE->info.dDefSegFee;
-            preServiceFee = pEVSE->info.dServiceFee;
-            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */      
-        }
+//        if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
+//        {
+//            prePowerFee = pEVSE->info.dDefSegFee;
+//            preServiceFee = pEVSE->info.dServiceFee;
+//            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+//            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
+//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
+//        }
         if ((SignalFlag == 4) || (SignalFlag > 4))
         {
             SignalIntensity = getSignalIntensity();
@@ -189,9 +188,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
                 }
+                
             }
             PreSignalIntensity = SignalIntensity;  
             SignalFlag = 0;
+            
+            prePowerFee = pEVSE->info.dDefSegFee;
+            preServiceFee = pEVSE->info.dServiceFee;
+            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
         }
         SignalFlag++;
         /**< 重启定时器 */
