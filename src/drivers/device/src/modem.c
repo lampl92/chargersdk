@@ -1440,8 +1440,8 @@ void Modem_Poll(DevModem_t *pModem)
     uint8_t *pucQueBuffer;
     uint32_t ulPos = 0;
     
-    uint32_t ulReGetCnt = 0;
-    uint32_t ulReOpenCnt = 0;
+    uint32_t ulFTPReGetCnt = 0;
+    uint32_t ulFTPReOpenCnt = 0;
     
     
     uint32_t ulRecvFileSize = 0;
@@ -1688,10 +1688,10 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_OPEN:
-            ulReOpenCnt++;
-            if (ulReOpenCnt >= 5)
+            ulFTPReOpenCnt++;
+            if (ulFTPReOpenCnt >= 5)
             {
-                ulReOpenCnt = 0;
+                ulFTPReOpenCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }
@@ -1713,7 +1713,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_FTP_GET:
             ulTaskDelay_ms = 100;
-            ulReGetCnt++;//FTPGet次数
+            ulFTPReGetCnt++;//FTPGet次数
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
             sprintf(filepath, "%s%s", pathSystemDir, pechProto->info.ftp.strNewFileName);
@@ -1805,9 +1805,9 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_REGET:
-            if (ulReGetCnt >= 5)
+            if (ulFTPReGetCnt >= 5)
             {
-                ulReGetCnt = 0;
+                ulFTPReGetCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }

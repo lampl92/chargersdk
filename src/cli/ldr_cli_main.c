@@ -15,7 +15,7 @@ void tinysh_char_out(unsigned char c)
 extern tinysh_cmd_t cli_exit_cmd;
 void cli_init(void)
 {
-    tinysh_set_prompt("\n[charger]$ ");
+    tinysh_set_prompt("\n[bootldr]$ ");
     /************系统信息****************/
     tinysh_add_command(&cli_hello_cmd);
     tinysh_add_command(&cli_systemdate_cmd);
