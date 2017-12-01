@@ -16,4 +16,3 @@ set crc32=%_crc32:~24,8%
 md ..\Release\chargesdk\%folder1%\%folder2%
 copy /y %source% ..\Release\chargesdk\%folder1%\%folder2%\chargesdk.bin.new
 copy /y %source% ..\Release\chargesdk\%folder1%\%folder2%\01%crc32%
-pause
