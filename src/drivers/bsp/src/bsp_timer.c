@@ -168,6 +168,7 @@ void TIM_SetTIM2Compare1(unsigned int compare)
  	}
 	else
 	{
+    	flat_pwm_change = 1;
 			TIM2->CCR1=compare;
        pwm=compare;
 	}
@@ -182,6 +183,7 @@ void TIM_SetTIM4Compare1(unsigned int compare)
 	}
 	else
 	{
+    	flat_pwm_change = 1;
     TIM4->CCR1=compare;
        pwm=compare;
 	}
@@ -218,6 +220,12 @@ void TIM3_IRQHandler (void)//0.1ms
 	timer_ms++;
     delay_breath++;
     pwm_samp_timer++;
+    if (flat_pwm_change == 1)
+    {
+        pwm_samp_timer = 0;
+        flat_pwm_change = 0;
+        
+    }
     if((pwm_samp_flag==1)&&(pwm_samp_timer>=3))
     {
         RUN_ON;
