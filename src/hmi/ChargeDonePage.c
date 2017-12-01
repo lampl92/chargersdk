@@ -40,11 +40,11 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { IMAGE_CreateIndirect, "PromptImage", ID_IMAGE_2, 65, 315, 319, 59, 0, 0, 0 },
     { TEXT_CreateIndirect, "Hour", ID_TEXT_2, 156, 168, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "min", ID_TEXT_3, 256, 168, 48, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "sec", ID_TEXT_4, 348, 168, 48, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "sec", ID_TEXT_4, 342, 168, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalPower", ID_TEXT_5, 161, 231, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalServFee", ID_TEXT_6, 582, 161, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalPowerFee", ID_TEXT_7, 582, 221, 48, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "TotalFee", ID_TEXT_8, 582, 301, 282, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "TotalFee", ID_TEXT_8, 582, 281, 282, 24, 0, 0x0, 0 },
 };
 
 static void Data_Process(WM_MESSAGE *pMsg)
@@ -72,23 +72,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
     if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//订单上传完成
 
-    {
-        if (pCON->order.ucStopType == defOrderStopType_Full)
-        {
-            IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), FullDoneImage->pfilestring, FullDoneImage->pfilesize);
-        }
-        else if ((pCON->order.ucStopType == defOrderStopType_Knock)\
-            || (pCON->order.ucStopType == defOrderStopType_OverCurr)\
-            || (pCON->order.ucStopType == defOrderStopType_Poweroff)\
-            || (pCON->order.ucStopType == defOrderStopType_NetLost)\
-            || (pCON->order.ucStopType == defOrderStopType_Scram))
-        {
-            IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), DevErrDoneImage->pfilestring, DevErrDoneImage->pfilesize);
-        }
-        else
-        {
-            IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), NormalDoneImage->pfilestring, NormalDoneImage->pfilesize);
-        }
+    {        
         orderFinish = 1;
         bitset(EventChargeDoneFlag, 0);
     }
@@ -172,13 +156,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         PreSignalIntensity = SignalIntensity;
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-        IMAGE_SetBMP(hItem, ChargeDoneVoidImage->pfilestring, ChargeDoneVoidImage->pfilesize);
+        IMAGE_SetBMP(hItem, OrderUploadImage->pfilestring, OrderUploadImage->pfilesize);
         
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
-        sprintf(temp_buf, "%%3.1f", pCON->order.dTotalPower);
+        sprintf(temp_buf, "%3.1f", pCON->order.dTotalPower);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_RED, temp_buf);//充入电量
-        sprintf(temp_buf, "%%3.1f", pCON->order.dTotalServFee);
+        sprintf(temp_buf, "%3.1f", pCON->order.dTotalServFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_RED, temp_buf);//服务费
         sprintf(temp_buf, "%3.1f", pCON->order.dTotalPowerFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_RED, temp_buf);//电费
@@ -202,10 +186,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             sprintf(temp_buf, "% 2d", hour);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_RED, temp_buf);//hour
             memset(temp_buf, '\0', strlen(temp_buf));
-            sprintf(temp_buf, "% 2dd", min);
+            sprintf(temp_buf, "% 2d", min);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_RED, temp_buf);// min
             memset(temp_buf, '\0', strlen(temp_buf));
-            sprintf(temp_buf, "% 2dd", sec);
+            sprintf(temp_buf, "% 2d", sec);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_RED, temp_buf);// sec
             
             xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
@@ -236,6 +220,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 /**< 显示时间和日期 */
                 Caculate_RTC_Show(pMsg, ID_TEXT_0, ID_TEXT_1);
+                
                 if (SignalFlag == 4)
                 {
                     SignalIntensity = getSignalIntensity();
@@ -270,6 +255,27 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SignalFlag = 0;
                 }
                 SignalFlag++;
+                if (orderFinish = 1)
+                {
+                    pCON = CONGetHandle(0);
+                    if (pCON->order.ucStopType == defOrderStopType_Full)
+                    {
+                        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), FullDoneImage->pfilestring, FullDoneImage->pfilesize);
+                    }
+                    else if ((pCON->order.ucStopType == defOrderStopType_Knock)\
+                        || (pCON->order.ucStopType == defOrderStopType_OverCurr)\
+                        || (pCON->order.ucStopType == defOrderStopType_Poweroff)\
+                        || (pCON->order.ucStopType == defOrderStopType_NetLost)\
+                        || (pCON->order.ucStopType == defOrderStopType_Scram))
+                    {
+                        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), DevErrDoneImage->pfilestring, DevErrDoneImage->pfilesize);
+                    }
+                    else
+                    {
+                        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), NormalDoneImage->pfilestring, NormalDoneImage->pfilesize);
+                    }
+                }
+                
 /**< 重启定时器 */
                 WM_RestartTimer(pMsg->Data.v, 300);
             }

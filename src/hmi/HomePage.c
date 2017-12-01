@@ -129,7 +129,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         PreSignalIntensity = SignalIntensity;
         
-        hwinQR = WM_CreateWindowAsChild(300, 156, QR_info.Size, QR_info.Size, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
+        hwinQR = WM_CreateWindowAsChild((800 - QR_info.Size)/2 - 10, (480 - QR_info.Size)/2, QR_info.Size, QR_info.Size, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
         break;
     case WM_PAINT:
      /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if

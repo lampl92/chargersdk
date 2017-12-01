@@ -154,6 +154,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);
 
                 GUI_EndDialog(_hWinManagerCommon, 0);
+                prePowerFee = 0;
+                preServiceFee = 0;
                 CreateHomePage();
                 break;
             }

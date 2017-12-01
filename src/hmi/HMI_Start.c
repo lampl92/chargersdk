@@ -47,6 +47,7 @@ p_inf *StopByQRImage;
 p_inf *ChargingVoidImage;
 
 p_inf *ChargeDoneImage;
+p_inf *OrderUploadImage;
 p_inf *NormalDoneImage;
 p_inf *FullDoneImage;
 p_inf *DevErrDoneImage;
@@ -73,7 +74,7 @@ void MainTask(void)
     {
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
-        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 6, GUI_QR_ECLEVEL_L, 0);
+        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
 
 
@@ -105,6 +106,7 @@ void MainTask(void)
         ChargingVoidImage = readPicInf(pathChargingVoidImage);
 
         ChargeDoneImage = readPicInf(pathChargeDoneImage);
+        OrderUploadImage = readPicInf(pathOrderUploadImage);
         NormalDoneImage = readPicInf(pathNormalDoneImage);
         FullDoneImage = readPicInf(pathFullDoneImage);
         DevErrDoneImage = readPicInf(pathDevErrDoneImage);
