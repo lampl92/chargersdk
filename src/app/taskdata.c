@@ -154,30 +154,37 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsData = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                 if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     pCON->order.ucStopType = defOrderStopType_Fee;
                 }
                 if ((uxBitsData & defEventBitOrderStopTypeLimitTime) == defEventBitOrderStopTypeLimitTime)    //达到充电时间限制
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
                     pCON->order.ucStopType = defOrderStopType_Time;
                 }
                 if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //远程停止
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     pCON->order.ucStopType = defOrderStopType_Remote;
                 }
                 if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //刷卡停止
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     pCON->order.ucStopType = defOrderStopType_RFID;
                 }
                 if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //自动充满
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
                     pCON->order.ucStopType = defOrderStopType_Full;
                 }
                 if ((uxBitsData & defEventBitOrderStopTypeCurr) == defEventBitOrderStopTypeCurr)    //过流
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
                     pCON->order.ucStopType = defOrderStopType_OverCurr;
                 }
                 if ((uxBitsData & defEventBitOrderStopTypeScram) == defEventBitOrderStopTypeScram)    //急停
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->order.ucStopType = defOrderStopType_Scram;
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
