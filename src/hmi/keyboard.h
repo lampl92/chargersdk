@@ -7,7 +7,7 @@
 //下述定义为输入设置项的对应宏
 #define LOGIN_PASSWD    0
 #define SYSSET_VALUE    1
-
+#define CONSET_VALUE    2
 //下述定义为输入数据合法性检测返回值
 #define VALUE_OK_SAV 0
 #define VALUE_ERROR 1
@@ -34,8 +34,8 @@ typedef struct
 	u16 height;							//软键盘高度
 	WM_HWIN hKeypad;					//软键盘窗口句柄
 	WM_HWIN EngButton_Handle[35];		//英文键盘上按钮句柄
-	WM_HWIN NumButton_Handle[30];		//数字键盘上按钮句柄
-	WM_HWIN SignButton_Handle[30];		//符号键盘上按钮句柄
+	WM_HWIN NumButton_Handle[35];		//数字键盘上按钮句柄
+	WM_HWIN SignButton_Handle[35];		//符号键盘上按钮句柄
     WM_HWIN ChineseButton_Handle[25];   //中文键盘上按钮句柄
     u8      inputstr[7];                //输入字符串，最大6个字符+结束符
     u8      inputlen;                   //输入长度

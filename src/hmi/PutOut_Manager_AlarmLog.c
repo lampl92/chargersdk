@@ -45,7 +45,7 @@
 *
 **********************************************************************
 */
-#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x00)
+#define ID_WINDOW_0     (GUI_ID_USER + 0x00)
 // USER START (Optionally insert additional defines)
 #define ID_IMAGE_0    (GUI_ID_USER + 0x1C)
 #define ID_TEXT_1     (GUI_ID_USER + 0x0B)
@@ -86,7 +86,8 @@
 // 01  2017-06-07 12:13:34  2017-06-08 12:13:23  急停故障"
 //};
 // USER END
-static WM_HWIN _hWinManagerAlarmLog;
+WM_HWIN _hWinManagerLogDate;
+static WM_HWIN _hWinManagerLog;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
 /*********************************************************************
@@ -127,29 +128,33 @@ static uint8_t list_end_index[3];
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 800, 480, 0, 0x64, 0 },
-    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 789, 459, 0, 0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_1, 630, 0, 80, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_2, 720, 0, 70, 16, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
-    { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
-    { BUTTON_CreateIndirect, "信息查询", ID_BUTTON_0, 50, 70, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "历史记录", ID_BUTTON_1, 50, 140, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "系统配置", ID_BUTTON_2, 50, 210, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "退    出", ID_BUTTON_3, 50, 280, 150, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "模拟量", ID_BUTTON_4, 550, 20, 80, 30, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "状态量", ID_BUTTON_5, 550, 52, 80, 30, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 290, 25, 43, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 340, 25, 20, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Date", ID_TEXT_5, 243, 40, 50, 31, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_2, 365, 25, 20, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_3, 450, 25, 43, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "TO", ID_TEXT_6, 400, 40, 50, 20, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_4, 500, 25, 20, 50, 0, 0x0, 0 },
-    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_5, 525, 25, 20, 50, 0, 0x0, 0 },
-//    { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 210, 82, 560, 276, 0, 0x0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 210, 82, 560, 276, 0, 0x0, 0 },//560,276
+#define LISTWHEEL_XLEFTOFF  80 
+    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
+    
+    { TEXT_CreateIndirect, "Date", ID_TEXT_5, 100 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
+
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_0, 190 - LISTWHEEL_XLEFTOFF, 60, 90, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_1, 280 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_2, 330 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+
+    { TEXT_CreateIndirect, "TO", ID_TEXT_6, 400 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
+
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_3, 490 - LISTWHEEL_XLEFTOFF, 60, 90, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_4, 580 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    { LISTWHEEL_CreateIndirect, "Listwheel", ID_LISTWHEEL_5, 630 - LISTWHEEL_XLEFTOFF, 60, 50, 180, 0, 0x0, 0 },
+    
+    { BUTTON_CreateIndirect, "查询时间", ID_BUTTON_3, 20, 20, 80, 20, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "查询告警", ID_BUTTON_4, 700 - LISTWHEEL_XLEFTOFF, 100, 160, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "查询充电", ID_BUTTON_5, 700 - LISTWHEEL_XLEFTOFF, 170, 160, 40, 0, 0x0, 0 },
 };
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
+{
+//    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+//    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+};
+
 
 /*********************************************************************
 *
@@ -171,7 +176,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
 	if(0 == log_type)   //故障记录
     {
-        jsParent = GetCfgObj("system\\evse.log", &errcode);
+        jsParent = GetCfgObj(pathEVSELog, &errcode);
         if (jsParent == NULL)
         {
             cJSON_Delete(jsParent);
@@ -201,7 +206,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
             sprintf((char *)buf, "%d", jsItem->valueint);
             LISTVIEW_SetItemText(hItem, 2, i, buf);
-            
+
             //0 状态 1 告警 2 异常 3 故障
             jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
             switch (jsItem->valueint)
@@ -237,7 +242,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     }
     else if(1 == log_type)
     {
-        jsParent = GetCfgObj("system\\order.txt", &errcode);
+        jsParent = GetCfgObj(pathOrder, &errcode);
         if (jsParent == NULL)
         {
             cJSON_Delete(jsParent);
@@ -347,7 +352,546 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
     return errcode;
 }
-
+///*********************************************************************
+//*
+//*       _cbDialog
+//*/
+//static void _cbDialog(WM_MESSAGE *pMsg)
+//{
+//    const void *pData;
+//    volatile WM_HWIN      hItem;
+//    U32          FileSize;
+//    int          NCode;
+//    int          Id;
+//    uint16_t     i,_strNum[3];
+//	volatile HEADER_Handle hHeader;
+//	char    buf[20];
+////	static char  Value = 0;
+//    SCROLLBAR_Handle hScroll;
+//    SCROLLBAR_Handle wScroll;
+////    static int _x,_y;
+////    WM_SCROLL_STATE ScrollState;
+//
+//    switch (pMsg->MsgId)
+//    {
+//    case WM_PAINT:
+//        WM_SetFocus(_hWinManagerAlarmLog);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerAlarmLog == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerAlarmLog == cur_win)
+//            {
+//                /**< 故障分析 */
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
+//        break;
+//    case WM_INIT_DIALOG:
+//        //
+//        // 初始化window 选择查询时间段日期的window
+//        //
+//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF16_Font,GUI_BLACK,"起始");
+//        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF16_Font,GUI_BLACK,"终止");
+//        //
+//        // Initialization of 'Button'
+//        //
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
+//                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
+//
+//        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
+//                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
+//        //
+//        // Initialization of 'Listwheel'
+//        //
+//        //初始化listwheel
+//        for(i = 0;i < 6;i++)
+//        {
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0+i);
+//            //设置字体
+//            LISTWHEEL_SetFont(hItem,&GUI_FontComic18B_ASCII);
+//            LISTWHEEL_SetTextAlign(hItem,GUI_TA_VCENTER | GUI_TA_VERTICAL);
+//            //设置吸附位置
+//            LISTWHEEL_SetSnapPosition(hItem,15);
+//            //设置绘制数据项所使用的行高
+//        //        LISTWHEEL_SetLineHeight(hItem,30);
+//            //设置选中的条目的文本颜色
+//            LISTWHEEL_SetTextColor(hItem,LISTWHEEL_CI_SEL,GUI_RED);
+//        }
+//        //设置起始年listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0);
+//        //绘制指示行
+//        //    LISTWHEEL_SetOwnerDraw(hItem,ListWheel0_OwnerDraw);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apYear);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apYear+i));
+//        }
+//
+//        //设置起始月listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_1);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apMonth);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apMonth+i));
+//        }
+//
+//        //设置起始日listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_2);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apDay);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apDay+i));
+//        }
+//
+//        //设置终止年listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_3);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apYear);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apYear+i));
+//        }
+//
+//        //设置终止月listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_4);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apMonth);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apMonth+i));
+//        }
+//
+//        //设置终止日listwheel
+//        hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_5);
+//        //添加数据
+//        for(i = 0;i < GUI_COUNTOF(_apDay);i++)
+//        {
+//            LISTWHEEL_AddString(hItem,*(_apDay+i));
+//        }
+//        //
+//        // 初始列表控件
+//        //
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+//        /* 设置列表控件中header控件的所显示文本的字体 */
+//        hHeader = LISTVIEW_GetHeader(hItem);
+//        HEADER_SetFont(hHeader, &SIF16_Font);
+////            LISTVIEW_SetAutoScrollH(hItem,1);
+////            LISTVIEW_SetAutoScrollV(hItem,1);
+//
+//        /*srollbar*/
+//        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
+//        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
+//        SCROLLBAR_SetWidth(hScroll,20);
+//        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+//        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
+//        SCROLLBAR_SetWidth(wScroll,20);
+//        /*end*/
+//
+//        //SCROLLBAR_SetDefaultWidth(15);
+//        /* 设置列表控件选项中所显示文本的字体 */
+//        LISTVIEW_SetFont(hItem, &SIF16_Font);
+//        /* 设置列表控件表格可见 */
+//        LISTVIEW_SetGridVis(hItem, 1);
+//        break;
+//    case WM_NOTIFY_PARENT:
+//        Id    = WM_GetId(pMsg->hWinSrc);
+//        NCode = pMsg->Data.v;
+//        switch(Id) {
+//            /*scrollbar*/
+////        case GUI_ID_HSCROLL:
+////            if(NCode == WM_NOTIFICATION_VALUE_CHANGED)
+////            {
+////                   /* 得到滚动条的状态，得到的数值好像是负值 才能使得 _x - ScrollState.v是正值 */
+////                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
+////                    if (_x != ScrollState.v)
+////                    {
+////                        WM_MoveWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), _x - ScrollState.v, 0);
+////                        _x = ScrollState.v;
+////                    }
+////            }
+////            else if(NCode == GUI_ID_VSCROLL)
+////            {
+////                    WM_GetScrollState(pMsg->hWinSrc, &ScrollState);
+////                    if (_y != ScrollState.v)
+////                    {
+////                        WM_MoveWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0, _y - ScrollState.v);
+////                        _y = ScrollState.v;
+////                    }
+////            }
+////            break;
+//            /*end*/
+//        case ID_BUTTON_0: // Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            /**< 跳转到模拟量信息查询 */
+//            _deleteWin(_hWinManagerAlarmLog);
+//            CreateManagerInfoAnalog();
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_BUTTON_1: // Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_BUTTON_2: // Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            /**< 跳转到设置参数信息查询 */
+//            _deleteWin(_hWinManagerAlarmLog);
+//            CreateManagerSysSet();
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_BUTTON_3: // Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            //WM_DeleteWindow(pMsg->hWin);
+//            //PutOut_SelAOrB();
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            /**< 跳转至home */
+//            _deleteWin(_hWinManagerAlarmLog);
+//            CreateHomePage();
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_BUTTON_4: //查询故障 Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            //删除window 创建listview的window，并且初始化listview和填充值
+//            GUI_EndDialog(_hWinManagerLogDate,0);
+//            CreateManagerLog(0);
+//            /**< get到现有表格的行列数 */
+//            column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+//            for(i = 0;i < column_num;i++)
+//            {
+//                LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
+//            }
+//            /*序号 记录时间  枪号  故障等级  故障状态  故障信息*/
+//			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
+//            LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "记录时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "设备", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障等级", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "故障状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "故障信息", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//
+//			/* 添加三行，调用一次函数LISTVIEW_AddRow添加一行 */
+////			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
+////			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
+////			LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
+//
+//
+//            Data_Flush(0,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+////            for(i = 0; i< 500;i++)
+////            {
+////                LISTVIEW_AddRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), NULL);
+////                sprintf(buf, "%03d", i+1);
+////                //序号
+////                LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0, i, buf);
+//////                memset(buf,'\0',strlen(buf));
+////                strcpy(buf, "2016-07-07 12:13:14");
+////                LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 1, i, buf);
+//////                memset(buf,'\0',strlen(buf));
+////                strcpy(buf, "2016-07-07 12:13:14");
+////                LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 2, i, buf);
+//////                memset(buf,'\0',strlen(buf));
+////                strcpy(buf, "i");
+////                LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 3, i, buf);
+////            }
+//
+//			/* 为列表控件三行四列共12个选项全部添加文本 */
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0, 0, "00");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 1, 0, "2016-07-07 12:13:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 2, 0, "2016-07-07 12:14:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 3, 0, "急停故障");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0, 1, "01");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 1, 1, "2016-07-07 12:13:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 2, 1, "2016-07-07 12:13:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 3, 1, "交流过压");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0, 2, "02");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 1, 2, "2016-07-07 12:13:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 2, 2, "2016-07-07 12:13:14");
+////			LISTVIEW_SetItemText(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 3, 2, "继电器故障");
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_BUTTON_5: // Notifications sent by 'Button'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+//            for(i = 0;i < column_num;i++)
+//            {
+//                LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
+//            }
+//            /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "启动方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "卡号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 240, "订单流水号", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "起始时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "结束时间", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 160, "结束类型", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总电量", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总电费", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总服务费", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总费用", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "支付方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
+//            Data_Flush(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+//
+//            break;
+//        /// TODO (zshare#1#): ///因为鼠标重置的问题, \
+//        所以需要用到WM_NOTIFICATION_MOVED_OUT事件,不触发WM_NOTIFICATION_RELEASED
+//          case WM_NOTIFICATION_RELEASED://WM_NOTIFICATION_MOVED_OUT:
+//            /**< 跳转到状态信息查询 */
+////            _deleteWin(_hWinManagerInfoAnalog);
+////            CreateManagerInfoStatus();
+//            break;
+//          }
+//            break;
+//        case ID_LISTWHEEL_0: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            //获取句柄
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0);
+//            //获取当前句柄索引
+//            list_start_index[0] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_start_index[0]);
+//            LISTWHEEL_GetItemText(hItem,list_start_index[0],sel_start_date.year,5);
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_LISTWHEEL_1: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            //获取句柄
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_1);
+//            //获取当前句柄索引
+//            list_start_index[1] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_start_index[1]);
+//            LISTWHEEL_GetItemText(hItem,list_start_index[1],sel_start_date.month,5);
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_LISTWHEEL_2: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            //获取句柄
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_2);
+//            //获取当前句柄索引
+//            list_start_index[2] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_start_index[2]);
+//            LISTWHEEL_GetItemText(hItem,list_start_index[2],sel_start_date.day,5);
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_LISTWHEEL_3: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_3);
+//            //获取当前句柄索引
+//            list_end_index[0] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_end_index[0]);
+//            LISTWHEEL_GetItemText(hItem,list_end_index[0],sel_end_date.year,5);
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_LISTWHEEL_4: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_4);
+//            //获取当前句柄索引
+//            list_end_index[1] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_end_index[1]);
+//            LISTWHEEL_GetItemText(hItem,list_end_index[1],sel_end_date.month,5);
+//            // USER END
+//            break;
+//          // USER START (Optionally insert additional code for further notification handling)
+//          // USER END
+//          }
+//          break;
+//        case ID_LISTWHEEL_5: // Notifications sent by 'Listwheel'
+//          switch(NCode) {
+//          case WM_NOTIFICATION_CLICKED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_RELEASED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            // USER END
+//            break;
+//          case WM_NOTIFICATION_SEL_CHANGED:
+//            // USER START (Optionally insert code for reacting on notification message)
+//            hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_5);
+//            //获取当前句柄索引
+//            list_end_index[2] = LISTWHEEL_GetPos(hItem);
+//            //设置当前句柄数据项
+//            LISTWHEEL_SetSel(hItem,list_end_index[2]);
+//            LISTWHEEL_GetItemText(hItem,list_end_index[2],sel_end_date.day,5);
+//            // USER END
+//            break;
+//        }
+//        break;
+//    }
+//    case WM_TIMER:
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            //Data_Flush(pMsg);
+//            WM_RestartTimer(pMsg->Data.v,5000);
+//        }
+//        break;
+//    case MSG_CREATERRWIN:
+//        /**< 故障界面不存在则创建,存在则刷新告警 */
+//        err_window(pMsg->hWin);
+//        break;
+//    case MSG_DELERRWIN:
+//        /**< 故障界面存在则删除故障界面 */
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            GUI_EndDialog(err_hItem,0);
+//            err_hItem = 0;
+//        }
+//        break;
+//    default:
+//        WM_DefaultProc(pMsg);
+//        break;
+//    }
+//}
+///** @brief
+// *  输出管理员界面里的信息查询记录
+// * @param
+// * @param
+// * @return
+// *       CreateManagerLog
+//*/
+//WM_HWIN CreateManagerLog(uint8_t opt)
+//{
+//    _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, srcHwin, 0, 0);
+//    cur_win = _hWinManagerLogDate;
+//    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerTime, 20, 0);
+//    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerFlush,1000,0);
+//    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLogDate), ID_TimerSignal,5000,0);
+//    return 0;
+//}
 /*********************************************************************
 *
 *       _cbDialog
@@ -371,55 +915,41 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        WM_SetFocus(_hWinManagerAlarmLog);
-        /// TODO (zshare#1#): 下面的if不起作用.\
-        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if(_hWinManagerAlarmLog == cur_win)
-        {
-            /**< 数据处理 */
-            //Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if(_hWinManagerAlarmLog == cur_win)
-            {
-                /**< 故障分析 */
-                //Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-        }
+//        WM_SetFocus(_hWinManagerAlarmLog);
+//        /// TODO (zshare#1#): 下面的if不起作用.\
+//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+//        if(_hWinManagerAlarmLog == cur_win)
+//        {
+//            /**< 数据处理 */
+//            //Data_Process(pMsg);
+//            /**< 信号数据处理 */
+//            Signal_Show();
+//            /**< 灯光控制 */
+//            Led_Show();
+//            /**< 如果界面发生了切换 */
+//            if(_hWinManagerAlarmLog == cur_win)
+//            {
+//                /**< 故障分析 */
+//                //Err_Analy(pMsg->hWin);
+//                /**< 特殊触控点分析 */
+//                CaliDone_Analy(pMsg->hWin);
+//            }
+//        }
         break;
     case WM_INIT_DIALOG:
         //
-        // Initialization of 'Framewin'
+        // 初始化window 选择查询时间段日期的window
         //
-        FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5),&SIF16_Font,GUI_BLACK,"起始");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6),&SIF16_Font,GUI_BLACK,"终止");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF36_Font, GUI_BLACK, "起始");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_BLACK, "终止");
         //
         // Initialization of 'Button'
         //
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_GREEN,BUTTON_CI_UNPRESSED,GUI_BLACK,"信息查询");
-
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_RED,BUTTON_CI_UNPRESSED,GUI_RED,"历史查询");
-        BUTTON_SetPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),1);
-        BUTTON_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1),BUTTON_CI_PRESSED,GUI_RED);
-
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"系统配置");
-        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"退    出");
-
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询告警");
 
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5),GUI_TA_HCENTER|GUI_TA_VCENTER,
-                    &SIF16_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
+                    &SIF36_Font,BUTTON_CI_UNPRESSED,GUI_BLACK,BUTTON_CI_UNPRESSED,GUI_BLACK,"查询充电");
         //
         // Initialization of 'Listwheel'
         //
@@ -428,10 +958,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0+i);
             //设置字体
-            LISTWHEEL_SetFont(hItem,&GUI_FontComic18B_ASCII);
+            LISTWHEEL_SetFont(hItem, &SIF36_Font);//GUI_FontComic36B_ASCII);
             LISTWHEEL_SetTextAlign(hItem,GUI_TA_VCENTER | GUI_TA_VERTICAL);
             //设置吸附位置
-            LISTWHEEL_SetSnapPosition(hItem,15);
+            LISTWHEEL_SetSnapPosition(hItem,80);
             //设置绘制数据项所使用的行高
         //        LISTWHEEL_SetLineHeight(hItem,30);
             //设置选中的条目的文本颜色
@@ -486,42 +1016,34 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apDay+i));
         }
-//        //初始化multiedit
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
-//        MULTIEDIT_SetAutoScrollH(hItem,1);
-//        MULTIEDIT_SetAutoScrollV(hItem,1);
-//        MULTIEDIT_SetInsertMode(hItem, 1);
-//        MULTIEDIT_SetFont(hItem, &SIF24_Font);
-//        MULTIEDIT_SetCursorOffset(hItem,0);
-//        MULTIEDIT_EnableBlink(hItem,0,0);
-//        //memset(_alarmLog,'\0',strlen(_alarmLog));
-//        MULTIEDIT_SetText(hItem, " ");
-////        SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//创建垂直滑轮
-////        SCROLLBAR_CreateAttached(hItem, 0);//创建水平滑轮
-			//
-			// 初始列表控件
-			//
-			hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-			/* 设置列表控件中header控件的所显示文本的字体 */
-			hHeader = LISTVIEW_GetHeader(hItem);
-			HEADER_SetFont(hHeader, &SIF16_Font);
+        //
+        // 初始列表控件
+        //
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+        /* 设置列表控件中header控件的所显示文本的字体 */
+        hHeader = LISTVIEW_GetHeader(hItem);
+        HEADER_SetFont(hHeader, &SIF16_Font);
 //            LISTVIEW_SetAutoScrollH(hItem,1);
 //            LISTVIEW_SetAutoScrollV(hItem,1);
 
-            /*srollbar*/
-            hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
-            SCROLLBAR_SetNumItems(hScroll, 30 * 4);
-            SCROLLBAR_SetWidth(hScroll,20);
-            wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-            SCROLLBAR_SetNumItems(wScroll, 30 * 20);
-            SCROLLBAR_SetWidth(wScroll,20);
-            /*end*/
+        /*srollbar*/
+        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
+        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
+        SCROLLBAR_SetWidth(hScroll,20);
+        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
+        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
+        SCROLLBAR_SetWidth(wScroll,20);
+        /*end*/
 
-            //SCROLLBAR_SetDefaultWidth(15);
-			/* 设置列表控件选项中所显示文本的字体 */
-			LISTVIEW_SetFont(hItem, &SIF16_Font);
-			/* 设置列表控件表格可见 */
-			LISTVIEW_SetGridVis(hItem, 1);
+        //SCROLLBAR_SetDefaultWidth(15);
+        /* 设置列表控件选项中所显示文本的字体 */
+        LISTVIEW_SetFont(hItem, &SIF16_Font);
+        /* 设置列表控件表格可见 */
+        LISTVIEW_SetGridVis(hItem, 1);
+        WM_HideWindow(hItem);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        WM_HideWindow(hItem);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -558,8 +1080,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             /**< 跳转到模拟量信息查询 */
-            _deleteWin(_hWinManagerAlarmLog);
-            CreateManagerInfoAnalog();
+//            _deleteWin(_hWinManagerAlarmLog);
+//            CreateManagerInfoAnalog();
             break;
           // USER START (Optionally insert additional code for further notification handling)
           // USER END
@@ -583,8 +1105,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
             /**< 跳转到设置参数信息查询 */
-            _deleteWin(_hWinManagerAlarmLog);
-            CreateManagerSysSet();
+//            _deleteWin(_hWinManagerAlarmLog);
+            //CreateManagerSysSet();
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
@@ -604,10 +1126,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
-            /**< 跳转至home */
-            _deleteWin(_hWinManagerAlarmLog);
-            CreateHomePage();
-            // USER END
+              //隐藏查询时间button，listview，展示时间滚轮
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_0));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_1));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_2));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_3));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_4));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_5));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
+              WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
+
+              WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
+              WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+              // USER END
             break;
           // USER START (Optionally insert additional code for further notification handling)
           // USER END
@@ -621,6 +1154,23 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
+            //删除window 创建listview的window，并且初始化listview和填充值
+//            GUI_EndDialog(_hWinManagerLogDate,0);
+//            CreateManagerLog(0);
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_0));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_1));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_2));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_3));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_4));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_5));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
+
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+
             /**< get到现有表格的行列数 */
             column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
             for(i = 0;i < column_num;i++)
@@ -682,6 +1232,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         case ID_BUTTON_5: // Notifications sent by 'Button'
           switch(NCode) {
           case WM_NOTIFICATION_CLICKED:
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_0));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_1));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_2));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_3));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_4));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTWHEEL_5));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4));
+            WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5));
+
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3));
+            WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+
             column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
             for(i = 0;i < column_num;i++)
             {
@@ -858,37 +1422,40 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         break;
     }
-    case WM_TIMER:
-        if(pMsg->Data.v == _timerRTC)
-        {
-            /**< 显示时间和日期 */
-            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-            /**< 重启定时器 */
-            WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-            //Data_Flush(pMsg);
-            WM_RestartTimer(pMsg->Data.v,5000);
-        }
-        break;
-    case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
-        break;
-    case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if(bittest(winCreateFlag,0))
-        {
-            bitclr(winCreateFlag,0);
-            GUI_EndDialog(err_hItem,0);
-            err_hItem = 0;
-        }
+//    case WM_TIMER:
+//        if(pMsg->Data.v == _timerRTC)
+//        {
+//            /**< 显示时间和日期 */
+//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
+//            /**< 重启定时器 */
+//            WM_RestartTimer(pMsg->Data.v, 20);
+//        }
+//        if(pMsg->Data.v == _timerSignal)
+//        {
+//            WM_RestartTimer(pMsg->Data.v, 2000);
+//        }
+//        if(pMsg->Data.v == _timerData)
+//        {
+//            //Data_Flush(pMsg);
+//            WM_RestartTimer(pMsg->Data.v,5000);
+//        }
+//        break;
+//    case MSG_CREATERRWIN:
+//        /**< 故障界面不存在则创建,存在则刷新告警 */
+//        err_window(pMsg->hWin);
+//        break;
+//    case MSG_DELERRWIN:
+//        /**< 故障界面存在则删除故障界面 */
+//        if(bittest(winCreateFlag,0))
+//        {
+//            bitclr(winCreateFlag,0);
+//            GUI_EndDialog(err_hItem,0);
+//            err_hItem = 0;
+//        }
+//        break;
+    case MSG_DELETEMANAGERWIN:
+        GUI_EndDialog(_hWinManagerLog,0);
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -904,20 +1471,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 */
 
 /** @brief
- *  输出管理员界面里的信息查询告警记录部分
+ *  输出管理员界面里的信息查询记录选择日期
  * @param
  * @param
  * @return
- *       CreateManagerAlarmLog
+ *       CreateManagerLogDate
 */
-WM_HWIN CreateManagerAlarmLog(void)
+WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin)
 {
-    _hWinManagerAlarmLog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    cur_win = _hWinManagerAlarmLog;
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerFlush,1000,0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerAlarmLog), ID_TimerSignal,5000,0);
-    return 0;
+    _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
+    cur_win = _hWinManagerLogDate;
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerFlush, 1000, 0);
+    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerSignal, 5000, 0);
+    return _hWinManagerLogDate;
 }
 /*************************** End of file ****************************/
 

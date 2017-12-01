@@ -46,6 +46,7 @@
 #define pathChargingVoidImage       "/nand/system/ChargingVoidImage.bmp"
 
 #define pathChargeDoneImage         "/nand/system/ChargeDoneImage.bmp"
+#define pathOrderUploadImage        "/nand/system/OrderUploadImage.bmp"
 #define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
 #define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
 #define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"

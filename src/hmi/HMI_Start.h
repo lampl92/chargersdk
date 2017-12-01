@@ -43,6 +43,7 @@ extern p_inf *StopByQRImage;
 extern p_inf *ChargingVoidImage;
 
 extern p_inf *ChargeDoneImage;
+extern p_inf *OrderUploadImage;
 extern p_inf *NormalDoneImage;
 extern p_inf *FullDoneImage;
 extern p_inf *DevErrDoneImage;

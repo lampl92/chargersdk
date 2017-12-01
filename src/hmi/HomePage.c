@@ -129,7 +129,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         PreSignalIntensity = SignalIntensity;
         
-        hwinQR = WM_CreateWindowAsChild(299, 156, 200, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
+        hwinQR = WM_CreateWindowAsChild((800 - QR_info.Size)/2 - 10, (480 - QR_info.Size)/2, QR_info.Size, QR_info.Size, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
         break;
     case WM_PAINT:
      /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
@@ -149,15 +149,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     /**< 显示时间和日期 */
         Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
         //费用显示
-//        if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
-//        {
-//            prePowerFee = pEVSE->info.dDefSegFee;
-//            preServiceFee = pEVSE->info.dServiceFee;
-//            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-//            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
-//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
-//            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
-//        }
+        if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
+        {
+            prePowerFee = pEVSE->info.dDefSegFee;
+            preServiceFee = pEVSE->info.dServiceFee;
+            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
+        }
         if ((SignalFlag == 4) || (SignalFlag > 4))
         {
             SignalIntensity = getSignalIntensity();
@@ -189,16 +189,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
                 }
                 
-            }
-            PreSignalIntensity = SignalIntensity;  
-            SignalFlag = 0;
-            
-            prePowerFee = pEVSE->info.dDefSegFee;
-            preServiceFee = pEVSE->info.dServiceFee;
-            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
+            }  
         }
         SignalFlag++;
         /**< 重启定时器 */

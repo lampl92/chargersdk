@@ -1512,7 +1512,19 @@
     <ClCompile Include="..\..\..\src\hmi\HomePage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Charge_Done.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
   </ItemGroup>

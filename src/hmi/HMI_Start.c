@@ -15,6 +15,11 @@ WM_HWIN cur_win;//记录当前界面
 int SignalIntensity;
 int PreSignalIntensity;
 
+//int QR_Width;//NUmber of "Moudle"
+//int QR_Size;//Size of Bitmap in pixels
+
+GUI_QR_INFO QR_info;
+
 p_inf *HomeImage;
 p_inf *SignalImage0;
 p_inf *SignalImage1;
@@ -42,6 +47,7 @@ p_inf *StopByQRImage;
 p_inf *ChargingVoidImage;
 
 p_inf *ChargeDoneImage;
+p_inf *OrderUploadImage;
 p_inf *NormalDoneImage;
 p_inf *FullDoneImage;
 p_inf *DevErrDoneImage;
@@ -68,25 +74,26 @@ void MainTask(void)
     {
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
-        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 6, GUI_QR_ECLEVEL_L, 0);
-        
-    
+        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
+        GUI_QR_GetInfo(qr_hmem, &QR_info);
+
+
         SignalImage0 = readPicInf(pathSignalImage0);
         SignalImage1 = readPicInf(pathSignalImage1);
         SignalImage2 = readPicInf(pathSignalImage2);
         SignalImage3 = readPicInf(pathSignalImage3);
         SignalImage4 = readPicInf(pathSignalImage4);
         SignalImage5 = readPicInf(pathSignalImage5);
-        
-        HomeImage = readPicInf(pathHomeImage); 
-        
+
+        HomeImage = readPicInf(pathHomeImage);
+
         CardInfoImage = readPicInf(pathCardInfoImage);
         GetCardInfoImage = readPicInf(pathGetCardInfoImage);
         CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
         CardArrearsImage = readPicInf(pathCardArrearsImage);
         PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
         CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
-        
+
         ChargingImage = readPicInf(path3zhengzaichongdian);
         cartoonImage0 = readPicInf(pathCartoonImage0);
         cartoonImage1 = readPicInf(pathCartoonImage1);
@@ -99,19 +106,20 @@ void MainTask(void)
         ChargingVoidImage = readPicInf(pathChargingVoidImage);
 
         ChargeDoneImage = readPicInf(pathChargeDoneImage);
+        OrderUploadImage = readPicInf(pathOrderUploadImage);
         NormalDoneImage = readPicInf(pathNormalDoneImage);
         FullDoneImage = readPicInf(pathFullDoneImage);
         DevErrDoneImage = readPicInf(pathDevErrDoneImage);
         MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
         ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-        
+
         AdvertisementImage = readPicInf(pathAdvertisementImage);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
         Create_SIF24(pathstSIF24);
         Create_SIF36(pathstSIF36);
-     
+
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
