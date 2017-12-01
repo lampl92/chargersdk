@@ -151,9 +151,7 @@ void vTaskEVSEData(void *pvParameters)
                     }
                 }
                 /*****************************************/
-                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                 defEventBitOrderStopType,
-                                                 pdTRUE, pdFALSE, 0);
+                uxBitsData = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                 if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
                 {
                     pCON->order.ucStopType = defOrderStopType_Fee;
@@ -173,6 +171,14 @@ void vTaskEVSEData(void *pvParameters)
                 if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //自动充满
                 {
                     pCON->order.ucStopType = defOrderStopType_Full;
+                }
+                if ((uxBitsData & defEventBitOrderStopTypeCurr) == defEventBitOrderStopTypeCurr)    //过流
+                {
+                    pCON->order.ucStopType = defOrderStopType_OverCurr;
+                }
+                if ((uxBitsData & defEventBitOrderStopTypeScram) == defEventBitOrderStopTypeScram)    //急停
+                {
+                    pCON->order.ucStopType = defOrderStopType_Scram;
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
@@ -223,12 +229,6 @@ void vTaskEVSEData(void *pvParameters)
         }
         /********** end of 读取文件配置 **************/
 
-//        uxBits = xEventGroupWaitBits(xHandleEventData, defEventBitAddOrder, pdTRUE, pdFALSE, 0);
-//        if((uxBits & defEventBitAddOrder) == defEventBitAddOrder)
-//        {
-//            DataAddOrder();
-//            xEventGroupSetBits(xHandleEventData, defEventBitAddOrderOK);
-//        }
         /********** 更新密钥 **************/
         if(pechProto->info.tNewKeyChangeTime <= time(NULL))
         {

@@ -59,28 +59,28 @@
 
 
 /*------pCON->status.xHandleEventOrder*/
-#define defEventBitOrderTmp             BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
-#define defEventBitOrderMakeOK          BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
-#define defEventBitOrderUpdateOK        BIT_2
-#define defEventBitAddOrder             BIT_3
-#define defEventBitAddOrderOK           BIT_4
+#define defEventBitOrderTmp                      BIT_0    //获取刷卡数据后通知taskdata将tmpOrder填充到枪的order中。
+#define defEventBitOrderMakeOK                   BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
+#define defEventBitOrderUpdateOK                 BIT_2
 
-#define defEventBitOrder_HMIDispOK      BIT_5
-#define defEventBitOrder_RemoteOrderOK  BIT_6
-#define defEventBitOrder_RemoteRTDataOK BIT_7
-#define defEventBitOrder_StoreOK        BIT_8
+#define defEventBitOrder_HMIDispOK               BIT_5
+#define defEventBitOrder_RemoteOrderOK           BIT_6
+#define defEventBitOrder_RemoteRTDataOK          BIT_7
+#define defEventBitOrder_StoreOK                 BIT_8
 
-#define defEventBitOrderStopTypeLimitFee    BIT_9
-#define defEventBitOrderStopTypeLimitTime   BIT_10
-#define defEventBitOrderStopTypeRemoteStop  BIT_11
-#define defEventBitOrderStopTypeRFIDStop    BIT_12
-#define defEventBitOrderStopTypeFull        BIT_13
+#define defEventBitOrderStopTypeCurr             BIT_3
+#define defEventBitOrderStopTypeScram            BIT_4
+#define defEventBitOrderStopTypeLimitFee         BIT_9
+#define defEventBitOrderStopTypeLimitTime        BIT_10
+#define defEventBitOrderStopTypeLimitPower       BIT_17
+#define defEventBitOrderStopTypeRemoteStop       BIT_11
+#define defEventBitOrderStopTypeRFIDStop         BIT_12
+#define defEventBitOrderStopTypeFull             BIT_13
 
-#define defEventBitOrderMakeFinish      BIT_14  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToChargetask  BIT_15 
-#define defEventBitOrderFinishToHMI  BIT_16 
+#define defEventBitOrderMakeFinish               BIT_14  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderFinishToChargetask       BIT_15 
+#define defEventBitOrderFinishToHMI              BIT_16 
 
-#define defEventBitOrderStopType    (defEventBitOrderStopTypeLimitFee | defEventBitOrderStopTypeRemoteStop | defEventBitOrderStopTypeRFIDStop)
 #if EVSE_USING_GUI
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK | \
@@ -121,10 +121,10 @@
 #define defEventBitDiagChargingData     BIT_5
 #define defEventBitDiagEVSEState        BIT_6
 /*------pCON->status.xHandleEventException*/
-#define defEventBitExceptionTempW       BIT_0   //Warning
-//#define defEventBitExceptionTempC       BIT_1   //Critical
+#define defEventBitExceptionTempW       BIT_0   
+#define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
-#define defEventBitExceptionCurr        BIT_3
+//#define defEventBitExceptionCurr        BIT_3
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
@@ -141,7 +141,6 @@
 #define defEventBitExceptionSocketTempSensor  BIT_15
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID | defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
-#define defEventBitExceptionStopType    (defEventBitExceptionLimitFee | defEventBitExceptionRemoteStop | defEventBitExceptionRFIDStop)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK

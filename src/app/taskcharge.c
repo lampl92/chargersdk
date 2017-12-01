@@ -278,9 +278,7 @@ void vTaskEVSECharge(void *pvParameters)
                     break;
                 }
                 /*** 判断用户相关停止条件  ***/
-                uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionStopType,
-                                                      pdTRUE, pdFALSE, 0);
+                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
                 if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
@@ -299,6 +297,16 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 /******************************/
