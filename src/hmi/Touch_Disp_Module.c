@@ -360,21 +360,13 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     if (bittest(calebrate_done, 8))
     {
         bitclr(calebrate_done, 8);
-        //if ((cur_win == _hWinHome) && (pCON->status.xPlugState == UNPLUG))
-        //{
-            //_deleteWin(hWin);
+        if (AdvertisementRecordFlag == 0)
+        {
             WM_HideWindow(cur_win);
             WM_ShowWindow(_hWinAdvertizement);
-            
-            //bitset(AdvertisementRecordFlag, 0);
-            // CreateAdvertisementPage();
-       // }
-//        if (cur_win == _hWinCharging)
-//        {
-//            _deleteWin(hWin);
-//            bitset(AdvertisementRecordFlag, 1);
-//            CreateAdvertisementPage();
-//        }     
+            AdvertisementRecordFlag = 1;
+        }
+          
     }
 }
 /** @brief 故障弹窗弹出展示

@@ -11,7 +11,6 @@
 
 static WM_HTIMER _timerRTC;
 
-uint8_t AdvertisementRecordFlag;//记录广告来源，0位为home页，1位为charging页
 WM_HWIN _hWinAdvertizement;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
@@ -21,45 +20,32 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static void Data_Process(WM_MESSAGE *pMsg)
 {
-//    CON_t *pCON;
-//    EventBits_t uxBitRFID;
-//    EventBits_t uxBitHMI;
-//    WM_HWIN hWin = pMsg->hWin;
-//    pCON = CONGetHandle(0);
-//    
-//    SignalIntensity = getSignalIntensity();
-//    
-//    if (bittest(AdvertisementRecordFlag, 0))
-//    {
-//        uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
-//            defEventBitGotIDtoHMI,
-//            pdTRUE,
-//            pdTRUE,
-//            0);
-//      //  if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)  && (SignalIntensity > 0))
-//        if (((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI))
-//        {
-//            WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
-//        }
-//        if (pCON->status.xPlugState == PLUG)
-//        {
-//            WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
-//        }
-//    }
-//    if (bittest(AdvertisementRecordFlag, 1))
-//    {
-//        uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
-//            defEventBitHMI_ChargeReqDispDone,
-//            pdTRUE,
-//            pdTRUE,
-//            0);
-//        if ((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
-//        {
-//            /**< 跳到充电完成 */
-//            WM_SendMessageNoPara(hWin, MSG_JUMPCHARGEDONE);
-//        }
-//    }
-//  
+    CON_t *pCON;
+    pCON = CONGetHandle(0);
+    if (cur_win == _hWinHome)
+    {
+        if (pCON->status.xPlugState == PLUG)
+        {
+            if (AdvertisementRecordFlag == 1)
+            {
+                WM_HideWindow(_hWinAdvertizement);
+                WM_ShowWindow(cur_win);
+                AdvertisementRecordFlag = 0;
+            }
+        }
+    }
+    if (cur_win == _hWinCharging)
+    {
+        if (pCON->status.xPlugState == UNPLUG)
+        {
+            if (AdvertisementRecordFlag == 1)
+            {
+                WM_HideWindow(_hWinAdvertizement);
+                WM_ShowWindow(cur_win);
+                AdvertisementRecordFlag = 0;
+            }
+        }
+    }
 }
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -84,14 +70,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch (Id)
             {
             case ID_IMAGE_0:
-                WM_HideWindow(_hWinAdvertizement);
-                WM_ShowWindow(cur_win);
-//                prePowerFee = 0;
-//                preServiceFee = 0;
-//                AdvertisementRecordFlag = 0;
-//                _deleteWin(_hWinAdvertizement);
-//                _hWinAdvertizement = 0;
-//                CreateHomePage();
+                if (AdvertisementRecordFlag == 1)
+                {
+                    WM_HideWindow(_hWinAdvertizement);
+                    WM_ShowWindow(cur_win);
+                    AdvertisementRecordFlag = 0;
+                }
                 break;
             default:
                 break;
@@ -101,47 +85,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case WM_TIMER:
-//        if (pMsg->Data.v == _timerRTC)
-//        {
-//            Data_Process(pMsg);
-//            WM_RestartTimer(pMsg->Data.v, 100);
-//        }
-//    case MSG_CREATERRWIN:
-///**< 故障界面不存在则创建,存在则刷新告警 */
-//        err_window(pMsg->hWin);
-//        break;
-//    case MSG_DELERRWIN:
-//        /**< 故障界面存在则删除故障界面 */
-//        if (bittest(winCreateFlag, 0))
-//        {
-//            bitclr(winCreateFlag, 0);
-//            //WM_DeleteWindow(err_hItem);
-//            GUI_EndDialog(err_hItem, 0);
-//            err_hItem = 0;
-//        }
-//        break;
-//    case MSG_JUMPHOME:
-//        prePowerFee = 0;
-//        preServiceFee = 0;
-//        bitclr(winInitDone, 0);
-//        AdvertisementRecordFlag = 0;
-//       _deleteWin(_hWinAdvertizement);
-//        _hWinAdvertizement= 0;
-//        CreateHomePage();
-//        break;
-//    case MSG_JUMPCARDINFO:
-//        bitclr(winInitDone, 0);
-//        AdvertisementRecordFlag = 0;
-//        _deleteWin(_hWinAdvertizement);
-//        CreateCardInfoPage();
-//        break;
-//    case MSG_JUMPCHARGEDONE:
-//        bitclr(winInitDone, 0);
-//        AdvertisementRecordFlag = 0;
-//        _deleteWin(_hWinAdvertizement);
-//        _hWinAdvertizement = 0;
-//        CreateChargeDonePage();
-//        break;
+        if (pMsg->Data.v == _timerRTC)
+        {
+            Data_Process(pMsg);
+            WM_RestartTimer(pMsg->Data.v, 100);
+        }
+
     default:
         WM_DefaultProc(pMsg);
         break;
@@ -153,9 +102,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 WM_HWIN CreateAdvertisementPage(void);
 WM_HWIN CreateAdvertisementPage(void) {
     _hWinAdvertizement = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-//    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinAdvertizement), ID_TimerTime, 100, 0);
-//    cur_win = _hWinAdvertizement;
-//    bitset(winInitDone, 0);
+    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinAdvertizement), ID_TimerTime, 100, 0);
     return 0;
 }
 
