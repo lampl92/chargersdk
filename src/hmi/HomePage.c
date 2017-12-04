@@ -34,7 +34,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "PowerFee", ID_TEXT_0, 96, 168, 96, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "ServiceFee", ID_TEXT_1, 96, 278, 96, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Date", ID_TEXT_2, 4, 4, 120, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "Time", ID_TEXT_3, 136, 4, 120, 24, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Time", ID_TEXT_3, 136, 4, 120, 24, 0, 0x0, 0 },
 };
 
 //·¢ËÍË¢¿¨»òÉ¨Âë»»Ò³ÐÅºÅ
