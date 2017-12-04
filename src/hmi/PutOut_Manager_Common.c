@@ -92,6 +92,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int          NCode;
     int          Id;
     WM_HWIN     hWinPage;
+    CON_t       *pCont;
 
     switch (pMsg->MsgId)
     {
@@ -134,7 +135,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_HCENTER|GUI_TA_VCENTER,
             &SIF24_Font,BUTTON_CI_UNPRESSED, GUI_BLACK, BUTTON_CI_UNPRESSED,GUI_BLACK, "退出管理");
 
-        
+
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -156,7 +157,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(_hWinManagerCommon, 0);
                 prePowerFee = 0;
                 preServiceFee = 0;
-                CreateHomePage();
+                //增加跳出管理员时界面选择，暂时只添加充电中和首页
+                if(pCON->state == STATE_CON_CHARGING)
+                {
+                    CreateChargingPage();
+                }
+                else
+                {
+                    CreateHomePage();
+                }
                 break;
             }
             break;
