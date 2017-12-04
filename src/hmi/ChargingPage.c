@@ -306,6 +306,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPCHARGEDONE:
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
         bitclr(winInitDone, 0);
         _deleteWin(_hWinCharging);
         _hWinCharging = 0;

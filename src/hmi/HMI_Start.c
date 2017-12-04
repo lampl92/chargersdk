@@ -123,7 +123,10 @@ void MainTask(void)
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
+        CreateAdvertisementPage();
         CreateHomePage();
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
     }
     else
     {

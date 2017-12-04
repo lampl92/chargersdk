@@ -304,6 +304,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPHOME:
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
         prePowerFee = 0;
         preServiceFee = 0;
         current_page = _HOMEPAGE;
@@ -314,6 +316,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         CreateHomePage();
         break;
     case MSG_JUMPCHAING:
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
         current_page = _CHARGINGPAGE;
         bitset(winInitDone, 7);
         EventFlag = 0;

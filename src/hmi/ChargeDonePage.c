@@ -294,6 +294,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
             break;
         case MSG_JUMPHOME:
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
             prePowerFee = 0;
             preServiceFee = 0;
             first_flag = 0;

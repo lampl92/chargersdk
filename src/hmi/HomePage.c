@@ -208,6 +208,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPCARDINFO:
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
         GUI_EndDialog(hwinQR, 0);
         _deleteWin(_hWinHome);
         CreateCardInfoPage();
@@ -215,6 +217,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         bitset(winInitDone, 7);
         break;
     case MSG_JUMPCHAING:
+        WM_HideWindow(_hWinAdvertizement);
+        WM_ShowWindow(cur_win);
         _deleteWin(_hWinHome);
         CreateChargingPage();
         current_page = _CHARGINGPAGE;
