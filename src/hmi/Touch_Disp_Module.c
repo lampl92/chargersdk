@@ -360,12 +360,24 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     if (bittest(calebrate_done, 8))
     {
         bitclr(calebrate_done, 8);
-        if (AdvertisementRecordFlag == 0)
+        if ((cur_win == _hWinHome) && (pCON->status.xPlugState == UNPLUG))
         {
-            WM_HideWindow(cur_win);
-            WM_ShowWindow(_hWinAdvertizement);
-            AdvertisementRecordFlag = 1;
+            if (AdvertisementRecordFlag == 0)
+            {
+                WM_HideWindow(cur_win);
+                WM_ShowWindow(_hWinAdvertizement);
+                AdvertisementRecordFlag = 1;
+            }
         }
+        if (cur_win == _hWinCharging)
+        {
+            if (AdvertisementRecordFlag == 0)
+            {
+                WM_HideWindow(cur_win);
+                WM_ShowWindow(_hWinAdvertizement);
+                AdvertisementRecordFlag = 1;
+            }
+        }   
           
     }
 }
