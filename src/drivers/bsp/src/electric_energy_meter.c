@@ -2,6 +2,10 @@
 #include "user_app.h"
 #include "FreeRTOS.h"
 #include "task.h"
+
+#define read     0x03
+#define write    0x10
+
 void RS485_Init(u32 bound)
 {
     //GPIO¶Ë¿ÚÉèÖÃ
