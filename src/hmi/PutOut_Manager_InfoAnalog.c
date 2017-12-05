@@ -85,10 +85,10 @@
 #define analogACCurrent "交流电流"
 #define analogCPVol "充电导引电压"
 #define analogACFreq "频率"
-#define analogACTempL "输入端子L温度"
-#define analogACTempN "输入端子N温度"
-#define analogOutTempL "输出端子L温度"
-#define analogOutTempN "输出端子N温度"
+#define analogACTempL "市电A(L)相温度"
+#define analogACTempN "市电N相温度"
+#define analogOutTempL "A(L)相温度"
+#define analogOutTempN "N相温度"
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;

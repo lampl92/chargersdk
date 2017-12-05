@@ -205,7 +205,14 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
             sprintf((char *)buf, "%d", jsItem->valueint);
-            LISTVIEW_SetItemText(hItem, 2, i, buf);
+            if (jsItem->valueint == 0)
+            {
+                LISTVIEW_SetItemText(hItem, 2, i, "桩");
+            }
+            else if (jsItem->valueint == 1)
+            {
+                LISTVIEW_SetItemText(hItem, 2, i, "枪");                
+            }
 
             //0 状态 1 告警 2 异常 3 故障
             jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
