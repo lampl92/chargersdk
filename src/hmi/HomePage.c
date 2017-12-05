@@ -87,7 +87,8 @@ static void _cbWindowQR(WM_MESSAGE *pMsg)
 static void _cbDialog(WM_MESSAGE * pMsg) {
     
     WM_HWIN      hItem;
-    
+    uint8_t pos = 0;
+    time_t  now;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
     
@@ -151,10 +152,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         //费用显示
         if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
         {
-            prePowerFee = pEVSE->info.dDefSegFee;
-            preServiceFee = pEVSE->info.dServiceFee;
-            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
+            now = time(NULL);
+            JudgeSegState(now, pechProto, &pos);
+//            pechProto->info.dSegPowerFee[pos];
+//            pechProto->info.dSegServFee[pos];
+            prePowerFee = pechProto->info.dSegPowerFee[pos];
+            preServiceFee = pechProto->info.dSegServFee[pos];
+//            prePowerFee = pEVSE->info.dDefSegFee;
+//            preServiceFee = pEVSE->info.dServiceFee;
+            sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[pos]);
+            sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[pos]);
+//            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
+//            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
         }

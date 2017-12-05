@@ -158,7 +158,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 prePowerFee = 0;
                 preServiceFee = 0;
                 //增加跳出管理员时界面选择，暂时只添加充电中和首页
-                if(pCON->state == STATE_CON_CHARGING)
+                if(pCont->state == STATE_CON_CHARGING)
                 {
                     CreateChargingPage();
                 }
