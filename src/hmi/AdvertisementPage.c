@@ -65,7 +65,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         switch (NCode)
         {
         case WM_NOTIFICATION_CLICKED:
-        case WM_NOTIFICATION_RELEASED:
+        //case WM_NOTIFICATION_RELEASED:
         case WM_NOTIFICATION_MOVED_OUT:
             switch (Id)
             {

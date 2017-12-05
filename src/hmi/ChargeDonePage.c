@@ -196,32 +196,33 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
             break;
         case WM_PAINT:
-       // TODO (zshare#1#): 下面的if不起作用.\但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-            if ((bittest(winInitDone, 0))&&(_hWinChargDone == cur_win))
-            {
-                /**< 数据处理 */
-                Data_Process(pMsg);
-                /**< 信号数据处理 */
-                Signal_Show();
-                /**< 灯光控制 */
-                Led_Show();
-                /**< 如果界面发生了切换 */
-                if (_hWinChargDone == cur_win)
-                {
-                    /**< 故障分析 */
-                    Err_Analy(pMsg->hWin);
-                    /**< 特殊触控点分析 */
-                    CaliDone_Analy(pMsg->hWin);
-                }
-            }
+
             break;
         case WM_TIMER:
             if (pMsg->Data.v == _timerRTC)
             {
+                       // TODO (zshare#1#): 下面的if不起作用.\但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+                if ((bittest(winInitDone, 0))&&(_hWinChargDone == cur_win))
+                {
+                    /**< 数据处理 */
+                    Data_Process(pMsg);
+                    /**< 信号数据处理 */
+                    Signal_Show();
+                    /**< 灯光控制 */
+                    Led_Show();
+                    /**< 如果界面发生了切换 */
+                    if (_hWinChargDone == cur_win)
+                    {
+                        /**< 故障分析 */
+                        Err_Analy(pMsg->hWin);
+                        /**< 特殊触控点分析 */
+                        CaliDone_Analy(pMsg->hWin);
+                    }
+                }
                 /**< 显示时间和日期 */
                 Caculate_RTC_Show(pMsg, ID_TEXT_0, ID_TEXT_1);
                 
-                if (SignalFlag == 4)
+                if ((SignalFlag == 12) || (SignalFlag > 12))
                 {
                     SignalIntensity = getSignalIntensity();
                     if (SignalIntensity != PreSignalIntensity)
@@ -277,7 +278,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 }
                 
 /**< 重启定时器 */
-                WM_RestartTimer(pMsg->Data.v, 300);
+                WM_RestartTimer(pMsg->Data.v, 50);
             }
             break;
         case MSG_CREATERRWIN:

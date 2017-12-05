@@ -133,6 +133,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case WM_PAINT:
      /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+        break;
+    case WM_TIMER:
         if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
         {
             Data_Process(pMsg);
@@ -142,10 +144,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 Err_Analy(pMsg->hWin);
                 CaliDone_Analy(pMsg->hWin);
-            }
+            }    
         }
-        break;
-    case WM_TIMER:
     /**< 显示时间和日期 */
         Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
         //费用显示
@@ -158,7 +158,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
         }
-        if ((SignalFlag == 4) || (SignalFlag > 4))
+        if ((SignalFlag == 12) || (SignalFlag > 12))
         {
             SignalIntensity = getSignalIntensity();
             if (SignalIntensity != PreSignalIntensity)
@@ -193,7 +193,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         SignalFlag++;
         /**< 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, 300);
+        WM_RestartTimer(pMsg->Data.v, 50);
         break;
     case MSG_CREATERRWIN:
         /**< 故障界面不存在则创建,存在则刷新告警 */
@@ -241,7 +241,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateHomePage(void) {
     _hWinHome = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 250, 0);
+    WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 50, 0);
     cur_win = _hWinHome;
     bitset(winInitDone, 0);
     return 0;

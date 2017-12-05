@@ -51,7 +51,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         pdTRUE,
         pdTRUE,
         0);
-    if (((uxBitRFID & defEventBitGoodIDReqDisp) == defEventBitGoodIDReqDisp) && (!bittest(EventFlag,0)))
+    if (((uxBitRFID & defEventBitGoodIDReqDisp) == defEventBitGoodIDReqDisp) && (!bittest(EventFlag, 0)))
     {
         /**< 显示卡余额 */
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
@@ -108,7 +108,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
         /** 跳转充电界面 */
-        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2),CardInfoVoidImage->pfilestring, CardInfoVoidImage->pfilesize);        
+        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), CardInfoVoidImage->pfilestring, CardInfoVoidImage->pfilesize);        
         //bitclr(winInitDone, 0);
         first_CardInfo = 0;
         bitset(winInitDone, 3);
@@ -194,29 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBMP(hItem, GetCardInfoImage->pfilestring, GetCardInfoImage->pfilesize);
         break;
     case WM_PAINT://MSG_UPDATEDATA:
-        /// TODO (zshare#1#): 下面的if不起作用.但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
-        //if(_hWinCardInfo == cur_win)
-	    {
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-	        if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
-		    //if(_hWinCardInfo == cur_win)
-			{
-                /**< 故障分析 */
-                Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-				/**< 数据处理 */
-    			//Data_Flush(pMsg);
-	            Data_Process(pMsg);
 
-            }
-//            CaliDone_Analy(pMsg->hWin);
-        }
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerRTC)
@@ -261,7 +239,29 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_RestartTimer(pMsg->Data.v, 300);
         }
         if (pMsg->Data.v == _timerSignal)
-        {
+        {        /// TODO (zshare#1#): 下面的if不起作用.但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+            if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+            //if(_hWinCardInfo == cur_win)
+            {
+                /**< 信号数据处理 */
+                Signal_Show();
+                /**< 灯光控制 */
+                Led_Show();
+                /**< 如果界面发生了切换 */
+                if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+                //if(_hWinCardInfo == cur_win)
+                {
+                    /**< 故障分析 */
+                    Err_Analy(pMsg->hWin);
+                    /**< 特殊触控点分析 */
+                    CaliDone_Analy(pMsg->hWin);
+                    /**< 数据处理 */
+                    //Data_Flush(pMsg);
+                    Data_Process(pMsg);
+
+                }
+                //            CaliDone_Analy(pMsg->hWin);
+            }
             if (bittest(winInitDone, 2) && bittest(winInitDone, 3))
             {
                 
