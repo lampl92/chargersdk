@@ -7,6 +7,7 @@
 #include "stringName.h"
 
 uint16_t calebrate_done = 0;
+uint8_t AdvertisementRecordFlag = 0;//标志现在是否处于广告页，1为在广告页，0为不在广告页
 uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
@@ -123,7 +124,10 @@ void MainTask(void)
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
+        CreateAdvertisementPage();
+        WM_HideWindow(_hWinAdvertizement);
         CreateHomePage();
+        WM_ShowWindow(cur_win);
     }
     else
     {

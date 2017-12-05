@@ -187,26 +187,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &SIF24_Font, GUI_BLUE, " ");
         break;
     case WM_PAINT://MSG_UPDATEDATA:
-    /// TODO (zshare#1#): 下面的if不起作用.\但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if ((bittest(winInitDone, 0))&&(_hWinCharging == cur_win))
-        {
-            /**< 数据处理 */
-            Data_Process(pMsg);
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-            if (_hWinCharging == cur_win)
-            {
-                /**< 故障分析 */
-                Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-            }
-           // Data_Flush(pMsg);
-//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-        }
+
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerRTC)
@@ -287,8 +268,27 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         if (pMsg->Data.v == _timerText)
         {
-            Data_Flush(pMsg);
-            WM_RestartTimer(pMsg->Data.v, 500);
+                /// TODO (zshare#1#): 下面的if不起作用.\但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+            if ((bittest(winInitDone, 0))&&(_hWinCharging == cur_win))
+            {
+                /**< 数据处理 */
+                Data_Process(pMsg);
+                /**< 信号数据处理 */
+                Signal_Show();
+                /**< 灯光控制 */
+                Led_Show();
+                /**< 如果界面发生了切换 */
+                if (_hWinCharging == cur_win)
+                {
+                    /**< 故障分析 */
+                    Err_Analy(pMsg->hWin);
+                    /**< 特殊触控点分析 */
+                    CaliDone_Analy(pMsg->hWin);
+                }
+                 Data_Flush(pMsg);
+     //            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
+            }
+            WM_RestartTimer(pMsg->Data.v, 50);
         }
         break;
     case MSG_CREATERRWIN:
@@ -306,6 +306,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPCHARGEDONE:
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         bitclr(winInitDone, 0);
         _deleteWin(_hWinCharging);
         _hWinCharging = 0;
@@ -328,7 +334,7 @@ WM_HWIN CreateChargingPage(void) {
     cur_win = _hWinCharging;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerTime, 300, 0);
     _timerCortoon = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerCortoon, 1000, 0);
-    _timerText = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerText, 500, 0);
+    _timerText = WM_CreateTimer(WM_GetClientWindow(_hWinCharging), ID_TimerText, 50, 0);
     bitset(winInitDone, 0);
     return 0;
 }

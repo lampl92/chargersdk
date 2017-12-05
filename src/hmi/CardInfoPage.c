@@ -194,29 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBMP(hItem, GetCardInfoImage->pfilestring, GetCardInfoImage->pfilesize);
         break;
     case WM_PAINT://MSG_UPDATEDATA:
-        /// TODO (zshare#1#): 下面的if不起作用.但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-        if((bittest(winInitDone,0))&&(_hWinCardInfo == cur_win))
-        //if(_hWinCardInfo == cur_win)
-	    {
-            /**< 信号数据处理 */
-            Signal_Show();
-            /**< 灯光控制 */
-            Led_Show();
-            /**< 如果界面发生了切换 */
-	        if((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
-		    //if(_hWinCardInfo == cur_win)
-			{
-                /**< 故障分析 */
-                Err_Analy(pMsg->hWin);
-                /**< 特殊触控点分析 */
-                CaliDone_Analy(pMsg->hWin);
-				/**< 数据处理 */
-    			//Data_Flush(pMsg);
-	            Data_Process(pMsg);
 
-            }
-//            CaliDone_Analy(pMsg->hWin);
-        }
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerRTC)
@@ -261,7 +239,29 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_RestartTimer(pMsg->Data.v, 300);
         }
         if (pMsg->Data.v == _timerSignal)
-        {
+        {        /// TODO (zshare#1#): 下面的if不起作用.但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+            if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+            //if(_hWinCardInfo == cur_win)
+            {
+                /**< 信号数据处理 */
+                Signal_Show();
+                /**< 灯光控制 */
+                Led_Show();
+                /**< 如果界面发生了切换 */
+                if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
+                //if(_hWinCardInfo == cur_win)
+                {
+                    /**< 故障分析 */
+                    Err_Analy(pMsg->hWin);
+                    /**< 特殊触控点分析 */
+                    CaliDone_Analy(pMsg->hWin);
+                    /**< 数据处理 */
+                    //Data_Flush(pMsg);
+                    Data_Process(pMsg);
+
+                }
+                //            CaliDone_Analy(pMsg->hWin);
+            }
             if (bittest(winInitDone, 2) && bittest(winInitDone, 3))
             {
                 
@@ -304,6 +304,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_JUMPHOME:
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         prePowerFee = 0;
         preServiceFee = 0;
 //        current_page = _HOMEPAGE;
@@ -314,7 +320,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         CreateHomePage();
         break;
     case MSG_JUMPCHAING:
-//        current_page = _CHARGINGPAGE;
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
+        current_page = _CHARGINGPAGE;
         bitset(winInitDone, 7);
         EventFlag = 0;
         _deleteWin(_hWinCardInfo);
