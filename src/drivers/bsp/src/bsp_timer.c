@@ -226,7 +226,7 @@ void TIM3_IRQHandler (void)//0.1ms
         flat_pwm_change = 0;
         
     }
-    if((pwm_samp_flag==1)&&(pwm_samp_timer>=3))
+    if((pwm_samp_flag==1)&&(pwm_samp_timer>=2))
     {
         RUN_ON;
         get_CP1();
