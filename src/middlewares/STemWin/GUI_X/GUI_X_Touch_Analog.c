@@ -105,20 +105,19 @@ void GUI_TOUCH_X_ActivateX(void)
 
             /**< 键盘鼠标路线会触发拐角的键,
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
-            if (bittest(winCreateFlag, 2))
+            if (_pidFlag == 1)
             {
+                _pidFlag = 0;
+                Buzzer_control(0);
+                if (bittest(winCreateFlag, 2))
+                {
+                    State.x = 400;
+                    State.y = 60;
+                }
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
-
-                adc_x = 569;
-                adc_y = 60;
             }
-            else
-            {
-                State.Pressed = 0;
-                GUI_TOUCH_StoreStateEx(&State);
-            }
-        }        
+        }
     }
 }
 
@@ -145,7 +144,7 @@ int  GUI_TOUCH_X_MeasureX(void)
         {
             step = 1;
         }
-        else if ((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40))
+        else if ((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40)&&(step == 1))
         {
             step = 2;
             if (!bittest(calebrate_done, 8))

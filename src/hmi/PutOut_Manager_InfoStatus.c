@@ -260,11 +260,11 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	/**< 输出继电器状态 */
 	if ((pcont->status.ulSignalState & defSignalCON_State_AC_A_Relay) == defSignalCON_State_AC_A_Relay)
 	{
-    	LISTVIEW_SetItemText(hItem, 1, 4, "×");//"故障");
+    	LISTVIEW_SetItemText(hItem, 1, 4, "√");//"故障");
 	}
 	else
 	{
-    	LISTVIEW_SetItemText(hItem, 1, 4, "√");//"正常");
+    	LISTVIEW_SetItemText(hItem, 1, 4, "×");//"正常");
 	}
 
 	/**< 控制导引状态 */
@@ -387,7 +387,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 频率 */
         LISTVIEW_SetItemText(hItem, 2, 3, stateACFreq);
         /**< 防雷器状态 */
-        LISTVIEW_SetItemText(hItem, 4, 3, stateScram);
+        LISTVIEW_SetItemText(hItem, 4, 3, stateACFL);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 输出继电器状态 */
         LISTVIEW_SetItemText(hItem, 0, 4, stateRelay);

@@ -536,8 +536,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedPower);
         _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
         _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
-        sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
-        EDIT_SetText(_aahEdit[10][0],_tmpBuff);
+        //sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
+        EDIT_SetText(_aahEdit[10][0],"7kW");
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)

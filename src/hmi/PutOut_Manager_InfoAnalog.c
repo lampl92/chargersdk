@@ -142,19 +142,19 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     strcat(strTmp,"Hz");
     LISTVIEW_SetItemText(hItem, 3, 1, strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);
+    sprintf(strTmp,"%.1f",pEVSE->status.dAC_A_Temp_IN);
     strcat(strTmp,"℃");
     LISTVIEW_SetItemText(hItem, 1, 2, strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dACNTemp);
+    sprintf(strTmp,"%.1f",pEVSE->status.dAC_N_Temp_IN);
     strcat(strTmp,"℃");
     LISTVIEW_SetItemText(hItem, 3, 2, strTmp);
 
-    sprintf(strTmp,"%.1f",pCon->status.dBTypeSocketTemp1);//acl or acn
+    sprintf(strTmp,"%.1f",pCon->status.dACLTemp);//acl or acn
     strcat(strTmp,"℃");
     LISTVIEW_SetItemText(hItem, 1, 3, strTmp);
 
-    sprintf(strTmp, "%.1f", pCon->status.dBTypeSocketTemp2);
+    sprintf(strTmp, "%.1f", pCon->status.dACNTemp);
     strcat(strTmp, "℃");
     LISTVIEW_SetItemText(hItem, 3, 3, strTmp);
 }
