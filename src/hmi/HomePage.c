@@ -154,16 +154,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             now = time(NULL);
             JudgeSegState(now, pechProto, &pos);
-//            pechProto->info.dSegPowerFee[pos];
-//            pechProto->info.dSegServFee[pos];
             prePowerFee = pechProto->info.dSegPowerFee[pos];
             preServiceFee = pechProto->info.dSegServFee[pos];
-//            prePowerFee = pEVSE->info.dDefSegFee;
-//            preServiceFee = pEVSE->info.dServiceFee;
             sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[pos]);
             sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[pos]);
-//            sprintf(strPowerFee, "%.2lf", pEVSE->info.dDefSegFee);
-//            sprintf(strServiceFee, "%.2lf", pEVSE->info.dServiceFee);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
         }

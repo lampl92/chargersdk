@@ -130,7 +130,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
 #define LISTWHEEL_XLEFTOFF  80 
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 250, 0, 0x0, 0 },//560,276
     
     { TEXT_CreateIndirect, "Date", ID_TEXT_5, 100 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
 
@@ -1487,7 +1487,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin)
 {
     _hWinManagerLogDate = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-    cur_win = _hWinManagerLogDate;
+//    cur_win = _hWinManagerLogDate;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerTime, 20, 0);
     _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerFlush, 1000, 0);
     _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerLogDate), ID_TimerSignal, 5000, 0);

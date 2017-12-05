@@ -71,7 +71,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
     { TEXT_CreateIndirect, "Text", ID_TEXT_3, 440, 0, 180, 16, 0, 0x0, 0 },//网络信号强度
     { TEXT_CreateIndirect, "Text", ID_TEXT_4, 225, 367, 300, 20, 0, 0x0, 0 },//最底端的说明
 	{ MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 0, 0, 800, 360, 0, 0x0, 0 },//multipage
-    { BUTTON_CreateIndirect, "退出管理", ID_BUTTON_0, 700, 380, 100, 30, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "退出管理", ID_BUTTON_0, 650, 380, 100, 30, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -93,6 +93,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int          Id;
     WM_HWIN     hWinPage;
     CON_t       *pCont;
+    EventBits_t uxBits;
 
     switch (pMsg->MsgId)
     {
@@ -157,15 +158,32 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(_hWinManagerCommon, 0);
                 prePowerFee = 0;
                 preServiceFee = 0;
-                //增加跳出管理员时界面选择，暂时只添加充电中和首页
-                if(pCont->state == STATE_CON_CHARGING)
-                {
-                    CreateChargingPage();
-                }
-                else
-                {
-                    CreateHomePage();
-                }
+                WM_ShowWindow(cur_win);  
+//                //增加跳出管理员时界面选择，暂时只添加充电中和首页
+//                if (pCont->state == STATE_CON_STOPCHARGE || 
+//                    pCont->state == STATE_CON_IDLE ||
+//                    pCont->state == STATE_CON_RETURN)
+//                {
+//                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
+//                        defEventBitOrderMakeFinish,
+//                        pdFALSE,
+//                        pdTRUE,
+//                        0);
+//                    if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
+//                    {            
+//                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
+//                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+//                    }
+//                    CreateHomePage();
+//                }
+//                if(pCont->state == STATE_CON_CHARGING)
+//                {
+//                    CreateChargingPage();
+//                }
+//                else
+//                {
+//                    CreateHomePage();
+//                }
                 break;
             }
             break;
@@ -264,7 +282,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerCommon(void)
 {
     _hWinManagerCommon = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    cur_win = _hWinManagerCommon;
+//    cur_win = _hWinManagerCommon;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerCommon), ID_TimerTime, 20, 0);
 }
 /*************************** End of file ****************************/

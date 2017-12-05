@@ -194,6 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+        }
             break;
         case WM_PAINT:
        // TODO (zshare#1#): 下面的if不起作用.\但是if里嵌套的if起作用,目前先用此来规避不起作用的if
@@ -307,7 +308,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         default:
             WM_DefaultProc(pMsg);
             break;
-        }
+        
     }
 }
 /*

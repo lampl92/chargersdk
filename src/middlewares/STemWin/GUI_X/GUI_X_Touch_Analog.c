@@ -100,8 +100,8 @@ void GUI_TOUCH_X_ActivateX(void)
                 _AsmtCount = 0;
             }
 
-            _pidFlag = 0;
-            Buzzer_control(0);
+//            _pidFlag = 0;
+//            Buzzer_control(0);
 
             /**< 键盘鼠标路线会触发拐角的键,
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */

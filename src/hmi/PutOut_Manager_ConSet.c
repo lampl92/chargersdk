@@ -537,7 +537,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,30,strlen("145.4"));
         _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"kW");
         //sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
-        EDIT_SetText(_aahEdit[10][0],"7kW");
+        EDIT_SetText(_aahEdit[10][0],"7.0");
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
 
         for(x = 0;x < _SYSSTATUE_LINE;x++)
@@ -598,7 +598,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin)
 {
     _hWinManagerConSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-    cur_win = _hWinManagerConSet;
+//    cur_win = _hWinManagerConSet;
     return _hWinManagerConSet;
 }
 /*************************** End of file ****************************/
