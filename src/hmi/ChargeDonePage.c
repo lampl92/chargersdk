@@ -194,6 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
             xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+        }
             break;
         case WM_PAINT:
 
@@ -256,7 +257,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     SignalFlag = 0;
                 }
                 SignalFlag++;
-                if (orderFinish = 1)
+                if (orderFinish == 1)
                 {
                     pCON = CONGetHandle(0);
                     if (pCON->order.ucStopType == defOrderStopType_Full)
@@ -314,8 +315,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         default:
             WM_DefaultProc(pMsg);
             break;
-        }
-    }
+        }   
 }
 /*
 *

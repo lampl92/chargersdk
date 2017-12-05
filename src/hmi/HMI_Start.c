@@ -125,8 +125,8 @@ void MainTask(void)
 
         GUI_UC_SetEncodeUTF8();
         CreateAdvertisementPage();
-        CreateHomePage();
         WM_HideWindow(_hWinAdvertizement);
+        CreateHomePage();
         WM_ShowWindow(cur_win);
     }
     else
