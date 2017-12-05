@@ -306,6 +306,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     pCON =  CONGetHandle(0);
     if (bittest(calebrate_done, 3) == 1)
     {
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         bitclr(calebrate_done, 3);
         WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
         //err_window(hWin,uxBitsErr);
@@ -313,6 +319,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 
     if (bittest(calebrate_done, 4))
     {
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         bitclr(calebrate_done, 4);
         WM_SendMessageNoPara(hWin, MSG_DELERRWIN);
 //        if(bittest(winCreateFlag,0))
@@ -326,6 +338,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 
     if (bittest(calebrate_done, 5))
     {
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         bitclr(calebrate_done, 5);
         _deleteWin(hWin);
         vTaskDelay(100);
@@ -337,6 +355,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         calebrate_done = 1;
         //PutOut_SelAOrB();
         //MainTask();
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         CreateHomePage();
     }
 /// TODO (zshare#1#): ///添加跳转首页会有问题???
@@ -351,6 +375,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
 
     if (bittest(calebrate_done, 7))
     {
+        if (AdvertisementRecordFlag == 1)
+        {
+            WM_HideWindow(_hWinAdvertizement);
+            WM_ShowWindow(cur_win);
+            AdvertisementRecordFlag = 0;
+        }
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done, 7);
         //WM_DeleteWindow(hWin);
