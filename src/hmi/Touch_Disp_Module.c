@@ -354,8 +354,8 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done, 7);
         //WM_DeleteWindow(hWin);
-        //_deleteWin(hWin);
-        WM_HideWindow(hWin);
+        _deleteWin(hWin);
+//        WM_HideWindow(hWin);
         Keypad_GetValue(LOGIN_PASSWD, " ");
     }
     if (bittest(calebrate_done, 8))

@@ -50,6 +50,7 @@
 // USER END
 WM_HWIN _hWinManagerCommon;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
+static uint8_t statelog = 0;
 volatile static int page = 0;
 /*********************************************************************
 *
@@ -95,11 +96,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     CON_t       *pCont;
     EventBits_t uxBits;
 
+    pCont = CONGetHandle(0);
+    
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
         break;
     case WM_INIT_DIALOG:
+        statelog = pCont->state;
         //
         // Initialization of 'Framewin'
         //
@@ -158,7 +162,39 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(_hWinManagerCommon, 0);
                 prePowerFee = 0;
                 preServiceFee = 0;
-                WM_ShowWindow(cur_win);  
+                
+                if (pCont->state == statelog)
+                {
+                    if (pCont->state == STATE_CON_CHARGING)
+                    {
+                        CreateChargingPage();
+                    }
+                    else
+                    {
+                        CreateHomePage();//？
+                    }                    
+                }
+                else
+                {
+                    if (statelog == STATE_CON_CHARGING)
+                    {
+                        xEventGroupWaitBits(xHandleEventHMI,
+                            defEventBitHMI_ChargeReqDispDone,
+                            pdTRUE,
+                            pdTRUE,
+                            0);
+
+                        bitclr(winInitDone, 0);
+                        _hWinCharging = 0;
+                        CreateChargeDonePage();
+                        bitset(winInitDone, 7);
+                    }
+                    else
+                    {
+                        CreateHomePage();//？
+                    }
+                }
+//                WM_ShowWindow(cur_win);  
 //                //增加跳出管理员时界面选择，暂时只添加充电中和首页
 //                if (pCont->state == STATE_CON_STOPCHARGE || 
 //                    pCont->state == STATE_CON_IDLE ||
@@ -176,14 +212,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                    }
 //                    CreateHomePage();
 //                }
-//                if(pCont->state == STATE_CON_CHARGING)
-//                {
-//                    CreateChargingPage();
-//                }
-//                else
-//                {
-//                    CreateHomePage();
-//                }
+
                 break;
             }
             break;
@@ -235,15 +264,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
            // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
             /**< 重启定时器 */
             WM_RestartTimer(pMsg->Data.v, 20);
-        }
-        if(pMsg->Data.v == _timerSignal)
-        {
-            WM_RestartTimer(pMsg->Data.v, 2000);
-        }
-        if(pMsg->Data.v == _timerData)
-        {
-
-            WM_RestartTimer(pMsg->Data.v,5000);
         }
         break;
     case MSG_CREATERRWIN:

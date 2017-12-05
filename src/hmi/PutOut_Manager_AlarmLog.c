@@ -1184,6 +1184,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
             }
+            row_num = LISTVIEW_GetNumRows(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+            for (i = 0; i < row_num; i++)
+            {
+                LISTVIEW_DeleteRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0);
+            }
             /*序号 记录时间  枪号  故障等级  故障状态  故障信息*/
 			/* 添加四列表，调用一次函数LISTVIEW_AddColumn添加一列 */
             LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
@@ -1258,6 +1263,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             {
                 LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
             }
+              
+            row_num = LISTVIEW_GetNumRows(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
+            for (i = 0; i < row_num; i++)
+            {
+                LISTVIEW_DeleteRow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0);
+            }
+
             /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "序号", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 60, "启动方式", GUI_TA_HCENTER | GUI_TA_VCENTER);

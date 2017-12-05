@@ -552,7 +552,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin)
 {
     _hWinManagerSysSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-    cur_win = _hWinManagerSysSet;
+//    cur_win = _hWinManagerSysSet;
 //    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerTime, 20, 0);
 //    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerFlush,1000,0);
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysSet), ID_TimerSignal,5000,0);
