@@ -306,7 +306,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerCommon(void)
 {
     _hWinManagerCommon = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-//    cur_win = _hWinManagerCommon;
+    cur_win = _hWinManagerCommon;
     _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerCommon), ID_TimerTime, 20, 0);
 }
 /*************************** End of file ****************************/
