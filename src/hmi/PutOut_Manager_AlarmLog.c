@@ -299,7 +299,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             LISTVIEW_SetItemText(hItem, 5, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
-            printf_safe("StopType\t%d\n", jsItem->valueint);
+//            printf_safe("StopType\t%d\n", jsItem->valueint);
             switch(jsItem->valueint)
             {
                 case defOrderStopType_RFID:

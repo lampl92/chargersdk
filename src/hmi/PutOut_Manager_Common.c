@@ -101,6 +101,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
+        Err_Analy(pMsg->hWin);
+        CaliDone_Analy(pMsg->hWin);
         break;
     case WM_INIT_DIALOG:
         statelog = pCont->state;
@@ -158,8 +160,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);
-
-                GUI_EndDialog(_hWinManagerCommon, 0);
+//                WM_SendMessageNoPara(_hWinManagerCommon, MSG_DELERRWIN);
+//                
+//                GUI_EndDialog(_hWinManagerCommon, 0);
+                _deleteWin(_hWinManagerCommon);
                 prePowerFee = 0;
                 preServiceFee = 0;
                 
