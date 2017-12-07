@@ -355,12 +355,6 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         calebrate_done = 1;
         //PutOut_SelAOrB();
         //MainTask();
-        if (AdvertisementRecordFlag == 1)
-        {
-            WM_HideWindow(_hWinAdvertizement);
-            WM_ShowWindow(cur_win);
-            AdvertisementRecordFlag = 0;
-        }
         CreateHomePage();
     }
 /// TODO (zshare#1#): ///添加跳转首页会有问题???
@@ -384,9 +378,12 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done, 7);
         //WM_DeleteWindow(hWin);
-        _deleteWin(hWin);
-//        WM_HideWindow(hWin);
-        Keypad_GetValue(LOGIN_PASSWD, " ");
+        if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
+        {
+            _deleteWin(hWin);
+            //        WM_HideWindow(hWin);
+            Keypad_GetValue(LOGIN_PASSWD, " ");
+        }
     }
     if (bittest(calebrate_done, 8))
     {
