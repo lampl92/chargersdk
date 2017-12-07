@@ -1177,6 +1177,7 @@ static uint8_t Value_Check()
         }
         break;
     }
+    return VALUE_OK_SAV;
 }
 
 static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
