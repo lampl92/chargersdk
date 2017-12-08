@@ -10,6 +10,7 @@
 #include "interface.h"
 #include "cJSON.h"
 #include "yaffsfs.h"
+#include "user_app.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -47,9 +48,26 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_FILE_RW;
         goto exit;
     }
-    taskENTER_CRITICAL(); 
+    taskENTER_CRITICAL();
+    if (flag_power_out_l == 1)
+    {
+        POWER_L_ON;
+    }
+    if (flag_power_out_n == 1)
+    {
+        POWER_N_ON;
+    }
+    
     bw = yaffs_write(fd, pbuff, len);
     taskEXIT_CRITICAL();
+    if (flag_power_out_l == 1)
+    {
+        POWER_L_ON;
+    }
+    if (flag_power_out_n == 1)
+    {
+        POWER_N_ON;
+    }
     if(len != bw)
     {
         ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-write");
