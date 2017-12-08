@@ -56,11 +56,11 @@ static void Data_Process(WM_MESSAGE *pMsg)
     }
     
     /*如果扫码，发送跳页消息*/
-    if ((pCON->order.ucStartType == 5)
-        &&(pCON->state == STATE_CON_CHARGING))
-    {
-        WM_SendMessageNoPara(hWin, MSG_JUMPCHAING);
-    }
+//    if ((pCON->order.ucStartType == 5)
+//        &&(pCON->state == STATE_CON_CHARGING))
+//    {
+//        WM_SendMessageNoPara(hWin, MSG_JUMPCHAING);
+//    }
 
     if (pCON->state == STATE_CON_CHARGING)
     {
@@ -217,11 +217,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
         }
-        GUI_EndDialog(hwinQR, 0);
-        _deleteWin(_hWinHome);
-        CreateCardInfoPage();
         current_page = _CARDINFOPAGE;
         bitset(winInitDone, 7);
+        GUI_EndDialog(hwinQR, 0);
+        _deleteWin(_hWinHome);
+        _hWinHome = 0;
+        CreateCardInfoPage();
         break;
     case MSG_JUMPCHAING:
         if (AdvertisementRecordFlag == 1)
@@ -230,10 +231,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
         }
-        _deleteWin(_hWinHome);
-        CreateChargingPage();
         current_page = _CHARGINGPAGE;
         bitset(winInitDone, 7);
+        GUI_EndDialog(hwinQR, 0);
+        _deleteWin(_hWinHome);
+        _hWinHome = 0;
+        CreateChargingPage();
         break;
     default:
         WM_DefaultProc(pMsg);

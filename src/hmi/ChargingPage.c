@@ -128,7 +128,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_INIT_DIALOG:
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
         IMAGE_SetBMP(hItem, ChargingImage->pfilestring, ChargingImage->pfilesize);
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1);
         SignalIntensity = getSignalIntensity();
         if (SignalIntensity == 1)

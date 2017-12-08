@@ -7,6 +7,8 @@
 */
 #include "touchtimer.h"
 #include "DIALOG.h"
+#include "HMI_Start.h"
+#include "touchtimer.h"
 
 #define ERR_SIMBOL  (0x3e000)
 
@@ -401,8 +403,10 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         {
             if (AdvertisementRecordFlag == 0)
             {
-                WM_HideWindow(cur_win);
-                WM_ShowWindow(_hWinAdvertizement);
+                WM_HideWindow(cur_win);       
+               // IMAGE_SetBMP(WM_GetDialogItem(_hWinAdvertizement, (GUI_ID_USER + 0x01)), AdvertisementImage->pfilestring, AdvertisementImage->pfilesize);
+                WM_ShowWindow(_hWinAdvertizement);           
+               // CreateAdvertisementPage();
                 AdvertisementRecordFlag = 1;
             }
         }   
