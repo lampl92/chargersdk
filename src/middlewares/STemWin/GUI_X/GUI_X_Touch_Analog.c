@@ -50,7 +50,7 @@ Purpose     : Config / System dependent externals for GUI
 
 #define CALEBRATE_DEBUG 0
 #define CALEBRATE_TIME  500
-#define AdvertisementTime 8000 //进入广告的计数值
+#define AdvertisementTime 400 //进入广告的计数值
 
 volatile static uint16_t adc_x = 0, adc_y = 0;
 static uint8_t step = 0;

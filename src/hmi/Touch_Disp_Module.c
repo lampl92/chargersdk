@@ -390,7 +390,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
     if (bittest(calebrate_done, 8))
     {
         bitclr(calebrate_done, 8);
-        if ((cur_win == _hWinHome) && (pCON->status.xPlugState == UNPLUG))
+        if ((cur_win == _hWinHome) && (pCON->status.xPlugState == UNPLUG) && !(bittest(winCreateFlag, 0)))
         {
             if (AdvertisementRecordFlag == 0)
             {
@@ -399,7 +399,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
                 AdvertisementRecordFlag = 1;
             }
         }
-        if (cur_win == _hWinCharging)
+        if ((cur_win == _hWinCharging) && !(bittest(winCreateFlag, 0)))
         {
             if (AdvertisementRecordFlag == 0)
             {
@@ -665,6 +665,12 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
         Errlist_flush(msg_err);
         if (bittest(winCreateFlag, 1))
         {
+            if (AdvertisementRecordFlag == 1)
+            {
+                WM_HideWindow(_hWinAdvertizement);
+                WM_ShowWindow(cur_win);
+                AdvertisementRecordFlag = 0;
+            }
         //创建故障界面
             err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos,
                 ErrMultiEdit_Size.ypos,

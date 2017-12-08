@@ -7,7 +7,6 @@
 
 #define ID_IMAGE_0_IMAGE_0 0x00
 #define ID_TimerAdver 4
-static WM_HTIMER _timerRTC;
 static WM_HTIMER _timerAdver;
 
 WM_HWIN _hWinAdvertizement;
@@ -84,7 +83,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case WM_TIMER:
-        if (pMsg->Data.v == _timerRTC)
+        if (pMsg->Data.v == _timerAdver)
         {
             Data_Process(pMsg);
             WM_RestartTimer(pMsg->Data.v, 100);
