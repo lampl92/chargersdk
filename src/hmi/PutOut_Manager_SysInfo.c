@@ -131,8 +131,10 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     /**< 软件版本 */
     memset(buf,'\0',sizeof(buf));
     strcpy(buf,sysInfoVersion);
-    strcpy(buf,xSysconf.strVersion);
+    strcat(buf,xSysconf.strVersion);
     LISTVIEW_SetItemText(hItem, 0, 2, buf);
+    LISTVIEW_SetTextAlign(hItem, 0, GUI_TA_LEFT | GUI_TA_CENTER);
+
 }
 
 /*********************************************************************
@@ -230,8 +232,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /**< 软件版本 */
         memset(buf,'\0',sizeof(buf));
         strcpy(buf,sysInfoVersion);
-        strcpy(buf,xSysconf.strVersion);
+        strcat(buf,xSysconf.strVersion);
         LISTVIEW_SetItemText(hItem, 0, 2, buf);
+        LISTVIEW_SetTextAlign(hItem, 0, GUI_TA_CENTER | GUI_TA_LEFT);
+
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

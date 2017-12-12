@@ -6,6 +6,8 @@
 #include "interface.h"
 #include "stringName.h"
 
+static TaskHandle_t xHandleTaskReadPic = NULL;
+
 uint16_t calebrate_done = 0;
 uint8_t AdvertisementRecordFlag = 0;//标志现在是否处于广告页，1为在广告页，0为不在广告页
 uint8_t winInitDone = 0;
@@ -57,9 +59,35 @@ p_inf *ChargeDoneVoidImage;
 
 p_inf *AdvertisementImage;
 
-static uint8_t codetest[] = {
-    "https://www.baidu.com"
-};
+
+static void vTaskReadPic(void *pvParameters)
+{
+    ChargeDoneImage = readPicInf(pathChargeDoneImage);
+    CardInfoImage = readPicInf(pathCardInfoImage);
+    ChargingImage = readPicInf(path3zhengzaichongdian);
+    GetCardInfoImage = readPicInf(pathGetCardInfoImage);
+    cartoonImage0 = readPicInf(pathCartoonImage0);
+    cartoonImage1 = readPicInf(pathCartoonImage1);
+    cartoonImage2 = readPicInf(pathCartoonImage2);
+    cartoonImage3 = readPicInf(pathCartoonImage3);
+    cartoonImage4 = readPicInf(pathCartoonImage4);
+    cartoonImage5 = readPicInf(pathCartoonImage5);
+    CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
+    CardArrearsImage = readPicInf(pathCardArrearsImage);
+    PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
+    CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
+    StopByCardImage = readPicInf(pathStopByCardImage);
+    StopByQRImage = readPicInf(pathStopByQRImage);
+    ChargingVoidImage = readPicInf(pathChargingVoidImage);
+    OrderUploadImage = readPicInf(pathOrderUploadImage);
+    NormalDoneImage = readPicInf(pathNormalDoneImage);
+    FullDoneImage = readPicInf(pathFullDoneImage);
+    DevErrDoneImage = readPicInf(pathDevErrDoneImage);
+    MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
+    ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
+    
+    vTaskDelete(xTaskGetCurrentTaskHandle());
+}
 void MainTask(void)
 {
     CON_t *pCON;
@@ -86,35 +114,8 @@ void MainTask(void)
         SignalImage4 = readPicInf(pathSignalImage4);
         SignalImage5 = readPicInf(pathSignalImage5);
 
-        HomeImage = readPicInf(pathHomeImage);
-
-        CardInfoImage = readPicInf(pathCardInfoImage);
-        GetCardInfoImage = readPicInf(pathGetCardInfoImage);
-        CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
-        CardArrearsImage = readPicInf(pathCardArrearsImage);
-        PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
-        CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
-
-        ChargingImage = readPicInf(path3zhengzaichongdian);
-        cartoonImage0 = readPicInf(pathCartoonImage0);
-        cartoonImage1 = readPicInf(pathCartoonImage1);
-        cartoonImage2 = readPicInf(pathCartoonImage2);
-        cartoonImage3 = readPicInf(pathCartoonImage3);
-        cartoonImage4 = readPicInf(pathCartoonImage4);
-        cartoonImage5 = readPicInf(pathCartoonImage5);
-        StopByCardImage = readPicInf(pathStopByCardImage);
-        StopByQRImage = readPicInf(pathStopByQRImage);
-        ChargingVoidImage = readPicInf(pathChargingVoidImage);
-
-        ChargeDoneImage = readPicInf(pathChargeDoneImage);
-        OrderUploadImage = readPicInf(pathOrderUploadImage);
-        NormalDoneImage = readPicInf(pathNormalDoneImage);
-        FullDoneImage = readPicInf(pathFullDoneImage);
-        DevErrDoneImage = readPicInf(pathDevErrDoneImage);
-        MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
-        ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-
         AdvertisementImage = readPicInf(pathAdvertisementImage);
+        HomeImage = readPicInf(pathHomeImage);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
@@ -140,7 +141,7 @@ void MainTask(void)
 
         CreateHomePage();
     }
-
+    xTaskCreate(vTaskReadPic, "TaskReadPic", 1024, NULL, 2, &xHandleTaskReadPic);
     while (1)
     {
 //	    printf_safe("exec start = %d\n", clock());

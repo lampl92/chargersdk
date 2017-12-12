@@ -222,10 +222,10 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                     LISTVIEW_SetItemText(hItem, 3, i, "状态");
                     break;
                 case 1:
-                    LISTVIEW_SetItemText(hItem, 3, i, "告警");
+                    LISTVIEW_SetItemText(hItem, 3, i, "警告");
                     break;
                 case 2:
-                    LISTVIEW_SetItemText(hItem, 3, i, "异常");
+                    LISTVIEW_SetItemText(hItem, 3, i, "严重警告");
                     break;
                 case 3:
                     LISTVIEW_SetItemText(hItem, 3, i, "故障");
