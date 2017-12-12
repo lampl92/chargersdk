@@ -12,6 +12,8 @@
 
 #define ERR_SIMBOL  (0x3e000)
 
+int gGYa = 3;
+
 uint8_t *cur_err = "       当前故障列表\n";
 uint8_t *cur_noerr = "\n   当前没有故障\n";
 uint8_t *Scram_err = "   急停异常\n";
@@ -397,6 +399,11 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
                 WM_HideWindow(cur_win);
                 WM_ShowWindow(_hWinAdvertizement);
                 AdvertisementRecordFlag = 1;
+                if (gGYa)
+                {
+                    WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
+                    gGYa--;
+                }
             }
         }
         if ((cur_win == _hWinCharging) && !(bittest(winCreateFlag, 0)))
