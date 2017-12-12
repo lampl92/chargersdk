@@ -64,7 +64,6 @@
 #define MSG_MANAGERSETIDE       (GUI_ID_USER + 0x4E)
 #define MSG_MANAGERSETIDF       (GUI_ID_USER + 0x4F)
 
-extern int gGYa;
 extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;
 extern uint8_t winInitDone;
