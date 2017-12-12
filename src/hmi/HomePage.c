@@ -216,6 +216,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         current_page = _CARDINFOPAGE;
         bitset(winInitDone, 7);
@@ -230,6 +231,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         current_page = _CHARGINGPAGE;
         bitset(winInitDone, 7);

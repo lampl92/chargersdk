@@ -301,6 +301,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_HideWindow(_hWinAdvertizement);
                 WM_ShowWindow(cur_win);
                 AdvertisementRecordFlag = 0;
+                GUI_Exec();
             }
             prePowerFee = 0;
             preServiceFee = 0;

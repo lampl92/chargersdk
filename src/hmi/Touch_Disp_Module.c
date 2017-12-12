@@ -314,6 +314,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         bitclr(calebrate_done, 3);
         WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
@@ -327,6 +328,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         bitclr(calebrate_done, 4);
         WM_SendMessageNoPara(hWin, MSG_DELERRWIN);
@@ -346,6 +348,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         bitclr(calebrate_done, 5);
         _deleteWin(hWin);
@@ -377,6 +380,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
             WM_HideWindow(_hWinAdvertizement);
             WM_ShowWindow(cur_win);
             AdvertisementRecordFlag = 0;
+            GUI_Exec();
         }
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done, 7);
@@ -398,6 +402,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
                 WM_HideWindow(cur_win);
                 WM_ShowWindow(_hWinAdvertizement);
                 AdvertisementRecordFlag = 1;
+                GUI_Exec();
             }
         }
         if ((cur_win == _hWinCharging) && !(bittest(winCreateFlag, 0)))
@@ -409,6 +414,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
                 WM_ShowWindow(_hWinAdvertizement);           
                // CreateAdvertisementPage();
                 AdvertisementRecordFlag = 1;
+                GUI_Exec();
             }
         }   
           
@@ -671,6 +677,7 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
                 WM_HideWindow(_hWinAdvertizement);
                 WM_ShowWindow(cur_win);
                 AdvertisementRecordFlag = 0;
+                GUI_Exec();
             }
         //创建故障界面
             err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos,
