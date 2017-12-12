@@ -255,7 +255,7 @@ void vTaskEVSEData(void *pvParameters)
             ulSignalPoolXor = ulSignalCONAlarmOld_CON[id] ^ pCON->status.ulSignalAlarm;
             if (ulSignalPoolXor != 0)
             {
-                for (i = 0; i < 32; i++)
+                for (i = 0; i < 32; i++)//ulSignalPoolXor = 32bit
                 {
                     if ((ulSignalPoolXor & (1 << i)) == (1 << i))
                     {
@@ -337,7 +337,7 @@ void vTaskEVSEData(void *pvParameters)
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
                             break;
                         default:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知告警");
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知警告");
                             break;
                             
                         }
@@ -449,7 +449,7 @@ void vTaskEVSEData(void *pvParameters)
                         AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
                         break;
                     default:
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, 1, "EVSE未知告警");
+                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, 1, "EVSE未知警告");
                         break;
                     }
                 }
