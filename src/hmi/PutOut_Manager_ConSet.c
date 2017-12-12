@@ -88,13 +88,13 @@ static int _x,_y;
 #define conVolatageUpperLimits "电压上限"
 #define conVolatageLowerLimits "电压下限"
 #define conACCurrentUpperLimits "电流上限"
-#define conACTempUpperLimits "交流输入端子温度上限"
-#define conACTempLowerLimits "交流输入端子温度下限"
+#define conACTempUpperLimits "端子温度上限"
+#define conACTempLowerLimits "端子温度下限"
 #define conSocketTempUpperLimits "插座温度上限"
 #define conSocketTempLowerLimits "插座温度下限"
 #define conRatedCurrent "额定电流"
 #define conRatedPower "额定功率"
-#define conQRCode "QRCode"
+#define conQRCode "二维码"
 
 static WM_HWIN hWindow;
 WM_HWIN _hWinManagerConSet;

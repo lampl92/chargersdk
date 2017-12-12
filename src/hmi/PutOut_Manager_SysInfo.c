@@ -133,8 +133,6 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     strcpy(buf,sysInfoVersion);
     strcat(buf,xSysconf.strVersion);
     LISTVIEW_SetItemText(hItem, 0, 2, buf);
-    LISTVIEW_SetTextAlign(hItem, 0, GUI_TA_LEFT | GUI_TA_CENTER);
-
 }
 
 /*********************************************************************
@@ -203,7 +201,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
-        LISTVIEW_SetFont(hItem, &SIF36_Font);
+        LISTVIEW_SetFont(hItem, &SIF24_Font);
         /* 设置列表控件表格可见 */
         LISTVIEW_SetGridVis(hItem, 1);
 
@@ -215,6 +213,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         /*增加一列*/
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_SetTextAlign(hItem, 1, GUI_TA_CENTER | GUI_TA_LEFT);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 7kW交流充电桩 */
@@ -234,7 +233,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         strcpy(buf,sysInfoVersion);
         strcat(buf,xSysconf.strVersion);
         LISTVIEW_SetItemText(hItem, 0, 2, buf);
-        LISTVIEW_SetTextAlign(hItem, 0, GUI_TA_CENTER | GUI_TA_LEFT);
 
         break;
     case WM_NOTIFY_PARENT:
