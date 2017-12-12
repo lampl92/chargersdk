@@ -170,7 +170,7 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\event_groups.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\list.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\queue.c" />
-    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\readme.txt" />
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\tasks.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />

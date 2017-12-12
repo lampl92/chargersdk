@@ -5,6 +5,7 @@
 #include "stringName.h"
 #include "factorycfg.h"
 #include "cfg_sys.h"
+#include "yaffs2msic.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c

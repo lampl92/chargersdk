@@ -95,9 +95,6 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define green    1
 #define blue     2
 
-#define read     0x03
-#define write    0x10
-
 #define voltage  0x000b
 #define current  0x000c
 #define power    0x000d
