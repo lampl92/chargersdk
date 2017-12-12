@@ -154,7 +154,7 @@ void vTaskInit(void *pvParameters)
     
     AppObjCreate();
     sys_Init();
-    printf_safe("\nPRESS 'C' IN 3 SECONDS, ENTER CLI MODE...\n");
+    printf_safe("\nPRESS 'C' IN 3 SECONDS FOR CLI MODE...\n");
     while (1)
     {
         cli_std_len = uart_read(UART_PORT_CLI, cli_std, 1, 3000);

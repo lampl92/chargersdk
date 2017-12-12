@@ -313,13 +313,22 @@
                                                     defSignalCON_Fault_AC_B_RelayPaste | \
                                                     defSignalCON_Fault_AC_C_RelayPaste | \
                                                     defSignalCON_Fault_AC_N_RelayPaste )
-    
+#define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
+                                                defSignalCON_Alarm_SocketTemp2_War | \
+                                                defSignalCON_Alarm_AC_A_Temp_War | \
+                                                defSignalCON_Alarm_AC_B_Temp_War | \
+                                                defSignalCON_Alarm_AC_C_Temp_War | \
+                                                defSignalCON_Alarm_AC_N_Temp_War)   
 #define defSignalGroupCON_Alarm_Temp_Cri           (defSignalCON_Alarm_SocketTemp1_Cri | \
                                                 defSignalCON_Alarm_SocketTemp2_Cri | \
                                                 defSignalCON_Alarm_AC_A_Temp_Cri | \
                                                 defSignalCON_Alarm_AC_B_Temp_Cri | \
                                                 defSignalCON_Alarm_AC_C_Temp_Cri | \
                                                 defSignalCON_Alarm_AC_N_Temp_Cri)
+#define defSignalGroupEVSE_Alarm_Temp_War      (defSignalEVSE_Alarm_AC_A_Temp_War | \
+                                                defSignalEVSE_Alarm_AC_B_Temp_War | \
+                                                defSignalEVSE_Alarm_AC_C_Temp_War | \
+                                                defSignalEVSE_Alarm_AC_N_Temp_War)
 #define defSignalGroupEVSE_Alarm_Temp_Cri      (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
                                                 defSignalEVSE_Alarm_AC_B_Temp_Cri | \
                                                 defSignalEVSE_Alarm_AC_C_Temp_Cri | \

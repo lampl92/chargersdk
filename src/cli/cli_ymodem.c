@@ -1,10 +1,13 @@
 #include "ymodem.h"
 #include "tinysh.h"
+#include "bsp.h"
 
-extern rym_err_t rym_write_to_file(void);
+extern ymod_err_t ymod_write_to_file(void);
 void cli_ymodem_fnt(int argc, char **argv)
 {
-    rym_write_to_file();
+    NVIC_SetPriority(CLI_IRQn, 1);
+    ymod_write_to_file();
+    NVIC_SetPriority(CLI_IRQn, CLI_Priority);
 }
 
 tinysh_cmd_t cli_ymodem_cmd =

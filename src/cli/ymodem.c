@@ -63,9 +63,7 @@ uint16_t CRC16(unsigned char *q, int len)
 static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
 {
     uint32_t len;
-    //taskENTER_CRITICAL();
     len = uart_read_ymodem(UART_PORT_CLI, pbuff, rlen, timeout_ms);
-    //taskEXIT_CRITICAL();
     return len;
 }
 static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
@@ -79,12 +77,12 @@ static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
 }
 // we could only use global varible because we could not use
 // rt_device_t->user_data(it is used by the serial driver)...
-static struct rym_ctx *_rym_the_ctx;
+static struct ymod_ctx *_ymod_the_ctx;
 
 
 
-static enum rym_code _rym_read_code(
-    struct rym_ctx *ctx,
+static enum ymod_code _ymod_read_code(
+    struct ymod_ctx *ctx,
     uint32_t timeout)
 {
     if (ymod_read(ctx->buf, 1, timeout) == 1)
@@ -93,13 +91,13 @@ static enum rym_code _rym_read_code(
     }
     else
     {
-        return RYM_CODE_NONE;
+        return YMOD_CODE_NONE;
     }
 }
 
-/* the caller should at least alloc _RYM_STX_PKG_SZ buffer */
-static uint32_t _rym_read_data(
-    struct rym_ctx *ctx,
+/* the caller should at least alloc _YMOD_STX_PKG_SZ buffer */
+static uint32_t _ymod_read_data(
+    struct ymod_ctx *ctx,
     uint32_t len)
 {
     /* we should already have had the code */
@@ -109,7 +107,7 @@ static uint32_t _rym_read_data(
 
     do
     {
-        readlen = ymod_read(buf + currlen, len - currlen, RYM_WAIT_CHR_TICK);
+        readlen = ymod_read(buf + currlen, len - currlen, YMOD_WAIT_CHR_TICK);
         currlen += readlen;
         if (currlen >= len)
             return currlen;
@@ -119,168 +117,168 @@ static uint32_t _rym_read_data(
     return currlen;
 }
 
-static uint32_t _rym_putchar(uint8_t code)
+static uint32_t _ymod_putchar(uint8_t code)
 {
     ymod_write(&code, sizeof(code));
     return 1;
 }
 
-static rym_err_t _rym_do_handshake(
-    struct rym_ctx *ctx,
+static ymod_err_t _ymod_do_handshake(
+    struct ymod_ctx *ctx,
     int tm_sec)
 {
-    enum rym_code code;
+    enum ymod_code code;
     uint32_t i;
     uint16_t recv_crc, cal_crc;
     uint32_t pkg_sz;
 
-    ctx->stage = RYM_STAGE_ESTABLISHING;
+    ctx->stage = YMOD_STAGE_ESTABLISHING;
     /* send C every second, so the sender could know we are waiting for it. */
     for (i = 0; i < tm_sec; i++)
     {
-        _rym_putchar(RYM_CODE_C);
-        code = _rym_read_code(ctx, RYM_CHD_INTV_TICK);
-        if (code == RYM_CODE_SOH)
+        _ymod_putchar(YMOD_CODE_C);
+        code = _ymod_read_code(ctx, YMOD_CHD_INTV_TICK);
+        if (code == YMOD_CODE_SOH)
         {
-            pkg_sz = _RYM_SOH_PKG_SZ;
+            pkg_sz = _YMOD_SOH_PKG_SZ;
             break;
         }
-        if (code == RYM_CODE_STX)
+        if (code == YMOD_CODE_STX)
         {
-            pkg_sz = _RYM_STX_PKG_SZ;
+            pkg_sz = _YMOD_STX_PKG_SZ;
             break;
         }
     }
     if (i == tm_sec)
-        return -RYM_ERR_TMO;
+        return -YMOD_ERR_TMO;
 
-    i = _rym_read_data(ctx, pkg_sz - 1);
+    i = _ymod_read_data(ctx, pkg_sz - 1);
     if (i != (pkg_sz - 1))
-        return -RYM_ERR_DSZ;
+        return -YMOD_ERR_DSZ;
 
     /* sanity check */
     if (ctx->buf[1] != 0 || ctx->buf[2] != 0xFF)
-        return -RYM_ERR_SEQ;
+        return -YMOD_ERR_SEQ;
 
     recv_crc = (uint16_t)(*(ctx->buf + pkg_sz - 2) << 8) | *(ctx->buf + pkg_sz - 1);
     cal_crc = CRC16(ctx->buf + 3, pkg_sz - 5);
     if (recv_crc != cal_crc)
-        return -RYM_ERR_CRC;
+        return -YMOD_ERR_CRC;
 
     if (ctx->buf[3] == 0)
     {
-        _rym_putchar(RYM_CODE_ACK);
-        ctx->stage = RYM_STAGE_FINISHED;
+        _ymod_putchar(YMOD_CODE_ACK);
+        ctx->stage = YMOD_STAGE_FINISHED;
         return RT_EEMPTY;
     }
     else
     {
         /* congratulations, check passed. */
-        if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf + 3, 1024) != RYM_CODE_ACK)
-            return -RYM_ERR_CAN;
+        if (ctx->on_begin && ctx->on_begin(ctx, ctx->buf + 3, 1024) != YMOD_CODE_ACK)
+            return -YMOD_ERR_CAN;
     }
     return RT_EOK;
 }
 
-static rym_err_t _rym_trans_data(
-    struct rym_ctx *ctx,
+static ymod_err_t _ymod_trans_data(
+    struct ymod_ctx *ctx,
     uint32_t data_sz,
-    enum rym_code *code)
+    enum ymod_code *code)
 {
     const uint32_t tsz = 2 + data_sz + 2;
     uint16_t recv_crc;
 
     /* seq + data + crc */
-    uint32_t i = _rym_read_data(ctx, tsz);
+    uint32_t i = _ymod_read_data(ctx, tsz);
     if (i != tsz)
-        return -RYM_ERR_DSZ;
+        return -YMOD_ERR_DSZ;
 
     if ((ctx->buf[1] + ctx->buf[2]) != 0xFF)
     {
-        return -RYM_ERR_SEQ;
+        return -YMOD_ERR_SEQ;
     }
 
     /* As we are sending C continuously, there is a chance that the
      * sender(remote) receive an C after sending the first handshake package.
      * So the sender will interpret it as NAK and re-send the package. So we
      * just ignore it and proceed. */
-    if (ctx->stage == RYM_STAGE_ESTABLISHED && ctx->buf[1] == 0x00)
+    if (ctx->stage == YMOD_STAGE_ESTABLISHED && ctx->buf[1] == 0x00)
     {
-        *code = RYM_CODE_NONE;
+        *code = YMOD_CODE_NONE;
         return RT_EOK;
     }
 
-    ctx->stage = RYM_STAGE_TRANSMITTING;
+    ctx->stage = YMOD_STAGE_TRANSMITTING;
 
     /* sanity check */
     recv_crc = (uint16_t)(*(ctx->buf + tsz - 1) << 8) | *(ctx->buf + tsz);
     if (recv_crc != CRC16(ctx->buf + 3, data_sz))
-        return -RYM_ERR_CRC;
+        return -YMOD_ERR_CRC;
 
     /* congratulations, check passed. */
     if (ctx->on_data)
         *code = ctx->on_data(ctx, ctx->buf + 3, data_sz);
     else
-        *code = RYM_CODE_ACK;
+        *code = YMOD_CODE_ACK;
     return RT_EOK;
 }
 
-static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
+static ymod_err_t _ymod_do_trans(struct ymod_ctx *ctx)
 {
-    _rym_putchar(RYM_CODE_ACK);
-    _rym_putchar(RYM_CODE_C);
+    _ymod_putchar(YMOD_CODE_ACK);
+    _ymod_putchar(YMOD_CODE_C);
 
-    ctx->stage = RYM_STAGE_ESTABLISHED;
+    ctx->stage = YMOD_STAGE_ESTABLISHED;
 
     while (1)
     {
-        rym_err_t err;
-        enum rym_code code;
+        ymod_err_t err;
+        enum ymod_code code;
         uint32_t data_sz, i;
 
-        code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
+        code = _ymod_read_code(ctx, YMOD_WAIT_PKG_TICK);
         switch (code)
         {
-        case RYM_CODE_SOH:
+        case YMOD_CODE_SOH:
             data_sz = 128;
             break;
-        case RYM_CODE_STX:
+        case YMOD_CODE_STX:
             data_sz = 1024;
             break;
-        case RYM_CODE_EOT:
+        case YMOD_CODE_EOT:
             return RT_EOK;
-        case RYM_CODE_CAN:
-            return -RYM_ERR_CAN;
+        case YMOD_CODE_CAN:
+            return -YMOD_ERR_CAN;
         default:
-            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, RYM_WAIT_PKG_TICK) != 0)
+            while (ymod_read(ctx->buf, _YMOD_STX_PKG_SZ, YMOD_WAIT_PKG_TICK) != 0)
                 ;
-            memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
-            _rym_putchar(RYM_CODE_NAK);
+            memset(ctx->buf, 0, _YMOD_STX_PKG_SZ);
+            _ymod_putchar(YMOD_CODE_NAK);
             continue;
-//            return -RYM_ERR_CODE;
+//            return -YMOD_ERR_CODE;
         };
 
-        err = _rym_trans_data(ctx, data_sz, &code);
+        err = _ymod_trans_data(ctx, data_sz, &code);
         if (err != RT_EOK)
         {
-            while (ymod_read(ctx->buf, _RYM_STX_PKG_SZ, RYM_WAIT_PKG_TICK) != 0)
+            while (ymod_read(ctx->buf, _YMOD_STX_PKG_SZ, YMOD_WAIT_PKG_TICK) != 0)
                 ;
-            memset(ctx->buf, 0, _RYM_STX_PKG_SZ);
-            _rym_putchar(RYM_CODE_NAK);
+            memset(ctx->buf, 0, _YMOD_STX_PKG_SZ);
+            _ymod_putchar(YMOD_CODE_NAK);
             continue;
             //return err;
         }
         switch (code)
         {
-        case RYM_CODE_CAN:
+        case YMOD_CODE_CAN:
             /* the spec require multiple CAN */
-            for (i = 0; i < RYM_END_SESSION_SEND_CAN_NUM; i++)
+            for (i = 0; i < YMOD_END_SESSION_SEND_CAN_NUM; i++)
             {
-                _rym_putchar(RYM_CODE_CAN);
+                _ymod_putchar(YMOD_CODE_CAN);
             }
-            return -RYM_ERR_CAN;
-        case RYM_CODE_ACK:
-            _rym_putchar(RYM_CODE_ACK);
+            return -YMOD_ERR_CAN;
+        case YMOD_CODE_ACK:
+            _ymod_putchar(YMOD_CODE_ACK);
             break;
         default:
             // wrong code
@@ -289,69 +287,67 @@ static rym_err_t _rym_do_trans(struct rym_ctx *ctx)
     }
 }
 
-static rym_err_t _rym_do_fin(struct rym_ctx *ctx)
+static ymod_err_t _ymod_do_fin(struct ymod_ctx *ctx)
 {
-    enum rym_code code;
+    enum ymod_code code;
     uint16_t recv_crc;
     uint32_t i;
 
-    ctx->stage = RYM_STAGE_FINISHING;
+    ctx->stage = YMOD_STAGE_FINISHING;
 
     /* we already got one EOT in the caller. invoke the callback if there is
      * one. */
     if (ctx->on_end)
         ctx->on_end(ctx, ctx->buf + 3, 128);
 
-    _rym_putchar(RYM_CODE_NAK);
-    code = _rym_read_code(ctx, RYM_WAIT_PKG_TICK);
-    if (code != RYM_CODE_EOT)
-        return -RYM_ERR_CODE;
+    _ymod_putchar(YMOD_CODE_NAK);
+    code = _ymod_read_code(ctx, YMOD_WAIT_PKG_TICK);
+    if (code != YMOD_CODE_EOT)
+        return -YMOD_ERR_CODE;
 
-    _rym_putchar(RYM_CODE_ACK);
+    _ymod_putchar(YMOD_CODE_ACK);
 
     return RT_EOK;
 }
 
-static rym_err_t _rym_do_recv(
-    struct rym_ctx *ctx,
+static ymod_err_t _ymod_do_recv(
+    struct ymod_ctx *ctx,
     int handshake_timeout)
 {
-    rym_err_t err;
+    ymod_err_t err;
 
-    ctx->stage = RYM_STAGE_NONE;
+    ctx->stage = YMOD_STAGE_NONE;
 
-    err = _rym_do_handshake(ctx, handshake_timeout);
+    err = _ymod_do_handshake(ctx, handshake_timeout);
     if (err == RT_EEMPTY)
         return RT_EEMPTY;
     if (err != RT_EOK)
         return err;
 
-    err = _rym_do_trans(ctx);
+    err = _ymod_do_trans(ctx);
     if (err != RT_EOK)
         return err;
 
-    return _rym_do_fin(ctx);
+    return _ymod_do_fin(ctx);
 }
 extern SemaphoreHandle_t  xprintfMutex;
-rym_err_t rym_recv_on_device( struct rym_ctx *ctx, rym_callback on_begin, rym_callback on_data, rym_callback on_end, int handshake_timeout)
+ymod_err_t ymod_recv_on_device( struct ymod_ctx *ctx, ymod_callback on_begin, ymod_callback on_data, ymod_callback on_end, int handshake_timeout)
 {
-    rym_err_t res;
+    ymod_err_t res;
 
     ctx->on_begin = on_begin;
     ctx->on_data  = on_data;
     ctx->on_end   = on_end;
 #if USE_FreeRTOS
-    //taskENTER_CRITICAL();
     xSemaphoreTake(xprintfMutex, portMAX_DELAY);
 #endif
-    res = _rym_do_recv(ctx, handshake_timeout);
+    res = _ymod_do_recv(ctx, handshake_timeout);
     while (res == RT_EOK)
     {
-        res = _rym_do_recv(ctx, 1);
+        res = _ymod_do_recv(ctx, 1);
     }
 #if USE_FreeRTOS
     xSemaphoreGive(xprintfMutex);
-    //taskEXIT_CRITICAL();
 #endif
 
     return res;

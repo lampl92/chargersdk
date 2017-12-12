@@ -49,25 +49,8 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         goto exit;
     }
     taskENTER_CRITICAL();
-    if (flag_power_out_l == 1)
-    {
-        POWER_L_ON;
-    }
-    if (flag_power_out_n == 1)
-    {
-        POWER_N_ON;
-    }
-    
     bw = yaffs_write(fd, pbuff, len);
     taskEXIT_CRITICAL();
-    if (flag_power_out_l == 1)
-    {
-        POWER_L_ON;
-    }
-    if (flag_power_out_n == 1)
-    {
-        POWER_N_ON;
-    }
     if(len != bw)
     {
         ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-write");
@@ -112,8 +95,6 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
         *perrcode = ERR_FILE_RW;
         goto exit;
     }
-    //fsize = yaffs_lseek(fd, 0, SEEK_END);
-    //yaffs_lseek(fd, 0, SEEK_SET);
     yaffs_stat(path, &st);
     fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));

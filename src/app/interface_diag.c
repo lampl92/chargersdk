@@ -603,18 +603,17 @@ void DiagTempError(CON_t *pCON)
     }
     
     {  
-        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
-          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
-        {
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        
-        }
-        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
+        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
             (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
         {
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
             ThrowErrorCode(id, ERR_CON_ACTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
+          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         }
         else
         {

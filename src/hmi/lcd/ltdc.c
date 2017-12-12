@@ -421,11 +421,11 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
     __HAL_RCC_GPIOI_CLK_ENABLE();               //使能GPIOI时钟
 
     //初始化PB5，背光引脚
-    GPIO_Initure.Pin=GPIO_PIN_5;                //PB5推挽输出，控制背光
+    GPIO_Initure.Pin=GPIO_PIN_3;                //PB5推挽输出，控制背光
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;      //推挽输出
     GPIO_Initure.Pull=GPIO_PULLUP;              //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
-    HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+    HAL_GPIO_Init(GPIOI,&GPIO_Initure);
 
     //初始化PF10
     GPIO_Initure.Pin=GPIO_PIN_10;

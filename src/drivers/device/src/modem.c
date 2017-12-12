@@ -1688,6 +1688,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_OPEN:
+            NVIC_SetPriority(GPRS_IRQn, 1);
             ulFTPReOpenCnt++;
             if (ulFTPReOpenCnt >= 5)
             {
@@ -1818,6 +1819,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_CLOSE:
+            NVIC_SetPriority(GPRS_IRQn, GPRS_Priority);
             ret = modem_set_ftpclose(pModem);
             if (ret == DR_MODEM_OK)
             {
