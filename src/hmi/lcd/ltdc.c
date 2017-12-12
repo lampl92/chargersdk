@@ -362,8 +362,8 @@ void LTDC_Init(void)
 		lcdltdc.vbp=23;				    //垂直后廊
 		lcdltdc.hfp=210;			    //水平前廊
 		lcdltdc.vfp=22;				    //垂直前廊
-        //LTDC_Clk_Set(396,3,RCC_PLLSAIDIVR_4); //设置像素时钟 33M(如果开双显,需要降低DCLK到:18.75Mhz  300/4/4,才会比较好)
-        LTDC_Clk_Set(320,2,RCC_PLLSAIDIVR_4);
+        LTDC_Clk_Set(396,3,RCC_PLLSAIDIVR_4); //设置像素时钟 33M(如果开双显,需要降低DCLK到:18.75Mhz  300/4/4,才会比较好)
+        //LTDC_Clk_Set(336,3,RCC_PLLSAIDIVR_4);
 	}
 
 	lcddev.width=lcdltdc.pwidth;
@@ -421,11 +421,11 @@ void HAL_LTDC_MspInit(LTDC_HandleTypeDef* hltdc)
     __HAL_RCC_GPIOI_CLK_ENABLE();               //使能GPIOI时钟
 
     //初始化PB5，背光引脚
-    GPIO_Initure.Pin=GPIO_PIN_5;                //PB5推挽输出，控制背光
+    GPIO_Initure.Pin=GPIO_PIN_3;                //PB5推挽输出，控制背光
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;      //推挽输出
     GPIO_Initure.Pull=GPIO_PULLUP;              //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;         //高速
-    HAL_GPIO_Init(GPIOB,&GPIO_Initure);
+    HAL_GPIO_Init(GPIOI,&GPIO_Initure);
 
     //初始化PF10
     GPIO_Initure.Pin=GPIO_PIN_10;

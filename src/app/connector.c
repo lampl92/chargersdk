@@ -1355,7 +1355,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = tmpLStat;
 #else
 
-    tmpLStat = flag_power_out_l;//Get_State_relay();//1 : switch on
+    tmpLStat = Get_State_relay();//1 : switch on
     tmpNStat = tmpLStat;
     if (tmpLStat == SWITCH_ON)
     {

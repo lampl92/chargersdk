@@ -103,9 +103,9 @@ static void Timer_Process(WM_MESSAGE *pMsg)
     /// TODO (zshare#1#): //添加哪个枪在使用中。。。
 
 //            Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_LEFT | GUI_TA_VCENTER,
-//                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "A枪");
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "A枪");
 //        Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
-//                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
+//                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
 //
 //
     //ErrWindow_Show(hWin);
@@ -126,11 +126,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     {
     case WM_INIT_DIALOG:
         FrameWin_Init(pMsg, ID_TEXT_1, ID_TEXT_2, ID_TEXT_3, ID_TEXT_4,ID_IMAGE_0);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "请选择充电枪");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &XBF36_Font, GUI_BLACK, "请选择充电枪");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), GUI_TA_HCENTER | GUI_TA_VCENTER,
-                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "A枪");
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "A枪");
         Button_Show(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1), GUI_TA_HCENTER | GUI_TA_VCENTER,
-                    &SIF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
+                    &XBF24_Font, BUTTON_CI_UNPRESSED, GUI_BLUE, BUTTON_CI_UNPRESSED, GUI_BLUE, "B枪");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -144,13 +144,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             }
             break;
@@ -161,13 +161,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 WM_DeleteWindow(pMsg->hWin);
                 GUI_EndDialog(pMsg->hWin,0);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             }
             break;

@@ -305,7 +305,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
                 _deleteWin(_hWinCardInfo);
                 current_page = _HOMEPAGE;
                 bitset(winInitDone,7);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
 
@@ -365,14 +365,14 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateHome();
+        CreateHomePage();
         break;
     case MSG_JUMPCHAING:
         current_page = _CHARGINGPAGE;
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateCharging();
+        CreateChargingPage();
         break;
     default:
         WM_DefaultProc(pMsg);

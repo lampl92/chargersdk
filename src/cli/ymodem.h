@@ -1,44 +1,44 @@
-/* The word "RYM" is stand for "Real-YModem". */
+/* The word "YMOD" is stand for "YModem". */
 #ifndef __YMODEM_H__
 #define __YMODEM_H__
 
 #include "stm32f4xx.h"
 
-#define RYM_TICK_PER_SECOND 1000
-typedef long                            rym_err_t;      /**< Nbit CPU related date type */
+#define YMOD_TICK_PER_SECOND 1000
+typedef long                            ymod_err_t;      /**< Nbit CPU related date type */
 
 /* SOH/STX + seq + payload + crc */
-#define _RYM_SOH_PKG_SZ (1+2+128+2)
-#define _RYM_STX_PKG_SZ (1+2+1024+2)
+#define _YMOD_SOH_PKG_SZ (1+2+128+2)
+#define _YMOD_STX_PKG_SZ (1+2+1024+2)
 
-enum rym_code {
-    RYM_CODE_NONE = 0x00,
-    RYM_CODE_SOH  = 0x01,
-    RYM_CODE_STX  = 0x02,
-    RYM_CODE_EOT  = 0x04,
-    RYM_CODE_ACK  = 0x06,
-    RYM_CODE_NAK  = 0x15,
-    RYM_CODE_CAN  = 0x18,
-    RYM_CODE_C    = 0x43,
+enum ymod_code {
+    YMOD_CODE_NONE = 0x00,
+    YMOD_CODE_SOH  = 0x01,
+    YMOD_CODE_STX  = 0x02,
+    YMOD_CODE_EOT  = 0x04,
+    YMOD_CODE_ACK  = 0x06,
+    YMOD_CODE_NAK  = 0x15,
+    YMOD_CODE_CAN  = 0x18,
+    YMOD_CODE_C    = 0x43,
 };
 
-/* RYM error code
+/* YM error code
  *
- * We use the rym_err_t to return error values. We take use of current error
+ * We use the ym_err_t to return error values. We take use of current error
  * codes available in RTT and append ourselves.
  */
 /* timeout on handshake */
-#define RYM_ERR_TMO  0x70
+#define YMOD_ERR_TMO  0x70
 /* wrong code, wrong SOH, STX etc. */
-#define RYM_ERR_CODE 0x71
+#define YMOD_ERR_CODE 0x71
 /* wrong sequence number */
-#define RYM_ERR_SEQ  0x72
+#define YMOD_ERR_SEQ  0x72
 /* wrong CRC checksum */
-#define RYM_ERR_CRC  0x73
+#define YMOD_ERR_CRC  0x73
 /* not enough data received */
-#define RYM_ERR_DSZ  0x74
+#define YMOD_ERR_DSZ  0x74
 /* the transmission is aborted by user */
-#define RYM_ERR_CAN  0x75
+#define YMOD_ERR_CAN  0x75
 #define RT_EOK                          0               /**< There is no error */
 #define RT_ERROR                        1               /**< A generic error happens */
 #define RT_ETIMEOUT                     2               /**< Timed out */
@@ -53,64 +53,64 @@ enum rym_code {
 
 
 /* how many ticks wait for chars between packet. */
-#ifndef RYM_WAIT_CHR_TICK
-#define RYM_WAIT_CHR_TICK (RYM_TICK_PER_SECOND * 1)
+#ifndef YMOD_WAIT_CHR_TICK
+#define YMOD_WAIT_CHR_TICK (YMOD_TICK_PER_SECOND * 1)
 #endif
 /* how many ticks wait for between packet. */
-#ifndef RYM_WAIT_PKG_TICK
-#define RYM_WAIT_PKG_TICK (RYM_TICK_PER_SECOND * 1)
+#ifndef YMOD_WAIT_PKG_TICK
+#define YMOD_WAIT_PKG_TICK (YMOD_TICK_PER_SECOND * 1)
 #endif
 /* how many ticks between two handshake code. */
-#ifndef RYM_CHD_INTV_TICK
-#define RYM_CHD_INTV_TICK (RYM_TICK_PER_SECOND * 1)
+#ifndef YMOD_CHD_INTV_TICK
+#define YMOD_CHD_INTV_TICK (YMOD_TICK_PER_SECOND * 1)
 #endif
 
 /* how many CAN be sent when user active end the session. */
-#ifndef RYM_END_SESSION_SEND_CAN_NUM
-#define RYM_END_SESSION_SEND_CAN_NUM  0x07
+#ifndef YMOD_END_SESSION_SEND_CAN_NUM
+#define YMOD_END_SESSION_SEND_CAN_NUM  0x07
 #endif
 
-enum rym_stage {
-    RYM_STAGE_NONE,
+enum ymod_stage {
+    YMOD_STAGE_NONE,
     /* set when C is send */
-    RYM_STAGE_ESTABLISHING,
+    YMOD_STAGE_ESTABLISHING,
     /* set when we've got the packet 0 and sent ACK and second C */
-    RYM_STAGE_ESTABLISHED,
+    YMOD_STAGE_ESTABLISHED,
     /* set when the sender respond to our second C and recviever got a real
      * data packet. */
-    RYM_STAGE_TRANSMITTING,
+    YMOD_STAGE_TRANSMITTING,
     /* set when the sender send a EOT */
-    RYM_STAGE_FINISHING,
+    YMOD_STAGE_FINISHING,
     /* set when transmission is really finished, i.e., after the NAK, C, final
      * NULL packet stuff. */
-    RYM_STAGE_FINISHED,
+    YMOD_STAGE_FINISHED,
 };
 
-struct rym_ctx;
+struct ymod_ctx;
 /* when receiving files, the buf will be the data received from ymodem protocol
  * and the len is the data size.
  *
  * TODO:
- * When sending files, the len is the buf size in RYM. The callback need to
- * fill the buf with data to send. Returning RYM_CODE_EOT will terminate the
+ * When sending files, the len is the buf size in YMOD. The callback need to
+ * fill the buf with data to send. Returning YMOD_CODE_EOT will terminate the
  * transfer and the buf will be discarded. Any other return values will cause
  * the transfer continue.
  */
-typedef enum rym_code (*rym_callback)(struct rym_ctx *ctx, uint8_t *buf, uint32_t len);
+typedef enum ymod_code (*ymod_callback)(struct ymod_ctx *ctx, uint8_t *buf, uint32_t len);
 
-/* Currently RYM only support one transfer session(ctx) for simplicity.
+/* Currently YMOD only support one transfer session(ctx) for simplicity.
  *
  * In case we could support multiple sessions in The future, the first argument
- * of APIs are (struct rym_ctx*).
+ * of APIs are (struct ym_ctx*).
  */
-struct rym_ctx
+struct ymod_ctx
 {
-    rym_callback on_data;
-    rym_callback on_begin;
-    rym_callback on_end;
+    ymod_callback on_data;
+    ymod_callback on_begin;
+    ymod_callback on_end;
     /* When error happened, user need to check this to get when the error has
      * happened. */
-    enum rym_stage stage;
+    enum ymod_stage stage;
     /* user could get the error content through this */
     uint8_t *buf;
 };
@@ -128,8 +128,8 @@ struct rym_ctx
  *
  * @param on_data The callback will be invoked on the packets received.  The
  * callback should save the data to the destination. The return value will be
- * sent to the sender and in turn, only RYM_{ACK,CAN} is valid. When on_data is
- * NULL, RYM will barely send ACK on every packet and have no side-effects.
+ * sent to the sender and in turn, only YMOD_{ACK,CAN} is valid. When on_data is
+ * NULL, YMOD will barely send ACK on every packet and have no side-effects.
  *
  * @param on_end The callback will be invoked when one transmission is
  * finished. The data should be 128 bytes of NULL. You can do some cleaning job
@@ -140,7 +140,7 @@ struct rym_ctx
  * @param handshake_timeout the timeout when hand shaking. The unit is in
  * second.
  */
-rym_err_t rym_recv_on_device(struct rym_ctx *ctx, rym_callback on_begin, rym_callback on_data, rym_callback on_end,
+ymod_err_t ymod_recv_on_device(struct ymod_ctx *ctx, ymod_callback on_begin, ymod_callback on_data, ymod_callback on_end,
         int handshake_timeout);
 
 #endif

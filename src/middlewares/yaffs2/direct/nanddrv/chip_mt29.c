@@ -19,6 +19,7 @@ static int power_check(struct nand_chip *this);
 int nand_hal_init(void)
 {
     NAND_Init();
+    return 1;
 }
 static void set_ale(struct nand_chip * this, int high)
 {

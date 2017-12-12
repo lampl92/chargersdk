@@ -18,6 +18,48 @@
 #define pathBlackList       "/nand/system/blacklist.cfg"
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
+#define pathSignalImage0            "/nand/system/SignalImage0.bmp"
+#define pathSignalImage1            "/nand/system/SignalImage1.bmp"
+#define pathSignalImage2            "/nand/system/SignalImage2.bmp"
+#define pathSignalImage3            "/nand/system/SignalImage3.bmp"
+#define pathSignalImage4            "/nand/system/SignalImage4.bmp"
+#define pathSignalImage5            "/nand/system/SignalImage5.bmp"
+        
+#define pathHomeImage                "/nand/system/HomeImage.bmp"
+        
+#define pathCardInfoImage           "/nand/system/CardInfoImage.bmp"
+#define pathGetCardInfoImage        "/nand/system/GetCardInfoImage.bmp"
+#define pathCardUnregisteredImage   "/nand/system/CardUnregisteredImage.bmp"
+#define pathCardArrearsImage        "/nand/system/CardArrearsImage.bmp"
+#define pathPleaseConnectPlugImage  "/nand/system/PleaseConnectPlugImage.bmp"
+#define pathCardInfoVoidImage       "/nand/system/CardInfoVoidImage.bmp"
+        
+#define path3zhengzaichongdian      "/nand/system/ChargingImage.bmp"
+#define pathCartoonImage0           "/nand/system/CartoonImage0.bmp"
+#define pathCartoonImage1           "/nand/system/CartoonImage1.bmp"
+#define pathCartoonImage2           "/nand/system/CartoonImage2.bmp"
+#define pathCartoonImage3           "/nand/system/CartoonImage3.bmp"
+#define pathCartoonImage4           "/nand/system/CartoonImage4.bmp"
+#define pathCartoonImage5           "/nand/system/CartoonImage5.bmp"
+#define pathStopByCardImage         "/nand/system/StopByCardImage.bmp"
+#define pathStopByQRImage           "/nand/system/StopByQRImage.bmp"
+#define pathChargingVoidImage       "/nand/system/ChargingVoidImage.bmp"
+
+#define pathChargeDoneImage         "/nand/system/ChargeDoneImage.bmp"
+#define pathOrderUploadImage        "/nand/system/OrderUploadImage.bmp"
+#define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
+#define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
+#define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"
+#define pathMoneyNotEnoughDoneImage     "/nand/system/MoneyNotEnoughDoneImage.bmp"
+#define pathChargeDoneVoidImage     "/nand/system/ChargeDoneVoidImage.bmp"
+        
+#define pathAdvertisementImage      "/nand/system/AdvertisementImage.bmp"
+
+#define pathstSIF12                 "/nand/system/stSIF12.sif"
+#define pathstSIF16                 "/nand/system/stSIF16.sif"
+#define pathstSIF24                 "/nand/system/stSIF24.sif"
+#define pathstSIF36                 "/nand/system/stSIF36.sif"
+
 #define YAFFS_MOUNT_POINT   "/nand/"
 #define pathSystemDir       "/nand/system/"
 

@@ -56,15 +56,10 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     int res;
-    EventBits_t uxBits;
-    int id;
-    uint32_t ulTotalCON;
-    CON_t *pCON;
     uint8_t flag_set;
 
     res = 0;
-    flag_set = 0;//0不可设置, 1 可设置
-    ulTotalCON = pListCON->Total;
+    flag_set = 0;
 
     /******* 设置上报间隔************/
     RemoteIF_RecvSetCyc(pEVSE, pProto, &res);
@@ -78,16 +73,13 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
                            100);//设置timer period ，有timer start 功能
     }
     /******* 判断充电过程中不允许设置************/
-    for(id = 0; id < ulTotalCON; id++)
+    if (isEVSEWorking() == 0)
     {
-        flag_set = 1;
-        pCON = CONGetHandle(id);
-        uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-        if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
-        {
-            flag_set = 0;
-            break;
-        }
+        flag_set = 1;//0不可设置, 1 可设置
+    }
+    else
+    {
+        flag_set = 0;
     }
 
     taskremote_reset(pEVSE, pProto, flag_set);
@@ -157,15 +149,26 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode, errcode_sdt;
     int network_res = 0;
     int succ;
+    uint8_t flag_set;
+    
+    if (isEVSEWorking() == 0)
+    {
+        flag_set = 1;//0不可设置, 1 可设置
+    }
+    else
+    {
+        flag_set = 0;
+    }
+    
     /*1. 平台下发升级命令*/
     errcode = RemoteIF_RecvSetOTA(pProto, &network_res);
-    if (errcode == ERR_NO && network_res == 1)
+    if (errcode == ERR_NO && network_res == 1 && flag_set == 1)
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 1);
         /*2. 充电桩上报进入升级状态*/
         RemoteIF_SendOTA_Start(pEVSE, pProto, NULL);
     }
-    else if (errcode == ERR_FILE_RW && network_res == 1)
+    else if (network_res == 1)//errcode != ERR_NO, flag_set != 1
     {
         RemoteIF_SendSetOTA(pEVSE, pProto, NULL, 0);
     }

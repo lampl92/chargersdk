@@ -5,6 +5,7 @@
 #include "stringName.h"
 #include "factorycfg.h"
 #include "cfg_sys.h"
+#include "yaffs2msic.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -42,7 +43,7 @@ void timeInit()
 
 uint8_t create_system_dir(void)
 {
-    int res = 0;
+    int res = 1;
     res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
     if (res != 0)
     {
@@ -59,27 +60,21 @@ uint8_t create_system_dir(void)
 }
 
 
-void create_cfg_file(const uint8_t *path, const uint8_t *context)
+void create_cfg_file(const char *path, const uint8_t *context)
 {
     uint32_t bw;
     int fd;
-    int res = 0;
-    fd = yaffs_open(path, O_CREAT | O_RDWR, S_IWRITE | S_IREAD);
+    int res = 1;
+    fd = yaffs_open(path, O_CREAT | O_EXCL | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
         res = yaffs_get_error();
     }
-    switch (res)
+    else
     {
-    case 0:
         bw = yaffs_write(fd, context, strlen(context));
-        break;
-    case -EEXIST:
-        break;
-    default:
-        break;
+        yaffs_close(fd);
     }
-    yaffs_close(fd);
 }
 extern void retarget_init(void);
 void yaffs_init(void)

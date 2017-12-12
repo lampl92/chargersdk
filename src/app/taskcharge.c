@@ -278,27 +278,45 @@ void vTaskEVSECharge(void *pvParameters)
                     break;
                 }
                 /*** 判断用户相关停止条件  ***/
-                uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionStopType,
-                                                      pdTRUE, pdFALSE, 0);
+                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
                 if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
                 {
+                    printf_safe("LimitFee Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((uxBitsException & defEventBitExceptionLimitTime) == defEventBitExceptionLimitTime)    //达到充电时间限制
                 {
-                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitExceptionLimitTime);
+                    printf_safe("LimitTime Stop Charge!\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
+                    printf_safe("Remote Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
                 {
+                    printf_safe("RFID Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
+                {
+                    printf_safe("Curr Stop Charge!\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                }
+                if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
+                {
+                    printf_safe("Scram Stop Charge!\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 /******************************/
@@ -322,6 +340,7 @@ void vTaskEVSECharge(void *pvParameters)
                     if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
                         //用户原因停止
+                        printf_safe("\e[44;37mAuth Stop Charge!\e[0m\n");
                     }
 
                     THROW_ERROR(i, errcode = pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "other stop charge");

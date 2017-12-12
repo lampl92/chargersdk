@@ -23,6 +23,7 @@
 #include "bsp_dwt.h"
 #include "bsp_rtc.h"
 //#include "bsp_ltdc.h"
+#include "bsp_nand_flash.h"
 #include "bsp_user_lib.h"
 #include "lcddrv.h"
 #include "touch.h"

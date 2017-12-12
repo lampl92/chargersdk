@@ -154,10 +154,11 @@ void vTaskInit(void *pvParameters)
     
     AppObjCreate();
     sys_Init();
+    printf_safe("\nPRESS 'C' IN 3 SECONDS FOR CLI MODE...\n");
     while (1)
     {
         cli_std_len = uart_read(UART_PORT_CLI, cli_std, 1, 3000);
-        if (cli_std_len >= 1 && cli_std[0] == 'c')
+        if (cli_std_len >= 1 && (cli_std[0] == 'c' || cli_std[0] == 'C'))
         {
             cli_std[0] = 0;
             cli_std_len = 0;
@@ -216,7 +217,7 @@ void vTaskInit(void *pvParameters)
         }
         else
         {
-            printf_safe("升级失败, 请手动重启或检查待升级固件!\n");
+            printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
         }
        
         vTaskDelay(1000);

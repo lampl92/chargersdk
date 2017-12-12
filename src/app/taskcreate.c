@@ -25,8 +25,10 @@
 /---------------------------------------------------------------------------*/
 #define defSTACK_TaskInit                   (1024*10)
 #define defSTACK_TaskCLI                    (1024 * 50)
-#define defSTACK_TaskGUI                    (1024*10)
-#define defSTACK_TaskTouch                  512
+//#define defSTACK_TaskGUI                    (1024*10)
+#define defSTACK_TaskGUI                    (1024*20)
+//#define defSTACK_TaskTouch                  512
+#define defSTACK_TaskTouch                  1024
 #define defSTACK_TaskOTA                    512
 #define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
@@ -277,6 +279,6 @@ void AppObjCreate (void)
 #if EVSE_USING_RFID
     xTimerStart(xHandleTimerRFID, 0);
 #endif
-    //xTimerStart(xHandleTimerDataRefresh, 0);
+    xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器
 }

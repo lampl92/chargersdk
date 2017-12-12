@@ -71,6 +71,7 @@ WM_HWIN _hWinChargDone;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 static uint8_t first_flag = 0;
 static uint8_t orderFinish = 0;
+uint8_t strCSQ[32];
 /*********************************************************************
 *
 *       Static data
@@ -130,7 +131,6 @@ static void Data_Process(WM_MESSAGE *pMsg)
 {
     static uint8_t timer_count = 0;
     static uint8_t num = 0;
-    uint8_t Timer_buf[10];
     uint8_t temp_buf[32];
     CON_t *pCON;
     time_t now;
@@ -138,7 +138,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     volatile uint32_t diffsec;
     volatile int8_t sec;
     EventBits_t uxBits;
-    uint8_t strCSQ[32];
+
 
     WM_HWIN hWin = pMsg->hWin;
 
@@ -147,7 +147,6 @@ static void Data_Process(WM_MESSAGE *pMsg)
     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
 								defEventBitOrderFinishToHMI,
                                 pdTRUE, pdTRUE, 0);
-
 	if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)//订单上传完成
 	{
 		orderFinish = 1;
@@ -315,7 +314,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 first_flag = 0;
                 _deleteWin(_hWinChargDone);
                 _hWinChargDone = 0;
-                CreateHome();
+                CreateHomePage();
                 current_page = _HOMEPAGE;
                 bitset(winInitDone,7);
                 // USER END
@@ -380,7 +379,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         first_flag = 0;
         _deleteWin(_hWinChargDone);
         _hWinChargDone = 0;
-        CreateHome();
+        CreateHomePage();
         current_page = _HOMEPAGE;
         bitset(winInitDone,7);
         break;

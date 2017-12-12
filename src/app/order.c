@@ -66,7 +66,7 @@ static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
  * @return SegTimeState_e
  *
  */
-static OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
+OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
 {
     int i;
     for (i = 0; i < defOrderSegMax; i++)

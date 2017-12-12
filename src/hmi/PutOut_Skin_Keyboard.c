@@ -8,6 +8,7 @@
 #include "WM.h"
 #include "BUTTON.h"
 #include "cfg_parse.h"
+#include "touchtimer.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -22,7 +23,7 @@ EDIT_Handle _aahEditEg;//示例
 KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
-uint8_t *passwd = "8888";
+uint8_t *passwd = "888888";
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
@@ -1030,7 +1031,7 @@ static uint8_t Value_Check()
 
     pCon = CONGetHandle(0);
 
-    memset(result_input,'\0',strlen(result_input));
+    memset(result_input,'\0',sizeof(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
 
     switch(ManagerSetOptions)
@@ -1061,63 +1062,122 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);   
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
+                memset(pEVSE->info.strSN,'\0',strlen(pEVSE->info.strSN));
+                strcpy(pEVSE->info.strSN,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
                 break;
             case 21:
-                tmpU8 = atoi(result_input);
-                pEVSE->info.SetEVSECfg(pEVSE, jnTotalCON, &tmpU8, ParamTypeU8);   
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                memset(pEVSE->info.strID,'\0',strlen(pEVSE->info.strID));
+                strcpy(pEVSE->info.strID,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
+                break;
+            case 22:
+                pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strServerIP,'\0',strlen(pechProto->info.strServerIP));
+                strcpy(pechProto->info.strServerIP,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
+                break;
+            case 23://
+                tmpU16 = (uint16_t)atoi(result_input);
+                pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
+                pechProto->info.usServerPort = tmpU16;
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
+                break;
+            case 24://user name
+                pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strUserName,'\0',strlen(pechProto->info.strUserName));
+                strcpy(pechProto->info.strUserName,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
+                break;
+            case 25://user passwd
+                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
+                memset(pechProto->info.strUserPwd,'\0',strlen(pechProto->info.strUserPwd));
+                strcpy(pechProto->info.strUserPwd,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+                break;
+            case 26://屏保时间
+                tmpU32 = atoi(result_input);
+                xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+                xSysconf.ulDispSleepTime_s = tmpU32;
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
+                break;
+        }
+        break;
+    case CONSET_VALUE:
+        switch(htmpID)
+        {
+            case 20:
+                pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
+                memset(pCon->info.strQRCode,'\0',sizeof(pCon->info.strQRCode));
+                strcpy(pCon->info.strQRCode,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+                break;
+            case 21:
+                pCon->info.SetCONCfg(pCon, jnSocketType, result_input, ParamTypeString);
+               // memset(pCon->info.ucSocketType,'\0',sizeof(pCon->info.ucSocketType));
+               // pCon->info.ucSocketType = 0;
+                pCon->info.ucSocketType = result_input[0];
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
                 break;
             case 22:
                 tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                pCon->info.dVolatageUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
                 break;
             case 23:
                 tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
+                pCon->info.dVolatageLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
                 break;
-            case 24://电流下限 去掉
+            case 24://电流上限
+                //tmpDouble = atof(result_input);
+                //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
                 break;
-            case 25://出场设置额定电流
-            
+            case 25://交流输入端子温度上限
+                tmpDouble = atof(result_input);
+                pCon->info.dACTempUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
             case 26:
                 tmpDouble = atof(result_input);
-                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);                
+                pCon->info.dACTempLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
                 break;
-            case 27://背光时间
-                
+            case 27://交流输出端子温度上限
+                tmpDouble = atof(result_input);
+                pCon->info.dSocketTempUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
                 break;
             case 28:
-            
+                tmpDouble = atof(result_input);
+                pCon->info.dSocketTempLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
                 break;
             case 29:
+                tmpDouble = atof(result_input);
+                pCon->info.dRatedCurrent = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnRatedCurrent, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
                 break;
-            case 30://本机IP做显示 更改为服务器IP pechProto->info.strServerIP
-                //pModem->status.strLocIP;
+            case 30:
+                tmpDouble = atof(result_input);
+                pCon->info.dRatedPower = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
                 break;
-            case 31://ziwangyanma duqiao
-                break;
-            case 32://wangguan dudiao
-                break;
-            case 33://mac dudiao
-                break;
-            case 34://
-                tmpU16 = (uint16_t)atoi(result_input);
-                pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
-                break;
-            case 35://user name
-                pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
-                break;
-            case 36://user passwd
-                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
-                break;
-            //user miyao
-            //pechProto->info.SetProtoCfg(pechProto, jnProtoKey, result_input, ParamTypeString);
-                
-            
         }
         break;
     }
+    return VALUE_OK_SAV;
 }
 
 static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
@@ -1158,10 +1218,18 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     {
     case LOGIN_PASSWD:
         bitclr(winCreateFlag,2);
-        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHome());
+        prePowerFee = 0;
+        preServiceFee = 0;
+        (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:
+        bitclr(winCreateFlag, 2);
+        WM_ShowWindow(htmpBK);
+        WM_ShowWindow(htmpChild);
+    break;
+    /**< 添加跳页到设置页 , */
+    case CONSET_VALUE:
         bitclr(winCreateFlag, 2);
         WM_ShowWindow(htmpBK);
         WM_ShowWindow(htmpChild);
@@ -1233,15 +1301,8 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 	keypad_dev.ypos=150;
 	keypad_dev.width=780;
 	keypad_dev.height=320;
-//    if (ManagerSetOptions == LOGIN_PASSWD)
-//    {
-//        keypad_dev.padtype = NUMBER_KEYPAD;				//默认为數字鍵盤 
-//    }
-//    else
-//    {
-        keypad_dev.padtype = ENGLISH_KEYPAD;				//默认为英文键盘            
-//    }	
-    keypad_dev.signpad_flag=0;
+	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
+	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;
     keypad_dev.inputlen=0;
     keypad_dev.pynowpage=0;
@@ -1295,7 +1356,6 @@ void Keypad_GetValue(uint8_t optios,char *varname)
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
         TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
-        MULTIEDIT_SetMaxNumChars(_aahEditVar, 4);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 
@@ -1330,15 +1390,8 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
 	keypad_dev.ypos=150;
 	keypad_dev.width=780;
 	keypad_dev.height=320;
-//    if (ManagerSetOptions == LOGIN_PASSWD)
-//    {
-//        keypad_dev.padtype = NUMBER_KEYPAD;				//默认为數字鍵盤 
-//    }
-//    else
-//    {
-        keypad_dev.padtype = ENGLISH_KEYPAD;				//默认为英文键盘            
-//    }
-    keypad_dev.signpad_flag=0;
+	keypad_dev.padtype=ENGLISH_KEYPAD;				//默认为英文键盘
+	keypad_dev.signpad_flag=0;
 	keypad_dev.signpad_num=2;
     keypad_dev.inputlen=0;
     keypad_dev.pynowpage=0;
@@ -1392,11 +1445,21 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,"登录密码:");
         TEXT_SetFont(_aahEditVar, &SIF24_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
-        MULTIEDIT_SetMaxNumChars(_aahEditVar, 4);
         MULTIEDIT_SetPasswordMode(hMulti,1);//是否启用密码模式
     break;
 
     case SYSSET_VALUE:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditVar, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditEg, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
+        TEXT_SetText(_aahEditEg,eg_p);
+//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+    break;
+
+    case CONSET_VALUE:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
         TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);

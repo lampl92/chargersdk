@@ -10,6 +10,7 @@
 #include "interface.h"
 #include "cJSON.h"
 #include "yaffsfs.h"
+#include "user_app.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -37,7 +38,7 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_WRONLY, S_IWRITE);
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
         ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-open");
@@ -47,9 +48,8 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_FILE_RW;
         goto exit;
     }
-    taskENTER_CRITICAL(); 
+    taskENTER_CRITICAL();
     bw = yaffs_write(fd, pbuff, len);
-    yaffs_sync(path); 
     taskEXIT_CRITICAL();
     if(len != bw)
     {
@@ -95,8 +95,6 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
         *perrcode = ERR_FILE_RW;
         goto exit;
     }
-    //fsize = yaffs_lseek(fd, 0, SEEK_END);
-    //yaffs_lseek(fd, 0, SEEK_SET);
     yaffs_stat(path, &st);
     fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));

@@ -1,4 +1,4 @@
-#ifndef	__PY_MB_h__
+﻿#ifndef	__PY_MB_h__
 #define	__PY_MB_h__
 #include "pyinput.h"
 //汉字排列表

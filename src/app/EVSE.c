@@ -19,6 +19,26 @@
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
 
+uint8_t isEVSEWorking(void)
+{
+    int id;
+    uint32_t ulTotalCON;
+    CON_t *pCON;
+    
+    ulTotalCON = pListCON->Total;
+    
+    for (id = 0; id < ulTotalCON; id++)
+    {
+        pCON = CONGetHandle(id);
+        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
+        {
+            return 1;
+        } 
+    }
+    return 0;
+}
+
+
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     EVSE_t *pEVSE;

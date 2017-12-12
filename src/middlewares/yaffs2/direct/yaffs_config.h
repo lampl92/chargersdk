@@ -2,6 +2,7 @@
 #define YAFFS_CONFIG_H
 
 #include "sys_types.h"
+#include "bsp.h"
 
 #define NO_inline
 #define LOFF_T_32_BIT
