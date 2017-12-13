@@ -8,10 +8,12 @@
 #ifndef  __ORDER_H
 #define  __ORDER_H
 
-#include <time.h>
 #include "gdsl_list.h"
 #include "evse_config.h"
 #include "taskremote.h"
+#include "FreeRTOS.h"
+#include "timers.h"
+#include <time.h>
 
 
 /*停止类型 StopType*/
@@ -135,6 +137,8 @@ typedef struct _OrderData
     uint8_t         ucStopType; //停止类型
     time_t          tStopTime;  //停止时间          6
 
+    char strOrderTmpPath[16];
+    TimerHandle_t xHandleTimerOrderTmp;
 	statRemote_t statRemoteProc;
     void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;

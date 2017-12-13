@@ -82,6 +82,8 @@
 #define defEventBitOrderFinishToChargetask       BIT_17
 #define defEventBitOrderFinishToHMI              BIT_18
 
+#define defEventBitOrderTmpTimer                 BIT_19
+
 #if EVSE_USING_GUI
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK | \

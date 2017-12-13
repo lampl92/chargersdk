@@ -99,7 +99,6 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
     taskENTER_CRITICAL();
-    yaffsfs_SetError(0);
     br = yaffs_read(fd, rbuff, fsize);
     taskEXIT_CRITICAL();
     if(fsize != br)

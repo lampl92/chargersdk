@@ -2,5 +2,7 @@
 #define CFG_ORDER_H
 
 ErrorCode_t  AddOrderCfg(char *path, CON_t *pCON, echProtocol_t *pProto);
+ErrorCode_t  AddOrderTmp(char *path, CON_t *pCON, echProtocol_t *pProto);
+void RemoveOrderTmp(char *path);
 
 #endif
