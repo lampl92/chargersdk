@@ -232,6 +232,8 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     case DR_MODEM_ERROR:
     case DR_MODEM_TIMEOUT:
         break;
+    default:
+        break;
     }
 
     return ret;
@@ -333,6 +335,8 @@ static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
         sscanf(reply, "%*[^ ] %[0-9]", s);
         pModem->status.ucSignalQuality = atoi(s);
         break;
+    default:
+        break;
     }
     return ret;
 }
@@ -370,6 +374,8 @@ static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
             pModem->status.eNetReg = REG_UNKNOWN;
             break;
         }
+        break;
+    default:
         break;
     }
 
@@ -410,6 +416,8 @@ static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
             pModem->status.eGprsReg = REG_UNKNOWN;
             break;
         }
+        break;
+    default:
         break;
     }
 
@@ -540,10 +548,6 @@ DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
 
     return ret;
-}
-DR_MODEM_e modem3G_set_QICSGP(DevModem_t *pModem)
-{
-
 }
 /** @brief 激活移动场景，发起GPRS连接
  *
@@ -695,6 +699,10 @@ DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
             }
         }
     }
+    else
+    {
+        pModem->status.eConnect = CONNECT_FAIL;
+    }
     return ret;
 }
 DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
@@ -708,20 +716,20 @@ DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
                   pProto->info.usServerPort);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
-    if(ret == DR_MODEM_OK)
+    if (ret == DR_MODEM_OK)
     {
-        if(pModem->info.ucTPMode == 0)
+        if (pModem->info.ucTPMode == 0)
         {
             sscanf(reply, "%*s%s", s);
-            if(strcmp(s, "OK") == 0) //"CONNECT OK"
+            if (strcmp(s, "OK") == 0) //"CONNECT OK"
             {
                 pModem->status.eConnect = CONNECT_OK;
             }
-            else if(strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            else if (strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
             {
                 pModem->status.eConnect = CONNECT_FAIL;
             }
-            else if(strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            else if (strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
             {
                 pModem->status.eConnect = CONNECT_OK;
             }
@@ -729,20 +737,24 @@ DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
         else
         {
             sscanf(reply, "%s", s);
-            if(strcmp(s, "CONNECT") == 0) //"CONNECT OK"
+            if (strcmp(s, "CONNECT") == 0) //"CONNECT OK"
             {
                 pModem->status.eConnect = CONNECT_OK;
             }
             sscanf(reply, "%*s%s", s);
-            if(strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
+            if (strcmp(s, "FAIL") == 0) //"CONNECT FAIL"
             {
                 pModem->status.eConnect = CONNECT_FAIL;
             }
-            else if(strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
+            else if (strcmp(s, "CONNECT") == 0)  //"ALREADY CONNECT"
             {
                 pModem->status.eConnect = CONNECT_OK;
             }
         }
+    }
+    else if (ret == DR_MODEM_ERROR)
+    {
+        pModem->status.eConnect = CONNECT_FAIL;
     }
     return ret;
 }
@@ -942,7 +954,7 @@ DR_MODEM_e M26_STATE(DevModem_t *pModem)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "STATE", 3);
     if(ret == DR_MODEM_OK)
     {
-        sscanf(reply, "%*s%*s%s", s);///** @todo (rgw#1#): 查看一下内存中真实数据 */
+        sscanf(reply, "%*s%*s%*s%s", s);
         if(strcmp(s, "INITIAL") == 0)
         {
             pModem->status.statConStat = IP_INITIAL;
@@ -1067,6 +1079,8 @@ DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
             ret = DR_MODEM_ERROR;
         }
         break;
+    default:
+        break;
     }
     return ret;
 }
@@ -1092,6 +1106,8 @@ DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
         {
             ret = DR_MODEM_ERROR;
         }
+        break;
+    default:
         break;
     }
     return ret;
@@ -1180,6 +1196,8 @@ DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
             ret = DR_MODEM_ERROR;
         }
         break;
+    default:
+        break;
     }
     return ret;
 }
@@ -1205,6 +1223,8 @@ DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
         {
             ret = DR_MODEM_ERROR;
         }
+        break;
+    default:
         break;
     }
     return ret;
@@ -1466,7 +1486,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             else
             {
-                pModem->state = DS_MODEM_ERR;
+                pModem->state = DS_MODEM_DEACT_PDP;
             }
             break;
         case DS_MODEM_ACT_PDP:
@@ -1522,17 +1542,32 @@ void Modem_Poll(DevModem_t *pModem)
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
             case CONNECT_FAIL:
-                M26_STATE(pModem);
-                if (pModem->status.statConStat == TCP_CONNECTING)
+                if (xSysconf.xModule.use_gprs == 2)
                 {
-                    pModem->state = DS_MODEM_TCP_CLOSE;
-                    printf_safe("State TCP open Fail ,Call TCP close!!\n");
+                    M26_STATE(pModem);
+                    if (pModem->status.statConStat == TCP_CONNECTING)
+                    {
+                        pModem->state = DS_MODEM_TCP_CLOSE;
+                        printf_safe("State TCP open Fail ,Call TCP close!!\n");
+                    }
+                    else if (pModem->status.statConStat == IP_STATUS)
+                    {
+                        pModem->state = DS_MODEM_DEACT_PDP;
+                        printf_safe("IP Status Error，Please check IP address，Call DEACT PDP!!\n");
+                    }
+                    else
+                    {
+                        pModem->state = DS_MODEM_DEACT_PDP;
+                    }
+                    break; 
                 }
-                else
+                else if (xSysconf.xModule.use_gprs == 3)
                 {
+                    printf_safe("IP Status Error，Please check IP address，Call DEACT PDP!!\n");
                     pModem->state = DS_MODEM_DEACT_PDP;
+                    break;
                 }
-                break;
+               
             default:
                 break;
             }

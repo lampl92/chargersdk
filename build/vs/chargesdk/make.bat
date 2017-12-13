@@ -11,7 +11,7 @@ set Thh=%TIME:~0,2%
 set Thh=%Thh: =0%
 set folder1="%yy%.%mm%.%dd%"
 set folder2="%Thh%.%Tmm%.%Tss%"
-for /f "delims=" %%t in ('..\..\..\tools\crc32sum.exe -r .\Release\chargesdk.bin') do set _crc32=%%t
+for /f "delims=" %%t in ('%crc32sum% -r %source%') do set _crc32=%%t
 set crc32=%_crc32:~24,8%
 md ..\Release\chargesdk\%folder1%\%folder2%
 copy /y %source% ..\Release\chargesdk\%folder1%\%folder2%\chargesdk.bin.new

@@ -89,7 +89,7 @@ void GUI_TOUCH_X_ActivateX(void)
             if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
             {
                 _AsmtCount++;
-                if (_AsmtCount > AdvertisementTime)
+                if (_AsmtCount > xSysconf.ulDispSleepTime_s * 50)
                 {
                     _AsmtCount = 0;
                     bitset(calebrate_done, 8);//calebrate_done的第八位为广告页

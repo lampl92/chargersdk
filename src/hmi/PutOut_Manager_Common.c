@@ -164,8 +164,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                
 //                GUI_EndDialog(_hWinManagerCommon, 0);
                 _deleteWin(_hWinManagerCommon);
-                prePowerFee = 0;
-                preServiceFee = 0;
                 
                 if (pCont->state == statelog)
                 {

@@ -324,29 +324,36 @@ void vTaskEVSECharge(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
 //                printf_safe("uxBitsCharge = %X\n", uxBitsCharge);
 //                printf_safe("CPCondition = %X\n", defEventBitChargeCondition);
-                if((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) //6vpwm->9vpwm S2主动断开
+                if (((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) && 
+                    ((uxBitsCharge & defEventBitCONPlugOK) == defEventBitCONPlugOK)) //6vpwm->9vpwm S2主动断开
                 {
                     THROW_ERROR(i, errcode = pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING S2 Open");
                     
-                    if(errcode == ERR_NO)
+                    if (errcode == ERR_NO)
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
-                        printf_safe("S2 Stop Charge!\n");
+                        printf_safe("\e[44;37mS2 Opened, Full!\e[0m\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                 }
                 else if(((uxBitsCharge & (defEventBitChargeCondition)) | defEventBitCONVoltOK) != (defEventBitChargeCondition))//除去S2主动断开情况，如果被监测的点有False, 电压异常由diag处理
                 {
-                    if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
+                    if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                    {
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
+                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                        printf_safe("\e[44;37mFource Unplug!\e[0m\n");
+                    }
+                    else if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
                         //用户原因停止
-                        printf_safe("\e[44;37mAuth Stop Charge!\e[0m\n");
+                        printf_safe("\e[44;37mAuth Clear!\e[0m\n");
                     }
 
                     THROW_ERROR(i, errcode = pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
                     if(errcode == ERR_NO)
                     {
-                        printf_safe("\e[44;37mOther Stop Charge!\e[0m\n");
+                        printf_safe("\e[44;37mStop Charge!\e[0m\n");
                         pCON->state = STATE_CON_STOPCHARGE;
                     }
                     

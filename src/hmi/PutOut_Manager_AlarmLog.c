@@ -196,7 +196,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             sprintf((char *)buf, "%d", i+1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
-            jsChild = cJSON_GetArrayItem(jsParent, i);
+            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - i - 1);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
@@ -269,7 +269,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             sprintf((char *)buf, "%d", i+1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
-            jsChild = cJSON_GetArrayItem(jsParent, i);
+            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem-i-1);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             if(jsItem->valueint == 4)
             {
@@ -314,10 +314,20 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                 case defOrderStopType_Fee:
                     LISTVIEW_SetItemText(hItem, 6, i, "达到充电金额");
                     break;
+                case defOrderStopType_Time:
+                    LISTVIEW_SetItemText(hItem, 6, i, "达到充电时间");
+                    break;
                 case defOrderStopType_Scram:
+                    LISTVIEW_SetItemText(hItem, 6, i, "急停结束");
+                    break;
+                case defOrderStopType_OverCurr:
+                    LISTVIEW_SetItemText(hItem, 6, i, "过流结束");
+                    break;
+                case defOrderStopType_UnPlug:
+                    LISTVIEW_SetItemText(hItem, 6, i, "强制拔枪");
+                    break;
                 case defOrderStopType_NetLost:
                 case defOrderStopType_Poweroff:
-                case defOrderStopType_OverCurr:
                 case defOrderStopType_Knock:
                     LISTVIEW_SetItemText(hItem, 6, i, "异常结束");
                     break;

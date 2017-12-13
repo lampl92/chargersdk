@@ -27,7 +27,7 @@
 #define defOrderStopType_Poweroff       9
 #define defOrderStopType_Scram          10
 #define defOrderStopType_SocketError    11
-#define defOrderStopType_SocketLost     12
+#define defOrderStopType_UnPlug     12
 #define defOrderStopType_OverVolt       13
 #define defOrderStopType_UnderVolt      14
 #define defOrderStopType_OverCurr       15

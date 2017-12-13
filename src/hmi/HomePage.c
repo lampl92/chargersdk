@@ -17,16 +17,13 @@
 
 #define ID_TimerTime    0
 
-WM_HWIN _hWinHome;//home½çÃæ¾ä±ú
+WM_HWIN _hWinHome;//homeç•Œé¢å¥æŸ„
 
-static WM_HWIN hwinQR;//¶þÎ¬Âë¾ä±ú
+static WM_HWIN hwinQR;//äºŒç»´ç å¥æŸ„
 
-int SignalFlag = 0;//ÐÅºÅÍ¼±êË¢ÐÂ±êÖ¾
+int SignalFlag = 0;//ä¿¡å·å›¾æ ‡åˆ·æ–°æ ‡å¿—
 
-float preServiceFee = 0;
-float prePowerFee = 0;
-
-//home½çÃæ×ÊÔ´±í
+//homeç•Œé¢èµ„æºè¡¨
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "HomePage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
@@ -37,7 +34,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "Time", ID_TEXT_3, 136, 4, 120, 24, 0, 0x0, 0 },
 };
 
-//·¢ËÍË¢¿¨»òÉ¨Âë»»Ò³ÐÅºÅ
+//å‘é€åˆ·å¡æˆ–æ‰«ç æ¢é¡µä¿¡å·
 static void Data_Process(WM_MESSAGE *pMsg)
 {
     CON_t *pCON;
@@ -46,7 +43,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     WM_HWIN hWin = pMsg->hWin;
     pCON = CONGetHandle(0);
     
-    /*Èç¹ûË¢¿¨£¬·¢ËÍÌøÒ³ÏûÏ¢*/
+    /*å¦‚æžœåˆ·å¡ï¼Œå‘é€è·³é¡µæ¶ˆæ¯*/
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                 defEventBitGotIDtoHMI,  
                                 pdTRUE, pdTRUE, 0);    
@@ -55,7 +52,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
         WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
     }
     
-    /*Èç¹ûÉ¨Âë£¬·¢ËÍÌøÒ³ÏûÏ¢*/
+    /*å¦‚æžœæ‰«ç ï¼Œå‘é€è·³é¡µæ¶ˆæ¯*/
 //    if ((pCON->order.ucStartType == 5)
 //        &&(pCON->state == STATE_CON_CHARGING))
 //    {
@@ -68,7 +65,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     }   
 }
 
-//¶þÎ¬Âë»Øµ÷º¯Êý
+//äºŒç»´ç å›žè°ƒå‡½æ•°
 static void _cbWindowQR(WM_MESSAGE *pMsg)
 {
     WM_HWIN hWin;
@@ -88,6 +85,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     WM_HWIN      hItem;
     uint8_t pos = 0;
+    uint8_t ucSegState;
     time_t  now;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
@@ -133,7 +131,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hwinQR = WM_CreateWindowAsChild((800 - QR_info.Size)/2 - 10, (480 - QR_info.Size)/2, QR_info.Size, QR_info.Size, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
         break;
     case WM_PAINT:
-     /// TODO (zshare#1#): ÏÂÃæµÄif²»Æð×÷ÓÃ. µ«ÊÇifÀïÇ¶Ì×µÄifÆð×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æð×÷ÓÃµÄif
+     /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨. ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
         break;
     case WM_TIMER:
         if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
@@ -147,20 +145,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CaliDone_Analy(pMsg->hWin);
             }    
         }
-    /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
+    /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
         Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
-        //·ÑÓÃÏÔÊ¾
-        if (((pEVSE->info.dDefSegFee - prePowerFee) > 0.01) || ((pEVSE->info.dServiceFee - preServiceFee) > 0.01))
-        {
-            now = time(NULL);
-            JudgeSegState(now, pechProto, &pos);
-            prePowerFee = pechProto->info.dSegPowerFee[pos];
-            preServiceFee = pechProto->info.dSegServFee[pos];
-            sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[pos]);
-            sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[pos]);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< ³äµç·Ñ*/
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< ·þÎñ·Ñ */   
-        }
+        //è´¹ç”¨æ˜¾ç¤º
+
+        now = time(NULL);
+        extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
+        ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
+        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[ucSegState]);
+        sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[ucSegState]);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< å……ç”µè´¹*/
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< æœåŠ¡è´¹ */   
+
         if ((SignalFlag == 12) || (SignalFlag > 12))
         {
             SignalIntensity = getSignalIntensity();
@@ -195,15 +191,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }  
         }
         SignalFlag++;
-        /**< ÖØÆô¶¨Ê±Æ÷ */
+        /**< é‡å¯å®šæ—¶å™¨ */
         WM_RestartTimer(pMsg->Data.v, 50);
         break;
     case MSG_CREATERRWIN:
-        /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ÐÂ¸æ¾¯ */
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
         err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ý¹ÊÕÏ½çÃæ */
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
         if (bittest(winCreateFlag, 0))
         {
             bitclr(winCreateFlag, 0);

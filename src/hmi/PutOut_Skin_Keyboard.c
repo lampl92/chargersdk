@@ -1098,7 +1098,7 @@ static uint8_t Value_Check()
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
             case 26://屏保时间
-                tmpU32 = atoi(result_input);
+                tmpU32 = atoi(result_input) * 60;
                 xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
                 xSysconf.ulDispSleepTime_s = tmpU32;
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
@@ -1219,8 +1219,6 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     {
     case LOGIN_PASSWD:
         bitclr(winCreateFlag,2);
-        prePowerFee = 0;
-        preServiceFee = 0;
         (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
     break;
     /**< 添加跳页到设置页 , */

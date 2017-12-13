@@ -81,9 +81,6 @@ extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
 
-extern float preServiceFee;
-extern float prePowerFee;
-
 extern WM_HWIN _hWinManagerCommon;
 extern WM_HWIN _hWinManagerInfoAnalog;
 extern WM_HWIN _hWinManagerInfoStatus;

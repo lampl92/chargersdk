@@ -63,23 +63,24 @@
 #define defEventBitOrderMakeOK                   BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK                 BIT_2
 
-#define defEventBitOrder_HMIDispOK               BIT_5
-#define defEventBitOrder_RemoteOrderOK           BIT_6
-#define defEventBitOrder_RemoteRTDataOK          BIT_7
-#define defEventBitOrder_StoreOK                 BIT_8
+#define defEventBitOrder_HMIDispOK               BIT_3
+#define defEventBitOrder_RemoteOrderOK           BIT_4
+#define defEventBitOrder_RemoteRTDataOK          BIT_5
+#define defEventBitOrder_StoreOK                 BIT_6
 
-#define defEventBitOrderStopTypeCurr             BIT_3
-#define defEventBitOrderStopTypeScram            BIT_4
+#define defEventBitOrderStopTypeCurr             BIT_7
+#define defEventBitOrderStopTypeScram            BIT_8
 #define defEventBitOrderStopTypeLimitFee         BIT_9
 #define defEventBitOrderStopTypeLimitTime        BIT_10
-#define defEventBitOrderStopTypeLimitPower       BIT_17
-#define defEventBitOrderStopTypeRemoteStop       BIT_11
-#define defEventBitOrderStopTypeRFIDStop         BIT_12
-#define defEventBitOrderStopTypeFull             BIT_13
+#define defEventBitOrderStopTypeLimitPower       BIT_11
+#define defEventBitOrderStopTypeRemoteStop       BIT_12
+#define defEventBitOrderStopTypeRFIDStop         BIT_13
+#define defEventBitOrderStopTypeFull             BIT_14
+#define defEventBitOrderStopTypeUnPlug           BIT_15
 
-#define defEventBitOrderMakeFinish               BIT_14  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToChargetask       BIT_15 
-#define defEventBitOrderFinishToHMI              BIT_16 
+#define defEventBitOrderMakeFinish               BIT_16  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderFinishToChargetask       BIT_17
+#define defEventBitOrderFinishToHMI              BIT_18
 
 #if EVSE_USING_GUI
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \

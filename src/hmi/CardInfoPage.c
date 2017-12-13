@@ -311,8 +311,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             AdvertisementRecordFlag = 0;
             GUI_Exec();
         }
-        prePowerFee = 0;
-        preServiceFee = 0;
 //        current_page = _HOMEPAGE;
         bitset(winInitDone, 7);
         EventFlag = 0;

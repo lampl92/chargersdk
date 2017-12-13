@@ -39,6 +39,7 @@ int printf_safe(const char *format, ...)
         xSemaphoreGive(xprintfMutex);
     }
 #endif
+    return 0;
 }
 
 

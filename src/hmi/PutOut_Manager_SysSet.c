@@ -246,7 +246,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "eg,5");
+                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：1~999");
 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -279,7 +279,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             EDIT_SetText(_aahEdit[5][0],"******");
             break;
         case MSG_MANAGERSETID6:
-            sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
+            sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s/60);
             EDIT_SetText(_aahEdit[6][0],_tmpBuff);
             break;
         default:
@@ -392,7 +392,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("100"));
         _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "分");
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
-        sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s);
+        sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s/60);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
         //GPRS模块选择 暂时不能设置 需要将设置项进行两种分类，一种模拟量 一种状态量
         _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,sysUSEGPRSModem);
