@@ -1265,7 +1265,7 @@ static void _cbFrame(WM_MESSAGE * pMsg)
         case GUI_ID_BUTTON0://确定
             switch(NCode)
             {
-            case WM_NOTIFICATION_CLICKED:
+            case WM_NOTIFICATION_RELEASED:
                 /**< 进入密码、设置值操作 */
                 if(Value_Check() == VALUE_OK_SAV)
                 {
@@ -1278,7 +1278,7 @@ static void _cbFrame(WM_MESSAGE * pMsg)
         case GUI_ID_BUTTON1://取消
             switch(NCode)
             {
-            case WM_NOTIFICATION_CLICKED:
+            case WM_NOTIFICATION_RELEASED:
                 Jump_Screen(pMsg->hWin,1);
                 break;
             }
@@ -1332,14 +1332,14 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 	MULTIEDIT_SetFont(hMulti, &SIF24_Font);
 	WM_SetFocus(hMulti);
 
-    _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
+    _aahButtonOk = BUTTON_CreateEx(610,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
     BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
     BUTTON_SetText(_aahButtonOk, "确定");
 
-    _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    _aahButtonCancel = BUTTON_CreateEx(610,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
     BUTTON_SetFont(_aahButtonCancel, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);

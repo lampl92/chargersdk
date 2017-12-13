@@ -219,7 +219,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     }
                 break;
             case 20:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     //WM_SendMessageNoPara(hWin,MSG_JUMPKEYPAD);
                     //                        WM_SetStayOnTop(_hWinManagerConSet,0);
@@ -231,7 +231,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 21:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -240,7 +240,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 22:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -252,7 +252,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 23:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -264,7 +264,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 24:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     //电流过流值不可设 == 由额定电流计算得到
 //                    WM_HideWindow(_hWinManagerConSet);
@@ -276,7 +276,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 25:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -287,7 +287,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 26:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -298,7 +298,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 27:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -309,7 +309,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 28:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerConSet);
                     WM_HideWindow(_hWinManagerCommon);
@@ -320,7 +320,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 29:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
 //                    WM_HideWindow(_hWinManagerConSet);
 //                    WM_HideWindow(_hWinManagerCommon);
@@ -329,7 +329,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             case 30:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
 //                    WM_HideWindow(_hWinManagerConSet);
 //                    WM_HideWindow(_hWinManagerCommon);
@@ -465,7 +465,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建编辑区
         /**< 20-50编辑区ID */
         //枪类型
-        _editxoff = GUI_MANAGER_XLEFT+_FONT_WIDTH*(strlen(conQRCode)) + 100;
+        _editxoff = GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(conQRCode)); //+ 50;
         //可以创建一个固定长度的text 和 edit
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conQRCode);
         _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("2000000000000003")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,20,strlen("2000000000000003"));

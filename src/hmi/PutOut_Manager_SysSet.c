@@ -174,82 +174,82 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     }
                 break;
             case 20:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "eg,1122334455667788");
                     //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
-                    EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
+//                    EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
                 }
                 break;
             case 21:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "eg,1122334455667788");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
-                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
+//                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
                 }
                 break;
             case 22:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "eg,192.168.1.101");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
-                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
+//                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
                 }
                 break;
             case 23:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "eg,8080");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
-                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
+//                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
                 }
                 break;
             case 24:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "eg,dpc");
-                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
+//                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
                 }
                 break;
             case 25:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "eg,8888");
-                    EDIT_SetText(_aahEdit[5][0], "******");
+//                    EDIT_SetText(_aahEdit[5][0], "******");
                 }
                 break;
             case 26:
-                if (pMsg->Data.v == WM_NOTIFICATION_CLICKED)
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "eg,5");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
-                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
+//                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
                 }
                 break;
             }
