@@ -1184,6 +1184,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
 {
     uint8_t i = 0;
 
+    WM_DeleteWindow(hMulti);
     for (i = 0; i < GUI_COUNTOF(_aEngButtonData); i++)
 	{
 		WM_DeleteWindow(keypad_dev.EngButton_Handle[i]);
