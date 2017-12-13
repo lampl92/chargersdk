@@ -7,6 +7,7 @@
 #include "cfg_parse.h"
 #include "stringName.h"
 #include "errorcode.h"
+#include "yaffsfs.h"
 #include <string.h>
 
 static cJSON *CreateNewOrderCfg(CON_t *pCON, echProtocol_t *pProto)
@@ -89,6 +90,21 @@ ErrorCode_t  AddOrderCfg(char *path, CON_t *pCON, echProtocol_t *pProto)
     errcode = SetCfgObj(path, jsParent);
     
     return errcode;
+}
+
+ErrorCode_t  AddOrderTmp(char *path, CON_t *pCON, echProtocol_t *pProto)
+{
+    cJSON *jsObj;
+    ErrorCode_t errcode;
+    
+    jsObj = CreateNewOrderCfg(pCON, pProto);
+    errcode = SetCfgObj(path, jsObj);
+    
+    return errcode;
+}
+void RemoveOrderTmp(char *path)
+{
+    yaffs_unlink(path);
 }
 
 int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
