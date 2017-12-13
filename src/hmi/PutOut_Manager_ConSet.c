@@ -246,9 +246,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 22, _hWinManagerConSet, _hWinManagerCommon, conVolatageUpperLimits, "eg,250");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
-                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
+//                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
                 }
                 break;
             case 23:
@@ -258,9 +258,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 23, _hWinManagerConSet, _hWinManagerCommon, conVolatageLowerLimits, "eg,190");
-                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
-                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
+//                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+//                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
                 }
                 break;
             case 24:
@@ -282,8 +282,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet, _hWinManagerCommon, conACTempUpperLimits, "eg,105");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
-                    EDIT_SetText(_aahEdit[5][0], _tmpBuff);
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
+//                    EDIT_SetText(_aahEdit[5][0], _tmpBuff);
                 }
                 break;
             case 26:
@@ -293,8 +293,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conACTempLowerLimits, "eg,-40");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
-                    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
+//                    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
                 }
                 break;
             case 27:
@@ -304,8 +304,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 27, _hWinManagerConSet, _hWinManagerCommon, conSocketTempUpperLimits, "eg,105");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
-                    EDIT_SetText(_aahEdit[7][0], _tmpBuff);
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
+//                    EDIT_SetText(_aahEdit[7][0], _tmpBuff);
                 }
                 break;
             case 28:
@@ -315,8 +315,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerCommon);
 
                     Keypad_GetValueTest(CONSET_VALUE, 28, _hWinManagerConSet, _hWinManagerCommon, conSocketTempLowerLimits, "eg,-40");
-                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
-                    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
+//                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
+//                    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
                 }
                 break;
             case 29:
