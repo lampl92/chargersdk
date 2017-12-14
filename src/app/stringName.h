@@ -9,6 +9,7 @@
 #define STRINGNAME_H_INCLUDED
 
 #define pathOrder           "/nand/system/order.txt"
+#define pathOrderTmp        "/nand/system/order.tmp"
 #define pathEVSELog         "/nand/system/evse.log"
 #define pathEVSECfg         "/nand/system/evse.cfg"
 #define pathSysCfg          "/nand/system/sys.cfg"
@@ -34,7 +35,7 @@
 #define pathPleaseConnectPlugImage  "/nand/system/PleaseConnectPlugImage.bmp"
 #define pathCardInfoVoidImage       "/nand/system/CardInfoVoidImage.bmp"
         
-#define path3zhengzaichongdian      "/nand/system/ChargingImage.bmp"
+#define pathChargingImage           "/nand/system/ChargingImage.bmp"
 #define pathCartoonImage0           "/nand/system/CartoonImage0.bmp"
 #define pathCartoonImage1           "/nand/system/CartoonImage1.bmp"
 #define pathCartoonImage2           "/nand/system/CartoonImage2.bmp"

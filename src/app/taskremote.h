@@ -30,6 +30,7 @@ typedef struct
 }RemoteCardStatus_t;
 typedef struct
 {
+    uint8_t ucCheckOrderTmp;
     statRemoteOrder_e stat;
     time_t timestamp;
 }RemoteOrderStatus_t;

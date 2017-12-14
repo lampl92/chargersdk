@@ -64,7 +64,7 @@ static void vTaskReadPic(void *pvParameters)
 {
     ChargeDoneImage = readPicInf(pathChargeDoneImage);
     CardInfoImage = readPicInf(pathCardInfoImage);
-    ChargingImage = readPicInf(path3zhengzaichongdian);
+    ChargingImage = readPicInf(pathChargingImage);
     GetCardInfoImage = readPicInf(pathGetCardInfoImage);
     cartoonImage0 = readPicInf(pathCartoonImage0);
     cartoonImage1 = readPicInf(pathCartoonImage1);
