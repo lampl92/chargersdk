@@ -9,6 +9,7 @@
 #include "taskcreate.h"
 #include "taskrfid.h"
 #include "interface.h"
+#include "utils.h"
 
 //#define DEBUG_NO_TASKRFID
 
@@ -40,28 +41,26 @@ void vTaskEVSERFID(void *pvParameters)
                                          pdTRUE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. 检测到卡
             {
-                memmove(pRFIDDev->order.ucCardID, pRFIDDev->status.ucCardID, defCardIDLength);
+                ul2uc ul2ucTmp;
+                ul2ucTmp.ucVal[0] = pRFIDDev->status.ucCardID[0];
+                ul2ucTmp.ucVal[1] = pRFIDDev->status.ucCardID[1];
+                ul2ucTmp.ucVal[2] = pRFIDDev->status.ucCardID[2];
+                ul2ucTmp.ucVal[3] = pRFIDDev->status.ucCardID[3];
+                ul2ucTmp.ulVal = utils_ntohl(ul2ucTmp.ulVal);
+                sprintf(pRFIDDev->order.strCardID, "%016u", ul2ucTmp.ulVal);
+                printf_safe("CardID :%s\n", pRFIDDev->order.strCardID);
                 pRFIDDev->state = STATE_RFID_GOTID;
                 xTimerStop(xHandleTimerRFID, 100); 
             }
             break;
         case STATE_RFID_GOTID:
 	        xEventGroupClearBits(xHandleEventHMI,defEventBitHMITimeOutToRFID);//防止其他状态产生timeout没有处理
-#ifdef DEBUG_RFID
-            printf_safe("im rfid task,find card, :)\n");
-            printf_safe("ID = ");
-            for(i = 0; i < defCardIDLength; i++)
-            {
-                printf_safe("%02x ", pRFIDDev->order.ucCardID[i]);
-            }
-            printf_safe("\n");
-#endif
             for(i = 0; i < ulTotalCON; i++)  //2.判断卡是否刷过
             {
                 pCON =  CONGetHandle(i);
                 if(pCON->state == STATE_CON_CHARGING)
                 {
-                    if(memcmp(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength) == 0)
+                    if(strcmp(pCON->order.strCardID, pRFIDDev->order.strCardID) == 0)
                     {
                         //此卡已刷
 #ifdef DEBUG_RFID

@@ -141,18 +141,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     WM_HWIN      hItem;
     U32          FileSize;
     
-    uint8_t temp_buf[32];
-    
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
       //
       // Initialization of 'CardInfoImage'
       //
         first_CardInfo = 0;
-        HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, temp_buf);//¿¨ºÅ
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, pRFIDDev->order.strCardID);//¿¨ºÅ
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "?");        
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);   

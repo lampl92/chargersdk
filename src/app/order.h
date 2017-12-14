@@ -107,19 +107,19 @@ typedef struct _OrderData
     OrderSegState_e statOrderSeg; //记录订单时间段状态
     uint8_t pos;//在时段中的位置，用于与now获得的pos进行对比
 
-    uint8_t ucCardID[defCardIDLength]; //卡号//在taskrfid中赋值            2
+    char strCardID[defCardIDLength + 1];//卡号//在taskrfid中赋值
     uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
     uint8_t ucCardStatus;      //0 普通用户, 1 白名单用户, 2 黑名单用户
-    double  dBalance;           //余额                                        3
-    uint8_t ucCONID;            //4
+    double  dBalance;           //余额 
+    uint8_t ucCONID;            //
     //创建时
-    uint8_t strOrderSN[defOrderSNLength]; //交易流水号       DBIdx 1
+    uint8_t strOrderSN[defOrderSNLength + 1]; //交易流水号
 
-    time_t  tStartTime;         //启动充电时间           5
-    uint8_t ucStartType;        //4 有卡 5 无卡         6
+    time_t  tStartTime;         //启动充电时间 
+    uint8_t ucStartType;        //4 有卡 5 无卡 
     double  dLimitFee;          //充电截至金额         在远程启动和界面启动时赋值
     uint32_t ulLimitTime;       //充电最大时间         
-    double  dStartPower;        //8
+    double  dStartPower;        //
     //充电过程
     double  dTotalPower;        //总电量
     double  dTotalPowerFee;     //总电费
@@ -135,7 +135,7 @@ typedef struct _OrderData
     uint8_t         ucPayType;  //支付方式
     uint8_t         ucPayStatus;//结算状态 0:未结算  1:已结算
     uint8_t         ucStopType; //停止类型
-    time_t          tStopTime;  //停止时间          6
+    time_t          tStopTime;  //停止时间 
 
 	statRemote_t statRemoteProc;
 }OrderData_t;

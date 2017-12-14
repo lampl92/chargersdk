@@ -13,14 +13,12 @@
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsNewOrderCfgObj;
-    uint8_t strCardID[17] = { 0 };
 
-    HexToStr(pOrder->ucCardID, strCardID, 8);
     jsNewOrderCfgObj = cJSON_CreateObject();
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartType, cJSON_CreateNumber(pOrder->ucStartType));                            //有卡无卡标志
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateString(pOrder->strOrderSN));                               //1 交易流水
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(pOrder->ucCONID + 1));                                //2 充电桩接口
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(strCardID));                                             //3 卡号
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(pOrder->strCardID));                                             //3 卡号
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartPower, cJSON_CreateNumber(pOrder->dStartPower));                           //4 充电前电能总示值
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStopPower, cJSON_CreateNumber(pOrder->dStartPower + pOrder->dTotalPower));  //5 充电后电能总示值
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee, cJSON_CreateNumber(pOrder->dTotalPowerFee));                     //6 电费总金额
@@ -150,7 +148,6 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
 {
     cJSON *jsParent;
     ErrorCode_t errcode;
-    char strCardID[17] = { 0 };
     double dStopPower;
     
     errcode = ERR_NO;
@@ -164,8 +161,7 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     GetOrderCfgItem(jsParent, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
     GetOrderCfgItem(jsParent, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
     pOrder->ucCONID = pOrder->ucCONID - 1;
-    GetOrderCfgItem(jsParent, jnOrderCardID, strCardID, ParamTypeString);
-    StrToHex(strCardID, pOrder->ucCardID, strlen(strCardID));
+    GetOrderCfgItem(jsParent, jnOrderCardID, pOrder->strCardID, ParamTypeString);
     GetOrderCfgItem(jsParent, jnOrderStartPower, &pOrder->dStartPower, ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderStopPower, &dStopPower, ParamTypeDouble);
     pOrder->dTotalPower = dStopPower - pOrder->dStartPower;
@@ -250,8 +246,7 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
         GetOrderCfgItem(jsChild, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
         GetOrderCfgItem(jsChild, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
         pOrder->ucCONID = pOrder->ucCONID - 1;
-        GetOrderCfgItem(jsChild, jnOrderCardID, strCardID, ParamTypeString);
-        StrToHex(strCardID, pOrder->ucCardID, strlen(strCardID));
+        GetOrderCfgItem(jsChild, jnOrderCardID, pOrder->strCardID, ParamTypeString);
         GetOrderCfgItem(jsChild, jnOrderStartPower, &pOrder->dStartPower, ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderStopPower, &dStopPower, ParamTypeDouble);
         pOrder->dTotalPower = dStopPower - pOrder->dStartPower;
