@@ -10,6 +10,7 @@
 #include "taskcreate.h"
 #include "taskremote.h"
 #include "cfg_parse.h"
+#include "cfg_order.h"
 #include "stringName.h"
 
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
@@ -231,6 +232,8 @@ void vTaskEVSERemote(void *pvParameters)
     uint32_t reg_try_cnt;
     uint32_t heart_lost;
     uint8_t rtdata_reason;
+    static uint8_t ucCheckNoPay;
+    OrderData_t OrderNoPay;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -247,6 +250,7 @@ void vTaskEVSERemote(void *pvParameters)
     reg_try_cnt = 0;
     heart_lost = 0;
     rtdata_reason = 0;
+    ucCheckNoPay = 0;
 
     while(1)
     {
@@ -306,6 +310,20 @@ void vTaskEVSERemote(void *pvParameters)
                 printf_safe("State Regedit TCPConnectFail, Call Reconnect!!!\n");
                 break;
             }
+            
+            if (ucCheckNoPay == 1)
+            {
+                errcode = GetNoPayOrder(pathOrder, &OrderNoPay);
+                if (errcode == ERR_NO)
+                {
+                    
+                }
+                else 
+                {
+                    ucCheckNoPay = 0;
+                }
+            }
+            
 
             /************ 心跳 ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
@@ -592,7 +610,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     break;
                 case REMOTEOrder_Send:
-                    RemoteIF_SendOrder(pEVSE, pechProto, pCON);
+                    RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->order));
                     pCON->order.statRemoteProc.order.timestamp = time(NULL);
                     pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
