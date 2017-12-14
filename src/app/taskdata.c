@@ -88,6 +88,7 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
+                xTimerStart(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
                 makeOrder(pCON);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//充电前数据准备完成, Clear in proto
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
@@ -98,11 +99,19 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
                 {
+                    xTimerStop(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
                     pCON->order.statOrder = STATE_ORDER_FINISH;
                 }
                 else
                 {
                     makeOrder(pCON);
+                    uxBitsTimer = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
+                                                        defEventBitOrderTmpTimer, 
+                                                        pdTRUE, pdTRUE, 0);
+                    if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
+                    {
+                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                    }
                 }
                 /****金额判断****/
                 if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
@@ -134,6 +143,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_FINISH:
                 //5. 结束充电
                 makeOrder(pCON);
+                AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy ************/
                 if(pCON->order.dLimitFee != 0)
@@ -194,8 +204,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
-                /** @todo (rgw#1#): 存储订单 */
-
+                /**存储订单 */
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
                                                  pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
@@ -204,8 +213,8 @@ void vTaskEVSEData(void *pvParameters)
     	            printf_safe("Order OK.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 		            /* 在这里存储订单*/
-		            AddOrderCfg(pathOrder, pCON, pechProto); //存储订单
-		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+    	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE
@@ -215,8 +224,8 @@ void vTaskEVSEData(void *pvParameters)
     	            printf_safe("Order TimeOut.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 					/* (rgw#1): 在这里存储订单*/
-		            AddOrderCfg(pathOrder, pCON, pechProto);
-		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
+    	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE

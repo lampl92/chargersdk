@@ -17,6 +17,7 @@ typedef struct _CON
     CONStatus_t status;
     CONState_t state;
     OrderData_t order;
+    OrderTmpData_t OrderTmp;
 } CON_t;
 
 CON_t *CONCreate(uint8_t ucCONID);

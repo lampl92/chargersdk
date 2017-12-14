@@ -10,7 +10,6 @@
 #include "interface.h"
 #include "cJSON.h"
 #include "yaffsfs.h"
-#include "user_app.h"
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -22,7 +21,6 @@
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
     int fd;
-    int res = 0;
     uint8_t *pbuff;
     uint32_t len;
     uint32_t bw;
@@ -41,11 +39,8 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
     fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
-        ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-open");
-    }
-    if(res != 0)
-    {
-        errcode = ERR_FILE_RW;
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-open");
+        errcode = ERR_FILE_NO;
         goto exit;
     }
     taskENTER_CRITICAL();
@@ -53,7 +48,7 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
     taskEXIT_CRITICAL();
     if(len != bw)
     {
-        ThrowFSCode(res = yaffs_get_error(), path, "SetCfgObj()-write");
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-write");
         errcode = ERR_FILE_RW;
         goto exit_write;
     }
@@ -75,7 +70,6 @@ exit:
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
     int fd;
-    int res = 0;
     uint8_t *rbuff;
     uint32_t fsize;
     struct yaffs_stat st;
@@ -88,23 +82,19 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     fd = yaffs_open(path, O_RDWR, 0);
     if (fd < 0)
     {
-        ThrowFSCode(res = yaffs_get_error(), path, "GetCfgObj-open");
-    }
-    if(res != 0)
-    {
-        *perrcode = ERR_FILE_RW;
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-open");
+        *perrcode = ERR_FILE_NO;
         goto exit;
     }
     yaffs_stat(path, &st);
     fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
     taskENTER_CRITICAL();
-    yaffsfs_SetError(0);
     br = yaffs_read(fd, rbuff, fsize);
     taskEXIT_CRITICAL();
     if(fsize != br)
     {
-        ThrowFSCode(res = yaffs_get_error(), path, "GetCfgObj-read");
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-read");
         *perrcode = ERR_FILE_RW;
         goto exit_read;
     }

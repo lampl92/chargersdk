@@ -57,6 +57,7 @@
 #define defRemoteHeartbeatCyc       15000     //心跳
 #define defRemoteStatusCyc          120000    //状态上报
 #define defRemoteRTDataCyc          10000     //充电实时数据
+#define defOrderTmpCyc              60000     //充电订单临时文件更新时间
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
