@@ -204,7 +204,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
     switch(statOrder)
     {
     case STATE_ORDER_TMP:
-        memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
+        strcpy(pCON->order.strCardID, pRFIDDev->order.strCardID);
         pCON->order.ucAccountStatus = pRFIDDev->order.ucAccountStatus;
         pCON->order.ucCardStatus = pRFIDDev->order.ucCardStatus;
         pCON->order.dBalance = pRFIDDev->order.dBalance;
@@ -238,7 +238,7 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
     switch(statOrder)
     {
     case STATE_ORDER_TMP:
-        memmove(pCON->order.ucCardID, pRFIDDev->order.ucCardID, defCardIDLength);
+        strcpy(pCON->order.strCardID, pRFIDDev->order.strCardID);
         pCON->order.ucAccountStatus = 1;
         pCON->order.dBalance = 888;
         pCON->order.ucCONID = pCON->info.ucCONID;

@@ -1284,7 +1284,6 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     CON_t *pCON;
     uint8_t *pbuff;
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
@@ -1305,10 +1304,9 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
     //[9...24] 卡号
-    HexToStr(pCON->order.ucCardID, strCardID, 8);
     for(i = 0; i < 16; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.strCardID[i];
     }
     //[25...28] 当前充电总电量 xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
@@ -1415,7 +1413,6 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     OrderData_t *pOrder;
     uint8_t *pbuff;
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
@@ -1440,10 +1437,9 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     //[10...25] 卡号
     if(pbuff[0] == 4)
     {
-        HexToStr(pOrder->ucCardID, strCardID, 8);
         for(i = 0; i < 16; i++)
         {
-            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pOrder->strCardID[i];
         }
     }
     else if(pbuff[0] == 5)
@@ -2170,7 +2166,6 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     RFIDDev_t *pRfid;
     uint8_t ucOrderSN[8] = {0};
     uint8_t strOrderSN[17] = {0};
-    uint8_t strCardID[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     uint8_t remote_id;
     ul2uc ultmpNetSeq;
@@ -2183,10 +2178,9 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     remote_id = EchCONIDtoRemoteID(pRfid->order.ucCONID, pEVSE->info.ucTotalCON);
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = remote_id;
     //[1...16] 刷卡启动的卡号
-    HexToStr(pRfid->order.ucCardID, strCardID, 8);
     for(i = 0;  i < 16; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pRfid->order.strCardID[i];
     }
     //[17...24] 有卡充电流水号
     ultmpNetSeq.ulVal = htonl(time(NULL)); // 采用时间戳作为交易流水号
@@ -2231,7 +2225,6 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     EVSE_t *pEVSE;
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t strCardID[17] = {0};
     uint8_t ucOrderSN[8] = {0};
     ul2uc ultmpNetSeq;
     int i;
@@ -2246,10 +2239,9 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     //[0] 充电桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->order.ucCONID, pEVSE->info.ucTotalCON);
     //[1...16] 卡号
-    HexToStr(pCON->order.ucCardID, strCardID, 8);
     for(i = 0; i < 16; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.strCardID[i];
     }
     //[17] 卡号状态
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.ucCardStatus;
@@ -2305,7 +2297,6 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
-    uint8_t strCardID[17] = {0};
     uint8_t ucOrderSN[8] = {0};
     int i;
     EventBits_t uxBits;
@@ -2320,10 +2311,9 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
     //[0] 充电桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->order.ucCONID, pEVSE->info.ucTotalCON);
     //[1...16] 启动卡号
-    HexToStr(pCON->order.ucCardID, strCardID, 8);
     for(i = 0; i < 16; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = strCardID[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.strCardID[i];
     }
     //[17] 卡号状态
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.ucCardStatus;

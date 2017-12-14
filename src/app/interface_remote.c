@@ -1260,19 +1260,17 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 {
     uint8_t ucOrderSN[8] = {0};
     uint8_t strOrderSN[17] = {0};
-    uint8_t strCardID[17] = {0};
     ul2uc ultmpNetSeq;
     ErrorCode_t errcode = ERR_NO;
 
-    HexToStr(pRfid->order.ucCardID, strCardID, 8);
-    if (pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
+    if (pProto->info.BnWIsListCfg(pathBlackList, pRfid->order.strCardID) == 1)
     {
         pRfid->order.ucAccountStatus = 0;
         pRfid->order.dBalance = 0;
 
         return ERR_BLACK_LIST;
     }
-    else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    else if(pProto->info.BnWIsListCfg(pathWhiteList, pRfid->order.strCardID) == 1)
     //else if(1)    
     {
         pRfid->order.ucAccountStatus = 1;
@@ -1306,7 +1304,6 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     ErrorCode_t errcode;
     uint8_t con_id;
     uint8_t strCardID[17] = {0};
-    uint8_t strOrderCardID[17] = {0};
     uint8_t ucOrderSN[8] = {0};
     uint8_t strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
@@ -1334,8 +1331,7 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         {
             strCardID[i] = pbuff[ucOffset++];
         }
-        HexToStr(pRfid->order.ucCardID, strOrderCardID, 8);
-        if(strcmp(strCardID, strOrderCardID) != 0)
+        if (strcmp(strCardID, pRfid->order.strCardID) != 0)
         {
             *psiRetVal = 0;
             break;

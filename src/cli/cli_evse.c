@@ -349,12 +349,7 @@ void cli_evseorder_fnt(int argc, char **argv)
             }
             printf_safe("\n");
             //Card ID
-            printf_safe("CardID:\t");
-            for(i = 0; i < defCardIDLength; i++)
-            {
-                printf_safe("%02X ", pCON->order.ucCardID[i]);
-            }
-            printf_safe("\n");
+            printf_safe("CardID:\t%s\n", pCON->order.strCardID);
             //帐户状态 1：注册卡 2:欠费 0：未注册卡
             printf_safe("账户状态:\t");
             switch(pCON->order.ucAccountStatus)

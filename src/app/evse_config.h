@@ -31,7 +31,7 @@
 
 #define defTotalCON             2
 //#define defUIDLength            4
-#define defCardIDLength         8
+#define defCardIDLength         16
 #define defEVSESNLength         64
 #define defEVSEIDLength         64
 #define defFileNameLength       64
