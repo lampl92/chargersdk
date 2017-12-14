@@ -183,7 +183,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                             defEventBitOrderUseless,
                             pdTRUE,
                             pdTRUE,
-                            65000);//要比remote中的order超时（60s）长
+                            10000);//要比remote中的order超时（60s）长
                         if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
                         {
                             xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);

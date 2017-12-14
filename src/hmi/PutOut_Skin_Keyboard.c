@@ -1409,7 +1409,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
                         defEventBitOrderUseless,
                         pdTRUE,
                         pdTRUE,
-                        65000);//要比remote中的order超时（60s）长
+                        10000);//要比remote中的order超时（60s）长
                     if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
                     {
                         xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);

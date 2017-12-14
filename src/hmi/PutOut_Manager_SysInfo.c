@@ -79,7 +79,7 @@
 #define CHARGE_COLUMNS  20
 #define DB_DEBUG    0
 
-#define sysInfoName "系统信息"
+#define sysInfoName "       系统信息"
 #define sysInfoEVSEName "系统名称:7kW交流充电桩"
 #define sysInfoProtoVer "协议版本:"
 #define sysInfoVersion "软件版本:"
@@ -212,8 +212,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
 
         /*增加一列*/
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_SetTextAlign(hItem, 1, GUI_TA_CENTER | GUI_TA_LEFT);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_VCENTER | GUI_TA_LEFT);
+//        LISTVIEW_SetTextAlign(hItem, 1, GUI_TA_CENTER | GUI_TA_LEFT);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 7kW交流充电桩 */
