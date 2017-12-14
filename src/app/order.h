@@ -97,6 +97,7 @@ typedef struct _statRemote
 {
 	RemoteCardStatus_t card;
 	RemoteOrderStatus_t order;
+	RemoteOrderStatus_t orderTmp;
 }statRemote_t;
 
 /** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中

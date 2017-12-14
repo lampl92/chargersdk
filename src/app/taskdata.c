@@ -116,7 +116,7 @@ void vTaskEVSEData(void *pvParameters)
                                                         pdTRUE, pdTRUE, 0);
                     if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
                     {
-                        AddOrderTmp(pCON->order.strOrderTmpPath, pCON, pechProto);
+                        AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
                     }
                 }
                 /****金额判断****/
@@ -149,7 +149,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_FINISH:
                 //5. 结束充电
                 makeOrder(pCON);
-                AddOrderTmp(pCON->order.strOrderTmpPath, pCON, pechProto);
+                AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy ************/
                 if(pCON->order.dLimitFee != 0)
@@ -210,8 +210,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
-                /** @todo (rgw#1#): 存储订单 */
-
+                /**存储订单 */
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
                                                  pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
@@ -220,7 +219,7 @@ void vTaskEVSEData(void *pvParameters)
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 		            /* 在这里存储订单*/
     	            RemoveOrderTmp(pCON->order.strOrderTmpPath);
-		            AddOrderCfg(pathOrder, pCON, pechProto); //存储订单
+		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
 		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
@@ -230,8 +229,8 @@ void vTaskEVSEData(void *pvParameters)
 	            {
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 					/* (rgw#1): 在这里存储订单*/
-    	            AddOrderTmp(pCON->order.strOrderTmpPath, pCON, pechProto);
-		            AddOrderCfg(pathOrder, pCON, pechProto);
+    	            AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
+		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
 		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
