@@ -201,6 +201,7 @@ void vTaskEVSEData(void *pvParameters)
                                                  pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
 	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
 	            {
+    	            printf_safe("Order OK.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 		            /* 在这里存储订单*/
 		            AddOrderCfg(pathOrder, pCON, pechProto); //存储订单
@@ -211,6 +212,7 @@ void vTaskEVSEData(void *pvParameters)
 	            }
 	            else
 	            {
+    	            printf_safe("Order TimeOut.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 					/* (rgw#1): 在这里存储订单*/
 		            AddOrderCfg(pathOrder, pCON, pechProto);

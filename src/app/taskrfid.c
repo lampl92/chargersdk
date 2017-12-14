@@ -103,11 +103,9 @@ void vTaskEVSERFID(void *pvParameters)
             pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
             pRFIDDev->order.dLimitFee = 0;
             pRFIDDev->order.ulLimitTime = 0;
-//            uxBits = xEventGroupSync(xHandleEventRemote,
-//                                     defEventBitRemoteGetAccount,
-//                                     defEventBitRemoteGotAccount,
-//                                     5000);//发送到Remote
+            
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);//fix：防止结束时再次刷卡产生多余的刷卡停止标志
             if (pCON->order.statOrder != STATE_ORDER_IDLE)
             {
                 printf_safe("该接口有未完成订单!!!!\n");
@@ -196,8 +194,6 @@ void vTaskEVSERFID(void *pvParameters)
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
                 pRFIDDev->state = STATE_RFID_RETURN;
-                xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
-                                defEventBitGotIDtoHMI);
             break;
         case STATE_RFID_GOODID:
             /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
@@ -302,6 +298,8 @@ void vTaskEVSERFID(void *pvParameters)
 	        pRFIDDev->state = STATE_RFID_RETURN;
 	        break;
         case STATE_RFID_RETURN:
+            xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
+                                defEventBitGotIDtoHMI);
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
             xTimerStart(xHandleTimerRFID, 100); 

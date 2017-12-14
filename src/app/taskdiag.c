@@ -94,7 +94,9 @@ void vTaskEVSEDiag(void *pvParameters)
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
-            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
+            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
+                                                    defEventBitExceptionTempW, 
+                                                    pdTRUE, pdFALSE, 0);
             if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
                 if (pCON->state == STATE_CON_CHARGING)

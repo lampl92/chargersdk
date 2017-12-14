@@ -78,7 +78,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     }
 
  //   if ((orderFinish == 1) && pCON->status.xPlugState == UNPLUG)
-    if ((orderFinish == 1))
+    if (orderFinish == 1)
     {
         if (first_flag == 0)
         {
@@ -173,7 +173,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             defEventBitOrderMakeFinish,
             pdFALSE,
             pdTRUE,
-            portMAX_DELAY);
+            65000);
         if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
         {
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
