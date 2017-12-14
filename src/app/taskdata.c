@@ -88,13 +88,7 @@ void vTaskEVSEData(void *pvParameters)
                 break;
             case STATE_ORDER_MAKE:
                 //3. 开始充电时数据准备
-                pCON->order.xHandleTimerOrderTmp = xTimerCreate("TimerOrderTmp",
-                                                                defOrderTmpCyc,
-                                                                pdTRUE,
-                                                                (void *)(int)(pCON->order.ucCONID),
-                                                                vOrderTmpTimerCB);
-                sprintf(pCON->order.strOrderTmpPath, "OrderCON%d.tmp", pCON->order.ucCONID);
-                xTimerStart(pCON->order.xHandleTimerOrderTmp, 0);
+                xTimerStart(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
                 makeOrder(pCON);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);//充电前数据准备完成, Clear in proto
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
@@ -105,7 +99,7 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                 if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
                 {
-                    xTimerStop(pCON->order.xHandleTimerOrderTmp, 0);
+                    xTimerStop(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
                     pCON->order.statOrder = STATE_ORDER_FINISH;
                 }
                 else
@@ -116,7 +110,7 @@ void vTaskEVSEData(void *pvParameters)
                                                         pdTRUE, pdTRUE, 0);
                     if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
                     {
-                        AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
+                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                     }
                 }
                 /****金额判断****/
@@ -149,7 +143,7 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_FINISH:
                 //5. 结束充电
                 makeOrder(pCON);
-                AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
+                AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy ************/
                 if(pCON->order.dLimitFee != 0)
@@ -219,9 +213,8 @@ void vTaskEVSEData(void *pvParameters)
     	            printf_safe("Order OK.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 		            /* 在这里存储订单*/
-    	            RemoveOrderTmp(pCON->order.strOrderTmpPath);
+    	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
 		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
-		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE
@@ -231,9 +224,8 @@ void vTaskEVSEData(void *pvParameters)
     	            printf_safe("Order TimeOut.....................\n");
 		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 					/* (rgw#1): 在这里存储订单*/
-    	            AddOrderTmp(pCON->order.strOrderTmpPath, &(pCON->order), pechProto);
+    	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
-		            //xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONOrderFinish);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE

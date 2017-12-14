@@ -16,6 +16,9 @@
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
 #include "timercallback.h"
+#include "FreeRTOS.h"
+#include "event_groups.h"
+#include "timers.h"
 
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
@@ -1549,6 +1552,8 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
+    xTimerDelete(pCON->status.xHandleTimerRTData, 100);
+    xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
     pCON = NULL;
 }
@@ -1630,8 +1635,17 @@ CON_t *CONCreate(uint8_t ucCONID )
                                       pdTRUE,
                                       (void *)(int)ucCONID,
                                       vRemoteRTDataTimerCB);
-
+    //order init
     OrderInit(&(pCON->order));
+    //OrderTmp init
+    OrderInit(&(pCON->OrderTmp.order));
+    pCON->OrderTmp.ucCheckOrderTmp = 0;
+    sprintf(pCON->OrderTmp.strOrderTmpPath, "%sOrderCON%d.tmp", pathSystemDir, pCON->info.ucCONID);
+    pCON->OrderTmp.xHandleTimerOrderTmp = xTimerCreate("TimerOrderTmp",
+                                                    defOrderTmpCyc,
+                                                    pdTRUE,
+                                                    (void *)(int)(pCON->info.ucCONID),
+                                                    vOrderTmpTimerCB);
 
     return pCON;
 }

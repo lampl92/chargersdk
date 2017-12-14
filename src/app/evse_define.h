@@ -167,8 +167,7 @@
 #define defEventBitEVSEPowerOffOK       BIT_17
 
 #define defEventBitCONOrderStart        BIT_18
-#define defEventBitCONOrderFinish       BIT_19
-#define defEventBitChargeRTDataTimer    BIT_20
+#define defEventBitChargeRTDataTimer    BIT_19
 
 
 #define defEventBitEVSEReady            (defEventBitEVSEScramOK |    \

@@ -232,7 +232,6 @@ void vTaskEVSERemote(void *pvParameters)
     uint32_t reg_try_cnt;
     uint32_t heart_lost;
     uint8_t rtdata_reason;
-    OrderData_t OrderTmp;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -278,7 +277,11 @@ void vTaskEVSERemote(void *pvParameters)
                 xTimerChangePeriod(xHandleTimerRemoteStatus,
                                    pdMS_TO_TICKS(pechProto->info.ulStatusCyc_ms),
                                    100);//设置timer period ，有timer start 功能
-                pCON->order.statRemoteProc.orderTmp.ucCheckOrderTmp = 1;
+                for (i = 0; i < ulTotalCON; i++)
+                {
+                    pCON = CONGetHandle(i);
+                    pCON->OrderTmp.ucCheckOrderTmp = 1;
+                }
                 remotestat = REMOTE_REGEDITED;
             }
             else
@@ -311,55 +314,55 @@ void vTaskEVSERemote(void *pvParameters)
             }
             
             /*********上传未处理的订单**************/
+#if 1
             for (i = 0; i < ulTotalCON; i++)
             {
-                if (pCON->order.statRemoteProc.orderTmp.ucCheckOrderTmp == 1)
+                pCON = CONGetHandle(i);
+                if (pCON->OrderTmp.ucCheckOrderTmp == 1)
                 {
                     if (pCON->state != STATE_CON_CHARGING)
                     {
-                        switch (pCON->order.statRemoteProc.orderTmp.stat)
+                        switch (pCON->OrderTmp.order.statRemoteProc.order.stat)
                         {
                         case REMOTEOrder_IDLE:
-                            pCON = CONGetHandle(i);
-                            sprintf(pCON->order.strOrderTmpPath, "OrderCON%d.tmp", i);
-                            errcode = GetOrderTmp(pCON->order.strOrderTmpPath, &OrderTmp);
+                            errcode = GetOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->OrderTmp.order));
                             if (errcode == ERR_FILE_NO)
                             {
                                 //无订单临时文件,太好了
-                                pCON->order.statRemoteProc.orderTmp.ucCheckOrderTmp = 0;
+                                printf_safe("无订单临时文件,太好了\n");
+                                pCON->OrderTmp.ucCheckOrderTmp = 0;
                                 continue;
                             }
                             else if (errcode == ERR_NO)
                             {
                                 //当前枪有订单临时文件
-                                pCON->order.statRemoteProc.orderTmp.stat = REMOTEOrder_Send;
+                                printf_safe("枪%d有订单临时文件\n", pCON->info.ucCONID);
+                                pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_Send;
                             }
                             else//解析错误
                             {
-                                RemoveOrderTmp(pCON->order.strOrderTmpPath);
+                                RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                             }
                             break;
                         case REMOTEOrder_Send:
-                            GetOrderTmp(pCON->order.strOrderTmpPath, &OrderTmp);
-                            RemoteIF_SendOrder(pEVSE, pechProto, &OrderTmp);
-                            pCON->order.statRemoteProc.orderTmp.timestamp = time(NULL);
-                            pCON->order.statRemoteProc.orderTmp.stat = REMOTEOrder_WaitRecv;
+                            RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->OrderTmp.order));
+                            pCON->OrderTmp.order.statRemoteProc.order.timestamp = time(NULL);
+                            pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                             break;
                         case REMOTEOrder_WaitRecv:
-                            RemoteIF_RecvOrder(pEVSE, pechProto, &network_res);
+                            RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->OrderTmp.order), &network_res);
                             if (network_res == 1)
                             {
-                                GetOrderTmp(pCON->order.strOrderTmpPath, &OrderTmp);
-                                OrderTmp.ucPayStatus = 1;
-                                AddOrderCfg(pathOrder, &OrderTmp, pechProto);
-                                RemoveOrderTmp(pCON->order.strOrderTmpPath);
-                                pCON->order.statRemoteProc.orderTmp.stat = REMOTEOrder_IDLE;
+                                pCON->OrderTmp.order.ucPayStatus = 1;
+                                AddOrderCfg(pathOrder, &(pCON->OrderTmp.order), pechProto);
+                                RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                                pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                             }
                             else if (network_res == 0)
                             {
-                                if (time(NULL) - pCON->order.statRemoteProc.orderTmp.timestamp > 60)
+                                if (time(NULL) - pCON->OrderTmp.order.statRemoteProc.order.timestamp > 60)
                                 {
-                                    pCON->order.statRemoteProc.orderTmp.stat = REMOTEOrder_IDLE;
+                                    pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                                 }
                             }
                             break;
@@ -367,7 +370,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                 }
             }//for id
-
+#endif
             /************ 心跳 ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                          defEventBitTimerCBHeartbeat,
@@ -658,7 +661,7 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
                 case REMOTEOrder_WaitRecv:
-                    RemoteIF_RecvOrder(pEVSE, pechProto, &network_res);
+                    RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.ucPayStatus = 1;
@@ -670,7 +673,8 @@ void vTaskEVSERemote(void *pvParameters)
                         if (time(NULL) - pCON->order.statRemoteProc.order.timestamp > 60)
                         {
                             pCON->order.ucPayStatus = 0;
-                            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
+                            //超时就不要发送使用完成OK了，下面这条语句注释 ↓
+                            //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
                             pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                         }
                     }

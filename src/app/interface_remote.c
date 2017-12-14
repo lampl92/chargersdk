@@ -86,6 +86,10 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
                 gdsl_list_cursor_free(cs);
                 xSemaphoreGive(pProto->xMutexProtoSend);
             }//if mutex
+            else
+            {
+                printf_safe("xMutexProtoSend Timeout---> [%0X]%d!!!\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            }
         }
     }//if mutex
 
@@ -447,7 +451,7 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
 
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal)
 {
     CON_t *pCON;
     uint8_t id;
@@ -477,13 +481,17 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
         if(pCON != NULL)
         {
             HexToStr(&pbuff[1], strOrderSN_tmp, 8);
-            if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+            if(strcmp(strOrderSN_tmp, pOrder->strOrderSN) == 0)
             {
                 *psiRetVal = 1;
             }
             else //订单号不相等
             {
                 *psiRetVal = 0;
+                printf_safe("OrderSN not equal!!! \n");
+                printf_safe("-Remote OrderSN: %s \n", strOrderSN_tmp);
+                printf_safe("-Local  OrderSN: %s \n", pOrder->strOrderSN);
+                
                 errcode = ERR_REMOTE_ORDERSN;
             }
         }

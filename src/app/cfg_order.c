@@ -110,9 +110,11 @@ void RemoveOrderTmp(char *path)
 ErrorCode_t GetOrderCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
 {
     cJSON *jsItem;
+    cJSON *pCfgObj;
     ErrorCode_t errcode;
     
-    jsItem = (cJSON *)pvCfgObj;
+    pCfgObj = (cJSON *)pvCfgObj;
+    jsItem = cJSON_GetObjectItem(pCfgObj, jnItemName);
     if (jsItem == NULL)
     {
         errcode = ERR_FILE_PARSE;

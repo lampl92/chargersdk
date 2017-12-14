@@ -97,7 +97,6 @@ typedef struct _statRemote
 {
 	RemoteCardStatus_t card;
 	RemoteOrderStatus_t order;
-	RemoteOrderStatus_t orderTmp;
 }statRemote_t;
 
 /** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中
@@ -138,12 +137,16 @@ typedef struct _OrderData
     uint8_t         ucStopType; //停止类型
     time_t          tStopTime;  //停止时间          6
 
-    char strOrderTmpPath[16];
-    TimerHandle_t xHandleTimerOrderTmp;
 	statRemote_t statRemoteProc;
-    void (*Delete)(struct _OrderData *pOrder);
 }OrderData_t;
 
+typedef struct _OrderTmpData
+{
+    OrderData_t order;
+    uint8_t ucCheckOrderTmp;
+    char strOrderTmpPath[32];
+    TimerHandle_t xHandleTimerOrderTmp;
+}OrderTmpData_t;
 
 void OrderCreate(OrderData_t *pOrder);
 void OrderInit(OrderData_t *pOrder);
