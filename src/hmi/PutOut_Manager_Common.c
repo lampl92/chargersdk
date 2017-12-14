@@ -165,37 +165,70 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                GUI_EndDialog(_hWinManagerCommon, 0);
                 _deleteWin(_hWinManagerCommon);
                 
-                if (pCont->state == statelog)
+                if (pCont->state == STATE_CON_CHARGING)
                 {
-                    if (pCont->state == STATE_CON_CHARGING)
-                    {
-                        CreateChargingPage();
-                    }
-                    else
-                    {
-                        CreateHomePage();//？
-                    }                    
+                    xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                    CreateChargingPage();
                 }
                 else
                 {
-                    if (statelog == STATE_CON_CHARGING)
+                    if (pCont->state == statelog)
                     {
-                        xEventGroupWaitBits(xHandleEventHMI,
-                            defEventBitHMI_ChargeReqDispDone,
-                            pdTRUE,
-                            pdTRUE,
-                            0);
-
-                        bitclr(winInitDone, 0);
-                        _hWinCharging = 0;
-                        CreateChargeDonePage();
-                        bitset(winInitDone, 7);
+                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                        CreateHomePage();   
                     }
                     else
                     {
-                        CreateHomePage();//？
+                        uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
+                            defEventBitOrderUseless,
+                            pdTRUE,
+                            pdTRUE,
+                            65000);//要比remote中的order超时（60s）长
+                        if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
+                        {
+                            xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                            xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
+                            xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+                            CreateHomePage();
+                        }
+                        else
+                        {
+                            xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                            CreateHomePage();
+                        }
                     }
                 }
+//                if (pCont->state == statelog)
+//                {
+//                    if (pCont->state == STATE_CON_CHARGING)
+//                    {
+//                        CreateChargingPage();
+//                    }
+//                    else
+//                    {
+//                        CreateHomePage();//？
+//                    }                    
+//                }
+//                else
+//                {
+//                    if (statelog == STATE_CON_CHARGING)
+//                    {
+//                        xEventGroupWaitBits(xHandleEventHMI,
+//                            defEventBitHMI_ChargeReqDispDone,
+//                            pdTRUE,
+//                            pdTRUE,
+//                            0);
+//
+//                        bitclr(winInitDone, 0);
+//                        _hWinCharging = 0;
+//                        CreateChargeDonePage();
+//                        bitset(winInitDone, 7);
+//                    }
+//                    else
+//                    {
+//                        CreateHomePage();//？
+//                    }
+//                }
 //                WM_ShowWindow(cur_win);  
 //                //增加跳出管理员时界面选择，暂时只添加充电中和首页
 //                if (pCont->state == STATE_CON_STOPCHARGE || 

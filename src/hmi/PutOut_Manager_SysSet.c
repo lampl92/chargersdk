@@ -214,7 +214,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "eg,8080");
+                    Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "note:1~9999");
 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
 //                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -246,7 +246,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：1~999");
+                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：5~60");
 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
