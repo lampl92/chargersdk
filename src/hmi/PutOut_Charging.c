@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"
@@ -338,7 +337,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 	    bitclr(winInitDone,0);
         _deleteWin(_hWinCharging);
         _hWinCharging = 0;
-        CreateChargeDone();
+        CreateChargeDonePage();
         current_page = _CHARGEDONEPAGE;
         bitset(winInitDone,7);
         break;

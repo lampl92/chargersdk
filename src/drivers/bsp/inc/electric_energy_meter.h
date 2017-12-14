@@ -1,5 +1,6 @@
 #ifndef ELECTRIC_ENERGY_METER_H_INCLUDED
 #define ELECTRIC_ENERGY_METER_H_INCLUDED
+#include "sys_types.h"
 #include "bsp_define.h"
 UART_HandleTypeDef UART7_Handler;
 UART_HandleTypeDef UART7_RS485Handler;

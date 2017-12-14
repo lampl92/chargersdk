@@ -119,7 +119,7 @@ void bsp_Init(void)
     /* 优先级分组设置为4，可配置0-15级抢占式优先级，0级子优先级，即不存在子优先级。*/
 
     HAL_Init();
-    SystemClock_Config(); //系统始终配置为192MHz
+    SystemClock_Config(); //系统始终配置为168MHz
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
     /* Enable the CRC Module */
     __HAL_RCC_CRC_CLK_ENABLE(); //
@@ -129,7 +129,7 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
-#ifndef EVSE_DEBUG
+#ifndef DEBUG_DIAG_DUMMY
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();
@@ -138,17 +138,14 @@ void bsp_Init(void)
     LCD_Init();
     TP_Init();
 #endif
-    //FTL_Init();在fatfs中初始化
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
     bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
 #ifndef EVSE_DEBUG
-    //IWDG_Init(IWDG_PRESCALER_64,500);  	//·ÖÆµÊýÎª64,ÖØÔØÖµÎª500,Òç³öÊ±¼äÎª1s
+    //IWDG_Init(IWDG_PRESCALER_64,500);  	
 #endif
-//LCD_Init();
-
 }
 
 void bsp_Error_Handler(void)

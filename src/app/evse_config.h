@@ -22,7 +22,8 @@
 
 #ifndef EVSE_USING_STORE_ORDER
 #define EVSE_USING_STORE_ORDER      1
-#endif
+#endif
+
 #ifndef EVSE_USING_STORE_LOG
 #define EVSE_USING_STORE_LOG        1
 #endif
@@ -30,7 +31,7 @@
 
 #define defTotalCON             2
 //#define defUIDLength            4
-#define defCardIDLength         8
+#define defCardIDLength         16
 #define defEVSESNLength         64
 #define defEVSEIDLength         64
 #define defFileNameLength       64
@@ -45,7 +46,7 @@
 #define defMonitorPlugStateCyc      50
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
-#define defMonitorRFIDCyc           1000
+#define defMonitorRFIDCyc           100
 #define defMonitorDataRefreshCyc    5000
 #define defDiagVoltDummyCyc         3000
 #define defDiagVoltRecoverCyc       5000
@@ -56,6 +57,7 @@
 #define defRemoteHeartbeatCyc       15000     //心跳
 #define defRemoteStatusCyc          120000    //状态上报
 #define defRemoteRTDataCyc          10000     //充电实时数据
+#define defOrderTmpCyc              60000     //充电订单临时文件更新时间
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
@@ -64,9 +66,9 @@
 #define defMonitorFreqUpper         50  //(Hz)
 #define defMonitorFreqPeriod        1   //(Hz)
 
-#define defCfgOrderMaxItem          20
+#define defCfgOrderMaxItem          50
 #define defCfgOrderRemoveOldItem    10
-#define defCfgLogMaxItem            50
+#define defCfgLogMaxItem            100
 #define defCfgLogRemoveOldItem      10
 
 #endif /* EVSE_CONFIG_H_INCLUDED */

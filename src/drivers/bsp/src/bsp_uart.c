@@ -117,16 +117,108 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
     return rl;
 }
 
-static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
+static uint8_t readRecvQue_ymodem(Queue *q, uint8_t *ch, uint32_t timeout_ms)
 {
-    while (timeout_ms)
+    uint32_t ulNumber10US;
+    if (timeout_ms > 0)
     {
+        ulNumber10US = timeout_ms * 100;
+    }
+    else
+    {
+        ulNumber10US = 100;
+    }
+    while (ulNumber10US)
+    {
+#if USE_FreeRTOS
         if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
         {
-            if ((q->isEmpty(q)) == QUE_FALSE)
+#endif
+            if ((q->isEmpty(q)) != QUE_TRUE)
             {
                 q->DeElem(q, ch);
+#if USE_FreeRTOS
                 xSemaphoreGive(q->xHandleMutexQue);
+#endif
+                return 1;
+            }
+            else
+            {
+#if USE_FreeRTOS
+                xSemaphoreGive(q->xHandleMutexQue);
+//                vTaskDelay(1);
+                bsp_DelayUS(10);
+#else
+                bsp_DelayMS(1);
+#endif
+                ulNumber10US--;
+            }
+#if USE_FreeRTOS
+        }
+#endif
+    }
+
+    return 0;
+}
+
+uint32_t uart_read_ymodem(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms)
+{
+    Queue *pRecvQue;
+    uint8_t ch;
+    uint32_t rl = 0;//read lenko
+    switch (uartport)
+    {
+    case UART_PORT_CLI:
+        pRecvQue = pCliRecvQue;
+        break;
+    case UART_PORT_RFID:
+        pRecvQue = pRfidRecvQue;
+        break;
+    case UART_PORT_GPRS:
+        pRecvQue = pGprsRecvQue;
+        break;
+    case UART_PORT_WIFI:
+        pRecvQue = pWifiRecvQue;
+        break;
+    default:
+        break;
+    }
+
+    while (readRecvQue_ymodem(pRecvQue, &ch, timeout_ms) == 1)
+    {
+        data[rl] = ch;
+        rl++;
+        if (len != 0)
+        {
+            if (rl == len)
+            {
+                break;
+            }
+        }
+    }
+
+    return rl;
+}
+
+
+static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
+{
+    if (timeout_ms == 0)
+    {
+        timeout_ms = 100;
+    }
+    while (timeout_ms)
+    {
+#if USE_FreeRTOS
+        if (xSemaphoreTake(q->xHandleMutexQue, 0) == pdPASS)
+        {
+#endif
+            if ((q->isEmpty(q)) != QUE_TRUE)
+            {
+                q->DeElem(q, ch);
+#if USE_FreeRTOS
+                xSemaphoreGive(q->xHandleMutexQue);
+#endif
                 return 1;
             }
             else
@@ -135,9 +227,11 @@ static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms)
                 vTaskDelay(1);
                 timeout_ms--;
             }
+#if USE_FreeRTOS
         }
+#endif
     }
-    
+
     return 0;
 }
 

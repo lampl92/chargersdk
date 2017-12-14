@@ -50,29 +50,32 @@ Purpose     : Config / System dependent externals for GUI
 
 #define CALEBRATE_DEBUG 0
 #define CALEBRATE_TIME  500
+#define AdvertisementTime 400 //进入广告的计数值
 
-volatile static uint16_t adc_x = 0 ,adc_y = 0;
+volatile static uint16_t adc_x = 0, adc_y = 0;
 static uint8_t step = 0;
-GUI_PID_STATE State = {0};
+GUI_PID_STATE State = { 0 };
 static uint8_t _pidFlag = 0;
 static uint16_t _pidCount = 0;
+static uint16_t _AsmtCount = 0;//进入广告时间计数
 
-extern uint8_t calebrate_done;
+extern uint16_t calebrate_done;
 
 void GUI_TOUCH_X_ActivateX(void)
 {
-    if((calebrate_done & 0x01) == 1)//初始化完成
+    if ((calebrate_done & 0x01) == 1)//初始化完成
     {
         if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
         {
             if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
             {
+                _AsmtCount = 0;//一旦触屏则广告时间计数归零
                 _pidFlag = 1;
                 Buzzer_control(1);
                 adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
                 adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
 
-                //if (!bittest(winCreateFlag, 2))
+                if (!bittest(winCreateFlag, 2))
                 {
                     State.x = adc_x;
                     State.y = adc_y;
@@ -83,6 +86,23 @@ void GUI_TOUCH_X_ActivateX(void)
         }
         else
         {
+            if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
+            {
+                _AsmtCount++;
+                if (_AsmtCount > xSysconf.ulDispSleepTime_s * 50)
+                {
+                    _AsmtCount = 0;
+                    bitset(calebrate_done, 8);//calebrate_done的第八位为广告页
+                }
+            }
+            else
+            {
+                _AsmtCount = 0;
+            }
+
+//            _pidFlag = 0;
+//            Buzzer_control(0);
+
             /**< 键盘鼠标路线会触发拐角的键,
             暂时在键盘页增加下面的返回值,点击后把鼠标位置置于左角 */
             if (_pidFlag == 1)
@@ -97,7 +117,7 @@ void GUI_TOUCH_X_ActivateX(void)
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
             }
-        }        
+        }
     }
 }
 
@@ -108,26 +128,29 @@ void GUI_TOUCH_X_ActivateY(void)
 
 int  GUI_TOUCH_X_MeasureX(void)
 {
-    if(_pidFlag == 1)//检测到有效坐标
+    if (_pidFlag == 1)//检测到有效坐标
     {
-        if((adc_x < ErrMultiEdit_Size.xpos) || (adc_y < ErrMultiEdit_Size.ypos))
+        if ((adc_x < ErrMultiEdit_Size.xpos) || (adc_y < ErrMultiEdit_Size.ypos))
         {
-            bitset(calebrate_done,4); //清除故障窗口
+            bitset(calebrate_done, 4); //清除故障窗口
         }
 
-        if((adc_x >= 0 && adc_x <= 40)&&(adc_y >= 0 && adc_y <= 40))
+        if ((adc_x >= 0 && adc_x <= 40)&&(adc_y >= 0 && adc_y <= 40))
         {
-            bitset(calebrate_done,6);//进入首页
+            bitset(calebrate_done, 6);//进入首页
         }
 
-        if((adc_x >= 400 && adc_x <= 800) && (adc_y >= 0 && adc_y <= 40))
+        if ((adc_x >= 400 && adc_x <= 800) && (adc_y >= 0 && adc_y <= 40))
         {
             step = 1;
         }
-        else if((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40)&&(step == 1))
+        else if ((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40)&&(step == 1))
         {
             step = 2;
-            bitset(calebrate_done,7);//管理员
+            if (!bittest(calebrate_done, 8))
+            {
+                bitset(calebrate_done, 7);//管理员
+            }
         }
         else
         {
@@ -136,24 +159,24 @@ int  GUI_TOUCH_X_MeasureX(void)
 
         _pidCount++;
 #if CALEBRATE_DEBUG
-        printf_safe("_pid_count = %d  ",_pidCount);
-        if(_pidCount % 10 == 0)
+        printf_safe("_pid_count = %d  ", _pidCount);
+        if (_pidCount % 10 == 0)
             printf_safe("\n");
 #endif
-        switch(_pidCount)
+        switch (_pidCount)
         {
-            case CALEBRATE_TIME:
-                _pidCount = 0;
+        case CALEBRATE_TIME:
+            _pidCount = 0;
 #if CALEBRATE_DEBUG
-                printf_safe("\n进入校准模式!\n");
+            printf_safe("\n进入校准模式!\n");
 #endif
-                bitset(calebrate_done,5);//校准
-                bitclr(calebrate_done,0);//
+            bitset(calebrate_done, 5);//校准
+            bitclr(calebrate_done, 0);//
 
-                _pidFlag = 0;
-                Buzzer_control(0);
-                State.Pressed = 0;
-                GUI_TOUCH_StoreStateEx(&State);
+            _pidFlag = 0;
+            Buzzer_control(0);
+            State.Pressed = 0;
+            GUI_TOUCH_StoreStateEx(&State);
             break;
         }
     }

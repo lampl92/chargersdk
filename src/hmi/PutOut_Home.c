@@ -17,7 +17,6 @@
 *                                                                    *
 **********************************************************************
 */
-#include "xbffontcreate.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "bmpdisplay.h"

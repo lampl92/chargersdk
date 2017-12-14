@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 // USER END
 
@@ -145,13 +144,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             }
             break;
@@ -162,13 +161,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 GUI_EndDialog(pMsg->hWin,0);
                 WM_DeleteWindow(pMsg->hWin);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 WM_DeleteWindow(pMsg->hWin);
                 GUI_EndDialog(pMsg->hWin,0);
                 vTaskDelay(500);
-                CreateHome();
+                CreateHomePage();
                 break;
             }
             break;

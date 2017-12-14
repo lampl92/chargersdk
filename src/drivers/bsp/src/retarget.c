@@ -1,8 +1,7 @@
 #include "bsp.h"
 #include "xprintf.h"
+#include "taskcreate.h"
 extern UART_HandleTypeDef CLI_UARTx_Handler;
-
-SemaphoreHandle_t  xprintfMutex = NULL;
 
 void myputc(uint8_t ch)
 {
@@ -12,8 +11,6 @@ void myputc(uint8_t ch)
 #if 1
 void retarget_init(void)
 {
-    xprintfMutex = xSemaphoreCreateMutex();
-
     if(xprintfMutex == NULL)
     {
         //
@@ -33,12 +30,16 @@ int printf_safe(const char *format, ...)
                     (char const *) format,
                     v_args);
     va_end(v_args);
-
+#if USE_FreeRTOS
     if (xSemaphoreTake(xprintfMutex, 10) == pdPASS)
     {
+#endif
         xprintf("%s", buf_str);
+#if USE_FreeRTOS
         xSemaphoreGive(xprintfMutex);
     }
+#endif
+    return 0;
 }
 
 

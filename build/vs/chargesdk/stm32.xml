@@ -20,6 +20,7 @@
         <string>STM32F429xx</string>
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
+        <string>USE_FreeRTOS=1</string>
       </PreprocessorMacros>
       <IncludeDirectories>
         <string>.</string>
@@ -31,27 +32,31 @@
         <string>../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc</string>
         <string>../../../src/drivers/bsp/inc</string>
         <string>../../../src/drivers/device/inc</string>
-        <string>../../../src/os</string>
+        <string>../../../src/os/FreeRTOS</string>
         <string>../../../src/os/FreeRTOS/Source/include</string>
         <string>../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F</string>
         <string>../../../src/middlewares/tinysh</string>
         <string>../../../src/middlewares/STemWin/inc</string>
         <string>../../../src/middlewares/STemWin/Config</string>
         <string>../../../src/middlewares/STemWin/Demo</string>
-        <string>../../../src/middlewares/fatfs/src</string>
-        <string>../../../src/middlewares/fatfs/diskdrv</string>
         <string>../../../src/middlewares/userlib/inc</string>
         <string>../../../src/middlewares/cJSON</string>
         <string>../../../src/middlewares/gdsl-1.8/src</string>
         <string>../../../src/middlewares/gdsl-1.8/src/examples</string>
         <string>../../../src/middlewares/STemWin/BMP</string>
-        <string>../../../src/middlewares/STemWin/XBF</string>
-        <string>../../../src/middlewares/tiny-AES128-C</string>
         <string>../../../src/hmi</string>
         <string>../../../src/hmi/lcd</string>
         <string>../../../src/net/mbedTLS/include</string>
         <string>../../../src/hmi/qrencode/inc</string>
         <string>../../../src/middlewares/STemWin/SIF</string>
+        <string>../../../src/hmi</string>
+        <string>../../../src/hmi/lcd</string>
+        <string>../../../src/net/mbedTLS/include</string>
+        <string>../../../src/hmi/qrencode/inc</string>
+        <string>../../../src/middlewares/STemWin/SIF</string>
+        <string>../../../src/middlewares/yaffs2</string>
+        <string>../../../src/middlewares/yaffs2/direct</string>
+        <string>../../../src/middlewares/yaffs2/direct/nanddrv</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>
@@ -60,7 +65,7 @@
       <CXXFLAGS />
       <LDFLAGS>--specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs</LDFLAGS>
       <ASFLAGS>-mfpu=fpv4-sp-d16</ASFLAGS>
-      <LinkerScript>STM32F429IG_flash.lds</LinkerScript>
+      <LinkerScript>chargersdk_flash.lds</LinkerScript>
       <COMMONFLAGS>-mcpu=cortex-m4 -mthumb -mfloat-abi=hard</COMMONFLAGS>
       <EnableLinkerGroups>true</EnableLinkerGroups>
     </CompilationFlags>

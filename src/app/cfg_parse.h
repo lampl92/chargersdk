@@ -18,8 +18,9 @@
 #define ParamTypeString     5
 #define ParamTypeList       6
 #define ParamTypeObj        7
+#define ParamTypeS32        8
 
-ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj);
-cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode);
+ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj);
+cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode);
 
 #endif

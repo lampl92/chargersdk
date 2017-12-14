@@ -9,17 +9,18 @@
 #include "task.h"
 float frequency_test;
 samp Sys_samp;
-
+void user_pwm_relay2_setvalue(uint16_t value);
+void user_pwm_relay1_setvalue(uint16_t value);
 static void value_reset(void)
 {
-	Sys_samp.DC.TEMP_ARM1 = 0;
-	Sys_samp.DC.TEMP_ARM2 = 0;
-	Sys_samp.DC.TEMP_ARM3 = 0;
-	Sys_samp.DC.TEMP_ARM4 = 0;
-	Sys_samp.DC.TEMP1 = 0;
-	Sys_samp.DC.TEMP2 = 0;
-	Sys_samp.DC.TEMP3 = 0;
-	Sys_samp.DC.TEMP4 = 0;
+    Sys_samp.DC.TEMP_ARM1 = 0;
+    Sys_samp.DC.TEMP_ARM2 = 0;
+    Sys_samp.DC.TEMP_ARM3 = 0;
+    Sys_samp.DC.TEMP_ARM4 = 0;
+    Sys_samp.DC.TEMP1 = 0;
+    Sys_samp.DC.TEMP2 = 0;
+    Sys_samp.DC.TEMP3 = 0;
+    Sys_samp.DC.TEMP4 = 0;
 }
 const double  resistance[146] =
 {
@@ -43,7 +44,7 @@ double get_ia(void)
 {
     unsigned short i;
     unsigned long ia_sum = 0;
-    for(i = 0; i < samp_sum; i++)
+    for (i = 0; i < samp_sum; i++)
     {
         ia_sum += ((Sys_samp.AC_samp.ia_samp[i] - vref) * (Sys_samp.AC_samp.ia_samp[i] - vref));
     }
@@ -56,7 +57,7 @@ double get_va(void)
 {
     unsigned short i;
     unsigned long long va_sum = 0;
-    for(i = 0; i < samp_sum; i++)
+    for (i = 0; i < samp_sum; i++)
     {
         va_sum += ((Sys_samp.AC_samp.va_samp[i] - vref) * (Sys_samp.AC_samp.va_samp[i] - vref));
     }
@@ -68,7 +69,7 @@ double get_va(void)
 double get_leakage_current(void)
 {
     unsigned short i;
-    for(i = 0; i < samp_sum; i++)
+    for (i = 0; i < samp_sum; i++)
     {
         leakage_current_sum += (Sys_samp.AC_samp.leakage_current_samp[i] * Sys_samp.AC_samp.leakage_current_samp[i]);
     }
@@ -79,13 +80,17 @@ double get_leakage_current(void)
 float get_CD4067(void)
 {
     unsigned short i;
-    for(i = 0; i < samp_dma; i++)
+    for (i = 0; i < samp_dma; i++)
     {
         CD4067_sum += AD_samp_dma[i].CD4067;
     }
     Sys_samp.DC.CD4067 = (CD4067_sum / samp_dma); //*temper_k;
-	CD4067_sum = 0;
+    CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
+}
+uint8_t Get_State_relay(void)
+{
+    return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
 }
 /********************************
 *蜂鸣器状态控制函数
@@ -94,7 +99,7 @@ float get_CD4067(void)
 *********************************/
 void Buzzer_control(uint8_t state)
 {
-    Chip2.buzzer=state&0x01;
+    Chip2.buzzer = state & 0x01;
     write_pca9554_2();
 }
 float get_dc_massage(uint8_t DC_channel)
@@ -104,7 +109,6 @@ float get_dc_massage(uint8_t DC_channel)
     float ad_value, re_value;
     float dc_data;
 
-
     Chip1.a_select = DC_channel >> 0 & 0x01;
     Chip1.b_select = DC_channel >> 1 & 0x01;
     Chip1.c_select = DC_channel >> 2 & 0x01;
@@ -112,18 +116,18 @@ float get_dc_massage(uint8_t DC_channel)
     Chip1.cs1_select = 1;
     write_pca9554_1();
     vTaskDelay(25);
-    ad_samp_value =get_CD4067();
+    ad_samp_value = get_CD4067();
     switch (DC_channel)
     {
     case 0:
         ad_value = (double)(ad_samp_value * 3) / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP1 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP1;
+                dc_data = (float)Sys_samp.DC.TEMP1;
             }
         }
         //return dc_data;
@@ -131,12 +135,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 1:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP2 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP2;
+                dc_data = (float)Sys_samp.DC.TEMP2;
             }
         }
         //return dc_data;
@@ -144,12 +148,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 2:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP3 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP3;
+                dc_data = (float)Sys_samp.DC.TEMP3;
             }
         }
         //return dc_data;
@@ -157,12 +161,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 3:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP4 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP4;
+                dc_data = (float)Sys_samp.DC.TEMP4;
             }
         }
         //return dc_data;
@@ -170,12 +174,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 4:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM1 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP_ARM1;
+                dc_data = (float)Sys_samp.DC.TEMP_ARM1;
             }
         }
         //  return dc_data;
@@ -183,12 +187,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 5:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM2 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP_ARM2;
+                dc_data = (float)Sys_samp.DC.TEMP_ARM2;
             }
         }
         //return dc_data;
@@ -196,12 +200,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 6:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM3 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP_ARM3;
+                dc_data = (float)Sys_samp.DC.TEMP_ARM3;
             }
         }
         //return dc_data;
@@ -209,12 +213,12 @@ float get_dc_massage(uint8_t DC_channel)
     case 7:
         ad_value = (double)ad_samp_value * 3 / 4096;
         re_value = (ad_value * 30) / (3 - ad_value);
-        for(j = 0; j < 145; j++)
+        for (j = 0; j < 145; j++)
         {
-            if((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
             {
                 Sys_samp.DC.TEMP_ARM4 = j - 40;
-                dc_data=(float)Sys_samp.DC.TEMP_ARM4;
+                dc_data = (float)Sys_samp.DC.TEMP_ARM4;
             }
         }
 
@@ -244,17 +248,16 @@ float get_dc_massage(uint8_t DC_channel)
         break;
     }
     return dc_data;
-
 }
 void get_CP1(void)
 {
     unsigned short i;
     float dma_cp1_sum = 0;
-    for(i = 0; i < samp_dma; i++)
+    for (i = 0; i < samp_dma; i++)
     {
-       dma_cp1_sum+=AD_samp_dma[i].CP1;
+        dma_cp1_sum += AD_samp_dma[i].CP1;
     }
-    dma_cp1_sum=dma_cp1_sum/samp_dma;
+    dma_cp1_sum = dma_cp1_sum / samp_dma;
     Sys_samp.DC.CP1 = dma_cp1_sum * CP1_k + 0.2;
     //return Sys_samp.DC.CP1;
 }
@@ -263,18 +266,17 @@ double get_CP2(void)
 {
     unsigned short i;
 
-    for(i = 0; i < samp_sum; i++)
+    for (i = 0; i < samp_sum; i++)
     {
-        if(Sys_samp.DC_samp.CP2[i] >= 1000)
+        if (Sys_samp.DC_samp.CP2[i] >= 1000)
         {
             CP2_sum_sys += Sys_samp.DC_samp.CP2[i];
             num_cp2++;
         }
     }
-    if(num_cp2 <= 20)
+    if (num_cp2 <= 20)
     {
         Sys_samp.DC.CP2 = 0;
-
     }
     else
     {
@@ -296,30 +298,30 @@ void Delay_ms(unsigned long long time)
 void Delay_us(unsigned long long time)
 {
     unsigned int y;
-    for(y = 190; y > 0; y--);
+    for (y = 190; y > 0; y--)
+        ;
 }
 void Close_gun_1(void)
 {
-        A_KEY_ON;
-       B_KEY_OFF;
-        Delay_ms(lock_timer);
-        A_KEY_OFF;
+    A_KEY_ON;
+    B_KEY_OFF;
+    Delay_ms(lock_timer);
+    A_KEY_OFF;
 }
 void Open_gun_1(void)
 {
-        A_KEY_OFF;
-       B_KEY_ON;
-        Delay_ms(lock_timer);
-        B_KEY_OFF;
+    A_KEY_OFF;
+    B_KEY_ON;
+    Delay_ms(lock_timer);
+    B_KEY_OFF;
 }
 void Close_gun_2(void)
 {
-   A_KEY_ON;
+    A_KEY_ON;
     Delay_ms(10);
     B_KEY_ON;
     Delay_ms(lock_timer);
     A_KEY_OFF;
-
 }
 void Open_gun_2(void)
 {
@@ -330,77 +332,83 @@ void Open_gun_2(void)
     B_KEY_OFF;
 }
 
-
 void Power_out_l_pwm_ctrl(void)
 {
-    if(pwm_ms%2==0)
+    RELAY2_KEEP;
+  /*  if(pwm_ms%2==0)
     {
         POWER_L_ON;
     }
     else
     {
         POWER_L_OFF;
-    }
+    }*/
 }
 void Power_out_n_pwm_ctrl(void)
 {
-    if(pwm_ms%2==0)
+    RELAY1_KEEP;
+   /* if(pwm_ms%2==0)
     {
         POWER_N_ON;
     }
     else
     {
         POWER_N_OFF;
-    }
+    }*/
 }
-void POWER_L_CLOSE(void)
-{
-    POWER_L_ON;
-    flag_power_out_l=1;
-    flag_pwm_out_l=0;
-    timer_relay_ms=0;
-}
+
 void POWER_N_CLOSE(void)
 {
-    POWER_N_ON;
-    flag_power_out_n=1;
-    flag_pwm_out_n=0;
-    timer_relay_ms=0;
-}
-void POWER_L_OPEN(void)
-{
-    flag_power_out_l=0;
-    POWER_L_OFF;
-    flag_pwm_out_l=0;
+    RELAY1_ON;// POWER_N_ON;
+    flag_power_out_n = 1;
+    flag_pwm_out_n = 0;
+    timer_relay_ms = 0;
 }
 void POWER_N_OPEN(void)
 {
-    flag_power_out_n=0;
-    POWER_N_OFF;
-    flag_pwm_out_n=0;
+    flag_power_out_n = 0;
+    RELAY1_OFF;// POWER_N_OFF;
+    flag_pwm_out_n = 0;
 }
-uint8_t Get_State_relay()
+void POWER_L_CLOSE(void)
 {
-    uint8_t relay_num,i,j;
-    relay_num=0;
-    for (i=0; i<100; i++)
-    {
-        j=read_pca9554_2()>>1;
-        relay_num+=(j&0x01);
-    }
-    if(relay_num==100)
-    {
-        return 0;//未连接
-    }
-    else
-    {
-        return 1;//已经连接
-    }
+    RELAY2_ON;//POWER_L_ON;
+    flag_power_out_l = 1;
+    flag_pwm_out_l = 0;
+    timer_relay_ms = 0;
+}
+void POWER_L_OPEN(void)
+{
+    RELAY2_OFF;// flag_power_out_l = 0;
+    POWER_L_OFF;
+    flag_pwm_out_l = 0;
+}
 
+void user_pwm_relay1_setvalue(uint16_t value)
+{
+  //  TIM_OC_InitTypeDef sConfigOC;
+  //   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+//   sConfigOC.Pulse = value;
+    //sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+   // sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  // HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2);
+   // HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+    TIM3->CCR2 = value;
+}
+void user_pwm_relay2_setvalue(uint16_t value)
+{
+  // TIM_OC_InitTypeDef sConfigOC;
+   //sConfigOC.OCMode = TIM_OCMODE_PWM1;
+   // sConfigOC.Pulse = value;
+   //  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  // sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  // HAL_TIM_PWM_ConfigChannel(&htim8, &sConfigOC, TIM_CHANNEL_3);
+  //  HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
+    TIM8->CCR3 = value;
 }
 void Peripheral_Init(void)
 {
-	value_reset();
+    value_reset();
     MX_GPIO_Init();
     IIC_Init();
     PCA9554_init();
@@ -408,25 +416,49 @@ void Peripheral_Init(void)
     MX_DMA_Init();
     MX_ADC1_Init();
     MX_TIM2_Init();//1ºÅÇ¹PWMÆµÂÊ1K
-    MX_TIM3_Init();//ÏµÍ³¶¨Ê±Æ÷100uS
+    MX_TIM3_Init();//1ºÅÇ¹PWMÆµÂÊ1K
     MX_TIM4_Init();//2ºÅÇ¹PWMÆµÂÊ1K
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
+    MX_TIM8_Init();
     RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
     PWM1_ON;
     PWM2_ON;
-    TIMER3_ON;
+    //PWM3_ON;
+    //PWM4_ON;
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
     TIMER5_ON;
     //Close_gun_1();
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
-    vref=2045;
+    vref = 2045;
     PWM1_1000;
+   //user_pwm_relay1_setvalue(1000);
+  // user_pwm_relay2_setvalue(1000);
+   // vref = Get_State_relay();
+  //  RELAY1_ON;
+ //   RELAY2_ON;
  //   vref=get_dc_massage(VREF_1v5);
 //   Get_State_relay();
 //         Get_Electricity_meter_massage_frequency();
     //Close_gun_1();
+}
 
+TIM_HandleTypeDef htim2;
+extern DMA_HandleTypeDef hdma_adc1;
 
+/**
+* @brief This function handles DMA2 stream0 global interrupt.
+*/
+void DMA2_Stream0_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream0_IRQn 0 */
+    HAL_DMA_IRQHandler(&hdma_adc1);
+    /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
+
+      /* USER CODE END DMA2_Stream0_IRQn 1 */
 }

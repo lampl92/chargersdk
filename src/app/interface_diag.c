@@ -369,7 +369,7 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 100);
-                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 10), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
+                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent - 50), ERR_LEVEL_WARNING, "DiagVolt SetLoad");
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Fix",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
@@ -603,18 +603,17 @@ void DiagTempError(CON_t *pCON)
     }
     
     {  
-        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
-          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
-        {
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        
-        }
-        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
+        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
             (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
         {
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
             ThrowErrorCode(id, ERR_CON_ACTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
+          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         }
         else
         {

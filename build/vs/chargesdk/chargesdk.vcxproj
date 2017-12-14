@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0\backward;C:\SysGCC\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;C:\SysGCC\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;C:\SysGCC\arm-eabi\arm-eabi\sys-include;C:\SysGCC\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -50,7 +50,7 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/fatfs/src;../../../src/middlewares/fatfs/diskdrv;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/middlewares/STemWin/XBF;../../../src/middlewares/tiny-AES128-C;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;C:\SysGCC\arm-eabi\arm-eabi\include\c++\6.2.0\backward;C:\SysGCC\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;C:\SysGCC\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;C:\SysGCC\arm-eabi\arm-eabi\sys-include;C:\SysGCC\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os/FreeRTOS;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/hmi;../../../src/hmi/lcd;../../../src/net/mbedTLS/include;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -71,6 +71,7 @@
     <None Include="Makefile" />
     <None Include="release.mak" />
     <None Include="stm32.mak" />
+    <None Include="chargersdk_flash.lds" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml" />
@@ -78,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\app\cfg_order.c" />
     <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
+    <ClCompile Include="..\..\..\src\app\cfg_sys.c" />
     <ClCompile Include="..\..\..\src\app\connector.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
     <ClCompile Include="..\..\..\src\app\EVSE.c" />
@@ -89,11 +91,12 @@
     <ClCompile Include="..\..\..\src\app\interface_remote.c" />
     <ClCompile Include="..\..\..\src\app\interface_rfid.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c" />
+    <ClCompile Include="..\..\..\src\app\libEcharge\ech_ftp.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_globals.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol.c" />
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c" />
     <ClCompile Include="..\..\..\src\app\log_evse.c" />
-    <ClCompile Include="..\..\..\src\app\main.c" />
+    <ClCompile Include="..\..\..\src\app\app_main.c" />
     <ClCompile Include="..\..\..\src\app\order.c" />
     <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c" />
     <ClCompile Include="..\..\..\src\app\stringName.c" />
@@ -107,21 +110,20 @@
     <ClCompile Include="..\..\..\src\app\taskremote.c" />
     <ClCompile Include="..\..\..\src\app\taskrfid.c" />
     <ClCompile Include="..\..\..\src\app\timercallback.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_aes.c" />
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_crc.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_fatfs.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_gprs.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_json.c" />
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
+    <ClCompile Include="..\..\..\src\cli\tofile.c" />
+    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c" />
+    <ClCompile Include="..\..\..\src\cli\ymodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_ftl.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_hw.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_rtc.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_sdram.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c" />
@@ -139,7 +141,6 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
-    <ClCompile Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c" />
@@ -167,32 +168,29 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c" />
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c" />
+    <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
+    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
+    <ClCompile Include="..\..\..\src\hmi\HomePage.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Charge_Done.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Charging.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Home.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_SelAOrB.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\diskio.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\ff_ex.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\syscall.c" />
-    <ClCompile Include="..\..\..\src\middlewares\fatfs\src\option\unicode.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
@@ -204,25 +202,51 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\tinyaes.c" />
-    <ClCompile Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffscfg2k.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\chip_mt29.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_mt29_drv.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nand_drv.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_osglue.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_attribs.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_error.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_allocator.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_guts.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nameval.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_nand.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags1.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags2.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_summary.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_tagscompat.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_tagsmarshall.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.c" />
+    <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\croutine.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\event_groups.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\list.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\queue.c" />
+    <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\tasks.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
-    <ClCompile Include="startup_stm32f429xx.c" />
+    <ClCompile Include="startup_chargersdk.c" />
+    <ClCompile Include="system_chargersdk.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h" />
@@ -251,6 +275,7 @@
     <ClInclude Include="..\..\..\src\app\stm32f4xx_it.h" />
     <ClInclude Include="..\..\..\src\app\stringName.h" />
     <ClInclude Include="..\..\..\src\app\sysinit.h" />
+    <ClInclude Include="..\..\..\src\app\sys_types.h" />
     <ClInclude Include="..\..\..\src\app\taskcharge.h" />
     <ClInclude Include="..\..\..\src\app\taskcreate.h" />
     <ClInclude Include="..\..\..\src\app\taskdata.h" />
@@ -262,14 +287,14 @@
     <ClInclude Include="..\..\..\src\app\timercallback.h" />
     <ClInclude Include="..\..\..\src\app\version.h" />
     <ClInclude Include="..\..\..\src\cli\cli_app.h" />
-    <ClInclude Include="..\..\..\src\cli\cli_fatfs.h" />
     <ClInclude Include="..\..\..\src\cli\cli_main.h" />
     <ClInclude Include="..\..\..\src\cli\cli_rtos.h" />
+    <ClInclude Include="..\..\..\src\cli\ymodem.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_define.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_dwt.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_gpio.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_ftl.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_hw.h" />
+    <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_nand_flash.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_rtc.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_sdram.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_timer.h" />
@@ -427,16 +452,12 @@
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2j.h" />
-    <ClInclude Include="..\..\..\src\middlewares\cJSON\s2jdef.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\ff_gen_drv.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\nand_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\diskdrv\usbh_diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\diskio.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ffconf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\ff_ex.h" />
-    <ClInclude Include="..\..\..\src\middlewares\fatfs\src\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\diskio.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ffconf.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff_ex.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\integer.h" />
+    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\acconfig.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\config.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl.h" />
@@ -574,8 +595,58 @@
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h" />
+    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\userlib\src\utils.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim_file.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandstore_file.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nand_chip.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nand_store.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_fileem2k.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_m18_drv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nandsim_file.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nand_drv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_nor_drv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffs_ramdisk.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\ynorsim.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yramsim.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffscfg.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffsfs.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_config.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_flashif2.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_hweight.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_list.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_nandemul2k.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yaffs_osglue.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\ydirectenv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\yportenv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\moduleconfig.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_allocator.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_attribs.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_bitmap.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_checkptrw.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_ecc.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_endian.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_getblockinfo.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_guts.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_linux.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_mtdif.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_nameval.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_nand.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags1.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_packedtags2.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_summary.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_tagscompat.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_tagsmarshall.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_trace.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_multi.h" />
+    <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_single.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwipopts.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwippools.h" />
     <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\autoip.h" />
@@ -730,7 +801,7 @@
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h" />
     <ClInclude Include="..\..\..\src\net\user\ifconfig.h" />
     <ClInclude Include="..\..\..\src\net\user\lwip_init.h" />
-    <ClInclude Include="..\..\..\src\os\FreeRTOSConfig.h" />
+    <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\deprecated_definitions.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\event_groups.h" />
