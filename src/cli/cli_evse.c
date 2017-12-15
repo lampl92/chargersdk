@@ -538,7 +538,6 @@ void cli_evseorder_fnt(int argc, char **argv)
                     pCON->OrderTmp.order.tStartTime = time(NULL) + i * 100;
                     AddOrderCfg(pathOrder, &(pCON->OrderTmp.order), pechProto);
                     printf_safe("Add %d\n", i);
-                    bsp_DelayMS(100);
                 }  
             }
             
