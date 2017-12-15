@@ -42,13 +42,13 @@
 #define bspTIM2_PreemptPriority        8
 #define bspTIM2_SubPriority            0
 
-#define bspTIM3_PreemptPriority        1
+#define bspTIM3_PreemptPriority        8
 #define bspTIM3_SubPriority            0
 
 #define bspTIM4_PreemptPriority        8
 #define bspTIM4_SubPriority            0
 
-#define bspTIM8_PreemptPriority        1
+#define bspTIM8_PreemptPriority        8
 #define bspTIM8_SubPriority            0
 
 #define bspTIM5_PreemptPriority        8
