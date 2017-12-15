@@ -7,9 +7,53 @@
 */
 #include "includes.h"
 #include "stringName.h"
+#include "factorycfg.h"
 #include "interface.h"
 #include "cJSON.h"
 #include "yaffsfs.h"
+#include "sysinit.h"
+
+static const char *select_ctx_from_path(char *path)
+{
+    if (strcmp(path, pathOrder) == 0)
+    {
+        return strOrderCfg;
+    }
+    if (strcmp(path, pathOrderTmp) == 0)
+    {
+        return strOrderCfg;
+    }
+    if (strcmp(path, pathEVSELog) == 0)
+    {
+        return strLogCfg;
+    }
+    if (strcmp(path, pathEVSECfg) == 0)
+    {
+        return strEVSECfg;
+    }
+    if (strcmp(path, pathSysCfg) == 0)
+    {
+        return strSysCfg;
+    }
+    if (strcmp(path, pathFTPCfg) == 0)
+    {
+        return strFtpCfg;
+    }
+    if (strcmp(path, pathProtoCfg) == 0)
+    {
+        return strProtoCfg;
+    }
+    if (strcmp(path, pathWhiteList) == 0)
+    {
+        return strWhiteListCfg;
+    }
+    if (strcmp(path, pathBlackList) == 0)
+    {
+        return strBlackListCfg;
+    }
+    return NULL;
+}
+
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -103,6 +147,9 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)
     {
+        printf_safe("cfg file parse fail, remove orig file and create new cfg file!!\n");
+        yaffs_unlink(path);
+        create_cfg_file(path, select_ctx_from_path(path));
         *perrcode = ERR_FILE_PARSE;
         goto exit_parse;
     }

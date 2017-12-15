@@ -8,6 +8,7 @@
 #include "stringName.h"
 #include "errorcode.h"
 #include "yaffsfs.h"
+#include "factorycfg.h"
 #include <string.h>
 
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
@@ -72,9 +73,6 @@ ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
     {
-        yaffs_unlink(path);
-        extern void create_cfg_file(const char *path, const uint8_t *context);
-        create_cfg_file(path, pathOrder);
         return errcode;
     }
     ulMaxItem  = cJSON_GetArraySize(jsParent);

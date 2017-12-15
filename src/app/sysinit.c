@@ -60,7 +60,7 @@ uint8_t create_system_dir(void)
 }
 
 
-void create_cfg_file(const char *path, const uint8_t *context)
+void create_cfg_file(const char *path, const char *context)
 {
     uint32_t bw;
     int fd;

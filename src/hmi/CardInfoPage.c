@@ -127,7 +127,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
     }
     diffsec = (uint32_t)difftime(now, first_time);
 	//printf_safe("now = %d, first_time = %d, sec = %d ,winInitDone = %d ,first_CardInfo = %d\n", now, first_time, sec, winInitDone, first_CardInfo);
-    if (diffsec > 25)
+    if (diffsec > 60)
     {
         bitclr(winInitDone, 0);
         first_CardInfo = 0;

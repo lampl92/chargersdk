@@ -923,6 +923,9 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\factorycfg.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_order.h">

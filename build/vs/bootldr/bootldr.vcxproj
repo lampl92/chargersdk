@@ -80,6 +80,7 @@
     <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
     <ClCompile Include="..\..\..\src\app\cfg_sys.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
+    <ClCompile Include="..\..\..\src\app\factorycfg.c" />
     <ClCompile Include="..\..\..\src\app\stm32f4xx_it.c" />
     <ClCompile Include="..\..\..\src\app\stringName.c" />
     <ClCompile Include="..\..\..\src\app\taskOTA.c" />

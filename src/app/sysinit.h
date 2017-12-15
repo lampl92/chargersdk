@@ -9,5 +9,6 @@
 extern Sysconf_t   xSysconf;//存放系统初始化参数
 
 void sys_Init(void);
+void create_cfg_file(const char *path, const char *context);
 
 #endif
