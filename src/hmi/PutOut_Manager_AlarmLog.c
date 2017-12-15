@@ -180,7 +180,8 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     int i = 0,j = 0;
 	struct tm *ts;
 	char buf[80] = "\0";
-
+    _MANAGERDate ts_start, ts_end;
+    
 	if(0 == log_type)   //故障记录
     {
         jsParent = GetCfgObj(pathEVSELog, &errcode);
@@ -260,13 +261,11 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                     }
                 }
             }
-
-            i++;
-
+            
             //序号 记录时间  枪号  故障等级  故障状态  故障信息
             LISTVIEW_AddRow(hItem, NULL);
 
-            sprintf((char *)buf, "%d", i);
+            sprintf((char *)buf, "%d", i+1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
 //            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - i - 1);
@@ -318,6 +317,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
             jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
             LISTVIEW_SetItemText(hItem, 5, i, jsItem->valuestring);
+            i++;
         }
         if (i == 0)
         {
@@ -406,7 +406,6 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                 }
             }
 
-            i++;
             /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
             LISTVIEW_AddRow(hItem, NULL);
             sprintf((char *)buf, "%d", i);
@@ -504,7 +503,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "扫码支付");
             }
-
+            i++;
         }
         if (i == 0)
         {
@@ -572,7 +571,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //        LISTWHEEL_SetLineHeight(hItem,30);
             //设置选中的条目的文本颜色
             LISTWHEEL_SetTextColor(hItem,LISTWHEEL_CI_SEL,GUI_RED);
-            LISTWHEEL_SetVelocity(hItem, 100);
         }
         //设置起始年listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_0);
@@ -903,6 +901,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
+              LISTWHEEL_SetVelocity(hItem, 1000);
             // USER END
             break;
           case WM_NOTIFICATION_SEL_CHANGED:

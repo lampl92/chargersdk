@@ -94,7 +94,7 @@ ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsObj;
     ErrorCode_t errcode;
-    
+    pOrder->tStopTime = time(NULL);//添加临时订单时或无停止时间，增加添加临时订单时间作为临时停止时间
     jsObj = CreateNewOrderCfg(pOrder, pProto);
     errcode = SetCfgObj(path, jsObj);
     
