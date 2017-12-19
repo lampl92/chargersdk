@@ -9,20 +9,22 @@ void myputc(uint8_t ch)
     CLI_USARTx_BASE->DR = ch;
 }
 #if 1
+extern Queue *pTermRecvQue;
 void retarget_init(void)
 {
+    pTermRecvQue = QueueCreate(TERM_QUEUE_SIZE);
+    
     if(xprintfMutex == NULL)
     {
         //
     }
     xdev_out(myputc);
 }
-
 int printf_safe(const char *format, ...)
 {
     char  buf_str[200 + 1];
     va_list   v_args;
-
+    int i;
 
     va_start(v_args, format);
     (void)vsnprintf((char *)&buf_str[0],
@@ -35,6 +37,12 @@ int printf_safe(const char *format, ...)
     {
 #endif
         xprintf("%s", buf_str);
+        //strcpy(strTermCtx, buf_str);
+        for (i = 0; i < strlen(buf_str); i++)
+        {
+            pTermRecvQue->EnElem(pTermRecvQue, buf_str[i]);
+        }
+        buf_str[i] = '\0';
 #if USE_FreeRTOS
         xSemaphoreGive(xprintfMutex);
     }

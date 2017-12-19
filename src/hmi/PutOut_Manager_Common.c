@@ -133,7 +133,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         hWinPage = CreateManagerSysInfo(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
-
+        
+        if (managerLevel == 0)
+        {
+            hWinPage = CreateManagerTerminate(pMsg->hWin);
+            MULTIPAGE_AddEmptyPage(hItem, hWinPage, "终端");
+        }
+        
 //        hWinPage = CreateManagerExit(pMsg->hWin);
 //        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "退出管理员");
 
@@ -160,6 +166,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);
+                if (managerLevel == 0)
+                {
+                    WM_SendMessageNoPara(_hWinManagerTerminate, MSG_DELETEMANAGERWIN);
+                    managerLevel = 1;
+                }
 //                WM_SendMessageNoPara(_hWinManagerCommon, MSG_DELERRWIN);
 //                
 //                GUI_EndDialog(_hWinManagerCommon, 0);

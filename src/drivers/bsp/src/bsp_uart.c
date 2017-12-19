@@ -23,6 +23,7 @@ static Queue *pCliRecvQue = NULL;
 static Queue *pRfidRecvQue = NULL;
 static Queue *pGprsRecvQue = NULL;
 static Queue *pWifiRecvQue = NULL;
+Queue *pTermRecvQue = NULL;
 
 static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
@@ -96,6 +97,9 @@ uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t 
         break;
     case UART_PORT_WIFI:
         pRecvQue = pWifiRecvQue;
+        break;
+    case UART_PORT_TERM:
+        pRecvQue = pTermRecvQue;
         break;
     default:
         break;

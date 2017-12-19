@@ -876,7 +876,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /* @todo (yuye#1#): 确认电压范围 */
     /**  (rgw#1#): 实现代码 */
 
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
 //    if (Get_Power_Status == 1)

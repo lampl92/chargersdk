@@ -81,6 +81,7 @@ typedef enum _OrderState
     STATE_ORDER_WAITSTART,
     STATE_ORDER_MAKE,
     STATE_ORDER_UPDATE,
+    STATE_ORDER_WAITSTOP,
     STATE_ORDER_FINISH
 }OrderState_t;
 

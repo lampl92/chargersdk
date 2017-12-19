@@ -24,6 +24,8 @@ KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
 uint8_t *passwd = "888888";
+uint8_t *passwdDebug = "123456";
+uint8_t managerLevel = 1;
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static uint32_t statelog = 0;
@@ -1037,14 +1039,19 @@ static uint8_t Value_Check()
     switch(ManagerSetOptions)
     {
     case LOGIN_PASSWD:
-        if(strlen(result_input) == 0)
+        if (strlen(result_input) == 0)
         {
             BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
             BUTTON_SetText(_aahButtonOk, "确定");
             return VALUE_ERROR;
         }
-        else if(strcmp(result_input,passwd) == 0)
+        else if (strcmp(result_input, passwd) == 0)
         {
+            return VALUE_OK_SAV;
+        }
+        else if (strcmp(result_input, passwdDebug) == 0)
+        {
+            managerLevel = 0;
             return VALUE_OK_SAV;
         }
         else
@@ -1127,6 +1134,11 @@ static uint8_t Value_Check()
             pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
             memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
             strcpy(pCon->info.strQRCode, result_input);
+            
+            GUI_QR_Delete(qr_hmem);
+            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
+            GUI_QR_GetInfo(qr_hmem, &QR_info);
+
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:

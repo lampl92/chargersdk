@@ -188,6 +188,7 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />

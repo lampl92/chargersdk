@@ -94,31 +94,30 @@ void vTaskEVSEData(void *pvParameters)
                 pCON->order.statOrder = STATE_ORDER_UPDATE;
                 break;
             case STATE_ORDER_UPDATE:
-                //4. 更新充电数据
-                /** 获取离开Update条件，进入Finish状态 */
+                /** 等待充电停止，进入Finish状态 */
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                if((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
+                if ((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
                 {
                     xTimerStop(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
                     pCON->order.statOrder = STATE_ORDER_FINISH;
                 }
-                else
+                //4. 更新充电数据
+                makeOrder(pCON);
+                uxBitsTimer = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
+                                                  defEventBitOrderTmpTimer, 
+                                                  pdTRUE, pdTRUE, 0);
+                if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
                 {
-                    makeOrder(pCON);
-                    uxBitsTimer = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
-                                                        defEventBitOrderTmpTimer, 
-                                                        pdTRUE, pdTRUE, 0);
-                    if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
-                    {
-                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
-                    }
+                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 }
+                
                 /****金额判断****/
                 if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
                 {
                     if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                        pCON->order.statOrder = STATE_ORDER_WAITSTOP;
                         break;
                     }
                 }
@@ -130,6 +129,7 @@ void vTaskEVSEData(void *pvParameters)
                         if (time(NULL) - pCON->order.tStartTime >= pCON->order.ulLimitTime)//达到或超过设定时间
                         {
                             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
+                            pCON->order.statOrder = STATE_ORDER_WAITSTOP;
                             break;
                         }
                     }
@@ -137,7 +137,17 @@ void vTaskEVSEData(void *pvParameters)
                 else
                 {
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
+                    pCON->order.statOrder = STATE_ORDER_WAITSTOP;
                     break;
+                }
+                break;
+            case STATE_ORDER_WAITSTOP:
+                /** 等待充电停止，进入Finish状态 */
+                uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                if ((uxBitsCharge & defEventBitCONStartOK) != defEventBitCONStartOK)
+                {
+                    xTimerStop(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
+                    pCON->order.statOrder = STATE_ORDER_FINISH;
                 }
                 break;
             case STATE_ORDER_FINISH:
@@ -444,13 +454,13 @@ void vTaskEVSEData(void *pvParameters)
                         AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_B_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
+                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_C_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
+                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_N_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
+                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_A_Temp_Cri: 
                         AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");

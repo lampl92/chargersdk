@@ -94,7 +94,7 @@ void MainTask(void)
 
     if (calebrate_done == 0)
     {
-        GUI_CURSOR_Show();
+        GUI_CURSOR_Hide();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }

@@ -17,7 +17,8 @@ typedef enum
     UART_PORT_CLI,
     UART_PORT_GPRS,
     UART_PORT_RFID,
-    UART_PORT_WIFI
+    UART_PORT_WIFI,
+    UART_PORT_TERM
 } UART_Portdef;
 
 #ifndef EVSE_DEBUG
@@ -44,6 +45,8 @@ typedef enum
 #define WIFI_USARTx_BAUDRATE                        115200
 #define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
 #define WIFI_QUEUE_SIZE                             100
+
+#define TERM_QUEUE_SIZE                             1500
 
 #endif
 #ifdef EVSE_DEBUG

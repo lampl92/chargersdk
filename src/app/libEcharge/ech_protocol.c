@@ -2764,11 +2764,13 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
         else
         {
             printf_safe("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+#if DEBUG_PROTO_LOG
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
                 printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
             }
             printf_safe("\n");
+#endif
             lRecvElem.UID = 0;
             lRecvElem.timestamp = time(NULL);
             lRecvElem.len = pCMD->ulRecvdOptLen;
