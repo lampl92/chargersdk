@@ -32,7 +32,7 @@
 WM_HWIN _hWinCharging;
 uint8_t _secDown[10];
 static WM_HTIMER _timerRTC, _timerCortoon,_timerText;
-int cartoonflag = 0;//¶¯»­½ÓÌæÏÔÊ¾±êÖ¾
+int cartoonflag = 0;//åŠ¨ç”»æ¥æ›¿æ˜¾ç¤ºæ ‡å¿—
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "ChargingPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -65,7 +65,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
 
     WM_HWIN hWin = pMsg->hWin;
 
-    pCON = CONGetHandle(0);///** @todo (zshare#1#): Ë«Ç¹IDÑ¡Ôñ */
+    pCON = CONGetHandle(0);///** @todo (zshare#1#): åŒæªIDé€‰æ‹© */
     now = time(NULL);
 
     diffsec = (uint32_t)difftime(now, pCON->order.tStartTime);
@@ -83,19 +83,19 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_BLUE, temp_buf);
     
 //    pCON->status.GetChargingCurrent(pCON);
-    sprintf(temp_buf, "%2.1f", pCON->status.dChargingCurrent);//³äµçµçÁ÷   
+    sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//å……ç”µç”µæµ   
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_5), temp_buf);
 //    pCON->status.GetChargingPower(pCON);
-    sprintf(temp_buf, "%3.1f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_6), temp_buf);//³äµç¹¦ÂÊ
-    sprintf(temp_buf, "%3.1f", pCON->order.dTotalPower);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_7), temp_buf);//³äÈëµçÁ¿
-    sprintf(temp_buf, "%3.1f", pCON->order.dTotalServFee);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_8), temp_buf);//µ±Ç°·şÎñ·Ñ
-    sprintf(temp_buf, "%3.1f", pCON->order.dTotalPowerFee);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_9), temp_buf);//µ±Ç°µç·Ñ
-    sprintf(temp_buf, "%3.1f", pCON->order.dTotalFee);
-    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_10), temp_buf);//Ïû·Ñ×Ü¶î
+    sprintf(temp_buf, "%.2f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000);
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_6), temp_buf);//å……ç”µåŠŸç‡
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_7), temp_buf);//å……å…¥ç”µé‡
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_8), temp_buf);//å½“å‰æœåŠ¡è´¹
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_9), temp_buf);//å½“å‰ç”µè´¹
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
+    TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_10), temp_buf);//æ¶ˆè´¹æ€»é¢
 }
 
 static void Data_Process(WM_MESSAGE *pMsg)
@@ -112,7 +112,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
         0);
     if ((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
     {
-        /**< Ìøµ½³äµçÍê³É */
+        /**< è·³åˆ°å……ç”µå®Œæˆ */
         WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPCHARGEDONE);
     }
 }
@@ -191,7 +191,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerRTC)
         {
-            /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
+            /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
             Caculate_RTC_Show(pMsg, ID_TEXT_0, ID_TEXT_1);
             SignalIntensity = getSignalIntensity();              
             if ((SignalFlag == 4) || (SignalFlag > 4))
@@ -227,7 +227,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 PreSignalIntensity = SignalIntensity;
                 SignalFlag = 0;
             }
-            /**< ÖØÆô¶¨Ê±Æ÷ */
+            /**< é‡å¯å®šæ—¶å™¨ */
             SignalFlag++;
             WM_RestartTimer(pMsg->Data.v, 300);
         }
@@ -267,21 +267,21 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         if (pMsg->Data.v == _timerText)
         {
-                /// TODO (zshare#1#): ÏÂÃæµÄif²»Æğ×÷ÓÃ.\µ«ÊÇifÀïÇ¶Ì×µÄifÆğ×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æğ×÷ÓÃµÄif
+                /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.\ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
             if ((bittest(winInitDone, 0))&&(_hWinCharging == cur_win))
             {
-                /**< Êı¾İ´¦Àí */
+                /**< æ•°æ®å¤„ç† */
                 Data_Process(pMsg);
-                /**< ĞÅºÅÊı¾İ´¦Àí */
+                /**< ä¿¡å·æ•°æ®å¤„ç† */
                 Signal_Show();
-                /**< µÆ¹â¿ØÖÆ */
+                /**< ç¯å…‰æ§åˆ¶ */
                 Led_Show();
-                /**< Èç¹û½çÃæ·¢ÉúÁËÇĞ»» */
+                /**< å¦‚æœç•Œé¢å‘ç”Ÿäº†åˆ‡æ¢ */
                 if (_hWinCharging == cur_win)
                 {
-                    /**< ¹ÊÕÏ·ÖÎö */
+                    /**< æ•…éšœåˆ†æ */
                     Err_Analy(pMsg->hWin);
-                    /**< ÌØÊâ´¥¿Øµã·ÖÎö */
+                    /**< ç‰¹æ®Šè§¦æ§ç‚¹åˆ†æ */
                     CaliDone_Analy(pMsg->hWin);
                 }
                  Data_Flush(pMsg);
@@ -291,11 +291,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_CREATERRWIN:
-        /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ĞÂ¸æ¾¯ */
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
         err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ı¹ÊÕÏ½çÃæ */
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
         if (bittest(winCreateFlag, 0))
         {
             bitclr(winCreateFlag, 0);

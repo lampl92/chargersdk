@@ -291,7 +291,7 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
-                    remotestat = REMOTE_NO;
+                    remotestat = REMOTE_RECONNECT;
                 }
                 uxBits = xEventGroupGetBits(xHandleEventTCP);
                 if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)

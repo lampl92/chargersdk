@@ -62,15 +62,21 @@ static void modem_UART_putQue(DevModem_t *pModem)
 #endif
 	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
 	    {
+#if DEBUG_PROTO_LOG
 			printf_safe("Send: ");
+#endif
 	    }
         while (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
         {
             pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
+#if DEBUG_PROTO_LOG
             printf_safe("%02X ", ch);
+#endif
             gprs_uart_putc(ch);
         }
+#if DEBUG_PROTO_LOG
 	    printf_safe("\n");
+#endif
 #if USE_FreeRTOS
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }
@@ -1504,7 +1510,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             else
             {
-                pModem->state = DS_MODEM_ERR;
+                pModem->state = DS_MODEM_DEACT_PDP;
             }
             break;
         case DS_MODEM_DEACT_PDP:
@@ -1637,12 +1643,14 @@ void Modem_Poll(DevModem_t *pModem)
                     recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                     if (recv_len > 0)
                     {
+#if DEBUG_PROTO_LOG
                         printf_safe("\n\e[34;43mTCP Recv:\e[0m ");
                         for (i = 0; i < recv_len; i++)
                         {
                             printf_safe("%02X ", tcp_client_recvbuf[i]);
                         }
                         printf_safe("\n");
+#endif
                         if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
                         {
                             printf_safe("\e[31;47mServer CLOSED\n\e[0m");
@@ -1682,14 +1690,17 @@ void Modem_Poll(DevModem_t *pModem)
                 recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
                 if (recv_len > 0)
                 {
+#if DEBUG_PROTO_LOG
                     printf_safe("\nTCP Recv: ");
                     for (i = 0; i < recv_len; i++)
                     {
                         printf_safe("%02X ", tcp_client_recvbuf[i]);
                     }
                     printf_safe("\n");
+#endif
                     if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
                     {
+                        printf_safe("\e[31;47mServer CLOSED\n\e[0m");
                         pModem->state = DS_MODEM_ERR;
                     }
                     else

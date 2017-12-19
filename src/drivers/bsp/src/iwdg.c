@@ -1,21 +1,21 @@
 #include "stm32f4xx.h"
 
-IWDG_HandleTypeDef IWDG_Handler; //¶ÀÁ¢¿´ÃÅ¹·¾ä±ú
+IWDG_HandleTypeDef IWDG_Handler; //ç‹¬ç«‹çœ‹é—¨ç‹—å¥æŸ„
 
-//³õÊ¼»¯¶ÀÁ¢¿´ÃÅ¹·
-//prer:·ÖÆµÊı:IWDG_PRESCALER_4~IWDG_PRESCALER_256
-//rlr:×Ô¶¯ÖØ×°ÔØÖµ,0~0XFFF.
-//Ê±¼ä¼ÆËã(´ó¸Å):Tout=((4*2^prer)*rlr)/32 (ms).
+//åˆå§‹åŒ–ç‹¬ç«‹çœ‹é—¨ç‹—
+//prer:åˆ†é¢‘æ•°:IWDG_PRESCALER_4~IWDG_PRESCALER_256
+//rlr:è‡ªåŠ¨é‡è£…è½½å€¼,0~0XFFF.
+//æ—¶é—´è®¡ç®—(å¤§æ¦‚):Tout=((4*2^prer)*rlr)/32 (ms).
 void IWDG_Init(uint8_t prer,uint16_t rlr)
 {
     IWDG_Handler.Instance=IWDG;
-    IWDG_Handler.Init.Prescaler=prer;	//ÉèÖÃIWDG·ÖÆµÏµÊı
-    IWDG_Handler.Init.Reload=rlr;		//ÖØ×°ÔØÖµ
-    HAL_IWDG_Init(&IWDG_Handler);		//³õÊ¼»¯IWDG
+    IWDG_Handler.Init.Prescaler=prer;	//è®¾ç½®IWDGåˆ†é¢‘ç³»æ•°
+    IWDG_Handler.Init.Reload=rlr;		//é‡è£…è½½å€¼
+    HAL_IWDG_Init(&IWDG_Handler);		//åˆå§‹åŒ–IWDG
 }
 
-//Î¹¶ÀÁ¢¿´ÃÅ¹·
+//å–‚ç‹¬ç«‹çœ‹é—¨ç‹—
 void IWDG_Feed(void)
 {
-    HAL_IWDG_Refresh(&IWDG_Handler); 	//Î¹¹·
+    HAL_IWDG_Refresh(&IWDG_Handler); 	//å–‚ç‹—
 }

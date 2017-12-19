@@ -376,8 +376,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             {
                 /**在这里判断交易号是否相等 */
                 HexToStr(&pbuff[4], strOrderSN_tmp, 8);
-                if(1)
-//                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+//                if(1)
+                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
                 {
                     *pctrl = pbuff[13];
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);

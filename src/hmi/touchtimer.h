@@ -80,7 +80,9 @@ void _cbHomeDialog(WM_MESSAGE *pMsg);
 extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
-
+extern uint8_t managerLevel;
+extern GUI_HMEM    qr_hmem;
+extern GUI_QR_INFO QR_info;
 extern WM_HWIN _hWinManagerCommon;
 extern WM_HWIN _hWinManagerInfoAnalog;
 extern WM_HWIN _hWinManagerInfoStatus;
@@ -88,6 +90,7 @@ extern WM_HWIN _hWinManagerLogDate;
 extern WM_HWIN _hWinManagerConSet;
 extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
+extern WM_HWIN _hWinManagerTerminate;
 
 GUI_QR_INFO QR_info;
 
@@ -133,6 +136,7 @@ WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin);
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin);
+WM_HWIN CreateManagerTerminate(WM_HWIN srcHwin);
 WM_HWIN CreateManagerCommon(void);
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);

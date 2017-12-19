@@ -124,8 +124,8 @@ typedef struct
     int tm_mon;
     int tm_mday;
 }_MANAGERDate;
-static DateStruct sel_start_date = {"2004","01","01"};
-static DateStruct sel_end_date = {"2004","01","01"};
+static DateStruct sel_start_date = {"2017","01","01"};
+static DateStruct sel_end_date = {"2018","01","01"};
 static uint8_t list_start_index[3];
 static uint8_t list_end_index[3];
 
@@ -581,6 +581,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apYear+i));
         }
+        LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetPos(hItem,0);
 
         //设置起始月listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_1);
@@ -589,6 +591,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apMonth+i));
         }
+        LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetPos(hItem,0);
 
         //设置起始日listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_2);
@@ -597,6 +601,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apDay+i));
         }
+        LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetPos(hItem,0);
 
         //设置终止年listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_3);
@@ -605,6 +611,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apYear+i));
         }
+        LISTWHEEL_SetSel(hItem,1);
+        LISTWHEEL_SetPos(hItem,1);
 
         //设置终止月listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_4);
@@ -613,6 +621,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apMonth+i));
         }
+        LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetPos(hItem,0);
 
         //设置终止日listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_5);
@@ -621,6 +631,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apDay+i));
         }
+        LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetPos(hItem,0);
+                
         //
         // 初始列表控件
         //
@@ -901,7 +914,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
           case WM_NOTIFICATION_RELEASED:
             // USER START (Optionally insert code for reacting on notification message)
-              LISTWHEEL_SetVelocity(hItem, 1000);
+//              LISTWHEEL_SetVelocity(hItem, 1000);
             // USER END
             break;
           case WM_NOTIFICATION_SEL_CHANGED:

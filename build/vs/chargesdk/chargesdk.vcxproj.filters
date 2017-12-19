@@ -1530,6 +1530,9 @@
     <ClCompile Include="..\..\..\src\app\factorycfg.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
