@@ -1465,12 +1465,7 @@ void Modem_Poll(DevModem_t *pModem)
     uint8_t *pucFileBuffer;
     uint8_t *pucQueBuffer;
     uint32_t ulPos = 0;
-    
-    uint32_t ulFTPReGetCnt = 0;
-    uint32_t ulFTPReOpenCnt = 0;
-    
-    
-    uint32_t ulRecvFileSize = 0;
+        
     while(1)
     {
         switch (pModem->state)
@@ -1505,6 +1500,7 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 else
                 {
+                    xTimerStart(xHandleTimerRFID, 100); 
                     pModem->state = DS_MODEM_TCP_OPEN;
                 }
             }
@@ -1735,10 +1731,10 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_FTP_OPEN:
             NVIC_SetPriority(GPRS_IRQn, 1);
-            ulFTPReOpenCnt++;
-            if (ulFTPReOpenCnt >= 5)
+                pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt++;
+            if (    pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt >= 5)
             {
-                ulFTPReOpenCnt = 0;
+                    pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }
@@ -1760,7 +1756,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_FTP_GET:
             ulTaskDelay_ms = 100;
-            ulFTPReGetCnt++;//FTPGet次数
+            pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;//FTPGet次数
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
             sprintf(filepath, "%s%s", pathSystemDir, pechProto->info.ftp.strNewFileName);
@@ -1776,21 +1772,21 @@ void Modem_Poll(DevModem_t *pModem)
             while (1)
             {
                 recv_len = modem_read(pModem, pucQueBuffer, QUE_BUFSIZE);
-                ulRecvFileSize += recv_len;
+                pechProto->info.ftp.ftp_proc.ulRecvFileSize += recv_len;
                 if (strstr(pucQueBuffer, "+QFTPGET:") != NULL)
                 {
                     for (i = 0; i < recv_len; i++)
                     {
                         printf_safe("%c", pucQueBuffer[i]);
                     }
-                    ulRecvFileSize -= recv_len;//减去最后模块返回命令的长度
+                    pechProto->info.ftp.ftp_proc.ulRecvFileSize -= recv_len;//减去最后模块返回命令的长度
                     taskENTER_CRITICAL();
-                    bw = yaffs_write(fd, pucFileBuffer, ulRecvFileSize);
+                    bw = yaffs_write(fd, pucFileBuffer, pechProto->info.ftp.ftp_proc.ulRecvFileSize);
                     yaffs_close(fd);
                     taskEXIT_CRITICAL();
                     free(pucFileBuffer);
                     free(pucQueBuffer);
-                    ulRecvFileSize = 0;
+                    pechProto->info.ftp.ftp_proc.ulRecvFileSize = 0;
                     ulPos = 0;
                     pModem->state = DS_MODEM_FTP_CHECK;
                     ulTaskDelay_ms = 1000;
@@ -1801,13 +1797,13 @@ void Modem_Poll(DevModem_t *pModem)
                     if (recv_len > 0)
                     {
                         printf_safe("recv = %d\n", recv_len);                
-                        printf_safe("total= %d\n", ulRecvFileSize);
+                        printf_safe("total= %d\n", pechProto->info.ftp.ftp_proc.ulRecvFileSize);
 //                        for (i = 0; i < recv_len; i++)
 //                        {
 //                            printf_safe("%02X ", pucQueBuffer[i]);
 //                        }
                         taskENTER_CRITICAL();
-                        pucFileBuffer = realloc(pucFileBuffer, ulRecvFileSize);
+                        pucFileBuffer = realloc(pucFileBuffer, pechProto->info.ftp.ftp_proc.ulRecvFileSize);
                         memcpy(pucFileBuffer + ulPos, pucQueBuffer, recv_len);
                         taskEXIT_CRITICAL();
                         ulPos += recv_len;
@@ -1852,9 +1848,10 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_REGET:
-            if (ulFTPReGetCnt >= 5)
+            if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt >= 5)
             {
-                ulFTPReGetCnt = 0;
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
+                pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }

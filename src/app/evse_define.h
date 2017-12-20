@@ -113,6 +113,8 @@
 #define defEventBitHMI_ChargeReqClickOK     BIT_4
 #define defEventBitHMI_ChargeReqLockLcdOK   BIT_5
 #define defEventBitHMI_RFIDOLD              BIT_6
+#define defEventBitHMI_UP_FAILD             BIT_7
+    
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
