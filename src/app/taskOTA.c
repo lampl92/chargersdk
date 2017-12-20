@@ -10,7 +10,7 @@
 #include  "interface.h"
 void vTaskOTA(void *pvParameters)
 {
-    //IWDG_Init(IWDG_PRESCALER_64, 500);  
+    IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s 
     while(1)
     {
 //        CON_t *pCON;

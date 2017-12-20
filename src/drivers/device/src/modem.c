@@ -1849,6 +1849,7 @@ void Modem_Poll(DevModem_t *pModem)
         case DS_MODEM_FTP_REGET:
             if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt >= 5)
             {
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
                 pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;

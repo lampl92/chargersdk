@@ -202,7 +202,7 @@ void vTaskInit(void *pvParameters)
                     }
                 }
             }
-            else if (xSysconf.xUpFlag.chargesdk_bin == 0 || xSysconf.xUpFlag.chargesdk_bin == 2)
+            else if (xSysconf.xUpFlag.chargesdk_bin != 1)
             {
                 printf_safe("direct app_start!\n");
                 Jump_To_APP();

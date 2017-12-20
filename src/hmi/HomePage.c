@@ -107,6 +107,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     uint8_t strServiceFee[10];
     uint8_t pDest[256];
     uint8_t buff[50];
+    EventBits_t uxbits;
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
@@ -187,7 +188,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
         {
-            if (pechProto->info.ftp.ucDownloadStart == 1)
+            if (pModem->state == DS_MODEM_FTP_GET)
             {
                 if (((pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024))  < progbar_value)
                     &&(textLogDone == 0))
@@ -204,7 +205,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     TEXT_GetText(text_up, pDest, 256);
                     strcat(pDest, buff);
                     TEXT_SetText(text_up, pDest);
-                    GUI_Exec();
                     textLogDone = 0;
                 }
        /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
@@ -228,15 +228,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
    //        }
            //pechProto->info.ftp.ftp_proc.ulRecvFileSize = filesize  768 = 100 % filesize * 100 / 768
                 progbar_value = pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024);
-                if (progbar_value >= 100)
-                {
-                    GUI_EndDialog(progbar_up, 0);
-                    GUI_EndDialog(text_up, 0);                    
-                }
                 PROGBAR_SetValue(progbar_up, progbar_value);
             }
             
-            if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt > 4)
+            uxbits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_UP_FAILD,pdTRUE,pdTRUE,0);
+            if((uxbits & defEventBitHMI_UP_FAILD) == defEventBitHMI_UP_FAILD)
             {
                 GUI_EndDialog(progbar_up, 0);
                 GUI_EndDialog(text_up, 0);
