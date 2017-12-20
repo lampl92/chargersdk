@@ -3,6 +3,12 @@
 
 #include "stm32f4xx.h"
 #include "errorcode.h"
+typedef struct _ftp_proc
+{
+    uint32_t ulFTPReGetCnt;
+    uint32_t ulFTPReOpenCnt;
+    uint32_t ulRecvFileSize;
+}ftp_proc_t;
 
 typedef struct
 {
@@ -16,7 +22,7 @@ typedef struct
     uint8_t ucDownloadStatus;
     ErrorCode_t(*GetFtpCfg)(void *pvFtp, void *pvCfgObj);
     ErrorCode_t(*SetFtpCfg)(uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
-    
+    ftp_proc_t ftp_proc;
 }EchFtpCfg_t;
 
 void EchFtpInit(EchFtpCfg_t *ftp);

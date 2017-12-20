@@ -17,9 +17,25 @@
 
 #define ID_TimerTime    0
 
+#define PROGBAR_X   200
+#define PROGBAR_Y   50
+#define PROGBAR_XSIZE   400
+#define PROGBAR_YSIZE   100
+#define TEXT_X      PROGBAR_X      
+#define TEXT_Y      (PROGBAR_Y+PROGBAR_YSIZE)
+#define TEXT_XSIZE  400
+#define TEXT_YSIZE  400
+
 WM_HWIN _hWinHome;//home界面句柄
 
 static WM_HWIN hwinQR;//二维码句柄
+static PROGBAR_Handle progbar_up;
+static int progbar_value = 0;
+static uint8_t textLogDone = 0;
+PROGBAR_SKINFLEX_PROPS progbar_props;
+uint32_t props_r, props_g, props_b;
+
+static TEXT_Handle text_up;
 
 int SignalFlag = 0;//信号图标刷新标志
 
@@ -89,6 +105,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     time_t  now;
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
+    uint8_t pDest[256];
+    uint8_t buff[50];
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
@@ -129,13 +147,101 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         PreSignalIntensity = SignalIntensity;
         
         hwinQR = WM_CreateWindowAsChild((800 - QR_info.Size)/2 - 10, (480 - QR_info.Size)/2, QR_info.Size, QR_info.Size, pMsg->hWin, WM_CF_SHOW | WM_CF_HASTRANS, _cbWindowQR, 0);            
+//        pechProto->info.ftp.ucDownloadStart ? 0,1=shengji
+//        text_up = TEXT_CreateEx(TEXT_X, TEXT_Y, TEXT_XSIZE, TEXT_YSIZE, _hWinHome, WM_CF_SHOW, 0, 0, "");
+//        TEXT_SetFont(text_up, &SIF16_Font);
+//        TEXT_SetTextColor(text_up, GUI_BLACK);            
+//        TEXT_SetText(text_up, "测试显示");
+        if (pechProto->info.ftp.ucDownloadStart == 1)
+        {
+            progbar_up = PROGBAR_CreateEx(PROGBAR_X, PROGBAR_Y, PROGBAR_XSIZE, PROGBAR_YSIZE, _hWinHome, WM_CF_SHOW, PROGBAR_CF_HORIZONTAL, 0);
+            text_up = TEXT_CreateEx(TEXT_X, TEXT_Y, TEXT_XSIZE, TEXT_YSIZE, _hWinHome, WM_CF_SHOW, 0, 0, "");
+            
+            PROGBAR_SetMinMax(progbar_up, 0, 100);
+            PROGBAR_SetFont(progbar_up, &SIF24_Font);
+
+            progbar_props.aColorUpperL[0] = GUI_BLUE;
+            progbar_props.aColorUpperL[1] = GUI_BLUE;
+            progbar_props.aColorLowerL[0] = GUI_BLUE;
+            progbar_props.aColorLowerL[1] = GUI_BLUE;
+            progbar_props.aColorUpperR[0] = GUI_GRAY;
+            progbar_props.aColorUpperR[1] = GUI_GRAY;
+            progbar_props.aColorLowerR[0] = GUI_GRAY;
+            progbar_props.aColorLowerR[1] = GUI_GRAY;
+            progbar_props.ColorFrame = GUI_BLACK;
+        
+            PROGBAR_SetSkinFlexProps(&progbar_props, 0);
+            //        PROGBAR_SetSkin(progbar_up, PROGBAR_SKIN_FLEX);
+            //        PROGBAR_SetDefaultSkin(PROGBAR_SKIN_FLEX);
+            //        PROGBAR_SetText(progbar_up, "(1/5)");
+        
+            TEXT_SetFont(text_up, &SIF16_Font);
+            TEXT_SetTextColor(text_up, GUI_BLACK);            
+            TEXT_SetText(text_up, "打开FTP...");
+            TEXT_SetBkColor(text_up, GUI_GRAY);
+        }
+        
         break;
     case WM_PAINT:
-     /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
         break;
     case WM_TIMER:
         if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
         {
+            if (pechProto->info.ftp.ucDownloadStart == 1)
+            {
+                if (((pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024))  < progbar_value)
+                    &&(textLogDone == 0))
+                {
+                    textLogDone = 1;
+                }
+        
+                if (textLogDone == 1)
+                {
+                    memset(buff, '\0', sizeof(buff));
+            
+                    sprintf(buff, "\n下载失败!\n第(%d/5)次尝试下载文件...", pechProto->info.ftp.ftp_proc.ulFTPReGetCnt + 1);
+                    memset(pDest, '\0', sizeof(pDest));
+                    TEXT_GetText(text_up, pDest, 256);
+                    strcat(pDest, buff);
+                    TEXT_SetText(text_up, pDest);
+                    GUI_Exec();
+                    textLogDone = 0;
+                }
+       /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+   //        
+   //              5   xiazai
+   //             pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt 5  dakai ftp
+   //        if (pModem->status == DS_MODEM_FTP_OPEN)
+   //        {
+   //                        
+   //        }
+   //        if (pechProto->info.ftp.ftp_proc.ulRecvFileSize > 0)
+   //        {
+   //            pModem->state = DS_MODEM_FTP_OPEN //dakaizhong...
+   //                DS_MODEM_FTP_GET //xiazaizhong
+   //                DS_MODEM_FTP_REGET//jindutiao = 0// chongxinxiazai 
+   //                
+   //                memset(pDest,'\0',sizeof(pDest));
+   //            TEXT_GetText(text_up, pDest, 256);
+   //            strcat(pDest, "打开成功！\n正在下载...\n");
+   //            TEXT_SetText(text_up,pDest);
+   //        }
+           //pechProto->info.ftp.ftp_proc.ulRecvFileSize = filesize  768 = 100 % filesize * 100 / 768
+                progbar_value = pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024);
+                if (progbar_value >= 100)
+                {
+                    GUI_EndDialog(progbar_up, 0);
+                    GUI_EndDialog(text_up, 0);                    
+                }
+                PROGBAR_SetValue(progbar_up, progbar_value);
+            }
+            
+            if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt > 4)
+            {
+                GUI_EndDialog(progbar_up, 0);
+                GUI_EndDialog(text_up, 0);
+            }
+            
             Data_Process(pMsg);
             Signal_Show();
             Led_Show();
