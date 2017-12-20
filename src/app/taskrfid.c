@@ -29,6 +29,11 @@ void vTaskEVSERFID(void *pvParameters)
     uxBits = 0;
     res = 0;
     errcode = ERR_NO;
+    
+    if (pechProto->info.ftp.ucDownloadStart == 1)
+    {
+        xTimerStop(xHandleTimerRFID, 100); 
+    }
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID

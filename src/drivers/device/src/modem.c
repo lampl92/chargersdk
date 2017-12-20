@@ -1500,6 +1500,7 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 else
                 {
+                    xTimerStart(xHandleTimerRFID, 100); 
                     pModem->state = DS_MODEM_TCP_OPEN;
                 }
             }
