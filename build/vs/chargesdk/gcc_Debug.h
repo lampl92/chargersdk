@@ -733,6 +733,9 @@
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
 #endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
+#endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
 #endif
@@ -1063,6 +1066,9 @@
 #ifndef __cpp_constexpr
 #define __cpp_constexpr 201304
 #endif
+#ifndef USE_FreeRTOS
+#define USE_FreeRTOS 1
+#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1227,8 +1233,6 @@
 //../../../src/middlewares/STemWin/inc
 //../../../src/middlewares/STemWin/Config
 //../../../src/middlewares/STemWin/Demo
-//../../../src/middlewares/fatfs/src
-//../../../src/middlewares/fatfs/diskdrv
 //../../../src/middlewares/userlib/inc
 //../../../src/middlewares/cJSON
 //../../../src/middlewares/gdsl-1.8/src
@@ -1241,6 +1245,9 @@
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/middlewares/yaffs2
+//../../../src/middlewares/yaffs2/direct
+//../../../src/middlewares/yaffs2/direct/nanddrv
 // --- Include directories end --- //
 
 

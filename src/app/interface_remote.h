@@ -14,24 +14,24 @@
 typedef struct _Heartbeat
 {
     uint8_t ucEVSEID[defEVSEIDLength];
-    uint8_t ucCONID;                    //Ω”ø⁄ID 0~255
-    uint8_t ucChargeState;  //0x00   ±Ì æ≤ªø…”√£®Œ¥◊¢≤·£©
-                            //0x01   ±Ì æø’œ–
-                            //0x02   ±Ì æ±ª‘§‘º
-                            //0x03   ±Ì æ≥µ«π¡¥Ω”£®≤ª’˝≥££©
-                            //0x04   ±Ì æ«π≥µ¡¨Ω”’˝≥££¨Œ¥≥‰µÁ
-                            //0x05   ≥‰µÁ÷–
-                            //0x0f   π ’œ£®≤ªø…”√£©
+    uint8_t ucCONID;                    //Êé•Âè£ID 0~255
+    uint8_t ucChargeState;  //0x00   Ë°®Á§∫‰∏çÂèØÁî®ÔºàÊú™Ê≥®ÂÜåÔºâ
+                            //0x01   Ë°®Á§∫Á©∫Èó≤
+                            //0x02   Ë°®Á§∫Ë¢´È¢ÑÁ∫¶
+                            //0x03   Ë°®Á§∫ËΩ¶Êû™ÈìæÊé•Ôºà‰∏çÊ≠£Â∏∏Ôºâ
+                            //0x04   Ë°®Á§∫Êû™ËΩ¶ËøûÊé•Ê≠£Â∏∏ÔºåÊú™ÂÖÖÁîµ
+                            //0x05   ÂÖÖÁîµ‰∏≠
+                            //0x0f   ÊïÖÈöúÔºà‰∏çÂèØÁî®Ôºâ
     double dChargingVoltage;
     double dChargingCurrent;
-    double dTotalPower;     //“—≥‰µÁ¡ø
-    uint32_t ulTotalTime;      //“—≥‰ ±º‰(√Î)
+    double dTotalPower;     //Â∑≤ÂÖÖÁîµÈáè
+    uint32_t ulTotalTime;      //Â∑≤ÂÖÖÊó∂Èó¥(Áßí)
     double dTemp;
     double dTotalFee;
     uint8_t ucServiceFeeType;
-    double  dServiceFee;                //∑˛ŒÒ∑—
-    uint32_t ulRemainTime;      // £”‡≥‰µÁ ±º‰
-    uint8_t ucSOC;             //“—≥‰SOC 1%~100%
+    double  dServiceFee;                //ÊúçÂä°Ë¥π
+    uint32_t ulRemainTime;      //Ââ©‰ΩôÂÖÖÁîµÊó∂Èó¥
+    uint8_t ucSOC;             //Â∑≤ÂÖÖSOC 1%~100%
 }Heartbeat_t;
 
 
@@ -53,8 +53,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason);
 ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason);
 
-ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
-ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder);
+ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal);
 
 ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
 ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
@@ -76,5 +76,17 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal);
 
 ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto);
+
+ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal);
+ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ);
+
+ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal);
+ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
+
+ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
+ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal);
+
+ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ);
+ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal);
 
 #endif

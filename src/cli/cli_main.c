@@ -2,8 +2,6 @@
 #include "tinysh.h"
 #include "cli_app.h"
 #include "cli_rtos.h"
-#include "cli_fatfs.h"
-#include "cli_xml.h"
 #include "cli_main.h"
 #include "bsp_uart.h"
 #include "userlib_queue.h"
@@ -20,6 +18,7 @@ void cli_init(void)
     tinysh_set_prompt("\n[charger]$ ");
     /************系统信息****************/
     tinysh_add_command(&cli_hello_cmd);
+    tinysh_add_command(&cli_reboot_cmd);
     tinysh_add_command(&cli_systemdate_cmd);
     tinysh_add_command(&cli_tasklist_cmd);
 
@@ -28,8 +27,12 @@ void cli_init(void)
 //    tinysh_add_command(&cli_mkfs_cmd);
 //    tinysh_add_command(&cli_mount_cmd);
 //    tinysh_add_command(&cli_umount_cmd);
+//    tinysh_add_command(&cli_cat_cmd);
+    tinysh_add_command(&cli_ls_cmd);
+    tinysh_add_command(&cli_file_cmd);
     tinysh_add_command(&cli_cat_cmd);
-    tinysh_add_command(&cli_xmodem_cmd);
+    tinysh_add_command(&cli_rm_cmd);
+    tinysh_add_command(&cli_ymodem_cmd);
     
 
     /************系统测试****************/
@@ -37,7 +40,8 @@ void cli_init(void)
 //    tinysh_add_command(&cli_testsdram_cmd);
 //    tinysh_add_command(&cli_parseJson_cmd);
 //    tinysh_add_command(&cli_makeJson_cmd);
-    tinysh_add_command(&cli_aestest_cmd);
+//    tinysh_add_command(&cli_aestest_cmd);
+//    tinysh_add_command(&cli_yaffs2test_cmd);
 //    tinysh_add_command(&cli_crctest_cmd);
     /************电桩信息****************/
     tinysh_add_command(&cli_evseinfo_cmd);

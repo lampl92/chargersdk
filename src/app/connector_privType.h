@@ -70,17 +70,7 @@ typedef struct _CONInfo
     uint8_t strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
-    ErrorCode_t(*SetCONCfg)(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
-//    pCONSetCfg_ft SetCONType;
-//    pCONSetCfg_ft SetSocketType;
-//    pCONSetCfg_ft SetVolatageUpperLimits;
-//    pCONSetCfg_ft SetVolatageLowerLimits;
-//    pCONSetCfg_ft SetACTempUpperLimits;
-//    pCONSetCfg_ft SetACTempLowerLimits;
-//    pCONSetCfg_ft SetSocketTempUpperLimits;
-//    pCONSetCfg_ft SetSocketTempLowerLimits;
-//    pCONSetCfg_ft SetRatedCurrent;
-//    pCONSetCfg_ft SetRatedPower;
+    ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
 } CONInfo_t;
 
 typedef struct _CONStatus
@@ -147,9 +137,6 @@ typedef enum _CONState
     STATE_CON_PRECONTRACT_LOSEPLUG,
     STATE_CON_STARTCHARGE,
     STATE_CON_CHARGING,
-    STATE_CON_SuspendedEV,
-    STATE_CON_SuspendedEVSE,
-    STATE_CON_FINISHING,
     STATE_CON_STOPCHARGE,
     STATE_CON_RETURN,
     STATE_CON_ERROR

@@ -6,7 +6,7 @@ uint8_t acTaskStatusBuffer[500];
 void cli_tasklist_fnt(int argc, char **argv)
 {
     uint32_t FreeBytesRemaining = 0;
-    uint32_t memused;
+    double memused;
     double usedkb;
     uint8_t paddr[20];
     int i;
@@ -26,8 +26,8 @@ void cli_tasklist_fnt(int argc, char **argv)
         printf_safe("%c", acTaskStatusBuffer[i]);
     }
     FreeBytesRemaining = xPortGetFreeHeapSize();
-    memused = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) * 100 / configTOTAL_HEAP_SIZE;
-    sprintf((char *)paddr, "%d.%01d%%", memused / 10, memused % 10);
+    memused = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) * 100.0 / configTOTAL_HEAP_SIZE;
+    sprintf((char *)paddr, "%.2lf%%", memused);
     usedkb = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) / 1024;
     printf_safe("\nSDRAM 使用率: %s，%.2lf KB\n", paddr, usedkb);
 }

@@ -32,8 +32,8 @@ typedef struct
 								//b5:保留
 								//b4~b0:电容触摸屏按下的点数(0,表示未按下,1表示按下)
 /////////////////////触摸屏校准参数(电容屏不需要校准)//////////////////////
-	float xfac;
-	float yfac;
+	double xfac;
+	double yfac;
 	short xoff;
 	short yoff;
 //新增的参数,当触摸屏的左右上下完全颠倒时需要用到.

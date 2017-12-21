@@ -449,7 +449,6 @@ static void deleteCOM(void *pObj)
  * @return MT626COM_t* 返回MT626通讯实例指针
  *
  */
-/** @todo (rgw#1#): 传入通信接口 */
 MT626COM_t *MT626COMCreate(void)
 {
     int i;

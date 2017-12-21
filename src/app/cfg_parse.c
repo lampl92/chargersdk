@@ -7,8 +7,53 @@
 */
 #include "includes.h"
 #include "stringName.h"
+#include "factorycfg.h"
 #include "interface.h"
 #include "cJSON.h"
+#include "yaffsfs.h"
+#include "sysinit.h"
+
+static const char *select_ctx_from_path(char *path)
+{
+    if (strcmp(path, pathOrder) == 0)
+    {
+        return strOrderCfg;
+    }
+    if (strcmp(path, pathOrderTmp) == 0)
+    {
+        return strOrderCfg;
+    }
+    if (strcmp(path, pathEVSELog) == 0)
+    {
+        return strLogCfg;
+    }
+    if (strcmp(path, pathEVSECfg) == 0)
+    {
+        return strEVSECfg;
+    }
+    if (strcmp(path, pathSysCfg) == 0)
+    {
+        return strSysCfg;
+    }
+    if (strcmp(path, pathFTPCfg) == 0)
+    {
+        return strFtpCfg;
+    }
+    if (strcmp(path, pathProtoCfg) == 0)
+    {
+        return strProtoCfg;
+    }
+    if (strcmp(path, pathWhiteList) == 0)
+    {
+        return strWhiteListCfg;
+    }
+    if (strcmp(path, pathBlackList) == 0)
+    {
+        return strBlackListCfg;
+    }
+    return NULL;
+}
+
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -17,13 +62,12 @@
  * @return ErrorCode_t
  *
  */
-ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
+ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
     uint8_t *pbuff;
     uint32_t len;
-    UINT bw;
+    uint32_t bw;
     ErrorCode_t errcode;
 
     pbuff = NULL;
@@ -36,23 +80,25 @@ ErrorCode_t SetCfgObj(uint8_t *path, cJSON *jsCfgObj)
         errcode = ERR_SET_SERIALIZATION;
         goto exit;
     }
-    ThrowFSCode(res = f_open(&f, path, FA_CREATE_ALWAYS|FA_WRITE), path, "SetCfgObj()-open");
-    if(res != FR_OK)
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
     {
-        errcode = ERR_FILE_RW;
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-open");
+        errcode = ERR_FILE_NO;
         goto exit;
     }
-    taskENTER_CRITICAL();  //注释掉 ，解决可能锁死的问题
-    ThrowFSCode(res = f_write(&f, pbuff, len, &bw), path, "SetCfgObj()-write");
+    taskENTER_CRITICAL();
+    bw = yaffs_write(fd, pbuff, len);
     taskEXIT_CRITICAL();
     if(len != bw)
     {
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-write");
         errcode = ERR_FILE_RW;
         goto exit_write;
     }
 exit_write:
+    yaffs_close(fd);
     free(pbuff);
-    f_close(&f);
 exit:
     cJSON_Delete(jsCfgObj);
     return errcode;
@@ -65,29 +111,34 @@ exit:
  * @return cJSON* 返回cJSON指针
  *
  */
-cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
+cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
-    FIL f;
-    FRESULT res;
+    int fd;
     uint8_t *rbuff;
-    FSIZE_t fsize;
-    UINT  br;   //byte read
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t  br;   //byte read
 
     cJSON *jsCfgObj = NULL;
     int i;
     *perrcode = ERR_NO;
     /*读取文件*/
-    ThrowFSCode(res = f_open(&f, path, FA_READ), path, "GetCfgObj-open");
-    if(res != FR_OK)
+    fd = yaffs_open(path, O_RDWR, 0);
+    if (fd < 0)
     {
-        *perrcode = ERR_FILE_RW;
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-open");
+        *perrcode = ERR_FILE_NO;
         goto exit;
     }
-    fsize = f_size(&f);
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    ThrowFSCode(res = f_read(&f, rbuff, fsize, &br), path, "GetCfgObj-read");
+    taskENTER_CRITICAL();
+    br = yaffs_read(fd, rbuff, fsize);
+    taskEXIT_CRITICAL();
     if(fsize != br)
     {
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-read");
         *perrcode = ERR_FILE_RW;
         goto exit_read;
     }
@@ -96,13 +147,16 @@ cJSON *GetCfgObj(uint8_t *path, ErrorCode_t *perrcode)
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)
     {
+        printf_safe("cfg file parse fail, remove orig file and create new cfg file!!\n");
+        yaffs_unlink(path);
+        create_cfg_file(path, select_ctx_from_path(path));
         *perrcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
 exit_read:
 exit_parse:
+    yaffs_close(fd);
     free(rbuff);
-    f_close(&f);
 exit:
     return jsCfgObj;
 }

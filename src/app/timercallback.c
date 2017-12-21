@@ -136,3 +136,21 @@ void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+void vOrderTmpTimerCB(TimerHandle_t xTimer)
+{
+    uint32_t uxTimerID;
+    uint32_t ulTotalCON = pListCON->Total;
+    CON_t *pCON = NULL;
+    uint32_t i;
+
+    uxTimerID = (uint32_t)pvTimerGetTimerID(xTimer);
+
+    for (i = 0; i < ulTotalCON; i++)
+    {
+        if (uxTimerID == i)
+        {
+            pCON = CONGetHandle(i);
+            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderTmpTimer);
+        }
+    }
+}

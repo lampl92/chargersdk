@@ -5,6 +5,7 @@
 #include "semphr.h"
 #include "bsp_dwt.h"
 #include "tinysh.h"
+#include <string.h>
 
 #define XMOD_SOH    0x01
 #define XMOD_EOT    0x04

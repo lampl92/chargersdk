@@ -8,8 +8,6 @@
 #ifndef  __ERRORCODE_H
 #define  __ERRORCODE_H
 
-#include	"ff.h"
-
 #define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
                                                             ErrorCode_t _macro_errcode = _errcode;         \
                                                             if(_macro_errcode != ERR_NO)                  \
@@ -89,7 +87,7 @@ typedef struct _ErrorPackage
     uint32_t		ulDevID;
     ErrorCode_t		code;
     ErrorLevel_t	level;
-    uint8_t		msg[64];
+    char		msg[64];
 } ErrorPackage_t;
 
 //充电枪ID从小到大定义，其他设备从大小定义
@@ -104,9 +102,9 @@ typedef struct _ErrorPackage
 #define defDevID_EVSE		255	//0xff
 
 
-extern const uint8_t	*strErrorCode[];
+extern const char	*strErrorCode[];
 
-void	ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, uint8_t *msg);
-void	ThrowFSCode (FRESULT rc, uint8_t *path, uint8_t *info);
+void	ThrowErrorCode(uint32_t ulDevID, ErrorCode_t errcode, ErrorLevel_t errlevel, char *msg);
+void	ThrowFSCode (int rc, char *path, char *info);
 
 #endif

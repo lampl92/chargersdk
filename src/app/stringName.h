@@ -8,13 +8,61 @@
 #ifndef STRINGNAME_H_INCLUDED
 #define STRINGNAME_H_INCLUDED
 
-#define pathOrder       "system\\order.txt"
-#define pathEVSELog     "system\\evse.log"
-#define pathEVSECfg     "system\\evse.cfg"
-#define pathSysconf     "system\\sysconf.cfg"
-#define pathProtoCfg    "system\\protocol.cfg"
-#define pathWhiteList   "system\\whitelist.cfg"
-#define pathBlackList   "system\\blacklist.cfg"
+#define pathOrder           "/nand/system/order.txt"
+#define pathOrderTmp        "/nand/system/order.tmp"
+#define pathEVSELog         "/nand/system/evse.log"
+#define pathEVSECfg         "/nand/system/evse.cfg"
+#define pathSysCfg          "/nand/system/sys.cfg"
+#define pathFTPCfg          "/nand/system/ftp.cfg"
+#define pathProtoCfg        "/nand/system/protocol.cfg"
+#define pathWhiteList       "/nand/system/whitelist.cfg"
+#define pathBlackList       "/nand/system/blacklist.cfg"
+#define pathBin             "/nand/system/chargesdk.bin.new"
+
+#define pathSignalImage0            "/nand/system/SignalImage0.bmp"
+#define pathSignalImage1            "/nand/system/SignalImage1.bmp"
+#define pathSignalImage2            "/nand/system/SignalImage2.bmp"
+#define pathSignalImage3            "/nand/system/SignalImage3.bmp"
+#define pathSignalImage4            "/nand/system/SignalImage4.bmp"
+#define pathSignalImage5            "/nand/system/SignalImage5.bmp"
+        
+#define pathHomeImage                "/nand/system/HomeImage.bmp"
+        
+#define pathCardInfoImage           "/nand/system/CardInfoImage.bmp"
+#define pathGetCardInfoImage        "/nand/system/GetCardInfoImage.bmp"
+#define pathCardUnregisteredImage   "/nand/system/CardUnregisteredImage.bmp"
+#define pathCardArrearsImage        "/nand/system/CardArrearsImage.bmp"
+#define pathPleaseConnectPlugImage  "/nand/system/PleaseConnectPlugImage.bmp"
+#define pathCardInfoVoidImage       "/nand/system/CardInfoVoidImage.bmp"
+        
+#define pathChargingImage           "/nand/system/ChargingImage.bmp"
+#define pathCartoonImage0           "/nand/system/CartoonImage0.bmp"
+#define pathCartoonImage1           "/nand/system/CartoonImage1.bmp"
+#define pathCartoonImage2           "/nand/system/CartoonImage2.bmp"
+#define pathCartoonImage3           "/nand/system/CartoonImage3.bmp"
+#define pathCartoonImage4           "/nand/system/CartoonImage4.bmp"
+#define pathCartoonImage5           "/nand/system/CartoonImage5.bmp"
+#define pathStopByCardImage         "/nand/system/StopByCardImage.bmp"
+#define pathStopByQRImage           "/nand/system/StopByQRImage.bmp"
+#define pathChargingVoidImage       "/nand/system/ChargingVoidImage.bmp"
+
+#define pathChargeDoneImage         "/nand/system/ChargeDoneImage.bmp"
+#define pathOrderUploadImage        "/nand/system/OrderUploadImage.bmp"
+#define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
+#define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
+#define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"
+#define pathMoneyNotEnoughDoneImage     "/nand/system/MoneyNotEnoughDoneImage.bmp"
+#define pathChargeDoneVoidImage     "/nand/system/ChargeDoneVoidImage.bmp"
+        
+#define pathAdvertisementImage      "/nand/system/AdvertisementImage.bmp"
+
+#define pathstSIF12                 "/nand/system/stSIF12.sif"
+#define pathstSIF16                 "/nand/system/stSIF16.sif"
+#define pathstSIF24                 "/nand/system/stSIF24.sif"
+#define pathstSIF36                 "/nand/system/stSIF36.sif"
+
+#define YAFFS_MOUNT_POINT   "/nand/"
+#define pathSystemDir       "/nand/system/"
 
 
 #define jnEVSESN        "EVSESN"
@@ -99,6 +147,38 @@
 #define jnLogLevel       "Level"
 #define jnLogState       "State"
 #define jnLogMessage     "Message"
+
+/*ftp.cfg*/
+#define jnFtpServer         "Server"
+#define jnFtpPort           "Port"
+#define jnFtpUsername       "Username"
+#define jnFtpPassword       "Password"
+#define jnFtpNewVersion     "NewVersion"
+#define jnFtpNewFilename    "NewFilename"
+#define jnFtpDownloadStart  "DownloadStart"
+#define jnFtpDownloadStatus "DownloadStatus"
+
+/*sys.cfg*/
+#define jnSysChargersdk_bin    "chargesdk_bin"
+#define jnSysChargersdk_bin_crc32    "chargesdk_bin_crc32"
+#define jnSysEvse_cfg          "evse_cfg"
+#define jnSysProtocol_cfg      "protocol_cfg"
+#define jnSysSys_cfg           "sys_cfg"
+#define jnSysBlacklist_cfg     "blacklist_cfg"
+#define jnSysWhitelist_cfg     "whitelist_cfg"
+#define jnSysDispSleepTime     "DispSleepTime"
+#define jnSystouchtype         "touchtype"
+#define jnSysis_calibrate      "is_calibrate"
+#define jnSysxfac              "xfac"
+#define jnSysyfac              "yfac"
+#define jnSysxoff              "xoff"
+#define jnSysyoff              "yoff"
+#define jnSysVersion           "Version"
+#define jnSysUSE_GPRSModem         "USE_GPRSModem"
+#define jnSysUSE_Meter             "USE_Meter"
+#define jnSysUSE_RFID           "USE_RFID"
+#define jnSysUSE_GUI           "USE_GUI"
+
 
 /*protocol.cfg*/
 #define jnProtoServerIP            "ServerIP"

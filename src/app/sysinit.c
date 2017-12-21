@@ -1,12 +1,11 @@
 #include "includes.h"
-#include "ff_gen_drv.h"
-#include "nand_diskio.h"
+#include "yaffsfs.h"
 #include "cJSON.h"
-#include "s2j.h"
 #include <time.h>
 #include "stringName.h"
 #include "factorycfg.h"
-
+#include "cfg_sys.h"
+#include "yaffs2msic.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -15,23 +14,7 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 
 Sysconf_t   xSysconf;//存放系统初始化参数
 
-FATFS NANDDISKFatFs;  /* File system object for RAM disk logical drive */
-char NANDDISKPath[4]; /* RAM disk logical drive path */
-
 extern time_t time_dat;
-extern void Error_Handler(void);
-static void fatfs_format(void)
-{
-    BYTE work[_MAX_SS]; /* Work area (larger is better for processing time) */
-
-    /*##-3- Create a FAT file system (format) on the logical drive #########*/
-    if(f_mkfs((TCHAR const *)NANDDISKPath, FM_FAT32, 0, work, sizeof(work)) != FR_OK)
-    {
-        /* FatFs Format Error */
-        Error_Handler();
-    }
-
-}
 
 void timeInit()
 {
@@ -58,79 +41,99 @@ void timeInit()
     time(&settime);
 }
 
-static uint8_t create_system_dir(void)
+uint8_t create_system_dir(void)
 {
-    FRESULT res;
-    res = f_mkdir("system");
-    switch(res)
+    int res = 1;
+    res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
+    if (res != 0)
     {
-    case FR_OK:
-    case FR_EXIST:
+        res = yaffs_get_error();
+    }
+    switch (res)
+    {
+    case 0:
+    case -EEXIST:
         return TRUE;
     default:
         return FALSE;
     }
 }
 
-void create_cfg_file(const uint8_t *path, const uint8_t *context)
+
+void create_cfg_file(const char *path, const char *context)
 {
-    FIL f;
-    UINT bw;
-    FRESULT res;
-    res = f_open(&f, path, FA_CREATE_NEW | FA_WRITE);
-//    res = f_open(&f, path, FA_CREATE_ALWAYS | FA_WRITE);
-    switch(res)
+    uint32_t bw;
+    int fd;
+    int res = 1;
+    fd = yaffs_open(path, O_CREAT | O_EXCL | O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
     {
-    case FR_OK:
-        f_write(&f, context, strlen(context), &bw);
-        f_close(&f);
-    case FR_EXIST:
-    default:
-        f_close(&f);
+        res = yaffs_get_error();
+    }
+    else
+    {
+        bw = yaffs_write(fd, context, strlen(context));
+        yaffs_close(fd);
     }
 }
 extern void retarget_init(void);
+void yaffs_init(void)
+{
+    int res;
+    yaffs_start_up();
+    yaffs_set_trace(0);
+    //yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
+    res = yaffs_mount(YAFFS_MOUNT_POINT);
+    if (res != 0)
+    {
+        yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
+        yaffs_mount(YAFFS_MOUNT_POINT);
+    }
+}
 void sys_Init(void)
 {
+    int res;
     //ifconfig_init();
     timeInit();
     retarget_init();
-    /*---------------------------------------------------------------------------/
-    /                               FATFS初始化
-    /---------------------------------------------------------------------------*/
-    /*##-1- Link the NAND disk I/O driver #######################################*/
-    if(FATFS_LinkDriver(&NANDDISK_Driver, NANDDISKPath) == 0)
-    {
-        //fatfs_format();
-        /*##-2- Register the file system object to the FatFs module ##############*/
-        //DISABLE_INT();
-        if(f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1) != FR_OK)
-        {
-            fatfs_format();
-            f_mount(&NANDDISKFatFs, (TCHAR const *)NANDDISKPath, 1);
-            /* FatFs Initialization Error */
-            //Error_Handler();
-        }
-    }
-
+    yaffs_init();
+#if 1
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-    xSysconf.xCalibrate.ad_top = 270;
-    xSysconf.xCalibrate.ad_bottom = 3865;
-    xSysconf.xCalibrate.ad_left = 100;
-    xSysconf.xCalibrate.ad_right  = 3964;
+//    dump_directory_tree(YAFFS_MOUNT_POINT);
+//    res = yaffs_unlink(pathEVSECfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathProtoCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathWhiteList);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathBlackList);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathEVSELog);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathOrder);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathSysCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_unlink(pathFTPCfg);
+//    res = yaffsfs_GetLastError();
+//    res = yaffs_rmdir(pathSystemDir);
+//    res = yaffsfs_GetLastError();
+//    dump_directory_tree(YAFFS_MOUNT_POINT);
     create_system_dir();
-    //f_unlink(pathEVSECfg);
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
     create_cfg_file(pathBlackList, strBlackListCfg);
-    //f_unlink(pathEVSELog);
-    //f_unlink(pathOrder);
     create_cfg_file(pathOrder, strOrderCfg);
     create_cfg_file(pathEVSELog, strLogCfg);
+    create_cfg_file(pathSysCfg, strSysCfg);
+    create_cfg_file(pathFTPCfg, strFtpCfg);
+    dump_directory_tree(YAFFS_MOUNT_POINT);
 
+    SysCfgInit(&xSysconf);
+    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/
@@ -141,4 +144,5 @@ void sys_Init(void)
 #endif
     xprintf("\nsystem initialized\n\r");
     xprintf("\nhello charger\n\r");
+#endif
 }

@@ -1,5 +1,6 @@
 #include "myiic.h"
 #include "user_app.h"
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "bsp.h"
 unsigned char pca9554_1 = 0, pca9554_2 = 0;
@@ -176,7 +177,7 @@ void write_pca9554_1(void)
 {
     uint8_t PCAP554A_date;
     PCAP554A_date = Chip1.a_select | Chip1.b_select << 1 | Chip1.c_select << 2
-                    | Chip1.d_select << 3 | Chip1.cs1_select << 4 | Chip1.RESET_3G << 5 | Chip1.KEY_BT << 6 | Chip1.GPRS_key << 7;
+                    | Chip1.d_select << 3 | Chip1.cs1_select << 4 | Chip1.GPRS_key << 5 | Chip1.KEY_BT << 6 |  Chip1.RESET_3G << 7;
     IIC_Start();
     IIC_Send_Byte(0X40 + 0X00); //发送器件地址0XA0,写数据
     IIC_Wait_Ack();

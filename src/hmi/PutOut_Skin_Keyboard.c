@@ -4,10 +4,11 @@
 #include "string.h"
 #include "stdlib.h"
 #include "pyinput.h"
-#include "xbffontcreate.h"
+#include "stringName.h"
 #include "WM.h"
 #include "BUTTON.h"
 #include "cfg_parse.h"
+#include "touchtimer.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -23,9 +24,11 @@ KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
 uint8_t *passwd = "888888";
+uint8_t *passwdDebug = "123456";
+uint8_t managerLevel = 1;
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
-
+static uint32_t statelog = 0;
 typedef struct
 {
 	int          xPos;              //按钮X位置
@@ -399,10 +402,10 @@ void engkeypad_process(BUTTON_DATA *buttondata,int Id,WM_MESSAGE *pMsg)
         }
         else if(KeyID == 33)                        //切换到中文键盘
         {
-            keypad_dev.padtype=CHINESE_KEYPAD;
-			Msg.MsgId=CHANGE_ENGLISHPADTO_CHINESEPAD;
-			Msg.hWinSrc=pMsg->hWin;
-			WM_SendMessage(keypad_dev.hKeypad,&Msg);
+//            keypad_dev.padtype=CHINESE_KEYPAD;
+//			Msg.MsgId=CHANGE_ENGLISHPADTO_CHINESEPAD;
+//			Msg.hWinSrc=pMsg->hWin;
+//			WM_SendMessage(keypad_dev.hKeypad,&Msg);
         }
         else
         {
@@ -894,7 +897,7 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
 					}
                     else if(keypad_dev.padtype==CHINESE_KEYPAD)
                     {
-                        chinesekeypad_process(_aChineseButtonData1,Id,pMsg);
+//                        chinesekeypad_process(_aChineseButtonData1,Id,pMsg);
                     }
 					break;
 			}
@@ -925,75 +928,75 @@ static void _cbKeyPad(WM_MESSAGE * pMsg)
 		    drawsign_pad(hWin);
 			break;
         case CHANGE_ENGLISHPADTO_CHINESEPAD:        //从英文键盘切换到中文键盘
-            for(i=0;i<GUI_COUNTOF(_aEngButtonData);i++) WM_DeleteWindow(keypad_dev.EngButton_Handle[i]);
-            for(i=0;i<GUI_COUNTOF(_aEngButtonData);i++) keypad_dev.EngButton_Handle[i]=0;
-            drawchinese1_pad(hWin);
-            drawchinese2_pad(hWin);
+//            for(i=0;i<GUI_COUNTOF(_aEngButtonData);i++) WM_DeleteWindow(keypad_dev.EngButton_Handle[i]);
+//            for(i=0;i<GUI_COUNTOF(_aEngButtonData);i++) keypad_dev.EngButton_Handle[i]=0;
+//            drawchinese1_pad(hWin);
+//            drawchinese2_pad(hWin);
             break;
         case CHANGE_CHINESEPADTO_ENGLISHPAD:        //从中文键盘切换到英文键盘
-            for(i=0;i<25;i++) WM_DeleteWindow(keypad_dev.ChineseButton_Handle[i]);
-            for(i=0;i<25;i++) keypad_dev.ChineseButton_Handle[i]=0;
-            memset(keypad_dev.inputstr,0,7);    //清零
-            keypad_dev.cur_index=0;
-            keypad_dev.inputlen=0;
-            keypad_dev.result_num=0;
-            keypad_dev.pypagenum=0;
-            keypad_dev.pynowpage=0;
-            keypad_dev.dispagecur=0;
-            keypad_dev.dispagenum=0;
-            keypad_dev.sta=0;
-            drawenglish_pad(hWin);
+//            for(i=0;i<25;i++) WM_DeleteWindow(keypad_dev.ChineseButton_Handle[i]);
+//            for(i=0;i<25;i++) keypad_dev.ChineseButton_Handle[i]=0;
+//            memset(keypad_dev.inputstr,0,7);    //清零
+//            keypad_dev.cur_index=0;
+//            keypad_dev.inputlen=0;
+//            keypad_dev.result_num=0;
+//            keypad_dev.pypagenum=0;
+//            keypad_dev.pynowpage=0;
+//            keypad_dev.dispagecur=0;
+//            keypad_dev.dispagenum=0;
+//            keypad_dev.sta=0;
+//            drawenglish_pad(hWin);
             break;
         case CHANGE_CHINESE_PY:                                                             //显示九宫格输入的拼音选项
-            if(keypad_dev.cur_index>0)                                                      //keypad_dev.curindex>0说明有拼音选中
-            {
-                keypad_dev.disstr=t9.pymb[keypad_dev.cur_index-1]->pymb;                    //获得当前码表
-                slen=strlen((const char*)keypad_dev.disstr);                                //得到当前选中的拼音对应的汉字字符串的长度
-                keypad_dev.hznum=slen/2;                                                    //因为是中文，每个字视为2个字符。
-            }else                                                                           //没有拼音选中
-            {
-                keypad_dev.disstr=NULL;
-                slen=0;
-                keypad_dev.hznum=0;
-            }
-            keypad_dev.dispagenum=keypad_dev.hznum/6+(keypad_dev.hznum%6?1:0);              //得到汉字字符串的总页数
-            keypad_dev.pypagenum=keypad_dev.result_num/3+(keypad_dev.result_num%3?1:0);     //得到拼音页数
-/// TODO (zshare#1#): ///NULL -- '\0'
-
-            if(keypad_dev.inputstr[0]!='\0')
-            {
-                for(i=0;i<3;i++)
-                {
-                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
-                    if((i+3*(keypad_dev.pynowpage))>(keypad_dev.result_num-1))
-                    {
-                        BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
-                    }else
-                    {
-                        BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i],(const char*)t9.pymb[i+3*(keypad_dev.pynowpage)]->py);
-                    }
-                }
-
-                keypad_hbtn_updc(keypad_dev.disstr+(keypad_dev.dispagecur*6*2));        //更新横向按钮名字
-                keypad_draw_hbtn(keypad_dev.ChineseButton_Handle);                      //绘制横向按钮
-
-            }else                                                                       //没有输入任何拼音
-            {
-                for(i=0;i<3;i++)
-                {
-                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
-                    BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
-                }
-
-                for(i=0;i<6;i++)
-                {
-                    keypad_dev.disbuf[i][0]=' ';
-                    keypad_dev.disbuf[i][1]=' ';
-                    keypad_dev.disbuf[i][2]='\0';
-                    keypad_dev.butname[i]=keypad_dev.disbuf[i];
-                }
-                keypad_draw_hbtn(keypad_dev.ChineseButton_Handle);                  //绘制横向按钮
-            }
+//            if(keypad_dev.cur_index>0)                                                      //keypad_dev.curindex>0说明有拼音选中
+//            {
+//                keypad_dev.disstr=t9.pymb[keypad_dev.cur_index-1]->pymb;                    //获得当前码表
+//                slen=strlen((const char*)keypad_dev.disstr);                                //得到当前选中的拼音对应的汉字字符串的长度
+//                keypad_dev.hznum=slen/2;                                                    //因为是中文，每个字视为2个字符。
+//            }else                                                                           //没有拼音选中
+//            {
+//                keypad_dev.disstr=NULL;
+//                slen=0;
+//                keypad_dev.hznum=0;
+//            }
+//            keypad_dev.dispagenum=keypad_dev.hznum/6+(keypad_dev.hznum%6?1:0);              //得到汉字字符串的总页数
+//            keypad_dev.pypagenum=keypad_dev.result_num/3+(keypad_dev.result_num%3?1:0);     //得到拼音页数
+///// TODO (zshare#1#): ///NULL -- '\0'
+//
+//            if(keypad_dev.inputstr[0]!='\0')
+//            {
+//                for(i=0;i<3;i++)
+//                {
+//                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
+//                    if((i+3*(keypad_dev.pynowpage))>(keypad_dev.result_num-1))
+//                    {
+//                        BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
+//                    }else
+//                    {
+//                        BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i],(const char*)t9.pymb[i+3*(keypad_dev.pynowpage)]->py);
+//                    }
+//                }
+//
+//                keypad_hbtn_updc(keypad_dev.disstr+(keypad_dev.dispagecur*6*2));        //更新横向按钮名字
+//                keypad_draw_hbtn(keypad_dev.ChineseButton_Handle);                      //绘制横向按钮
+//
+//            }else                                                                       //没有输入任何拼音
+//            {
+//                for(i=0;i<3;i++)
+//                {
+//                    BUTTON_SetFont(keypad_dev.ChineseButton_Handle[21+i],&SIF24_Font);
+//                    BUTTON_SetText(keypad_dev.ChineseButton_Handle[21+i]," ");
+//                }
+//
+//                for(i=0;i<6;i++)
+//                {
+//                    keypad_dev.disbuf[i][0]=' ';
+//                    keypad_dev.disbuf[i][1]=' ';
+//                    keypad_dev.disbuf[i][2]='\0';
+//                    keypad_dev.butname[i]=keypad_dev.disbuf[i];
+//                }
+//                keypad_draw_hbtn(keypad_dev.ChineseButton_Handle);                  //绘制横向按钮
+//            }
             break;
 	}
 }
@@ -1021,24 +1024,34 @@ static void _cbBk(WM_MESSAGE * pMsg)
 static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
+    uint8_t tmpU8;
+    uint16_t tmpU16;
+    uint32_t tmpU32;
+    double tmpDouble;
     uint16_t i = 0;
     CON_t *pCon;
 
     pCon = CONGetHandle(0);
 
-    memset(result_input,'\0',strlen(result_input));
+    memset(result_input,'\0',sizeof(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
 
     switch(ManagerSetOptions)
     {
     case LOGIN_PASSWD:
-        if(strlen(result_input) == 0)
+        if (strlen(result_input) == 0)
         {
             BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
             BUTTON_SetText(_aahButtonOk, "确定");
+            return VALUE_ERROR;
         }
-        else if(strcmp(result_input,passwd) == 0)
+        else if (strcmp(result_input, passwd) == 0)
         {
+            return VALUE_OK_SAV;
+        }
+        else if (strcmp(result_input, passwdDebug) == 0)
+        {
+            managerLevel = 0;
             return VALUE_OK_SAV;
         }
         else
@@ -1057,88 +1070,298 @@ static uint8_t Value_Check()
         switch(htmpID)
         {
             case 20:
-                //if(SetCONCfg(pEVSE->info.strSN,"EVSESN",result_input,ParamTypeString)== ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
+                memset(pEVSE->info.strSN,'\0',strlen(pEVSE->info.strSN));
+                strcpy(pEVSE->info.strSN,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
                 break;
             case 21:
-                //if(SetCONCfg(pEVSE->info.ucTotalCON,"TotalCON",atoi(result_input),ParamTypeU8) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                memset(pEVSE->info.strID,'\0',strlen(pEVSE->info.strID));
+                strcpy(pEVSE->info.strID,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
                 break;
             case 22:
-                //if(SetCONCfg(pCon->info.dVolatageLowerLimits,"VolatageLowerLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+                
+                pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strServerIP,'\0',strlen(pechProto->info.strServerIP));
+                strcpy(pechProto->info.strServerIP,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
                 break;
-            case 23:
-               // if(SetCONCfg(pCon->info.dVolatageUpperLimits,"VolatageUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+            case 23://
+                tmpU16 = (uint16_t)atoi(result_input);
+                if (tmpU16 <= 0
+                || tmpU16 >= 10000)
+                {
+                    tmpU16 = 6677;                
+                }
+                pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
+                pechProto->info.usServerPort = tmpU16;
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
                 break;
-            case 24:
+            case 24://user name
+                pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strUserName,'\0',strlen(pechProto->info.strUserName));
+                strcpy(pechProto->info.strUserName,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
                 break;
-            case 25:
+            case 25://user passwd
+                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
+                memset(pechProto->info.strUserPwd,'\0',strlen(pechProto->info.strUserPwd));
+                strcpy(pechProto->info.strUserPwd,result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
-            case 26:
-                //if(SetCONCfg(pCon->info.dACTempUpperLimits,"ACTempUpperLimits",atoi(result_input),ParamTypeDouble) == ERR_NO)
-//                {
-//                    return VALUE_OK_SAV;
-//                }
-//                else
-//                {
-//                    return VALUE_ERROR;
-//                }
+            case 26://屏保时间
+                tmpU32 = atoi(result_input) * 60;
+            if (tmpU32 <= 0)
+            {
+                tmpU32 = 5 * 60;
+            }
+            else if (tmpU32 >= 60 * 60)
+            {
+                tmpU32 = 60 * 60;                
+            }
+                xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+                xSysconf.ulDispSleepTime_s = tmpU32;
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
                 break;
-            case 27:
+        }
+        break;
+    case CONSET_VALUE:
+        switch (htmpID)
+        {
+        case 20:
+            pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
+            memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
+            strcpy(pCon->info.strQRCode, result_input);
+            
+            GUI_QR_Delete(qr_hmem);
+            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
+            GUI_QR_GetInfo(qr_hmem, &QR_info);
+
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+            break;
+        case 21:
+            pCon->info.SetCONCfg(pCon, jnSocketType, result_input, ParamTypeString);
+           // memset(pCon->info.ucSocketType,'\0',sizeof(pCon->info.ucSocketType));
+           // pCon->info.ucSocketType = 0;
+            if (result_input[0] <= 'B')
+            {
+                result_input[0] = 'B';
+            }
+            else if(result_input[0] > 'B'
+                &&result_input[0] < 'b')
+            {
+                result_input[0] = 'C';
+            }
+            else if(result_input[0] >= 'c')
+            {
+                result_input[0] = 'C';
+            }
+            else
+            {
+                result_input[0] = 'B';
+            }
+            pCon->info.ucSocketType = result_input[0];
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
+                break;
+            case 22:// 178 - 280  > lower
+                tmpDouble = atof(result_input);
+            if (tmpDouble >= 280.0)
+            {
+                tmpDouble = 280.0;
+            }
+            else if (tmpDouble <= 280.0
+                &&tmpDouble >= 178.0
+                &&tmpDouble > pCon->info.dVolatageLowerLimits)
+            {
+                pCon->info.dVolatageUpperLimits = tmpDouble;                
+            }
+            else if (tmpDouble <= 280.0
+                &&tmpDouble >= 178.0
+                &&tmpDouble <= pCon->info.dVolatageLowerLimits)
+            {
+                tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
+            }
+            else if (tmpDouble < 178.0)
+            {
+                tmpDouble = 178.0;
+            }
+                pCon->info.dVolatageUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
+                break;
+            case 23:    // 100 - 240 < upper
+                tmpDouble = atof(result_input);
+            if (tmpDouble < 100.0)
+            {
+                tmpDouble = 100.0;
+            }
+            else if (tmpDouble >= 100.0
+                && tmpDouble <= 240.0
+                && tmpDouble < pCon->info.dVolatageUpperLimits)
+            {
+                pCon->info.dVolatageLowerLimits = tmpDouble;                
+            }
+            else if (tmpDouble >= 100.0
+                && tmpDouble <= 240.0
+                && tmpDouble >= pCon->info.dVolatageUpperLimits)
+            {
+                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;                
+            }
+            else if (tmpDouble > 240.0 
+            &&tmpDouble >= pCon->info.dVolatageUpperLimits)
+            {
+                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;                
+            }
+            else if (tmpDouble > 240.0
+                &&tmpDouble < pCon->info.dVolatageUpperLimits)
+            {
+                tmpDouble = 240.0; 
+            }
+            
+                pCon->info.dVolatageLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
+                break;
+            case 24://电流上限
+                //tmpDouble = atof(result_input);
+                //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
+                break;
+            case 25://交流输入端子温度上限 -50 120 > lower
+                tmpDouble = atof(result_input);
+            if (tmpDouble >= 120.0)
+            {
+                tmpDouble = 120.0;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble > pCon->info.dACTempLowerLimits)
+            {
+                pCon->info.dACTempUpperLimits = tmpDouble;                
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble <= pCon->info.dACTempLowerLimits)
+            {
+                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
+            }
+            else if (tmpDouble < (-50.0))
+            {
+                tmpDouble = -50.0;
+            }
+
+                pCon->info.dACTempUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+                break;
+            case 26://-50 120 < upper
+                tmpDouble = atof(result_input);
+            if (tmpDouble >= 120.0)
+            {
+                tmpDouble = 120.0;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble < pCon->info.dACTempUpperLimits)
+            {
+                pCon->info.dACTempUpperLimits = tmpDouble;                
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble >= pCon->info.dACTempUpperLimits)
+            {
+                tmpDouble = pCon->info.dACTempUpperLimits - 1.0;
+            }
+            else if (tmpDouble < (-50.0))
+            {
+                tmpDouble = -50.0;
+            }
+
+            pCon->info.dACTempLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
+                break;
+            case 27://交流输出端子温度上限
+                tmpDouble = atof(result_input);
+            if (tmpDouble >= 120.0)
+            {
+                tmpDouble = 120.0;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble > pCon->info.dSocketTempLowerLimits)
+            {
+                pCon->info.dSocketTempUpperLimits = tmpDouble;                
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble <= pCon->info.dSocketTempLowerLimits)
+            {
+                tmpDouble = pCon->info.dSocketTempLowerLimits + 1.0;
+            }
+            else if (tmpDouble < (-50.0))
+            {
+                tmpDouble = -50.0;
+            }
+
+                pCon->info.dSocketTempUpperLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
                 break;
             case 28:
+                tmpDouble = atof(result_input);
+            if (tmpDouble >= 120.0)
+            {
+                tmpDouble = 120.0;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble < pCon->info.dSocketTempUpperLimits)
+            {
+                pCon->info.dSocketTempUpperLimits = tmpDouble;                
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-50.0)
+                &&tmpDouble >= pCon->info.dSocketTempUpperLimits)
+            {
+                tmpDouble = pCon->info.dSocketTempUpperLimits - 1.0;
+            }
+            else if (tmpDouble < (-50.0))
+            {
+                tmpDouble = -50.0;
+            }
+
+                pCon->info.dSocketTempLowerLimits = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
                 break;
             case 29:
+                tmpDouble = atof(result_input);
+                pCon->info.dRatedCurrent = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnRatedCurrent, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
                 break;
             case 30:
-                break;
-            case 31:
-                break;
-            case 32:
-                break;
-            case 33:
-                break;
-            case 34:
-                break;
-            case 35:
-                break;
-            case 36:
+                tmpDouble = atof(result_input);
+                pCon->info.dRatedPower = tmpDouble;
+                pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
                 break;
         }
         break;
     }
+    return VALUE_OK_SAV;
 }
 
 static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
 {
     uint8_t i = 0;
+    CON_t       *pCont;
+    EventBits_t uxBits;
 
+    WM_DeleteWindow(hMulti);
     for (i = 0; i < GUI_COUNTOF(_aEngButtonData); i++)
 	{
 		WM_DeleteWindow(keypad_dev.EngButton_Handle[i]);
@@ -1173,10 +1396,58 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
     {
     case LOGIN_PASSWD:
         bitclr(winCreateFlag,2);
-        (IS_jump == 0) ? (CreateManagerInfoAnalog()):(CreateHome());
+        if (IS_jump == 0)
+        {
+            CreateManagerCommon();
+        }
+        else
+        {
+            pCont = CONGetHandle(0);
+            if (pCont->state == STATE_CON_CHARGING)
+            {
+                xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                CreateChargingPage();
+            }
+            else
+            {
+                if (pCont->state == statelog)
+                {
+                    xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                    CreateHomePage();   
+                }
+                else
+                {
+                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
+                        defEventBitOrderUseless,
+                        pdTRUE,
+                        pdTRUE,
+                        10000);//要比remote中的order超时（60s）长
+                    if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
+                    {
+                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
+                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
+                        CreateHomePage();
+                    }
+                    else
+                    {
+                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
+                        CreateHomePage();
+                    }
+                }
+            }
+        }
+//        (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
     break;
     /**< 添加跳页到设置页 , */
     case SYSSET_VALUE:
+        bitclr(winCreateFlag, 2);
+        WM_ShowWindow(htmpBK);
+        WM_ShowWindow(htmpChild);
+    break;
+    /**< 添加跳页到设置页 , */
+    case CONSET_VALUE:
+        bitclr(winCreateFlag, 2);
         WM_ShowWindow(htmpBK);
         WM_ShowWindow(htmpChild);
     break;
@@ -1211,7 +1482,8 @@ static void _cbFrame(WM_MESSAGE * pMsg)
         case GUI_ID_BUTTON0://确定
             switch(NCode)
             {
-            case WM_NOTIFICATION_CLICKED:
+            case WM_NOTIFICATION_RELEASED:
+                WM_SetFocus(hMulti);
                 /**< 进入密码、设置值操作 */
                 if(Value_Check() == VALUE_OK_SAV)
                 {
@@ -1224,7 +1496,7 @@ static void _cbFrame(WM_MESSAGE * pMsg)
         case GUI_ID_BUTTON1://取消
             switch(NCode)
             {
-            case WM_NOTIFICATION_CLICKED:
+            case WM_NOTIFICATION_RELEASED:
                 Jump_Screen(pMsg->hWin,1);
                 break;
             }
@@ -1240,6 +1512,9 @@ static void _cbFrame(WM_MESSAGE * pMsg)
 void Keypad_GetValue(uint8_t optios,char *varname)
 {
 	WM_HWIN hFrame;
+    CON_t       *pCont;
+    pCont = CONGetHandle(0);
+    statelog = pCont->state;
 
     ManagerSetOptions = optios;
 	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
@@ -1278,14 +1553,14 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 	MULTIEDIT_SetFont(hMulti, &SIF24_Font);
 	WM_SetFocus(hMulti);
 
-    _aahButtonOk = BUTTON_CreateEx(600,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
+    _aahButtonOk = BUTTON_CreateEx(610,5,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON0);
     BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonOk,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
     BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
     BUTTON_SetText(_aahButtonOk, "确定");
 
-    _aahButtonCancel = BUTTON_CreateEx(600,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
+    _aahButtonCancel = BUTTON_CreateEx(610,60,100,50,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,GUI_ID_BUTTON1);
     BUTTON_SetFont(_aahButtonCancel, &SIF24_Font);
     BUTTON_SetTextAlign(_aahButtonCancel,GUI_TA_HCENTER | GUI_TA_VCENTER);
     BUTTON_SetBkColor(_aahButtonCancel, BUTTON_CI_UNPRESSED, GUI_GRAY);
@@ -1326,6 +1601,10 @@ void Keypad_GetValue(uint8_t optios,char *varname)
 void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,uint8_t *name_p,uint8_t *eg_p)
 {
 	WM_HWIN hFrame;
+    CON_t       *pCont;
+    
+    pCont = CONGetHandle(0);
+    statelog = pCont->state;
 
     ManagerSetOptions = optios;
 	WM_SetCallback(WM_HBKWIN, _cbBk);		        //是指背景窗口回调函数
@@ -1395,6 +1674,17 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
     break;
 
     case SYSSET_VALUE:
+        _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditVar, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
+        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
+        TEXT_SetFont(_aahEditEg, &SIF16_Font);
+        TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
+        TEXT_SetText(_aahEditEg,eg_p);
+//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+    break;
+
+    case CONSET_VALUE:
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25,WM_GetClientWindow(hFrame),WM_CF_SHOW,0,13,name_p);
         TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);

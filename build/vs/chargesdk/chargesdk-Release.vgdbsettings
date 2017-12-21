@@ -99,7 +99,7 @@
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.jlink.resetafterload</Key>
-          <Value />
+          <Value>mon reset</Value>
         </KeyValue>
         <KeyValue>
           <Key>com.sysprogs.jlink.livememoryengine</Key>
@@ -175,8 +175,8 @@
   <ImportedPropertySheets />
   <CodeSense>
     <Enabled>Unknown</Enabled>
-    <CFLAGS />
-    <CXXFLAGS />
+    <CFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CFLAGS>
+    <CXXFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CXXFLAGS>
     <ExternalSourceFileList />
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>

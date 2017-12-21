@@ -26,8 +26,9 @@ tags
 *.bak
 .vs
 build/vs/chargesdk/*.user
-build/vs/chargesdk/Debug
-build/vs/chargesdk/Release
-build/vs/chargesdk/VisualGDBCache
-build/vs/CodeDB
+Debug
+Release
+VisualGDBCache
+CodeDB
 *.old
+*.old00

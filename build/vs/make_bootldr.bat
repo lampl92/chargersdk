@@ -1,0 +1,2 @@
+cd .\bootldr
+make.bat

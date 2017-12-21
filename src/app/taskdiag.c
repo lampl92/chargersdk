@@ -74,11 +74,17 @@ void vTaskEVSEDiag(void *pvParameters)
             pCON = CONGetHandle(i);
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
-                if (pCON->status.ulSignalAlarm != 0 ||
+                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
+                {
+                    //温度警告（非严重告警）算正常，不进行处理
+                }
+                else if (pCON->status.ulSignalAlarm != 0 ||
                     pCON->status.ulSignalFault != 0 ||
                     pEVSE->status.ulSignalAlarm != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
+                    //其他异常清除认证标志
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
             }
@@ -88,12 +94,14 @@ void vTaskEVSEDiag(void *pvParameters)
         for(i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
-            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, defEventBitExceptionTempW, pdTRUE, pdFALSE, 0);
+            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
+                                                    defEventBitExceptionTempW, 
+                                                    pdTRUE, pdFALSE, 0);
             if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
             {
                 if (pCON->state == STATE_CON_CHARGING)
                 {
-                    pCON->status.SetLoadPercent(pCON, 70);
+                    pCON->status.SetLoadPercent(pCON, 50);
                 }
             }
         }

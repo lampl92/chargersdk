@@ -82,7 +82,9 @@ Queue *QueueCreate(int len)
     memset(pQueue->elem, 0, pQueue->length);
     pQueue->front = 0;
     pQueue->rear = 0;
+#if USE_FreeRTOS
     pQueue->xHandleMutexQue = xSemaphoreCreateMutex();
+#endif
     pQueue->isEmpty = isEmpty;
     pQueue->isFull = isEmpty;
     pQueue->EnElem = EnElem;

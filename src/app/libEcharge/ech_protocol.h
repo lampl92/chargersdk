@@ -14,6 +14,7 @@
 #include "event_groups.h"
 #include "errorcode.h"
 #include "order.h"
+#include "libEcharge/ech_ftp.h"
 
 #define ECH_UNUSED_ARG(x) (void)x
 
@@ -48,6 +49,8 @@ typedef struct _echProtoInfo
 
     uint32_t ulStatusCyc_ms;    //状态数据上报间隔，精确到秒
     uint32_t ulRTDataCyc_ms;    //实时数据上报间隔  10s
+    
+    EchFtpCfg_t ftp;
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
     ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
@@ -117,9 +120,14 @@ typedef struct _echProtoStatus
 //---运维监控
 #define ECH_CMDID_UP_FAULT      32 //充电桩上报故障信息
 #define ECH_CMDID_UP_WARNING    33 //充电桩上报告警与保护信息
+//---远程升级
+#define ECH_CMDID_SET_OTA       34 //平台下发软件升级命令
+#define ECH_CMDID_REQ_OTA_DW    35 //平台查询软件下载是否成功
+#define ECH_CMDID_OTA_START     36 //充电桩上报进入升级状态
+#define ECH_CMDID_OTA_RESULT    37 //充电桩上报升级结果
 
 /*命令个数*/
-#define ECH_CMD_MAX             34
+#define ECH_CMD_MAX             38
 
 typedef struct
 {

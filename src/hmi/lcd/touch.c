@@ -1,3 +1,4 @@
+#include "sys_types.h"
 #include "bsp_define.h"
 #include "touch.h"
 #include "lcddrv.h"
@@ -6,12 +7,14 @@
 #include "GUI.h"
 #include "cJSON.h"
 #include "cfg_parse.h"
-#include "ff.h"
 #include "errorcode.h"
 #include "bsp.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "utils.h"
+#include "stringName.h"
+#include "yaffsfs.h"
+#include "sysinit.h"
 #include <string.h>
 
 static float sqrt1(float x)
@@ -78,7 +81,7 @@ uint16_t TP_Read_AD(uint8_t CMD)
     TDIN = 0;   //拉低数据线
     TCS = 0;    //选中触摸屏IC
     TP_Write_Byte(CMD);//发送命令字
-    bsp_DelayUS(3);//ADS7846的转换时间最长为6us
+    bsp_DelayUS(100);//ADS7846的转换时间最长为6us
     TCLK = 0;
     bsp_DelayUS(1);
     TCLK = 1;   //给1个时钟，清除BUSY
@@ -545,42 +548,15 @@ void Load_Drow_Dialog(void)
  */
 uint8_t TP_Save_Adjdata(void)
 {
-	int temp;
-    FIL fp;
-    UINT bw;
-    char result;
-    uint8_t *p;
-    cJSON *pJsonRoot = NULL;
-
-    pJsonRoot = cJSON_CreateObject();
-    if(pJsonRoot == NULL)
-    {
-        printf_safe("保存数据cjson创建失败!");
-        return 1;
-    }
-
-    cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",170);
-	cJSON_AddNumberToObject(pJsonRoot, "xytype", tp_dev.touchtype);
-	temp=tp_dev.xfac*100000000;
-    cJSON_AddNumberToObject(pJsonRoot,"xfac",temp);
-    temp=tp_dev.yfac*100000000;
-    cJSON_AddNumberToObject(pJsonRoot,"yfac",temp);
-
-    cJSON_AddNumberToObject(pJsonRoot,"xoff",tp_dev.xoff);
-
-    cJSON_AddNumberToObject(pJsonRoot,"yoff",tp_dev.yoff);
-
-    result = f_open(&fp, "system/CalibrationData.cfg", FA_CREATE_ALWAYS | FA_WRITE);
-	//文件打开错误或者文件大于BMPMEMORYSIZE
-	if(result != FR_OK)
-    {
-        return 1;
-    }
-    p = cJSON_Print(pJsonRoot);
-    f_write(&fp, p, strlen(p), &bw);
-
-    f_close(&fp);
-    cJSON_Delete(pJsonRoot);
+    uint8_t is_cali = 170;
+    
+    xSysconf.SetSysCfg(jnSysis_calibrate, (void *)&is_cali, ParamTypeU8);
+    xSysconf.SetSysCfg(jnSystouchtype, (void *)&tp_dev.touchtype, ParamTypeU8);
+    xSysconf.SetSysCfg(jnSysxfac, (void *)&tp_dev.xfac, ParamTypeDouble);
+    xSysconf.SetSysCfg(jnSysyfac, (void *)&tp_dev.yfac, ParamTypeDouble);
+    xSysconf.SetSysCfg(jnSysxoff, (void *)&tp_dev.xoff, ParamTypeU16);
+    xSysconf.SetSysCfg(jnSysyoff, (void *)&tp_dev.yoff, ParamTypeU16);
+    
     return 0;
 }
 /** @brief 取得校准值
@@ -592,62 +568,11 @@ uint8_t TP_Save_Adjdata(void)
  */
 uint8_t TP_Get_Adjdata(void)
 {
-    cJSON *jsCaliObj;
-    ErrorCode_t errcode;
-    cJSON * pSub;
-    uint8_t res;
-    FIL fp;
-    UINT bw;
-    uint8_t *p;
-
-    errcode = ERR_NO;
-
-    res = f_open(&fp, "system/CalibrationData.cfg", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
-
-    if(res == FR_OK)
+    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
+    
+    if(xSysconf.xCalibrate.is_calibrate == 170)
     {
-        if(f_size(&fp) == 0)
-        {
-            cJSON *pJsonRoot = NULL;
-
-            pJsonRoot = cJSON_CreateObject();
-            if(pJsonRoot == NULL)
-            {
-                printf_safe("保存数据cjson创建失败!");
-                return 1;
-            }
-
-            cJSON_AddNumberToObject(pJsonRoot,"is_calibrate",0);
-	        cJSON_AddNumberToObject(pJsonRoot, "xytype", 0);
-            cJSON_AddNumberToObject(pJsonRoot,"xfac",0);
-            cJSON_AddNumberToObject(pJsonRoot,"yfac",0);
-            cJSON_AddNumberToObject(pJsonRoot,"xoff",0);
-            cJSON_AddNumberToObject(pJsonRoot,"yoff",0);
-
-            p = cJSON_Print(pJsonRoot);
-            f_write(&fp, p, strlen(p), &bw);
-            cJSON_Delete(pJsonRoot);
-            free(p);
-            f_close(&fp);
-        }
-    }
-
-    jsCaliObj = GetCfgObj("system/CalibrationData.cfg", &errcode);
-
-    if(jsCaliObj == NULL || errcode != ERR_NO)
-    {
-        return 1;
-    }
-
-    pSub = cJSON_GetObjectItem(jsCaliObj,"is_calibrate");
-    if(pSub == NULL)
-    {
-        return 1;
-    }
-    if(pSub->valueint == 170)
-    {
-	    pSub = cJSON_GetObjectItem(jsCaliObj, "xytype");
-	    tp_dev.touchtype = pSub->valueint;
+	    tp_dev.touchtype = xSysconf.xCalibrate.touchtype;
 	    
 	    if (tp_dev.touchtype)//X,Y方向与屏幕相反
 	    {
@@ -659,20 +584,11 @@ uint8_t TP_Get_Adjdata(void)
 		    CMD_RDX = 0XD0;
 		    CMD_RDY = 0X90;
 	    }
-	    pSub = cJSON_GetObjectItem(jsCaliObj,"xfac");
-        tp_dev.xfac = (float)(pSub->valueint)/100000000;
+        tp_dev.xfac = xSysconf.xCalibrate.xfac;
+        tp_dev.yfac = xSysconf.xCalibrate.yfac;
+        tp_dev.xoff = xSysconf.xCalibrate.xoff;
+        tp_dev.yoff = xSysconf.xCalibrate.yoff;
 
-        pSub = cJSON_GetObjectItem(jsCaliObj,"yfac");
-        tp_dev.yfac = (float)(pSub->valueint)/100000000;
-
-        pSub = cJSON_GetObjectItem(jsCaliObj,"xoff");
-        tp_dev.xoff = pSub->valueint;
-
-        pSub = cJSON_GetObjectItem(jsCaliObj,"yoff");
-        tp_dev.yoff = pSub->valueint;
-
-        cJSON_Delete(jsCaliObj);
-        //cJSON_Delete(pSub);
         return 0;
     }
 

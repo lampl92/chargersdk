@@ -16,6 +16,9 @@
 #include "cfg_parse.h"
 #include "electric_energy_meter.h"
 #include "timercallback.h"
+#include "FreeRTOS.h"
+#include "event_groups.h"
+#include "timers.h"
 
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
@@ -68,7 +71,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 /*                               设置充电接口信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
 
-static ErrorCode_t SetCONCfg(void *pvCON, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsCONArray;
@@ -710,6 +713,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     uint8_t ucCONID;
     CONStatusType_t tmpCPState;
     ErrorCode_t errcode;
+    static uint32_t cp_err_cont;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
@@ -730,10 +734,12 @@ static ErrorCode_t GetCPState(void *pvCON)
             if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_12V_PWM;
+                cp_err_cont = 0;
             }
             else
             {
                 tmpCPState = CP_12V;
+                cp_err_cont = 0;
             }
             pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
@@ -742,10 +748,12 @@ static ErrorCode_t GetCPState(void *pvCON)
             if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_9V_PWM;
+                cp_err_cont = 0;
             }
             else
             {
                 tmpCPState = CP_9V;
+                cp_err_cont = 0;
             }
             pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
@@ -754,10 +762,12 @@ static ErrorCode_t GetCPState(void *pvCON)
             if(TIM2->CCR1 != TIMER_MAX)
             {
                 tmpCPState = CP_6V_PWM;
+                cp_err_cont = 0;
             }
             else
             {
                 tmpCPState = CP_6V;
+                cp_err_cont = 0;
             }
             pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
         }
@@ -770,8 +780,18 @@ static ErrorCode_t GetCPState(void *pvCON)
             printf_safe("CP_ERR %lf\n", cp1);
             printf_safe("CP_ERR %lf\n", cp1);
             tmpCPState = CP_ERR;
-            pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
-            errcode =  ERR_CON_CP_FAULT;
+            if (tmpCPState == CP_ERR)
+            {
+                cp_err_cont++;
+                tmpCPState = pCON->status.xCPState;
+            }
+            if (cp_err_cont >= 100)//50ms
+            {
+                cp_err_cont = 0;
+                tmpCPState = CP_ERR;
+                pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
+                errcode =  ERR_CON_CP_FAULT;
+            }
         }
 #endif
     }
@@ -898,6 +918,15 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     tmpCPPWM = 53; //负载100%时，PWM=53, 负载50%时，PWM= 27
     errcode = ERR_NO;
 
+    if (ucLoadPercent == pCON->status.ucLoadPercent)//相同负载百分比不进行设置
+    {
+        return errcode;
+    }
+    else//由于目前设置负载百分比会导致cp检测不准，暂时屏蔽该功能，技术突破后，屏蔽掉该else
+    {
+        pCON->status.ucLoadPercent = ucLoadPercent;
+        return errcode;
+    }
     /** ************* */
     if(ucCONID == 0)
     {
@@ -1355,7 +1384,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpNStat = tmpLStat;
 #else
 
-    tmpLStat = flag_power_out_l;//Get_State_relay();//1 : switch on
+    tmpLStat = Get_State_relay();//1 : switch on
     tmpNStat = tmpLStat;
     if (tmpLStat == SWITCH_ON)
     {
@@ -1549,6 +1578,8 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
+    xTimerDelete(pCON->status.xHandleTimerRTData, 100);
+    xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
     pCON = NULL;
 }
@@ -1630,8 +1661,17 @@ CON_t *CONCreate(uint8_t ucCONID )
                                       pdTRUE,
                                       (void *)(int)ucCONID,
                                       vRemoteRTDataTimerCB);
-
+    //order init
     OrderInit(&(pCON->order));
+    //OrderTmp init
+    OrderInit(&(pCON->OrderTmp.order));
+    pCON->OrderTmp.ucCheckOrderTmp = 0;
+    sprintf(pCON->OrderTmp.strOrderTmpPath, "%sOrderCON%d.tmp", pathSystemDir, pCON->info.ucCONID);
+    pCON->OrderTmp.xHandleTimerOrderTmp = xTimerCreate("TimerOrderTmp",
+                                                    defOrderTmpCyc,
+                                                    pdTRUE,
+                                                    (void *)(int)(pCON->info.ucCONID),
+                                                    vOrderTmpTimerCB);
 
     return pCON;
 }

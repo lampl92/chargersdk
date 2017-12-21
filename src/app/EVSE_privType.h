@@ -35,16 +35,8 @@ typedef struct _EVSEInfo
     double dDefSegFee;
     gdsl_list_t plTemplSeg;
 
-    uint8_t strSoftVer[defSoftVerLength + 1];
-
     pEVSEGetCfg_ft GetEVSECfg;
     ErrorCode_t(*SetEVSECfg)(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
-//    pEVSESetCfg_ft SetSN;
-//    pEVSESetCfg_ft SetID;
-//    pEVSESetCfg_ft SetType;
-//    pEVSESetCfg_ft SetTotalCON;
-//    pEVSESetCfg_ft SetLngLat;
-//    pEVSESetCfg_ft SetTempl;
 }EVSEInfo_t;
 
 typedef struct _EVSEStatus

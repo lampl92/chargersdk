@@ -26,6 +26,9 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define PWM1_ON      HAL_TIM_OC_Start_IT(&htim2, TIM_CHANNEL_1)//¿ªÆôPWM1
 #define PWM2_ON      HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_2)//¿ªÆôPWM2
+#define PWM3_ON      HAL_TIM_OC_Start_IT(&htim3, TIM_CHANNEL_2)//¿ªÆôPWM2
+#define PWM4_ON      HAL_TIM_OC_Start_IT(&htim8, TIM_CHANNEL_3)//¿ªÆôPWM2
+
 #define PWM1_OFF     ;//HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//¹Ø±ÕPWM1
 #define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
@@ -33,7 +36,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
-#define Get_Power_Status HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)
+#define Get_Power_Status (~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3) & 0x01)
 
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
@@ -41,8 +44,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define cs_zl_set   do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
-#define GPRS_set      do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
-#define GPRS_reset    do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
+#define GPRS_reset      do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
+#define GPRS_set    do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
 #define TIMER5_OFF   HAL_TIM_Base_Stop_IT(&htim5)
@@ -50,8 +53,19 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define TIMER3_ON    HAL_TIM_Base_Start_IT(&htim3)
 #define TIMER3_OFF   HAL_TIM_Base_Stop_IT(&htim3)
 
+#define TIMER8_ON    HAL_TIM_Base_Start_IT(&htim8)
+#define TIMER8_OFF   HAL_TIM_Base_Stop_IT(&htim8)
+
 #define PWM1_1000  TIM_SetTIM2Compare1(TIMER_MAX)
 #define PWM1_535   TIM_SetTIM2Compare1(465)
+
+#define RELAY2_ON  user_pwm_relay2_setvalue(1000);
+#define RELAY2_KEEP  user_pwm_relay2_setvalue(500);
+#define RELAY2_OFF  user_pwm_relay2_setvalue(0);
+
+#define RELAY1_ON  user_pwm_relay1_setvalue(1000);
+#define RELAY1_KEEP   user_pwm_relay1_setvalue(500);
+#define RELAY1_OFF  user_pwm_relay1_setvalue(0);
 
 #define PWM2_1000  do{TIM_SetTIM4Compare1(TIMER_MAX);}while(0)
 #define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
@@ -61,9 +75,6 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
-
-
-
 
 #define TEMP_L_OUT 0X00 //板卡输出N
 #define TEMP_L_IN  0X01 //    L
@@ -75,8 +86,6 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define TEMP_GUN2_NEGATIVE  0X07
 #define VREF_1v5            0X0F
 
-
-
 #define keep_off 0
 #define keep_on  1
 #define breath   2
@@ -85,9 +94,6 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define red      0
 #define green    1
 #define blue     2
-
-#define read     0x03
-#define write    0x10
 
 #define voltage  0x000b
 #define current  0x000c
@@ -136,7 +142,7 @@ typedef struct
     double TEMP3;
     double TEMP4;
     double TEMP_ARM1;
-	double TEMP_ARM2;
+    double TEMP_ARM2;
     double TEMP_ARM3;
     double TEMP_ARM4;
 } DC_t;
@@ -152,32 +158,30 @@ typedef struct
     unsigned short CD4067;
     unsigned short CP1;
     unsigned short CP2;
-
 } AD_samp[samp_dma];
 AD_samp AD_samp_dma;
 typedef struct
 {
     struct
-   {
-       uint8_t flag_va;
-       uint8_t flag_ia;
-       uint8_t flag_power;
-       uint8_t flag_electric_energy_l;
-       uint8_t flag_electric_energy_h;
-       uint8_t flag_frequency;
-       uint8_t flag_erro;
-   }flag;
-     struct
-   {
-       float  massage_va;
-       float  massage_ia;
-       float massage_power;
-       float massage_electric_energy;
-       float massage_electric_energy_l;
-       float massage_electric_energy_h;
-       float massage_frequency;
-   }massage;
-
+    {
+        uint8_t flag_va;
+        uint8_t flag_ia;
+        uint8_t flag_power;
+        uint8_t flag_electric_energy_l;
+        uint8_t flag_electric_energy_h;
+        uint8_t flag_frequency;
+        uint8_t flag_erro;
+    }flag;
+    struct
+    {
+        float  massage_va;
+        float  massage_ia;
+        float massage_power;
+        float massage_electric_energy;
+        float massage_electric_energy_l;
+        float massage_electric_energy_h;
+        float massage_frequency;
+    }massage;
 } electricity_meter[electricity_meter_num];
 electricity_meter  Electricity_meter;
 
@@ -243,12 +247,13 @@ void Close_gun_2(void);
 void Open_gun_2(void);
 void get_samp_point(void);//ÓÃÊ±30¦ÌS
 void Buzzer_control(uint8_t state);
+uint8_t Get_State_relay(void);
 uint8_t flag_rs485[255];
-uint8_t flag_pwm_out_n,flag_pwm_out_l,flag_gun_Close,flag_gun_Open,flag_power_out_l,flag_power_out_n;
-uint16_t num_cp1,num_cp2;
-double vref,va;
+uint8_t flag_pwm_out_n, flag_pwm_out_l, flag_gun_Close, flag_gun_Open, flag_power_out_l, flag_power_out_n;
+uint16_t num_cp1, num_cp2;
+double vref, va;
 uint8_t RS485_RX_MODBUS_CNT;
-uint32_t CD4067_sum,leakage_current_sum,va_samp_sum,ia_samp_sum,CP2_sum,CP1_sum,CP1_sum_sys,CP2_sum_sys;
-uint8_t   pwm_samp_timer,pwm_samp_flag;
+uint32_t CD4067_sum, leakage_current_sum, va_samp_sum, ia_samp_sum, CP2_sum, CP1_sum, CP1_sum_sys, CP2_sum_sys;
+uint8_t   pwm_samp_timer, pwm_samp_flag;
 extern samp Sys_samp;
 #endif /* USER_APP_H_INCLUDED */

@@ -19,7 +19,6 @@
 */
 
 // USER START (Optionally insert additional includes)
-#include "xbffontcreate.h"
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"
@@ -144,9 +143,13 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     }
     pCON = CONGetHandle(0);//选择枪的时候获取pCON
     /**未进GoodID ,BadID和OweID状态时显示内容*/
-    if(pCON->status.xPlugState == UNPLUG)
+    if (pCON->status.xPlugState == UNPLUG)
     {
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "请连接充电插头");
+    }
+    else if (pCON->status.xPlugState == PLUG)
+    {
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "车辆确认中");        
     }
     /**end of 未进GoodID ,BadID和OweID状态时显示内容*/
 
@@ -225,7 +228,6 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
     int          NCode;
     int          Id;
     // USER START (Optionally insert additional variables)
-    uint8_t temp_buf[32];
     int i;
     // USER END
 
@@ -273,8 +275,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         // Initialization of 'Edit'
         //
 
-        HexToStr(pRFIDDev->order.ucCardID, temp_buf, defCardIDLength);
-        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, temp_buf);         //卡号
+        Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_0), &SIF24_Font, pRFIDDev->order.strCardID);         //卡号
         Edit_Show(WM_GetDialogItem(pMsg->hWin, ID_EDIT_1), &SIF24_Font, "?");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF36_Font, GUI_RED, "正在获取账户信息...");
 
@@ -302,7 +303,7 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
                 _deleteWin(_hWinCardInfo);
                 current_page = _HOMEPAGE;
                 bitset(winInitDone,7);
-                CreateHome();
+                CreateHomePage();
                 break;
             case WM_NOTIFICATION_RELEASED:
 
@@ -362,14 +363,14 @@ static void _cbCardDialog(WM_MESSAGE *pMsg)
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateHome();
+        CreateHomePage();
         break;
     case MSG_JUMPCHAING:
         current_page = _CHARGINGPAGE;
         bitset(winInitDone,7);
         _deleteWin(_hWinCardInfo);
         _hWinCardInfo = 0;
-        CreateCharging();
+        CreateChargingPage();
         break;
     default:
         WM_DefaultProc(pMsg);

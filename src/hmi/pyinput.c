@@ -1,7 +1,6 @@
 #include "pymb.h"
 #include "pyinput.h"
 #include "string.h"
-#include "xbffontcreate.h"
 //拼音输入法
 pyinput t9=
 {

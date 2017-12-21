@@ -10,51 +10,12 @@
 #include "includes.h"
 #include "bsp.h"
 #include "interface.h"
-#include "mbedtls/base64.h"
 #include "utils.h"
 #include "stringName.h"
 #include "cfg_parse.h"
 #include "libEcharge/ech_globals.h"
 #include "libEcharge/ech_protocol_proc.h"
-
-#if 0
-ErrorCode_t RemoteInit()
-{
-    uint8_t  ucAESKey_BASE64[] = "oFqTg0a0VrjiVU76M1WRVw==";
-    uint8_t *pucAESKey_BASE64;
-
-    pucAESKey_BASE64 = ucAESKey_BASE64;
-
-    uint8_t ucAESKey[64];
-    uint8_t ucAESKeyLen;
-    uint8_t olen;
-    int i;
-    pucAESKey_BASE64 = ucAESKey_BASE64;
-    mbedtls_base64_decode(ucAESKey, sizeof(ucAESKey), &olen, pucAESKey_BASE64, strlen(pucAESKey_BASE64));
-    printf_safe("AESKEYBASE64 : %s\n", pucAESKey_BASE64);
-    printf_safe("AESKey ： ");
-    for(i = 0; i < olen; i++)
-    {
-        printf_safe("%02x ", ucAESKey[i]);
-    }
-    printf_safe("\n");
-}
-
-ErrorCode_t RemoteGetTime(struct tm *pTimeBlock)
-{
-    struct tm tmpTimeBlock;
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-
-    /** @todo (rgw#1#): 获取服务器时间 */
-
-
-    *pTimeBlock = tmpTimeBlock;
-
-    return errcode;
-}
-#endif
+#include "libEcharge/ech_ftp.h"
 
 /** @brief
  *
@@ -125,6 +86,10 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
                 gdsl_list_cursor_free(cs);
                 xSemaphoreGive(pProto->xMutexProtoSend);
             }//if mutex
+            else
+            {
+                printf_safe("xMutexProtoSend Timeout---> [%0X]%d!!!\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            }
         }
     }//if mutex
 
@@ -411,8 +376,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             {
                 /**在这里判断交易号是否相等 */
                 HexToStr(&pbuff[4], strOrderSN_tmp, 8);
-                if(1)
-//                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+//                if(1)
+                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
                 {
                     *pctrl = pbuff[13];
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
@@ -473,7 +438,7 @@ ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
 
     return errcode;
 }
-ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder)
 {
     uint8_t *pbuff;
     ErrorCode_t errcode;
@@ -481,12 +446,12 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON
 
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
-    pbuff[0] = pCON->order.ucStartType;//4 有卡，5 无卡
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_ORDER, 20, 3);
+    pbuff[0] = pOrder->ucStartType;//4 有卡，5 无卡
+    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_ORDER, 20, 3);
 
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal)
 {
     CON_t *pCON;
     uint8_t id;
@@ -516,13 +481,17 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
         if(pCON != NULL)
         {
             HexToStr(&pbuff[1], strOrderSN_tmp, 8);
-            if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0)
+            if(strcmp(strOrderSN_tmp, pOrder->strOrderSN) == 0)
             {
                 *psiRetVal = 1;
             }
             else //订单号不相等
             {
                 *psiRetVal = 0;
+                printf_safe("OrderSN not equal!!! \n");
+                printf_safe("-Remote OrderSN: %s \n", strOrderSN_tmp);
+                printf_safe("-Local  OrderSN: %s \n", pOrder->strOrderSN);
+                
                 errcode = ERR_REMOTE_ORDERSN;
             }
         }
@@ -1291,19 +1260,17 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 {
     uint8_t ucOrderSN[8] = {0};
     uint8_t strOrderSN[17] = {0};
-    uint8_t strCardID[17] = {0};
     ul2uc ultmpNetSeq;
     ErrorCode_t errcode = ERR_NO;
 
-    HexToStr(pRfid->order.ucCardID, strCardID, 8);
-    if (pProto->info.BnWIsListCfg(pathBlackList, strCardID) == 1)
+    if (pProto->info.BnWIsListCfg(pathBlackList, pRfid->order.strCardID) == 1)
     {
         pRfid->order.ucAccountStatus = 0;
         pRfid->order.dBalance = 0;
 
         return ERR_BLACK_LIST;
     }
-    else if(pProto->info.BnWIsListCfg(pathWhiteList, strCardID) == 1)
+    else if(pProto->info.BnWIsListCfg(pathWhiteList, pRfid->order.strCardID) == 1)
     //else if(1)    
     {
         pRfid->order.ucAccountStatus = 1;
@@ -1337,7 +1304,6 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     ErrorCode_t errcode;
     uint8_t con_id;
     uint8_t strCardID[17] = {0};
-    uint8_t strOrderCardID[17] = {0};
     uint8_t ucOrderSN[8] = {0};
     uint8_t strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
@@ -1365,8 +1331,7 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         {
             strCardID[i] = pbuff[ucOffset++];
         }
-        HexToStr(pRfid->order.ucCardID, strOrderCardID, 8);
-        if(strcmp(strCardID, strOrderCardID) != 0)
+        if (strcmp(strCardID, pRfid->order.strCardID) != 0)
         {
             *psiRetVal = 0;
             break;
@@ -1794,4 +1759,275 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     }
 
     return ERR_NO;
+}
+
+ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint32_t ftp_len = 0;
+    uint8_t i, j;
+    uint8_t ucOffset = 0;
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+    ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil, errcode_stat;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0...3] 操作ID
+        ucOffset = 4;
+        EchFtpInit(&pProto->info.ftp);
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            pProto->info.ftp.strNewVersion[i] = pbuff[ucOffset++]; 
+        }
+        //ftp地址长度
+        ftp_len = pbuff[ucOffset++];
+        //ftp地址
+        for (i = 0; i < ftp_len; i++)
+        {
+            pProto->info.ftp.strServer[i] = pbuff[ucOffset++];
+        }
+        //登录ftp账号
+        for (i = 0; i < 8; i++)
+        {
+            pProto->info.ftp.strUser[i] = pbuff[ucOffset++];
+        }
+        //登录ftp密码
+        for (i = 0; i < 8; i++)
+        {
+            pProto->info.ftp.strPassword[i] = pbuff[ucOffset++];
+        }
+        //软件包名称
+        for (i = 0; i < 10; i++)
+        {
+            pProto->info.ftp.strNewFileName[i] = pbuff[ucOffset++];
+        }
+        //存储FTP数据
+        pProto->info.ftp.ucDownloadStatus = 1;
+        errcode_ver = pProto->info.ftp.SetFtpCfg(jnFtpNewVersion, (void *)(pProto->info.ftp.strNewVersion), ParamTypeString);
+        errcode_ser = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strServer), ParamTypeString);
+        errcode_usr = pProto->info.ftp.SetFtpCfg(jnFtpUsername, (void *)(pProto->info.ftp.strUser), ParamTypeString);
+        errcode_pass = pProto->info.ftp.SetFtpCfg(jnFtpPassword, (void *)(pProto->info.ftp.strPassword), ParamTypeString);
+        errcode_fil = pProto->info.ftp.SetFtpCfg(jnFtpNewFilename, (void *)(pProto->info.ftp.strNewFileName), ParamTypeString);
+        errcode_stat = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStatus, (void *)&(pProto->info.ftp.ucDownloadStatus), ParamTypeU8);
+        if (errcode_ver == ERR_NO &&
+            errcode_ser == ERR_NO &&
+            errcode_usr == ERR_NO &&
+            errcode_pass == ERR_NO &&
+            errcode_fil == ERR_NO &&
+            errcode_stat == ERR_NO)
+        {
+            *psiRetVal = 1;
+            errcode = ERR_NO;
+        }
+        else
+        {
+            *psiRetVal = 1;
+            errcode = ERR_FILE_RW;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_SET_OTA]->ucRecvdOptData;
+    if (succ == 1)
+    {
+        pbuff[4] = 1;
+    }
+    else if (succ == 0)
+    {
+        pbuff[4] = 2;
+    }
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_SET_OTA, 0, 1);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint8_t ucOffset = 0;
+    int i;
+    uint8_t tmpVersion[10 + 1] = {0};
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_OTA_DW, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        ucOffset = 4;
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            tmpVersion[i] = pbuff[ucOffset++]; 
+        }
+        if (strcmp(tmpVersion, pProto->info.ftp.strNewVersion) == 0)
+        {
+            errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_REMOTE_PARAM;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    uint8_t *pbuff;
+    uint8_t download_status;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_OTA_DW]->ucRecvdOptData;
+
+    pProto->info.ftp.GetFtpCfg((void *)&(pProto->info.ftp), NULL);
+    pbuff[4] = pProto->info.ftp.ucDownloadStatus;
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REQ_OTA_DW, 0, 1);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint8_t ucOffset = 0;
+    int i;
+    uint8_t tmpVersion[10 + 1] = { 0 };
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_START, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        ucOffset = 0;
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            tmpVersion[i] = pbuff[ucOffset++]; 
+        }
+        if (strcmp(tmpVersion, pProto->info.ftp.strNewVersion) == 0)
+        {
+            errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_REMOTE_PARAM;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+{
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_START, 20, 3);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    uint8_t ucOffset = 0;
+    int i;
+    uint8_t tmpVersion[10 + 1] = { 0 };
+    ErrorCode_t handle_errcode;
+    ErrorCode_t errcode;
+
+    errcode = ERR_NO;
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_RESULT, pbuff, &len);
+    switch (handle_errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        ucOffset = 0;
+        //软件版本号
+        for (i = 0; i < 10; i++)
+        {
+            tmpVersion[i] = pbuff[ucOffset++]; 
+        }
+        if (strcmp(tmpVersion, pProto->info.ftp.strNewVersion) == 0)
+        {
+            errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_REMOTE_PARAM;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_OTA_RESULT]->ucRecvdOptData;
+
+    pbuff[20] = succ;
+
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_RESULT, 20, 3);
+
+    return errcode;
 }

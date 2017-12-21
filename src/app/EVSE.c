@@ -19,6 +19,26 @@
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
 
+uint8_t isEVSEWorking(void)
+{
+    int id;
+    uint32_t ulTotalCON;
+    CON_t *pCON;
+    
+    ulTotalCON = pListCON->Total;
+    
+    for (id = 0; id < ulTotalCON; id++)
+    {
+        pCON = CONGetHandle(id);
+        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
+        {
+            return 1;
+        } 
+    }
+    return 0;
+}
+
+
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     EVSE_t *pEVSE;
@@ -856,7 +876,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /* @todo (yuye#1#): 确认电压范围 */
     /**  (rgw#1#): 实现代码 */
 
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
 //    if (Get_Power_Status == 1)
@@ -1080,7 +1100,6 @@ EVSE_t *EVSECreate(void)
         return NULL;
     }
     //pEVSE->info.pTemplSeg = UserListCreate();
-    strcpy(pEVSE->info.strSoftVer, FULLVERSION_STRING);
 
     pEVSE->status.ulArresterState = 0;
     pEVSE->status.ulKnockState    = 0;
@@ -1120,7 +1139,7 @@ static void CONInit(void)
     int i;
 //    double upp = 260;
 //    double low = 176;
-	double temp = 95;
+	double temp = 32;
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON[i] = CONCreate(i);
@@ -1128,6 +1147,7 @@ static void CONInit(void)
         THROW_ERROR(i, pCON[i]->info.GetCONCfg(pCON[i], NULL), ERR_LEVEL_WARNING, "CONInit GetCONCfg");
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageUpperLimits, &upp, ParamTypeDouble);
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
+        //pCON[i]->info .SetCONCfg (pCON[i], jnRatedCurrent, &temp, ParamTypeDouble);
 	    //pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
         
 
@@ -1147,5 +1167,5 @@ void EVSEinit(void)
 
     pechProto = EchProtocolCreate();
     THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");
-
+    THROW_ERROR(defDevID_File, pechProto->info.ftp.GetFtpCfg((void *)&(pechProto->info.ftp), NULL), ERR_LEVEL_WARNING, "EVSEinit GetFtpCfg");
 }
