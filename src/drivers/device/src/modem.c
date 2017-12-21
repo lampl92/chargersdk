@@ -1732,9 +1732,9 @@ void Modem_Poll(DevModem_t *pModem)
         case DS_MODEM_FTP_OPEN:
             NVIC_SetPriority(GPRS_IRQn, 1);
                 pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt++;
-            if (    pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt >= 5)
+            if (pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt >= 5)
             {
-                    pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 0;
+                pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
             }
@@ -1850,7 +1850,6 @@ void Modem_Poll(DevModem_t *pModem)
         case DS_MODEM_FTP_REGET:
             if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt >= 5)
             {
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
                 pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
                 pModem->state = DS_MODEM_FTP_ERR;
                 break;
@@ -1870,6 +1869,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_ERR:
+            xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
             xSysconf.xUpFlag.chargesdk_bin = 3;
             pechProto->info.ftp.ucDownloadStart = 0;
             xSysconf.SetSysCfg(
