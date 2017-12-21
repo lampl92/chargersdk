@@ -447,14 +447,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //            strcat(buff, "次\n");
 //        
            // strcat(terminateBuff, buff);
-            uart_read(UART_PORT_TERM, strTermCtx, 1500, 1000);
-            MULTIEDIT_AddText(multiedit_handler, strTermCtx);
-            sizeMul = MULTIEDIT_GetTextSize(multiedit_handler);
-            if (sizeMul > 10000)
-                MULTIEDIT_SetBufferSize(multiedit_handler, 10000);
+            uart_read(UART_PORT_TERM, strTermCtx, sizeof(strTermCtx), 1000);
             MULTIEDIT_AddText(multiedit_handler, strTermCtx);
             
-            //memset(strTermCtx,0,1500);
+            sizeMul = MULTIEDIT_GetTextSize(multiedit_handler);
+            if (sizeMul > 10000)
+            {
+                MULTIEDIT_SetBufferSize(multiedit_handler, 10000);
+                MULTIEDIT_AddText(multiedit_handler, strTermCtx);
+            }
+            memset(strTermCtx, 0, sizeof(strTermCtx));
+            
             WM_RestartTimer(pMsg->Data.v,500);
         }
         break;

@@ -494,14 +494,14 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             sprintf((char *)buf,"%.2lf",(jsItem->valuedouble + jsItemTmp->valuedouble) * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 10, i, buf);
 
-            jsItemTmp = cJSON_GetObjectItem(jsChild, jnOrderPayStatus);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderPayStatus);
             if(jsItem->valueint == 0)
             {
-                LISTVIEW_SetItemText(hItem, 11, i, "刷卡支付");
+                LISTVIEW_SetItemText(hItem, 11, i, "未支付");
             }
             else
             {
-                LISTVIEW_SetItemText(hItem, 11, i, "扫码支付");
+                LISTVIEW_SetItemText(hItem, 11, i, "已支付");
             }
             i++;
         }
@@ -893,7 +893,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总电费", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总服务费", GUI_TA_HCENTER | GUI_TA_VCENTER);
 			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "总费用", GUI_TA_HCENTER | GUI_TA_VCENTER);
-			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "支付方式", GUI_TA_HCENTER | GUI_TA_VCENTER);
+			LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, "支付状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
             Data_Flush(1,WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
 
             break;

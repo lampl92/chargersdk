@@ -334,6 +334,8 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
             printf_safe("TotalServFee\t%.3lf\n", jsItem->valuedouble);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
             printf_safe("StopType\t%d\n", jsItem->valueint);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderPayStatus);
+            printf_safe("PayStatus\t%d\n", jsItem->valueint);
 	        
 	        jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
