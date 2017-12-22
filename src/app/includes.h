@@ -57,6 +57,5 @@
 #include "tinysh.h"
 #include "xprintf.h"
 #include "errorcode.h"
-#include "version.h"
 
 #endif
