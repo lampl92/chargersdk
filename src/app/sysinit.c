@@ -5,7 +5,9 @@
 #include "stringName.h"
 #include "factorycfg.h"
 #include "cfg_sys.h"
+#include "cfg_parse.h"
 #include "yaffs2msic.h"
+#include "evse_version.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -93,6 +95,7 @@ void yaffs_init(void)
 void sys_Init(void)
 {
     int res;
+    evse_ver ver_from_cfg;
     //ifconfig_init();
     timeInit();
     retarget_init();
@@ -134,6 +137,13 @@ void sys_Init(void)
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
+    sscanf(xSysconf.strVersion, "%d.%d.%d", &(ver_from_cfg.major), &(ver_from_cfg.minor), &(ver_from_cfg.patch));
+    if (ver_from_cfg.major != EVSE_MAJOR || ver_from_cfg.minor != EVSE_MINOR || ver_from_cfg.patch != EVSE_PATCH)
+    {
+        sprintf(xSysconf.strVersion, "%02d.%02d.%04d", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+        xSysconf.SetSysCfg(jnSysVersion, xSysconf.strVersion, ParamTypeString);
+    }
+
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/

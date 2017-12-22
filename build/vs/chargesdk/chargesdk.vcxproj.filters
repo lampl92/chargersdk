@@ -1700,9 +1700,6 @@
     <ClInclude Include="..\..\..\src\app\timercallback.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\app\version.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\cli\cli_app.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -4087,6 +4084,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h">
       <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_version.h">
+      <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
