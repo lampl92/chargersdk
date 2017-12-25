@@ -267,4 +267,6 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->statOrderSeg = STATE_SEG_IDLE;
 	pOrder->statRemoteProc.card.stat = CARDCTRL_IDLE;
 	pOrder->statRemoteProc.order.stat = REMOTEOrder_IDLE;
+    pOrder->statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
+    pOrder->statRemoteProc.rtdata.stat = REMOTERTData_IDLE;
 }
