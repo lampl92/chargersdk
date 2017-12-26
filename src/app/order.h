@@ -94,12 +94,6 @@ typedef struct _ChargePeriodStatus
     double dPower;
 }ChargePeriodStatus_t;
 
-typedef struct _statRemote
-{
-	RemoteCardStatus_t card;
-	RemoteOrderStatus_t order;
-}statRemote_t;
-
 /** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中
  */
 typedef struct _OrderData
