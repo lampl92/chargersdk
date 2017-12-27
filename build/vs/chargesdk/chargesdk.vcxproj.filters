@@ -1578,9 +1578,6 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\date_time.c">
       <Filter>Source files\net\CycloneTCP\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\debug.c">
-      <Filter>Source files\net\CycloneTCP\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_freertos.c">
       <Filter>Source files\net\CycloneTCP\common</Filter>
     </ClCompile>
