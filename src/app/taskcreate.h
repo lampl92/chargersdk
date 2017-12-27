@@ -50,6 +50,8 @@ extern TimerHandle_t xHandleTimerRemoteStatus;
 extern TimerHandle_t xHandleTimerRemoteRTData;
 extern TimerHandle_t xHandleTimerRFID;
 
+extern QueueHandle_t xHandleQueueRfidPkg;
+extern QueueHandle_t xHandleQueueUserChargeCondition;
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;
 

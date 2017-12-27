@@ -322,8 +322,6 @@ void vTaskEVSECharge(void *pvParameters)
                 /******************************/
 
                 uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-//                printf_safe("uxBitsCharge = %X\n", uxBitsCharge);
-//                printf_safe("CPCondition = %X\n", defEventBitChargeCondition);
                 if (((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) && 
                     ((uxBitsCharge & defEventBitCONPlugOK) == defEventBitCONPlugOK)) //6vpwm->9vpwm S2主动断开
                 {
@@ -365,15 +363,9 @@ void vTaskEVSECharge(void *pvParameters)
 
                 /** @todo (rgw#1#): 等待结费
                                     结费成功后通知HMI显示结费完成,进入idle */
-#ifdef DEBUG_DIAG_DUMMY
-                xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-#endif
-//                xEventGroupSync(xHandleEventHMI,
-//                                defEventBitHMI_ChargeReqDispDone,
-//                                defeventBitHMI_ChargeReqDispDoneOK,
-//                                portMAX_DELAY );
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//通知HMI显示结束订单
 
+                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//通知HMI显示结束订单
+                
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
 #ifdef RFID_ProtoOK// 刷卡协议完成后添加
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventOrder,

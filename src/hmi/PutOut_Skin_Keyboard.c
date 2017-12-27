@@ -1422,11 +1422,9 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
                         pdTRUE,
                         pdTRUE,
                         10000);//要比remote中的order超时（60s）长
-                    if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
+                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
                     {
                         xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
-                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
                         CreateHomePage();
                     }
                     else

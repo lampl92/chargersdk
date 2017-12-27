@@ -146,6 +146,8 @@ EventGroupHandle_t xHandleEventTCP   = NULL;
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
 //队列
+QueueHandle_t xHandleQueueRfidPkg = NULL;
+QueueHandle_t xHandleQueueUserChargeCondition = NULL;
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //Timer句柄
@@ -255,9 +257,10 @@ void AppObjCreate (void)
     xHandleEventHMI = xEventGroupCreate();
     xHandleEventTCP = xEventGroupCreate();
 
-
-    xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
-    xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
+    xHandleQueueRfidPkg = xQueueCreate(defMaxCON, sizeof(RfidQPkg_t));
+    xHandleQueueUserChargeCondition = xQueueCreate(defMaxCON, sizeof(UserChargeCondition_t));
+    xHandleQueueOrders = xQueueCreate(defMaxCON, sizeof(OrderData_t));
+    xHandleQueueErrorPackage = xQueueCreate(50, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vCONTimerCB);

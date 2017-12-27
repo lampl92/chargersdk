@@ -29,7 +29,7 @@
 #endif
 
 
-#define defTotalCON             2
+#define defMaxCON               32
 //#define defUIDLength            4
 #define defCardIDLength         16
 #define defEVSESNLength         64

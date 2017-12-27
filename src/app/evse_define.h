@@ -43,17 +43,6 @@
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
 #define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
-#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
-//#define defEventBitIsNewID              BIT_2             //此卡在本桩没有刷过
-#define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
-#define defEventBitRFIDNewID            BIT_4
-#define defEventBitRFIDOldID            BIT_5
-#define defEventBitGoodIDReqDisp        BIT_6
-#define defEventBitGoodIDReqDispOK      BIT_7
-#define defEventBitBadIDReqDisp        BIT_8
-#define defEventBitBadIDReqDispOK      BIT_9
-#define defEventBitOweIDReqDisp        BIT_10
-#define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
 
@@ -63,7 +52,6 @@
 #define defEventBitOrderMakeOK                   BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK                 BIT_2
 
-#define defEventBitOrder_HMIDispOK               BIT_3
 #define defEventBitOrder_RemoteOrderOK           BIT_4
 #define defEventBitOrder_RemoteRTDataOK          BIT_5
 #define defEventBitOrder_StoreOK                 BIT_6
@@ -84,14 +72,8 @@
 
 #define defEventBitOrderTmpTimer                 BIT_19
 
-#if EVSE_USING_GUI1
-#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
-                                      defEventBitOrder_RemoteRTDataOK | \
-                                      defEventBitOrder_HMIDispOK)
-#else
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
-#endif
 
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
@@ -106,14 +88,9 @@
 #define defEventBitTCPClientFlushBuff   BIT_8
 
 /*------xHandleEventHMI*/
-#define defEventBitHMITimeOutToRFID         BIT_0
 #define defEventBitHMI_ChargeReqDispDone    BIT_1
-#define defeventBitHMI_ChargeReqDispDoneOK  BIT_2
-#define defEventBitHMI_ChargeReqClick       BIT_3
-#define defEventBitHMI_ChargeReqClickOK     BIT_4
-#define defEventBitHMI_ChargeReqLockLcdOK   BIT_5
-#define defEventBitHMI_RFIDOLD              BIT_6
 #define defEventBitHMI_UP_FAILD             BIT_7
+#define defEventBitHMI_TimeOut              BIT_8
     
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4

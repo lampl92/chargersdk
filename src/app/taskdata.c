@@ -214,6 +214,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
+                xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
                 /**存储订单 */
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
@@ -221,25 +222,33 @@ void vTaskEVSEData(void *pvParameters)
 	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
 	            {
     	            printf_safe("Order OK.....................\n");
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-		            /* 在这里存储订单*/
+    	            pCON->order.ucPayStatus = 1;
     	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
-		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
 	            else
 	            {
     	            printf_safe("Order TimeOut.....................\n");
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-					/* (rgw#1): 在这里存储订单*/
+    	            pCON->order.ucPayStatus = 0;
     	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
-		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
-		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
+                AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
+                xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
+                pCON->order.statOrder = STATE_ORDER_HOLD;
+                break;
+            case STATE_ORDER_HOLD:
+                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
+                {
+                    break;
+                }
+                else
+                {
+                    pCON->order.statOrder = STATE_ORDER_RETURN;
+                }
+                break;
+            case STATE_ORDER_RETURN:
+                OrderInit(&(pCON->order));//状态变为IDLE
                 break;
             }
         }//for CONid

@@ -1524,9 +1524,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\factorycfg.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
@@ -3919,9 +3916,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.h">
       <Filter>Header files\drivers\hal\CMSIS_RTOS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\app\version.h">
-      <Filter>Header files\app</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\timercallback.h">
       <Filter>Header files\app</Filter>

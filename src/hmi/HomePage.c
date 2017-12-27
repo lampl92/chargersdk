@@ -26,6 +26,38 @@
 #define TEXT_XSIZE  400
 #define TEXT_YSIZE  400
 
+
+
+
+
+
+
+
+
+
+
+
+//刷卡已经不再用这些事件, 为保证编译临时定义, 整改界面流程后删掉
+
+#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 WM_HWIN _hWinHome;//home界面句柄
 
 static WM_HWIN hwinQR;//二维码句柄

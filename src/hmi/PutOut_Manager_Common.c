@@ -198,8 +198,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
                         {
                             xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
-                            xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-                            xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
                             CreateHomePage();
                         }
                         else
@@ -253,8 +251,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                        0);
 //                    if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
 //                    {            
-//                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-//                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
 //                    }
 //                    CreateHomePage();
 //                }
