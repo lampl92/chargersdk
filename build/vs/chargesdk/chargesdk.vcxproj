@@ -235,6 +235,7 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\debug.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
@@ -689,6 +690,8 @@
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_multi.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_single.h" />
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\net_config.h" />
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\os_port_config.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aesni.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\arc4.h" />
@@ -959,10 +962,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns_sd\dns_sd.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\dm9000_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\enc28j60_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\enc624j600_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\ksz8851_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\a2fxxxm3_eth_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\am335x_eth_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\aps3_eth_driver.h" />
@@ -1011,7 +1010,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\xmc4700_eth_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\xmc4800_eth_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\zynq7000_eth_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\pcap\pcap_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ar8031_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dm9161_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dp83620_driver.h" />
@@ -1033,14 +1031,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\rtl8211_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\st802rt1a_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\upd60611_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\ksz8873_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\ksz8895_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\lan9303_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\bcm43362_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\esp32_wifi_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\mrf24wg_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\wilc1000_driver.h" />
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\winc1500_driver.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.h" />

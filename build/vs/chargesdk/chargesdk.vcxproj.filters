@@ -735,23 +735,11 @@
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers">
       <UniqueIdentifier>{ba4e9b10-0b60-4490-816e-fdbcd5f21b4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\eth">
-      <UniqueIdentifier>{645a554e-3921-457b-91c1-acca66b82f63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\mac">
       <UniqueIdentifier>{6f21035e-27a6-4662-96e2-bcbf8c156347}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\pcap">
-      <UniqueIdentifier>{b5c8b146-4795-465d-93e6-98ffac9d4ca5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\phy">
       <UniqueIdentifier>{a2904c73-e5b2-489b-8bc8-2cea423bef04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\switch">
-      <UniqueIdentifier>{000445ca-d0d7-489b-8a8c-264892e1cc60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi">
-      <UniqueIdentifier>{75d900bc-1494-4de9-89cf-873b7e338627}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\ftp">
       <UniqueIdentifier>{1766b159-dc0d-4b35-bc4b-55ab5f9b3fc5}</UniqueIdentifier>
@@ -800,6 +788,12 @@
     </Filter>
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\web_socket">
       <UniqueIdentifier>{e64a5b5b-4ca8-4fed-a76c-e9e8b9567163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\customer">
+      <UniqueIdentifier>{7ff88056-e64e-412c-af82-1b55ac201654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\customer">
+      <UniqueIdentifier>{eda88369-7c01-46b3-94a9-1c053daea50e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1721,6 +1715,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\echo.c">
       <Filter>Source files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\debug.c">
+      <Filter>Source files\net\CycloneTCP\customer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4145,18 +4142,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns_sd\dns_sd.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns_sd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\dm9000_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\eth</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\enc28j60_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\eth</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\enc624j600_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\eth</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\eth\ksz8851_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\eth</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\a2fxxxm3_eth_driver.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
     </ClInclude>
@@ -4301,9 +4286,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\zynq7000_eth_driver.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\pcap\pcap_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\pcap</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ar8031_driver.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
     </ClInclude>
@@ -4366,30 +4348,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\upd60611_driver.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\ksz8873_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\switch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\ksz8895_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\switch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\switch\lan9303_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\switch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\bcm43362_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\esp32_wifi_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\mrf24wg_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\wilc1000_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\wifi\winc1500_driver.h">
-      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\wifi</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
@@ -4690,6 +4648,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_version.h">
       <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\net_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\os_port_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
