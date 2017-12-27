@@ -111,22 +111,34 @@ void vTaskEVSEData(void *pvParameters)
                     AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 }
                 
-                /****金额判断****/
-                if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
+                
+ 
+                if ((time(NULL) - pCON->order.tStartTime) < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
                 {
-                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
+                    /****电量判断****/
+                    if (pCON->order.dLimitPower != 0) //0 时表示自动充满，非0即停止电量 
                     {
-                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
-                        pCON->order.statOrder = STATE_ORDER_WAITSTOP;
-                        break;
+                        if (pCON->order.dTotalPower >= pCON->order.dLimitPower) // 达到充电电量
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitPower);
+                            pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                            break;
+                        }
                     }
-                }
-                //****时间判断***   
-                if (time(NULL) - pCON->order.tStartTime < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
-                {
-                    if (pCON->order.ulLimitTime != 0) //0表示自动充满 非0表示设定时间
+                    /****金额判断****/
+                    else if (pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
                     {
-                        if (time(NULL) - pCON->order.tStartTime >= pCON->order.ulLimitTime)//达到或超过设定时间
+                        if (pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                            pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                            break;
+                        }
+                    }
+                    //****时间判断***  
+                    else if (pCON->order.ulLimitTime != 0) //0表示自动充满 非0表示设定时间
+                    {
+                        if ((time(NULL) - pCON->order.tStartTime) >= pCON->order.ulLimitTime)//达到或超过设定时间
                         {
                             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                             pCON->order.statOrder = STATE_ORDER_WAITSTOP;
@@ -156,14 +168,21 @@ void vTaskEVSEData(void *pvParameters)
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy ************/
-                if(pCON->order.dLimitFee != 0)
+                if (pCON->order.dLimitPower != 0)
+                {
+                    if (pCON->order.dTotalPower > pCON->order.dLimitPower)
+                    {
+                        pCON->order.dTotalPower = pCON->order.dLimitPower;
+                    }
+                }
+                else if(pCON->order.dLimitFee != 0)
                 {
                     if(pCON->order.dTotalFee > pCON->order.dLimitFee)
                     {
                         pCON->order.dTotalFee = pCON->order.dLimitFee;
                     }
                 }
-                if (pCON->order.ulLimitTime != 0)
+                else if (pCON->order.ulLimitTime != 0)
                 {
                     if (pCON->order.tStopTime - pCON->order.tStartTime > pCON->order.ulLimitTime)
                     {
@@ -172,6 +191,11 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 /*****************************************/
                 uxBitsData = xEventGroupGetBits(pCON->status.xHandleEventOrder);
+                if ((uxBitsData & defEventBitOrderStopTypeLimitPower) == defEventBitOrderStopTypeLimitPower)    //达到充电电量限制
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitPower);
+                    pCON->order.ucStopType = defOrderStopType_Power;
+                }
                 if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
