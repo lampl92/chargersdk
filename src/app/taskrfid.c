@@ -13,7 +13,7 @@
 
 //#define DEBUG_NO_TASKRFID
 
-static int GetOldID(char *pCardID)
+static int IsOldID(char *pCardID)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
@@ -32,7 +32,7 @@ static int GetOldID(char *pCardID)
     return -1;
 }
 
-static int GetNewID(void)
+static int IsNewID(void)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
@@ -110,7 +110,7 @@ void vTaskEVSERFID(void *pvParameters)
             break;
         case STATE_RFID_GOTID:
             // 判断卡是否刷过
-            id = GetOldID(pRFIDDev->order.strCardID);
+            id = IsOldID(pRFIDDev->order.strCardID);
             if (id >= 0)
             {
                 pRFIDDev->order.ucCONID = id;
@@ -118,7 +118,7 @@ void vTaskEVSERFID(void *pvParameters)
                 break;
             }
             // 卡之前没有刷过, 判断是否有可用枪
-            id = GetNewID();
+            id = IsNewID();
             if (id >= 0)
             {
                 printf_safe("有枪可以用\n");
