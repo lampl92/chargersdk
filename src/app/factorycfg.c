@@ -9,110 +9,110 @@
 
 const char *strEVSECfg = 
 "{\
-    \"EVSESN\":\"0102030405060708\",\
-    \"EVSEID\":\"3000000000000002\",\
-    \"EVSEType\":2,\
-    \"TotalCON\":1,\
-    \"Lng\":116.275833,\
-    \"Lat\":39.831944,\
-    \"ServiceFeeType\":1,\
-    \"ServiceFee\":1,\
-    \"DefSegFee\":1.2,\
-    \"CONArray\":[\
-        {\
-            \"ID\":0,\
-            \"Type\":2,\
-            \"SocketType\":67,\
-            \"VolatageUpperLimits\":260,\
-            \"VolatageLowerLimits\":176,\
-            \"ACTempUpperLimits\":95,\
-            \"ACTempLowerLimits\":-40,\
-            \"SocketTempUpperLimits\":95,\
-            \"SocketTempLowerLimits\":-40,\
-            \"RatedCurrent\":32,\
-            \"RatedPower\":7,\
-            \"QRCode\":\"3000000000000002\"\
-        }\
-    ],\
-    \"TemplSegArray\":[]\
-}";
+    \"EVSESN\":\"0102030405060708\",\n \
+    \"EVSEID\":\"3000000000000002\",\n \
+    \"EVSEType\":2,\n \
+    \"TotalCON\":1,\n \
+    \"Lng\":116.275833,\n \
+    \"Lat\":39.831944,\n \
+    \"ServiceFeeType\":1,\n \
+    \"ServiceFee\":1,\n \
+    \"DefSegFee\":1.2,\n \
+    \"CONArray\":[\n \
+        {\n \
+            \"ID\":0,\n \
+            \"Type\":2,\n \
+            \"SocketType\":67,\n \
+            \"VolatageUpperLimits\":260,\n \
+            \"VolatageLowerLimits\":176,\n \
+            \"ACTempUpperLimits\":95,\n \
+            \"ACTempLowerLimits\":-40,\n \
+            \"SocketTempUpperLimits\":95,\n \
+            \"SocketTempLowerLimits\":-40,\n \
+            \"RatedCurrent\":32,\n \
+            \"RatedPower\":7,\n \
+            \"QRCode\":\"3000000000000002\"\n \
+        }\n \
+    ],\n \
+    \"TemplSegArray\":[]\n \
+}\n";
 
 const char *strProtoCfg =
 "{\
-    \"ServerIP\": \"123.56.113.123\",\
-    \"ServerPort\": 6677,\
-    \"UserName\": \"esaasusr\",\
-    \"UserPwd\": \"esaaspasswrd\",\
-    \"Key\": \"0123456789abcdeg\",\
-    \"NewKey\": \"\",\
-    \"NewKeyChangeTime\": 4294967295,\
-    \"OptSN\": 0,\
-    \"ProtoVer\": 104,\
-    \"HeartBeatCyc_ms\": 15000,\
-    \"StatusCyc_ms\": 120000,\
-    \"RTDataCyc_ms\": 10000,\
-    \"ResetAct\": 0,\
-    \"PowerFee_sharp\": 1,\
-    \"PowerFee_peak\": 0,\
-    \"PowerFee_shoulder\": 0,\
-    \"PowerFee_off_peak\": 0,\
-    \"ServiceFee_sharp\": 0.8,\
-    \"ServiceFee_peak\": 0,\
-    \"ServiceFee_shoulder\": 0,\
-    \"ServiceFee_off_peak\": 0,\
-    \"SegTime_sharp\": {\
-        \"SegCont\": 1,\
-        \"Start1\": 0,\
-        \"End1\": 24,\
-        \"Start2\": 255,\
-        \"End2\": 255,\
-        \"Start3\": 255,\
-        \"End3\": 255,\
-        \"Start4\": 255,\
-        \"End4\": 255,\
-        \"Start5\": 255,\
-        \"End5\": 255\
-    },\
-    \"SegTime_peak\": {\
-        \"SegCont\": 0,\
-        \"Start1\": 255,\
-        \"End1\": 255,\
-        \"Start2\": 255,\
-        \"End2\": 255,\
-        \"Start3\": 255,\
-        \"End3\": 255,\
-        \"Start4\": 255,\
-        \"End4\": 255,\
-        \"Start5\": 255,\
-        \"End5\": 255\
-    },\
-    \"SegTime_shoulder\": {\
-        \"SegCont\": 0,\
-        \"Start1\": 255,\
-        \"End1\": 255,\
-        \"Start2\": 255,\
-        \"End2\": 255,\
-        \"Start3\": 255,\
-        \"End3\": 255,\
-        \"Start4\": 255,\
-        \"End4\": 255,\
-        \"Start5\": 255,\
-        \"End5\": 255\
-    },\
-    \"SegTime_off_peak\": {\
-        \"SegCont\": 0,\
-        \"Start1\": 255,\
-        \"End1\": 255,\
-        \"Start2\": 255,\
-        \"End2\": 255,\
-        \"Start3\": 255,\
-        \"End3\": 255,\
-        \"Start4\": 255,\
-        \"End4\": 255,\
-        \"Start5\": 255,\
-        \"End5\": 255\
-    }\
-}";
+    \"ServerIP\": \"123.56.113.123\",\n \
+    \"ServerPort\": 6677,\n \
+    \"UserName\": \"esaasusr\",\n \
+    \"UserPwd\": \"esaaspasswrd\",\n \
+    \"Key\": \"0123456789abcdeg\",\n \
+    \"NewKey\": \"\",\n \
+    \"NewKeyChangeTime\": 4294967295,\n \
+    \"OptSN\": 0,\n \
+    \"ProtoVer\": 104,\n \
+    \"HeartBeatCyc_ms\": 15000,\n \
+    \"StatusCyc_ms\": 120000,\n \
+    \"RTDataCyc_ms\": 10000,\n \
+    \"ResetAct\": 0,\n \
+    \"PowerFee_sharp\": 1,\n \
+    \"PowerFee_peak\": 0,\n \
+    \"PowerFee_shoulder\": 0,\n \
+    \"PowerFee_off_peak\": 0,\n \
+    \"ServiceFee_sharp\": 0.8,\n \
+    \"ServiceFee_peak\": 0,\n \
+    \"ServiceFee_shoulder\": 0,\n \
+    \"ServiceFee_off_peak\": 0,\n \
+    \"SegTime_sharp\": {\n \
+        \"SegCont\": 1,\n \
+        \"Start1\": 0,\n \
+        \"End1\": 24,\n \
+        \"Start2\": 255,\n \
+        \"End2\": 255,\n \
+        \"Start3\": 255,\n \
+        \"End3\": 255,\n \
+        \"Start4\": 255,\n \
+        \"End4\": 255,\n \
+        \"Start5\": 255,\n \
+        \"End5\": 255\n \
+    },\n \
+    \"SegTime_peak\": {\n \
+        \"SegCont\": 0,\n \
+        \"Start1\": 255,\n \
+        \"End1\": 255,\n \
+        \"Start2\": 255,\n \
+        \"End2\": 255,\n \
+        \"Start3\": 255,\n \
+        \"End3\": 255,\n \
+        \"Start4\": 255,\n \
+        \"End4\": 255,\n \
+        \"Start5\": 255,\n \
+        \"End5\": 255\n \
+    },\n \
+    \"SegTime_shoulder\": {\n \
+        \"SegCont\": 0,\n \
+        \"Start1\": 255,\n \
+        \"End1\": 255,\n \
+        \"Start2\": 255,\n \
+        \"End2\": 255,\n \
+        \"Start3\": 255,\n \
+        \"End3\": 255,\n \
+        \"Start4\": 255,\n \
+        \"End4\": 255,\n \
+        \"Start5\": 255,\n \
+        \"End5\": 255\n \
+    },\n \
+    \"SegTime_off_peak\": {\n \
+        \"SegCont\": 0,\n \
+        \"Start1\": 255,\n \
+        \"End1\": 255,\n \
+        \"Start2\": 255,\n \
+        \"End2\": 255,\n \
+        \"Start3\": 255,\n \
+        \"End3\": 255,\n \
+        \"Start4\": 255,\n \
+        \"End4\": 255,\n \
+        \"Start5\": 255,\n \
+        \"End5\": 255\n \
+    }\n \
+}\n";
 
 const char *strFtpCfg =
 "{\n \
@@ -150,8 +150,8 @@ const char *strSysCfg =
 }\n";
    
         
-const char *strWhiteListCfg ="[]";
-const char *strBlackListCfg ="[]";
+const char *strWhiteListCfg ="[]\n";
+const char *strBlackListCfg ="[]\n";
     
-const char *strOrderCfg ="[]";
-const char *strLogCfg ="[]";
+const char *strOrderCfg ="[]\n";
+const char *strLogCfg ="[]\n";
