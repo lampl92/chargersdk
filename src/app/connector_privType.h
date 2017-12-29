@@ -53,6 +53,7 @@ typedef enum
 typedef ErrorCode_t(*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
 typedef ErrorCode_t(*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t(*pCon_ft)(void *pvCon);
+typedef ErrorCode_t(*pLine_ft)(void *pvLine);
 
 typedef struct _CONInfo
 {
@@ -73,9 +74,26 @@ typedef struct _CONInfo
     ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
 } CONInfo_t;
 
+typedef struct _Line
+{
+    struct _info
+    {
+        double dRatedCurr;
+    }info;
+    struct _status
+    {
+        double dVolt;
+        double dCurr;
+        double dFreq;
+        double dPower;
+        double dEnergy;
+        double dTemp;
+        uint8_t ucRelayState;
+    }status;
+}Line_t;
+
 typedef struct _CONStatus
 {
-    //uint8_t ucHeldCardID[defCardIDLength];
     CONStatusType_t xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     uint8_t ucLoadPercent;        // 负载百分比
     CONStatusType_t xCCState;     // 检测点4 CC state --PE
@@ -90,6 +108,8 @@ typedef struct _CONStatus
     double dChargingCurrent;
     double dChargingFrequence;
     double dChargingPower;
+    double dPower_Total;
+    double dEnergy_Total;
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;

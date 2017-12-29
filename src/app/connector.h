@@ -16,6 +16,12 @@ typedef struct _CON
     CONInfo_t info;
     CONStatus_t status;
     CONState_t state;
+    struct _line
+    {
+        Line_t A;
+        Line_t B;
+        Line_t C;
+    }line;
     OrderData_t order;
     OrderTmpData_t OrderTmp;
 } CON_t;
