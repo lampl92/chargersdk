@@ -7,7 +7,7 @@
 #include "os_port.h"
 #include "core/net.h"
 #include "drivers/mac/stm32f4x9_eth_driver.h"
-#include "drivers/phy/lan8742_driver.h"
+#include "drivers/phy/lan8720_driver.h"
 #include "dhcp/dhcp_client.h"
 #include "debug.h"
 
@@ -19,13 +19,13 @@ extern void testBnWList(void);
 #define APP_USE_DHCP ENABLED
 DhcpClientSettings dhcpClientSettings;
 DhcpClientContext dhcpClientContext;
-int_t eth_main(void)
-{
     error_t error;
     NetInterface *interface;
     OsTask *task;
     MacAddr macAddr;
     Ipv4Addr ipv4Addr;
+int_t eth_main(void)
+{
 
        //Start-up message
     TRACE_INFO("\r\n");
@@ -52,10 +52,10 @@ int_t eth_main(void)
        //Set interface name
     //netSetInterfaceName(interface, "eth0"); 已经设置
     //Set host name
-    //netSetHostname(interface, "WebServerDemo");
+    netSetHostname(interface, "RGW_Charger");
     //Select the relevant network adapter
     netSetDriver(interface, &stm32f4x9EthDriver);
-    netSetPhyDriver(interface, &lan8742PhyDriver);
+    netSetPhyDriver(interface, &lan8720PhyDriver);
     //Set host MAC address
     macStringToAddr(APP_MAC_ADDR, &macAddr);
     netSetMacAddr(interface, &macAddr);
@@ -128,6 +128,7 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
     //testBnWList();
+    eth_main();
 #if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);

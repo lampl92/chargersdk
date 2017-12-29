@@ -218,7 +218,6 @@ void stm32f4x9EthInitGpio(NetInterface *interface)
    __HAL_RCC_GPIOA_CLK_ENABLE();
    __HAL_RCC_GPIOB_CLK_ENABLE();
    __HAL_RCC_GPIOC_CLK_ENABLE();
-   __HAL_RCC_GPIOG_CLK_ENABLE();
 
    //Select RMII interface mode
    SYSCFG->PMC |= SYSCFG_PMC_MII_RMII_SEL;

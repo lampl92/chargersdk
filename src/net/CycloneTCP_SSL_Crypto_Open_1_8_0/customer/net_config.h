@@ -31,6 +31,11 @@
 
 #define GPL_LICENSE_TERMS_ACCEPTED
 #define PPP_SUPPORT ENABLED
+#define NET_TASK_PRIORITY         12
+#define DNS_CLIENT_SUPPORT DISABLED
+#define MDNS_CLIENT_SUPPORT DISABLED
+#define NBNS_CLIENT_SUPPORT DISABLED
+#define NBNS_RESPONDER_SUPPORT DISABLED
 
 //Trace level for TCP/IP stack debugging
 #define MEM_TRACE_LEVEL          4
@@ -127,7 +132,7 @@
 #define TCP_SACK_SUPPORT DISABLED
 
 //UDP support
-#define UDP_SUPPORT DISABLED
+#define UDP_SUPPORT ENABLED
 //Receive queue depth for connectionless sockets
 #define UDP_RX_QUEUE_SIZE 4
 
