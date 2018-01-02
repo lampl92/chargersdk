@@ -1530,6 +1530,9 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -4081,6 +4084,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_version.h">
       <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hmi\GUI_backstage.h">
+      <Filter>Header files\hmi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
