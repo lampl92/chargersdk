@@ -53,7 +53,7 @@ typedef enum
 typedef ErrorCode_t(*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
 typedef ErrorCode_t(*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t(*pCon_ft)(void *pvCon);
-typedef ErrorCode_t(*pLine_ft)(void *pvLine);
+
 
 typedef struct _CONInfo
 {
@@ -73,24 +73,6 @@ typedef struct _CONInfo
     pCONGetCfg_ft GetCONCfg;
     ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
 } CONInfo_t;
-
-typedef struct _Line
-{
-    struct _info
-    {
-        double dRatedCurr;
-    }info;
-    struct _status
-    {
-        double dVolt;
-        double dCurr;
-        double dFreq;
-        double dPower;
-        double dEnergy;
-        double dTemp;
-        uint8_t ucRelayState;
-    }status;
-}Line_t;
 
 typedef struct _CONStatus
 {
