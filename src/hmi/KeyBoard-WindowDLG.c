@@ -63,9 +63,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   // USER START (Optionally insert additional variables)
   // USER END
     WM_HWIN hItem;
+    
+    static PageChosenData_struct GetPic;
+    PageChosenData_struct *Pic = &GetPic;
+    
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        
+        GetPic.BitmapConstChosen = &BitmapCheckboxChosen;
+        GetPic.BitmapConstNotChosen = &BitmapCheckboxNotChosen;
+        WM_SetUserData(pMsg->hWin, &Pic, sizeof(Pic));
         //GUI_SetFont(&SIF36_Font);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         //CHECKBOX_SetText(hItem, "1243534");
@@ -84,6 +90,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_BUTTON_S:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GUI_Exec();
                 if (FlagDisableKeyboard = !FlagDisableKeyboard)
                 {
                     WM_HideWindow(HwinKeyboard);
@@ -102,6 +109,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_0:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GUI_Exec();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
                 CHECKBOX_SetState(hItem,1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
@@ -110,6 +118,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
+                GUI_Exec();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -120,6 +129,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_1:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GUI_Exec();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
                 CHECKBOX_SetState(hItem, 1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
@@ -128,6 +138,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
+                GUI_Exec();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -138,6 +149,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_2:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
+                GUI_Exec();
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
                 CHECKBOX_SetState(hItem, 1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
@@ -146,6 +158,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
+                GUI_Exec();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -174,6 +187,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case WM_PAINT:
+        GUI_DrawBitmap(&BitmapCheckboxChosen, 100, 10);
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -415,6 +429,7 @@ WM_HWIN CreateKeyBoardWindow(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     HwinKeyboard = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog1, hWin, 0, 0);
+
     return hWin;  
 }
 
