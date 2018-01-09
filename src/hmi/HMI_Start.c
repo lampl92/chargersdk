@@ -59,6 +59,13 @@ p_inf *ChargeDoneVoidImage;
 
 p_inf *AdvertisementImage;
 
+p_inf *DtaFileCheckboxChosen;
+p_inf *DtaFileCheckboxNotChosen;
+GUI_BITMAP BitmapCheckboxChosen;
+GUI_BITMAP BitmapCheckboxNotChosen;
+GUI_LOGPALETTE Palette;
+
+
 
 static void vTaskReadPic(void *pvParameters)
 {
@@ -116,6 +123,10 @@ void MainTask(void)
 
         AdvertisementImage = readPicInf(pathAdvertisementImage);
         HomeImage = readPicInf(pathHomeImage);
+        DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
+        DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
+        GUI_CreateBitmapFromStream565(&BitmapCheckboxChosen, &Palette, DtaFileCheckboxChosen->pfilestring);
+        GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
@@ -125,10 +136,11 @@ void MainTask(void)
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
-        CreateAdvertisementPage();
-        CreateHomePage();
-        WM_HideWindow(_hWinAdvertizement);
-        WM_ShowWindow(cur_win);
+//        CreateAdvertisementPage();
+//        CreateHomePage();
+//        WM_HideWindow(_hWinAdvertizement);
+//        WM_ShowWindow(cur_win);
+        CreateKeyBoardWindow();
     }
     else
     {

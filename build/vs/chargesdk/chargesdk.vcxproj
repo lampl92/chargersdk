@@ -174,9 +174,11 @@
     <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
     <ClCompile Include="..\..\..\src\hmi\HomePage.c" />
+    <ClCompile Include="..\..\..\src\hmi\KeyBoard-WindowDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
@@ -452,6 +454,7 @@
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\QR_Encode.h" />
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\rscode.h" />
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\split.h" />
+    <ClInclude Include="..\..\..\src\hmi\skin.h" />
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h" />

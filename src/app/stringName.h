@@ -56,6 +56,9 @@
         
 #define pathAdvertisementImage      "/nand/system/AdvertisementImage.bmp"
 
+#define pathCheckboxDta             "/nand/system/chosen.dta"
+#define pathCheckboxNotDta          "/nand/system/notchosen.dta"
+
 #define pathstSIF12                 "/nand/system/stSIF12.sif"
 #define pathstSIF16                 "/nand/system/stSIF16.sif"
 #define pathstSIF24                 "/nand/system/stSIF24.sif"

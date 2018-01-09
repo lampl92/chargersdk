@@ -118,6 +118,7 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 void PutOut_SelAOrB();
+WM_HWIN CreateKeyBoardWindow(void);
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateCardInfoPage(void);
 WM_HWIN CreateChargingPage(void);

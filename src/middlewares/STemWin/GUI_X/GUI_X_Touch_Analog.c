@@ -70,7 +70,7 @@ void GUI_TOUCH_X_ActivateX(void)
             {
                 _AsmtCount = 0;//一旦触屏则广告时间计数归零
                 _pidFlag = 1;
-                Buzzer_control(1);
+               // Buzzer_control(1);
                 adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
                 adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
 
