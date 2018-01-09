@@ -1530,6 +1530,9 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\line.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -3656,9 +3659,6 @@
     <ClInclude Include="..\..\..\src\app\sys_types.h">
       <Filter>Header files\app</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\cli\ymodem.h">
-      <Filter>Source files\cli</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h">
       <Filter>Header files\os\FreeRTOS</Filter>
     </ClInclude>
@@ -4079,8 +4079,14 @@
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h">
       <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\line.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\cli\ymodem.h">
+      <Filter>Header files\cli</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_version.h">
-      <Filter>Header files</Filter>
+      <Filter>Header files\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

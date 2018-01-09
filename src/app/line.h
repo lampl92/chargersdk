@@ -11,15 +11,20 @@
 #include "stm32f4xx.h"
 #include "errorcode.h"
 
-typedef ErrorCode_t(*pLine_ft)(void *pvLine, uint8_t ucPhase);
+#define defLineA        0
+#define defLineB        1
+#define defLineC        2
+#define defLineN        3
+
+
+typedef ErrorCode_t(*pLine_ft)(void *pvLine, uint8_t ucCONID, uint8_t ucLineID);
 
 
 typedef struct _Line
 {
     struct _info
     {
-        uint8_t ucPhase;//1,2,3=>A,B,C
-        double dRatedCurr;
+        uint8_t ucLineID;//0,1,2=>A,B,C
     }info;
     struct _status
     {
@@ -27,7 +32,6 @@ typedef struct _Line
         double dCurr;
         double dFreq;
         double dPower;
-        double dEnergy;
         double dTemp;
         uint8_t ucRelayState;
     }status;
@@ -35,9 +39,8 @@ typedef struct _Line
     pLine_ft GetCurr;
     pLine_ft GetFreq;
     pLine_ft GetPower;
-    pLine_ft GetEnergy;
     pLine_ft GetTemp;
-    
 }Line_t;
 
+void LineInit(Line_t *pLine, uint8_t ucLineID);
 #endif

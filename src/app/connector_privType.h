@@ -90,6 +90,7 @@ typedef struct _CONStatus
     double dChargingCurrent;
     double dChargingFrequence;
     double dChargingPower;
+    double dChargingEnergy;
     double dPower_Total;
     double dEnergy_Total;
     EventGroupHandle_t xHandleEventCharge;
@@ -110,6 +111,7 @@ typedef struct _CONStatus
     pCon_ft GetChargingCurrent;
     pCon_ft GetChargingFrequence;
     pCon_ft GetChargingPower;
+    pCon_ft GetChargingEnergy;
     VoltState_t xVoltStat;
     CurrState_t xCurrStat;
 
