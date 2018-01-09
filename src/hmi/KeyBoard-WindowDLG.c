@@ -65,6 +65,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     WM_HWIN hItem;
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
+        
         //GUI_SetFont(&SIF36_Font);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         //CHECKBOX_SetText(hItem, "1243534");
@@ -75,7 +76,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
         //CHECKBOX_SetText(hItem, "12345345");
         CHECKBOX_SetSkin(hItem, SKIN_checkbox);
-        
+        GUI_DrawBitmap(&BitmapCheckboxChosen, 100, 10);
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;

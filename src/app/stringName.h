@@ -58,6 +58,7 @@
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"
 #define pathCheckboxNotDta          "/nand/system/notchosen.dta"
+#define pathKeyboardDta             "/nand/system/KeyboardMark.dta"
 
 #define pathstSIF12                 "/nand/system/stSIF12.sif"
 #define pathstSIF16                 "/nand/system/stSIF16.sif"

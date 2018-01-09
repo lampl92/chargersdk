@@ -123,7 +123,7 @@ void MainTask(void)
 
         AdvertisementImage = readPicInf(pathAdvertisementImage);
         HomeImage = readPicInf(pathHomeImage);
-        DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
+        DtaFileCheckboxChosen = readPicInf(pathKeyboardDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxChosen, &Palette, DtaFileCheckboxChosen->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
