@@ -12,12 +12,199 @@
 #include "cJSON.h"
 #include "yaffsfs.h"
 #include "sysinit.h"
+#include "utils.h"
+#include "cfg_parse.h"
 #include <string.h>
+#include <stdarg.h>
 
-double cfg_get_double(cJSON *pCfgObj, ...)
+#define DEBUG_PARSE 1
+
+#define MAX_STRING_NAME     200
+
+/*
 {
-    
+    "a": 1,
+    "b": 2,
+    "c": {
+        "ca": 1,
+        "cb": 2,
+        "cc": [0, 1, 2]
+    },
+    "d": [{
+            "da": 1,
+            "db": 1,
+            "dc": 1
+        },
+        {
+            "da": 1,
+            "db": 1,
+            "dc": 1
+        }
+    ]
 }
+*/
+//"a"
+//"c.ca"
+//"c.cc:2"
+//"d:1.da"
+
+static ErrorCode_t cfg_get(cJSON *pCfgObj, void *retval, char *str_key, uint8_t type)
+{
+    char *p;
+    char *str_n;
+    int n;
+    cJSON *pRootObj;
+    cJSON *pSubObj;
+    ErrorCode_t errcode;
+    
+    pRootObj = pCfgObj;
+    errcode = ERR_NO;
+    int i = 0;
+    while ((p = strsep(&str_key, ".")) != NULL)
+    {
+#if DEBUG_PARSE
+        i++;
+        printf_safe("string = %s\n", p);
+        printf_safe("size = %d\n", strlen(p));
+        printf_safe("i = %d\n", i);
+#endif
+        str_n = strrchr(p, ':');
+        if (str_n != NULL)
+        {
+            str_n = str_n + 1;//例如str_n为":0", +1 变为"0"
+            n = atoi(str_n);
+            p[strlen(p) - 2] = '\0';//-2把"array:0"变为"array"
+            printf_safe("p = %s\n", p);
+            pSubObj = cJSON_GetObjectItem(pRootObj, p);
+            if (pSubObj == NULL)
+            {
+                errcode = ERR_FILE_PARSE;
+                goto exit_get;
+            }
+            else
+            {
+                pRootObj = cJSON_GetArrayItem(pSubObj, n);
+            }
+        }
+        else
+        {
+            pSubObj = cJSON_GetObjectItem(pRootObj, p);
+            if (pSubObj == NULL)
+            {
+                errcode = ERR_FILE_PARSE;
+                goto exit_get;
+            }
+            else
+            {
+                pRootObj = pSubObj;
+            }
+        }
+    }
+    switch (type)
+    {
+    case ParamTypeU8:
+        *(uint8_t *)retval = pRootObj->valueint;
+        break;
+    case ParamTypeU16:
+        *(uint16_t *)retval = pRootObj->valueint;
+        break;
+    case ParamTypeU32:
+        *(uint32_t *)retval = pRootObj->valueint;
+        break;
+    case ParamTypeS32:
+        *(int32_t *)retval = pRootObj->valueint;
+        break;
+    case ParamTypeDouble:
+        *(double *)retval = pRootObj->valuedouble;
+        break;
+    case ParamTypeString:
+        strcpy((char *)retval, pRootObj->valuestring);
+        break;
+    default:
+        retval = NULL;
+        errcode = ERR_FILE_PARAM;
+        break;
+    }
+    
+exit_get:
+    return errcode;
+}
+
+ErrorCode_t cfg_get_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeU8);
+}
+ErrorCode_t cfg_get_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeU16);
+}
+ErrorCode_t cfg_get_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeU32);
+}
+
+ErrorCode_t cfg_get_int32(cJSON *pCfgObj, int32_t *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeS32);
+}
+
+ErrorCode_t cfg_get_double(cJSON *pCfgObj, double *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeDouble);
+}
+ErrorCode_t cfg_get_string(cJSON *pCfgObj, char *retval, char *fmt, ...)
+{
+    char str[MAX_STRING_NAME] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfg_get(pCfgObj, (void *)retval, str, ParamTypeString);
+}
+
 static const char *select_ctx_from_path(char *path)
 {
     if (strcmp(path, pathOrder) == 0)
@@ -58,7 +245,6 @@ static const char *select_ctx_from_path(char *path)
     }
     return NULL;
 }
-
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
@@ -165,3 +351,66 @@ exit_parse:
 exit:
     return jsCfgObj;
 }
+
+#if 1
+int test_cfg_get(void)
+{
+    cJSON *pObj;
+    ErrorCode_t errcode;
+    uint8_t ucVal;
+    uint16_t usVal;
+    uint32_t ulVal;
+    double dVal;
+    char strVal[64];
+    cJSON *pSubObj;
+    cJSON *pArrObj;
+    
+    pObj = GetCfgObj(pathEVSECfg, &errcode);
+    if (pObj == NULL)
+    {
+        return -1;
+    }
+    errcode = cfg_get_double(pObj, &dVal, "%s", "Lng");
+    if (errcode != ERR_NO)
+    {
+        printf_safe("double value = %s\n", "解析失败");
+    }
+    else
+    {
+        printf_safe("double val = %lf\n", dVal);
+    }
+#if 1
+    errcode = cfg_get_double(pObj, &dVal, "%s", "La1t");
+    if (errcode != ERR_NO)
+    {
+        printf_safe("double value = %s\n", "解析失败");
+    }
+    else
+    {
+        printf_safe("double val = %lf\n", dVal);
+    }
+    cfg_get_uint8(pObj, &ucVal, "%s", jnEVSEType);
+    printf_safe("%s = %d\n", jnEVSEType, ucVal);
+    
+    cfg_get_uint16(pObj, &usVal, "%s", jnTotalCON);
+    printf_safe("%s = %d\n", jnTotalCON, usVal);
+    
+    cfg_get_uint32(pObj, &ulVal, "%s", jnServiceFeeType);
+    printf_safe("%s = %d\n", jnServiceFeeType, ulVal);
+    
+    cfg_get_string(pObj, strVal, "%s", jnEVSEID);
+    printf_safe("%s = %s\n", jnEVSEID, strVal);
+    
+    cfg_get_string(pObj, strVal, "%s", jnEVSESN);
+    printf_safe("%s = %s\n", jnEVSESN, strVal);
+
+    cfg_get_uint32(pObj, &ulVal, "%s:%d.%s", jnCONArray, 0, jnID);
+    printf_safe("CON%d %s = %d\n",0, jnID, ulVal);
+    
+    cfg_get_string(pObj, strVal, "%s:%d.%s", jnCONArray, 0, jnQRCode);
+    printf_safe("CON%d %s = %s\n", 0, jnQRCode, strVal);
+#endif
+    cJSON_Delete(pObj);
+    return 0;
+}
+#endif

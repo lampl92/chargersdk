@@ -20,6 +20,13 @@
 #define ParamTypeObj        7
 #define ParamTypeS32        8
 
+ErrorCode_t cfg_get_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_int32(cJSON *pCfgObj, int32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_double(cJSON *pCfgObj, double *retval, char *fmt, ...);
+ErrorCode_t cfg_get_string(cJSON *pCfgObj, char *retval, char *fmt, ...);
+
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj);
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode);
 

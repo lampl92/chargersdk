@@ -117,7 +117,11 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
     //testBnWList();
-    eth_main();
+    //eth_main();
+    for (i = 0; i < 1000; i++)
+    {
+        test_cfg_get();
+    }
 #if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);
