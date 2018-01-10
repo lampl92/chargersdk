@@ -12,7 +12,12 @@
 #include "cJSON.h"
 #include "yaffsfs.h"
 #include "sysinit.h"
+#include <string.h>
 
+double cfg_get_double(cJSON *pCfgObj, ...)
+{
+    
+}
 static const char *select_ctx_from_path(char *path)
 {
     if (strcmp(path, pathOrder) == 0)
