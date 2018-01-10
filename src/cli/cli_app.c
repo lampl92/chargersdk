@@ -26,18 +26,7 @@ DhcpClientContext dhcpClientContext;
     Ipv4Addr ipv4Addr;
 int_t eth_main(void)
 {
-
-       //Start-up message
-    TRACE_INFO("\r\n");
-    TRACE_INFO("**********************************\r\n");
-    TRACE_INFO("*** CycloneTCP Web Server Demo ***\r\n");
-    TRACE_INFO("**********************************\r\n");
-    TRACE_INFO("Copyright: 2010-2017 Oryx Embedded SARL\r\n");
-    TRACE_INFO("Compiled: %s %s\r\n", __DATE__, __TIME__);
-    TRACE_INFO("Target: STM32F429\r\n");
-    TRACE_INFO("\r\n");
-
-       //TCP/IP stack initialization
+    //TCP/IP stack initialization
     error = netInit();
     //Any error to report?
     if (error)

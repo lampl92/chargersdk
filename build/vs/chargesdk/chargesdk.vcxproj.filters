@@ -3566,9 +3566,6 @@
     <ClInclude Include="..\..\..\src\app\sys_types.h">
       <Filter>Header files\app</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\cli\ymodem.h">
-      <Filter>Source files\cli</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h">
       <Filter>Header files\os\FreeRTOS</Filter>
     </ClInclude>
@@ -4651,6 +4648,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\os_port_config.h">
       <Filter>Header files\net\CycloneTCP\customer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\cli\ymodem.h">
+      <Filter>Header files\cli</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

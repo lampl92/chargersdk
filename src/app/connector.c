@@ -20,6 +20,7 @@
 #include "event_groups.h"
 #include "timers.h"
 
+#if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     CON_t *pCON;
@@ -67,6 +68,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
         return 0;
     }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /*                               设置充电接口信息到配置文件                    */
 /*---------------------------------------------------------------------------*/

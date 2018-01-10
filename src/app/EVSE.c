@@ -33,12 +33,12 @@ uint8_t isEVSEWorking(void)
         if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
         {
             return 1;
-        } 
+        }
     }
     return 0;
 }
 
-
+#if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     EVSE_t *pEVSE;
@@ -86,6 +86,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
         return 0;
     }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /*                               设置充电桩信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
