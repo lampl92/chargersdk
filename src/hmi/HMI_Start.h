@@ -54,8 +54,10 @@ extern p_inf *AdvertisementImage;
 
 extern p_inf *DtaFileCheckboxChosen;
 extern p_inf *DtaFileCheckboxNotChosen;
+extern p_inf *DtaFileBeijing;
 extern GUI_BITMAP BitmapCheckboxChosen;
 extern GUI_BITMAP BitmapCheckboxNotChosen;
+extern GUI_BITMAP BitmapBeijing;
 
 extern int SignalFlag;//信号图标刷新标志
 

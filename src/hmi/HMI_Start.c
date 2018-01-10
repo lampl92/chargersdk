@@ -61,8 +61,11 @@ p_inf *AdvertisementImage;
 
 p_inf *DtaFileCheckboxChosen;
 p_inf *DtaFileCheckboxNotChosen;
+p_inf *DtaFileBeijing;
 GUI_BITMAP BitmapCheckboxChosen;
 GUI_BITMAP BitmapCheckboxNotChosen;
+GUI_BITMAP BitmapBeijing;
+
 GUI_LOGPALETTE Palette;
 
 
@@ -92,6 +95,7 @@ static void vTaskReadPic(void *pvParameters)
     DevErrDoneImage = readPicInf(pathDevErrDoneImage);
     MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
     ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
+    
     
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
@@ -125,8 +129,10 @@ void MainTask(void)
         HomeImage = readPicInf(pathHomeImage);
         DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
+        DtaFileBeijing = readPicInf(pathBeijingDta);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxChosen, &Palette, DtaFileCheckboxChosen->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
+        GUI_CreateBitmapFromStream565(&BitmapBeijing, &Palette, DtaFileBeijing->pfilestring);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);

@@ -209,6 +209,9 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
+#ifndef __OPTIMIZE__
+#define __OPTIMIZE__ 1
+#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -579,9 +582,6 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
-#endif
-#ifndef __NO_INLINE__
-#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -1226,7 +1226,7 @@
 //../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc
 //../../../src/drivers/bsp/inc
 //../../../src/drivers/device/inc
-//../../../src/os
+//../../../src/os/FreeRTOS
 //../../../src/os/FreeRTOS/Source/include
 //../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F
 //../../../src/middlewares/tinysh
@@ -1238,8 +1238,6 @@
 //../../../src/middlewares/gdsl-1.8/src
 //../../../src/middlewares/gdsl-1.8/src/examples
 //../../../src/middlewares/STemWin/BMP
-//../../../src/middlewares/STemWin/XBF
-//../../../src/middlewares/tiny-AES128-C
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
