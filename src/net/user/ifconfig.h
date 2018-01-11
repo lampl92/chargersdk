@@ -8,23 +8,31 @@
 #ifndef  __IFCONFIG_H
 #define  __IFCONFIG_H
 
-#include "lwip/ip_addr.h"
+#include "core/net.h"
+#include "errorcode.h"
 
 typedef struct _ifconfig
 {
-    ip_addr_t local_ip;
-    ip_addr_t gateway;
-    ip_addr_t netmask;
-    ip_addr_t server_ip;
-    ip_addr_t server_ip_bak;
-    uint16_t server_port;
-    uint16_t server_port_bak;
-    uint16_t local_port;
-    uint8_t server_domain[50];
+    struct
+    {
+        char strIP[16];
+        char strMask[16];
+        char strGate[16];
+        char strMAC[18];
+        char strHostName[16 + 1];
+        uint8_t ucDHCPEnable;
+    }info;
+    struct
+    {
+        char strIP[16];
+        char strMask[16];
+        char strGate[16];
+        char strDNS1[16];
+        char strDNS2[16];
+    }status;
 }ifconfig_t;
 
 extern ifconfig_t ifconfig;
 
 void ifconfig_init(void);
-void ifconfig_set(void);
 #endif
