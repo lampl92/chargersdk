@@ -16,7 +16,30 @@
 #include "modem.h"
 #include "stringName.h" 
 #include "cfg_order.h"
+#include "ifconfig.h"
 
+void cli_networkinfo_fnt(int argc, char **argv)
+{
+    printf_safe("=============信息=============\n");
+    
+    printf_safe("HostName:\t%s\n", ifconfig.info.strHostName);
+    printf_safe("Adapter:\t%d\n", ifconfig.info.ucAdapterSel);
+    printf_safe("DHCP:\t%d\n", ifconfig.info.ucDHCPEnable);
+    printf_safe("MAC:\t%s\n", ifconfig.info.strMAC);
+    printf_safe("IP:\t%s\n", ifconfig.info.strIP);
+    printf_safe("Gate:\t%s\n", ifconfig.info.strGate);
+    printf_safe("Mask:\t%s\n", ifconfig.info.strMask);
+    printf_safe("DNS1:\t%s\n", ifconfig.info.strDNS1);
+    printf_safe("DNS2:\t%s\n", ifconfig.info.strDNS2);
+    
+    printf_safe("=============状态=============\n");
+    
+    printf_safe("IP:\t%s\n", ifconfig.status.strIP);
+    printf_safe("Gate:\t%s\n", ifconfig.status.strGate);
+    printf_safe("Mask:\t%s\n", ifconfig.status.strMask);
+    printf_safe("DNS1:\t%s\n", ifconfig.status.strDNS1);
+    printf_safe("DNS2:\t%s\n", ifconfig.status.strDNS2);
+}
 void cli_modeminfo_fnt(int argc, char **argv)
 {
     printf_safe("=============信息=============\n");
@@ -656,6 +679,17 @@ void cli_evselog_fnt(int argc, char **argv)
 {
     testSearchEVSELogByTime(pathEVSELog, 0, 0);
 }
+tinysh_cmd_t cli_networkinfo_cmd =
+{
+    0,
+    "networkinfo",
+    "display network info",
+    0,
+    cli_networkinfo_fnt,
+    "<cr>",
+    0,
+    0
+};
 tinysh_cmd_t cli_protoinfo_cmd =
 {
     0,
