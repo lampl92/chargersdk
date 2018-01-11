@@ -289,3 +289,5 @@ int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
 
     return 1;
 }
+
+char *strdup(const char *s) __attribute__((alias("utils_strdup")));
