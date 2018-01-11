@@ -174,11 +174,12 @@
     <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
     <ClCompile Include="..\..\..\src\hmi\HomePage.c" />
-    <ClCompile Include="..\..\..\src\hmi\KeyBoard-WindowDLG.c" />
+    <ClCompile Include="..\..\..\src\hmi\selectpatternDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />

@@ -1533,10 +1533,13 @@
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\KeyBoard-WindowDLG.c">
+    <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c">
+    <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\selectpatternDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
   </ItemGroup>

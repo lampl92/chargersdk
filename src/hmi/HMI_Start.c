@@ -14,15 +14,7 @@ uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
-
-int SignalIntensity;
-int PreSignalIntensity;
-
-//int QR_Width;//NUmber of "Moudle"
-//int QR_Size;//Size of Bitmap in pixels
-
-GUI_QR_INFO QR_info;
-
+#pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
 p_inf *SignalImage1;
@@ -68,37 +60,66 @@ GUI_BITMAP BitmapCheckboxNotChosen;
 GUI_BITMAP BitmapCheckboxDisable;
 GUI_BITMAP BitmapBeijing;
 
-GUI_LOGPALETTE Palette;
+GUI_LOGPALETTE Palette;			  
+#pragma endregion
+
+int SignalIntensity;
+int PreSignalIntensity;
+
+//int QR_Width;//NUmber of "Moudle"
+//int QR_Size;//Size of Bitmap in pixels
+
+GUI_QR_INFO QR_info;
 
 
+
+
+//公用图片“退出”
+GUI_BITMAP BitmapQuit;
+GUI_BITMAP BitmapQuitPress;
+
+//选择页图片
+GUI_BITMAP BitmapSelectGunBack;
+GUI_BITMAP BitmapSelectGunAbottonNotpress;
+GUI_BITMAP BitmapSelectGunBbottonNotpress;
+GUI_BITMAP BitmapSelectGunAbottonPress;
+GUI_BITMAP BitmapSelectGunBbottonPress;
+
+//选择充电模式页图片
+GUI_BITMAP BitmapKeyboardback;
+GUI_BITMAP BitmapKeyboard0;
+GUI_BITMAP BitmapKeyboard1;
+GUI_BITMAP BitmapKeyboard2;
+GUI_BITMAP BitmapKeyboard3;
+GUI_BITMAP BitmapKeyboard4;
+GUI_BITMAP BitmapKeyboard5;
+GUI_BITMAP BitmapKeyboard6;
+GUI_BITMAP BitmapKeyboard7;
+GUI_BITMAP BitmapKeyboard8;
+GUI_BITMAP BitmapKeyboard9;
+GUI_BITMAP BitmapKeyboardBackspace;
+GUI_BITMAP BitmapKeyboardesc;
+GUI_BITMAP BitmapKeyboardok;
+GUI_BITMAP BitmapKeyboardpoint;
+
+GUI_BITMAP BitmapKeyboardbackpress;
+GUI_BITMAP BitmapKeyboard0press;
+GUI_BITMAP BitmapKeyboard1press;
+GUI_BITMAP BitmapKeyboard2press;
+GUI_BITMAP BitmapKeyboard3press;
+GUI_BITMAP BitmapKeyboard4press;
+GUI_BITMAP BitmapKeyboard5press;
+GUI_BITMAP BitmapKeyboard6press;
+GUI_BITMAP BitmapKeyboard7press;
+GUI_BITMAP BitmapKeyboard8press;
+GUI_BITMAP BitmapKeyboard9press;
+GUI_BITMAP BitmapKeyboardBackspacepress;
+GUI_BITMAP BitmapKeyboardescpress;
+GUI_BITMAP BitmapKeyboardokpress;
+GUI_BITMAP BitmapKeyboardpointpress;
 
 static void vTaskReadPic(void *pvParameters)
-{
-    ChargeDoneImage = readPicInf(pathChargeDoneImage);
-    CardInfoImage = readPicInf(pathCardInfoImage);
-    ChargingImage = readPicInf(pathChargingImage);
-    GetCardInfoImage = readPicInf(pathGetCardInfoImage);
-    cartoonImage0 = readPicInf(pathCartoonImage0);
-    cartoonImage1 = readPicInf(pathCartoonImage1);
-    cartoonImage2 = readPicInf(pathCartoonImage2);
-    cartoonImage3 = readPicInf(pathCartoonImage3);
-    cartoonImage4 = readPicInf(pathCartoonImage4);
-    cartoonImage5 = readPicInf(pathCartoonImage5);
-    CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
-    CardArrearsImage = readPicInf(pathCardArrearsImage);
-    PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
-    CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
-    StopByCardImage = readPicInf(pathStopByCardImage);
-    StopByQRImage = readPicInf(pathStopByQRImage);
-    ChargingVoidImage = readPicInf(pathChargingVoidImage);
-    OrderUploadImage = readPicInf(pathOrderUploadImage);
-    NormalDoneImage = readPicInf(pathNormalDoneImage);
-    FullDoneImage = readPicInf(pathFullDoneImage);
-    DevErrDoneImage = readPicInf(pathDevErrDoneImage);
-    MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
-    ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-    
-    
+{ 
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 void MainTask(void)
@@ -120,15 +141,6 @@ void MainTask(void)
         GUI_QR_GetInfo(qr_hmem, &QR_info);
 
 
-        SignalImage0 = readPicInf(pathSignalImage0);
-        SignalImage1 = readPicInf(pathSignalImage1);
-        SignalImage2 = readPicInf(pathSignalImage2);
-        SignalImage3 = readPicInf(pathSignalImage3);
-        SignalImage4 = readPicInf(pathSignalImage4);
-        SignalImage5 = readPicInf(pathSignalImage5);
-
-        AdvertisementImage = readPicInf(pathAdvertisementImage);
-        HomeImage = readPicInf(pathHomeImage);
         DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
         DtaFileCheckboxDisable = readPicInf(pathCheckboxDisable);
@@ -137,7 +149,50 @@ void MainTask(void)
         GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxDisable, &Palette, DtaFileCheckboxDisable->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapBeijing, &Palette, DtaFileBeijing->pfilestring);
+        //公用图片读取
+        BitmapQuit = readDtafile(pathQuit);
+        BitmapQuitPress = readDtafile(pathQuitPress);
+        //选择页图片读取
+        BitmapSelectGunAbottonNotpress = readDtafile(pathSelectGunAbottonNotpress);
+        BitmapSelectGunAbottonPress = readDtafile(pathSelectGunAbottonPress);
+        BitmapSelectGunBack = readDtafile(pathSelectGunBack);
+        BitmapSelectGunBbottonNotpress = readDtafile(pathSelectGunBbottonNotpress);
+        BitmapSelectGunBbottonPress = readDtafile(pathSelectGunBbottonPress);
+        
+        //选择充电模式页图片读取
+        BitmapKeyboardback = readDtafile(pathKeyboardback);
+        
+        BitmapKeyboard0 = readDtafile(pathKeyboard0);
+        BitmapKeyboard1 = readDtafile(pathKeyboard1);
+        BitmapKeyboard2 = readDtafile(pathKeyboard2);
+        BitmapKeyboard3 = readDtafile(pathKeyboard3);
+        BitmapKeyboard4 = readDtafile(pathKeyboard4);
+        BitmapKeyboard5 = readDtafile(pathKeyboard5);
+        BitmapKeyboard6 = readDtafile(pathKeyboard6);
+        BitmapKeyboard7 = readDtafile(pathKeyboard7);
+        BitmapKeyboard8 = readDtafile(pathKeyboard8);
+        BitmapKeyboard9 = readDtafile(pathKeyboard9);
+        BitmapKeyboardBackspace = readDtafile(pathKeyboardBackspace);
+        BitmapKeyboardesc = readDtafile(pathKeyboardesc);
+        BitmapKeyboardok = readDtafile(pathKeyboardok);
+        BitmapKeyboardpoint = readDtafile(pathKeyboardpoint);
 
+        BitmapKeyboard0press = readDtafile(pathKeyboard0press);
+        BitmapKeyboard1press = readDtafile(pathKeyboard1press);
+        BitmapKeyboard2press = readDtafile(pathKeyboard2press);
+        BitmapKeyboard3press = readDtafile(pathKeyboard3press);
+        BitmapKeyboard4press = readDtafile(pathKeyboard4press);
+        BitmapKeyboard5press = readDtafile(pathKeyboard5press);
+        BitmapKeyboard6press = readDtafile(pathKeyboard6press);
+        BitmapKeyboard7press = readDtafile(pathKeyboard7press);
+        BitmapKeyboard8press = readDtafile(pathKeyboard8press);
+        BitmapKeyboard9press = readDtafile(pathKeyboard9press);
+        BitmapKeyboardBackspacepress = readDtafile(pathKeyboardBackspacepress);
+        BitmapKeyboardescpress = readDtafile(pathKeyboardescpress);
+        BitmapKeyboardokpress = readDtafile(pathKeyboardokpress);
+        BitmapKeyboardpointpress = readDtafile(pathKeyboardpointpress);
+        
+        
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
         Create_SIF24(pathstSIF24);
@@ -150,7 +205,8 @@ void MainTask(void)
 //        CreateHomePage();
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
-        CreateKeyBoardWindow();
+ //       CreateKeyBoardWindow();
+        Createselectgun();
     }
     else
     {

@@ -19,42 +19,57 @@
 #define pathBlackList       "/nand/system/blacklist.cfg"
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
-#define pathSignalImage0            "/nand/system/SignalImage0.bmp"
-#define pathSignalImage1            "/nand/system/SignalImage1.bmp"
-#define pathSignalImage2            "/nand/system/SignalImage2.bmp"
-#define pathSignalImage3            "/nand/system/SignalImage3.bmp"
-#define pathSignalImage4            "/nand/system/SignalImage4.bmp"
-#define pathSignalImage5            "/nand/system/SignalImage5.bmp"
-        
-#define pathHomeImage                "/nand/system/HomeImage.bmp"
-        
-#define pathCardInfoImage           "/nand/system/CardInfoImage.bmp"
-#define pathGetCardInfoImage        "/nand/system/GetCardInfoImage.bmp"
-#define pathCardUnregisteredImage   "/nand/system/CardUnregisteredImage.bmp"
-#define pathCardArrearsImage        "/nand/system/CardArrearsImage.bmp"
-#define pathPleaseConnectPlugImage  "/nand/system/PleaseConnectPlugImage.bmp"
-#define pathCardInfoVoidImage       "/nand/system/CardInfoVoidImage.bmp"
-        
-#define pathChargingImage           "/nand/system/ChargingImage.bmp"
-#define pathCartoonImage0           "/nand/system/CartoonImage0.bmp"
-#define pathCartoonImage1           "/nand/system/CartoonImage1.bmp"
-#define pathCartoonImage2           "/nand/system/CartoonImage2.bmp"
-#define pathCartoonImage3           "/nand/system/CartoonImage3.bmp"
-#define pathCartoonImage4           "/nand/system/CartoonImage4.bmp"
-#define pathCartoonImage5           "/nand/system/CartoonImage5.bmp"
-#define pathStopByCardImage         "/nand/system/StopByCardImage.bmp"
-#define pathStopByQRImage           "/nand/system/StopByQRImage.bmp"
-#define pathChargingVoidImage       "/nand/system/ChargingVoidImage.bmp"
+//**********************
+//公用图片路径
+#define  pathQuit           "nand/system/quit.dta"
+#define  pathQuitPress      "nand/system/quitpress.dta"
+//**********************
 
-#define pathChargeDoneImage         "/nand/system/ChargeDoneImage.bmp"
-#define pathOrderUploadImage        "/nand/system/OrderUploadImage.bmp"
-#define pathNormalDoneImage         "/nand/system/NormalDoneImage.bmp"
-#define pathFullDoneImage           "/nand/system/FullDoneImage.bmp"
-#define pathDevErrDoneImage         "/nand/system/DevErrDoneImage.bmp"
-#define pathMoneyNotEnoughDoneImage     "/nand/system/MoneyNotEnoughDoneImage.bmp"
-#define pathChargeDoneVoidImage     "/nand/system/ChargeDoneVoidImage.bmp"
-        
-#define pathAdvertisementImage      "/nand/system/AdvertisementImage.bmp"
+//**********
+//选枪图片路径
+#define pathSelectGunBack                   "nand/system/selectgunback.dta"
+#define pathSelectGunAbottonNotpress        "nand/system/selectgunAbuttonnotpress.dta"
+#define pathSelectGunBbottonNotpress        "nand/system/selectgunBbuttonnotpress.dta"
+#define pathSelectGunAbottonPress           "nand/system/selectgunAbuttonpress.dta"
+#define pathSelectGunBbottonPress           "nand/system/selectgunBbuttonpress.dta"
+//*********
+
+//************
+//
+#define pathKeyboardback                    "nand/system/kwyboardback.dta"
+
+#define pathKeyboard0                       "nand/system/kwyboard0.dta"
+#define pathKeyboard1                       "nand/system/kwyboard1.dta"
+#define pathKeyboard2                       "nand/system/kwyboard2.dta"
+#define pathKeyboard3                       "nand/system/kwyboard3.dta"
+#define pathKeyboard4                       "nand/system/kwyboard4.dta"
+#define pathKeyboard5                       "nand/system/kwyboard5.dta"
+#define pathKeyboard6                       "nand/system/kwyboard6.dta"
+#define pathKeyboard7                       "nand/system/kwyboard7.dta"
+#define pathKeyboard8                       "nand/system/kwyboard8.dta"
+#define pathKeyboard9                       "nand/system/kwyboard9.dta"
+#define pathKeyboardBackspace               "nand/system/kwyboardbackspace.dta"
+#define pathKeyboardesc                     "nand/system/kwyboardesc.dta"
+#define pathKeyboardok                      "nand/system/kwyboardok.dta"
+#define pathKeyboardpoint                   "nand/system/kwyboardpoint.dta"
+
+#define pathKeyboard0press                 "nand/system/kwyboard0press.dta"
+#define pathKeyboard1press                 "nand/system/kwyboard1press.dta"
+#define pathKeyboard2press                 "nand/system/kwyboard2press.dta"
+#define pathKeyboard3press                 "nand/system/kwyboard3press.dta"
+#define pathKeyboard4press                 "nand/system/kwyboard4press.dta"
+#define pathKeyboard5press                 "nand/system/kwyboard5press.dta"
+#define pathKeyboard6press                 "nand/system/kwyboard6press.dta"
+#define pathKeyboard7press                 "nand/system/kwyboard7press.dta"
+#define pathKeyboard8press                 "nand/system/kwyboard8press.dta"
+#define pathKeyboard9press                 "nand/system/kwyboard9press.dta"
+#define pathKeyboardBackspacepress         "nand/system/kwyboardbackspacepress.dta"
+#define pathKeyboardescpress               "nand/system/kwyboardescpress.dta"
+#define pathKeyboardokpress                "nand/system/kwyboardokpress.dta"
+#define pathKeyboardpointpress             "nand/system/kwyboardpointpress.dta"
+//*************
+
+
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"
 #define pathCheckboxNotDta          "/nand/system/notchosen.dta"

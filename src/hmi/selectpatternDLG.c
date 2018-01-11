@@ -4,7 +4,6 @@
 #include  "HMI_Start.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
-#define ID_BUTTON_S (GUI_ID_USER + 0x11)
 
 #define ID_WINDOW_1 (GUI_ID_USER + 0x0F)
 #define ID_BUTTON_0 (GUI_ID_USER + 0x01)
@@ -27,6 +26,7 @@
 #define ID_CHECKBOX_3 (GUI_ID_USER + 0x15)
 #define ID_TEXT_0 (GUI_ID_USER + 0x16)
 #define ID_IMAGE_0 (GUI_ID_USER + 0x17)
+#define ID_IMAGE_1 (GUI_ID_USER + 0x18)
 
 int FlagDisableKeyboard = 0;
 WM_HWIN HwinKeyboard;
@@ -36,7 +36,6 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
     { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 400, 150, 100, 24, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Buttons", ID_BUTTON_S, 15, 15, 50, 50, 0, 0x0, 0 },//Ôª£¬·ÖÖÓ£¬kwh
     { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, 100, 120, 100, 45, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, 100, 195, 100, 45, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_2, 100, 270, 100, 45, 0, 0x0, 0 },
@@ -45,6 +44,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
     { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 400, 200, 260, 260, 0, 0x0, 0 },
+    { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_1, 0, 0, 800, 480, 0, 0, 0 },
     { BUTTON_CreateIndirect, "Button1", ID_BUTTON_0, 15, 15, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button2", ID_BUTTON_1, 75, 15, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button3", ID_BUTTON_2, 135, 15, 50, 50, 0, 0x0, 0 },
@@ -92,37 +92,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch (Id) {
-        case ID_BUTTON_S:
-            switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-//                GUI_Exec();
-                if (FlagDisableKeyboard = !FlagDisableKeyboard)
-                {
-                    //WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
-//                    WM_HideWindow(HwinKeyboard);
-//                    GUI_DrawBitmap(&BitmapCheckboxNotChosen, 100, 10);
-                    WM_DisableWindow(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
-                }
-                else
-                {
-                    //WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
-//                    WM_ShowWindow(HwinKeyboard);
-//                    GUI_DrawBitmap(&BitmapCheckboxChosen, 100, 10);
-                    WM_EnableWindow(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
-                }
-                break;
-            case WM_NOTIFICATION_RELEASED:
-                break;
-            }
-            break;
         case ID_CHECKBOX_0:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
                 CHECKBOX_SetState(hItem, 1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
@@ -222,6 +197,81 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
     WM_HWIN hItem;
 
     switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG:
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1);
+        IMAGE_SetBitmap(hItem, &BitmapKeyboardback);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard1press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard1, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard2press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard2, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard3press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard3, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboardBackspacepress, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboardBackspace, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard4press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard4, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard5press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard5, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_6);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard6press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard6, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_7);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboardescpress, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboardesc, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_8);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard7press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard7, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_9);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard8press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard8, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_10);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard9press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard9, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_11);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboardokpress, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboardok, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_12);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboard0press, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboard0, 0, 0);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_13);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapKeyboardpointpress, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapKeyboardpoint, 0, 0);  
+        
+        break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;

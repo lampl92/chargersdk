@@ -61,6 +61,55 @@ extern GUI_BITMAP BitmapCheckboxNotChosen;
 extern GUI_BITMAP BitmapCheckboxDisable;
 
 extern GUI_BITMAP BitmapBeijing;
+//公用图片“退出”
+extern GUI_BITMAP BitmapQuit;
+extern GUI_BITMAP BitmapQuitPress;
+
+//********
+//选枪页相关图片
+extern GUI_BITMAP BitmapSelectGunBack;
+extern GUI_BITMAP BitmapSelectGunAbottonNotpress;
+extern GUI_BITMAP BitmapSelectGunBbottonNotpress;
+extern GUI_BITMAP BitmapSelectGunAbottonPress;
+extern GUI_BITMAP BitmapSelectGunBbottonPress;
+//********
+
+//***********
+//选择充电模式页图片
+extern GUI_BITMAP BitmapKeyboardback;
+
+extern GUI_BITMAP BitmapKeyboard0;
+extern GUI_BITMAP BitmapKeyboard1;
+extern GUI_BITMAP BitmapKeyboard2;
+extern GUI_BITMAP BitmapKeyboard3;
+extern GUI_BITMAP BitmapKeyboard4;
+extern GUI_BITMAP BitmapKeyboard5;
+extern GUI_BITMAP BitmapKeyboard6;
+extern GUI_BITMAP BitmapKeyboard7;
+extern GUI_BITMAP BitmapKeyboard8;
+extern GUI_BITMAP BitmapKeyboard9;
+extern GUI_BITMAP BitmapKeyboardBackspace;
+extern GUI_BITMAP BitmapKeyboardesc;
+extern GUI_BITMAP BitmapKeyboardok;
+extern GUI_BITMAP BitmapKeyboardpoint;
+
+extern GUI_BITMAP BitmapKeyboard0press;
+extern GUI_BITMAP BitmapKeyboard1press;
+extern GUI_BITMAP BitmapKeyboard2press;
+extern GUI_BITMAP BitmapKeyboard3press;
+extern GUI_BITMAP BitmapKeyboard4press;
+extern GUI_BITMAP BitmapKeyboard5press;
+extern GUI_BITMAP BitmapKeyboard6press;
+extern GUI_BITMAP BitmapKeyboard7press;
+extern GUI_BITMAP BitmapKeyboard8press;
+extern GUI_BITMAP BitmapKeyboard9press;
+extern GUI_BITMAP BitmapKeyboardBackspacepress;
+extern GUI_BITMAP BitmapKeyboardescpress;
+extern GUI_BITMAP BitmapKeyboardokpress;
+extern GUI_BITMAP BitmapKeyboardpointpress;
+//************
+
+
 
 extern int SignalFlag;//信号图标刷新标志
 

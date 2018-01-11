@@ -53,3 +53,16 @@ INFRETURN_MALLOC_ERR:
     return NULL;
 }
 
+
+GUI_BITMAP readDtafile(char *pathfile)
+{
+    p_inf *tmp;
+    GUI_LOGPALETTE Palette;
+    GUI_BITMAP bitmaptmp;
+    tmp = readPicInf(pathfile);
+    GUI_CreateBitmapFromStream565(&bitmaptmp, &Palette, tmp->pfilestring);
+    return bitmaptmp;
+}
+
+
+
