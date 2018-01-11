@@ -4,110 +4,8 @@
 #include "interface.h"
 #include "sys_types.h"
 
-#include "os_port.h"
-#include "core/net.h"
-#include "drivers/mac/stm32f4x9_eth_driver.h"
-#include "drivers/phy/lan8720_driver.h"
-#include "dhcp/dhcp_client.h"
-#include "debug.h"
-
-
 extern void testBnWList(void);
 
-//Application configuration
-#define APP_MAC_ADDR "00-AB-CD-EF-04-29"
-#define APP_USE_DHCP ENABLED
-DhcpClientSettings dhcpClientSettings;
-DhcpClientContext dhcpClientContext;
-    error_t error;
-    NetInterface *interface;
-    OsTask *task;
-    MacAddr macAddr;
-    Ipv4Addr ipv4Addr;
-int_t eth_main(void)
-{
-    //TCP/IP stack initialization
-    error = netInit();
-    //Any error to report?
-    if (error)
-    {
-       //Debug message
-        TRACE_ERROR("Failed to initialize TCP/IP stack!\r\n");
-    }
-
-       //Configure the first Ethernet interface
-    interface = &netInterface[0];
-
-       //Set interface name
-    //netSetInterfaceName(interface, "eth0"); 已经设置
-    //Set host name
-    netSetHostname(interface, "RGW_Charger");
-    //Select the relevant network adapter
-    netSetDriver(interface, &stm32f4x9EthDriver);
-    netSetPhyDriver(interface, &lan8720PhyDriver);
-    //Set host MAC address
-    macStringToAddr(APP_MAC_ADDR, &macAddr);
-    netSetMacAddr(interface, &macAddr);
-
-       //Initialize network interface
-    error = netConfigInterface(interface);
-    //Any error to report?
-    if (error)
-    {
-       //Debug message
-        TRACE_ERROR("Failed to configure interface %s!\r\n", interface->name);
-    }
-
-#if (IPV4_SUPPORT == ENABLED)
-#if (APP_USE_DHCP == ENABLED)
-       //Get default settings
-    dhcpClientGetDefaultSettings(&dhcpClientSettings);
-    //Set the network interface to be configured by DHCP
-    dhcpClientSettings.interface = interface;
-    //Disable rapid commit option
-    dhcpClientSettings.rapidCommit = FALSE;
-
-       //DHCP client initialization
-    error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
-    //Failed to initialize DHCP client?
-    if (error)
-    {
-       //Debug message
-        TRACE_ERROR("Failed to initialize DHCP client!\r\n");
-    }
-
-       //Start DHCP client
-    error = dhcpClientStart(&dhcpClientContext);
-    //Failed to start DHCP client?
-    if (error)
-    {
-       //Debug message
-        TRACE_ERROR("Failed to start DHCP client!\r\n");
-    }
-#else
-       //Set IPv4 host address
-    ipv4StringToAddr(APP_IPV4_HOST_ADDR, &ipv4Addr);
-    ipv4SetHostAddr(interface, ipv4Addr);
-
-       //Set subnet mask
-    ipv4StringToAddr(APP_IPV4_SUBNET_MASK, &ipv4Addr);
-    ipv4SetSubnetMask(interface, ipv4Addr);
-
-       //Set default gateway
-    ipv4StringToAddr(APP_IPV4_DEFAULT_GATEWAY, &ipv4Addr);
-    ipv4SetDefaultGateway(interface, ipv4Addr);
-
-       //Set primary and secondary DNS servers
-    ipv4StringToAddr(APP_IPV4_PRIMARY_DNS, &ipv4Addr);
-    ipv4SetDnsServer(interface, 0, ipv4Addr);
-    ipv4StringToAddr(APP_IPV4_SECONDARY_DNS, &ipv4Addr);
-    ipv4SetDnsServer(interface, 1, ipv4Addr);
-#endif
-#endif
-
-       //This function should never return
-    return 0;
-}
 void cli_hello_fnt(int argc, char **argv)
 {
     int i;
@@ -120,8 +18,9 @@ void cli_hello_fnt(int argc, char **argv)
     //eth_main();
     for (i = 0; i < 1000; i++)
     {
-        test_cfg_get();
+        //test_cfg_set(i);
     }
+    //test_cfg_get();
 #if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);
