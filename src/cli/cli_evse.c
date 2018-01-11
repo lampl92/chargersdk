@@ -682,7 +682,7 @@ void cli_evselog_fnt(int argc, char **argv)
 tinysh_cmd_t cli_networkinfo_cmd =
 {
     0,
-    "networkinfo",
+    "ifconfig",
     "display network info",
     0,
     cli_networkinfo_fnt,
