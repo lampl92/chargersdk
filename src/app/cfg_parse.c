@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#define DEBUG_PARSE 1
+#define DEBUG_PARSE     0
 
 #define MAX_STRING_LEN     200
 
