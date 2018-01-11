@@ -5,11 +5,118 @@
 * @version v1.0
 * @date 2017-04-27
 */
-#include "lwip/ip.h"
-#include "lwip/tcpip.h"
-#include "netif/ppp/ppp.h"
 #include "bsp.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "ifconfig.h"
+#include "modem.h"
 
+#include "os_port.h"
+#include "core/net.h"
+#include "drivers/mac/stm32f4x9_eth_driver.h"
+#include "drivers/phy/lan8720_driver.h"
+#include "dhcp/dhcp_client.h"
+#include "debug.h"
+
+int_t eth_init(void);
+void vTaskTCPClient(void *pvParameters)
+{
+    
+//    pModem = DevModemCreate();
+//    modem_open(pModem);
+//    modem_init(pModem);
+//    Modem_Poll(pModem);//è¿™æ˜¯ä»»åŠ¡
+    eth_init();
+    while (1)
+    {
+        vTaskDelay(1000);
+    }
+}
+int_t eth_init(void)
+{
+    DhcpClientSettings dhcpClientSettings;
+    DhcpClientContext dhcpClientContext;
+    error_t error;
+    NetInterface *interface;
+    OsTask *task;
+    MacAddr macAddr;
+    Ipv4Addr ipv4Addr;
+
+    //åˆå§‹åŒ–TCP/IPåè®®æ ˆ
+    error = netInit();
+    if (error)
+    {
+        TRACE_ERROR("Failed to initialize TCP/IP stack!\r\n");
+    }
+
+    //è®¾ç½®ç¬¬ä¸€ä¸ªä»¥å¤ªç½‘æ¥å£
+    interface = &netInterface[0];
+
+    //è®¾ç½®æ¥å£åç§°
+    //netSetInterfaceName(interface, "eth0"); å·²ç»è®¾ç½®
+    //è®¾ç½®ä¸»æœºå
+    netSetHostname(interface, ifconfig.info.strHostName);
+    //é€‰æ‹©ç½‘å¡
+    netSetDriver(interface, &stm32f4x9EthDriver);
+    netSetPhyDriver(interface, &lan8720PhyDriver);
+    //è®¾ç½®MACåœ°å€
+    macStringToAddr(ifconfig.info.strMAC, &macAddr);
+    netSetMacAddr(interface, &macAddr);
+
+    //åˆå§‹åŒ–ç½‘è·¯æ¥å£
+    error = netConfigInterface(interface);
+    if (error)
+    {
+        TRACE_ERROR("Failed to configure interface %s!\r\n", interface->name);
+    }
+
+    if (ifconfig.info.ucDHCPEnable == 1)
+    {
+       //è·å–é»˜è®¤è®¾ç½®
+        dhcpClientGetDefaultSettings(&dhcpClientSettings);
+        //è®¾ç½®è®©DHCPå»é…ç½®è¯¥æ¥å£
+        dhcpClientSettings.interface = interface;
+        //Disable rapid commit option
+        dhcpClientSettings.rapidCommit = FALSE;
+
+        //DHCPå®¢æˆ·ç«¯åˆå§‹åŒ–
+        error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
+        if (error)
+        {
+            TRACE_ERROR("Failed to initialize DHCP client!\r\n");
+        }
+
+        //å¯åŠ¨DHCPå®¢æˆ·ç«¯
+        error = dhcpClientStart(&dhcpClientContext);
+        if (error)
+        {
+            TRACE_ERROR("Failed to start DHCP client!\r\n");
+        }
+    }
+    else
+    {
+        //è®¾ç½®ä¸»æœº IPv4 åœ°å€
+        ipv4StringToAddr(ifconfig.info.strIP, &ipv4Addr);
+        ipv4SetHostAddr(interface, ipv4Addr);
+
+        //è®¾ç½®å­ç½‘æ©ç 
+        ipv4StringToAddr(ifconfig.info.strMask, &ipv4Addr);
+        ipv4SetSubnetMask(interface, ipv4Addr);
+
+        //è®¾ç½®é»˜è®¤ç½‘å…³
+        ipv4StringToAddr(ifconfig.info.strGate, &ipv4Addr);
+        ipv4SetDefaultGateway(interface, ipv4Addr);
+
+        //è®¾ç½®DNSæœåŠ¡å™¨
+        ipv4StringToAddr(ifconfig.info.strDNS1, &ipv4Addr);
+        ipv4SetDnsServer(interface, 0, ipv4Addr);
+        ipv4StringToAddr(ifconfig.info.strDNS2, &ipv4Addr);
+        ipv4SetDnsServer(interface, 1, ipv4Addr);
+    }
+    
+    return 0;
+}
+#if 0
 
 #define lwip1_4_1
 
@@ -23,19 +130,19 @@ void tcpip_init_done(void *arg)
     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPIPinit);
 }
 
-/** @brief PPPoS ´®¿ÚÊä³ö»Øµ÷º¯Êı
+/** @brief PPPoS ä¸²å£è¾“å‡ºå›è°ƒå‡½æ•°
  *
- * @param pcb ppp_pcb*  PPP¿ØÖÆ¿é
- * @param data u8_t*    Ğ´µ½´®¿ÚµÄbuffer
+ * @param pcb ppp_pcb*  PPPæ§åˆ¶å—
+ * @param data u8_t*    å†™åˆ°ä¸²å£çš„buffer
  * @param len u32_t     buffer length
- * @param ctx void*     ÓÃ»§»Øµ÷º¯ÊıÖ¸Õë
- * @return u32_t        ³É¹¦Ğ´Èë³¤¶È
+ * @param ctx void*     ç”¨æˆ·å›è°ƒå‡½æ•°æŒ‡é’ˆ
+ * @return u32_t        æˆåŠŸå†™å…¥é•¿åº¦
  *
  */
 #ifdef lwip2_0
 static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
 {
-    (*(ctx_cb_fn)ctx)("output_cb called\n");/** @todo (rgw#1#): ×¢ÊÍµôºó»áÎŞ·¨²¦Í¨ */
+    (*(ctx_cb_fn)ctx)("output_cb called\n");/** @todo (rgw#1#): æ³¨é‡Šæ‰åä¼šæ— æ³•æ‹¨é€š */
 //    int i;
 //    printf_safe("mcu output: ");
 //    for(i = 0; i < len; i++)
@@ -47,7 +154,7 @@ static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
     return uart_write(UART_PORT_GPRS, data, len);
 }
 
-/** @brief PPP status »Øµ÷º¯Êı£¬lwIPÄÚºËÏß³Ì»áÔÚPPP×´Ì¬¸Ä±ä£¨up£¬down£¬...£©Ê±µ÷ÓÃ
+/** @brief PPP status å›è°ƒå‡½æ•°ï¼ŒlwIPå†…æ ¸çº¿ç¨‹ä¼šåœ¨PPPçŠ¶æ€æ”¹å˜ï¼ˆupï¼Œdownï¼Œ...ï¼‰æ—¶è°ƒç”¨
  *
  * @param pcb ppp_pcb*
  * @param err_code int
@@ -146,14 +253,14 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 
     xEventGroupClearBits(xHandleEventTCP, defEventBitConnectOK);
 
-    /* ppp_close() ±»ÓÃ»§µ÷ÓÃ£¬²»ÒªÖØĞÂÁ¬½Ó */
+    /* ppp_close() è¢«ç”¨æˆ·è°ƒç”¨ï¼Œä¸è¦é‡æ–°è¿æ¥ */
     if (err_code == PPPERR_USER)
     {
-        /* ppp_free(); -- ¿ÉÒÔÔÚÕâÀïµ÷ÓÃ */
+        /* ppp_free(); -- å¯ä»¥åœ¨è¿™é‡Œè°ƒç”¨ */
         return;
     }
 
-    /** @todo (zshare#1#): ÔÚÕâÀï¶Ômodem½øĞĞÖØÁ¬£¬Á¬½ÓºÃºóÍ¨¹ıĞÅºÅÁ¿»òÕßÊ±¼äÍ¨Öª¸Ãº¯Êı£¬È»ºó¶Ôppp½øĞĞÖØÁ¬ */
+    /** @todo (zshare#1#): åœ¨è¿™é‡Œå¯¹modemè¿›è¡Œé‡è¿ï¼Œè¿æ¥å¥½åé€šè¿‡ä¿¡å·é‡æˆ–è€…æ—¶é—´é€šçŸ¥è¯¥å‡½æ•°ï¼Œç„¶åå¯¹pppè¿›è¡Œé‡è¿ */
     uxBitLwip = xEventGroupSync(xHandleEventTCP,
                                 defEventBitReDail,
                                 defEventBitDailCONNECT,
@@ -206,14 +313,14 @@ void ppp_on_status(void *ctx, int errCode, void *arg)
 
     xEventGroupClearBits(xHandleEventTCP, defEventBitConnectOK);
 
-    /* ppp_close() ±»ÓÃ»§µ÷ÓÃÊ±·µ»ØµÄ´úÂë£¬ËµÃ÷²»Òª×Ô¶¯ÖØĞÂÁ¬½Ó£¬¿ÉÒÔ½øĞĞÊÍ·Å */
+    /* ppp_close() è¢«ç”¨æˆ·è°ƒç”¨æ—¶è¿”å›çš„ä»£ç ï¼Œè¯´æ˜ä¸è¦è‡ªåŠ¨é‡æ–°è¿æ¥ï¼Œå¯ä»¥è¿›è¡Œé‡Šæ”¾ */
     if (errCode == PPPERR_USER)
     {
-        /* ppp_free(); -- ¿ÉÒÔÔÚÕâÀïµ÷ÓÃ */
+        /* ppp_free(); -- å¯ä»¥åœ¨è¿™é‡Œè°ƒç”¨ */
         return;
     }
 
-    /** @todo (zshare#1#): ÔÚÕâÀï¶Ômodem½øĞĞÖØÁ¬£¬Á¬½ÓºÃºóÍ¨¹ıĞÅºÅÁ¿»òÕßÊ±¼äÍ¨Öª¸Ãº¯Êı£¬È»ºó¶Ôppp½øĞĞÖØÁ¬ */
+    /** @todo (zshare#1#): åœ¨è¿™é‡Œå¯¹modemè¿›è¡Œé‡è¿ï¼Œè¿æ¥å¥½åé€šè¿‡ä¿¡å·é‡æˆ–è€…æ—¶é—´é€šçŸ¥è¯¥å‡½æ•°ï¼Œç„¶åå¯¹pppè¿›è¡Œé‡è¿ */
     xEventGroupSetBits(xHandleEventTCP, defEventBitReDail);
 }
 #endif
@@ -235,7 +342,7 @@ int lwip_init_task(void)
                                     pdTRUE, pdTRUE, portMAX_DELAY);
     if((uxBitLwIP & defEventBitTCPIPinit) != defEventBitTCPIPinit)
     {
-        //µ±portMAX_DELAYĞŞ¸ÄÎª³¬Ê±Ê±¼äºó£¬µ±³¬Ê±ºóÈÔÎ´³õÊ¼»¯Íê³ÉÔò½øÈë³¬Ê±´¦Àí¡£
+        //å½“portMAX_DELAYä¿®æ”¹ä¸ºè¶…æ—¶æ—¶é—´åï¼Œå½“è¶…æ—¶åä»æœªåˆå§‹åŒ–å®Œæˆåˆ™è¿›å…¥è¶…æ—¶å¤„ç†ã€‚
 
     }
 
@@ -244,9 +351,11 @@ int lwip_init_task(void)
     if((uxBitLwIP & defEventBitDailCONNECT) == defEventBitDailCONNECT)
     {
         pppInit();
-        /*´´½¨ PPPoS ¿ØÖÆ¿é*/
+        /*åˆ›å»º PPPoS æ§åˆ¶å—*/
         pppSetAuth(PPPAUTHTYPE_PAP, "", "");
         ppp = pppOverSerialOpen(0, ppp_on_status, &ppp);
     }
     return ppp;
 }
+
+#endif
