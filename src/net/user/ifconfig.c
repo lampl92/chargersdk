@@ -5,32 +5,30 @@
 * @version v1.0
 * @date 2017-05-04
 */
-#include "lwipopts.h"
 #include "ifconfig.h"
-
+#include "cfg_parse.h"
+#include "stringName.h"
 
 ifconfig_t ifconfig;
 
-void ifconfig_set(void)
+void ifconfig_get(void)
 {
-#ifdef LWIP_DEBUG
-    printf_safe("local ip = %s\n", ipaddr_ntoa(&ifconfig.local_ip));
-    printf_safe("gateway = %s\n", ipaddr_ntoa(&ifconfig.gateway));
-    printf_safe("netmask = %s\n", ipaddr_ntoa(&ifconfig.netmask));
-#endif
-    /** @todo (zshare#1#): 向文件系统写入当前配置 */
+    cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucAdapterSel), "%s", jnNetAdapter);
+    cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucDHCPEnable), "%s", jnNetDHCP);
+    cfg_get_string(pathNetCfg, ifconfig.info.strHostName, "%s", jnNetHostName);
+    cfg_get_string(pathNetCfg, ifconfig.info.strMAC, "%s", jnNetMAC);
+    cfg_get_string(pathNetCfg, ifconfig.info.strIP, "%s", jnNetIP);
+    cfg_get_string(pathNetCfg, ifconfig.info.strMask, "%s", jnNetMask);
+    cfg_get_string(pathNetCfg, ifconfig.info.strGate, "%s", jnNetGate);
+    cfg_get_string(pathNetCfg, ifconfig.info.strDNS1, "%s", jnNetDNS1);
+    cfg_get_string(pathNetCfg, ifconfig.info.strDNS2, "%s", jnNetDNS2);
 }
 
 void ifconfig_init(void)
 {
-    ifconfig.local_ip.addr = 0;
-    ifconfig.gateway.addr = 0;
-    ifconfig.netmask.addr = 0;
-    //IP4_ADDR(&ifconfig.server_ip,124,207,112,70);
-    IP4_ADDR(&ifconfig.server_ip,123,56,113,123);
-    ifconfig.server_ip_bak.addr = 0;
-    ifconfig.server_port = 6677;//8051;//
-    ifconfig.server_port_bak = 0;
-    ifconfig.local_port = 0;
-    ifconfig.server_domain[0] = '\0';
+    uint8_t tmp = 0;
+    memset(&ifconfig, 0, sizeof(ifconfig_t));
+    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetDHCP);
+    ifconfig_get();
+    
 }

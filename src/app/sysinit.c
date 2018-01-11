@@ -8,6 +8,7 @@
 #include "cfg_parse.h"
 #include "yaffs2msic.h"
 #include "evse_version.h"
+#include "ifconfig.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -104,26 +105,6 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-//    dump_directory_tree(YAFFS_MOUNT_POINT);
-//    res = yaffs_unlink(pathEVSECfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathProtoCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathWhiteList);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathBlackList);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathEVSELog);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathOrder);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathSysCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathFTPCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_rmdir(pathSystemDir);
-//    res = yaffsfs_GetLastError();
-//    dump_directory_tree(YAFFS_MOUNT_POINT);
     create_system_dir();
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
@@ -133,6 +114,7 @@ void sys_Init(void)
     create_cfg_file(pathEVSELog, strLogCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
+    create_cfg_file(pathNetCfg, strNetCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
 
     SysCfgInit(&xSysconf);
@@ -143,7 +125,11 @@ void sys_Init(void)
         sprintf(xSysconf.strVersion, "%02d.%02d.%04d", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
         xSysconf.SetSysCfg(jnSysVersion, xSysconf.strVersion, ParamTypeString);
     }
-
+    
+    /*---------------------------------------------------------------------------/
+    /                               NET初始化
+    /---------------------------------------------------------------------------*/
+    ifconfig_init();
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/

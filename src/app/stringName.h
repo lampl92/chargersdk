@@ -210,12 +210,15 @@
 #define jnProtoSegCont             "SegCont"
 
 /*ifconfig.cfg*/
+#define jnNetAdapter        "Adapter"
+#define jnNetDHCP           "DHCP"
+#define jnNetHostName       "HostName"
+#define jnNetMAC            "MAC"
 #define jnNetIP             "IP"
 #define jnNetMask           "Mask"
 #define jnNetGate           "Gate"
-#define jnNetMAC            "MAC"
-#define jnNetHostName       "HostName"
-#define jnNetDHCP           "DHCP"
+#define jnNetDNS1           "DNS1"
+#define jnNetDNS2           "DNS2"
 
 //#define jnProtoStart(n)              "Start"#n
 //#define jnProtoEnd(n)                "End"#n
