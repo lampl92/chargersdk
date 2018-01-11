@@ -26,6 +26,7 @@
 #define ID_CHECKBOX_2 (GUI_ID_USER + 0x14)
 #define ID_CHECKBOX_3 (GUI_ID_USER + 0x15)
 #define ID_TEXT_0 (GUI_ID_USER + 0x16)
+#define ID_IMAGE_0 (GUI_ID_USER + 0x17)
 
 int FlagDisableKeyboard = 0;
 WM_HWIN HwinKeyboard;
@@ -33,6 +34,7 @@ static char strNumber[10];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
     { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 400, 150, 100, 24, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Buttons", ID_BUTTON_S, 15, 15, 50, 50, 0, 0x0, 0 },//Ôª£¬·ÖÖÓ£¬kwh
     { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, 100, 120, 100, 45, 0, 0x0, 0 },
@@ -70,17 +72,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int Id;
     WM_HWIN hItem;
     
-//    static PageChosenData_struct GetPic;
-//    PageChosenData_struct *Pic = &GetPic;
-    
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-//        GetPic.BitmapConstChosen = &BitmapCheckboxChosen;
-//        GetPic.BitmapConstNotChosen = &BitmapCheckboxNotChosen;
-//        WM_SetUserData(pMsg->hWin, &Pic, sizeof(Pic));
-        
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, "");
-        //WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
+
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+        IMAGE_SetBitmap(hItem,&BitmapBeijing);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetSkin(hItem, SKIN_checkbox);
@@ -101,15 +98,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //                GUI_Exec();
                 if (FlagDisableKeyboard = !FlagDisableKeyboard)
                 {
-                    WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
+                    //WM_HideWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
 //                    WM_HideWindow(HwinKeyboard);
 //                    GUI_DrawBitmap(&BitmapCheckboxNotChosen, 100, 10);
+                    WM_DisableWindow(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
                 }
                 else
                 {
-                    WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
+                    //WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0));
 //                    WM_ShowWindow(HwinKeyboard);
 //                    GUI_DrawBitmap(&BitmapCheckboxChosen, 100, 10);
+                    WM_EnableWindow(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
                 }
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -119,7 +118,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_0:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-//                GUI_Exec();
+
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
@@ -132,7 +131,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
-//                GUI_Exec();
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -146,7 +144,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber,'\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-//                GUI_Exec();
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
                 CHECKBOX_SetState(hItem, 1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
@@ -155,7 +153,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
-//                GUI_Exec();
+
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -169,7 +167,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-//                GUI_Exec();
+
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
                 CHECKBOX_SetState(hItem, 1);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
@@ -178,7 +176,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
-//                GUI_Exec();
+
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -210,35 +208,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             break;
         }
         break;
-    case WM_PAINT:
-        //GUI_DrawBitmap(&BitmapBeijing, 0, 0);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);        
-        if (CHECKBOX_GetState(hItem))
-        {
-            GUI_DrawBitmap(&BitmapCheckboxChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }
-        else
-        {
-            GUI_DrawBitmap(&BitmapCheckboxNotChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);        
-        if (CHECKBOX_GetState(hItem))
-        {
-            GUI_DrawBitmap(&BitmapCheckboxChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }
-        else
-        {
-            GUI_DrawBitmap(&BitmapCheckboxNotChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);        
-        if (CHECKBOX_GetState(hItem))
-        {
-            GUI_DrawBitmap(&BitmapCheckboxChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }
-        else
-        {
-            GUI_DrawBitmap(&BitmapCheckboxNotChosen, WM_GetWindowOrgX(hItem), WM_GetWindowOrgY(hItem));
-        }   
+    case WM_PAINT: 
         break;
     default:
         WM_DefaultProc(pMsg);

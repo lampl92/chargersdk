@@ -16,7 +16,15 @@ int SKIN_checkbox(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         y0 =WM_GetWindowOrgY(pDrawItemInfo->hWin);
 //        hWin = WM_GetParent(pDrawItemInfo->hWin);
 //        WM_GetUserData(hWin, &Pic, sizeof(Pic));
-        GUI_DrawBitmap(&BitmapCheckboxChosen, x0, y0);//从页面坐标显示图片,emWin会自己剪切出这个控件范围的图片
+//        if (pDrawItemInfo->ItemIndex == CHECKBOX_SKINFLEX_PI_ENABLED)
+//        {
+//            GUI_DrawBitmap(&BitmapCheckboxChosen, 0, 0);//从页面坐标显示图片,emWin会自己剪切出这个控件范围的图片
+//        }
+//        else
+//        {
+            GUI_DrawBitmap(&BitmapCheckboxDisable, 0, 0);
+//        }
+        
 //        WM_Paint(hWin);
         break;
     case WIDGET_ITEM_DRAW_BITMAP://选择打勾
@@ -24,7 +32,14 @@ int SKIN_checkbox(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         y0 =WM_GetWindowOrgY(pDrawItemInfo->hWin);
 //        hWin = WM_GetParent(pDrawItemInfo->hWin);
 //        WM_GetUserData(hWin, &Pic, sizeof(Pic));
-        GUI_DrawBitmap(&BitmapCheckboxNotChosen, x0, y0);
+//        if (pDrawItemInfo->ItemIndex == CHECKBOX_SKINFLEX_PI_ENABLED)
+//        {
+            GUI_DrawBitmap(&BitmapCheckboxNotChosen, 0, 0);
+//        }
+//        else
+//        {
+//            GUI_DrawBitmap(&BitmapCheckboxDisable, 0, 0);
+//        }
 //        WM_Paint(hWin);
         break;
     case WIDGET_ITEM_DRAW_FOCUS:

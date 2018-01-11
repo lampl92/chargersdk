@@ -58,6 +58,7 @@
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"
 #define pathCheckboxNotDta          "/nand/system/notchosen.dta"
+#define pathCheckboxDisable          "/nand/system/checkboxdisable.dta"
 #define pathBeijingDta             "/nand/system/beijing.dta"
 
 #define pathstSIF12                 "/nand/system/stSIF12.sif"

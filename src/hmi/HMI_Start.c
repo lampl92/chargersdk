@@ -62,8 +62,10 @@ p_inf *AdvertisementImage;
 p_inf *DtaFileCheckboxChosen;
 p_inf *DtaFileCheckboxNotChosen;
 p_inf *DtaFileBeijing;
+p_inf *DtaFileCheckboxDisable;
 GUI_BITMAP BitmapCheckboxChosen;
 GUI_BITMAP BitmapCheckboxNotChosen;
+GUI_BITMAP BitmapCheckboxDisable;
 GUI_BITMAP BitmapBeijing;
 
 GUI_LOGPALETTE Palette;
@@ -129,9 +131,11 @@ void MainTask(void)
         HomeImage = readPicInf(pathHomeImage);
         DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
+        DtaFileCheckboxDisable = readPicInf(pathCheckboxDisable);
         DtaFileBeijing = readPicInf(pathBeijingDta);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxChosen, &Palette, DtaFileCheckboxChosen->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
+        GUI_CreateBitmapFromStream565(&BitmapCheckboxDisable, &Palette, DtaFileCheckboxDisable->pfilestring);
         GUI_CreateBitmapFromStream565(&BitmapBeijing, &Palette, DtaFileBeijing->pfilestring);
 
         Create_SIF12(pathstSIF12);
