@@ -1243,6 +1243,7 @@
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
+//../../../src/net/user
 // --- Include directories end --- //
 
 

@@ -237,9 +237,6 @@
     <Filter Include="Source files\net\mbedTLS\library">
       <UniqueIdentifier>{8e69c93d-cac1-4cfa-ae6d-da5e4003749a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\net\user">
-      <UniqueIdentifier>{500e4fce-bc92-4030-b8fe-b8ed0bc01d33}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\os">
       <UniqueIdentifier>{8d5a2a06-9107-4493-acbb-d44508320cbe}</UniqueIdentifier>
     </Filter>
@@ -794,6 +791,12 @@
     </Filter>
     <Filter Include="Header files\net\CycloneTCP\customer">
       <UniqueIdentifier>{eda88369-7c01-46b3-94a9-1c053daea50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\user">
+      <UniqueIdentifier>{7de3f50a-0af7-410e-831f-bf06a48f101a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\user">
+      <UniqueIdentifier>{55efeae1-ff25-4e91-8922-bc76607a92f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1715,6 +1718,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\debug.c">
       <Filter>Source files\net\CycloneTCP\customer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\ifconfig.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\tasknetwork.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\taskppp.c">
+      <Filter>Source files\net\user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2911,9 +2923,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h">
       <Filter>Header files\net\mbedTLS\include\mbedtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\user\ifconfig.h">
-      <Filter>Header files\net\user</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h">
       <Filter>Header files\os\FreeRTOS\Source\include</Filter>
@@ -4651,6 +4660,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\cli\ymodem.h">
       <Filter>Header files\cli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\ifconfig.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\tasknetwork.h">
+      <Filter>Header files\net\user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
