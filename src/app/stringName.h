@@ -23,6 +23,8 @@
 //公用图片路径
 #define  pathQuit           "nand/system/quit.dta"
 #define  pathQuitPress      "nand/system/quitpress.dta"
+#define pathbackquit        "nand/system/backquit.dta"
+#define pathbackquitpress   "nand/system/backquitpress.dta"
 //**********************
 
 //**********
@@ -35,7 +37,24 @@
 //*********
 
 //************
-//
+//选模式图片
+
+#define pathselectpatternback               "nand/system/selectpatternback.dta"
+#define pathselectpatternelectricnumber             "nand/system/selectpatternelectricnumber.dta"
+#define pathselectpatternfull               "nand/system/selectpatternfull.dta"
+#define pathselectpatternmoneynumber                "nand/system/selectpatternmoneynumber.dta"
+#define pathselectpatterntime               "nand/system/selectpatterntime.dta"
+
+#define pathselectpatternelectricnumberpress                "nand/system/selectpatternelectricnumberpress.dta"
+#define pathselectpatternfullpress              "nand/system/selectpatternfullpress.dta"
+#define pathselectpatternmoneynumberpress               "nand/system/selectpatternmoneynumberpress.dta"
+#define pathselectpatterntimepress              "nand/system/selectpatterntimepress.dta"
+
+#define pathselectpatternunityuan               "nand/system/selectpatternunityuan.dta"
+#define pathselectpatternunitdu               "nand/system/selectpatternunitdu.dta"
+#define pathselectpatternunitfen               "nand/system/selectpatternunitfen.dta"
+#define pathselectpatternunitno               "nand/system/selectpatternunitno.dta"
+
 #define pathKeyboardback                    "nand/system/kwyboardback.dta"
 
 #define pathKeyboard0                       "nand/system/kwyboard0.dta"
@@ -69,6 +88,14 @@
 #define pathKeyboardpointpress             "nand/system/kwyboardpointpress.dta"
 //*************
 
+//卡信息图片路径
+#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
+#define pathcardinfoback        "nand/system/cardinfoback.dta"
+#define pathcardinfoempty        "nand/system/cardinfoempty.dta"
+#define pathcardinfoget        "nand/system/cardinfoget.dta"
+#define pathcardinfoplug        "nand/system/cardinfoplug.dta"
+#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
+//******************
 
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"

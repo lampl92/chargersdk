@@ -13,6 +13,7 @@
 #include "user_app.h"
 extern GUI_HMEM    qr_hmem;
 
+#pragma region MyRegion				 
 extern int SignalIntensity;
 extern int PreSignalIntensity;
 
@@ -61,9 +62,14 @@ extern GUI_BITMAP BitmapCheckboxNotChosen;
 extern GUI_BITMAP BitmapCheckboxDisable;
 
 extern GUI_BITMAP BitmapBeijing;
+#pragma endregion
+
+
 //公用图片“退出”
 extern GUI_BITMAP BitmapQuit;
 extern GUI_BITMAP BitmapQuitPress;
+extern GUI_BITMAP BitmapbackQuit;
+extern GUI_BITMAP BitmapbackQuitPress;
 
 //********
 //选枪页相关图片
@@ -76,6 +82,22 @@ extern GUI_BITMAP BitmapSelectGunBbottonPress;
 
 //***********
 //选择充电模式页图片
+extern GUI_BITMAP Bitmapselectpatternback;
+extern GUI_BITMAP Bitmapselectpatternelectricnumber;
+extern GUI_BITMAP Bitmapselectpatternfull;
+extern GUI_BITMAP Bitmapselectpatternmoneynumber;
+extern GUI_BITMAP Bitmapselectpatterntime;
+
+extern GUI_BITMAP Bitmapselectpatternelectricnumberpress;
+extern GUI_BITMAP Bitmapselectpatternfullpress;
+extern GUI_BITMAP Bitmapselectpatternmoneynumberpress;
+extern GUI_BITMAP Bitmapselectpatterntimepress;
+
+extern GUI_BITMAP Bitmapselectpatternunityuan;
+extern GUI_BITMAP Bitmapselectpatternunitdu;
+extern GUI_BITMAP Bitmapselectpatternunitfen;
+extern GUI_BITMAP Bitmapselectpatternunitno;
+
 extern GUI_BITMAP BitmapKeyboardback;
 
 extern GUI_BITMAP BitmapKeyboard0;
@@ -109,6 +131,13 @@ extern GUI_BITMAP BitmapKeyboardokpress;
 extern GUI_BITMAP BitmapKeyboardpointpress;
 //************
 
+//卡信息图片
+extern GUI_BITMAP Bitmapcardinfoarrears;
+extern GUI_BITMAP Bitmapcardinfoback;
+extern GUI_BITMAP Bitmapcardinfoempty;
+extern GUI_BITMAP Bitmapcardinfoget;
+extern GUI_BITMAP Bitmapcardinfoplug;
+extern GUI_BITMAP Bitmapcardinfounregister;
 
 
 extern int SignalFlag;//信号图标刷新标志

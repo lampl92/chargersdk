@@ -14,6 +14,7 @@ uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
+
 #pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
@@ -71,12 +72,11 @@ int PreSignalIntensity;
 
 GUI_QR_INFO QR_info;
 
-
-
-
 //公用图片“退出”
 GUI_BITMAP BitmapQuit;
 GUI_BITMAP BitmapQuitPress;
+GUI_BITMAP BitmapbackQuit;
+GUI_BITMAP BitmapbackQuitPress;
 
 //选择页图片
 GUI_BITMAP BitmapSelectGunBack;
@@ -86,6 +86,22 @@ GUI_BITMAP BitmapSelectGunAbottonPress;
 GUI_BITMAP BitmapSelectGunBbottonPress;
 
 //选择充电模式页图片
+GUI_BITMAP Bitmapselectpatternback;
+GUI_BITMAP Bitmapselectpatternelectricnumber;
+GUI_BITMAP Bitmapselectpatternfull;
+GUI_BITMAP Bitmapselectpatternmoneynumber;
+GUI_BITMAP Bitmapselectpatterntime;
+
+GUI_BITMAP Bitmapselectpatternelectricnumberpress;
+GUI_BITMAP Bitmapselectpatternfullpress;
+GUI_BITMAP Bitmapselectpatternmoneynumberpress;
+GUI_BITMAP Bitmapselectpatterntimepress;
+
+GUI_BITMAP Bitmapselectpatternunityuan;
+GUI_BITMAP Bitmapselectpatternunitdu;
+GUI_BITMAP Bitmapselectpatternunitfen;
+GUI_BITMAP Bitmapselectpatternunitno;
+
 GUI_BITMAP BitmapKeyboardback;
 GUI_BITMAP BitmapKeyboard0;
 GUI_BITMAP BitmapKeyboard1;
@@ -118,6 +134,14 @@ GUI_BITMAP BitmapKeyboardescpress;
 GUI_BITMAP BitmapKeyboardokpress;
 GUI_BITMAP BitmapKeyboardpointpress;
 
+//卡信息页图片
+GUI_BITMAP Bitmapcardinfoarrears;
+GUI_BITMAP Bitmapcardinfoback;
+GUI_BITMAP Bitmapcardinfoempty;
+GUI_BITMAP Bitmapcardinfoget;
+GUI_BITMAP Bitmapcardinfoplug;
+GUI_BITMAP Bitmapcardinfounregister;
+
 static void vTaskReadPic(void *pvParameters)
 { 
     vTaskDelete(xTaskGetCurrentTaskHandle());
@@ -140,7 +164,6 @@ void MainTask(void)
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
 
-
         DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
         DtaFileCheckboxDisable = readPicInf(pathCheckboxDisable);
@@ -152,6 +175,8 @@ void MainTask(void)
         //公用图片读取
         BitmapQuit = readDtafile(pathQuit);
         BitmapQuitPress = readDtafile(pathQuitPress);
+        BitmapbackQuit =readDtafile(pathbackquit);
+        BitmapbackQuitPress =readDtafile(pathbackquitpress);
         //选择页图片读取
         BitmapSelectGunAbottonNotpress = readDtafile(pathSelectGunAbottonNotpress);
         BitmapSelectGunAbottonPress = readDtafile(pathSelectGunAbottonPress);
@@ -160,6 +185,22 @@ void MainTask(void)
         BitmapSelectGunBbottonPress = readDtafile(pathSelectGunBbottonPress);
         
         //选择充电模式页图片读取
+        Bitmapselectpatternback = readDtafile(pathselectpatternback);
+        Bitmapselectpatternelectricnumber = readDtafile(pathselectpatternelectricnumber);
+        Bitmapselectpatternfull = readDtafile(pathselectpatternfull);
+        Bitmapselectpatternmoneynumber = readDtafile(pathselectpatternmoneynumber);
+        Bitmapselectpatterntime = readDtafile(pathselectpatterntime);
+
+        Bitmapselectpatternelectricnumberpress = readDtafile(pathselectpatternelectricnumberpress);
+        Bitmapselectpatternfullpress = readDtafile(pathselectpatternfullpress);
+        Bitmapselectpatternmoneynumberpress = readDtafile(pathselectpatternmoneynumberpress);
+        Bitmapselectpatterntimepress = readDtafile(pathselectpatterntimepress);
+
+        Bitmapselectpatternunityuan = readDtafile(pathselectpatternunityuan);
+        Bitmapselectpatternunitdu = readDtafile(pathselectpatternunitdu);
+        Bitmapselectpatternunitfen = readDtafile(pathselectpatternunitfen);
+        Bitmapselectpatternunitno = readDtafile(pathselectpatternunitno);
+        
         BitmapKeyboardback = readDtafile(pathKeyboardback);
         
         BitmapKeyboard0 = readDtafile(pathKeyboard0);
@@ -192,6 +233,14 @@ void MainTask(void)
         BitmapKeyboardokpress = readDtafile(pathKeyboardokpress);
         BitmapKeyboardpointpress = readDtafile(pathKeyboardpointpress);
         
+        //卡信息页图片
+        Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
+        Bitmapcardinfoback = readDtafile(pathcardinfoback);
+        Bitmapcardinfoempty = readDtafile(pathcardinfoempty);
+        Bitmapcardinfoget = readDtafile(pathcardinfoget);
+        Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
+        Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
+        
         
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
@@ -206,7 +255,7 @@ void MainTask(void)
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
  //       CreateKeyBoardWindow();
-        Createselectgun();
+        CreateselectgunDLG();
     }
     else
     {

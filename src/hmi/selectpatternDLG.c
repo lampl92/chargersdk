@@ -3,6 +3,8 @@
 #include "skin.h"
 #include  "HMI_Start.h"
 
+#define  INPUTNUMBERLENGTH 6
+
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 
 #define ID_WINDOW_1 (GUI_ID_USER + 0x0F)
@@ -27,24 +29,27 @@
 #define ID_TEXT_0 (GUI_ID_USER + 0x16)
 #define ID_IMAGE_0 (GUI_ID_USER + 0x17)
 #define ID_IMAGE_1 (GUI_ID_USER + 0x18)
+#define ID_IMAGE_2 (GUI_ID_USER + 0x19)
+#define ID_BUTTON_14 (GUI_ID_USER + 0x20)
 
-int FlagDisableKeyboard = 0;
 WM_HWIN HwinKeyboard;
-static char strNumber[10];
+static char strNumber[INPUTNUMBERLENGTH];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 400, 150, 100, 24, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, 100, 120, 100, 45, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, 100, 195, 100, 45, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_2, 100, 270, 100, 45, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_3, 100, 345, 100, 45, 0, 0x0, 0 },
+    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
+    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 530, 72, 120, 36, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 180, 50, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 180, 110, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 180, 170, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 180, 230, 150, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, 100, 400, 100, 50, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
-    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 400, 200, 260, 260, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_1, 0, 0, 800, 480, 0, 0, 0 },
+    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 400, 110, 260, 260, 0, 0x0, 0 },
+    { IMAGE_CreateIndirect, "SelectInfoImage", ID_IMAGE_1, 0, 0, 260, 260, 0, 0, 0 },
     { BUTTON_CreateIndirect, "Button1", ID_BUTTON_0, 15, 15, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button2", ID_BUTTON_1, 75, 15, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Button3", ID_BUTTON_2, 135, 15, 50, 50, 0, 0x0, 0 },
@@ -63,7 +68,35 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
 
 static void MakeStrNumber(char *number)
 {
-    strcat(strNumber,number);
+    int i = 0;
+
+    if (strcmp(number, "bs") == 0)
+    {
+        for (i = 0; strNumber[i] != '\0'; i++)
+            ;
+        strNumber[i - 1] = '\0';
+    }
+    else if (strcmp(number, "esc") == 0)
+    {
+        memset(strNumber, '\0', sizeof(strNumber));
+    }
+    else
+    {
+        if (strlen(strNumber) < INPUTNUMBERLENGTH-1)
+        {
+            if (strcmp(number, ".") == 0)
+            {       
+                for (i = 0; strNumber[i] != '\0'; i++)
+                {
+                    if (strNumber[i] == '.')
+                    {
+                        return;
+                    }
+                }
+            }
+            strcat(strNumber, number); 
+        }
+    }
 }
 
 
@@ -74,19 +107,30 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "");
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem,&BitmapBeijing);
+        IMAGE_SetBitmap(hItem, &Bitmapselectpatternback);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+        IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitno);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-        CHECKBOX_SetSkin(hItem, SKIN_checkbox);
+        CHECKBOX_SetSkin(hItem, SKIN_checkboxfull);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-        CHECKBOX_SetSkin(hItem, SKIN_checkbox);
+        CHECKBOX_SetSkin(hItem, SKIN_checkboxtime);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-        CHECKBOX_SetSkin(hItem, SKIN_checkbox);
+        CHECKBOX_SetSkin(hItem, SKIN_checkboxmoney);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
+        CHECKBOX_SetSkin(hItem, SKIN_checkboxelectric);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_14);
+        BUTTON_SetText(hItem, "");
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuit, 0, 0);
+        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuitPress, 0, 0);
         
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -95,7 +139,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_0:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                WM_ShowWindow(HwinKeyboard);
+                WM_HideWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
@@ -106,6 +150,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitno);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -117,7 +163,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 WM_ShowWindow(HwinKeyboard);
-                memset(strNumber,'\0', sizeof(strNumber));
+                memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
 
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
@@ -128,7 +174,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
-
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitfen);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -151,7 +198,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
                 CHECKBOX_SetState(hItem, 0);
-
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunityuan);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -162,7 +210,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_CHECKBOX_3:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                WM_HideWindow(HwinKeyboard);
+                WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
                 
@@ -174,6 +222,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 CHECKBOX_SetState(hItem, 0);
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
                 CHECKBOX_SetState(hItem, 0);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitdu);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -181,7 +231,21 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             }
             break;
+        case ID_BUTTON_14: //'quit'
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTGUN);
+                break;
+            }
+            break;
         }
+        break;
+    case MSG_JUMPSELECTGUN:
+        GUI_EndDialog(pMsg->hWin, 0);
+        GUI_EndDialog(HwinKeyboard, 0);
+        CreateselectgunDLG();
         break;
     case WM_PAINT: 
         break;
@@ -276,222 +340,160 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch (Id) {
-        case ID_BUTTON_0: // Notifications sent by 'Button1'
+        case ID_BUTTON_0: //'Button1'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("1");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_1: // Notifications sent by 'Button2'
+        case ID_BUTTON_1: //'Button2'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("2");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_2: // Notifications sent by 'Button3'
+        case ID_BUTTON_2: //'Button3'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("3");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_3: // Notifications sent by 'Button-b'
+        case ID_BUTTON_3: //'Button-b'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                //MakeStrNumber("3");
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
+                MakeStrNumber("bs");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_4: // Notifications sent by 'Button4'
+        case ID_BUTTON_4: //'Button4'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("4");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_5: // Notifications sent by 'Button5'
+        case ID_BUTTON_5: //'Button5'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("5");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_6: // Notifications sent by 'Button6'
+        case ID_BUTTON_6: //'Button6'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:               
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("6");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_7: // Notifications sent by 'Button-cancel'
+        case ID_BUTTON_7: //'Button-cancel'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                //MakeStrNumber("7");
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
+                MakeStrNumber("esc");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_8: // Notifications sent by 'Button7'
+        case ID_BUTTON_8: //'Button7'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("7");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_9: // Notifications sent by 'Button8'
+        case ID_BUTTON_9: //'Button8'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("8");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_10: // Notifications sent by 'Button9'
+        case ID_BUTTON_10: //'Button9'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("9");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_11: // Notifications sent by 'Button-ok'
+        case ID_BUTTON_11: //'Button-ok'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-              // USER START (Optionally insert code for reacting on notification message)
-              // USER END
                 break;
             case WM_NOTIFICATION_RELEASED:
-                Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
+                WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPCARDINFO);
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_12: // Notifications sent by 'Button0'
+        case ID_BUTTON_12: //'Button0'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber("0");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-        case ID_BUTTON_13: // Notifications sent by 'Button-point'
+        case ID_BUTTON_13: //'Button-point'
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:
-                
+            case WM_NOTIFICATION_CLICKED:                
                 break;
             case WM_NOTIFICATION_RELEASED:
                 MakeStrNumber(".");
                 Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
                 break;
-  // USER START (Optionally insert additional code for further notification handling)
-  // USER END
             }
             break;
-// USER START (Optionally insert additional code for further Ids)
-// USER END
         }
         break;
-      // USER START (Optionally insert additional message handling)
-      // USER END
+    case MSG_JUMPCARDINFO:
+        GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
+        CreateCardInfoDLG();
+        break;
     default:
         WM_DefaultProc(pMsg);
         break;
     }
 }
 
-    /*********************************************************************
-    *
-    *       Public code
-    *
-    **********************************************************************
-    */
-    /*********************************************************************
-    *
-    *       CreateKeyBoard-Window
-    */
-WM_HWIN CreateKeyBoardWindow(void);
-WM_HWIN CreateKeyBoardWindow(void) {
+//CreateKeyBoard-Window
+WM_HWIN CreateselectpatternDLG(void);
+WM_HWIN CreateselectpatternDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     HwinKeyboard = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog1, hWin, 0, 0);
@@ -499,7 +501,3 @@ WM_HWIN CreateKeyBoardWindow(void) {
     return hWin;  
 }
 
-    // USER START (Optionally insert additional public code)
-    // USER END
-
-    /*************************** End of file ****************************/

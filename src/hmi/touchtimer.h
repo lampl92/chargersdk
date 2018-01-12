@@ -46,7 +46,9 @@
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 #define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
+
 #define MSG_JUMPSELECTPATTERN (GUI_ID_USER + 0x39)  //调到选择充电方式
+#define MSG_JUMPSELECTGUN   (GUI_ID_USER +0x3a)     //跳到选枪页
 
 
 #define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
@@ -119,10 +121,11 @@ struct errMultiEdit_size{
     uint8_t err_num;
 }ErrMultiEdit_Size;
 
-
-WM_HWIN Createselectgun(void);
-
-
+//**********单双枪新界面
+WM_HWIN CreateselectgunDLG(void);
+WM_HWIN CreateselectpatternDLG(void);
+WM_HWIN CreateCardInfoDLG(void);
+//*************
 
 
 
@@ -130,7 +133,9 @@ WM_HWIN Createselectgun(void);
 
 
 void PutOut_SelAOrB();
-WM_HWIN CreateKeyBoardWindow(void);
+
+
+
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateCardInfoPage(void);
 WM_HWIN CreateChargingPage(void);
