@@ -142,6 +142,27 @@ GUI_BITMAP Bitmapcardinfoget;
 GUI_BITMAP Bitmapcardinfoplug;
 GUI_BITMAP Bitmapcardinfounregister;
 
+//主页图片
+GUI_BITMAP Bitmaphomeback;
+GUI_BITMAP BitmaphomegunAchargedone;
+GUI_BITMAP BitmaphomegunAcharging;
+GUI_BITMAP BitmaphomegunAerror;
+GUI_BITMAP BitmaphomegunAfree;
+GUI_BITMAP BitmaphomegunBchargedone;
+GUI_BITMAP BitmaphomegunBcharging;
+GUI_BITMAP BitmaphomegunBerror;
+GUI_BITMAP BitmaphomegunBfree;
+GUI_BITMAP Bitmaphomegunlookinfo;
+GUI_BITMAP Bitmaphomegunscancode;
+GUI_BITMAP Bitmaphomegunlookinfopress;
+GUI_BITMAP Bitmaphomegunscancodepress;
+GUI_BITMAP Bitmaphomesignal0;
+GUI_BITMAP Bitmaphomesignal1;
+GUI_BITMAP Bitmaphomesignal2;
+GUI_BITMAP Bitmaphomesignal3;
+
+
+
 static void vTaskReadPic(void *pvParameters)
 { 
     vTaskDelete(xTaskGetCurrentTaskHandle());
@@ -241,6 +262,24 @@ void MainTask(void)
         Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
         Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
         
+        //主页图片读取
+        Bitmaphomeback = readDtafile(pathhomeback);
+        BitmaphomegunAchargedone = readDtafile(pathhomegunAchargedone);
+        BitmaphomegunAcharging = readDtafile(pathhomegunAcharging);
+        BitmaphomegunAerror = readDtafile(pathhomegunAerror);
+        BitmaphomegunAfree = readDtafile(pathhomegunAfree);
+        BitmaphomegunBchargedone = readDtafile(pathhomegunBchargedone);
+        BitmaphomegunBcharging = readDtafile(pathhomegunBcharging);
+        BitmaphomegunBerror = readDtafile(pathhomegunBerror);
+        BitmaphomegunBfree = readDtafile(pathhomegunBfree);
+        Bitmaphomegunlookinfo = readDtafile(pathhomegunlookinfo);
+        Bitmaphomegunscancode = readDtafile(pathhomegunscancode);
+        Bitmaphomegunlookinfopress = readDtafile(pathhomegunlookinfopress);
+        Bitmaphomegunscancodepress = readDtafile(pathhomegunscancodepress);   
+        Bitmaphomesignal0 = readDtafile(pathhomesignal0);
+        Bitmaphomesignal1 = readDtafile(pathhomesignal1);
+        Bitmaphomesignal2 = readDtafile(pathhomesignal2);
+        Bitmaphomesignal3 = readDtafile(pathhomesignal3);
         
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
@@ -255,7 +294,8 @@ void MainTask(void)
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
  //       CreateKeyBoardWindow();
-        CreateselectgunDLG();
+        CreateHomeDLG();
+        //CreateselectgunDLG();
     }
     else
     {

@@ -140,6 +140,26 @@ extern GUI_BITMAP Bitmapcardinfoplug;
 extern GUI_BITMAP Bitmapcardinfounregister;
 
 
+//主页图片
+extern GUI_BITMAP Bitmaphomeback;
+extern GUI_BITMAP BitmaphomegunAchargedone;
+extern GUI_BITMAP BitmaphomegunAcharging;
+extern GUI_BITMAP BitmaphomegunAerror;
+extern GUI_BITMAP BitmaphomegunAfree;
+extern GUI_BITMAP BitmaphomegunBchargedone;
+extern GUI_BITMAP BitmaphomegunBcharging;
+extern GUI_BITMAP BitmaphomegunBerror;
+extern GUI_BITMAP BitmaphomegunBfree;
+extern GUI_BITMAP Bitmaphomegunlookinfo;
+extern GUI_BITMAP Bitmaphomegunscancode;
+extern GUI_BITMAP Bitmaphomegunlookinfopress;
+extern GUI_BITMAP Bitmaphomegunscancodepress;
+extern GUI_BITMAP Bitmaphomesignal0;
+extern GUI_BITMAP Bitmaphomesignal1;
+extern GUI_BITMAP Bitmaphomesignal2;
+extern GUI_BITMAP Bitmaphomesignal3;
+
+
 extern int SignalFlag;//信号图标刷新标志
 
 

@@ -122,6 +122,7 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 //**********单双枪新界面
+WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateselectgunDLG(void);
 WM_HWIN CreateselectpatternDLG(void);
 WM_HWIN CreateCardInfoDLG(void);

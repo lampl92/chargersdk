@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\HomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />

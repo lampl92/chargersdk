@@ -97,6 +97,26 @@
 #define pathcardinfounregister        "nand/system/cardinfounregister.dta"
 //******************
 
+//Ö÷Ò³Í¼Æ¬Â·¾¶
+#define pathhomeback                "/nand/system/homeback.dta"
+#define pathhomegunAchargedone                  "/nand/system/homegunAchargedone.dta"
+#define pathhomegunAcharging                "/nand/system/homegunAcharging.dta"
+#define pathhomegunAerror                   "/nand/system/homegunAerror.dta"
+#define pathhomegunAfree                "/nand/system/homegunAfree.dta"
+#define pathhomegunBchargedone                  "/nand/system/homegunBchargedone.dta"
+#define pathhomegunBcharging                "/nand/system/homegunBcharging.dta"
+#define pathhomegunBerror                   "/nand/system/homegunBerror.dta"
+#define pathhomegunBfree                "/nand/system/homegunBfree.dta"
+#define pathhomegunlookinfo                 "/nand/system/homegunlookinfo.dta"
+#define pathhomegunscancode                 "/nand/system/homegunscancode.dta"
+#define pathhomegunlookinfopress                 "/nand/system/homegunlookinfopress.dta"
+#define pathhomegunscancodepress                 "/nand/system/homegunscancodepress.dta"
+#define pathhomesignal0  "nand/system/homesignal0.dta"
+#define pathhomesignal1  "nand/system/homesignal1.dta"
+#define pathhomesignal2  "nand/system/homesignal2.dta"
+#define pathhomesignal3  "nand/system/homesignal3.dta"
+
+
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"
 #define pathCheckboxNotDta          "/nand/system/notchosen.dta"
