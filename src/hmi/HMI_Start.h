@@ -159,6 +159,10 @@ extern GUI_BITMAP Bitmaphomesignal1;
 extern GUI_BITMAP Bitmaphomesignal2;
 extern GUI_BITMAP Bitmaphomesignal3;
 
+//提示信息页图片
+extern GUI_BITMAP Bitmapchargedoneinfo;
+extern GUI_BITMAP Bitmapcharginginfo;
+
 
 extern int SignalFlag;//信号图标刷新标志
 

@@ -126,6 +126,8 @@ WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateselectgunDLG(void);
 WM_HWIN CreateselectpatternDLG(void);
 WM_HWIN CreateCardInfoDLG(void);
+WM_HWIN CreatechargedoneinfoDLG(void);
+WM_HWIN CreatecharginginfoDLG(void);
 //*************
 
 

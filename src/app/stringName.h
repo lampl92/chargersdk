@@ -116,6 +116,10 @@
 #define pathhomesignal2  "nand/system/homesignal2.dta"
 #define pathhomesignal3  "nand/system/homesignal3.dta"
 
+//提示信息页图片
+#define pathchargedoneinfo      "nand/system/chargedoneinfo.dta"
+#define pathcharginginfo        "nand/system/charginginfo.dta"
+
 
 
 #define pathCheckboxDta             "/nand/system/chosen.dta"

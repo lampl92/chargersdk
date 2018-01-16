@@ -81,7 +81,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPHOME:
         GUI_EndDialog(pMsg->hWin, 0);
-        CreateselectgunDLG();
+        CreateHomeDLG();
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -97,10 +97,8 @@ WM_HWIN CreateCardInfoDLG(void);
 WM_HWIN CreateCardInfoDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerFlush, 10, 0);
-    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinCardInfo), ID_TimerSignal, 300, 0);
-    
+    _timerRTC = WM_CreateTimer(hWin, ID_TimerTime, 20, 0);
+    _timerData = WM_CreateTimer(hWin, ID_TimerFlush, 10, 0);
+    _timerSignal = WM_CreateTimer(hWin, ID_TimerSignal, 300, 0);
     return 0;
 }

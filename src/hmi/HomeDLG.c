@@ -1,6 +1,7 @@
 #include "DIALOG.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
+#include "GUI_backstage.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_IMAGE_0 (GUI_ID_USER + 0x01)
@@ -13,6 +14,12 @@
 #define ID_TEXT_1 (GUI_ID_USER + 0x08)
 #define ID_TEXT_2 (GUI_ID_USER + 0x09)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x0A)
+
+#define ID_Timerstateflash    1
+
+static WM_HTIMER _timerstateflash;
+
+static int i = 1;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -35,8 +42,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int          NCode;
     int          Id;
 
+
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
+        gunstate[0] = 1;
+        gunstate[1] = 1;
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "2018-1-15  18:58");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_BLACK, "12");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, "18");
@@ -45,24 +55,43 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         IMAGE_SetBitmap(hItem, &Bitmaphomeback);
       
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1);
-        IMAGE_SetBitmap(hItem, &Bitmaphomesignal0);
+        IMAGE_SetBitmap(hItem, &Bitmaphomesignal3);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
         IMAGE_SetBitmap(hItem, &BitmaphomegunAfree);
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_3);
         IMAGE_SetBitmap(hItem, &BitmaphomegunBfree);
+        if (gunstate[0] == GunfreeState || gunstate[0] == Gunerror)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+            BUTTON_SetText(hItem, "");
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+        }
+        else
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+            BUTTON_SetText(hItem, "");
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+        }
         
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
-        
+        if (gunstate[1] == GunfreeState || gunstate[1] == Gunerror)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+            BUTTON_SetText(hItem, "");
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+        }
+        else
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+            BUTTON_SetText(hItem, "");
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+            BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+        }
+
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuitPress, 0, 0);
@@ -78,7 +107,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
                 break;
             case WM_NOTIFICATION_RELEASED:
-
+                if (gunstate[0] == GunchargingState)
+                {
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    CreatecharginginfoDLG();
+                }
+                else if (gunstate[0] == GunchargedoneState)
+                {
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    CreatechargedoneinfoDLG();
+                }
                 break;
             }
             break;
@@ -88,7 +126,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
           
                 break;
             case WM_NOTIFICATION_RELEASED:
-
+                if (gunstate[1] == GunchargingState)
+                {
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    CreatecharginginfoDLG();
+                }
+                else if (gunstate[1] == GunchargedoneState)
+                {
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    CreatechargedoneinfoDLG();
+                }
                 break;
             }
             break;
@@ -98,10 +145,94 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
                 break;
             case WM_NOTIFICATION_RELEASED:
-
+                GUI_EndDialog(pMsg->hWin, 0);
+                CreateselectgunDLG();
                 break;
             }
             break;
+        }
+        break;
+    case WM_TIMER:
+        if (pMsg->Data.v == _timerstateflash)
+        {
+            if (i > 4 || i < 1) i = 1;
+            gunstate[0] = i;
+            gunstate[1] = i;
+            i++;
+            if (gunstate[0] == GunfreeState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunAfree);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+            }
+            else if (gunstate[0] == GunchargingState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunAcharging);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+            }
+            else if (gunstate[0] == GunchargedoneState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunAchargedone);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+            }
+            else if (gunstate[0] == Gunerror)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunAerror);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+            }
+            
+            if (gunstate[1] == GunfreeState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_3);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunBfree);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+            }
+            else if (gunstate[1] == GunchargingState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_3);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunBcharging);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+            }
+            else if (gunstate[1] == GunchargedoneState)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_3);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunBchargedone);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunlookinfo, 0, 0);
+            }
+            else if (gunstate[1] == Gunerror)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_3);
+                IMAGE_SetBitmap(hItem, &BitmaphomegunBerror);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                BUTTON_SetText(hItem, "");
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
+                BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &Bitmaphomegunscancode, 0, 0);
+            }
+            WM_RestartTimer(pMsg->Data.v, 4000);
         }
         break;
     default:
@@ -114,5 +245,6 @@ WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateHomeDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _timerstateflash = WM_CreateTimer(hWin, ID_Timerstateflash, 5, 0);
     return hWin;
 }

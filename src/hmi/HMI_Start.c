@@ -161,6 +161,10 @@ GUI_BITMAP Bitmaphomesignal1;
 GUI_BITMAP Bitmaphomesignal2;
 GUI_BITMAP Bitmaphomesignal3;
 
+//提示信息页图片
+GUI_BITMAP Bitmapchargedoneinfo;
+GUI_BITMAP Bitmapcharginginfo;
+
 
 
 static void vTaskReadPic(void *pvParameters)
@@ -280,6 +284,9 @@ void MainTask(void)
         Bitmaphomesignal1 = readDtafile(pathhomesignal1);
         Bitmaphomesignal2 = readDtafile(pathhomesignal2);
         Bitmaphomesignal3 = readDtafile(pathhomesignal3);
+        
+        Bitmapchargedoneinfo = readDtafile(pathchargedoneinfo);
+        Bitmapcharginginfo = readDtafile(pathcharginginfo);
         
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);

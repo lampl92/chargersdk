@@ -81,6 +81,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         CreateselectpatternDLG();
         break;
     case MSG_JUMPHOME:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreateHomeDLG();
         break;
     default:
         WM_DefaultProc(pMsg);
