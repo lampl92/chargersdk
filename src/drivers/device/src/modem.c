@@ -1576,6 +1576,7 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_TCP_KEEP: //临时注释，不要删
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
+#if 0
 //            modem_get_STATE(pModem);
 //            if(pModem->state == PDP_DEACT)
 //            {
@@ -1619,6 +1620,7 @@ void Modem_Poll(DevModem_t *pModem)
 //                    printf_safe("发送失败\r\n");
 //                }
 //            }
+#endif
             modem_UART_putQue(pModem);
             /*=== read处理 ===*/
             if (pModem->info.ucTPMode == 0)

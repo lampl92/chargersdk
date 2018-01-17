@@ -2957,33 +2957,7 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");//
-    pProto->info.usServerPort      = 6677;//8051;//
-    strcpy(pProto->info.strUserName, "esaasusr");
-    strcpy(pProto->info.strUserPwd, "esaaspasswrd");
-    strcpy(pProto->info.strKey, "0123456789abcdeg");
-//   strcpy(pProto->info.strKey, "1234567890abcde2");
-    memset(pProto->info.strNewKey, 0, 17);
-    pProto->info.tNewKeyChangeTime = 0;
-    pProto->info.ulOptSN           = 0;
-    pProto->info.ucProtoVer        = 0x68;
-    pProto->info.ulHeartBeatCyc_ms = 15000;
-    pProto->info.ucResetAct        = 0;
-
-    for (i = 0; i < defOrderSegMax; i++)
-    {
-        pProto->info.dSegPowerFee[i]    = 0; //尖峰费率
-        pProto->info.dSegServFee[i]    = 0;
-        for (j = 0; j < defOrderPeriodMax; j++)
-        {
-            pProto->info.SegTime[i].ucStart[j] = 0;
-            pProto->info.SegTime[i].ucEnd[j] = 0;
-        }
-        pProto->info.SegTime[i].ucPeriodCont = 0;
-    }
-
-    pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
-    pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
+    memset(pProto, 0, sizeof(echProtocol_t));
 
     EchFtpInit(&pProto->info.ftp);
     
@@ -2998,17 +2972,6 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
     pProto->status.ulStatus |= defSignalCON_State_Standby;
-    for(i = 0; i < 6; i++)
-    {
-        pProto->status.fault[i] = 0;
-        pProto->status.warning[i] = 0;
-        pProto->status.protect[i] = 0;
-    }
-
-    for(i = 0; i < ECH_CMD_MAX; i++)
-    {
-        pProto->pCMD[i] = NULL;
-    }
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)

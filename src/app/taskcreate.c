@@ -167,7 +167,7 @@ void vTaskInit(void *pvParameters)
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
-    IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s    
+    //IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s    
     while (1)
     {
         IWDG_Feed();

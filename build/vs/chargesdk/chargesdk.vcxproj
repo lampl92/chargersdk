@@ -235,7 +235,17 @@
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_verify.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs1.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\yaffs_yaffs2.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\fs_port_yaffs.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\debug.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_cache.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_events.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_misc.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c" />
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
     <ClCompile Include="..\..\..\src\net\user\ifconfig.c" />
@@ -279,7 +289,6 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_server.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f4x9_eth_driver.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8720_driver.c" />
-    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\arp.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\auto_ip.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\icmp.c" />
@@ -692,6 +701,7 @@
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_multi.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\yportenv_single.h" />
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\fs_port_config.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\net_config.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\os_port_config.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h" />
@@ -764,7 +774,7 @@
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509_csr.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h" />
     <ClInclude Include="..\..\..\src\net\user\ifconfig.h" />
-    <ClInclude Include="..\..\..\src\net\user\tasknetwork.h" />
+    <ClInclude Include="..\..\..\src\net\user\interface_network.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\deprecated_definitions.h" />

@@ -10,6 +10,10 @@
 #include "task.h"
 #include "ifconfig.h"
 #include "modem.h"
+#include "cfg_parse.h"
+#include "stringName.h"
+#include "evse_globals.h"
+#include "taskcreate.h"
 
 #include "os_port.h"
 #include "core/net.h"
@@ -18,24 +22,138 @@
 #include "dhcp/dhcp_client.h"
 #include "debug.h"
 
+#include "ftp/ftp_server.h"
+#include "path.h"
+
+#include "ftp/ftp_client.h"
+
+//Forward declaration of functions
+uint_t ftpServerCheckUserCallback(FtpClientConnection *connection,
+    const char_t *user);
+
+uint_t ftpServerCheckPasswordCallback(FtpClientConnection *connection,
+    const char_t *user,
+    const char_t *password);
+
+uint_t ftpServerGetFilePermCallback(FtpClientConnection *connection,
+    const char_t *user,
+    const char_t *path);
+
+error_t ftpClientTest(void);
+
 int_t eth_init(void);
+void ifconfig_update(void);
+int_t eth_connect(void);
+DhcpClientContext dhcpClientContext;
+Socket *socketfd; //Socket 套接字 
+size_t length; 
+
+int netSend(uint8_t *pbuff, uint32_t len)
+{
+    error_t error; 
+    error = socketSend(socketfd, pbuff, len, NULL, 0); 
+    if (error) return 0; 
+    return 1;
+}
+
 void vTaskTCPClient(void *pvParameters)
 {
-    
+    DhcpState dhcpstate;
+    error_t error; 
+    char_t buffer[5000]; 
+    NetInterface *interface = &netInterface[0];
 //    pModem = DevModemCreate();
 //    modem_open(pModem);
 //    modem_init(pModem);
 //    Modem_Poll(pModem);//这是任务
     eth_init();
+    ifconfig_update();
+    eth_connect();
+    pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
+    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
+    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
+    ftpClientTest();
     while (1)
     {
-        vTaskDelay(1000);
+        error = socketReceive(socketfd, buffer, sizeof(buffer) - 1, &length, 0); 
+        if (error == NO_ERROR && length > 0)
+        {
+            pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
+        }
+        vTaskDelay(100);
     }
 }
+
+int_t eth_connect(void)
+{
+    error_t error; 
+    IpAddr ipAddr; //DNS 解析得到的地址 
+
+    //Debug message 
+    TRACE_INFO("\r\n\r\nResolving server name...\r\n"); 
+ 
+    //Resolve HTTP server name 解析地址 
+    error = getHostByName(NULL, pechProto->info.strServerIP, &ipAddr, 0); 
+    //Any error to report? 
+    if (error) 
+    { 
+        //Debug message 
+        TRACE_INFO("Failed to resolve server name!\r\n"); 
+        //Exit immediately 
+        return error; 
+    } 
+    
+    socketfd = socketOpen(SOCKET_TYPE_STREAM, SOCKET_IP_PROTO_TCP); 
+    if (!socketfd) 
+    { 
+        //Debug message 
+        TRACE_INFO("Failed to open socket!\r\n"); 
+        //Exit immediately 
+        return ERROR_OPEN_FAILED; 
+    } 
+    do 
+    { 
+        //Debug message
+        TRACE_INFO("Connecting to server %s\r\n", ipAddrToString(&ipAddr, NULL)); 
+ 
+       //Connect to the HTTP server 连接到 HTTP 服务器 
+        error = socketConnect(socketfd, &ipAddr, pechProto->info.usServerPort); 
+        //Any error to report? 
+        if (error) break; 
+ 
+        //Debug message 
+        TRACE_INFO("Successful connection\r\n"); 
+    } while (0);
+}
+void ifconfig_update(void)
+{
+    NetInterface *interface = &netInterface[0];
+    Ipv4Addr ipv4Addr;
+    
+    ipv4GetHostAddr(interface, &ipv4Addr);
+    ipv4AddrToString(ipv4Addr, ifconfig.status.strIP);
+    
+    ipv4GetDefaultGateway(interface, &ipv4Addr);
+    ipv4AddrToString(ipv4Addr, ifconfig.status.strGate);
+    
+    ipv4GetSubnetMask(interface, &ipv4Addr);
+    ipv4AddrToString(ipv4Addr, ifconfig.status.strMask);
+    
+    ipv4GetDnsServer(interface, 0, &ipv4Addr);
+    ipv4AddrToString(ipv4Addr, ifconfig.status.strDNS1);
+    
+    ipv4GetDnsServer(interface, 1, &ipv4Addr);
+    ipv4AddrToString(ipv4Addr, ifconfig.status.strDNS2);
+}
+
+FtpServerSettings ftpServerSettings;
+FtpServerContext ftpServerContext;
+
 int_t eth_init(void)
 {
     DhcpClientSettings dhcpClientSettings;
-    DhcpClientContext dhcpClientContext;
+
+    DhcpState dhcpstate;
     error_t error;
     NetInterface *interface;
     OsTask *task;
@@ -92,6 +210,11 @@ int_t eth_init(void)
         {
             TRACE_ERROR("Failed to start DHCP client!\r\n");
         }
+        while ((dhcpstate = dhcpClientGetState(&dhcpClientContext)) != DHCP_STATE_BOUND)
+        {
+            printf_safe("dhcpstate = %d\n", dhcpstate);
+            vTaskDelay(1000);
+        }
     }
     else
     {
@@ -114,7 +237,248 @@ int_t eth_init(void)
         ipv4SetDnsServer(interface, 1, ipv4Addr);
     }
     
+    
+    
+    ///ftp
+    fsInit();
+    //Get default settings
+    ftpServerGetDefaultSettings(&ftpServerSettings);
+    //Bind FTP server to the desired interface
+    ftpServerSettings.interface = &netInterface[0];
+    //Listen to port 21
+    ftpServerSettings.port = FTP_PORT;
+    //Root directory
+    strcpy(ftpServerSettings.rootDir, YAFFS_MOUNT_POINT);
+    //User verification callback function
+    ftpServerSettings.checkUserCallback = ftpServerCheckUserCallback;
+    //Password verification callback function
+    ftpServerSettings.checkPasswordCallback = ftpServerCheckPasswordCallback;
+    //Callback used to retrieve file permissions
+    ftpServerSettings.getFilePermCallback = ftpServerGetFilePermCallback;
+
+       //FTP server initialization
+    error = ftpServerInit(&ftpServerContext, &ftpServerSettings);
+    //Failed to initialize FTP server?
+    if (error)
+    {
+       //Debug message
+        TRACE_ERROR("Failed to initialize FTP server!\r\n");
+    }
+
+       //Start FTP server
+    error = ftpServerStart(&ftpServerContext);
+    //Failed to start FTP server?
+    if (error)
+    {
+       //Debug message
+        TRACE_ERROR("Failed to start FTP server!\r\n");
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     return 0;
+}
+
+/**
+ * @brief User verification callback function
+ * @param[in] connection Handle referencing a client connection
+ * @param[in] user NULL-terminated string that contains the user name
+ * @return Access status (FTP_ACCESS_ALLOWED, FTP_ACCESS_DENIED or FTP_PASSWORD_REQUIRED)
+ **/
+
+uint_t ftpServerCheckUserCallback(FtpClientConnection *connection,
+    const char_t *user)
+{
+   //Debug message
+    TRACE_INFO("FTP server: User verification\r\n");
+
+       //Manage authentication policy
+    if (!strcmp(user, "anonymous"))
+    {
+        return FTP_ACCESS_ALLOWED;
+    }
+    else if (!strcmp(user, "admin"))
+    {
+        return FTP_PASSWORD_REQUIRED;
+    }
+    else
+    {
+        return FTP_ACCESS_DENIED;
+    }
+}
+
+
+/**
+ * @brief Password verification callback function
+ * @param[in] connection Handle referencing a client connection
+ * @param[in] user NULL-terminated string that contains the user name
+ * @param[in] password NULL-terminated string that contains the corresponding password
+ * @return Access status (FTP_ACCESS_ALLOWED or FTP_ACCESS_DENIED)
+ **/
+
+uint_t ftpServerCheckPasswordCallback(FtpClientConnection *connection,
+    const char_t *user,
+    const char_t *password)
+{
+   //Debug message
+    TRACE_INFO("FTP server: Password verification\r\n");
+
+       //Verify password
+    if (!strcmp(user, "admin") && !strcmp(password, "admin"))
+    {
+        return FTP_ACCESS_ALLOWED;
+    }
+    else
+    {
+        return FTP_ACCESS_DENIED;
+    }
+}
+
+
+/**
+ * @brief Callback used to retrieve file permissions
+ * @param[in] connection Handle referencing a client connection
+ * @param[in] user NULL-terminated string that contains the user name
+ * @param[in] path Canonical path of the file
+ * @return Permissions for the specified file
+ **/
+
+uint_t ftpServerGetFilePermCallback(FtpClientConnection *connection,
+    const char_t *user,
+    const char_t *path)
+{
+    uint_t perm;
+
+       //Debug message
+    TRACE_INFO("FTP server: Checking access rights for %s\r\n", path);
+
+       //Manage access rights
+    if (!strcmp(user, "anonymous"))
+    {
+       //Allow read/write access to temp directory
+        if (pathMatch(path, "/temp/*"))
+            perm = FTP_FILE_PERM_LIST | FTP_FILE_PERM_READ | FTP_FILE_PERM_WRITE;
+      //Allow read access only to other directories
+        else
+            perm = FTP_FILE_PERM_LIST | FTP_FILE_PERM_READ;
+    }
+    else if (!strcmp(user, "admin"))
+    {
+       //Allow read/write access
+        perm = FTP_FILE_PERM_LIST | FTP_FILE_PERM_READ | FTP_FILE_PERM_WRITE;
+    }
+    else
+    {
+       //Deny access
+        perm = 0;
+    }
+
+       //Return the relevant permissions
+    return perm;
+}
+
+
+/**
+ * @brief FTP client test routine
+ * @return Error code
+ **/
+
+error_t ftpClientTest(void)
+{
+    error_t error;
+    size_t length;
+    IpAddr ipAddr;
+    FtpClientContext ftpContext;
+    static char_t buffer[256];
+
+       //Debug message
+    TRACE_INFO("\r\n\r\nResolving server name...\r\n");
+    //Resolve FTP server name
+    error = getHostByName(NULL, "ftp.gnu.org", &ipAddr, 0);
+
+       //Any error to report?
+    if (error)
+    {
+       //Debug message
+        TRACE_INFO("Failed to resolve server name!\r\n");
+        //Exit immediately
+        return error;
+    }
+
+       //Debug message
+    TRACE_INFO("Connecting to FTP server %s\r\n", ipAddrToString(&ipAddr, NULL));
+    //Connect to the FTP server
+    error = ftpConnect(&ftpContext, NULL, &ipAddr, 21, FTP_NO_SECURITY | FTP_PASSIVE_MODE);
+
+       //Any error to report?
+    if (error)
+    {
+       //Debug message
+        TRACE_INFO("Failed to connect to FTP server!\r\n");
+        //Exit immediately
+        return error;
+    }
+
+       //Debug message
+    TRACE_INFO("Successful connection\r\n");
+
+       //Start of exception handling block
+    do
+    {
+       //Login to the FTP server using the provided username and password
+        error = ftpLogin(&ftpContext, "anonymous", "password", "");
+        //Any error to report?
+        if (error)
+            break;
+
+                  //Open the specified file for reading
+        error = ftpOpenFile(&ftpContext, "welcome.msg", FTP_FOR_READING | FTP_BINARY_TYPE);
+        //Any error to report?
+        if (error)
+            break;
+
+                  //Dump the contents of the file
+        while (1)
+        {
+           //Read data
+            error = ftpReadFile(&ftpContext, buffer, sizeof(buffer) - 1, &length, 0);
+            //End of file?
+            if (error)
+                break;
+
+                         //Properly terminate the string with a NULL character
+            buffer[length] = '\0';
+            //Dump current data
+            TRACE_INFO("%s", buffer);
+        }
+
+              //End the string with a line feed
+        TRACE_INFO("\r\n");
+        //Close the file
+        error = ftpCloseFile(&ftpContext);
+
+              //End of exception handling block
+    } while (0);
+
+       //Close the connection
+    ftpClose(&ftpContext);
+    //Debug message
+    TRACE_INFO("Connection closed...\r\n");
+
+       //Return status code
+    return error;
 }
 #if 0
 
@@ -358,4 +722,4 @@ int lwip_init_task(void)
     return ppp;
 }
 
-#endif
+#endif

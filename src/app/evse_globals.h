@@ -12,11 +12,10 @@
 #include "EVSE.h"
 #include "interface_rfid.h"
 #include "userlib_list.h"
-#include "libEcharge/ech_protocol.h"
+#include "libEcharge/ech_globals.h"
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
-extern echProtocol_t *pechProto;
 
 #endif

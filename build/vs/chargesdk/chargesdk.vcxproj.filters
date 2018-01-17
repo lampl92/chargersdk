@@ -798,6 +798,9 @@
     <Filter Include="Header files\net\user">
       <UniqueIdentifier>{55efeae1-ff25-4e91-8922-bc76607a92f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\dns">
+      <UniqueIdentifier>{6bc3a077-96d5-4fda-8992-dabe663c7840}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -1653,9 +1656,6 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8720_driver.c">
       <Filter>Source files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c">
-      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\arp.c">
       <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
     </ClCompile>
@@ -1727,6 +1727,36 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\net\user\taskppp.c">
       <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_cache.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\fs_port_yaffs.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_events.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4664,8 +4694,11 @@
     <ClInclude Include="..\..\..\src\net\user\ifconfig.h">
       <Filter>Header files\net\user</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\net\user\tasknetwork.h">
+    <ClInclude Include="..\..\..\src\net\user\interface_network.h">
       <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\fs_port_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -30,59 +30,17 @@
 #include "error.h"
 #include "debug.h"
 
-//FatFs specific headers
-#include "ff.h"
+//YAFFS specific headers
+#include "yaffsfs.h"
 
-//FatFs revision
-#define FATFS_R(major, minor, patch) ((major << 16) | (minor << 8) | (0x ## patch))
-
-//Check revision ID
-#if (_FATFS == 124)
-   #define FATFS_REVISON FATFS_R(0, 7, c)
-#elif (_FATFS == 126)
-   #define FATFS_REVISON FATFS_R(0, 7, e)
-#elif (_FATFS == 8085)
-   #define FATFS_REVISON FATFS_R(0, 8, 0)
-#elif (_FATFS == 8255)
-   #define FATFS_REVISON FATFS_R(0, 8, a)
-#elif (_FATFS == 8237)
-   #define FATFS_REVISON FATFS_R(0, 8, b)
-#elif (_FATFS == 6502)
-   #define FATFS_REVISON FATFS_R(0, 9, 0)
-#elif (_FATFS == 4004)
-   #define FATFS_REVISON FATFS_R(0, 9, a)
-#elif (_FATFS == 82786)
-   #define FATFS_REVISON FATFS_R(0, 9, b)
-#elif (_FATFS == 80960)
-   #define FATFS_REVISON FATFS_R(0, 10, 0)
-#elif (_FATFS == 29000)
-   #define FATFS_REVISON FATFS_R(0, 10, a)
-#elif (_FATFS == 8051)
-   #define FATFS_REVISON FATFS_R(0, 10, b)
-#elif (_FATFS == 80376)
-   #define FATFS_REVISON FATFS_R(0, 10, c)
-#elif (_FATFS == 32020)
-   #define FATFS_REVISON FATFS_R(0, 11, 0)
-#elif (_FATFS == 64180)
-   #define FATFS_REVISON FATFS_R(0, 11, a)
-#elif (_FATFS == 88100)
-   #define FATFS_REVISON FATFS_R(0, 12, 0)
-#elif (_FATFS == 80186)
-   #define FATFS_REVISON FATFS_R(0, 12, a)
-#elif (_FATFS == 68020)
-   #define FATFS_REVISON FATFS_R(0, 12, b)
-#elif (_FATFS == 68300)
-   #define FATFS_REVISON FATFS_R(0, 12, c)
-#elif (FF_DEFINED == 87030)
-   #define FATFS_REVISON FATFS_R(0, 13, 0)
-#else
-   #define FATFS_REVISON FATFS_R(0, 0, 0)
-#endif
-
+typedef struct 
+{
+    yaffs_DIR *d;
+    char path[260];
+}dir_tab_t;
 //File system objects
-static FATFS fs;
-static FIL fileTable[FS_MAX_FILES];
-static DIR dirTable[FS_MAX_DIRS];
+static int fileTable[FS_MAX_FILES] = { -1 };
+static dir_tab_t dirTable[FS_MAX_DIRS] = { 0 };
 
 //Mutex that protects critical sections
 static OsMutex fsMutex;
@@ -95,35 +53,12 @@ static OsMutex fsMutex;
 
 error_t fsInit(void)
 {
-   FRESULT res;
-
-   //Clear file system objects
-   memset(fileTable, 0, sizeof(fileTable));
-   memset(dirTable, 0, sizeof(dirTable));
-
-   //Create a mutex to protect critical sections
-   if(!osCreateMutex(&fsMutex))
-   {
-      //Failed to create mutex
-      return ERROR_OUT_OF_RESOURCES;
-   }
-
-   //Mount file system
-#if (FATFS_REVISON <= FATFS_R(0, 9, b))
-   res = f_mount(0, &fs);
-#else
-   res = f_mount(&fs, "", 1);
-#endif
-
-   //Failed to mount file system?
-   if(res != FR_OK)
-   {
-      //Clean up side effects
-      osDeleteMutex(&fsMutex);
-      //Report an error
-      return ERROR_FAILURE;
-   }
-
+    //Create a mutex to protect critical sections
+    if (!osCreateMutex(&fsMutex))
+    {
+       //Failed to create mutex
+        return ERROR_OUT_OF_RESOURCES;
+    }
    //Successful processing
    return NO_ERROR;
 }
@@ -137,39 +72,24 @@ error_t fsInit(void)
 
 bool_t fsFileExists(const char_t *path)
 {
-   FRESULT res;
-   FILINFO fno;
+   int res;
+    struct yaffs_stat st;
 
-#if (FATFS_REVISON <= FATFS_R(0, 11, a) && _USE_LFN != 0)
-   fno.lfname = NULL;
-   fno.lfsize = 0;
-#endif
 
    //Make sure the pathname is valid
    if(path == NULL)
       return FALSE;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
 
    //Check whether the file exists
-   res = f_stat(path, &fno);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_stat(path, &st);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res < 0)
       return FALSE;
 
    //Valid file?
-   if(fno.fattrib & AM_DIR)
+   if(S_ISDIR(st.st_mode))
       return FALSE;
    else
       return TRUE;
@@ -185,42 +105,25 @@ bool_t fsFileExists(const char_t *path)
 
 error_t fsGetFileSize(const char_t *path, uint32_t *size)
 {
-   FRESULT res;
-   FILINFO fno;
-
-#if (FATFS_REVISON <= FATFS_R(0, 11, a) && _USE_LFN != 0)
-   fno.lfname = NULL;
-   fno.lfsize = 0;
-#endif
+   int res;
+   struct yaffs_stat st;
 
    //Check parameters
    if(path == NULL || size == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Retrieve information about the specified file
-   res = f_stat(path, &fno);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_stat(path, &st);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res < 0)
       return ERROR_FAILURE;
    //Valid file?
-   if(fno.fattrib & AM_DIR)
+   if(S_ISDIR(st.st_mode))
       return ERROR_FAILURE;
 
    //Return the size of the file
-   *size = fno.fsize;
+   *size = st.st_size;
 
    //Successful processing
    return NO_ERROR;
@@ -236,29 +139,17 @@ error_t fsGetFileSize(const char_t *path, uint32_t *size)
 
 error_t fsRenameFile(const char_t *oldPath, const char_t *newPath)
 {
-   FRESULT res;
+   int res;
 
    //Check parameters
    if(oldPath == NULL || newPath == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Rename the specified file
-   res = f_rename(oldPath, newPath);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_rename(oldPath, newPath);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res < 0)
       return ERROR_FAILURE;
 
    //Successful processing
@@ -274,29 +165,17 @@ error_t fsRenameFile(const char_t *oldPath, const char_t *newPath)
 
 error_t fsDeleteFile(const char_t *path)
 {
-   FRESULT res;
+   int res;
 
    //Make sure the pathname is valid
    if(path == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Delete the specified file
-   res = f_unlink(path);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_unlink(path);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res < 0)
       return ERROR_FAILURE;
 
    //Successful processing
@@ -316,7 +195,6 @@ FsFile *fsOpenFile(const char_t *path, uint_t mode)
 {
    uint_t i;
    uint_t flags;
-   FRESULT res;
 
    //File pointer
    FsFile *file = NULL;
@@ -332,30 +210,26 @@ FsFile *fsOpenFile(const char_t *path, uint_t mode)
    for(i = 0; i < FS_MAX_FILES; i++)
    {
       //Unused file object found?
-#if (FATFS_REVISON <= FATFS_R(0, 11, a))
-      if(fileTable[i].fs == NULL)
-#else
-      if(fileTable[i].obj.fs == NULL)
-#endif
+      if(fileTable[i] < 0)
       {
          //Default access mode
          flags = 0;
 
          //Check access mode
-         if(mode & FS_FILE_MODE_READ)
-            flags |= FA_READ;
-         if(mode & FS_FILE_MODE_WRITE)
-            flags |= FA_WRITE;
-         if(mode & FS_FILE_MODE_CREATE)
-            flags |= FA_OPEN_ALWAYS;
-         if(mode & FS_FILE_MODE_TRUNC)
-            flags |= FA_CREATE_ALWAYS;
+          if (mode & FS_FILE_MODE_READ)
+              flags |= O_RDONLY;
+          if (mode & FS_FILE_MODE_WRITE)
+              flags |= O_WRONLY;
+          if (mode & FS_FILE_MODE_CREATE)
+              flags |= O_CREAT;
+          if (mode & FS_FILE_MODE_TRUNC)
+              flags |= O_TRUNC;
 
          //Open the specified file
-         res = f_open(&fileTable[i], path, flags);
+          fileTable[i] = yaffs_open(path, flags, S_IWRITE | S_IREAD);
 
          //Check status code
-         if(res == FR_OK)
+          if (fileTable[i] >= 0)
             file = &fileTable[i];
 
          //Stop immediately
@@ -381,36 +255,19 @@ FsFile *fsOpenFile(const char_t *path, uint_t mode)
 
 error_t fsSeekFile(FsFile *file, int_t offset, uint_t origin)
 {
-   FRESULT res;
-
    //Make sure the file pointer is valid
    if(file == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Offset is relative to the current file pointer position?
    if(origin == FS_SEEK_CUR)
-      offset += f_tell((FIL *) file);
+      offset = yaffs_lseek(*(int *)file, offset, SEEK_CUR);
    //Offset is relative to the end of the file?
    else if(origin == FS_SEEK_END)
-      offset += f_size((FIL *) file);
-
-   //Move read/write pointer
-   res = f_lseek((FIL *) file, offset);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+      offset = yaffs_lseek(*(int *)file, offset, SEEK_END);
 
    //Any error to report?
-   if(res != FR_OK)
+    if (offset < 0)
       return ERROR_FAILURE;
 
    //Successful processing
@@ -428,31 +285,14 @@ error_t fsSeekFile(FsFile *file, int_t offset, uint_t origin)
 
 error_t fsWriteFile(FsFile *file, void *data, size_t length)
 {
-   UINT n;
-   FRESULT res;
+   int n;
 
    //Make sure the file pointer is valid
    if(file == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Write data
-   res = f_write((FIL *) file, data, length, &n);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
-
-   //Any error to report?
-   if(res != FR_OK)
-      return ERROR_FAILURE;
+   n = yaffs_write(*(int *)file, data, length);
 
    //Sanity check
    if(n != length)
@@ -474,8 +314,7 @@ error_t fsWriteFile(FsFile *file, void *data, size_t length)
 
 error_t fsReadFile(FsFile *file, void *data, size_t size, size_t *length)
 {
-   UINT n;
-   FRESULT res;
+   int n;
 
    //No data has been read yet
    *length = 0;
@@ -484,24 +323,8 @@ error_t fsReadFile(FsFile *file, void *data, size_t size, size_t *length)
    if(file == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Read data
-   res = f_read((FIL *) file, data, size, &n);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
-
-   //Any error to report?
-   if(res != FR_OK)
-      return ERROR_FAILURE;
+   n = yaffs_read(*(int *)file, data, size);
 
    //End of file?
    if(!n)
@@ -521,6 +344,7 @@ error_t fsReadFile(FsFile *file, void *data, size_t size, size_t *length)
 
 void fsCloseFile(FsFile *file)
 {
+    int i;
    //Make sure the file pointer is valid
    if(file != NULL)
    {
@@ -528,14 +352,17 @@ void fsCloseFile(FsFile *file)
       osAcquireMutex(&fsMutex);
 
       //Close the specified file
-      f_close((FIL *) file);
-
+      yaffs_close(*(int *)file);
+       
       //Mark the corresponding entry as free
-#if (FATFS_REVISON <= FATFS_R(0, 11, a))
-      ((FIL *) file)->fs = NULL;
-#else
-      ((FIL *) file)->obj.fs = NULL;
-#endif
+//       for (i = 0; i < FS_MAX_FILES; i++)
+//       {
+//           if (fileTable[i] == *(int*)file)
+//           {
+//               fileTable[i] = -1;
+//           }
+//       }
+       *(int*)file = -1;
 
       //Leave critical section
       osReleaseMutex(&fsMutex);
@@ -551,13 +378,8 @@ void fsCloseFile(FsFile *file)
 
 bool_t fsDirExists(const char_t *path)
 {
-   FRESULT res;
-   FILINFO fno;
-
-#if (FATFS_REVISON <= FATFS_R(0, 11, a) && _USE_LFN != 0)
-   fno.lfname = NULL;
-   fno.lfsize = 0;
-#endif
+   int res;
+   struct yaffs_stat st;
 
    //Make sure the pathname is valid
    if(path == NULL)
@@ -567,27 +389,15 @@ bool_t fsDirExists(const char_t *path)
    if(!strcmp(path, "/"))
       return TRUE;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Check whether the file exists
-   res = f_stat(path, &fno);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_stat(path, &st);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res < 0)
       return FALSE;
 
    //Valid directory?
-   if(fno.fattrib & AM_DIR)
+   if(S_ISDIR(st.st_mode))
       return TRUE;
    else
       return FALSE;
@@ -602,29 +412,17 @@ bool_t fsDirExists(const char_t *path)
 
 error_t fsCreateDir(const char_t *path)
 {
-   FRESULT res;
+   int res;
 
    //Make sure the pathname is valid
    if(path == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Create a new directory
-   res = f_mkdir(path);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+    res = yaffs_mkdir(path, S_IREAD | S_IWRITE);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res != 0)
       return ERROR_FAILURE;
 
    //Successful processing
@@ -640,29 +438,17 @@ error_t fsCreateDir(const char_t *path)
 
 error_t fsRemoveDir(const char_t *path)
 {
-   FRESULT res;
+   int res;
 
    //Make sure the pathname is valid
    if(path == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Remove the specified directory
-   res = f_unlink(path);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
+   res = yaffs_rmdir(path);
 
    //Any error to report?
-   if(res != FR_OK)
+   if(res != 0)
       return ERROR_FAILURE;
 
    //Successful processing
@@ -679,7 +465,6 @@ error_t fsRemoveDir(const char_t *path)
 FsDir *fsOpenDir(const char_t *path)
 {
    uint_t i;
-   FRESULT res;
 
    //Directory pointer
    FsDir *dir = NULL;
@@ -695,18 +480,17 @@ FsDir *fsOpenDir(const char_t *path)
    for(i = 0; i < FS_MAX_DIRS; i++)
    {
       //Unused directory object found?
-#if (FATFS_REVISON <= FATFS_R(0, 11, a))
-      if(dirTable[i].fs == NULL)
-#else
-      if(dirTable[i].obj.fs == NULL)
-#endif
+      if(dirTable[i].d == NULL)
       {
          //Open the specified directory
-         res = f_opendir(&dirTable[i], path);
+          dirTable[i].d = yaffs_opendir(path);
 
          //Check status code
-         if(res == FR_OK)
-            dir = &dirTable[i];
+          if (dirTable[i].d != NULL)
+          {
+             strcpy(dirTable[i].path, path);
+             dir = dirTable[i].d;
+          }
 
          //Stop immediately
          break;
@@ -729,64 +513,61 @@ FsDir *fsOpenDir(const char_t *path)
 
 error_t fsReadDir(FsDir *dir, FsDirEntry *dirEntry)
 {
-   FRESULT res;
-   FILINFO fno;
+   int res;
+    int i;
+   struct yaffs_dirent *de;
+   struct yaffs_stat st;
    char_t *fn;
    size_t n;
-
-#if (FATFS_REVISON <= FATFS_R(0, 11, a) && _USE_LFN != 0)
-   char_t lfn[_MAX_LFN + 1];
-   fno.lfname = lfn;
-   fno.lfsize = sizeof(lfn);
-#endif
+    char_t path[260];
+    struct tm *ptm;
 
    //Make sure the directory pointer is valid
    if(dir == NULL)
       return ERROR_INVALID_PARAMETER;
 
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Enter critical section
-   osAcquireMutex(&fsMutex);
-#endif
-
    //Read the specified directory
-   res = f_readdir((DIR *) dir, &fno);
-
-#if ((FATFS_REVISON <= FATFS_R(0, 12, c) && _FS_REENTRANT == 0) || \
-   (FATFS_REVISON >= FATFS_R(0, 13, 0) && FF_FS_REENTRANT == 0))
-   //Leave critical section
-   osReleaseMutex(&fsMutex);
-#endif
-
-   //Any error to report?
-   if(res != FR_OK)
-      return ERROR_FAILURE;
-
+    de = yaffs_readdir((yaffs_DIR *)dir);
+    for (i = 0; i < FS_MAX_DIRS; i++)
+    {
+        if (dirTable[i].d == dir)
+        {
+            sprintf(path, "%s/%s", dirTable[i].path, de->d_name);
+            break;
+        }
+    }
+    
+    yaffs_stat(path, &st);
+    
    //End of the directory stream?
-   if(fno.fname[0] == '\0')
+    if (de == NULL)
       return ERROR_END_OF_STREAM;
 
    //Point to the long filename
-#if (FATFS_REVISON <= FATFS_R(0, 11, a) && _USE_LFN != 0)
-   fn = (*fno.lfname != '\0') ? fno.lfname : fno.fname;
-#else
-   fn = fno.fname;
-#endif
-
+   fn = de->d_name;
+    
    //File attributes
-   dirEntry->attributes = fno.fattrib;
+    if (S_ISDIR(st.st_mode))
+    {
+        dirEntry->attributes = FS_FILE_ATTR_DIRECTORY;
+    }
+    if (S_ISREG(st.st_mode))
+    {
+        dirEntry->attributes = FS_FILE_ATTR_SYSTEM;
+    }
+        
    //File size
-   dirEntry->size = fno.fsize;
+   dirEntry->size = st.st_size;
    //Last modified date
-   dirEntry->modified.year = 1980 + ((fno.fdate >> 9) & 0x7F);
-   dirEntry->modified.month = (fno.fdate >> 5) & 0x0F;
-   dirEntry->modified.day = fno.fdate & 0x1F;
+    ptm = localtime(&st.yst_mtime);
+   dirEntry->modified.year = 1900 + ptm->tm_year;
+   dirEntry->modified.month = ptm->tm_mon + 1;
+   dirEntry->modified.day = ptm->tm_mday;
    dirEntry->modified.dayOfWeek = 0;
    //Last modified time
-   dirEntry->modified.hours = (fno.ftime >> 11) & 0x1F;
-   dirEntry->modified.minutes = (fno.ftime >> 5) & 0x3F;
-   dirEntry->modified.seconds = (fno.ftime & 0x1F) * 2;
+   dirEntry->modified.hours = ptm->tm_hour;
+   dirEntry->modified.minutes = ptm->tm_min;
+   dirEntry->modified.seconds = ptm->tm_sec;
    dirEntry->modified.milliseconds = 0;
 
    //Make sure the date is valid
@@ -817,24 +598,24 @@ error_t fsReadDir(FsDir *dir, FsDirEntry *dirEntry)
 
 void fsCloseDir(FsDir *dir)
 {
+    int res;
+    int i;
    //Make sure the directory pointer is valid
    if(dir != NULL)
    {
       //Enter critical section
       osAcquireMutex(&fsMutex);
 
-#if (FATFS_REVISON >= FATFS_R(0, 10, 0))
-      //Close the specified directory
-      f_closedir((DIR *) dir);
-#endif
+      res = yaffs_closedir((yaffs_DIR *)dir);
+      
 
       //Mark the corresponding entry as free
-#if (FATFS_REVISON <= FATFS_R(0, 11, a))
-      ((DIR *) dir)->fs = NULL;
-#else
-      ((DIR *) dir)->obj.fs = NULL;
-#endif
-
+       for (i = 0; i < FS_MAX_DIRS; i++)
+       {
+           if (dirTable[i].d == dir)
+               dirTable[i].d = NULL;
+       }
+       
       //Leave critical section
       osReleaseMutex(&fsMutex);
    }

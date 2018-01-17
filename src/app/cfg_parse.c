@@ -730,7 +730,7 @@ ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
     SetCfgObj(path, pObj);
     return errcode;      
 }
-#if 0
+#if 1
 int test_cfgobj_set(int val)
 {
     cJSON *pObj;
@@ -814,7 +814,6 @@ int test_cfgobj_get(void)
     cJSON_Delete(pObj);
     return 0;
 }
-#endif
 
 void test_cfg_get(void)
 {
@@ -826,3 +825,4 @@ void test_cfg_get(void)
     cfg_get_uint8(pathEVSECfg, &ucVal, "%s", jnEVSEType);
     printf_safe("%s = %d\n", jnEVSEType, ucVal);
 }
+#endif
