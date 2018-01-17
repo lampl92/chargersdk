@@ -726,7 +726,7 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     if(ucCONID == 0)
     {
-#ifndef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY
         tmpCPState = CP_6V_PWM;
 #else
         cp1 = Sys_samp.DC.CP1;//get_CP1();
