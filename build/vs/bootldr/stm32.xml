@@ -52,6 +52,7 @@
         <string>../../../src/middlewares/yaffs2</string>
         <string>../../../src/middlewares/yaffs2/direct</string>
         <string>../../../src/middlewares/yaffs2/direct/nanddrv</string>
+        <string>../../../src/net/user</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>

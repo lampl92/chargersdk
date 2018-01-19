@@ -1240,6 +1240,7 @@
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/user
 // --- Include directories end --- //
 
 
