@@ -23,10 +23,11 @@ int netRecv(uint8_t *pbuff, uint32_t buff_len)
     return recv_len;
 }
 
-error_t net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, Socket *socketfd)
+Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror)
 {
     error_t error; 
     IpAddr ipAddr; //DNS 解析得到的地址 
+    Socket *socketfd;
  
     TRACE_INFO("\r\n\r\n解析域名...\r\n"); 
  
@@ -35,14 +36,16 @@ error_t net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip,
     if (error) 
     { 
         TRACE_INFO("解析域名失败!\r\n"); 
-        return error; 
+        *perror = error;
+        return NULL; 
     } 
     
     socketfd = socketOpen(SOCKET_TYPE_STREAM, SOCKET_IP_PROTO_TCP); 
     if (!socketfd) 
     { 
         TRACE_INFO("Socket 打开失败!\r\n"); 
-        return ERROR_OPEN_FAILED; 
+        *perror = ERROR_OPEN_FAILED;
+        return NULL; 
     } 
     do 
     { 
@@ -52,7 +55,7 @@ error_t net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip,
             break; 
         TRACE_INFO("连接成功\r\n"); 
     } while (0);
-    return error;
+    return socketfd;
 }
 
 void ifconfig_update(net_device_t *net_dev)

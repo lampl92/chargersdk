@@ -12,7 +12,11 @@ Socket *socket_eth; //Socket 套接字
 
 error_t net_eth_connect(void)
 {
-    return net_connect_server_via_tcp(&eth_dev, pechProto->info.strServerIP, pechProto->info.usServerPort, socket_eth);
+    error_t error;
+    
+    socket_eth = net_connect_server_via_tcp(&eth_dev, pechProto->info.strServerIP, pechProto->info.usServerPort, &error);
+    
+    return error;
 }
 
 /**
