@@ -9,6 +9,7 @@
 #include "yaffs2msic.h"
 #include "evse_version.h"
 #include "ifconfig.h"
+#include "interface_network.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -130,6 +131,8 @@ void sys_Init(void)
     /                               NET初始化
     /---------------------------------------------------------------------------*/
     ifconfig_init();
+    net_stack_init();
+    
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/

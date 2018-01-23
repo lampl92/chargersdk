@@ -8,11 +8,12 @@
 #ifndef  __INTERFACE_NETWORK_H
 #define  __INTERFACE_NETWORK_H
 
+#include "net_device.h"
 #include "core/net.h"
 
-int_t eth_init(void);
-void ifconfig_update(void);
-int_t eth_connect(void);
+error_t net_stack_init(void);
+error_t net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, Socket *socketfd);
+void ifconfig_update(net_device_t *net_dev);
 
 int netSend(uint8_t *pbuff, uint32_t len);
 int netRecv(uint8_t *pbuff, uint32_t buff_len);

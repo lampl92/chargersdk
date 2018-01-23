@@ -16,6 +16,7 @@
 #include "interface_network.h"
 #include "interface_ftpclient.h"
 #include "interface_ftpserver.h"
+#include "net_eth.h"
 
 void vTaskTCPClient(void *pvParameters)
 {
@@ -27,15 +28,16 @@ void vTaskTCPClient(void *pvParameters)
 //    modem_open(pModem);
 //    modem_init(pModem);
 //    Modem_Poll(pModem);//这是任务
-    eth_init();
-    ifconfig_update();
-    eth_connect();
+
+    net_eth_init(&eth_dev, 0);
+    ifconfig_update(&eth_dev);
+    net_eth_connect();
     pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
     xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
-        ftp_download_file(&pechProto->info.ftp);
+        ftp_download_file(&pechProto->info.ftp, &eth_dev);
     }
     while (1)
     {

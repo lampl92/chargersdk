@@ -1770,6 +1770,9 @@
     <ClCompile Include="..\..\..\src\net\user\interface_ftpclient.c">
       <Filter>Source files\net\user</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\net_eth.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -4713,7 +4716,13 @@
       <Filter>Header files\net\CycloneTCP\customer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\user\interface_ftpserver.h">
-      <Filter>Source files\net\user</Filter>
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\interface_ftpclient.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\net_device.h">
+      <Filter>Header files\net\user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

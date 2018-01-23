@@ -253,6 +253,7 @@
     <ClCompile Include="..\..\..\src\net\user\interface_ftpserver.c" />
     <ClCompile Include="..\..\..\src\net\user\interface_network.c" />
     <ClCompile Include="..\..\..\src\net\user\net_device.c" />
+    <ClCompile Include="..\..\..\src\net\user\net_eth.c" />
     <ClCompile Include="..\..\..\src\net\user\tasknetwork.c" />
     <ClCompile Include="..\..\..\src\net\user\taskppp.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
@@ -778,8 +779,10 @@
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509_csr.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h" />
     <ClInclude Include="..\..\..\src\net\user\ifconfig.h" />
+    <ClInclude Include="..\..\..\src\net\user\interface_ftpclient.h" />
     <ClInclude Include="..\..\..\src\net\user\interface_ftpserver.h" />
     <ClInclude Include="..\..\..\src\net\user\interface_network.h" />
+    <ClInclude Include="..\..\..\src\net\user\net_device.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h" />
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\deprecated_definitions.h" />

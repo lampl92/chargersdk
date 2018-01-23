@@ -13,9 +13,12 @@
 #include "interface_rfid.h"
 #include "userlib_list.h"
 #include "libEcharge/ech_globals.h"
+#include "net_device.h"
+#include "ifconfig.h"
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
+extern net_device_t eth_dev;
 
 #endif

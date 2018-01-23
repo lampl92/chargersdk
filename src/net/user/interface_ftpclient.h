@@ -20,6 +20,6 @@ struct _ftp_ctx
     ftp_cb on_end;
 };
 
-int ftp_download_file(EchFtpCfg_t *pechFtp);
+int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev);
 
 #endif

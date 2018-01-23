@@ -91,16 +91,17 @@ static int _ftp_end_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 }
 
 /**
- * @fn  static error_t ftp_recv_data(struct _ftp_ctx *ctx)
+ * @fn  static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
  *
  * @brief   FTP receive data
  *
- * @param [in]  ctx If non-null, the context.
+ * @param [in]  ctx     If non-null, the context.
+ * @param [in]  net_dev If non-null, the net development.
  *
  * @return  An error_t.
  */
 
-static error_t ftp_recv_data(struct _ftp_ctx *ctx)
+static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
 {
     error_t error;
     size_t length;
@@ -109,7 +110,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx)
     char_t buffer[256];
 
     TRACE_INFO("\r\n\r\n解析FTP服务器域名...\r\n");
-    error = getHostByName(NULL, ctx->ftp_server, &ipAddr, 0);
+    error = getHostByName(net_dev->interface, ctx->ftp_server, &ipAddr, 0);
     if (error)
     {
         TRACE_INFO("解析FTP服务器域名失败!\r\n");
@@ -179,7 +180,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx)
  * @return  An int.
  */
 
-int ftp_download_file(EchFtpCfg_t *pechFtp)
+int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
 {
     struct _ftp_ctx_save_file ctx;
     
@@ -193,6 +194,6 @@ int ftp_download_file(EchFtpCfg_t *pechFtp)
     ctx.parent.on_data = _ftp_tof_cb;
     ctx.parent.on_end = _ftp_end_cb;
     
-    ftp_recv_data(&ctx.parent);
+    ftp_recv_data(&ctx.parent, net_dev);
     return 0;
 }
