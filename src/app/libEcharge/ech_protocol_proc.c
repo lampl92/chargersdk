@@ -12,7 +12,7 @@
 #include "event_groups.h"
 #include "evse_globals.h"
 #include "taskcreate.h"
-#include "interface.h"
+#include "interface_network.h"
 //#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)

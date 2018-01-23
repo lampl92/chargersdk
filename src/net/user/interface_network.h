@@ -8,6 +8,8 @@
 #ifndef  __INTERFACE_NETWORK_H
 #define  __INTERFACE_NETWORK_H
 
+#include "core/net.h"
+
 int_t eth_init(void);
 void ifconfig_update(void);
 int_t eth_connect(void);

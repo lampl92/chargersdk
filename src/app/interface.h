@@ -17,7 +17,6 @@
 #include "interface_data.h"
 #include "interface_remote.h"
 #include "interface_diag.h"
-#include "interface_network.h"
 #include "modem.h"
 //#include "esp8266.h"
 
