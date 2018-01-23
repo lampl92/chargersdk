@@ -17,10 +17,21 @@ uint16_t utils_ntohs(uint16_t n);
 uint32_t utils_htonl(uint32_t n);
 uint32_t utils_ntohl(uint32_t n);
 
+#ifndef htons
 #define htons(x) utils_htons(x)
+#endif
+
+#ifndef ntohs
 #define ntohs(x) utils_ntohs(x)
+#endif
+
+#ifndef htonl
 #define htonl(x) utils_htonl(x)
+#endif
+
+#ifndef ntohl
 #define ntohl(x) utils_ntohl(x)
+#endif
 
 typedef union
 {
