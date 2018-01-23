@@ -223,7 +223,7 @@
 //#define jnProtoStart(n)              "Start"#n
 //#define jnProtoEnd(n)                "End"#n
 
-extern const uint8_t	*jnProtoSegStart[];
-extern const uint8_t	*jnProtoSegEnd[];
+extern const char *jnProtoSegStart[];
+extern const char *jnProtoSegEnd[];
 
 #endif
