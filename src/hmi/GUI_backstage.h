@@ -14,7 +14,7 @@ typedef enum MyEnum
     GetGunInfoState,
     GetBalanceState,
     KnowBalanceState,
-}GBSState_E;//ºóÌ¨×´Ì¬
+}GBSState_E;//åå°çŠ¶æ€
 
 typedef enum gunenum
 {
@@ -32,13 +32,13 @@ typedef struct orderinfo
 typedef struct userlike
 {
     UserChargeCondition_t user_like;
-    int UserLikeFlag;//1±íÊ¾ÓÃ»§Ñ¡Íê
+    int UserLikeFlag;//1è¡¨ç¤ºç”¨æˆ·é€‰å®Œ
 }UserLike_S;
 
 extern GUNState_E gunstate[2];
 extern GBSState_E gbsstate;
 extern OrderInfo_S GunInfo[defMaxCON];
-extern RfidQPkg_t Temprfid_pkg;//Ã»Ñ¡Ç¹Ö®Ç°±£´æË¢¿¨µÄ¿¨ºÅ
+extern RfidQPkg_t Temprfid_pkg;//æ²¡é€‰æªä¹‹å‰ä¿å­˜åˆ·å¡çš„å¡å·
 extern UserLike_S Tempuserlike;
 
 #endif 

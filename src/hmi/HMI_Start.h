@@ -163,6 +163,27 @@ extern GUI_BITMAP Bitmaphomesignal3;
 extern GUI_BITMAP Bitmapchargedoneinfo;
 extern GUI_BITMAP Bitmapcharginginfo;
 
+//主页储存设备
+extern GUI_MEMDEV_Handle Memdevhomeback;
+extern GUI_MEMDEV_Handle MemdevhomegunAchargedone;
+extern GUI_MEMDEV_Handle MemdevhomegunAcharging;
+extern GUI_MEMDEV_Handle MemdevhomegunAerror;
+extern GUI_MEMDEV_Handle MemdevhomegunAfree;
+extern GUI_MEMDEV_Handle MemdevhomegunBchargedone;
+extern GUI_MEMDEV_Handle MemdevhomegunBcharging;
+extern GUI_MEMDEV_Handle MemdevhomegunBerror;
+extern GUI_MEMDEV_Handle MemdevhomegunBfree;
+extern GUI_MEMDEV_Handle Memdevhomegunlookinfo;
+extern GUI_MEMDEV_Handle Memdevhomegunscancode;
+extern GUI_MEMDEV_Handle Memdevhomegunlookinfopress;
+extern GUI_MEMDEV_Handle Memdevhomegunscancodepress;
+extern GUI_MEMDEV_Handle Memdevhomesignal0;
+extern GUI_MEMDEV_Handle Memdevhomesignal1;
+extern GUI_MEMDEV_Handle Memdevhomesignal2;
+extern GUI_MEMDEV_Handle Memdevhomesignal3;
+
+extern GUI_MEASDEV_Handle MemdevSelectGunBack;
+
 
 extern int SignalFlag;//信号图标刷新标志
 

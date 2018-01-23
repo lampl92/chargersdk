@@ -11,7 +11,7 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
+  //  { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, IMAGE_CF_MEMDEV | IMAGE_CF_TILE, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 285, 195, 100, 100, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 455, 195, 100, 100, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 100, 400, 100, 50, 0, 0x0, 0 },
@@ -23,8 +23,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     WM_HWIN hItem;
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &BitmapSelectGunBack);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+//        IMAGE_SetBitmap(hItem, &BitmapSelectGunBack);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetText(hItem, "");
@@ -40,6 +40,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapQuit, 0, 0);
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapQuitPress, 0, 0);
+        break;
+    case WM_PAINT:
+        GUI_MEMDEV_WriteAt(MemdevSelectGunBack,0,0);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

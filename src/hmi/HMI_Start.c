@@ -71,7 +71,7 @@ int PreSignalIntensity;
 //int QR_Size;//Size of Bitmap in pixels
 
 GUI_QR_INFO QR_info;
-
+#pragma region MyRegion
 //公用图片“退出”
 GUI_BITMAP BitmapQuit;
 GUI_BITMAP BitmapQuitPress;
@@ -163,8 +163,29 @@ GUI_BITMAP Bitmaphomesignal3;
 
 //提示信息页图片
 GUI_BITMAP Bitmapchargedoneinfo;
-GUI_BITMAP Bitmapcharginginfo;
+GUI_BITMAP Bitmapcharginginfo;				  
+#pragma endregion
 
+//主页储存设备
+GUI_MEMDEV_Handle Memdevhomeback;
+GUI_MEMDEV_Handle MemdevhomegunAchargedone;
+GUI_MEMDEV_Handle MemdevhomegunAcharging;
+GUI_MEMDEV_Handle MemdevhomegunAerror;
+GUI_MEMDEV_Handle MemdevhomegunAfree;
+GUI_MEMDEV_Handle MemdevhomegunBchargedone;
+GUI_MEMDEV_Handle MemdevhomegunBcharging;
+GUI_MEMDEV_Handle MemdevhomegunBerror;
+GUI_MEMDEV_Handle MemdevhomegunBfree;
+GUI_MEMDEV_Handle Memdevhomegunlookinfo;
+GUI_MEMDEV_Handle Memdevhomegunscancode;
+GUI_MEMDEV_Handle Memdevhomegunlookinfopress;
+GUI_MEMDEV_Handle Memdevhomegunscancodepress;
+GUI_MEMDEV_Handle Memdevhomesignal0;
+GUI_MEMDEV_Handle Memdevhomesignal1;
+GUI_MEMDEV_Handle Memdevhomesignal2;
+GUI_MEMDEV_Handle Memdevhomesignal3;
+
+GUI_MEASDEV_Handle MemdevSelectGunBack;
 
 
 static void vTaskReadPic(void *pvParameters)
@@ -172,7 +193,8 @@ static void vTaskReadPic(void *pvParameters)
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 
-void MainTask(void)
+
+void MainTask1(void)
 {
     GUI_MEMDEV_Handle hMempic;
 //    Bitmapcardinfoback = readDtafile(pathcardinfoback);
@@ -203,7 +225,7 @@ void MainTask(void)
 }
 
 
-void MainTask1(void)
+void MainTask(void)
 {
     CON_t *pCON;
     if (calebrate_done == 0)
@@ -219,7 +241,7 @@ void MainTask1(void)
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
-
+#pragma region MyRegion
         DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
         DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
         DtaFileCheckboxDisable = readPicInf(pathCheckboxDisable);
@@ -231,8 +253,8 @@ void MainTask1(void)
         //公用图片读取
         BitmapQuit = readDtafile(pathQuit);
         BitmapQuitPress = readDtafile(pathQuitPress);
-        BitmapbackQuit =readDtafile(pathbackquit);
-        BitmapbackQuitPress =readDtafile(pathbackquitpress);
+        BitmapbackQuit = readDtafile(pathbackquit);
+        BitmapbackQuitPress = readDtafile(pathbackquitpress);
         //选择页图片读取
         BitmapSelectGunAbottonNotpress = readDtafile(pathSelectGunAbottonNotpress);
         BitmapSelectGunAbottonPress = readDtafile(pathSelectGunAbottonPress);
@@ -317,7 +339,29 @@ void MainTask1(void)
         Bitmaphomesignal3 = readDtafile(pathhomesignal3);
         
         Bitmapchargedoneinfo = readDtafile(pathchargedoneinfo);
-        Bitmapcharginginfo = readDtafile(pathcharginginfo);
+        Bitmapcharginginfo = readDtafile(pathcharginginfo);				  
+#pragma endregion
+
+        Memdevhomeback = createMemdev(pathhomeback);
+        MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone);
+        MemdevhomegunAcharging = createMemdev(pathhomegunAcharging);
+        MemdevhomegunAerror = createMemdev(pathhomegunAerror);
+        MemdevhomegunAfree = createMemdev(pathhomegunAfree);
+        MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone);
+        MemdevhomegunBcharging = createMemdev(pathhomegunBcharging);
+        MemdevhomegunBerror = createMemdev(pathhomegunBerror);
+        MemdevhomegunBfree = createMemdev(pathhomegunBfree);
+        Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
+        Memdevhomegunscancode = createMemdev(pathhomegunscancode);
+        Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);
+        Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress);
+        Memdevhomesignal0 = createMemdev(pathhomesignal0);
+        Memdevhomesignal1 = createMemdev(pathhomesignal1);
+        Memdevhomesignal2 = createMemdev(pathhomesignal2);
+        Memdevhomesignal3 = createMemdev(pathhomesignal3);
+        
+        MemdevSelectGunBack = createMemdev(pathSelectGunBack);
+        
         
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
@@ -332,7 +376,7 @@ void MainTask1(void)
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
  //       CreateKeyBoardWindow();
- //       CreateHomeDLG();
+        CreateHomeDLG();
         //CreateselectgunDLG();                   
     }
     else
