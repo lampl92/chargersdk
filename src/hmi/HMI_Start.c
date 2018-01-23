@@ -171,10 +171,41 @@ static void vTaskReadPic(void *pvParameters)
 { 
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
+
 void MainTask(void)
 {
-    CON_t *pCON;
+    GUI_MEMDEV_Handle hMempic;
+//    Bitmapcardinfoback = readDtafile(pathcardinfoback);
+//    GUI_MEMDEV_Handle hMemBMP;
+//    Bitmapcardinfoback = readDtafile(pathcardinfoback);
+//    WM_MULTIBUF_Enable(1);
+//    hMemBMP = GUI_MEMDEV_CreateEx(0, 0, Bitmapcardinfoback.XSize, Bitmapcardinfoback.YSize, GUI_MEMDEV_HASTRANS);
+//    GUI_MEMDEV_Select(hMemBMP);
+//    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
+//    GUI_MEMDEV_Select(0);
+//    GUI_MEMDEV_WriteAt(hMemBMP, 0, 0); 
+    GUI_SetFont(&GUI_Font16_1);
+    GUI_DispStringAt("Encoding JPEG......", 0, 0);
+	
+    /* 绘制桌面窗口的背景图片 ------------------------------------------*/
+    hMempic = createMemdev(pathcardinfoback);
+//    GUI_MEMDEV_Select(hMempic);
+//    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
+//    GUI_MEMDEV_Select(0);
+//    GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+    while (1)
+    {
+        //GUI_MEMDEV_CopyToLCDAt(hMempic, 0, 0);
+        GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+        GUI_Delay(20);
+        vTaskDelay(100);
+    }
+}
 
+
+void MainTask1(void)
+{
+    CON_t *pCON;
     if (calebrate_done == 0)
     {
         GUI_CURSOR_Hide();
@@ -301,8 +332,8 @@ void MainTask(void)
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
  //       CreateKeyBoardWindow();
-        CreateHomeDLG();
-        //CreateselectgunDLG();
+ //       CreateHomeDLG();
+        //CreateselectgunDLG();                   
     }
     else
     {

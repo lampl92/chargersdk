@@ -22,5 +22,6 @@ uint8_t dispbmpNOFree(uint8_t is_free,char *BMPFileName,uint8_t mode,uint32_t x,
 uint8_t readBackGroundNOFREE(char *BMPFileName);
 p_inf *readPicInf(char *pfilepath);
 GUI_BITMAP readDtafile(char *pathfile);
+GUI_MEMDEV_Handle createMemdev(char *pfilepath);
 #endif
 
