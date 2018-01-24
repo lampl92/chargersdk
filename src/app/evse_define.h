@@ -124,7 +124,9 @@
 #define defEventBitExceptionTempSensor  BIT_16
 #define defEventBitExceptionSocketTempSensor  BIT_17
 
-#define defEventBitExceptionDevFault    (defEventBitExceptionRFID | defEventBitExceptionMeter|defEventBitExceptionRelayPaste)
+#define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
+                                        defEventBitExceptionMeter|\
+                                        defEventBitExceptionRelayPaste)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK

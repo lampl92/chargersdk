@@ -1,0 +1,8 @@
+bsd_socket.h
+line:251
+before: typedef struct timeval
+now:    typedef struct timeval_cyclone
+
+fd_set
+fd_set_cyclone
+

@@ -46,7 +46,6 @@
         <string>../../../src/middlewares/STemWin/BMP</string>
         <string>../../../src/hmi</string>
         <string>../../../src/hmi/lcd</string>
-        <string>../../../src/net/mbedTLS/include</string>
         <string>../../../src/hmi/qrencode/inc</string>
         <string>../../../src/middlewares/STemWin/SIF</string>
         <string>../../../src/hmi</string>
@@ -57,6 +56,11 @@
         <string>../../../src/middlewares/yaffs2</string>
         <string>../../../src/middlewares/yaffs2/direct</string>
         <string>../../../src/middlewares/yaffs2/direct/nanddrv</string>
+        <string>../../../src/net/mbedTLS/include</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer</string>
+        <string>../../../src/net/user</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>

@@ -243,6 +243,7 @@ void DiagVoltageError(CON_t *pCON)
         case VOLT_LOWER:
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltUp;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltLow;
+            break;
         case VOLT_UPPER:
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltUp;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltLow;

@@ -48,6 +48,7 @@
 / 任务优先级
 /---------------------------------------------------------------------------*/
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+#define defPRIORITY_TaskInit                31
 #define defPRIORITY_TaskOTA                 31/* 最高*/
 
 #define defPRIORITY_TaskEVSECharge          27
@@ -62,7 +63,6 @@
 #define defPRIORITY_TaskTCPClient           12
 #define defPRIORITY_TaskRemoteCmdProc       19
 
-#define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
 #define defPRIORITY_TaskCLI                 16  //1. 原优先级2，修改16保证执行添加订单时订单存储被高优先级任务打断。2017年12月15日
@@ -166,24 +166,15 @@ void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
-#if 1
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
-    
-    pModem = DevModemCreate();
-
-    modem_open(pModem);
-    modem_init(pModem);
-    Modem_Poll(pModem);//这是任务
-#else
+    //IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s    
     while (1)
     {
-        yaffs2_main();
+        IWDG_Feed();
         vTaskDelay(1000);
     }
-#endif
-
 //    pWIFI = DevWifiCreate();
 //    strcpy(pWIFI->info.strSSID, "rgw");
 //    strcpy(pWIFI->info.strPWD,"abc666def8");
@@ -227,7 +218,7 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 
     //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
-    //xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
+    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 
 }

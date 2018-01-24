@@ -148,7 +148,22 @@ const char *strSysCfg =
     \"USE_RFID\": 1,\n \
     \"USE_GUI\":1\n \
 }\n";
-   
+    
+    
+//Adapter   1:以太网  2: 2G  3: 3G  4: 4G 5: WIFI
+//DHCP   1:使能  0:禁止
+const char *strNetCfg =
+"{\n \
+    \"Adapter\": 1,\n \
+    \"DHCP\": 1,\n \
+    \"HostName\":\"RGW1 Charger\",\n \
+    \"MAC\":\"00-AB-CD-EF-04-29\",\n \
+    \"IP\":\"192.168.153.105\",\n \
+    \"Mask\":\"192.168.30.1\",\n \
+    \"Gate\":\"255.255.255.0\",\n \
+    \"DNS1\":\"192.168.30.1\",\n \
+    \"DNS2\":\"0.0.0.0\"\n \
+}\n";
         
 const char *strWhiteListCfg ="[]\n";
 const char *strBlackListCfg ="[]\n";

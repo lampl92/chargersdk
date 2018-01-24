@@ -74,7 +74,7 @@ err_return:
     return errcode;
 }
 
-ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
+static ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
 {
     cJSON *jsSysObj;
     ErrorCode_t errcode;
@@ -228,9 +228,7 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
     return errcode;
 }
 
-
-
-ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsSysCfgObj;
     cJSON *jsItem;

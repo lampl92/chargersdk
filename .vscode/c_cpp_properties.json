@@ -1,0 +1,143 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/usr/include",
+                "/usr/local/include",
+                "${workspaceRoot}"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ]
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/include",
+                "/usr/local/include",
+                "${workspaceRoot}"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0",
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4",
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0/backward",
+                "c:/sysgcc/arm-eabi/lib/gcc/arm-eabi/6.2.0/include",
+                "c:/sysgcc/arm-eabi/lib/gcc/arm-eabi/6.2.0/include-fixed",
+                "c:/sysgcc/arm-eabi/arm-eabi/sys-include",
+                "c:/sysgcc/arm-eabi/arm-eabi/include",
+                "${workspaceRoot}",
+                "${workspaceRoot}/src/app",
+                "${workspaceRoot}/src/app/libEcharge",
+                "${workspaceRoot}/src/cli",
+                "${workspaceRoot}/src/drivers/bsp/inc",
+                "${workspaceRoot}/src/drivers/device/inc",
+                "${workspaceRoot}/src/drivers/hal/CMSIS/Include",
+                "${workspaceRoot}/src/drivers/hal/CMSIS_RTOS",
+                "${workspaceRoot}/src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceRoot}/src/drivers/hal/STM32F4xx_HAL_Driver/Inc",
+                "${workspaceRoot}/src/os/FreeRTOS",
+                "${workspaceRoot}/src/os/FreeRTOS/Source/include",
+                "${workspaceRoot}/src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+                "${workspaceRoot}/src/middlewares/tinysh",
+                "${workspaceRoot}/src/middlewares/userlib/inc",
+                "${workspaceRoot}/src/middlewares/cJSON",
+                "${workspaceRoot}/src/middlewares/gdsl-1.8/src",
+                "${workspaceRoot}/src/middlewares/gdsl-1.8/src/examples",
+                "${workspaceRoot}/src/middlewares/STemWin/inc",
+                "${workspaceRoot}/src/middlewares/STemWin/Config",
+                "${workspaceRoot}/src/middlewares/STemWin/Demo",
+                "${workspaceRoot}/src/middlewares/STemWin/BMP",
+                "${workspaceRoot}/src/middlewares/STemWin/SIF",
+                "${workspaceRoot}/src/middlewares/yaffs2",
+                "${workspaceRoot}/src/middlewares/yaffs2/direct",
+                "${workspaceRoot}/src/middlewares/yaffs2/direct/nanddrv",
+                "${workspaceRoot}/src/hmi",
+                "${workspaceRoot}/src/hmi/lcd",
+                "${workspaceRoot}/src/net/mbedTLS/include",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer",
+                "${workspaceRoot}/src/net/user"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": [
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0",
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4",
+                "c:/sysgcc/arm-eabi/arm-eabi/include/c++/6.2.0/backward",
+                "c:/sysgcc/arm-eabi/lib/gcc/arm-eabi/6.2.0/include",
+                "c:/sysgcc/arm-eabi/lib/gcc/arm-eabi/6.2.0/include-fixed",
+                "c:/sysgcc/arm-eabi/arm-eabi/sys-include",
+                "c:/sysgcc/arm-eabi/arm-eabi/include",
+                "${workspaceRoot}",
+                "${workspaceRoot}/src/app",
+                "${workspaceRoot}/src/app/libEcharge",
+                "${workspaceRoot}/src/cli",
+                "${workspaceRoot}/src/drivers/bsp/inc",
+                "${workspaceRoot}/src/drivers/device/inc",
+                "${workspaceRoot}/src/drivers/hal/CMSIS/Include",
+                "${workspaceRoot}/src/drivers/hal/CMSIS_RTOS",
+                "${workspaceRoot}/src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceRoot}/src/drivers/hal/STM32F4xx_HAL_Driver/Inc",
+                "${workspaceRoot}/src/os/FreeRTOS",
+                "${workspaceRoot}/src/os/FreeRTOS/Source/include",
+                "${workspaceRoot}/src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+                "${workspaceRoot}/src/middlewares/tinysh",
+                "${workspaceRoot}/src/middlewares/userlib/inc",
+                "${workspaceRoot}/src/middlewares/cJSON",
+                "${workspaceRoot}/src/middlewares/gdsl-1.8/src",
+                "${workspaceRoot}/src/middlewares/gdsl-1.8/src/examples",
+                "${workspaceRoot}/src/middlewares/STemWin/inc",
+                "${workspaceRoot}/src/middlewares/STemWin/Config",
+                "${workspaceRoot}/src/middlewares/STemWin/Demo",
+                "${workspaceRoot}/src/middlewares/STemWin/BMP",
+                "${workspaceRoot}/src/middlewares/STemWin/SIF",
+                "${workspaceRoot}/src/middlewares/yaffs2",
+                "${workspaceRoot}/src/middlewares/yaffs2/direct",
+                "${workspaceRoot}/src/middlewares/yaffs2/direct/nanddrv",
+                "${workspaceRoot}/src/hmi",
+                "${workspaceRoot}/src/hmi/lcd",
+                "${workspaceRoot}/src/net/mbedTLS/include",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common",
+                "${workspaceRoot}/src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer",
+                "${workspaceRoot}/src/net/user"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 3
+}

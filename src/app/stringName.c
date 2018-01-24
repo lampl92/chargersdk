@@ -7,7 +7,7 @@
 * @Last Modified time: 2017-08-03 10:40:47
 */
 #include "stm32f4xx.h"
-const uint8_t *jnProtoSegStart[5] =
+const char *jnProtoSegStart[5] =
 {
     "Start1",
     "Start2",
@@ -16,7 +16,7 @@ const uint8_t *jnProtoSegStart[5] =
     "Start5"
 };
 
-const uint8_t *jnProtoSegEnd[5] =
+const char *jnProtoSegEnd[5] =
 {
     "End1",
     "End2",

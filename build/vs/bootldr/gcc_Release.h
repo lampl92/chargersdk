@@ -110,6 +110,9 @@
 #ifndef __FLT_EVAL_METHOD__
 #define __FLT_EVAL_METHOD__ 0
 #endif
+#ifndef EVSE_DEBUG_DUMMY
+#define EVSE_DEBUG_DUMMY 1
+#endif
 #ifndef __cpp_binary_literals
 #define __cpp_binary_literals 201304
 #endif
@@ -883,6 +886,9 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
+#ifndef EVSE_USING_RFID
+#define EVSE_USING_RFID 0
+#endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
 #endif
@@ -1234,6 +1240,10 @@
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/user
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
 // --- Include directories end --- //
 
 

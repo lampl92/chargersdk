@@ -194,6 +194,8 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     GetOrderCfgItem(jsParent, jnOrderPayStatus, &pOrder->ucPayStatus, ParamTypeU8);
     GetOrderCfgItem(jsParent, jnOrderStopTime, &pOrder->tStopTime, ParamTypeU32);
     
+    cJSON_Delete(jsParent);
+    
     return errcode;
 }
 ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
