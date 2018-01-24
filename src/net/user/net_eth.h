@@ -9,5 +9,6 @@ extern Socket *socket_eth; //Socket 套接字
 
 int_t net_eth_init(net_device_t *net_dev, uint32_t n);
 error_t net_eth_connect(void);
+error_t net_eth_reconnect(void);
 
 #endif

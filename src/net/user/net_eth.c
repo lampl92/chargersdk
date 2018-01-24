@@ -19,6 +19,17 @@ error_t net_eth_connect(void)
     return error;
 }
 
+error_t net_eth_reconnect(void)
+{
+    error_t error;
+    
+    socketClose(socket_eth);
+    
+    error = net_eth_connect();
+    
+    return error;
+}
+
 /**
  * @fn  error_t net_eth_init(net_device_t *net_dev, uint32_t n)
  *

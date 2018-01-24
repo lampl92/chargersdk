@@ -29,9 +29,9 @@ void vTaskTCPClient(void *pvParameters)
 //    modem_init(pModem);
 //    Modem_Poll(pModem);//这是任务
 
-    net_eth_init(&eth_dev, 0);
+    error = net_eth_init(&eth_dev, 0);
     ifconfig_update(&eth_dev);
-    net_eth_connect();
+    error = net_eth_connect();
     pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
     xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
     xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
@@ -39,6 +39,7 @@ void vTaskTCPClient(void *pvParameters)
     {
         ftp_download_file(&pechProto->info.ftp, &eth_dev);
     }
+
     while (1)
     {
         length = netRecv(buffer, sizeof(buffer));
