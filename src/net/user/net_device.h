@@ -5,12 +5,12 @@
 
 typedef enum
 {
-    DS_NET_INIT,
-    DS_NET_CONNECT,
-    DS_NET_OK
+    NET_STATE_INIT,
+    NET_STATE_CONNECT,
+    NET_STATE_OK
 }net_state;
 
-typedef struct _net_device
+typedef struct _net_device 
 {
     NetInterface *interface;
     char name[16];
