@@ -1065,9 +1065,6 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c">
       <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
-      <Filter>Source files\middlewares\STemWin\BMP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c">
       <Filter>Source files\middlewares\STemWin\Config</Filter>
     </ClCompile>
@@ -1553,6 +1550,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\charginginfoDLG.c">
       <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\display.c">
+      <Filter>Source files\middlewares\STemWin\BMP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2206,9 +2206,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
       <Filter>Header files\middlewares\minunit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h">
-      <Filter>Header files\middlewares\STemWin\BMP</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
       <Filter>Header files\middlewares\STemWin\Config</Filter>
@@ -4111,6 +4108,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\hmi\skin.h">
       <Filter>Header files\hmi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\display.h">
+      <Filter>Header files\middlewares\STemWin\BMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

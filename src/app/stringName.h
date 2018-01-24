@@ -131,6 +131,10 @@
 #define pathstSIF16                 "/nand/system/stSIF16.sif"
 #define pathstSIF24                 "/nand/system/stSIF24.sif"
 #define pathstSIF36                 "/nand/system/stSIF36.sif"
+#define pathfontwryhct12aa4         "/nand/system/fontwryhct12aa4.sif"
+#define pathfontwryhct16aa4         "/nand/system/fontwryhct16aa4.sif"
+#define pathfontwryhct24aa4         "/nand/system/fontwryhct24aa4.sif"
+#define pathfontwryhct36aa4         "/nand/system/fontwryhct36aa4.sif"
 
 #define YAFFS_MOUNT_POINT   "/nand/"
 #define pathSystemDir       "/nand/system/"

@@ -30,7 +30,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 //    { IMAGE_CreateIndirect, "gun2stateImage", ID_IMAGE_3, 405, 155, 170, 170, 0, 0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 225, 335, 170, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, 405, 335, 170, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 210, 55, 100, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 210, 55, 100, 36, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 545, 55, 100, 24, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 100, 100, 50, 0, 0x0, 0 },
 };
@@ -52,7 +52,7 @@ static void updategunState(WM_MESSAGE * pMsg)
     {
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
 //        IMAGE_SetBitmap(hItem, &BitmaphomegunAcharging);
-        GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, 225, 0);
+        GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, 225, 155);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
@@ -62,7 +62,7 @@ static void updategunState(WM_MESSAGE * pMsg)
     {
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
 //        IMAGE_SetBitmap(hItem, &BitmaphomegunAchargedone);
-        GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, 225, 50);
+        GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, 225, 155);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunlookinfopress, 0, 0);
@@ -72,7 +72,7 @@ static void updategunState(WM_MESSAGE * pMsg)
     {
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
 //        IMAGE_SetBitmap(hItem, &BitmaphomegunAerror);
-        GUI_MEMDEV_WriteAt(MemdevhomegunAerror, 225, 250);
+        GUI_MEMDEV_WriteAt(MemdevhomegunAerror, 225, 155);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &Bitmaphomegunscancodepress, 0, 0);
@@ -134,7 +134,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         gunstate[0] = 1;
         gunstate[1] = 1;
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "2018-1-15  18:58");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_BLACK, "12");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhct36aa4, GUI_BLACK, "请选枪");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, "18");
         
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
@@ -184,6 +184,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuit, 0, 0);
         updategunState(pMsg);
         break;
+    case MSG_UPDATE:
+        updategunState(pMsg);
+        //WM_InvalidateWindow(pMsg->hWin);
+        break;              
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevhomeback, 0, 0);
         updategunState(pMsg);
@@ -250,7 +254,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             gunstate[0] = i;
             gunstate[1] = i;
             i++;
-            WM_SendMessageNoPara(pMsg->hWin ,WM_PAINT);
+            WM_SendMessageNoPara(pMsg->hWin ,MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 4000);
         }
         break;

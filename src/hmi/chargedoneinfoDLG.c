@@ -1,5 +1,6 @@
 #include "DIALOG.h"
 #include "HMI_Start.h"
+#include "display.h"
 #include "touchtimer.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)

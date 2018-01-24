@@ -1,6 +1,7 @@
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"
+#include "display.h"
 #include "utils.h"
 #include "DIALOG.h"
 

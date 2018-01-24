@@ -205,7 +205,7 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c" />
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c" />
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\display.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_Lin_Template.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_FreeRTOS.c" />
@@ -492,7 +492,7 @@
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_integers.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h" />
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h" />
-    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h" />
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\display.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_LTDC.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_Template.h" />
