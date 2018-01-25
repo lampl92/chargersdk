@@ -7,7 +7,7 @@ typedef enum
 {
     NET_STATE_INIT,
     NET_STATE_CONNECT,
-    NET_STATE_OK
+    NET_STATE_WORKING
 }net_state;
 
 typedef struct _net_device 

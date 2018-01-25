@@ -55,6 +55,7 @@ error_t net_eth_init(net_device_t *net_dev, uint32_t n)
     //初始化网络设备
     net_dev->interface = &netInterface[n];
     sprintf(net_dev->name, "eth%d", n);
+    net_dev->state = NET_STATE_INIT;
     
     interface = net_dev->interface;
 
