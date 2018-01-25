@@ -24,7 +24,7 @@ static int i = 1;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
    // { IMAGE_CreateIndirect, "HomeBack", ID_IMAGE_0, 0, 0, 800, 480, 0, IMAGE_CF_MEMDEV | IMAGE_CF_TILE, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 0, 0, 200, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 10, 100, 200, 36, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "SignalImage", ID_IMAGE_1, 755, 3, 40, 29, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "gun1stateImage", ID_IMAGE_2, 225, 155, 170, 170, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "gun2stateImage", ID_IMAGE_3, 405, 155, 170, 170, 0, 0, 0 },
@@ -133,9 +133,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_INIT_DIALOG:
         gunstate[0] = 1;
         gunstate[1] = 1;
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "2018-1-15  18:58");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhct36aa4, GUI_BLACK, "请选枪");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, "18");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg12aa4e, GUI_BLACK, "请选枪");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg36e, GUI_BLACK, "请选枪");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg12aa4, GUI_BLACK, "请选枪");
         
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
 //        IMAGE_SetBitmap(hItem, &Bitmaphomeback);

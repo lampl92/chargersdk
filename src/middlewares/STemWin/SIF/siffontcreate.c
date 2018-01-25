@@ -8,10 +8,26 @@ GUI_FONT SIF12_Font;
 GUI_FONT SIF16_Font;
 GUI_FONT SIF24_Font;
 GUI_FONT SIF36_Font;
+
 GUI_FONT fontwryhct12aa4;
 GUI_FONT fontwryhct16aa4;
 GUI_FONT fontwryhct24aa4;
 GUI_FONT fontwryhct36aa4;
+
+GUI_FONT fontwryhcg12aa4;
+GUI_FONT fontwryhcg16aa4;
+GUI_FONT fontwryhcg24aa4;
+GUI_FONT fontwryhcg36aa4;
+
+GUI_FONT fontwryhcg12aa4e;
+GUI_FONT fontwryhcg16aa4e;
+GUI_FONT fontwryhcg24aa4e;
+GUI_FONT fontwryhcg36aa4e;
+
+GUI_FONT fontwryhcg12e;
+GUI_FONT fontwryhcg16e;
+GUI_FONT fontwryhcg24e;
+GUI_FONT fontwryhcg36e;
 
 //字库文件缓冲区
 //u8 *SIF12FontBuff;
@@ -67,10 +83,26 @@ void createfont()
     create_sif_font(pathstSIF16, &SIF16_Font, GUI_SIF_TYPE_PROP);
     create_sif_font(pathstSIF24, &SIF24_Font, GUI_SIF_TYPE_PROP);
     create_sif_font(pathstSIF36, &SIF36_Font, GUI_SIF_TYPE_PROP);
+    
     create_sif_font(pathfontwryhct12aa4, &fontwryhct12aa4, GUI_SIF_TYPE_PROP_AA4);
     create_sif_font(pathfontwryhct16aa4, &fontwryhct16aa4, GUI_SIF_TYPE_PROP_AA4);
     create_sif_font(pathfontwryhct24aa4, &fontwryhct24aa4, GUI_SIF_TYPE_PROP_AA4);
     create_sif_font(pathfontwryhct36aa4, &fontwryhct36aa4, GUI_SIF_TYPE_PROP_AA4);
+    
+    create_sif_font(pathfontwryhcg12aa4, &fontwryhcg12aa4, GUI_SIF_TYPE_PROP_AA4);
+    create_sif_font(pathfontwryhcg16aa4, &fontwryhcg16aa4, GUI_SIF_TYPE_PROP_AA4);
+    create_sif_font(pathfontwryhcg24aa4, &fontwryhcg24aa4, GUI_SIF_TYPE_PROP_AA4);
+    create_sif_font(pathfontwryhcg36aa4, &fontwryhcg36aa4, GUI_SIF_TYPE_PROP_AA4);
+    
+    create_sif_font(pathfontwryhcg12aa4e, &fontwryhcg12aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+    create_sif_font(pathfontwryhcg16aa4e, &fontwryhcg16aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+    create_sif_font(pathfontwryhcg24aa4e, &fontwryhcg24aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+    create_sif_font(pathfontwryhcg36aa4e, &fontwryhcg36aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+    
+    create_sif_font(pathfontwryhcg12e, &fontwryhcg12e, GUI_SIF_TYPE_PROP_EXT);
+    create_sif_font(pathfontwryhcg16e, &fontwryhcg16e, GUI_SIF_TYPE_PROP_EXT);
+    create_sif_font(pathfontwryhcg24e, &fontwryhcg24e, GUI_SIF_TYPE_PROP_EXT);
+    create_sif_font(pathfontwryhcg36e, &fontwryhcg36e, GUI_SIF_TYPE_PROP_EXT);
 }
 
 
