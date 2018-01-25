@@ -29,6 +29,9 @@ GUI_FONT fontwryhcg16e;
 GUI_FONT fontwryhcg24e;
 GUI_FONT fontwryhcg36e;
 
+GUI_FONT fontwryhcg44e;
+GUI_FONT fontwryhcg44aa4e;
+
 //字库文件缓冲区
 //u8 *SIF12FontBuff;
 //u8 *SIF16FontBuff;
@@ -103,6 +106,9 @@ void createfont()
     create_sif_font(pathfontwryhcg16e, &fontwryhcg16e, GUI_SIF_TYPE_PROP_EXT);
     create_sif_font(pathfontwryhcg24e, &fontwryhcg24e, GUI_SIF_TYPE_PROP_EXT);
     create_sif_font(pathfontwryhcg36e, &fontwryhcg36e, GUI_SIF_TYPE_PROP_EXT);
+    
+    create_sif_font(pathfontwryhcg44e, &fontwryhcg44e, GUI_SIF_TYPE_PROP_EXT);
+    create_sif_font(pathfontwryhcg44aa4e, &fontwryhcg44aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
 }
 
 

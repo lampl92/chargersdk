@@ -58,6 +58,8 @@ static uint8_t _pidFlag = 0;
 static uint16_t _pidCount = 0;
 static uint32_t _AsmtCount = 0;//进入广告时间计数
 
+static uint32_t _pointpause = 0;//进入广告时间计数
+
 extern uint16_t calebrate_done;
 
 void GUI_TOUCH_X_ActivateX(void)
@@ -85,6 +87,15 @@ void GUI_TOUCH_X_ActivateX(void)
         }
         else
         {
+            _pointpause++;
+            if (_pointpause > 150)
+            {
+                State.x = 795;
+                State.y = 475;
+                State.Pressed = 0;
+                GUI_TOUCH_StoreStateEx(&State);
+                _pointpause = 0;
+            }
             if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
             {
                 _AsmtCount++;

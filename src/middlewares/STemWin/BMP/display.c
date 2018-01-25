@@ -159,10 +159,13 @@ GUI_MEMDEV_Handle Memdevhomegunlookinfo;
 GUI_MEMDEV_Handle Memdevhomegunscancode;
 GUI_MEMDEV_Handle Memdevhomegunlookinfopress;
 GUI_MEMDEV_Handle Memdevhomegunscancodepress;
+GUI_MEMDEV_Handle Memdevhomegunerror;
 GUI_MEMDEV_Handle Memdevhomesignal0;
 GUI_MEMDEV_Handle Memdevhomesignal1;
 GUI_MEMDEV_Handle Memdevhomesignal2;
 GUI_MEMDEV_Handle Memdevhomesignal3;
+GUI_MEMDEV_Handle Memdevhomesignal4;
+GUI_MEMDEV_Handle Memdevhomesignal5;
 
 GUI_MEASDEV_Handle MemdevSelectGunBack;
 
@@ -392,10 +395,13 @@ void creatememdev()
     Memdevhomegunscancode = createMemdev(pathhomegunscancode);
     Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);
     Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress);
+    Memdevhomegunerror = createMemdev(pathhomegunerror);
     Memdevhomesignal0 = createMemdev(pathhomesignal0);
     Memdevhomesignal1 = createMemdev(pathhomesignal1);
     Memdevhomesignal2 = createMemdev(pathhomesignal2);
     Memdevhomesignal3 = createMemdev(pathhomesignal3);
+    Memdevhomesignal3 = createMemdev(pathhomesignal4);
+    Memdevhomesignal3 = createMemdev(pathhomesignal5);
         
     MemdevSelectGunBack = createMemdev(pathSelectGunBack);
         

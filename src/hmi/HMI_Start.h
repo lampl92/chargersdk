@@ -11,6 +11,7 @@
 #include "keyboard.h"
 #include "lcddrv.h"
 #include "user_app.h"
+#include "skin.h"
 extern GUI_HMEM    qr_hmem;
 
 extern int SignalFlag;//信号图标刷新标志

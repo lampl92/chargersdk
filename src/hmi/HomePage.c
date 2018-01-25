@@ -41,7 +41,7 @@ uint32_t props_r, props_g, props_b;
 
 static TEXT_Handle text_up;
 
-int SignalFlag = 0;//信号图标刷新标志
+int SignalFlag;
 
 //home界面资源表
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {

@@ -111,10 +111,14 @@
 #define pathhomegunscancode                 "/nand/system/homegunscancode.dta"
 #define pathhomegunlookinfopress                 "/nand/system/homegunlookinfopress.dta"
 #define pathhomegunscancodepress                 "/nand/system/homegunscancodepress.dta"
+#define pathhomegunerror                 "/nand/system/homegunerror.dta"
 #define pathhomesignal0  "nand/system/homesignal0.dta"
 #define pathhomesignal1  "nand/system/homesignal1.dta"
 #define pathhomesignal2  "nand/system/homesignal2.dta"
 #define pathhomesignal3  "nand/system/homesignal3.dta"
+#define pathhomesignal4  "nand/system/homesignal4.dta"
+#define pathhomesignal5  "nand/system/homesignal5.dta"
+
 
 //提示信息页图片
 #define pathchargedoneinfo      "nand/system/chargedoneinfo.dta"
@@ -151,6 +155,9 @@
 #define pathfontwryhcg16e         "/nand/system/fontwryhcg16e.sif"
 #define pathfontwryhcg24e         "/nand/system/fontwryhcg24e.sif"
 #define pathfontwryhcg36e         "/nand/system/fontwryhcg36e.sif"
+
+#define pathfontwryhcg44e         "/nand/system/fontwryhcg44e.sif"
+#define pathfontwryhcg44aa4e         "/nand/system/fontwryhcg44aa4e.sif"
 
 
 #define YAFFS_MOUNT_POINT   "/nand/"

@@ -17,8 +17,7 @@ GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
 
 
-int SignalIntensity;
-int PreSignalIntensity;
+
 
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
@@ -67,7 +66,7 @@ void MainTask(void)
     CON_t *pCON;
     if (calebrate_done == 0)
     {
-        GUI_CURSOR_Hide();
+        GUI_CURSOR_Show();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }

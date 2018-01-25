@@ -29,5 +29,8 @@ extern GUI_FONT fontwryhcg16e;
 extern GUI_FONT fontwryhcg24e;
 extern GUI_FONT fontwryhcg36e;
 
+extern GUI_FONT fontwryhcg44e;
+extern GUI_FONT fontwryhcg44aa4e;
+
 void createfont();
 #endif
