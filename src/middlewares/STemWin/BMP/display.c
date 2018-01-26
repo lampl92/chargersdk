@@ -3,7 +3,10 @@
 #include "DIALOG.h"
 #include "yaffsfs.h"
 #include "stringName.h"
+#include "HMI_Start.h"
+#include "interface.h"
 
+#pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
 p_inf *SignalImage1;
@@ -47,8 +50,8 @@ p_inf *DtaFileCheckboxDisable;
 GUI_BITMAP BitmapCheckboxChosen;
 GUI_BITMAP BitmapCheckboxNotChosen;
 GUI_BITMAP BitmapCheckboxDisable;
-GUI_BITMAP BitmapBeijing;
-
+GUI_BITMAP BitmapBeijing;			  
+#pragma endregion
 
 #pragma region MyRegion
         //公用图片“退出”
@@ -145,6 +148,7 @@ GUI_BITMAP BitmapBeijing;
         GUI_BITMAP Bitmapcharginginfo;				  
 #pragma endregion
 
+#pragma region MyRegion
 //主页储存设备
 GUI_MEMDEV_Handle Memdevhomeback;
 GUI_MEMDEV_Handle MemdevhomegunAchargedone;
@@ -167,7 +171,8 @@ GUI_MEMDEV_Handle Memdevhomesignal3;
 GUI_MEMDEV_Handle Memdevhomesignal4;
 GUI_MEMDEV_Handle Memdevhomesignal5;
 
-GUI_MEASDEV_Handle MemdevSelectGunBack;
+GUI_MEASDEV_Handle MemdevSelectGunBack;			  
+#pragma endregion
 
 /*
 *函数功能：返回图片信息结构体p_inf
@@ -379,18 +384,50 @@ void createGUI_BITMAP()
     Bitmapcharginginfo = readDtafile(pathcharginginfo);		
 }
 
+//返回-1时出错
+int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
+{
+    int memx;
+    int qrx;
+    int qry;
+    GUI_HMEM qr_hmem;
+//int QR_Width;//NUmber of "Moudle"
+//int QR_Size;//Size of Bitmap in pixels
+    GUI_QR_INFO QR_info_struct;//仿真时看值
+    qr_hmem = GUI_QR_Create(pText, 6, GUI_QR_ECLEVEL_L, 0);
+    GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
+    GUI_MEMDEV_Select(mem);
+    memx =  GUI_MEMDEV_GetXSize(mem);
+    if (memx < QR_info_struct.Size)
+    {
+        return -1;
+    }
+    qrx = (memx - QR_info_struct.Size) / 2;
+    qry = 39;
+    GUI_QR_Draw(qr_hmem, qrx, qry);
+    GUI_MEMDEV_Select(0);  
+    return 0;
+}
+
 void creatememdev()
 {   
     //主页存储
+    CON_t *pCON;   
+    MemdevhomegunAfree = createMemdev(pathhomegunAfree);
+    pCON = CONGetHandle(0);
+    createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+    
+    MemdevhomegunBfree = createMemdev(pathhomegunBfree);
+    pCON = CONGetHandle(0);
+    createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
+    
     Memdevhomeback = createMemdev(pathhomeback);
     MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone);
     MemdevhomegunAcharging = createMemdev(pathhomegunAcharging);
-    MemdevhomegunAerror = createMemdev(pathhomegunAerror);
-    MemdevhomegunAfree = createMemdev(pathhomegunAfree);
+    MemdevhomegunAerror = createMemdev(pathhomegunAerror); 
     MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone);
     MemdevhomegunBcharging = createMemdev(pathhomegunBcharging);
-    MemdevhomegunBerror = createMemdev(pathhomegunBerror);
-    MemdevhomegunBfree = createMemdev(pathhomegunBfree);
+    MemdevhomegunBerror = createMemdev(pathhomegunBerror);   
     Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
     Memdevhomegunscancode = createMemdev(pathhomegunscancode);
     Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);

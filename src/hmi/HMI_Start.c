@@ -77,24 +77,19 @@ void MainTask(void)
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
-
-
-//        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
-//        memoryfree = GUI_ALLOC_GetNumFreeBytes();
-        
         createGUI_BITMAP();
         creatememdev();
         createfont();
+//        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
+//        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
+        GUI_Exec();
         GUI_UC_SetEncodeUTF8();
-        
-//        CreateAdvertisementPage();
-//        CreateHomePage();
+
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
- //       CreateKeyBoardWindow();
-        CreateHomeDLG();
-        //CreateselectgunDLG();                   
+//        CreateKeyBoardWindow();
+        CreateHomeDLG();                
     }
     else
     {

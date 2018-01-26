@@ -98,7 +98,7 @@ extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 extern WM_HWIN _hWinManagerTerminate;
 
-GUI_QR_INFO QR_info;
+extern GUI_QR_INFO QR_info;
 
 enum{
     _HOMEPAGE,
