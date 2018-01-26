@@ -16,51 +16,133 @@
 #include "interface_network.h"
 #include "interface_ftpclient.h"
 #include "interface_ftpserver.h"
-#include "net_eth.h"
+#include "net_device.h"
+
+#include "debug.h"
+
+void netChangeState(net_device_t *net_dev, net_state new_state)
+{
+    static const char_t *stateLabel[] =
+    {
+        "NET_STATE_IDLE",
+        "NET_STATE_INIT",
+        "NET_STATE_CONNECT",
+        "NET_STATE_FTP",
+        "NET_STATE_TCP_ON"
+    };
+
+    if (net_dev->state < arraysize(stateLabel) && new_state < arraysize(stateLabel))
+    {
+        TRACE_INFO("TASK NET FSM: %s (%u) -> %s (%u)\r\n",
+            stateLabel[net_dev->state],
+            net_dev->state,
+            stateLabel[new_state],
+            new_state);
+    }
+    
+    switch (new_state)
+    {
+    case NET_STATE_TCP_ON:
+        pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
+        xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
+        xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
+        break;
+    }
+    
+    net_dev->state = new_state;
+}
+static void netStateInit(net_device_t *net_dev)
+{
+    error_t error; 
+    uint32_t n = 0;//接口号
+    
+    //初始化网络设备
+    net_dev->interface = &netInterface[n];
+    sprintf(net_dev->name, "eth%d", n);
+    
+    error = net_dev_init(net_dev);
+    if (error == NO_ERROR)
+    {
+        netChangeState(net_dev, NET_STATE_CONNECT);
+    }
+}
+static void netStateFTP(net_device_t *net_dev)
+{
+    int res;
+    res = ftp_download_file(&pechProto->info.ftp, net_dev);
+    if (res != 0)
+    {
+        netChangeState(net_dev, NET_STATE_TCP_ON);
+    }
+}
+static void netStateTcpOn(net_device_t *net_dev)
+{
+    char_t buffer[5000]; 
+    size_t length; 
+    error_t error; 
+    
+    if (pechProto->info.ftp.ucDownloadStart == 1)
+    {
+        netChangeState(net_dev, NET_STATE_FTP);
+    }
+    
+    length = netRecv(buffer, sizeof(buffer));
+    if (length > 0)
+    {
+        pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
+    }
+}
+static void netStateConnect(net_device_t *net_dev)
+{
+    error_t error; 
+    ifconfig_update(net_dev);
+    error = net_dev_connect();
+    if (error == NO_ERROR)
+    {
+        netChangeState(net_dev, NET_STATE_TCP_ON);
+    }
+    else
+    {
+        vTaskDelay(10000);
+    }
+}
 
 void vTaskTCPClient(void *pvParameters)
 {
     net_device_t *net_dev;
-    DhcpState dhcpstate;
-    error_t error; 
-    char_t buffer[5000]; 
-    size_t length; 
 
-    net_dev = &eth_dev;
-    error = net_eth_init(net_dev, 0);
-    
-    pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
-    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
-    if (pechProto->info.ftp.ucDownloadStart == 1)
+    switch (ifconfig.info.ucAdapterSel)
     {
-        ftp_download_file(&pechProto->info.ftp, net_dev);
+    case 1:
+        net_dev = &eth_dev;
+        break; 
     }
+    
+    net_dev->state = NET_STATE_INIT;
 
     while (1)
     {
         switch (net_dev->state)
         {
+        case NET_STATE_IDLE:
+            break;
         case NET_STATE_INIT:
-            ifconfig_update(net_dev);
-            error = net_eth_connect();
-            if (error == NO_ERROR)
-            {
-                net_dev->state = NET_STATE_CONNECT;
-            }
+            netStateInit(net_dev);
             break;
         case NET_STATE_CONNECT:
+            netStateConnect(net_dev);
             break;
-        case NET_STATE_WORKING:
+        case NET_STATE_TCP_ON:
+            netStateTcpOn(net_dev);
+            break;
+        case NET_STATE_FTP:
+            netStateFTP(net_dev);
             break;
         default:
+            netChangeState(net_dev, NET_STATE_IDLE);
             break;
         }
-        length = netRecv(buffer, sizeof(buffer));
-        if (length > 0)
-        {
-            pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
-        }
+
         vTaskDelay(100);
     }
 }
