@@ -134,7 +134,25 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
     PreSignalIntensity = SignalIntensity;
 }
 
-static void datetime_Show(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
+static void updateprice(WM_MESSAGE * pMsg, int idpowerfee, int idservidefee, const GUI_FONT * pFont)
+{
+    uint8_t pos = 0;
+    uint8_t ucSegState;
+    time_t  now;
+    uint8_t strPowerFee[10];
+    uint8_t strServiceFee[10];
+    now = time(NULL);
+    extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
+    ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
+    sprintf(strPowerFee, "%5.1f", pechProto->info.dSegPowerFee[ucSegState]);
+    sprintf(strServiceFee, "%5.1f", pechProto->info.dSegServFee[ucSegState]);
+    TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, idpowerfee), pFont);
+    TEXT_SetText(WM_GetDialogItem(pMsg->hWin, idpowerfee), strPowerFee);/**< 充电费*/
+    TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, idservidefee), pFont);
+    TEXT_SetText(WM_GetDialogItem(pMsg->hWin, idservidefee), strServiceFee);/**< 服务费 */  
+}
+
+static void updatedatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT, const GUI_FONT * pFont)
 {
     RTC_TimeTypeDef RTC_TimeStruct;
     RTC_DateTypeDef RTC_DateStruct;
@@ -150,6 +168,7 @@ static void datetime_Show(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
     sprintf((char *)Time_buf, "%02d:%02d:%02d", RTC_TimeStruct.Hours, RTC_TimeStruct.Minutes, RTC_TimeStruct.Seconds);
     
     sprintf((char*)date_time_buf, "%s   %s", Date_buf, Time_buf);
+    TEXT_SetFont(WM_GetDialogItem(hWin, ID_TEXT), pFont);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT), date_time_buf);
 }
 
@@ -159,20 +178,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     U32          FileSize;
     int          NCode;
     int          Id;
-    uint8_t pos = 0;
-    uint8_t ucSegState;
-    time_t  now;
-    uint8_t strPowerFee[10];
-    uint8_t strServiceFee[10];
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         gunstate[0] = 1;
         gunstate[1] = 1;
         SignalIntensity = getSignalIntensity();
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg24e, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg24e, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg24e, GUI_BLACK, "");
+        updatedatetime(pMsg, ID_TEXT_0,&fontwryhcg24e);
+        updateprice(pMsg, ID_TEXT_1, ID_TEXT_2, &fontwryhcg24e);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetFocussable(hItem,0);
@@ -271,18 +284,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         else if (pMsg->Data.v == _timerpriceflash)
         {
-            now = time(NULL);
-            extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
-            ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
-            sprintf(strPowerFee, "%5.1f", pechProto->info.dSegPowerFee[ucSegState]);
-            sprintf(strServiceFee, "%5.1f", pechProto->info.dSegServFee[ucSegState]);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strPowerFee);/**< 充电费*/
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), strServiceFee);/**< 服务费 */  
+            updateprice(pMsg, ID_TEXT_1, ID_TEXT_2, &fontwryhcg24e);
             WM_RestartTimer(pMsg->Data.v, 1000);
         }
         else if (pMsg->Data.v = _timertimeflash)
         {
-            datetime_Show(pMsg, ID_TEXT_0);
+            updatedatetime(pMsg, ID_TEXT_0, &fontwryhcg24e);
             WM_RestartTimer(pMsg->Data.v, 200);
         }
         break;

@@ -87,15 +87,12 @@ void GUI_TOUCH_X_ActivateX(void)
         }
         else
         {
-//            _pointpause++;
-//            if (_pointpause > 150)
-//            {
+
             State.x = adc_x;
             State.y = adc_y;
-                State.Pressed = 0;
-                GUI_TOUCH_StoreStateEx(&State);
-//                _pointpause = 0;
-//            }
+            State.Pressed = 0;
+            GUI_TOUCH_StoreStateEx(&State);
+
             if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
             {
                 _AsmtCount++;
