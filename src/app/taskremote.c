@@ -220,7 +220,6 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBits;
     RemoteState_t remotestat;
-    RemoteHeartState_e eRmtHeartStat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
@@ -230,7 +229,6 @@ void vTaskEVSERemote(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
-    eRmtHeartStat = REMOTEHEART_IDLE;
     errcode = ERR_NO;
     network_res = 0;
     reg_try_cnt = 0;
@@ -374,7 +372,6 @@ void vTaskEVSERemote(void *pvParameters)
                 if(heart_lost > 750)
                 {
                     heart_lost = 0;
-                    eRmtHeartStat = REMOTEHEART_IDLE;
                     remotestat = REMOTE_RECONNECT;
                     break;
                 }
