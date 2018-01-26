@@ -55,6 +55,7 @@ Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip,
             break; 
         TRACE_INFO("连接成功\r\n"); 
     } while (0);
+    *perror = error;
     return socketfd;
 }
 
