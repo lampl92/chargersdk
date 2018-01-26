@@ -179,6 +179,7 @@
     <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
     <ClCompile Include="..\..\..\src\hmi\HomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c" />
+    <ClCompile Include="..\..\..\src\hmi\selectpatternbetterDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
@@ -199,6 +200,7 @@
     <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c" />
+    <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />

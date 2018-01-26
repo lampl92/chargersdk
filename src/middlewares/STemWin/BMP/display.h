@@ -185,7 +185,51 @@ extern GUI_MEMDEV_Handle Memdevhomesignal3;
 extern GUI_MEMDEV_Handle Memdevhomesignal4;
 extern GUI_MEMDEV_Handle Memdevhomesignal5;
 
-extern GUI_MEASDEV_Handle MemdevSelectGunBack;
+//选枪页
+extern GUI_MEMDEV_Handle MemdevSelectGunBack;
+extern GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
+extern GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
+extern GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
+extern GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		  
+
+//选模式
+extern GUI_MEMDEV_Handle Memdevselectpatternback;
+extern GUI_MEMDEV_Handle Memdevselectpatternelectricnumber;
+extern GUI_MEMDEV_Handle Memdevselectpatternfull;
+extern GUI_MEMDEV_Handle Memdevselectpatternmoneynumber;
+extern GUI_MEMDEV_Handle Memdevselectpatterntime;
+
+extern GUI_MEMDEV_Handle Memdevselectpatternelectricnumberpress;
+extern GUI_MEMDEV_Handle Memdevselectpatternfullpress;
+extern GUI_MEMDEV_Handle Memdevselectpatternmoneynumberpress;
+extern GUI_MEMDEV_Handle Memdevselectpatterntimepress;
+
+extern GUI_MEMDEV_Handle Memdevselectpatternunityuan;
+extern GUI_MEMDEV_Handle Memdevselectpatternunitdu;
+extern GUI_MEMDEV_Handle Memdevselectpatternunitfen;
+extern GUI_MEMDEV_Handle Memdevselectpatternunitno;
+
+extern GUI_MEMDEV_Handle Memdevselectpatternkeyboard;
+extern GUI_MEMDEV_Handle Memdevselectpatternkeyboardpress;
+
+//提示信息页图片
+extern GUI_MEMDEV_Handle Memdevchargedoneinfo;
+extern GUI_MEMDEV_Handle Memdevcharginginfo;	
+
+//公用图片“退出”
+extern GUI_MEMDEV_Handle MemdevQuit;
+extern GUI_MEMDEV_Handle MemdevQuitPress;
+extern GUI_MEMDEV_Handle MemdevbackQuit;
+extern GUI_MEMDEV_Handle MemdevbackQuitPress;
+
+//卡信息页图片
+extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
+extern GUI_MEMDEV_Handle Memdevcardinfoback;
+extern GUI_MEMDEV_Handle Memdevcardinfoempty;
+extern GUI_MEMDEV_Handle Memdevcardinfoget;
+extern GUI_MEMDEV_Handle Memdevcardinfoplug;
+extern GUI_MEMDEV_Handle Memdevcardinfounregister;
+
 
 p_inf *readPicInf(char *pfilepath);
 GUI_BITMAP readDtafile(char *pathfile);

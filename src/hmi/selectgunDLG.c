@@ -9,6 +9,15 @@
 #define ID_IMAGE_0  (GUI_ID_USER + 0x04)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x05)
 
+int selectgunax = 285;
+int selectgunay = 195;
+
+int selectgunbx = 455;
+int selectgunby = 195;
+
+int quitx = 100;
+int quity = 370;
+
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
   //  { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, IMAGE_CF_MEMDEV | IMAGE_CF_TILE, 0 },
@@ -27,19 +36,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //        IMAGE_SetBitmap(hItem, &BitmapSelectGunBack);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapSelectGunAbottonPress, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapSelectGunAbottonNotpress, 0, 0);
+        BUTTON_SetSkin(hItem, SKIN_selectbutton);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapSelectGunBbottonPress, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapSelectGunBbottonNotpress, 0, 0);
+        BUTTON_SetSkin(hItem, SKIN_selectbutton);
                 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapQuit, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapQuitPress, 0, 0);
+        BUTTON_SetSkin(hItem, SKIN_buttonquit);
         break;
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(MemdevSelectGunBack,0,0);

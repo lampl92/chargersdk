@@ -55,6 +55,9 @@
 #define pathselectpatternunitfen               "nand/system/selectpatternunitfen.dta"
 #define pathselectpatternunitno               "nand/system/selectpatternunitno.dta"
 
+#define pathselectpatternkeyboard              "nand/system/selectpatternkeyboard.dta"
+#define pathselectpatternkeyboardpress         "nand/system/selectpatternkeyboardpress.dta"
+
 #define pathKeyboardback                    "nand/system/kwyboardback.dta"
 
 #define pathKeyboard0                       "nand/system/kwyboard0.dta"

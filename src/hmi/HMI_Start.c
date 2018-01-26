@@ -81,6 +81,8 @@ void MainTask(void)
         creatememdev();
         createfont();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
+//        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
+//        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
         GUI_Exec();

@@ -171,7 +171,51 @@ GUI_MEMDEV_Handle Memdevhomesignal3;
 GUI_MEMDEV_Handle Memdevhomesignal4;
 GUI_MEMDEV_Handle Memdevhomesignal5;
 
-GUI_MEASDEV_Handle MemdevSelectGunBack;			  
+//选枪页
+GUI_MEMDEV_Handle MemdevSelectGunBack;
+GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
+GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
+GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
+GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		  
+
+//选模式
+GUI_MEMDEV_Handle Memdevselectpatternback;
+GUI_MEMDEV_Handle Memdevselectpatternelectricnumber;
+GUI_MEMDEV_Handle Memdevselectpatternfull;
+GUI_MEMDEV_Handle Memdevselectpatternmoneynumber;
+GUI_MEMDEV_Handle Memdevselectpatterntime;
+
+GUI_MEMDEV_Handle Memdevselectpatternelectricnumberpress;
+GUI_MEMDEV_Handle Memdevselectpatternfullpress;
+GUI_MEMDEV_Handle Memdevselectpatternmoneynumberpress;
+GUI_MEMDEV_Handle Memdevselectpatterntimepress;
+
+GUI_MEMDEV_Handle Memdevselectpatternunityuan;
+GUI_MEMDEV_Handle Memdevselectpatternunitdu;
+GUI_MEMDEV_Handle Memdevselectpatternunitfen;
+GUI_MEMDEV_Handle Memdevselectpatternunitno;
+
+GUI_MEMDEV_Handle Memdevselectpatternkeyboard;
+GUI_MEMDEV_Handle Memdevselectpatternkeyboardpress;
+
+//提示信息页图片
+GUI_MEMDEV_Handle Memdevchargedoneinfo;
+GUI_MEMDEV_Handle Memdevcharginginfo;	
+
+//公用图片“退出”
+GUI_MEMDEV_Handle MemdevQuit;
+GUI_MEMDEV_Handle MemdevQuitPress;
+GUI_MEMDEV_Handle MemdevbackQuit;
+GUI_MEMDEV_Handle MemdevbackQuitPress;
+
+//卡信息页图片
+GUI_MEMDEV_Handle Memdevcardinfoarrears;
+GUI_MEMDEV_Handle Memdevcardinfoback;
+GUI_MEMDEV_Handle Memdevcardinfoempty;
+GUI_MEMDEV_Handle Memdevcardinfoget;
+GUI_MEMDEV_Handle Memdevcardinfoplug;
+GUI_MEMDEV_Handle Memdevcardinfounregister;
+
 #pragma endregion
 
 /*
@@ -440,7 +484,50 @@ void creatememdev()
     Memdevhomesignal3 = createMemdev(pathhomesignal4);
     Memdevhomesignal3 = createMemdev(pathhomesignal5);
         
+    //选枪
     MemdevSelectGunBack = createMemdev(pathSelectGunBack);
+    MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress);
+    MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
+    MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
+    MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
+    
+    //选模式
+    Memdevselectpatternback = createMemdev(pathselectpatternback);
+    Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber);
+    Memdevselectpatternfull = createMemdev(pathselectpatternfull);
+    Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber);
+    Memdevselectpatterntime = createMemdev(pathselectpatterntime);
+
+    Memdevselectpatternelectricnumberpress = createMemdev(pathselectpatternelectricnumberpress);
+    Memdevselectpatternfullpress = createMemdev(pathselectpatternfullpress);
+    Memdevselectpatternmoneynumberpress = createMemdev(pathselectpatternmoneynumberpress);
+    Memdevselectpatterntimepress = createMemdev(pathselectpatterntimepress);
+
+    Memdevselectpatternunityuan = createMemdev(pathselectpatternunityuan);
+    Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu);
+    Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen);
+    Memdevselectpatternunitno = createMemdev(pathselectpatternunitno);
+
+    Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
+    Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
+    
+    //提示信息页图片
+    Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
+    Memdevcharginginfo = createMemdev(pathcharginginfo);
+
+    //公用图片“退出”
+    MemdevQuit = createMemdev(pathQuit);
+    MemdevQuitPress = createMemdev(pathQuitPress);
+    MemdevbackQuit = createMemdev(pathbackquit);
+    MemdevbackQuitPress = createMemdev(pathbackquitpress);
+
+    //卡信息页图片
+    Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
+    Memdevcardinfoback = createMemdev(pathcardinfoback);
+    Memdevcardinfoempty = createMemdev(pathcardinfoempty);
+    Memdevcardinfoget = createMemdev(pathcardinfoget);
+    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
+    Memdevcardinfounregister = createMemdev(pathcardinfounregister);
         
 }
 
