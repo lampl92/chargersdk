@@ -24,6 +24,7 @@ typedef struct _net_device
     net_state state;
 }net_device_t;
 
+net_device_t *get_net_device_handler(uint8_t dev_num);
 error_t net_dev_init(net_device_t *net_dev);
 error_t net_dev_connect(void);
 

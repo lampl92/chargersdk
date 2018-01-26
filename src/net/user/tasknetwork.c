@@ -111,14 +111,9 @@ void vTaskTCPClient(void *pvParameters)
 {
     net_device_t *net_dev;
 
-    switch (ifconfig.info.ucAdapterSel)
-    {
-    case 1:
-        net_dev = &eth_dev;
-        break; 
-    }
-    
-    net_dev->state = NET_STATE_INIT;
+    net_dev = get_net_device_handler(ifconfig.info.ucAdapterSel);
+
+    netChangeState(net_dev, NET_STATE_INIT);
 
     while (1)
     {
