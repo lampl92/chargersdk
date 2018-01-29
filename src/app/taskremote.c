@@ -276,27 +276,12 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
-                    remotestat = REMOTE_RECONNECT;
-                }
-                uxBits = xEventGroupGetBits(xHandleEventTCP);
-                if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
-                {
-                    reg_try_cnt = 0;
-                    remotestat = REMOTE_NO;
+                    remotestat = REMOTE_ERROR;
                 }
             }
             break;
         case REMOTE_REGEDITED:
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPConnectFail,
-                                         pdTRUE, pdTRUE, 0);
-            if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
-            {
-                remotestat = REMOTE_RECONNECT;
-                printf_safe("State Regedit TCPConnectFail, Call Reconnect!!!\n");
-                break;
-            }
             
             /*********上传未处理的订单**************/
 #if 1
@@ -369,10 +354,10 @@ void vTaskEVSERemote(void *pvParameters)
             if(network_res != 1)
             {
                 heart_lost++;
-                if(heart_lost > 750)
+                if(heart_lost > 200)//750
                 {
                     heart_lost = 0;
-                    remotestat = REMOTE_RECONNECT;
+                    remotestat = REMOTE_ERROR;
                     break;
                 }
             }
@@ -696,6 +681,13 @@ void vTaskEVSERemote(void *pvParameters)
             printf_safe("State Reconnect ,Call TCP close!!\n");
             break;
         case REMOTE_ERROR:
+            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+            xTimerStop(xHandleTimerRemoteStatus, 100);
+            remotestat = REMOTE_NO;
+            xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
+            printf_safe("remote state error ,Call TCP close!!\n");
+            break;
+        default:
             break;
         }
 

@@ -139,7 +139,7 @@ ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 0, 1);
 
     return errcode;
 }
@@ -1238,6 +1238,7 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
 {
     int res;
+    ErrorCode_t errcode;
 
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_POWERFEE, pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SERVFEE,  pEVSE, pProto, &res);
@@ -1254,6 +1255,8 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_ADD_BNW, pEVSE, pProto, &res);
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
+    
+    return errcode;
 }
 
 ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
