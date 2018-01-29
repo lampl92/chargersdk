@@ -29,6 +29,11 @@ error_t net_eth_reconnect(void)
     
     return error;
 }
+void net_eth_disconnect(void)
+{
+    socketClose(socket_eth);
+    socket_eth = NULL;
+}
 
 /**
  * @fn  error_t net_eth_init(net_device_t *net_dev, uint32_t n)
@@ -41,7 +46,7 @@ error_t net_eth_reconnect(void)
  * @return  An error_t.
  */
 
-error_t net_eth_init(net_device_t *net_dev, uint32_t n)
+error_t net_eth_init(net_device_t *net_dev)
 {
     DhcpClientSettings dhcpClientSettings;
 
@@ -51,11 +56,7 @@ error_t net_eth_init(net_device_t *net_dev, uint32_t n)
     OsTask *task;
     MacAddr macAddr;
     Ipv4Addr ipv4Addr;
-
-    //初始化网络设备
-    net_dev->interface = &netInterface[n];
-    sprintf(net_dev->name, "eth%d", n);
-    
+  
     interface = net_dev->interface;
 
     //设置接口名称

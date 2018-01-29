@@ -17,12 +17,6 @@ typedef enum
     REMOTE_ERROR
 } RemoteState_t;
 
-typedef enum
-{
-    REMOTEHEART_IDLE,
-    REMOTEHEART_RECV
-} RemoteHeartState_e;
-
 ////////远程状态///////////
 
 //刷卡启动数据结构

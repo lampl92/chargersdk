@@ -10,6 +10,15 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 
+
+
+//    pModem = DevModemCreate();
+//    modem_open(pModem);
+//    modem_init(pModem);
+//    Modem_Poll(pModem);//这是任务
+
+
+
 #if 0
 EventBits_t uxBitLwip;
 //void input_over_serial(int ppp)

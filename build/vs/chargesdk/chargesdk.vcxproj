@@ -254,6 +254,7 @@
     <ClCompile Include="..\..\..\src\net\user\interface_network.c" />
     <ClCompile Include="..\..\..\src\net\user\net_device.c" />
     <ClCompile Include="..\..\..\src\net\user\net_eth.c" />
+    <ClCompile Include="..\..\..\src\net\user\net_modem.c" />
     <ClCompile Include="..\..\..\src\net\user\tasknetwork.c" />
     <ClCompile Include="..\..\..\src\net\user\taskppp.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
