@@ -52,3 +52,21 @@ error_t net_dev_connect(void)
     
     return error;
 }
+
+error_t net_dev_disconnect(void)
+{
+    error_t error;
+    
+    switch (ifconfig.info.ucAdapterSel)
+    {
+    case 1:
+        net_eth_disconnect();
+        break;   
+    default:
+        error = ERROR_FAILURE;
+        TRACE_ERROR("!!! NO THIS DEVICE !!!\n");
+        break;
+    }
+    
+    return error;
+}
