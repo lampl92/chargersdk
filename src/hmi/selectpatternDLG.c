@@ -37,13 +37,13 @@ static char strNumber[INPUTNUMBERLENGTH];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, IMAGE_CF_MEMDEV, 0, 0 },
+//    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, IMAGE_CF_MEMDEV, 0, 0 },
     { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, IMAGE_CF_MEMDEV, 0, 0 },
     { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 530, 72, 120, 36, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 180, 50, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 180, 110, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 180, 170, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 180, 230, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 100, 110, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 100, 170, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 100, 230, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 100, 290, 150, 40, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, 100, 400, 100, 50, 0, 0x0, 0 },
 };
 
@@ -109,8 +109,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_INIT_DIALOG:
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "");
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &Bitmapselectpatternback);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+//        IMAGE_SetBitmap(hItem, &Bitmapselectpatternback);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
         IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitno);
@@ -131,7 +131,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         BUTTON_SetText(hItem, "");
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuit, 0, 0);
         BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuitPress, 0, 0);
-        
+        break;
+    case WM_PAINT:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternback, 0, 0);
+        break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
@@ -246,8 +249,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_EndDialog(pMsg->hWin, 0);
         GUI_EndDialog(HwinKeyboard, 0);
         CreateselectgunDLG();
-        break;
-    case WM_PAINT: 
         break;
     default:
         WM_DefaultProc(pMsg);

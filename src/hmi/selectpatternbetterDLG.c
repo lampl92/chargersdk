@@ -21,88 +21,93 @@
 WM_HWIN HwinKeyboard;
 static char strNumber[INPUTNUMBERLENGTH];
 
-int keyboardx = 480;
+int keyboardx = 290;
 int keyboardy = 155;
 
-int backquitx = 280;
-int backquity = 370;
+int backquitx = 600;
+int backquity = 350;
+
+int yuandufenx = 530;
+int yuandufeny = 115;
+
+int Checkboxfullx = 100;
+int Checkboxfully = 110;
+
+int Checkboxtimex = 100;
+int Checkboxtimey = 170;
+
+int Checkboxmonex = 100;
+int Checkboxmoney = 230;
+
+int Checkboxelectricx = 100;
+int Checkboxelectricy = 290;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
-    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 530, 72, 120, 36, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 180, 50, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 180, 110, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 180, 170, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 180, 230, 150, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, 280, 370, 100, 50, 0, 0x0, 0 },
+//    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
+//    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 430, 115, 100, 36, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 100, 110, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 100, 170, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 100, 230, 150, 40, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 100, 290, 150, 40, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, 600, 350, 170, 70, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
-    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 480, 155, 260, 260, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_0, 0, 0, 260, 260, 0, 0x0, 2 },
+    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 290, 155, 270, 240, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_0, 0, 0, 270, 240, 0, 0x0, 2 },
 };
 
 static char* getbutton(int id)
 {
-    if (id == 0)
+    switch (id)
     {
+    case 1:
         return "1";
-    }
-    else if (id == 1)
-    {
+        break;
+    case 2:
         return "2";
-    }
-    else if (id == 2)
-    {
+        break;
+    case 3:
         return "3";
-    }
-    else if (id == 3)
-    {
+        break;
+    case 4:
         return "bs";
-    }
-    else if (id == 4)
-    {
+        break;
+    case 5:
         return "4";
-    }
-    else if (id == 5)
-    {
+        break;
+    case 6:
         return "5";
-    }
-    else if (id == 6)
-    {
+        break;
+    case 7:
         return "6";
-    }
-    else if (id == 7)
-    {
+        break;
+    case 8:
         return "esc";
-    }
-    else if (id == 8)
-    {
+        break;
+    case 9:
         return "7";
-    }
-    else if (id == 9)
-    {
+        break;
+    case 10:
         return "8";
-    }
-    else if (id == 10)
-    {
+        break;
+    case 11:
         return "9";
-    }
-    else if (id == 11)
-    {
+        break;
+    case 12:
         return "ok";
-    }
-    else if (id == 12)
-    {
+        break;
+    case 13:
         return "0";
-    }
-    else if (id == 13)
-    {
+        break;
+    case 14:
         return ".";
+        break;
+    default:
+        return NULL;
     }
-    return NULL;
 }
 
 static void MakeStrNumber(char *number)
@@ -110,6 +115,10 @@ static void MakeStrNumber(char *number)
     int i = 0;
     for (i = 0; strNumber[i] != '\0'; i++);
     if ((i == 0)&&((strcmp(number, ".") == 0) || (strcmp(number, "0") == 0)))
+    {
+        return;
+    }
+    if (strcmp(number, "ok") == 0)
     {
         return;
     }
@@ -141,7 +150,13 @@ static void MakeStrNumber(char *number)
     }
 }
 
-
+static void RADIO(WM_HWIN hItem1, WM_HWIN hItem2, WM_HWIN hItem3, WM_HWIN hItem4)
+{
+    CHECKBOX_SetState(hItem1, 1);
+    CHECKBOX_SetState(hItem2, 0);
+    CHECKBOX_SetState(hItem3, 0);
+    CHECKBOX_SetState(hItem4, 0);
+}
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int NCode;
     int Id;
@@ -150,13 +165,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "");
-
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &Bitmapselectpatternback);
+        GUI_MEMDEV_WriteAt(Memdevselectpatternunitno, yuandufenx, yuandufeny);
         
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-        IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitno);
-
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetSkin(hItem, SKIN_checkboxfull);
         
@@ -170,10 +180,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         CHECKBOX_SetSkin(hItem, SKIN_checkboxelectric);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_14);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuit, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuitPress, 0, 0);
-        
+        BUTTON_SetSkin(hItem, SKIN_buttonbackquit);
+        break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break; 
+    case WM_PAINT:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternback, 0, 0);
+        break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
@@ -184,16 +198,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_HideWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-                CHECKBOX_SetState(hItem, 1);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitno);
+                RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
+                GUI_MEMDEV_WriteAt(Memdevselectpatternunitno, yuandufenx, yuandufeny);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -207,17 +217,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-                CHECKBOX_SetState(hItem, 1);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitfen);
+                RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0),\
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
+                GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -231,17 +236,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-                CHECKBOX_SetState(hItem, 1);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunityuan);
+                RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
+                GUI_MEMDEV_WriteAt(Memdevselectpatternunityuan, yuandufenx, yuandufeny);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -255,17 +255,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
                 Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3);
-                CHECKBOX_SetState(hItem, 1);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
-                CHECKBOX_SetState(hItem, 0);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-                IMAGE_SetBitmap(hItem, &Bitmapselectpatternunitdu);
+                RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
+                GUI_MEMDEV_WriteAt(Memdevselectpatternunitdu, yuandufenx, yuandufeny);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -288,8 +283,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_EndDialog(pMsg->hWin, 0);
         GUI_EndDialog(HwinKeyboard, 0);
         CreateselectgunDLG();
-        break;
-    case WM_PAINT: 
         break;
     default:
         WM_DefaultProc(pMsg);

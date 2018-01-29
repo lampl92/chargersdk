@@ -15,15 +15,15 @@ int selectgunay = 195;
 int selectgunbx = 455;
 int selectgunby = 195;
 
-int quitx = 100;
-int quity = 370;
+int quitx = 50;
+int quity = 350;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
   //  { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, IMAGE_CF_MEMDEV | IMAGE_CF_TILE, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 285, 195, 100, 100, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 455, 195, 100, 100, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 100, 400, 100, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 50, 350, 170, 70, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -84,7 +84,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPSELECTPATTERN:
         GUI_EndDialog(pMsg->hWin,0);
-        CreateselectpatternDLG();
+        CreateselectpatternbetterDLG();
         break;
     case MSG_JUMPHOME:
         GUI_EndDialog(pMsg->hWin, 0);

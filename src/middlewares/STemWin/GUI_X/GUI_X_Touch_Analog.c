@@ -51,12 +51,16 @@ Purpose     : Config / System dependent externals for GUI
 #define CALEBRATE_DEBUG 0
 #define CALEBRATE_TIME  500
 
+#define DOWN_VALID		2	/* 按下30ms 后, 开始统计ADC */
+
 volatile static uint16_t adc_x = 0, adc_y = 0;
 static uint8_t step = 0;
 GUI_PID_STATE State = { 0 };
 static uint8_t _pidFlag = 0;
 static uint16_t _pidCount = 0;
 static uint32_t _AsmtCount = 0;//进入广告时间计数
+static uint8_t s_count = 0;//按键消抖
+
 
 //static uint32_t _pointpause = 0;//
 
@@ -68,20 +72,62 @@ void GUI_TOUCH_X_ActivateX(void)
     {
         if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
         {
-            if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
+            if (s_count >= DOWN_VALID)
             {
-                _AsmtCount = 0;//一旦触屏则广告时间计数归零
-                _pidFlag = 1;
-               // Buzzer_control(1);
-                adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-                adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-
-                if (!bittest(winCreateFlag, 2))
+                if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
                 {
+                    adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+                    adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
                     State.x = adc_x;
                     State.y = adc_y;
                     State.Pressed = 1;
                     GUI_TOUCH_StoreStateEx(&State);
+                }
+            }
+            else
+            {
+                s_count++;
+            }
+        }
+        else
+        {
+            if (s_count > 0)
+            {
+                if (--s_count == 0)
+                {
+                    State.Pressed = 0;
+                    GUI_TOUCH_StoreStateEx(&State);
+                    s_count = 0;
+                }
+            }
+        }
+    }    
+}
+
+void GUI_TOUCH_X_ActivateX1(void)
+{
+    if ((calebrate_done & 0x01) == 1)//初始化完成
+    {
+        if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
+        {
+            if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
+            {
+                _AsmtCount = 0;//一旦触屏则广告时间计数归零
+                (_pidFlag == 0) ? (_pidFlag = 1) : (_pidFlag = 0);
+               // Buzzer_control(1);
+                if (_pidFlag == 1)
+                {
+                    adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+                    adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+
+                    if (!bittest(winCreateFlag, 2))
+                    {
+                        State.x = adc_x;
+                        State.y = adc_y;
+                        State.Pressed = 1;
+                        GUI_TOUCH_StoreStateEx(&State);
+                    }
+                    
                 }
             }
         }
@@ -124,6 +170,7 @@ void GUI_TOUCH_X_ActivateX(void)
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
             }
+            _pidFlag = 0;
         }
     }
 }

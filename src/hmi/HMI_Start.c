@@ -75,6 +75,8 @@ void MainTask(void)
     {
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
+        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
+        GUI_Exec();
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
         createGUI_BITMAP();
@@ -84,8 +86,6 @@ void MainTask(void)
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
-        WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
-        GUI_Exec();
         GUI_UC_SetEncodeUTF8();
 
 //        WM_HideWindow(_hWinAdvertizement);
@@ -108,7 +108,8 @@ void MainTask(void)
     while (1)
     {
 //	    printf_safe("exec start = %d\n", clock());
-        GUI_Exec();
+//        GUI_Exec();
+        GUI_Delay(8000);
 //	    printf_safe("exec end = %d\n", clock());
 //	    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(100);

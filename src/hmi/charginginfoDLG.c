@@ -3,7 +3,7 @@
 #include "touchtimer.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
-#define ID_IMAGE_0 (GUI_ID_USER + 0x01)
+//#define ID_IMAGE_0 (GUI_ID_USER + 0x01)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
 #define ID_TEXT_1 (GUI_ID_USER + 0x03)
 #define ID_TEXT_2 (GUI_ID_USER + 0x04)
@@ -11,7 +11,7 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "charginginfo", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "charginginfoImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
+//    { IMAGE_CreateIndirect, "charginginfoImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
     { TEXT_CreateIndirect, "kwhtext", ID_TEXT_0, 316, 180, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Atext", ID_TEXT_1, 315, 220, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "kwtext", ID_TEXT_2, 313, 260, 80, 24, 0, 0x0, 0 },
@@ -27,16 +27,20 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-        IMAGE_SetBitmap(hItem, &Bitmapcharginginfo);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
+//        IMAGE_SetBitmap(hItem, &Bitmapcharginginfo);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_BLACK, "20");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_BLACK, "12");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, "18");
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuitPress, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuit, 0, 0);
+        BUTTON_SetSkin(hItem ,SKIN_buttonquit);
+//        BUTTON_SetText(hItem, "");
+//        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapbackQuitPress, 0, 0);
+//        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapbackQuit, 0, 0);
+        break;
+    case WM_PAINT:
+        GUI_MEMDEV_WriteAt(Memdevcharginginfo, 0, 0);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

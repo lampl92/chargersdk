@@ -29,32 +29,35 @@ extern int keyboardy;
 #define ID_BUTTON_19  (GUI_ID_USER + 0x15)
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-    { BUTTON_CreateIndirect, "Button1", ID_BUTTON_0, 15, 15, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button2", ID_BUTTON_1, 75, 15, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button3", ID_BUTTON_2, 135, 15, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button-b", ID_BUTTON_3, 195, 15, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button4", ID_BUTTON_4, 15, 75, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button5", ID_BUTTON_5, 75, 75, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button6", ID_BUTTON_6, 135, 75, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button-cancel", ID_BUTTON_7, 195, 75, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button7", ID_BUTTON_8, 15, 135, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button8", ID_BUTTON_9, 75, 135, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button9", ID_BUTTON_10, 135, 135, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button-ok", ID_BUTTON_11, 195, 135, 50, 110, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_12, 15, 195, 110, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button-point", ID_BUTTON_13, 135, 195, 50, 50, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_0, 290, 155, 270, 240, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button1", ID_BUTTON_0, 0, 0, 65, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button2", ID_BUTTON_1, 65, 0, 70, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button3", ID_BUTTON_2, 135, 0, 67, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button-b", ID_BUTTON_3, 202, 0, 68, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button4", ID_BUTTON_4, 0, 60, 65, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button5", ID_BUTTON_5, 65, 60, 70, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button6", ID_BUTTON_6, 135, 60, 67, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button-cancel", ID_BUTTON_7, 202, 60, 68, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button7", ID_BUTTON_8, 0, 120, 65, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button8", ID_BUTTON_9, 65, 120, 70, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button9", ID_BUTTON_10, 135, 120, 67, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button-ok", ID_BUTTON_11, 202, 120, 68, 120, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_12, 0, 180, 135, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button-point", ID_BUTTON_13, 135, 180, 67, 60, 0, 0x0, 0 },
 };
 
 static int BUTTONSKB_GetPressKey(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo, I16 *pid, GUI_RECT *pr)
 {
 	I16 i;
+    I16 a;
 	GUI_PID_STATE statePID;
 	WIDGET_ITEM_DRAW_INFO DrawItemInfoL;
 	GUI_PID_GetState(&statePID);
 	statePID.x -= WM_GetWindowOrgX(pDrawItemInfo->hWin);
 	statePID.y -= WM_GetWindowOrgY(pDrawItemInfo->hWin);
 	*pid = 0;
-	for(i=0; i<GUI_COUNTOF(_aDialogCreate); i++)
+    a = GUI_COUNTOF(_aDialogCreate);
+	for(i=1; i<a; i++)
 	{
 		DrawItemInfoL.x0 = _aDialogCreate[i].x0;
 		DrawItemInfoL.y0 = _aDialogCreate[i].y0;
@@ -69,7 +72,7 @@ static int BUTTONSKB_GetPressKey(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo, I1
 			return *pid;
 		}
 	}
-	return -1;
+	return 0;
 }
 
 //Button控件的自定义绘制函数
@@ -94,8 +97,8 @@ int SKIN_buttonSKB(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 		{
     		GUI_MEMDEV_WriteAt(Memdevselectpatternkeyboard, keyboardx, keyboardy);
 			BUTTONSKB_GetPressKey(pDrawItemInfo, &Id, &r);
+    		if (!Id) break;
 			BUTTON_SetUserData(pDrawItemInfo->hWin, &Id, 2);
-			if(Id == -1) break;
             WM_SetUserClipRect(&r);
     		GUI_MEMDEV_WriteAt(Memdevselectpatternkeyboardpress, keyboardx, keyboardy);
 			WM_SetUserClipRect(0);

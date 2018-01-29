@@ -53,83 +53,77 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 {
     WM_HWIN      hItem;
-    if (gunstate[0] == GunfreeState)
+    switch (gunstate[0])
     {
+    case GunfreeState:
         GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_buttongunAscancode);
-    }
-    else if (gunstate[0] == GunchargingState)
-    {
+        break;
+    case GunchargingState:
         GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, gunstateax, gunstateay);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
-    }
-    else if (gunstate[0] == GunchargedoneState)
-    {
+        break;
+    case GunchargedoneState:
         GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, gunstateax, gunstateay);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
-    }
-    else if (gunstate[0] == Gunerror)
-    {
+        break;
+    case Gunerror:
         GUI_MEMDEV_WriteAt(MemdevhomegunAerror, gunstateax, gunstateay);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
+        break;
     }
-            
-    if (gunstate[1] == GunfreeState)
+    switch (gunstate[1])
     {
+    case GunfreeState:
         GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetSkin(hItem, SKIN_buttongunBscancode);
-    }
-    else if (gunstate[1] == GunchargingState)
-    {
+        break;
+    case GunchargingState:
         GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, gunstatebx, gunstateby);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
-    }
-    else if (gunstate[1] == GunchargedoneState)
-    {
+        break;
+    case GunchargedoneState:
         GUI_MEMDEV_WriteAt(MemdevhomegunBchargedone, gunstatebx, gunstateby);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
-    }
-    else if (gunstate[1] == Gunerror)
-    {
+        break;
+    case Gunerror:
         GUI_MEMDEV_WriteAt(MemdevhomegunBerror, gunstatebx, gunstateby);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetSkin(hItem, SKIN_buttongunBerror);
+        break;
     }
 }
 
 static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
 {
     SignalIntensity = getSignalIntensity();
-    if (SignalIntensity == 1)
+    switch (SignalIntensity)
     {
+    case 1:
         GUI_MEMDEV_WriteAt(Memdevhomesignal1, signalx, signaly);
-    }
-    else if (SignalIntensity == 2)
-    {
+        break;
+    case 2:
         GUI_MEMDEV_WriteAt(Memdevhomesignal2, signalx, signaly);
-    }
-    else if (SignalIntensity == 3)
-    {
+        break;
+    case 3:
         GUI_MEMDEV_WriteAt(Memdevhomesignal3, signalx, signaly);
-    }
-    else if (SignalIntensity == 4)
-    {
+        break;
+    case 4:
         GUI_MEMDEV_WriteAt(Memdevhomesignal4, signalx, signaly);
-    }
-    else if (SignalIntensity == 5)
-    {
+        break;
+    case 5:
         GUI_MEMDEV_WriteAt(Memdevhomesignal5, signalx, signaly);
-    }
-    else
-    {
+        break;
+    default:
         GUI_MEMDEV_WriteAt(Memdevhomesignal0, signalx, signaly);
+        break;
     }
     PreSignalIntensity = SignalIntensity;
 }
@@ -287,7 +281,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             updateprice(pMsg, ID_TEXT_1, ID_TEXT_2, &fontwryhcg24e);
             WM_RestartTimer(pMsg->Data.v, 1000);
         }
-        else if (pMsg->Data.v = _timertimeflash)
+        else if (pMsg->Data.v == _timertimeflash)
         {
             updatedatetime(pMsg, ID_TEXT_0, &fontwryhcg24e);
             WM_RestartTimer(pMsg->Data.v, 200);
