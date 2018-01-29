@@ -29,6 +29,11 @@ error_t net_eth_reconnect(void)
     
     return error;
 }
+void net_eth_disconnect(void)
+{
+    socketClose(socket_eth);
+    socket_eth = NULL;
+}
 
 /**
  * @fn  error_t net_eth_init(net_device_t *net_dev, uint32_t n)
