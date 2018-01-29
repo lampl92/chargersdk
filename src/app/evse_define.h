@@ -76,8 +76,8 @@
                                       defEventBitOrder_RemoteRTDataOK)
 
 /*------xHandleEventRemote*/
-#define defEventBitRemoteGetAccount     BIT_0
-#define defEventBitRemoteGotAccount     BIT_1
+#define defEventBitRemoteError          BIT_0
+
 /*------xHandleEventTCP*/
 #define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3

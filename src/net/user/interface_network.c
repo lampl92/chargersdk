@@ -52,7 +52,12 @@ Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip,
         TRACE_INFO("连接到服务器 %s:%d\r\n", ipAddrToString(&ipAddr, NULL), port); 
         error = socketConnect(socketfd, &ipAddr, port); 
         if (error) 
+        {
+            TRACE_ERROR("连接失败!\r\n"); 
+            socketClose(socketfd);
+            socketfd = NULL;
             break; 
+        }
         TRACE_INFO("连接成功\r\n"); 
     } while (0);
     *perror = error;

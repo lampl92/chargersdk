@@ -28,7 +28,8 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
         "NET_STATE_INIT",
         "NET_STATE_CONNECT",
         "NET_STATE_FTP",
-        "NET_STATE_TCP_ON"
+        "NET_STATE_TCP_ON",
+        "NET_STATE_DISCONNECT"
     };
 
     if (net_dev->state < arraysize(stateLabel) && new_state < arraysize(stateLabel))
@@ -44,8 +45,11 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     {
     case NET_STATE_TCP_ON:
         pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
-        xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
         xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
+        break;
+    case NET_STATE_DISCONNECT:
+        pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
+        xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
         break;
     }
     
@@ -75,11 +79,18 @@ static void netStateFTP(net_device_t *net_dev)
         netChangeState(net_dev, NET_STATE_TCP_ON);
     }
 }
+static void netStateDisconnect(net_device_t *net_dev)
+{
+    net_dev_disconnect();
+    netChangeState(net_dev, NET_STATE_CONNECT);
+}
 static void netStateTcpOn(net_device_t *net_dev)
 {
     char_t buffer[5000]; 
     size_t length; 
     error_t error; 
+    
+    EventBits_t uxBit;
     
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
@@ -90,6 +101,12 @@ static void netStateTcpOn(net_device_t *net_dev)
     if (length > 0)
     {
         pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
+    }
+    
+    uxBit = xEventGroupWaitBits(xHandleEventRemote, defEventBitRemoteError, pdTRUE, pdTRUE, 0);
+    if ((uxBit & defEventBitRemoteError) == defEventBitRemoteError)
+    {
+        netChangeState(net_dev, NET_STATE_DISCONNECT);
     }
 }
 static void netStateConnect(net_device_t *net_dev)
@@ -129,6 +146,9 @@ void vTaskTCPClient(void *pvParameters)
             break;
         case NET_STATE_TCP_ON:
             netStateTcpOn(net_dev);
+            break;
+        case NET_STATE_DISCONNECT:
+            netStateDisconnect(net_dev);
             break;
         case NET_STATE_FTP:
             netStateFTP(net_dev);
