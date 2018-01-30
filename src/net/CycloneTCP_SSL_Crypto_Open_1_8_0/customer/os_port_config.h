@@ -27,6 +27,8 @@
 #ifndef _OS_PORT_CONFIG_H
 #define _OS_PORT_CONFIG_H
 
+#define GPL_LICENSE_TERMS_ACCEPTED
+
 //Select underlying RTOS
 #define USE_FREERTOS
 

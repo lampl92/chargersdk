@@ -29,7 +29,6 @@
 #ifndef _NET_CONFIG_H
 #define _NET_CONFIG_H
 
-#define GPL_LICENSE_TERMS_ACCEPTED
 #define PPP_SUPPORT             ENABLED
 #define NET_TASK_PRIORITY       12
 #define DNS_CLIENT_SUPPORT      ENABLED
@@ -143,5 +142,8 @@
 
 //Number of sockets that can be opened simultaneously
 #define SOCKET_MAX_COUNT 10
+
+//SMTP over SSL/TLS
+#define SMTP_CLIENT_TLS_SUPPORT ENABLED
 
 #endif

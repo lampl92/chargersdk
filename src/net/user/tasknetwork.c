@@ -123,7 +123,7 @@ static void netStateConnect(net_device_t *net_dev)
         vTaskDelay(10000);
     }
 }
-
+extern error_t smtpClientTest(void);
 void vTaskTCPClient(void *pvParameters)
 {
     net_device_t *net_dev;
@@ -143,6 +143,7 @@ void vTaskTCPClient(void *pvParameters)
             break;
         case NET_STATE_CONNECT:
             netStateConnect(net_dev);
+            smtpClientTest();
             break;
         case NET_STATE_TCP_ON:
             netStateTcpOn(net_dev);
