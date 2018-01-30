@@ -19,7 +19,30 @@ error_t smtpClientTest(void)
 {
     error_t error;
     int i;
+    uint32_t value;
 
+    RNG_HandleTypeDef hrng; 
+    __HAL_RCC_RNG_CLK_ENABLE();
+    hrng.Instance = RNG;
+    HAL_RNG_Init(&hrng);
+
+       //Generate a random seed
+    for (i = 0; i < 32; i += 4)
+    {
+       //Wait for the RNG to contain a valid data
+        while (HAL_RNG_GetState(&hrng) != HAL_RNG_STATE_READY)
+            ;
+
+              //Get 32-bit random value
+        value = HAL_RNG_GetRandomNumber(&hrng);
+
+        //Copy random value
+        seed[i] = value & 0xFF;
+        seed[i + 1] = (value >> 8) & 0xFF;
+        seed[i + 2] = (value >> 16) & 0xFF;
+        seed[i + 3] = (value >> 24) & 0xFF;
+    }
+    
        //PRNG initialization
     error = yarrowInit(&yarrowContext);
     //Any error to report?
