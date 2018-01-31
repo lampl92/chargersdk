@@ -379,8 +379,9 @@ void POWER_L_CLOSE(void)
 }
 void POWER_L_OPEN(void)
 {
-    RELAY2_OFF;// flag_power_out_l = 0;
+    RELAY2_OFF;// 
     POWER_L_OFF;
+    flag_power_out_l = 0;
     flag_pwm_out_l = 0;
 }
 
