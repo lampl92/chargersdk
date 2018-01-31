@@ -93,6 +93,7 @@ typedef struct _CONStatus
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
+    EventGroupHandle_t xHandleEventTimerCBNotify;
     TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
     TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
     TimerHandle_t xHandleTimerCharge;   //Charge状态判断过程中使用

@@ -1585,6 +1585,7 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
+    vEventGroupDelete(pCON->status.xHandleEventTimerCBNotify);
     xTimerDelete(pCON->status.xHandleTimerRTData, 100);
     xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
@@ -1631,6 +1632,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleEventCharge    = xEventGroupCreate();
     pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
+    pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
