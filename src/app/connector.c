@@ -785,7 +785,7 @@ static ErrorCode_t GetCPState(void *pvCON)
                 cp_err_cont++;
                 tmpCPState = pCON->status.xCPState;
             }
-            if (cp_err_cont >= 100)//50ms
+            if (cp_err_cont >= 1)//50ms
             {
                 cp_err_cont = 0;
                 tmpCPState = CP_ERR;
@@ -1509,9 +1509,9 @@ static ErrorCode_t StopCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-
+    clock_t old;
+    printf_safe("set cp clock = %d\n", old = clock());
     SetCPSwitch(pCON, SWITCH_OFF);
-    vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.xCPState = CP_12V;
 #endif
@@ -1520,14 +1520,17 @@ static ErrorCode_t StopCharge(void *pvCON)
        pCON->status.xCPState == CP_9V ||
        pCON->status.xCPState == CP_12V)
     {
+        printf_safe("cp switch ok clock = %d\n", clock() - old );
+        old = clock();
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
             defEventBitCONS2Opened,
             pdFALSE,
             pdTRUE,
             100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
-        //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
+        //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
 
         errcode = SetRelay(pvCON, SWITCH_OFF);
+        printf_safe("total = %d\n", clock() - old);
         vTaskDelay(defRelayDelay);
         THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
 #ifdef DEBUG_DIAG_DUMMY
@@ -1538,6 +1541,10 @@ static ErrorCode_t StopCharge(void *pvCON)
             pCON->status.ucRelayNState == SWITCH_OFF)
         {
             errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_RELAY_PASTE;
         }
     }
     else
