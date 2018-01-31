@@ -37,13 +37,44 @@ void vTaskEVSERFID(void *pvParameters)
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID
+        
+
+        
+        
+        
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
 	        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//bugfix：避免上次刷卡处理过程中再次检测到卡，导致充电完成后再次显示卡信息
+            
+            /////////////////
+            uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdTRUE, 0);
+            if ((uxBits & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
+            {
+#ifdef TEST_TIME_rfid
+                printf_safe("begin %s %d\n", TEST_TIME_rfid, clock());
+#endif // TEST_TIME_rfid 
+                THROW_ERROR(defDevID_RFID, errcode = pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
+#ifdef TEST_TIME_rfid
+                printf_safe("end %s %d\n", TEST_TIME_rfid, clock());
+#endif // TEST_TIME_rfid 
+                if (errcode == ERR_NO)
+                {
+                    pEVSE->status.ulSignalFault &= ~defSignalEVSE_Fault_RFID;
+                }
+                else
+                {
+                    pEVSE->status.ulSignalFault |= defSignalEVSE_Fault_RFID;
+                }
+            }
+        
+            /////////////////////
+            
+            
+            
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
-                                         pdTRUE, pdTRUE, portMAX_DELAY);
+                                         pdTRUE, pdTRUE, 0);
             if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. 检测到卡
             {
                 ul2uc ul2ucTmp;
