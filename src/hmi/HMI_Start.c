@@ -61,31 +61,7 @@ p_inf *AdvertisementImage;
 
 
 static void vTaskReadPic(void *pvParameters)
-{
-    ChargeDoneImage = readPicInf(pathChargeDoneImage);
-    CardInfoImage = readPicInf(pathCardInfoImage);
-    ChargingImage = readPicInf(pathChargingImage);
-    GetCardInfoImage = readPicInf(pathGetCardInfoImage);
-    cartoonImage0 = readPicInf(pathCartoonImage0);
-    cartoonImage1 = readPicInf(pathCartoonImage1);
-    cartoonImage2 = readPicInf(pathCartoonImage2);
-    cartoonImage3 = readPicInf(pathCartoonImage3);
-    cartoonImage4 = readPicInf(pathCartoonImage4);
-    cartoonImage5 = readPicInf(pathCartoonImage5);
-    CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
-    CardArrearsImage = readPicInf(pathCardArrearsImage);
-    PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
-    CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
-    StopByCardImage = readPicInf(pathStopByCardImage);
-    StopByQRImage = readPicInf(pathStopByQRImage);
-    ChargingVoidImage = readPicInf(pathChargingVoidImage);
-    OrderUploadImage = readPicInf(pathOrderUploadImage);
-    NormalDoneImage = readPicInf(pathNormalDoneImage);
-    FullDoneImage = readPicInf(pathFullDoneImage);
-    DevErrDoneImage = readPicInf(pathDevErrDoneImage);
-    MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
-    ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-    
+{ 
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 void MainTask(void)
@@ -116,6 +92,30 @@ void MainTask(void)
 
         AdvertisementImage = readPicInf(pathAdvertisementImage);
         HomeImage = readPicInf(pathHomeImage);
+        
+        ChargeDoneImage = readPicInf(pathChargeDoneImage);
+        CardInfoImage = readPicInf(pathCardInfoImage);
+        ChargingImage = readPicInf(pathChargingImage);
+        GetCardInfoImage = readPicInf(pathGetCardInfoImage);
+        cartoonImage0 = readPicInf(pathCartoonImage0);
+        cartoonImage1 = readPicInf(pathCartoonImage1);
+        cartoonImage2 = readPicInf(pathCartoonImage2);
+        cartoonImage3 = readPicInf(pathCartoonImage3);
+        cartoonImage4 = readPicInf(pathCartoonImage4);
+        cartoonImage5 = readPicInf(pathCartoonImage5);
+        CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
+        CardArrearsImage = readPicInf(pathCardArrearsImage);
+        PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
+        CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
+        StopByCardImage = readPicInf(pathStopByCardImage);
+        StopByQRImage = readPicInf(pathStopByQRImage);
+        ChargingVoidImage = readPicInf(pathChargingVoidImage);
+        OrderUploadImage = readPicInf(pathOrderUploadImage);
+        NormalDoneImage = readPicInf(pathNormalDoneImage);
+        FullDoneImage = readPicInf(pathFullDoneImage);
+        DevErrDoneImage = readPicInf(pathDevErrDoneImage);
+        MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
+        ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);
