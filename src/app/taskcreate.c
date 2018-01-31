@@ -50,8 +50,8 @@
 //优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
 #define defPRIORITY_TaskOTA                 31/* 最高*/
 
-#define defPRIORITY_TaskEVSECharge          27
-#define defPRIORITY_TaskEVSEDiag            25
+#define defPRIORITY_TaskEVSEDiag            27
+#define defPRIORITY_TaskEVSECharge          25
 #define defPRIORITY_TaskEVSEMonitor         23
 //#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 22
 #define defPRIORITY_TaskEVSERFID            20
@@ -164,20 +164,18 @@ void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
-#if 1
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
     
+#if EVSE_USING_NET
     pModem = DevModemCreate();
 
     modem_open(pModem);
     modem_init(pModem);
     Modem_Poll(pModem);//这是任务
-#else
-    while (1)
+#else    while (1)
     {
-        yaffs2_main();
         vTaskDelay(1000);
     }
 #endif
