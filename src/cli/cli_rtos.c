@@ -1,8 +1,8 @@
 #include "includes.h"
 #include "task.h"
 #include "interface.h"
-uint8_t acTaskStatusBuffer[500];
 
+uint8_t acTaskStatusBuffer[2000];
 void cli_tasklist_fnt(int argc, char **argv)
 {
     uint32_t FreeBytesRemaining = 0;
