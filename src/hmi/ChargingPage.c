@@ -80,7 +80,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "% 2d", min);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), temp_buf);// min
     sprintf(temp_buf, "% 2d", sec);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_BLUE, temp_buf);
+    Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_WHITE, temp_buf);
     
 //    pCON->status.GetChargingCurrent(pCON);
     sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//充电电流   
