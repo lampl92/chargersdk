@@ -32,7 +32,9 @@ void vTaskEVSERFID(void *pvParameters)
     
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
+#if EVSE_USING_RFID
         xTimerStop(xHandleTimerRFID, 100); 
+#endif
     }
     while(1)
     {
@@ -55,7 +57,9 @@ void vTaskEVSERFID(void *pvParameters)
                 sprintf(pRFIDDev->order.strCardID, "%016u", ul2ucTmp.ulVal);
                 printf_safe("CardID :%s\n", pRFIDDev->order.strCardID);
                 pRFIDDev->state = STATE_RFID_GOTID;
+#if EVSE_USING_RFID
                 xTimerStop(xHandleTimerRFID, 100); 
+#endif
             }
             break;
         case STATE_RFID_GOTID:
@@ -306,7 +310,9 @@ void vTaskEVSERFID(void *pvParameters)
                                 defEventBitGotIDtoHMI);
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
+#if EVSE_USING_RFID
             xTimerStart(xHandleTimerRFID, 100); 
+#endif
             pRFIDDev->state = STATE_RFID_NOID;
             break;
         default:

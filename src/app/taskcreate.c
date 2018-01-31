@@ -277,7 +277,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
 #if EVSE_USING_RFID
-    xTimerStart(xHandleTimerRFID, 0);
+    //xTimerStart(xHandleTimerRFID, 0);
 #endif
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器
