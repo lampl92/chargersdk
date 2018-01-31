@@ -226,6 +226,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.tStopTime = time(NULL);
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
         break;
+    default:
+        break;
     }
     return errcode;
 }
@@ -255,6 +257,8 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = testtime;
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
+        break;
+    default:
         break;
     }
     return errcode;
