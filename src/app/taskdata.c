@@ -215,6 +215,10 @@ void vTaskEVSEData(void *pvParameters)
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
                 /**存储订单 */
+#if EVSE_USING_NET
+#else
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
+#endif
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
                                                  defEventBitOrderUseless,
                                                  pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
@@ -225,7 +229,6 @@ void vTaskEVSEData(void *pvParameters)
 		            /* 在这里存储订单*/
     	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
 		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
@@ -236,7 +239,6 @@ void vTaskEVSEData(void *pvParameters)
 					/* (rgw#1): 在这里存储订单*/
     	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToChargetask);
 		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
 		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
@@ -362,6 +364,15 @@ void vTaskEVSEData(void *pvParameters)
                         case defSignalCON_Alarm_AC_C_CurrUp_Cri:
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
                             break;
+                        case defSignalCON_Alarm_AC_A_Freq_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相频率");
+                            break;
+                        case defSignalCON_Alarm_AC_B_Freq_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相频率");
+                            break;
+                        case defSignalCON_Alarm_AC_C_Freq_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相频率");
+                            break;
                         default:
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知警告");
                             break;
@@ -397,14 +408,8 @@ void vTaskEVSEData(void *pvParameters)
                         case defSignalCON_Fault_AC_N_Temp: 
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "N相温度检测");
                             break;
-                        case defSignalCON_Fault_AC_A_RelayPaste: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "A(L)相继电器粘连");
-                            break;
-                        case defSignalCON_Fault_AC_B_RelayPaste: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "B相继电器粘连");
-                            break;
-                        case defSignalCON_Fault_AC_C_RelayPaste: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "C相继电器粘连");
+                        case defSignalCON_Fault_RelayPaste: 
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "继电器粘连");
                             break;
                         case defSignalCON_Fault_CP: 
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "CP检测");
