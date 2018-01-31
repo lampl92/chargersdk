@@ -35,13 +35,11 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
         memset(pRfid->status.ucCardID, 0, defCardIDLength);
         memmove(pRfid->status.ucCardID, pmt626cmd->ucRecvdOptData, ulRecvdOptLen);
         memset(pmt626cmd->ucRecvdOptData, 0, ulRecvdOptLen);
-        //pRfid->status.ucFoundCard = 1;
         xEventGroupSetBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);
     }
     else if(state == MT_STATE_N)
     {
-        xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//清除在其他流程中误刷卡
-        //pRfid->status.ucFoundCard = 0;
+        //xEventGroupClearBits(pRfid->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//清除在其他流程中误刷卡
     }
     else if(state == MT_COM_FAIL)
     {
