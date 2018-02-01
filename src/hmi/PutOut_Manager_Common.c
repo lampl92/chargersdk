@@ -178,14 +178,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 
                 if (pCont->state == STATE_CON_CHARGING)
                 {
-                    xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                     CreateChargingPage();
                 }
                 else
                 {
                     if (pCont->state == statelog)
                     {
-                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                         CreateHomePage();   
                     }
                     else
@@ -197,14 +195,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                             10000);//要比remote中的order超时（60s）长
                         if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
                         {
-                            xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
-                            xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-                            xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
                             CreateHomePage();
                         }
                         else
                         {
-                            xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                             CreateHomePage();
                         }
                     }
@@ -253,7 +247,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                        0);
 //                    if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
 //                    {            
-//                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
 //                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
 //                    }
 //                    CreateHomePage();

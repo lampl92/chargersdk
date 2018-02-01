@@ -84,14 +84,8 @@
 
 #define defEventBitOrderTmpTimer                 BIT_19
 
-#if EVSE_USING_GUI1
-#define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
-                                      defEventBitOrder_RemoteRTDataOK | \
-                                      defEventBitOrder_HMIDispOK)
-#else
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
-#endif
 
 /*------xHandleEventRemote*/
 #define defEventBitRemoteGetAccount     BIT_0
@@ -107,8 +101,6 @@
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
-#define defEventBitHMI_ChargeReqDispDone    BIT_1
-#define defeventBitHMI_ChargeReqDispDoneOK  BIT_2
 #define defEventBitHMI_ChargeReqClick       BIT_3
 #define defEventBitHMI_ChargeReqClickOK     BIT_4
 #define defEventBitHMI_ChargeReqLockLcdOK   BIT_5

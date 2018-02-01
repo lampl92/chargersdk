@@ -1405,14 +1405,12 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
             pCont = CONGetHandle(0);
             if (pCont->state == STATE_CON_CHARGING)
             {
-                xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                 CreateChargingPage();
             }
             else
             {
                 if (pCont->state == statelog)
                 {
-                    xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                     CreateHomePage();   
                 }
                 else
@@ -1424,14 +1422,10 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
                         10000);//要比remote中的order超时（60s）长
                     if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
                     {
-                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
-                        xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
                         CreateHomePage();
                     }
                     else
                     {
-                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                         CreateHomePage();
                     }
                 }

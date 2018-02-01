@@ -358,11 +358,9 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_STOPCHARGE:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//通知HMI显示结束订单
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
 #ifdef DEBUG_DIAG_DUMMY
-                xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
                 pCON->state = STATE_CON_RETURN;
                 break;
 #endif
@@ -377,12 +375,12 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     stop_try++;
                     printf_safe("paste!! try %d\n", stop_try);
-                    if (stop_try >= 5)
+                    if (stop_try >= 50)
                     {
                         pCON->state = STATE_CON_UNLOCK;//即便继电器失败, 也要解锁枪锁
                         break;
                     }
-                    vTaskDelay(1000);
+                    //vTaskDelay(1000);
                 }
                 break;
             case STATE_CON_UNLOCK:
