@@ -119,7 +119,7 @@ GUI_BITMAP BitmapBeijing;
         //ø®–≈œ¢“≥Õº∆¨
         GUI_BITMAP Bitmapcardinfoarrears;
         GUI_BITMAP Bitmapcardinfoback;
-        GUI_BITMAP Bitmapcardinfoempty;
+GUI_BITMAP Bitmapcardinforeadycharging;
         GUI_BITMAP Bitmapcardinfoget;
         GUI_BITMAP Bitmapcardinfoplug;
         GUI_BITMAP Bitmapcardinfounregister;
@@ -209,12 +209,14 @@ GUI_MEMDEV_Handle MemdevbackQuit;
 GUI_MEMDEV_Handle MemdevbackQuitPress;
 
 //ø®–≈œ¢“≥Õº∆¨
-GUI_MEMDEV_Handle Memdevcardinfoarrears;
+//GUI_MEMDEV_Handle Memdevcardinfoarrears;
+GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
+GUI_MEMDEV_Handle Memdevcardinfostartfail;
 GUI_MEMDEV_Handle Memdevcardinfoback;
-GUI_MEMDEV_Handle Memdevcardinfoempty;
+GUI_MEMDEV_Handle Memdevcardinforeadycharging;
 GUI_MEMDEV_Handle Memdevcardinfoget;
 GUI_MEMDEV_Handle Memdevcardinfoplug;
-GUI_MEMDEV_Handle Memdevcardinfounregister;
+//GUI_MEMDEV_Handle Memdevcardinfounregister;
 
 #pragma endregion
 
@@ -398,12 +400,12 @@ void createGUI_BITMAP()
     BitmapKeyboardpointpress = readDtafile(pathKeyboardpointpress);
         
     //ø®–≈œ¢“≥Õº∆¨
-    Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
+    //Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
     Bitmapcardinfoback = readDtafile(pathcardinfoback);
-    Bitmapcardinfoempty = readDtafile(pathcardinfoempty);
+    Bitmapcardinforeadycharging = readDtafile(pathcardinforeadycharging);
     Bitmapcardinfoget = readDtafile(pathcardinfoget);
     Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
-    Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
+    //Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
         
     //÷˜“≥Õº∆¨∂¡»°
     Bitmaphomeback = readDtafile(pathhomeback);
@@ -522,12 +524,14 @@ void creatememdev()
     MemdevbackQuitPress = createMemdev(pathbackquitpress);
 
     //ø®–≈œ¢“≥Õº∆¨
-    Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
+    //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
+    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
+    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);
     Memdevcardinfoback = createMemdev(pathcardinfoback);
-    Memdevcardinfoempty = createMemdev(pathcardinfoempty);
+    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging);
     Memdevcardinfoget = createMemdev(pathcardinfoget);
     Memdevcardinfoplug = createMemdev(pathcardinfoplug);
-    Memdevcardinfounregister = createMemdev(pathcardinfounregister);
+    //Memdevcardinfounregister = createMemdev(pathcardinfounregister);
         
 }
 

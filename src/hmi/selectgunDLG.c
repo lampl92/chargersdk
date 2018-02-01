@@ -20,7 +20,6 @@ int quity = 350;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-  //  { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, IMAGE_CF_MEMDEV | IMAGE_CF_TILE, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 285, 195, 100, 100, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 455, 195, 100, 100, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 50, 350, 170, 70, 0, 0x0, 0 },
@@ -31,10 +30,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int Id;
     WM_HWIN hItem;
     switch (pMsg->MsgId) {
-    case WM_INIT_DIALOG:
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
-//        IMAGE_SetBitmap(hItem, &BitmapSelectGunBack);
-        
+    case WM_INIT_DIALOG:        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_selectbutton);
         

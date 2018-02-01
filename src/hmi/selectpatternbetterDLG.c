@@ -157,6 +157,34 @@ static void RADIO(WM_HWIN hItem1, WM_HWIN hItem2, WM_HWIN hItem3, WM_HWIN hItem4
     CHECKBOX_SetState(hItem3, 0);
     CHECKBOX_SetState(hItem4, 0);
 }
+
+static void paintyuandufen(WM_MESSAGE * pMsg)
+{
+    int i;
+    for (i = 0; i < 4; i++)
+    {
+        if (CHECKBOX_GetState(WM_GetDialogItem(pMsg->hWin, GUI_ID_USER + 0x12 + i)) == 1)
+        {
+            break;
+        }
+    }
+    switch (i)
+    {
+    case 0:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternunitno, yuandufenx, yuandufeny);
+        break;
+    case 1:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
+        break;
+    case 2:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternunityuan, yuandufenx, yuandufeny);
+        break;
+    case 3:
+        GUI_MEMDEV_WriteAt(Memdevselectpatternunitdu, yuandufenx, yuandufeny);
+        break;
+    }
+}
+
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int NCode;
     int Id;
@@ -165,7 +193,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "");
-        GUI_MEMDEV_WriteAt(Memdevselectpatternunitno, yuandufenx, yuandufeny);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetSkin(hItem, SKIN_checkboxfull);
@@ -187,6 +214,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break; 
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevselectpatternback, 0, 0);
+        paintyuandufen(pMsg);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -201,8 +229,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
-                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
-                GUI_MEMDEV_WriteAt(Memdevselectpatternunitno, yuandufenx, yuandufeny);
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));                
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -220,8 +247,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
-                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
-                GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));              
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -239,8 +265,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
-                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));
-                GUI_MEMDEV_WriteAt(Memdevselectpatternunityuan, yuandufenx, yuandufeny);
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));              
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -259,7 +284,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));
-                GUI_MEMDEV_WriteAt(Memdevselectpatternunitdu, yuandufenx, yuandufeny);
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:

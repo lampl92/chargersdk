@@ -25,7 +25,7 @@ WM_HWIN cur_win;//记录当前界面
 GUI_QR_INFO QR_info;
 
 static void vTaskReadPic(void *pvParameters)
-{ 
+{
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 

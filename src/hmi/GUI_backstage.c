@@ -17,62 +17,62 @@ void GBSTask()
     BaseType_t xResult;
     EventBits_t uxBitHMI;
     CON_t *pCON;   
-    gbsstate = HomeState;
+    gbsstate = StateHome;
     
     while (1)
     {
         switch (gbsstate)
         {
-        case HomeState:
+        case StateHome:
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
-                gbsstate = GetGunInfoState;
+                gbsstate = StateGetGunInfo;
             }
             break;
-        case GetGunInfoState:
+        case StateGetGunInfo:
             if (Tempuserlike.UserLikeFlag == 1)
             {
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;
-                gbsstate = GetBalanceState;
+                gbsstate = StatePrepareCharge;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
-                gbsstate = HomeState;
+                gbsstate = StateHome;
             }
             break;
-        case GetBalanceState:
+        case StatePrepareCharge:
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
                 GunInfo[Tempuserlike.user_like.ucCONID].rfid_pkg = Temprfid_pkg;
                 if ((Temprfid_pkg.ucAccountStatus == 1) && (Temprfid_pkg.ucCardStatus != 2))
                 {                  
-                    gbsstate = KnowBalanceState;
+                    gbsstate = StateNetTimeout;
                 }
                 else
                 {
-                    gbsstate = HomeState;
+                    gbsstate = StateHome;
                 }
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
-                gbsstate = HomeState;
+                gbsstate = StateHome;
             }
             break;
-        case KnowBalanceState:
+        case StateNetTimeout:
             pCON = CONGetHandle(Tempuserlike.user_like.ucCONID);
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
             {
-                gbsstate = HomeState;
+                gbsstate = StateHome;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
-                gbsstate = HomeState;
+                gbsstate = StateHome;
             }
             break;
         }

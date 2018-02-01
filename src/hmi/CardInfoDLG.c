@@ -6,48 +6,94 @@
 #include "DIALOG.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
-#define ID_IMAGE_0 (GUI_ID_USER + 0x01)
 #define ID_TEXT_2 (GUI_ID_USER + 0x07)
 #define ID_TEXT_3 (GUI_ID_USER + 0x08)
-#define ID_IMAGE_2 (GUI_ID_USER + 0x09)
 #define ID_BUTTON_0 (GUI_ID_USER + 0x0A)
 
-#define ID_TimerTime    1
-#define ID_TimerFlush   2
-#define ID_TimerSignal  3
+#define ID_promptTime    1
 
-static WM_HTIMER _timerRTC, _timerData, _timerSignal;
+static WM_HTIMER _timerprompt;
+
+typedef enum promptEnum
+{
+    promptGetInfoState = 1,    
+    promptUnavailableState,
+    promptReadyChargingState,
+    promptPleasePlugState,
+    promptstartfailState,
+}PROMPTSTATE_E;
+
+PROMPTSTATE_E promptstate;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "CardInfoback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
     { TEXT_CreateIndirect, "CardNumber", ID_TEXT_2, 326, 165, 280, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Balance", ID_TEXT_3, 326, 223, 280, 24, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "PromptImage", ID_IMAGE_2, 240, 316, 319, 59, 0, 0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 100, 400, 100, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 50, 350, 170, 70, 0, 0x0, 0 },
 };
+
+static void showprompt()
+{
+    switch (promptstate)
+    {
+    case promptGetInfoState:
+        GUI_MEMDEV_WriteAt(Memdevcardinfoget, 240, 316);
+        break;
+    case promptUnavailableState:
+        GUI_MEMDEV_WriteAt(MemdevcardinfoUnavailable, 240, 316);
+        break;
+    case promptReadyChargingState:
+        GUI_MEMDEV_WriteAt(Memdevcardinforeadycharging, 240, 316);
+        break;
+    case promptPleasePlugState:
+        GUI_MEMDEV_WriteAt(Memdevcardinfoplug, 240, 316);
+        break;
+    case promptstartfailState:
+        GUI_MEMDEV_WriteAt(Memdevcardinfostartfail, 240, 316);
+        break;
+    }
+}
+
+static void transformprompt(PROMPTSTATE_E state)
+{
+    switch (state)
+    {
+    case promptGetInfoState:
+//        if (gbsstate != StatePrepareCharge)
+//        {
+//            
+//        }
+        break;
+    case promptUnavailableState:
+        
+        break;
+    case promptReadyChargingState:
+       
+        break;
+    case promptPleasePlugState:
+       
+        break; 
+    case promptstartfailState:
+
+        break;
+    }
+}
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int NCode;
     int Id;
-    const void * pData;
     WM_HWIN      hItem;
-    U32          FileSize;
+
+    CON_t *pCON;
+    pCON = CONGetHandle(0);//选择枪的时候获取pCON
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, "1234567890");//卡号
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "?");        
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);   //背景
-        IMAGE_SetBitmap(hItem, &Bitmapcardinfoback);
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2); //提示
-        IMAGE_SetBitmap(hItem, &Bitmapcardinfoget);        
+        promptstate = promptGetInfoState;
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetText(hItem, "");
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_PRESSED, &BitmapQuit, 0, 0);
-        BUTTON_SetBitmapEx(hItem, BUTTON_BI_UNPRESSED, &BitmapQuitPress, 0, 0);
+        BUTTON_SetSkin(hItem ,SKIN_buttonquit);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -65,18 +111,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case WM_PAINT:
+        GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
+        showprompt();
         break;
     case WM_TIMER:
-        if (pMsg->Data.v == _timerRTC)
-        {
-            WM_RestartTimer(pMsg->Data.v, 300);
-        }
-        if (pMsg->Data.v == _timerSignal)
-        {        
-            WM_RestartTimer(pMsg->Data.v, 100);
-        }
-        if (pMsg->Data.v == _timerData)
-        {
+        if (pMsg->Data.v == _timerprompt)
+        { 
+//            if (gbsstate == StatePrepareCharge)
+//            {
+//                
+//            }
             WM_RestartTimer(pMsg->Data.v, 300);
         }
         break;
@@ -98,8 +142,6 @@ WM_HWIN CreateCardInfoDLG(void);
 WM_HWIN CreateCardInfoDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    _timerRTC = WM_CreateTimer(hWin, ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(hWin, ID_TimerFlush, 10, 0);
-    _timerSignal = WM_CreateTimer(hWin, ID_TimerSignal, 300, 0);
+    _timerprompt = WM_CreateTimer(hWin, ID_promptTime, 20, 0);
     return 0;
 }

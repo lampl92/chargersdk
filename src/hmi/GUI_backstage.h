@@ -10,10 +10,14 @@
 
 typedef enum MyEnum
 {
-    HomeState,
-    GetGunInfoState,
-    GetBalanceState,
-    KnowBalanceState,
+    StateHome,
+    StateGetGunInfo,
+    StatePrepareCharge,
+    StateNetTimeout,
+    StateCardconditionNotOk,
+    StatePlugTimeout,
+    StatePleasePlug,
+    StateStartOk,
 }GBSState_E;//后台状态
 
 typedef enum gunenum

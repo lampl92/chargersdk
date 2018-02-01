@@ -16,7 +16,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "dutext", ID_TEXT_0, 365, 195, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "yuantext", ID_TEXT_1, 365, 235, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "fentext", ID_TEXT_2, 365, 275, 80, 24, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 100, 400, 100, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 50, 350, 170, 70, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {

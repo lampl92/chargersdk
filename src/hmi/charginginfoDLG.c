@@ -15,7 +15,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "kwhtext", ID_TEXT_0, 316, 180, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Atext", ID_TEXT_1, 315, 220, 80, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "kwtext", ID_TEXT_2, 313, 260, 80, 24, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 100, 400, 100, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 50, 350, 170, 70, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {

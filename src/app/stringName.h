@@ -92,12 +92,14 @@
 //*************
 
 //¿¨ÐÅÏ¢Í¼Æ¬Â·¾¶
-#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
+//#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
+#define pathcardinfoUnavailable        "nand/system/cardinfoUnavailable.dta"
+#define pathcardinfostartfail        "nand/system/cardinfostartfail.dta"
 #define pathcardinfoback        "nand/system/cardinfoback.dta"
-#define pathcardinfoempty        "nand/system/cardinfoempty.dta"
+#define pathcardinforeadycharging        "nand/system/cardinforeadycharging.dta"
 #define pathcardinfoget        "nand/system/cardinfoget.dta"
 #define pathcardinfoplug        "nand/system/cardinfoplug.dta"
-#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
+//#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
 //******************
 
 //Ö÷Ò³Í¼Æ¬Â·¾¶
