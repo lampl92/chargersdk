@@ -213,6 +213,7 @@ void vTaskEVSEData(void *pvParameters)
                     pCON->order.ucStopType = defOrderStopType_Scram;
                 }
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                vTaskDelay(3000);//等待其他地方使用
 
                 /**存储订单 */
 #if EVSE_USING_NET
