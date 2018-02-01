@@ -469,7 +469,6 @@ void vTaskEVSECharge(void *pvParameters)
                 dev_err = 0;
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed); //清除认证标志
                 THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
-                vTaskDelay(defRelayDelay);
                 pCON->status.ucLoadPercent = 100;
                 pCON->state = STATE_CON_IDLE;
                 break;
