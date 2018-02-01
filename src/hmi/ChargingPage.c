@@ -42,9 +42,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "Time", ID_TEXT_1, 136, 4, 120, 24, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "CartoonImage", ID_IMAGE_2, 105, 116, 228, 112, 0, 0, 0 },
     { IMAGE_CreateIndirect, "PromptImage", ID_IMAGE_3, 65, 315, 319, 59, 0, 0, 0 },
-    { TEXT_CreateIndirect, "Hour", ID_TEXT_2, 168, 262, 48, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "min", ID_TEXT_3, 254, 262, 48, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "sec", ID_TEXT_4, 330, 262, 48, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "Hour", ID_TEXT_2, 168, 259, 48, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "min", ID_TEXT_3, 254, 259, 48, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "sec", ID_TEXT_4, 330, 259, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "ChargingCurrent", ID_TEXT_5, 582, 107, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "ChargingPower", ID_TEXT_6, 582, 158, 48, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "TotalPower", ID_TEXT_7, 582, 213, 48, 24, 0, 0x0, 0 },
@@ -80,7 +80,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     sprintf(temp_buf, "% 2d", min);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_3), temp_buf);// min
     sprintf(temp_buf, "% 2d", sec);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_WHITE, temp_buf);
+    Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, FONT_COLOR, temp_buf);
     
 //    pCON->status.GetChargingCurrent(pCON);
     sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//充电电流   
@@ -169,17 +169,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             IMAGE_SetBMP(hItem, ChargingVoidImage->pfilestring, ChargingVoidImage->pfilesize);
         }      
       
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_WHITE," ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &SIF24_Font, GUI_WHITE, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, FONT_COLOR," ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_9), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &SIF24_Font, FONT_COLOR, " ");
         break;
     case WM_PAINT://MSG_UPDATEDATA:
 

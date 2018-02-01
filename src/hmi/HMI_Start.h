@@ -11,6 +11,8 @@
 #include "keyboard.h"
 #include "lcddrv.h"
 #include "user_app.h"
+
+#define FONT_COLOR      0xFF330000
 extern GUI_HMEM    qr_hmem;
 
 extern int SignalIntensity;

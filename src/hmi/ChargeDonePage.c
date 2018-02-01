@@ -122,8 +122,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
         IMAGE_SetBMP(hItem, ChargeDoneImage->pfilestring, ChargeDoneImage->pfilesize);
         
@@ -161,13 +161,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
         sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_WHITE, temp_buf);//充入电量
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
         sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_WHITE, temp_buf);//服务费
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//服务费
         sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_WHITE, temp_buf);//电费
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//电费
         sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_WHITE, temp_buf);//消费总额  
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//消费总额  
         pCON = CONGetHandle(0);
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
             defEventBitOrderMakeFinish,
@@ -184,13 +184,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", hour);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_WHITE, temp_buf);//hour
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, temp_buf);//hour
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", min);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_WHITE, temp_buf);// min
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, temp_buf);// min
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", sec);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_WHITE, temp_buf);// sec
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, FONT_COLOR, temp_buf);// sec
         }
             break;
         case WM_PAINT:

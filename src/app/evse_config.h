@@ -13,7 +13,7 @@
 #endif
 
 #ifndef EVSE_USING_NET
-#define EVSE_USING_NET              1
+#define EVSE_USING_NET              0
 #endif
 
 #ifndef EVSE_USING_GUI

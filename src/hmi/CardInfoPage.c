@@ -147,10 +147,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       // Initialization of 'CardInfoImage'
       //
         first_CardInfo = 0;
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_WHITE, pRFIDDev->order.strCardID);//¿¨ºÅ
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_WHITE, "?");        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, pRFIDDev->order.strCardID);//¿¨ºÅ
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, "?");        
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);   
         IMAGE_SetBMP(hItem, CardInfoImage->pfilestring, CardInfoImage->pfilesize);

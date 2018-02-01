@@ -3920,9 +3920,6 @@
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.h">
       <Filter>Header files\drivers\hal\CMSIS_RTOS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\app\version.h">
-      <Filter>Header files\app</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\app\timercallback.h">
       <Filter>Header files\app</Filter>
     </ClInclude>
