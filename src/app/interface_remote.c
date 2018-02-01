@@ -1270,8 +1270,11 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 
         return ERR_BLACK_LIST;
     }
+#if EVSE_USING_NET
     else if(pProto->info.BnWIsListCfg(pathWhiteList, pRfid->order.strCardID) == 1)
-    //else if(1)    
+#else
+    else if(1)
+#endif
     {
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
@@ -1609,8 +1612,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-	    if (((pCON->status.ulSignalFault & defSignalCON_Fault_AC_A_RelayPaste) == defSignalCON_Fault_AC_A_RelayPaste) ||
-			((pCON->status.ulSignalFault & defSignalCON_Fault_AC_N_RelayPaste) == defSignalCON_Fault_AC_N_RelayPaste))
+        if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
 	    {
             SET_BIT(pProto->status.fault[3], BIT_2);
             break;//有一个有故障就退出

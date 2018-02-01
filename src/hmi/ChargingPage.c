@@ -105,15 +105,11 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
     pCON = CONGetHandle(0);
 
-    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI,
-        defEventBitHMI_ChargeReqDispDone,
-        pdTRUE,
-        pdTRUE,
-        0);
-    if ((uxBitHMI & defEventBitHMI_ChargeReqDispDone) == defEventBitHMI_ChargeReqDispDone)
+    if (pCON->state != STATE_CON_CHARGING)
     {
         /**< 跳到充电完成 */
         WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPCHARGEDONE);
+        
     }
 }
 

@@ -191,9 +191,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", sec);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_WHITE, temp_buf);// sec
-            
-            xEventGroupSetBits(xHandleEventHMI, defeventBitHMI_ChargeReqDispDoneOK);
-            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
         }
             break;
         case WM_PAINT:

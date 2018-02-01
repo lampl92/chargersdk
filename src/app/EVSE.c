@@ -1132,7 +1132,7 @@ EVSE_t *EVSECreate(void)
 
 static void CONInit(void)
 {
-    static CON_t *pCON[1];  //在堆中定义
+    static CON_t *pCON[defTotalCON];  //在堆中定义
 	uint8_t str[17] = "2000000000000002";
 
     pListCON = UserListCreate();

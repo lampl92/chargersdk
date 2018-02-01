@@ -12,8 +12,8 @@
 #define EVSE_USING_RFID             1
 #endif
 
-#ifndef EVSE_USING_GPRS
-#define EVSE_USING_GPRS             1
+#ifndef EVSE_USING_NET
+#define EVSE_USING_NET              1
 #endif
 
 #ifndef EVSE_USING_GUI

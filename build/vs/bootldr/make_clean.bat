@@ -1,1 +1,1 @@
-rgw-make clean
+C:\SysGCC\arm-eabi\bin\rgw-make clean

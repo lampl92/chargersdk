@@ -1067,7 +1067,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         errcode |= 1 << 1; //Bit1 电表故障
     }
-    if ((pCON->status.ulSignalFault & defSignalGroupCON_Fault_AC_RelayPase) != 0)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
         errcode |= 1 << 2; //Bit2 接触器故障
     }

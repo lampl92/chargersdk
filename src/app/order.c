@@ -226,6 +226,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.tStopTime = time(NULL);
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
         break;
+    default:
+        break;
     }
     return errcode;
 }
@@ -256,6 +258,8 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
         pCON->order.tStopTime = testtime;
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
         break;
+    default:
+        break;
     }
     return errcode;
 }
@@ -267,4 +271,6 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->statOrderSeg = STATE_SEG_IDLE;
 	pOrder->statRemoteProc.card.stat = CARDCTRL_IDLE;
 	pOrder->statRemoteProc.order.stat = REMOTEOrder_IDLE;
+    pOrder->statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
+    pOrder->statRemoteProc.rtdata.stat = REMOTERTData_IDLE;
 }

@@ -142,7 +142,7 @@ const char *strSysCfg =
     \"yfac\": 0.1423487514257431,\n \
     \"xoff\": 830,\n \
     \"yoff\": 65486,\n \
-    \"Version\":\"0.2.1.2552\",\n \
+    \"Version\":\"01.01.1222\",\n \
     \"USE_GPRSModem\":2,\n \
     \"USE_Meter\": 1,\n \
     \"USE_RFID\": 1,\n \
