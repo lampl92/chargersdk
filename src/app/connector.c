@@ -1531,7 +1531,7 @@ static ErrorCode_t StopCharge(void *pvCON)
 
         errcode = SetRelay(pvCON, SWITCH_OFF);
         printf_safe("total = %d\n", clock() - old);
-        vTaskDelay(defRelayDelay);
+        //vTaskDelay(defRelayDelay);//没什么用
         THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
 #ifdef DEBUG_DIAG_DUMMY
         pCON->status.ucRelayLState = SWITCH_OFF;
