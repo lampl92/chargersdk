@@ -57,7 +57,7 @@ void vTaskMonitor_ChData(void *pvParameters)
     }
 }
 
-void vTaskMonitor_EvseData(void *pvParameters)
+void vTaskMonitor_EvseStatus(void *pvParameters)
 {
     EventBits_t uxBitsTimerCB;
     ErrorCode_t errcode;
@@ -108,9 +108,9 @@ void vTaskEVSEMonitor(void *pvParameters)
     {
         pCON = CONGetHandle(i);
         sprintf(pcName, "CON%d_ChData", i);
-        xTaskCreate(vTaskMonitor_ChData, pcName, 1024, pCON, 23, &xHandleTaskChData[i]);
+        xTaskCreate(vTaskMonitor_ChData, pcName, 2048, pCON, 23, &xHandleTaskChData[i]);
     }
-    xTaskCreate(vTaskMonitor_EvseData, "TaskEvseStatus", 1024, NULL, 23, &xHandleTaskEvseData);
+    xTaskCreate(vTaskMonitor_EvseStatus, "TaskEvseStatus", 2048, NULL, 23, &xHandleTaskEvseData);
     
     while(1)
     {
