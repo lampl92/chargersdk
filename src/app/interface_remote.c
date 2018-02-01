@@ -1685,7 +1685,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_Freq_Cri) == defSignalCON_Alarm_AC_Freq_Cri)
         {
             SET_BIT(pProto->status.warning[2], BIT_7);
             break;//有一个有故障就退出

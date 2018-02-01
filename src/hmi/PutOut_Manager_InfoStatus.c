@@ -238,7 +238,7 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	}
 
 	/**< 频率 */
-	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_Freq_Cri) == defSignalCON_Alarm_AC_Freq_Cri)
 	{
     	LISTVIEW_SetItemText(hItem, 3, 3, "×");//"异常");
 	}

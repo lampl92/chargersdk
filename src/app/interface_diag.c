@@ -38,7 +38,12 @@ typedef enum
     CURR_OK,
     CURR_UPPER,
 } HandleCurr_t;
-
+typedef enum
+{
+    FREQ_OK,
+    FREQ_LOWER,
+    FREQ_UPPER
+} HandleFreq_t;
 /** @brief 比较温度
  *
  * @param temp double   获取到的温度
@@ -119,6 +124,23 @@ static HandleCurr_t HandleCurr(double curr, double ratecurr)
     return currstat;
 }
 
+static HandleFreq_t HandleFreq(double freq, double lower, double upper)
+{
+    HandleFreq_t freqstat;
+    if (freq >= lower && freq <= upper)
+    {
+        freqstat = FREQ_OK;
+    }
+    else if (freq > upper)
+    {
+        freqstat = FREQ_UPPER;
+    }
+    else if (freq < lower)
+    {
+        freqstat = FREQ_LOWER;
+    }
+    return freqstat;
+}
 /** @brief 电压判断 北汽需求 P10 f)过压保护 g)欠压保护
  *
  * @param pCON CON_t*
@@ -705,18 +727,156 @@ void DiagTempError(CON_t *pCON)
  */
 void DiagFreqError(CON_t *pCON)
 {
+    HandleFreq_t freqstat;
+    EventBits_t uxBitsException;
+    int id;
+    
+    uxBitsException = 0;
+    id = pCON->info.ucCONID;
 
-    if(pCON->status.dChargingFrequence >= defMonitorFreqLower - defMonitorFreqPeriod &&
-            pCON->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
+    freqstat = HandleFreq(pCON->status.dChargingFrequence,
+        defMonitorFreqLower,
+        defMonitorFreqUpper);
+
+    switch (pCON->status.xFreqStat)
     {
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Freq_Cri;
-    }
-    else
-    {
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Freq_Cri;
-    }
+    case STATE_FREQ_OK:
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_Freq_Cri;
+        switch (freqstat)
+        {
+        case FREQ_OK:
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            break;
+        case FREQ_LOWER:
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqLow_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_LOWER_Dummy;
+            break;
+        case FREQ_UPPER:
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqUp_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_UPPER_Dummy;
+            break;
+        default:
+            break;
+        }
+        break;
+    case STATE_FREQ_LOWER_Dummy:
+    case STATE_FREQ_UPPER_Dummy:
+        uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+            defEventBitExceptionFreqTimer,
+            pdTRUE,
+            pdFALSE,
+            0);
+        if ((uxBitsException & defEventBitExceptionFreqTimer) == defEventBitExceptionFreqTimer)
+        {
+            xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            if (pCON->status.xFreqStat == STATE_FREQ_LOWER_Dummy)
+            {
+                pCON->status.xFreqStat = STATE_FREQ_LOWER;
+            }
+            if (pCON->status.xFreqStat == STATE_FREQ_UPPER_Dummy)
+            {
+                pCON->status.xFreqStat = STATE_FREQ_UPPER;
+            }
+        }
+        else
+        {
+            switch (freqstat)
+            {
+            case FREQ_OK:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_OK;
+                break;
+            case FREQ_LOWER:
+                if (pCON->status.xFreqStat == STATE_FREQ_UPPER_Dummy)
+                {
+                    xTimerReset(pCON->status.xHandleTimerFreq, 0);
+                    pCON->status.xFreqStat = STATE_FREQ_LOWER_Dummy;
+                }
+                break;
+            case FREQ_UPPER:
+                if (pCON->status.xFreqStat == STATE_FREQ_LOWER_Dummy)
+                {
+                    xTimerReset(pCON->status.xHandleTimerFreq, 0);
+                    pCON->status.xFreqStat = STATE_FREQ_UPPER_Dummy;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        break;
+    case STATE_FREQ_LOWER:
+    case STATE_FREQ_UPPER:
+        freqstat = HandleFreq(pCON->status.dChargingFrequence,
+            defMonitorFreqLower + defMonitorFreqPeriod,
+            defMonitorFreqUpper - defMonitorFreqPeriod);
+        switch (freqstat)
+        {
+        case FREQ_OK://49.5~50.5
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqOK_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_OK_Dummy;
+            break;
+        case FREQ_LOWER:
+        case FREQ_UPPER:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_Freq_Cri;
+            break;
+        default:
+            break;
+        }
+        break;
+    case STATE_FREQ_OK_Dummy:
+        uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+            defEventBitExceptionFreqTimer,
+            pdTRUE,
+            pdFALSE,
+            0);
+        if ((uxBitsException & defEventBitExceptionFreqTimer) == defEventBitExceptionFreqTimer)
+        {
+            xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            pCON->status.xFreqStat = STATE_FREQ_OK;
+        }
+        else
+        {
+            freqstat = HandleFreq(pCON->status.dChargingFrequence,
+                defMonitorFreqLower + defMonitorFreqPeriod,
+                defMonitorFreqUpper - defMonitorFreqPeriod);
+            switch (freqstat)
+            {
+            case FREQ_OK://49.5~50.5
+                break;
+            case FREQ_LOWER:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_LOWER;
+                break;
+            case FREQ_UPPER:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_UPPER;
+                break;
+            default:
+                break;
+            }
+        }
+        break;
+    default:
+        break;
+    }/* end of switch(pCON->status.xFreqStat) */
 }
 void DiagPlugError(CON_t *pCON)
 {

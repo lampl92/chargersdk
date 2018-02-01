@@ -1638,6 +1638,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
+    pCON->status.xHandleTimerFreq      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
     pCON->status.xHandleTimerRTData    = NULL;
     pCON->status.GetChargingVoltage    = GetChargingVoltage;
@@ -1646,6 +1647,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.GetChargingPower      = GetChargingPower;
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
+    pCON->status.xFreqStat             = STATE_FREQ_OK;
     pCON->status.ulSignalState         = 0;
     pCON->status.ulSignalAlarm         = 0;
     pCON->status.ulSignalFault         = 0;
