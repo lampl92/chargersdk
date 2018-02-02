@@ -1024,16 +1024,16 @@ static void _cbBk(WM_MESSAGE * pMsg)
 static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
-    uint8_t tmpU8;
-    uint16_t tmpU16;
-    uint32_t tmpU32;
-    double tmpDouble;
+    uint8_t tmpU8 = 0;
+    uint16_t tmpU16 = 0;
+    uint32_t tmpU32 = 0;
+    double tmpDouble = 0.0;
     uint16_t i = 0;
     CON_t *pCon;
 
     pCon = CONGetHandle(0);
 
-    memset(result_input,'\0',sizeof(result_input));
+    memset(result_input,0,sizeof(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
 
     switch(ManagerSetOptions)
@@ -1112,12 +1112,13 @@ static uint8_t Value_Check()
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
             case 26://屏保时间
-                tmpU32 = atoi(result_input) * 60;
-            if (tmpU32 <= 5)
+            tmpU32 = (uint32_t)atoi(result_input);// * 60;
+            tmpU32 = tmpU32 * 60;
+            if (tmpU32 <= (5 * 60))
             {
                 tmpU32 = 5 * 60;
             }
-            else if (tmpU32 >= 60 * 60)
+            else if (tmpU32 >= (60 * 60))
             {
                 tmpU32 = 60 * 60;
             }
