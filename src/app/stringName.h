@@ -123,6 +123,11 @@
 #define pathhomesignal3  "nand/system/homesignal3.dta"
 #define pathhomesignal4  "nand/system/homesignal4.dta"
 #define pathhomesignal5  "nand/system/homesignal5.dta"
+#define pathhomechargedoneinfo          "/nand/system/homechargedoneinfo.dta"
+#define pathhomecharginginfo            "/nand/system/homecharginginfo.dta"
+#define pathhomechargehelp          "/nand/system/homechargehelp.dta"
+#define pathhomechargehelppress         "/nand/system/homechargehelppress.dta"
+#define pathhomehelpinfo            "/nand/system/homehelpinfo.dta"
 
 
 //提示信息页图片

@@ -20,14 +20,6 @@ typedef enum MyEnum
     StateStartOk,
 }GBSState_E;//后台状态
 
-typedef enum gunenum
-{
-    GunfreeState = 1,
-    GunchargingState,
-    GunchargedoneState,
-    Gunerror,
-}GUNState_E;
-
 typedef struct orderinfo
 {
     RfidQPkg_t rfid_pkg;
@@ -39,7 +31,7 @@ typedef struct userlike
     int UserLikeFlag;//1表示用户选完
 }UserLike_S;
 
-extern GUNState_E gunstate[2];
+
 extern GBSState_E gbsstate;
 extern OrderInfo_S GunInfo[defMaxCON];
 extern RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号

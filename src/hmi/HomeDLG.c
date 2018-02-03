@@ -2,6 +2,7 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "GUI_backstage.h"
+#include "homedataflashbackstage.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
@@ -11,37 +12,32 @@
 #define ID_TEXT_2 (GUI_ID_USER + 0x09)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x0A)
 #define ID_BUTTON_3 (GUI_ID_USER + 0x0B)
-
+#define ID_WINDOW_1 (GUI_ID_USER + 0x0C)
+#define ID_TEXT_3 (GUI_ID_USER + 0x0D)
+#define ID_TEXT_4 (GUI_ID_USER + 0x0E)
+#define ID_TEXT_5 (GUI_ID_USER + 0x0F)
 //枪状态，信号状态，价格状态
 #define ID_Timergunstateflash           1
 #define ID_Timersignalstateflash        2
 #define ID_Timerpriceflash              3
 #define ID_Timertimeflash               4
+#define gunstateax  185 //枪A状态图标x位置
+#define gunstateay  100 //枪A状态图标y位置
+#define gunstatebx  445 //枪B状态图标x位置
+#define gunstateby  100 //枪B状态图标y位置
+#define signalx  755 //信号位置x
+#define signaly  3 //信号位置y
+#define infoAx 140 //A枪充电信息位置x
+#define infoAy 90 //A枪充电信息位置y
+#define infoBx 400 //B枪充电信息位置x
+#define infoBy 90 //B枪充电信息位置y
 
+static WM_HWIN      Hwininfo;
 static WM_HTIMER _timergunstateflash, _timersignalstateflash, _timerpriceflash,_timertimeflash;
-
 static int helpflag;//提示帮助标志位
-
 static int i = 1;//函数临时使用
-
-int gunbuttonax = 185;//画按键皮肤时使用
-int gunbuttonay = 280;//画按键皮肤时使用
-
-int gunbuttonbx = 445;//画按键皮肤时使用
-int gunbuttonby = 280;//画按键皮肤时使用
-
-static int gunstateax = 185;//枪A状态图标x位置
-static int gunstateay = 100;//枪A状态图标y位置
-
-static int gunstatebx = 445;//枪B状态图标x位置
-static int gunstateby = 100;//枪B状态图标x位置
-
-static int signalx = 755;//信号位置x
-static int signaly = 3;//信号位置y
-
 int SignalIntensity;//信号强度
 int PreSignalIntensity;//之前的信号强度
-
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -53,6 +49,14 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, 50, 350, 170, 70, 0, 0x0, 0 },
 };
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
+    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 140, 90, 260, 195, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 14, 9, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 14, 9, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 14, 9, 240, 24, 0, 0x0, 0 },
+};
+
 
 static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 {
@@ -216,38 +220,51 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_BUTTON_0: //'gun1infobutton'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-
+                if (gunstate[0] == GunchargingState || gunstate[0] == GunchargedoneState)
+                {
+                    WM_MoveChildTo(Hwininfo, infoAx, infoAy);
+                    WM_ShowWin(Hwininfo);   
+                }
                 break;
             case WM_NOTIFICATION_RELEASED:
-                if (gunstate[0] == GunchargingState)
-                {
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    CreatecharginginfoDLG();
-                }
-                else if (gunstate[0] == GunchargedoneState)
-                {
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    CreatechargedoneinfoDLG();
-                }
+//                if (gunstate[0] == GunchargingState)
+//                {
+//                    GUI_EndDialog(pMsg->hWin, 0);
+//                    CreatecharginginfoDLG();
+//                }
+//                else if (gunstate[0] == GunchargedoneState)
+//                {
+//                    GUI_EndDialog(pMsg->hWin, 0);
+//                    CreatechargedoneinfoDLG();
+//                }
+                WM_HideWin(Hwininfo);
+                break;
+            case WM_NOTIFICATION_MOVED_OUT:
+                WM_HideWin(Hwininfo);
                 break;
             }
             break;
         case ID_BUTTON_1: //'gun2infobutton'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-          
+                if (gunstate[1] == GunchargingState || gunstate[1] == GunchargedoneState)
+                {
+                    WM_MoveChildTo(Hwininfo, infoBx, infoBy);
+                    WM_ShowWin(Hwininfo);   
+                }
                 break;
             case WM_NOTIFICATION_RELEASED:
-                if (gunstate[1] == GunchargingState)
-                {
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    CreatecharginginfoDLG();
-                }
-                else if (gunstate[1] == GunchargedoneState)
-                {
-                    GUI_EndDialog(pMsg->hWin, 0);
-                    CreatechargedoneinfoDLG();
-                }
+//                if (gunstate[1] == GunchargingState)
+//                {
+//                    GUI_EndDialog(pMsg->hWin, 0);
+//                    CreatecharginginfoDLG();
+//                }
+//                else if (gunstate[1] == GunchargedoneState)
+//                {
+//                    GUI_EndDialog(pMsg->hWin, 0);
+//                    CreatechargedoneinfoDLG();
+//                }
+                WM_HideWin(Hwininfo);
                 break;
             }
             break;
@@ -269,6 +286,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
+                helpflag = 0;
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                break;
+            case WM_NOTIFICATION_MOVED_OUT:
                 helpflag = 0;
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
@@ -307,8 +328,55 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
+            if (!(gunstate[1] == GunchargingState || gunstate[1] == GunchargedoneState \
+                || gunstate[0] == GunchargingState || gunstate[0] == GunchargedoneState))
+            {
+                WM_HideWin(Hwininfo);
+            }
             updatedatetime(pMsg, ID_TEXT_0, &fontwryhcg24e);
             WM_RestartTimer(pMsg->Data.v, 200);
+        }
+        break;
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
+}
+
+static void _cbDialoginfo(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    
+    switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG:        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "");        
+        break;
+    case WM_PAINT:
+        if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0)))
+        {
+            if (gunstate[0] == GunchargingState)
+            {
+                GUI_MEMDEV_WriteAt(Memdevhomecharginginfo,infoAx,infoAy);
+            }
+            if (gunstate[0] == GunchargedoneState)
+            {
+                GUI_MEMDEV_WriteAt(Memdevhomechargedoneinfo, infoAx, infoAy);
+            }
+        }
+        if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1)))
+        {
+            if (gunstate[1] == GunchargingState)
+            {
+                GUI_MEMDEV_WriteAt(Memdevhomecharginginfo, infoBx, infoBy);
+            }
+            if (gunstate[1] == GunchargedoneState)
+            {
+                GUI_MEMDEV_WriteAt(Memdevhomechargedoneinfo, infoBx, infoBy);
+            } 
         }
         break;
     default:
@@ -325,5 +393,7 @@ WM_HWIN CreateHomeDLG(void) {
     _timersignalstateflash = WM_CreateTimer(hWin, ID_Timersignalstateflash, 1000, 0);
     _timerpriceflash = WM_CreateTimer(hWin, ID_Timerpriceflash, 2000, 0);
     _timertimeflash = WM_CreateTimer(hWin,ID_Timertimeflash, 200, 0);
+    Hwininfo = GUI_CreateDialogBox(_aDialogCreateinfo, GUI_COUNTOF(_aDialogCreateinfo), _cbDialoginfo, hWin, 0, 0);
+    WM_HideWin(Hwininfo);
     return hWin;
 }

@@ -5,7 +5,7 @@
 #include "interface.h"
 #include "utils.h"
 
-GUNState_E gunstate[2];
+
 GBSState_E gbsstate;
 OrderInfo_S GunInfo[defMaxCON];
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号

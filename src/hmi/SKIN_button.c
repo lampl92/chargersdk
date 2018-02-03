@@ -3,13 +3,6 @@
 #include "skin.h"
 #include "HMI_Start.h"
 
-//��ҳ
-extern int gunbuttonax;
-extern int gunbuttonay;
-
-extern int gunbuttonbx;
-extern int gunbuttonby;
-
 //ѡǹҳ
 extern int selectgunax;
 extern int selectgunay;

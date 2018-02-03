@@ -177,6 +177,7 @@
     <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\charginginfoDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\homedataflashbackstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\selectpatternbetterDLG.c" />
@@ -445,6 +446,7 @@
     <ClInclude Include="..\..\..\src\hmi\dimen_barcode\qrdecode.h" />
     <ClInclude Include="..\..\..\src\hmi\GUI_backstage.h" />
     <ClInclude Include="..\..\..\src\hmi\HMI_Start.h" />
+    <ClInclude Include="..\..\..\src\hmi\homedataflashbackstage.h" />
     <ClInclude Include="..\..\..\src\hmi\keyboard.h" />
     <ClInclude Include="..\..\..\src\hmi\lcd\font.h" />
     <ClInclude Include="..\..\..\src\hmi\lcd\lcddrv.h" />
@@ -463,6 +465,7 @@
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\rscode.h" />
     <ClInclude Include="..\..\..\src\hmi\qrencode\inc\split.h" />
     <ClInclude Include="..\..\..\src\hmi\skin.h" />
+    <ClInclude Include="..\..\..\src\hmi\skinposition.h" />
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON.h" />
     <ClInclude Include="..\..\..\src\middlewares\cJSON\cJSON_Utils.h" />

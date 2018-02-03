@@ -170,6 +170,13 @@ GUI_MEMDEV_Handle Memdevhomesignal2;
 GUI_MEMDEV_Handle Memdevhomesignal3;
 GUI_MEMDEV_Handle Memdevhomesignal4;
 GUI_MEMDEV_Handle Memdevhomesignal5;
+GUI_MEMDEV_Handle Memdevhomechargedoneinfo;
+GUI_MEMDEV_Handle Memdevhomecharginginfo;
+GUI_MEMDEV_Handle Memdevhomechargehelp;
+GUI_MEMDEV_Handle Memdevhomechargehelppress;
+GUI_MEMDEV_Handle Memdevhomehelpinfo;
+
+
 
 //ѡǹҳ
 GUI_MEMDEV_Handle MemdevSelectGunBack;
@@ -485,6 +492,11 @@ void creatememdev()
     Memdevhomesignal3 = createMemdev(pathhomesignal3);
     Memdevhomesignal3 = createMemdev(pathhomesignal4);
     Memdevhomesignal3 = createMemdev(pathhomesignal5);
+    Memdevhomechargedoneinfo = createMemdev(pathhomechargedoneinfo);
+    Memdevhomecharginginfo = createMemdev(pathhomecharginginfo);
+    Memdevhomechargehelp = createMemdev(pathhomechargehelp);
+    Memdevhomechargehelppress = createMemdev(pathhomechargehelppress);
+    Memdevhomehelpinfo = createMemdev(pathhomehelpinfo);
         
     //ѡǹ
     MemdevSelectGunBack = createMemdev(pathSelectGunBack);
