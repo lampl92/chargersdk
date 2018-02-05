@@ -1284,7 +1284,7 @@ static uint8_t Value_Check()
                 pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
                 break;
-            case 27://交流输出端子温度上限
+            case 27://插座温度上限
                 tmpDouble = atof(result_input);
             if (tmpDouble >= 120.0)
             {
