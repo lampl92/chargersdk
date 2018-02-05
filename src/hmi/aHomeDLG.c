@@ -31,6 +31,8 @@
 #define infoAy 90 //A枪充电信息位置y
 #define infoBx 400 //B枪充电信息位置x
 #define infoBy 90 //B枪充电信息位置y
+#define helpinfox 165
+#define helpinfoy 70
 
 static WM_HWIN      Hwininfo;
 static WM_HTIMER _timergunstateflash, _timersignalstateflash, _timerpriceflash,_timertimeflash;
@@ -44,10 +46,10 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 14, 9, 240, 24, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 185, 280, 170, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, 445, 280, 170, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 264, 365, 100, 44, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 484, 365, 100, 44, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 264, 384, 100, 44, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 484, 384, 100, 44, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "help", ID_BUTTON_3, 50, 350, 170, 70, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
@@ -198,7 +200,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         BUTTON_SetSkin(hItem, SKIN_buttontest);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
-        BUTTON_SetSkin(hItem, SKIN_buttonquit);
+        BUTTON_SetSkin(hItem, SKIN_buttonhelp);
 
         break;
     case MSG_UPDATE:
@@ -210,7 +212,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         updatesignal(pMsg);
         if (helpflag == 1)
         {
-            GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, 300, gunstateay);
+            GUI_MEMDEV_WriteAt(Memdevhomehelpinfo, helpinfox, helpinfoy);
         }
         break;
     case WM_NOTIFY_PARENT:
@@ -265,6 +267,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //                    CreatechargedoneinfoDLG();
 //                }
                 WM_HideWin(Hwininfo);
+            case WM_NOTIFICATION_MOVED_OUT:
+                WM_HideWin(Hwininfo);
                 break;
             }
             break;
@@ -283,14 +287,26 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
                 helpflag = 1;
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                WM_HideWin(hItem);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                WM_HideWin(hItem);
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 helpflag = 0;
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                WM_ShowWin(hItem);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                WM_ShowWin(hItem);
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_MOVED_OUT:
                 helpflag = 0;
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+                WM_ShowWin(hItem);
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+                WM_ShowWin(hItem);
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             }

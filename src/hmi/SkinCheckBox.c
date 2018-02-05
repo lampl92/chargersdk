@@ -2,18 +2,6 @@
 #include "skin.h"
 #include "HMI_Start.h"
 
-extern int Checkboxfullx;
-extern int Checkboxfully;
-
-extern int Checkboxtimex;
-extern int Checkboxtimey;
-
-extern int Checkboxmonex;
-extern int Checkboxmoney;
-
-extern int Checkboxelectricx;
-extern int Checkboxelectricy;
-
 int SKIN_checkboxfull(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
 //    PageChosenData_struct *Pic;

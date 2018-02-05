@@ -34,24 +34,24 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static void showprompt()
 {
-    switch (promptstate)
-    {
-    case promptGetInfoState:
-        GUI_MEMDEV_WriteAt(Memdevcardinfoget, 240, 316);
-        break;
-    case promptUnavailableState:
-        GUI_MEMDEV_WriteAt(MemdevcardinfoUnavailable, 240, 316);
-        break;
-    case promptReadyChargingState:
-        GUI_MEMDEV_WriteAt(Memdevcardinforeadycharging, 240, 316);
-        break;
-    case promptPleasePlugState:
-        GUI_MEMDEV_WriteAt(Memdevcardinfoplug, 240, 316);
-        break;
-    case promptstartfailState:
-        GUI_MEMDEV_WriteAt(Memdevcardinfostartfail, 240, 316);
-        break;
-    }
+//    switch (promptstate)
+//    {
+//    case promptGetInfoState:
+//        GUI_MEMDEV_WriteAt(Memdevcardinfoget, 240, 316);
+//        break;
+//    case promptUnavailableState:
+//        GUI_MEMDEV_WriteAt(MemdevcardinfoUnavailable, 240, 316);
+//        break;
+//    case promptReadyChargingState:
+//        GUI_MEMDEV_WriteAt(Memdevcardinforeadycharging, 240, 316);
+//        break;
+//    case promptPleasePlugState:
+//        GUI_MEMDEV_WriteAt(Memdevcardinfoplug, 240, 316);
+//        break;
+//    case promptstartfailState:
+//        GUI_MEMDEV_WriteAt(Memdevcardinfostartfail, 240, 316);
+//        break;
+//    }
 }
 
 static void transformprompt(PROMPTSTATE_E state)
@@ -59,7 +59,7 @@ static void transformprompt(PROMPTSTATE_E state)
     switch (state)
     {
     case promptGetInfoState:
-//        if (gbsstate != StatePrepareCharge)
+//        if (gbsstate != StateReadyStart)
 //        {
 //            
 //        }
@@ -117,7 +117,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerprompt)
         { 
-//            if (gbsstate == StatePrepareCharge)
+//            if (gbsstate == StateReadyStart)
 //            {
 //                
 //            }

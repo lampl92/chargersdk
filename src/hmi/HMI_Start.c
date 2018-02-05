@@ -79,7 +79,7 @@ void MainTask(void)
         GUI_Exec();
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
-        createGUI_BITMAP();
+        //createGUI_BITMAP();
         creatememdev();
         createfont();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();

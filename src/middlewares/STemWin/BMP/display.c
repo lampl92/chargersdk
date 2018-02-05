@@ -176,8 +176,6 @@ GUI_MEMDEV_Handle Memdevhomechargehelp;
 GUI_MEMDEV_Handle Memdevhomechargehelppress;
 GUI_MEMDEV_Handle Memdevhomehelpinfo;
 
-
-
 //—°«π“≥
 GUI_MEMDEV_Handle MemdevSelectGunBack;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
@@ -216,13 +214,20 @@ GUI_MEMDEV_Handle MemdevbackQuit;
 GUI_MEMDEV_Handle MemdevbackQuitPress;
 
 //ø®–≈œ¢“≥Õº∆¨
-//GUI_MEMDEV_Handle Memdevcardinfoarrears;
-GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
-GUI_MEMDEV_Handle Memdevcardinfostartfail;
 GUI_MEMDEV_Handle Memdevcardinfoback;
-GUI_MEMDEV_Handle Memdevcardinforeadycharging;
-GUI_MEMDEV_Handle Memdevcardinfoget;
-GUI_MEMDEV_Handle Memdevcardinfoplug;
+GUI_MEMDEV_Handle Memdevcardinfocardconditionnotok;
+GUI_MEMDEV_Handle Memdevcardinfochargingok;
+GUI_MEMDEV_Handle Memdevcardinfonettimeout;
+GUI_MEMDEV_Handle Memdevcardinfopleaseplug;
+GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
+GUI_MEMDEV_Handle Memdevcardinforeadystart;
+//GUI_MEMDEV_Handle Memdevcardinfoarrears;
+//GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
+//GUI_MEMDEV_Handle Memdevcardinfostartfail;
+//GUI_MEMDEV_Handle Memdevcardinfoback;
+//GUI_MEMDEV_Handle Memdevcardinforeadycharging;
+//GUI_MEMDEV_Handle Memdevcardinfoget;
+//GUI_MEMDEV_Handle Memdevcardinfoplug;
 //GUI_MEMDEV_Handle Memdevcardinfounregister;
 
 #pragma endregion
@@ -408,10 +413,10 @@ void createGUI_BITMAP()
         
     //ø®–≈œ¢“≥Õº∆¨
     //Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
-    Bitmapcardinfoback = readDtafile(pathcardinfoback);
-    Bitmapcardinforeadycharging = readDtafile(pathcardinforeadycharging);
-    Bitmapcardinfoget = readDtafile(pathcardinfoget);
-    Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
+//    Bitmapcardinfoback = readDtafile(pathcardinfoback);
+//    Bitmapcardinforeadycharging = readDtafile(pathcardinforeadycharging);
+//    Bitmapcardinfoget = readDtafile(pathcardinfoget);
+//    Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
     //Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
         
     //÷˜“≥Õº∆¨∂¡»°
@@ -536,14 +541,22 @@ void creatememdev()
     MemdevbackQuitPress = createMemdev(pathbackquitpress);
 
     //ø®–≈œ¢“≥Õº∆¨
-    //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
-    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
-    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);
     Memdevcardinfoback = createMemdev(pathcardinfoback);
-    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging);
-    Memdevcardinfoget = createMemdev(pathcardinfoget);
-    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
+    Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok);
+    Memdevcardinfochargingok = createMemdev(pathcardinfochargingok);
+    Memdevcardinfonettimeout = createMemdev(pathcardinfonettimeout);
+    Memdevcardinfopleaseplug = createMemdev(pathcardinfopleaseplug);
+    Memdevcardinfoplugtimeout = createMemdev(pathcardinfoplugtimeout);
+    Memdevcardinforeadystart = createMemdev(pathcardinforeadystart);
+    //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
+//    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
+//    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);
+//    Memdevcardinfoback = createMemdev(pathcardinfoback);
+//    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging);
+//    Memdevcardinfoget = createMemdev(pathcardinfoget);
+//    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
     //Memdevcardinfounregister = createMemdev(pathcardinfounregister);
+    
         
 }
 

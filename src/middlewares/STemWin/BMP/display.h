@@ -228,13 +228,20 @@ extern GUI_MEMDEV_Handle MemdevbackQuit;
 extern GUI_MEMDEV_Handle MemdevbackQuitPress;
 
 //ø®–≈œ¢“≥Õº∆¨
-//extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
-extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
-extern GUI_MEMDEV_Handle Memdevcardinfostartfail;
 extern GUI_MEMDEV_Handle Memdevcardinfoback;
-extern GUI_MEMDEV_Handle Memdevcardinforeadycharging;
-extern GUI_MEMDEV_Handle Memdevcardinfoget;
-extern GUI_MEMDEV_Handle Memdevcardinfoplug;
+extern GUI_MEMDEV_Handle Memdevcardinfocardconditionnotok;
+extern GUI_MEMDEV_Handle Memdevcardinfochargingok;
+extern GUI_MEMDEV_Handle Memdevcardinfonettimeout;
+extern GUI_MEMDEV_Handle Memdevcardinfopleaseplug;
+extern GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
+extern GUI_MEMDEV_Handle Memdevcardinforeadystart;
+//extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
+//extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
+//extern GUI_MEMDEV_Handle Memdevcardinfostartfail;
+//extern GUI_MEMDEV_Handle Memdevcardinfoback;
+//extern GUI_MEMDEV_Handle Memdevcardinforeadycharging;
+//extern GUI_MEMDEV_Handle Memdevcardinfoget;
+//extern GUI_MEMDEV_Handle Memdevcardinfoplug;
 //extern GUI_MEMDEV_Handle Memdevcardinfounregister;
 
 p_inf *readPicInf(char *pfilepath);

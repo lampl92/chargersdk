@@ -21,27 +21,6 @@
 WM_HWIN HwinKeyboard;
 static char strNumber[INPUTNUMBERLENGTH];
 
-int keyboardx = 290;
-int keyboardy = 155;
-
-int backquitx = 600;
-int backquity = 350;
-
-int yuandufenx = 530;
-int yuandufeny = 115;
-
-int Checkboxfullx = 100;
-int Checkboxfully = 110;
-
-int Checkboxtimex = 100;
-int Checkboxtimey = 170;
-
-int Checkboxmonex = 100;
-int Checkboxmoney = 230;
-
-int Checkboxelectricx = 100;
-int Checkboxelectricy = 290;
-
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
@@ -350,7 +329,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPCARDINFO:
         GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
-        CreateCardInfoDLG();
+        CreatereadystartDLG();
         break;
     default:
         WM_DefaultProc(pMsg);

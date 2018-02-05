@@ -3,19 +3,6 @@
 #include "skin.h"
 #include "HMI_Start.h"
 
-//选枪页
-extern int selectgunax;
-extern int selectgunay;
-
-extern int selectgunbx;
-extern int selectgunby;
-
-//共用退出和后退
-extern int quitx;
-extern int quity;
-extern int backquitx;
-extern int backquity;
-
 //测试按键
 int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
@@ -313,6 +300,49 @@ int SKIN_buttongunBerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
+int SKIN_buttonhelp(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomechargehelp, helpbuttonx, helpbuttony);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomechargehelppress, helpbuttonx, helpbuttony);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomechargehelp, helpbuttonx, helpbuttony);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomechargehelp, helpbuttonx, helpbuttony);
+        }
+        else
+        {
+            BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
+
 
 //选枪页上的枪A枪B按钮
 int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
@@ -466,5 +496,4 @@ int SKIN_buttonbackquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     }
     return 0;
 }
-
 

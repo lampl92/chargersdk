@@ -20,6 +20,7 @@ int SKIN_buttongunAerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttongunBlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttongunBscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttongunBerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+int SKIN_buttonhelp(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
 int SKIN_buttonSKB(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);

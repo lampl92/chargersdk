@@ -9,14 +9,6 @@
 #define ID_IMAGE_0  (GUI_ID_USER + 0x04)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x05)
 
-int selectgunax = 285;
-int selectgunay = 195;
-
-int selectgunbx = 455;
-int selectgunby = 195;
-
-int quitx = 50;
-int quity = 350;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },

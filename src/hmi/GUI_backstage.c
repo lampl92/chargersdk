@@ -5,12 +5,10 @@
 #include "interface.h"
 #include "utils.h"
 
-
+double GBSBalance = 9999.9;
 GBSState_E gbsstate;
-OrderInfo_S GunInfo[defMaxCON];
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
-
 
 void GBSTask()
 {
@@ -35,7 +33,7 @@ void GBSTask()
             {
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;
-                gbsstate = StatePrepareCharge;
+                gbsstate = StateReadyStart;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
@@ -43,39 +41,63 @@ void GBSTask()
                 gbsstate = StateHome;
             }
             break;
-        case StatePrepareCharge:
+        case StateReadyStart:
+            vTaskDelay(500);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
-                GunInfo[Tempuserlike.user_like.ucCONID].rfid_pkg = Temprfid_pkg;
-                if ((Temprfid_pkg.ucAccountStatus == 1) && (Temprfid_pkg.ucCardStatus != 2))
+                pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+                GBSBalance = Temprfid_pkg.dBalance;
+                if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
                 {                  
-                    gbsstate = StateNetTimeout;
+                    gbsstate = StatePleasePlug;
                 }
-                else
+                if (pCON->state == STATE_CON_CHARGING)
                 {
-                    gbsstate = StateHome;
+                    gbsstate = StateChargingOk;
+                }
+                if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
+                {
+                    gbsstate = StateCardconditionNotOk;
                 }
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
-                gbsstate = StateHome;
+                gbsstate = StateNetTimeout;
             }
+            break;
+        case StatePleasePlug:
+            vTaskDelay(1000);
+            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+            if (pCON->state == STATE_CON_CHARGING)
+            {
+                gbsstate = StateChargingOk;
+            }
+            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+            {
+                gbsstate = StatePlugTimeout;
+            }
+            break;
+        case StateChargingOk:
+            vTaskDelay(1000);
+            gbsstate = StateHome;
+            break;
+        case StateCardconditionNotOk:
+            vTaskDelay(1000);
+            gbsstate = StateHome;
             break;
         case StateNetTimeout:
-            pCON = CONGetHandle(Tempuserlike.user_like.ucCONID);
-            if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
-            {
-                gbsstate = StateHome;
-            }
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StateHome;
-            }
+            vTaskDelay(1000);
+            gbsstate = StateHome;
+            break;
+        case StatePlugTimeout:
+            vTaskDelay(1000);
+            gbsstate = StateHome;
             break;
         }
+        vTaskDelay(100);
     }
 }
 

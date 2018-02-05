@@ -8,22 +8,19 @@
 #include "interface.h"
 #include "utils.h"
 
+extern double GBSBalance;
+
 typedef enum MyEnum
 {
     StateHome,
     StateGetGunInfo,
-    StatePrepareCharge,
+    StateReadyStart,
     StateNetTimeout,
     StateCardconditionNotOk,
     StatePlugTimeout,
     StatePleasePlug,
-    StateStartOk,
+    StateChargingOk,
 }GBSState_E;//后台状态
-
-typedef struct orderinfo
-{
-    RfidQPkg_t rfid_pkg;
-}OrderInfo_S;
 
 typedef struct userlike
 {
@@ -33,8 +30,9 @@ typedef struct userlike
 
 
 extern GBSState_E gbsstate;
-extern OrderInfo_S GunInfo[defMaxCON];
 extern RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 extern UserLike_S Tempuserlike;
+
+void GBSTask();
 
 #endif 

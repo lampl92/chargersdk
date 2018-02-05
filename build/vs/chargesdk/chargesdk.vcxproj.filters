@@ -1533,16 +1533,10 @@
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\selectgunDLG.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\selectpatternDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\CardInfoDLG.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\HomeDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\chargedoneinfoDLG.c">
@@ -1557,13 +1551,37 @@
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\selectpatternbetterDLG.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\homedataflashbackstage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\b1selectpatternbetterDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\b0selectgunDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\creadystartDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d0nettimeoutDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d1cardconditionnotokDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d2pleaseplugDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d3chargingokDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\eplugtimeoutDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
   </ItemGroup>

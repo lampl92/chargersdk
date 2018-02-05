@@ -3,9 +3,6 @@
 #include "skin.h"
 #include "HMI_Start.h"
 
-extern int keyboardx;
-extern int keyboardy;
-
 #define ID_WINDOW_0  (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0  (GUI_ID_USER + 0x02)
 #define ID_BUTTON_1  (GUI_ID_USER + 0x03)

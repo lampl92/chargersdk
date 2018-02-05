@@ -92,13 +92,20 @@
 //*************
 
 //¿¨ÐÅÏ¢Í¼Æ¬Â·¾¶
+#define pathcardinfoback                "nand/system/cardinfoback.dta"
+#define pathcardinfocardconditionnotok              "nand/system/cardinfocardconditionnotok.dta"
+#define pathcardinfochargingok              "nand/system/cardinfochargingok.dta"
+#define pathcardinfonettimeout              "nand/system/cardinfonettimeout.dta"
+#define pathcardinfopleaseplug              "nand/system/cardinfopleaseplug.dta"
+#define pathcardinfoplugtimeout                 "nand/system/cardinfoplugtimeout.dta"
+#define pathcardinforeadystart              "nand/system/cardinforeadystart.dta"
 //#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
-#define pathcardinfoUnavailable        "nand/system/cardinfoUnavailable.dta"
-#define pathcardinfostartfail        "nand/system/cardinfostartfail.dta"
-#define pathcardinfoback        "nand/system/cardinfoback.dta"
-#define pathcardinforeadycharging        "nand/system/cardinforeadycharging.dta"
-#define pathcardinfoget        "nand/system/cardinfoget.dta"
-#define pathcardinfoplug        "nand/system/cardinfoplug.dta"
+//#define pathcardinfoUnavailable        "nand/system/cardinfoUnavailable.dta"
+//#define pathcardinfostartfail        "nand/system/cardinfostartfail.dta"
+//#define pathcardinfoback        "nand/system/cardinfoback.dta"
+//#define pathcardinforeadycharging        "nand/system/cardinforeadycharging.dta"
+//#define pathcardinfoget        "nand/system/cardinfoget.dta"
+//#define pathcardinfoplug        "nand/system/cardinfoplug.dta"
 //#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
 //******************
 
