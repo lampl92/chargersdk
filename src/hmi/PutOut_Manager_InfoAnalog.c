@@ -240,24 +240,24 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, analogValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
-        /**< 工作状态 */
+        /**< AC v */
         LISTVIEW_SetItemText(hItem, 0, 0, analogACVol);
-        /**< 急停状态 */
+        /**< ac A */
         LISTVIEW_SetItemText(hItem, 2, 0, analogACCurrent);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
-        /**< 电表通信 */
+        /**< cp vol */
         LISTVIEW_SetItemText(hItem, 0, 1, analogCPVol);
-        /**< A插座温度1 */
+        /**< ac freq */
         LISTVIEW_SetItemText(hItem, 2, 1, analogACFreq);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
-        /**< A插座温度2 */
+        /**< ac L temp */
         LISTVIEW_SetItemText(hItem, 0, 2, analogACTempL);
-        /**< A枪输出电流 */
+        /**< ac N temp */
         LISTVIEW_SetItemText(hItem, 2, 2, analogACTempN);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
-        /**< RFID */
+        /**< out L Temp  */
         LISTVIEW_SetItemText(hItem, 0, 3, analogOutTempL);
-        /**< A枪枪锁 */
+        /**< out N Temp */
         LISTVIEW_SetItemText(hItem, 2, 3, analogOutTempN);
         break;
     case WM_NOTIFY_PARENT:
