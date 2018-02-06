@@ -26,75 +26,63 @@ error_t smtpClientTest(void)
     hrng.Instance = RNG;
     HAL_RNG_Init(&hrng);
 
-       //Generate a random seed
+    //生成随机数种子
     for (i = 0; i < 32; i += 4)
     {
-       //Wait for the RNG to contain a valid data
         while (HAL_RNG_GetState(&hrng) != HAL_RNG_STATE_READY)
             ;
-
-              //Get 32-bit random value
         value = HAL_RNG_GetRandomNumber(&hrng);
-
-        //Copy random value
         seed[i] = value & 0xFF;
         seed[i + 1] = (value >> 8) & 0xFF;
         seed[i + 2] = (value >> 16) & 0xFF;
         seed[i + 3] = (value >> 24) & 0xFF;
     }
-    
-       //PRNG initialization
+    //PRNG 初始化
     error = yarrowInit(&yarrowContext);
-    //Any error to report?
     if (error)
     {
-       //Debug message
-        TRACE_ERROR("Failed to initialize PRNG!\r\n");
+        TRACE_ERROR("初始化PRNG失败!\r\n");
     }
 
-       //Properly seed the PRNG
     error = yarrowSeed(&yarrowContext, seed, sizeof(seed));
-    //Any error to report?
     if (error)
     {
-       //Debug message
-        TRACE_ERROR("Failed to seed PRNG!\r\n");
+        TRACE_ERROR("PRNG种子失败!\r\n");
     }
     
-       //Authentication information
+    //认证信息
     static SmtpAuthInfo authInfo =
     {
-        NULL,             //Network interface
-        "smtp.qq.com", //SMTP server name
-        25,               //SMTP server port
-        "rgw5267",       //User name
-        "13131685886a=",       //Password
-                  FALSE,            //Use STARTTLS rather than implicit TLS
-      YARROW_PRNG_ALGO, //PRNG algorithm
-      &yarrowContext    //PRNG context
+        NULL,             //网络接口
+        "smtp.qq.com", //SMTP 服务器
+        25,               //SMTP 端口
+        "rgw5267",       //用户名
+        "13131685886a=",       //密码
+        FALSE,            //Use STARTTLS rather than implicit TLS
+        YARROW_PRNG_ALGO, //PRNG algorithm
+        &yarrowContext    //PRNG context
     };
 
-       //Recipients
+    //Recipients
     static SmtpMailAddr recipients[2] =
     {
-        { "RGW", "rgw5267@gmail.com", SMTP_RCPT_TYPE_TO }, //First recipient
-        { "RGW", "renguangwei@dpc.com.cn", SMTP_RCPT_TYPE_CC }      //Second recipient
+        { "RGW", "renguangwei@dpc.com.cn", SMTP_RCPT_TYPE_TO }, //First recipient
+        { "RGW", "rgw5267@gmail.com", SMTP_RCPT_TYPE_CC }      //Second recipient
     };
 
-       //Mail contents
+    //Mail contents
     static SmtpMail mail =
     {
         { "RGW", "rgw5267@qq.com" },  //From
         recipients,                        //Recipients
-        2,                                 //Recipient count
+        1,                                 //Recipient count
         "",                                //Date
-        "SMTP Client Demo",                //Subject
-        "Hello World!"                     //Body
+        "SMTP Client Demo\0",                //Subject
+        "Hello World!\0"                     //Body
     };
 
-       //Send mail
+    //Send mail
     error = smtpSendMail(&authInfo, &mail);
 
-       //Return status code
     return error;
 }
