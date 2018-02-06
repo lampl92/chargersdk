@@ -289,10 +289,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             case 26:
                 if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conACTempLowerLimits, "note,-50~120");
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conACTempLowerLimits, "note,-50~120");
 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
 //                    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
                 }
@@ -311,10 +311,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             case 28:
                 if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 28, _hWinManagerConSet, _hWinManagerCommon, conSocketTempLowerLimits, "note,-50~120");
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 28, _hWinManagerConSet, _hWinManagerCommon, conSocketTempLowerLimits, "note,-50~120");
 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
 //                    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
                 }
@@ -513,6 +513,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*6, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dACTempLowerLimits);
         EDIT_SetText(_aahEdit[6][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[6][0], EDIT_CI_ENABLED, GUI_GRAY);
+
         //交流输出端子温度上限
         _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conSocketTempUpperLimits);
         _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,27,strlen("145.4"));
@@ -525,6 +527,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[8][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*8, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,"℃");
         sprintf(_tmpBuff,"%.1f",pCon->info.dSocketTempLowerLimits);
         EDIT_SetText(_aahEdit[8][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[8][0], EDIT_CI_ENABLED, GUI_GRAY);
+
         //额定电流
         _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conRatedCurrent);
         _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*9, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,29,strlen("145.4"));

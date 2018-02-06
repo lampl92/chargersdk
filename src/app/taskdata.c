@@ -365,14 +365,8 @@ void vTaskEVSEData(void *pvParameters)
                         case defSignalCON_Alarm_AC_C_CurrUp_Cri:
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
                             break;
-                        case defSignalCON_Alarm_AC_A_Freq_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相频率");
-                            break;
-                        case defSignalCON_Alarm_AC_B_Freq_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相频率");
-                            break;
-                        case defSignalCON_Alarm_AC_C_Freq_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相频率");
+                        case defSignalCON_Alarm_AC_Freq_Cri:
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "频率");
                             break;
                         default:
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知警告");
