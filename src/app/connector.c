@@ -721,6 +721,59 @@ static ErrorCode_t GetChargingEnergy(void *pvCON)
 
     return errcode;
 }
+
+/** @brief 控制S1开关
+ *
+ * @param pvCON void*
+ * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
+{
+    CON_t *pCON;
+    uint8_t ucCONID;
+    ErrorCode_t errcode;
+
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    errcode = ERR_NO;
+
+    /** ****************  */
+
+    //...
+    if (ucCONID == 0)
+    {
+        if (cmd == SWITCH_ON)
+        {
+            PWM1_535;
+        }
+        else if (cmd == SWITCH_OFF)
+        {
+            PWM1_1000;
+        }
+    }
+    else if (ucCONID == 1)
+    {
+
+
+        if (cmd == SWITCH_ON)
+        {
+            PWM2_535;
+        }
+        else
+        {
+            PWM2_1000;
+        }
+
+    }
+
+
+    /*********************/
+
+    return errcode;
+}
+
 /** @brief 获取CP状态
  *
  * @param pvCON void*
@@ -810,6 +863,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             }
             if (cp_err_cont >= 1)//50ms
             {
+                SetCPSwitch(pCON, SWITCH_OFF);
                 cp_err_cont = 0;
                 tmpCPState = CP_ERR;
                 pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
@@ -870,57 +924,7 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     return errcode;
 }
-/** @brief 控制S1开关
- *
- * @param pvCON void*
- * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    ErrorCode_t errcode;
 
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    errcode = ERR_NO;
-
-    /** ****************  */
-
-    //...
-    if(ucCONID == 0)
-    {
-        if(cmd == SWITCH_ON)
-        {
-            PWM1_535;
-        }
-        else if(cmd == SWITCH_OFF)
-        {
-            PWM1_1000;
-        }
-    }
-    else if(ucCONID == 1)
-    {
-
-
-        if(cmd == SWITCH_ON)
-        {
-            PWM2_535;
-        }
-        else
-        {
-            PWM2_1000;
-        }
-
-    }
-
-
-    /*********************/
-
-    return errcode;
-}
 /** @brief 设置PWM占空比 详情请看18487.1-2015 P22
  *
  * @param pvCON void*
@@ -1657,6 +1661,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
+    pCON->status.xHandleTimerFreq      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
     pCON->status.xHandleTimerRTData    = NULL;
     pCON->status.GetChargingVoltage    = GetChargingVoltage;
@@ -1666,6 +1671,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.GetChargingEnergy     = GetChargingEnergy;
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
+    pCON->status.xFreqStat             = STATE_FREQ_OK;
     pCON->status.ulSignalState         = 0;
     pCON->status.ulSignalAlarm         = 0;
     pCON->status.ulSignalFault         = 0;

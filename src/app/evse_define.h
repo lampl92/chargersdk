@@ -113,7 +113,7 @@
 #define defEventBitExceptionChargeTimer BIT_6
 #define defEventBitExceptionRFID        BIT_7
 #define defEventBitExceptionMeter       BIT_8
-//#define defEventBitExceptionRelayPaste  BIT_9
+#define defEventBitExceptionFreqTimer   BIT_9
 
 #define defEventBitExceptionLimitPower  BIT_10  //把LimitPower放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionLimitFee    BIT_11  
@@ -275,9 +275,7 @@
 #define defSignalCON_Alarm_AC_A_CurrUp_Cri      BIT_22       //
 #define defSignalCON_Alarm_AC_B_CurrUp_Cri      BIT_23       //*
 #define defSignalCON_Alarm_AC_C_CurrUp_Cri      BIT_24       //*
-#define defSignalCON_Alarm_AC_A_Freq_Cri        BIT_25       //
-#define defSignalCON_Alarm_AC_B_Freq_Cri        BIT_26       //*
-#define defSignalCON_Alarm_AC_C_Freq_Cri        BIT_27       //*
+#define defSignalCON_Alarm_AC_Freq_Cri        BIT_25       //
 
     //ulSignalFault
 #define defSignalCON_Fault_SocketLock           BIT_0

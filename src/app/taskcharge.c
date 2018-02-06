@@ -219,7 +219,7 @@ void vTaskEVSECharge(void *pvParameters)
 	            }
 	            else
 	            {
-		            pCON->state = STATE_CON_RETURN;
+		            pCON->state = STATE_CON_PRECONTRACT;
 		            break;
 	            }
 	            //end fix
