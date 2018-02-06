@@ -198,9 +198,6 @@
     <Filter Include="Header files\middlewares\STemWin\XBF">
       <UniqueIdentifier>{84d2b761-42fb-4888-bf60-8a1289b08b78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\tiny-AES128-C">
-      <UniqueIdentifier>{daeea64c-08e4-4d12-b36d-bac04859b29a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\middlewares\tinysh">
       <UniqueIdentifier>{920f98d0-9c7d-4975-86d7-ebfa389067ca}</UniqueIdentifier>
     </Filter>
@@ -225,75 +222,6 @@
     <Filter Include="Header files\net">
       <UniqueIdentifier>{a4640c96-5bdc-4555-a54e-b8b9f6d62e8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1">
-      <UniqueIdentifier>{8c07f07e-c4f0-4d28-b346-32073f6a679f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src">
-      <UniqueIdentifier>{277027ef-0b36-4983-9fa4-760664a530bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include">
-      <UniqueIdentifier>{ca10fb84-6432-46ee-8146-89d9ad87d027}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\ipv4">
-      <UniqueIdentifier>{2b44a2a9-784c-4425-9ff5-d5908376237e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\ipv4\lwip">
-      <UniqueIdentifier>{ab1e2b99-50d2-41e4-a732-871b380f6ed8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\ipv6">
-      <UniqueIdentifier>{02ddecdd-220c-4785-b055-09b40d05478a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\ipv6\lwip">
-      <UniqueIdentifier>{a0c80ac9-e7b1-4812-8371-8d17ec529038}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\lwip">
-      <UniqueIdentifier>{024212f4-50f0-4e6f-a633-62b1618d6fe4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\netif">
-      <UniqueIdentifier>{01b17d87-5b96-4e81-b10b-e3ff7051016d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\posix">
-      <UniqueIdentifier>{e8c9df25-e9ad-480b-abef-2924d050f8ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\include\posix\sys">
-      <UniqueIdentifier>{9094d0ed-de74-42a2-b2ad-b9683fb5cb83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\netif">
-      <UniqueIdentifier>{da5d3b69-852b-4fef-9e9c-7798ba84703d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\src\netif\ppp">
-      <UniqueIdentifier>{89e65dd7-a9c8-4b73-bc28-d9cf42ab46b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\system">
-      <UniqueIdentifier>{3f190304-ea22-42e8-9252-7e0a7b71c3c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\system\arch">
-      <UniqueIdentifier>{47bf5a1b-f0f5-4aab-b779-69bc3fc2c82f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\system\noOS">
-      <UniqueIdentifier>{1f9a7109-f8b3-494e-9543-ced0e49867dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\system\OS">
-      <UniqueIdentifier>{e793657f-4990-40e5-8783-28e83bba799a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test">
-      <UniqueIdentifier>{95cf3a36-e5a3-41c8-8b05-3999fb5f800a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test\unit">
-      <UniqueIdentifier>{5352c350-1564-471a-a92f-a4164545f1dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test\unit\core">
-      <UniqueIdentifier>{c63a69d0-2439-4324-a437-81ca80129d50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test\unit\etharp">
-      <UniqueIdentifier>{07c65912-9c49-4a71-9224-99f7401af3f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test\unit\tcp">
-      <UniqueIdentifier>{9752283f-75f7-4d89-9aa1-c9c2a4f79373}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\lwip-1.4.1\test\unit\udp">
-      <UniqueIdentifier>{1b33d6bd-d93f-4177-ab08-cb2386c0e1e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\net\mbedTLS">
       <UniqueIdentifier>{f50fb545-ef64-48ac-8581-1fae0f4ef0d6}</UniqueIdentifier>
     </Filter>
@@ -308,9 +236,6 @@
     </Filter>
     <Filter Include="Source files\net\mbedTLS\library">
       <UniqueIdentifier>{8e69c93d-cac1-4cfa-ae6d-da5e4003749a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\net\user">
-      <UniqueIdentifier>{500e4fce-bc92-4030-b8fe-b8ed0bc01d33}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source files\os">
       <UniqueIdentifier>{8d5a2a06-9107-4493-acbb-d44508320cbe}</UniqueIdentifier>
@@ -720,18 +645,6 @@
     <Filter Include="Header files\middlewares\STemWin\SIF">
       <UniqueIdentifier>{3668b843-55e0-4405-905b-fe35d945e264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\ff13a">
-      <UniqueIdentifier>{27996e35-e362-4998-822f-b770bb802323}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\ff13a\documents">
-      <UniqueIdentifier>{4c812fc7-bef2-45b9-8e17-0ad177b5345c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\ff13a\documents\res">
-      <UniqueIdentifier>{898836bc-f1ad-4d39-ab28-c5596a0fab18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\middlewares\ff13a\source">
-      <UniqueIdentifier>{f977ecc8-cb4a-48a1-a770-fb610f44016b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\middlewares\yaffs2">
       <UniqueIdentifier>{30f3014a-1627-4a50-a77e-d7cd337cc507}</UniqueIdentifier>
     </Filter>
@@ -755,6 +668,234 @@
     </Filter>
     <Filter Include="Source files\Device-specific files">
       <UniqueIdentifier>{42a710f8-21f2-495c-9cc8-e70494880696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP">
+      <UniqueIdentifier>{ccf31c43-d5f3-402a-ba26-eac0942d0304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\common">
+      <UniqueIdentifier>{47886c7f-a2e6-404e-bc2d-cdb6526eec1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp">
+      <UniqueIdentifier>{e229aa56-f60e-40bf-a010-857b20e12434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\core">
+      <UniqueIdentifier>{7c9829e2-0528-4255-9414-426ca800b96b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\dhcp">
+      <UniqueIdentifier>{f34faf99-6315-4f11-ad68-1cd7d46ff143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\drivers">
+      <UniqueIdentifier>{d1a7488f-646f-4af7-b5ad-856dc5f15c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\drivers\mac">
+      <UniqueIdentifier>{7fdf87d5-b25f-4e42-8b21-4f122eace2fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\drivers\phy">
+      <UniqueIdentifier>{9ea598c6-0e85-48b4-9b4a-d62eaa51daf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\ftp">
+      <UniqueIdentifier>{0e662518-edb7-484d-b98f-da2bcd143483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\ipv4">
+      <UniqueIdentifier>{b0509136-4d03-4311-85bb-225a624264ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\ppp">
+      <UniqueIdentifier>{21589a3a-939f-44ff-b4b4-063c11f4c2f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\std_services">
+      <UniqueIdentifier>{6f200675-23a2-4b04-8bc6-fe3bb447443b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP">
+      <UniqueIdentifier>{dd0d3152-b174-4696-950e-24936bfb6858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\common">
+      <UniqueIdentifier>{4181fede-d62b-4d96-91cc-f3870638e360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp">
+      <UniqueIdentifier>{8229873b-1ddd-4442-b092-1d88b0b5f473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\core">
+      <UniqueIdentifier>{e2f8ea8a-2574-4b75-8cf7-aa43d297ed0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\dhcp">
+      <UniqueIdentifier>{9a7f9f5e-69c4-486f-ab17-f793669783e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\dhcpv6">
+      <UniqueIdentifier>{f84bee87-f4e7-454a-8fc5-ce362df7a41d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\dns">
+      <UniqueIdentifier>{3c215f43-5147-4579-92cc-059fc7392bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\dns_sd">
+      <UniqueIdentifier>{c9fcf3f6-b758-4cda-b2b7-cb346f304f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers">
+      <UniqueIdentifier>{ba4e9b10-0b60-4490-816e-fdbcd5f21b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\mac">
+      <UniqueIdentifier>{6f21035e-27a6-4662-96e2-bcbf8c156347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\phy">
+      <UniqueIdentifier>{a2904c73-e5b2-489b-8bc8-2cea423bef04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\ftp">
+      <UniqueIdentifier>{1766b159-dc0d-4b35-bc4b-55ab5f9b3fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\http">
+      <UniqueIdentifier>{7ba7bf5a-b0a4-4c4e-9d3a-403ce8e52e13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\icecast">
+      <UniqueIdentifier>{74f39c03-c101-4f75-90dd-f271c33e2784}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\ipv4">
+      <UniqueIdentifier>{986310a7-9367-4824-bc96-9d80b4c355c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\ipv6">
+      <UniqueIdentifier>{aa7ab0a2-0cfa-4f7f-8172-d4afdfdad37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\mdns">
+      <UniqueIdentifier>{45f232bf-beb2-4f29-87d5-c59c928cb1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\mibs">
+      <UniqueIdentifier>{f17d30b0-45b0-482d-96ee-7d90873b49c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\mqtt">
+      <UniqueIdentifier>{1cc0f726-0883-48dd-b63a-3b3621408f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\netbios">
+      <UniqueIdentifier>{812a8921-e27d-4d8e-8bda-5dfbe92c842a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\ppp">
+      <UniqueIdentifier>{f9850a25-97ca-4393-835f-f62e4b983879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\smtp">
+      <UniqueIdentifier>{56dc2716-6f4f-4ee8-98a2-96deeb882fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\snmp">
+      <UniqueIdentifier>{e506aa6e-7d8a-495c-8e52-0d641bef05aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\sntp">
+      <UniqueIdentifier>{7dd980a7-f30c-4db5-8e2e-68510328b7ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\std_services">
+      <UniqueIdentifier>{e7f8e653-ec92-4432-a59e-5e942ecf0b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\tftp">
+      <UniqueIdentifier>{6f96480c-3c0e-4dbd-acb0-6abefe6d4d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\web_socket">
+      <UniqueIdentifier>{e64a5b5b-4ca8-4fed-a76c-e9e8b9567163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\customer">
+      <UniqueIdentifier>{7ff88056-e64e-412c-af82-1b55ac201654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\customer">
+      <UniqueIdentifier>{eda88369-7c01-46b3-94a9-1c053daea50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\user">
+      <UniqueIdentifier>{7de3f50a-0af7-410e-831f-bf06a48f101a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\user">
+      <UniqueIdentifier>{55efeae1-ff25-4e91-8922-bc76607a92f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\dns">
+      <UniqueIdentifier>{6bc3a077-96d5-4fda-8992-dabe663c7840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\smtp">
+      <UniqueIdentifier>{a4875b73-6bfc-4f60-b3ae-ceeea4f2b535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto">
+      <UniqueIdentifier>{7bc7874f-3eef-47cb-a5a7-e3cd2e4008b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto">
+      <UniqueIdentifier>{6dd8b258-eea3-46a5-b3d4-72a86c8e6c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\aead">
+      <UniqueIdentifier>{60fd183a-dff8-4f66-a29b-2db6ecf1290c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\certificate">
+      <UniqueIdentifier>{574bf6c6-505c-4ad0-85c3-4a2ad35b1665}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\cipher">
+      <UniqueIdentifier>{3938986a-3c04-4e9a-b28f-2ee6d473951a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\cipher_mode">
+      <UniqueIdentifier>{fed74b41-f6dc-43b7-ba9a-27e1bf253107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\core">
+      <UniqueIdentifier>{24043015-e62a-479a-80a1-a70bf0fdd558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\ecc">
+      <UniqueIdentifier>{abcdfd46-b501-4410-98d1-21021a6b2c73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\encoding">
+      <UniqueIdentifier>{180ccdc6-b2e2-4df1-9bd3-7a90dc707e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\encoding">
+      <UniqueIdentifier>{b67d360e-e93d-465b-9888-efd6f5f14755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\hash">
+      <UniqueIdentifier>{a0f4d070-b83c-43d4-9dee-709eb345911f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\kdf">
+      <UniqueIdentifier>{d879bbbf-f7b0-45e3-9b80-1de561fa5084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\mac">
+      <UniqueIdentifier>{ac1b013f-c077-4f33-a65b-32cd79ca69d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\mpi">
+      <UniqueIdentifier>{84271379-fbcd-4b46-a572-71aba8c9b363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\pkc">
+      <UniqueIdentifier>{60fc84bc-7800-4542-84f7-8bbcf4ef7f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\rng">
+      <UniqueIdentifier>{9f038011-780c-4d7f-b552-8adc5a11a8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\rng">
+      <UniqueIdentifier>{59c18f28-3727-41f8-8c5e-1d309a146c3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_crypto\xof">
+      <UniqueIdentifier>{dfb53659-af31-4650-a1dc-7ca8069916e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_ssl">
+      <UniqueIdentifier>{ce207141-788b-467d-b360-a600f616a725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_ssl">
+      <UniqueIdentifier>{726ee1a8-68f4-447c-ac5b-680abb8aed5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\aead">
+      <UniqueIdentifier>{581dea97-a619-4b9b-80b6-7d4919e126e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\certificate">
+      <UniqueIdentifier>{068bbb15-fd42-4b24-b4b2-fc3c10828231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\cipher">
+      <UniqueIdentifier>{467d17c1-9a36-4386-9f00-6d6919432380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\cipher_mode">
+      <UniqueIdentifier>{89d6b4c6-0fc5-4b9a-83fa-cfe0be69077b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\ecc">
+      <UniqueIdentifier>{073e196f-509b-4f6b-879c-460ba93b15c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\hash">
+      <UniqueIdentifier>{fa4d7813-55a5-488a-998d-4ff082bdf6c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\kdf">
+      <UniqueIdentifier>{2b339cf9-6c8d-418f-9239-4aab922f550d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\mac">
+      <UniqueIdentifier>{97d37d4d-09be-4324-8fd7-88534e561f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\mpi">
+      <UniqueIdentifier>{e1c1c158-526d-44c3-9567-bf471aa2a3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\pkc">
+      <UniqueIdentifier>{5e281fd9-7cf2-49e5-b576-c2bede3a0f38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\xof">
+      <UniqueIdentifier>{67940721-c1fe-488b-96e4-fda3603aa11c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1136,9 +1277,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
       <Filter>Source files\cli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\aes.c">
-      <Filter>Source files\net\mbedTLS\library</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
       <Filter>Source files\app\libEcharge</Filter>
@@ -1524,14 +1662,509 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Card_Info.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\factorycfg.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
       <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\line.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\cpu_endian.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\date_time.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_freertos.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\path.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\resource_manager.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\str.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\bsd_socket.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ethernet.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ip.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\net.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\net_mem.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\nic.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ping.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\raw_socket.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\socket.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_fsm.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_timer.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\udp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_common.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_debug.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_server.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f4x9_eth_driver.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8720_driver.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\arp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\auto_ip.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\icmp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\igmp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\ipv4.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\ipv4_frag.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\chap.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ipcp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ipv6cp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\lcp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\pap.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_debug.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_fsm.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_hdlc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\chargen.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\daytime.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\discard.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\echo.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\debug.c">
+      <Filter>Source files\net\CycloneTCP\customer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\ifconfig.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\tasknetwork.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\taskppp.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_cache.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\fs_port_yaffs.c">
+      <Filter>Source files\net\CycloneTCP\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_events.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\interface_network.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\net_device.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\interface_ftpserver.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\interface_ftpclient.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\net_eth.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\net_modem.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\smtp\smtp_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\smtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\asn1.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\base64.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\oid.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\rng\yarrow.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\rng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\interface_smtpclient.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\dtls_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\dtls_record.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\ssl_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_cache.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_certificate.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_cipher_suites.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_client.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_client_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_common.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake_hash.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_key_material.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_record.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_signature.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\ccm.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\chacha20_poly1305.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\gcm.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\pem_import.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_parse.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_validate.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_common.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aes.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aria.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\camellia.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\chacha.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des3.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\idea.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\present.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc4.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc6.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\seed.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cbc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cfb.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ctr.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ecb.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ofb.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\xts.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdh.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdsa.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec_curves.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\asn1.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\base64.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\oid.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b160.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b384.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b512.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s128.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s160.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s224.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md2.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md4.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md5.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd128.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd160.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha1.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha224.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha384.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_224.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_384.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_512.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_224.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\tiger.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\whirlpool.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\kdf\pkcs5.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\kdf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\cmac.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\gmac.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\hmac.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\poly1305.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mpi\mpi.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\mpi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dh.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dsa.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\rsa.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\rng\yarrow.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\rng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\keccak.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake128.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake256.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\mbedTLS\library\mbedtls_aes.c">
+      <Filter>Source files\net\mbedTLS\library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rng.c">
+      <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2507,12 +3140,6 @@
     <ClInclude Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.h">
       <Filter>Header files\middlewares\STemWin\XBF</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\aes.h">
-      <Filter>Header files\middlewares\tiny-AES128-C</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\tiny-AES128-C\enc_dec.h">
-      <Filter>Header files\middlewares\tiny-AES128-C</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h">
       <Filter>Header files\middlewares\tinysh</Filter>
     </ClInclude>
@@ -2527,255 +3154,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwipopts.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwippools.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\autoip.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\icmp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\igmp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\inet.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\inet_chksum.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\ip.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\ip_addr.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv4\lwip\ip_frag.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv4\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv6\lwip\icmp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv6\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv6\lwip\inet.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv6\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv6\lwip\ip.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv6\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\ipv6\lwip\ip_addr.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\ipv6\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\api.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\api_msg.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\arch.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\debug.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\def.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\dhcp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\dns.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\err.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\init.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\mem.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\memp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\memp_std.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\netbuf.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\netdb.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\netif.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\netifapi.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\opt.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\pbuf.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\raw.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\sio.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\snmp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\snmp_asn1.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\snmp_msg.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\snmp_structs.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\sockets.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\stats.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\sys.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\tcp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\tcpip.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\tcp_impl.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\timers.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\lwip\udp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\lwip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\netif\etharp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\netif</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\netif\ppp_oe.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\netif</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\netif\slipif.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\netif</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\posix\netdb.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\posix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\include\posix\sys\socket.h">
-      <Filter>Header files\net\lwip-1.4.1\src\include\posix\sys</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\auth.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\chap.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\chpms.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\fsm.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\ipcp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\lcp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\magic.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\md5.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\pap.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\pppdebug.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\ppp_impl.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\randm.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\src\netif\ppp\vj.h">
-      <Filter>Header files\net\lwip-1.4.1\src\netif\ppp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\bpstruct.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\cc.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\cpu.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\epstruct.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\init.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\lib.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\perf.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\arch\sys_arch.h">
-      <Filter>Header files\net\lwip-1.4.1\system\arch</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\noOS\ethernetif.h">
-      <Filter>Header files\net\lwip-1.4.1\system\noOS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\system\OS\ethernetif.h">
-      <Filter>Header files\net\lwip-1.4.1\system\OS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\lwipopts.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\lwip_check.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\core\test_mem.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\etharp\test_etharp.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\etharp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\tcp\tcp_helper.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\tcp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\tcp\test_tcp.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\tcp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\tcp\test_tcp_oos.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\tcp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\lwip-1.4.1\test\unit\udp\test_udp.h">
-      <Filter>Header files\net\lwip-1.4.1\test\unit\udp</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h">
       <Filter>Header files\net\mbedTLS\include\mbedtls</Filter>
@@ -2983,12 +3361,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h">
       <Filter>Header files\net\mbedTLS\include\mbedtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\user\ifconfig.h">
-      <Filter>Header files\net\user</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\net\user\lwip_init.h">
-      <Filter>Header files\net\user</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h">
       <Filter>Header files\os\FreeRTOS\Source\include</Filter>
@@ -3452,24 +3824,6 @@
     <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h">
       <Filter>Header files\middlewares\STemWin\SIF</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\diskio.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ffconf.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\ff_ex.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\integer.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\ff13a\source\nand_diskio.h">
-      <Filter>Header files\middlewares\ff13a\source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
@@ -3658,9 +4012,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\sys_types.h">
       <Filter>Header files\app</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\cli\ymodem.h">
-      <Filter>Source files\cli</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\FreeRTOSConfig.h">
       <Filter>Header files\os\FreeRTOS</Filter>
@@ -4082,8 +4433,1199 @@
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h">
       <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\line.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\cli\ymodem.h">
+      <Filter>Header files\cli</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_version.h">
-      <Filter>Header files</Filter>
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\compiler_port.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\cpu_endian.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\date_time.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\debug.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\error.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\fs_port.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_chibios.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_cmsis_rtos.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_cmsis_rtos2.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_embos.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_freertos.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_none.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_posix.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_rtx.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_sys_bios.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_ucos2.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_ucos3.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\os_port_windows.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\path.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\resource_manager.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\str.h">
+      <Filter>Header files\net\CycloneTCP\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\bsd_socket.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ethernet.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ip.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\net.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\net_legacy.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\net_mem.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\nic.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\ping.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\raw_socket.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\socket.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_fsm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\tcp_timer.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\core\udp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_debug.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcp\dhcp_server.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcpv6\dhcpv6_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcpv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcpv6\dhcpv6_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcpv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcpv6\dhcpv6_debug.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcpv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dhcpv6\dhcpv6_relay.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dhcpv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_cache.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns_sd\dns_sd.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\dns_sd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\a2fxxxm3_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\am335x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\aps3_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\avr32_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\esp32_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\f28m35x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\fm4_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lm3s_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc175x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc176x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc178x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc18xx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc23xx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\lpc43xx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\m2sxxx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\mcf5225x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\mimxrt1052_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\mk6x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\mk7x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\mkv5x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\omapl138_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\pic32mx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\pic32mz_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\rx63n_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\rza1_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\s7g2_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sam3x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sam4e_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sam7x_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sam9263_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sama5d2_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sama5d3_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\sama5d3_gigabit_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\same54_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\same70_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\samv71_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f107_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f2x7_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f4x7_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f4x9_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32f7xx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\stm32h7xx_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\str912_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\tm4c129_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\xmc4500_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\xmc4700_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\xmc4800_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\mac\zynq7000_eth_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ar8031_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dm9161_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dp83620_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dp83822_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\dp83848_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8031_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8041_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8051_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8061_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8081_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8091_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz8721_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\ksz9031_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8700_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8710_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8720_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8740_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\lan8742_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\rtl8211_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\st802rt1a_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\phy\upd60611_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\phy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_events.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_auth.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\mime.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\ssi.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\icecast\icecast_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\icecast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\arp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\auto_ip.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\icmp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\igmp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\ipv4.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\ipv4_frag.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv4\ipv4_routing.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\icmpv6.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ipv6.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ipv6_frag.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ipv6_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ipv6_pmtu.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ipv6_routing.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\mld.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ndp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ndp_cache.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ndp_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\ndp_router_adv.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ipv6\slaac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mdns\mdns_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mdns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mdns\mdns_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mdns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mdns\mdns_responder.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mdns</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\if_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\if_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\ip_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\ip_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\mib2_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\mib2_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\mib_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_community_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_community_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_framework_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_framework_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_usm_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_usm_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_vacm_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\snmp_vacm_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\tcp_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\tcp_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\udp_mib_impl.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mibs\udp_mib_module.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mqtt\mqtt_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mqtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mqtt\mqtt_client_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mqtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mqtt\mqtt_client_packet.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mqtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mqtt\mqtt_client_transport.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mqtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\mqtt\mqtt_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\mqtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\netbios\nbns_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\netbios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\netbios\nbns_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\netbios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\netbios\nbns_responder.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\netbios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\chap.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ipcp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ipv6cp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\lcp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\pap.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_debug.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_fsm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_hdlc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ppp\ppp_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\ppp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\smtp\smtp_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\smtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_dispatch.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_inform.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_message.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_object.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_pdu.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_trap.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_usm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_agent_vacm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\snmp\snmp_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\snmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\sntp\sntp_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\sntp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\chargen.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\daytime.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\discard.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\std_services\echo.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\std_services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\tftp\tftp_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\tftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\tftp\tftp_client_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\tftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\tftp\tftp_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\tftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\tftp\tftp_server.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\tftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\tftp\tftp_server_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\tftp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\web_socket\web_socket.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\web_socket\web_socket_auth.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\web_socket\web_socket_frame.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\web_socket\web_socket_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\web_socket\web_socket_transport.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_version.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\net_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\os_port_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\cli\ymodem.h">
+      <Filter>Header files\cli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\ifconfig.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\interface_network.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer\fs_port_config.h">
+      <Filter>Header files\net\CycloneTCP\customer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\interface_ftpserver.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\interface_ftpclient.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\user\net_device.h">
+      <Filter>Header files\net\user</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\ccm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\chacha20_poly1305.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\gcm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\pem_import.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_parse.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_validate.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aes.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aria.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\camellia.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\chacha.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des3.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\idea.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\present.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc4.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc6.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\seed.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cbc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cfb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ctr.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ecb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ofb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\xts.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\core\crypto.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdh.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec_curves.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\asn1.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\base64.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\oid.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md2.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md4.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md5.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha1.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\tiger.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\whirlpool.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\kdf\pkcs5.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\kdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\cmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\gmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\hmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\poly1305.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mpi\mpi.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dh.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\rsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\rng\yarrow.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\rng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\keccak.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\dtls_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\dtls_record.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\ssl_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_cache.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_certificate.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_cipher_suites.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_client.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_client_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake_hash.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_handshake_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_key_material.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_legacy.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_record.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server_misc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_signature.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_ssl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\ccm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\chacha20_poly1305.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\aead\gcm.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\aead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\pem_import.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_parse.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_cert_validate.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\certificate\x509_common.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\certificate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aes.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\aria.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\camellia.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\chacha.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\des3.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\idea.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\present.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc4.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\timercallback.h">
+      <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\rc6.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher\seed.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cbc.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\cfb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ctr.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ecb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\ofb.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\cipher_mode\xts.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\cipher_mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\core\crypto.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdh.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ecdsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\ecc\ec_curves.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\ecc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\asn1.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\base64.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\encoding\oid.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\encoding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2b512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\blake2s256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md2.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md4.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\md5.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\ripemd160.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha1.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_384.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha3_512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_224.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\sha512_256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\tiger.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\hash\whirlpool.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\kdf\pkcs5.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\kdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\cmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\gmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\hmac.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mac\poly1305.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\mpi\mpi.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\mpi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dh.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\dsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\pkc\rsa.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\pkc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\rng\yarrow.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\rng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\keccak.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake128.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake256.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

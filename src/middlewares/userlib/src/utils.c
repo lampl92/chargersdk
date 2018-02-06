@@ -9,9 +9,34 @@
 #include "xprintf.h"
 #include "yaffsfs.h"
 
+char *utils_strsep(char **stringp, const char *delim)
+{
+    char *s;
+    const char *spanp;
+    int c, sc;
+    char *tok;
+    if ((s = *stringp) == NULL)
+        return (NULL);
+    for (tok = s;;) {
+        c = *s++;
+        spanp = delim;
+        do {
+            if ((sc = *spanp++) == c) {
+                if (c == 0)
+                    s = NULL;
+                else
+                    s[-1] = 0;
+                *stringp = s;
+                return (tok);
+            }
+        } while (sc != 0);
+    }
+    /* NOTREACHED */
+}
+
 char *utils_strdup(const char *s)
 {
-    size_t len = strlen(s) + 1;//计算字符串的长度
+    size_t len = strlen(s) + sizeof("");//计算字符串的长度
     void *new = malloc(len);//分配一个新的空间给new
     if(new == NULL)
     {
@@ -264,3 +289,5 @@ int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
 
     return 1;
 }
+
+char *strdup(const char *s) __attribute__((alias("utils_strdup")));

@@ -33,12 +33,12 @@ uint8_t isEVSEWorking(void)
         if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
         {
             return 1;
-        } 
+        }
     }
     return 0;
 }
 
-
+#if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     EVSE_t *pEVSE;
@@ -86,6 +86,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
         return 0;
     }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /*                               设置充电桩信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
@@ -876,7 +877,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /* @todo (yuye#1#): 确认电压范围 */
     /**  (rgw#1#): 实现代码 */
 
-#ifndef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY
     tmpOffState = 0;
 #else
 //    if (Get_Power_Status == 1)
@@ -1132,11 +1133,16 @@ EVSE_t *EVSECreate(void)
 
 static void CONInit(void)
 {
-    static CON_t *pCON[defTotalCON];  //在堆中定义
-	uint8_t str[17] = "2000000000000002";
-
-    pListCON = UserListCreate();
     int i;
+    static CON_t *pCON[defMaxCON];  //在堆中定义
+
+	uint8_t str[17] = "2000000000000002";
+    for (i = 0; i < defMaxCON; i++)
+    {
+        pCON[i] = NULL;
+    }
+    
+    pListCON = UserListCreate();
 //    double upp = 260;
 //    double low = 176;
 	double temp = 32;
@@ -1149,7 +1155,6 @@ static void CONInit(void)
 //        pCON[i]->info .SetCONCfg (pCON[i], jnVolatageLowerLimits, &low, ParamTypeDouble);
         //pCON[i]->info .SetCONCfg (pCON[i], jnRatedCurrent, &temp, ParamTypeDouble);
 	    //pCON[i]->info.SetCONCfg(pCON[i], jnQRCode, str, ParamTypeString);
-        
 
         pListCON->Add(pListCON, pCON[i]);
     }

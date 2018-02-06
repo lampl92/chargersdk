@@ -5,15 +5,21 @@
 * @version v1.0
 * @date 2017-05-02
 */
-
-//#include "netif/ppp/ppp.h"
-#include "lwip_init.h"
 #include "bsp.h"
 #include "gprs_m26.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
-#include "netif/ppp/ppp.h"
 
+
+
+//    pModem = DevModemCreate();
+//    modem_open(pModem);
+//    modem_init(pModem);
+//    Modem_Poll(pModem);//这是任务
+
+
+
+#if 0
 EventBits_t uxBitLwip;
 //void input_over_serial(int ppp)
 //{
@@ -52,3 +58,4 @@ void vTaskPPP(void *pvParameters)
         vTaskDelay(1000);
     }
 }
+#endif

@@ -247,7 +247,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                        0);
 //                    if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
 //                    {            
-//                        xEventGroupSetBits(pCont->status.xHandleEventOrder, defEventBitOrder_HMIDispOK);
 //                    }
 //                    CreateHomePage();
 //                }

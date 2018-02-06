@@ -1420,7 +1420,7 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
                         pdTRUE,
                         pdTRUE,
                         10000);//要比remote中的order超时（60s）长
-                    if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
+                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
                     {
                         CreateHomePage();
                     }

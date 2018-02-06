@@ -17,6 +17,7 @@
 #define pathProtoCfg        "/nand/system/protocol.cfg"
 #define pathWhiteList       "/nand/system/whitelist.cfg"
 #define pathBlackList       "/nand/system/blacklist.cfg"
+#define pathNetCfg          "/nand/system/ifconfig.cfg"
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
 #define pathSignalImage0            "/nand/system/SignalImage0.bmp"
@@ -208,10 +209,21 @@
 #define jnProtoSegTime_off_peak    "SegTime_off_peak"
 #define jnProtoSegCont             "SegCont"
 
+/*ifconfig.cfg*/
+#define jnNetAdapter        "Adapter"
+#define jnNetDHCP           "DHCP"
+#define jnNetHostName       "HostName"
+#define jnNetMAC            "MAC"
+#define jnNetIP             "IP"
+#define jnNetMask           "Mask"
+#define jnNetGate           "Gate"
+#define jnNetDNS1           "DNS1"
+#define jnNetDNS2           "DNS2"
+
 //#define jnProtoStart(n)              "Start"#n
 //#define jnProtoEnd(n)                "End"#n
 
-extern const uint8_t	*jnProtoSegStart[];
-extern const uint8_t	*jnProtoSegEnd[];
+extern const char *jnProtoSegStart[];
+extern const char *jnProtoSegEnd[];
 
 #endif

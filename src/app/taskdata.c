@@ -24,8 +24,8 @@ void vTaskEVSEData(void *pvParameters)
     uint32_t ulTotalCON;
     int id, i;
     uint32_t ulSignalPoolXor;
-    uint32_t ulSignalCONAlarmOld_CON[8] = {0};
-    uint32_t ulSignalCONFaultOld_CON[8] = {0};
+    uint32_t ulSignalCONAlarmOld_CON[defMaxCON] = { 0 };
+    uint32_t ulSignalCONFaultOld_CON[defMaxCON] = { 0 };
     uint32_t ulSignalEVSEAlarmOld = 0;
     uint32_t ulSignalEVSEFaultOld = 0;
     EventBits_t uxBitsTimer;
@@ -37,7 +37,7 @@ void vTaskEVSEData(void *pvParameters)
     uxBitsTimer = 0;
     uxBitsData = 0;
     uxBitsCharge = 0;
-    if (ulTotalCON > 8)
+    if (ulTotalCON > defMaxCON)
     {
         while (1)
             ;//你看, 你设置的ulSignalCONAlarmOld_CON 数组小了
@@ -111,22 +111,40 @@ void vTaskEVSEData(void *pvParameters)
                     AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 }
                 
-                /****金额判断****/
-                if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
+                /*金额不足*/
+                if (pCON->order.dTotalFee >= pCON->order.dBalance)
                 {
-                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
-                    {
-                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
-                        pCON->order.statOrder = STATE_ORDER_WAITSTOP;
-                        break;
-                    }
+                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                    pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                    break;
                 }
-                //****时间判断***   
-                if (time(NULL) - pCON->order.tStartTime < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
+                /*总时间限制*/
+                if ((time(NULL) - pCON->order.tStartTime) < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
                 {
-                    if (pCON->order.ulLimitTime != 0) //0表示自动充满 非0表示设定时间
+                    /****电量判断****/
+                    if (pCON->order.dLimitPower != 0) //0 时表示自动充满，非0即停止电量 
                     {
-                        if (time(NULL) - pCON->order.tStartTime >= pCON->order.ulLimitTime)//达到或超过设定时间
+                        if (pCON->order.dTotalPower >= pCON->order.dLimitPower) // 达到充电电量
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitPower);
+                            pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                            break;
+                        }
+                    }
+                    /****金额判断****/
+                    else if (pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
+                    {
+                        if (pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                            pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                            break;
+                        }
+                    }
+                    //****时间判断***  
+                    else if (pCON->order.ulLimitTime != 0) //0表示自动充满 非0表示设定时间
+                    {
+                        if ((time(NULL) - pCON->order.tStartTime) >= pCON->order.ulLimitTime)//达到或超过设定时间
                         {
                             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                             pCON->order.statOrder = STATE_ORDER_WAITSTOP;
@@ -155,66 +173,103 @@ void vTaskEVSEData(void *pvParameters)
                 makeOrder(pCON);
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
-                /************ make user happy, but boss and i are not happy ************/
-                if(pCON->order.dLimitFee != 0)
+                /************ make user happy, but boss and i are not happy :( ************/
+                if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                {
+                    pCON->order.dTotalFee = pCON->order.dBalance;
+                }
+                if (pCON->order.dLimitPower != 0)
+                {
+                    if (pCON->order.dTotalPower > pCON->order.dLimitPower)
+                    {
+                        pCON->order.dTotalPower = pCON->order.dLimitPower;
+                    }
+                }
+                else if(pCON->order.dLimitFee != 0)
                 {
                     if(pCON->order.dTotalFee > pCON->order.dLimitFee)
                     {
                         pCON->order.dTotalFee = pCON->order.dLimitFee;
                     }
                 }
-                if (pCON->order.ulLimitTime != 0)
+                else if (pCON->order.ulLimitTime != 0)
                 {
                     if (pCON->order.tStopTime - pCON->order.tStartTime > pCON->order.ulLimitTime)
                     {
                         pCON->order.tStopTime = (time_t)(pCON->order.tStartTime + pCON->order.ulLimitTime);
                     }
                 }
-                /*****************************************/
+                /***************************************** :) *******/
+                /***判断停止类型***/
                 uxBitsData = xEventGroupGetBits(pCON->status.xHandleEventOrder);
-                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)    //达到充电金额限制
+                
+                //达到充电电量限制
+                if ((uxBitsData & defEventBitOrderStopTypeLimitPower) == defEventBitOrderStopTypeLimitPower)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitPower);
+                    pCON->order.ucStopType = defOrderStopType_Power;
+                }
+                
+                //达到充电金额限制
+                if((uxBitsData & defEventBitOrderStopTypeLimitFee) == defEventBitOrderStopTypeLimitFee)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     pCON->order.ucStopType = defOrderStopType_Fee;
                 }
-                if ((uxBitsData & defEventBitOrderStopTypeLimitTime) == defEventBitOrderStopTypeLimitTime)    //达到充电时间限制
+                
+                //达到充电时间限制
+                if ((uxBitsData & defEventBitOrderStopTypeLimitTime) == defEventBitOrderStopTypeLimitTime)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
                     pCON->order.ucStopType = defOrderStopType_Time;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)    //远程停止
+                
+                //远程停止
+                if((uxBitsData & defEventBitOrderStopTypeRemoteStop) == defEventBitOrderStopTypeRemoteStop)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     pCON->order.ucStopType = defOrderStopType_Remote;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)    //刷卡停止
+                
+                //刷卡停止
+                if((uxBitsData & defEventBitOrderStopTypeRFIDStop) == defEventBitOrderStopTypeRFIDStop)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     pCON->order.ucStopType = defOrderStopType_RFID;
                 }
-                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)    //自动充满
+                
+                //自动充满
+                if((uxBitsData & defEventBitOrderStopTypeFull) == defEventBitOrderStopTypeFull)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
                     pCON->order.ucStopType = defOrderStopType_Full;
                 }
-                if ((uxBitsData & defEventBitOrderStopTypeUnPlug) == defEventBitOrderStopTypeUnPlug)    //用户强制拔枪
+                
+                //用户强制拔枪
+                if ((uxBitsData & defEventBitOrderStopTypeUnPlug) == defEventBitOrderStopTypeUnPlug)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
                     pCON->order.ucStopType = defOrderStopType_UnPlug;
                 }
-                if ((uxBitsData & defEventBitOrderStopTypeCurr) == defEventBitOrderStopTypeCurr)    //过流
+                
+                //过流
+                if ((uxBitsData & defEventBitOrderStopTypeCurr) == defEventBitOrderStopTypeCurr)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
                     pCON->order.ucStopType = defOrderStopType_OverCurr;
                 }
-                if ((uxBitsData & defEventBitOrderStopTypeScram) == defEventBitOrderStopTypeScram)    //急停
+                
+                //急停
+                if ((uxBitsData & defEventBitOrderStopTypeScram) == defEventBitOrderStopTypeScram)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->order.ucStopType = defOrderStopType_Scram;
                 }
+                
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                vTaskDelay(3000);//等待其他地方使用
 
+                xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
+                
                 /**存储订单 */
 #if EVSE_USING_NET
 #else
@@ -226,23 +281,32 @@ void vTaskEVSEData(void *pvParameters)
 	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
 	            {
     	            printf_safe("Order OK.....................\n");
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-		            /* 在这里存储订单*/
+    	            pCON->order.ucPayStatus = 1;
     	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-		            AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
-		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
 	            else
 	            {
     	            printf_safe("Order TimeOut.....................\n");
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-					/* (rgw#1): 在这里存储订单*/
+    	            pCON->order.ucPayStatus = 0;
     	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
-		            AddOrderCfg(pathOrder, &(pCON->order), pechProto);
-		            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
-		            OrderInit(&(pCON->order));//状态变为IDLE
 	            }
+                AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
+                xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
+                pCON->order.statOrder = STATE_ORDER_HOLD;
+                break;
+            case STATE_ORDER_HOLD:
+                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
+                {
+                    break;
+                }
+                else
+                {
+                    pCON->order.statOrder = STATE_ORDER_RETURN;
+                }
+                break;
+            case STATE_ORDER_RETURN:
+                OrderInit(&(pCON->order));//状态变为IDLE
                 break;
             }
         }//for CONid
@@ -276,7 +340,7 @@ void vTaskEVSEData(void *pvParameters)
         }
         
         /********** 告警记录 **************/
-#if 1
+#if EVSE_USING_STORE_LOG
         for (id = 0; id < ulTotalCON; id++)
         {
             pCON = CONGetHandle(id);

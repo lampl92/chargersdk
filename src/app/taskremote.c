@@ -220,7 +220,6 @@ void vTaskEVSERemote(void *pvParameters)
     int i;
     EventBits_t uxBits;
     RemoteState_t remotestat;
-    RemoteHeartState_e eRmtHeartStat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
@@ -230,7 +229,6 @@ void vTaskEVSERemote(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
-    eRmtHeartStat = REMOTEHEART_IDLE;
     errcode = ERR_NO;
     network_res = 0;
     reg_try_cnt = 0;
@@ -278,27 +276,12 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
-                    remotestat = REMOTE_RECONNECT;
-                }
-                uxBits = xEventGroupGetBits(xHandleEventTCP);
-                if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
-                {
-                    reg_try_cnt = 0;
-                    remotestat = REMOTE_NO;
+                    remotestat = REMOTE_ERROR;
                 }
             }
             break;
         case REMOTE_REGEDITED:
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPConnectFail,
-                                         pdTRUE, pdTRUE, 0);
-            if((uxBits & defEventBitTCPConnectFail) == defEventBitTCPConnectFail)
-            {
-                remotestat = REMOTE_RECONNECT;
-                printf_safe("State Regedit TCPConnectFail, Call Reconnect!!!\n");
-                break;
-            }
             
             /*********上传未处理的订单**************/
 #if 1
@@ -371,11 +354,10 @@ void vTaskEVSERemote(void *pvParameters)
             if(network_res != 1)
             {
                 heart_lost++;
-                if(heart_lost > 750)
+                if(heart_lost > 200)//750
                 {
                     heart_lost = 0;
-                    eRmtHeartStat = REMOTEHEART_IDLE;
-                    remotestat = REMOTE_RECONNECT;
+                    remotestat = REMOTE_ERROR;
                     break;
                 }
             }
@@ -414,12 +396,21 @@ void vTaskEVSERemote(void *pvParameters)
                 switch (pCON->order.statRemoteProc.rmt_ctrl.stat)
                 {
                 case REMOTECTRL_IDLE:
-                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, &(pCON->order.statRemoteProc.rmt_ctrl.id), &(pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff), &network_res);
-                    if (network_res == 1) //注意这里的ID会一直存在，在其他状态中也可以使用
+                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, 
+                                            &(pCON->order.statRemoteProc.rmt_ctrl.id), 
+                                            &(pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff), 
+                                            &network_res);
+                    if (network_res == 1)
                     {
                         pCON->order.statRemoteProc.rmt_ctrl.timestamp = time(NULL);
                         if (pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff == 1)
                         {
+                            if (pCON->order.statOrder != STATE_ORDER_IDLE)
+                            {
+                                printf_safe("上次订单未结束, 不允许开启新订单!!!!\n");
+                                pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
+                                break;
+                            }
                             pCON->order.statOrder = STATE_ORDER_WAITSTART;//状态处理见taskdata.c文件
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_WAIT_START;
                         }
@@ -443,7 +434,6 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 60)
                         {
-                            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }
                     }
@@ -467,8 +457,8 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
                     break;
                 case REMOTECTRL_FAIL:
-                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                    if ((uxBits & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Plug) != defSignalCON_State_Plug)
                     {
                         RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 3);//3, 枪未连接
                     }
@@ -653,7 +643,6 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
                     if(network_res == 1)
                     {
-                        pCON->order.ucPayStatus = 1;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
                         pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                     }
@@ -661,7 +650,6 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         if (time(NULL) - pCON->order.statRemoteProc.order.timestamp > 60)
                         {
-                            pCON->order.ucPayStatus = 0;
                             //超时就不要发送使用完成OK了，下面这条语句注释 ↓
                             //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
                             pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
@@ -693,6 +681,13 @@ void vTaskEVSERemote(void *pvParameters)
             printf_safe("State Reconnect ,Call TCP close!!\n");
             break;
         case REMOTE_ERROR:
+            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+            xTimerStop(xHandleTimerRemoteStatus, 100);
+            remotestat = REMOTE_NO;
+            xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
+            printf_safe("remote state error ,Call TCP close!!\n");
+            break;
+        default:
             break;
         }
 

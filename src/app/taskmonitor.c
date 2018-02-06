@@ -17,7 +17,7 @@
 //#define TEST_TIME_EvseData  "EvseData"
 //#define TEST_TIME_rfid  "rfid"
 
-static TaskHandle_t xHandleTaskChData[defTotalCON] = { NULL };
+static TaskHandle_t xHandleTaskChData[defMaxCON] = { NULL };
 static TaskHandle_t xHandleTaskEvseData = NULL;
 
 void vTaskMonitor_ChData(void *pvParameters)

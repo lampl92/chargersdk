@@ -12,7 +12,7 @@
 #include "event_groups.h"
 #include "evse_globals.h"
 #include "taskcreate.h"
-#include "modem.h"
+#include "interface_network.h"
 //#include "lwip_init.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
@@ -88,7 +88,8 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 if (pechProtoElem->status == 0)
                 {
                     printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
-                    modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
+                    //modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
+                    netSend(pechProtoElem->pbuff, pechProtoElem->len);
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
                 }

@@ -54,6 +54,7 @@ typedef ErrorCode_t(*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
 typedef ErrorCode_t(*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t(*pCon_ft)(void *pvCon);
 
+
 typedef struct _CONInfo
 {
     uint8_t ucCONID;                // 枪号
@@ -75,7 +76,6 @@ typedef struct _CONInfo
 
 typedef struct _CONStatus
 {
-    //uint8_t ucHeldCardID[defCardIDLength];
     CONStatusType_t xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     uint8_t ucLoadPercent;        // 负载百分比
     CONStatusType_t xCCState;     // 检测点4 CC state --PE
@@ -90,6 +90,9 @@ typedef struct _CONStatus
     double dChargingCurrent;
     double dChargingFrequence;
     double dChargingPower;
+    double dChargingEnergy;
+    double dPower_Total;
+    double dEnergy_Total;
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
@@ -109,6 +112,7 @@ typedef struct _CONStatus
     pCon_ft GetChargingCurrent;
     pCon_ft GetChargingFrequence;
     pCon_ft GetChargingPower;
+    pCon_ft GetChargingEnergy;
     VoltState_t xVoltStat;
     CurrState_t xCurrStat;
 

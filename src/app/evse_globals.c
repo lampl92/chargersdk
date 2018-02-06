@@ -1,15 +1,16 @@
 /**
 * @file globals.c
-* @brief EVSEÓ¦ÓÃÖĞÉæ¼°µ½µÄÈ«¾Ö±äÁ¿
+* @brief EVSEåº”ç”¨ä¸­æ¶‰åŠåˆ°çš„å…¨å±€å˜é‡
 * @author rgw
 * @version v1.0
 * @date 2017-01-22
 */
 #include "interface.h"
 #include "userlib_list.h"
-
+#include "net_device.h"
 
 EVSE_t *pEVSE;
 UserList_t *pListCON;
 RFIDDev_t *pRFIDDev;
 echProtocol_t *pechProto;
+//net_device_t eth_dev; å®šä¹‰åœ¨net_eth.cä¸­

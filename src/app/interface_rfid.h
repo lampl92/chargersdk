@@ -50,6 +50,16 @@ typedef struct _RFIDDev
     OrderData_t order;
 }RFIDDev_t;
 
+typedef struct _RfidQPkg
+{
+    char strCardID[defCardIDLength + 1];//卡号//在taskrfid中赋值
+    uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
+    uint8_t ucCardStatus;      //0 普通用户, 1 白名单用户, 2 黑名单用户
+    double  dBalance;           //余额 
+    uint8_t ucCONID;            //
+    RFIDState_t state;
+}RfidQPkg_t;
+
 RFIDDev_t *RFIDDevCreate(void);
 
 

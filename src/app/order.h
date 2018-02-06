@@ -82,7 +82,9 @@ typedef enum _OrderState
     STATE_ORDER_MAKE,
     STATE_ORDER_UPDATE,
     STATE_ORDER_WAITSTOP,
-    STATE_ORDER_FINISH
+    STATE_ORDER_FINISH,
+    STATE_ORDER_HOLD,
+    STATE_ORDER_RETURN
 }OrderState_t;
 
 /*每个时间段需要记录的信息*/
@@ -114,6 +116,7 @@ typedef struct _OrderData
     uint8_t ucStartType;        //4 有卡 5 无卡 
     double  dLimitFee;          //充电截至金额         在远程启动和界面启动时赋值
     uint32_t ulLimitTime;       //充电最大时间         
+    double dLimitPower;         //充电最大电量
     double  dStartPower;        //
     //充电过程
     double  dTotalPower;        //总电量
@@ -143,6 +146,13 @@ typedef struct _OrderTmpData
     TimerHandle_t xHandleTimerOrderTmp;
 }OrderTmpData_t;
 
+typedef struct _UserChargeCondition
+{
+    uint8_t ucCONID;            //
+    double  dLimitFee;          //充电截至金额
+    uint32_t ulLimitTime;       //充电最大时间       
+    double dLimitPower;         //充电最大电量
+}UserChargeCondition_t;
 void OrderCreate(OrderData_t *pOrder);
 void OrderInit(OrderData_t *pOrder);
 

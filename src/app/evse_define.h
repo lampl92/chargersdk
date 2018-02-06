@@ -43,17 +43,6 @@
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
 #define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
-#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
-//#define defEventBitIsNewID              BIT_2             //此卡在本桩没有刷过
-#define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
-#define defEventBitRFIDNewID            BIT_4
-#define defEventBitRFIDOldID            BIT_5
-#define defEventBitGoodIDReqDisp        BIT_6
-#define defEventBitGoodIDReqDispOK      BIT_7
-#define defEventBitBadIDReqDisp        BIT_8
-#define defEventBitBadIDReqDispOK      BIT_9
-#define defEventBitOweIDReqDisp        BIT_10
-#define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
 
@@ -63,7 +52,6 @@
 #define defEventBitOrderMakeOK                   BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK                 BIT_2
 
-#define defEventBitOrder_HMIDispOK               BIT_3
 #define defEventBitOrder_RemoteOrderOK           BIT_4
 #define defEventBitOrder_RemoteRTDataOK          BIT_5
 #define defEventBitOrder_StoreOK                 BIT_6
@@ -88,8 +76,8 @@
                                       defEventBitOrder_RemoteRTDataOK)
 
 /*------xHandleEventRemote*/
-#define defEventBitRemoteGetAccount     BIT_0
-#define defEventBitRemoteGotAccount     BIT_1
+#define defEventBitRemoteError          BIT_0
+
 /*------xHandleEventTCP*/
 #define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
@@ -101,11 +89,8 @@
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
-#define defEventBitHMI_ChargeReqClick       BIT_3
-#define defEventBitHMI_ChargeReqClickOK     BIT_4
-#define defEventBitHMI_ChargeReqLockLcdOK   BIT_5
-#define defEventBitHMI_RFIDOLD              BIT_6
 #define defEventBitHMI_UP_FAILD             BIT_7
+#define defEventBitHMI_TimeOut              BIT_3
     
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
@@ -130,13 +115,14 @@
 #define defEventBitExceptionMeter       BIT_8
 //#define defEventBitExceptionRelayPaste  BIT_9
 
-#define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionLimitTime   BIT_16  //把LimitTime放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionRemoteStop  BIT_11
-#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
-#define defEventBitExceptionCPSwitch    BIT_13
-#define defEventBitExceptionTempSensor  BIT_14
-#define defEventBitExceptionSocketTempSensor  BIT_15
+#define defEventBitExceptionLimitPower  BIT_10  //把LimitPower放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitFee    BIT_11  
+#define defEventBitExceptionLimitTime   BIT_12  
+#define defEventBitExceptionRemoteStop  BIT_13  //远程停止
+#define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
+#define defEventBitExceptionCPSwitch    BIT_15
+#define defEventBitExceptionTempSensor  BIT_16
+#define defEventBitExceptionSocketTempSensor  BIT_17
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
                                          defEventBitExceptionMeter)

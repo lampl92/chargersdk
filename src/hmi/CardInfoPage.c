@@ -21,6 +21,40 @@
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
 
+
+
+
+
+
+
+
+
+
+
+//刷卡已经不再用这些事件, 为保证编译临时定义, 整改界面流程后删掉
+
+#define defEventBitGoodIDReqDisp        BIT_6
+#define defEventBitGoodIDReqDispOK      BIT_7
+#define defEventBitBadIDReqDisp        BIT_8
+#define defEventBitBadIDReqDispOK      BIT_9
+#define defEventBitOweIDReqDisp        BIT_10
+#define defEventBitOwdIDReqDispOK      BIT_11
+
+#define defEventBitHMITimeOutToRFID         BIT_0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 WM_HWIN _hWinCardInfo;
 uint8_t EventFlag = 0;//用于事件发生时，防止图片重复刷新，影响响应速度
 uint8_t Timer_buf[32];

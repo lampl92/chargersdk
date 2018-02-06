@@ -50,6 +50,7 @@ void cli_init(void)
     tinysh_add_command(&cli_modeminfo_cmd);
     tinysh_add_command(&cli_protoinfo_cmd);
     tinysh_add_command(&cli_evselog_cmd);
+    tinysh_add_command(&cli_networkinfo_cmd);
     /************设备测试****************/
 //    tinysh_add_command(&cli_gprs_cmd);
 

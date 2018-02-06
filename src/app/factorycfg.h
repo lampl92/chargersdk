@@ -19,6 +19,8 @@ extern const char *strSysCfg;
         
 extern const char *strWhiteListCfg;
 extern const char *strBlackListCfg;
+
+extern const char *strNetCfg;
     
 extern const char *strOrderCfg;
 extern const char *strLogCfg;

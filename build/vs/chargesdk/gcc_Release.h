@@ -733,6 +733,9 @@
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
 #endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
+#endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
 #endif
@@ -880,6 +883,9 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
+#ifndef EVSE_USING_RFID
+#define EVSE_USING_RFID 0
+#endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
 #endif
@@ -999,6 +1005,9 @@
 #endif
 #ifndef __LLACCUM_IBIT__
 #define __LLACCUM_IBIT__ 32
+#endif
+#ifndef DEBUG_DIAG_DUMMY
+#define DEBUG_DIAG_DUMMY 1
 #endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
@@ -1225,12 +1234,18 @@
 //../../../src/middlewares/STemWin/BMP
 //../../../src/hmi
 //../../../src/hmi/lcd
-//../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/net/mbedTLS/include
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
+//../../../src/net/user
 // --- Include directories end --- //
 
 
