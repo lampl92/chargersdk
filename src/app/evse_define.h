@@ -91,6 +91,7 @@
 #define defEventBitHMI_ChargeReqDispDone    BIT_1
 #define defEventBitHMI_UP_FAILD             BIT_2
 #define defEventBitHMI_TimeOut              BIT_3
+#define defEventBitHMITOTASKRFID_Timeout    BIT_4
     
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4

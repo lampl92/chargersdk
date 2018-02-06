@@ -1554,9 +1554,6 @@
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\homedataflashbackstage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -4141,9 +4138,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\display.h">
       <Filter>Header files\middlewares\STemWin\BMP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hmi\homedataflashbackstage.h">
-      <Filter>Header files\hmi</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hmi\skinposition.h">
       <Filter>Header files\hmi</Filter>

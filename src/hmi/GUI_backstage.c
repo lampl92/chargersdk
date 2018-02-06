@@ -5,7 +5,10 @@
 #include "interface.h"
 #include "utils.h"
 
+int i;//临时用
 double GBSBalance;
+int quitflag = 0;
+GUNState_E GBSgunstate[2];//刷新各个枪的状态，给StateHome使用
 GBSState_E gbsstate;
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
@@ -22,6 +25,28 @@ void GBSTask()
         switch (gbsstate)
         {
         case StateHome:
+            for (i = 0; i < 2; i++)
+            {
+                pCON = CONGetHandle(i);
+                if (pCON->state ==  STATE_CON_IDLE || pCON->state == STATE_CON_PLUGED \
+                    || pCON->state == STATE_CON_PRECONTRACT || pCON->state == STATE_CON_PRECONTRACT_LOSEPLUG\
+                    || pCON->state == STATE_CON_STARTCHARGE || pCON->state == STATE_CON_RETURN)
+                {
+                    GBSgunstate[i] = GunfreeState;
+                }
+                if (pCON->state == STATE_CON_CHARGING)
+                {
+                    GBSgunstate[i] = GunchargingState;
+                }
+                if (pCON->state == STATE_CON_STOPCHARGE)
+                {
+                    GBSgunstate[i] = GunchargedoneState;
+                }
+                if (pCON->state == STATE_CON_ERROR)
+                {
+                    GBSgunstate[i] = Gunerror;
+                }
+            }
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
@@ -35,6 +60,12 @@ void GBSTask()
                 Tempuserlike.UserLikeFlag = 0;
                 gbsstate = StateReadyStart;
                 break;
+            }
+            if (quitflag == 1)
+            {
+                Tempuserlike.user_like.HMItimeout = 1;
+                xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+                quitflag = 0;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)

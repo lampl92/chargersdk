@@ -2,7 +2,6 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "GUI_backstage.h"
-#include "homedataflashbackstage.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
@@ -63,7 +62,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 {
     WM_HWIN      hItem;
-    switch (gunstate[0])
+    switch (GBSgunstate[0])
     {
     case GunfreeState:
         GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
@@ -86,7 +85,7 @@ static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
         BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
         break;
     }
-    switch (gunstate[1])
+    switch (GBSgunstate[1])
     {
     case GunfreeState:
         GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
@@ -186,8 +185,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         helpflag = 0;
-        gunstate[0] = 1;
-        gunstate[1] = 1;
+        GBSgunstate[0] = 1;
+        GBSgunstate[1] = 1;
         SignalIntensity = getSignalIntensity();
         updatedatetime(pMsg, ID_TEXT_0,&fontwryhcg24e);
         updateprice(pMsg, ID_TEXT_1, ID_TEXT_2, &fontwryhcg24e);
@@ -222,7 +221,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_BUTTON_0: //'gun1infobutton'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                if (gunstate[0] == GunchargingState || gunstate[0] == GunchargedoneState)
+                if (GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState)
                 {
                     WM_MoveChildTo(Hwininfo, infoAx, infoAy);
                     WM_ShowWin(Hwininfo);   
@@ -249,7 +248,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case ID_BUTTON_1: //'gun2infobutton'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                if (gunstate[1] == GunchargingState || gunstate[1] == GunchargedoneState)
+                if (GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState)
                 {
                     WM_MoveChildTo(Hwininfo, infoBx, infoBy);
                     WM_ShowWin(Hwininfo);   
@@ -318,8 +317,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {           
             //枪状态更新
             if (i > 4 || i < 1) i = 1;
-            gunstate[0] = i;
-            gunstate[1] = i;
+            GBSgunstate[0] = i;
+            GBSgunstate[1] = i;
             i++;
             SignalIntensity = i;
             //WM_SendMessageNoPara(pMsg->hWin, WM_PAINT);
@@ -344,8 +343,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
-            if (!(gunstate[1] == GunchargingState || gunstate[1] == GunchargedoneState \
-                || gunstate[0] == GunchargingState || gunstate[0] == GunchargedoneState))
+            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState \
+                || GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
             {
                 WM_HideWin(Hwininfo);
             }
@@ -374,22 +373,22 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
     case WM_PAINT:
         if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0)))
         {
-            if (gunstate[0] == GunchargingState)
+            if (GBSgunstate[0] == GunchargingState)
             {
                 GUI_MEMDEV_WriteAt(Memdevhomecharginginfo,infoAx,infoAy);
             }
-            if (gunstate[0] == GunchargedoneState)
+            if (GBSgunstate[0] == GunchargedoneState)
             {
                 GUI_MEMDEV_WriteAt(Memdevhomechargedoneinfo, infoAx, infoAy);
             }
         }
         if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1)))
         {
-            if (gunstate[1] == GunchargingState)
+            if (GBSgunstate[1] == GunchargingState)
             {
                 GUI_MEMDEV_WriteAt(Memdevhomecharginginfo, infoBx, infoBy);
             }
-            if (gunstate[1] == GunchargedoneState)
+            if (GBSgunstate[1] == GunchargedoneState)
             {
                 GUI_MEMDEV_WriteAt(Memdevhomechargedoneinfo, infoBx, infoBy);
             } 
