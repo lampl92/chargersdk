@@ -1,3 +1,4 @@
 #include "homedataflashbackstage.h"
+#include "evse_config.h"
 
-GUNState_E gunstate[2];
+GUNState_E gunstate[defMaxCON];

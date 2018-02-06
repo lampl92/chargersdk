@@ -5,9 +5,9 @@
 #include "interface.h"
 #include "utils.h"
 
-double GBSBalance = 9999.9;
+double GBSBalance;
 GBSState_E gbsstate;
-RfidQPkg_t Temprfid_pkg;//Ã»Ñ¡Ç¹Ö®Ç°±£´æË¢¿¨µÄ¿¨ºÅ
+RfidQPkg_t Temprfid_pkg;//æ²¡é€‰æžªä¹‹å‰ä¿å­˜åˆ·å¡çš„å¡å·
 UserLike_S Tempuserlike;
 
 void GBSTask()
@@ -34,6 +34,7 @@ void GBSTask()
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;
                 gbsstate = StateReadyStart;
+                break;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
@@ -42,7 +43,7 @@ void GBSTask()
             }
             break;
         case StateReadyStart:
-            vTaskDelay(500);
+            vTaskDelay(1000);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
@@ -51,14 +52,17 @@ void GBSTask()
                 if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
                 {                  
                     gbsstate = StatePleasePlug;
+                    break;
                 }
                 if (pCON->state == STATE_CON_CHARGING)
                 {
                     gbsstate = StateChargingOk;
+                    break;
                 }
                 if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
                 {
                     gbsstate = StateCardconditionNotOk;
+                    break;
                 }
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
@@ -68,11 +72,12 @@ void GBSTask()
             }
             break;
         case StatePleasePlug:
-            vTaskDelay(1000);
+            vTaskDelay(500);
             pCON = CONGetHandle(Temprfid_pkg.ucCONID);
             if (pCON->state == STATE_CON_CHARGING)
             {
                 gbsstate = StateChargingOk;
+                break;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
