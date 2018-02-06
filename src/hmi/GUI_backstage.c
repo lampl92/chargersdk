@@ -25,28 +25,28 @@ void GBSTask()
         switch (gbsstate)
         {
         case StateHome:
-            for (i = 0; i < 2; i++)
-            {
-                pCON = CONGetHandle(i);
-                if (pCON->state ==  STATE_CON_IDLE || pCON->state == STATE_CON_PLUGED \
-                    || pCON->state == STATE_CON_PRECONTRACT || pCON->state == STATE_CON_PRECONTRACT_LOSEPLUG\
-                    || pCON->state == STATE_CON_STARTCHARGE || pCON->state == STATE_CON_RETURN)
-                {
-                    GBSgunstate[i] = GunfreeState;
-                }
-                if (pCON->state == STATE_CON_CHARGING)
-                {
-                    GBSgunstate[i] = GunchargingState;
-                }
-                if (pCON->state == STATE_CON_STOPCHARGE)
-                {
-                    GBSgunstate[i] = GunchargedoneState;
-                }
-                if (pCON->state == STATE_CON_ERROR)
-                {
-                    GBSgunstate[i] = Gunerror;
-                }
-            }
+//            for (i = 0; i < 2; i++)
+//            {
+//                pCON = CONGetHandle(i);
+//                if (pCON->state ==  STATE_CON_IDLE || pCON->state == STATE_CON_PLUGED \
+//                    || pCON->state == STATE_CON_PRECONTRACT || pCON->state == STATE_CON_PRECONTRACT_LOSEPLUG\
+//                    || pCON->state == STATE_CON_STARTCHARGE || pCON->state == STATE_CON_RETURN)
+//                {
+//                    GBSgunstate[i] = GunfreeState;
+//                }
+//                if (pCON->state == STATE_CON_CHARGING)
+//                {
+//                    GBSgunstate[i] = GunchargingState;
+//                }
+//                if (pCON->state == STATE_CON_STOPCHARGE)
+//                {
+//                    GBSgunstate[i] = GunchargedoneState;
+//                }
+//                if (pCON->state == STATE_CON_ERROR)
+//                {
+//                    GBSgunstate[i] = Gunerror;
+//                }
+//            }
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
