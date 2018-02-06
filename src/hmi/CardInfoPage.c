@@ -1,6 +1,7 @@
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"
+#include "display.h"
 #include "utils.h"
 #include "DIALOG.h"
 
@@ -31,7 +32,7 @@
 
 
 
-//Ë¢¿¨ÒÑ¾­²»ÔÙÓÃÕâĞ©ÊÂ¼ş, Îª±£Ö¤±àÒëÁÙÊ±¶¨Òå, Õû¸Ä½çÃæÁ÷³ÌºóÉ¾µô
+//åˆ·å¡å·²ç»ä¸å†ç”¨è¿™äº›äº‹ä»¶, ä¸ºä¿è¯ç¼–è¯‘ä¸´æ—¶å®šä¹‰, æ•´æ”¹ç•Œé¢æµç¨‹ååˆ æ‰
 
 #define defEventBitGoodIDReqDisp        BIT_6
 #define defEventBitGoodIDReqDispOK      BIT_7
@@ -56,15 +57,15 @@
 
 
 WM_HWIN _hWinCardInfo;
-uint8_t EventFlag = 0;//ÓÃÓÚÊÂ¼ş·¢ÉúÊ±£¬·ÀÖ¹Í¼Æ¬ÖØ¸´Ë¢ĞÂ£¬Ó°ÏìÏìÓ¦ËÙ¶È
+uint8_t EventFlag = 0;//ç”¨äºäº‹ä»¶å‘ç”Ÿæ—¶ï¼Œé˜²æ­¢å›¾ç‰‡é‡å¤åˆ·æ–°ï¼Œå½±å“å“åº”é€Ÿåº¦
 uint8_t Timer_buf[32];
 
 static WM_HTIMER _timerRTC, _timerData, _timerSignal;
 static uint8_t first_CardInfo = 0;
 static time_t first_time = 0;
 static int InfoOkFlag = 0;
-static int cardconditionnotokflag1 = 0;//µÚÒ»½×¶Î
-static int cardconditionnotokflag2 = 0;//µÚ¶ş½×¶Î
+static int cardconditionnotokflag1 = 0;//ç¬¬ä¸€é˜¶æ®µ
+static int cardconditionnotokflag2 = 0;//ç¬¬äºŒé˜¶æ®µ
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -81,7 +82,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     EventBits_t uxBitRFID;
     EventBits_t uxBitCharge;
     CON_t *pCON;
-    pCON = CONGetHandle(0);//Ñ¡ÔñÇ¹µÄÊ±ºò»ñÈ¡pCON
+    pCON = CONGetHandle(0);//é€‰æ‹©æªçš„æ—¶å€™è·å–pCON
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
         defEventBitGoodIDReqDisp,
         pdTRUE,
@@ -89,7 +90,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         0);
     if (((uxBitRFID & defEventBitGoodIDReqDisp) == defEventBitGoodIDReqDisp) && (!bittest(EventFlag,0)))
     {
-        /**< ÏÔÊ¾¿¨Óà¶î */
+        /**< æ˜¾ç¤ºå¡ä½™é¢ */
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), Timer_buf);
         if (pCON->status.xPlugState == UNPLUG)
@@ -145,16 +146,16 @@ static void Data_Process(WM_MESSAGE *pMsg)
     uxBit = xEventGroupGetBits(pCON->status.xHandleEventOrder);
     if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
-        /** Ìø×ª³äµç½çÃæ */
+        /** è·³è½¬å……ç”µç•Œé¢ */
         IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2),CardInfoVoidImage->pfilestring, CardInfoVoidImage->pfilesize);        
         //bitclr(winInitDone, 0);
         first_CardInfo = 0;
         bitset(winInitDone, 3);
-        /**< Ìøµ½³äµçÖĞ */
+        /**< è·³åˆ°å……ç”µä¸­ */
     }
     else
     {
-        ;//Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "³äµçÌõ¼ş²»Âú×ã.");/** @todo (zshare#1#): ³äµçÌõ¼şÎ´´ï³É */
+        ;//Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &XBF36_Font, GUI_RED, "å……ç”µæ¡ä»¶ä¸æ»¡è¶³.");/** @todo (zshare#1#): å……ç”µæ¡ä»¶æœªè¾¾æˆ */
     }
 
     now = time(NULL);
@@ -169,8 +170,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
     {
         bitclr(winInitDone, 0);
         first_CardInfo = 0;
-        xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//·¢ËÍHMIÏÔÊ¾ÑÓÊ±µ½ÊÂ¼ş
-        //Ìøµ½HOME
+        xEventGroupSetBits(xHandleEventHMI, defEventBitHMITimeOutToRFID);//å‘é€HMIæ˜¾ç¤ºå»¶æ—¶åˆ°äº‹ä»¶
+        //è·³åˆ°HOME
         WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
     }   
 }
@@ -187,7 +188,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         first_CardInfo = 0;
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, pRFIDDev->order.strCardID);//¿¨ºÅ
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, pRFIDDev->order.strCardID);//å¡å·
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, "?");        
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);   
@@ -234,7 +235,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerRTC)
         {
-            /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
+            /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
             Caculate_RTC_Show(pMsg, ID_TEXT_0, ID_TEXT_1);
             if ((SignalFlag == 4) || (SignalFlag > 4))
             {
@@ -270,27 +271,27 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 SignalFlag = 0;
             }
             SignalFlag++;
-            /**< ÖØÆô¶¨Ê±Æ÷ */
+            /**< é‡å¯å®šæ—¶å™¨ */
             WM_RestartTimer(pMsg->Data.v, 300);
         }
         if (pMsg->Data.v == _timerSignal)
-        {        /// TODO (zshare#1#): ÏÂÃæµÄif²»Æğ×÷ÓÃ.µ«ÊÇifÀïÇ¶Ì×µÄifÆğ×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æğ×÷ÓÃµÄif
+        {        /// TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
             if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
             //if(_hWinCardInfo == cur_win)
             {
-                /**< ĞÅºÅÊı¾İ´¦Àí */
+                /**< ä¿¡å·æ•°æ®å¤„ç† */
                 Signal_Show();
-                /**< µÆ¹â¿ØÖÆ */
+                /**< ç¯å…‰æ§åˆ¶ */
                 Led_Show();
-                /**< Èç¹û½çÃæ·¢ÉúÁËÇĞ»» */
+                /**< å¦‚æœç•Œé¢å‘ç”Ÿäº†åˆ‡æ¢ */
                 if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
                 //if(_hWinCardInfo == cur_win)
                 {
-                    /**< ¹ÊÕÏ·ÖÎö */
+                    /**< æ•…éšœåˆ†æ */
                     Err_Analy(pMsg->hWin);
-                    /**< ÌØÊâ´¥¿Øµã·ÖÎö */
+                    /**< ç‰¹æ®Šè§¦æ§ç‚¹åˆ†æ */
                     CaliDone_Analy(pMsg->hWin);
-                    /**< Êı¾İ´¦Àí */
+                    /**< æ•°æ®å¤„ç† */
                     //Data_Flush(pMsg);
                     Data_Process(pMsg);
 
@@ -340,11 +341,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         break;
     case MSG_CREATERRWIN:
-        /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ĞÂ¸æ¾¯ */
+        /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
         err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ı¹ÊÕÏ½çÃæ */
+        /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
         if (bittest(winCreateFlag, 0))
         {
             bitclr(winCreateFlag, 0);

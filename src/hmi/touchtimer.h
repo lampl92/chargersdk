@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <includes.h>
 #include "siffontcreate.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touch.h"
 #include "utils.h"
 #include "interface.h"
@@ -46,6 +46,12 @@
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 #define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
+
+#define MSG_UPDATE           (GUI_ID_USER + 0x39) //更新存储设备
+
+#define MSG_JUMPSELECTPATTERN (GUI_ID_USER + 0x39)  //调到选择充电方式
+#define MSG_JUMPSELECTGUN   (GUI_ID_USER +0x3a)     //跳到选枪页
+
 
 #define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
 #define MSG_MANAGERSETID1       (GUI_ID_USER + 0x41)
@@ -92,7 +98,7 @@ extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 extern WM_HWIN _hWinManagerTerminate;
 
-GUI_QR_INFO QR_info;
+extern GUI_QR_INFO QR_info;
 
 enum{
     _HOMEPAGE,
@@ -118,6 +124,7 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 void PutOut_SelAOrB();
+
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateCardInfoPage(void);
 WM_HWIN CreateChargingPage(void);

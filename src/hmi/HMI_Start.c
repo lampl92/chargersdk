@@ -1,6 +1,6 @@
 #include "GUI.h"
 #include "siffontcreate.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "interface.h"
@@ -8,98 +8,86 @@
 
 static TaskHandle_t xHandleTaskReadPic = NULL;
 
+I32 memoryfree;
 uint16_t calebrate_done = 0;
-uint8_t AdvertisementRecordFlag = 0;//标志现在是否处于广告页，1为在广告页，0为不在广告页
+uint8_t AdvertisementRecordFlag = 0;//标志                                                                             现在是否处于广告页，1为在广告页，0为不在广告页
 uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
 
-int SignalIntensity;
-int PreSignalIntensity;
+
+
 
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
 
 GUI_QR_INFO QR_info;
 
-p_inf *HomeImage;
-p_inf *SignalImage0;
-p_inf *SignalImage1;
-p_inf *SignalImage2;
-p_inf *SignalImage3;
-p_inf *SignalImage4;
-p_inf *SignalImage5;
-
-p_inf *CardInfoImage;
-p_inf *GetCardInfoImage;
-p_inf *CardUnregisteredImage;
-p_inf *CardArrearsImage;
-p_inf *PleaseConnectPlugImage;
-p_inf *CardInfoVoidImage;
-
-p_inf *ChargingImage;
-p_inf *cartoonImage0;
-p_inf *cartoonImage1;
-p_inf *cartoonImage2;
-p_inf *cartoonImage3;
-p_inf *cartoonImage4;
-p_inf *cartoonImage5;
-p_inf *StopByCardImage;
-p_inf *StopByQRImage;
-p_inf *ChargingVoidImage;
-
-p_inf *ChargeDoneImage;
-p_inf *OrderUploadImage;
-p_inf *NormalDoneImage;
-p_inf *FullDoneImage;
-p_inf *DevErrDoneImage;
-p_inf *MoneyNotEnoughDoneImage;
-p_inf *ChargeDoneVoidImage;
-
-p_inf *AdvertisementImage;
-
-
 static void vTaskReadPic(void *pvParameters)
 {
-#if EVSE_USING_RFID
-    xTimerStop(xHandleTimerRFID, 100);
-#endif
-    ChargeDoneImage = readPicInf(pathChargeDoneImage);
-    CardInfoImage = readPicInf(pathCardInfoImage);
-    ChargingImage = readPicInf(pathChargingImage);
-    GetCardInfoImage = readPicInf(pathGetCardInfoImage);
-    cartoonImage0 = readPicInf(pathCartoonImage0);
-    cartoonImage1 = readPicInf(pathCartoonImage1);
-    cartoonImage2 = readPicInf(pathCartoonImage2);
-    cartoonImage3 = readPicInf(pathCartoonImage3);
-    cartoonImage4 = readPicInf(pathCartoonImage4);
-    cartoonImage5 = readPicInf(pathCartoonImage5);
-    CardUnregisteredImage = readPicInf(pathCardUnregisteredImage);
-    CardArrearsImage = readPicInf(pathCardArrearsImage);
-    PleaseConnectPlugImage = readPicInf(pathPleaseConnectPlugImage);
-    CardInfoVoidImage = readPicInf(pathCardInfoVoidImage);
-    StopByCardImage = readPicInf(pathStopByCardImage);
-    StopByQRImage = readPicInf(pathStopByQRImage);
-    ChargingVoidImage = readPicInf(pathChargingVoidImage);
-    OrderUploadImage = readPicInf(pathOrderUploadImage);
-    NormalDoneImage = readPicInf(pathNormalDoneImage);
-    FullDoneImage = readPicInf(pathFullDoneImage);
-    DevErrDoneImage = readPicInf(pathDevErrDoneImage);
-    MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
-    ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-#if EVSE_USING_RFID
-    xTimerStart(xHandleTimerRFID, 100);
-#endif
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
+
+
+void MainTask1(void)
+{
+    GUI_MEMDEV_Handle hMemBMP;
+    uint32_t t0, t1, i, count = 0;
+    char buf[50];
+    GUI_MEMDEV_Handle hMempic;
+    createfont();
+
+//    Bitmapcardinfoback = readDtafile(pathcardinfoback);
+//    GUI_MEMDEV_Handle hMemBMP;
+//    Bitmapcardinfoback = readDtafile(pathcardinfoback);
+//    WM_MULTIBUF_Enable(1);
+//    hMemBMP = GUI_MEMDEV_CreateEx(0, 0, Bitmapcardinfoback.XSize, Bitmapcardinfoback.YSize, GUI_MEMDEV_HASTRANS);
+//    GUI_MEMDEV_Select(hMemBMP);
+//    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
+//    GUI_MEMDEV_Select(0);
+//    GUI_MEMDEV_WriteAt(hMemBMP, 0, 0); 
+//    GUI_SetFont(&GUI_Font16_1);
+//    GUI_DispStringAt("Encoding JPEG......", 0, 0);
+	
+    /* 绘制桌面窗口的背景图片 ------------------------------------------*/
+    GUI_UC_SetEncodeUTF8();
+    GUI_SetFont(&fontwryhcg36aa4e);
+    hMempic = createMemdev(pathcardinfoback);
+//    GUI_MEMDEV_Select(hMempic);
+//    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
+//    GUI_MEMDEV_Select(0);
+    for (i = 0; i < 20; i++)
+    {
+        t0 = GUI_GetTime();
+        /* 用到 BMP 图片的时候，调用此函数即可 */
+        GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+        t1 = GUI_GetTime() - t0;
+        //App_Printf("速度 = %dms\r\n", t1);
+        count += t1;
+    }
+    /* 求出刷新 20 次的平均速度 */
+    sprintf(buf, "speed = %dms/frame", count / i);
+    GUI_DispStringAt(buf, 10, 10);
+    GUI_SetTextMode(GUI_TM_TRANS);
+    while (1)
+    {
+        //GUI_MEMDEV_CopyToLCDAt(hMempic, 0, 0);
+        GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+        GUI_DispStringAt(buf, 200, 220);
+       
+        GUI_Delay(2000);
+        vTaskDelay(100);
+    }
+}
+
+
 void MainTask(void)
 {
     CON_t *pCON;
-
     if (calebrate_done == 0)
     {
-        GUI_CURSOR_Hide();
+        GUI_CURSOR_Show();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
@@ -108,32 +96,23 @@ void MainTask(void)
     {
         WM_MULTIBUF_Enable(1);
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
+        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
+        GUI_Exec();
         qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
         GUI_QR_GetInfo(qr_hmem, &QR_info);
-
-
-        SignalImage0 = readPicInf(pathSignalImage0);
-        SignalImage1 = readPicInf(pathSignalImage1);
-        SignalImage2 = readPicInf(pathSignalImage2);
-        SignalImage3 = readPicInf(pathSignalImage3);
-        SignalImage4 = readPicInf(pathSignalImage4);
-        SignalImage5 = readPicInf(pathSignalImage5);
-
-        AdvertisementImage = readPicInf(pathAdvertisementImage);
-        HomeImage = readPicInf(pathHomeImage);
-
-        Create_SIF12(pathstSIF12);
-        Create_SIF16(pathstSIF16);
-        Create_SIF24(pathstSIF24);
-        Create_SIF36(pathstSIF36);
-
-        WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
-
+        //createGUI_BITMAP();
+        creatememdev();
+        createfont();
+//        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
+//        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
+//        memoryfree = GUI_ALLOC_GetNumUsedBytes();
+//        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         GUI_UC_SetEncodeUTF8();
-        CreateAdvertisementPage();
-        CreateHomePage();
-        WM_HideWindow(_hWinAdvertizement);
-        WM_ShowWindow(cur_win);
+
+//        WM_HideWindow(_hWinAdvertizement);
+//        WM_ShowWindow(cur_win);
+//        CreateKeyBoardWindow();
+        CreateHomeDLG();                
     }
     else
     {
@@ -150,30 +129,10 @@ void MainTask(void)
     while (1)
     {
 //	    printf_safe("exec start = %d\n", clock());
-        GUI_Exec();
+//        GUI_Exec();
+        GUI_Delay(8000);
 //	    printf_safe("exec end = %d\n", clock());
-	    //dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
+//	    dispbmp("system/dpc.bmp", 0, 5, 5, 1, 1);
         vTaskDelay(100);
-#if 0
-        if (bittest(winInitDone, 7))
-        {
-            bitclr(winInitDone, 7);
-            switch (current_page)
-            {
-            case _HOMEPAGE:
-                CreateHome();
-                break;
-            case _CARDINFOPAGE:
-                CreateCardInfoPage();
-                break;
-            case _CHARGINGPAGE:
-                CreateChargingPage();
-                break;
-            case _CHARGEDONEPAGE:
-                CreateChargeDonePage();
-                break;
-            }
-        }
-#endif
     }
 }

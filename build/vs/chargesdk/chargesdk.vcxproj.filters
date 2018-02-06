@@ -1206,9 +1206,6 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c">
       <Filter>Source files\middlewares\gdsl-1.8\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.c">
-      <Filter>Source files\middlewares\STemWin\BMP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c">
       <Filter>Source files\middlewares\STemWin\Config</Filter>
     </ClCompile>
@@ -2166,6 +2163,60 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rng.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\selectpatternDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\CardInfoDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\chargedoneinfoDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\charginginfoDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\display.c">
+      <Filter>Source files\middlewares\STemWin\BMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\SKIN_button.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\b1selectpatternbetterDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\b0selectgunDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\creadystartDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d0nettimeoutDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d1cardconditionnotokDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d2pleaseplugDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\d3chargingokDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\eplugtimeoutDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -2818,9 +2869,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
       <Filter>Header files\middlewares\minunit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\bmpdisplay.h">
-      <Filter>Header files\middlewares\STemWin\BMP</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
       <Filter>Header files\middlewares\STemWin\Config</Filter>
@@ -3715,6 +3763,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\ISR_Support.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
+      <Filter>Header files\middlewares\STemWin\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\portmacro.h">
       <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
@@ -5626,6 +5677,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake256.h">
       <Filter>Header files\net\CycloneTCP\cyclone_crypto\xof</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hmi\GUI_backstage.h">
+      <Filter>Header files\hmi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hmi\skin.h">
+      <Filter>Header files\hmi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\display.h">
+      <Filter>Header files\middlewares\STemWin\BMP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hmi\skinposition.h">
+      <Filter>Header files\hmi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

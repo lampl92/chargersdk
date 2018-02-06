@@ -4,58 +4,37 @@
 #include <stdlib.h>
 #include <includes.h>
 #include "siffontcreate.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touch.h"
 #include "utils.h"
 #include "interface.h"
 #include "keyboard.h"
 #include "lcddrv.h"
 #include "user_app.h"
-
-#define FONT_COLOR      0xFF330000
+#include "skin.h"
+#include "GUI_backstage.h"
+#include "skinposition.h"
 extern GUI_HMEM    qr_hmem;
 
-extern int SignalIntensity;
-extern int PreSignalIntensity;
+extern int SignalFlag;//淇″彿鍥炬爣鍒锋柊鏍囧織
 
-extern p_inf *HomeImage;
-extern p_inf *SignalImage0;
-extern p_inf *SignalImage1;
-extern p_inf *SignalImage2;
-extern p_inf *SignalImage3;
-extern p_inf *SignalImage4;
-extern p_inf *SignalImage5;
+#define FONT_COLOR GUI_BLACK
 
-extern p_inf *CardInfoImage;
-extern p_inf *GetCardInfoImage;
-extern p_inf *CardUnregisteredImage;
-extern p_inf *CardArrearsImage;
-extern p_inf *PleaseConnectPlugImage;
-extern p_inf *CardInfoVoidImage;
-
-extern p_inf *ChargingImage;
-extern p_inf *cartoonImage0;
-extern p_inf *cartoonImage1;
-extern p_inf *cartoonImage2;
-extern p_inf *cartoonImage3;
-extern p_inf *cartoonImage4;
-extern p_inf *cartoonImage5;
-extern p_inf *StopByCardImage;
-extern p_inf *StopByQRImage;
-extern p_inf *ChargingVoidImage;
-
-extern p_inf *ChargeDoneImage;
-extern p_inf *OrderUploadImage;
-extern p_inf *NormalDoneImage;
-extern p_inf *FullDoneImage;
-extern p_inf *DevErrDoneImage;
-extern p_inf *MoneyNotEnoughDoneImage;
-extern p_inf *ChargeDoneVoidImage;
-
-extern p_inf *AdvertisementImage;
-
-extern int SignalFlag;//信号图标刷新标志
-
+//**********鍗曞弻鏋柊鐣岄潰
+WM_HWIN CreateHomeDLG(void);
+WM_HWIN CreateselectgunDLG(void);
+WM_HWIN CreateselectpatternDLG(void);
+WM_HWIN CreateselectpatternbetterDLG(void);
+WM_HWIN CreateCardInfoDLG(void);
+WM_HWIN CreatechargedoneinfoDLG(void);
+WM_HWIN CreatecharginginfoDLG(void);
+WM_HWIN CreatereadystartDLG(void);
+WM_HWIN CreatenettimeoutDLG(void);
+WM_HWIN CreatecardconditionnotokDLG(void);
+WM_HWIN CreatepleaseplugDLG(void);
+WM_HWIN CreatechargingokDLG(void);
+WM_HWIN CreateplugtimeoutDLG(void);
+//*************
 
 
 void MainTask(void);

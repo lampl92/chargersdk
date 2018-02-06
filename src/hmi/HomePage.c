@@ -1,6 +1,6 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touchtimer.h"
 #include "DIALOG.h"
 
@@ -26,37 +26,9 @@
 #define TEXT_XSIZE  400
 #define TEXT_YSIZE  400
 
-
-
-
-
-
-
-
-
-
-
-
 //刷卡已经不再用这些事件, 为保证编译临时定义, 整改界面流程后删掉
 
 #define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 WM_HWIN _hWinHome;//home界面句柄
 
@@ -69,7 +41,7 @@ uint32_t props_r, props_g, props_b;
 
 static TEXT_Handle text_up;
 
-int SignalFlag = 0;//信号图标刷新标志
+int SignalFlag;
 
 //home界面资源表
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
