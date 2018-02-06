@@ -32,7 +32,12 @@ static void vTaskReadPic(void *pvParameters)
 
 void MainTask1(void)
 {
+    GUI_MEMDEV_Handle hMemBMP;
+    uint32_t t0, t1, i, count = 0;
+    char buf[50];
     GUI_MEMDEV_Handle hMempic;
+    createfont();
+
 //    Bitmapcardinfoback = readDtafile(pathcardinfoback);
 //    GUI_MEMDEV_Handle hMemBMP;
 //    Bitmapcardinfoback = readDtafile(pathcardinfoback);
@@ -42,20 +47,36 @@ void MainTask1(void)
 //    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
 //    GUI_MEMDEV_Select(0);
 //    GUI_MEMDEV_WriteAt(hMemBMP, 0, 0); 
-    GUI_SetFont(&GUI_Font16_1);
-    GUI_DispStringAt("Encoding JPEG......", 0, 0);
+//    GUI_SetFont(&GUI_Font16_1);
+//    GUI_DispStringAt("Encoding JPEG......", 0, 0);
 	
     /* 绘制桌面窗口的背景图片 ------------------------------------------*/
+    GUI_UC_SetEncodeUTF8();
+    GUI_SetFont(&fontwryhcg36aa4e);
     hMempic = createMemdev(pathcardinfoback);
 //    GUI_MEMDEV_Select(hMempic);
 //    GUI_DrawBitmap(&Bitmapcardinfoback, 0, 0);
 //    GUI_MEMDEV_Select(0);
-//    GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+    for (i = 0; i < 20; i++)
+    {
+        t0 = GUI_GetTime();
+        /* 用到 BMP 图片的时候，调用此函数即可 */
+        GUI_MEMDEV_WriteAt(hMempic, 0, 0);
+        t1 = GUI_GetTime() - t0;
+        //App_Printf("速度 = %dms\r\n", t1);
+        count += t1;
+    }
+    /* 求出刷新 20 次的平均速度 */
+    sprintf(buf, "speed = %dms/frame", count / i);
+    GUI_DispStringAt(buf, 10, 10);
+    GUI_SetTextMode(GUI_TM_TRANS);
     while (1)
     {
         //GUI_MEMDEV_CopyToLCDAt(hMempic, 0, 0);
         GUI_MEMDEV_WriteAt(hMempic, 0, 0);
-        GUI_Delay(20);
+        GUI_DispStringAt(buf, 200, 220);
+       
+        GUI_Delay(2000);
         vTaskDelay(100);
     }
 }
