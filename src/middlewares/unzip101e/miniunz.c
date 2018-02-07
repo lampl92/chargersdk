@@ -19,6 +19,7 @@
 #else
 //# include <direct.h>
 //# include <io.h>
+#include "yaffsfs.h"
 #endif
 
 #include "unzip.h"
@@ -567,7 +568,8 @@ int miniunz_main(argc,argv)
         return do_list(uf);
     else if (opt_do_extract==1)
     {
-        if (opt_extractdir && chdir(dirname)) 
+        if (opt_extractdir) 
+        //if (opt_extractdir && chdir(dirname)) 
         {
           printf("Error changing into %s, aborting\n", dirname);
           exit(-1);

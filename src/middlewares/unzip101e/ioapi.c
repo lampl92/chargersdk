@@ -13,6 +13,8 @@
 #include "zlib.h"
 #include "ioapi.h"
 
+#include "yaffsfs.h"
+
 
 
 /* I've found an old Unix (a SunOS 4.1.3_U1) without all SEEK_* defined.... */
@@ -70,20 +72,21 @@ voidpf ZCALLBACK fopen_file_func (opaque, filename, mode)
    const char* filename;
    int mode;
 {
-    FILE* file = NULL;
-    const char* mode_fopen = NULL;
+    int *fp;
+    int mode_fopen;
+    fp = malloc(sizeof(int));
     if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER)==ZLIB_FILEFUNC_MODE_READ)
-        mode_fopen = "rb";
+        mode_fopen = O_RDONLY;
     else
     if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-        mode_fopen = "r+b";
+        mode_fopen = O_RDWR;
     else
     if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-        mode_fopen = "wb";
+        mode_fopen = O_CREAT | O_TRUNC | O_RDWR;
 
-    if ((filename!=NULL) && (mode_fopen != NULL))
-        file = fopen(filename, mode_fopen);
-    return file;
+    if (filename!=NULL)
+        *fp = yaffs_open(filename, mode_fopen, S_IREAD | S_IWRITE);
+    return fp;
 }
 
 
@@ -94,7 +97,7 @@ uLong ZCALLBACK fread_file_func (opaque, stream, buf, size)
    uLong size;
 {
     uLong ret;
-    ret = (uLong)fread(buf, 1, (size_t)size, (FILE *)stream);
+    ret = (uLong)yaffs_read(*(int *)stream, buf, (size_t)size);
     return ret;
 }
 
@@ -106,7 +109,7 @@ uLong ZCALLBACK fwrite_file_func (opaque, stream, buf, size)
    uLong size;
 {
     uLong ret;
-    ret = (uLong)fwrite(buf, 1, (size_t)size, (FILE *)stream);
+    ret = (uLong)yaffs_write(*(int *)stream, buf, (size_t)size);
     return ret;
 }
 
@@ -115,7 +118,8 @@ long ZCALLBACK ftell_file_func (opaque, stream)
    voidpf stream;
 {
     long ret;
-    ret = ftell((FILE *)stream);
+    ret = yaffs_lseek(*(int *)stream, 0, SEEK_CUR);
+    //yaffs_lseek(*(int *)stream, 0, SEEK_SET);
     return ret;
 }
 
@@ -141,7 +145,7 @@ long ZCALLBACK fseek_file_func (opaque, stream, offset, origin)
     default: return -1;
     }
     ret = 0;
-    fseek((FILE *)stream, offset, fseek_origin);
+    yaffs_lseek(*(int *)stream, offset, fseek_origin);
     return ret;
 }
 
@@ -150,7 +154,7 @@ int ZCALLBACK fclose_file_func (opaque, stream)
    voidpf stream;
 {
     int ret;
-    ret = fclose((FILE *)stream);
+    ret = yaffs_close(*(int *)stream);
     return ret;
 }
 
@@ -159,7 +163,7 @@ int ZCALLBACK ferror_file_func (opaque, stream)
    voidpf stream;
 {
     int ret;
-    ret = ferror((FILE *)stream);
+    ret = yaffs_get_error();
     return ret;
 }
 
