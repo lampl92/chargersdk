@@ -63,6 +63,7 @@
         <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl</string>
         <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer</string>
         <string>../../../src/net/user</string>
+        <string>../../../src/middlewares/unzip101e</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>
