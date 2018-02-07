@@ -34,6 +34,7 @@ extern tinysh_cmd_t cli_reboot_cmd;
 extern tinysh_cmd_t cli_format_cmd;
 extern tinysh_cmd_t cli_set_crc32_cmd;
 extern tinysh_cmd_t cli_networkinfo_cmd;
+extern tinysh_cmd_t cli_ftpserver_cmd;
 
 
 

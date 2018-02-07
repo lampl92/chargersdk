@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_net.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
