@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\yaffs2msic.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
@@ -224,12 +225,18 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\adler32.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\crc32.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inffast.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inflate.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inftrees.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\ioapi.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\miniunz.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\minizip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\mztools.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\unzip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />

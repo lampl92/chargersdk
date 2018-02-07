@@ -1860,6 +1860,21 @@
     <ClCompile Include="..\..\..\src\cli\cli_net.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\adler32.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\crc32.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inffast.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inflate.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inftrees.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\ioapi.c">
       <Filter>Source files\middlewares\unzip101e</Filter>
     </ClCompile>
@@ -1877,6 +1892,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c">
       <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_zip.c">
+      <Filter>Source files\cli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
