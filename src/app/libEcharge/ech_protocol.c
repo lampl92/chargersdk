@@ -2971,8 +2971,6 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
 
-    pProto->status.ulStatus |= defSignalCON_State_Standby;
-
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
     pProto->pCMD[ECH_CMDID_REGISTER]       = EchCMDCreate(1,   2,   0,  makeCmdReg,          analyCmdCommon);

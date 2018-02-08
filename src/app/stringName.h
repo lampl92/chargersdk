@@ -11,7 +11,7 @@
 #define pathOrder           "/nand/system/order.txt"
 #define pathOrderTmp        "/nand/system/order.tmp"
 #define pathEVSELog         "/nand/system/evse.log"
-#define pathEVSECfg         "/nand/system/evse.cfg"
+#define pathEVSECfg         "/nand/system/evse2.cfg"
 #define pathSysCfg          "/nand/system/sys.cfg"
 #define pathFTPCfg          "/nand/system/ftp.cfg"
 #define pathProtoCfg        "/nand/system/protocol.cfg"
@@ -21,7 +21,7 @@
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
 //**********************
-//����ͼƬ·��
+//公用图片路径
 #define  pathQuit           "nand/system/quit.dta"
 #define  pathQuitPress      "nand/system/quitpress.dta"
 #define pathbackquit        "nand/system/backquit.dta"
@@ -29,7 +29,7 @@
 //**********************
 
 //**********
-//ѡǹͼƬ·��
+//选枪图片路径
 #define pathSelectGunBack                   "nand/system/selectgunback.dta"
 #define pathSelectGunAbottonNotpress        "nand/system/selectgunAbuttonnotpress.dta"
 #define pathSelectGunBbottonNotpress        "nand/system/selectgunBbuttonnotpress.dta"
@@ -38,7 +38,7 @@
 //*********
 
 //************
-//ѡģʽͼƬ
+//选模式图片
 
 #define pathselectpatternback               "nand/system/selectpatternback.dta"
 #define pathselectpatternelectricnumber             "nand/system/selectpatternelectricnumber.dta"
@@ -92,7 +92,7 @@
 #define pathKeyboardpointpress             "nand/system/kwyboardpointpress.dta"
 //*************
 
-//����ϢͼƬ·��
+//卡信息图片路径
 #define pathcardinfoback                "nand/system/cardinfoback.dta"
 #define pathcardinfocardconditionnotok              "nand/system/cardinfocardconditionnotok.dta"
 #define pathcardinfochargingok              "nand/system/cardinfochargingok.dta"
@@ -110,7 +110,7 @@
 //#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
 //******************
 
-//��ҳͼƬ·��
+//主页图片路径
 #define pathhomeback                "/nand/system/homeback.dta"
 #define pathhomegunAchargedone                  "/nand/system/homegunAchargedone.dta"
 #define pathhomegunAcharging                "/nand/system/homegunAcharging.dta"
@@ -138,7 +138,7 @@
 #define pathhomehelpinfo            "/nand/system/homehelpinfo.dta"
 
 
-//��ʾ��ϢҳͼƬ
+//提示信息页图片
 #define pathchargedoneinfo      "nand/system/chargedoneinfo.dta"
 #define pathcharginginfo        "nand/system/charginginfo.dta"
 
