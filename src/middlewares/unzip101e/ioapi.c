@@ -86,6 +86,11 @@ voidpf ZCALLBACK fopen_file_func (opaque, filename, mode)
 
     if (filename!=NULL)
         *fp = yaffs_open(filename, mode_fopen, S_IREAD | S_IWRITE);
+    if (*fp < 0)
+    {
+        free(fp);
+        return NULL;
+    }
     return fp;
 }
 
@@ -117,9 +122,10 @@ long ZCALLBACK ftell_file_func (opaque, stream)
    voidpf opaque;
    voidpf stream;
 {
-    long ret;
-    ret = yaffs_lseek(*(int *)stream, 0, SEEK_CUR);
-    //yaffs_lseek(*(int *)stream, 0, SEEK_SET);
+    long ret, curpos;
+    curpos = yaffs_lseek(*(int *)stream, 0, SEEK_CUR);
+    ret = yaffs_lseek(*(int *)stream, 0, SEEK_END);
+    yaffs_lseek(*(int *)stream, curpos, SEEK_SET);
     return ret;
 }
 
@@ -145,7 +151,7 @@ long ZCALLBACK fseek_file_func (opaque, stream, offset, origin)
     default: return -1;
     }
     ret = 0;
-    yaffs_lseek(*(int *)stream, offset, fseek_origin);
+    ret = yaffs_lseek(*(int *)stream, offset, fseek_origin);
     return ret;
 }
 
@@ -155,6 +161,7 @@ int ZCALLBACK fclose_file_func (opaque, stream)
 {
     int ret;
     ret = yaffs_close(*(int *)stream);
+    free(stream);
     return ret;
 }
 
