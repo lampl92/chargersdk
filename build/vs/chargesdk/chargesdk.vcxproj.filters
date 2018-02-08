@@ -252,383 +252,17 @@
     <Filter Include="Header files\os\FreeRTOS">
       <UniqueIdentifier>{efde4c68-3830-4bad-a1d7-b2fbe2aeec06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source">
-      <UniqueIdentifier>{9c2868da-997e-4e62-ad02-0b0cb8b38832}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\include">
-      <UniqueIdentifier>{fcba8d39-86ec-4c6d-97d9-38547108ed57}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\os\FreeRTOS\Source\portable">
       <UniqueIdentifier>{61a164e6-02bd-41a2-832a-d97eb1259a66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable">
-      <UniqueIdentifier>{2dc01f01-3d0f-45ac-a576-5343a5ab29ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC">
-      <UniqueIdentifier>{a71c017f-794d-404d-8960-3259c181175a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS">
-      <UniqueIdentifier>{4d7c8d24-2b17-4dfa-8417-f4b270a610a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\common">
-      <UniqueIdentifier>{646de572-d708-4707-8a65-b3f503a513d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186">
-      <UniqueIdentifier>{03c5a002-6619-4f05-b56f-815c767fe27c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC">
-      <UniqueIdentifier>{31664e77-a782-42ad-9b14-5beed8c7edb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS">
-      <UniqueIdentifier>{e04caf26-6f7e-4af0-b8c7-a05c3e52f3e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\ARM_CM4F">
-      <UniqueIdentifier>{4a6e42cf-e4b8-4079-81ae-67aea76e7983}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4">
-      <UniqueIdentifier>{6bcf341f-9c5e-40e8-9142-766de11936ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CCS\MSP430X">
-      <UniqueIdentifier>{ac5b92d3-c806-4c3f-8467-1a3c3d3787d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior">
-      <UniqueIdentifier>{1ca8ea9c-b001-4682-adaa-f1b5750443b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1">
-      <UniqueIdentifier>{d36b5110-23df-4987-aadf-c332cfc74277}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2">
-      <UniqueIdentifier>{e6500b81-46b8-481a-bdf0-00eb39038c2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\CodeWarrior\HCS12">
-      <UniqueIdentifier>{d8958578-57d3-4a17-aeab-34b081c97125}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source files\os\FreeRTOS\Source\portable\GCC">
       <UniqueIdentifier>{92ba0d21-1ef2-402a-91bc-f8b6a114022d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC">
-      <UniqueIdentifier>{9b842b25-c2f2-45cf-9a9a-f2bcb2a9f9d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008">
-      <UniqueIdentifier>{3a21d3d2-b68e-482b-9510-16a785f72f32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S">
-      <UniqueIdentifier>{8e5b141d-0b55-48f6-9ee6-feaeebf77b42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000">
-      <UniqueIdentifier>{0b60eb99-63d3-490e-8472-373a6efe5b09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx">
-      <UniqueIdentifier>{23e9ca02-5c66-45b7-852f-d1bd1a89de0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT">
-      <UniqueIdentifier>{9c50c067-cffe-4c06-8b8d-b236da00876d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA9">
-      <UniqueIdentifier>{af4000f1-d5e6-4a49-9021-5585b84ce78b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM0">
-      <UniqueIdentifier>{38744cda-26f2-480b-b9b5-015857891c94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3">
-      <UniqueIdentifier>{6b272dd6-16f2-43d8-bcf7-7499af268d93}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU">
-      <UniqueIdentifier>{60397ace-fcc2-4320-b242-29cd00b622be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F">
       <UniqueIdentifier>{19508a86-1fab-482e-b78e-31a14d070fed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F">
-      <UniqueIdentifier>{7fc7a73d-4d72-41bf-adc7-31b752d1b3ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU">
-      <UniqueIdentifier>{e08e07c3-e722-4a1c-9160-897162e8e6bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7">
-      <UniqueIdentifier>{5978f973-9076-431e-ae29-b127c41c93c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1">
-      <UniqueIdentifier>{e3ef6193-69fa-43dd-98bc-5a0185bd8d98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CR5">
-      <UniqueIdentifier>{84d0fce3-a166-4d4b-8dfc-18b1efeb8eed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC">
-      <UniqueIdentifier>{a730b9c4-7a8a-4e28-9c79-4eeb7beb7bdf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ATMega323">
-      <UniqueIdentifier>{d497e1ea-c630-4fcb-8878-192420a7f458}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\AVR32_UC3">
-      <UniqueIdentifier>{0c31524d-17d7-4f72-94e4-e3defda195d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\ColdFire_V2">
-      <UniqueIdentifier>{b5d66962-2a49-436a-bf4d-4e71ae34e07d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3">
-      <UniqueIdentifier>{c0b453f4-e8b1-4038-b302-a2dbec7e0fcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\H8S2329">
-      <UniqueIdentifier>{b1b0eecd-46d8-459d-bcad-97540e1875f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\HCS12">
-      <UniqueIdentifier>{83874a82-ecd8-434e-9e69-dc0298bd0a36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat">
-      <UniqueIdentifier>{07dd71e1-5d95-4808-aab6-3a509f7d9a68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MCF5235">
-      <UniqueIdentifier>{03fcbc11-6a6d-47c8-9ddc-631fca776e4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlaze">
-      <UniqueIdentifier>{f85ddf07-790d-4da8-93cd-9c91475f0277}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8">
-      <UniqueIdentifier>{adccb1bf-5741-4f85-9c86-cfa7d6e02c6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9">
-      <UniqueIdentifier>{29191cc5-28fd-417f-b539-684d1e6c644e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\MSP430F449">
-      <UniqueIdentifier>{b59c1e30-6e8a-4d25-aba8-683078b5c0ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\NiosII">
-      <UniqueIdentifier>{da55dabd-c917-4d03-b08e-6b76febf4e4e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx">
-      <UniqueIdentifier>{b18256bb-bc1f-4933-b9e8-8c20b2d1fac4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx">
-      <UniqueIdentifier>{65f7873c-0487-445c-bc4b-4c481e0b0233}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RL78">
-      <UniqueIdentifier>{1a128739-dea1-4318-a7ed-a16c01f48691}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX100">
-      <UniqueIdentifier>{b5a714c1-f983-4404-85f6-a7d729a1e76a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX600">
-      <UniqueIdentifier>{a93d9005-9233-44c1-9676-4c973dbd7745}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\RX600v2">
-      <UniqueIdentifier>{6946661b-05f4-4bfc-af4b-8734ba3c3aab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\STR75x">
-      <UniqueIdentifier>{6ea131e5-f616-4a4c-b064-b553cc1e8ce4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\GCC\TriCore_1782">
-      <UniqueIdentifier>{d5e3de4f-3eb4-4d2d-8670-ca7eda5008d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR">
-      <UniqueIdentifier>{f217b169-a376-4eef-ac30-d19638b87a74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\78K0R">
-      <UniqueIdentifier>{cf1ec0a4-3801-469b-9dba-f94cd3749e86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC">
-      <UniqueIdentifier>{723b32a0-60f6-45d2-81cc-1ebad83f681d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9">
-      <UniqueIdentifier>{5303b2ee-95d9-44f3-9655-e09a248d1748}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM0">
-      <UniqueIdentifier>{6b550458-fcfd-499a-b704-00fdb660088a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM3">
-      <UniqueIdentifier>{76e561e6-5a3c-42ac-aca6-941a9b018a2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM4F">
-      <UniqueIdentifier>{fce178dd-648c-4fe3-abfa-b17725e7b4a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7">
-      <UniqueIdentifier>{68d5788f-cadc-4c84-a531-df37034877bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1">
-      <UniqueIdentifier>{3e2ce0da-27c6-4e0e-a459-02a55e4d9d91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC">
-      <UniqueIdentifier>{bc539097-20d6-4adf-9966-31c4032df782}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\ATMega323">
-      <UniqueIdentifier>{5f985c86-b759-47d4-8119-9827fcc49c72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64">
-      <UniqueIdentifier>{b14f53df-b55a-4a40-b628-25ae35878ace}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE">
-      <UniqueIdentifier>{48232d9e-52f0-4932-962a-7225ee38c0ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\AVR32_UC3">
-      <UniqueIdentifier>{fb0e1fb4-b150-4257-8478-41e31457cbf5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\LPC2000">
-      <UniqueIdentifier>{8e9325ec-f5e0-4649-b984-9eaf70211e2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\MSP430">
-      <UniqueIdentifier>{90ef6920-e013-4473-9c16-00fe84cee22e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\MSP430X">
-      <UniqueIdentifier>{0c09b01c-3338-4f16-a616-c1c259a6562f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RL78">
-      <UniqueIdentifier>{da2d7212-90c3-4f39-b982-695ece7421df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RX100">
-      <UniqueIdentifier>{530a95a4-820e-48fd-9137-cda8a4b87df3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RX600">
-      <UniqueIdentifier>{c1f19a3e-49a4-4d50-8b3c-a4c50147ff5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\RXv2">
-      <UniqueIdentifier>{27d4ec85-bc50-4646-8a1c-29038af98474}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR71x">
-      <UniqueIdentifier>{0b3685ed-ad42-40fc-93b9-3dc5f97cc8aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR75x">
-      <UniqueIdentifier>{38b58237-5bf0-4cf7-911e-a00d0039fec0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\STR91x">
-      <UniqueIdentifier>{67df0228-50e1-45ee-ba21-31adceae2759}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\IAR\V850ES">
-      <UniqueIdentifier>{8c4e56f9-689b-43b8-a212-3fe1d10c66fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\os\FreeRTOS\Source\portable\MemMang">
       <UniqueIdentifier>{564bb3a1-5889-44e8-a4fe-07aea93a2625}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MikroC">
-      <UniqueIdentifier>{eaa159c5-0acc-4747-97ec-4cbfc89a7c89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F">
-      <UniqueIdentifier>{94138c5b-4fd5-4bd0-aa8f-b353dc360ecc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB">
-      <UniqueIdentifier>{4ec48565-838d-40cc-b21d-71823f0e3b9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F">
-      <UniqueIdentifier>{35d1be4c-1e66-4201-a551-a55aa5988448}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC">
-      <UniqueIdentifier>{9beadbfa-5143-4e52-bb40-88d3c4c9018e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx">
-      <UniqueIdentifier>{f5e33c6f-12fa-481c-8eaf-0e48bc6d1a13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX">
-      <UniqueIdentifier>{b7decf52-19f3-4a5e-b2b1-e80848e51989}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ">
-      <UniqueIdentifier>{e7bd17d0-6c3b-46eb-b435-2c580f7c6ce9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\MSVC-MingW">
-      <UniqueIdentifier>{d74ed68e-81dc-4497-a3ee-b5f8874f43b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom">
-      <UniqueIdentifier>{8a668664-b40a-4372-ba02-cf67980e8585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS">
-      <UniqueIdentifier>{a41bbde9-f209-46d2-ba98-a257946be8bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common">
-      <UniqueIdentifier>{051fc60b-56f3-4095-b40c-3fdb578ddcff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186">
-      <UniqueIdentifier>{fb72b89f-d3df-4831-a3d0-ed3ba071c93e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC">
-      <UniqueIdentifier>{54a5144c-992d-459e-8a93-e7c065f95a4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm">
-      <UniqueIdentifier>{9171a51d-d08a-418a-8240-31f62ab47caa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE">
-      <UniqueIdentifier>{1c42f5c9-93c5-44ff-901c-6ec0f779d127}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested">
-      <UniqueIdentifier>{66a9c616-b7d2-4be1-b109-202bae73b737}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small">
-      <UniqueIdentifier>{a643dfe4-dd65-43c3-9f93-322b4364ed5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas">
-      <UniqueIdentifier>{1ca5603d-d692-45b1-9fe5-3e991a8c09d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX100">
-      <UniqueIdentifier>{c7d67bf6-bc0c-423e-8deb-b370314b4d6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX200">
-      <UniqueIdentifier>{934d54a1-d906-49b8-b2f1-3591e567d8da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX600">
-      <UniqueIdentifier>{2a5bd7a6-2552-488a-a147-2b17e1d168ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\RX600v2">
-      <UniqueIdentifier>{77eef265-d840-4447-9cf0-2f7c5f219fdb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU">
-      <UniqueIdentifier>{7392bb86-781d-4caa-9547-6fe6fdf1c7e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Rowley">
-      <UniqueIdentifier>{ab0fa60b-f7ab-4b48-abba-0920d09cb411}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449">
-      <UniqueIdentifier>{8e33e24c-e6b0-40a8-aef9-d4ce16e57441}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS">
-      <UniqueIdentifier>{deeb5e3f-3c8c-41f4-af35-0125dd105bf9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx">
-      <UniqueIdentifier>{13d0e0cc-864a-4250-b40d-89c24ae5f4fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CA9">
-      <UniqueIdentifier>{933e120f-25c2-4733-8b7e-92d80b8fbbdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM0">
-      <UniqueIdentifier>{d0f56f29-43c9-4c32-a751-1d54d9f86bcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM3">
-      <UniqueIdentifier>{16dbfa27-3194-4c55-b1af-a16568007215}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F">
-      <UniqueIdentifier>{b0eaf760-5dd0-4222-ad36-118ed24ee88f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU">
-      <UniqueIdentifier>{f0042350-bcd6-4c26-9498-fda642d08f72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7">
-      <UniqueIdentifier>{d816bf52-4cb4-429f-a6ba-03e46b1898f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1">
-      <UniqueIdentifier>{026f3141-fe8a-47f7-bd85-ba60e100c648}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\SDCC">
-      <UniqueIdentifier>{736b893f-12b6-4ce0-a942-e537aa845974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\SDCC\Cygnal">
-      <UniqueIdentifier>{382ae8b1-01f2-4daf-8607-23ad68d0074f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune">
-      <UniqueIdentifier>{767db108-564e-4df5-b521-99b5aa3004fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune\MB91460">
-      <UniqueIdentifier>{cf814e2c-f19a-4f58-a52c-be0433b1b6a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Softune\MB96340">
-      <UniqueIdentifier>{1f233a67-a5e4-4443-b0db-eebc2968dee5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Tasking">
-      <UniqueIdentifier>{909d2593-f0ae-4187-9e8f-bf69392b8388}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F">
-      <UniqueIdentifier>{a4b5bafc-62d3-4804-a0c5-871609378707}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC">
-      <UniqueIdentifier>{eb17679f-260d-4d3f-b96e-cc8a0e5f188e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header files\os\FreeRTOS\Source\portable\WizC\PIC18">
-      <UniqueIdentifier>{476faccd-7261-4534-9ecb-898155dc2c2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{bf6d369c-db8b-4b07-8571-a00c2352ee79}</UniqueIdentifier>
@@ -896,6 +530,12 @@
     </Filter>
     <Filter Include="Source files\net\CycloneTCP\cyclone_crypto\xof">
       <UniqueIdentifier>{67940721-c1fe-488b-96e4-fda3603aa11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\unzip101e">
+      <UniqueIdentifier>{4b901e2e-5dcd-4dcf-8f9f-f36bf0b71445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\unzip101e">
+      <UniqueIdentifier>{30f09925-3061-41ab-adb1-7a05813195c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1626,9 +1266,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c">
       <Filter>Source files\os\FreeRTOS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
     </ClCompile>
@@ -2219,6 +1856,54 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_net.c">
       <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\adler32.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\crc32.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inffast.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inflate.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inftrees.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\ioapi.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\miniunz.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\minizip.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\mztools.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\unzip.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_zip.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\yaffs2misc.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\deflate.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\trees.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3413,455 +3098,8 @@
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h">
       <Filter>Header files\net\mbedTLS\include\mbedtls</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\croutine.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\deprecated_definitions.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\event_groups.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\FreeRTOS.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\list.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\mpu_prototypes.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\mpu_wrappers.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\portable.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\projdefs.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\queue.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\semphr.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\StackMacros.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\task.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\include\timers.h">
-      <Filter>Header files\os\FreeRTOS\Source\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\common\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186\prtmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\Flsh186</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC\prtmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\BCC\16BitDOS\PC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\ARM_Cortex-R4</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\MSP430X\data_model.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\MSP430X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CCS\MSP430X\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CCS\MSP430X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\ColdFire_V2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\CodeWarrior\HCS12\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\CodeWarrior\HCS12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91FR40008</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\AT91SAM7X256.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\ioat91sam7x256.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\lib_AT91SAM7X256.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_AT91SAM7S</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC2000</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM7_LPC23xx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA53_64_BIT</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CA9\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CA9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM0\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM0</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM3_MPU</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM4_MPU</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CM7\r0p1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CR5\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CR5</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ARM_CRx_No_GIC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ATMega323\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ATMega323</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\AVR32_UC3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\AVR32_UC3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ColdFire_V2\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\ColdFire_V2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\CORTUS_APS3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\H8S2329\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\H8S2329</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\HCS12\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\HCS12</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\IA32_flat\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\IA32_flat\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\IA32_flat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MCF5235\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MCF5235</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlaze\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlaze</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV8</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MicroBlazeV9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\MSP430F449\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\MSP430F449</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\NiosII\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\NiosII</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx\FPU_Macros.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC405_Xilinx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx\FPU_Macros.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\PPC440_Xilinx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RL78\isr_support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RL78</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RL78\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RL78</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX100\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX100</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX600\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX600</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\RX600v2\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\RX600v2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\STR75x\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\STR75x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\TriCore_1782\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\GCC\TriCore_1782</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\78K0R\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\78K0R</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\78K0R\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\78K0R</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC\portASM.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA5_No_GIC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA9\portASM.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CA9\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CA9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM0\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM0</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CM7\r0p1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ARM_CRx_No_GIC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\ATMega323\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\ATMega323</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7S64.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7S64_inc.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X128.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X128_inc.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X256.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\AT91SAM7X256_inc.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7S64.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7X128.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\lib_AT91SAM7X256.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM7S64</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AtmelSAM9XE</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\AVR32_UC3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\AVR32_UC3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\LPC2000\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\LPC2000</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\LPC2000\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\LPC2000</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430X\data_model.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\MSP430X\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\MSP430X</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RL78\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RL78</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RL78\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RL78</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RX100\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RX100</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RX600\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RX600</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\RXv2\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\RXv2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR71x\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR71x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR71x\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR71x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR75x\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR75x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR75x\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR75x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR91x\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR91x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\STR91x\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\STR91x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\V850ES\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\V850ES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\IAR\V850ES\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\IAR\V850ES</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MikroC\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC18F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC18F\stdio.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC18F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC24_dsPIC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MEC14xx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
       <Filter>Header files\middlewares\STemWin\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MX\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MX</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ\ISR_Support.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MPLAB\PIC32MZ</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\MSVC-MingW\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\MSVC-MingW</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\Flsh186</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\oWatcom\16BitDOS\PC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\large_untested</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Paradigm\Tern_EE\small</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX100\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX100</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX200\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX200</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX600\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX600</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\RX600v2\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\RX600v2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Renesas\SH2A_FPU</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Rowley\MSP430F449\portasm.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Rowley\MSP430F449\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Rowley\MSP430F449</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM7_LPC21xx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CA9\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CA9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM0\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM0</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM3\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM4_MPU</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\RVDS\ARM_CM7\r0p1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\SDCC\Cygnal\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\SDCC\Cygnal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Softune\MB91460\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Softune\MB91460</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Softune\MB96340\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Softune\MB96340</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\Tasking\ARM_CM4F</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\addFreeRTOS.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\os\FreeRTOS\Source\portable\WizC\PIC18\portmacro.h">
-      <Filter>Header files\os\FreeRTOS\Source\portable\WizC\PIC18</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\connector_privType.h">
       <Filter>Header files\app</Filter>
@@ -5692,6 +4930,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\hmi\skinposition.h">
       <Filter>Header files\hmi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\crypt.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\ioapi.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\iowin32.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\mztools.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\unzip.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zip.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,8 @@ void cli_init(void)
     tinysh_add_command(&cli_rm_cmd);
     tinysh_add_command(&cli_ymodem_cmd);
     tinysh_add_command(&cli_ftpserver_cmd);
+//    tinysh_add_command(&cli_unzip_cmd);
+//    tinysh_add_command(&cli_zip_cmd);
 
     /************系统测试****************/
 //    tinysh_add_command(&cli_fatfs_cmd);

@@ -6,7 +6,7 @@
 #include "factorycfg.h"
 #include "cfg_sys.h"
 #include "cfg_parse.h"
-#include "yaffs2msic.h"
+#include "yaffs2misc.h"
 #include "evse_version.h"
 #include "ifconfig.h"
 #include "interface_network.h"

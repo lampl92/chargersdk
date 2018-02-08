@@ -118,10 +118,6 @@ int check_pattern_file(char *fn)
 	return ok;
 }
 
-
-
-
-
 int dump_file_data(char *fn)
 {
 	int h;
@@ -152,7 +148,14 @@ int dump_file_data(char *fn)
 	return ok;
 }
 
-
+Y_LOFF_T yaffs_ftell(int fd)
+{
+    Y_LOFF_T len, curpos;
+    curpos = yaffs_lseek(fd, 0, SEEK_CUR);
+    len = yaffs_lseek(fd, 0, SEEK_END);
+    yaffs_lseek(fd, curpos, SEEK_SET);
+    return len;
+}
 
 void dump_file(const char *fn)
 {
@@ -167,12 +170,14 @@ void dump_file(const char *fn)
 	}
 	else
 	{
-		size = yaffs_lseek(h,0,SEEK_SET);
-		printf_safe("*****\nDump file %s size %d\n",fn,size);
-//		for(i = 0; i < size; i++)
-//		{
-//
-//		}
+		//size = yaffs_lseek(h,100,SEEK_SET);
+		//size = yaffs_lseek(h,0,SEEK_CUR);
+		//printf_safe("*****\nseek file %s size %d\n",fn,size);
+    	size = yaffs_ftell(h);
+		printf_safe("*****\ntell file %s size %d\n",fn,size);
+//    	size = yaffs_lseek(h, 0, SEEK_CUR);
+//		printf_safe("*****\nafter tell file %s size %d\n",fn,size);
+
     	yaffs_close(h);
 	}
 }
@@ -3174,7 +3179,7 @@ void xx_test(const char *mountpt)
 	dump_directory_tree(mountpt);
 }
 
-void yy_test(const char *mountpt)
+void yy1_test(const char *mountpt)
 {
 	yaffs_start_up();
 
@@ -3495,7 +3500,7 @@ int yaffs2test_main(int argc, char *argv[])
 	  //basic_utime_test("/nand");
 	  //case_insensitive_test("/nand");
 
-	  //yy_test("/nand");
+	  //yy1_test("/nand");
 	  //dir_rename_test("/nand");
 
 	  //dir_fd_test("/nand");
