@@ -169,6 +169,12 @@ void vTaskEVSERFID(void *pvParameters)
             xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 60000);
             if (xResult == pdTRUE)
             {
+                if (user_like.HMItimeout == 1)
+                {
+                    xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
+                    pRFIDDev->state = STATE_RFID_RETURN;
+                    break;
+                }
                 pRFIDDev->order.ucCONID = user_like.ucCONID;
                 pRFIDDev->order.dLimitFee = user_like.dLimitFee;
                 pRFIDDev->order.ulLimitTime = user_like.ulLimitTime;
