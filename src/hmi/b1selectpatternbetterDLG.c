@@ -15,6 +15,9 @@
 #define ID_IMAGE_0 (GUI_ID_USER + 0x17)
 #define ID_IMAGE_2 (GUI_ID_USER + 0x19)
 #define ID_BUTTON_14 (GUI_ID_USER + 0x20)
+#define ID_Timerstateflash 1
+
+static WM_HTIMER _timerstateflash;
 
 #define  INPUTNUMBERLENGTH 6
 
@@ -208,10 +211,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
-                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));                
+                    WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3));   
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
+                Tempuserlike.user_like.dLimitFee = 0;
+                Tempuserlike.user_like.dLimitPower = 0;
+                Tempuserlike.user_like.ulLimitTime = 0;
+                Tempuserlike.UserLikeFlag = 1;
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 break;
@@ -282,10 +289,31 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             break;
         }
         break;
+    case WM_TIMER:
+        if (pMsg->Data.v == _timerstateflash)
+        {
+            if (gbsstate == StateReadyStart)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_READYSTART);
+            }
+            if (gbsstate == StateHome)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+            }
+            WM_RestartTimer(pMsg->Data.v, 100);
+        }
+        break;
+    case MSG_READYSTART:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreatereadystartDLG();
+        break;
     case MSG_JUMPSELECTGUN:
         GUI_EndDialog(pMsg->hWin, 0);
-        GUI_EndDialog(HwinKeyboard, 0);
         CreateselectgunDLG();
+        break;
+    case MSG_JUMPHOME:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreateHomeDLG();
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -316,20 +344,49 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_RELEASED:
                 BUTTON_GetUserData(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), &skbID, 2);
                 for (i = 0; strNumber[i] != '\0'; i++);
-                if (strcmp(getbutton(skbID), "ok") == 0 && i!=0)
+                if (strcmp(getbutton(skbID), "ok") == 0 && i != 0)
                 {
-                    WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPCARDINFO);
+                    for (i = 0; i < 3; i++)
+                    {
+                        if (CHECKBOX_GetState(WM_GetDialogItem(WM_GetParent(pMsg->hWin), GUI_ID_USER + 0x13 + i)) == 1)
+                        {
+                            break;
+                        }
+                    }
+                    switch (i)
+                    {
+                    case 0:
+                        GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
+                        Tempuserlike.user_like.dLimitFee = 0;
+                        Tempuserlike.user_like.dLimitPower = 0;
+                        Tempuserlike.user_like.ulLimitTime = atof(strNumber);
+                        Tempuserlike.UserLikeFlag = 1;
+                        break;
+                    case 1:
+                        GUI_MEMDEV_WriteAt(Memdevselectpatternunityuan, yuandufenx, yuandufeny);
+                        Tempuserlike.user_like.dLimitFee = atof(strNumber);
+                        Tempuserlike.user_like.dLimitPower = 0;
+                        Tempuserlike.user_like.ulLimitTime = 0;
+                        Tempuserlike.UserLikeFlag = 1;
+                        break;
+                    case 2:
+                        GUI_MEMDEV_WriteAt(Memdevselectpatternunitdu, yuandufenx, yuandufeny);
+                        Tempuserlike.user_like.dLimitFee = 0;
+                        Tempuserlike.user_like.dLimitPower = atof(strNumber);
+                        Tempuserlike.user_like.ulLimitTime = 0;
+                        Tempuserlike.UserLikeFlag = 1;
+                        break;
+                    }
                 }
-                MakeStrNumber(getbutton(skbID));
-                Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
+                else
+                {
+                    MakeStrNumber(getbutton(skbID));
+                    Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
+                }
                 break;
             }
             break;
         }
-        break;
-    case MSG_JUMPCARDINFO:
-        GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
-        CreatereadystartDLG();
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -342,6 +399,7 @@ WM_HWIN CreateselectpatternbetterDLG(void);
 WM_HWIN CreateselectpatternbetterDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _timerstateflash = WM_CreateTimer(hWin, ID_Timerstateflash, 100, 0);
     HwinKeyboard = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog1, hWin, 0, 0);
     WM_HideWindow(HwinKeyboard);
     return hWin;  

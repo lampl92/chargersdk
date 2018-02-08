@@ -69,7 +69,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
                                 pdTRUE, pdTRUE, 0);    
     if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
-        WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
+        WM_SendMessageNoPara(hWin, MSG_READYSTART);
     }
     
     /*如果扫码，发送跳页消息*/
@@ -312,7 +312,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             GUI_EndDialog(err_hItem, 0);
         }
         break;
-    case MSG_JUMPCARDINFO:
+    case MSG_READYSTART:
         if (AdvertisementRecordFlag == 1)
         {
             WM_HideWindow(_hWinAdvertizement);

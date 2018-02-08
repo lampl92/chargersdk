@@ -41,6 +41,7 @@ extern GBSState_E gbsstate;
 extern GUNState_E GBSgunstate[2];
 extern RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 extern UserLike_S Tempuserlike;
+extern int quitflag;
 
 void GBSTask();
 

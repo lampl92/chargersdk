@@ -8,8 +8,8 @@
 #define ID_BUTTON_1 (GUI_ID_USER + 0x03)
 #define ID_IMAGE_0  (GUI_ID_USER + 0x04)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x05)
-
-
+#define ID_Timerstateflash 1
+static WM_HTIMER _timerstateflash;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 285, 195, 100, 100, 0, 0x0, 0 },
@@ -44,7 +44,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                Tempuserlike.user_like.ucCONID = 1;
+                Tempuserlike.user_like.ucCONID = 0;
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
                 break;
             }
@@ -54,7 +54,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                Tempuserlike.user_like.ucCONID = 2;
+                Tempuserlike.user_like.ucCONID = 1;
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
                 break;
             }
@@ -64,19 +64,29 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+                quitflag = 1;
                 break;
             }
             break;
         }
         break;
-    case MSG_JUMPSELECTPATTERN:
-        GUI_EndDialog(pMsg->hWin,0);
-        CreateselectpatternbetterDLG();
+    case WM_TIMER:
+        if (pMsg->Data.v == _timerstateflash)
+        {
+            if (gbsstate == StateHome)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+            }
+            WM_RestartTimer(pMsg->Data.v, 100);
+        }
         break;
     case MSG_JUMPHOME:
         GUI_EndDialog(pMsg->hWin, 0);
         CreateHomeDLG();
+        break;
+    case MSG_JUMPSELECTPATTERN:
+        GUI_EndDialog(pMsg->hWin,0);
+        CreateselectpatternbetterDLG();
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -89,6 +99,7 @@ WM_HWIN CreateselectgunDLG(void);
 WM_HWIN CreateselectgunDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    _timerstateflash = WM_CreateTimer(hWin, ID_Timerstateflash, 100, 0);
     return hWin;
 }
 

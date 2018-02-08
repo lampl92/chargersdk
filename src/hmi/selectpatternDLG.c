@@ -456,7 +456,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPCARDINFO);
+                WM__SendMessageNoPara(pMsg->hWin, MSG_READYSTART);
                 break;
             }
             break;
@@ -482,7 +482,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
             break;
         }
         break;
-    case MSG_JUMPCARDINFO:
+    case MSG_READYSTART:
         GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
         CreateCardInfoDLG();
         break;
