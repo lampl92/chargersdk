@@ -122,7 +122,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
     <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
-    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
@@ -227,6 +226,7 @@
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\adler32.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\crc32.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\deflate.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\inffast.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\inflate.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\inftrees.c" />
@@ -234,6 +234,7 @@
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\miniunz.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\minizip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\mztools.c" />
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\trees.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\unzip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c" />
@@ -241,6 +242,7 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\yaffs2misc.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffscfg2k.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\chip_mt29.c" />
@@ -786,6 +788,7 @@
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\iowin32.h" />
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\mztools.h" />
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\unzip.h" />
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h" />
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\zip.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />

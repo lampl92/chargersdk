@@ -1266,9 +1266,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c">
       <Filter>Source files\os\FreeRTOS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\yaffs2msic.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
     </ClCompile>
@@ -1898,6 +1895,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_zip.c">
       <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\yaffs2misc.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\deflate.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\unzip101e\trees.c">
+      <Filter>Source files\middlewares\unzip101e</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4941,6 +4947,9 @@
       <Filter>Header files\middlewares\unzip101e</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\zip.h">
+      <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h">
       <Filter>Header files\middlewares\unzip101e</Filter>
     </ClInclude>
   </ItemGroup>

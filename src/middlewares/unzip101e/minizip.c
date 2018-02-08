@@ -20,6 +20,7 @@
 #else
 //# include <direct.h>
 //# include <io.h>
+#include "yaffsfs.h"
 #endif
 
 #include "zip.h"
@@ -29,7 +30,7 @@
 #include "iowin32.h"
 #endif
 
-
+#define printf printf_safe
 
 #define WRITEBUFFERSIZE (16384)
 #define MAXFILENAME (256)
@@ -117,13 +118,13 @@ uLong filetime(f, tmzip, dt)
 int check_exist_file(filename)
     const char* filename;
 {
-    FILE* ftestexist;
+    int ftestexist;
     int ret = 1;
-    ftestexist = fopen(filename,"rb");
-    if (ftestexist==NULL)
+    ftestexist = yaffs_open(filename, O_RDWR, S_IWRITE | S_IREAD);
+    if (ftestexist < 0)
         ret = 0;
     else
-        fclose(ftestexist);
+        yaffs_close(ftestexist);
     return ret;
 }
 
@@ -149,10 +150,10 @@ int getFileCrc(const char* filenameinzip,void*buf,unsigned long size_buf,unsigne
 {
    unsigned long calculate_crc=0;
    int err=ZIP_OK;
-   FILE * fin = fopen(filenameinzip,"rb");
+   int fin = yaffs_open(filenameinzip, O_RDWR, 0);
    unsigned long size_read = 0;
    unsigned long total_read = 0;
-   if (fin==NULL)
+   if (fin < 0)
    {
        err = ZIP_ERRNO;
    }
@@ -161,13 +162,12 @@ int getFileCrc(const char* filenameinzip,void*buf,unsigned long size_buf,unsigne
         do
         {
             err = ZIP_OK;
-            size_read = (int)fread(buf,1,size_buf,fin);
-            if (size_read < size_buf)
-                if (feof(fin)==0)
-            {
-                printf("error in reading %s\n",filenameinzip);
-                err = ZIP_ERRNO;
-            }
+            size_read = (int)yaffs_read(fin, buf, size_buf);
+//            if (size_read < size_buf)
+//            {
+//                printf("error in reading %s\n",filenameinzip);
+//                err = ZIP_ERRNO;
+//            }
 
             if (size_read>0)
                 calculate_crc = crc32(calculate_crc,buf,size_read);
@@ -175,8 +175,8 @@ int getFileCrc(const char* filenameinzip,void*buf,unsigned long size_buf,unsigne
 
         } while ((err == ZIP_OK) && (size_read>0));
 
-    if (fin)
-        fclose(fin);
+    if (fin >= 0)
+        yaffs_close(fin);
 
     *result_crc=calculate_crc;
     printf("file %s crc %x\n",filenameinzip,calculate_crc);
@@ -283,6 +283,7 @@ int minizip_main(argc,argv)
                     ret = scanf("%1s",answer);
                     if (ret != 1)
                     {
+                        return 0;
                        exit(EXIT_FAILURE);
                     }
                     rep = answer[0] ;
@@ -326,7 +327,7 @@ int minizip_main(argc,argv)
                    ((argv[i][1]>='0') || (argv[i][1]<='9'))) &&
                   (strlen(argv[i]) == 2)))
             {
-                FILE * fin;
+                int fin;
                 int size_read;
                 const char* filenameinzip = argv[i];
                 zip_fileinfo zi;
@@ -360,8 +361,8 @@ int minizip_main(argc,argv)
                     printf("error in opening %s in zipfile\n",filenameinzip);
                 else
                 {
-                    fin = fopen(filenameinzip,"rb");
-                    if (fin==NULL)
+                    fin = yaffs_open(filenameinzip, O_RDWR, 0);
+                    if (fin < 0)
                     {
                         err=ZIP_ERRNO;
                         printf("error in opening %s for reading\n",filenameinzip);
@@ -372,13 +373,12 @@ int minizip_main(argc,argv)
                     do
                     {
                         err = ZIP_OK;
-                        size_read = (int)fread(buf,1,size_buf,fin);
-                        if (size_read < size_buf)
-                            if (feof(fin)==0)
-                        {
-                            printf("error in reading %s\n",filenameinzip);
-                            err = ZIP_ERRNO;
-                        }
+                        size_read = (int)yaffs_read(fin, buf, size_buf);
+//                        if (size_read < size_buf)
+//                        {
+//                            printf("error in reading %s\n",filenameinzip);
+//                            err = ZIP_ERRNO;
+//                        }
 
                         if (size_read>0)
                         {
@@ -392,8 +392,8 @@ int minizip_main(argc,argv)
                         }
                     } while ((err == ZIP_OK) && (size_read>0));
 
-                if (fin)
-                    fclose(fin);
+                if (fin >= 0)
+                    yaffs_close(fin);
 
                 if (err<0)
                     err=ZIP_ERRNO;

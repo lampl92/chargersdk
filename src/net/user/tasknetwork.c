@@ -143,7 +143,7 @@ void vTaskTCPClient(void *pvParameters)
             break;
         case NET_STATE_CONNECT:
             netStateConnect(net_dev);
-            smtpClientTest();
+            //smtpClientTest();
             break;
         case NET_STATE_TCP_ON:
             netStateTcpOn(net_dev);

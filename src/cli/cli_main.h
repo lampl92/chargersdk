@@ -36,6 +36,7 @@ extern tinysh_cmd_t cli_set_crc32_cmd;
 extern tinysh_cmd_t cli_networkinfo_cmd;
 extern tinysh_cmd_t cli_ftpserver_cmd;
 extern tinysh_cmd_t cli_unzip_cmd;
+extern tinysh_cmd_t cli_zip_cmd;
 
 
 

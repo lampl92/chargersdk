@@ -9,6 +9,7 @@
 #define ZCONF_H
 
 #define DYNAMIC_CRC_TABLE
+//#define GEN_TREES_H
 /*
  * If you *really* need a unique prefix for all types and library functions,
  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.

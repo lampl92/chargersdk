@@ -17,3 +17,19 @@ tinysh_cmd_t cli_unzip_cmd =
     0
 };
 
+void cli_zip_fnt(int argc, char **argv)
+{
+    minizip_main(argc, argv);
+}
+
+tinysh_cmd_t cli_zip_cmd =
+{
+    0,
+    "minizip",
+    "minizip",
+    0,
+    cli_zip_fnt,
+    "<cr>",
+    0,
+    0
+};
