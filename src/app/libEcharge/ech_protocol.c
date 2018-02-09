@@ -16,7 +16,7 @@
 #include "cfg_parse.h"
 #include "cJSON.h"
 #include "sysinit.h"
-
+#include  "evse_debug.h"
 
 
 /*---------------------------------------------------------------------------*/
@@ -2763,14 +2763,12 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
         }
         else
         {
-            printf_safe("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
-#if DEBUG_PROTO_LOG
+            printf_protolog("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
-                printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
+                printf_protolog("%02X ", pCMD->ucRecvdOptData[i]);
             }
-            printf_safe("\n");
-#endif
+            printf_protolog("\n");
             lRecvElem.UID = 0;
             lRecvElem.timestamp = time(NULL);
             lRecvElem.len = pCMD->ulRecvdOptLen;
@@ -2806,12 +2804,15 @@ static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t
         ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
         ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
         timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-        printf_safe("server: ");
-        printTime(timestamp);
-        printf_safe("\n");
-        printf_safe("local:  ");
-        printTime(time(NULL));
-        printf_safe("\n");
+        if (dePrintTime == 1)
+        {
+            printf_safe("server: ");
+            printTime(timestamp);
+            printf_safe("\n");
+            printf_safe("local:  ");
+            printTime(time(NULL));
+            printf_safe("\n");
+        }
         if(utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
         {
             time(&timestamp);

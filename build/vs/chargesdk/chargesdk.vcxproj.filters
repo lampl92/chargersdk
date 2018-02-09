@@ -1905,6 +1905,9 @@
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\trees.c">
       <Filter>Source files\middlewares\unzip101e</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_log.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -4951,6 +4954,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h">
       <Filter>Header files\middlewares\unzip101e</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\app\evse_debug.h">
+      <Filter>Header files\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

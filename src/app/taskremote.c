@@ -13,6 +13,8 @@
 #include "cfg_order.h"
 #include "stringName.h"
 
+#include "evse_debug.h"
+
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 
 //#define DEBUG_NO_TASKREMOTE
@@ -364,7 +366,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             else
             {
-                printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
+                printf_protolog("\n\nRecv Heart  !!!!!!!!!!\n\n");
                 heart_lost = 0;
             }
 

@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\..\src\app\timercallback.c" />
     <ClCompile Include="..\..\..\src\cli\cli_app.c" />
     <ClCompile Include="..\..\..\src\cli\cli_evse.c" />
+    <ClCompile Include="..\..\..\src\cli\cli_log.c" />
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_net.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
@@ -450,6 +451,7 @@
     <ClInclude Include="..\..\..\src\app\errorcode.h" />
     <ClInclude Include="..\..\..\src\app\EVSE.h" />
     <ClInclude Include="..\..\..\src\app\evse_config.h" />
+    <ClInclude Include="..\..\..\src\app\evse_debug.h" />
     <ClInclude Include="..\..\..\src\app\evse_define.h" />
     <ClInclude Include="..\..\..\src\app\evse_globals.h" />
     <ClInclude Include="..\..\..\src\app\EVSE_privType.h" />

@@ -17,6 +17,8 @@
 #include "libEcharge/ech_protocol_proc.h"
 #include "libEcharge/ech_ftp.h"
 
+#include "evse_debug.h"
+
 /** @brief
  *
  * @param pucRetVal uint8_t*     1注册成功  0注册失败
@@ -53,7 +55,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_tail (cur);//只要链表中最新接收的协议, 因此从tail开始
         while((pechCmdElem = gdsl_list_cursor_get_content (cur)) != NULL)
         {
-            printf_safe("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
+            printf_protolog("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
             memcpy(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
             *pLen = pCMD->ulRecvdOptLen;
             errcode = ERR_NO;
@@ -62,7 +64,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_head (cur);
         while((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
-            printf_safe("RemoteRecvHandle: RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            printf_protolog("RemoteRecvHandle: RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             gdsl_list_cursor_delete(cur);
         }
         gdsl_list_cursor_free(cur);

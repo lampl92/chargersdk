@@ -53,6 +53,8 @@ void cli_init(void)
     tinysh_add_command(&cli_protoinfo_cmd);
     tinysh_add_command(&cli_evselog_cmd);
     tinysh_add_command(&cli_networkinfo_cmd);
+    tinysh_add_command(&cli_printlog_cmd);
+    
     /************设备测试****************/
 //    tinysh_add_command(&cli_gprs_cmd);
 
@@ -83,7 +85,7 @@ void cli_main(void)
         {
             tinysh_char_in(ch[0]);
         }
-        vTaskDelay(200);
+        vTaskDelay(50);
     }
 }
 
