@@ -59,9 +59,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
     { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 140, 90, 260, 195, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 14, 9, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 14, 9, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 14, 9, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 120, 55, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 120, 89, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 120, 123, 240, 24, 0, 0x0, 0 },
 };
 
 
