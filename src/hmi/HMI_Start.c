@@ -87,7 +87,7 @@ void MainTask(void)
     CON_t *pCON;
     if (calebrate_done == 0)
     {
-        GUI_CURSOR_Show();
+        GUI_CURSOR_Hide();
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
@@ -98,9 +98,6 @@ void MainTask(void)
         pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
         GUI_Exec();
-        qr_hmem = GUI_QR_Create(pCON->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
-        GUI_QR_GetInfo(qr_hmem, &QR_info);
-        //createGUI_BITMAP();
         creatememdev();
         createfont();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
@@ -123,9 +120,9 @@ void MainTask(void)
 
         GUI_UC_SetEncodeUTF8();
 
-        CreateHomePage();
+        CreateHomeDLG();
     }
-    xTaskCreate(vTaskReadPic, "TaskReadPic", 1024, NULL, 2, &xHandleTaskReadPic);
+    //xTaskCreate(vTaskReadPic, "TaskReadPic", 1024, NULL, 2, &xHandleTaskReadPic);
     while (1)
     {
 //	    printf_safe("exec start = %d\n", clock());
