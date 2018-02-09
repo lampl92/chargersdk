@@ -183,6 +183,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
 int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
 {
     struct _ftp_ctx_save_file ctx;
+    error_t error;
     
     strcpy(ctx.parent.ftp_server, pechFtp->strServer);
     ctx.parent.port = pechFtp->usPort;
@@ -194,6 +195,13 @@ int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
     ctx.parent.on_data = _ftp_tof_cb;
     ctx.parent.on_end = _ftp_end_cb;
     
-    ftp_recv_data(&ctx.parent, net_dev);
-    return 0;
+    error = ftp_recv_data(&ctx.parent, net_dev);
+    if (error != NO_ERROR)
+    {
+        return 0;
+    }
+    else 
+    { 
+        return 1;
+    }
 }
