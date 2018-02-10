@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\..\readme.md" />
+    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c" />
     <None Include="chargesdk-Debug.vgdbsettings" />
     <None Include="chargesdk-Release.vgdbsettings" />
     <None Include="debug.mak" />
@@ -144,6 +145,7 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />

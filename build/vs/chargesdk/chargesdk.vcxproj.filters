@@ -557,6 +557,9 @@
     </None>
     <None Include="..\..\..\readme.md" />
     <None Include="chargersdk_flash.lds" />
+    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -1907,6 +1910,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_log.c">
       <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c">
+      <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
