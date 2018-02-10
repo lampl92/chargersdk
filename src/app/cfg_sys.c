@@ -30,7 +30,7 @@ static ErrorCode_t GetSysCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgIt
         *((uint16_t *)pvCfgItem) = (uint16_t)(jsItem->valueint);
         break;
     case ParamTypeU32:
-        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valueint);
+        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valuedouble);
         break;    
     case ParamTypeS32:
         *((int32_t *)pvCfgItem) = (int32_t)(jsItem->valueint);
@@ -101,7 +101,7 @@ static ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
                 errcode = GetSysCfgItem(jsSysObj,
                                         jnSysChargersdk_bin_crc32,                  
                                         (void *)&(pSysconf->xUpFlag.chargesdk_bin_crc32),
-                                        ParamTypeDouble),
+                                        ParamTypeU32),
                 ERR_LEVEL_WARNING,
                 jnSysChargersdk_bin_crc32);
     THROW_ERROR(defDevID_File,

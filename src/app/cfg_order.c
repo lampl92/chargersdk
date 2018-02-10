@@ -128,7 +128,7 @@ ErrorCode_t GetOrderCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, u
         *((uint16_t *)pvCfgItem) = (uint16_t)(jsItem->valueint);
         break;
     case ParamTypeU32:
-        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valueint);
+        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valuedouble);
         break;    
     case ParamTypeS32:
         *((int32_t *)pvCfgItem) = (int32_t)(jsItem->valueint);

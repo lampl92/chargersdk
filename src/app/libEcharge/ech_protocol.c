@@ -58,7 +58,7 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
         *((uint16_t *)pvProtoInfoItem) = (uint16_t)(jsItem->valueint);
         break;
     case ParamTypeU32:
-        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valueint);
+        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valuedouble);
         break;
     case ParamTypeDouble:
         *((double *)pvProtoInfoItem) = (double)(jsItem->valuedouble);

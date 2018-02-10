@@ -30,7 +30,7 @@ static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCf
         *((uint16_t *)pvCfgItem) = (uint16_t)(jsItem->valueint);
         break;
     case ParamTypeU32:
-        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valueint);
+        *((uint32_t *)pvCfgItem) = (uint32_t)(jsItem->valuedouble);
         break;
     case ParamTypeDouble:
         *((double *)pvCfgItem) = (double)(jsItem->valuedouble);
