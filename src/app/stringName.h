@@ -20,12 +20,23 @@
 #define pathNetCfg          "/nand/system/ifconfig.cfg"
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
+typedef enum _filelist
+{
+    FLIST_BIN = 1,
+    FLIST_EVSE_CFG,
+    FLIST_PROTO_CFG,
+    FLIST_SYS_CFG,
+    FLIST_BLACKLIST_CFG,
+    FLIST_WHITELIST_CFG,
+    FLIST_AD_BMP
+}filelist_e;
 //**********************
 //公用图片路径
 #define  pathQuit           "nand/system/quit.dta"
 #define  pathQuitPress      "nand/system/quitpress.dta"
 #define pathbackquit        "nand/system/backquit.dta"
 #define pathbackquitpress   "nand/system/backquitpress.dta"
+#define pathADPic           "nand/system/ADPic.dta"
 //**********************
 
 //**********

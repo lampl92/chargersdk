@@ -77,8 +77,9 @@ static void netStateInit(net_device_t *net_dev)
 static void netStateFTP(net_device_t *net_dev)
 {
     uint32_t crc32_calc, crc32_orig;
-    double dcrc32_calc;
+    //double dcrc32_calc;
     char ch_crc32[9] = { 0 };
+    filelist_e filelist;
     ul2uc ul2ucCrc32;
     char filepath[64 + 1];
     int i;
@@ -88,11 +89,12 @@ static void netStateFTP(net_device_t *net_dev)
     res = ftp_download_file(&pechProto->info.ftp, net_dev);
     if (res == 1)
     {
+        sprintf(filepath, "%s%s", pathSystemDir, pechProto->info.ftp.strNewFileName);
+        StrToHex(pechProto->info.ftp.strNewFileName, (uint8_t*)&filelist, 2);//filename中前两个字符标识filelist
         for (i = 0; i < 8; i++)
         {
             ch_crc32[i] = pechProto->info.ftp.strNewFileName[i + 2];
         }
-        sprintf(filepath, "%s%s", pathSystemDir, pechProto->info.ftp.strNewFileName);
         StrToHex(ch_crc32, ul2ucCrc32.ucVal, strlen(ch_crc32));
         crc32_orig = ntohl(ul2ucCrc32.ulVal);
         GetFileCrc32(filepath, &crc32_calc);
@@ -101,22 +103,71 @@ static void netStateFTP(net_device_t *net_dev)
         if (crc32_calc == crc32_orig)
         {
             taskENTER_CRITICAL();
-            dcrc32_calc = (uint32_t)crc32_calc;
-            cfg_set_uint32(pathSysCfg, &crc32_calc, "%s", jnSysChargersdk_bin_crc32);
-//            xSysconf.SetSysCfg(jnSysChargersdk_bin_crc32, (void*)&dcrc32_calc, ParamTypeDouble);
-            yaffs_unlink(pathBin);
-            yaffs_rename(filepath, pathBin);
+            //dcrc32_calc = (uint32_t)crc32_calc;
+            switch (filelist)
+            {
+            case FLIST_BIN:
+                cfg_set_uint32(pathSysCfg, &crc32_calc, "%s", jnSysChargersdk_bin_crc32);
+                yaffs_unlink(pathBin);
+                yaffs_rename(filepath, pathBin);
+                xSysconf.xUpFlag.chargesdk_bin = 1;//待升级
+                break;
+            case FLIST_EVSE_CFG:
+                yaffs_unlink(pathEVSECfg);
+                yaffs_rename(filepath, pathEVSECfg);
+                xSysconf.xUpFlag.chargesdk_bin = 2;//这个标志位不再局限于bin升级成功, 用这位标识所有升级成功
+                break;
+            case FLIST_PROTO_CFG:
+                yaffs_unlink(pathProtoCfg);
+                yaffs_rename(filepath, pathProtoCfg);
+                xSysconf.xUpFlag.chargesdk_bin = 2;
+                break;
+            case FLIST_SYS_CFG:
+                yaffs_unlink(pathSysCfg);
+                yaffs_rename(filepath, pathSysCfg);
+                xSysconf.xUpFlag.chargesdk_bin = 2;
+                break;
+            case FLIST_BLACKLIST_CFG:
+                yaffs_unlink(pathBlackList);
+                yaffs_rename(filepath, pathBlackList);
+                xSysconf.xUpFlag.chargesdk_bin = 2;
+                break;
+            case FLIST_WHITELIST_CFG:
+                yaffs_unlink(pathWhiteList);
+                yaffs_rename(filepath, pathWhiteList);
+                xSysconf.xUpFlag.chargesdk_bin = 2;
+                break;
+            case FLIST_AD_BMP:
+                yaffs_unlink(pathADPic);
+                yaffs_rename(filepath, pathADPic);
+                xSysconf.xUpFlag.chargesdk_bin = 2;
+                break;
+            }
             taskEXIT_CRITICAL();
-            xSysconf.xUpFlag.chargesdk_bin = 1;
-            pechProto->info.ftp.ucDownloadStart = 0;
             cfg_set_uint8(pathSysCfg, &xSysconf.xUpFlag.chargesdk_bin, "%s", jnSysChargersdk_bin);
+            pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
+            pechProto->info.ftp.ucDownloadStart = 0;
             cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
             NVIC_SystemReset();
         }
+        else
+        {
+            pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;
+        }
     }
-        
-    if (res != 0)
+    else
     {
+        pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;
+    }
+    
+    if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt >= 2)
+    {
+        pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
+        xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
+        xSysconf.xUpFlag.chargesdk_bin = 3;
+        pechProto->info.ftp.ucDownloadStart = 0;
+        cfg_set_uint8(pathSysCfg, &(xSysconf.xUpFlag.chargesdk_bin), "%s", jnSysChargersdk_bin);
+        cfg_set_uint8(pathFTPCfg, &(pechProto->info.ftp.ucDownloadStart), "%s", jnFtpDownloadStart);
         netChangeState(net_dev, NET_STATE_TCP_ON);
     }
 }
@@ -152,7 +203,6 @@ static void netStateTcpOn(net_device_t *net_dev)
             }
             printf_protodetail("\n"); 
         }
-        
     }
     
     uxBit = xEventGroupWaitBits(xHandleEventRemote, defEventBitRemoteError, pdTRUE, pdTRUE, 0);
