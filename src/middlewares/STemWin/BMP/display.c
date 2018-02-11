@@ -1,3 +1,20 @@
+/*
+*
+*æ¨¡å—åç§°;åˆ›å»ºå­˜å‚¨è®¾å¤‡
+*
+*æ–‡ä»¶åç§°ï¼šdisplay.c
+*
+*è¯´æ˜ï¼š
+*   æ­¤æ¨¡å—ç”¨æ¥åˆ›å»ºäº¤äº’ç•Œé¢æ‰€æœ‰æ‰€éœ€çš„æ‰€æœ‰GUI_MEMDEV_Handleï¼ˆå­˜å‚¨è®¾å¤‡ï¼‰
+*
+*ä½œè€…ï¼šæ¨åº·
+*
+*emailï¼šy2603012723@163.com
+*
+*Copyright (C)ï¼Œ2018-2ï¼ŒåŒ—äº¬åŠ¨åŠ›æºç§‘æŠ€è‚¡ä»½æœ‰é™å…¬å¸
+*
+*/
+
 #include "display.h"
 #include "GUI.h"
 #include "DIALOG.h"
@@ -54,20 +71,20 @@ GUI_BITMAP BitmapBeijing;
 #pragma endregion
 
 #pragma region MyRegion
-        //¹«ÓÃÍ¼Æ¬¡°ÍË³ö¡±
+        //å…¬ç”¨å›¾ç‰‡â€œé€€å‡ºâ€
         GUI_BITMAP BitmapQuit;
         GUI_BITMAP BitmapQuitPress;
         GUI_BITMAP BitmapbackQuit;
         GUI_BITMAP BitmapbackQuitPress;
 
-        //Ñ¡ÔñÒ³Í¼Æ¬
+        //é€‰æ‹©é¡µå›¾ç‰‡
         GUI_BITMAP BitmapSelectGunBack;
         GUI_BITMAP BitmapSelectGunAbottonNotpress;
         GUI_BITMAP BitmapSelectGunBbottonNotpress;
         GUI_BITMAP BitmapSelectGunAbottonPress;
         GUI_BITMAP BitmapSelectGunBbottonPress;
 
-        //Ñ¡Ôñ³äµçÄ£Ê½Ò³Í¼Æ¬
+        //é€‰æ‹©å……ç”µæ¨¡å¼é¡µå›¾ç‰‡
         GUI_BITMAP Bitmapselectpatternback;
         GUI_BITMAP Bitmapselectpatternelectricnumber;
         GUI_BITMAP Bitmapselectpatternfull;
@@ -116,7 +133,7 @@ GUI_BITMAP BitmapBeijing;
         GUI_BITMAP BitmapKeyboardokpress;
         GUI_BITMAP BitmapKeyboardpointpress;
 
-        //¿¨ĞÅÏ¢Ò³Í¼Æ¬
+        //å¡ä¿¡æ¯é¡µå›¾ç‰‡
         GUI_BITMAP Bitmapcardinfoarrears;
         GUI_BITMAP Bitmapcardinfoback;
 GUI_BITMAP Bitmapcardinforeadycharging;
@@ -124,7 +141,7 @@ GUI_BITMAP Bitmapcardinforeadycharging;
         GUI_BITMAP Bitmapcardinfoplug;
         GUI_BITMAP Bitmapcardinfounregister;
 
-        //Ö÷Ò³Í¼Æ¬
+        //ä¸»é¡µå›¾ç‰‡
         GUI_BITMAP Bitmaphomeback;
         GUI_BITMAP BitmaphomegunAchargedone;
         GUI_BITMAP BitmaphomegunAcharging;
@@ -143,13 +160,13 @@ GUI_BITMAP Bitmapcardinforeadycharging;
         GUI_BITMAP Bitmaphomesignal2;
         GUI_BITMAP Bitmaphomesignal3;
 
-        //ÌáÊ¾ĞÅÏ¢Ò³Í¼Æ¬
+        //æç¤ºä¿¡æ¯é¡µå›¾ç‰‡
         GUI_BITMAP Bitmapchargedoneinfo;
         GUI_BITMAP Bitmapcharginginfo;				  
 #pragma endregion
 
 #pragma region MyRegion
-//Ö÷Ò³´¢´æÉè±¸
+//ä¸»é¡µå‚¨å­˜è®¾å¤‡
 GUI_MEMDEV_Handle Memdevhomeback;
 GUI_MEMDEV_Handle MemdevhomegunAchargedone;
 GUI_MEMDEV_Handle MemdevhomegunAcharging;
@@ -176,14 +193,14 @@ GUI_MEMDEV_Handle Memdevhomechargehelp;
 GUI_MEMDEV_Handle Memdevhomechargehelppress;
 GUI_MEMDEV_Handle Memdevhomehelpinfo;
 
-//Ñ¡Ç¹Ò³
+//é€‰æªé¡µ
 GUI_MEMDEV_Handle MemdevSelectGunBack;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
 GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		  
 
-//Ñ¡Ä£Ê½
+//é€‰æ¨¡å¼
 GUI_MEMDEV_Handle Memdevselectpatternback;
 GUI_MEMDEV_Handle Memdevselectpatternelectricnumber;
 GUI_MEMDEV_Handle Memdevselectpatternfull;
@@ -203,17 +220,17 @@ GUI_MEMDEV_Handle Memdevselectpatternunitno;
 GUI_MEMDEV_Handle Memdevselectpatternkeyboard;
 GUI_MEMDEV_Handle Memdevselectpatternkeyboardpress;
 
-//ÌáÊ¾ĞÅÏ¢Ò³Í¼Æ¬
+//æç¤ºä¿¡æ¯é¡µå›¾ç‰‡
 GUI_MEMDEV_Handle Memdevchargedoneinfo;
 GUI_MEMDEV_Handle Memdevcharginginfo;	
 
-//¹«ÓÃÍ¼Æ¬¡°ÍË³ö¡±
+//å…¬ç”¨å›¾ç‰‡â€œé€€å‡ºâ€
 GUI_MEMDEV_Handle MemdevQuit;
 GUI_MEMDEV_Handle MemdevQuitPress;
 GUI_MEMDEV_Handle MemdevbackQuit;
 GUI_MEMDEV_Handle MemdevbackQuitPress;
 
-//¿¨ĞÅÏ¢Ò³Í¼Æ¬
+//å¡ä¿¡æ¯é¡µå›¾ç‰‡
 GUI_MEMDEV_Handle Memdevcardinfoback;
 GUI_MEMDEV_Handle Memdevcardinfocardconditionnotok;
 GUI_MEMDEV_Handle Memdevcardinfochargingok;
@@ -233,17 +250,17 @@ GUI_MEMDEV_Handle Memdevcardinforeadystart;
 #pragma endregion
 
 /*
-*º¯Êı¹¦ÄÜ£º·µ»ØÍ¼Æ¬ĞÅÏ¢½á¹¹Ìåp_inf
-*    ²ÎÊı£ºÍ¼Æ¬Â·¾¶×Ö·û´®picture_file_path
-*  ·µ»ØÖµ£º·µ»ØÍ¼Æ¬ĞÅÏ¢£¬NULLÊ±Îª¶ÁÈ¡Í¼Æ¬ĞÅÏ¢Ê§°Ü
-*    ×÷Õß£ºÑî¿µ
+*å‡½æ•°åŠŸèƒ½ï¼šè¿”å›å›¾ç‰‡ä¿¡æ¯ç»“æ„ä½“p_inf
+*    å‚æ•°ï¼šå›¾ç‰‡è·¯å¾„å­—ç¬¦ä¸²picture_file_path
+*  è¿”å›å€¼ï¼šè¿”å›å›¾ç‰‡ä¿¡æ¯ï¼ŒNULLæ—¶ä¸ºè¯»å–å›¾ç‰‡ä¿¡æ¯å¤±è´¥
+*    ä½œè€…ï¼šæ¨åº·
 */
 p_inf * readPicInf(char *pfilepath)
 {
-    int  fileDescriptor;//ÎÄ¼şÌå»òÕß³ÆÎÄ¼şÃèÊö·û
-    uint32_t readByteResult;//×÷Îªf_readµÄ×îºóÒ»¸ö²ÎÊı£¬½ÓÊÜ¶Áµ½ÁË¶àÉÙ¸ö×Ö½Ú
-    char fOptResult;//½ÓÊÜÎÄ¼ş²Ù×÷·µ»ØÖµ£¨Ò²¾ÍÊÇ·µ»Ø½á¹û£©
-    p_inf *infReturn;//Í¼Æ¬ĞÅÏ¢½á¹¹Ìå£¬×îºó×÷Îª·µ»ØÖµ
+    int  fileDescriptor;//æ–‡ä»¶ä½“æˆ–è€…ç§°æ–‡ä»¶æè¿°ç¬¦
+    uint32_t readByteResult;//ä½œä¸ºf_readçš„æœ€åä¸€ä¸ªå‚æ•°ï¼Œæ¥å—è¯»åˆ°äº†å¤šå°‘ä¸ªå­—èŠ‚
+    char fOptResult;//æ¥å—æ–‡ä»¶æ“ä½œè¿”å›å€¼ï¼ˆä¹Ÿå°±æ˜¯è¿”å›ç»“æœï¼‰
+    p_inf *infReturn;//å›¾ç‰‡ä¿¡æ¯ç»“æ„ä½“ï¼Œæœ€åä½œä¸ºè¿”å›å€¼
     struct yaffs_stat st;
    
     fileDescriptor = yaffs_open(pfilepath, O_RDONLY, 0);
@@ -295,11 +312,11 @@ GUI_BITMAP readDtafile(char *pathfile)
 
 GUI_MEMDEV_Handle createMemdev(char *pfilepath)
 {
-    int  fileDescriptor;//ÎÄ¼şÌå»òÕß³ÆÎÄ¼şÃèÊö·û
+    int  fileDescriptor;//æ–‡ä»¶ä½“æˆ–è€…ç§°æ–‡ä»¶æè¿°ç¬¦
     int XSize, YSize;
     GUI_HMEM hMem;
     GUI_MEMDEV_Handle hMemBMP;
-    uint32_t readByteResult;//×÷Îªf_readµÄ×îºóÒ»¸ö²ÎÊı£¬½ÓÊÜ¶Áµ½ÁË¶àÉÙ¸ö×Ö½Ú
+    uint32_t readByteResult;//ä½œä¸ºf_readçš„æœ€åä¸€ä¸ªå‚æ•°ï¼Œæ¥å—è¯»åˆ°äº†å¤šå°‘ä¸ªå­—èŠ‚
     struct yaffs_stat st;    
     char *_acBuffer;
     GUI_LOGPALETTE Palette;
@@ -312,9 +329,9 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
         ThrowFSCode(fileDescriptor = yaffs_get_error(), pfilepath, "readPicInf()-open");
         return -1;
     }
-    /* ÉêÇëÒ»¿éÄÚ´æ¿Õ¼ä ²¢ÇÒ½«ÆäÇåÁã */
+    /* ç”³è¯·ä¸€å—å†…å­˜ç©ºé—´ å¹¶ä¸”å°†å…¶æ¸…é›¶ */
     hMem = GUI_ALLOC_AllocZero(st.st_size);
-    /* ½«ÉêÇëµ½ÄÚ´æµÄ¾ä±ú×ª»»³ÉÖ¸ÕëÀàĞÍ */
+    /* å°†ç”³è¯·åˆ°å†…å­˜çš„å¥æŸ„è½¬æ¢æˆæŒ‡é’ˆç±»å‹ */
     _acBuffer = GUI_ALLOC_h2p(hMem);
  
     readByteResult = yaffs_read(fileDescriptor, _acBuffer, st.st_size);
@@ -333,7 +350,7 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
     GUI_MEMDEV_Select(hMemBMP);
     GUI_DrawBitmap(&bitmaptmp, 0, 0);
     GUI_MEMDEV_Select(0);
-    /* ÊÍ·Å¶¯Ì¬ÄÚ´æ hMem */
+    /* é‡Šæ”¾åŠ¨æ€å†…å­˜ hMem */
     GUI_ALLOC_Free(hMem);
     yaffs_close(fileDescriptor);
     return hMemBMP;
@@ -350,19 +367,19 @@ void createGUI_BITMAP()
     GUI_CreateBitmapFromStream565(&BitmapCheckboxNotChosen, &Palette, DtaFileCheckboxNotChosen->pfilestring);
     GUI_CreateBitmapFromStream565(&BitmapCheckboxDisable, &Palette, DtaFileCheckboxDisable->pfilestring);
     GUI_CreateBitmapFromStream565(&BitmapBeijing, &Palette, DtaFileBeijing->pfilestring);
-    //¹«ÓÃÍ¼Æ¬¶ÁÈ¡
+    //å…¬ç”¨å›¾ç‰‡è¯»å–
     BitmapQuit = readDtafile(pathQuit);
     BitmapQuitPress = readDtafile(pathQuitPress);
     BitmapbackQuit = readDtafile(pathbackquit);
     BitmapbackQuitPress = readDtafile(pathbackquitpress);
-    //Ñ¡ÔñÒ³Í¼Æ¬¶ÁÈ¡
+    //é€‰æ‹©é¡µå›¾ç‰‡è¯»å–
     BitmapSelectGunAbottonNotpress = readDtafile(pathSelectGunAbottonNotpress);
     BitmapSelectGunAbottonPress = readDtafile(pathSelectGunAbottonPress);
     BitmapSelectGunBack = readDtafile(pathSelectGunBack);
     BitmapSelectGunBbottonNotpress = readDtafile(pathSelectGunBbottonNotpress);
     BitmapSelectGunBbottonPress = readDtafile(pathSelectGunBbottonPress);
         
-    //Ñ¡Ôñ³äµçÄ£Ê½Ò³Í¼Æ¬¶ÁÈ¡
+    //é€‰æ‹©å……ç”µæ¨¡å¼é¡µå›¾ç‰‡è¯»å–
     Bitmapselectpatternback = readDtafile(pathselectpatternback);
     Bitmapselectpatternelectricnumber = readDtafile(pathselectpatternelectricnumber);
     Bitmapselectpatternfull = readDtafile(pathselectpatternfull);
@@ -411,7 +428,7 @@ void createGUI_BITMAP()
     BitmapKeyboardokpress = readDtafile(pathKeyboardokpress);
     BitmapKeyboardpointpress = readDtafile(pathKeyboardpointpress);
         
-    //¿¨ĞÅÏ¢Ò³Í¼Æ¬
+    //å¡ä¿¡æ¯é¡µå›¾ç‰‡
     //Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
 //    Bitmapcardinfoback = readDtafile(pathcardinfoback);
 //    Bitmapcardinforeadycharging = readDtafile(pathcardinforeadycharging);
@@ -419,7 +436,7 @@ void createGUI_BITMAP()
 //    Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
     //Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
         
-    //Ö÷Ò³Í¼Æ¬¶ÁÈ¡
+    //ä¸»é¡µå›¾ç‰‡è¯»å–
     Bitmaphomeback = readDtafile(pathhomeback);
     BitmaphomegunAchargedone = readDtafile(pathhomegunAchargedone);
     BitmaphomegunAcharging = readDtafile(pathhomegunAcharging);
@@ -442,7 +459,7 @@ void createGUI_BITMAP()
     Bitmapcharginginfo = readDtafile(pathcharginginfo);		
 }
 
-//·µ»Ø-1Ê±³ö´í
+//è¿”å›-1æ—¶å‡ºé”™
 int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 {
     int memx;
@@ -451,7 +468,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
     GUI_HMEM qr_hmem;
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
-    GUI_QR_INFO QR_info_struct;//·ÂÕæÊ±¿´Öµ
+    GUI_QR_INFO QR_info_struct;//ä»¿çœŸæ—¶çœ‹å€¼
     qr_hmem = GUI_QR_Create(pText, 6, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     GUI_MEMDEV_Select(mem);
@@ -469,7 +486,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 
 void creatememdev()
 {   
-    //Ö÷Ò³´æ´¢
+    //ä¸»é¡µå­˜å‚¨
     CON_t *pCON;   
     MemdevhomegunAfree = createMemdev(pathhomegunAfree);
     pCON = CONGetHandle(0);
@@ -503,14 +520,14 @@ void creatememdev()
     Memdevhomechargehelppress = createMemdev(pathhomechargehelppress);
     Memdevhomehelpinfo = createMemdev(pathhomehelpinfo);
         
-    //Ñ¡Ç¹
+    //é€‰æª
     MemdevSelectGunBack = createMemdev(pathSelectGunBack);
     MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress);
     MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
     MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
     MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
     
-    //Ñ¡Ä£Ê½
+    //é€‰æ¨¡å¼
     Memdevselectpatternback = createMemdev(pathselectpatternback);
     Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber);
     Memdevselectpatternfull = createMemdev(pathselectpatternfull);
@@ -530,17 +547,17 @@ void creatememdev()
     Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
     Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
     
-    //ÌáÊ¾ĞÅÏ¢Ò³Í¼Æ¬
+    //æç¤ºä¿¡æ¯é¡µå›¾ç‰‡
     Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
     Memdevcharginginfo = createMemdev(pathcharginginfo);
 
-    //¹«ÓÃÍ¼Æ¬¡°ÍË³ö¡±
+    //å…¬ç”¨å›¾ç‰‡â€œé€€å‡ºâ€
     MemdevQuit = createMemdev(pathQuit);
     MemdevQuitPress = createMemdev(pathQuitPress);
     MemdevbackQuit = createMemdev(pathbackquit);
     MemdevbackQuitPress = createMemdev(pathbackquitpress);
 
-    //¿¨ĞÅÏ¢Ò³Í¼Æ¬
+    //å¡ä¿¡æ¯é¡µå›¾ç‰‡
     Memdevcardinfoback = createMemdev(pathcardinfoback);
     Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok);
     Memdevcardinfochargingok = createMemdev(pathcardinfochargingok);
