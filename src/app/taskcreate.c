@@ -174,6 +174,8 @@ void vTaskInit(void *pvParameters)
     SysTaskCreate();
     AppTaskCreate();
     //IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s    
+    pModem = DevModemCreate();
+    Modem_Poll(pModem);//这是任务
     while (1)
     {
         IWDG_Feed();
@@ -227,7 +229,7 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
 
     //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
-    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
+    //xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 
 }
