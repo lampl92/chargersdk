@@ -103,7 +103,6 @@ static void netStateFTP(net_device_t *net_dev)
         if (crc32_calc == crc32_orig)
         {
             taskENTER_CRITICAL();
-            //dcrc32_calc = (uint32_t)crc32_calc;
             switch (filelist)
             {
             case FLIST_BIN:
