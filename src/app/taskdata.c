@@ -332,8 +332,8 @@ void vTaskEVSEData(void *pvParameters)
         /********** 更新密钥 **************/
         if(pechProto->info.tNewKeyChangeTime <= time(NULL))
         {
-            //32位系统最大时间戳4294967295
-            uint32_t max_time = 4294967295;
+            //32位系统最大时间戳2147483647 -> 2038/1/19 11:14:7
+            uint32_t max_time = 2147483647;
 
             pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
             pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);

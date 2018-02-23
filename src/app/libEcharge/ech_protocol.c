@@ -60,6 +60,9 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
     case ParamTypeU32:
         *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valuedouble);
         break;
+    case ParamTypeS32:
+        *((int32_t *)pvProtoInfoItem) = (int32_t)(jsItem->valueint);
+        break;
     case ParamTypeDouble:
         *((double *)pvProtoInfoItem) = (double)(jsItem->valuedouble);
         break;
@@ -224,7 +227,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
                 "GetNewKey()");
     THROW_ERROR(defDevID_File,
                 errcode = GetProtoCfgItem((void *)(&(pProto->info.tNewKeyChangeTime)),
-                                          ParamTypeU32,
+                                          ParamTypeS32,
                                           jsProtoObj,
                                           jnProtoNewKeyChangeTime),
                 ERR_LEVEL_WARNING,
