@@ -44,8 +44,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "HomePage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { IMAGE_CreateIndirect, "HomeImage", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
     { IMAGE_CreateIndirect, "SignalImage", ID_IMAGE_1, 755, 3, 40, 29, 0, 0, 0 },
-    { TEXT_CreateIndirect, "PowerFee", ID_TEXT_0, 96, 168, 96, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "ServiceFee", ID_TEXT_1, 96, 278, 96, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "PowerFee", ID_TEXT_0, 96, 170, 96, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "ServiceFee", ID_TEXT_1, 96, 280, 96, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Date", ID_TEXT_2, 4, 4, 120, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "Time", ID_TEXT_3, 136, 4, 120, 24, 0, 0x0, 0 },
 };
