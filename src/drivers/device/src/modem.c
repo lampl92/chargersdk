@@ -111,7 +111,7 @@ uint32_t modem_send_at(uint8_t *format, ...)
     modem_UART_puts(cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
-    printf_modem("%s\r\n", cmd);
+    printf_modem("%s", cmd);
 
     return n;
 }

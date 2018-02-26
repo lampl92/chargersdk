@@ -68,7 +68,7 @@ static void netStateInit(net_device_t *net_dev)
     net_dev->interface = &netInterface[n];
     sprintf(net_dev->name, "eth%d", n);
     
-    error = net_dev_init(net_dev);
+    error = net_dev->init(net_dev);
     if (error == NO_ERROR)
     {
         netChangeState(net_dev, NET_STATE_CONNECT);
@@ -172,7 +172,7 @@ static void netStateFTP(net_device_t *net_dev)
 }
 static void netStateDisconnect(net_device_t *net_dev)
 {
-    net_dev_disconnect();
+    net_dev->disconnect(net_dev);
     netChangeState(net_dev, NET_STATE_CONNECT);
 }
 static void netStateTcpOn(net_device_t *net_dev)
@@ -214,7 +214,7 @@ static void netStateConnect(net_device_t *net_dev)
 {
     error_t error; 
     ifconfig_update(net_dev);
-    error = net_dev_connect();
+    error = net_dev->connect(net_dev);
     if (error == NO_ERROR)
     {
         netChangeState(net_dev, NET_STATE_TCP_ON);
@@ -227,9 +227,8 @@ static void netStateConnect(net_device_t *net_dev)
 extern error_t smtpClientTest(void);
 void vTaskTCPClient(void *pvParameters)
 {
-    net_device_t *net_dev;
-
-    net_dev = get_net_device_handler(ifconfig.info.ucAdapterSel);
+    //net_dev = net_device_create(ifconfig.info.ucAdapterSel);
+    net_dev = net_device_create(2);
 
     netChangeState(net_dev, NET_STATE_INIT);
 

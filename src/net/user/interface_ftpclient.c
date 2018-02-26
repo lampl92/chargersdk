@@ -136,6 +136,8 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
             break;
 
         error = ftpChangeWorkingDir(&ftpContext, ctx->fpath);
+        if (error)
+            break;
         error = ftpOpenFile(&ftpContext, ctx->fname, FTP_FOR_READING | FTP_BINARY_TYPE);
         if (error)
             break;

@@ -297,6 +297,7 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.c" />
@@ -312,7 +313,7 @@
     <ClCompile Include="..\..\..\src\net\user\interface_smtpclient.c" />
     <ClCompile Include="..\..\..\src\net\user\net_device.c" />
     <ClCompile Include="..\..\..\src\net\user\net_eth.c" />
-    <ClCompile Include="..\..\..\src\net\user\net_modem.c" />
+    <ClCompile Include="..\..\..\src\net\user\net_ppp.c" />
     <ClCompile Include="..\..\..\src\net\user\tasknetwork.c" />
     <ClCompile Include="..\..\..\src\net\user\taskppp.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
@@ -872,6 +873,7 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server_misc.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_signature.h" />
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aesni.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\arc4.h" />

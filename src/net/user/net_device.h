@@ -3,6 +3,8 @@
 
 #include "core/net.h"
 
+typedef error_t (*net_dev_ft)(void *vnet_dev);
+    
 typedef enum
 {
     NET_FLAG_CONNECTED
@@ -23,11 +25,13 @@ typedef struct _net_device
     NetInterface *interface;
     char name[16];
     net_state state;
+    net_dev_ft init;
+    net_dev_ft connect;
+    net_dev_ft disconnect;
 }net_device_t;
 
-net_device_t *get_net_device_handler(uint8_t dev_num);
-error_t net_dev_init(net_device_t *net_dev);
-error_t net_dev_connect(void);
-error_t net_dev_disconnect(void);
+extern net_device_t *net_dev;
 
+net_device_t *get_net_device_handler(uint8_t dev_num);
+net_device_t *net_device_create(uint8_t dev_num);
 #endif

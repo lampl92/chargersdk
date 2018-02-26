@@ -19,6 +19,5 @@
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
-extern net_device_t eth_dev;
 
 #endif

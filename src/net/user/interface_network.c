@@ -23,7 +23,7 @@ int netRecv(uint8_t *pbuff, uint32_t buff_len)
     return recv_len;
 }
 
-Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror)
+Socket *netif_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror)
 {
     error_t error; 
     IpAddr ipAddr; //DNS 解析得到的地址 
@@ -97,7 +97,7 @@ error_t net_stack_init(void)
 {
     error_t error;
     
-    error = netInit();
+    error = netInit();//启动 TCP/IP 任务
     if (error)
     {
         TRACE_ERROR("初始化 TCP/IP 协议栈失败!\r\n");

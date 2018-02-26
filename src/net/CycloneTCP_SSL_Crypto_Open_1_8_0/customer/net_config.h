@@ -30,6 +30,8 @@
 #define _NET_CONFIG_H
 
 #define PPP_SUPPORT             ENABLED
+#define PPP_TRACE_LEVEL         TRACE_LEVEL_DEBUG
+
 #define NET_TASK_PRIORITY       12
 #define DNS_CLIENT_SUPPORT      ENABLED
 #define MDNS_CLIENT_SUPPORT     DISABLED
