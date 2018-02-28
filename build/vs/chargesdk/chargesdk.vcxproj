@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\..\readme.md" />
+    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c" />
     <None Include="chargesdk-Debug.vgdbsettings" />
     <None Include="chargesdk-Release.vgdbsettings" />
     <None Include="debug.mak" />
@@ -144,6 +145,7 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
@@ -295,6 +297,7 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_client.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_common.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\dns\dns_debug.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_client.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_commands.c" />
@@ -310,7 +313,7 @@
     <ClCompile Include="..\..\..\src\net\user\interface_smtpclient.c" />
     <ClCompile Include="..\..\..\src\net\user\net_device.c" />
     <ClCompile Include="..\..\..\src\net\user\net_eth.c" />
-    <ClCompile Include="..\..\..\src\net\user\net_modem.c" />
+    <ClCompile Include="..\..\..\src\net\user\net_ppp.c" />
     <ClCompile Include="..\..\..\src\net\user\tasknetwork.c" />
     <ClCompile Include="..\..\..\src\net\user\taskppp.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\FreeRTOSHook.c" />
@@ -870,6 +873,7 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server_misc.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_signature.h" />
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aesni.h" />
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\arc4.h" />

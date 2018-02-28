@@ -3,7 +3,7 @@
 #include "evse_globals.h"
 void cli_ftpserver_fnt(int argc, char **argv)
 {
-    net_ftp_server_start(&eth_dev);
+    net_ftp_server_start(net_dev);
 }
 
 tinysh_cmd_t cli_ftpserver_cmd =

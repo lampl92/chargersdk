@@ -86,6 +86,8 @@
 #define defEventBitTCPConnectFail       BIT_6 //接收主动清除
 #define defEventBitTCPClientRecvValid   BIT_7
 #define defEventBitTCPClientFlushBuff   BIT_8
+#define defEventBitPPPDiagOK            BIT_9
+#define defEventBitPPPClosed            BIT_10
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0

@@ -249,13 +249,13 @@ void vTaskEVSERemote(void *pvParameters)
                                          pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
-                RemoteIF_SendRegist(pEVSE, pechProto);
+                RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
             }
             break;
         case REMOTE_CONNECTED:
             /********** 注册 **************/
-            RemoteIF_RecvRegist(pEVSE, pechProto, &network_res);
+            RemoteIF_RecvLogin(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
                 reg_try_cnt = 0;
@@ -357,7 +357,7 @@ void vTaskEVSERemote(void *pvParameters)
             if(network_res != 1)
             {
                 heart_lost++;
-                if(heart_lost > 200)//750
+                if(heart_lost > 750)//750
                 {
                     heart_lost = 0;
                     remotestat = REMOTE_ERROR;

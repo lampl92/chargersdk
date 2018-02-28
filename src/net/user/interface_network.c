@@ -2,6 +2,7 @@
 #include "ifconfig.h"
 #include "net_device.h"
 #include "net_eth.h"
+#include "net_ppp.h"
 
 #include "core/net.h"
 #include "debug.h"
@@ -9,7 +10,17 @@
 int netSend(uint8_t *pbuff, uint32_t len)
 {
     error_t error; 
-    error = socketSend(socket_eth, pbuff, len, NULL, 0); 
+    switch (ifconfig.info.ucAdapterSel)
+    {
+    case NET_DEVICE_ETH:
+        error = socketSend(socket_eth, pbuff, len, NULL, 0); 
+        break;
+    case NET_DEVICE_MODEM:
+        error = socketSend(socket_ppp, pbuff, len, NULL, 0); 
+        break;
+    default:
+        break;
+    }
     if (error) return 0; 
     return 1;
 }
@@ -18,12 +29,22 @@ int netRecv(uint8_t *pbuff, uint32_t buff_len)
 {
     size_t recv_len;
     error_t error; 
-    error = socketReceive(socket_eth, pbuff, buff_len, &recv_len, 0); 
+    switch (ifconfig.info.ucAdapterSel)
+    {
+    case NET_DEVICE_ETH:
+        error = socketReceive(socket_eth, pbuff, buff_len, &recv_len, 0); 
+        break;
+    case NET_DEVICE_MODEM:
+        error = socketReceive(socket_ppp, pbuff, buff_len, &recv_len, 0); 
+        break;
+    default:
+        break;
+    }
     if (error) return 0; 
     return recv_len;
 }
 
-Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror)
+Socket *netif_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror)
 {
     error_t error; 
     IpAddr ipAddr; //DNS 解析得到的地址 
@@ -97,7 +118,7 @@ error_t net_stack_init(void)
 {
     error_t error;
     
-    error = netInit();
+    error = netInit();//启动 TCP/IP 任务
     if (error)
     {
         TRACE_ERROR("初始化 TCP/IP 协议栈失败!\r\n");

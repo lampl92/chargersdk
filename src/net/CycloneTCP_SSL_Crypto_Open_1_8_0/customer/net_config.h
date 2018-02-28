@@ -30,6 +30,8 @@
 #define _NET_CONFIG_H
 
 #define PPP_SUPPORT             ENABLED
+#define PPP_TRACE_LEVEL         TRACE_LEVEL_INFO
+
 #define NET_TASK_PRIORITY       12
 #define DNS_CLIENT_SUPPORT      ENABLED
 #define MDNS_CLIENT_SUPPORT     DISABLED
@@ -37,6 +39,12 @@
 #define NBNS_RESPONDER_SUPPORT  DISABLED
 
 //Trace level for TCP/IP stack debugging
+// TRACE_LEVEL_OFF      0
+// TRACE_LEVEL_FATAL    1
+// TRACE_LEVEL_ERROR    2
+// TRACE_LEVEL_WARNING  3
+// TRACE_LEVEL_INFO     4
+// TRACE_LEVEL_DEBUG    5
 #define MEM_TRACE_LEVEL          4
 #define NIC_TRACE_LEVEL          4
 #define ETH_TRACE_LEVEL          2
@@ -61,11 +69,11 @@
 #define MDNS_TRACE_LEVEL         4
 #define NBNS_TRACE_LEVEL         2
 #define LLMNR_TRACE_LEVEL        4
-#define FTP_TRACE_LEVEL          5
+#define FTP_TRACE_LEVEL          4
 #define HTTP_TRACE_LEVEL         4
-#define SMTP_TRACE_LEVEL         5
+#define SMTP_TRACE_LEVEL         4
 #define SNTP_TRACE_LEVEL         4
-#define STD_SERVICES_TRACE_LEVEL 5
+#define STD_SERVICES_TRACE_LEVEL 4
 
 //Number of network adapters
 #define NET_INTERFACE_COUNT 1

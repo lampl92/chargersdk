@@ -66,12 +66,65 @@ static void netStateInit(net_device_t *net_dev)
     
     //初始化网络设备
     net_dev->interface = &netInterface[n];
-    sprintf(net_dev->name, "eth%d", n);
     
-    error = net_dev_init(net_dev);
+    error = net_dev->init(net_dev);
     if (error == NO_ERROR)
     {
         netChangeState(net_dev, NET_STATE_CONNECT);
+    }
+}
+static void netStateConnect(net_device_t *net_dev)
+{
+    error_t error; 
+    ifconfig_update(net_dev);
+    if (pechProto->info.ftp.ucDownloadStart == 1)
+    {
+        netChangeState(net_dev, NET_STATE_FTP);
+        return;
+    }
+    error = net_dev->connect(net_dev);
+    if (error == NO_ERROR)
+    {
+        netChangeState(net_dev, NET_STATE_TCP_ON);
+    }
+    else
+    {
+        netChangeState(net_dev, NET_STATE_ERR);
+//        vTaskDelay(10000);
+    }
+}
+static void netStateDisconnect(net_device_t *net_dev)
+{
+    net_dev->disconnect(net_dev);
+    netChangeState(net_dev, NET_STATE_CONNECT);
+}
+static void netStateTcpOn(net_device_t *net_dev)
+{
+    char_t buffer[5000]; 
+    size_t length; 
+    error_t error; 
+    int i;
+    
+    EventBits_t uxBit;
+    
+    length = netRecv(buffer, sizeof(buffer));
+    if (length > 0)
+    {
+        pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
+        {
+            printf_protodetail("\nTCP Recv: ");
+            for (i = 0; i < length; i++)
+            {
+                printf_protodetail("%02X ", buffer[i]);
+            }
+            printf_protodetail("\n"); 
+        }
+    }
+    
+    uxBit = xEventGroupWaitBits(xHandleEventRemote, defEventBitRemoteError, pdTRUE, pdTRUE, 0);
+    if ((uxBit & defEventBitRemoteError) == defEventBitRemoteError)
+    {
+        netChangeState(net_dev, NET_STATE_DISCONNECT);
     }
 }
 static void netStateFTP(net_device_t *net_dev)
@@ -103,7 +156,6 @@ static void netStateFTP(net_device_t *net_dev)
         if (crc32_calc == crc32_orig)
         {
             taskENTER_CRITICAL();
-            //dcrc32_calc = (uint32_t)crc32_calc;
             switch (filelist)
             {
             case FLIST_BIN:
@@ -171,66 +223,16 @@ static void netStateFTP(net_device_t *net_dev)
         netChangeState(net_dev, NET_STATE_TCP_ON);
     }
 }
-static void netStateDisconnect(net_device_t *net_dev)
+static void netStateErr(net_device_t *net_dev)
 {
-    net_dev_disconnect();
-    netChangeState(net_dev, NET_STATE_CONNECT);
+    net_dev->close_hard(net_dev);
+    netChangeState(net_dev, NET_STATE_INIT);
 }
-static void netStateTcpOn(net_device_t *net_dev)
-{
-    char_t buffer[5000]; 
-    size_t length; 
-    error_t error; 
-    int i;
-    
-    EventBits_t uxBit;
-    
-    if (pechProto->info.ftp.ucDownloadStart == 1)
-    {
-        netChangeState(net_dev, NET_STATE_FTP);
-        return;
-    }
-    
-    length = netRecv(buffer, sizeof(buffer));
-    if (length > 0)
-    {
-        pechProto->recvResponse(pechProto, pEVSE, buffer, length, 3);
-        {
-            printf_protodetail("\nTCP Recv: ");
-            for (i = 0; i < length; i++)
-            {
-                printf_protodetail("%02X ", buffer[i]);
-            }
-            printf_protodetail("\n"); 
-        }
-    }
-    
-    uxBit = xEventGroupWaitBits(xHandleEventRemote, defEventBitRemoteError, pdTRUE, pdTRUE, 0);
-    if ((uxBit & defEventBitRemoteError) == defEventBitRemoteError)
-    {
-        netChangeState(net_dev, NET_STATE_DISCONNECT);
-    }
-}
-static void netStateConnect(net_device_t *net_dev)
-{
-    error_t error; 
-    ifconfig_update(net_dev);
-    error = net_dev_connect();
-    if (error == NO_ERROR)
-    {
-        netChangeState(net_dev, NET_STATE_TCP_ON);
-    }
-    else
-    {
-        vTaskDelay(10000);
-    }
-}
+
 extern error_t smtpClientTest(void);
 void vTaskTCPClient(void *pvParameters)
 {
-    net_device_t *net_dev;
-
-    net_dev = get_net_device_handler(ifconfig.info.ucAdapterSel);
+    net_dev = net_device_create(ifconfig.info.ucAdapterSel);
 
     netChangeState(net_dev, NET_STATE_INIT);
 
@@ -254,6 +256,9 @@ void vTaskTCPClient(void *pvParameters)
             break;
         case NET_STATE_FTP:
             netStateFTP(net_dev);
+            break;
+        case NET_STATE_ERR:
+            netStateErr(net_dev);
             break;
         default:
             netChangeState(net_dev, NET_STATE_IDLE);

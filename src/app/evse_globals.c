@@ -7,10 +7,8 @@
 */
 #include "interface.h"
 #include "userlib_list.h"
-#include "net_device.h"
 
 EVSE_t *pEVSE;
 UserList_t *pListCON;
 RFIDDev_t *pRFIDDev;
 echProtocol_t *pechProto;
-//net_device_t eth_dev; 定义在net_eth.c中

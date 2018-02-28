@@ -537,6 +537,12 @@
     <Filter Include="Header files\middlewares\unzip101e">
       <UniqueIdentifier>{30f09925-3061-41ab-adb1-7a05813195c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\drivers\uart">
+      <UniqueIdentifier>{73a7d8ee-67ba-4c50-93ac-aa68886c3c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\uart">
+      <UniqueIdentifier>{f48c96c6-a0fb-4e52-b3f5-362276970cdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -557,6 +563,9 @@
     </None>
     <None Include="..\..\..\readme.md" />
     <None Include="chargersdk_flash.lds" />
+    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -1500,9 +1509,6 @@
     <ClCompile Include="..\..\..\src\net\user\net_eth.c">
       <Filter>Source files\net\user</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\net\user\net_modem.c">
-      <Filter>Source files\net\user</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\smtp\smtp_client.c">
       <Filter>Source files\net\CycloneTCP\cyclone_tcp\smtp</Filter>
     </ClCompile>
@@ -1907,6 +1913,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_log.c">
       <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\net_ppp.c">
+      <Filter>Source files\net\user</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\drivers\uart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4957,6 +4972,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_debug.h">
       <Filter>Header files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.h">
+      <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\uart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
 #include "core/net.h"
 
 error_t net_stack_init(void);
-Socket *net_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror);
+Socket *netif_connect_server_via_tcp(net_device_t *net_dev, const char *server_ip, uint16_t port, error_t *perror);
 void ifconfig_update(net_device_t *net_dev);
 
 int netSend(uint8_t *pbuff, uint32_t len);

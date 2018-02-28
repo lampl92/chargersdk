@@ -59,7 +59,7 @@ const char *strProtoCfg =
     \"UserPwd\": \"esaaspasswrd\",\n \
     \"Key\": \"0123456789abcdeg\",\n \
     \"NewKey\": \"\",\n \
-    \"NewKeyChangeTime\": 4294967295,\n \
+    \"NewKeyChangeTime\": 2147483647,\n \
     \"OptSN\": 0,\n \
     \"ProtoVer\": 104,\n \
     \"HeartBeatCyc_ms\": 15000,\n \
