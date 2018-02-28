@@ -35,8 +35,8 @@ typedef struct _Heartbeat
 }Heartbeat_t;
 
 
-ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto);
-ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
+ErrorCode_t RemoteIF_SendLogin(EVSE_t *pEVSE, echProtocol_t *pProto);
+ErrorCode_t RemoteIF_RecvLogin(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 
 ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
