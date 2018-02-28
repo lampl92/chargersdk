@@ -1006,9 +1006,6 @@
 #ifndef __LLACCUM_IBIT__
 #define __LLACCUM_IBIT__ 32
 #endif
-#ifndef DEBUG_DIAG_DUMMY
-#define DEBUG_DIAG_DUMMY 1
-#endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
 #endif

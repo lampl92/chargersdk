@@ -265,26 +265,13 @@ void get_CP1(void)
 double get_CP2(void)
 {
     unsigned short i;
-
-    for (i = 0; i < samp_sum; i++)
+    float dma_cp2_sum = 0;
+    for (i = 0; i < samp_dma; i++)
     {
-        if (Sys_samp.DC_samp.CP2[i] >= 1000)
-        {
-            CP2_sum_sys += Sys_samp.DC_samp.CP2[i];
-            num_cp2++;
-        }
+        dma_cp2_sum += AD_samp_dma[i].CP2;
     }
-    if (num_cp2 <= 20)
-    {
-        Sys_samp.DC.CP2 = 0;
-    }
-    else
-    {
-        Sys_samp.DC.CP2 = (CP2_sum_sys * CP2_k) / num_cp2 + 0.2;
-    }
-    CP2_sum_sys = 0;
-    num_cp2 = 0;
-    return Sys_samp.DC.CP2;
+    dma_cp2_sum = dma_cp2_sum / samp_dma;
+     Sys_samp.DC.CP2 = dma_cp2_sum * CP2_k + 0.2;
 }
 
 void Delay_ms(unsigned long long time)
@@ -415,9 +402,9 @@ void Peripheral_Init(void)
     led_state_init();
     MX_DMA_Init();
     MX_ADC1_Init();
-    MX_TIM2_Init();//1ºÅÇ¹PWMÆµÂÊ1K
+    MX_TIM2_Init();//CP1PWM
     MX_TIM3_Init();//1ºÅÇ¹PWMÆµÂÊ1K
-    MX_TIM4_Init();//2ºÅÇ¹PWMÆµÂÊ1K
+    MX_TIM4_Init();//CP2PWM
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     MX_TIM8_Init();
     RS485_Init(9600);
@@ -434,7 +421,9 @@ void Peripheral_Init(void)
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
     vref = 2045;
-    PWM1_1000;
+    PWM1_535;
+    PWM2_535;
+    //PWM2_1000;
    //user_pwm_relay1_setvalue(1000);
   // user_pwm_relay2_setvalue(1000);
    // vref = Get_State_relay();

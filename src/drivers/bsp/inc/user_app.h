@@ -30,7 +30,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define PWM4_ON      HAL_TIM_OC_Start_IT(&htim8, TIM_CHANNEL_3)//¿ªÆôPWM2
 
 #define PWM1_OFF     ;//HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//¹Ø±ÕPWM1
-#define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
+#define PWM2_OFF     ;//HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
 #define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
@@ -58,6 +58,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define PWM1_1000  TIM_SetTIM2Compare1(TIMER_MAX)
 #define PWM1_535   TIM_SetTIM2Compare1(465)
+#define PWM1_0   TIM_SetTIM2Compare1(1000)
 
 #define RELAY2_ON  user_pwm_relay2_setvalue(1000);
 #define RELAY2_KEEP  user_pwm_relay2_setvalue(500);
@@ -68,7 +69,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define RELAY1_OFF  user_pwm_relay1_setvalue(0);
 
 #define PWM2_1000  do{TIM_SetTIM4Compare1(TIMER_MAX);}while(0)
-#define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
+#define PWM2_535   do{TIM_SetTIM4Compare1(465);}while(0)
+#define PWM2_0   do{TIM_SetTIM4Compare1(1000);}while(0)
 
 #define write_chip1 0x40 //0100 0000
 #define read_chip1 0x41 //0100 0001
@@ -95,12 +97,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define green    1
 #define blue     2
 
-#define voltage  0x000b
-#define current  0x000c
-#define power    0x000d
-#define electric_energy_l 0x0001
-#define electric_energy_h 0x0000
-#define frequency 0x0011
+
 
 #define	AXISDATA_REG	0x28
 #define lock_timer      20
@@ -254,6 +251,6 @@ uint16_t num_cp1, num_cp2;
 double vref, va;
 uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum, leakage_current_sum, va_samp_sum, ia_samp_sum, CP2_sum, CP1_sum, CP1_sum_sys, CP2_sum_sys;
-uint8_t   pwm_samp_timer, pwm_samp_flag;
+uint8_t   pwm_samp_timer, pwm_samp_flag,pwm_samp_timer_cp2, pwm_samp_flag_cp2;
 extern samp Sys_samp;
 #endif /* USER_APP_H_INCLUDED */
