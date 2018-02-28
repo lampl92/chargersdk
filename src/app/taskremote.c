@@ -277,7 +277,7 @@ void vTaskEVSERemote(void *pvParameters)
                 reg_try_cnt++;
                 if(reg_try_cnt > 200)
                 {
-                    printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
+                    printf_safe("\n\nlogin try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
                     remotestat = REMOTE_ERROR;
                 }
@@ -359,6 +359,7 @@ void vTaskEVSERemote(void *pvParameters)
                 heart_lost++;
                 if(heart_lost > 750)//750
                 {
+                    printf_safe("\n\nHeart LOST!!!!\n\n");
                     heart_lost = 0;
                     remotestat = REMOTE_ERROR;
                     break;
