@@ -64,7 +64,7 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
     }
     pechProto->info.ftp.ftp_proc.ulRecvFileSize += len;
     TRACE_DEBUG("filesize = %d（recv %d）\n", pechProto->info.ftp.ftp_proc.ulRecvFileSize, len);
-    vTaskDelay(1);//给其他任务喘气的机会
+    //vTaskDelay(1);//给其他任务喘气的机会
     return 0;
 }
 
@@ -107,7 +107,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
     size_t length;
     IpAddr ipAddr;
     FtpClientContext ftpContext;
-    char_t buffer[256];
+    char_t buffer[1500];
 
     TRACE_INFO("\r\n\r\n解析FTP服务器域名...\r\n");
     error = getHostByName(net_dev->interface, ctx->ftp_server, &ipAddr, 0);
