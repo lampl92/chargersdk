@@ -51,7 +51,7 @@ typedef enum
 
 typedef struct
 {
-    uint8_t strAPN[16+1];
+    char strAPN[16+1];
     uint8_t ucContext;
     uint8_t ucTPMode;
 } ModemInfo_t;
@@ -62,7 +62,7 @@ typedef struct
     ModemParam_e eNetReg;       //CREG 网络注册信息    REG_LOCAl || REG_ROAMING
     ModemParam_e eGprsReg;      //CGREG GPRS网络注册信息 REG_LOCAl || REG_ROAMING
     uint8_t ucSignalQuality;    //CSQ 信号强度  rssi:0-31，越大越好,  99 信号异常
-    uint8_t strLocIP[15+1];     //本地IP
+    char strLocIP[15+1];     //本地IP
     ModemParam_e eConnect;
     ModemConStat_e statConStat;
 } ModemStatus_t;
@@ -72,6 +72,8 @@ typedef enum
     DS_MODEM_OFF,
     DS_MODEM_ON,
     DS_MODEM_ERR,
+    DS_MODEM_PPP_Diag,
+    DS_MODEM_PPP_On,
     DS_MODEM_ACT_PDP,
     DS_MODEM_DEACT_PDP,
 //    DS_MODEM_TRANSPARENT,

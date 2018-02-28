@@ -101,25 +101,22 @@ void stm32f4x9UartDisableIrq(void)
 void stm32f4x9UartStartTx(void)
 {
     int_t c;
+    uint8_t a;
     
-    do
-    {
-        pppHdlcDriverReadTxQueue(net_dev->interface, &c);
-    } while (c != EOF);
     while (pppHdlcDriverReadTxQueue(net_dev->interface, &c) == FALSE)
     {
         
         //printf_safe("context switch\n");
-        //modem_enQue((uint8_t*)&c, 1);
         if (c != EOF)
         {
-            printf_safe("%02x ", c);
+            a = (uint8_t)c;
+            modem_enQue(&a, 1);
+            //printf_safe("%02x ", c);
         }
         else
         {
             break;
         }
     }
-    printf_safe("\n");
-    //printf_safe("%02x ", c);
+    //printf_safe("\n");
 }

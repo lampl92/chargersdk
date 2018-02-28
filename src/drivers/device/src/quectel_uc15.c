@@ -505,7 +505,8 @@ DevModem_t *UC15Create(void)
 {
     DevModem_t *pMod;
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
-    strcpy(pModem->info.strAPN, "CMNET");
+    memset(pMod, 0, sizeof(DevModem_t));
+    sprintf(pModem->info.strAPN, "3GNET");
     pMod->info.ucContext = 1;
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;

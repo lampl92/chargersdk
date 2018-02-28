@@ -24,9 +24,9 @@ net_device_t *net_device_create(uint8_t dev_num)
 {
     switch (dev_num)
     {
-    case 1:
+    case NET_DEVICE_ETH:
         return net_eth_create();
-    case 2:
+    case NET_DEVICE_MODEM:
         return net_ppp_create();
     default:
         return NULL;

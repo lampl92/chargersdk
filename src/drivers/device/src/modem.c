@@ -20,6 +20,8 @@
 #include "quectel_m26.h"
 #include "quectel_uc15.h"
 
+#include "ppp/ppp_hdlc.h"
+
 #ifdef EVSE_DEBUG
 
 #undef   GPRS_set
@@ -34,7 +36,7 @@ int modemlog = 1;
 #define TCP_CLIENT_BUFSIZE           MAX_COMMAND_LEN
 #define QUE_BUFSIZE                  5000
 DevModem_t *pModem;
-uint32_t ulTaskDelay_ms = 1000;
+uint32_t ulTaskDelay_ms = 100;
 
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
 
@@ -71,15 +73,15 @@ static void modem_UART_putQue(DevModem_t *pModem)
 #endif
 	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
 	    {
-			printf_protolog("Send: ");
+			printf_protodetail("PPP Send: ");
 	    }
         while (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
         {
             pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
-            printf_protolog("%02X ", ch);
+            printf_protodetail("%02X ", ch);
             gprs_uart_putc(ch);
         }
-        printf_protolog("\n");
+        printf_protodetail("\n");
 #if USE_FreeRTOS
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }
@@ -277,11 +279,54 @@ void Modem_Poll(DevModem_t *pModem)
             ret = pModem->init(pModem);
             if (ret == DR_MODEM_OK)
             {
+                pModem->state = DS_MODEM_PPP_Diag;
+            }
+#if 0
+            if (ret == DR_MODEM_OK)
+            {
                 pModem->state = DS_MODEM_ACT_PDP;
             }
             else
             {
                 pModem->state = DS_MODEM_DEACT_PDP;
+            }
+#endif
+            break;
+        case DS_MODEM_PPP_Diag:
+            ret = M26_diag_PPP(pModem);
+            if (ret == DR_MODEM_OK)
+            {
+                xEventGroupSetBits(xHandleEventTCP, defEventBitPPPDiagOK);
+                pModem->state = DS_MODEM_PPP_On;
+            }
+            break;
+        case DS_MODEM_PPP_On:
+            modem_UART_putQue(pModem);
+            /*=== read处理 ===*/
+            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+            if (recv_len > 0)
+            {
+                for (i = 0; i < recv_len; i++)
+                {
+                    pppHdlcDriverWriteRxQueue(net_dev->interface, tcp_client_recvbuf[i]);
+                }
+
+                if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                {
+                    printf_safe("\e[31;47mServer CLOSED\n\e[0m");
+                    pModem->state = DS_MODEM_ERR;
+                }
+                else
+                {
+                    //
+                }
+                memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
+                recv_len = 0;
+            }
+            uxBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPClosed, pdTRUE, pdTRUE, 0);
+            if ((uxBits & defEventBitPPPClosed) == defEventBitPPPClosed)
+            {
+                pModem->state = DS_MODEM_ERR;
             }
             break;
         case DS_MODEM_ACT_PDP:
@@ -382,109 +427,29 @@ void Modem_Poll(DevModem_t *pModem)
 #endif
             modem_UART_putQue(pModem);
             /*=== read处理 ===*/
-            if (pModem->info.ucTPMode == 0)
+            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+            if (recv_len > 0)
             {
-                ret = modem_get_at_reply(tcp_client_recvbuf, sizeof(tcp_client_recvbuf) - 1, "+QIRDI:", 1);
-                if (ret == DR_MODEM_READ)
-                {
-                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid);
-                }
-                uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                    defEventBitTCPClientRecvValid,
-                    pdTRUE,
-                    pdTRUE,
-                    0);
-                if ((uxBits & defEventBitTCPClientRecvValid) == defEventBitTCPClientRecvValid)
-                {
-                    //读取串口数据
-                    recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-                    if (recv_len > 0)
-                    {
-                        printf_protolog("\n\e[34;43mTCP Recv:\e[0m ");
-                        for (i = 0; i < recv_len; i++)
-                        {
-                            printf_protolog("%02X ", tcp_client_recvbuf[i]);
-                        }
-                        printf_protolog("\n");
-                        if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
-                        {
-                            printf_safe("\e[31;47mServer CLOSED\n\e[0m");
-                            pModem->state = DS_MODEM_TCP_CLOSE;
-                        }
-                        else
-                        {
-                            resp = pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-                            switch (resp)
-                            {
-                            case 1:
-                                break;
-                            case -1:
-                                printf_safe("接收协议版本不正确\n");
-                                break;
-                            case -2:
-                                printf_safe("接收协议校验码错误\n");
-                                break;
-                            case -3:
-                                printf_safe("接收协议枪ID错误\n");
-                                break;
-                            case -4:
-                                printf_safe("接收协议命令字错误\n");
-                                break;
-                            case -5:
-                                printf_safe("接收协议长度错误\n");
-                                break;
-                            }
-                        }
-                        memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
-                        recv_len = 0;
-                    }
-                }
-            }
-            else//透传模式
-            {
-                recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-                if (recv_len > 0)
-                {
                     
-                    printf_protolog("\nTCP Recv: ");
-                    for (i = 0; i < recv_len; i++)
-                    {
-                        printf_protolog("%02X ", tcp_client_recvbuf[i]);
-                    }
-                    printf_protolog("\n");
-
-                    if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
-                    {
-                        printf_safe("\e[31;47mServer CLOSED\n\e[0m");
-                        pModem->state = DS_MODEM_ERR;
-                    }
-                    else
-                    {
-                        resp = pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-                        switch (resp)
-                        {
-                        case 1:
-                            break;
-                        case -1:
-                            printf_safe("接收协议版本不正确\n");
-                            break;
-                        case -2:
-                            printf_safe("接收协议校验码错误\n");
-                            break;
-                        case -3:
-                            printf_safe("接收协议枪ID错误\n");
-                            break;
-                        case -4:
-                            printf_safe("接收协议命令字错误\n");
-                            break;
-                        case -5:
-                            printf_safe("接收协议长度错误\n");
-                            break;
-                        }
-                    }
-                    memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
-                    recv_len = 0;
+                printf_protolog("\nTCP Recv: ");
+                for (i = 0; i < recv_len; i++)
+                {
+                    pppHdlcDriverWriteRxQueue(net_dev->interface, tcp_client_recvbuf[i]);
+                    printf_protolog("%02X ", tcp_client_recvbuf[i]);
                 }
+                printf_protolog("\n");
+
+                if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                {
+                    printf_safe("\e[31;47mServer CLOSED\n\e[0m");
+                    pModem->state = DS_MODEM_ERR;
+                }
+                else
+                {  
+                    
+                }
+                memset(tcp_client_recvbuf, 0, TCP_CLIENT_BUFSIZE);
+                recv_len = 0;
             }
             break;
         case DS_MODEM_TCP_CLOSE:

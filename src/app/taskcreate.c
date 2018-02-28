@@ -30,7 +30,7 @@
 //#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskTouch                  1024
 #define defSTACK_TaskOTA                    512
-#define defSTACK_TaskPPP                    (1024*10)
+//#define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
 #define defSTACK_TaskRemoteCmdProc          (1024*10)
 
@@ -59,7 +59,7 @@
 #define defPRIORITY_TaskEVSERemote          18
 #define defPRIORITY_TaskEVSEData            16
 
-#define defPRIORITY_TaskPPP                 14
+//#define defPRIORITY_TaskPPP                 14
 #define defPRIORITY_TaskTCPClient           12
 #define defPRIORITY_TaskRemoteCmdProc       19
 
@@ -80,7 +80,6 @@ const char *TASKNAME_GUI            = "TaskGUI";
 const char *TASKNAME_GUIBS          = "TaskGUIBS";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
-const char *TASKNAME_PPP            = "TaskPPP";
 const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
 const char *TASKNAME_RemoteCmdProc  = "TaskRemoteCmdProc" ;
 
@@ -100,7 +99,6 @@ void vTaskGUI(void *pvParameters);
 void vTaskGUIBS(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
-void vTaskPPP(void *pvParameters);
 void vTaskTCPClient(void *pvParameters);
 void vTaskRemoteCmdProc(void *pvParameters);
 
@@ -120,7 +118,6 @@ static TaskHandle_t xHandleTaskGUI = NULL;
 static TaskHandle_t xHandleTaskGUIBS = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
-static TaskHandle_t xHandleTaskPPP = NULL;
 static TaskHandle_t xHandleTaskTCPClient = NULL;
 static TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
 
@@ -174,21 +171,11 @@ void vTaskInit(void *pvParameters)
     SysTaskCreate();
     AppTaskCreate();
     //IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s    
-//    pModem = DevModemCreate();
-//    Modem_Poll(pModem);//这是任务
     while (1)
     {
         IWDG_Feed();
         vTaskDelay(1000);
     }
-//    pWIFI = DevWifiCreate();
-//    strcpy(pWIFI->info.strSSID, "rgw");
-//    strcpy(pWIFI->info.strPWD,"abc666def8");
-//    pWIFI->xMutex = xSemaphoreCreateMutex();
-//
-//    wifi_open(pWIFI);
-//    wifi_init(pWIFI);
-//    Wifi_Poll(pWIFI);
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -227,8 +214,6 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
 #endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
-
-    //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
     xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 

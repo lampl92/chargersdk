@@ -33,7 +33,10 @@ error_t net_eth_disconnect(void *pvnet_dev)
     socket_eth = NULL;
     return NO_ERROR;
 }
-
+error_t net_eth_close_hard(void *pvnet_dev)
+{
+    return NO_ERROR;
+}
 /**
  * @fn  error_t net_eth_init(net_device_t *net_dev, uint32_t n)
  *
@@ -130,9 +133,12 @@ net_device_t *net_eth_create(void)
     net_device_t *net;
     net = (net_device_t*)malloc(sizeof(net_device_t));
     memset(net, 0, sizeof(net_device_t));
+    sprintf(net->name, "eth%d", 0);
+    
     net->init = net_eth_init;
     net->connect = net_eth_connect;
     net->disconnect = net_eth_disconnect;
+    net->close_hard = net_eth_close_hard;
     
     return net;
 }

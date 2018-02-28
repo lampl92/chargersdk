@@ -3,6 +3,10 @@
 
 #include "core/net.h"
 
+#define NET_DEVICE_ETH   1
+#define NET_DEVICE_MODEM  2
+
+
 typedef error_t (*net_dev_ft)(void *vnet_dev);
     
 typedef enum
@@ -17,7 +21,9 @@ typedef enum
     NET_STATE_CONNECT,
     NET_STATE_FTP,
     NET_STATE_TCP_ON,
-    NET_STATE_DISCONNECT
+    NET_STATE_DISCONNECT,
+    NET_STATE_ERR,
+    
 }net_state;
 
 typedef struct _net_device 
@@ -28,6 +34,8 @@ typedef struct _net_device
     net_dev_ft init;
     net_dev_ft connect;
     net_dev_ft disconnect;
+    net_dev_ft close_hard;
+    
 }net_device_t;
 
 extern net_device_t *net_dev;

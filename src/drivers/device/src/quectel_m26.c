@@ -32,7 +32,49 @@ static DR_MODEM_e M26_disable_echo(void)
 
     return ret;
 }
+static DR_MODEM_e M26_ATI(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
 
+    modem_send_at("ATI\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Q", 3);
+    printf_safe("%s", reply);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "%*[^ ] %[0-9]", s);
+        pModem->status.ucSignalQuality = atoi(s);
+        break;
+    default:
+        break;
+    }
+    return ret;
+}
+//运行商
+static DR_MODEM_e M26_AT_COPS(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+COPS?\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+COPS", 3);
+    //printf_safe("%s", reply);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        if (strstr(reply, "CHINA MOBILE") != NULL)
+        {
+            //printf_safe("%s", reply);
+        }
+        break;
+    default:
+        break;
+    }
+    return ret;
+}
 /** @brief 信号强度检测
  *
  * @param void
@@ -164,6 +206,32 @@ static DR_MODEM_e M26_CGREG(DevModem_t *pModem)
     default:
         break;
     }
+
+    return ret;
+}
+
+DR_MODEM_e M26_AT_CGDCONT(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+CGDCONT=%d,\"%s\",\"%s\"\r", 1, "IP", pModem->info.strAPN);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+
+DR_MODEM_e M26_ATD(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("ATD*99#\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
 
     return ret;
 }
@@ -729,7 +797,6 @@ DR_MODEM_e M26_open(void *pvModem)
 
 DR_MODEM_e M26_init(void *pvModem)
 {
-    
     DevModem_t *pModem;
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
@@ -742,57 +809,90 @@ DR_MODEM_e M26_init(void *pvModem)
     {
         return ret;
     }
-
     do
     {
         ret = M26_CPIN(pModem);
-        if (ret != DR_MODEM_OK)
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.eSimStat == CPIN_READY)
+                break;
+        }
+        else
         {
             return ret;
         }
         modem_delayms(1000);
-    } while (pModem->status.eSimStat != CPIN_READY);
-//    do
-//    {
-//        ret = modem_get_net_reg(pModem);
-//        if(ret != DR_MODEM_OK)
-//        {
-//            return ret;
-//        }
-//        modem_delayms(1000);
-//    }
-//    while(pModem->status.eNetReg == REG_SEARCH );
+    } while (1);
+#if 0
+    do
+    {
+        ret = M26_CREG(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.eNetReg == REG_LOCAl || pModem->status.eNetReg == REG_ROAMING)
+                break;
+        }
+        else
+        {
+            return ret;
+        }
+        modem_delayms(1000);
+    }
+    while(1);
 
-//    do
-//    {
-//        ret = modem_get_gprs_reg(pModem);
-//        if(ret != DR_MODEM_OK)
-//        {
-//            return ret;
-//        }
-//        modem_delayms(1000);
-//    }
-//    while(pModem->status.eGprsReg == REG_SEARCH );
+    do
+    {
+        ret = M26_CGREG(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.eGprsReg == REG_LOCAl || pModem->status.eGprsReg == REG_ROAMING)
+                break;
+        }
+        else
+        {
+            return ret;
+        }
+        modem_delayms(1000);
+    }
+    while(1);
+#endif
     do
     {
         ret = M26_CSQ(pModem);
-        if (ret != DR_MODEM_OK)
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.ucSignalQuality > 5 &&
+                pModem->status.ucSignalQuality < 99)
+                break;
+        }
+        else
         {
             return ret;
         }
         modem_delayms(1000);
-    } while (pModem->status.ucSignalQuality < 5 ||
-            pModem->status.ucSignalQuality >= 99);
+    } while (1);
+ 
+    return ret;
+}
 
-    if (pModem->info.ucTPMode == 0)
+DR_MODEM_e M26_diag_PPP(void *pModem)
+{
+    DR_MODEM_e ret;
+    ret = M26_AT_CGDCONT(pModem);
+    if (ret != DR_MODEM_OK)
     {
-        ret = M26_set_RecvType(pModem);
-        if (ret != DR_MODEM_OK)
-        {
-            return ret;
-        }
+        return ret;
     }
-
+    ret = M26_ATD(pModem);
+    if (ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    return ret;
+}
+DR_MODEM_e M26_act_PDP(void *pModem)
+{
+    DR_MODEM_e ret;
     ret = M26_QIFGCNT(pModem);
     if (ret != DR_MODEM_OK)
     {
@@ -803,14 +903,6 @@ DR_MODEM_e M26_init(void *pvModem)
     {
         return ret;
     }
-   
-    return ret;
-}
-
-DR_MODEM_e M26_act_PDP(void *pModem)
-{
-    DR_MODEM_e ret;
-
     ret = M26_AT_QIREGAPP(pModem);
     if (ret != DR_MODEM_OK)
     {
@@ -829,6 +921,7 @@ DR_MODEM_e M26_act_PDP(void *pModem)
        
     return ret;
 }
+
 DR_MODEM_e M26_deact_PDP(void *pModem)
 {
     DR_MODEM_e ret;
@@ -887,7 +980,8 @@ DevModem_t *M26Create(void)
 {
     DevModem_t *pMod;
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
-    strcpy(pModem->info.strAPN, "CMNET");
+    memset(pMod, 0, sizeof(DevModem_t));
+    sprintf(pMod->info.strAPN, "CMNET");
     pMod->info.ucContext = 0;
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
