@@ -26,7 +26,7 @@ void ifconfig_get(void)
 
 void ifconfig_init(void)
 {
-    //uint8_t tmp = 1;
+    uint8_t tmp = 1;
     memset(&ifconfig, 0, sizeof(ifconfig_t));
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetDHCP);
 //    tmp = 2;
