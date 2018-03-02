@@ -1,6 +1,7 @@
 #include "touchtimer.h"
 #include "interface.h"
 #include "HMI_Start.h"
+#include "display.h"
 #include "utils.h"
 #include "DIALOG.h"
 
@@ -63,6 +64,8 @@ static WM_HTIMER _timerRTC, _timerData, _timerSignal;
 static uint8_t first_CardInfo = 0;
 static time_t first_time = 0;
 static int InfoOkFlag = 0;
+static int cardconditionnotokflag1 = 0;//第一阶段
+static int cardconditionnotokflag2 = 0;//第二阶段
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -109,8 +112,9 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         0);
     if (((uxBitRFID & defEventBitBadIDReqDisp) == defEventBitBadIDReqDisp) && (!bittest(EventFlag, 1)))
     {
-        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), CardUnregisteredImage->pfilestring, CardUnregisteredImage->pfilesize);
+        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), CardArrearsImage->pfilestring, CardArrearsImage->pfilesize);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitBadIDReqDispOK);
+        cardconditionnotokflag1 = 1;
         bitset(EventFlag, 1);
     }
     uxBitRFID = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
@@ -124,6 +128,7 @@ static void Data_Flush(WM_MESSAGE *pMsg)
         IMAGE_SetBMP(WM_GetDialogItem(pMsg->MsgId, ID_IMAGE_2), CardArrearsImage->pfilestring, CardArrearsImage->pfilesize);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_RED, Timer_buf);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitOwdIDReqDispOK);
+        cardconditionnotokflag1 = 1;
         bitset(EventFlag, 2);
     }   
 }
@@ -181,10 +186,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       // Initialization of 'CardInfoImage'
       //
         first_CardInfo = 0;
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_WHITE, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_BLACK, pRFIDDev->order.strCardID);//卡号
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "?");        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, pRFIDDev->order.strCardID);//卡号
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, "?");        
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);   
         IMAGE_SetBMP(hItem, CardInfoImage->pfilestring, CardInfoImage->pfilesize);
@@ -293,6 +298,21 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 }
                 //            CaliDone_Analy(pMsg->hWin);
             }
+            if (cardconditionnotokflag1 == 1)
+            {
+                
+                if (cardconditionnotokflag2 == 1)
+                {
+                    cardconditionnotokflag1 = 0;
+                    cardconditionnotokflag2 = 0;
+                    WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+                }
+                else
+                {
+                    cardconditionnotokflag2 = 1;                                  
+                    WM_RestartTimer(pMsg->Data.v, 3000);                   
+                }              
+            }
             if (bittest(winInitDone, 2) && bittest(winInitDone, 3))
             {
                 
@@ -306,7 +326,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 else
                 {
                     InfoOkFlag = 1;                                  
-                    WM_RestartTimer(pMsg->Data.v, 500);                   
+                    WM_RestartTimer(pMsg->Data.v, 3000);                   
                 }              
             }
             else

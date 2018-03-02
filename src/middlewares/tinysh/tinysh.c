@@ -35,7 +35,7 @@
 #define PROMPT_SIZE 16
 #endif
 #ifndef TOPCHAR
-#define TOPCHAR '/'
+#define TOPCHAR '\\'
 #endif
 
 

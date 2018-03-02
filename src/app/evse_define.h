@@ -67,7 +67,7 @@
 #define defEventBitOrderStopTypeUnPlug           BIT_15
 
 #define defEventBitOrderMakeFinish               BIT_16  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderFinishToChargetask       BIT_17
+//#define defEventBitOrderFinishToChargetask       BIT_17
 #define defEventBitOrderFinishToHMI              BIT_18
 
 #define defEventBitOrderTmpTimer                 BIT_19
@@ -86,10 +86,12 @@
 #define defEventBitTCPConnectFail       BIT_6 //接收主动清除
 #define defEventBitTCPClientRecvValid   BIT_7
 #define defEventBitTCPClientFlushBuff   BIT_8
+#define defEventBitPPPDiagOK            BIT_9
+#define defEventBitPPPClosed            BIT_10
 
 /*------xHandleEventHMI*/
-#define defEventBitHMI_ChargeReqDispDone    BIT_1
-#define defEventBitHMI_UP_FAILD             BIT_2
+#define defEventBitHMITimeOutToRFID         BIT_0
+#define defEventBitHMI_UP_FAILD             BIT_7
 #define defEventBitHMI_TimeOut              BIT_3
     
 
@@ -113,7 +115,7 @@
 #define defEventBitExceptionChargeTimer BIT_6
 #define defEventBitExceptionRFID        BIT_7
 #define defEventBitExceptionMeter       BIT_8
-#define defEventBitExceptionRelayPaste  BIT_9
+#define defEventBitExceptionFreqTimer   BIT_9
 
 #define defEventBitExceptionLimitPower  BIT_10  //把LimitPower放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionLimitFee    BIT_11  
@@ -125,8 +127,7 @@
 #define defEventBitExceptionSocketTempSensor  BIT_17
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
-                                        defEventBitExceptionMeter|\
-                                        defEventBitExceptionRelayPaste)
+                                         defEventBitExceptionMeter)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -276,9 +277,7 @@
 #define defSignalCON_Alarm_AC_A_CurrUp_Cri      BIT_22       //
 #define defSignalCON_Alarm_AC_B_CurrUp_Cri      BIT_23       //*
 #define defSignalCON_Alarm_AC_C_CurrUp_Cri      BIT_24       //*
-#define defSignalCON_Alarm_AC_A_Freq_Cri        BIT_25       //
-#define defSignalCON_Alarm_AC_B_Freq_Cri        BIT_26       //*
-#define defSignalCON_Alarm_AC_C_Freq_Cri        BIT_27       //*
+#define defSignalCON_Alarm_AC_Freq_Cri        BIT_25       //
 
     //ulSignalFault
 #define defSignalCON_Fault_SocketLock           BIT_0
@@ -286,18 +285,19 @@
 #define defSignalCON_Fault_AC_B_Temp            BIT_2
 #define defSignalCON_Fault_AC_C_Temp            BIT_3
 #define defSignalCON_Fault_AC_N_Temp            BIT_4
-#define defSignalCON_Fault_AC_A_RelayPaste      BIT_5
-#define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
-#define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
-#define defSignalCON_Fault_AC_N_RelayPaste      BIT_8
+#define defSignalCON_Fault_RelayPaste           BIT_5
+//#define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
+//#define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
+//#define defSignalCON_Fault_AC_N_RelayPaste      BIT_8
 #define defSignalCON_Fault_CP                   BIT_9        //CP传感故障
 #define defSignalCON_Fault_Plug                 BIT_10
 #define defSignalCON_Fault_Meter                BIT_11       //电表或电能芯片
 
-#define defSignalGroupCON_Fault_AC_RelayPase       (defSignalCON_Fault_AC_A_RelayPaste | \
-                                                    defSignalCON_Fault_AC_B_RelayPaste | \
-                                                    defSignalCON_Fault_AC_C_RelayPaste | \
-                                                    defSignalCON_Fault_AC_N_RelayPaste )
+//#define defSignalGroupCON_Fault_AC_RelayPaste       (defSignalCON_Fault_AC_A_RelayPaste | \
+//                                                    defSignalCON_Fault_AC_B_RelayPaste | \
+//                                                    defSignalCON_Fault_AC_C_RelayPaste | \
+//                                                    defSignalCON_Fault_AC_N_RelayPaste )
+    
 #define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
                                                 defSignalCON_Alarm_SocketTemp2_War | \
                                                 defSignalCON_Alarm_AC_A_Temp_War | \

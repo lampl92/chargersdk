@@ -10,9 +10,9 @@
 const char *strEVSECfg = 
 "{\
     \"EVSESN\":\"0102030405060708\",\n \
-    \"EVSEID\":\"3000000000000002\",\n \
+    \"EVSEID\":\"2000000000000002\",\n \
     \"EVSEType\":2,\n \
-    \"TotalCON\":1,\n \
+    \"TotalCON\":2,\n \
     \"Lng\":116.275833,\n \
     \"Lat\":39.831944,\n \
     \"ServiceFeeType\":1,\n \
@@ -31,7 +31,21 @@ const char *strEVSECfg =
             \"SocketTempLowerLimits\":-40,\n \
             \"RatedCurrent\":32,\n \
             \"RatedPower\":7,\n \
-            \"QRCode\":\"3000000000000002\"\n \
+            \"QRCode\":\"2000000000000002\"\n \
+        },\n \
+        {\n \
+            \"ID\":1,\n \
+            \"Type\":2,\n \
+            \"SocketType\":67,\n \
+            \"VolatageUpperLimits\":260,\n \
+            \"VolatageLowerLimits\":176,\n \
+            \"ACTempUpperLimits\":95,\n \
+            \"ACTempLowerLimits\":-40,\n \
+            \"SocketTempUpperLimits\":95,\n \
+            \"SocketTempLowerLimits\":-40,\n \
+            \"RatedCurrent\":32,\n \
+            \"RatedPower\":7,\n \
+            \"QRCode\":\"2000000000000013\"\n \
         }\n \
     ],\n \
     \"TemplSegArray\":[]\n \
@@ -45,7 +59,7 @@ const char *strProtoCfg =
     \"UserPwd\": \"esaaspasswrd\",\n \
     \"Key\": \"0123456789abcdeg\",\n \
     \"NewKey\": \"\",\n \
-    \"NewKeyChangeTime\": 4294967295,\n \
+    \"NewKeyChangeTime\": 2147483647,\n \
     \"OptSN\": 0,\n \
     \"ProtoVer\": 104,\n \
     \"HeartBeatCyc_ms\": 15000,\n \
@@ -61,11 +75,11 @@ const char *strProtoCfg =
     \"ServiceFee_shoulder\": 0,\n \
     \"ServiceFee_off_peak\": 0,\n \
     \"SegTime_sharp\": {\n \
-        \"SegCont\": 1,\n \
-        \"Start1\": 0,\n \
-        \"End1\": 24,\n \
-        \"Start2\": 255,\n \
-        \"End2\": 255,\n \
+        \"SegCont\": 2,\n \
+        \"Start1\": 11,\n \
+        \"End1\": 13,\n \
+        \"Start2\": 16,\n \
+        \"End2\": 17,\n \
         \"Start3\": 255,\n \
         \"End3\": 255,\n \
         \"Start4\": 255,\n \
@@ -74,37 +88,37 @@ const char *strProtoCfg =
         \"End5\": 255\n \
     },\n \
     \"SegTime_peak\": {\n \
-        \"SegCont\": 0,\n \
-        \"Start1\": 255,\n \
-        \"End1\": 255,\n \
-        \"Start2\": 255,\n \
-        \"End2\": 255,\n \
-        \"Start3\": 255,\n \
-        \"End3\": 255,\n \
+        \"SegCont\": 3,\n \
+        \"Start1\": 10,\n \
+        \"End1\": 11,\n \
+        \"Start2\": 13,\n \
+        \"End2\": 15,\n \
+        \"Start3\": 18,\n \
+        \"End3\": 21,\n \
         \"Start4\": 255,\n \
         \"End4\": 255,\n \
         \"Start5\": 255,\n \
         \"End5\": 255\n \
     },\n \
     \"SegTime_shoulder\": {\n \
-        \"SegCont\": 0,\n \
-        \"Start1\": 255,\n \
-        \"End1\": 255,\n \
-        \"Start2\": 255,\n \
-        \"End2\": 255,\n \
-        \"Start3\": 255,\n \
-        \"End3\": 255,\n \
-        \"Start4\": 255,\n \
-        \"End4\": 255,\n \
+        \"SegCont\": 4,\n \
+        \"Start1\": 7,\n \
+        \"End1\": 10,\n \
+        \"Start2\": 15,\n \
+        \"End2\": 16,\n \
+        \"Start3\": 17,\n \
+        \"End3\": 18,\n \
+        \"Start4\": 21,\n \
+        \"End4\": 23,\n \
         \"Start5\": 255,\n \
         \"End5\": 255\n \
     },\n \
     \"SegTime_off_peak\": {\n \
-        \"SegCont\": 0,\n \
-        \"Start1\": 255,\n \
-        \"End1\": 255,\n \
-        \"Start2\": 255,\n \
-        \"End2\": 255,\n \
+        \"SegCont\": 2,\n \
+        \"Start1\": 23,\n \
+        \"End1\": 24,\n \
+        \"Start2\": 0,\n \
+        \"End2\": 7,\n \
         \"Start3\": 255,\n \
         \"End3\": 255,\n \
         \"Start4\": 255,\n \

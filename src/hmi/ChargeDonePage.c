@@ -29,7 +29,7 @@ static WM_HTIMER _timerRTC, _timerData, _timerSignal;
 static uint8_t first_flag = 0;
 static uint8_t orderFinish = 0;
 uint8_t strCSQ[32];
-uint8_t EventChargeDoneFlag = 0;//ç”¨äºäº‹ä»¶å‘ç”Ÿæ—¶ï¼Œé˜²æ­¢å›¾ç‰‡é‡å¤åˆ·æ–°ï¼Œå½±å“å“åº”é€Ÿåº¦
+uint8_t EventChargeDoneFlag = 0;//ÓÃÓÚÊÂ¼ş·¢ÉúÊ±£¬·ÀÖ¹Í¼Æ¬ÖØ¸´Ë¢ĞÂ£¬Ó°ÏìÏìÓ¦ËÙ¶È
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "ChargeDonePage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
@@ -69,8 +69,8 @@ static void Data_Process(WM_MESSAGE *pMsg)
         pdTRUE,
         pdTRUE,
         0);
-    //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//è®¢å•ä¸Šä¼ å®Œæˆ
-    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//è®¢å•ä¸Šä¼ å®Œæˆ
+    //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//¶©µ¥ÉÏ´«Íê³É
+    if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//¶©µ¥ÉÏ´«Íê³É
 
     {        
         orderFinish = 1;
@@ -98,7 +98,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
         {
             orderFinish = 0;
             first_flag = 0;
-            			//è·³åˆ°HOME
+            			//Ìøµ½HOME
             WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
         }      
     }
@@ -122,8 +122,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, " ");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_RED, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, FONT_COLOR, " ");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, FONT_COLOR, " ");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
         IMAGE_SetBMP(hItem, ChargeDoneImage->pfilestring, ChargeDoneImage->pfilesize);
         
@@ -161,13 +161,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
         sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_RED, temp_buf);//å……å…¥ç”µé‡
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//³äÈëµçÁ¿
         sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, GUI_RED, temp_buf);//æœåŠ¡è´¹
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//·şÎñ·Ñ
         sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, GUI_RED, temp_buf);//ç”µè´¹
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//µç·Ñ
         sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, GUI_RED, temp_buf);//æ¶ˆè´¹æ€»é¢  
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//Ïû·Ñ×Ü¶î  
         pCON = CONGetHandle(0);
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
             defEventBitOrderMakeFinish,
@@ -184,13 +184,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", hour);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, GUI_RED, temp_buf);//hour
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &SIF24_Font, FONT_COLOR, temp_buf);//hour
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", min);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_RED, temp_buf);// min
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, FONT_COLOR, temp_buf);// min
             memset(temp_buf, '\0', strlen(temp_buf));
             sprintf(temp_buf, "% 2d", sec);
-            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_RED, temp_buf);// sec
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, FONT_COLOR, temp_buf);// sec
         }
             break;
         case WM_PAINT:
@@ -199,25 +199,25 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case WM_TIMER:
             if (pMsg->Data.v == _timerRTC)
             {
-                       // TODO (zshare#1#): ä¸‹é¢çš„ifä¸èµ·ä½œç”¨.\ä½†æ˜¯ifé‡ŒåµŒå¥—çš„ifèµ·ä½œç”¨,ç›®å‰å…ˆç”¨æ­¤æ¥è§„é¿ä¸èµ·ä½œç”¨çš„if
+                       // TODO (zshare#1#): ÏÂÃæµÄif²»Æğ×÷ÓÃ.\µ«ÊÇifÀïÇ¶Ì×µÄifÆğ×÷ÓÃ,Ä¿Ç°ÏÈÓÃ´ËÀ´¹æ±Ü²»Æğ×÷ÓÃµÄif
                 if ((bittest(winInitDone, 0))&&(_hWinChargDone == cur_win))
                 {
-                    /**< æ•°æ®å¤„ç† */
+                    /**< Êı¾İ´¦Àí */
                     Data_Process(pMsg);
-                    /**< ä¿¡å·æ•°æ®å¤„ç† */
+                    /**< ĞÅºÅÊı¾İ´¦Àí */
                     Signal_Show();
-                    /**< ç¯å…‰æ§åˆ¶ */
+                    /**< µÆ¹â¿ØÖÆ */
                     Led_Show();
-                    /**< å¦‚æœç•Œé¢å‘ç”Ÿäº†åˆ‡æ¢ */
+                    /**< Èç¹û½çÃæ·¢ÉúÁËÇĞ»» */
                     if (_hWinChargDone == cur_win)
                     {
-                        /**< æ•…éšœåˆ†æ */
+                        /**< ¹ÊÕÏ·ÖÎö */
                         Err_Analy(pMsg->hWin);
-                        /**< ç‰¹æ®Šè§¦æ§ç‚¹åˆ†æ */
+                        /**< ÌØÊâ´¥¿Øµã·ÖÎö */
                         CaliDone_Analy(pMsg->hWin);
                     }
                 }
-                /**< æ˜¾ç¤ºæ—¶é—´å’Œæ—¥æœŸ */
+                /**< ÏÔÊ¾Ê±¼äºÍÈÕÆÚ */
                 Caculate_RTC_Show(pMsg, ID_TEXT_0, ID_TEXT_1);
                 
                 if ((SignalFlag == 12) || (SignalFlag > 12))
@@ -275,16 +275,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     }
                 }
                 
-/**< é‡å¯å®šæ—¶å™¨ */
+/**< ÖØÆô¶¨Ê±Æ÷ */
                 WM_RestartTimer(pMsg->Data.v, 50);
             }
             break;
         case MSG_CREATERRWIN:
-              /**< æ•…éšœç•Œé¢ä¸å­˜åœ¨åˆ™åˆ›å»º,å­˜åœ¨åˆ™åˆ·æ–°å‘Šè­¦ */
+              /**< ¹ÊÕÏ½çÃæ²»´æÔÚÔò´´½¨,´æÔÚÔòË¢ĞÂ¸æ¾¯ */
             err_window(pMsg->hWin);
             break;
         case MSG_DELERRWIN:
-            /**< æ•…éšœç•Œé¢å­˜åœ¨åˆ™åˆ é™¤æ•…éšœç•Œé¢ */
+            /**< ¹ÊÕÏ½çÃæ´æÔÚÔòÉ¾³ı¹ÊÕÏ½çÃæ */
             if (bittest(winCreateFlag, 0))
             {
                 bitclr(winCreateFlag, 0);

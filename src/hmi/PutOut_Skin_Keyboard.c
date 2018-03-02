@@ -1024,16 +1024,16 @@ static void _cbBk(WM_MESSAGE * pMsg)
 static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
-    uint8_t tmpU8;
-    uint16_t tmpU16;
-    uint32_t tmpU32;
-    double tmpDouble;
+    uint8_t tmpU8 = 0;
+    uint16_t tmpU16 = 0;
+    uint32_t tmpU32 = 0;
+    double tmpDouble = 0.0;
     uint16_t i = 0;
     CON_t *pCon;
 
     pCon = CONGetHandle(0);
 
-    memset(result_input,'\0',sizeof(result_input));
+    memset(result_input,0,sizeof(result_input));
     MULTIEDIT_GetText(hMulti,result_input,MULTIEDIT_GetTextSize(hMulti));
 
     switch(ManagerSetOptions)
@@ -1082,7 +1082,7 @@ static uint8_t Value_Check()
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
                 break;
             case 22:
-                
+
                 pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
                 memset(pechProto->info.strServerIP,'\0',strlen(pechProto->info.strServerIP));
                 strcpy(pechProto->info.strServerIP,result_input);
@@ -1093,7 +1093,7 @@ static uint8_t Value_Check()
                 if (tmpU16 <= 0
                 || tmpU16 >= 10000)
                 {
-                    tmpU16 = 6677;                
+                    tmpU16 = 6677;
                 }
                 pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
                 pechProto->info.usServerPort = tmpU16;
@@ -1112,14 +1112,15 @@ static uint8_t Value_Check()
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
             case 26://屏保时间
-                tmpU32 = atoi(result_input) * 60;
-            if (tmpU32 <= 0)
+            tmpU32 = (uint32_t)atoi(result_input);// * 60;
+            tmpU32 = tmpU32 * 60;
+            if (tmpU32 <= (5 * 60))
             {
                 tmpU32 = 5 * 60;
             }
-            else if (tmpU32 >= 60 * 60)
+            else if (tmpU32 >= (60 * 60))
             {
-                tmpU32 = 60 * 60;                
+                tmpU32 = 60 * 60;
             }
                 xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
                 xSysconf.ulDispSleepTime_s = tmpU32;
@@ -1134,7 +1135,7 @@ static uint8_t Value_Check()
             pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
             memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
             strcpy(pCon->info.strQRCode, result_input);
-            
+
             GUI_QR_Delete(qr_hmem);
             qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
             GUI_QR_GetInfo(qr_hmem, &QR_info);
@@ -1175,7 +1176,7 @@ static uint8_t Value_Check()
                 &&tmpDouble >= 178.0
                 &&tmpDouble > pCon->info.dVolatageLowerLimits)
             {
-                pCon->info.dVolatageUpperLimits = tmpDouble;                
+                pCon->info.dVolatageUpperLimits = tmpDouble;
             }
             else if (tmpDouble <= 280.0
                 &&tmpDouble >= 178.0
@@ -1201,25 +1202,25 @@ static uint8_t Value_Check()
                 && tmpDouble <= 240.0
                 && tmpDouble < pCon->info.dVolatageUpperLimits)
             {
-                pCon->info.dVolatageLowerLimits = tmpDouble;                
+                pCon->info.dVolatageLowerLimits = tmpDouble;
             }
             else if (tmpDouble >= 100.0
                 && tmpDouble <= 240.0
                 && tmpDouble >= pCon->info.dVolatageUpperLimits)
             {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;                
+                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
             }
-            else if (tmpDouble > 240.0 
+            else if (tmpDouble > 240.0
             &&tmpDouble >= pCon->info.dVolatageUpperLimits)
             {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;                
+                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
             }
             else if (tmpDouble > 240.0
                 &&tmpDouble < pCon->info.dVolatageUpperLimits)
             {
-                tmpDouble = 240.0; 
+                tmpDouble = 240.0;
             }
-            
+
                 pCon->info.dVolatageLowerLimits = tmpDouble;
                 pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
@@ -1239,7 +1240,7 @@ static uint8_t Value_Check()
                 &&tmpDouble >= (-50.0)
                 &&tmpDouble > pCon->info.dACTempLowerLimits)
             {
-                pCon->info.dACTempUpperLimits = tmpDouble;                
+                pCon->info.dACTempUpperLimits = tmpDouble;
             }
             else if (tmpDouble <= 120.0
                 &&tmpDouble >= (-50.0)
@@ -1266,7 +1267,7 @@ static uint8_t Value_Check()
                 &&tmpDouble >= (-50.0)
                 &&tmpDouble < pCon->info.dACTempUpperLimits)
             {
-                pCon->info.dACTempUpperLimits = tmpDouble;                
+                pCon->info.dACTempUpperLimits = tmpDouble;
             }
             else if (tmpDouble <= 120.0
                 &&tmpDouble >= (-50.0)
@@ -1283,7 +1284,7 @@ static uint8_t Value_Check()
                 pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
                 break;
-            case 27://交流输出端子温度上限
+            case 27://插座温度上限
                 tmpDouble = atof(result_input);
             if (tmpDouble >= 120.0)
             {
@@ -1293,7 +1294,7 @@ static uint8_t Value_Check()
                 &&tmpDouble >= (-50.0)
                 &&tmpDouble > pCon->info.dSocketTempLowerLimits)
             {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;                
+                pCon->info.dSocketTempUpperLimits = tmpDouble;
             }
             else if (tmpDouble <= 120.0
                 &&tmpDouble >= (-50.0)
@@ -1320,7 +1321,7 @@ static uint8_t Value_Check()
                 &&tmpDouble >= (-50.0)
                 &&tmpDouble < pCon->info.dSocketTempUpperLimits)
             {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;                
+                pCon->info.dSocketTempUpperLimits = tmpDouble;
             }
             else if (tmpDouble <= 120.0
                 &&tmpDouble >= (-50.0)
@@ -1405,14 +1406,12 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
             pCont = CONGetHandle(0);
             if (pCont->state == STATE_CON_CHARGING)
             {
-                xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                 CreateChargingPage();
             }
             else
             {
                 if (pCont->state == statelog)
                 {
-                    xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                     CreateHomePage();   
                 }
                 else
@@ -1424,12 +1423,10 @@ static void Jump_Screen(WM_HWIN hWin,uint8_t IS_jump)
                         10000);//要比remote中的order超时（60s）长
                     if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
                     {
-                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                         CreateHomePage();
                     }
                     else
                     {
-                        xEventGroupClearBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);
                         CreateHomePage();
                     }
                 }
@@ -1600,7 +1597,7 @@ void Keypad_GetValueTest(uint8_t optios,uint8_t id,WM_HWIN hwin,WM_HWIN _hbkWin,
 {
 	WM_HWIN hFrame;
     CON_t       *pCont;
-    
+
     pCont = CONGetHandle(0);
     statelog = pCont->state;
 

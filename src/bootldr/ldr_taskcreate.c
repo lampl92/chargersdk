@@ -187,7 +187,7 @@ void vTaskInit(void *pvParameters)
                 if (pucBinBuffer != NULL && size > 0)
                 {
                     GetBufferCrc32(pucBinBuffer, size, &crc32);
-                    if (crc32 != (uint32_t)xSysconf.xUpFlag.chargesdk_bin_crc32)
+                    if (crc32 != xSysconf.xUpFlag.chargesdk_bin_crc32)
                     {
                         printf_safe("Get Crc32 Err!\n");
                         free(pucBinBuffer);

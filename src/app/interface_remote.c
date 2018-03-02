@@ -17,13 +17,15 @@
 #include "libEcharge/ech_protocol_proc.h"
 #include "libEcharge/ech_ftp.h"
 
+#include "evse_debug.h"
+
 /** @brief
  *
  * @param pucRetVal uint8_t*     1注册成功  0注册失败
  * @return ErrorCode_t
  *
  */
-ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
+ErrorCode_t RemoteIF_SendLogin(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;
 
@@ -53,7 +55,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_tail (cur);//只要链表中最新接收的协议, 因此从tail开始
         while((pechCmdElem = gdsl_list_cursor_get_content (cur)) != NULL)
         {
-            printf_safe("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
+            printf_protolog("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
             memcpy(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
             *pLen = pCMD->ulRecvdOptLen;
             errcode = ERR_NO;
@@ -62,7 +64,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_head (cur);
         while((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
-            printf_safe("RemoteRecvHandle: RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            printf_protolog("RemoteRecvHandle: RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             gdsl_list_cursor_delete(cur);
         }
         gdsl_list_cursor_free(cur);
@@ -96,7 +98,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     return errcode;
 }
 
-ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvLogin(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -1273,8 +1275,11 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 
         return ERR_BLACK_LIST;
     }
+#if EVSE_USING_NET
     else if(pProto->info.BnWIsListCfg(pathWhiteList, pRfid->order.strCardID) == 1)
-    //else if(1)    
+#else
+    else if(1)
+#endif
     {
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
@@ -1612,8 +1617,7 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-	    if (((pCON->status.ulSignalFault & defSignalCON_Fault_AC_A_RelayPaste) == defSignalCON_Fault_AC_A_RelayPaste) ||
-			((pCON->status.ulSignalFault & defSignalCON_Fault_AC_N_RelayPaste) == defSignalCON_Fault_AC_N_RelayPaste))
+        if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
 	    {
             SET_BIT(pProto->status.fault[3], BIT_2);
             break;//有一个有故障就退出
@@ -1686,7 +1690,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
+	    if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_Freq_Cri) == defSignalCON_Alarm_AC_Freq_Cri)
         {
             SET_BIT(pProto->status.warning[2], BIT_7);
             break;//有一个有故障就退出

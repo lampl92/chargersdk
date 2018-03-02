@@ -1,7 +1,7 @@
 #include "yaffsfs.h"
 #include "bsp.h"
 #include "tinysh.h"
-#include "yaffs2msic.h"
+#include "yaffs2misc.h"
 
 #define YAFFS_MOUNT_POINT "/nand/"
 #define FILE_PATH "/nand/system/foo.txt"

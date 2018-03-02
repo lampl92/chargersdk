@@ -82,18 +82,51 @@ void vTaskEVSERFID(void *pvParameters)
     
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
+#if EVSE_USING_RFID
         xTimerStop(xHandleTimerRFID, 100); 
+#endif
     }
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID
+        
+
+        
+        
+        
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
 	        xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID, defEventBitGotIDtoRFID);//bugfix：避免上次刷卡处理过程中再次检测到卡，导致充电完成后再次显示卡信息
+            
+            /////////////////
+            uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID, pdTRUE, pdTRUE, 0);
+            if ((uxBits & defEventBitTimerCBRFID) == defEventBitTimerCBRFID)
+            {
+#ifdef TEST_TIME_rfid
+                printf_safe("begin %s %d\n", TEST_TIME_rfid, clock());
+#endif // TEST_TIME_rfid 
+                THROW_ERROR(defDevID_RFID, errcode = pRFIDDev->status.GetCardID(pRFIDDev), ERR_LEVEL_CRITICAL, "Monitor");
+#ifdef TEST_TIME_rfid
+                printf_safe("end %s %d\n", TEST_TIME_rfid, clock());
+#endif // TEST_TIME_rfid 
+                if (errcode == ERR_NO)
+                {
+                    pEVSE->status.ulSignalFault &= ~defSignalEVSE_Fault_RFID;
+                }
+                else
+                {
+                    pEVSE->status.ulSignalFault |= defSignalEVSE_Fault_RFID;
+                }
+            }
+        
+            /////////////////////
+            
+            
+            
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
-                                         pdTRUE, pdTRUE, portMAX_DELAY);
+                                         pdTRUE, pdTRUE, 0);
             if((uxBits & defEventBitGotIDtoRFID) == defEventBitGotIDtoRFID)//1. 检测到卡
             {
                 ul2uc ul2ucTmp;
@@ -105,7 +138,9 @@ void vTaskEVSERFID(void *pvParameters)
                 sprintf(pRFIDDev->order.strCardID, "%016u", ul2ucTmp.ulVal);
                 printf_safe("CardID :%s\n", pRFIDDev->order.strCardID);
                 pRFIDDev->state = STATE_RFID_GOTID;
+#if EVSE_USING_RFID
                 xTimerStop(xHandleTimerRFID, 100); 
+#endif
             }
             break;
         case STATE_RFID_GOTID:
@@ -134,6 +169,12 @@ void vTaskEVSERFID(void *pvParameters)
             xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 60000);
             if (xResult == pdTRUE)
             {
+                if (user_like.HMItimeout == 1)
+                {
+                    xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
+                    pRFIDDev->state = STATE_RFID_RETURN;
+                    break;
+                }
                 pRFIDDev->order.ucCONID = user_like.ucCONID;
                 pRFIDDev->order.dLimitFee = user_like.dLimitFee;
                 pRFIDDev->order.ulLimitTime = user_like.ulLimitTime;
@@ -280,7 +321,9 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_RETURN:
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
+#if EVSE_USING_RFID
             xTimerStart(xHandleTimerRFID, 100); 
+#endif
             pRFIDDev->state = STATE_RFID_NOID;
             break;
         default:

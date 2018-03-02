@@ -118,7 +118,7 @@ static ErrorCode_t cfgobj_get(cJSON *pCfgObj, void *retval, char *str_key, uint8
         *(uint16_t *)retval = pRootObj->valueint;
         break;
     case ParamTypeU32:
-        *(uint32_t *)retval = pRootObj->valueint;
+        *(uint32_t *)retval = (uint32_t)pRootObj->valuedouble;
         break;
     case ParamTypeS32:
         *(int32_t *)retval = pRootObj->valueint;

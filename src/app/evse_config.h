@@ -12,8 +12,8 @@
 #define EVSE_USING_RFID             1
 #endif
 
-#ifndef EVSE_USING_GPRS
-#define EVSE_USING_GPRS             1
+#ifndef EVSE_USING_NET
+#define EVSE_USING_NET              0
 #endif
 
 #ifndef EVSE_USING_GUI
@@ -52,6 +52,7 @@
 #define defDiagVoltRecoverCyc       5000
 #define defDiagCurrInitCyc          500       //延时启动电流检测
 #define defDiagCurrDummyCyc         2000
+#define defDiagFreqDummyCyc         1000
 #define defChargeAntiShakeCyc       1000      //插枪防抖检测，状态1'->状态1时的延时
 #define defRelayDelay               500
 #define defRemoteHeartbeatCyc       15000     //心跳
@@ -62,9 +63,9 @@
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
 #define defMonitorCurrPeriod        1.1 //(倍)           //when rate is 32 then up is 32 + 3.2 //(A)
-#define defMonitorFreqLower         50  //(Hz)
-#define defMonitorFreqUpper         50  //(Hz)
-#define defMonitorFreqPeriod        1   //(Hz)
+#define defMonitorFreqLower         49  //(Hz)
+#define defMonitorFreqUpper         51  //(Hz)
+#define defMonitorFreqPeriod        0.5 //(Hz)
 
 #define defCfgOrderMaxItem          50
 #define defCfgOrderRemoveOldItem    10

@@ -18,19 +18,19 @@
 #include "gprs_m26.h"
 #include "bsp.h"
 #include "modem.h"
-
-
+#include "GUI_backstage.h"
 /*---------------------------------------------------------------------------/
 / 任务栈大小
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskInit                   (1024*10)
+#define defSTACK_TaskInit                   (1024*10)      
 #define defSTACK_TaskCLI                    (1024 * 50)
 //#define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskGUI                    (1024*20)
+#define defSTACK_TaskGUIBS                 (1024)
 //#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskTouch                  1024
 #define defSTACK_TaskOTA                    512
-#define defSTACK_TaskPPP                    (1024*10)
+//#define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
 #define defSTACK_TaskRemoteCmdProc          (1024*10)
 
@@ -51,20 +51,21 @@
 #define defPRIORITY_TaskInit                31
 #define defPRIORITY_TaskOTA                 31/* 最高*/
 
-#define defPRIORITY_TaskEVSECharge          27
-#define defPRIORITY_TaskEVSEDiag            25
+#define defPRIORITY_TaskEVSEDiag            27
+#define defPRIORITY_TaskEVSECharge          25
 #define defPRIORITY_TaskEVSEMonitor         23
 //#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 22
 #define defPRIORITY_TaskEVSERFID            20
 #define defPRIORITY_TaskEVSERemote          18
 #define defPRIORITY_TaskEVSEData            16
 
-#define defPRIORITY_TaskPPP                 14
+//#define defPRIORITY_TaskPPP                 14
 #define defPRIORITY_TaskTCPClient           12
 #define defPRIORITY_TaskRemoteCmdProc       19
 
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
+#define defPRIORITY_TaskGUIBS               3
 #define defPRIORITY_TaskCLI                 16  //1. 原优先级2，修改16保证执行添加订单时订单存储被高优先级任务打断。2017年12月15日
 
 //#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
@@ -76,9 +77,9 @@
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
+const char *TASKNAME_GUIBS          = "TaskGUIBS";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
-const char *TASKNAME_PPP            = "TaskPPP";
 const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
 const char *TASKNAME_RemoteCmdProc  = "TaskRemoteCmdProc" ;
 
@@ -95,9 +96,9 @@ const char *TASKNAME_EVSEData       = "TaskEVSEData";
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
+void vTaskGUIBS(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
-void vTaskPPP(void *pvParameters);
 void vTaskTCPClient(void *pvParameters);
 void vTaskRemoteCmdProc(void *pvParameters);
 
@@ -114,9 +115,9 @@ void vTaskEVSEData(void *pvParameters);
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
+static TaskHandle_t xHandleTaskGUIBS = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
-static TaskHandle_t xHandleTaskPPP = NULL;
 static TaskHandle_t xHandleTaskTCPClient = NULL;
 static TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
 
@@ -175,14 +176,6 @@ void vTaskInit(void *pvParameters)
         IWDG_Feed();
         vTaskDelay(1000);
     }
-//    pWIFI = DevWifiCreate();
-//    strcpy(pWIFI->info.strSSID, "rgw");
-//    strcpy(pWIFI->info.strPWD,"abc666def8");
-//    pWIFI->xMutex = xSemaphoreCreateMutex();
-//
-//    wifi_open(pWIFI);
-//    wifi_init(pWIFI);
-//    Wifi_Poll(pWIFI);
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -194,6 +187,10 @@ void vTaskGUI(void *pvParameters)
     MainTask();
 }
 
+void vTaskGUIBS(void *pvParameters)
+{
+    GBSTask();
+}
 void vTaskTouch(void *pvParameters)
 {
     while(1)
@@ -213,11 +210,10 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
 #if EVSE_USING_GUI
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
+    xTaskCreate(vTaskGUIBS, TASKNAME_GUIBS, defSTACK_TaskGUIBS, NULL, defPRIORITY_TaskGUIBS, &xHandleTaskGUIBS);
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
 #endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
-
-    //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
     xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 
@@ -271,7 +267,7 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
 #if EVSE_USING_RFID
-    xTimerStart(xHandleTimerRFID, 0);
+    //xTimerStart(xHandleTimerRFID, 0);
 #endif
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器

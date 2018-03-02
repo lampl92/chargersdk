@@ -721,6 +721,59 @@ static ErrorCode_t GetChargingEnergy(void *pvCON)
 
     return errcode;
 }
+
+/** @brief 控制S1开关
+ *
+ * @param pvCON void*
+ * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
+ * @return ErrorCode_t
+ *
+ */
+static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
+{
+    CON_t *pCON;
+    uint8_t ucCONID;
+    ErrorCode_t errcode;
+
+    pCON = (CON_t *)pvCON;
+    ucCONID = pCON->info.ucCONID;
+    errcode = ERR_NO;
+
+    /** ****************  */
+
+    //...
+    if (ucCONID == 0)
+    {
+        if (cmd == SWITCH_ON)
+        {
+            PWM1_535;
+        }
+        else if (cmd == SWITCH_OFF)
+        {
+            PWM1_1000;
+        }
+    }
+    else if (ucCONID == 1)
+    {
+
+
+        if (cmd == SWITCH_ON)
+        {
+            PWM2_535;
+        }
+        else
+        {
+            PWM2_1000;
+        }
+
+    }
+
+
+    /*********************/
+
+    return errcode;
+}
+
 /** @brief 获取CP状态
  *
  * @param pvCON void*
@@ -808,8 +861,9 @@ static ErrorCode_t GetCPState(void *pvCON)
                 cp_err_cont++;
                 tmpCPState = pCON->status.xCPState;
             }
-            if (cp_err_cont >= 100)//50ms
+            if (cp_err_cont >= 1)//50ms
             {
+                SetCPSwitch(pCON, SWITCH_OFF);
                 cp_err_cont = 0;
                 tmpCPState = CP_ERR;
                 pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
@@ -870,57 +924,7 @@ static ErrorCode_t GetCPState(void *pvCON)
 
     return errcode;
 }
-/** @brief 控制S1开关
- *
- * @param pvCON void*
- * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    ErrorCode_t errcode;
 
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    errcode = ERR_NO;
-
-    /** ****************  */
-
-    //...
-    if(ucCONID == 0)
-    {
-        if(cmd == SWITCH_ON)
-        {
-            PWM1_535;
-        }
-        else if(cmd == SWITCH_OFF)
-        {
-            PWM1_1000;
-        }
-    }
-    else if(ucCONID == 1)
-    {
-
-
-        if(cmd == SWITCH_ON)
-        {
-            PWM2_535;
-        }
-        else
-        {
-            PWM2_1000;
-        }
-
-    }
-
-
-    /*********************/
-
-    return errcode;
-}
 /** @brief 设置PWM占空比 详情请看18487.1-2015 P22
  *
  * @param pvCON void*
@@ -1531,9 +1535,9 @@ static ErrorCode_t StopCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-
+    clock_t old;
+    printf_safe("set cp clock = %d\n", old = clock());
     SetCPSwitch(pCON, SWITCH_OFF);
-    vTaskDelay(defRelayDelay);
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.xCPState = CP_12V;
 #endif
@@ -1542,15 +1546,18 @@ static ErrorCode_t StopCharge(void *pvCON)
        pCON->status.xCPState == CP_9V ||
        pCON->status.xCPState == CP_12V)
     {
+        printf_safe("cp switch ok clock = %d\n", clock() - old );
+        old = clock();
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
             defEventBitCONS2Opened,
             pdFALSE,
             pdTRUE,
             100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
-        //此处应该判断uxbits，但在这里无意义，因为无论如何100ms内或者100ms外都要断电。
+        //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
 
         errcode = SetRelay(pvCON, SWITCH_OFF);
-        vTaskDelay(defRelayDelay);
+        printf_safe("total = %d\n", clock() - old);
+        //vTaskDelay(defRelayDelay);//没什么用
         THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
 #ifdef DEBUG_DIAG_DUMMY
         pCON->status.ucRelayLState = SWITCH_OFF;
@@ -1560,6 +1567,10 @@ static ErrorCode_t StopCharge(void *pvCON)
             pCON->status.ucRelayNState == SWITCH_OFF)
         {
             errcode = ERR_NO;
+        }
+        else
+        {
+            errcode = ERR_RELAY_PASTE;
         }
     }
     else
@@ -1600,6 +1611,7 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventCharge);
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
+    vEventGroupDelete(pCON->status.xHandleEventTimerCBNotify);
     xTimerDelete(pCON->status.xHandleTimerRTData, 100);
     xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
@@ -1646,8 +1658,10 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleEventCharge    = xEventGroupCreate();
     pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
+    pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
+    pCON->status.xHandleTimerFreq      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
     pCON->status.xHandleTimerRTData    = NULL;
     pCON->status.GetChargingVoltage    = GetChargingVoltage;
@@ -1657,6 +1671,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.GetChargingEnergy     = GetChargingEnergy;
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
+    pCON->status.xFreqStat             = STATE_FREQ_OK;
     pCON->status.ulSignalState         = 0;
     pCON->status.ulSignalAlarm         = 0;
     pCON->status.ulSignalFault         = 0;

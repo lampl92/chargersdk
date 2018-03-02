@@ -13,6 +13,7 @@ void vEVSETimerCB(TimerHandle_t xTimer);
 void vRFIDTimerCB(TimerHandle_t xTimer);
 void vVoltTimerCB(TimerHandle_t xTimer);
 void vCurrTimerCB(TimerHandle_t xTimer);
+void vFreqTimerCB(TimerHandle_t xTimer);
 void vChargeStateTimerCB(TimerHandle_t xTimer);
 void vRemoteRTDataTimerCB(TimerHandle_t xTimer);
 void vOrderTmpTimerCB(TimerHandle_t xTimer);

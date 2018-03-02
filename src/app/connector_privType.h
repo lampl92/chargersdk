@@ -50,6 +50,15 @@ typedef enum
     STATE_CURR_UPPER_Dummy,
     STATE_CURR_ERROR
 } CurrState_t;
+typedef enum
+{
+    STATE_FREQ_OK,
+    STATE_FREQ_UPPER_Dummy,
+    STATE_FREQ_UPPER,
+    STATE_FREQ_LOWER_Dummy,
+    STATE_FREQ_LOWER,
+    STATE_FREQ_OK_Dummy
+} FreqState_t;
 typedef ErrorCode_t(*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
 typedef ErrorCode_t(*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t(*pCon_ft)(void *pvCon);
@@ -96,8 +105,10 @@ typedef struct _CONStatus
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
+    EventGroupHandle_t xHandleEventTimerCBNotify;
     TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
     TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
+    TimerHandle_t xHandleTimerFreq;     //频率状态判断过程中使用
     TimerHandle_t xHandleTimerCharge;   //Charge状态判断过程中使用
     TimerHandle_t xHandleTimerRTData;
     uint8_t ucRelayLState;
@@ -114,6 +125,7 @@ typedef struct _CONStatus
     pCon_ft GetChargingEnergy;
     VoltState_t xVoltStat;
     CurrState_t xCurrStat;
+    FreqState_t xFreqStat;
 
     pCon_ft GetCPState;
     ErrorCode_t(*SetCPSwitch)(void *pvCON, uint8_t cmd);
@@ -142,8 +154,10 @@ typedef enum _CONState
     STATE_CON_STARTCHARGE,
     STATE_CON_CHARGING,
     STATE_CON_STOPCHARGE,
+    STATE_CON_UNLOCK,
     STATE_CON_RETURN,
-    STATE_CON_ERROR
+    STATE_CON_ERROR,
+    STATE_CON_DEV_ERROR
 } CONState_t;
 
 #endif

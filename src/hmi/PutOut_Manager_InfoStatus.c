@@ -89,12 +89,17 @@
 #define stateCurrent "输出电流"
 #define stateRFID "RFID状态"
 #define stateSocketLock "枪锁"
-#define stateNTemp "零线温度"
+#define stateNTemp "继电器输出N温度"
 #define stateACVol "交流电压"
 #define stateACFreq "交流频率"
 #define stateACFL "防雷器状态"
 #define stateRelay "输出继电器"
 #define stateCP "控制导引"
+#define stateRelayOn "继电器故障"
+#define stateACLTemp "市电输入L温度"
+#define stateACNTemp "市电输入N温度"
+#define stateCONLTemp "继电器输出L温度"
+
 
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
@@ -106,7 +111,7 @@ WM_HWIN _hWinManagerInfoStatus;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 540, 276, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 580, 276, 0, 0x0, 0 },//560,276
 };
 
 /*********************************************************************
@@ -238,7 +243,7 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	}
 
 	/**< 频率 */
-	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Freq_Cri) == defSignalCON_Alarm_AC_A_Freq_Cri)
+	if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_Freq_Cri) == defSignalCON_Alarm_AC_Freq_Cri)
 	{
     	LISTVIEW_SetItemText(hItem, 3, 3, "×");//"异常");
 	}
@@ -276,6 +281,48 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 	{
     	LISTVIEW_SetItemText(hItem, 3, 4, "√");//"正常");
 	}
+    
+	/**< 继电器黏连 */
+    if ((pcont->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
+    {
+        LISTVIEW_SetItemText(hItem, 5, 4, "故障");//"黏连");//"故障");
+    }
+    else
+    {
+        LISTVIEW_SetItemText(hItem, 5, 4, "正常");//"正常");//"正常");
+    }
+
+	/**< 市电输入L温度 */
+    if ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+    {
+        LISTVIEW_SetItemText(hItem, 1, 5, "×");
+    }
+    else 
+    {
+        LISTVIEW_SetItemText(hItem, 1, 5, "√");
+    }
+
+    	/**< 市电输入N温度 */
+    if ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+    {
+        LISTVIEW_SetItemText(hItem, 3, 5, "×");
+    }
+    else
+    {
+        LISTVIEW_SetItemText(hItem, 3, 5, "√");
+    }
+    
+	/**< 继电器输出L温度 */
+    if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+    {
+        printf_safe("x\n");
+        LISTVIEW_SetItemText(hItem, 5, 5, "×");
+    }
+    else
+    {
+        printf_safe("y\n");
+        LISTVIEW_SetItemText(hItem, 5, 5, "√");
+    }    
 }
 
 /*********************************************************************
@@ -357,7 +404,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 140, stateName, GUI_TA_HCENTER | GUI_TA_VCENTER);
         LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 80, stateValue, GUI_TA_HCENTER | GUI_TA_VCENTER);
 
         LISTVIEW_AddRow(hItem, NULL);//增加一行
@@ -393,6 +440,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         LISTVIEW_SetItemText(hItem, 0, 4, stateRelay);
         /**< 控制导引状态 */
         LISTVIEW_SetItemText(hItem, 2, 4, stateCP);
+        /**< 继电器黏连 */
+        LISTVIEW_SetItemText(hItem, 4, 4, stateRelayOn);
+        LISTVIEW_AddRow(hItem, NULL);//增加一行
+        /**< 市电输入L温度 */
+        LISTVIEW_SetItemText(hItem, 0, 5, stateACLTemp);
+        /**< 市电输入N温度 */
+        LISTVIEW_SetItemText(hItem, 2, 5, stateACNTemp);
+        /**< 继电器输出L温度 */
+        LISTVIEW_SetItemText(hItem, 4, 5, stateCONLTemp);
+
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

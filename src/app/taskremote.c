@@ -13,6 +13,8 @@
 #include "cfg_order.h"
 #include "stringName.h"
 
+#include "evse_debug.h"
+
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 
 //#define DEBUG_NO_TASKREMOTE
@@ -102,16 +104,17 @@ void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
 
 }
 // 1 更新  0 不更新
-static int taskremote_status_update(echProtocol_t *pProto, CON_t *pCON)
+static uint32_t ulSignalState_old[defMaxCON];
+static int taskremote_status_update(CON_t *pCON)
 {
     uint32_t status_old;
-    status_old = pProto->status.ulStatus;
-    pProto->status.ulStatus = pCON->status.ulSignalState & (defSignalCON_State_Standby | \
+    status_old = ulSignalState_old[pCON->info.ucCONID];
+    ulSignalState_old[pCON->info.ucCONID] = pCON->status.ulSignalState & (defSignalCON_State_Standby | \
                                                             defSignalCON_State_Working | \
                                                             defSignalCON_State_Stopping | \
                                                             defSignalCON_State_Fault | \
                                                             defSignalCON_State_Plug);
-    if (pProto->status.ulStatus  != status_old)
+    if (ulSignalState_old[pCON->info.ucCONID]  != status_old)
     {
         return 1;
     }
@@ -201,7 +204,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     }
     if (succ == 1)//succ == 1 升级成功
     {
-        xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
+        //xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString); // 不再文件中设置版本, 程序中自带版本
     }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
@@ -246,13 +249,13 @@ void vTaskEVSERemote(void *pvParameters)
                                          pdFALSE, pdTRUE, portMAX_DELAY);
             if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
-                RemoteIF_SendRegist(pEVSE, pechProto);
+                RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
             }
             break;
         case REMOTE_CONNECTED:
             /********** 注册 **************/
-            RemoteIF_RecvRegist(pEVSE, pechProto, &network_res);
+            RemoteIF_RecvLogin(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
                 reg_try_cnt = 0;
@@ -274,7 +277,7 @@ void vTaskEVSERemote(void *pvParameters)
                 reg_try_cnt++;
                 if(reg_try_cnt > 200)
                 {
-                    printf_safe("\n\nregedit try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
+                    printf_safe("\n\nlogin try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
                     reg_try_cnt = 0;
                     remotestat = REMOTE_ERROR;
                 }
@@ -354,8 +357,9 @@ void vTaskEVSERemote(void *pvParameters)
             if(network_res != 1)
             {
                 heart_lost++;
-                if(heart_lost > 200)//750
+                if(heart_lost > 750)//750
                 {
+                    printf_safe("\n\nHeart LOST!!!!\n\n");
                     heart_lost = 0;
                     remotestat = REMOTE_ERROR;
                     break;
@@ -363,7 +367,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             else
             {
-                printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
+                printf_protolog("\n\nRecv Heart  !!!!!!!!!!\n\n");
                 heart_lost = 0;
             }
 
@@ -382,7 +386,7 @@ void vTaskEVSERemote(void *pvParameters)
             for (i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                if (taskremote_status_update(pechProto, pCON) == 1)
+                if (taskremote_status_update(pCON) == 1)
                 {
                     RemoteIF_SendStatus(pEVSE, pechProto, pCON);
                 }

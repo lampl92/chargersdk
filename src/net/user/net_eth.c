@@ -6,35 +6,37 @@
 #include "dhcp/dhcp_client.h"
 #include "debug.h"
 
-net_device_t eth_dev;
 DhcpClientContext dhcpClientContext;
 Socket *socket_eth; //Socket 套接字 
 
-error_t net_eth_connect(void)
+error_t net_eth_connect(void *pvnet_dev)
 {
     error_t error;
     
-    socket_eth = net_connect_server_via_tcp(&eth_dev, pechProto->info.strServerIP, pechProto->info.usServerPort, &error);
+    socket_eth = netif_connect_server_via_tcp(net_dev, pechProto->info.strServerIP, pechProto->info.usServerPort, &error);
     
     return error;
 }
 
-error_t net_eth_reconnect(void)
+error_t net_eth_reconnect(void *pvnet_dev)
 {
     error_t error;
     
     socketClose(socket_eth);
-    
-    error = net_eth_connect();
+    error = net_eth_connect(pvnet_dev);
     
     return error;
 }
-void net_eth_disconnect(void)
+error_t net_eth_disconnect(void *pvnet_dev)
 {
     socketClose(socket_eth);
     socket_eth = NULL;
+    return NO_ERROR;
 }
-
+error_t net_eth_close_hard(void *pvnet_dev)
+{
+    return NO_ERROR;
+}
 /**
  * @fn  error_t net_eth_init(net_device_t *net_dev, uint32_t n)
  *
@@ -46,17 +48,18 @@ void net_eth_disconnect(void)
  * @return  An error_t.
  */
 
-error_t net_eth_init(net_device_t *net_dev)
+error_t net_eth_init(void *pvnet_dev)
 {
+    net_device_t *net_dev;
     DhcpClientSettings dhcpClientSettings;
 
     DhcpState dhcpstate;
     error_t error;
     NetInterface *interface;
-    OsTask *task;
     MacAddr macAddr;
     Ipv4Addr ipv4Addr;
-  
+    
+    net_dev = (net_device_t*)pvnet_dev;
     interface = net_dev->interface;
 
     //设置接口名称
@@ -122,5 +125,20 @@ error_t net_eth_init(net_device_t *net_dev)
         ipv4SetDnsServer(interface, 1, ipv4Addr);
     }
     
-    return 0;
+    return error;
+}
+
+net_device_t *net_eth_create(void)
+{
+    net_device_t *net;
+    net = (net_device_t*)malloc(sizeof(net_device_t));
+    memset(net, 0, sizeof(net_device_t));
+    sprintf(net->name, "eth%d", 0);
+    
+    net->init = net_eth_init;
+    net->connect = net_eth_connect;
+    net->disconnect = net_eth_disconnect;
+    net->close_hard = net_eth_close_hard;
+    
+    return net;
 }

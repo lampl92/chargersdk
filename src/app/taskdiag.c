@@ -39,11 +39,6 @@ void vTaskEVSEDiag(void *pvParameters)
             switch(errpack.code) // ！！！ 这里一定要仔细查看errpack.ulDevID是否可以用作 CONID， 主要是看设备是否是归属于枪还是桩。 ！！！
             {
             case ERR_RFID_FAULT:
-                for(i = 0; i < ulTotalCON; i++)
-                {
-                    pCON = CONGetHandle(i);
-                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
-                }
                 break;
             case ERR_CON_METER_FAULT:
                 pCON = CONGetHandle(errpack.ulDevID);
@@ -87,6 +82,14 @@ void vTaskEVSEDiag(void *pvParameters)
                     //其他异常清除认证标志
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
+            }
+            if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+            {
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+            }
+            else
+            {
+                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
             }
         }
         

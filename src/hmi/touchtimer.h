@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <includes.h>
 #include "siffontcreate.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touch.h"
 #include "utils.h"
 #include "interface.h"
@@ -40,12 +40,26 @@
 #define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //创建故障弹窗消息
 #define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //删除故障窗口消息
 #define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //跳到HOME页消息
-#define MSG_JUMPCARDINFO    (GUI_ID_USER + 0x33)    //跳到卡片信息页消息
+#define MSG_READYSTART      (GUI_ID_USER + 0x33)    //跳到卡片信息页消息
 #define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //跳到充电中页消息
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 #define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
+
+#define MSG_UPDATE           (GUI_ID_USER + 0x39) //更新存储设备
+
+#define MSG_JUMPSELECTPATTERN (GUI_ID_USER + 0x39)  //调到选择充电方式
+#define MSG_JUMPSELECTGUN   (GUI_ID_USER +0x3a)     //跳到选枪页
+#define MSG_JUMPNetTimeout  (GUI_ID_USER + 0x3b)    //调到网络超时页
+
+#define MSG_JUMPCardconditionNotOk  (GUI_ID_USER + 0x3c)//调到卡条件不足页
+#define MSG_JUMPPleasePlug  (GUI_ID_USER + 0x3d)//跳到请连接插头页
+#define MSG_JUMPChargingOk (GUI_ID_USER + 0x3e)//跳到启动成功页
+#define MSG_JUMPStatePlugTimeout (GUI_ID_USER + 0x3f)
+
+
+
 
 #define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
 #define MSG_MANAGERSETID1       (GUI_ID_USER + 0x41)
@@ -92,7 +106,7 @@ extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 extern WM_HWIN _hWinManagerTerminate;
 
-GUI_QR_INFO QR_info;
+extern GUI_QR_INFO QR_info;
 
 enum{
     _HOMEPAGE,
@@ -118,6 +132,7 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 void PutOut_SelAOrB();
+
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateCardInfoPage(void);
 WM_HWIN CreateChargingPage(void);

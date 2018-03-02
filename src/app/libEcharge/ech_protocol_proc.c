@@ -13,7 +13,7 @@
 #include "evse_globals.h"
 #include "taskcreate.h"
 #include "interface_network.h"
-//#include "lwip_init.h"
+#include "evse_debug.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {
@@ -26,6 +26,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
     uint32_t ulRecvCmdCount;
     EventBits_t uxBitsTCP;
     int res;
+    int i_deb;
 
     pProto = (echProtocol_t *)pvParameters;
     cs = gdsl_list_cursor_alloc(pProto->plechSendCmd);
@@ -87,9 +88,17 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 /* 1. 判断协议是否发送 */
                 if (pechProtoElem->status == 0)
                 {
-                    printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                    printf_protolog("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                     //modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
                     netSend(pechProtoElem->pbuff, pechProtoElem->len);
+                    {//debug
+                        printf_protodetail("\nTCP Send: ");
+                        for (i_deb = 0; i_deb < pechProtoElem->len; i_deb++)
+                        {
+                            printf_protodetail("%02X ", pechProtoElem->pbuff[i_deb]);
+                        }
+                        printf_protodetail("\n"); 
+                    }
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
                 }
@@ -108,7 +117,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     if ((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
                     {
                         gdsl_list_cursor_delete(cs);//请求命令收到平台回复并已处理, 删除命令
-                        printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                        printf_protolog("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
                 }

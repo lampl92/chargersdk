@@ -11,7 +11,6 @@
 
 //#define DEBUG_NO_TASKCHARGE
 
-//#define RFID_ProtoOK 
 static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
 {
     switch (signal)
@@ -51,13 +50,17 @@ void vTaskEVSECharge(void *pvParameters)
     int i;
     EventBits_t uxBitsCharge;
     EventBits_t uxBitsException;
-//    uint8_t strTimerName[50];
+    uint8_t stop_try;
+    uint8_t unlock_try;
+    uint8_t dev_err;
     ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
     uxBitsCharge = 0;
     uxBitsException = 0;
-//    memset(strTimerName, 0, 50);
+    stop_try = 0;
+    unlock_try = 0;
+    dev_err = 0;
     errcode = ERR_NO;
 
     for(i = 0; i < ulTotalCON; i++)
@@ -216,7 +219,7 @@ void vTaskEVSECharge(void *pvParameters)
 	            }
 	            else
 	            {
-		            pCON->state = STATE_CON_RETURN;
+		            pCON->state = STATE_CON_PRECONTRACT;
 		            break;
 	            }
 	            //end fix
@@ -274,7 +277,7 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsException & defEventBitExceptionDevFault) != 0)
                 {
                     printf_safe("Dev Fault Stop Error!\n");
-                    pCON->state = STATE_CON_ERROR;
+                    pCON->state = STATE_CON_STOPCHARGE;
                     break;
                 }
                 /*** 判断用户相关停止条件  ***/
@@ -291,40 +294,46 @@ void vTaskEVSECharge(void *pvParameters)
                     printf_safe("LimitFee Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((uxBitsException & defEventBitExceptionLimitTime) == defEventBitExceptionLimitTime)    //达到充电时间限制
                 {
                     printf_safe("LimitTime Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
                     printf_safe("Remote Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
                 {
                     printf_safe("RFID Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
                 {
                     printf_safe("Curr Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
                 {
                     printf_safe("Scram Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
+//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 /******************************/
 
@@ -332,98 +341,139 @@ void vTaskEVSECharge(void *pvParameters)
                 if (((uxBitsCharge & defEventBitCONS2Opened) == defEventBitCONS2Opened) && 
                     ((uxBitsCharge & defEventBitCONPlugOK) == defEventBitCONPlugOK)) //6vpwm->9vpwm S2主动断开
                 {
-                    THROW_ERROR(i, errcode = pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_CHARGING S2 Open");
-                    
-                    if (errcode == ERR_NO)
-                    {
-                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
-                        printf_safe("\e[44;37mS2 Opened, Full!\e[0m\n");
-                        pCON->state = STATE_CON_STOPCHARGE;
-                    }
+                    printf_safe("\e[44;37mS2 Opened, Full!\e[0m\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
+                    pCON->state = STATE_CON_STOPCHARGE;
                 }
                 else if(((uxBitsCharge & (defEventBitChargeCondition)) | defEventBitCONVoltOK) != (defEventBitChargeCondition))//除去S2主动断开情况，如果被监测的点有False, 电压异常由diag处理
                 {
                     if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                     {
-                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
-                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                         printf_safe("\e[44;37mFource Unplug!\e[0m\n");
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
+//                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                     }
                     else if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
                         //用户原因停止
                         printf_safe("\e[44;37mAuth Clear!\e[0m\n");
                     }
-
-                    THROW_ERROR(i, errcode = pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "other stop charge");
-                    if(errcode == ERR_NO)
-                    {
-                        printf_safe("\e[44;37mStop Charge!\e[0m\n");
-                        pCON->state = STATE_CON_STOPCHARGE;
-                    }
+                    pCON->state = STATE_CON_STOPCHARGE;
                     
                     /** @todo (rgw#1#): 后续会增加判断失效点，并对失效点进行提示。或者在这里不进行提示，而在发现失效时进行提示 */
                 }
                 break;
             case STATE_CON_STOPCHARGE:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
-
-                /** @todo (rgw#1#): 等待结费
-                                    结费成功后通知HMI显示结费完成,进入idle */
-
-                xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_ChargeReqDispDone);//通知HMI显示结束订单
-                
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
-#ifdef RFID_ProtoOK// 刷卡协议完成后添加
-                uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                   defEventBitOrderFinishToChargetask,
-                                                   pdTRUE, pdTRUE, 10000);
-	            if ((uxBitsCharge & defEventBitOrderFinishToChargetask) == defEventBitOrderFinishToChargetask)
-                {
-#endif
 #ifdef DEBUG_DIAG_DUMMY
-                            pCON->state = STATE_CON_IDLE;
+                pCON->state = STATE_CON_RETURN;
+                break;
 #endif
-                    //解锁
-                    if(pCON->info.ucSocketType == defSocketTypeB)
+                errcode = pCON->status.StopCharge(pCON);
+                if (errcode == ERR_NO)
+                {
+                    printf_safe("\e[44;37mStop Charge!\e[0m\n");
+                    stop_try = 0;
+                    pCON->state = STATE_CON_UNLOCK;
+                }
+                else
+                {
+                    stop_try++;
+                    printf_safe("paste!! try %d\n", stop_try);
+                    if (stop_try >= 50)
                     {
-                        uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-                        if((uxBitsCharge & defEventBitCONLocked) == defEventBitCONLocked)
+                        pCON->state = STATE_CON_UNLOCK;//即便继电器失败, 也要解锁枪锁
+                        break;
+                    }
+                    //vTaskDelay(1000);
+                }
+                break;
+            case STATE_CON_UNLOCK:
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+                    if ((uxBitsCharge & defEventBitCONLocked) == defEventBitCONLocked)
+                    {
+                        THROW_ERROR(i, pCON->status.SetBTypeSocketLock(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_STOPCHARGE");
+                        vTaskDelay(defRelayDelay);
+                        pCON->status.GetBTypeSocketLock(pCON);
+                        if (pCON->status.xBTypeSocketLockState == UNLOCK)
                         {
-                            THROW_ERROR(i, pCON->status.SetBTypeSocketLock(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "STATE_CON_STOPCHARGE");
-                            vTaskDelay(defRelayDelay);
-                            pCON->status.GetBTypeSocketLock(pCON);
-                            if(pCON->status.xBTypeSocketLockState == UNLOCK)
+                            unlock_try = 0;
+                            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
+                            if (stop_try != 0)//承接上面继电器失败
                             {
-                                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
-                                pCON->state = STATE_CON_RETURN;
+                                pCON->state = STATE_CON_ERROR;
+                                break;
                             }
+                            pCON->state = STATE_CON_RETURN;
                         }
                         else
                         {
-
+                            unlock_try++;
+                            if (unlock_try >= 5)
+                            {
+                                pCON->state = STATE_CON_ERROR;
+                                break;
+                            }
+                            vTaskDelay(1000);
                         }
                     }
-                    else if(pCON->info.ucSocketType == defSocketTypeC)
+                    else
                     {
-                        pCON->state = STATE_CON_RETURN;
+                        //开锁状态
                     }
-#ifdef RFID_ProtoOK// 刷卡协议完成后添加
                 }
-#endif
+                else if (pCON->info.ucSocketType == defSocketTypeC)
+                {
+                    if (stop_try != 0)//承接上面继电器失败
+                    {
+                        pCON->state = STATE_CON_ERROR;
+                        break;
+                    }
+                    pCON->state = STATE_CON_RETURN;
+                }
                 break;
             case STATE_CON_ERROR:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Fault);
-                THROW_ERROR(i, pCON->status.StopCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_ERROR");
-                vTaskDelay(defRelayDelay);
-                /** @todo (rgw#1#): 等待diag处理完成 */
-
-                pCON->state = STATE_CON_RETURN;
+                if (dev_err == 1)
+                {
+                    pCON->state = STATE_CON_DEV_ERROR;
+                    break;
+                }
+                else if (stop_try != 0)
+                {
+                    //printf_safe("继电器故障! 断电修复后才能继续充电!!!\n");   
+                    pCON->status.ulSignalFault |= defSignalCON_Fault_RelayPaste;
+                }
+                else if (unlock_try != 0)
+                {
+                    //printf_safe("枪锁故障! 断电修复后才能继续充电!!!\n");   
+                    pCON->status.ulSignalFault |= defSignalCON_Fault_SocketLock;
+                }
+                else
+                {
+                    pCON->state = STATE_CON_RETURN;
+                }
+                break;
+            case STATE_CON_DEV_ERROR:
+                THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
+                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
+                if ((uxBitsException & defEventBitExceptionDevFault) == 0)
+                {
+                    printf_safe("Error recovery!\n");
+                    dev_err = 0;
+                    pCON->state = STATE_CON_ERROR;
+                } 
                 break;
             case STATE_CON_RETURN:
+                stop_try = 0;
+                unlock_try = 0;
+                dev_err = 0;
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed); //清除认证标志
                 THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
-                vTaskDelay(defRelayDelay);
                 pCON->status.ucLoadPercent = 100;
                 pCON->state = STATE_CON_IDLE;
                 break;

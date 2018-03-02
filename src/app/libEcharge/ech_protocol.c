@@ -16,7 +16,7 @@
 #include "cfg_parse.h"
 #include "cJSON.h"
 #include "sysinit.h"
-
+#include  "evse_debug.h"
 
 
 /*---------------------------------------------------------------------------*/
@@ -58,7 +58,10 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
         *((uint16_t *)pvProtoInfoItem) = (uint16_t)(jsItem->valueint);
         break;
     case ParamTypeU32:
-        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valueint);
+        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valuedouble);
+        break;
+    case ParamTypeS32:
+        *((int32_t *)pvProtoInfoItem) = (int32_t)(jsItem->valueint);
         break;
     case ParamTypeDouble:
         *((double *)pvProtoInfoItem) = (double)(jsItem->valuedouble);
@@ -224,7 +227,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
                 "GetNewKey()");
     THROW_ERROR(defDevID_File,
                 errcode = GetProtoCfgItem((void *)(&(pProto->info.tNewKeyChangeTime)),
-                                          ParamTypeU32,
+                                          ParamTypeS32,
                                           jsProtoObj,
                                           jnProtoNewKeyChangeTime),
                 ERR_LEVEL_WARNING,
@@ -974,8 +977,8 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 5;
     }
-    //输出电压xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //输出电压xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -995,8 +998,8 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //输出电流xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    //输出电流xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1067,7 +1070,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         errcode |= 1 << 1; //Bit1 电表故障
     }
-    if ((pCON->status.ulSignalFault & defSignalGroupCON_Fault_AC_RelayPase) != 0)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
         errcode |= 1 << 2; //Bit2 接触器故障
     }
@@ -1232,14 +1235,14 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //[42,43] 剩余充电时间
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[44...47] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //[44...47] 输出电压 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[48...51] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    //[48...51] 输出电流 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1363,14 +1366,14 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     //[58,59] 剩余充电时间
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[60...63] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //[60...63] 输出电压 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[64...67] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    //[64...67] 输出电流 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -2763,14 +2766,12 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
         }
         else
         {
-            printf_safe("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
-#if DEBUG_PROTO_LOG
+            printf_protolog("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
-                printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
+                printf_protolog("%02X ", pCMD->ucRecvdOptData[i]);
             }
-            printf_safe("\n");
-#endif
+            printf_protolog("\n");
             lRecvElem.UID = 0;
             lRecvElem.timestamp = time(NULL);
             lRecvElem.len = pCMD->ulRecvdOptLen;
@@ -2806,12 +2807,15 @@ static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t
         ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
         ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
         timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-        printf_safe("server: ");
-        printTime(timestamp);
-        printf_safe("\n");
-        printf_safe("local:  ");
-        printTime(time(NULL));
-        printf_safe("\n");
+        if (dePrintTime == 1)
+        {
+            printf_safe("server: ");
+            printTime(timestamp);
+            printf_safe("\n");
+            printf_safe("local:  ");
+            printTime(time(NULL));
+            printf_safe("\n");
+        }
         if(utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
         {
             time(&timestamp);
@@ -2970,8 +2974,6 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWAddListCfg = BnWAddListCfg;
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
-
-    pProto->status.ulStatus |= defSignalCON_State_Standby;
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
