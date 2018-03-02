@@ -5,7 +5,7 @@
 BINARYDIR := Debug
 
 #Additional flags
-PREPROCESSOR_MACROS := DEBUG=1 EVSE_USING_RFID=0 EVSE_DEBUG DEBUG_RFID DEBUG_DIAG_DUMMY __DEBUG_CFG_PARSE EVSE_USING_GUI=0
+PREPROCESSOR_MACROS := DEBUG=1 EVSE_ERRLOG EVSE_USING_RFID=0 EVSE_USING_GUI=0 DEBUG_DIAG_DUMMY
 INCLUDE_DIRS := 
 LIBRARY_DIRS := 
 LIBRARY_NAMES := 
@@ -13,8 +13,8 @@ ADDITIONAL_LINKER_INPUTS :=
 MACOS_FRAMEWORKS := 
 LINUX_PACKAGES := 
 
-CFLAGS := -ggdb -ffunction-sections -O2
-CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O2
+CFLAGS := -ggdb -ffunction-sections -O0
+CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O0
 ASFLAGS := 
 LDFLAGS := -Wl,-gc-sections
 COMMONFLAGS := 

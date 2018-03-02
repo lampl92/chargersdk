@@ -378,7 +378,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
     {
         pwm_b_2 = 0;
     }
-#ifndef EVSE_DEBUG
+#ifndef EVSE_DEVBOARD
     led_output();
 #endif
   //get_samp_point();

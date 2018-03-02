@@ -89,11 +89,6 @@ void vTaskEVSERFID(void *pvParameters)
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID
-        
-
-        
-        
-        
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
@@ -121,8 +116,6 @@ void vTaskEVSERFID(void *pvParameters)
             }
         
             /////////////////////
-            
-            
             
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
@@ -166,7 +159,15 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_NEWID:
             make_rfidpkg(pRFIDDev, &rfid_pkg);
             xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+#if EVSE_USING_GUI
             xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 60000);
+#else
+            user_like.ucCONID = 0;
+            user_like.dLimitFee = 0;
+            user_like.ulLimitTime = 0;
+            user_like.dLimitPower = 0;
+            user_like.HMItimeout = 0;
+#endif
             if (xResult == pdTRUE)
             {
                 if (user_like.HMItimeout == 1)
@@ -265,13 +266,13 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_GOODID:
             make_rfidpkg(pRFIDDev, &rfid_pkg);
             xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
-#ifdef DEBUG_RFID
+#if (EVSE_USING_GUI==0)
             printf_safe("用户状态：");
             switch(pRFIDDev->order.ucAccountStatus)
             {
-            case 0: printf_safe("未注册卡\n"); break;
-            case 1: printf_safe("注册卡\n"); break;
-            case 2: printf_safe("欠费卡\n"); break;
+                case 0: printf_safe("该卡不可充电\n"); break;
+                case 1: printf_safe("注册卡\n"); break;
+                case 2: printf_safe("欠费卡\n"); break;
             }
             printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
             printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);

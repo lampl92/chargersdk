@@ -123,7 +123,7 @@ void bsp_Init(void)
     SystemCoreClockUpdate();    /* 根据PLL配置更新系统时钟频率变量 SystemCoreClock */
     /* Enable the CRC Module */
     __HAL_RCC_CRC_CLK_ENABLE(); //
-#ifdef EVSE_DEBUG
+#ifdef EVSE_DEVBOARD
     bsp_GPIO_Init();
 #endif
     bsp_RTC_Init();
@@ -143,9 +143,7 @@ void bsp_Init(void)
     bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
-#ifndef EVSE_DEBUG
-    //IWDG_Init(IWDG_PRESCALER_64,500);  //在taskOTA中初始化了	
-#endif
+    //IWDG_Init(IWDG_PRESCALER_64,500);  //在taskinit中初始化了	
 }
 
 void bsp_Error_Handler(void)

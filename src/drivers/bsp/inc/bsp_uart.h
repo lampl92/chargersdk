@@ -21,7 +21,7 @@ typedef enum
     UART_PORT_TERM
 } UART_Portdef;
 
-#ifndef EVSE_DEBUG
+#ifndef EVSE_DEVBOARD
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
@@ -49,7 +49,7 @@ typedef enum
 #define TERM_QUEUE_SIZE                             1500
 
 #endif
-#ifdef EVSE_DEBUG
+#ifdef EVSE_DEVBOARD
 #define CLI_USARTx_BASE                             USART2
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)

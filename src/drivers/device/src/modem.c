@@ -22,7 +22,7 @@
 
 #include "ppp/ppp_hdlc.h"
 
-#ifdef EVSE_DEBUG
+#ifdef EVSE_DEVBOARD
 
 #undef   GPRS_set
 #undef   GPRS_reset

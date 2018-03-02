@@ -16,7 +16,7 @@
 #include "cfg_parse.h"
 #include "cJSON.h"
 #include "sysinit.h"
-#include  "evse_debug.h"
+#include "evse_debug.h"
 
 
 /*---------------------------------------------------------------------------*/

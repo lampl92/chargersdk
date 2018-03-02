@@ -366,9 +366,9 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
                 ulTmp.ucVal[3] = pbuff[17];
                 dLimetFee = (double)(ntohl(ulTmp.ulVal)) * 0.01;
                 pCON->order.dLimitFee = dLimetFee;
-#if EVSE_DEBUG
-                pCON->order.dLimitFee = 0;
+#if EVSE_FUTURE
                 pCON->order.ulLimitTime = 0;
+                pCON->order.dLimitPower = 0;
 #endif
                 pCON->order.ucStartType = 5;//Remote无卡
 

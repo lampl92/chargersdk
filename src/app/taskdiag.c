@@ -32,7 +32,7 @@ void vTaskEVSEDiag(void *pvParameters)
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef EVSE_DEBUG
+#ifdef EVSE_ERRLOG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
 #endif
