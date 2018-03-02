@@ -797,12 +797,11 @@ static ErrorCode_t GetCPState(void *pvCON)
     errcode = ERR_NO;
 
     /** ***********/
-
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpCPState = CP_6V_PWM;
 #else
+    if(ucCONID == 0)
+    {
         cp1 = Sys_samp.DC.CP1;//get_CP1();
         pCON->status.dCPVolt = cp1;
         if((cp1 < 12.8f) && (cp1 > 11.2f))
@@ -870,7 +869,6 @@ static ErrorCode_t GetCPState(void *pvCON)
                 errcode =  ERR_CON_CP_FAULT;
             }
         }
-#endif
     }
     else if(ucCONID == 1)
     {
@@ -918,6 +916,7 @@ static ErrorCode_t GetCPState(void *pvCON)
             errcode =  ERR_CON_CP_FAULT;
         } ;
     }
+#endif
     /*********************/
 
     pCON->status.xCPState = tmpCPState;
@@ -1110,12 +1109,11 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpLockState = LOCK;
 #else
+    if(ucCONID == 0)
+    {
         if(GET_GUN_STATE_1 == 1)
         {
             tmpLockState = UNLOCK;
@@ -1124,7 +1122,6 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
         {
             tmpLockState = LOCK;
         }
-#endif
     }
     else if(ucCONID == 1)
     {
@@ -1137,6 +1134,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
             tmpLockState = LOCK;
         }
     }
+#endif
     /*********************/
 
 
