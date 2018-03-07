@@ -457,6 +457,24 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     pCON->state = STATE_CON_RETURN;
                 }
+                ////
+                THROW_ERROR(i, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "Charge init");
+                if (pCON->status.ucRelayLState == SWITCH_OFF &&
+                        pCON->status.ucRelayNState == SWITCH_OFF)
+                {
+                    pCON->status.ulSignalFault &= ~defSignalCON_Fault_RelayPaste;
+                    pCON->state = STATE_CON_RETURN;
+                }
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(i, pCON->status.GetBTypeSocketLock(pCON), ERR_LEVEL_CRITICAL, "Charge init");
+                    if (pCON->status.xBTypeSocketLockState == UNLOCK &&
+                            pCON->status.xBTypeSocketLockState == UNLOCK)
+                    {
+                        pCON->status.ulSignalFault &= ~defSignalCON_Fault_SocketLock;
+                        pCON->state = STATE_CON_RETURN;
+                    }
+                }
                 break;
             case STATE_CON_DEV_ERROR:
                 THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
