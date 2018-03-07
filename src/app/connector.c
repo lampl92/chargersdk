@@ -1523,7 +1523,7 @@ static ErrorCode_t StopCharge(void *pvCON)
        pCON->status.xCPState == CP_9V ||
        pCON->status.xCPState == CP_12V)
     {
-        printf_safe("cp switch ok clock = %d\n", clock() - old );
+        printf_safe("cp switch ok clock = %d\n", clock() - old);
         old = clock();
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
             defEventBitCONS2Opened,
@@ -1531,30 +1531,40 @@ static ErrorCode_t StopCharge(void *pvCON)
             pdTRUE,
             100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
         //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
-
-        errcode = SetRelay(pvCON, SWITCH_OFF);
-        printf_safe("total = %d\n", clock() - old);
-        //vTaskDelay(defRelayDelay);//没什么用
-        THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
-#ifdef DEBUG_DIAG_DUMMY
-        pCON->status.ucRelayLState = SWITCH_OFF;
-        pCON->status.ucRelayNState = SWITCH_OFF;
-#endif
-        if (pCON->status.ucRelayLState == SWITCH_OFF &&
-            pCON->status.ucRelayNState == SWITCH_OFF)
+        if ((uxBits & defEventBitCONS2Opened) == defEventBitCONS2Opened)
         {
-            errcode = ERR_NO;
+            printf_safe("S2 Opened OK\n");
         }
         else
         {
-            errcode = ERR_RELAY_PASTE;
+            printf_safe("S2 Opend timeout\n");
         }
+    }
+    else if (pCON->status.xCPState != CP_ERR) //PWM
+    {
+        //CP未转换;
+        return ERR_CON_CP_SWITCH_FAULT;
+    }
+    else//CP_ERR
+    {
+        
+    }
+    errcode = SetRelay(pvCON, SWITCH_OFF);
+    printf_safe("total = %d\n", clock() - old);
+    THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
+#ifdef DEBUG_DIAG_DUMMY
+    pCON->status.ucRelayLState = SWITCH_OFF;
+    pCON->status.ucRelayNState = SWITCH_OFF;
+#endif
+    if (pCON->status.ucRelayLState == SWITCH_OFF &&
+        pCON->status.ucRelayNState == SWITCH_OFF)
+    {
+        errcode = ERR_NO;
     }
     else
     {
-        errcode = ERR_CON_CP_SWITCH_FAULT;
+        errcode = ERR_RELAY_PASTE;
     }
-
     /*********************/
     return errcode;
 }
