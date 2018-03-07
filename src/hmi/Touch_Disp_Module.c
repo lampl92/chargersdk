@@ -588,18 +588,19 @@ void Errlist_flush(uint8_t *msg_err)
         strncat(msg_err, Volt_err, strlen(Volt_err));
         ErrMultiEdit_Size.err_num++;
     }
-    if ((pCON->status.ulSignalAlarm & defSignalCON_Fault_RelayPaste) != 0)
+//    if ((pCON->status.ulSignalAlarm & defSignalCON_Fault_RelayPaste) != 0)
+    if((uxBitsErr >> 5) & 0x01 == 0) 
     {
         strncat(msg_err, RaleyOn_err, strlen(RaleyOn_err));
         ErrMultiEdit_Size.err_num++;        
     }
-    if((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0 ||
-        (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
-    //if (((uxBitsErr >> 9) & 0x01) == 0)
-    {
-        strncat(msg_err, ACTemp_err, strlen(ACTemp_err));
-        ErrMultiEdit_Size.err_num++;
-    }
+//    if((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0 ||
+//        (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
+//    if (((uxBitsErr >> 9) & 0x01) == 0)
+//    {
+//        strncat(msg_err, ACTemp_err, strlen(ACTemp_err));
+//        ErrMultiEdit_Size.err_num++;
+//    }
     if (((uxBitsErr >> 14) & 0x01) == 0)
     {
         strncat(msg_err, PE_err, strlen(PE_err));
