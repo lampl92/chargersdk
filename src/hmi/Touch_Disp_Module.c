@@ -24,7 +24,7 @@ uint8_t *Arrester_err = "   防雷异常\n";
 uint8_t *PowerOff_err = "   停电异常\n";
 uint8_t *Curr_err = "   电流异常\n   请拔枪\n";
 uint8_t *Freq_err = "   频率异常\n";
-uint8_t *RaleyOn_err = "   继电器黏连\n";
+uint8_t *RaleyOn_err = "   继电器故障\n";
 
 WM_HWIN err_hItem = 0;
 
@@ -588,13 +588,18 @@ void Errlist_flush(uint8_t *msg_err)
         strncat(msg_err, Volt_err, strlen(Volt_err));
         ErrMultiEdit_Size.err_num++;
     }
-    if ((pCON->status.ulSignalAlarm & defSignalCON_Fault_RelayPaste) != 0)
+//    if(((uxBitsErr >> 5) & 0x01) == 0)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
         strncat(msg_err, RaleyOn_err, strlen(RaleyOn_err));
         ErrMultiEdit_Size.err_num++;        
     }
-    if((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0 ||
-        (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
+    if(((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        ||((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri))
+    //if ((->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) == defSignalGroupCON_Alarm_Temp_Cri ||
+    //    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) == 0)
     //if (((uxBitsErr >> 9) & 0x01) == 0)
     {
         strncat(msg_err, ACTemp_err, strlen(ACTemp_err));
