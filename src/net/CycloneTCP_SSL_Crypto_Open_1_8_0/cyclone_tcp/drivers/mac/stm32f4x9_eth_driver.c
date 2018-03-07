@@ -243,6 +243,13 @@ void stm32f4x9EthInitGpio(NetInterface *interface)
    //Configure RMII_TX_EN (PB11), ETH_RMII_TXD0 (PB12)
    GPIO_InitStructure.Pin = GPIO_PIN_11 | GPIO_PIN_12;
    HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+    
+    //ETH_nRST (PA8)
+    GPIO_InitStructure.Pin =  GPIO_PIN_8;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_PULLUP;
+    GPIO_InitStructure.Speed = GPIO_SPEED_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
 
