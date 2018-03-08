@@ -118,12 +118,12 @@ void vTaskEVSERFID(void *pvParameters)
                 }
                 else if(pCON->state == STATE_CON_STOPCHARGE)
                 {
-	                pCON->state = STATE_CON_RETURN;
+                    pRFIDDev->state = STATE_RFID_RETURN;
                     //while(1);
                 }
                 else if(pCON->state == STATE_CON_ERROR)
                 {
-	                pCON->state = STATE_CON_RETURN;
+                    pRFIDDev->state = STATE_RFID_RETURN;
 	               //while(1);
                 }
                 else// if(pCON->state == STATE_CON_IDLE)
