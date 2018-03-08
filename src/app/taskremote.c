@@ -355,6 +355,10 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         }//switch stat
                     }
+                    else//如果不是充电中下次循环过来就不检查了
+                    {
+                        pCON->OrderTmp.ucCheckOrderTmp = 0;
+                    }
                 }
             }//for id
 #endif
