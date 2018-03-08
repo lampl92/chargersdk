@@ -260,7 +260,6 @@ void vTaskEVSECharge(void *pvParameters)
                         THROW_ERROR(i, errcode = pCON->status.StartCharge(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
                         if(errcode == ERR_NO)
                         {
-                            //vTaskDelay(5000);//在这5s之间，防止RFID勿刷，并等待电流稳定。
                             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                             pCON->state = STATE_CON_CHARGING;
                             printf_safe("\e[44;37mStart Charge!\e[0m\n");
@@ -375,7 +374,7 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     stop_try++;
                     printf_safe("paste!! try %d\n", stop_try);
-                    if (stop_try >= 50)
+                    if (stop_try >= 30)
                     {
                         pCON->state = STATE_CON_UNLOCK;//即便继电器失败, 也要解锁枪锁
                         break;
