@@ -860,7 +860,7 @@ static ErrorCode_t GetCPState(void *pvCON)
                 cp_err_cont++;
                 tmpCPState = pCON->status.xCPState;
             }
-            if (cp_err_cont >= 1)//50ms
+            if (cp_err_cont >= 2)//50ms
             {
                 SetCPSwitch(pCON, SWITCH_OFF);
                 cp_err_cont = 0;

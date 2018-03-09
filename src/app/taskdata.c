@@ -171,7 +171,6 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_FINISH:
                 //5. 结束充电
                 makeOrder(pCON);
-                AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy :( ************/
                 if (pCON->order.dTotalFee >= pCON->order.dBalance)
@@ -189,6 +188,7 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     if(pCON->order.dTotalFee > pCON->order.dLimitFee)
                     {
+                        pCON->order.dTotalServFee = pCON->order.dLimitFee - pCON->order.dTotalPowerFee;
                         pCON->order.dTotalFee = pCON->order.dLimitFee;
                     }
                 }
@@ -265,7 +265,7 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->order.ucStopType = defOrderStopType_Scram;
                 }
-                
+                AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
 
                 xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
@@ -288,6 +288,8 @@ void vTaskEVSEData(void *pvParameters)
 	            {
     	            printf_safe("Order TimeOut.....................\n");
     	            pCON->order.ucPayStatus = 0;
+		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+					/* 临时订单 在这里存储订单*/
     	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
 	            }
                 AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单

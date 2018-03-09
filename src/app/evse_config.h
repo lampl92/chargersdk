@@ -43,7 +43,7 @@
 /* 单位：ms */
 #define defMonitorTempCyc           5000
 #define defMonitorLockStateCyc      1000
-#define defMonitorPlugStateCyc      50
+#define defMonitorPlugStateCyc      20
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
 #define defMonitorRFIDCyc           100

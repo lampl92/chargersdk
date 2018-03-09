@@ -24,15 +24,18 @@ static int IsOldID(char *pCardID)
     for (i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        if (strcmp(pCON->order.strCardID, pCardID) == 0)
+        if (pCON->state == STATE_CON_CHARGING)
         {
-            return i;
+            if (strcmp(pCON->order.strCardID, pCardID) == 0)
+            {
+                return i;
+            }
         }
     }
     return -1;
 }
 
-static int IsNewID(void)
+static int IsCONAvailable(void)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
@@ -43,6 +46,14 @@ static int IsNewID(void)
     for (i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
+        if(pCON->state == STATE_CON_STOPCHARGE)
+        {
+            continue;
+        }
+        else if(pCON->state == STATE_CON_ERROR)
+        {
+            continue;
+        }
         if (pCON->order.statOrder == STATE_ORDER_IDLE)
         {
             return i;
@@ -146,7 +157,7 @@ void vTaskEVSERFID(void *pvParameters)
                 break;
             }
             // 卡之前没有刷过, 判断是否有可用枪
-            id = IsNewID();
+            id = IsCONAvailable();
             if (id >= 0)
             {
                 printf_safe("有枪可以用\n");
