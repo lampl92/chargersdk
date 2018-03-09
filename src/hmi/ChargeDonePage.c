@@ -90,16 +90,19 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
         diffsec = (uint32_t)difftime(now, first);
 
-        sec = 3 - diffsec;
+        sec = 5 - diffsec;
         if (sec < 0)
             sec = 0;
         sprintf((char *)_secDown, "(%02dS)", sec);
         if (sec == 0)
         {
-            orderFinish = 0;
+            //orderFinish = 0;
             first_flag = 0;
             			//Ìøµ½HOME
-            WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
+            if (pCON->state != STATE_CON_ERROR)
+            {
+                WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
+            }
         }      
     }
 }
