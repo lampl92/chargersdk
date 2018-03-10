@@ -39,8 +39,8 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
             RemoteIF_SendReset(pEVSE, pProto, 2); //1 成功，2失败
             return;
         }
-        pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
-        pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
+        cfg_set_uint32(pathProtoCfg, &ulOptSN, "%s", jnProtoOptSN);
+        cfg_set_uint8(pathProtoCfg, &ucAct, "%s", jnProtoResetAct);
 
         HAL_NVIC_SystemReset();
         return;
@@ -51,7 +51,7 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
     {
         ucAct = 0;
 
-        pProto->info.SetProtoCfg(jnProtoResetAct, ParamTypeU8, NULL, 0, &ucAct);
+        cfg_set_uint8(pathProtoCfg, &ucAct, "%s", jnProtoResetAct);
         THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "taskremote GetProtoCfg");
         RemoteIF_SendReset(pEVSE, pProto, 1); //1 成功，2失败
     }

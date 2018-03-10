@@ -98,86 +98,6 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief 设置参数
- *
- * @param jnItemString uint8_t*     要设置参数的名称 或 要设置参数所在的Obj名称
- * @param ObjType uint8_t           要设置参数的类型 或 Obj类型
- * @param jnSubItemString uint8_t*  假如要设置参数在另一个Obj中，则传入这个Obj中该参数的名称
- * @param SubType uint8_t           要设置参数的类型
- * @param pvCfgParam void*          要设置的参数
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
-{
-    cJSON *jsProtoCfgObj;
-    cJSON *jsItem;
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-    jsProtoCfgObj = GetCfgObj(pathProtoCfg, &errcode);
-    if(jsProtoCfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsItem = jsProtoCfgObj->child;
-    do
-    {
-        if(strcmp(jsItem->string, jnItemString) == 0)
-        {
-            switch(ObjType)
-            {
-            case ParamTypeU8:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            case ParamTypeU16:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
-                break;
-            case ParamTypeU32:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
-                break;
-            case ParamTypeDouble:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
-                break;
-            case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
-                break;
-            case ParamTypeObj:
-                //subtype在这里没有使用，因为目前只有uint8一种类型
-                cJSON_ReplaceItemInObject(jsItem, jnSubItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            default:
-                break;
-            }
-            break;//退出while循环
-        }
-        else
-        {
-            jsItem = jsItem->next;
-        }
-    }
-    while(jsItem != NULL);
-    errcode = SetCfgObj(pathProtoCfg, jsProtoCfgObj);
-
-    return errcode;
-}
-
-/** @brief 测试参数设置函数
- *
- * @return void
- *
- */
-void testSetProtoCfg()
-{
-    uint8_t ucParam;
-    uint32_t ulParam;
-    ucParam = 4;
-    ulParam = 232;
-    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, (void *)&ucParam);
-    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, "Start1", ParamTypeU8, (void *)&ucParam);
-    SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, (void *)&ulParam);
-}
-
 /*---------------------------------------------------------------------------/
 /                               黑白名单
 /---------------------------------------------------------------------------*/
@@ -2723,7 +2643,6 @@ echProtocol_t *EchProtocolCreate(void)
     EchFtpInit(&pProto->info.ftp);
     
     pProto->info.GetProtoCfg = GetProtoCfg;
-    pProto->info.SetProtoCfg = SetProtoCfg;
 
     pProto->info.BnWIsListCfg = BnWIsListCfg;
     pProto->info.BnWGetListCfg = BnWGetListCfg;

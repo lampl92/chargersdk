@@ -337,8 +337,8 @@ void vTaskEVSEData(void *pvParameters)
             //32位系统最大时间戳2147483647 -> 2038/1/19 11:14:7
             uint32_t max_time = 2147483647;
 
-            pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, pechProto->info.strNewKey);
-            pechProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &max_time);
+            cfg_set_string(pathProtoCfg, pechProto->info.strNewKey, "%s", jnProtoKey);
+            cfg_set_uint32(pathProtoCfg, &max_time, "%s", jnProtoNewKeyChangeTime);
         }
         
         /********** 告警记录 **************/

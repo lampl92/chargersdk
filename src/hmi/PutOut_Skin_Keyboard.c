@@ -1067,51 +1067,50 @@ static uint8_t Value_Check()
         }
         break;
     case SYSSET_VALUE:
-        switch(htmpID)
+        switch (htmpID)
         {
-            case 20:
-                pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
-                memset(pEVSE->info.strSN,'\0',strlen(pEVSE->info.strSN));
-                strcpy(pEVSE->info.strSN,result_input);
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
-                break;
-            case 21:
-                pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
-                memset(pEVSE->info.strID,'\0',strlen(pEVSE->info.strID));
-                strcpy(pEVSE->info.strID,result_input);
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
-                break;
-            case 22:
-
-                pechProto->info.SetProtoCfg(jnProtoServerIP, ParamTypeString, NULL, 0, result_input);
-                memset(pechProto->info.strServerIP,'\0',strlen(pechProto->info.strServerIP));
-                strcpy(pechProto->info.strServerIP,result_input);
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
-                break;
-            case 23://
-                tmpU16 = (uint16_t)atoi(result_input);
-                if (tmpU16 <= 0
-                || tmpU16 >= 10000)
-                {
-                    tmpU16 = 6677;
-                }
-                pechProto->info.SetProtoCfg(jnProtoServerPort, ParamTypeU16, NULL, 0, &tmpU16);
-                pechProto->info.usServerPort = tmpU16;
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
-                break;
-            case 24://user name
-                pechProto->info.SetProtoCfg(jnProtoUserName, ParamTypeString, NULL, 0, result_input);
-                memset(pechProto->info.strUserName,'\0',strlen(pechProto->info.strUserName));
-                strcpy(pechProto->info.strUserName,result_input);
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
-                break;
-            case 25://user passwd
-                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString ,NULL ,0,result_input);
-                memset(pechProto->info.strUserPwd,'\0',strlen(pechProto->info.strUserPwd));
-                strcpy(pechProto->info.strUserPwd,result_input);
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
-                break;
-            case 26://屏保时间
+        case 20:
+            pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
+            memset(pEVSE->info.strSN, '\0', strlen(pEVSE->info.strSN));
+            strcpy(pEVSE->info.strSN, result_input);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+            break;
+        case 21:
+            pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+            memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
+            strcpy(pEVSE->info.strID, result_input);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
+            break;
+        case 22:
+            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoServerIP);
+            memset(pechProto->info.strServerIP, '\0', strlen(pechProto->info.strServerIP));
+            strcpy(pechProto->info.strServerIP, result_input);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
+            break;
+        case 23://
+            tmpU16 = (uint16_t)atoi(result_input);
+            if (tmpU16 <= 0
+            || tmpU16 >= 10000)
+            {
+                tmpU16 = 6677;
+            }
+            cfg_set_uint16(pathProtoCfg, &tmpU16, "%s", jnProtoServerPort);
+            pechProto->info.usServerPort = tmpU16;
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
+            break;
+        case 24://user name
+            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserName);
+            memset(pechProto->info.strUserName, '\0', strlen(pechProto->info.strUserName));
+            strcpy(pechProto->info.strUserName, result_input);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
+            break;
+        case 25://user passwd
+            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserPwd);
+            memset(pechProto->info.strUserPwd, '\0', strlen(pechProto->info.strUserPwd));
+            strcpy(pechProto->info.strUserPwd, result_input);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+            break;
+        case 26://屏保时间
             tmpU32 = (uint32_t)atoi(result_input);// * 60;
             tmpU32 = tmpU32 * 60;
             if (tmpU32 <= (5 * 60))
@@ -1122,10 +1121,10 @@ static uint8_t Value_Check()
             {
                 tmpU32 = 60 * 60;
             }
-                xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
-                xSysconf.ulDispSleepTime_s = tmpU32;
-                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
-                break;
+            xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+            xSysconf.ulDispSleepTime_s = tmpU32;
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
+            break;
         }
         break;
     case CONSET_VALUE:

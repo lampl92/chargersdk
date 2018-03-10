@@ -53,7 +53,6 @@ typedef struct _echProtoInfo
     EchFtpCfg_t ftp;
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
-    ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
     int (*BnWIsListCfg)(uint8_t *path, uint8_t *strID);
     int (*BnWGetListSizeCfg)(uint8_t *path, uint16_t *size);
     int (*BnWGetListCfg)(uint8_t *path, uint16_t idx, uint8_t *strID);

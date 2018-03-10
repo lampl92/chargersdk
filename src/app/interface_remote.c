@@ -198,7 +198,7 @@ ErrorCode_t RemoteIF_SendReset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t su
     pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_RESET, 0, 1);
 
     ulOptSN = 0;
-    pProto->info.SetProtoCfg(jnProtoOptSN, ParamTypeU32, NULL, 0, &ulOptSN);
+    cfg_set_uint32(pathProtoCfg, &ulOptSN, "%s", jnProtoOptSN);
 
     return errcode;
 }
@@ -558,28 +558,28 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
         ultmpNetSeq.ucVal[2] = pbuff[6];
         ultmpNetSeq.ucVal[3] = pbuff[7];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoPowerFee_sharp, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
+        set_errcode_sharp = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_sharp);
         //pbuff[8...11] 峰费率
         ultmpNetSeq.ucVal[0] = pbuff[8];
         ultmpNetSeq.ucVal[1] = pbuff[9];
         ultmpNetSeq.ucVal[2] = pbuff[10];
         ultmpNetSeq.ucVal[3] = pbuff[11];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoPowerFee_peak, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
+        set_errcode_peak = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_peak);
         //pbuff[12...15] 平费率
         ultmpNetSeq.ucVal[0] = pbuff[12];
         ultmpNetSeq.ucVal[1] = pbuff[13];
         ultmpNetSeq.ucVal[2] = pbuff[14];
         ultmpNetSeq.ucVal[3] = pbuff[15];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoPowerFee_shoulder, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
+        set_errcode_shoulder = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_shoulder); 
         //pbuff[16...19] 谷费率
         ultmpNetSeq.ucVal[0] = pbuff[16];
         ultmpNetSeq.ucVal[1] = pbuff[17];
         ultmpNetSeq.ucVal[2] = pbuff[18];
         ultmpNetSeq.ucVal[3] = pbuff[19];
         dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoPowerFee_off_peak, ParamTypeDouble, NULL, 0, &dtmpPowerFee);
+        set_errcode_off_peak = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_off_peak);
 
         //pbuff[0...3] 操作ID
         if(set_errcode_sharp == ERR_NO &&
@@ -653,28 +653,28 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         ultmpNetSeq.ucVal[2] = pbuff[6];
         ultmpNetSeq.ucVal[3] = pbuff[7];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoServFee_sharp, ParamTypeDouble, NULL, 0, &dtmpServFee);
+        set_errcode_sharp = cfg_set_double(pathProtoCfg, &dtmpServFee, "%s", jnProtoServFee_sharp); 
         //pbuff[8...11] 峰服务费
         ultmpNetSeq.ucVal[0] = pbuff[8];
         ultmpNetSeq.ucVal[1] = pbuff[9];
         ultmpNetSeq.ucVal[2] = pbuff[10];
         ultmpNetSeq.ucVal[3] = pbuff[11];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoServFee_peak, ParamTypeDouble, NULL, 0, &dtmpServFee);
+        set_errcode_peak = cfg_set_double(pathProtoCfg, &dtmpServFee, "%s", jnProtoServFee_peak); 
         //pbuff[12...15] 平服务费
         ultmpNetSeq.ucVal[0] = pbuff[12];
         ultmpNetSeq.ucVal[1] = pbuff[13];
         ultmpNetSeq.ucVal[2] = pbuff[14];
         ultmpNetSeq.ucVal[3] = pbuff[15];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoServFee_shoulder, ParamTypeDouble, NULL, 0, &dtmpServFee);
+        set_errcode_shoulder = cfg_set_double(pathProtoCfg, &dtmpServFee, "%s", jnProtoServFee_shoulder);
         //pbuff[16...19] 谷服务费
         ultmpNetSeq.ucVal[0] = pbuff[16];
         ultmpNetSeq.ucVal[1] = pbuff[17];
         ultmpNetSeq.ucVal[2] = pbuff[18];
         ultmpNetSeq.ucVal[3] = pbuff[19];
         dtmpServFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoServFee_off_peak, ParamTypeDouble, NULL, 0, &dtmpServFee);
+        set_errcode_off_peak = cfg_set_double(pathProtoCfg, &dtmpServFee, "%s", jnProtoServFee_off_peak);
 
         //pbuff[0...3] 操作ID
         if(set_errcode_sharp == ERR_NO &&
@@ -728,10 +728,10 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         //pbuff[0...3] 操作ID
         //pbuff[4] 状态数据上报间隔
         ultmpTimCyc_ms = pbuff[4] * 1000;
-        set_errcode_stat = pProto->info.SetProtoCfg(jnProtoStatusCyc_ms, ParamTypeU32, NULL, 0, &ultmpTimCyc_ms);
+        set_errcode_stat = cfg_set_uint32(pathProtoCfg, &ultmpTimCyc_ms, "%s", jnProtoStatusCyc_ms);
         //pbuff[5] 实时数据上报间隔
         ultmpTimCyc_ms = pbuff[5] * 1000;
-        set_errcode_rt = pProto->info.SetProtoCfg(jnProtoRTDataCyc_ms, ParamTypeU32, NULL, 0, &ultmpTimCyc_ms);
+        set_errcode_rt = cfg_set_uint32(pathProtoCfg, &ultmpTimCyc_ms, "%s", jnProtoRTDataCyc_ms);
 
         //pbuff[0...3] 操作ID
         if(set_errcode_stat == ERR_NO &&
@@ -766,14 +766,11 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     uint8_t pbuff[1024] = {0};
     uint32_t len;
     ErrorCode_t handle_errcode;
-    ErrorCode_t set_errcode_sharp;
-    ErrorCode_t set_errcode_peak;
-    ErrorCode_t set_errcode_shoulder;
-    ErrorCode_t set_errcode_off_peak;
     ErrorCode_t errcode;
     EchSegTime_t tmpSegTime;
     uint8_t ucOffset;
     int i;
+    cJSON *jsCfgObj;
 
     ucOffset = 0;
     handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_TIMESEG, pbuff, &len);
@@ -784,7 +781,8 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         errcode = handle_errcode;
         break;
     case ERR_NO:
-        if(flag_set == 0)
+        jsCfgObj = GetCfgObj(pathProtoCfg, &errcode);//为避免以下多次操作文件，选择cfgobj接口
+        if (flag_set == 0 || jsCfgObj == NULL)
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
@@ -803,58 +801,54 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
         ucOffset = 4;
         //尖
         tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
-        set_errcode_sharp = pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucPeriodCont), "%s.%s", jnProtoSegTime_sharp, jnProtoSegCont);
         //pbuff[5...SegCont]
         for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
-            pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
-            pProto->info.SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucStart[i]), "%s.Start%d", jnProtoSegTime_sharp, i + 1);
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucEnd[i]), "%s.End%d", jnProtoSegTime_sharp, i + 1);
         }
         //峰
         tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
-        set_errcode_peak = pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucPeriodCont), "%s.%s", jnProtoSegTime_peak, jnProtoSegCont);
         for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
-            pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
-            pProto->info.SetProtoCfg(jnProtoSegTime_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucStart[i]), "%s.Start%d", jnProtoSegTime_peak, i + 1);
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucEnd[i]), "%s.End%d", jnProtoSegTime_peak, i + 1);
         }
         //平
         tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
-        set_errcode_shoulder = pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucPeriodCont), "%s.%s", jnProtoSegTime_shoulder, jnProtoSegCont);
         for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
-            pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
-            pProto->info.SetProtoCfg(jnProtoSegTime_shoulder, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucStart[i]), "%s.Start%d", jnProtoSegTime_shoulder, i + 1);
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucEnd[i]), "%s.End%d", jnProtoSegTime_shoulder, i + 1);
         }
         //谷
         tmpSegTime.ucPeriodCont = pbuff[ucOffset++];
-        set_errcode_off_peak = pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegCont, ParamTypeU8, &(tmpSegTime.ucPeriodCont));
+        cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucPeriodCont), "%s.%s", jnProtoSegTime_off_peak, jnProtoSegCont);
         for(i = 0; i < tmpSegTime.ucPeriodCont; i++)
         {
             tmpSegTime.ucStart[i] = pbuff[ucOffset++];
             tmpSegTime.ucEnd[i] = pbuff[ucOffset++];
-            pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegStart[i], ParamTypeU8, &(tmpSegTime.ucStart[i]));
-            pProto->info.SetProtoCfg(jnProtoSegTime_off_peak, ParamTypeObj, jnProtoSegEnd[i],   ParamTypeU8, &(tmpSegTime.ucEnd[i]));
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucStart[i]), "%s.Start%d", jnProtoSegTime_off_peak, i + 1);
+            cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucEnd[i]), "%s.End%d", jnProtoSegTime_off_peak, i + 1);
         }
-
         //pbuff[0...3] 操作ID
-        if(set_errcode_sharp == ERR_NO &&
-           set_errcode_peak == ERR_NO &&
-           set_errcode_shoulder == ERR_NO &&
-           set_errcode_off_peak == ERR_NO)
+        errcode = SetCfgObj(pathProtoCfg, jsCfgObj);
+        if (errcode == ERR_NO)
         {
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
-            errcode = ERR_NO;
-            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0, 1);
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0, 1); 
         }
         else
         {
@@ -862,8 +856,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
             pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
-            errcode = ERR_FILE_RW;
-            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0, 1);
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0, 1); 
         }
         break;
     default:
@@ -903,14 +896,14 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
         {
             strTmpKey[i] = pbuff[ucOffset++];
         }
-        set_errcode_key = pProto->info.SetProtoCfg(jnProtoNewKey, ParamTypeString, NULL, 0, strTmpKey);
+        set_errcode_key = cfg_set_string(pathProtoCfg, strTmpKey, "%s", jnProtoNewKey);
         //pbuff[20...23] 密钥变更时间
         ultmpNetSeq.ucVal[0] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[1] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[2] = pbuff[ucOffset++];
         ultmpNetSeq.ucVal[3] = pbuff[ucOffset++];
         ultmpTim = ntohl(ultmpNetSeq.ulVal);
-        set_errcode_time = pProto->info.SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, &ultmpTim);
+        set_errcode_time = cfg_set_uint32(pathProtoCfg, &ultmpTim, jnProtoNewKeyChangeTime);
 
         if(set_errcode_key == ERR_NO &&
            set_errcode_time == ERR_NO)
@@ -1001,7 +994,7 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
                 qrcode[j] = pbuff[ucOffset++];
             }
             qrcode[len_qr] = '\0';
-            pCON->info.SetCONCfg(pCON, jnQRCode, qrcode, ParamTypeString);
+            cfg_set_string(pathEVSECfg, qrcode, "%s:%d.%s", jnCONArray, id, jnQRCode);
         }
 
         //pbuff[0...3] 操作ID
