@@ -73,7 +73,7 @@ err_return:
 
 ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
 {
-    cJSON *jsFTPObj;
+    cJSON *jsCfgObj;
     ErrorCode_t errcode;
     EchFtpCfg_t *pFtp;
 
@@ -81,70 +81,29 @@ ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
     pFtp = (EchFtpCfg_t *)pvFtp;
 
     /*json解析*/
-    jsFTPObj = GetCfgObj(pathFTPCfg, &errcode);
-    if (jsFTPObj == NULL || errcode != ERR_NO)
+    if (pvCfgObj == NULL)
     {
-        return errcode;
+        jsCfgObj = GetCfgObj(pathFTPCfg, &errcode);
+        if (jsCfgObj == NULL)
+        {
+            return errcode;
+        }
+    }
+    else
+    {
+        jsCfgObj = (cJSON *)pvCfgObj;
     }
 
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpServer,                                        
-                                        (void *)(pFtp->strServer),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPServer()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpPort,                                        
-                                        (void *)(&(pFtp->usPort)),                                
-                                        ParamTypeU16),
-                ERR_LEVEL_WARNING,
-                "GetFTPPort()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpUsername,                                        
-                                        (void *)(pFtp->strUser),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPUser()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpPassword,                                        
-                                        (void *)(pFtp->strPassword),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPPass()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpNewVersion,                                        
-                                        (void *)(pFtp->strNewVersion),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPNewVersion()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpNewFilename,                                        
-                                        (void *)(pFtp->strNewFileName),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPNewFileName()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpDownloadStart,                                        
-                                        (void *)(&(pFtp->ucDownloadStart)),                                
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                "GetFTPDWStart()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpDownloadStatus,                                        
-                                        (void *)(&(pFtp->ucDownloadStatus)),                                
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                "GetFTPDWStatus()");
+    cfgobj_get_string(jsCfgObj, pFtp->strServer, "%s", jnFtpServer);
+    cfgobj_get_uint16(jsCfgObj, &pFtp->usPort, "%s", jnFtpPort);
+    cfgobj_get_string(jsCfgObj, pFtp->strUser, "%s", jnFtpUsername);
+    cfgobj_get_string(jsCfgObj, pFtp->strPassword, "%s", jnFtpPassword);
+    cfgobj_get_string(jsCfgObj, pFtp->strNewVersion, "%s", jnFtpNewVersion);
+    cfgobj_get_string(jsCfgObj, pFtp->strNewFileName, "%s", jnFtpNewFilename);
+    cfgobj_get_uint8(jsCfgObj, &pFtp->ucDownloadStart, "%s", jnFtpDownloadStart);
+    cfgobj_get_uint8(jsCfgObj, &pFtp->ucDownloadStatus, "%s", jnFtpDownloadStatus);
 
-    cJSON_Delete(jsFTPObj);
+    cJSON_Delete(jsCfgObj);
     return errcode;
 }
 

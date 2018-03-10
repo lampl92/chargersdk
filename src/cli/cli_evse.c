@@ -203,24 +203,6 @@ void cli_evseinfo_fnt(int argc, char **argv)
     printf_safe("服务费:         %.2lf\n", pEVSE->info.dServiceFee);
     /**/
     printf_safe("默认段电费:     %.2lf\n", pEVSE->info.dDefSegFee);
-    /**/
-    uint8_t listsize_dbg = gdsl_list_get_size(pEVSE->info.plTemplSeg);
-    printf_safe("总时段个数:     %d\n", listsize_dbg);
-    struct tm *ts_dbg;
-    TemplSeg_t *tmlseg_dgb;
-
-    for(i = 1; i <= listsize_dbg; i++)
-    {
-        tmlseg_dgb = (TemplSeg_t *)(gdsl_list_search_by_position(pEVSE->info.plTemplSeg, i));
-        ts_dbg = localtime(&(tmlseg_dgb->tStartTime));
-        printf_safe("时段 %d  StartTime:%02d:%02d | ",
-                    i , ts_dbg->tm_hour, ts_dbg->tm_min  );
-        ts_dbg = localtime(&(tmlseg_dgb->tEndTime));
-        printf_safe("EndTime:%02d:%02d | ",
-                    ts_dbg->tm_hour, ts_dbg->tm_min  );
-        printf_safe("SegFee:%.2lf\n",
-                    tmlseg_dgb->dSegFee );
-    }
 
     for(i = 0; i < pEVSE->info.ucTotalCON; i++)
     {

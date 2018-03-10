@@ -138,334 +138,6 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
 /*---------------------------------------------------------------------------*/
 /*                              从文件获取充电接口信息                         */
 /*---------------------------------------------------------------------------*/
-/** @todo (rgw#1#): 增加枪充电类型CONType */
-
-static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpType;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpType = defCONType_AC;
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpType = jsItem->valueint;
-
-    /*********************/
-    if(tmpType > 0 && tmpType < 6)
-    {
-        pCON->info.ucCONType = tmpType;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-    return  errcode;
-}
-static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpQRCode[defQRCodeLength];
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    memset(tmpQRCode, 0, defQRCodeLength);
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnQRCode);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    strncpy(tmpQRCode, jsItem->valuestring, strlen(jsItem->valuestring));
-
-    /*********************/
-    if(strlen(tmpQRCode) > 0)
-    {
-        strncpy(pCON->info.strQRCode, tmpQRCode, strlen(tmpQRCode));
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-    return  errcode;
-}
-
-static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpType;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpType = defSocketTypeB;
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketType);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpType = jsItem->valueint;
-
-    /*********************/
-    if(tmpType == defSocketTypeB || tmpType == defSocketTypeC)
-    {
-        pCON->info.ucSocketType = tmpType;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpVoltUpLim;
-    double tmpVoltLowLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpVoltUpLim = 250;//(V)
-    tmpVoltLowLim = 190;//(V)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpVoltUpLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpVoltLowLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpVoltLowLim > 0 && tmpVoltUpLim > 0)
-    {
-        pCON->info.dVolatageUpperLimits = tmpVoltUpLim;
-        pCON->info.dVolatageLowerLimits = tmpVoltLowLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpACTempUpperLim;
-    double tmpACTempLowerLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpACTempUpperLim = 105;//(℃)
-    tmpACTempLowerLim = -40;//(℃)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpACTempUpperLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpACTempLowerLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpACTempUpperLim < 1000 && tmpACTempLowerLim > -100)
-    {
-        pCON->info.dACTempUpperLimits = tmpACTempUpperLim;
-        pCON->info.dACTempLowerLimits = tmpACTempLowerLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpSocketTempUpperLim;
-    double tmpSocketTempLowerLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpSocketTempUpperLim = 105;//(℃)
-    tmpSocketTempLowerLim = -40;//(℃)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpSocketTempUpperLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpSocketTempLowerLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpSocketTempUpperLim < 1000 && tmpSocketTempLowerLim > -100)
-    {
-        pCON->info.dSocketTempUpperLimits = tmpSocketTempUpperLim;
-        pCON->info.dSocketTempLowerLimits = tmpSocketTempLowerLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpCurr;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpCurr = 32;//(A)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedCurrent);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpCurr = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpCurr > 0)
-    {
-        pCON->info.dRatedCurrent = tmpCurr;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpPow;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpPow = 7;//(kW)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedPower);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpPow = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpPow > 0)
-    {
-        pCON->info.dRatedPower = tmpPow;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
 /** @brief 从cfg文件获取充电枪配置
  *
  * @param pvCON void*
@@ -476,10 +148,6 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
 static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 {
     cJSON *jsCfgObj;
-    cJSON *jsCONArray;
-    cJSON *jsCONObj;
-    int iArraySize;
-
     CON_t *pCON;
     int i;
     ErrorCode_t errcode = ERR_NO;
@@ -487,42 +155,32 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     pCON = (CON_t *)pvCON;
 
     /*json解析*/
-    jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    if(jsCfgObj == NULL)
+    if (pvCfgObj == NULL)
     {
-        //errcode 已经在GetCfgObj中获得
-        goto exit;
+        jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
+        if (jsCfgObj == NULL)
+        {
+            return errcode;
+        }
     }
-    /*取出CON相关配置*/
-    jsCONArray = cJSON_GetObjectItem(jsCfgObj, jnCONArray);
-    if(jsCONArray == NULL)
+    else
     {
-        errcode = ERR_FILE_PARSE;
-        goto exit_parse;
+        jsCfgObj = (cJSON *)pvCfgObj;
     }
-    iArraySize = cJSON_GetArraySize(jsCONArray);//有多少个充电枪配置
-    if(iArraySize != pEVSE->info.ucTotalCON)
-    {
-        errcode = ERR_FILE_PARAM;
-        goto exit_parse;
-    }
-    jsCONObj = cJSON_GetArrayItem(jsCONArray, pCON->info.ucCONID);
-    if(jsCONObj == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto exit_parse;
-    }
-    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONType()");
-    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketType()");
-    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetVolatageLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetACTempLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketTempLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedCurrent()");
-    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedPower()");
-    THROW_ERROR(defDevID_File, errcode = GetCONQRCode(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONQRCode()");
-exit_parse:
+    
+    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucCONType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnType);
+    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucSocketType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketType);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageLowerLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dACTempUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnACTempUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dACTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnACTempLowerLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
+    cfgobj_get_string(jsCfgObj, pCON->info.strQRCode, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnQRCode);
+    
     cJSON_Delete(jsCfgObj);
-exit:
     return errcode;
 }
 
