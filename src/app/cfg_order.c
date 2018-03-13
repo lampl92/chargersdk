@@ -20,36 +20,36 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateString(pOrder->strOrderSN));                               //1 交易流水
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(pOrder->ucCONID + 1));                                //2 充电桩接口
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(pOrder->strCardID));                                             //3 卡号
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartPower, cJSON_CreateNumber(pOrder->dStartPower));                           //4 充电前电能总示值
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStopPower, cJSON_CreateNumber(pOrder->dStartPower + pOrder->dTotalPower));  //5 充电后电能总示值
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee, cJSON_CreateNumber(pOrder->dTotalPowerFee));                     //6 电费总金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartEnergy, cJSON_CreateNumber(pOrder->dStartEnergy));                           //4 充电前电能总示值
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStopEnergy, cJSON_CreateNumber(pOrder->dStartEnergy + pOrder->dTotalEnergy));  //5 充电后电能总示值
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergyFee, cJSON_CreateNumber(pOrder->dTotalEnergyFee));                     //6 电费总金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee, cJSON_CreateNumber(pOrder->dTotalServFee));                       //7 服务费总金额
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_sharp, cJSON_CreateNumber(pProto->info.dSegPowerFee[0]));                  //8 尖电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderEnergyFee_sharp, cJSON_CreateNumber(pProto->info.dSegEnergyFee[0]));                  //8 尖电价
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_sharp, cJSON_CreateNumber(pProto->info.dSegServFee[0]));                    //9 尖服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_sharp, cJSON_CreateNumber(pOrder->dSegTotalPower[0]));               //10 尖电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_sharp, cJSON_CreateNumber(pOrder->dSegTotalPowerFee[0]));         //11 尖充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergy_sharp, cJSON_CreateNumber(pOrder->dSegTotalEnergy[0]));               //10 尖电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergyFee_sharp, cJSON_CreateNumber(pOrder->dSegTotalEnergyFee[0]));         //11 尖充电金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_sharp, cJSON_CreateNumber(pOrder->dSegTotalServFee[0]));           //12 尖服务费金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_sharp, cJSON_CreateNumber(pOrder->ulSegTotalTime[0]));                //13 尖充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_peak, cJSON_CreateNumber(pProto->info.dSegPowerFee[1]));                    //14 峰电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderEnergyFee_peak, cJSON_CreateNumber(pProto->info.dSegEnergyFee[1]));                    //14 峰电价
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_peak, cJSON_CreateNumber(pProto->info.dSegServFee[1]));                      //15 峰服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_peak, cJSON_CreateNumber(pOrder->dSegTotalPower[1]));                 //16 峰电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_peak, cJSON_CreateNumber(pOrder->dSegTotalPowerFee[1]));           //17 峰充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergy_peak, cJSON_CreateNumber(pOrder->dSegTotalEnergy[1]));                 //16 峰电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergyFee_peak, cJSON_CreateNumber(pOrder->dSegTotalEnergyFee[1]));           //17 峰充电金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_peak, cJSON_CreateNumber(pOrder->dSegTotalServFee[1]));             //18 峰服务费金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_peak, cJSON_CreateNumber(pOrder->ulSegTotalTime[1]));                  //19 峰充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_shoulder, cJSON_CreateNumber(pProto->info.dSegPowerFee[2]));            //20 平电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderEnergyFee_shoulder, cJSON_CreateNumber(pProto->info.dSegEnergyFee[2]));            //20 平电价
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_shoulder, cJSON_CreateNumber(pProto->info.dSegServFee[2]));              //21 平服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_shoulder, cJSON_CreateNumber(pOrder->dSegTotalPower[2]));         //22 平电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_shoulder, cJSON_CreateNumber(pOrder->dSegTotalPowerFee[2]));   //23 平充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergy_shoulder, cJSON_CreateNumber(pOrder->dSegTotalEnergy[2]));         //22 平电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergyFee_shoulder, cJSON_CreateNumber(pOrder->dSegTotalEnergyFee[2]));   //23 平充电金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_shoulder, cJSON_CreateNumber(pOrder->dSegTotalServFee[2]));     //24 平服务费金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_shoulder, cJSON_CreateNumber(pOrder->ulSegTotalTime[2]));          //25 平充电时长
     
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderPowerFee_off_peak, cJSON_CreateNumber(pProto->info.dSegPowerFee[3]));            //26 谷电价
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderEnergyFee_off_peak, cJSON_CreateNumber(pProto->info.dSegEnergyFee[3]));            //26 谷电价
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderServFee_off_peak, cJSON_CreateNumber(pProto->info.dSegServFee[3]));              //27 谷服务费单价
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPower_off_peak, cJSON_CreateNumber(pOrder->dSegTotalPower[3]));         //28 谷电量
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalPowerFee_off_peak, cJSON_CreateNumber(pOrder->dSegTotalPowerFee[3]));   //29 谷充电金额
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergy_off_peak, cJSON_CreateNumber(pOrder->dSegTotalEnergy[3]));         //28 谷电量
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalEnergyFee_off_peak, cJSON_CreateNumber(pOrder->dSegTotalEnergyFee[3]));   //29 谷充电金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalServFee_off_peak, cJSON_CreateNumber(pOrder->dSegTotalServFee[3]));     //30 谷服务费金额
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderTotalTime_off_peak, cJSON_CreateNumber(pOrder->ulSegTotalTime[3]));          //31 谷充电时长
     
@@ -149,7 +149,7 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
 {
     cJSON *jsParent;
     ErrorCode_t errcode;
-    double dStopPower;
+    double dStopEnergy;
     
     errcode = ERR_NO;
     jsParent = GetCfgObj(path, &errcode);
@@ -163,29 +163,29 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     GetOrderCfgItem(jsParent, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
     pOrder->ucCONID = pOrder->ucCONID - 1;
     GetOrderCfgItem(jsParent, jnOrderCardID, pOrder->strCardID, ParamTypeString);
-    GetOrderCfgItem(jsParent, jnOrderStartPower, &pOrder->dStartPower, ParamTypeDouble);
-    GetOrderCfgItem(jsParent, jnOrderStopPower, &dStopPower, ParamTypeDouble);
-    pOrder->dTotalPower = dStopPower - pOrder->dStartPower;
-    GetOrderCfgItem(jsParent, jnOrderTotalPowerFee, &pOrder->dTotalPowerFee, ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderStartEnergy, &pOrder->dStartEnergy, ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderStopEnergy, &dStopEnergy, ParamTypeDouble);
+    pOrder->dTotalEnergy = dStopEnergy - pOrder->dStartEnergy;
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergyFee, &pOrder->dTotalEnergyFee, ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalServFee, &pOrder->dTotalServFee, ParamTypeDouble);
 
-    GetOrderCfgItem(jsParent, jnOrderTotalPower_sharp, &pOrder->dSegTotalPower[0], ParamTypeDouble);
-    GetOrderCfgItem(jsParent, jnOrderTotalPowerFee_sharp, &pOrder->dSegTotalPowerFee[0], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergy_sharp, &pOrder->dSegTotalEnergy[0], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergyFee_sharp, &pOrder->dSegTotalEnergyFee[0], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalServFee_sharp, &pOrder->dSegTotalServFee[0], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalTime_sharp, &pOrder->ulSegTotalTime[0], ParamTypeDouble);
         
-    GetOrderCfgItem(jsParent, jnOrderTotalPower_peak, &pOrder->dSegTotalPower[1], ParamTypeDouble);
-    GetOrderCfgItem(jsParent, jnOrderTotalPowerFee_peak, &pOrder->dSegTotalPowerFee[1], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergy_peak, &pOrder->dSegTotalEnergy[1], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergyFee_peak, &pOrder->dSegTotalEnergyFee[1], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalServFee_peak, &pOrder->dSegTotalServFee[1], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalTime_peak, &pOrder->ulSegTotalTime[1], ParamTypeDouble);
         
-    GetOrderCfgItem(jsParent, jnOrderTotalPower_shoulder, &pOrder->dSegTotalPower[2], ParamTypeDouble);
-    GetOrderCfgItem(jsParent, jnOrderTotalPowerFee_shoulder, &pOrder->dSegTotalPowerFee[2], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergy_shoulder, &pOrder->dSegTotalEnergy[2], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergyFee_shoulder, &pOrder->dSegTotalEnergyFee[2], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalServFee_shoulder, &pOrder->dSegTotalServFee[2], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalTime_shoulder, &pOrder->ulSegTotalTime[2], ParamTypeDouble);
         
-    GetOrderCfgItem(jsParent, jnOrderTotalPower_off_peak, &pOrder->dSegTotalPower[3], ParamTypeDouble);
-    GetOrderCfgItem(jsParent, jnOrderTotalPowerFee_off_peak, &pOrder->dSegTotalPowerFee[3], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergy_off_peak, &pOrder->dSegTotalEnergy[3], ParamTypeDouble);
+    GetOrderCfgItem(jsParent, jnOrderTotalEnergyFee_off_peak, &pOrder->dSegTotalEnergyFee[3], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalServFee_off_peak, &pOrder->dSegTotalServFee[3], ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderTotalTime_off_peak, &pOrder->ulSegTotalTime[3], ParamTypeDouble);
         
@@ -207,7 +207,7 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
     int i;
     uint8_t ucPayStatus;
     char strCardID[17] = { 0 };
-    double dStopPower;
+    double dStopEnergy;
     
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
@@ -250,29 +250,29 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
         GetOrderCfgItem(jsChild, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
         pOrder->ucCONID = pOrder->ucCONID - 1;
         GetOrderCfgItem(jsChild, jnOrderCardID, pOrder->strCardID, ParamTypeString);
-        GetOrderCfgItem(jsChild, jnOrderStartPower, &pOrder->dStartPower, ParamTypeDouble);
-        GetOrderCfgItem(jsChild, jnOrderStopPower, &dStopPower, ParamTypeDouble);
-        pOrder->dTotalPower = dStopPower - pOrder->dStartPower;
-        GetOrderCfgItem(jsChild, jnOrderTotalPowerFee, &pOrder->dTotalPowerFee, ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderStartEnergy, &pOrder->dStartEnergy, ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderStopEnergy, &dStopEnergy, ParamTypeDouble);
+        pOrder->dTotalEnergy = dStopEnergy - pOrder->dStartEnergy;
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergyFee, &pOrder->dTotalEnergyFee, ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalServFee, &pOrder->dTotalServFee, ParamTypeDouble);
 
-        GetOrderCfgItem(jsChild, jnOrderTotalPower_sharp, &pOrder->dSegTotalPower[0], ParamTypeDouble);
-        GetOrderCfgItem(jsChild, jnOrderTotalPowerFee_sharp, &pOrder->dSegTotalPowerFee[0], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergy_sharp, &pOrder->dSegTotalEnergy[0], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergyFee_sharp, &pOrder->dSegTotalEnergyFee[0], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalServFee_sharp, &pOrder->dSegTotalServFee[0], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalTime_sharp, &pOrder->ulSegTotalTime[0], ParamTypeDouble);
         
-        GetOrderCfgItem(jsChild, jnOrderTotalPower_peak, &pOrder->dSegTotalPower[1], ParamTypeDouble);
-        GetOrderCfgItem(jsChild, jnOrderTotalPowerFee_peak, &pOrder->dSegTotalPowerFee[1], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergy_peak, &pOrder->dSegTotalEnergy[1], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergyFee_peak, &pOrder->dSegTotalEnergyFee[1], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalServFee_peak, &pOrder->dSegTotalServFee[1], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalTime_peak, &pOrder->ulSegTotalTime[1], ParamTypeDouble);
         
-        GetOrderCfgItem(jsChild, jnOrderTotalPower_shoulder, &pOrder->dSegTotalPower[2], ParamTypeDouble);
-        GetOrderCfgItem(jsChild, jnOrderTotalPowerFee_shoulder, &pOrder->dSegTotalPowerFee[2], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergy_shoulder, &pOrder->dSegTotalEnergy[2], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergyFee_shoulder, &pOrder->dSegTotalEnergyFee[2], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalServFee_shoulder, &pOrder->dSegTotalServFee[2], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalTime_shoulder, &pOrder->ulSegTotalTime[2], ParamTypeDouble);
         
-        GetOrderCfgItem(jsChild, jnOrderTotalPower_off_peak, &pOrder->dSegTotalPower[3], ParamTypeDouble);
-        GetOrderCfgItem(jsChild, jnOrderTotalPowerFee_off_peak, &pOrder->dSegTotalPowerFee[3], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergy_off_peak, &pOrder->dSegTotalEnergy[3], ParamTypeDouble);
+        GetOrderCfgItem(jsChild, jnOrderTotalEnergyFee_off_peak, &pOrder->dSegTotalEnergyFee[3], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalServFee_off_peak, &pOrder->dSegTotalServFee[3], ParamTypeDouble);
         GetOrderCfgItem(jsChild, jnOrderTotalTime_off_peak, &pOrder->ulSegTotalTime[3], ParamTypeDouble);
         
@@ -330,8 +330,8 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
 	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
             printf_safe("StartTime\t%s\n", buf);
 	        
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
-            printf_safe("TotalPowerFee\t%.3lf\n", jsItem->valuedouble);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalEnergyFee);
+            printf_safe("TotalEnergyFee\t%.3lf\n", jsItem->valuedouble);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalServFee);
             printf_safe("TotalServFee\t%.3lf\n", jsItem->valuedouble);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);

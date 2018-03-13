@@ -258,7 +258,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         now = time(NULL);
         extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
         ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
-        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[ucSegState]);
+        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegEnergyFee[ucSegState]);
         sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[ucSegState]);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   

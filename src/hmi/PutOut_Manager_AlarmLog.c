@@ -478,12 +478,12 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                     break;
             }
 
-            jsItem = cJSON_GetObjectItem(jsChild,jnOrderStopPower);
-            jsItemTmp = cJSON_GetObjectItem(jsChild,jnOrderStartPower);
+            jsItem = cJSON_GetObjectItem(jsChild,jnOrderStopEnergy);
+            jsItemTmp = cJSON_GetObjectItem(jsChild,jnOrderStartEnergy);
             sprintf((char *)buf,"%.2lf",(jsItem->valuedouble - jsItemTmp->valuedouble)*100 / 100.0);
             LISTVIEW_SetItemText(hItem, 7, i, buf);
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalPowerFee);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalEnergyFee);
             sprintf((char *)buf,"%.2lf",jsItem->valuedouble * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 8, i, buf);
 

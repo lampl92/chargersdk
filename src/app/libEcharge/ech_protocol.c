@@ -78,10 +78,10 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulRTDataCyc_ms, "%s", jnProtoRTDataCyc_ms);
     cfgobj_get_uint8(jsCfgObj, &pProto->info.ucResetAct, "%s", jnProtoResetAct);
     
-    cfgobj_get_double(jsCfgObj, &pProto->info.dSegPowerFee[0], "%s", jnProtoPowerFee_sharp);
-    cfgobj_get_double(jsCfgObj, &pProto->info.dSegPowerFee[1], "%s", jnProtoPowerFee_peak);
-    cfgobj_get_double(jsCfgObj, &pProto->info.dSegPowerFee[2], "%s", jnProtoPowerFee_shoulder);
-    cfgobj_get_double(jsCfgObj, &pProto->info.dSegPowerFee[3], "%s", jnProtoPowerFee_off_peak);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[0], "%s", jnProtoEnergyFee_sharp);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[1], "%s", jnProtoEnergyFee_peak);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[2], "%s", jnProtoEnergyFee_shoulder);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[3], "%s", jnProtoEnergyFee_off_peak);
     
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[0], "%s", jnProtoServFee_sharp);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[1], "%s", jnProtoServFee_peak);
@@ -726,7 +726,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //电能表有功电能 xx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -858,37 +858,37 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //[8] 桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
     //[9...12] 当前充电总电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[13...16] 尖电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[17...20] 峰电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[21...24] 平电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[25...28] 谷电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[29...32] 当前充电金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -989,37 +989,37 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.strCardID[i];
     }
     //[25...28] 当前充电总电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[29...32] 尖电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[33...36] 峰电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[37...40] 平电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[41...44] 谷电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[45...48] 当前充电金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1130,19 +1130,19 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
         }
     }
     //[26...29] 充电前总电能示值 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dStartPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dStartEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[30...33] 充电后电能总示值 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)((pOrder->dStartPower + pOrder->dTotalPower) * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)((pOrder->dStartEnergy + pOrder->dTotalEnergy) * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[34...37] 本次充电电费总金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1154,7 +1154,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[42...45] 尖电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[0] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[0] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1166,13 +1166,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[50...53] 尖电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[54...57] 尖充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1189,7 +1189,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[64...85]峰
     //[64...67] 峰电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[1] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[1] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1201,13 +1201,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[72...75] 峰电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[76...79] 峰充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1224,7 +1224,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[86...107]平
     //[86...89] 平电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[2] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[2] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1236,13 +1236,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[94...97] 平电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[98...101] 平充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1259,7 +1259,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[108...129]谷
     //[108...111] 谷电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[3] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[3] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1271,13 +1271,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[116...119] 谷电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[120...123] 谷充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1414,27 +1414,27 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     switch(usCmdID)
     {
-    case ECH_CMDID_REQ_POWERFEE:
+    case ECH_CMDID_REQ_ENERGYFEE:
         //[8...11] 尖
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[0] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[0] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[12...15] 峰
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[1] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[1] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[16...19] 平
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[2] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[2] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[20...23] 谷
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[3] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[3] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1471,14 +1471,14 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
-static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+static int makeCmdReqEnergyFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
-    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_ENERGYFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_ENERGYFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
 static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
@@ -1939,7 +1939,7 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
                                 pdFALSE, pdTRUE, 10000);
     if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartEnergy * 100));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -2662,12 +2662,12 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ORDER]          = EchCMDCreate(46,  47,  30, makeCmdOrder,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SUCC]       = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,      NULL);
     pProto->pCMD[ECH_CMDID_SET_FAIL]       = EchCMDCreate(8,   0,   0,  makeCmdSetFail,      NULL);
-    pProto->pCMD[ECH_CMDID_SET_POWERFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_ENERGYFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SERVFEE]    = EchCMDCreate(0,   12,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_CYC]        = EchCMDCreate(0,   13,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_TIMESEG]    = EchCMDCreate(0,   14,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_KEY]        = EchCMDCreate(0,   15,  30, NULL,                analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_POWERFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqPowerFee,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_ENERGYFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqEnergyFee,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_SERVFEE]    = EchCMDCreate(24,  23,  30, makeCmdReqServFee,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_CYC]        = EchCMDCreate(26,  25,  30, makeCmdReqCyc,       analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]    = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,   analyCmdCommon);

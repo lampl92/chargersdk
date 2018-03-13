@@ -190,7 +190,7 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->order.ucCONID = user_like.ucCONID;
                 pRFIDDev->order.dLimitFee = user_like.dLimitFee;
                 pRFIDDev->order.ulLimitTime = user_like.ulLimitTime;
-                pRFIDDev->order.dLimitPower = user_like.dLimitPower;
+                pRFIDDev->order.dLimitEnergy = user_like.dLimitEnergy;
             }
             else
             {

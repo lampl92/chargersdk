@@ -97,14 +97,14 @@ ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e stat
     pPeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pos]);
     if (pPeriodStatus->tStartTime > 0)
     {
-        pPeriodStatus->dPower = pCON->status.dChargingPower - pPeriodStatus->dStartPower;
+        pPeriodStatus->dEnergy = pCON->status.dChargingEnergy - pPeriodStatus->dStartEnergy;
     }
     else
     {
         //第一次进到这个时段
         pCON->order.pos = pos; //状态转换时已经赋过值了
         pPeriodStatus->tStartTime = now;
-        pPeriodStatus->dStartPower = pCON->status.dChargingPower;
+        pPeriodStatus->dStartEnergy = pCON->status.dChargingEnergy;
     }
     return pPeriodStatus;
 }
@@ -121,8 +121,8 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     ChargePeriodStatus_t *pPeriodStatus;
     uint8_t pos = 0;//当前时间在时段中的位置
     int i, j;
-    double tmpTotalPower = 0; //用于计算尖峰平谷总电量
-    double tmpTotalPowerFee = 0;
+    double tmpTotalEnergy = 0; //用于计算尖峰平谷总电量
+    double tmpTotalEnergyFee = 0;
     double tmpTotalServFee = 0;
     uint32_t tmpTotalTime = 0;  //用于计算尖峰平谷总充电时间
 
@@ -160,38 +160,38 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     /*2. 汇总时段*/
     for (i = 0; i < defOrderSegMax; i++)
     {
-        tmpTotalPower = 0;
+        tmpTotalEnergy = 0;
         tmpTotalTime = 0;
         //  ↓:j    ↓:j                                          ↓:j
         for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; j++)
         {
-            tmpTotalPower += pCON->order.chargeSegStatus[i][j].dPower;
+            tmpTotalEnergy += pCON->order.chargeSegStatus[i][j].dEnergy;
             if (pCON->order.chargeSegStatus[i][j].tEndTime != 0) //不为0表示时段已经结束
             {
                 tmpTotalTime += (pCON->order.chargeSegStatus[i][j].tEndTime - pCON->order.chargeSegStatus[i][j].tStartTime);
             }
         }
-        pCON->order.dSegTotalPower[i] = (uint32_t)(tmpTotalPower * 100) / 100.0; //防止sprintf对double精度进行四舍五入
-        pCON->order.dSegTotalPowerFee[i] = tmpTotalPower * pechProto->info.dSegPowerFee[i];
-        pCON->order.dSegTotalServFee[i] = tmpTotalPower * pechProto->info.dSegServFee[i];
+        pCON->order.dSegTotalEnergy[i] = (uint32_t)(tmpTotalEnergy * 100) / 100.0; //防止sprintf对double精度进行四舍五入
+        pCON->order.dSegTotalEnergyFee[i] = tmpTotalEnergy * pechProto->info.dSegEnergyFee[i];
+        pCON->order.dSegTotalServFee[i] = tmpTotalEnergy * pechProto->info.dSegServFee[i];
         pCON->order.ulSegTotalTime[i] = tmpTotalTime;
     }
 
     /*3. 汇总总电量*/
-    tmpTotalPower = 0;
-    tmpTotalPowerFee = 0;
+    tmpTotalEnergy = 0;
+    tmpTotalEnergyFee = 0;
     tmpTotalServFee = 0;
     for (i = 0; i < defOrderSegMax; i++)
     {
-        tmpTotalPower += pCON->order.dSegTotalPower[i];
-        tmpTotalPowerFee += pCON->order.dSegTotalPowerFee[i];
+        tmpTotalEnergy += pCON->order.dSegTotalEnergy[i];
+        tmpTotalEnergyFee += pCON->order.dSegTotalEnergyFee[i];
         tmpTotalServFee += pCON->order.dSegTotalServFee[i];
     }
-    pCON->order.dTotalPower = tmpTotalPower;
-    pCON->order.dTotalPowerFee = (uint32_t)(tmpTotalPowerFee * 100) / 100.0;
+    pCON->order.dTotalEnergy = tmpTotalEnergy;
+    pCON->order.dTotalEnergyFee = (uint32_t)(tmpTotalEnergyFee * 100) / 100.0;
     pCON->order.dTotalServFee = (uint32_t)(tmpTotalServFee * 100) / 100.0;
     /*4. 总费用*/
-    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
+    pCON->order.dTotalFee = pCON->order.dTotalEnergyFee + pCON->order.dTotalServFee;
 }
 
 ErrorCode_t makeOrder(CON_t *pCON)
@@ -215,7 +215,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);
-        pCON->order.dStartPower = pCON->status.dChargingPower;
+        pCON->order.dStartEnergy = pCON->status.dChargingEnergy;
         SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
@@ -247,7 +247,7 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = testtime;
-        pCON->order.dStartPower = pCON->status.dChargingPower;
+        pCON->order.dStartEnergy = pCON->status.dChargingEnergy;
         SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
