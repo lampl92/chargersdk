@@ -90,6 +90,8 @@ static uint8_t _checkbox;
 #define sysUserPwd "用户密码"
 #define sysDispSleepTime "屏保时间"
 #define sysUSEGPRSModem "GPRS类型"
+#define sysPasswd "秘钥"
+#define sysManagerPwd "管理员密码"
 // USER END
 static WM_HWIN hWindow;
 WM_HWIN _hWinManagerSysSet;
@@ -252,6 +254,25 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
                 }
                 break;
+            case 27:
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+
+                    Keypad_GetValueTest(SYSSET_VALUE, 27, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "eg,8888");
+                }
+                break;
+            case 28:
+                if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+
+                    Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "eg,8888");
+                }
+                break;
+
             }
             break;
         case WM_PAINT:
@@ -282,6 +303,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             sprintf(_tmpBuff,"%d",xSysconf.ulDispSleepTime_s/60);
             EDIT_SetText(_aahEdit[6][0],_tmpBuff);
             break;
+        case MSG_MANAGERSETID7:
+            EDIT_SetText(_aahEdit[7][0], "******");
+            break;
+        case MSG_MANAGERSETID8:
+            EDIT_SetText(_aahEdit[6][0], "******");
+            break;        
         default:
             WM_DefaultProc(pMsg);
     }
@@ -399,6 +426,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("2G")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 27, strlen("2G"));
         EDIT_SetText(_aahEdit[7][0], "2G");
         EDIT_SetBkColor(_aahEdit[7][0], EDIT_CI_ENABLED, GUI_GRAY);
+        //秘钥
+        _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _FONT_WIDTH*(strlen(sysPasswd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysPasswd);
+        _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*strlen("******"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 28, strlen("******"));
+        EDIT_SetText(_aahEdit[8][0], "******");
+        //管理员密码
+        _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _FONT_WIDTH*(strlen(sysManagerPwd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysManagerPwd);
+        _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*strlen("******"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 29, strlen("******"));
+        EDIT_SetText(_aahEdit[9][0], "******");
+        
           //初始化复选框
 //        _checkbox = 0;
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
