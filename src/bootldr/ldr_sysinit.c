@@ -12,7 +12,7 @@ uint8_t *ucHeap = (uint8_t *)(0XC0B00000);//used by heap_4.c
 #endif
 
 Sysconf_t   xSysconf;//存放系统初始化参数
-
+uint8_t passwd[16];//在bootldr中没有用，因为和app共用了cfg_sys中读取该参数的函数，所以得定义
 extern time_t time_dat;
 
 void timeInit()
