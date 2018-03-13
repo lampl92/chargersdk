@@ -95,8 +95,7 @@ void yaffs_init(void)
 void sys_Init(void)
 {
     int res;
-    evse_ver ver_from_cfg;
-    //ifconfig_init();
+
     timeInit();
     retarget_init();
     yaffs_init();
@@ -137,12 +136,7 @@ void sys_Init(void)
 
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-    sscanf(xSysconf.strVersion, "%d.%d.%d", &(ver_from_cfg.major), &(ver_from_cfg.minor), &(ver_from_cfg.patch));
-    if (ver_from_cfg.major != EVSE_MAJOR || ver_from_cfg.minor != EVSE_MINOR || ver_from_cfg.patch != EVSE_PATCH)
-    {
-        sprintf(xSysconf.strVersion, "%02d.%02d.%04d", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
-        xSysconf.SetSysCfg(jnSysVersion, xSysconf.strVersion, ParamTypeString);
-    }
+    sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
 
     /*---------------------------------------------------------------------------/
     /                               GUI初始化

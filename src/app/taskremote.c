@@ -201,7 +201,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     }
     if (succ == 1)//succ == 1 升级成功
     {
-        xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
+        //xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString);
     }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
