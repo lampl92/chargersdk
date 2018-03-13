@@ -188,13 +188,14 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
                                         ParamTypeU16),
                 ERR_LEVEL_WARNING,
                 jnSysyoff);
-//    THROW_ERROR(defDevID_File,   改为程序固定版本，不再文件中体现
-//                errcode = GetSysCfgItem(jsSysObj,
-//                                        jnSysVersion,                  
-//                                        (void *)(pSysconf->strVersion),
-//                                        ParamTypeString),
-//                ERR_LEVEL_WARNING,
-//                jnSysVersion);
+    extern uint8_t passwd[];
+    THROW_ERROR(defDevID_File,
+                errcode = GetSysCfgItem(jsSysObj,
+                                        jnSysVersion,                  
+                                        (void *)(passwd),
+                                        ParamTypeString),
+                ERR_LEVEL_WARNING,
+                jnSysVersion);
     THROW_ERROR(defDevID_File,
                 errcode = GetSysCfgItem(jsSysObj,
                                         jnSysUSE_GPRSModem,                  
