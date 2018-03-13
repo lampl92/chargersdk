@@ -4083,7 +4083,7 @@
       <Filter>Header files\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\evse_version.h">
-      <Filter>Header files</Filter>
+      <Filter>Header files\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
