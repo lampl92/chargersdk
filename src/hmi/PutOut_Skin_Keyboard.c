@@ -1112,20 +1112,33 @@ static uint8_t Value_Check()
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
                 break;
             case 26://屏保时间
-            tmpU32 = (uint32_t)atoi(result_input);// * 60;
-            tmpU32 = tmpU32 * 60;
-            if (tmpU32 <= (5 * 60))
-            {
-                tmpU32 = 5 * 60;
-            }
-            else if (tmpU32 >= (60 * 60))
-            {
-                tmpU32 = 60 * 60;
-            }
+                tmpU32 = (uint32_t)atoi(result_input);// * 60;
+                tmpU32 = tmpU32 * 60;
+                if (tmpU32 <= (5 * 60))
+                {
+                    tmpU32 = 5 * 60;
+                }
+                else if (tmpU32 >= (60 * 60))
+                {
+                    tmpU32 = 60 * 60;
+                }
                 xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
                 xSysconf.ulDispSleepTime_s = tmpU32;
                 WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
                 break;
+            case 27://passwd
+            pechProto->info.SetProtoCfg(jnProtoKey, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strKey, '\0', strlen(pechProto->info.strKey));
+                strcpy(pechProto->info.strKey, result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
+                break;
+            case 28://manager passwd
+                pechProto->info.SetProtoCfg(jnProtoUserPwd, ParamTypeString, NULL, 0, result_input);
+                memset(pechProto->info.strUserPwd, '\0', strlen(pechProto->info.strUserPwd));
+                strcpy(pechProto->info.strUserPwd, result_input);
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
+                break;
+
         }
         break;
     case CONSET_VALUE:
