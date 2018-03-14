@@ -43,6 +43,56 @@ static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
 
 }
 
+int manual_charge(void *pvCON, int onoff)
+{
+    CON_t *pCON;
+    EventBits_t uxBit;
+    int timecont = 0;
+    
+    pCON = (CON_t *)pvCON;
+    
+    if (onoff > 0)
+    {
+        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+            uxBit = xEventGroupWaitBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK, pdFALSE, pdTRUE, 10000);
+            if ((uxBit & defEventBitCONStartOK) == defEventBitCONStartOK)
+            {
+                return 1;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else if (onoff == 0)
+    {
+        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+        {
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+            timecont = 0;
+            while (pCON->state == STATE_CON_CHARGING)
+            {
+                timecont++;
+                if (timecont > 100)
+                {
+                    return 0;
+                }
+                vTaskDelay(100);
+            }
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
 void vTaskEVSECharge(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -98,8 +148,6 @@ void vTaskEVSECharge(void *pvParameters)
                                                    pdFALSE, pdFALSE, 0);
                 if((uxBitsCharge & defEventBitCONPlugOK) == defEventBitCONPlugOK)
                 {
-                    /** @todo (rgw#1#): HMI */
-
                     pCON->state = STATE_CON_PLUGED;
                 }
                 break;
@@ -287,7 +335,6 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((uxBitsException & defEventBitExceptionLimitTime) == defEventBitExceptionLimitTime)    //达到充电时间限制
                 {
@@ -295,7 +342,6 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
@@ -303,7 +349,6 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
                 {
@@ -311,21 +356,18 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
                 {
                     printf_safe("Curr Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
                 {
                     printf_safe("Scram Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->state = STATE_CON_STOPCHARGE;
-//                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
                 /******************************/
 
@@ -343,7 +385,6 @@ void vTaskEVSECharge(void *pvParameters)
                     {
                         printf_safe("\e[44;37mFource Unplug!\e[0m\n");
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
-//                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                     }
                     else if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
