@@ -36,8 +36,8 @@
 */
 /*编辑窗口14行1列，状态项14个*/
 #define _SYSEDIT_MAX_X 2
-#define _SYSEDIT_MAX_Y 11
-#define _SYSSTATUE_LINE 11
+#define _SYSEDIT_MAX_Y 12
+#define _SYSSTATUE_LINE 12
 #define _SYSSTATUE_CAL 3
 //后续将编辑和文本的滚轮方式用链表进行封装
 #define _FONT_WIDTH 24
@@ -45,8 +45,9 @@
 static uint8_t _aahSysSet[_SYSEDIT_MAX_Y];
 static EDIT_Handle   _aahEdit[_SYSEDIT_MAX_Y][_SYSEDIT_MAX_X];
 static TEXT_Handle   _aahText[_SYSSTATUE_LINE][_SYSSTATUE_CAL];
+static BUTTON_Handle _aahButton[1][1];
 static int _x,_y;
-
+static uint8_t manualType = 0;
 /*********************************************************************
 *
 *       Defines
@@ -95,10 +96,14 @@ static int _x,_y;
 #define conRatedCurrent "额定电流"
 #define conRatedPower "额定功率"
 #define conQRCode "二维码"
+#define conManual "手动充电"
+
+#define MANUALSTART 40
 
 static WM_HWIN hWindow;
 WM_HWIN _hWinManagerConSet;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
+extern int manual_charge(void *pvCON, int onoff);
 /*********************************************************************
 *
 *       Static data
@@ -543,7 +548,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0],"7.0");
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
-
+        
+        _aahButton[0][0] = BUTTON_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen(conManual)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, MANUALSTART);
+        BUTTON_SetText(_aahButton[0][0], conManual);
+        BUTTON_SetFont(_aahButton[0][0], &SIF24_Font);
+        
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
             for(y = 0;y < _SYSSTATUE_CAL;y++)
@@ -563,6 +572,34 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             }
         }
         WM_SetStayOnTop(hWindow,1);
+        break;
+        
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id)
+        {
+        case MANUALSTART:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_CLICKED:
+                if (manualType == 0)
+                {
+                    manual_charge(pCon, 1);
+                    manualType = 1;
+                }
+                else if (manualType == 1)
+                {
+                    manual_charge(pCon, 0);
+                    manualType = 0;                    
+                }
+                break;
+            case WM_NOTIFICATION_RELEASED:
+
+                break;
+            }
+            break;
+        }
         break;
         // USER START (Optionally insert additional message handling)
 //    case MSG_CREATERRWIN:
