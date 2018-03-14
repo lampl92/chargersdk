@@ -96,7 +96,7 @@ static uint8_t manualType = 0;
 #define conRatedCurrent "额定电流"
 #define conRatedPower "额定功率"
 #define conQRCode "二维码"
-#define conManual "手动充电"
+#define conManual "测试充电"
 
 #define MANUALSTART 40
 
@@ -184,8 +184,32 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     {
         case WM_NOTIFY_PARENT:
             /**< 添加两个滑轮的事件 */
-            switch(WM_GetId(pMsg->hWinSrc))
-            {
+        switch (WM_GetId(pMsg->hWinSrc))
+        {
+                if(managerLevel == 0)
+                {
+                    case MANUALSTART:
+                    switch (pMsg->Data.v)
+                    {
+                    case WM_NOTIFICATION_CLICKED:
+                        if (manualType == 0)
+                        {
+                            if ((manual_charge(pCon, 1)) == 1)
+                                manualType = 1;
+                        }
+                        else if (manualType == 1)
+                        {
+                            if ((manual_charge(pCon, 0)) == 1)
+                                manualType = 0;                    
+                        }
+                        break;
+                    case WM_NOTIFICATION_RELEASED:
+
+                        break;
+                    }
+                    break;
+                }
+                
                 case GUI_ID_HSCROLL://水平
                     if(pMsg->Data.v == WM_NOTIFICATION_VALUE_CHANGED)
                     {
@@ -460,7 +484,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
-        SCROLLBAR_SetNumItems(wScroll, 25*8);
+        SCROLLBAR_SetNumItems(wScroll, 25*9);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
         SCROLLBAR_SetWidth(wScroll,WSCROLL_WIDTH);
@@ -549,9 +573,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[10][0],"7.0");
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
         
-        _aahButton[0][0] = BUTTON_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen(conManual)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, MANUALSTART);
-        BUTTON_SetText(_aahButton[0][0], conManual);
-        BUTTON_SetFont(_aahButton[0][0], &SIF24_Font);
+        if (managerLevel == 0)
+        {
+            _aahButton[0][0] = BUTTON_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen(conManual)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, MANUALSTART);
+            BUTTON_SetText(_aahButton[0][0], conManual);
+            BUTTON_SetFont(_aahButton[0][0], &SIF24_Font);
+            _aahText[11][0] = _aahButton[0][0];            
+        }
         
         for(x = 0;x < _SYSSTATUE_LINE;x++)
         {
@@ -572,34 +600,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             }
         }
         WM_SetStayOnTop(hWindow,1);
-        break;
-        
-    case WM_NOTIFY_PARENT:
-        Id    = WM_GetId(pMsg->hWinSrc);
-        NCode = pMsg->Data.v;
-        switch (Id)
-        {
-        case MANUALSTART:
-            switch (NCode)
-            {
-            case WM_NOTIFICATION_CLICKED:
-                if (manualType == 0)
-                {
-                    manual_charge(pCon, 1);
-                    manualType = 1;
-                }
-                else if (manualType == 1)
-                {
-                    manual_charge(pCon, 0);
-                    manualType = 0;                    
-                }
-                break;
-            case WM_NOTIFICATION_RELEASED:
-
-                break;
-            }
-            break;
-        }
         break;
         // USER START (Optionally insert additional message handling)
 //    case MSG_CREATERRWIN:
