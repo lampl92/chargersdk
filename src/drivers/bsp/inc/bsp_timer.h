@@ -2,7 +2,7 @@
 #define _TIMER_H
 #include "bsp.h"
 #include "stm32f4xx_hal_tim.h"
-uint16_t flat_pwm_change;
+uint16_t flat_pwm_change, flat_pwm_change_cp2;
 uint16_t pwm, pwm_relay1, pwm_relay2, pwm4, timer_ms, timer_s, delay_breath, timer_relay_ms, timer_min;
 uint16_t delay_ms, pwm_ms, pwm_r_1, pwm_r_2, pwm_g_1, pwm_g_2,
             pwm_b_1, pwm_b_2;
