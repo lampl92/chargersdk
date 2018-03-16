@@ -112,7 +112,8 @@ static ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pSysconf->xCalibrate.yfac, "%s", jnSysyfac);
     cfgobj_get_uint16(jsCfgObj, &pSysconf->xCalibrate.xoff, "%s", jnSysxoff);
     cfgobj_get_uint16(jsCfgObj, &pSysconf->xCalibrate.yoff, "%s", jnSysyoff);
-    cfgobj_get_string(jsCfgObj, pSysconf->strVersion, "%s", jnSysVersion);
+    extern uint8_t passwd[];
+    cfgobj_get_string(jsCfgObj, passwd, "%s", jnSysVersion);
     cfgobj_get_uint8(jsCfgObj, &pSysconf->xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     cfgobj_get_uint8(jsCfgObj, &pSysconf->xModule.use_meter, "%s", jnSysUSE_Meter);
     cfgobj_get_uint8(jsCfgObj, &pSysconf->xModule.use_rfid, "%s", jnSysUSE_RFID);
