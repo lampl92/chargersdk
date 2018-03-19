@@ -325,6 +325,7 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     printf_safe("Dev Fault Stop Error!\n");
                     pCON->state = STATE_CON_STOPCHARGE;
+                    dev_err = 1;
                     break;
                 }
                 /*** 判断用户相关停止条件  ***/
@@ -443,7 +444,7 @@ void vTaskEVSECharge(void *pvParameters)
                         {
                             unlock_try = 0;
                             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONLocked);
-                            if (stop_try != 0)//承接上面继电器失败
+                            if (stop_try != 0 || dev_err == 1)//承接上面继电器失败和设备失败
                             {
                                 pCON->state = STATE_CON_ERROR;
                                 break;
@@ -453,7 +454,7 @@ void vTaskEVSECharge(void *pvParameters)
                         else
                         {
                             unlock_try++;
-                            if (unlock_try >= 5)
+                            if (unlock_try >= 5 || dev_err == 1)
                             {
                                 pCON->state = STATE_CON_ERROR;
                                 break;
@@ -468,7 +469,7 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 else if (pCON->info.ucSocketType == defSocketTypeC)
                 {
-                    if (stop_try != 0)//承接上面继电器失败
+                    if (stop_try != 0 || dev_err == 1)//承接上面继电器失败和设备失败
                     {
                         pCON->state = STATE_CON_ERROR;
                         break;
@@ -478,6 +479,7 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_ERROR:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Fault);
+                THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging error");
                 if (dev_err == 1)
                 {
                     pCON->state = STATE_CON_DEV_ERROR;
@@ -517,7 +519,6 @@ void vTaskEVSECharge(void *pvParameters)
                 }
                 break;
             case STATE_CON_DEV_ERROR:
-                THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
                 uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
                 if ((uxBitsException & defEventBitExceptionDevFault) == 0)
                 {
