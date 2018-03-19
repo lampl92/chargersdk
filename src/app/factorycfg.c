@@ -12,7 +12,7 @@ const char *strEVSECfg =
     \"EVSESN\":\"0102030405060708\",\n \
     \"EVSEID\":\"2000000000000002\",\n \
     \"EVSEType\":2,\n \
-    \"TotalCON\":2,\n \
+    \"TotalCON\":1,\n \
     \"Lng\":116.275833,\n \
     \"Lat\":39.831944,\n \
     \"ServiceFeeType\":1,\n \
