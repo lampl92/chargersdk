@@ -27,4 +27,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttonquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttonbackquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
+int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+
 #endif
+

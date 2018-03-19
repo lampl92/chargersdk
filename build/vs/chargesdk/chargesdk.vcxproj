@@ -213,6 +213,7 @@
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c" />
+    <ClCompile Include="..\..\..\src\hmi\SKIN_progbarmeter.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
