@@ -4,6 +4,7 @@
 #include "taskrfid.h"
 #include "interface.h"
 #include "utils.h"
+#include "touchtimer.h"
 
 int i;//临时用
 double GBSBalance;
