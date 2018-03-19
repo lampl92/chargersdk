@@ -22,6 +22,7 @@ void GBSTask()
     
     while (1)
     {
+        ledShow();
         switch (gbsstate)
         {
         case StateHome:
@@ -49,6 +50,13 @@ void GBSTask()
                 case STATE_CON_DEV_ERROR:
                     GBSgunstate[i] = Gunerror;
                     break;
+                }
+                if (pCON->status.ulSignalAlarm != 0 ||
+                    pCON->status.ulSignalFault != 0 ||
+                    pEVSE->status.ulSignalAlarm != 0 ||
+                    pEVSE->status.ulSignalFault != 0)
+                {
+                    GBSgunstate[i] = Gunerror;
                 }
             }
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
