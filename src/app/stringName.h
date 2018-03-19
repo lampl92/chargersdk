@@ -11,7 +11,7 @@
 #define pathOrder           "/nand/system/order.txt"
 #define pathOrderTmp        "/nand/system/order.tmp"
 #define pathEVSELog         "/nand/system/evse.log"
-#define pathEVSECfg         "/nand/system/evse2.cfg"
+#define pathEVSECfg         "/nand/system/evse.cfg"
 #define pathSysCfg          "/nand/system/sys.cfg"
 #define pathFTPCfg          "/nand/system/ftp.cfg"
 #define pathProtoCfg        "/nand/system/protocol.cfg"
