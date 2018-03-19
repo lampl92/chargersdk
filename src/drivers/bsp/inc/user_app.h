@@ -244,7 +244,7 @@ void Close_gun_2(void);
 void Open_gun_2(void);
 void get_samp_point(void);//ÓÃÊ±30¦ÌS
 void Buzzer_control(uint8_t state);
-uint8_t Get_State_relay(void);
+uint8_t Get_State_relay(uint32_t relay_id);
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n, flag_pwm_out_l, flag_gun_Close, flag_gun_Open, flag_power_out_l, flag_power_out_n;
 uint16_t num_cp1, num_cp2;
@@ -253,4 +253,5 @@ uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum, leakage_current_sum, va_samp_sum, ia_samp_sum, CP2_sum, CP1_sum, CP1_sum_sys, CP2_sum_sys;
 uint8_t   pwm_samp_timer, pwm_samp_flag,pwm_samp_timer_cp2, pwm_samp_flag_cp2;
 extern samp Sys_samp;
+void curr2pwm(uint32_t rate_curr, uint32_t con_id);
 #endif /* USER_APP_H_INCLUDED */

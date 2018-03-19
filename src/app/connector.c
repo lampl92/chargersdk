@@ -398,13 +398,11 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     errcode = ERR_NO;
 
     /** ****************  */
-
-    //...
     if (ucCONID == 0)
     {
         if (cmd == SWITCH_ON)
         {
-            PWM1_535;
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else if (cmd == SWITCH_OFF)
         {
@@ -413,20 +411,15 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     }
     else if (ucCONID == 1)
     {
-
-
         if (cmd == SWITCH_ON)
         {
-            PWM2_535;
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else
         {
             PWM2_1000;
         }
-
     }
-
-
     /*********************/
 
     return errcode;
@@ -442,12 +435,15 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
  */
 static ErrorCode_t GetCPState(void *pvCON)
 {
-    float cp1, cp2;
+    float cp;
     CON_t *pCON;
     uint8_t ucCONID;
     CONStatusType_t tmpCPState;
     ErrorCode_t errcode;
-    static uint32_t cp_err_cont;
+    static uint32_t cp1_err_cont;
+    static uint32_t cp2_err_cont;
+    uint32_t *pCP_err_cont;
+    __IO uint32_t *pCCR1;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
@@ -458,121 +454,83 @@ static ErrorCode_t GetCPState(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpCPState = CP_6V_PWM;
 #else
-    if(ucCONID == 0)
+    if (ucCONID == 0)
     {
-        cp1 = Sys_samp.DC.CP1;//get_CP1();
-        pCON->status.dCPVolt = cp1;
-        if((cp1 < 12.8f) && (cp1 > 11.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_12V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_12V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp1 < 9.8f) && (cp1 > 8.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_9V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_9V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp1 < 6.8f) && (cp1 > 5.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_6V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_6V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else
-        {
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            tmpCPState = CP_ERR;
-            if (tmpCPState == CP_ERR)
-            {
-                cp_err_cont++;
-                tmpCPState = pCON->status.xCPState;
-            }
-            if (cp_err_cont >= 2)//50ms
-            {
-                SetCPSwitch(pCON, SWITCH_OFF);
-                cp_err_cont = 0;
-                tmpCPState = CP_ERR;
-                pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
-                errcode =  ERR_CON_CP_FAULT;
-            }
-        }
+        pCP_err_cont = &*pCP_err_cont;
+        pCCR1 = &(TIM2->CCR1);
+        pCON->status.dCPVolt = Sys_samp.DC.CP1; 
     }
-    else if(ucCONID == 1)
+    else if (ucCONID == 1)
     {
-        cp1 = get_CP2();
-        if((cp2 < 12.8f) && (cp2 > 11.2f))
+        pCP_err_cont = &cp2_err_cont;
+        pCCR1 = &(TIM4->CCR1);
+        pCON->status.dCPVolt = Sys_samp.DC.CP2; 
+    }
+    
+    if ((pCON->status.dCPVolt < 12.8f) && (pCON->status.dCPVolt > 11.2f))
+    {
+        if (*pCCR1 != TIMER_MAX)
         {
-            if(TIM4->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_12V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_12V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp2 < 9.8f) && (cp2 > 8.2f))
-        {
-            if(TIM4->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_9V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_9V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp2 < 6.8f) && (cp2 > 5.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_6V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_6V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+            tmpCPState = CP_12V_PWM;
+            pCON->status.dCPVolt = 0;
         }
         else
         {
+            tmpCPState = CP_12V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.2f))
+    {
+        if (*pCCR1 != TIMER_MAX)
+        {
+            tmpCPState = CP_9V_PWM;
+            *pCP_err_cont = 0;
+        }
+        else
+        {
+            tmpCPState = CP_9V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else if((pCON->status.dCPVolt < 6.8f) && (pCON->status.dCPVolt > 5.2f))
+    {
+        if (*pCCR1 != TIMER_MAX)
+        {
+            tmpCPState = CP_6V_PWM;
+            *pCP_err_cont = 0;
+        }
+        else
+        {
+            tmpCPState = CP_6V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else
+    {
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        tmpCPState = CP_ERR;
+        if (tmpCPState == CP_ERR)
+        {
+            (*pCP_err_cont)++;
+            tmpCPState = pCON->status.xCPState;
+        }
+        if (*pCP_err_cont >= 2)//50ms
+        {
+            SetCPSwitch(pCON, SWITCH_OFF);
+            *pCP_err_cont = 0;
             tmpCPState = CP_ERR;
             pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
             errcode =  ERR_CON_CP_FAULT;
-        } ;
+        }
     }
 #endif
     /*********************/
@@ -958,7 +916,6 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
@@ -1009,8 +966,6 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
-    //...
     if(ucCONID == 0)
     {
 #ifdef DEBUG_DIAG_DUMMY
@@ -1051,6 +1006,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
 {
     CON_t *pCON;
     uint8_t ucCONID;
+    uint8_t ucRelayID;
     uint8_t tmpLStat;
     uint8_t tmpNStat;
     ErrorCode_t errcode;
@@ -1066,26 +1022,36 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
 #else
-    tmpLStat = Get_State_relay();//1 : switch on
-    tmpNStat = tmpLStat;
+    if (pEVSE->info.ucTotalCON > 1)
+    {
+        ucRelayID = ucCONID;
+        tmpLStat = Get_State_relay(ucRelayID);//1 : switch on
+        tmpNStat = tmpLStat; 
+    }
+    else
+    {
+        //tmpLStat = 1 ==》switch on
+        tmpLStat = Get_State_relay(0);//L
+        tmpNStat = Get_State_relay(1);//N
+    }
     if (tmpLStat == SWITCH_ON)
     {
         pCON->status.ulSignalState |= defSignalCON_State_AC_A_Relay;
-        pCON->status.ulSignalState |= defSignalCON_State_AC_N_Relay;
     }
-    else if(tmpLStat == SWITCH_OFF)
+    else if (tmpLStat == SWITCH_OFF)
     {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_A_Relay;
+    }
+    if (tmpNStat == SWITCH_ON)
+    {
+        pCON->status.ulSignalState |= defSignalCON_State_AC_N_Relay;
+    }
+    else if (tmpNStat == SWITCH_OFF)
+    {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_N_Relay;
     }
 #endif
     /*********************/
-    /* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
-//    if(触电粘连)
-//    {
-//        errcode = ERR_RELAY_PASTE;
-//    }
-
 
     pCON->status.ucRelayLState = tmpLStat;
     pCON->status.ucRelayNState = tmpNStat;
@@ -1098,7 +1064,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
  * @param cmd uint8_t SWITCH_ON SWITCH_OFF
  * @return ErrorCode_t
  *
- */          //K1 K2指的是什么
+ */
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1118,22 +1084,49 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-            POWER_L_OPEN();
-            POWER_N_OPEN();
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                POWER_L_OPEN();
+            }
+            else
+            {
+                POWER_L_OPEN();
+                POWER_N_OPEN();
+            }
 #endif
         }
         else if(cmd == SWITCH_ON)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-            POWER_L_CLOSE();
-            POWER_N_CLOSE();
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                POWER_L_CLOSE();
+            }
+            else
+            {
+                POWER_L_CLOSE();
+                POWER_N_CLOSE();
+            }
 #endif
         }
     }
     else if(ucCONID == 1)
     {
-        ;
+        if (cmd == SWITCH_OFF)
+        {
+#ifdef DEBUG_DIAG_DUMMY
+#else
+            POWER_N_OPEN();
+#endif
+        }
+        else if (cmd == SWITCH_ON)
+        {
+#ifdef DEBUG_DIAG_DUMMY
+#else
+            POWER_N_CLOSE();
+#endif
+        }
     }
     /*********************/
 

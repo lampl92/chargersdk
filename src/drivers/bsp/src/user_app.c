@@ -88,9 +88,16 @@ float get_CD4067(void)
     CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
 }
-uint8_t Get_State_relay(void)
+uint8_t Get_State_relay(uint32_t relay_id)
 {
-    return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+    if (relay_id == 0)//L
+    {
+        return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+    }
+    else if (relay_id == 1)//N
+    {
+        return ((~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)) & 0x01);
+    }
 }
 /********************************
 *蜂鸣器状态控制函数
@@ -452,3 +459,33 @@ void DMA2_Stream0_IRQHandler(void)
 
       /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
+
+void curr2pwm(uint32_t rate_curr, uint32_t con_id)
+{
+    uint32_t compare;
+    double duty;
+    //7kw duty = 53.3%, 40kw duty = 89.2%
+    if (rate_curr <= 51 && rate_curr >= 6)
+    { 
+        duty = rate_curr / 0.6 / 100;
+    }
+    else if (rate_curr > 51 && rate_curr <= 63)
+    {
+        duty = (rate_curr / 2.5 + 64) / 100;
+    }
+    else//默认
+    {
+        duty = 53.3;
+    }
+    compare = 1000 - duty * 10;
+    if (con_id == 0)
+    {
+        TIM_SetTIM2Compare1(compare);//465
+    }
+    if (con_id == 1)
+    {
+        TIM_SetTIM4Compare1(compare);
+    }
+}
+
+
