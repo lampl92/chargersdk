@@ -472,12 +472,16 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     WM_HWIN      hItem;
     int          NCode;
     int          Id;
+    CON_t *pCON;
+    int pkw;//功率
     
+    pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
         homegunstate[0] = GBSgunstate[0];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetValue(hItem, 0);
+        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
         break;
     case MSG_UPDATE:
         WM_InvalidateWindow(pMsg->hWin);
@@ -510,9 +514,12 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if (pMsg->Data.v == _timergunastateflash)
         {
+            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/70;
+            PROGBAR_SetValue(hItem, pkw);
             if (homegunstate[0] != GBSgunstate[0]) 
             {              
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                homegunstate[0] = GBSgunstate[0];
             }
             WM_RestartTimer(pMsg->Data.v, 20);    
         }
@@ -528,12 +535,15 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
     WM_HWIN      hItem;
     int          NCode;
     int          Id;
-    
+    CON_t *pCON;
+    int pkw;//功率
+    pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
         homegunstate[1] = GBSgunstate[1];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
         PROGBAR_SetValue(hItem, 0);
+        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
         break;
     case MSG_UPDATE:
         WM_InvalidateWindow(pMsg->hWin);
@@ -566,10 +576,13 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if (pMsg->Data.v == _timergunastateflash)
         {
+            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 70;
+            PROGBAR_SetValue(hItem, pkw);
             if (homegunstate[1] != GBSgunstate[1]) 
             {
                 //WM_SendMessageNoPara(pMsg->hWin, WM_PAINT);
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                homegunstate[1] = GBSgunstate[1];
             }
             WM_RestartTimer(pMsg->Data.v, 20);    
         }
