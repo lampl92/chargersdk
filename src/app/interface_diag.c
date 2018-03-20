@@ -628,20 +628,21 @@ void DiagTempError(CON_t *pCON)
     {  
         if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
             (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
-        {
+        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-            ThrowErrorCode(id, ERR_CON_ACTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
         }
         else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
           (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
         {
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
+            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
         }
         else
         {
-            pCON->status.SetLoadPercent(pCON, 100);
+            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
             xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         }
@@ -656,24 +657,16 @@ void DiagTempError(CON_t *pCON)
         switch(templevel)
         {
         case ERR_LEVEL_OK:
-            pCON->status.SetLoadPercent(pCON, 100);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_Cri;
-            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;
@@ -687,24 +680,16 @@ void DiagTempError(CON_t *pCON)
         switch(templevel)
         {
         case ERR_LEVEL_OK:
-            pCON->status.SetLoadPercent(pCON, 100);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_Cri;
-            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;
