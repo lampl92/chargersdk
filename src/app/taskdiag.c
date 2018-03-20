@@ -108,8 +108,8 @@ void vTaskEVSEDiag(void *pvParameters)
 
         /* 诊断各状态 */
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
+        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTempOut, pdTRUE, pdFALSE, 0);
+        if((uxBitsDiag & defEventBitDiagTempOut) == defEventBitDiagTempOut)
         {
             for(i = 0; i < ulTotalCON; i++)
             {

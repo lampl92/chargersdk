@@ -98,8 +98,8 @@
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
 /*------xHandleEventDiag*/
-#define defEventBitDiagTempW            BIT_0              //温度报警
-#define defEventBitDiagTemp             BIT_1
+#define defEventBitDiagTempIn            BIT_0              //温度报警
+#define defEventBitDiagTempOut             BIT_1
 #define defEventBitDiagLockState        BIT_2
 #define defEventBitDiagPlugState        BIT_3
 #define defEventBitDiagVolt             BIT_4
@@ -175,7 +175,7 @@
 
 
 /*------xHandleEventTimerCBNotify*/
-#define defEventBitTimerCBTemp              BIT_0
+#define defEventBitTimerCBTempOut           BIT_0
 #define defEventBitTimerCBLockState         BIT_1
 #define defEventBitTimerCBPlugState         BIT_2
 #define defEventBitTimerCBChargingData      BIT_4
@@ -184,6 +184,7 @@
 #define defEventBitTimerCBDataRefresh       BIT_7
 #define defEventBitTimerCBHeartbeat         BIT_8
 #define defEventBitTimerCBStatus            BIT_9
+#define defEventBitTimerCBTempIn            BIT_10
 
 /*pProto->pCMD[i]->xHandleEventCmd*/
 #define defEventBitProtoCmdHandled          BIT_0
