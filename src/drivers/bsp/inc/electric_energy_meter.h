@@ -14,6 +14,13 @@
 #define current_b  0x0046
 #define current_c  0x0047
 
+#define frequency_a  0
+#define frequency_b  0
+#define frequency_c  0
+
+#define power_a  0
+#define power_b  0
+#define power_c  0
 
 #define electric_energy_l 0x0001
 #define electric_energy_h 0x0000

@@ -78,10 +78,10 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
-#define TEMP_L_OUT 0X00 //板卡输出N
-#define TEMP_L_IN  0X01 //    L
-#define TEMP_N_OUT 0X02 //市电输入N
-#define TEMP_N_IN  0X03 //市电输入L
+#define TEMP_N_OUT  0X00 //板卡输出N
+#define TEMP_L_OUT  0X01 //    L
+#define TEMP_N_IN   0X02 //市电输入N
+#define TEMP_L_IN   0X03 //市电输入L
 #define TEMP_GUN1_POSITIVE  0X04
 #define TEMP_GUN1_NEGATIVE  0X05
 #define TEMP_GUN2_POSITIVE  0X06

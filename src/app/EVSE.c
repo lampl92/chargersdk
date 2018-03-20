@@ -426,7 +426,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpACTemp = 25;
 #else
-    tmpACTemp = (double)get_dc_massage(TEMP_N_IN); 
+    tmpACTemp = (double)get_dc_massage(TEMP_L_IN); 
 	if (tmpACTemp > 200 || tmpACTemp < -40)
 	{
 		errcode = ERR_EVSE_AC_A_TEMP_DECT_FAULT;
@@ -518,7 +518,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
 #ifdef DEBUG_DIAG_DUMMY
     tmpACTemp = 25;
 #else
-    tmpACTemp = (double)get_dc_massage(TEMP_N_OUT); 
+    tmpACTemp = (double)get_dc_massage(TEMP_N_IN); 
 	if (tmpACTemp > 200 || tmpACTemp < -40)
 	{
 		errcode = ERR_EVSE_AC_N_TEMP_DECT_FAULT;

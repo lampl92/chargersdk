@@ -339,10 +339,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     for (i = 0; i < 3; i++)
     {
         errcode = pCON->line[i].GetPower(&(pCON->line[i]), ucCONID, i);
-        if (pCON->line[i].status.dPower > tmpPower)
-        {
-            tmpPower = pCON->line[i].status.dPower;
-        }
+        tmpPower += pCON->line[i].status.dPower;//求和
     }
 #endif
 

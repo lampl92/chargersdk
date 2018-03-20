@@ -96,7 +96,7 @@ uint8_t Get_State_relay(uint32_t relay_id)
     }
     else if (relay_id == 1)//N
     {
-        return ((~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)) & 0x01);
+       // return ((~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)) & 0x01);
     }
 }
 /********************************
