@@ -107,7 +107,7 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
         }
         
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTempIn, pdTRUE, pdFALSE, 0);
-        if ((uxBitsTimerCB & defEventBitTimerCBTempOut) == defEventBitTimerCBTempOut)
+        if ((uxBitsTimerCB & defEventBitTimerCBTempIn) == defEventBitTimerCBTempIn)
         {
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_A_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_B_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
