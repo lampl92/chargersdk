@@ -7,6 +7,7 @@
 #include "electric_energy_meter.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "evse_globals.h"
 float frequency_test;
 samp Sys_samp;
 void user_pwm_relay2_setvalue(uint16_t value);
@@ -92,11 +93,18 @@ uint8_t Get_State_relay(uint32_t relay_id)
 {
     if (relay_id == 0)//L
     {
-        return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+        if (pEVSE->info.ucTotalCON > 1)
+        {
+            return GET_RELAY1_STATE_1;
+        }
+        else
+        {
+            return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+        }
     }
     else if (relay_id == 1)//N
     {
-       // return ((~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3)) & 0x01);
+        return GET_RELAY1_STATE_2;
     }
 }
 /********************************

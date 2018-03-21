@@ -36,7 +36,9 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
-#define Get_Power_Status (~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3) & 0x01)
+#define Get_Power_Status           (~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3) & 0x01)
+#define GET_RELAY1_STATE_1         (~HAL_GPIO_ReadPin(GPIOH, GPIO_PIN_7) & 0x01)//双枪交流接触器1常开辅助节点检测返回1位闭合0位断开 枪1
+#define GET_RELAY1_STATE_2         (~HAL_GPIO_ReadPin(GPIOH, GPIO_PIN_8) & 0x01)//双枪交流接触器2常开辅助节点检测返回1位闭合0位断开 枪2
 
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)

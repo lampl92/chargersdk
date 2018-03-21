@@ -1029,7 +1029,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     {
         //tmpLStat = 1 ==》switch on
         tmpLStat = Get_State_relay(0);//L
-        tmpNStat = Get_State_relay(1);//N
+        tmpNStat = tmpLStat; 
     }
     if (tmpLStat == SWITCH_ON)
     {
