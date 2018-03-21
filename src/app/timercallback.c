@@ -19,8 +19,7 @@ void vCONTimerCB(TimerHandle_t xTimer)
 
     if(uxTimerID == defTIMERID_Temp)    //5000 ms
     {
-        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBTempIn);//市电输入温度检测
-        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBTempOut);//市电输出温度检测
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp);
     }
     if(uxTimerID == defTIMERID_LockState)   //1000ms
     {

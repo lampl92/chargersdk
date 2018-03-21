@@ -180,6 +180,11 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
     cfgobj_get_string(jsCfgObj, pCON->info.strQRCode, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnQRCode);
     
+    ////EVSE使用CON温度
+    pEVSE->info.dACTempLowerLimits = pCON->info.dACTempLowerLimits;
+    pEVSE->info.dACTempUpperLimits = pCON->info.dACTempUpperLimits;
+    ////
+    
     cJSON_Delete(jsCfgObj);
     return errcode;
 }
@@ -1268,6 +1273,7 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
     vEventGroupDelete(pCON->status.xHandleEventTimerCBNotify);
+    vEventGroupDelete(pCON->status.xHandleEventDiag);
     xTimerDelete(pCON->status.xHandleTimerRTData, 100);
     xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
@@ -1315,6 +1321,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
     pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
+    pCON->status.xHandleEventDiag      = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
     pCON->status.xHandleTimerFreq      = NULL;

@@ -90,34 +90,40 @@ void vTaskEVSEDiag(void *pvParameters)
         }
         
         /* 处理系统报警 */
-        for(i = 0; i < ulTotalCON; i++)
-        {
-            pCON = CONGetHandle(i);
-            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
-                                                    defEventBitExceptionTempW, 
-                                                    pdTRUE, pdFALSE, 0);
-            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
-            {
-                if (pCON->state == STATE_CON_CHARGING)
-                {
-                    pCON->status.SetLoadPercent(pCON, 50);
-                }
-            }
-        }
+//        for(i = 0; i < ulTotalCON; i++)
+//        {
+//            pCON = CONGetHandle(i);
+//            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
+//                                                    defEventBitExceptionTempW, 
+//                                                    pdTRUE, pdFALSE, 0);
+//            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
+//            {
+//                if (pCON->state == STATE_CON_CHARGING)
+//                {
+//                    pCON->status.SetLoadPercent(pCON, 50);
+//                }
+//            }
+//        }
         /* end of 处理系统报警 */
 
-        /* 诊断各状态 */
+        /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTempOut, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagTempOut) == defEventBitDiagTempOut)
+        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
+        if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
         {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                DiagTempError(pCON);
-            }
+                DiagEVSETempError(pEVSE);
         }
 
+        for (i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
+            if ((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
+            {
+                DiagCONTempError(pCON);
+            }
+        }
+        
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagLockState) == defEventBitDiagLockState)
         {
@@ -138,12 +144,12 @@ void vTaskEVSEDiag(void *pvParameters)
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
+        for (i = 0; i < ulTotalCON; i++)
         {
-            for(i = 0; i < ulTotalCON; i++)
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
+            if ((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
             {
-                pCON = CONGetHandle(i);
                 DiagVoltageError(pCON);
                 DiagCurrentError(pCON);
                 DiagFreqError(pCON);

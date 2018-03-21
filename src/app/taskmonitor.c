@@ -51,16 +51,16 @@ void vTaskMonitor_ChData(void *pvParameters)
             {
                 xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
             }
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagChargingData);
+            xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData);
         }
         
 #ifdef TEST_TIME_TEMP
         printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
 #endif // TEST_TIME_TEMP
         uxBitsTimerCB = xEventGroupWaitBits(pCON->status.xHandleEventTimerCBNotify, 
-                                            defEventBitTimerCBTempOut, 
+                                            defEventBitTimerCBTemp, 
                                             pdTRUE, pdTRUE, 0);
-        if ((uxBitsTimerCB & defEventBitTimerCBTempOut) == defEventBitTimerCBTempOut)
+        if ((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
         {
             THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
             THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
@@ -69,7 +69,7 @@ void vTaskMonitor_ChData(void *pvParameters)
                 THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING, "Monitor");
                 THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING, "Monitor");
             }
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTempOut);
+            xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagTemp);
         }
 #ifdef TEST_TIME_TEMP
         printf_safe("con%d end %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
@@ -80,9 +80,13 @@ void vTaskMonitor_ChData(void *pvParameters)
 
 void vTaskMonitor_EvseStatus(void *pvParameters)
 {
+    CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
+    int i;
     EventBits_t uxBitsTimerCB;
     ErrorCode_t errcode;
 
+    ulTotalCON = pListCON->Total; 
     uxBitsTimerCB = 0;
     errcode = ERR_NO;
 
@@ -106,15 +110,20 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagEVSEState);
         }
         
-        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTempIn, pdTRUE, pdFALSE, 0);
-        if ((uxBitsTimerCB & defEventBitTimerCBTempIn) == defEventBitTimerCBTempIn)
+        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp, pdTRUE, pdFALSE, 0);
+        if ((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
         {
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_A_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_B_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_C_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_N_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTemp);
             
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagTempIn);
+            for (i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                xEventGroupSetBits(pCON->status.xHandleEventTimerCBNotify, defEventBitTimerCBTemp);
+            }
         }
         vTaskDelay(10);
     }
@@ -145,16 +154,6 @@ void vTaskEVSEMonitor(void *pvParameters)
     {
 #ifndef DEBUG_NO_TASKMONITOR
         /* 获取EVSE和CON状态 */
-
-        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTempOut, pdTRUE, pdFALSE, 0);
-        if((uxBitsTimerCB & defEventBitTimerCBTempOut) == defEventBitTimerCBTempOut)
-        {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                xEventGroupSetBits(pCON->status.xHandleEventTimerCBNotify, defEventBitTimerCBTempOut);
-            }
-        }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBLockState, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBLockState) == defEventBitTimerCBLockState)

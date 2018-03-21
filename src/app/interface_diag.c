@@ -9,24 +9,6 @@
 #include "evse_config.h"
 #include "evse_globals.h"
 
-
-#define defDiag_EVSE_Temp_War   (defSignalEVSE_Alarm_AC_A_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_B_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_C_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_N_Temp_War )
-#define defDiag_EVSE_Temp_Cri   (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_B_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_C_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_N_Temp_Cri )
-#define defDiag_CON_Temp_War   ( defSignalCON_Alarm_AC_A_Temp_War | \
-                                 defSignalCON_Alarm_AC_B_Temp_War | \
-                                 defSignalCON_Alarm_AC_C_Temp_War | \
-                                 defSignalCON_Alarm_AC_N_Temp_War )
-#define defDiag_CON_Temp_Cri   ( defSignalCON_Alarm_AC_A_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_B_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_C_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_N_Temp_Cri )
-
 typedef enum
 {
     VOLT_OK,
@@ -472,24 +454,20 @@ void DiagCurrentError(CON_t *pCON)
  * @return void
  *
  */
-void DiagTempError(CON_t *pCON)
+void DiagEVSETempError(EVSE_t *pEVSE)
 {
+    CON_t *pCON;
+    int i;
     ErrorLevel_t templevel;
     ErrorLevel_t templevel_EVSE_A;
     ErrorLevel_t templevel_EVSE_B;
     ErrorLevel_t templevel_EVSE_C;
     ErrorLevel_t templevel_EVSE_N;
-    ErrorLevel_t templevel_CON_A;
-    ErrorLevel_t templevel_CON_B;
-    ErrorLevel_t templevel_CON_C;
-    ErrorLevel_t templevel_CON_N;
-    int id;
-    id = pCON->info.ucCONID;
 
     {
         templevel_EVSE_A = HandleTemp(pEVSE->status.dAC_A_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_A)
         {
         case ERR_LEVEL_OK:
@@ -510,8 +488,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_B = HandleTemp(pEVSE->status.dAC_B_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_B)
         {
         case ERR_LEVEL_OK:
@@ -532,8 +510,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_C = HandleTemp(pEVSE->status.dAC_C_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_C)
         {
         case ERR_LEVEL_OK:
@@ -554,8 +532,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_N = HandleTemp(pEVSE->status.dAC_N_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_N)
         {
         case ERR_LEVEL_OK:
@@ -574,6 +552,37 @@ void DiagTempError(CON_t *pCON)
             break;
         }
     }
+    for(i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {  
+        pCON = CONGetHandle(i);
+        if ((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
+        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+        else
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+    }
+}
+/** @brief B型插座温度与进线温度检测
+ *
+ * @param pCON CON_t*
+ * @return void
+ *
+ */
+void DiagCONTempError(CON_t *pCON)
+{
+    ErrorLevel_t templevel;
+    ErrorLevel_t templevel_CON_A;
+    ErrorLevel_t templevel_CON_B;
+    ErrorLevel_t templevel_CON_C;
+    ErrorLevel_t templevel_CON_N;
+
     {
         templevel_CON_A = HandleTemp(pCON->status.dACLTemp,
             pCON->info.dACTempLowerLimits,
@@ -622,29 +631,6 @@ void DiagTempError(CON_t *pCON)
             break;
         default:
             break;
-        }
-    }
-    
-    {  
-        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
-            (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
-        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        }
-        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
-          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
-        {
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-        }
-        else
-        {
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempC);
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         }
     }
 
@@ -703,6 +689,21 @@ void DiagTempError(CON_t *pCON)
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
+    }
+    
+    {  
+        if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0)
+        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+        else if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+        else
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
     }
 }
 /** @brief 频率判断
