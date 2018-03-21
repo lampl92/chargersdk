@@ -97,13 +97,9 @@ static ErrorCode_t GetLineFreq(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     switch (ucLineID)
     {
     case defLineA:
-        pLine->status.dFreq = Get_Electricity_meter_massage_frequency(ucCONID + 1, frequency_a);
-        break;
     case defLineB:
-        pLine->status.dFreq = Get_Electricity_meter_massage_frequency(ucCONID + 1, frequency_b);
-        break;
     case defLineC:
-        pLine->status.dFreq = Get_Electricity_meter_massage_frequency(ucCONID + 1, frequency_c);
+        pLine->status.dFreq = 50;
         break;
     default:
         break;
@@ -130,13 +126,9 @@ static ErrorCode_t GetLinePower(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     switch (ucLineID)
     {
     case defLineA:
-        pLine->status.dPower = Get_Electricity_meter_massage_power(ucCONID + 1, power_a);
-        break;
     case defLineB:
-        pLine->status.dPower = Get_Electricity_meter_massage_power(ucCONID + 1, power_b);
-        break;
     case defLineC:
-        pLine->status.dPower = Get_Electricity_meter_massage_power(ucCONID + 1, power_c);
+        pLine->status.dPower = pLine->status.dVolt * pLine->status.dCurr;
         break;
     default:
         break;
