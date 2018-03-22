@@ -823,7 +823,7 @@ DR_MODEM_e M26_init(void *pvModem)
         }
         modem_delayms(1000);
     } while (1);
-#if 0
+#if 1
     do
     {
         ret = M26_CREG(pModem);
