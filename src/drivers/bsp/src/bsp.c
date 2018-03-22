@@ -143,6 +143,7 @@ void bsp_Init(void)
     bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
+    bsp_Uart_Init(UART_PORT_BLUT, 1);
 #ifndef EVSE_DEBUG
     //IWDG_Init(IWDG_PRESCALER_64,500);  //在taskOTA中初始化了	
 #endif
