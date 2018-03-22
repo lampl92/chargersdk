@@ -338,7 +338,7 @@ static ErrorCode_t GetPowerOffState(void *pvEVSE)
     /* @todo (yuye#1#): 确认电压范围 */
     /**  (rgw#1#): 实现代码 */
 
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef DEBUG_DIAG_DUMMY1
     tmpOffState = 0;
 #else
 //    if (Get_Power_Status == 1)
@@ -584,8 +584,10 @@ static void CONInit(void)
 void EVSEinit(void)
 {
 	uint8_t str[17] = "2000000000000002";
+    uint8_t tmp = 2;
 	
     pEVSE = EVSECreate();
+    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
