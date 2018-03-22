@@ -97,6 +97,13 @@ void vTaskEVSERFID(void *pvParameters)
         xTimerStop(xHandleTimerRFID, 100); 
 #endif
     }
+    while (pEVSE->status.ulTimeUpdated == 0)
+    {
+        vTaskDelay(100);
+    }
+#if EVSE_USING_RFID
+    xTimerStart(xHandleTimerRFID, 0);
+#endif
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID

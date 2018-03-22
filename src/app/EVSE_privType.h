@@ -47,6 +47,7 @@ typedef struct _EVSEStatus
     uint32_t ulSignalAlarm;
     uint32_t ulSignalFault;
     uint32_t ulSignalPool[EVSE_MAX_SIGNAL_BLOCK];
+    uint32_t ulTimeUpdated;
 
     pEVSE_ft GetScramState;
     pEVSE_ft GetKnockState;
