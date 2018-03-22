@@ -458,7 +458,7 @@ static ErrorCode_t GetCPState(void *pvCON)
 #else
     if (ucCONID == 0)
     {
-        pCP_err_cont = &*pCP_err_cont;
+        pCP_err_cont = &cp1_err_cont;
         pCCR1 = &(TIM2->CCR1);
         pCON->status.dCPVolt = Sys_samp.DC.CP1; 
     }
@@ -474,7 +474,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         if (*pCCR1 != TIMER_MAX)
         {
             tmpCPState = CP_12V_PWM;
-            pCON->status.dCPVolt = 0;
+            *pCP_err_cont = 0;
         }
         else
         {
