@@ -506,7 +506,7 @@ void creatememdev()
     Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
     Memdevhomegunscancode = createMemdev(pathhomegunscancode);
     Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);
-    Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress);
+    //Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress);
     Memdevhomegunerror = createMemdev(pathhomegunerror);
     Memdevhomesignal0 = createMemdev(pathhomesignal0);
     Memdevhomesignal1 = createMemdev(pathhomesignal1);
@@ -548,8 +548,8 @@ void creatememdev()
     Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
     
     //提示信息页图片
-    Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
-    Memdevcharginginfo = createMemdev(pathcharginginfo);
+    //Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
+    //Memdevcharginginfo = createMemdev(pathcharginginfo);
 
     //公用图片“退出”
     MemdevQuit = createMemdev(pathQuit);
