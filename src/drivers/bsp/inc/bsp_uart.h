@@ -18,8 +18,7 @@ typedef enum
     UART_PORT_GPRS,
     UART_PORT_RFID,
     UART_PORT_WIFI,
-    UART_PORT_TERM,
-    UART_PORT_BLUT
+    UART_PORT_TERM
 } UART_Portdef;
 
 #ifndef EVSE_DEBUG
@@ -34,10 +33,6 @@ typedef enum
 #define RFID_USARTx_BAUDRATE                        115200
 #define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
 #define RFID_QUEUE_SIZE                             100
-
-#define BLUT_USARTx_BASE                            USART6
-#define BLUT_USARTx_BAUDRATE                        115200
-#define BLUT_USARTx_IRQHandler                      void USART6_IRQHandler(void)
 
 #define GPRS_USARTx_BASE                            UART5
 #define GPRS_USARTx_BAUDRATE                        115200

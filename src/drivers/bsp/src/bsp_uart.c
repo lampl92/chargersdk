@@ -18,7 +18,6 @@ UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
 UART_HandleTypeDef GPRS_UARTx_Handler;
 UART_HandleTypeDef WIFI_UARTx_Handler;
-UART_HandleTypeDef BLUT_UARTx_Handler;
 
 static Queue *pCliRecvQue = NULL;
 static Queue *pRfidRecvQue = NULL;
@@ -30,7 +29,6 @@ static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 static volatile uint8_t WIFI_RX_Buffer[1];
-static volatile uint8_t BLUT_RX_Buffer[1];
 
 static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
 
@@ -294,18 +292,6 @@ void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode)
         HAL_UART_Init(&GPRS_UARTx_Handler);
         HAL_UART_Receive_IT(&GPRS_UARTx_Handler, (uint8_t *)GPRS_RX_Buffer, 1);
         break;
-    case UART_PORT_BLUT:
-        BLUT_UARTx_Handler.Instance = BLUT_USARTx_BASE;
-        BLUT_UARTx_Handler.Init.BaudRate = BLUT_USARTx_BAUDRATE;
-        BLUT_UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-        BLUT_UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-        BLUT_UARTx_Handler.Init.Parity = UART_PARITY_NONE;
-        BLUT_UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
-        BLUT_UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-        BLUT_UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
-        HAL_UART_Init(&BLUT_UARTx_Handler);
-        HAL_UART_Receive_IT(&BLUT_UARTx_Handler, (uint8_t *)BLUT_RX_Buffer, 1);
-        break;
 //    case UART_PORT_WIFI:
 //        if(mode == 1)
 //        {
@@ -427,25 +413,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_NVIC_EnableIRQ(UART5_IRQn);
         HAL_NVIC_SetPriority(UART5_IRQn, bspUART5_PreemptPriority, bspUART5_SubPriority);
     }
-    if (huart->Instance == USART6)
-    {
-        __HAL_RCC_GPIOC_CLK_ENABLE();
-        __HAL_RCC_USART6_CLK_ENABLE();
-
-        GPIO_InitStruct.Pin = GPIO_PIN_6;//PIN_TX
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-        GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-        GPIO_InitStruct.Pin = GPIO_PIN_7;//PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-        HAL_NVIC_EnableIRQ(USART6_IRQn);
-        HAL_NVIC_SetPriority(USART6_IRQn, bspUSART6_PreemptPriority, bspUSART6_SubPriority);
-    }
 }
 
 CLI_USARTx_IRQHandler
@@ -495,13 +462,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         if(HAL_UART_Receive_IT(&CLI_UARTx_Handler, (uint8_t *)CLI_RX_Buffer, 1) == HAL_OK)
         {
             pCliRecvQue->EnElem(pCliRecvQue, CLI_RX_Buffer[0]);
-        }
-    }
-    if (huart->Instance == BLUT_USARTx_BASE)
-    {
-        if (HAL_UART_Receive_IT(&BLUT_UARTx_Handler, (uint8_t *)BLUT_RX_Buffer, 1) == HAL_OK)
-        {
-            HAL_UART_Transmit(&BLUT_UARTx_Handler, (uint8_t *)BLUT_RX_Buffer, 1, 2000);
         }
     }
     if(huart->Instance == RFID_USARTx_BASE)
