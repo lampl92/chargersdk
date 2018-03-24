@@ -36,6 +36,8 @@ typedef struct _RFIDDevStatus
     uint8_t ucCardID[defCardIDLength];
 	time_t tHoldStateStartTime;
 	uint32_t ulHoldMaxTime_s;
+    uint8_t ucNeedPwd;
+    char strPwd[7];
 
     ErrorCode_t (*GetCardID)(void *pvRFIDDev);
 }RFIDDevStatus_t;
@@ -58,6 +60,7 @@ typedef struct _RfidQPkg
     double  dBalance;           //余额 
     uint8_t ucCONID;            //
     RFIDState_t state;
+    uint8_t ucNeedPwd;
 }RfidQPkg_t;
 
 RFIDDev_t *RFIDDevCreate(void);

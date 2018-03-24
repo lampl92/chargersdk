@@ -112,20 +112,21 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_ADD_BNW       26 //平台新增黑白名单 BNW = Black and White
 #define ECH_CMDID_DEL_BNW       27 //平台删除黑白名单
 #define ECH_CMDID_CARD_START     28 //充电桩请求有卡启动充电
-#define ECH_CMDID_CARD_START_RES 29 //充电桩上报有卡充电启动结果
-#define ECH_CMDID_CARD_STOP_RES  30 //充电桩上报有卡充电停止充电
-#define ECH_CMDID_CARD_RTDATA    31 //充电桩上报有卡实时充电数据
+#define ECH_CMDID_CARD_START_PWD 29 //充电桩带密码请求有卡启动充电
+#define ECH_CMDID_CARD_START_RES 30 //充电桩上报有卡充电启动结果
+#define ECH_CMDID_CARD_STOP_RES  31 //充电桩上报有卡充电停止充电
+#define ECH_CMDID_CARD_RTDATA    32 //充电桩上报有卡实时充电数据
 //---运维监控
-#define ECH_CMDID_UP_FAULT      32 //充电桩上报故障信息
-#define ECH_CMDID_UP_WARNING    33 //充电桩上报告警与保护信息
+#define ECH_CMDID_UP_FAULT      33 //充电桩上报故障信息
+#define ECH_CMDID_UP_WARNING    34 //充电桩上报告警与保护信息
 //---远程升级
-#define ECH_CMDID_SET_OTA       34 //平台下发软件升级命令
-#define ECH_CMDID_REQ_OTA_DW    35 //平台查询软件下载是否成功
-#define ECH_CMDID_OTA_START     36 //充电桩上报进入升级状态
-#define ECH_CMDID_OTA_RESULT    37 //充电桩上报升级结果
+#define ECH_CMDID_SET_OTA       35 //平台下发软件升级命令
+#define ECH_CMDID_REQ_OTA_DW    36 //平台查询软件下载是否成功
+#define ECH_CMDID_OTA_START     37 //充电桩上报进入升级状态
+#define ECH_CMDID_OTA_RESULT    38 //充电桩上报升级结果
 
 /*命令个数*/
-#define ECH_CMD_MAX             38
+#define ECH_CMD_MAX             39
 
 typedef struct
 {

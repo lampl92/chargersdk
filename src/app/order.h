@@ -153,6 +153,7 @@ typedef struct _UserChargeCondition
     uint32_t ulLimitTime;       //充电最大时间       
     double dLimitPower;         //充电最大电量
     int HMItimeout;       //HMI超时
+    char strPwd[7];
 }UserChargeCondition_t;
 void OrderCreate(OrderData_t *pOrder);
 void OrderInit(OrderData_t *pOrder);

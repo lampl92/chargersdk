@@ -661,20 +661,21 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电压
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineA].status.dVolt * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineB].status.dVolt * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineC].status.dVolt * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //输出电流xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
@@ -682,20 +683,21 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电流
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineA].status.dCurr * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineB].status.dCurr * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineC].status.dCurr * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //继电器状态 1开，2关
     if(pCON->status.ucRelayLState == SWITCH_ON &&
             pCON->status.ucRelayNState == SWITCH_ON)
@@ -716,17 +718,18 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //有功功率 无功功率 xx.xxxx
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 10000));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //电能表有功电能 xx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1840,7 +1843,7 @@ static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
-static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     EVSE_t *pEVSE;
     RFIDDev_t *pRfid;
@@ -1880,6 +1883,15 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
+    if (usCmdID == ECH_CMDID_CARD_START_PWD)
+    {
+      //[25...30]密码
+        for (i = 0; i < 6; i++)
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pRfid->status.strPwd[i];
+        }  
+    }
+    
     //保存流水号到order
     HexToStr(ucOrderSN, strOrderSN, 8);
     strcpy(pRfid->order.strOrderSN, strOrderSN);
@@ -1894,8 +1906,18 @@ static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdCardStartBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdCardStartBodyCtx(pEObj, pCObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
+}
+static int makeCmdCardStartPwd(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdCardStartBodyCtx(pEObj, pCObj, ECH_CMDID_CARD_START_PWD, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START_PWD, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
 static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2682,6 +2704,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ADD_BNW]        = EchCMDCreate(0,   105, 30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_DEL_BNW]        = EchCMDCreate(0,   106, 30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_START]     = EchCMDCreate(90,  91,  30, makeCmdCardStart,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_CARD_START_PWD] = EchCMDCreate(89,  91,  30, makeCmdCardStartPwd, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_START_RES] = EchCMDCreate(92,  93,  30, makeCmdCardStartRes, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_STOP_RES]  = EchCMDCreate(95,  96,  30, makeCmdCardStopRes,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_RTDATA]    = EchCMDCreate(94,  0,   30, makeCmdCardRTData,   NULL);

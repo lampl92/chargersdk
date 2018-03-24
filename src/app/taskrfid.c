@@ -69,6 +69,7 @@ static void make_rfidpkg(RFIDDev_t *dev, RfidQPkg_t *pkg)
     pkg->ucCardStatus = dev->order.ucCardStatus;
     pkg->dBalance = dev->order.dBalance;
     pkg->ucCONID = dev->order.ucCONID;
+    pkg->ucNeedPwd = dev->status.ucNeedPwd;
     strcpy(pkg->strCardID, dev->order.strCardID);
 }
 
@@ -185,6 +186,7 @@ void vTaskEVSERFID(void *pvParameters)
             user_like.ulLimitTime = 0;
             user_like.dLimitPower = 0;
             user_like.HMItimeout = 0;
+            strcpy(user_like.strPwd, "888888");
 #endif
             if (xResult == pdTRUE)
             {
@@ -198,6 +200,7 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->order.dLimitFee = user_like.dLimitFee;
                 pRFIDDev->order.ulLimitTime = user_like.ulLimitTime;
                 pRFIDDev->order.dLimitPower = user_like.dLimitPower;
+                strcpy(pRFIDDev->status.strPwd, user_like.strPwd);
             }
             else
             {
@@ -205,8 +208,14 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->state = STATE_RFID_RETURN;
                 break;
             }
-
-            errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);
+            if (pRFIDDev->status.ucNeedPwd == 0)
+            {
+                errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);    
+            }
+            else if(pRFIDDev->status.ucNeedPwd == 1)
+            {
+                errcode = RemoteIF_SendCardStartPwd(pEVSE, pechProto, pRFIDDev);  
+            }
             ucVaild = 0;
             switch(errcode)
             {
@@ -247,6 +256,11 @@ void vTaskEVSERFID(void *pvParameters)
             if(ucVaild == 2)//e充网定义 1 可充, 2不可充
             {
                 pRFIDDev->state = STATE_RFID_BADID;
+                break;
+            }
+            if (ucVaild == 3)//拒绝启动,需要密码校验
+            {
+                pRFIDDev->status.ucNeedPwd = 1;
                 break;
             }
 

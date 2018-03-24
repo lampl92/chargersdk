@@ -1312,6 +1312,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.dChargingFrequence    = 0;
     pCON->status.dChargingVoltage      = 0;
     pCON->status.dChargingPower        = 0;
+    pCON->status.dChargingEnergy       = 0;
     pCON->status.xBTypeSocketLockState = 0;
     pCON->status.xCCState              = 0;
     pCON->status.xCPState              = 0;
