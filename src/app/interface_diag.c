@@ -440,7 +440,8 @@ void DiagCurrentError(CON_t *pCON)
             uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
             if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
             {
-                pCON->status.xCurrStat = STATE_CURR_INIT;
+                if (currstat != CURR_UPPER)
+                    pCON->status.xCurrStat = STATE_CURR_INIT;
             }
             break;
         default:
