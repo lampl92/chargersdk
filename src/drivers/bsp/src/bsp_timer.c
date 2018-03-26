@@ -41,7 +41,7 @@ void MX_TIM2_Init(void)
     }
 
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = 1000;
+    sConfigOC.Pulse = 1;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
     sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
     if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -119,7 +119,7 @@ void MX_TIM4_Init(void)
     }
 
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = 465;
+    sConfigOC.Pulse = 1;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
@@ -215,7 +215,7 @@ void TIM_SetTIM2Compare1(unsigned int compare)
 
 void TIM_SetTIM4Compare1(unsigned int compare)
 {
-    if (pwm == compare)
+    if (pwm4 == compare)
     {
         ;
     }
@@ -223,7 +223,7 @@ void TIM_SetTIM4Compare1(unsigned int compare)
     {
         flat_pwm_change_cp2 = 1;
         TIM4->CCR1 = compare;
-        pwm = compare;
+        pwm4 = compare;
     }
 }
 void TIM_SetTIM3Compare1(unsigned int compare)

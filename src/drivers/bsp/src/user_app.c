@@ -436,10 +436,8 @@ void Peripheral_Init(void)
     //Close_gun_1();
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
-    vref = 2045;
-    PWM1_535;
-    PWM2_535;
-    //PWM2_1000;
+   PWM1_1000;
+   PWM2_1000;
    //user_pwm_relay1_setvalue(1000);
   // user_pwm_relay2_setvalue(1000);
    // vref = Get_State_relay();

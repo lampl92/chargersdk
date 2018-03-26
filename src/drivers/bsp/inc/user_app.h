@@ -62,17 +62,17 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define PWM1_535   TIM_SetTIM2Compare1(465)
 #define PWM1_0   TIM_SetTIM2Compare1(1000)
 
-#define RELAY2_ON  user_pwm_relay2_setvalue(1000);
-#define RELAY2_KEEP  user_pwm_relay2_setvalue(500);
-#define RELAY2_OFF  user_pwm_relay2_setvalue(0);
+#define RELAY2_ON  user_pwm_relay2_setvalue(1000)
+#define RELAY2_KEEP  user_pwm_relay2_setvalue(500)
+#define RELAY2_OFF  user_pwm_relay2_setvalue(0)
 
-#define RELAY1_ON  user_pwm_relay1_setvalue(1000);
-#define RELAY1_KEEP   user_pwm_relay1_setvalue(500);
-#define RELAY1_OFF  user_pwm_relay1_setvalue(0);
+#define RELAY1_ON  user_pwm_relay1_setvalue(1000)
+#define RELAY1_KEEP   user_pwm_relay1_setvalue(500)
+#define RELAY1_OFF  user_pwm_relay1_setvalue(0)
 
-#define PWM2_1000  do{TIM_SetTIM4Compare1(TIMER_MAX);}while(0)
-#define PWM2_535   do{TIM_SetTIM4Compare1(465);}while(0)
-#define PWM2_0   do{TIM_SetTIM4Compare1(1000);}while(0)
+#define PWM2_1000  TIM_SetTIM4Compare1(TIMER_MAX)
+#define PWM2_535   TIM_SetTIM4Compare1(465)
+#define PWM2_0   TIM_SetTIM4Compare1(1000)
 
 #define write_chip1 0x40 //0100 0000
 #define read_chip1 0x41 //0100 0001
@@ -112,7 +112,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define CP1_k      0.0032
 #define CP2_k      0.0032//14.1/3??·???±???
 #define electricity_meter_num 2
-#define TIMER_MAX 1
+#define TIMER_MAX 1 //不能写成0
 typedef struct
 {
     unsigned short va_samp[samp_sum];
