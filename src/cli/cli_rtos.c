@@ -3,6 +3,25 @@
 #include "interface.h"
 
 char acTaskStatusBuffer[2000];
+void print_stack(void)
+{
+    printf_safe("stack = %d\n", uxTaskGetStackHighWaterMark(NULL));
+}
+
+void cli_taskstack_fnt(int argc, char **argv)
+{
+    UBaseType_t uxHighWaterMark;
+    TaskHandle_t xHandle;
+
+    xHandle = xTaskGetHandle(argv[1]);
+    while (1)
+    {
+        uxHighWaterMark = uxTaskGetStackHighWaterMark(xHandle);
+        printf_safe("%s stack = %d\n", argv[1], uxHighWaterMark);
+        vTaskDelay(1);
+    }
+}
+
 void cli_tasklist_fnt(int argc, char **argv)
 {
     uint32_t FreeBytesRemaining = 0;
@@ -40,5 +59,16 @@ tinysh_cmd_t cli_tasklist_cmd =
     0,
     cli_tasklist_fnt,
     "<cr>", 0, 0
+};
+tinysh_cmd_t cli_taskstack_cmd =
+{
+    0,
+    "taskstack",
+    "display task stack",
+    0,
+    cli_taskstack_fnt,
+    "<cr>",
+    0,
+    0
 };
 

@@ -21,6 +21,7 @@ void cli_init(void)
     tinysh_add_command(&cli_reboot_cmd);
     tinysh_add_command(&cli_systemdate_cmd);
     tinysh_add_command(&cli_tasklist_cmd);
+    tinysh_add_command(&cli_taskstack_cmd);
 
     /************磁盘管理****************/
 
