@@ -181,6 +181,7 @@ void vTaskEVSERFID(void *pvParameters)
 #if EVSE_USING_GUI
             xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 60000);
 #else
+            xResult = pdTRUE;
             user_like.ucCONID = 0;
             user_like.dLimitFee = 0;
             user_like.ulLimitTime = 0;
@@ -248,7 +249,17 @@ void vTaskEVSERFID(void *pvParameters)
                 errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
                 vTaskDelay(100);
             }
-            
+#if (EVSE_USING_GUI==0)
+            printf_safe("用户状态：");
+            switch (pRFIDDev->order.ucAccountStatus)
+            {
+                case 0: printf_safe("该卡不可充电\n"); break;
+                case 1: printf_safe("注册卡\n"); break;
+                case 2: printf_safe("该卡不可充电\n"); break;
+            }
+            printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
+            printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
+#endif
             if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
             {
                 break;
@@ -298,17 +309,6 @@ void vTaskEVSERFID(void *pvParameters)
         case STATE_RFID_GOODID:
             make_rfidpkg(pRFIDDev, &rfid_pkg);
             xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
-#if (EVSE_USING_GUI==0)
-            printf_safe("用户状态：");
-            switch(pRFIDDev->order.ucAccountStatus)
-            {
-                case 0: printf_safe("该卡不可充电\n"); break;
-                case 1: printf_safe("注册卡\n"); break;
-                case 2: printf_safe("欠费卡\n"); break;
-            }
-            printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
-            printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
-#endif
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             xEventGroupSync(pCON->status.xHandleEventOrder,
