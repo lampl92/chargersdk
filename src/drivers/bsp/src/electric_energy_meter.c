@@ -168,7 +168,7 @@ void electricity_meter_analysis(uint8_t add)
         {
             A1.an[3] = RS485_RX_MODBUS[3];
             A1.an[2] = RS485_RX_MODBUS[4];
-            Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_electric_energy_h = RS485_RX_MODBUS[3] * 265 + RS485_RX_MODBUS[4];//A1.yy_test_float;
+            Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_electric_energy_h = RS485_RX_MODBUS[3] * 256 + RS485_RX_MODBUS[4];//A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_electric_energy_h = 0;
             flag_rs485[add] = 0;
         }
@@ -176,7 +176,7 @@ void electricity_meter_analysis(uint8_t add)
         {
             A1.an[3] = RS485_RX_MODBUS[3];
             A1.an[2] = RS485_RX_MODBUS[4];
-            Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_electric_energy_l = RS485_RX_MODBUS[3] * 265 + RS485_RX_MODBUS[4];//A1.yy_test_float;
+            Electricity_meter[RS485_RX_MODBUS[0]].massage.massage_electric_energy_l = RS485_RX_MODBUS[3] * 256 + RS485_RX_MODBUS[4];//A1.yy_test_float;
             Electricity_meter[RS485_RX_MODBUS[0]].flag.flag_electric_energy_l = 0;
             flag_rs485[add] = 0;
         }
@@ -260,8 +260,8 @@ double Get_Electricity_meter_massage_energy(uint8_t add)
     Get_electricity_meter_massage(add, read, electric_energy_h, 1);
     Get_electricity_meter_massage(add, read, electric_energy_l, 1);
     electricity_data =
-    Electricity_meter[add].massage.massage_electric_energy_h * 65536
-    + Electricity_meter[add].massage.massage_electric_energy_l / 100;
+    (Electricity_meter[add].massage.massage_electric_energy_h * 65536
+    + Electricity_meter[add].massage.massage_electric_energy_l) / 100.0;
     return electricity_data;
 }
 double Get_Electricity_meter_massage_current(uint8_t add, uint8_t massage)
@@ -287,8 +287,8 @@ double Get_Electricity_meter_massage_energy(uint8_t add)
     Get_electricity_meter_massage(add, read, electric_energy_h, 1);
     Get_electricity_meter_massage(add, read, electric_energy_l, 1);
     electricity_data =
-    Electricity_meter[add].massage.massage_electric_energy_h * 65536
-    + Electricity_meter[add].massage.massage_electric_energy_l / 100;
+    (Electricity_meter[add].massage.massage_electric_energy_h * 65536
+    + Electricity_meter[add].massage.massage_electric_energy_l ) / 100.0;
     return electricity_data;
 }
 double Get_Electricity_meter_massage_current(uint8_t add)
@@ -319,5 +319,6 @@ double Get_Electricity_meter_massage_frequency(uint8_t add)
     electricity_data = Electricity_meter[add].massage.massage_frequency / 100;
     return electricity_data;
 }
-#endif
+#endif
+
 /************************电表RS485END****************/
