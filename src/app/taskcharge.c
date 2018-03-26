@@ -112,7 +112,7 @@ void vTaskEVSECharge(void *pvParameters)
     unlock_try = 0;
     dev_err = 0;
     errcode = ERR_NO;
-
+#ifndef DEBUG_NO_TASKCHARGE
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
@@ -132,7 +132,7 @@ void vTaskEVSECharge(void *pvParameters)
             }
         }
     }
-
+#endif
     while(1)
     {
 #ifndef DEBUG_NO_TASKCHARGE
