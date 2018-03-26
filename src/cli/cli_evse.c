@@ -109,7 +109,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     printf_safe("实时数据周期：\t%d\n", pechProto->info.ulRTDataCyc_ms);
     printf_safe("重启标志：\t%d\n", pechProto->info.ucResetAct);
     printf_safe("=== 尖 ===\n");
-    printf_safe("尖电费率：\t%.4lf\n", pechProto->info.dSegPowerFee[0]);
+    printf_safe("尖电费率：\t%.4lf\n", pechProto->info.dSegEnergyFee[0]);
     printf_safe("尖服务费率：\t%.4lf\n", pechProto->info.dSegServFee[0]);
     printf_safe("尖时段数量：\t%d\n", pechProto->info.SegTime[0].ucPeriodCont);
     printf_safe("时段:\t");
@@ -119,7 +119,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     }
     printf_safe("\n");
     printf_safe("=== 峰 ===\n");
-    printf_safe("峰电费率：\t%.4lf\n", pechProto->info.dSegPowerFee[1]);
+    printf_safe("峰电费率：\t%.4lf\n", pechProto->info.dSegEnergyFee[1]);
     printf_safe("峰服务费率：\t%.4lf\n", pechProto->info.dSegServFee[1]);
     printf_safe("峰时段数量：\t%d\n", pechProto->info.SegTime[1].ucPeriodCont);
     printf_safe("时段: \t");
@@ -129,7 +129,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     }
     printf_safe("\n");
     printf_safe("=== 平 ===\n");
-    printf_safe("平电费率：\t%.4lf\n", pechProto->info.dSegPowerFee[2]);
+    printf_safe("平电费率：\t%.4lf\n", pechProto->info.dSegEnergyFee[2]);
     printf_safe("平服务费率：\t%.4lf\n", pechProto->info.dSegServFee[2]);
     printf_safe("平时段数量：\t%d\n", pechProto->info.SegTime[2].ucPeriodCont);
     printf_safe("时段: \t");
@@ -139,7 +139,7 @@ void cli_protoinfo_fnt(int argc, char **argv)
     }
     printf_safe("\n");
     printf_safe("=== 谷 ===\n");
-    printf_safe("谷电费率：\t%.4lf\n", pechProto->info.dSegPowerFee[3]);
+    printf_safe("谷电费率：\t%.4lf\n", pechProto->info.dSegEnergyFee[3]);
     printf_safe("谷服务费率：\t%.4lf\n", pechProto->info.dSegServFee[3]);
     printf_safe("谷时段数量：\t%d\n", pechProto->info.SegTime[3].ucPeriodCont);
     printf_safe("时段: \t");
@@ -192,7 +192,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
     case defOrderSerType_Order:
         printf_safe("按单");
         break;
-    case defOrderSerType_Power:
+    case defOrderSerType_Energy:
         printf_safe("按度");
         break;
     default:
@@ -388,17 +388,17 @@ void cli_evseorder_fnt(int argc, char **argv)
             ts = localtime (& pCON->OrderTmp.order.tStartTime);
             strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
             printf_safe("启动时间:\t%s \n", buf);
-            printf_safe("启动时电表读数\t%.2lf\n", pCON->OrderTmp.order.dStartPower);
+            printf_safe("启动时电表读数\t%.2lf\n", pCON->OrderTmp.order.dStartEnergy);
 
             printf_safe("========充电过程数据=========\n");
-            printf_safe("总电量:       %.2lf\n", pCON->OrderTmp.order.dTotalPower);
-            printf_safe("总电费:       %.2lf\n", pCON->OrderTmp.order.dTotalPowerFee);
+            printf_safe("总电量:       %.2lf\n", pCON->OrderTmp.order.dTotalEnergy);
+            printf_safe("总电费:       %.2lf\n", pCON->OrderTmp.order.dTotalEnergyFee);
             printf_safe("总服务费:     %.2lf\n", pCON->OrderTmp.order.dTotalServFee);
             printf_safe("总费用:       %.2lf\n", pCON->OrderTmp.order.dTotalFee);
-            printf_safe("尖电价：      %.4lf\n", pechProto->info.dSegPowerFee[0]);
+            printf_safe("尖电价：      %.4lf\n", pechProto->info.dSegEnergyFee[0]);
             printf_safe("尖服务费单价  %.4lf\n", pechProto->info.dSegServFee[0]);
-            printf_safe("尖电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalPower[0]);
-            printf_safe("尖充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalPowerFee[0]);
+            printf_safe("尖电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergy[0]);
+            printf_safe("尖充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergyFee[0]);
             printf_safe("尖服务费金额  %.2lf\n", pCON->OrderTmp.order.dSegTotalServFee[0]);
             printf_safe("尖充电时长    %d\n", pCON->OrderTmp.order.ulSegTotalTime[0]);
             printf_safe("尖详细数据：\n");
@@ -416,14 +416,14 @@ void cli_evseorder_fnt(int argc, char **argv)
                     strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
                     printf_safe("\t结束时间：%s\n", buf);
 
-                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[0][i].dStartPower);
-                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[0][i].dPower);
+                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[0][i].dStartEnergy);
+                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[0][i].dEnergy);
                 }
             }
-            printf_safe("峰电价：      %.4lf\n", pechProto->info.dSegPowerFee[1]);
+            printf_safe("峰电价：      %.4lf\n", pechProto->info.dSegEnergyFee[1]);
             printf_safe("峰服务费单价  %.4lf\n", pechProto->info.dSegServFee[1]);
-            printf_safe("峰电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalPower[1]);
-            printf_safe("峰充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalPowerFee[1]);
+            printf_safe("峰电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergy[1]);
+            printf_safe("峰充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergyFee[1]);
             printf_safe("峰服务费金额  %.2lf\n", pCON->OrderTmp.order.dSegTotalServFee[1]);
             printf_safe("峰充电时长    %d\n", pCON->OrderTmp.order.ulSegTotalTime[1]);
             printf_safe("峰详细数据：\n");
@@ -441,14 +441,14 @@ void cli_evseorder_fnt(int argc, char **argv)
                     strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
                     printf_safe("\t结束时间：%s\n", buf);
 
-                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[1][i].dStartPower);
-                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[1][i].dPower);
+                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[1][i].dStartEnergy);
+                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[1][i].dEnergy);
                 }
             }
-            printf_safe("平电价：      %.4lf\n", pechProto->info.dSegPowerFee[2]);
+            printf_safe("平电价：      %.4lf\n", pechProto->info.dSegEnergyFee[2]);
             printf_safe("平服务费单价  %.4lf\n", pechProto->info.dSegServFee[2]);
-            printf_safe("平电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalPower[2]);
-            printf_safe("平充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalPowerFee[2]);
+            printf_safe("平电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergy[2]);
+            printf_safe("平充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergyFee[2]);
             printf_safe("平服务费金额  %.2lf\n", pCON->OrderTmp.order.dSegTotalServFee[2]);
             printf_safe("平充电时长    %d\n", pCON->OrderTmp.order.ulSegTotalTime[2]);
             printf_safe("平详细数据：\n");
@@ -466,14 +466,14 @@ void cli_evseorder_fnt(int argc, char **argv)
                     strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
                     printf_safe("\t结束时间：%s\n", buf);
 
-                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[2][i].dStartPower);
-                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[2][i].dPower);
+                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[2][i].dStartEnergy);
+                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[2][i].dEnergy);
                 }
             }
-            printf_safe("谷电价：      %.4lf\n", pechProto->info.dSegPowerFee[3]);
+            printf_safe("谷电价：      %.4lf\n", pechProto->info.dSegEnergyFee[3]);
             printf_safe("谷服务费单价  %.4lf\n", pechProto->info.dSegServFee[3]);
-            printf_safe("谷电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalPower[3]);
-            printf_safe("谷充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalPowerFee[3]);
+            printf_safe("谷电量        %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergy[3]);
+            printf_safe("谷充电金额    %.2lf\n", pCON->OrderTmp.order.dSegTotalEnergyFee[3]);
             printf_safe("谷服务费金额  %.2lf\n", pCON->OrderTmp.order.dSegTotalServFee[3]);
             printf_safe("谷充电时长    %d\n", pCON->OrderTmp.order.ulSegTotalTime[3]);
             printf_safe("谷详细数据：\n");
@@ -491,8 +491,8 @@ void cli_evseorder_fnt(int argc, char **argv)
                     strftime (buf, sizeof (buf), "%Y-%m-%d %H:%M:%S", ts);
                     printf_safe("\t结束时间：%s\n", buf);
 
-                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[3][i].dStartPower);
-                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[3][i].dPower);
+                    printf_safe("\t开始电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[3][i].dStartEnergy);
+                    printf_safe("\t时段电量：%.2lf\n", pCON->OrderTmp.order.chargeSegStatus[3][i].dEnergy);
                 }
             }
             printf_safe("========停止时数据=========\n");
@@ -649,7 +649,8 @@ void cli_evsestatus_fnt(int argc, char **argv)
         printf_safe("充电电压：    %.2lf\n", pCON->status.dChargingVoltage);
         printf_safe("充电电流：    %.2lf\n", pCON->status.dChargingCurrent);
         printf_safe("电压频率：    %.2lf\n", pCON->status.dChargingFrequence);
-        printf_safe("电表读数：    %.2lf\n", pCON->status.dChargingPower);
+        printf_safe("电表功率：    %.2lf\n", pCON->status.dChargingPower);
+        printf_safe("电表读数：    %.2lf\n", pCON->status.dChargingEnergy);
         printf_safe("继电器：      L %d N %d\n", pCON->status.ucRelayLState, pCON->status.ucRelayNState);
 
         printf_safe("\n");

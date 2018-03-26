@@ -122,11 +122,11 @@ void vTaskEVSEData(void *pvParameters)
                 if ((time(NULL) - pCON->order.tStartTime) < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
                 {
                     /****电量判断****/
-                    if (pCON->order.dLimitPower != 0) //0 时表示自动充满，非0即停止电量 
+                    if (pCON->order.dLimitEnergy != 0) //0 时表示自动充满，非0即停止电量 
                     {
-                        if (pCON->order.dTotalPower >= pCON->order.dLimitPower) // 达到充电电量
+                        if (pCON->order.dTotalEnergy >= pCON->order.dLimitEnergy) // 达到充电电量
                         {
-                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitPower);
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitEnergy);
                             pCON->order.statOrder = STATE_ORDER_WAITSTOP;
                             break;
                         }
@@ -177,18 +177,18 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     pCON->order.dTotalFee = pCON->order.dBalance;
                 }
-                if (pCON->order.dLimitPower != 0)
+                if (pCON->order.dLimitEnergy != 0)
                 {
-                    if (pCON->order.dTotalPower > pCON->order.dLimitPower)
+                    if (pCON->order.dTotalEnergy > pCON->order.dLimitEnergy)
                     {
-                        pCON->order.dTotalPower = pCON->order.dLimitPower;
+                        pCON->order.dTotalEnergy = pCON->order.dLimitEnergy;
                     }
                 }
                 else if(pCON->order.dLimitFee != 0)
                 {
                     if(pCON->order.dTotalFee > pCON->order.dLimitFee)
                     {
-                        pCON->order.dTotalServFee = pCON->order.dLimitFee - pCON->order.dTotalPowerFee;
+                        pCON->order.dTotalServFee = pCON->order.dLimitFee - pCON->order.dTotalEnergyFee;
                         pCON->order.dTotalFee = pCON->order.dLimitFee;
                     }
                 }
@@ -204,10 +204,10 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsData = xEventGroupGetBits(pCON->status.xHandleEventOrder);
                 
                 //达到充电电量限制
-                if ((uxBitsData & defEventBitOrderStopTypeLimitPower) == defEventBitOrderStopTypeLimitPower)
+                if ((uxBitsData & defEventBitOrderStopTypeLimitEnergy) == defEventBitOrderStopTypeLimitEnergy)
                 {
-                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitPower);
-                    pCON->order.ucStopType = defOrderStopType_Power;
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitEnergy);
+                    pCON->order.ucStopType = defOrderStopType_Energy;
                 }
                 
                 //达到充电金额限制

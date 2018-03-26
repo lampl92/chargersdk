@@ -43,7 +43,7 @@ typedef struct _echProtoInfo
     uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t  ucResetAct;        //重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
 
-    double dSegPowerFee[defOrderSegMax];  //分段费率
+    double dSegEnergyFee[defOrderSegMax];  //分段费率
     double dSegServFee[defOrderSegMax];
     EchSegTime_t SegTime[defOrderSegMax];
 
@@ -92,12 +92,12 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_ORDER       6 //交易记录
 #define ECH_CMDID_SET_SUCC    7 //设置成功
 #define ECH_CMDID_SET_FAIL    8 //设置失败
-#define ECH_CMDID_SET_POWERFEE  9  //平台下发电价设置
+#define ECH_CMDID_SET_ENERGYFEE  9  //平台下发电价设置
 #define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
 #define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
 #define ECH_CMDID_SET_TIMESEG   12 //平台下发尖峰平谷时间段设置
 #define ECH_CMDID_SET_KEY       13 //平台下发密钥变更
-#define ECH_CMDID_REQ_POWERFEE  14 //平台查询充电桩当前电费
+#define ECH_CMDID_REQ_ENERGYFEE 14 //平台查询充电桩当前电费
 #define ECH_CMDID_REQ_SERVFEE   15 //平台查询充电桩当前服务费
 #define ECH_CMDID_REQ_CYC       16 //平台查询上报时间间隔
 #define ECH_CMDID_REQ_TIMESEG   17 //平台查询尖峰平谷时间段

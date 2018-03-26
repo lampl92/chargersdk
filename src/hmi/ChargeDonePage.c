@@ -163,11 +163,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
         sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//服务费
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergyFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//电费
         sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//消费总额  

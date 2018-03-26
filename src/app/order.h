@@ -20,7 +20,7 @@
 #define defOrderStopType_Unknown        0
 #define defOrderStopType_RFID           1
 #define defOrderStopType_Full           2
-#define defOrderStopType_Power          3
+#define defOrderStopType_Energy          3
 #define defOrderStopType_Time           4
 #define defOrderStopType_Fee            5
 #define defOrderStopType_NeedFee        6
@@ -42,7 +42,7 @@
 
 /*服务费类型*/
 #define defOrderSerType_Order           0
-#define defOrderSerType_Power           1
+#define defOrderSerType_Energy          1
 
 
 /*
@@ -92,8 +92,8 @@ typedef struct _ChargePeriodStatus
 {
     time_t tStartTime;
     time_t tEndTime;
-    double dStartPower;
-    double dPower;
+    double dStartEnergy;
+    double dEnergy;
 }ChargePeriodStatus_t;
 
 /** @brief  ucCardID 、ucAccountStatus、 dBalance、 ucCONID、 strOrderSN 是刷卡板要获取的数据, 在order建立时应拷贝到CON的order中
@@ -116,16 +116,16 @@ typedef struct _OrderData
     uint8_t ucStartType;        //4 有卡 5 无卡 
     double  dLimitFee;          //充电截至金额         在远程启动和界面启动时赋值
     uint32_t ulLimitTime;       //充电最大时间         
-    double dLimitPower;         //充电最大电量
-    double  dStartPower;        //
+    double dLimitEnergy;         //充电最大电量
+    double  dStartEnergy;        //
     //充电过程
-    double  dTotalPower;        //总电量
-    double  dTotalPowerFee;     //总电费
+    double  dTotalEnergy;        //总电量
+    double  dTotalEnergyFee;     //总电费
     double  dTotalServFee;   //总服务费
     double  dTotalFee;          //总费用
     ChargePeriodStatus_t chargeSegStatus[defOrderSegMax][defOrderPeriodMax];     //[0][0]尖第一时段 [1][0]峰第一时段 [2][1]平第二时段  过程信息
-    double dSegTotalPower[defOrderSegMax];   //分段总电量
-    double dSegTotalPowerFee[defOrderSegMax];//分段总电费
+    double dSegTotalEnergy[defOrderSegMax];   //分段总电量
+    double dSegTotalEnergyFee[defOrderSegMax];//分段总电费
     double dSegTotalServFee[defOrderSegMax]; //分段总服务费
     uint32_t ulSegTotalTime[defOrderSegMax];    //分段总充电时间
 
@@ -151,7 +151,7 @@ typedef struct _UserChargeCondition
     uint8_t ucCONID;            //
     double  dLimitFee;          //充电截至金额
     uint32_t ulLimitTime;       //充电最大时间       
-    double dLimitPower;         //充电最大电量
+    double dLimitEnergy;         //充电最大电量
     int HMItimeout;       //HMI超时
     char strPwd[7];
 }UserChargeCondition_t;

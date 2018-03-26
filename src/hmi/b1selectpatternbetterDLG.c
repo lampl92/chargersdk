@@ -216,7 +216,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             case WM_NOTIFICATION_RELEASED:
                 Tempuserlike.user_like.dLimitFee = 0;
-                Tempuserlike.user_like.dLimitPower = 0;
+                Tempuserlike.user_like.dLimitEnergy = 0;
                 Tempuserlike.user_like.ulLimitTime = 0;
                 Tempuserlike.UserLikeFlag = 1;
                 break;
@@ -358,21 +358,21 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
                     case 0:
                         GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
                         Tempuserlike.user_like.dLimitFee = 0;
-                        Tempuserlike.user_like.dLimitPower = 0;
+                        Tempuserlike.user_like.dLimitEnergy = 0;
                         Tempuserlike.user_like.ulLimitTime = atof(strNumber);
                         Tempuserlike.UserLikeFlag = 1;
                         break;
                     case 1:
                         GUI_MEMDEV_WriteAt(Memdevselectpatternunityuan, yuandufenx, yuandufeny);
                         Tempuserlike.user_like.dLimitFee = atof(strNumber);
-                        Tempuserlike.user_like.dLimitPower = 0;
+                        Tempuserlike.user_like.dLimitEnergy = 0;
                         Tempuserlike.user_like.ulLimitTime = 0;
                         Tempuserlike.UserLikeFlag = 1;
                         break;
                     case 2:
                         GUI_MEMDEV_WriteAt(Memdevselectpatternunitdu, yuandufenx, yuandufeny);
                         Tempuserlike.user_like.dLimitFee = 0;
-                        Tempuserlike.user_like.dLimitPower = atof(strNumber);
+                        Tempuserlike.user_like.dLimitEnergy = atof(strNumber);
                         Tempuserlike.user_like.ulLimitTime = 0;
                         Tempuserlike.UserLikeFlag = 1;
                         break;

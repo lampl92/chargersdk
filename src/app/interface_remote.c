@@ -506,7 +506,7 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     return errcode;
 }
 
-ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
+ErrorCode_t RemoteIF_SendSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;
     errcode = ERR_NO;
@@ -516,7 +516,7 @@ ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
     return errcode;
 }
 
-ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+ErrorCode_t RemoteIF_RecvSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -527,9 +527,9 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
     ErrorCode_t set_errcode_off_peak;
     ErrorCode_t errcode;
     ul2uc ultmpNetSeq;
-    double dtmpPowerFee;
+    double dtmpEnergyFee;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_POWERFEE, pbuff, &len);
+    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_ENERGYFEE, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -557,29 +557,29 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
         ultmpNetSeq.ucVal[1] = pbuff[5];
         ultmpNetSeq.ucVal[2] = pbuff[6];
         ultmpNetSeq.ucVal[3] = pbuff[7];
-        dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_sharp = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_sharp);
+        dtmpEnergyFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
+        set_errcode_sharp = cfg_set_double(pathProtoCfg, &dtmpEnergyFee, "%s", jnProtoEnergyFee_sharp);
         //pbuff[8...11] 峰费率
         ultmpNetSeq.ucVal[0] = pbuff[8];
         ultmpNetSeq.ucVal[1] = pbuff[9];
         ultmpNetSeq.ucVal[2] = pbuff[10];
         ultmpNetSeq.ucVal[3] = pbuff[11];
-        dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_peak = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_peak);
+        dtmpEnergyFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
+        set_errcode_peak = cfg_set_double(pathProtoCfg, &dtmpEnergyFee, "%s", jnProtoEnergyFee_peak);
         //pbuff[12...15] 平费率
         ultmpNetSeq.ucVal[0] = pbuff[12];
         ultmpNetSeq.ucVal[1] = pbuff[13];
         ultmpNetSeq.ucVal[2] = pbuff[14];
         ultmpNetSeq.ucVal[3] = pbuff[15];
-        dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_shoulder = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_shoulder); 
+        dtmpEnergyFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
+        set_errcode_shoulder = cfg_set_double(pathProtoCfg, &dtmpEnergyFee, "%s", jnProtoEnergyFee_shoulder); 
         //pbuff[16...19] 谷费率
         ultmpNetSeq.ucVal[0] = pbuff[16];
         ultmpNetSeq.ucVal[1] = pbuff[17];
         ultmpNetSeq.ucVal[2] = pbuff[18];
         ultmpNetSeq.ucVal[3] = pbuff[19];
-        dtmpPowerFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
-        set_errcode_off_peak = cfg_set_double(pathProtoCfg, &dtmpPowerFee, "%s", jnProtoPowerFee_off_peak);
+        dtmpEnergyFee = (double)(ntohl(ultmpNetSeq.ulVal) * 0.0001);
+        set_errcode_off_peak = cfg_set_double(pathProtoCfg, &dtmpEnergyFee, "%s", jnProtoEnergyFee_off_peak);
 
         //pbuff[0...3] 操作ID
         if(set_errcode_sharp == ERR_NO &&
@@ -1235,7 +1235,7 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     int res;
     ErrorCode_t errcode;
 
-    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_POWERFEE, pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_ENERGYFEE, pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_SERVFEE,  pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_CYC,      pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_TIMESEG,  pEVSE, pProto, &res);

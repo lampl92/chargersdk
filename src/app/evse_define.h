@@ -60,7 +60,7 @@
 #define defEventBitOrderStopTypeScram            BIT_8
 #define defEventBitOrderStopTypeLimitFee         BIT_9
 #define defEventBitOrderStopTypeLimitTime        BIT_10
-#define defEventBitOrderStopTypeLimitPower       BIT_11
+#define defEventBitOrderStopTypeLimitEnergy       BIT_11
 #define defEventBitOrderStopTypeRemoteStop       BIT_12
 #define defEventBitOrderStopTypeRFIDStop         BIT_13
 #define defEventBitOrderStopTypeFull             BIT_14
@@ -117,7 +117,7 @@
 #define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionFreqTimer   BIT_9
 
-#define defEventBitExceptionLimitPower  BIT_10  //把LimitPower放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitEnergy  BIT_10  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
 #define defEventBitExceptionLimitFee    BIT_11  
 #define defEventBitExceptionLimitTime   BIT_12  
 #define defEventBitExceptionRemoteStop  BIT_13  //远程停止

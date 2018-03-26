@@ -86,7 +86,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     }
 
     taskremote_reset(pEVSE, pProto, flag_set);
-    RemoteIF_RecvSetPowerFee(pEVSE, pProto, flag_set, &res);
+    RemoteIF_RecvSetEnergyFee(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetServFee(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetTimeSeg(pEVSE, pProto, flag_set, &res);
     RemoteIF_RecvSetQR(pEVSE, pProto, flag_set, &res);
