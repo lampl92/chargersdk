@@ -370,7 +370,7 @@ static ErrorCode_t GetChargingEnergy(void *pvCON)
     errcode = ERR_NO;
 
     /** 从电表获取 */
-#ifdef DEBUG_DIAG_DUMMY
+#ifndef  DEBUG_DIAG_DUMMY
     tmpEnergy = pCON->status.dChargingEnergy;
     tmpEnergy += 0.0001;
 #else
@@ -1203,8 +1203,8 @@ static ErrorCode_t StopCharge(void *pvCON)
             defEventBitCONS2Opened,
             pdFALSE,
             pdTRUE,
-            100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
-        //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
+            3000);//S1转换到12V后S2应在3s内断开，否则强制带载断电。
+        //此处判断uxbits无意义，因为无论如何3s内或者3s外都要断电。
         if ((uxBits & defEventBitCONS2Opened) == defEventBitCONS2Opened)
         {
             printf_safe("S2 Opened OK\n");
