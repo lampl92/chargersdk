@@ -10,6 +10,10 @@
 #include "electric_energy_meter.h"
 #include "user_app.h"
 #include <string.h>
+
+#define DEBUG_DIAG_DUMMY_METER
+//#define DEBUG_DIAG_DUMMY_TEMP
+
 /**
  * @brief 获取相电压
  * @details 获取相电压
@@ -27,7 +31,22 @@ static ErrorCode_t GetLineVolt(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     
     pLine = (Line_t *)pvLine;
     errcode = ERR_NO;
-    
+#ifdef DEBUG_DIAG_DUMMY_METER
+    switch (ucLineID)
+    {
+    case defLineA:
+        pLine->status.dVolt = 220.1+ucCONID;
+        break;
+    case defLineB:
+        pLine->status.dVolt = 220.2+ucCONID;
+        break;
+    case defLineC:
+        pLine->status.dVolt = 220.3+ucCONID;
+        break;
+    default:
+        break;
+    }  
+#else
     switch (ucLineID)
     {
     case defLineA:
@@ -42,6 +61,7 @@ static ErrorCode_t GetLineVolt(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     default:
         break;
     }
+#endif
     return errcode;
 }
 /**
@@ -61,6 +81,22 @@ static ErrorCode_t GetLineCurr(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     pLine = (Line_t *)pvLine;
     errcode = ERR_NO;
     
+#ifdef DEBUG_DIAG_DUMMY_METER
+    switch (ucLineID)
+    {
+    case defLineA:
+        pLine->status.dCurr = 60.1 + ucCONID;
+        break;
+    case defLineB:
+        pLine->status.dCurr = 60.2 + ucCONID;
+        break;
+    case defLineC:
+        pLine->status.dCurr = 60.3 + ucCONID;
+        break;
+    default:
+        break;
+    }  
+#else
     switch (ucLineID)
     {
     case defLineA:
@@ -75,6 +111,7 @@ static ErrorCode_t GetLineCurr(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     default:
         break;
     }
+#endif
     return errcode;
 }
 /**
@@ -156,6 +193,47 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     
     pLine = (Line_t *)pvLine;
     errcode = ERR_NO;
+#ifdef DEBUG_DIAG_DUMMY_TEMP
+    if (ucCONID == 0)
+    {
+        a_channel = 23;
+        b_channel = 23;
+        c_channel = 23;
+        if (pEVSE->info.ucTotalCON > 1)
+        {
+            n_channel = 23;
+        }
+        else
+        {
+            n_channel = 24;
+        }
+        
+    }
+    else if (ucCONID == 1)
+    {
+        a_channel = 24;
+        b_channel = 24;
+        c_channel = 24;
+        n_channel = 24;
+    }
+    switch (ucLineID)
+    {
+    case defLineA:
+        pLine->status.dTemp = a_channel;
+        break;
+    case defLineB:
+        pLine->status.dTemp = b_channel;
+        break;
+    case defLineC:
+        pLine->status.dTemp = c_channel;
+        break;
+    case defLineN:
+        pLine->status.dTemp = n_channel;
+        break;
+    default:
+        break;
+    }
+#else
     if (ucCONID == 0)
     {
         a_channel = TEMP_L_OUT;
@@ -195,6 +273,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     default:
         break;
     }
+#endif
 }
 
 void LineInit(Line_t *pLine, uint8_t ucLineID)
