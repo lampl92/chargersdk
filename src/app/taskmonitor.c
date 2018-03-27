@@ -38,14 +38,15 @@ void vTaskMonitor_ChData(void *pvParameters)
         if ((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
 #ifdef TEST_TIME_ChData
-            printf_safe("begin %s %d\n", TEST_TIME_ChData, clock());
+            printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
 #endif // TEST_TIME_ChData
             THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
             THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
             THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
             THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
+            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingEnergy(pCON), ERR_LEVEL_CRITICAL, "Monitor");
 #ifdef TEST_TIME_ChData
-            printf_safe("end %s %d\n", TEST_TIME_ChData, clock());
+            printf_safe("con%d end   %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
 #endif // TEST_TIME_ChData    
             if (errcode == ERR_NO)
             {
