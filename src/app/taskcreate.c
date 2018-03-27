@@ -134,6 +134,7 @@ SemaphoreHandle_t xMutexTimeStruct;
 SemaphoreHandle_t xMutexNandHW;
 SemaphoreHandle_t xprintfMutex = NULL;
 SemaphoreHandle_t xMeterMutex = NULL;
+SemaphoreHandle_t xTempMutex = NULL;
 
 
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
