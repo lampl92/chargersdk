@@ -4,6 +4,7 @@
 #include "taskrfid.h"
 #include "interface.h"
 #include "utils.h"
+#include "touchtimer.h"
 
 int i;//临时用
 double GBSBalance;
@@ -22,27 +23,39 @@ void GBSTask()
     
     while (1)
     {
+        ledShow();
         switch (gbsstate)
         {
         case StateHome:
             for (i = 0; i < 2; i++)
             {
                 pCON = CONGetHandle(i);
-                if (pCON->state ==  STATE_CON_IDLE || pCON->state == STATE_CON_PLUGED \
-                    || pCON->state == STATE_CON_PRECONTRACT || pCON->state == STATE_CON_PRECONTRACT_LOSEPLUG\
-                    || pCON->state == STATE_CON_STARTCHARGE || pCON->state == STATE_CON_RETURN)
+                switch (pCON->state)
                 {
+                case STATE_CON_IDLE:
+                case STATE_CON_PLUGED:
+                case STATE_CON_PRECONTRACT:
+                case STATE_CON_PRECONTRACT_LOSEPLUG:
+                case STATE_CON_STARTCHARGE:
+                case STATE_CON_RETURN:
+                case STATE_CON_UNLOCK:
                     GBSgunstate[i] = GunfreeState;
-                }
-                if (pCON->state == STATE_CON_CHARGING)
-                {
+                    break;
+                case STATE_CON_CHARGING:
                     GBSgunstate[i] = GunchargingState;
-                }
-                if (pCON->state == STATE_CON_STOPCHARGE)
-                {
+                    break;
+                case STATE_CON_STOPCHARGE:
                     GBSgunstate[i] = GunchargedoneState;
+                    break;
+                case STATE_CON_ERROR:
+                case STATE_CON_DEV_ERROR:
+                    GBSgunstate[i] = Gunerror;
+                    break;
                 }
-                if (pCON->state == STATE_CON_ERROR)
+                if (pCON->status.ulSignalAlarm != 0 ||
+                    pCON->status.ulSignalFault != 0 ||
+                    pEVSE->status.ulSignalAlarm != 0 ||
+                    pEVSE->status.ulSignalFault != 0)
                 {
                     GBSgunstate[i] = Gunerror;
                 }

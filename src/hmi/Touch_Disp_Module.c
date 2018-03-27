@@ -556,6 +556,103 @@ void Led_Show()
         led_signalold = led_signal;
     }
 }
+
+/**
+*灯光控制新
+*
+*/
+void ledShow()
+{
+    int i;
+    CON_t *pCON;
+    uint8_t ledSignalPool[2];
+    uint8_t led_signal[2];
+    static uint8_t led_signalold[2];
+    for (i = 0; i < 2; i++)
+    {
+        pCON = CONGetHandle(i);
+        led_signal[i] = 0;
+        /**< 置位说明有故障存在闪烁红灯 */
+        if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+        {
+            bitset(led_signal[i], 0);
+        }
+        else
+        {
+            switch (pCON->state)
+            {
+            case STATE_CON_IDLE:
+                /**< 空闲状态 */
+                bitset(led_signal[i], 1);
+                break;
+            case STATE_CON_CHARGING:
+                /**< 充电过程中 */
+                bitset(led_signal[i], 2);
+                break;
+            default:
+                if (pCON->status.xPlugState == PLUG)
+                {
+                    if (pCON->status.xCPState == CP_6V_PWM
+                        || pCON->status.xCPState == CP_6V)
+                    {
+                        /**< 等待车端插枪 */
+                        bitset(led_signal[i], 3);
+                    }
+                    else if (pCON->status.xCPState == CP_9V_PWM
+                        || pCON->status.xCPState == CP_9V)
+                    {
+                        /**< S1未闭合 */
+                        bitset(led_signal[i], 4);
+                    }
+                }
+                else
+                {
+                    /**< 未知状态 */
+                    bitset(led_signal[i], 5);
+                }
+                break;
+            }
+        }
+    }
+   
+    for (i = 0; i < 2; i++)
+    {
+        ledSignalPool[i] = led_signalold[i] ^ led_signal[i];//有变化则ledSignalPool不为0
+        if (ledSignalPool[i] != 0)
+        {
+            ledSignalPool[i] = ledSignalPool[i] & led_signal[i];
+            if (bittest(ledSignalPool[i], 0))
+            {
+                led_ctrl(i, red, flicker);
+            }
+            if (bittest(ledSignalPool[i], 1))
+            {
+                led_ctrl(i, green, keep_on);
+            }
+            if (bittest(ledSignalPool[i], 2))
+            {
+                led_ctrl(i, green, breath);
+            }
+            if (bittest(ledSignalPool[i], 3))
+            {
+                led_ctrl(i, green, flicker);
+            }
+            if (bittest(ledSignalPool[i], 4))
+            {
+                led_ctrl(i, blue, flicker);
+            }
+            if (bittest(ledSignalPool[i], 5))
+            {
+                led_ctrl(i, green, keep_on);
+            }
+            led_signalold[i] = led_signal[i];
+        }
+    }
+}
+
 /** @brief
  *刷新故障列表;
  * @param msg_err:故障列表指针

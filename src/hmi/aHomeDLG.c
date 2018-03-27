@@ -15,13 +15,20 @@
 #define ID_TEXT_3 (GUI_ID_USER + 0x0D)
 #define ID_TEXT_4 (GUI_ID_USER + 0x0E)
 #define ID_TEXT_5 (GUI_ID_USER + 0x0F)
+#define ID_WINDOW_2 (GUI_ID_USER + 0x10)
+#define ID_WINDOW_3 (GUI_ID_USER + 0x11)
+#define ID_WINDOW_4 (GUI_ID_USER + 0x12)
+#define ID_PROGBAR_0 (GUI_ID_USER + 0x13)
+#define ID_PROGBAR_1 (GUI_ID_USER + 0x14)
+
 //枪状态，信号状态，价格状态
-#define ID_Timergunstateflash           1
-#define ID_Timersignalstateflash        2
-#define ID_Timerpriceflash              3
-#define ID_Timertimeflash               4
-#define ID_Timerinfoflash               5
-#define ID_Timerstateflash              6
+#define ID_Timergunastateflash           1
+#define ID_Timergunbstateflash           2
+#define ID_Timersignalstateflash        3
+#define ID_Timerpriceflash              4
+#define ID_Timertimeflash               5
+#define ID_Timerinfoflash               6
+#define ID_Timerstateflash              7
 #define gunstateax  185 //枪A状态图标x位置
 #define gunstateay  100 //枪A状态图标y位置
 #define gunstatebx  445 //枪B状态图标x位置
@@ -36,10 +43,11 @@
 #define helpinfoy 70
 
 static WM_HWIN      Hwininfo;
-static WM_HTIMER    _timerstateflash;
-static WM_HTIMER _timergunstateflash, _timersignalstateflash, _timerpriceflash,_timertimeflash;
+static WM_HWIN      Hwingunastate, Hwingunbstate;//枪A枪B的状态窗口
+static WM_HWIN      Hwinhelp;
+static WM_HTIMER    _timerstateflash;//后台状态
+static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
-static int helpflag;//提示帮助标志位
 static int i = 1;//函数临时使用
 int SignalIntensity;//信号强度
 int PreSignalIntensity;//之前的信号强度
@@ -58,62 +66,76 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
-    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 140, 90, 260, 195, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "info-Window", ID_WINDOW_1, 140, 90, 260, 195, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 120, 55, 240, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 120, 89, 240, 24, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 120, 123, 240, 24, 0, 0x0, 0 },
 };
 
+static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
+    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, 185, 100, 170, 170, 0, 0x0, 0 },
+    { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, gunstateax, gunstateay, 170, 170, 0, 0x0, 0 },
+};
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
+    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_3, 445, 100, 170, 170, 0, 0x0, 0 },
+    { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_1, gunstatebx, gunstateby, 170, 170, 0, 0x0, 0 },    
+};
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
+    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_4, 445, 100, 170, 170, 0, 0x0, 0 },
+};
+
 
 static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 {
-    WM_HWIN      hItem;
-    switch (GBSgunstate[0])
-    {
-    case GunfreeState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetSkin(hItem, SKIN_buttongunAscancode);
-        break;
-    case GunchargingState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, gunstateax, gunstateay);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
-        break;
-    case GunchargedoneState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, gunstateax, gunstateay);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
-        break;
-    case Gunerror:
-        GUI_MEMDEV_WriteAt(MemdevhomegunAerror, gunstateax, gunstateay);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
-        break;
-    }
-    switch (GBSgunstate[1])
-    {
-    case GunfreeState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetSkin(hItem, SKIN_buttongunBscancode);
-        break;
-    case GunchargingState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, gunstatebx, gunstateby);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
-        break;
-    case GunchargedoneState:
-        GUI_MEMDEV_WriteAt(MemdevhomegunBchargedone, gunstatebx, gunstateby);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
-        break;
-    case Gunerror:
-        GUI_MEMDEV_WriteAt(MemdevhomegunBerror, gunstatebx, gunstateby);
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetSkin(hItem, SKIN_buttongunBerror);
-        break;
-    }
+//    WM_HWIN      hItem;
+//    switch (GBSgunstate[0])
+//    {
+//    case GunfreeState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunAscancode);
+//        break;
+//    case GunchargingState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, gunstateax, gunstateay);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+//        break;
+//    case GunchargedoneState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, gunstateax, gunstateay);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+//        break;
+//    case Gunerror:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunAerror, gunstateax, gunstateay);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
+//        break;
+//    }
+//    switch (GBSgunstate[1])
+//    {
+//    case GunfreeState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunBscancode);
+//        break;
+//    case GunchargingState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, gunstatebx, gunstateby);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+//        break;
+//    case GunchargedoneState:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunBchargedone, gunstatebx, gunstateby);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+//        break;
+//    case Gunerror:
+//        GUI_MEMDEV_WriteAt(MemdevhomegunBerror, gunstatebx, gunstateby);
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+//        BUTTON_SetSkin(hItem, SKIN_buttongunBerror);
+//        break;
+//    }
 }
 
 static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
@@ -181,7 +203,7 @@ static void updatedatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT, const GUI_FONT * 
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT), date_time_buf);
 }
 
-static void updateinfo(WM_MESSAGE *pMsg)//专用
+static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
 {
     uint8_t temp_buf[32];
     uint32_t time_charge;
@@ -203,7 +225,7 @@ static void updateinfo(WM_MESSAGE *pMsg)//专用
             sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
             sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4),temp_buf);//消费总额 
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);//消费总额 
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
             sprintf(temp_buf, "%d", time_charge / 60);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电时间
@@ -244,11 +266,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        helpflag = 0;
-        homegunstate[0] = GBSgunstate[0];
-        homegunstate[1] = GBSgunstate[1];
         SignalIntensity = getSignalIntensity();
-        updatedatetime(pMsg, ID_TEXT_0,&fontwryhcg24e);
+        updatedatetime(pMsg, ID_TEXT_0, &fontwryhcg24e);
         updateprice(pMsg, ID_TEXT_1, ID_TEXT_2, &fontwryhcg24e);
         
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
@@ -267,12 +286,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         break;              
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevhomeback, 0, 0);
-        updategunState(pMsg);
+        //updategunState(pMsg);
         updatesignal(pMsg);
-        if (helpflag == 1)
-        {
-            GUI_MEMDEV_WriteAt(Memdevhomehelpinfo, helpinfox, helpinfoy);
-        }
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -345,45 +360,20 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         case ID_BUTTON_3: //'help'
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
-                helpflag = 1;
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-                WM_HideWin(hItem);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-                WM_HideWin(hItem);
-                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                WM_ShowWin(Hwinhelp);              
                 break;
             case WM_NOTIFICATION_RELEASED:
-                helpflag = 0;
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-                WM_ShowWin(hItem);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-                WM_ShowWin(hItem);
-                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                WM_HideWin(Hwinhelp);
                 break;
             case WM_NOTIFICATION_MOVED_OUT:
-                helpflag = 0;
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-                WM_ShowWin(hItem);
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-                WM_ShowWin(hItem);
-                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                WM_HideWin(Hwinhelp);
                 break;
             }
             break;
         }
         break;
     case WM_TIMER:
-        if (pMsg->Data.v == _timergunstateflash)
-        {           
-            //枪状态更新
-            if (homegunstate[0] != GBSgunstate[0] || homegunstate[1] != GBSgunstate[1]) 
-            {
-                //WM_SendMessageNoPara(pMsg->hWin, WM_PAINT);
-                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
-            }
-            WM_RestartTimer(pMsg->Data.v, 100);
-        }
-        else if (pMsg->Data.v == _timersignalstateflash)
+        if (pMsg->Data.v == _timersignalstateflash)
         {
            //信号的更新
             SignalIntensity = getSignalIntensity();
@@ -445,7 +435,7 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
         {
             if (GBSgunstate[0] == GunchargingState)
             {
-                GUI_MEMDEV_WriteAt(Memdevhomecharginginfo,infoAx,infoAy);
+                GUI_MEMDEV_WriteAt(Memdevhomecharginginfo, infoAx, infoAy);
             }
             if (GBSgunstate[0] == GunchargedoneState)
             {
@@ -477,17 +467,171 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
     }
 }
 
+static void _cbDialoggunastate(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    CON_t *pCON;
+    int pkw;//功率
+    
+    pCON = CONGetHandle(0);
+    switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG: 
+        homegunstate[0] = GBSgunstate[0];
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+        PROGBAR_SetValue(hItem, 0);
+        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
+        break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break;    
+    case WM_PAINT:
+        switch (GBSgunstate[0])
+        {
+        case GunfreeState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAscancode);
+            break;
+        case GunchargingState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+            break;
+        case GunchargedoneState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+            break;
+        case Gunerror:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAerror, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
+            break;
+        }
+        break;
+    case WM_TIMER:
+        if (pMsg->Data.v == _timergunastateflash)
+        {
+            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/70;
+            PROGBAR_SetValue(hItem, pkw);
+            if (homegunstate[0] != GBSgunstate[0]) 
+            {              
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                homegunstate[0] = GBSgunstate[0];
+            }
+            WM_RestartTimer(pMsg->Data.v, 20);    
+        }
+        break;
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
+}
+
+static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    CON_t *pCON;
+    int pkw;//功率
+    pCON = CONGetHandle(0);
+    switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG:        
+        homegunstate[1] = GBSgunstate[1];
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
+        PROGBAR_SetValue(hItem, 0);
+        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
+        break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break;    
+    case WM_PAINT:
+        switch (GBSgunstate[1])
+        {
+        case GunfreeState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBscancode);
+            break;
+        case GunchargingState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+            break;
+        case GunchargedoneState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBchargedone, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+            break;
+        case Gunerror:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBerror, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBerror);
+            break;
+        }
+        break;
+    case WM_TIMER:
+        if (pMsg->Data.v == _timergunastateflash)
+        {
+            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 70;
+            PROGBAR_SetValue(hItem, pkw);
+            if (homegunstate[1] != GBSgunstate[1]) 
+            {
+                //WM_SendMessageNoPara(pMsg->hWin, WM_PAINT);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+                homegunstate[1] = GBSgunstate[1];
+            }
+            WM_RestartTimer(pMsg->Data.v, 20);    
+        }
+        break;
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
+}
+
+static void _cbDialoghelp(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    
+    switch (pMsg->MsgId) {
+    case WM_INIT_DIALOG:        
+        break;    
+    case WM_PAINT:
+        GUI_MEMDEV_WriteAt(Memdevhomehelpinfo, helpinfox, helpinfoy);
+        break;
+    default:
+        WM_DefaultProc(pMsg);
+        break;
+    }
+}
+
 WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateHomeDLG(void) {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     _timerstateflash = WM_CreateTimer(hWin, ID_Timerstateflash, 100, 0);
-    _timergunstateflash = WM_CreateTimer(hWin, ID_Timergunstateflash, 100, 0);
     _timersignalstateflash = WM_CreateTimer(hWin, ID_Timersignalstateflash, 100, 0);
     _timerpriceflash = WM_CreateTimer(hWin, ID_Timerpriceflash, 500, 0);
-    _timertimeflash = WM_CreateTimer(hWin,ID_Timertimeflash, 200, 0);
+    _timertimeflash = WM_CreateTimer(hWin, ID_Timertimeflash, 200, 0);
+    
+    Hwingunastate = GUI_CreateDialogBox(_aDialogCreategunastate, GUI_COUNTOF(_aDialogCreategunastate), _cbDialoggunastate, hWin, 0, 0);
+    _timergunastateflash = WM_CreateTimer(Hwingunastate, ID_Timergunastateflash, 100, 0);
+    
+    Hwingunbstate = GUI_CreateDialogBox(_aDialogCreategunbstate, GUI_COUNTOF(_aDialogCreategunbstate), _cbDialoggunbstate, hWin, 0, 0);
+    _timergunbstateflash = WM_CreateTimer(Hwingunbstate, ID_Timergunbstateflash, 100, 0);
+    
     Hwininfo = GUI_CreateDialogBox(_aDialogCreateinfo, GUI_COUNTOF(_aDialogCreateinfo), _cbDialoginfo, hWin, 0, 0);
-    _timerinfoflash = WM_CreateTimer(Hwininfo, ID_Timertimeflash, 200, 0);
+    _timerinfoflash = WM_CreateTimer(Hwininfo, ID_Timerinfoflash, 200, 0);
+    
+    Hwinhelp = GUI_CreateDialogBox(_aDialogCreatehelp, GUI_COUNTOF(_aDialogCreatehelp), _cbDialoghelp, hWin, 0, 0);
+    
+    WM_HideWin(Hwinhelp);
     WM_HideWin(Hwininfo);
     return hWin;
 }

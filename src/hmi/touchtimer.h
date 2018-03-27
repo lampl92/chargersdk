@@ -164,6 +164,7 @@ void CaliDone_Analy(WM_HWIN hWin);
 uint8_t _deleteWin(WM_HWIN hItem);
 void Err_Analy(WM_HWIN hWin);
 void Led_Show();
+void ledShow();
 void Errlist_flush(uint8_t *msg_err);
 void Signal_Show();
 int getSignalIntensity();
