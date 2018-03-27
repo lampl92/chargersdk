@@ -628,10 +628,10 @@ WM_HWIN CreateHomeDLG(void) {
     
     Hwininfo = GUI_CreateDialogBox(_aDialogCreateinfo, GUI_COUNTOF(_aDialogCreateinfo), _cbDialoginfo, hWin, 0, 0);
     _timerinfoflash = WM_CreateTimer(Hwininfo, ID_Timerinfoflash, 200, 0);
+    WM_HideWin(Hwininfo);
     
     Hwinhelp = GUI_CreateDialogBox(_aDialogCreatehelp, GUI_COUNTOF(_aDialogCreatehelp), _cbDialoghelp, hWin, 0, 0);
-    
     WM_HideWin(Hwinhelp);
-    WM_HideWin(Hwininfo);
+
     return hWin;
 }
