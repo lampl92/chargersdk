@@ -83,7 +83,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
-    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_4, 445, 100, 170, 170, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_4, 165, 70, 470, 300, 0, 0x0, 0 },
 };
 
 
