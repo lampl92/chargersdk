@@ -132,7 +132,8 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 /---------------------------------------------------------------------------*/
 SemaphoreHandle_t xMutexTimeStruct;
 SemaphoreHandle_t xMutexNandHW;
-SemaphoreHandle_t  xprintfMutex = NULL;
+SemaphoreHandle_t xprintfMutex = NULL;
+SemaphoreHandle_t xMeterMutex = NULL;
 
 
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
@@ -238,6 +239,7 @@ void AppObjCreate (void)
     xMutexTimeStruct = xSemaphoreCreateMutex();
     xMutexNandHW = xSemaphoreCreateMutex();
     xprintfMutex = xSemaphoreCreateMutex();
+    xMeterMutex = xSemaphoreCreateMutex();
     
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();

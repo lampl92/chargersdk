@@ -2,6 +2,9 @@
 #include "user_app.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+
+extern SemaphoreHandle_t xMeterMutex;
 
 #define read     0x03
 #define write    0x10
@@ -250,33 +253,61 @@ void Get_electricity_meter_massage(uint8_t add, uint8_t cmd, uint16_t massage, u
 
 //直接接收数据
 //bsp_DelayMS(100);
-    vTaskDelay(100);
+    vTaskDelay(30);
     electricity_meter_analysis(add);
 }
 #ifdef DTSF1352
 double Get_Electricity_meter_massage_energy(uint8_t add)
 {
     double electricity_data;
-    Get_electricity_meter_massage(add, read, electric_energy_h, 1);
-    Get_electricity_meter_massage(add, read, electric_energy_l, 1);
-    electricity_data =
-    (Electricity_meter[add].massage.massage_electric_energy_h * 65536
-    + Electricity_meter[add].massage.massage_electric_energy_l) / 100.0;
+    if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
+    {
+        Get_electricity_meter_massage(add, read, electric_energy_h, 1);
+        Get_electricity_meter_massage(add, read, electric_energy_l, 1);
+        electricity_data = (Electricity_meter[add].massage.massage_electric_energy_h * 65536 
+                            + Electricity_meter[add].massage.massage_electric_energy_l) / 100.0;
+        
+        xSemaphoreGive(xMeterMutex);
+    }
+    else
+    {
+        electricity_data = -1;
+        printf_safe("meter %d energy timeout\n", add);
+    }
+
     return electricity_data;
 }
 double Get_Electricity_meter_massage_current(uint8_t add, uint8_t massage)
 {
     double electricity_data;
-    Get_electricity_meter_massage(add, read, massage, 1);
-    electricity_data = Electricity_meter[add].massage.massage_ia / 100;
+    if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
+    {
+        Get_electricity_meter_massage(add, read, massage, 1);
+        electricity_data = Electricity_meter[add].massage.massage_ia / 100;
+        xSemaphoreGive(xMeterMutex);
+    }
+    else
+    {
+        electricity_data = -1;
+        printf_safe("meter %d curr timeout\n", add);
+    }
     return electricity_data;
 }
 
 double Get_Electricity_meter_massage_voltage(uint8_t add, uint8_t massage)
 {
     double electricity_data;
-    Get_electricity_meter_massage(add, read, massage, 1);
-    electricity_data = Electricity_meter[add].massage.massage_va / 10;
+    if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
+    {
+        Get_electricity_meter_massage(add, read, massage, 1);
+        electricity_data = Electricity_meter[add].massage.massage_va / 10;
+        xSemaphoreGive(xMeterMutex);
+    }
+    else
+    {
+        electricity_data = -1;
+        printf_safe("meter %d volt timeout\n", add);
+    }
     return electricity_data;
 }
 

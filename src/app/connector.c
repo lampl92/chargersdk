@@ -370,11 +370,11 @@ static ErrorCode_t GetChargingEnergy(void *pvCON)
     errcode = ERR_NO;
 
     /** 从电表获取 */
-#ifndef  DEBUG_DIAG_DUMMY
+#ifdef  DEBUG_DIAG_DUMMY
     tmpEnergy = pCON->status.dChargingEnergy;
     tmpEnergy += 0.0001;
 #else
-    tmpEnergy = tmpEnergy;/** 电表读数 */
+    tmpEnergy = Get_Electricity_meter_massage_energy(ucCONID + 1);/** 电表读数 */
 #endif
 
     pCON->status.dChargingEnergy = tmpEnergy;
@@ -466,6 +466,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     {
         pCP_err_cont = &cp2_err_cont;
         pCCR1 = &(TIM4->CCR1);
+
         pCON->status.dCPVolt = Sys_samp.DC.CP2; 
     }
     
@@ -513,6 +514,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else
     {
+
         printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
         printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
         printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);

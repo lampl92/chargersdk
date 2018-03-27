@@ -473,11 +473,11 @@ void curr2pwm(uint32_t rate_curr, uint32_t con_id)
     //7kw duty = 53.3%, 40kw duty = 89.2%
     if (rate_curr <= 51 && rate_curr >= 6)
     { 
-        duty = rate_curr / 0.6 / 100;
+        duty = rate_curr / 0.6 ;
     }
     else if (rate_curr > 51 && rate_curr <= 63)
     {
-        duty = (rate_curr / 2.5 + 64) / 100;
+        duty = rate_curr / 2.5 + 64;
     }
     else//默认
     {
@@ -486,7 +486,7 @@ void curr2pwm(uint32_t rate_curr, uint32_t con_id)
     compare = 1000 - duty * 10;
     if (con_id == 0)
     {
-        TIM_SetTIM2Compare1(compare);//465
+        TIM_SetTIM2Compare1(compare);//465=>7kw   108=>40kw
     }
     if (con_id == 1)
     {
