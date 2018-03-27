@@ -574,7 +574,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
         }
         break;
     case WM_TIMER:
-        if (pMsg->Data.v == _timergunastateflash)
+        if (pMsg->Data.v == _timergunbstateflash)
         {
             pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 70;
             PROGBAR_SetValue(hItem, pkw);
