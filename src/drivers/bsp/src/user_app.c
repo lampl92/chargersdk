@@ -8,6 +8,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "evse_globals.h"
+#include "taskcreate.h"
 float frequency_test;
 samp Sys_samp;
 void user_pwm_relay2_setvalue(uint16_t value);
@@ -124,145 +125,153 @@ float get_dc_massage(uint8_t DC_channel)
     float ad_value, re_value;
     float dc_data;
 
-    Chip1.a_select = DC_channel >> 0 & 0x01;
-    Chip1.b_select = DC_channel >> 1 & 0x01;
-    Chip1.c_select = DC_channel >> 2 & 0x01;
-    Chip1.d_select = DC_channel >> 3 & 0x01;
-    Chip1.cs1_select = 1;
-    write_pca9554_1();
-    vTaskDelay(25);
-    ad_samp_value = get_CD4067();
-    switch (DC_channel)
+    if (xSemaphoreTake(xTempMutex, 1000) == pdPASS)
     {
-    case 0:
-        ad_value = (double)(ad_samp_value * 3) / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
+        Chip1.a_select = DC_channel >> 0 & 0x01;
+        Chip1.b_select = DC_channel >> 1 & 0x01;
+        Chip1.c_select = DC_channel >> 2 & 0x01;
+        Chip1.d_select = DC_channel >> 3 & 0x01;
+        Chip1.cs1_select = 1;
+        write_pca9554_1();
+        vTaskDelay(25);
+        ad_samp_value = get_CD4067();
+        switch (DC_channel)
         {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+        case 0:
+            ad_value = (double)(ad_samp_value * 3) / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP1 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP1;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP1 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP1;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 1:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 1:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP2 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP2;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP2 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP2;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 2:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 2:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP3 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP3;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP3 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP3;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 3:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 3:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP4 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP4;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP4 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP4;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 4:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 4:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM1 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM1;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM1 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM1;
+                }
             }
-        }
-        //  return dc_data;
-        break;
-    case 5:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //  return dc_data;
+            break;
+        case 5:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM2 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM2;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM2 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM2;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 6:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 6:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM3 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM3;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM3 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM3;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 7:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 7:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM4 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM4;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM4 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM4;
+                }
             }
-        }
 
-        //return dc_data;
-        break;
-    case 8:
-        break;
-    case 9:
-        break;
-    case 10:
-        break;
-    case 11:
-        break;
-    case 12:
-        break;
-    case 13:
-        break;
-    case 14:
-        break;
-    case 15:
-        dc_data = ad_samp_value;
-        //return dc_data;
-        break;
+                    //return dc_data;
+            break;
+        case 8:
+            break;
+        case 9:
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        case 12:
+            break;
+        case 13:
+            break;
+        case 14:
+            break;
+        case 15:
+            dc_data = ad_samp_value;
+            //return dc_data;
+            break;
 
-    default :
+        default :
 
-        break;
+            break;
+        }
+        xSemaphoreGive(xTempMutex);
+        return dc_data;
     }
-    return dc_data;
+    else
+    {
+        return -1;
+    }
 }
 void get_CP1(void)
 {
