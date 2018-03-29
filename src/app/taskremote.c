@@ -287,7 +287,7 @@ void vTaskEVSERemote(void *pvParameters)
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
             
             /*********上传未处理的订单**************/
-#if 1
+#if 0
             for (i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
@@ -641,8 +641,10 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(pCON->order.statRemoteProc.order.stat)
                 {
                 case REMOTEOrder_IDLE:
-                    uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);
-                    if((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
+                    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
+                        defEventBitOrderMakeFinishToRemote, 
+                        pdTRUE, pdTRUE, 0);
+                    if ((uxBits & defEventBitOrderMakeFinishToRemote) == defEventBitOrderMakeFinishToRemote)
                     {
                         pCON->order.statRemoteProc.order.stat = REMOTEOrder_Send;
                     }
@@ -656,6 +658,7 @@ void vTaskEVSERemote(void *pvParameters)
                     RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
                     if(network_res == 1)
                     {
+                        network_res = 0;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
                         pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                     }
