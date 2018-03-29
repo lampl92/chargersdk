@@ -359,7 +359,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
                         GUI_MEMDEV_WriteAt(Memdevselectpatternunitfen, yuandufenx, yuandufeny);
                         Tempuserlike.user_like.dLimitFee = 0;
                         Tempuserlike.user_like.dLimitEnergy = 0;
-                        Tempuserlike.user_like.ulLimitTime = atof(strNumber);
+                        Tempuserlike.user_like.ulLimitTime = atof(strNumber) * 60;
                         Tempuserlike.UserLikeFlag = 1;
                         break;
                     case 1:
