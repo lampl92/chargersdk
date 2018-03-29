@@ -1,12 +1,12 @@
 #ifndef SKINPOSITION_H
 #define SKINPOSITION_H
 //home页
-#define gunbuttonax  185 //画按键皮肤时使用
-#define gunbuttonay  280 //画按键皮肤时使用
-#define gunbuttonbx  445 //画按键皮肤时使用
-#define gunbuttonby  280 //画按键皮肤时使用
-#define helpbuttonx  40 //help按键x位置
-#define helpbuttony 375 //help按键y位置
+#define gunbuttonax  142 //画按键皮肤时使用
+#define gunbuttonay  349 //画按键皮肤时使用
+#define gunbuttonbx  486 //画按键皮肤时使用
+#define gunbuttonby  350 //画按键皮肤时使用
+#define helpbuttonx  0 //help按键x位置
+#define helpbuttony 410 //help按键y位置
 
 //选枪页
 #define selectgunax  285 //选枪A按钮x位置

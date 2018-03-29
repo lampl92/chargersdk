@@ -469,7 +469,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
     GUI_QR_INFO QR_info_struct;//仿真时看值
-    qr_hmem = GUI_QR_Create(pText, 6, GUI_QR_ECLEVEL_L, 0);
+    qr_hmem = GUI_QR_Create(pText, 8, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     GUI_MEMDEV_Select(mem);
     memx =  GUI_MEMDEV_GetXSize(mem);
@@ -478,7 +478,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
         return -1;
     }
     qrx = (memx - QR_info_struct.Size) / 2;
-    qry = 39;
+    qry = 65;
     GUI_QR_Draw(qr_hmem, qrx, qry);
     GUI_MEMDEV_Select(0);  
     return 0;
@@ -493,7 +493,7 @@ void creatememdev()
     createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
     
     MemdevhomegunBfree = createMemdev(pathhomegunBfree);
-    pCON = CONGetHandle(0);
+    pCON = CONGetHandle(1);
     createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
     
     Memdevhomeback = createMemdev(pathhomeback);

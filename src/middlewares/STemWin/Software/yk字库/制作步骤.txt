@@ -1,0 +1,6 @@
+1. FontCvtST.exe
+2. Standard，16Bit
+3. 宋体，常规，大小（12，16，24，36 Pixels）
+4. edit->disable all
+5. edit->read pattern file
+6. 选择包含可用汉字文本文件

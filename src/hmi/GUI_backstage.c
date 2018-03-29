@@ -16,60 +16,63 @@ UserLike_S Tempuserlike;
 
 //破标志
 int flagGetMoney = 0;
-
+void flashGunState()
+{
+    CON_t *pCON;  
+    for (i = 0; i < 2; i++)
+    {
+        pCON = CONGetHandle(i);
+        switch (pCON->state)
+        {
+        case STATE_CON_IDLE:
+        case STATE_CON_PLUGED:
+        case STATE_CON_PRECONTRACT:
+        case STATE_CON_PRECONTRACT_LOSEPLUG:
+        case STATE_CON_STARTCHARGE:                 
+            GBSgunstate[i] = GunfreeState;
+            break;
+        case STATE_CON_CHARGING:
+            GBSgunstate[i] = GunchargingState;
+            break;
+        case STATE_CON_STOPCHARGE:
+        case STATE_CON_UNLOCK:
+        //                    GBSgunstate[i] = GunchargedoneState;
+            break;
+        case STATE_CON_ERROR:
+        case STATE_CON_DEV_ERROR:
+            GBSgunstate[i] = Gunerror;
+            break;
+        case STATE_CON_RETURN: 
+            break;
+        }
+        if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+        {
+            GBSgunstate[i] = Gunerror;
+            break;
+        }
+        if (pCON->order.statOrder == STATE_ORDER_HOLD)
+        {
+            GBSgunstate[i] = GunchargedoneState;
+            break;
+        }
+    }
+}
 void GBSTask()
 {
     BaseType_t xResult;
     EventBits_t uxBitHMI;
     CON_t *pCON;   
     gbsstate = StateHome;
-    
     while (1)
     {
         ledShow();
         switch (gbsstate)
         {
         case StateHome:
-            for (i = 0; i < 2; i++)
-            {
-                pCON = CONGetHandle(i);
-                switch (pCON->state)
-                {
-                case STATE_CON_IDLE:
-                case STATE_CON_PLUGED:
-                case STATE_CON_PRECONTRACT:
-                case STATE_CON_PRECONTRACT_LOSEPLUG:
-                case STATE_CON_STARTCHARGE:                 
-                    GBSgunstate[i] = GunfreeState;
-                    break;
-                case STATE_CON_CHARGING:
-                    GBSgunstate[i] = GunchargingState;
-                    break;
-                case STATE_CON_STOPCHARGE:
-                case STATE_CON_UNLOCK:
-//                    GBSgunstate[i] = GunchargedoneState;
-                    break;
-                case STATE_CON_ERROR:
-                case STATE_CON_DEV_ERROR:
-                    GBSgunstate[i] = Gunerror;
-                    break;
-                case STATE_CON_RETURN: 
-                    break;
-                }
-                if (pCON->status.ulSignalAlarm != 0 ||
-                    pCON->status.ulSignalFault != 0 ||
-                    pEVSE->status.ulSignalAlarm != 0 ||
-                    pEVSE->status.ulSignalFault != 0)
-                {
-                    GBSgunstate[i] = Gunerror;
-                    break;
-                }
-                if (pCON->order.statOrder == STATE_ORDER_HOLD)
-                {
-                    GBSgunstate[i] = GunchargedoneState;
-                    break;
-                }
-            }
+            flashGunState();
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
@@ -149,19 +152,23 @@ void GBSTask()
             }
             break;
         case StateChargingOk:
-            vTaskDelay(1000);
+            vTaskDelay(1500);
+            flashGunState();
             gbsstate = StateHome;
             break;
         case StateCardconditionNotOk:
             vTaskDelay(1000);
+            flashGunState();
             gbsstate = StateHome;
             break;
         case StateNetTimeout:
             vTaskDelay(1000);
+            flashGunState();
             gbsstate = StateHome;
             break;
         case StatePlugTimeout:
             vTaskDelay(1000);
+            flashGunState();
             gbsstate = StateHome;
             break;
         }

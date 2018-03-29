@@ -27,6 +27,7 @@ extern GUI_FONT fontwryhcg36aa4e;
 extern GUI_FONT fontwryhcg12e;
 extern GUI_FONT fontwryhcg16e;
 extern GUI_FONT fontwryhcg24e;
+extern GUI_FONT fontwryhcg30e;
 extern GUI_FONT fontwryhcg36e;
 
 extern GUI_FONT fontwryhcg44e;

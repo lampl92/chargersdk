@@ -27,6 +27,7 @@ GUI_FONT fontwryhcg36aa4e;
 GUI_FONT fontwryhcg12e;
 GUI_FONT fontwryhcg16e;
 GUI_FONT fontwryhcg24e;
+GUI_FONT fontwryhcg30e;
 GUI_FONT fontwryhcg36e;
 
 GUI_FONT fontwryhcg44e;
@@ -105,6 +106,7 @@ void createfont()
     create_sif_font(pathfontwryhcg12e, &fontwryhcg12e, GUI_SIF_TYPE_PROP_EXT);
     create_sif_font(pathfontwryhcg16e, &fontwryhcg16e, GUI_SIF_TYPE_PROP_EXT);
     create_sif_font(pathfontwryhcg24e, &fontwryhcg24e, GUI_SIF_TYPE_PROP_EXT);
+    create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
     create_sif_font(pathfontwryhcg36e, &fontwryhcg36e, GUI_SIF_TYPE_PROP_EXT);
     
     create_sif_font(pathfontwryhcg44e, &fontwryhcg44e, GUI_SIF_TYPE_PROP_EXT);
