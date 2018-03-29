@@ -112,12 +112,16 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 
                 /*金额不足*/
-                if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                if (pCON->order.ucStartType == defOrderStartType_Card)
                 {
-                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
-                    pCON->order.statOrder = STATE_ORDER_WAITSTOP;
-                    break;
+                    if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                    {
+                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                        pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                        break;
+                    }
                 }
+                
                 /*总时间限制*/
                 if ((time(NULL) - pCON->order.tStartTime) < 85800)//(24 * 3600 - 600) //充电时间快达到24小时时, 会提前10分钟断电结费.
                 {
@@ -267,6 +271,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
+                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
 
                 xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
                 
