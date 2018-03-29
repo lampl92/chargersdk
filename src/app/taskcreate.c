@@ -173,7 +173,7 @@ void vTaskInit(void *pvParameters)
     SysTaskCreate();
     AppTaskCreate();
 #ifdef RELEASE
-    IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
+   // IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
 #endif
     while (1)
     {
@@ -241,6 +241,7 @@ void AppObjCreate (void)
     xMutexNandHW = xSemaphoreCreateMutex();
     xprintfMutex = xSemaphoreCreateMutex();
     xMeterMutex = xSemaphoreCreateMutex();
+    xTempMutex = xSemaphoreCreateMutex();
     
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
