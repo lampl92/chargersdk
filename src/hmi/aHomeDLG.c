@@ -20,6 +20,7 @@
 #define ID_WINDOW_4 (GUI_ID_USER + 0x12)
 #define ID_PROGBAR_0 (GUI_ID_USER + 0x13)
 #define ID_PROGBAR_1 (GUI_ID_USER + 0x14)
+#define  ID_TEXT_6  (GUI_ID_USER + 0x15)
 
 //枪状态，信号状态，价格状态
 #define ID_Timergunastateflash           1
@@ -56,7 +57,7 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 240, 30, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, gunbuttonax, gunbuttonay, 170, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, gunbuttonbx, gunbuttonby, 170, 50, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 302, 422, 100, 44, 0, 0x0, 0 },
@@ -74,7 +75,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, gunstateax, gunstateay, 233, 266, 0, 0x0, 0 },
-   // { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, gunstateax, gunstateay, 235, 268, 0, 0x0, 0 },
+    { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 0, 0, 233, 266, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 90, 134, 52, 30, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
@@ -475,15 +477,25 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     int          NCode;
     int          Id;
     CON_t *pCON;
-    int pkw;//功率
+    float pkw;//功率
+    int pkwpercent;//功率百分比
+    uint8_t temp_buf[32];
     
     pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg36e);
+        TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         homegunstate[0] = GBSgunstate[0];
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
-//        PROGBAR_SetValue(hItem, 0);
-//        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
+        PROGBAR_SetValue(hItem, 0);
+        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
+        if (homegunstate[0] != GunchargingState)
+        {
+            WM_HideWin(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+            WM_HideWin(hItem); 
+        }
         break;
     case MSG_UPDATE:
         WM_InvalidateWindow(pMsg->hWin);
@@ -516,14 +528,31 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if (pMsg->Data.v == _timergunastateflash)
         {
-            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/70;
-//            PROGBAR_SetValue(hItem, pkw);
+            if (homegunstate[0] == GunchargingState)
+            {
+                pCON = CONGetHandle(0);
+                pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
+                sprintf(temp_buf, "%.1f", pkw);
+                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
+                pkwpercent = pkw / 40;
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkw);               
+            }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           
                 homegunstate[0] = GBSgunstate[0];
+                if (homegunstate[0] == GunchargingState)
+                {
+                    WM_ShowWin(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0));
+                    WM_ShowWin(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+                }
+                else
+                {
+                    WM_HideWin(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6));
+                    WM_HideWin(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0));
+                }
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             }
-            WM_RestartTimer(pMsg->Data.v, 20);    
+            WM_RestartTimer(pMsg->Data.v, 100);    
         }
         break;
     default:
@@ -546,6 +575,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
 //        PROGBAR_SetValue(hItem, 0);
 //        PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
+//        WM_HideWin(hItem);
         break;
     case MSG_UPDATE:
         WM_InvalidateWindow(pMsg->hWin);
@@ -578,8 +608,16 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
     case WM_TIMER:
         if (pMsg->Data.v == _timergunbstateflash)
         {
-            pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 70;
-//            PROGBAR_SetValue(hItem, pkw);
+//            if (homegunstate[1] == GunchargingState)
+//            {
+//                pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 70;
+//                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1), pkw);
+//                WM_ShowWin(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1));
+//            }
+//            else
+//            {
+//                WM_HideWin(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1));
+//            }
             if (homegunstate[1] != GBSgunstate[1]) 
             {
                 //WM_SendMessageNoPara(pMsg->hWin, WM_PAINT);

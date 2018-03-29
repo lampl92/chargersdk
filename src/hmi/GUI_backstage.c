@@ -45,17 +45,17 @@ void flashGunState()
         case STATE_CON_RETURN: 
             break;
         }
+        if (pCON->order.statOrder == STATE_ORDER_HOLD)
+        {
+            GBSgunstate[i] = GunchargedoneState;
+            break;
+        }
         if (pCON->status.ulSignalAlarm != 0 ||
             pCON->status.ulSignalFault != 0 ||
             pEVSE->status.ulSignalAlarm != 0 ||
             pEVSE->status.ulSignalFault != 0)
         {
             GBSgunstate[i] = Gunerror;
-            break;
-        }
-        if (pCON->order.statOrder == STATE_ORDER_HOLD)
-        {
-            GBSgunstate[i] = GunchargedoneState;
             break;
         }
     }

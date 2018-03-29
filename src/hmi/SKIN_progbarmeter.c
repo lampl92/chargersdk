@@ -7,7 +7,7 @@
 #include "GUI_backstage.h"
 
 #define testfactor 6
-static const GUI_POINT _aNeedle[] = { { -3*testfactor, 0 }, { -3*testfactor , -55*testfactor }, { 0, -65*testfactor  }, { 3*testfactor , -55*testfactor  }, { 3*testfactor , 0 } };
+static const GUI_POINT _aNeedle[] = { { -3*testfactor, 0 }, { -3*testfactor , -70*testfactor }, { 0, -80*testfactor  }, { 3*testfactor , -70*testfactor  }, { 3*testfactor , 0 } };
 
 static const GUI_POINT _aNeedle2[] = { { -5*testfactor, 0 }, { 0*testfactor, -65*testfactor }, { 5*testfactor, 0 } };
 
@@ -49,8 +49,12 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 //        xPrev = x;
 //        yPrev = y;
 //    }
-    GUI_SetColor(0x006666);
-    GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
+    GUI_SetColor(0x006666);//青色还不错
+//    GUI_SetColor(0xF9F900);//黄色不好
+//    GUI_SetColor(0x000079);//蓝色不好
+   // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
+    GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 116*testfactor, 150*testfactor);
+    GUI_AA_FillCircle(116*testfactor, 150*testfactor, 15*testfactor);
     GUI_AA_DisableHiRes();
 }
 
@@ -62,14 +66,10 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 	switch (pDrawItemInfo->Cmd)
 	{
 	case WIDGET_ITEM_CREATE:
-	//case WIDGET_ITEM_DRAW_BACKGROUND:
 	case WIDGET_ITEM_DRAW_FRAME:
-	//case WIDGET_ITEM_DRAW_TEXT:
-		break;
-	
 	case WIDGET_ITEM_DRAW_BACKGROUND:
 //    	GUI_SetPenShape(3);
-    	GUI_MEMDEV_WriteAt(Memdevhomeback, 0, 0);
+    	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, 112, 79);
 //    	GUI_SetColor(GUI_BLACK);  	
 //    	GUI_FillPolygon(_aNeedle1, GUI_COUNTOF(_aNeedle1), 0, 0);
 //    	GUI_SetColor(GUI_GREEN);
@@ -92,7 +92,7 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 //		WM_SetUserClipRect(0);
 		break;
   case WIDGET_ITEM_DRAW_TEXT:
-			PROGBARMETER_DispNeedle(pDrawItemInfo, 150, -150, 0, 100);
+			PROGBARMETER_DispNeedle(pDrawItemInfo, 140, -140, 0, 100);
     	break;
 	default: return PROGBAR_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
 	}
