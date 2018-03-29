@@ -14,6 +14,9 @@ GBSState_E gbsstate;
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
 
+//破标志
+int flagGetMoney = 0;
+
 void GBSTask()
 {
     BaseType_t xResult;
@@ -36,20 +39,21 @@ void GBSTask()
                 case STATE_CON_PLUGED:
                 case STATE_CON_PRECONTRACT:
                 case STATE_CON_PRECONTRACT_LOSEPLUG:
-                case STATE_CON_STARTCHARGE:
-                case STATE_CON_RETURN:
-                case STATE_CON_UNLOCK:
+                case STATE_CON_STARTCHARGE:                 
                     GBSgunstate[i] = GunfreeState;
                     break;
                 case STATE_CON_CHARGING:
                     GBSgunstate[i] = GunchargingState;
                     break;
                 case STATE_CON_STOPCHARGE:
-                    GBSgunstate[i] = GunchargedoneState;
+                case STATE_CON_UNLOCK:
+//                    GBSgunstate[i] = GunchargedoneState;
                     break;
                 case STATE_CON_ERROR:
                 case STATE_CON_DEV_ERROR:
                     GBSgunstate[i] = Gunerror;
+                    break;
+                case STATE_CON_RETURN: 
                     break;
                 }
                 if (pCON->status.ulSignalAlarm != 0 ||
@@ -58,12 +62,19 @@ void GBSTask()
                     pEVSE->status.ulSignalFault != 0)
                 {
                     GBSgunstate[i] = Gunerror;
+                    break;
+                }
+                if (pCON->order.statOrder == STATE_ORDER_HOLD)
+                {
+                    GBSgunstate[i] = GunchargedoneState;
+                    break;
                 }
             }
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
                 gbsstate = StateGetGunInfo;
+                break;
             }
             break;
         case StateGetGunInfo:
@@ -78,6 +89,7 @@ void GBSTask()
             {
                 Tempuserlike.user_like.HMItimeout = 1;
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+                Tempuserlike.user_like.HMItimeout = 0;
                 quitflag = 0;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
@@ -93,18 +105,25 @@ void GBSTask()
             {
                 pCON = CONGetHandle(Temprfid_pkg.ucCONID);
                 GBSBalance = Temprfid_pkg.dBalance;
+                flagGetMoney = 1;
+            }
+            if (flagGetMoney == 1)
+            {
                 if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
-                {                  
+                {            
+                    flagGetMoney = 0;
                     gbsstate = StatePleasePlug;
                     break;
                 }
                 if (pCON->state == STATE_CON_CHARGING)
                 {
+                    flagGetMoney = 0;
                     gbsstate = StateChargingOk;
                     break;
                 }
                 if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
                 {
+                    flagGetMoney = 0;
                     gbsstate = StateCardconditionNotOk;
                     break;
                 }
