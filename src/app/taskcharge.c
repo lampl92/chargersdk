@@ -335,7 +335,7 @@ void vTaskEVSECharge(void *pvParameters)
                     printf_safe("LimitPower Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitEnergy);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitEnergy);
-                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    pCON->state = STATE_CON_STOPCHARGE;
                 }
                 if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
                 {
