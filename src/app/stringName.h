@@ -183,6 +183,7 @@ typedef enum _filelist
 #define pathfontwryhcg12e         "/nand/system/fontwryhcg12e.sif"
 #define pathfontwryhcg16e         "/nand/system/fontwryhcg16e.sif"
 #define pathfontwryhcg24e         "/nand/system/fontwryhcg24e.sif"
+#define pathfontwryhcg30e         "/nand/system/fontwryhcg30e.sif"
 #define pathfontwryhcg36e         "/nand/system/fontwryhcg36e.sif"
 
 #define pathfontwryhcg44e         "/nand/system/fontwryhcg44e.sif"
