@@ -356,6 +356,7 @@ void vTaskEVSERFID(void *pvParameters)
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
             memset(pRFIDDev->status.strPwd, 0, sizeof(pRFIDDev->status.strPwd));
+            vTaskDelay(3000);
 #if EVSE_USING_RFID
             xTimerStart(xHandleTimerRFID, 100); 
 #endif
