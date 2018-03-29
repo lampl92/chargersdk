@@ -1188,8 +1188,6 @@ static ErrorCode_t StopCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-    clock_t old;
-    printf_safe("set cp clock = %d\n", old = clock());
     SetCPSwitch(pCON, SWITCH_OFF);
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.xCPState = CP_12V;
@@ -1199,8 +1197,6 @@ static ErrorCode_t StopCharge(void *pvCON)
        pCON->status.xCPState == CP_9V ||
        pCON->status.xCPState == CP_12V)
     {
-        printf_safe("cp switch ok clock = %d\n", clock() - old);
-        old = clock();
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
             defEventBitCONS2Opened,
             pdFALSE,
@@ -1226,7 +1222,6 @@ static ErrorCode_t StopCharge(void *pvCON)
         
     }
     errcode = SetRelay(pvCON, SWITCH_OFF);
-    printf_safe("total = %d\n", clock() - old);
     THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.ucRelayLState = SWITCH_OFF;
