@@ -67,7 +67,7 @@
 #define defEventBitOrderStopTypeUnPlug           BIT_15
 
 #define defEventBitOrderMakeFinish               BIT_16  //等待处不清除, 该事件置位后整个订单完成
-//#define defEventBitOrderFinishToChargetask       BIT_17
+#define defEventBitOrderMakeFinishToRemote           BIT_17
 #define defEventBitOrderFinishToHMI              BIT_18
 
 #define defEventBitOrderTmpTimer                 BIT_19
