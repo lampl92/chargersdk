@@ -15,6 +15,9 @@
 #include "timers.h"
 #include <time.h>
 
+/*启动类型 StopType*/
+#define defOrderStartType_Card          4
+#define defOrderStartType_Remote        5
 
 /*停止类型 StopType*/
 #define defOrderStopType_Unknown        0
