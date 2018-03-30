@@ -124,7 +124,7 @@ error_t stm32f4x9EthInit(NetInterface *interface)
    //GPIO configuration
    stm32f4x9EthInitGpio(interface);
     PAout(8) = 0;
-    bsp_DelayMS(100);
+    bsp_DelayMS(500);
     PAout(8) = 1;
 
    //Enable Ethernet MAC clock
