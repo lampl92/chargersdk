@@ -33,6 +33,8 @@
 #include "stm32f4xx.h"
 #include "core/net.h"
 #include "drivers/mac/stm32f4x9_eth_driver.h"
+#include "drivers/phy/lan8720_driver.h"
+#include "bsp_gpio.h"
 #include "debug.h"
 
 //Underlying network interface
@@ -121,6 +123,9 @@ error_t stm32f4x9EthInit(NetInterface *interface)
 
    //GPIO configuration
    stm32f4x9EthInitGpio(interface);
+    PAout(8) = 0;
+    bsp_DelayMS(100);
+    PAout(8) = 1;
 
    //Enable Ethernet MAC clock
    __HAL_RCC_ETHMAC_CLK_ENABLE();
@@ -131,6 +136,7 @@ error_t stm32f4x9EthInit(NetInterface *interface)
    __HAL_RCC_ETHMAC_FORCE_RESET();
    __HAL_RCC_ETHMAC_RELEASE_RESET();
 
+    lan8720WritePhyReg(interface, LAN8720_PHY_REG_BMCR, lan8720ReadPhyReg(interface, LAN8720_PHY_REG_BMCR) & ~BMCR_POWER_DOWN);
    //Perform a software reset
    ETH->DMABMR |= ETH_DMABMR_SR;
    //Wait for the reset to complete
@@ -246,9 +252,9 @@ void stm32f4x9EthInitGpio(NetInterface *interface)
     
     //ETH_nRST (PA8)
     GPIO_InitStructure.Pin =  GPIO_PIN_8;
-    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStructure.Pull = GPIO_PULLUP;
-    GPIO_InitStructure.Speed = GPIO_SPEED_LOW;
+    GPIO_InitStructure.Speed = GPIO_SPEED_HIGH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
