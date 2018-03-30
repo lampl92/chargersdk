@@ -29,16 +29,16 @@
 #define defSTACK_TaskGUI                    (1024*20)
 //#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskTouch                  1024
-#define defSTACK_TaskOTA                    512
+#define defSTACK_TaskOTA                    1024
 #define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
 #define defSTACK_TaskRemoteCmdProc          (1024*10)
 
 #define defSTACK_TaskEVSERemote             (1024*10)
-#define defSTACK_TaskEVSERFID               512
-#define defSTACK_TaskEVSECharge             512
-#define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEDiag               512
+#define defSTACK_TaskEVSERFID               (1024*5)
+#define defSTACK_TaskEVSECharge             (1024*5)
+#define defSTACK_TaskEVSEMonitor            (1024*5)
+#define defSTACK_TaskEVSEDiag               (1024*5)
 #define defSTACK_TaskEVSEData               (1024*50)
 
 
