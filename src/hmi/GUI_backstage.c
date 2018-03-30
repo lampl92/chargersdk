@@ -5,6 +5,7 @@
 #include "interface.h"
 #include "utils.h"
 #include "touchtimer.h"
+#include "evse_globals.h"
 
 int i;//临时用
 double GBSBalance;
@@ -19,7 +20,7 @@ int flagGetMoney = 0;
 void flashGunState()
 {
     CON_t *pCON;  
-    for (i = 0; i < 2; i++)
+    for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);
         switch (pCON->state)
@@ -45,10 +46,10 @@ void flashGunState()
         case STATE_CON_RETURN: 
             break;
         }
-        if (pCON->order.statOrder == STATE_ORDER_HOLD)
+        if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH)
         {
             GBSgunstate[i] = GunchargedoneState;
-            break;
+            continue;
         }
         if (pCON->status.ulSignalAlarm != 0 ||
             pCON->status.ulSignalFault != 0 ||
@@ -56,7 +57,7 @@ void flashGunState()
             pEVSE->status.ulSignalFault != 0)
         {
             GBSgunstate[i] = Gunerror;
-            break;
+            continue;
         }
     }
 }
