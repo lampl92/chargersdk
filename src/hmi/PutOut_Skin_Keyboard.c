@@ -1087,7 +1087,7 @@ static uint8_t Value_Check()
         }
         else
         {
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
+//            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED, GUI_RED);
             BUTTON_SetText(_aahButtonOk, "密码错误");
             for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
             {
@@ -1535,6 +1535,18 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             {
             case WM_NOTIFICATION_RELEASED:
                 Jump_Screen(pMsg->hWin, 1);
+                if(htmpChild == _hWinManagerSysSet)
+                {
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
+                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);                    
+                }
                 break;
             }
             break;
