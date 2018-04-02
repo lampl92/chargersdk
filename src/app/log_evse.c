@@ -1,3 +1,9 @@
+/**
+ * @file    D:\DPC\workspace\Projects\chargersdk\src\app\log_evse.c.
+ *
+ * @brief   Log evse class
+ */
+
 #include "stm32f4xx.h"
 #include "bsp.h"
 #include "interface.h"
@@ -8,6 +14,19 @@
 #include "stringName.h"
 #include "errorcode.h"
 #include <string.h>
+
+/**
+ * @fn  static cJSON *CreateNewEVSELog(uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
+ *
+ * @brief   Creates new evse log
+ *
+ * @param           device  The device.
+ * @param           level   The level.
+ * @param           state   The state.
+ * @param [in,out]  msg     If non-null, the message.
+ *
+ * @return  Null if it fails, else the new new evse log.
+ */
 
 static cJSON *CreateNewEVSELog(uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
 {
@@ -22,6 +41,20 @@ static cJSON *CreateNewEVSELog(uint8_t device, uint8_t level, uint8_t state, uin
     
     return jsNewEVSELogObj;
 }
+
+/**
+ * @fn  ErrorCode_t AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
+ *
+ * @brief   Adds an evse log
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param           device  The device.
+ * @param           level   The level.
+ * @param           state   The state.
+ * @param [in,out]  msg     If non-null, the message.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t state, uint8_t *msg)
 {
@@ -50,6 +83,18 @@ ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t st
     
     return errcode;
 }
+
+/**
+ * @fn  int testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
+ *
+ * @brief   Tests search evse log by time
+ *
+ * @param [in,out]  path        If non-null, full pathname of the file.
+ * @param           time_start  The time start.
+ * @param           time_end    The time end.
+ *
+ * @return  An int.
+ */
 
 int  testSearchEVSELogByTime(char *path, time_t time_start, time_t time_end)
 {

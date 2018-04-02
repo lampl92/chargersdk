@@ -1,8 +1,27 @@
+/**
+ * @file    D:\DPC\workspace\Projects\chargersdk\src\app\cfg_sys.c.
+ *
+ * @brief   Configuration system class
+ */
+
 #include "cfg_sys.h"
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
 #include <string.h>
+
+/**
+ * @fn  static ErrorCode_t GetSysCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
+ *
+ * @brief   Gets system configuration item
+ *
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ * @param [in,out]  jnItemName  If non-null, name of the jn item.
+ * @param [in,out]  pvCfgItem   If non-null, the pv configuration item.
+ * @param           type        The type.
+ *
+ * @return  The system configuration item.
+ */
 
 static ErrorCode_t GetSysCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
 {
@@ -74,6 +93,17 @@ err_return:
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
+ *
+ * @brief   Gets system configuration
+ *
+ * @param [in,out]  pvSysconf   If non-null, the pv sysconf.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The system configuration.
+ */
+
 ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
 {
     cJSON *jsSysObj;
@@ -89,147 +119,42 @@ ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
     {
         return errcode;
     }
-
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysChargersdk_bin,                  
-                                        (void *)&(pSysconf->xUpFlag.chargesdk_bin),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysChargersdk_bin);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysChargersdk_bin_crc32,                  
-                                        (void *)&(pSysconf->xUpFlag.chargesdk_bin_crc32),
-                                        ParamTypeDouble),
-                ERR_LEVEL_WARNING,
-                jnSysChargersdk_bin_crc32);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysEvse_cfg,                  
-                                        (void *)&(pSysconf->xUpFlag.evse_cfg),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysEvse_cfg);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysProtocol_cfg,                  
-                                        (void *)&(pSysconf->xUpFlag.protocol_cfg),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysProtocol_cfg);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysSys_cfg,                  
-                                        (void *)&(pSysconf->xUpFlag.sys_cfg),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysSys_cfg);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysBlacklist_cfg,                  
-                                        (void *)&(pSysconf->xUpFlag.blacklist_cfg),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysBlacklist_cfg);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysWhitelist_cfg,                  
-                                        (void *)&(pSysconf->xUpFlag.whitelist_cfg),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysWhitelist_cfg);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysDispSleepTime,                  
-                                        (void *)(&(pSysconf->ulDispSleepTime_s)),
-                                        ParamTypeU32),
-                ERR_LEVEL_WARNING,
-                jnSysDispSleepTime);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSystouchtype,                  
-                                        (void *)(&(pSysconf->xCalibrate.touchtype)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSystouchtype);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysis_calibrate,                  
-                                        (void *)(&(pSysconf->xCalibrate.is_calibrate)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysis_calibrate);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysxfac,                  
-                                        (void *)(&(pSysconf->xCalibrate.xfac)),
-                                        ParamTypeDouble),
-                ERR_LEVEL_WARNING,
-                jnSysxfac);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysyfac,                  
-                                        (void *)(&(pSysconf->xCalibrate.yfac)),
-                                        ParamTypeDouble),
-                ERR_LEVEL_WARNING,
-                jnSysyfac);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysxoff,                  
-                                        (void *)(&(pSysconf->xCalibrate.xoff)),
-                                        ParamTypeU16),
-                ERR_LEVEL_WARNING,
-                jnSysxoff);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysyoff,                  
-                                        (void *)(&(pSysconf->xCalibrate.yoff)),
-                                        ParamTypeU16),
-                ERR_LEVEL_WARNING,
-                jnSysyoff);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysChargersdk_bin, (void *)&(pSysconf->xUpFlag.chargesdk_bin), ParamTypeU8), ERR_LEVEL_WARNING, jnSysChargersdk_bin);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysChargersdk_bin_crc32, (void *)&(pSysconf->xUpFlag.chargesdk_bin_crc32), ParamTypeDouble), ERR_LEVEL_WARNING, jnSysChargersdk_bin_crc32);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysEvse_cfg, (void *)&(pSysconf->xUpFlag.evse_cfg), ParamTypeU8), ERR_LEVEL_WARNING, jnSysEvse_cfg);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysProtocol_cfg, (void *)&(pSysconf->xUpFlag.protocol_cfg), ParamTypeU8), ERR_LEVEL_WARNING, jnSysProtocol_cfg);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysSys_cfg, (void *)&(pSysconf->xUpFlag.sys_cfg), ParamTypeU8), ERR_LEVEL_WARNING, jnSysSys_cfg);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysBlacklist_cfg, (void *)&(pSysconf->xUpFlag.blacklist_cfg), ParamTypeU8), ERR_LEVEL_WARNING, jnSysBlacklist_cfg);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysWhitelist_cfg, (void *)&(pSysconf->xUpFlag.whitelist_cfg), ParamTypeU8), ERR_LEVEL_WARNING, jnSysWhitelist_cfg);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysDispSleepTime, (void *)(&(pSysconf->ulDispSleepTime_s)), ParamTypeU32), ERR_LEVEL_WARNING, jnSysDispSleepTime);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSystouchtype, (void *)(&(pSysconf->xCalibrate.touchtype)), ParamTypeU8), ERR_LEVEL_WARNING, jnSystouchtype);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysis_calibrate, (void *)(&(pSysconf->xCalibrate.is_calibrate)), ParamTypeU8), ERR_LEVEL_WARNING, jnSysis_calibrate);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysxfac, (void *)(&(pSysconf->xCalibrate.xfac)), ParamTypeDouble), ERR_LEVEL_WARNING, jnSysxfac);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysyfac, (void *)(&(pSysconf->xCalibrate.yfac)), ParamTypeDouble), ERR_LEVEL_WARNING, jnSysyfac);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysxoff, (void *)(&(pSysconf->xCalibrate.xoff)), ParamTypeU16), ERR_LEVEL_WARNING, jnSysxoff);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysyoff, (void *)(&(pSysconf->xCalibrate.yoff)), ParamTypeU16), ERR_LEVEL_WARNING, jnSysyoff);
     extern uint8_t passwd[];
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysVersion,                  
-                                        (void *)(passwd),
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                jnSysVersion);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysUSE_GPRSModem,                  
-                                        (void *)(&(pSysconf->xModule.use_gprs)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysUSE_GPRSModem);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysUSE_Meter,                  
-                                        (void *)(&(pSysconf->xModule.use_meter)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysUSE_Meter);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysUSE_RFID,                  
-                                        (void *)(&(pSysconf->xModule.use_rfid)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysUSE_RFID);
-    THROW_ERROR(defDevID_File,
-                errcode = GetSysCfgItem(jsSysObj,
-                                        jnSysUSE_GUI,                  
-                                        (void *)(&(pSysconf->xModule.use_gui)),
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                jnSysUSE_GUI);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysVersion, (void *)(passwd), ParamTypeString), ERR_LEVEL_WARNING, jnSysVersion);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysUSE_GPRSModem, (void *)(&(pSysconf->xModule.use_gprs)), ParamTypeU8), ERR_LEVEL_WARNING, jnSysUSE_GPRSModem);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysUSE_Meter, (void *)(&(pSysconf->xModule.use_meter)), ParamTypeU8), ERR_LEVEL_WARNING, jnSysUSE_Meter);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysUSE_RFID, (void *)(&(pSysconf->xModule.use_rfid)), ParamTypeU8), ERR_LEVEL_WARNING, jnSysUSE_RFID);
+    THROW_ERROR(defDevID_File, errcode = GetSysCfgItem(jsSysObj, jnSysUSE_GUI, (void *)(&(pSysconf->xModule.use_gui)), ParamTypeU8), ERR_LEVEL_WARNING, jnSysUSE_GUI);
     
     cJSON_Delete(jsSysObj);
     return errcode;
 }
 
-
+/**
+ * @fn  ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
+ *
+ * @brief   Sets system configuration
+ *
+ * @param [in,out]  jnItemString    If non-null, the jn item string.
+ * @param [in,out]  pvCfgParam      If non-null, the pv configuration parameter.
+ * @param           type            The type.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
 {
@@ -282,6 +207,14 @@ ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
 
     return errcode;
 }
+
+/**
+ * @fn  void SysCfgInit(Sysconf_t *sysconf)
+ *
+ * @brief   System configuration initialize
+ *
+ * @param [in,out]  sysconf If non-null, the sysconf.
+ */
 
 void SysCfgInit(Sysconf_t *sysconf)
 {

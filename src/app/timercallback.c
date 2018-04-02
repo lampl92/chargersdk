@@ -8,7 +8,12 @@
 #include "includes.h"
 #include "interface.h"
 
-/** 定时器在taskcreate中定义和创建
+/**
+ * @fn  void vCONTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   定时器在taskcreate中定义和创建
+ *
+ * @param   xTimer  The timer.
  */
 
 void vCONTimerCB(TimerHandle_t xTimer)
@@ -34,6 +39,15 @@ void vCONTimerCB(TimerHandle_t xTimer)
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData);
     }
 }
+
+/**
+ * @fn  void vEVSETimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Evse timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vEVSETimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
@@ -59,10 +73,26 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     }
 }
 
+/**
+ * @fn  void vRFIDTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Rfid timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vRFIDTimerCB(TimerHandle_t xTimer) //500ms
 {
     xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBRFID);
 }
+
+/**
+ * @fn  void vVoltTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Volt timer callback
+ *
+ * @param   xTimer  The timer.
+ */
 
 void vVoltTimerCB(TimerHandle_t xTimer)
 {
@@ -82,6 +112,15 @@ void vVoltTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+
+/**
+ * @fn  void vCurrTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Curr timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vCurrTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
@@ -100,6 +139,15 @@ void vCurrTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+
+/**
+ * @fn  void vFreqTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Frequency timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vFreqTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
@@ -118,6 +166,15 @@ void vFreqTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+
+/**
+ * @fn  void vChargeStateTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Charge state timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vChargeStateTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
@@ -136,6 +193,15 @@ void vChargeStateTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+
+/**
+ * @fn  void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Remote right data timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;
@@ -154,6 +220,15 @@ void vRemoteRTDataTimerCB(TimerHandle_t xTimer)
         }
     }
 }
+
+/**
+ * @fn  void vOrderTmpTimerCB(TimerHandle_t xTimer)
+ *
+ * @brief   Order temporary timer callback
+ *
+ * @param   xTimer  The timer.
+ */
+
 void vOrderTmpTimerCB(TimerHandle_t xTimer)
 {
     uint32_t uxTimerID;

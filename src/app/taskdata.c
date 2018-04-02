@@ -18,6 +18,14 @@
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
 
+/**
+ * @fn  void vTaskEVSEData(void *pvParameters)
+ *
+ * @brief   Task evse data
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
+
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;

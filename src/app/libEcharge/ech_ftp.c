@@ -1,8 +1,27 @@
+/**
+ * @file    D:\DPC\workspace\Projects\chargersdk\src\app\libEcharge\ech_ftp.c.
+ *
+ * @brief   Ech FTP class
+ */
+
 #include "ech_ftp.h"
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
 #include <string.h>
+
+/**
+ * @fn  static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCfgItem, uint8_t type)
+ *
+ * @brief   Gets FTP configuration item
+ *
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ * @param [in,out]  jnItemName  If non-null, name of the jn item.
+ * @param [in,out]  pvCfgItem   If non-null, the pv configuration item.
+ * @param           type        The type.
+ *
+ * @return  The FTP configuration item.
+ */
 
 static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCfgItem, uint8_t type)
 {
@@ -71,6 +90,17 @@ err_return:
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
+ *
+ * @brief   Gets FTP configuration
+ *
+ * @param [in,out]  pvFtp       If non-null, the pv FTP.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The FTP configuration.
+ */
+
 ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
 {
     cJSON *jsFTPObj;
@@ -87,68 +117,30 @@ ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
         return errcode;
     }
 
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpServer,                                        
-                                        (void *)(pFtp->strServer),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPServer()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpPort,                                        
-                                        (void *)(&(pFtp->usPort)),                                
-                                        ParamTypeU16),
-                ERR_LEVEL_WARNING,
-                "GetFTPPort()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpUsername,                                        
-                                        (void *)(pFtp->strUser),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPUser()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpPassword,                                        
-                                        (void *)(pFtp->strPassword),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPPass()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpNewVersion,                                        
-                                        (void *)(pFtp->strNewVersion),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPNewVersion()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpNewFilename,                                        
-                                        (void *)(pFtp->strNewFileName),                                
-                                        ParamTypeString),
-                ERR_LEVEL_WARNING,
-                "GetFTPNewFileName()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpDownloadStart,                                        
-                                        (void *)(&(pFtp->ucDownloadStart)),                                
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                "GetFTPDWStart()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetFTPCfgItem(jsFTPObj,
-                                        jnFtpDownloadStatus,                                        
-                                        (void *)(&(pFtp->ucDownloadStatus)),                                
-                                        ParamTypeU8),
-                ERR_LEVEL_WARNING,
-                "GetFTPDWStatus()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpServer, (void *)(pFtp->strServer), ParamTypeString), ERR_LEVEL_WARNING, "GetFTPServer()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpPort, (void *)(&(pFtp->usPort)), ParamTypeU16), ERR_LEVEL_WARNING, "GetFTPPort()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpUsername, (void *)(pFtp->strUser), ParamTypeString), ERR_LEVEL_WARNING, "GetFTPUser()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpPassword, (void *)(pFtp->strPassword), ParamTypeString), ERR_LEVEL_WARNING, "GetFTPPass()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpNewVersion, (void *)(pFtp->strNewVersion), ParamTypeString), ERR_LEVEL_WARNING, "GetFTPNewVersion()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpNewFilename, (void *)(pFtp->strNewFileName), ParamTypeString), ERR_LEVEL_WARNING, "GetFTPNewFileName()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpDownloadStart, (void *)(&(pFtp->ucDownloadStart)), ParamTypeU8), ERR_LEVEL_WARNING, "GetFTPDWStart()");
+    THROW_ERROR(defDevID_File, errcode = GetFTPCfgItem(jsFTPObj, jnFtpDownloadStatus, (void *)(&(pFtp->ucDownloadStatus)), ParamTypeU8), ERR_LEVEL_WARNING, "GetFTPDWStatus()");
 
     cJSON_Delete(jsFTPObj);
     return errcode;
 }
 
-
+/**
+ * @fn  ErrorCode_t SetFTPCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+ *
+ * @brief   Sets FTP configuration
+ *
+ * @param [in,out]  jnItemString    If non-null, the jn item string.
+ * @param [in,out]  pvCfgParam      If non-null, the pv configuration parameter.
+ * @param           type            The type.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t SetFTPCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 {
@@ -198,6 +190,14 @@ ErrorCode_t SetFTPCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
 
     return errcode;
 }
+
+/**
+ * @fn  void EchFtpInit(EchFtpCfg_t *ftp)
+ *
+ * @brief   Ech FTP initialize
+ *
+ * @param [in,out]  ftp If non-null, the FTP.
+ */
 
 void EchFtpInit(EchFtpCfg_t *ftp)
 {

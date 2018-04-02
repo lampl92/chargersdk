@@ -17,8 +17,16 @@
 //#define TEST_TIME_EvseData  "EvseData"
 //#define TEST_TIME_rfid  "rfid"
 
-static TaskHandle_t xHandleTaskChData[defTotalCON] = { NULL };
-static TaskHandle_t xHandleTaskEvseData = NULL;
+static TaskHandle_t xHandleTaskChData[defTotalCON] = { NULL };  ///< The handle task ch data[def total con]
+static TaskHandle_t xHandleTaskEvseData = NULL; ///< Information describing the handle task evse
+
+/**
+ * @fn  void vTaskMonitor_ChData(void *pvParameters)
+ *
+ * @brief   Task monitor ch data
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
 
 void vTaskMonitor_ChData(void *pvParameters)
 {
@@ -57,6 +65,14 @@ void vTaskMonitor_ChData(void *pvParameters)
     }
 }
 
+/**
+ * @fn  void vTaskMonitor_EvseStatus(void *pvParameters)
+ *
+ * @brief   Task monitor evse status
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
+
 void vTaskMonitor_EvseStatus(void *pvParameters)
 {
     EventBits_t uxBitsTimerCB;
@@ -87,6 +103,14 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
         vTaskDelay(10);
     }
 }
+
+/**
+ * @fn  void vTaskEVSEMonitor(void *pvParameters)
+ *
+ * @brief   Task evse monitor
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
 
 void vTaskEVSEMonitor(void *pvParameters)
 {

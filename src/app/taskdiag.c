@@ -11,6 +11,14 @@
 
 //#define DEBUG_NO_TASKDIAG
 
+/**
+ * @fn  void vTaskEVSEDiag(void *pvParameters)
+ *
+ * @brief   Task evse diagram
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
+
 void vTaskEVSEDiag(void *pvParameters)
 {
     CON_t *pCON = NULL;

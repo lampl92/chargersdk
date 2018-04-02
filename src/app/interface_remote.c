@@ -17,12 +17,17 @@
 #include "libEcharge/ech_protocol_proc.h"
 #include "libEcharge/ech_ftp.h"
 
-/** @brief
+/**
+ * @fn  ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
  *
- * @param pucRetVal uint8_t*     1注册成功  0注册失败
- * @return ErrorCode_t
+ * @brief   send regist
  *
+ * @param [in,out]  pEVSE   uint8_t*     1注册成功  0注册失败.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;
@@ -35,6 +40,19 @@ ErrorCode_t RemoteIF_SendRegist(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *pbuff, uint32_t *pLen)
+ *
+ * @brief   Remote receive handle
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           usSendID    Identifier for the send.
+ * @param [in,out]  pbuff       If non-null, the pbuff.
+ * @param [in,out]  pLen        If non-null, the length.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *pbuff, uint32_t *pLen)
 {
@@ -96,6 +114,18 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive regist
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -134,6 +164,17 @@ ErrorCode_t RemoteIF_RecvRegist(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
+ *
+ * @brief   send heart
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;
@@ -143,6 +184,18 @@ ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive heart
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
@@ -168,14 +221,18 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
     return errcode;
 }
 
-/** @brief 系统重启后，发送重启结果
+/**
+ * @fn  ErrorCode_t RemoteIF_SendReset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ)
  *
- * @param pEVSE EVSE_t*
- * @param pProto echProtocol_t*
- * @param succ uint32_t 成功标志 1 成功，2 失败
- * @return ErrorCode_t
+ * @brief   系统重启后，发送重启结果
  *
+ * @param [in,out]  pEVSE   EVSE_t*.
+ * @param [in,out]  pProto  echProtocol_t*.
+ * @param           succ    uint32_t 成功标志 1 成功，2 失败.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t RemoteIF_SendReset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t succ)
 {
     uint8_t *pbuff;
@@ -200,6 +257,19 @@ ErrorCode_t RemoteIF_SendReset(EVSE_t *pEVSE, echProtocol_t *pProto, uint32_t su
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *psiRetVal)
+ *
+ * @brief   receive reset
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  pulOptSN    If non-null, the pul option serial number.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *psiRetVal)
 {
     uint8_t pbuff[1024] = {0};
@@ -230,6 +300,19 @@ ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *p
     errcode = handle_errcode;
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+ *
+ * @brief   send status
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     ErrorCode_t errcode;
@@ -239,6 +322,19 @@ ErrorCode_t RemoteIF_SendStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCO
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive status
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     CON_t *pCON;
@@ -278,14 +374,20 @@ ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     return errcode;
 }
 
-/** @brief 桩回复平台启停命令
+/**
+ * @fn  ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ, uint8_t reason)
  *
- * @param pEVSE EVSE_t*
- * @param pProto echProtocol_t*
- * @param pCON CON_t*
- * @return ErrorCode_t
+ * @brief   桩回复平台启停命令
  *
+ * @param [in,out]  pEVSE   EVSE_t*.
+ * @param [in,out]  pProto  echProtocol_t*.
+ * @param [in,out]  pCON    CON_t*.
+ * @param           succ    The successor.
+ * @param           reason  The reason.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ, uint8_t reason)
 {
     uint8_t *pbuff;
@@ -310,16 +412,20 @@ ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
     return errcode;
 }
 
-/** @brief 平台下发的启停命令
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )
  *
- * @param pEVSE EVSE_t*
- * @param pProto echProtocol_t*
- * @param pid uint8_t* 返回ID到程序
- * @param pctrl uint8_t* 返回操作到程序
- * @param psiRetVal int* 返回结果到程序
- * @return ErrorCode_t
+ * @brief   平台下发的启停命令
  *
+ * @param [in,out]  pEVSE       EVSE_t*.
+ * @param [in,out]  pProto      echProtocol_t*.
+ * @param [in,out]  pid         uint8_t* 返回ID到程序.
+ * @param [in,out]  pctrl       uint8_t* 返回操作到程序.
+ * @param [in,out]  psiRetVal   int* 返回结果到程序.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal )// →_→
 {
     CON_t *pCON;
@@ -400,16 +506,20 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     return errcode;
 }
 
-/** @brief
+/**
+ * @fn  ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
  *
- * @param pEVSE EVSE_t*
- * @param pProto echProtocol_t*
- * @param pCON CON_t*
- * @param ctrl uint8_t     充电桩状态 1 开机，2 停机
- * @param reason uint8_t   停止原因
- * @return ErrorCode_t
+ * @brief   send right data
  *
+ * @param [in,out]  pEVSE   EVSE_t*.
+ * @param [in,out]  pProto  echProtocol_t*.
+ * @param [in,out]  pCON    CON_t*.
+ * @param           ctrl    uint8_t     充电桩状态 1 开机，2 停机.
+ * @param           reason  uint8_t   停止原因.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
 {
     uint8_t *pbuff;
@@ -424,6 +534,21 @@ ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCO
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
+ *
+ * @brief   send card right data
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ * @param           ctrl    The control.
+ * @param           reason  The reason.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason)
 {
     uint8_t *pbuff;
@@ -438,6 +563,19 @@ ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder)
+ *
+ * @brief   send order
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pOrder  If non-null, the order.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder)
 {
     uint8_t *pbuff;
@@ -451,6 +589,20 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal)
+ *
+ * @brief   receive order
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  pOrder      If non-null, the order.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal)
 {
     CON_t *pCON;
@@ -504,6 +656,17 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
+ *
+ * @brief   send set power fee
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;
@@ -513,6 +676,19 @@ ErrorCode_t RemoteIF_SendSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+ *
+ * @brief   receive set power fee
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           flag_set    Set the flag belongs to.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
@@ -609,6 +785,20 @@ ErrorCode_t RemoteIF_RecvSetPowerFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+ *
+ * @brief   receive set serv fee
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           flag_set    Set the flag belongs to.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -704,6 +894,19 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive set cyc
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -759,6 +962,20 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+ *
+ * @brief   receive set time segment
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           flag_set    Set the flag belongs to.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -871,6 +1088,19 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive set key
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -937,6 +1167,19 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
+ *
+ * @brief   receive set qr
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           flag_set    Set the flag belongs to.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal )
 {
@@ -1030,6 +1273,19 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive set button w list
+ *
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -1107,6 +1363,20 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive add delete button w list
+ *
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -1200,6 +1470,20 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
 
     return errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   send request cmdid
+ *
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     ErrorCode_t errcode;
@@ -1211,6 +1495,20 @@ static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 
     return errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
+ *
+ * @brief   receive request cmdid
+ *
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -1235,6 +1533,19 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive request
+ *
+ * @param [in,out]  pEVSE       If non-null, the evse.
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
 {
     int res;
@@ -1255,6 +1566,18 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_ADD_BNW, pEVSE, pProto, &res);
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
+ *
+ * @brief   send card start
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pRfid   If non-null, the rfid.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
@@ -1299,6 +1622,20 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
     pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 20, 3); //注意传的参数是 pRfid
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
+ *
+ * @brief   receive card start
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  pRfid       If non-null, the rfid.
+ * @param [in,out]  pucVaild    If non-null, the puc vaild.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
 {
     uint8_t pbuff[1024] = {0};
@@ -1376,6 +1713,19 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+ *
+ * @brief   send card start resource
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ * @param           succ    The successor.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
 {
     uint8_t *pbuff;
@@ -1397,6 +1747,18 @@ ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive card start resource
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
 {
     CON_t *pCON;
@@ -1432,12 +1794,36 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+ *
+ * @brief   send card stop resource
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 30, 3);
 
     return ERR_NO;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive card stop resource
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
 {
     CON_t *pCON;
@@ -1472,6 +1858,17 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
+ *
+ * @brief   send up fault
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
@@ -1633,6 +2030,17 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
     return ERR_NO;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
+ *
+ * @brief   send up warning
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     CON_t *pCON;
@@ -1763,6 +2171,17 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     return ERR_NO;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive set ota
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
 {
     uint8_t pbuff[1024] = { 0 };
@@ -1844,6 +2263,19 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+ *
+ * @brief   send set ota
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ * @param           succ    The successor.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
 {
     uint8_t *pbuff;
@@ -1864,6 +2296,17 @@ ErrorCode_t RemoteIF_SendSetOTA(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCO
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive request ota double-word
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
 {
@@ -1908,6 +2351,18 @@ ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+ *
+ * @brief   send request ota double-word
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     uint8_t *pbuff;
@@ -1924,6 +2379,17 @@ ErrorCode_t RemoteIF_SendReqOTA_DW(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive ota start
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
 {
@@ -1967,6 +2433,18 @@ ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
+ *
+ * @brief   send ota start
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
     ErrorCode_t errcode;
@@ -1976,6 +2454,17 @@ ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
+ *
+ * @brief   receive ota result
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param [in,out]  psiRetVal   If non-null, the psi ret value.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
 {
@@ -2018,6 +2507,19 @@ ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
 
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ)
+ *
+ * @brief   send ota result
+ *
+ * @param [in,out]  pEVSE   If non-null, the evse.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ * @param [in,out]  pCON    If non-null, the con.
+ * @param           succ    The successor.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ)
 {

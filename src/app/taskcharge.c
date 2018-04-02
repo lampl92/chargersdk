@@ -11,6 +11,15 @@
 
 //#define DEBUG_NO_TASKCHARGE
 
+/**
+ * @fn  static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
+ *
+ * @brief   Sets con signal work state
+ *
+ * @param [in,out]  pCON    If non-null, the con.
+ * @param           signal  The signal.
+ */
+
 static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
 {
     switch (signal)
@@ -42,6 +51,17 @@ static void SetCONSignalWorkState(CON_t *pCON, uint32_t signal)
     }
 
 }
+
+/**
+ * @fn  int manual_charge(void *pvCON, int onoff)
+ *
+ * @brief   Manual charge
+ *
+ * @param [in,out]  pvCON   If non-null, the pv con.
+ * @param           onoff   The onoff.
+ *
+ * @return  An int.
+ */
 
 int manual_charge(void *pvCON, int onoff)
 {
@@ -92,6 +112,14 @@ int manual_charge(void *pvCON, int onoff)
 
     return 0;
 }
+
+/**
+ * @fn  void vTaskEVSECharge(void *pvParameters)
+ *
+ * @brief   Task evse charge
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
 
 void vTaskEVSECharge(void *pvParameters)
 {
