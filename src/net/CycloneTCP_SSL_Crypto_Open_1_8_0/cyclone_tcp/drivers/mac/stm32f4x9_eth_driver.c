@@ -126,6 +126,7 @@ error_t stm32f4x9EthInit(NetInterface *interface)
     PAout(8) = 0;
     bsp_DelayMS(500);
     PAout(8) = 1;
+    bsp_DelayMS(500);
 
    //Enable Ethernet MAC clock
    __HAL_RCC_ETHMAC_CLK_ENABLE();
