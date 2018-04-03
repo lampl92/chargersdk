@@ -90,7 +90,20 @@ float get_CD4067(void)
 }
 uint8_t Get_State_relay(void)
 {
-    return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+    uint16_t i,j=0;
+    for (i = 0; i < 50; i++)
+    {
+        j += ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+        bsp_DelayUS(500);
+    }
+    if (j >= 3)
+    {
+        return 1; //on
+    }  
+    else
+    {    
+        return 0; //off
+    }
 }
 /********************************
 *蜂鸣器状态控制函数
@@ -439,8 +452,9 @@ void Peripheral_Init(void)
    //user_pwm_relay1_setvalue(1000);
   // user_pwm_relay2_setvalue(1000);
    // vref = Get_State_relay();
-  //  RELAY1_ON;
- //   RELAY2_ON;
+  // RELAY1_ON;
+   // RELAY2_ON;
+    //vref = Get_State_relay();
  //   vref=get_dc_massage(VREF_1v5);
 //   Get_State_relay();
 //         Get_Electricity_meter_massage_frequency();
