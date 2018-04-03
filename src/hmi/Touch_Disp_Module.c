@@ -626,27 +626,27 @@ void ledShow()
             ledSignalPool[i] = ledSignalPool[i] & led_signal[i];
             if (bittest(ledSignalPool[i], 0))
             {
-                led_ctrl(i, red, flicker);
+                led_ctrl(i + 1, red, flicker);
             }
             if (bittest(ledSignalPool[i], 1))
             {
-                led_ctrl(i, green, keep_on);
+                led_ctrl(i + 1, green, keep_on);
             }
             if (bittest(ledSignalPool[i], 2))
             {
-                led_ctrl(i, green, breath);
+                led_ctrl(i + 1, green, breath);
             }
             if (bittest(ledSignalPool[i], 3))
             {
-                led_ctrl(i, green, flicker);
+                led_ctrl(i + 1, green, flicker);
             }
             if (bittest(ledSignalPool[i], 4))
             {
-                led_ctrl(i, blue, flicker);
+                led_ctrl(i + 1, blue, flicker);
             }
             if (bittest(ledSignalPool[i], 5))
             {
-                led_ctrl(i, green, keep_on);
+                led_ctrl(i + 1, green, keep_on);
             }
             led_signalold[i] = led_signal[i];
         }
