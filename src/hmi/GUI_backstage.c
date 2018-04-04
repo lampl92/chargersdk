@@ -69,9 +69,7 @@ void GBSTask()
     gbsstate = StateHome;
     while (1)
     {
-       // ledShow();
-        //led_ctrl(2, green, breath);
-       // led_ctrl(2, green, flicker);
+        ledShow();
         switch (gbsstate)
         {
         case StateHome:
