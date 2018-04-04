@@ -70,7 +70,7 @@ void GBSTask()
     while (1)
     {
        // ledShow();
-        led_ctrl(2, green, breath);
+        //led_ctrl(2, green, breath);
        // led_ctrl(2, green, flicker);
         switch (gbsstate)
         {
