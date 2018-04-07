@@ -1663,6 +1663,9 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         con_id = EchRemoteIDtoCONID(pbuff[ucOffset++]);
         if(con_id != pRfid->order.ucCONID)
         {
+            printf_safe("枪接口返回不一致！\n");
+            printf_safe("-Local: %d", pRfid->order.ucCONID);
+            printf_safe("-Remote:%d", con_id);
             *psiRetVal = 0;
             break;
         }
@@ -1673,6 +1676,9 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         }
         if (strcmp(strCardID, pRfid->order.strCardID) != 0)
         {
+            printf_safe("卡号返回不一致！\n");
+            printf_safe("-Local: %s", pRfid->order.strCardID);
+            printf_safe("-Remote:%s", strCardID);
             *psiRetVal = 0;
             break;
         }
