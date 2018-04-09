@@ -36,9 +36,9 @@
 
 #define defSTACK_TaskEVSERemote             (1024*10)
 #define defSTACK_TaskEVSERFID               (1024*5)
-#define defSTACK_TaskEVSECharge             512
-#define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEDiag               512
+#define defSTACK_TaskEVSECharge             (1024*5)
+#define defSTACK_TaskEVSEMonitor            (1024*5)
+#define defSTACK_TaskEVSEDiag               (1024*5)
 #define defSTACK_TaskEVSEData               (1024*50)
 
 
@@ -47,7 +47,7 @@
 /*---------------------------------------------------------------------------/
 / 任务优先级
 /---------------------------------------------------------------------------*/
-//优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+//优先级规则为系统任务优先级低，OTA > 故障处理 > 充电任务   > 系统监视 > 刷卡与通信 > 数据处理与系统任务
 #define defPRIORITY_TaskInit                31
 #define defPRIORITY_TaskOTA                 31/* 最高*/
 

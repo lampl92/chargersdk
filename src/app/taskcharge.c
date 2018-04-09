@@ -423,7 +423,7 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     stop_try++;
                     printf_safe("paste!! try %d\n", stop_try);
-                    if (stop_try >= 30)
+                    if (stop_try >= 3)
                     {
                         pCON->state = STATE_CON_UNLOCK;//即便继电器失败, 也要解锁枪锁
                         break;
@@ -517,6 +517,7 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->state = STATE_CON_RETURN;
                     }
                 }
+                vTaskDelay(500);
                 break;
             case STATE_CON_DEV_ERROR:
                 uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
