@@ -1,3 +1,9 @@
+/**
+ * @file    D:\DPC\workspace\Projects\chargersdk\src\drivers\device\src\modem.c.
+ *
+ * @brief   Modem class
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -20,21 +26,65 @@
 
 #undef   GPRS_set
 #undef   GPRS_reset
+
+/**
+ * @def GPRS_set
+ *
+ * @brief   A macro that defines gprs set
+ */
+
 #define GPRS_set        PBout(3) = 1
+
+/**
+ * @def GPRS_reset
+ *
+ * @brief   A macro that defines gprs reset
+ */
+
 #define GPRS_reset      PBout(3) = 0
 
 #endif
 
+/**
+ * @def DEVDEBUG(msg)
+ *
+ * @brief   A macro that defines devdebug
+ *
+ * @param   msg The message.
+ */
+
 #define DEVDEBUG(msg)  do{printf_safe(msg);}while(0);
 
+/**
+ * @def TCP_CLIENT_BUFSIZE
+ *
+ * @brief   A macro that defines TCP client bufsize
+ */
+
 #define TCP_CLIENT_BUFSIZE           MAX_COMMAND_LEN
+
+/**
+ * @def QUE_BUFSIZE
+ *
+ * @brief   A macro that defines que bufsize
+ */
+
 #define QUE_BUFSIZE                  5000
-DevModem_t *pModem;
-uint32_t ulTaskDelay_ms = 1000;
+DevModem_t *pModem; ///< The modem
+uint32_t ulTaskDelay_ms = 1000; ///< The ul task delay in milliseconds
 
-uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
+uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE];    ///< TCP客户端接收数据缓冲区
 
-uint32_t recv_len = 0;
+uint32_t recv_len = 0;  ///< Length of the receive
+
+/**
+ * @fn  void modem_enQue(uint8_t *pbuff, uint32_t len)
+ *
+ * @brief   Modem en que
+ *
+ * @param [in,out]  pbuff   If non-null, the pbuff.
+ * @param           len     The length.
+ */
 
 void modem_enQue(uint8_t *pbuff, uint32_t len)
 {
@@ -52,6 +102,14 @@ void modem_enQue(uint8_t *pbuff, uint32_t len)
     }
 #endif
 }
+
+/**
+ * @fn  static void modem_UART_putQue(DevModem_t *pModem)
+ *
+ * @brief   Modem uart put que
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ */
 
 static void modem_UART_putQue(DevModem_t *pModem)
 {
@@ -83,15 +141,49 @@ static void modem_UART_putQue(DevModem_t *pModem)
 #endif
 }
 
+/**
+ * @fn  static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
+ *
+ * @brief   Modem uart puts
+ *
+ * @param [in,out]  pbuff   If non-null, the pbuff.
+ * @param           len     The length.
+ *
+ * @return  An uint32_t.
+ */
+
 static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
 {
     return uart_write(UART_PORT_GPRS, pbuff, len);
 }
 
+/**
+ * @fn  static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
+ *
+ * @brief   Modem uart gets
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  rbuff   If non-null, buffer for read data.
+ * @param           len     The length.
+ *
+ * @return  An uint32_t.
+ */
+
 static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
 {
     return uart_read(UART_PORT_GPRS, rbuff, len, 100);
 }
+
+/**
+ * @fn  static uint32_t modem_send_at(uint8_t *format, ...)
+ *
+ * @brief   Modem send at
+ *
+ * @param [in,out]  format  If non-null, describes the format to use.
+ * @param           ...     Variable arguments providing additional information.
+ *
+ * @return  An uint32_t.
+ */
 
 static uint32_t modem_send_at(uint8_t *format, ...)
 {
@@ -113,17 +205,19 @@ static uint32_t modem_send_at(uint8_t *format, ...)
     return n;
 }
 
-
 /**
- * modem_get_at_reply
+ * @fn  static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, uint32_t second)
  *
- * @param      reply   The reply
- * @param      len     The length
- * @param      key     关键词
- * @param      second  延时时间
+ * @brief   modem_get_at_reply
  *
- * @return     { description_of_the_return_value }
+ * @param [in,out]  reply   The reply.
+ * @param           len     The length.
+ * @param           key     关键词.
+ * @param           second  延时时间.
+ *
+ * @return  { description_of_the_return_value }
  */
+
 static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, uint32_t second)
 {
     uint8_t  *p;
@@ -186,6 +280,17 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
     DEVDEBUG(("%s\r\n\r\n", reply));
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_quit(DevModem_t *pModem)
+ *
+ * @brief   Modem quit
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_quit(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -197,12 +302,17 @@ DR_MODEM_e modem_quit(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief 初始化modem，置Key开启模块，检测AT返回命令
+
+/**
+ * @fn  DR_MODEM_e modem_open(DevModem_t *pModem)
  *
- * @param void
- * @return int
+ * @brief   初始化modem，置Key开启模块，检测AT返回命令
  *
+ * @param [in,out]  pModem  .
+ *
+ * @return  int.
  */
+
 DR_MODEM_e modem_open(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -245,12 +355,16 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 关闭回显
+/**
+ * @fn  static DR_MODEM_e modem_disable_echo(void)
  *
- * @param void
- * @return int
+ * @brief   关闭回显
  *
+ * @return  int.
+ *
+ * ### param    void    .
  */
+
 static DR_MODEM_e modem_disable_echo(void)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -262,13 +376,16 @@ static DR_MODEM_e modem_disable_echo(void)
     return ret;
 }
 
-
-/** @brief PIN检测
+/**
+ * @fn  static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
  *
- * @param void
- * @return int
+ * @brief   PIN检测
  *
+ * @param [in,out]  pModem  .
+ *
+ * @return  int.
  */
+
 static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -294,6 +411,17 @@ static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
+ *
+ * @brief   M26 cpin
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -320,13 +448,16 @@ static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
     return ret;
 }
 
-
-/** @brief 信号强度检测
+/**
+ * @fn  static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
  *
- * @param void
- * @return uint8_t 返回信号强度  0-31，值越大信号越好；99，无信号或不可检测
+ * @brief   信号强度检测
  *
+ * @param [in,out]  pModem  .
+ *
+ * @return  uint8_t 返回信号强度  0-31，值越大信号越好；99，无信号或不可检测.
  */
+
 static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -347,12 +478,16 @@ static DR_MODEM_e modem_CSQ(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 网络状态检测
+/**
+ * @fn  static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
  *
- * @param void
- * @return uint8_t
+ * @brief   网络状态检测
  *
+ * @param [in,out]  pModem  .
+ *
+ * @return  uint8_t.
  */
+
 static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -388,12 +523,16 @@ static DR_MODEM_e modem_get_net_reg(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief
+/**
+ * @fn  static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   Modem get gprs register
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -430,12 +569,16 @@ static DR_MODEM_e modem_get_gprs_reg(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 配置前置场景
+/**
+ * @fn  DR_MODEM_e modem_set_context(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   配置前置场景
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e modem_set_context(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -449,6 +592,16 @@ DR_MODEM_e modem_set_context(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
+ *
+ * @brief   Modem qimode
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -460,6 +613,17 @@ DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
+ *
+ * @brief   Modem qitcfg
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -472,12 +636,16 @@ DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 设置透传模式参数
+/**
+ * @fn  DR_MODEM_e modem_set_Transparent(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   设置透传模式参数
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e modem_set_Transparent(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -498,12 +666,16 @@ DR_MODEM_e modem_set_Transparent(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 设置TCP/UDP接收显示方式
+/**
+ * @fn  DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   设置TCP/UDP接收显示方式
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -537,12 +709,16 @@ DR_MODEM_e modem_set_RecvType(DevModem_t *pModem)
     return ret;
 }
 
-/** @brief 执行APN
+/**
+ * @fn  DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   执行APN
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -555,12 +731,17 @@ DR_MODEM_e modem_set_QIREGAPP(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief 激活移动场景，发起GPRS连接
+
+/**
+ * @fn  DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   激活移动场景，发起GPRS连接
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -573,6 +754,17 @@ DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QIACT(DevModem_t *pModem)
+ *
+ * @brief   26 qiact
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QIACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -585,12 +777,17 @@ DR_MODEM_e M26_QIACT(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief 关闭GPRS连接
+
+/**
+ * @fn  DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   关闭GPRS连接
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -603,6 +800,17 @@ DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
+ *
+ * @brief   26 qideact
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -615,12 +823,17 @@ DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief 获取locIP
+
+/**
+ * @fn  DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   获取locIP
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -637,6 +850,17 @@ DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
+ *
+ * @brief   15 locip
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -653,6 +877,18 @@ DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
+ *
+ * @brief   15 tcpopen
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -711,6 +947,18 @@ DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
+ *
+ * @brief   26 tcpopen
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -764,6 +1012,17 @@ DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, echProtocol_t *pProto)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QISACK(DevModem_t *pModem)
+ *
+ * @brief   26 qisack
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QISACK(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -777,6 +1036,18 @@ DR_MODEM_e M26_QISACK(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
+ *
+ * @brief   M26 QISEND
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param           len     The length.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -787,6 +1058,19 @@ DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
 
     return ret;
 }
+
+/**
+ * @fn  static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
+ *
+ * @brief   M26 QIRD
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  pbuff   If non-null, the pbuff.
+ * @param           len     The length.
+ *
+ * @return  An uint32_t.
+ */
+
 static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -825,14 +1109,19 @@ static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 
     return recv_len;
 }
-/** @brief 发送数据，超时时间20s
+
+/**
+ * @fn  DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
  *
- * @param pModem DevModem_t*
- * @param pbuff uint8_t*
- * @param len uint32_t
- * @return DR_MODEM_e
+ * @brief   发送数据，超时时间20s
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ * @param [in,out]  pbuff   uint8_t*.
+ * @param           len     uint32_t.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -898,6 +1187,19 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 
     return ret;
 }
+
+/**
+ * @fn  uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
+ *
+ * @brief   Modem read
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  pbuff   If non-null, the pbuff.
+ * @param           len     The length.
+ *
+ * @return  An uint32_t.
+ */
+
 uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
     if(pModem->info.ucTPMode == 0)
@@ -909,6 +1211,17 @@ uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
         return modem_UART_gets(pModem, pbuff, len);
     }
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
+ *
+ * @brief   U15 qiclose
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -920,6 +1233,17 @@ DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
+ *
+ * @brief   M26 qiclose
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -932,6 +1256,16 @@ DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DR_MODEM_e modem_RESET(DevModem_t *pModem)
+ *
+ * @brief   Modem reset
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_RESET(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -943,12 +1277,17 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
 
     return ret;
 }
-/** @brief 获取接入STATE  M26命令集 P156
+
+/**
+ * @fn  DR_MODEM_e M26_STATE(DevModem_t *pModem)
  *
- * @param pModem DevModem_t*
- * @return DR_MODEM_e
+ * @brief   获取接入STATE  M26命令集 P156
  *
+ * @param [in,out]  pModem  DevModem_t*.
+ *
+ * @return  DR_MODEM_e.
  */
+
 DR_MODEM_e M26_STATE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -1005,6 +1344,16 @@ DR_MODEM_e M26_STATE(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
+ *
+ * @brief   Modem set pdp
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1043,6 +1392,20 @@ DR_MODEM_e modem_set_PDP(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, uint8_t param)
+ *
+ * @brief   M15 qftpcfg
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  cmd     If non-null, the command.
+ * @param [in,out]  usr     If non-null, the usr.
+ * @param [in,out]  pass    If non-null, the pass.
+ * @param           param   The parameter.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, uint8_t param)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1061,6 +1424,18 @@ DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, ui
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
+ *
+ * @brief   UC15 qftpopen
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  server  If non-null, the server.
+ * @param           port    The port.
+ *
+ * @return  A DR_MODEM_e.
+ */
 
 DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
 {
@@ -1090,6 +1465,18 @@ DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server, uint16_t port)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
+ *
+ * @brief   UC15 qftpcwd
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1118,6 +1505,17 @@ DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
+ *
+ * @brief   UC15 qftpget
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1130,6 +1528,17 @@ DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
+ *
+ * @brief   M26 qftpget
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1142,6 +1551,17 @@ DR_MODEM_e M26_QFTPGET(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_set_ftpget(DevModem_t *pModem)
+ *
+ * @brief   Modem set ftpget
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_set_ftpget(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1155,6 +1575,17 @@ DR_MODEM_e modem_set_ftpget(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem)
+ *
+ * @brief   M26 qftpuser
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1167,6 +1598,17 @@ DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem)
+ *
+ * @brief   M26 qftppass
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1179,6 +1621,17 @@ DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
+ *
+ * @brief   M26 qftpopen
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1207,6 +1660,17 @@ DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
+ *
+ * @brief   M26 qftppath
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1236,6 +1700,16 @@ DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
+ *
+ * @brief   UC15 qftpclose
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1248,6 +1722,17 @@ DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
+ *
+ * @brief   M26 qftpclose
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -1260,6 +1745,17 @@ DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
+ *
+ * @brief   Modem set ftpclose
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1273,6 +1769,17 @@ DR_MODEM_e modem_set_ftpclose(DevModem_t *pModem)
     }
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
+ *
+ * @brief   Modem set ftpopen
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1298,6 +1805,17 @@ DR_MODEM_e modem_set_FTPOPEN(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_set_FTPGET(DevModem_t *pModem)
+ *
+ * @brief   Modem set ftpget
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_set_FTPGET(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1322,6 +1840,17 @@ DR_MODEM_e modem_set_FTPGET(DevModem_t *pModem)
 
     return ret;
 }
+
+/**
+ * @fn  DR_MODEM_e modem_get_info(DevModem_t *pModem)
+ *
+ * @brief   Modem get information
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_get_info(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
@@ -1380,6 +1909,16 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
     //modem_get_STATE(pModem);
 }
 
+/**
+ * @fn  DR_MODEM_e modem_init(DevModem_t *pModem)
+ *
+ * @brief   Modem initialize
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ *
+ * @return  A DR_MODEM_e.
+ */
+
 DR_MODEM_e modem_init(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
@@ -1425,6 +1964,14 @@ DR_MODEM_e modem_init(DevModem_t *pModem)
     return ret;
 }
 
+/**
+ * @fn  DevModem_t *DevModemCreate(void)
+ *
+ * @brief   Development modem create
+ *
+ * @return  Null if it fails, else a pointer to a DevModem_t.
+ */
+
 DevModem_t *DevModemCreate(void)
 {
     DevModem_t *pMod;
@@ -1446,6 +1993,14 @@ DevModem_t *DevModemCreate(void)
     
     return pMod;
 }
+
+/**
+ * @fn  void Modem_Poll(DevModem_t *pModem)
+ *
+ * @brief   Modem poll
+ *
+ * @param [in,out]  pModem  If non-null, the modem.
+ */
 
 void Modem_Poll(DevModem_t *pModem)
 {

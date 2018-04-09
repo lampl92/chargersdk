@@ -9,49 +9,100 @@
 #include "evse_config.h"
 #include "evse_globals.h"
 
+/**
+ * @def defDiag_EVSE_Temp_War
+ *
+ * @brief   A macro that defines Definition Diagram evse Temporary warning
+ */
 
 #define defDiag_EVSE_Temp_War   (defSignalEVSE_Alarm_AC_A_Temp_War | \
                                  defSignalEVSE_Alarm_AC_B_Temp_War | \
                                  defSignalEVSE_Alarm_AC_C_Temp_War | \
                                  defSignalEVSE_Alarm_AC_N_Temp_War )
+
+/**
+ * @def defDiag_EVSE_Temp_Cri
+ *
+ * @brief   A macro that defines Definition Diagram evse Temporary critical
+ */
+
 #define defDiag_EVSE_Temp_Cri   (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
                                  defSignalEVSE_Alarm_AC_B_Temp_Cri | \
                                  defSignalEVSE_Alarm_AC_C_Temp_Cri | \
                                  defSignalEVSE_Alarm_AC_N_Temp_Cri )
+
+/**
+ * @def defDiag_CON_Temp_War
+ *
+ * @brief   A macro that defines Definition Diagram con Temporary warning
+ */
+
 #define defDiag_CON_Temp_War   ( defSignalCON_Alarm_AC_A_Temp_War | \
                                  defSignalCON_Alarm_AC_B_Temp_War | \
                                  defSignalCON_Alarm_AC_C_Temp_War | \
                                  defSignalCON_Alarm_AC_N_Temp_War )
+
+/**
+ * @def defDiag_CON_Temp_Cri
+ *
+ * @brief   A macro that defines Definition Diagram con Temporary critical
+ */
+
 #define defDiag_CON_Temp_Cri   ( defSignalCON_Alarm_AC_A_Temp_Cri | \
                                  defSignalCON_Alarm_AC_B_Temp_Cri | \
                                  defSignalCON_Alarm_AC_C_Temp_Cri | \
                                  defSignalCON_Alarm_AC_N_Temp_Cri )
 
-typedef enum
-{
-    VOLT_OK,
-    VOLT_LOWER,
-    VOLT_UPPER
-} HandleVolt_t;
-typedef enum
-{
-    CURR_OK,
-    CURR_UPPER,
-} HandleCurr_t;
-typedef enum
-{
-    FREQ_OK,
-    FREQ_LOWER,
-    FREQ_UPPER
-} HandleFreq_t;
-/** @brief 比较温度
+/**
+ * @enum    HandleVolt_t
  *
- * @param temp double   获取到的温度
- * @param lower double  温度下限
- * @param upper double  温度上限
- * @return ErrorLevel_t
- *
+ * @brief   Values that represent handle volts
  */
+
+typedef enum
+{
+    VOLT_OK,    ///< the volt ok option
+    VOLT_LOWER, ///< the volt lower option
+    VOLT_UPPER  ///< the volt upper option
+} HandleVolt_t;
+
+/**
+ * @enum    HandleCurr_t
+ *
+ * @brief   Values that represent handle curr ts
+ */
+
+typedef enum
+{
+    CURR_OK,    ///< the curr ok option
+    CURR_UPPER, ///< the curr upper option
+} HandleCurr_t;
+
+/**
+ * @enum    HandleFreq_t
+ *
+ * @brief   Values that represent handle Frequency ts
+ */
+
+typedef enum
+{
+    FREQ_OK,    ///< the Frequency ok option
+    FREQ_LOWER, ///< the Frequency lower option
+    FREQ_UPPER  ///< the Frequency upper option
+} HandleFreq_t;
+
+/**
+ * @fn  static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
+ *
+ * @brief   比较温度
+ *
+ * @param   temp    double   获取到的温度.
+ * @param   lower   double  温度下限.
+ * @param   upper   double  温度上限.
+ *
+ * @return  ErrorLevel_t.
+ */
+
 static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
 {
     ErrorLevel_t templevel;
@@ -77,14 +128,18 @@ static ErrorLevel_t HandleTemp(double temp, double lower, double upper)
     return templevel;
 }
 
-/** @brief 比较电压
+/**
+ * @fn  static HandleVolt_t HandleVolt(double volt, double lower, double upper)
  *
- * @param volt double
- * @param lower double
- * @param upper double
- * @return HandleVolt_t
+ * @brief   比较电压
  *
+ * @param   volt    double.
+ * @param   lower   double.
+ * @param   upper   double.
+ *
+ * @return  HandleVolt_t.
  */
+
 static HandleVolt_t HandleVolt(double volt, double lower, double upper)
 {
     HandleVolt_t voltstat;
@@ -102,13 +157,18 @@ static HandleVolt_t HandleVolt(double volt, double lower, double upper)
     }
     return voltstat;
 }
-/** @brief 比较电流
+
+/**
+ * @fn  static HandleCurr_t HandleCurr(double curr, double ratecurr)
  *
- * @param curr double       获取到的电流
- * @param ratecurr double   额定电流
- * @return HandleCurr_t
+ * @brief   比较电流
  *
+ * @param   curr        double       获取到的电流.
+ * @param   ratecurr    double   额定电流.
+ *
+ * @return  HandleCurr_t.
  */
+
 static HandleCurr_t HandleCurr(double curr, double ratecurr)
 {
     HandleCurr_t currstat;
@@ -123,6 +183,18 @@ static HandleCurr_t HandleCurr(double curr, double ratecurr)
     }
     return currstat;
 }
+
+/**
+ * @fn  static HandleFreq_t HandleFreq(double freq, double lower, double upper)
+ *
+ * @brief   Handles the frequency
+ *
+ * @param   freq    The frequency.
+ * @param   lower   The lower.
+ * @param   upper   The upper.
+ *
+ * @return  A HandleFreq_t.
+ */
 
 static HandleFreq_t HandleFreq(double freq, double lower, double upper)
 {
@@ -141,12 +213,17 @@ static HandleFreq_t HandleFreq(double freq, double lower, double upper)
     }
     return freqstat;
 }
-/** @brief 电压判断 北汽需求 P10 f)过压保护 g)欠压保护
+
+/**
+ * @fn  void DiagVoltageError(CON_t *pCON)
  *
- * @param pCON CON_t*
- * @return void
+ * @brief   电压判断 北汽需求 P10 f)过压保护 g)欠压保护
  *
+ * @param [in,out]  pCON    CON_t*.
+ *
+ * ### return   void.
  */
+
 void DiagVoltageError(CON_t *pCON)
 {
     HandleVolt_t voltstat;
@@ -317,12 +394,17 @@ void DiagVoltageError(CON_t *pCON)
         break;
     }/* end of switch(pCON->status.xVoltStat) */
 }
-/** @brief 电流判断 GB/T 18487.1-2015 A3.10.7 (P24) 在此基础上增加一次降功率修正操作
+
+/**
+ * @fn  void DiagCurrentError(CON_t *pCON)
  *
- * @param pCON CON_t*
- * @return void
+ * @brief   电流判断 GB/T 18487.1-2015 A3.10.7 (P24) 在此基础上增加一次降功率修正操作
  *
+ * @param [in,out]  pCON    CON_t*.
+ *
+ * ### return   void.
  */
+
 void DiagCurrentError(CON_t *pCON)
 {
     HandleCurr_t currstat;
@@ -466,12 +548,17 @@ void DiagCurrentError(CON_t *pCON)
         }
     }
 }
-/** @brief B型插座温度与进线温度检测
+
+/**
+ * @fn  void DiagTempError(CON_t *pCON)
  *
- * @param pCON CON_t*
- * @return void
+ * @brief   B型插座温度与进线温度检测
  *
+ * @param [in,out]  pCON    CON_t*.
+ *
+ * ### return   void.
  */
+
 void DiagTempError(CON_t *pCON)
 {
     ErrorLevel_t templevel;
@@ -720,12 +807,17 @@ void DiagTempError(CON_t *pCON)
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
     }
 }
-/** @brief 频率判断
+
+/**
+ * @fn  void DiagFreqError(CON_t *pCON)
  *
- * @param pCON CON_t*
- * @return void
+ * @brief   频率判断
  *
+ * @param [in,out]  pCON    CON_t*.
+ *
+ * ### return   void.
  */
+
 void DiagFreqError(CON_t *pCON)
 {
     HandleFreq_t freqstat;
@@ -879,6 +971,15 @@ void DiagFreqError(CON_t *pCON)
         break;
     }/* end of switch(pCON->status.xFreqStat) */
 }
+
+/**
+ * @fn  void DiagPlugError(CON_t *pCON)
+ *
+ * @brief   Diagram plug error
+ *
+ * @param [in,out]  pCON    If non-null, the con.
+ */
+
 void DiagPlugError(CON_t *pCON)
 {
     if(pCON->status.xPlugState == PLUG)
@@ -906,6 +1007,15 @@ void DiagPlugError(CON_t *pCON)
     }
     /** (rgw#1#):  CC和CP状态已经在GetPlugState中获取，在TaskCharge中判断*/
 }
+
+/**
+ * @fn  void DiagLockError(CON_t *pCON)
+ *
+ * @brief   Diagram lock error
+ *
+ * @param [in,out]  pCON    If non-null, the con.
+ */
+
 void DiagLockError(CON_t *pCON)
 {
     if(pCON->info.ucSocketType == defSocketTypeB)
@@ -927,12 +1037,17 @@ void DiagLockError(CON_t *pCON)
         pCON->status.ulSignalState |= defSignalCON_State_SocketLock;
     }
 }
-/** @brief 主要进行启动条件判断
+
+/**
+ * @fn  void DiagEVSEError(CON_t *pCON)
  *
- * @param pCON CON_t*
- * @return void
+ * @brief   主要进行启动条件判断
  *
+ * @param [in,out]  pCON    CON_t*.
+ *
+ * ### return   void.
  */
+
 void DiagEVSEError(CON_t *pCON)
 {
     if(pEVSE->status.ulScramState == 0)

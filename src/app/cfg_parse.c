@@ -13,6 +13,16 @@
 #include "yaffsfs.h"
 #include "sysinit.h"
 
+/**
+ * @fn  static const char *select_ctx_from_path(char *path)
+ *
+ * @brief   Select context from path
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ *
+ * @return  Null if it fails, else a pointer to a const char.
+ */
+
 static const char *select_ctx_from_path(char *path)
 {
     if (strcmp(path, pathOrder) == 0)
@@ -54,14 +64,17 @@ static const char *select_ctx_from_path(char *path)
     return NULL;
 }
 
-
-/** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
+/**
+ * @fn  ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
  *
- * @param path uint8_t*
- * @param jsCfgObj cJSON*
- * @return ErrorCode_t
+ * @brief   保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
+ * @param [in,out]  path        uint8_t*.
+ * @param [in,out]  jsCfgObj    cJSON*.
+ *
+ * @return  ErrorCode_t.
  */
+
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
     int fd;
@@ -104,13 +117,17 @@ exit:
     return errcode;
 }
 
-/** @brief 获取配置文件cJSON结构体,注意使用完成后需要调用cJSON_Delete对cJSON指针进行释放
+/**
+ * @fn  cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
  *
- * @param path uint8_t* 配置文件存放位置
- * @param perrcode ErrorCode_t* 返回错误代码
- * @return cJSON* 返回cJSON指针
+ * @brief   获取配置文件cJSON结构体,注意使用完成后需要调用cJSON_Delete对cJSON指针进行释放
  *
+ * @param [in,out]  path        uint8_t* 配置文件存放位置.
+ * @param [in,out]  perrcode    ErrorCode_t* 返回错误代码.
+ *
+ * @return  cJSON* 返回cJSON指针.
  */
+
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
     int fd;

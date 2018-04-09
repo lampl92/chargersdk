@@ -23,15 +23,19 @@
 /*                               获取协议配置信息                            */
 /*---------------------------------------------------------------------------*/
 
-/** @brief 获取ProtoCfg中参数的值
+/**
+ * @fn  static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
  *
- * @param pvProtoInfoItem void* 传入要获取的参数的指针
- * @param type uint8_t 要获取参数的类型
- * @param pvCfgObj void*
- * @param jnItemName uint8_t* 参数名称
- * @return ErrorCode_t
+ * @brief   获取ProtoCfg中参数的值
  *
+ * @param [in,out]  pvProtoInfoItem void* 传入要获取的参数的指针.
+ * @param           type            uint8_t 要获取参数的类型.
+ * @param [in,out]  pvCfgObj        void*.
+ * @param [in,out]  jnItemName      uint8_t* 参数名称.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
 {
     ErrorCode_t errcode;
@@ -104,14 +108,19 @@ static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pv
 err_return:
     return errcode;
 }
-/** @brief 获取Proto中Obj的子参数
+
+/**
+ * @fn  static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
  *
- * @param jsProtoObj cJSON*     Obj的父Obj
- * @param pSegTime EchSegTime_t* Obj对应的时间段结构体
- * @param jnNameObj uint8_t*    Obj的名称
- * @return ErrorCode_t
+ * @brief   获取Proto中Obj的子参数
  *
+ * @param [in,out]  jsProtoObj  cJSON*     Obj的父Obj.
+ * @param [in,out]  pSegTime    EchSegTime_t* Obj对应的时间段结构体.
+ * @param [in,out]  jnNameObj   uint8_t*    Obj的名称.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
 {
     uint32_t ItemAddr;
@@ -158,13 +167,18 @@ static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uin
     }
     return errcode;
 }
-/** @brief 获取protocol.cfg全部参数
+
+/**
+ * @fn  static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
  *
- * @param pvProto void*
- * @param pvCfgObj void*
- * @return ErrorCode_t
+ * @brief   获取protocol.cfg全部参数
  *
+ * @param [in,out]  pvProto     void*.
+ * @param [in,out]  pvCfgObj    void*.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
 {
     cJSON *jsProtoObj;
@@ -340,16 +354,20 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     return errcode;
 }
 
-/** @brief 设置参数
+/**
+ * @fn  static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
  *
- * @param jnItemString uint8_t*     要设置参数的名称 或 要设置参数所在的Obj名称
- * @param ObjType uint8_t           要设置参数的类型 或 Obj类型
- * @param jnSubItemString uint8_t*  假如要设置参数在另一个Obj中，则传入这个Obj中该参数的名称
- * @param SubType uint8_t           要设置参数的类型
- * @param pvCfgParam void*          要设置的参数
- * @return ErrorCode_t
+ * @brief   设置参数
  *
+ * @param           jnItemString    uint8_t*     要设置参数的名称 或 要设置参数所在的Obj名称.
+ * @param           ObjType         uint8_t           要设置参数的类型 或 Obj类型.
+ * @param           jnSubItemString uint8_t*  假如要设置参数在另一个Obj中，则传入这个Obj中该参数的名称.
+ * @param           SubType         uint8_t           要设置参数的类型.
+ * @param [in,out]  pvCfgParam      void*          要设置的参数.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
 {
     cJSON *jsProtoCfgObj;
@@ -404,11 +422,14 @@ static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, con
     return errcode;
 }
 
-/** @brief 测试参数设置函数
+/**
+ * @fn  void testSetProtoCfg()
  *
- * @return void
+ * @brief   测试参数设置函数
  *
+ * ### return   void.
  */
+
 void testSetProtoCfg()
 {
     uint8_t ucParam;
@@ -423,6 +444,18 @@ void testSetProtoCfg()
 /*---------------------------------------------------------------------------/
 /                               黑白名单
 /---------------------------------------------------------------------------*/
+
+/**
+ * @fn  static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
+ *
+ * @brief   Button w is list configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  strID   If non-null, the identifier.
+ *
+ * @return  An int.
+ */
+
 static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
@@ -456,6 +489,18 @@ static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 
     return res;
 }
+
+/**
+ * @fn  static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
+ *
+ * @brief   Button w get list size configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  size    If non-null, the size.
+ *
+ * @return  An int.
+ */
+
 static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 {
     cJSON *jsArrayObj;
@@ -478,6 +523,19 @@ static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 
     return 1;
 }
+
+/**
+ * @fn  static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
+ *
+ * @brief   Button w get list configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param           idx     Zero-based index of the.
+ * @param [in,out]  strID   If non-null, the identifier.
+ *
+ * @return  An int.
+ */
+
 static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
 {
     cJSON *jsArrayObj;
@@ -500,13 +558,19 @@ static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
 
     return 1;
 }
-/** @brief 设置黑白名单到文件, 会覆盖原有内容
+
+/**
+ * @fn  static int BnWFlushListCfg(uint8_t *path)
  *
- * @param path uint8_t*
- * @param strID uint8_t*
- * @return int
+ * @brief   设置黑白名单到文件, 会覆盖原有内容
  *
+ * @param [in,out]  path    uint8_t*.
+ *
+ * @return  int.
+ *
+ * ### param            strID   uint8_t*.
  */
+
 static int BnWFlushListCfg(uint8_t *path)
 {
     cJSON *jsArrayObj;
@@ -531,13 +595,18 @@ static int BnWFlushListCfg(uint8_t *path)
     }
     return res;
 }
-/** @brief 增加黑白名单到文件, 不会覆盖
+
+/**
+ * @fn  static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
  *
- * @param path uint8_t*
- * @param strID uint8_t*
- * @return int
+ * @brief   增加黑白名单到文件, 不会覆盖
  *
+ * @param [in,out]  path    uint8_t*.
+ * @param [in,out]  strID   uint8_t*.
+ *
+ * @return  int.
  */
+
 static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
 {
     cJSON *jsArrayObj;
@@ -576,6 +645,17 @@ static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
     }
     return res;
 }
+
+/**
+ * @fn  static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
+ *
+ * @brief   Button w delete list configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  strID   If non-null, the identifier.
+ *
+ * @return  An int.
+ */
 
 static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
 {
@@ -616,6 +696,12 @@ static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
 
     return res;
 }
+
+/**
+ * @fn  void testBnWList(void)
+ *
+ * @brief   Tests button w list
+ */
 
 void testBnWList(void)
 {
@@ -697,10 +783,40 @@ void testBnWList(void)
 /*---------------------------------------------------------------------------*/
 /*                              协议解析                                     */
 /*---------------------------------------------------------------------------*/
+
+/**
+ * @fn  static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
+ *
+ * @brief   Ech verif check
+ *
+ * @param   ver     The version.
+ * @param   atrri   The atrri.
+ * @param   cmd     The command.
+ * @param   len     The length.
+ *
+ * @return  An uint16_t.
+ */
+
 static uint16_t echVerifCheck(uint8_t ver, uint8_t atrri, uint16_t cmd, uint32_t len)
 {
     return (uint16_t)(ver + atrri + cmd + len);
 }
+
+/**
+ * @fn  static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, uint32_t timeout_s, uint8_t trycountmax)
+ *
+ * @brief   Sends a command
+ *
+ * @param [in,out]  pPObj       If non-null, the protocol object.
+ * @param [in,out]  pEObj       If non-null, the evse object.
+ * @param [in,out]  pCObj       If non-null, the con object.
+ * @param           usCmdID     Identifier for the command.
+ * @param           timeout_s   The timeout s.
+ * @param           trycountmax The trycountmax.
+ *
+ * @return  An int.
+ */
+
 static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, uint32_t timeout_s, uint8_t trycountmax)
 {
     echProtocol_t *pProto;
@@ -745,6 +861,23 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, 
         return 1;
     }
 }
+
+/**
+ * @fn  static int makeStdCmd(void *pPObj, void *pEObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t ulMsgBodyCtxLen_dec, uint8_t *pucSendBuffer, uint32_t *pulSendLength)
+ *
+ * @brief   Makes standard command
+ *
+ * @param [in,out]  pPObj               If non-null, the protocol object.
+ * @param [in,out]  pEObj               If non-null, the evse object.
+ * @param           usCmdID             Identifier for the command.
+ * @param [in,out]  pucMsgBodyCtx_dec   If non-null, the puc message body context decrement.
+ * @param           ulMsgBodyCtxLen_dec The ul message body context length decrement.
+ * @param [in,out]  pucSendBuffer       If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLength       If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeStdCmd(void *pPObj,
                       void *pEObj,
                       uint16_t usCmdID,
@@ -821,6 +954,20 @@ static int makeStdCmd(void *pPObj,
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command register body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -849,6 +996,21 @@ static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdReg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command register
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -860,6 +1022,18 @@ static int makeCmdReg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuf
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command heart body context
+ *
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -879,6 +1053,21 @@ static int makeCmdHeartBodyCtx(uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyC
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command heart
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -889,6 +1078,19 @@ static int makeCmdHeart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_HEARTBEAT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command reset body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -912,6 +1114,21 @@ static int makeCmdResetBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command reset
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -922,6 +1139,20 @@ static int makeCmdReset(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RESET, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command status body context
+ *
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1101,6 +1332,21 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command status
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1111,6 +1357,19 @@ static int makeCmdStatus(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeStdCmd(pPObj, pEObj, ECH_CMDID_STATUS, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command remote control body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1143,6 +1402,21 @@ static int makeCmdRemoteCtrlBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command remote control
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1153,6 +1427,21 @@ static int makeCmdRemoteCtrl(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REMOTE_CTRL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command right data body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1266,6 +1555,21 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command right data
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1276,6 +1580,21 @@ static int makeCmdRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeStdCmd(pPObj, pEObj, ECH_CMDID_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command card right data body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1397,6 +1716,21 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command card right data
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1407,6 +1741,21 @@ static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command order body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1662,6 +2011,21 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
 
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command order
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1672,6 +2036,21 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command set resource body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param           usCmdID                 Identifier for the command.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1690,6 +2069,21 @@ static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
    
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command set successor
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1700,6 +2094,21 @@ static int makeCmdSetSucc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_SUCC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command set fail
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1710,6 +2119,21 @@ static int makeCmdSetFail(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_FAIL, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request fee body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param           usCmdID                 Identifier for the command.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1791,6 +2215,21 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request power fee
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1801,6 +2240,21 @@ static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request serv fee
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1811,6 +2265,20 @@ static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SERVFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqCycBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request cyc body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqCycBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -1835,6 +2303,21 @@ static int makeCmdReqCycBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request cyc
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1845,6 +2328,19 @@ static int makeCmdReqCyc(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_CYC, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request time segment body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1900,6 +2396,21 @@ static int makeCmdReqTimeSegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request time segment
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1911,6 +2422,18 @@ static int makeCmdReqTimeSeg(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     return 1;    
 }
 
+/**
+ * @fn  static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request key body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1945,6 +2468,21 @@ static int makeCmdReqKeyBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_
 
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request key
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1956,6 +2494,19 @@ static int makeCmdReqKey(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     return 1;    
 }
 
+/**
+ * @fn  static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request soft version body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -1984,6 +2535,21 @@ static int makeCmdReqSoftVerBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBod
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request soft version
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -1994,6 +2560,21 @@ static int makeCmdReqSoftVer(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_SOFTVER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqQRBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request qr body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqQRBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2038,6 +2619,21 @@ static int makeCmdReqQRBodyCtx(void *pPObj, void *pEObj, uint8_t *pucMsgBodyCtx_
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request qr
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2048,6 +2644,20 @@ static int makeCmdReqQR(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_QR, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command set button w resource body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param           usCmdID                 Identifier for the command.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2071,6 +2681,20 @@ static int makeCmdSetBnWResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMs
     return 1;    
 }
 
+/**
+ * @fn  static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command set black resource
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2081,6 +2705,21 @@ static int makeCmdSetBlackRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command set white resource
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2091,6 +2730,20 @@ static int makeCmdSetWhiteRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request button w body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param           usCmdID                 Identifier for the command.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2140,6 +2793,21 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request black
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2150,6 +2818,21 @@ static int makeCmdReqBlack(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_BLACK, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request white
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2160,6 +2843,21 @@ static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command card start body context
+ *
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     EVSE_t *pEVSE;
@@ -2208,6 +2906,21 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
    
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command card start
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2218,6 +2931,22 @@ static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command card start resource body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2274,6 +3003,21 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdCardStartRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command card start resource
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStartRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2289,6 +3033,22 @@ static int makeCmdCardStartRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *p
     res = makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return res;
 }
+
+/**
+ * @fn  static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command card stop resource body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pEObj                   If non-null, the evse object.
+ * @param [in,out]  pCObj                   If non-null, the con object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2356,6 +3116,21 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command card stop resource
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2366,6 +3141,19 @@ static int makeCmdCardStopRes(void *pPObj, void *pEObj, void *pCObj, uint8_t *pu
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_STOP_RES, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command up fault body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2387,6 +3175,21 @@ static int makeCmdUpFaultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command up fault
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2397,6 +3200,19 @@ static int makeCmdUpFault(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSen
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_FAULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command up warning body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
 
 static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
@@ -2420,6 +3236,21 @@ static int makeCmdUpWarningBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint
 
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command up warning
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2430,6 +3261,20 @@ static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_WARNING, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+
+/**
+ * @fn  static int makeCmdSetOTABodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command set ota body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetOTABodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2452,6 +3297,21 @@ static int makeCmdSetOTABodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_
     
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdSetOTA(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command set ota
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdSetOTA(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2462,6 +3322,20 @@ static int makeCmdSetOTA(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSend
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_OTA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;   
 }
+
+/**
+ * @fn  static int makeCmdReqOTA_DWBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command request ota double word body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqOTA_DWBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2484,6 +3358,21 @@ static int makeCmdReqOTA_DWBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint
     
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdReqOTA_DW(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command request ota double word
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdReqOTA_DW(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2494,6 +3383,20 @@ static int makeCmdReqOTA_DW(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_OTA_DW, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;   
 }
+
+/**
+ * @fn  static int makeCmdOTA_StartBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command ota start body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOTA_StartBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2513,6 +3416,21 @@ static int makeCmdOTA_StartBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint
     
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdOTA_Start(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command ota start
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOTA_Start(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2523,6 +3441,20 @@ static int makeCmdOTA_Start(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     makeStdCmd(pPObj, pEObj, ECH_CMDID_OTA_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdOTA_ResultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+ *
+ * @brief   Makes command ota result body context
+ *
+ * @param [in,out]  pPObj                   If non-null, the protocol object.
+ * @param [in,out]  pucMsgBodyCtx_dec       If non-null, the puc message body context decrement.
+ * @param [in,out]  pulMsgBodyCtxLen_dec    If non-null, the pul message body context length
+ *  decrement.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOTA_ResultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2562,6 +3494,21 @@ static int makeCmdOTA_ResultBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uin
     
     return 1;
 }
+
+/**
+ * @fn  static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+ *
+ * @brief   Makes command ota result
+ *
+ * @param [in,out]  pPObj           If non-null, the protocol object.
+ * @param [in,out]  pEObj           If non-null, the evse object.
+ * @param [in,out]  pCObj           If non-null, the con object.
+ * @param [in,out]  pucSendBuffer   If non-null, buffer for puc send data.
+ * @param [in,out]  pulSendLen      If non-null, length of the pul send.
+ *
+ * @return  An int.
+ */
+
 static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
@@ -2572,6 +3519,18 @@ static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_OTA_RESULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+/**
+ * @fn  static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
+ *
+ * @brief   Gets command identifier via receive command
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           usRecvCmd   The receive command.
+ *
+ * @return  The command identifier via receive command.
+ */
+
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2584,6 +3543,18 @@ static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
     }
     return ECH_CMD_MAX;
 }
+
+/**
+ * @fn  static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
+ *
+ * @brief   Gets receive to via receive command
+ *
+ * @param [in,out]  pProto      If non-null, the prototype.
+ * @param           usRecvCmd   The receive command.
+ *
+ * @return  The receive to via receive command.
+ */
+
 static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2596,12 +3567,68 @@ static uint32_t GetRecvTOViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
     }
     return 1;
 }
+
+/**
+ * @def ECH_ERR_OK
+ *
+ * @brief   A macro that defines ech Error ok
+ */
+
 #define ECH_ERR_OK      1
+
+/**
+ * @def ECH_ERR_VER
+ *
+ * @brief   A macro that defines ech Error Version
+ */
+
 #define ECH_ERR_VER     -1
+
+/**
+ * @def ECH_ERR_CHECK
+ *
+ * @brief   A macro that defines ech Error check
+ */
+
 #define ECH_ERR_CHECK   -2
+
+/**
+ * @def ECH_ERR_ID
+ *
+ * @brief   A macro that defines ech Error Identifier
+ */
+
 #define ECH_ERR_ID      -3
+
+/**
+ * @def ECH_ERR_CMDID
+ *
+ * @brief   A macro that defines ech Error cmdid
+ */
+
 #define ECH_ERR_CMDID   -4
+
+/**
+ * @def ECH_ERR_LEN
+ *
+ * @brief   A macro that defines ech Error Length
+ */
+
 #define ECH_ERR_LEN     -5
+
+/**
+ * @fn  static int recvResponse(void *pPObj, void *pEObj, uint8_t *pbuff, uint32_t ulRecvdLen, uint8_t trycountmax)
+ *
+ * @brief   Receive response
+ *
+ * @param [in,out]  pPObj       If non-null, the protocol object.
+ * @param [in,out]  pEObj       If non-null, the evse object.
+ * @param [in,out]  pbuff       If non-null, the pbuff.
+ * @param           ulRecvdLen  Length of the ul recvd.
+ * @param           trycountmax The trycountmax.
+ *
+ * @return  An int.
+ */
 
 static int recvResponse(void *pPObj,
                         void *pEObj,
@@ -2696,15 +3723,19 @@ static int recvResponse(void *pPObj,
     return ECH_ERR_OK;
 }
 
-/** @brief
+/**
+ * @fn  static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
  *
- * @param pPObj void*
- * @param usCmdID uint16_t
- * @param pbuff uint8_t*
- * @param ulRecvLen uint32_t
- * @return int
+ * @brief   Analy standard resource
  *
+ * @param [in,out]  pPObj       void*.
+ * @param           usCmdID     uint16_t.
+ * @param [in,out]  pbuff       uint8_t*.
+ * @param           ulRecvLen   uint32_t.
+ *
+ * @return  int.
  */
+
 static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
     echProtocol_t *pProto;
@@ -2743,6 +3774,19 @@ static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t u
 3. 将lRecvElem插入队尾
 4. 释放Mutex
 */
+
+/**
+ * @fn  static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
+ *
+ * @brief   Analy command common
+ *
+ * @param [in,out]  pPObj       If non-null, the protocol object.
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pbuff       If non-null, the pbuff.
+ * @param           ulRecvLen   Length of the ul receive.
+ *
+ * @return  An int.
+ */
 
 static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
@@ -2784,6 +3828,19 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
 
     return 1;
 }
+
+/**
+ * @fn  static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
+ *
+ * @brief   Analy command heart
+ *
+ * @param [in,out]  pPObj       If non-null, the protocol object.
+ * @param           usCmdID     Identifier for the command.
+ * @param [in,out]  pbuff       If non-null, the pbuff.
+ * @param           ulRecvLen   Length of the ul receive.
+ *
+ * @return  An int.
+ */
 
 static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
 {
@@ -2828,6 +3885,17 @@ static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t
 
     return 1;
 }
+
+/**
+ * @fn  static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
+ *
+ * @brief   Ech command list allocate
+ *
+ * @param   e   A gdsl_element_t to process.
+ *
+ * @return  A gdsl_element_t.
+ */
+
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
@@ -2852,6 +3920,15 @@ static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 
     return (gdsl_element_t)copyCmdElem;
 }
+
+/**
+ * @fn  static void echCmdListFree (gdsl_element_t e)
+ *
+ * @brief   Ech command list free
+ *
+ * @param   e   A gdsl_element_t to process.
+ */
+
 static void echCmdListFree (gdsl_element_t e)
 {
     free(((echCmdElem_t *)e)->pbuff);
@@ -2859,12 +3936,17 @@ static void echCmdListFree (gdsl_element_t e)
     ((echCmdElem_t *)e)->pbuff = NULL;
     e = NULL;
 }
-/** @brief 复制待插入的元素到新申请的空间
+
+/**
+ * @fn  static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
  *
- * @param pechCmd void*
- * @return gdsl_element_t
+ * @brief   复制待插入的元素到新申请的空间
  *
+ * @param   e   void*.
+ *
+ * @return  gdsl_element_t.
  */
+
 static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
 {
     echProtoElem_t *copyProtoElem;
@@ -2891,6 +3973,14 @@ static gdsl_element_t echProtoListAlloc(gdsl_element_t e)
     return (gdsl_element_t)copyProtoElem;
 }
 
+/**
+ * @fn  static void echProtoListFree (gdsl_element_t e)
+ *
+ * @brief   Ech prototype list free
+ *
+ * @param   e   A gdsl_element_t to process.
+ */
+
 static void echProtoListFree (gdsl_element_t e)
 {
     free(((echProtoElem_t *)e)->pbuff);
@@ -2898,6 +3988,14 @@ static void echProtoListFree (gdsl_element_t e)
     ((echProtoElem_t *)e)->pbuff = NULL;
     e = NULL;
 }
+
+/**
+ * @fn  static void deleteProto(void *pPObj)
+ *
+ * @brief   Deletes the prototype described by pPObj
+ *
+ * @param [in,out]  pPObj   If non-null, the protocol object.
+ */
 
 static void deleteProto(void *pPObj)
 {
@@ -2923,6 +4021,21 @@ static void deleteProto(void *pPObj)
     free(pProto);
     pProto = NULL;
 }
+
+/**
+ * @fn  static echCMD_t *EchCMDCreate(uint16_t usSendCmd, uint16_t usRecvCmd, uint32_t ulRecvTimeout_s, pECH_MAKE_PROC makeProc, pECH_ANALY_PROC analyProc)
+ *
+ * @brief   Ech command create
+ *
+ * @param   usSendCmd       The send command.
+ * @param   usRecvCmd       The receive command.
+ * @param   ulRecvTimeout_s The ul receive timeout s.
+ * @param   makeProc        The make proc.
+ * @param   analyProc       The analy proc.
+ *
+ * @return  Null if it fails, else a pointer to an echCMD_t.
+ */
+
 static echCMD_t *EchCMDCreate(uint16_t usSendCmd,
                               uint16_t usRecvCmd,
                               uint32_t ulRecvTimeout_s,
@@ -2948,6 +4061,14 @@ static echCMD_t *EchCMDCreate(uint16_t usSendCmd,
 
     return pECHCMD;
 }
+
+/**
+ * @fn  echProtocol_t *EchProtocolCreate(void)
+ *
+ * @brief   Ech protocol create
+ *
+ * @return  Null if it fails, else a pointer to an echProtocol_t.
+ */
 
 echProtocol_t *EchProtocolCreate(void)
 {

@@ -66,7 +66,6 @@ static void vTaskReadPic(void *pvParameters)
     xTimerStop(xHandleTimerRFID, 100);
 #endif
     ChargeDoneImage = readPicInf(pathChargeDoneImage);
-    CardInfoImage = readPicInf(pathCardInfoImage);
     ChargingImage = readPicInf(pathChargingImage);
     GetCardInfoImage = readPicInf(pathGetCardInfoImage);
     cartoonImage0 = readPicInf(pathCartoonImage0);
@@ -121,6 +120,7 @@ void MainTask(void)
 
         AdvertisementImage = readPicInf(pathAdvertisementImage);
         HomeImage = readPicInf(pathHomeImage);
+        CardInfoImage = readPicInf(pathCardInfoImage);
 
         Create_SIF12(pathstSIF12);
         Create_SIF16(pathstSIF16);

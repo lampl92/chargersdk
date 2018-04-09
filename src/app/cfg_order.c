@@ -1,3 +1,9 @@
+/**
+ * @file    D:\DPC\workspace\Projects\chargersdk\src\app\cfg_order.c.
+ *
+ * @brief   Configuration order class
+ */
+
 #include "stm32f4xx.h"
 #include "bsp.h"
 #include "interface.h"
@@ -10,6 +16,17 @@
 #include "yaffsfs.h"
 #include "factorycfg.h"
 #include <string.h>
+
+/**
+ * @fn  static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   Creates new order configuration
+ *
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  Null if it fails, else the new new order configuration.
+ */
 
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 {
@@ -63,6 +80,18 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
     return jsNewOrderCfgObj;
 }
 
+/**
+ * @fn  ErrorCode_t AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   Adds an order configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsParent;
@@ -91,6 +120,18 @@ ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     return errcode;
 }
 
+/**
+ * @fn  ErrorCode_t AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   Adds an order temporary
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsObj;
@@ -101,10 +142,32 @@ ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     
     return errcode;
 }
+
+/**
+ * @fn  void RemoveOrderTmp(char *path)
+ *
+ * @brief   Removes the order temporary described by path
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ */
+
 void RemoveOrderTmp(char *path)
 {
     yaffs_unlink(path);
 }
+
+/**
+ * @fn  ErrorCode_t GetOrderCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
+ *
+ * @brief   Gets order configuration item
+ *
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ * @param [in,out]  jnItemName  If non-null, name of the jn item.
+ * @param [in,out]  pvCfgItem   If non-null, the pv configuration item.
+ * @param           type        The type.
+ *
+ * @return  The order configuration item.
+ */
 
 ErrorCode_t GetOrderCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
 {
@@ -145,6 +208,18 @@ ErrorCode_t GetOrderCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, u
 err_return:
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
+ *
+ * @brief   Gets order temporary
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ *
+ * @return  The order temporary.
+ */
+
 ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
 {
     cJSON *jsParent;
@@ -196,6 +271,18 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
+ *
+ * @brief   Gets no pay order
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ *
+ * @return  The no pay order.
+ */
+
 ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
 {
     cJSON *jsParent;
@@ -289,6 +376,18 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
     
     return errcode;
 }
+
+/**
+ * @fn  int testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
+ *
+ * @brief   Tests search order configuration
+ *
+ * @param [in,out]  path        If non-null, full pathname of the file.
+ * @param           time_start  The time start.
+ * @param           time_end    The time end.
+ *
+ * @return  An int.
+ */
 
 int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
 {

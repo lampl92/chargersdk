@@ -18,6 +18,14 @@
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
 
+/**
+ * @fn  void vTaskEVSEData(void *pvParameters)
+ *
+ * @brief   Task evse data
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
+
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -109,6 +117,17 @@ void vTaskEVSEData(void *pvParameters)
                 if ((uxBitsTimer & defEventBitOrderTmpTimer) == defEventBitOrderTmpTimer)
                 {
                     AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                }
+                
+                /*金额不足*/
+                if (pCON->order.ucStartType == defOrderStartType_Card)
+                {
+                    if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                    {
+                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
+                        pCON->order.statOrder = STATE_ORDER_WAITSTOP;
+                        break;
+                    }
                 }
                 
                 /****金额判断****/

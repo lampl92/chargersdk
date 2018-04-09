@@ -17,8 +17,16 @@
 //#define TEST_TIME_EvseData  "EvseData"
 //#define TEST_TIME_rfid  "rfid"
 
-static TaskHandle_t xHandleTaskChData[defTotalCON] = { NULL };
-static TaskHandle_t xHandleTaskEvseData = NULL;
+static TaskHandle_t xHandleTaskChData[defTotalCON] = { NULL };  ///< The handle task ch data[def total con]
+static TaskHandle_t xHandleTaskEvseData = NULL; ///< Information describing the handle task evse
+
+/**
+ * @fn  void vTaskMonitor_ChData(void *pvParameters)
+ *
+ * @brief   Task monitor ch data
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
 
 void vTaskMonitor_ChData(void *pvParameters)
 {
@@ -57,6 +65,14 @@ void vTaskMonitor_ChData(void *pvParameters)
     }
 }
 
+/**
+ * @fn  void vTaskMonitor_EvseStatus(void *pvParameters)
+ *
+ * @brief   Task monitor evse status
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
+
 void vTaskMonitor_EvseStatus(void *pvParameters)
 {
     EventBits_t uxBitsTimerCB;
@@ -78,10 +94,7 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetKnockState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetArresterState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             THROW_ERROR(defDevID_EVSE, pEVSE->status.GetPowerOffState(pEVSE), ERR_LEVEL_TIPS, "Monitor");
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_A_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_B_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_C_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
-            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_N_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+
 #ifdef TEST_TIME_EvseData
             printf_safe("end %s %d\n", TEST_TIME_EvseData, clock());
 #endif // TEST_TIME_EvseData        
@@ -90,6 +103,14 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
         vTaskDelay(10);
     }
 }
+
+/**
+ * @fn  void vTaskEVSEMonitor(void *pvParameters)
+ *
+ * @brief   Task evse monitor
+ *
+ * @param [in,out]  pvParameters    If non-null, options for controlling the pv.
+ */
 
 void vTaskEVSEMonitor(void *pvParameters)
 {
@@ -120,6 +141,10 @@ void vTaskEVSEMonitor(void *pvParameters)
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
         {
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_A_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_B_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_C_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
+            THROW_ERROR(defDevID_EVSE, pEVSE->status.GetAC_N_Temp_in(pEVSE), ERR_LEVEL_TIPS, "Monitor");
             for(i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);

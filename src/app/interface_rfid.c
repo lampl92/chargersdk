@@ -9,6 +9,16 @@
 #include "interface.h"
 #include "user_app.h"
 
+/**
+ * @fn  static ErrorCode_t MT626GetUID(void *pvRfid)
+ *
+ * @brief   Mt626 get UID
+ *
+ * @param [in,out]  pvRfid  If non-null, the pv rfid.
+ *
+ * @return  An ErrorCode_t.
+ */
+
 static ErrorCode_t MT626GetUID(void *pvRfid)
 {
     RFIDDev_t *pRfid;
@@ -50,6 +60,14 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
 
     return errcode;
 }
+
+/**
+ * @fn  RFIDDev_t *RFIDDevCreate(void)
+ *
+ * @brief   Rfid device create
+ *
+ * @return  Null if it fails, else a pointer to a RFIDDev_t.
+ */
 
 RFIDDev_t *RFIDDevCreate(void)
 {

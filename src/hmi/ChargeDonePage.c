@@ -90,7 +90,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
         diffsec = (uint32_t)difftime(now, first);
 
-        sec = 5 - diffsec;
+        sec = 7 - diffsec;
         if (sec < 0)
             sec = 0;
         sprintf((char *)_secDown, "(%02dS)", sec);

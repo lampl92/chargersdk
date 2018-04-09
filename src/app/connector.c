@@ -20,6 +20,18 @@
 #include "event_groups.h"
 #include "timers.h"
 
+/**
+ * @fn  static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+ *
+ * @brief   Sets signal pool
+ *
+ * @param [in,out]  pvDev   If non-null, the pv development.
+ * @param           block   The block.
+ * @param           bit     The bit.
+ *
+ * @return  An int.
+ */
+
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     CON_t *pCON;
@@ -34,6 +46,19 @@ static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
     
     return 1;
 }
+
+/**
+ * @fn  static int ClrSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+ *
+ * @brief   Clear signal pool
+ *
+ * @param [in,out]  pvDev   If non-null, the pv development.
+ * @param           block   The block.
+ * @param           bit     The bit.
+ *
+ * @return  An int.
+ */
+
 static int ClrSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     CON_t *pCON;
@@ -48,6 +73,19 @@ static int ClrSignalPool(void *pvDev, uint32_t block, uint32_t bit)
     
     return 1;
 }
+
+/**
+ * @fn  static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
+ *
+ * @brief   Gets signal pool
+ *
+ * @param [in,out]  pvDev   If non-null, the pv development.
+ * @param           block   The block.
+ * @param           bit     The bit.
+ *
+ * @return  The signal pool.
+ */
+
 static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     CON_t *pCON;
@@ -70,6 +108,19 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 /*---------------------------------------------------------------------------*/
 /*                               设置充电接口信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
+
+/**
+ * @fn  static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type)
+ *
+ * @brief   Sets con configuration
+ *
+ * @param [in,out]  pvCON           If non-null, the pv con.
+ * @param [in,out]  jnItemString    If non-null, the jn item string.
+ * @param [in,out]  pvCfgParam      If non-null, the pv configuration parameter.
+ * @param           type            The type.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type)
 {
@@ -135,7 +186,19 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
 /*---------------------------------------------------------------------------*/
 /*                              从文件获取充电接口信息                         */
 /*---------------------------------------------------------------------------*/
-/** @todo (rgw#1#): 增加枪充电类型CONType */
+
+/**
+ * @fn  static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets con type
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The con type.
+ *
+ * ### todo (rgw#1#): 增加枪充电类型CONType.
+ */
 
 static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
 {
@@ -173,9 +236,20 @@ static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
     }
     return  errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets conqr code
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The conqr code.
+ */
+
 static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
 {
-    /** @todo (rgw#1#): 该函数未测试 */
     CON_t *pCON;
     uint8_t ucCONID;
     uint8_t tmpQRCode[defQRCodeLength];
@@ -210,6 +284,17 @@ static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
     }
     return  errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets socket type
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The socket type.
+ */
 
 static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
 {
@@ -247,6 +332,18 @@ static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
 
     return  errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets volatage limits
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The volatage limits.
+ */
+
 static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
 {
     CON_t *pCON;
@@ -292,6 +389,17 @@ static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
 
     return  errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets ac temporary limits
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  a c temporary limits.
+ */
 
 static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
 {
@@ -340,6 +448,17 @@ static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
+/**
+ * @fn  static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets socket temporary limits
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The socket temporary limits.
+ */
+
 static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
 {
     CON_t *pCON;
@@ -387,6 +506,17 @@ static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
+/**
+ * @fn  static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets rated current
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The rated current.
+ */
+
 static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
 {
     CON_t *pCON;
@@ -425,6 +555,18 @@ static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
 
     return  errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
+ *
+ * @brief   Gets rated power
+ *
+ * @param [in,out]  pvCON       If non-null, the pv con.
+ * @param [in,out]  pvCfgObj    If non-null, the pv configuration object.
+ *
+ * @return  The rated power.
+ */
+
 static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
 {
     CON_t *pCON;
@@ -464,13 +606,17 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
     return  errcode;
 }
 
-/** @brief 从cfg文件获取充电枪配置
+/**
+ * @fn  static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
  *
- * @param pvCON void*
- * @param pvCfgObj void* NULL
- * @return ErrorCode_t
+ * @brief   从cfg文件获取充电枪配置
  *
+ * @param [in,out]  pvCON       void*.
+ * @param [in,out]  pvCfgObj    void* NULL.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 {
     cJSON *jsCfgObj;
@@ -533,16 +679,17 @@ exit:
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 
-
-
-/** @brief 获取充电电压，检测精度 +/-0.1V
+/**
+ * @fn  static ErrorCode_t GetChargingVoltage(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_METER_FAULT
+ * @brief   获取充电电压，检测精度 +/-0.1V
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_METER_FAULT.
  */
+
 static ErrorCode_t GetChargingVoltage(void *pvCON)
 {
     CON_t *pCON;
@@ -577,14 +724,17 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
     return errcode;
 }
 
-/** @brief 获取充电电流，检测精度+/-0.1A
+/**
+ * @fn  static ErrorCode_t GetChargingCurrent(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
+ * @brief   获取充电电流，检测精度+/-0.1A
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CON_METER_FAULT.
  */
+
 static ErrorCode_t GetChargingCurrent(void *pvCON)
 {
     CON_t *pCON;
@@ -620,14 +770,17 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     return errcode;
 }
 
-/** @brief 获取电源频率
+/**
+ * @fn  static ErrorCode_t GetChargingFrequence(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
+ * @brief   获取电源频率
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CON_METER_FAULT.
  */
+
 static ErrorCode_t GetChargingFrequence(void *pvCON)
 {
     CON_t *pCON;
@@ -662,6 +815,16 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 
     return errcode;
 }
+
+/**
+ * @fn  static ErrorCode_t GetChargingPower(void *pvCON)
+ *
+ * @brief   Gets charging power
+ *
+ * @param [in,out]  pvCON   If non-null, the pv con.
+ *
+ * @return  The charging power.
+ */
 
 static ErrorCode_t GetChargingPower(void *pvCON)
 {
@@ -698,13 +861,17 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     return errcode;
 }
 
-/** @brief 控制S1开关
+/**
+ * @fn  static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
  *
- * @param pvCON void*
- * @param cmd uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF
- * @return ErrorCode_t
+ * @brief   控制S1开关
  *
+ * @param [in,out]  pvCON   void*.
+ * @param           cmd     uint8_t   传递开关控制命令，SWITCH_ON /SWITCH_OFF.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -750,14 +917,17 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     return errcode;
 }
 
-/** @brief 获取CP状态
+/**
+ * @fn  static ErrorCode_t GetCPState(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CP_FAULT
+ * @brief   获取CP状态
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CP_FAULT.
  */
+
 static ErrorCode_t GetCPState(void *pvCON)
 {
     float cp1, cp2;
@@ -901,14 +1071,17 @@ static ErrorCode_t GetCPState(void *pvCON)
     return errcode;
 }
 
-/** @brief 设置PWM占空比 详情请看18487.1-2015 P22
+/**
+ * @fn  static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
  *
- * @param pvCON void*
- * @param ucLoadPercent uint8_t 负载百分比 0 ~ 100
+ * @brief   设置PWM占空比 详情请看18487.1-2015 P22
  *
- * @return ErrorCode_t
+ * @param [in,out]  pvCON           void*.
+ * @param           ucLoadPercent   uint8_t 负载百分比 0 ~ 100.
  *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 {
     CON_t *pCON;
@@ -947,14 +1120,18 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t GetCCState(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CC_FAULT
+ * @brief   Gets Cc state
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CC_FAULT.
  */
+
 static ErrorCode_t GetCCState(void *pvCON)
 {
     CON_t *pCON;
@@ -1007,14 +1184,17 @@ static ErrorCode_t GetCCState(void *pvCON)
     return errcode;
 }
 
-/** @brief 获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
+/**
+ * @fn  static ErrorCode_t GetPlugState(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_PLUG_FAULT
+ * @brief   获取插枪状态，应同时检测检测点1（CC）和检测点4（CP）
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CON_PLUG_FAULT.
  */
+
 static ErrorCode_t GetPlugState(void *pvCON)
 {
     CON_t *pCON;
@@ -1065,14 +1245,17 @@ static ErrorCode_t GetPlugState(void *pvCON)
     return errcode;
 }
 
-/** @brief B型连接枪锁状态
+/**
+ * @fn  static ErrorCode_t GetBTypeSocketLock(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_B_LOCK_FAULT
+ * @brief   B型连接枪锁状态
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_B_LOCK_FAULT.
  */
+
 static ErrorCode_t GetBTypeSocketLock(void *pvCON)
 {
     CON_t *pCON;
@@ -1121,15 +1304,18 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     return errcode;
 }
 
-/** @brief B型连接枪锁开关
+/**
+ * @fn  static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
  *
- * @param pvCON void*
- * @param cmd uint8_t   开关控制，SWITCH_ON /SWITCH_OFF
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CANT_LOCK
+ * @brief   B型连接枪锁开关
  *
+ * @param [in,out]  pvCON   void*.
+ * @param           cmd     uint8_t   开关控制，SWITCH_ON /SWITCH_OFF.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_CANT_LOCK.
  */
+
 static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1170,14 +1356,17 @@ static ErrorCode_t SetBTypeSocketLock(void *pvCON, uint8_t cmd)
     return errcode;
 }
 
-/** @brief 获取L进线温度
+/**
+ * @fn  static ErrorCode_t GetACLTemp(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_ACLTEMP_DECT_FAULT
+ * @brief   获取L进线温度
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_ACLTEMP_DECT_FAULT.
  */
+
 static ErrorCode_t GetACLTemp(void *pvCON)
 {
     CON_t *pCON;
@@ -1216,14 +1405,18 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t GetACNTemp(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_ACNTEMP_DECT_FAULT
+ * @brief   Gets a cn temporary
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_ACNTEMP_DECT_FAULT.
  */
+
 static ErrorCode_t GetACNTemp(void *pvCON)
 {
     CON_t *pCON;
@@ -1264,14 +1457,17 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     return errcode;
 }
 
-/** @brief
+/**
+ * @fn  static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_BTEMP1_DECT_FAULT
+ * @brief   Gets b type socket temporary 1
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_BTEMP1_DECT_FAULT.
  */
+
 static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 {
     CON_t *pCON;
@@ -1312,13 +1508,18 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
 
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_BTEMP2_DECT_FAULT
+ * @brief   Gets b type socket temporary 2
+ *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_BTEMP2_DECT_FAULT.
  */
+
 static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 {
     CON_t *pCON;
@@ -1361,12 +1562,17 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
 
     return errcode;
 }
-/** @brief 获取输出继电器状态
+
+/**
+ * @fn  static ErrorCode_t GetRelayState(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
+ * @brief   获取输出继电器状态
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t.
  */
+
 static ErrorCode_t GetRelayState(void *pvCON)
 {
     CON_t *pCON;
@@ -1413,13 +1619,18 @@ static ErrorCode_t GetRelayState(void *pvCON)
 
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
  *
- * @param pvCON void*
- * @param cmd uint8_t SWITCH_ON SWITCH_OFF
- * @return ErrorCode_t
+ * @brief   Sets a relay
  *
- */          //K1 K2指的是什么
+ * @param [in,out]  pvCON   void*.
+ * @param           cmd     uint8_t SWITCH_ON SWITCH_OFF.
+ *
+ * @return  ErrorCode_t.
+ */
+
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1461,14 +1672,18 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     errcode = GetRelayState(pvCON);
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t StartCharge(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_STARTCHARGE
+ * @brief   Starts a charge
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_STARTCHARGE.
  */
+
 static ErrorCode_t StartCharge(void *pvCON)
 {
     CON_t *pCON;
@@ -1493,14 +1708,18 @@ static ErrorCode_t StartCharge(void *pvCON)
     /*********************/
     return errcode;
 }
-/** @brief
+
+/**
+ * @fn  static ErrorCode_t StopCharge(void *pvCON)
  *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_STOPCHARGE
+ * @brief   Stops a charge
  *
+ * @param [in,out]  pvCON   void*.
+ *
+ * @return  ErrorCode_t
+ *           ERR_NO ERR_STOPCHARGE.
  */
+
 static ErrorCode_t StopCharge(void *pvCON)
 {
     CON_t *pCON;
@@ -1529,7 +1748,7 @@ static ErrorCode_t StopCharge(void *pvCON)
             defEventBitCONS2Opened,
             pdFALSE,
             pdTRUE,
-            100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
+            3000);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
         //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
         if ((uxBits & defEventBitCONS2Opened) == defEventBitCONS2Opened)
         {
@@ -1569,6 +1788,16 @@ static ErrorCode_t StopCharge(void *pvCON)
     return errcode;
 }
 
+/**
+ * @fn  CON_t *CONGetHandle(uint8_t ucCONID)
+ *
+ * @brief   Con get handle
+ *
+ * @param   ucCONID The conid.
+ *
+ * @return  Null if it fails, else a pointer to a CON_t.
+ */
+
 CON_t *CONGetHandle(uint8_t ucCONID)
 {
     CON_t *pCON;
@@ -1585,6 +1814,17 @@ CON_t *CONGetHandle(uint8_t ucCONID)
         return NULL;
     }
 }
+
+/**
+ * @fn  CONState_t CONGetState(uint8_t ucCONID)
+ *
+ * @brief   Con get state
+ *
+ * @param   ucCONID The conid.
+ *
+ * @return  A CONState_t.
+ */
+
 CONState_t CONGetState(uint8_t ucCONID)
 {
     CON_t *pCON = NULL;
@@ -1593,6 +1833,15 @@ CONState_t CONGetState(uint8_t ucCONID)
 
     return pCON->state;
 }
+
+/**
+ * @fn  static void CONDelete(CON_t *pCON)
+ *
+ * @brief   Con delete
+ *
+ * @param [in,out]  pCON    If non-null, the con.
+ */
+
 static void CONDelete(CON_t *pCON)
 {
     vEventGroupDelete(pCON->status.xHandleEventCharge);
@@ -1604,6 +1853,17 @@ static void CONDelete(CON_t *pCON)
     free(pCON);
     pCON = NULL;
 }
+
+/**
+ * @fn  CON_t *CONCreate(uint8_t ucCONID )
+ *
+ * @brief   Con create
+ *
+ * @param   ucCONID The conid.
+ *
+ * @return  Null if it fails, else a pointer to a CON_t.
+ */
+
 CON_t *CONCreate(uint8_t ucCONID )
 {
     CON_t *pCON;
