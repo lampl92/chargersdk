@@ -536,6 +536,7 @@ void vTaskEVSECharge(void *pvParameters)
                         pCON->state = STATE_CON_RETURN;
                     }
                 }
+                vTaskDelay(500);
                 break;
             case STATE_CON_DEV_ERROR:
                 THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
