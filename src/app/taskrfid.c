@@ -185,7 +185,7 @@ void vTaskEVSERFID(void *pvParameters)
             user_like.ucCONID = 0;
             user_like.dLimitFee = 0;
             user_like.ulLimitTime = 0;
-            user_like.dLimitPower = 0;
+            user_like.dLimitEnergy = 0;
             user_like.HMItimeout = 0;
             strcpy(user_like.strPwd, "888888");
 #endif
