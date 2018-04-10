@@ -49,7 +49,6 @@ static WM_HWIN      Hwinhelp;
 static WM_HTIMER    _timerstateflash;//后台状态
 static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
-static int i = 1;//函数临时使用
 int SignalIntensity;//信号强度
 int PreSignalIntensity;//之前的信号强度
 
