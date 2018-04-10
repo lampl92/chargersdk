@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_rcc.c" />
+    <ClCompile Include="..\..\..\src\hmi\a0HomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c" />
     <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\b0selectgunDLG.c" />
