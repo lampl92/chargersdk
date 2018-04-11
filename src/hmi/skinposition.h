@@ -9,33 +9,33 @@
 #define helpbuttony 410 //help按键y位置
 
 //选枪页
-#define selectgunax  285 //选枪A按钮x位置
-#define selectgunay  195 //选枪A按钮y位置
-#define selectgunbx  455 //选枪B按钮x位置
-#define selectgunby  195 //选枪B按钮y位置
-#define quitx  50 //退出按钮x位置
-#define quity  350 //退出按钮y位置
+#define selectgunax  137 //选枪A按钮x位置
+#define selectgunay  200 //选枪A按钮y位置
+#define selectgunbx  454 //选枪B按钮x位置
+#define selectgunby  200 //选枪B按钮y位置
+#define quitx  52 //退出按钮x位置
+#define quity  404 //退出按钮y位置
 
 //选模式页
-#define backquitx  600 //后退按钮x位置
-#define backquity  350 //后退按钮y位置
+#define backquitx  52 //后退按钮x位置
+#define backquity  404 //后退按钮y位置
 
-#define keyboardx  290
-#define keyboardy  155
+#define keyboardx  408
+#define keyboardy  157
 
-#define yuandufenx  530
-#define yuandufeny  115
+#define yuandufenx  410
+#define yuandufeny  154
 
 #define Checkboxfullx  100
-#define Checkboxfully  110
+#define Checkboxfully  98
 
 #define Checkboxtimex  100
-#define Checkboxtimey  170
+#define Checkboxtimey  176
 
 #define Checkboxmonex  100
-#define Checkboxmoney  230
+#define Checkboxmoney  251
 
 #define Checkboxelectricx  100
-#define Checkboxelectricy  290
+#define Checkboxelectricy  328
 
 #endif
