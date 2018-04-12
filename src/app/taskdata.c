@@ -174,6 +174,14 @@ void vTaskEVSEData(void *pvParameters)
                 makeOrder(pCON);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
                 /************ make user happy, but boss and i are not happy ************/
+                if (pCON->order.ucStartType == defOrderStartType_Card)
+                {
+                    if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                    {
+                        pCON->order.dTotalServFee = pCON->order.dBalance - pCON->order.dTotalPowerFee;
+                        pCON->order.dTotalFee = pCON->order.dBalance;
+                    }
+                }
                 if(pCON->order.dLimitFee != 0)
                 {
                     if(pCON->order.dTotalFee > pCON->order.dLimitFee)

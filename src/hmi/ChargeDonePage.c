@@ -159,18 +159,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         PreSignalIntensity = SignalIntensity;
 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2);
-        IMAGE_SetBMP(hItem, OrderUploadImage->pfilestring, OrderUploadImage->pfilesize);
-        
-        pCON = CONGetHandle(0);
-        memset(temp_buf, '\0', sizeof(temp_buf));
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//服务费
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//电费
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//消费总额  
+        IMAGE_SetBMP(hItem, OrderUploadImage->pfilestring, OrderUploadImage->pfilesize); 
         pCON = CONGetHandle(0);
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
             defEventBitOrderMakeFinish,
@@ -181,6 +170,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
         //        time_charge = 0;
+            pCON = CONGetHandle(0);
+            memset(temp_buf, '\0', sizeof(temp_buf));
+            sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
+            sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//服务费
+            sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//电费
+            sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
+            Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//消费总额
             hour = time_charge / 3600;
             min = time_charge % 3600 / 60;
             sec = time_charge % 3600 % 60;
