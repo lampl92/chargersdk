@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "ifconfig.h": "c",
-        "net.h": "c"
-    }
-}

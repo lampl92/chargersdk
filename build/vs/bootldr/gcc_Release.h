@@ -1205,13 +1205,6 @@
 
 // --- Include directories begin --- //
 //.
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/app
 //../../../src/cli
 //../../../src/drivers/hal/CMSIS_RTOS
@@ -1236,11 +1229,18 @@
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
+//../../../src/net/user
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/middlewares/STemWin/SIF
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
-//../../../src/net/user
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
