@@ -662,6 +662,37 @@ void cli_evselog_fnt(int argc, char **argv)
 {
     testSearchEVSELogByTime(pathEVSELog, 0, 0);
 }
+void cli_setload_fnt(int argc, char **argv)
+{
+    CON_t *pCON;
+    uint8_t id;
+    uint8_t percent;
+    if (argc == 3)
+    {
+        id = atoi(argv[1]);
+        pCON = CONGetHandle(id);
+        if (pCON != NULL)
+        {
+            percent = atoi(argv[2]);
+            if (percent >= 0 && percent <= 100)
+            {
+                pCON->status.SetLoadPercent(pCON, percent);
+            }
+            else
+            {
+                printf_safe("Percent range(0~100) error.\n");
+            }
+        }
+        else
+        {
+            printf_safe("CON ID error, total con is %d.\n", pEVSE->info.ucTotalCON);
+        }
+    }
+    else
+    {
+        printf_safe("help:\"setload 0 50\" means set con0 load to 50%%\n");
+    }
+}
 tinysh_cmd_t cli_networkinfo_cmd =
 {
     0,
@@ -725,6 +756,17 @@ tinysh_cmd_t cli_evselog_cmd =
     "display evse log",
     0,
     cli_evselog_fnt,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_setload_cmd =
+{
+    0,
+    "setload",
+    "set evse load present",
+    0,
+    cli_setload_fnt,
     "<cr>",
     0,
     0

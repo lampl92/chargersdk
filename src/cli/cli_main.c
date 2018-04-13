@@ -55,6 +55,7 @@ void cli_init(void)
     tinysh_add_command(&cli_evselog_cmd);
     tinysh_add_command(&cli_networkinfo_cmd);
     tinysh_add_command(&cli_printlog_cmd);
+    tinysh_add_command(&cli_setload_cmd);
     
     /************设备测试****************/
 //    tinysh_add_command(&cli_gprs_cmd);
