@@ -176,8 +176,9 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pCON->info.dACTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnACTempLowerLimits);
     cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempUpperLimits);
     cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
-    cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
+    //cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
     cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
+    pCON->info.dRatedCurrent = pCON->info.dRatedPower / 220.0;
     cfgobj_get_string(jsCfgObj, pCON->info.strQRCode, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnQRCode);
     
     ////EVSE使用CON温度
@@ -404,7 +405,7 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_ON)
         {
-            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
+            pwr2pwm(pCON->info.dRatedPower, ucCONID);
         }
         else if (cmd == SWITCH_OFF)
         {
@@ -415,7 +416,7 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_ON)
         {
-            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
+            pwr2pwm(pCON->info.dRatedPower, ucCONID);
         }
         else
         {
@@ -556,34 +557,18 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 {
     CON_t *pCON;
     uint8_t ucCONID;
-    uint8_t tmpCPPWM;
     ErrorCode_t errcode;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpCPPWM = 53; //负载100%时，PWM=53, 负载50%时，PWM= 27
     errcode = ERR_NO;
 
     if (ucLoadPercent == pCON->status.ucLoadPercent)//相同负载百分比不进行设置
     {
         return errcode;
     }
-    else//由于目前设置负载百分比会导致cp检测不准，暂时屏蔽该功能，技术突破后，屏蔽掉该else
-    {
-        pCON->status.ucLoadPercent = ucLoadPercent;
-        return errcode;
-    }
-    /** ************* */
-    if(ucCONID == 0)
-    {
-        TIM2->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent); //1001 - (53 * 10) * (ucLoadPercent / 100.0)
-    }
-    else if(ucCONID == 1)
-    {
-        TIM4->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent);
-    }
-    //负载百分比输入范围0~100；
-    //PWM
+    /*********************/
+    pwr2pwm(pCON->info.dRatedPower * (ucLoadPercent / 100.0), ucCONID);
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;
@@ -1284,6 +1269,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     {
         return NULL;
     }
+    memset(pCON, 0, sizeof(CON_t));
     pCON->info.ucCONID                = ucCONID;
     pCON->info.ucCONType              = defCONType_AC;
     pCON->info.ucSocketType           = defSocketTypeC;

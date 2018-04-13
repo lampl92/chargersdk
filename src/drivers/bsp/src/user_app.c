@@ -489,14 +489,13 @@ void DMA2_Stream0_IRQHandler(void)
       /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
-void curr2pwm(uint32_t rate_curr, uint32_t con_id)
+double curr2duty(double rate_curr)
 {
-    uint32_t compare;
     double duty;
     //7kw duty = 53.3%, 40kw duty = 89.2%
     if (rate_curr <= 51 && rate_curr >= 6)
     { 
-        duty = rate_curr / 0.6 ;
+        duty = rate_curr / 0.6;
     }
     else if (rate_curr > 51 && rate_curr <= 63)
     {
@@ -506,10 +505,19 @@ void curr2pwm(uint32_t rate_curr, uint32_t con_id)
     {
         duty = 53.3;
     }
-    compare = 1000 - duty * 10;
+    return duty;
+}
+
+static void curr2pwm(double rate_curr, uint8_t con_id)
+{
+    uint32_t compare;
+    double duty;
+    
+    duty = curr2duty(rate_curr);
+    compare = 1001 - duty * 10;
     if (con_id == 0)
     {
-        TIM_SetTIM2Compare1(compare);//465=>7kw   108=>40kw
+        TIM_SetTIM2Compare1(compare);//467=>7kw   108=>40kw
     }
     if (con_id == 1)
     {
@@ -517,4 +525,10 @@ void curr2pwm(uint32_t rate_curr, uint32_t con_id)
     }
 }
 
+void pwr2pwm(double rate_power, uint8_t con_id)
+{
+    double rate_curr;
+    rate_curr = rate_power * 1000 / 220.0;
+    curr2pwm(rate_curr, con_id);
+}
 
