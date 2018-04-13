@@ -69,6 +69,12 @@ void vTaskEVSEDiag(void *pvParameters)
             pCON = CONGetHandle(i);
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
+                //发生温度告警（max_temp-10 ~ max_temp）
+                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
+                {
+                    pCON->status.SetLoadPercent(pCON, 50);
+                }
                 //温度警告（非严重告警）算正常，不进行处理
                 if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                     pCON->status.ulSignalFault != 0 ||
