@@ -587,7 +587,7 @@ void EVSEinit(void)
     uint8_t tmp = 2;
 	
     pEVSE = EVSECreate();
-    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
+    //cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();

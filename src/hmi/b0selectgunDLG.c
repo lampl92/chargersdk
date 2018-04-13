@@ -12,9 +12,9 @@
 static WM_HTIMER _timerstateflash;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 285, 195, 100, 100, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 455, 195, 100, 100, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 50, 350, 170, 70, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 137, 200, 213, 76, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 454, 200, 213, 76, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {

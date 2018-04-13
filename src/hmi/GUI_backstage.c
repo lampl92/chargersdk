@@ -69,7 +69,14 @@ void GBSTask()
     gbsstate = StateHome;
     while (1)
     {
-        ledShow();
+        if (pEVSE->info.ucTotalCON == 1)
+        {
+            Led_Show();
+        }
+        else
+        {
+            ledShow();
+        }        
         switch (gbsstate)
         {
         case StateHome:
@@ -77,12 +84,24 @@ void GBSTask()
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
-                gbsstate = StateGetGunInfo;
-                break;
+                if (pEVSE->info.ucTotalCON == 1)
+                {
+                    Tempuserlike.user_like.ucCONID = 0;
+                    Tempuserlike.user_like.dLimitFee = 0;
+                    Tempuserlike.user_like.dLimitEnergy = 0;
+                    Tempuserlike.user_like.ulLimitTime = 0;
+                    xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+                    gbsstate = StateReadyStart;
+                }
+                else
+                {
+                    gbsstate = StateGetGunInfo;
+                    break;
+                }
             }
             break;
         case StateGetGunInfo:
-            if (Tempuserlike.UserLikeFlag == 1)
+            if (Tempuserlike.UserLikeFlag == 1)     
             {
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;

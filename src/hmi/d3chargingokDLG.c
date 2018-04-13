@@ -53,7 +53,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //        break;
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
-        GUI_MEMDEV_WriteAt(Memdevcardinfochargingok, 195, 110);
+        GUI_MEMDEV_WriteAt(Memdevcardinfochargingok, 45, 77);
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerstatechange)

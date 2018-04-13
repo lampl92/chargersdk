@@ -109,7 +109,14 @@ void MainTask(void)
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
 //        CreateKeyBoardWindow();
-        CreateHomeDLG();                
+        if (pEVSE->info.ucTotalCON == 1)
+        {
+            CreateHome0DLG();
+        }
+        else
+        {
+            CreateHomeDLG();    
+        }        
     }
     else
     {

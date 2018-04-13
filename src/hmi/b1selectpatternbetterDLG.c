@@ -28,17 +28,17 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 430, 115, 100, 36, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, 100, 110, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, 100, 170, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, 100, 230, 150, 40, 0, 0x0, 0 },
-    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, 100, 290, 150, 40, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, 600, 350, 170, 70, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 420, 164, 100, 36, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, Checkboxfullx, Checkboxfully, 249, 74, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, Checkboxtimex, Checkboxtimey, 249, 74, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, Checkboxmonex, Checkboxmoney, 249, 74, 0, 0x0, 0 },
+    { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, Checkboxelectricx, Checkboxelectricy, 249, 74, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, backquitx, backquity, 171, 59, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
-    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, 290, 155, 270, 240, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_0, 0, 0, 270, 240, 0, 0x0, 2 },
+    { WINDOW_CreateIndirect, "KeyBoard-Window", ID_WINDOW_1, keyboardx, keyboardy, 275, 242, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Button0", ID_BUTTON_0, 0, 0, 275, 242, 0, 0x0, 2 },
 };
 
 static char* getbutton(int id)
