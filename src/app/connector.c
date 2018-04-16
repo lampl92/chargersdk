@@ -1098,11 +1098,11 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
     {
         return errcode;
     }
-    else//由于目前设置负载百分比会导致cp检测不准，暂时屏蔽该功能，技术突破后，屏蔽掉该else
-    {
-        pCON->status.ucLoadPercent = ucLoadPercent;
-        return errcode;
-    }
+//    else//由于目前设置负载百分比会导致cp检测不准，暂时屏蔽该功能，技术突破后，屏蔽掉该else
+//    {
+//        pCON->status.ucLoadPercent = ucLoadPercent;
+//        return errcode;
+//    }
     /** ************* */
     if(ucCONID == 0)
     {
