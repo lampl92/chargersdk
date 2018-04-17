@@ -12,7 +12,7 @@ typedef enum
 {
     REMOTE_NO,
     REMOTE_CONNECTED,
-    REMOTE_REGEDITED,
+    REMOTE_LOGINED,
     REMOTE_RECONNECT,
     REMOTE_ERROR
 } RemoteState_t;

@@ -226,7 +226,7 @@ void vTaskEVSERemote(void *pvParameters)
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
-    uint32_t reg_try_cnt;
+    uint32_t login_try_cnt;
     uint32_t heart_lost;
 
     ulTotalCON = pListCON->Total;
@@ -234,7 +234,7 @@ void vTaskEVSERemote(void *pvParameters)
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
     errcode = ERR_NO;
     network_res = 0;
-    reg_try_cnt = 0;
+    login_try_cnt = 0;
     heart_lost = 0;
 
     while(1)
@@ -254,11 +254,11 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_CONNECTED:
-            /********** 注册 **************/
+            /********** 登录 **************/
             RemoteIF_RecvLogin(pEVSE, pechProto, &network_res);
             if(network_res == 1)
             {
-                reg_try_cnt = 0;
+                login_try_cnt = 0;
                 xTimerChangePeriod(xHandleTimerRemoteHeartbeat,
                                    pdMS_TO_TICKS(pechProto->info.ulHeartBeatCyc_ms),
                                    100);//设置timer period ，有timer start 功能
@@ -270,20 +270,20 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON = CONGetHandle(i);
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
-                remotestat = REMOTE_REGEDITED;
+                remotestat = REMOTE_LOGINED;
             }
             else
             {
-                reg_try_cnt++;
-                if(reg_try_cnt > 200)
+                login_try_cnt++;
+                if(login_try_cnt > 200)
                 {
-                    printf_safe("\n\nlogin try cnt = %d!!!!!!!!!!\n\n", reg_try_cnt);
-                    reg_try_cnt = 0;
+                    printf_safe("\n\nlogin try cnt = %d!!!!!!!!!!\n\n", login_try_cnt);
+                    login_try_cnt = 0;
                     remotestat = REMOTE_ERROR;
                 }
             }
             break;
-        case REMOTE_REGEDITED:
+        case REMOTE_LOGINED:
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
             
             /*********上传未处理的订单**************/
