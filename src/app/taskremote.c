@@ -287,7 +287,7 @@ void vTaskEVSERemote(void *pvParameters)
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
             
             /*********上传未处理的订单**************/
-#if 0
+#if 1
             for (i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
@@ -323,7 +323,7 @@ void vTaskEVSERemote(void *pvParameters)
                             pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                             break;
                         case REMOTEOrder_WaitRecv:
-                            RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->OrderTmp.order), &network_res);
+                            errcode = RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->OrderTmp.order), &network_res);
                             if (network_res == 1)
                             {
                                 pCON->OrderTmp.order.ucPayStatus = 1;
@@ -333,9 +333,16 @@ void vTaskEVSERemote(void *pvParameters)
                             }
                             else if (network_res == 0)
                             {
+                                if (errcode == ERR_REMOTE_ORDERSN)//服务器不接受该订单号
+                                {
+                                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                                    pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                                    break;
+                                }
                                 if (time(NULL) - pCON->OrderTmp.order.statRemoteProc.order.timestamp > 60)
                                 {
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                                    break;
                                 }
                             }
                             break;
