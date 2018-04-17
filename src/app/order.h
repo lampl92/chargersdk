@@ -28,7 +28,7 @@
 #define defOrderStopType_Fee            5
 #define defOrderStopType_NeedFee        6
 #define defOrderStopType_Remote         7
-#define defOrderStopType_NetLost        8
+#define defOrderStopType_Offline        8
 #define defOrderStopType_Poweroff       9
 #define defOrderStopType_Scram          10
 #define defOrderStopType_SocketError    11

@@ -1319,7 +1319,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
         reason = 4;//达到充电金额
         break;
     case defOrderStopType_Scram:
-    case defOrderStopType_NetLost:
+    case defOrderStopType_Offline:
     case defOrderStopType_Poweroff:
     case defOrderStopType_OverCurr:
     case defOrderStopType_Knock:
@@ -2042,7 +2042,7 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
             pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 4;
             break;
         case defOrderStopType_Scram:
-        case defOrderStopType_NetLost:
+        case defOrderStopType_Offline:
         case defOrderStopType_Poweroff:
         case defOrderStopType_OverCurr:
         case defOrderStopType_Knock:

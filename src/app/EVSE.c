@@ -19,6 +19,34 @@
 #include "cfg_parse.h"
 #include "ST_LIS2DH12.h"
 
+uint8_t isEVSEStandby(void)
+{
+    int id;
+    uint32_t ulTotalCON;
+    uint32_t ulTotalCONStandby = 0;
+    CON_t *pCON;
+    
+    
+    ulTotalCON = pListCON->Total;
+    
+    for (id = 0; id < ulTotalCON; id++)
+    {
+        pCON = CONGetHandle(id);
+        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+        {
+            ulTotalCONStandby++;
+        }
+    }
+    //所有standby，evse才standby
+    if (ulTotalCONStandby == ulTotalCON)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
 uint8_t isEVSEWorking(void)
 {
     int id;
@@ -30,7 +58,8 @@ uint8_t isEVSEWorking(void)
     for (id = 0; id < ulTotalCON; id++)
     {
         pCON = CONGetHandle(id);
-        if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby)
+        //有一个working，evse就是working
+        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
         {
             return 1;
         }

@@ -351,6 +351,13 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                     pCON->state = STATE_CON_STOPCHARGE;
                 }
+                if ((uxBitsException & defEventBitExceptionOfflineStop) == defEventBitExceptionOfflineStop)    //达到充电时间限制
+                {
+                    printf_safe("Offline Stop Charge!\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                    pCON->state = STATE_CON_STOPCHARGE;
+                }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
                     printf_safe("Remote Stop Charge!\n");

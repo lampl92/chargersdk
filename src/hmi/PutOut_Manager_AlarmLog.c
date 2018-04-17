@@ -468,7 +468,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
                 case defOrderStopType_UnPlug:
                     LISTVIEW_SetItemText(hItem, 6, i, "强制拔枪");
                     break;
-                case defOrderStopType_NetLost:
+                case defOrderStopType_Offline:
                 case defOrderStopType_Poweroff:
                 case defOrderStopType_Knock:
                     LISTVIEW_SetItemText(hItem, 6, i, "异常结束");

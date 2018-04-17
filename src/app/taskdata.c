@@ -273,6 +273,12 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->order.ucStopType = defOrderStopType_Scram;
                 }
+                //离线
+                if ((uxBitsData & defEventBitOrderStopTypeOffline) == defEventBitOrderStopTypeOffline)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
+                    pCON->order.ucStopType = defOrderStopType_Offline;
+                }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
@@ -284,23 +290,33 @@ void vTaskEVSEData(void *pvParameters)
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                 defEventBitOrderUseless,
-                                                 pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
-	            if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
-	            {
-    	            printf_safe("Order OK.....................\n");
-    	            pCON->order.ucPayStatus = 1;
-    	            RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-	            }
-	            else
-	            {
-    	            printf_safe("Order TimeOut.....................\n");
-    	            pCON->order.ucPayStatus = 0;
-		            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-					/* 临时订单 在这里存储订单*/
-    	            AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
-	            }
+                if (pCON->order.ucStopType == defOrderStopType_Offline)
+                {
+                    printf_safe("Order Offline.....................\n");
+                    pCON->order.ucPayStatus = 0;
+                    /* 临时订单 在这里存储订单*/
+                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                }
+                else
+                {
+                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
+                                                     defEventBitOrderUseless,
+                                                     pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
+                    if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                    {
+                        printf_safe("Order OK.....................\n");
+                        pCON->order.ucPayStatus = 1;
+                        RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                    }
+                    else
+                    {
+                        printf_safe("Order TimeOut.....................\n");
+                        pCON->order.ucPayStatus = 0;
+                        /* 临时订单 在这里存储订单*/
+                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                    }
+                }
+                
                 AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);

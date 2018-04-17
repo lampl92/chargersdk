@@ -60,17 +60,18 @@
 #define defEventBitOrderStopTypeScram            BIT_8
 #define defEventBitOrderStopTypeLimitFee         BIT_9
 #define defEventBitOrderStopTypeLimitTime        BIT_10
-#define defEventBitOrderStopTypeLimitEnergy       BIT_11
+#define defEventBitOrderStopTypeLimitEnergy      BIT_11
 #define defEventBitOrderStopTypeRemoteStop       BIT_12
 #define defEventBitOrderStopTypeRFIDStop         BIT_13
 #define defEventBitOrderStopTypeFull             BIT_14
 #define defEventBitOrderStopTypeUnPlug           BIT_15
+#define defEventBitOrderStopTypeOffline          BIT_16
 
-#define defEventBitOrderMakeFinish               BIT_16  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderMakeFinishToRemote           BIT_17
-#define defEventBitOrderFinishToHMI              BIT_18
+#define defEventBitOrderMakeFinish               BIT_17  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinishToRemote       BIT_18
+#define defEventBitOrderFinishToHMI              BIT_19
 
-#define defEventBitOrderTmpTimer                 BIT_19
+#define defEventBitOrderTmpTimer                 BIT_20
 
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
@@ -125,6 +126,7 @@
 #define defEventBitExceptionCPSwitch    BIT_15
 #define defEventBitExceptionTempSensor  BIT_16
 #define defEventBitExceptionSocketTempSensor  BIT_17
+#define defEventBitExceptionOfflineStop    BIT_18  //刷卡停止
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
                                          defEventBitExceptionMeter)

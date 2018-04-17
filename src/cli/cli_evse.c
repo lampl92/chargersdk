@@ -520,7 +520,7 @@ void cli_evseorder_fnt(int argc, char **argv)
                 printf_safe("达到充电金额\n");//达到充电金额
                 break;
             case defOrderStopType_Scram:
-            case defOrderStopType_NetLost:
+            case defOrderStopType_Offline:
             case defOrderStopType_Poweroff:
             case defOrderStopType_OverCurr:
             case defOrderStopType_Knock:

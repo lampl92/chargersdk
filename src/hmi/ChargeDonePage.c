@@ -267,7 +267,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     else if ((pCON->order.ucStopType == defOrderStopType_Scram)\
                         || (pCON->order.ucStopType == defOrderStopType_OverCurr)\
                         || (pCON->order.ucStopType == defOrderStopType_Poweroff)\
-                        || (pCON->order.ucStopType == defOrderStopType_NetLost)\
+                        || (pCON->order.ucStopType == defOrderStopType_Offline)\
                         || (pCON->order.ucStopType == defOrderStopType_Scram))
                     {
                         IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), DevErrDoneImage->pfilestring, DevErrDoneImage->pfilesize);

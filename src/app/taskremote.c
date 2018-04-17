@@ -1,6 +1,8 @@
 /**
 * @file taskremote.c
-* @brief 远程通信的操作，接收通信实体的指针
+* @brief 远程通信的操作
+*        重连：丢失3个心跳
+*        停止充电：丢失9个心跳
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -76,7 +78,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
                            100);//设置timer period ，有timer start 功能
     }
     /******* 判断充电过程中不允许设置************/
-    if (isEVSEWorking() == 0)
+    if (isEVSEStandby() == 1)
     {
         flag_set = 1;//0不可设置, 1 可设置
     }
@@ -155,7 +157,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     int succ;
     uint8_t flag_set;
     
-    if (isEVSEWorking() == 0)
+    if (isEVSEStandby() == 1)
     {
         flag_set = 1;//0不可设置, 1 可设置
     }
@@ -227,7 +229,7 @@ void vTaskEVSERemote(void *pvParameters)
     ErrorCode_t errcode;
     int network_res;
     uint32_t login_try_cnt;
-    uint32_t heart_lost;
+    time_t last_heart_stamp;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -235,7 +237,7 @@ void vTaskEVSERemote(void *pvParameters)
     errcode = ERR_NO;
     network_res = 0;
     login_try_cnt = 0;
-    heart_lost = 0;
+    last_heart_stamp = 0;
 
     while(1)
     {
@@ -246,7 +248,7 @@ void vTaskEVSERemote(void *pvParameters)
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Registed;
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectOK,
-                                         pdFALSE, pdTRUE, portMAX_DELAY);
+                                         pdFALSE, pdTRUE, 10000);
             if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
             {
                 RemoteIF_SendLogin(pEVSE, pechProto);
@@ -270,6 +272,7 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON = CONGetHandle(i);
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
+                last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
             }
             else
@@ -367,20 +370,18 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
-                heart_lost++;
-                if(heart_lost > 750)//750
+                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 3)//心跳丢失3个进行重连
                 {
                     printf_safe("\n\nHeart LOST!!!!\n\n");
-                    heart_lost = 0;
                     remotestat = REMOTE_ERROR;
                     break;
                 }
             }
             else
             {
-                pEVSE->status.ulTimeUpdated = 1;
+                pEVSE->status.ulTimeUpdated = 1; //上电时只使用一次，用来看是否校准时间
                 printf_protolog("\n\nRecv Heart  !!!!!!!!!!\n\n");
-                heart_lost = 0;
+                last_heart_stamp = time(NULL);
             }
 
             /************ 状态******************/
@@ -596,7 +597,7 @@ void vTaskEVSERemote(void *pvParameters)
                             pCON->order.statRemoteProc.rtdata.stop_reason = 4;
                             break;
                         case defOrderStopType_Scram:
-                        case defOrderStopType_NetLost:
+                        case defOrderStopType_Offline:
                         case defOrderStopType_Poweroff:
                         case defOrderStopType_OverCurr:
                         case defOrderStopType_Knock:
@@ -696,17 +697,46 @@ void vTaskEVSERemote(void *pvParameters)
 
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
-            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
-            xTimerStop(xHandleTimerRemoteStatus, 100);
-            pModem->state = DS_MODEM_ERR;
-            vTaskDelay(1000);
-            remotestat = REMOTE_NO;
-            printf_safe("State Reconnect ,Call TCP close!!\n");
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Registed;
+            
+            {   //丢失9个心跳停止充电
+                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 9) 
+                {
+                    for (i = 0; i < ulTotalCON; i++)
+                    {
+                        pCON = CONGetHandle(i);
+                        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                        }
+                    }
+                    remotestat = REMOTE_NO;
+                    break;
+                }
+            }
+            {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断ConnectOK事件
+                uxBits = xEventGroupGetBits(xHandleEventRemote);
+                if ((uxBits & defEventBitRemoteError) == defEventBitRemoteError)
+                {
+                    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
+                    break;
+                }
+            }
+            uxBits = xEventGroupWaitBits(xHandleEventTCP,
+                defEventBitTCPConnectOK,
+                pdFALSE,
+                pdTRUE,
+                10000);
+            if ((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+            {
+                RemoteIF_SendLogin(pEVSE, pechProto);
+                remotestat = REMOTE_CONNECTED;
+            }
             break;
         case REMOTE_ERROR:
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
-            remotestat = REMOTE_NO;
+            remotestat = REMOTE_RECONNECT;
             xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
             printf_safe("remote state error ,Call TCP close!!\n");
             break;
