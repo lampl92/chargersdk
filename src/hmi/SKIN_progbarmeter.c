@@ -69,7 +69,14 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 	case WIDGET_ITEM_DRAW_FRAME:
 	case WIDGET_ITEM_DRAW_BACKGROUND:
 //    	GUI_SetPenShape(3);
-    	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, pDrawItemInfo->x0, pDrawItemInfo->y0);
+    	if (pDrawItemInfo->x0 == 112)
+    	{
+        	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, pDrawItemInfo->x0, pDrawItemInfo->y0);
+    	}
+    	else if (pDrawItemInfo->x0 == 456)
+    	{
+        	GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, pDrawItemInfo->x0, pDrawItemInfo->y0);
+    	}
 //    	GUI_SetColor(GUI_BLACK);  	
 //    	GUI_FillPolygon(_aNeedle1, GUI_COUNTOF(_aNeedle1), 0, 0);
 //    	GUI_SetColor(GUI_GREEN);
