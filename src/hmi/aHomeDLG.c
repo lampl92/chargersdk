@@ -549,8 +549,8 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
-                pkwpercent = pkw / 40;
-                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkw);               
+                pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           
