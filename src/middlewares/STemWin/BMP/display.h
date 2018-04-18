@@ -184,6 +184,10 @@ extern GUI_MEMDEV_Handle Memdevhomesignal2;
 extern GUI_MEMDEV_Handle Memdevhomesignal3;
 extern GUI_MEMDEV_Handle Memdevhomesignal4;
 extern GUI_MEMDEV_Handle Memdevhomesignal5;
+
+extern GUI_MEMDEV_Handle Memdevhomesignallogined;
+extern GUI_MEMDEV_Handle Memdevhomesignalnotlogined;
+
 extern GUI_MEMDEV_Handle Memdevhomechargedoneinfo;
 extern GUI_MEMDEV_Handle Memdevhomecharginginfo;
 extern GUI_MEMDEV_Handle Memdevhomechargehelp;

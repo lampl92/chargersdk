@@ -142,6 +142,10 @@ typedef enum _filelist
 #define pathhomesignal3  "nand/system/homesignal3.dta"
 #define pathhomesignal4  "nand/system/homesignal4.dta"
 #define pathhomesignal5  "nand/system/homesignal5.dta"
+
+#define pathhomesignalligined  "nand/system/homesignalligined.dta"
+#define pathhomesignalnotlogined  "nand/system/homesignalnotlogined.dta"
+
 #define pathhomechargedoneinfo          "/nand/system/homechargedoneinfo.dta"
 #define pathhomecharginginfo            "/nand/system/homecharginginfo.dta"
 #define pathhomechargehelp          "/nand/system/homechargehelp.dta"

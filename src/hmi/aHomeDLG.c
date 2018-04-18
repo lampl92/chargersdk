@@ -141,29 +141,43 @@ static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 
 static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
 {
-    SignalIntensity = getSignalIntensity();
-    switch (SignalIntensity)
+    if ((ifconfig.info.ucAdapterSel == 2) || (ifconfig.info.ucAdapterSel == 3) || (ifconfig.info.ucAdapterSel == 4))
     {
-    case 1:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal1, signalx, signaly);
-        break;
-    case 2:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal2, signalx, signaly);
-        break;
-    case 3:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal3, signalx, signaly);
-        break;
-    case 4:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal4, signalx, signaly);
-        break;
-    case 5:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal5, signalx, signaly);
-        break;
-    default:
-        GUI_MEMDEV_WriteAt(Memdevhomesignal0, signalx, signaly);
-        break;
+        SignalIntensity = getSignalIntensity();
+        switch (SignalIntensity)
+        {
+        case 1:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal1, signalx, signaly);
+            break;
+        case 2:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal2, signalx, signaly);
+            break;
+        case 3:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal3, signalx, signaly);
+            break;
+        case 4:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal4, signalx, signaly);
+            break;
+        case 5:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal5, signalx, signaly);
+            break;
+        default:
+            GUI_MEMDEV_WriteAt(Memdevhomesignal0, signalx, signaly);
+            break;
+        }
+        PreSignalIntensity = SignalIntensity;
     }
-    PreSignalIntensity = SignalIntensity;
+    else if (ifconfig.info.ucAdapterSel == 1)
+    {
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomesignallogined, signalx, signaly);
+        }
+        else
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomesignalnotlogined, signalx, signaly);
+        }
+    }
 }
 
 static void updateprice(WM_MESSAGE * pMsg, int idpowerfee, int idservidefee)
