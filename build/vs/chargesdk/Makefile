@@ -133,15 +133,15 @@ $(BINARYDIR)/$(TARGETNAME): $(LINKER_SCRIPT)
 endif
 
 ifeq ($(TARGETTYPE),APP)
-#$(BINARYDIR)/bootldr.o: ../bootldr/$(CONFIG)/bootldr.bin
-#####$(TOOLCHAIN_ROOT)/bin/arm-eabi-ld -r -b binary $< -o $@
-#####$(OBJCOPY) --rename-section .data=.bootldr $@
+$(BINARYDIR)/bootldr.o: ../bootldr/$(CONFIG)/bootldr.bin
+	$(TOOLCHAIN_ROOT)/bin/arm-eabi-ld -r -b binary $< -o $@
+	$(OBJCOPY) --rename-section .data=.bootldr $@
  
-#$(BINARYDIR)/$(TARGETNAME): $(all_objs) $(EXTERNAL_LIBS) $(BINARYDIR)/bootldr.o
-#####$(LD) -o $@ $(LDFLAGS) $(START_GROUP) $(all_objs) $(LIBRARY_LDFLAGS) $(BINARYDIR)/bootldr.o $(END_GROUP)
+$(BINARYDIR)/$(TARGETNAME): $(all_objs) $(EXTERNAL_LIBS) $(BINARYDIR)/bootldr.o
+	$(LD) -o $@ $(LDFLAGS) $(START_GROUP) $(all_objs) $(LIBRARY_LDFLAGS) $(BINARYDIR)/bootldr.o $(END_GROUP)
 
-$(BINARYDIR)/$(TARGETNAME): $(all_objs) $(EXTERNAL_LIBS)
-	$(LD) -o $@ $(LDFLAGS) $(START_GROUP) $(all_objs) $(LIBRARY_LDFLAGS) $(END_GROUP)
+#$(BINARYDIR)/$(TARGETNAME): $(all_objs) $(EXTERNAL_LIBS)
+####$(LD) -o $@ $(LDFLAGS) $(START_GROUP) $(all_objs) $(LIBRARY_LDFLAGS) $(END_GROUP)
 endif
 
 ifeq ($(TARGETTYPE),SHARED)

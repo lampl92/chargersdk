@@ -733,6 +733,9 @@
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
 #endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
+#endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
 #endif
@@ -880,6 +883,9 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
+#ifndef EVSE_USING_RFID
+#define EVSE_USING_RFID 0
+#endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
 #endif
@@ -999,6 +1005,9 @@
 #endif
 #ifndef __LLACCUM_IBIT__
 #define __LLACCUM_IBIT__ 32
+#endif
+#ifndef DEBUG_DIAG_DUMMY
+#define DEBUG_DIAG_DUMMY 1
 #endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
@@ -1196,6 +1205,13 @@
 
 // --- Include directories begin --- //
 //.
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/app
 //../../../src/cli
 //../../../src/drivers/hal/CMSIS_RTOS
@@ -1219,16 +1235,8 @@
 //../../../src/hmi
 //../../../src/hmi/lcd
 //../../../src/hmi/qrencode/inc
-//../../../src/net/mbedTLS/include
-//../../../src/net/user
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/middlewares/STemWin/SIF
+//../../../src/net/mbedTLS/include
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
@@ -1237,6 +1245,7 @@
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
+//../../../src/net/user
 //../../../src/middlewares/unzip101e
 // --- Include directories end --- //
 

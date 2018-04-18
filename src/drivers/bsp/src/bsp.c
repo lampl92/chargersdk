@@ -134,8 +134,8 @@ void bsp_Init(void)
 #endif
     bsp_SDRAM_Init();
 
-#if EVSE_USING_GUI
     LCD_Init();
+#if EVSE_USING_GUI
     TP_Init();
 #endif
     //bsp_LTDC_Init();//在GUI中初始化

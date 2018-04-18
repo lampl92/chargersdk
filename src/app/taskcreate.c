@@ -169,9 +169,9 @@ void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
-    EVSEinit();
+    //EVSEinit();
     SysTaskCreate();
-    AppTaskCreate();
+    //AppTaskCreate();
 #ifdef RELEASE
    // IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
 #endif
@@ -188,7 +188,17 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    MainTask();
+    char *disp_str[200];
+    //MainTask();
+    while (1)
+    {
+        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strIP);
+        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strGate);
+        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strMask);
+        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strDNS1);
+        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strDNS2);
+        vTaskDelay(1000);
+    }
 }
 
 void vTaskGUIBS(void *pvParameters)
@@ -212,14 +222,14 @@ void TaskInit(void)
 void SysTaskCreate (void)
 {
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
-#if EVSE_USING_GUI
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
+#if EVSE_USING_GUI
     xTaskCreate(vTaskGUIBS, TASKNAME_GUIBS, defSTACK_TaskGUIBS, NULL, defPRIORITY_TaskGUIBS, &xHandleTaskGUIBS);
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
 #endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
     xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
-    xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
+    //xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
 
 }
 

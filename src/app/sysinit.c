@@ -106,20 +106,20 @@ void sys_Init(void)
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
     create_system_dir();
-    create_cfg_file(pathEVSECfg, strEVSECfg);
-    create_cfg_file(pathProtoCfg, strProtoCfg);
-    create_cfg_file(pathWhiteList, strWhiteListCfg);
-    create_cfg_file(pathBlackList, strBlackListCfg);
-    create_cfg_file(pathOrder, strOrderCfg);
-    create_cfg_file(pathEVSELog, strLogCfg);
-    create_cfg_file(pathSysCfg, strSysCfg);
-    create_cfg_file(pathFTPCfg, strFtpCfg);
+//    create_cfg_file(pathEVSECfg, strEVSECfg);
+//    create_cfg_file(pathProtoCfg, strProtoCfg);
+//    create_cfg_file(pathWhiteList, strWhiteListCfg);
+//    create_cfg_file(pathBlackList, strBlackListCfg);
+//    create_cfg_file(pathOrder, strOrderCfg);
+//    create_cfg_file(pathEVSELog, strLogCfg);
+//    create_cfg_file(pathSysCfg, strSysCfg);
+//    create_cfg_file(pathFTPCfg, strFtpCfg);
     create_cfg_file(pathNetCfg, strNetCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
 
-    SysCfgInit(&xSysconf);
-    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-    sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+//    SysCfgInit(&xSysconf);
+//    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
+//    sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
     /*---------------------------------------------------------------------------/
     /                               NET初始化
     /---------------------------------------------------------------------------*/

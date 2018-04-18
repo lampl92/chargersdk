@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chargesdk", "chargesdk\chargesdk.vcxproj", "{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027} = {F0BAF0A2-2509-49F2-88BC-5B7198B92027}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bootldr", "bootldr\bootldr.vcxproj", "{F0BAF0A2-2509-49F2-88BC-5B7198B92027}"
 EndProject
@@ -33,7 +36,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
 		BuildVersion_StartDate = 2000/1/1
+		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
 	EndGlobalSection
 EndGlobal
