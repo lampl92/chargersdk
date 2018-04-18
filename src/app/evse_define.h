@@ -213,7 +213,7 @@
 /*EVSE Signal Pool*/
     //ulSignalState
 #define defSignalEVSE_State_Network_Online      BIT_0//
-#define defSignalEVSE_State_Network_Registed    BIT_1//
+#define defSignalEVSE_State_Network_Logined     BIT_1//
     //ulSignalAlarm
 #define defSignalEVSE_Alarm_Scram                BIT_0//
 #define defSignalEVSE_Alarm_Knock                BIT_1//

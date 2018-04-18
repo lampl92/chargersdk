@@ -245,7 +245,7 @@ void vTaskEVSERemote(void *pvParameters)
         switch(remotestat)
         {
         case REMOTE_NO:
-            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Registed;
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
             uxBits = xEventGroupWaitBits(xHandleEventTCP,
                                          defEventBitTCPConnectOK,
                                          pdFALSE, pdTRUE, 10000);
@@ -287,7 +287,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_LOGINED:
-            pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Registed;
+            pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Logined;
             
             /*********上传未处理的订单**************/
 #if 1
@@ -697,7 +697,7 @@ void vTaskEVSERemote(void *pvParameters)
 
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
-            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Registed;
+            pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
             
             {   //丢失9个心跳停止充电
                 if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 9) 

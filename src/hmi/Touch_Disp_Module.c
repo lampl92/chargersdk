@@ -144,7 +144,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
     //uxBits = xEventGroupGetBits(xHandleEventTCP);
     //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
 
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {
         strcat(strCSQ, " 服务器未连接");
     }
@@ -161,7 +161,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 */
 int getSignalIntensity()
 {
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {
         return 0;
     }
