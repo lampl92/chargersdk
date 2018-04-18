@@ -1535,7 +1535,9 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             {
             case WM_NOTIFICATION_RELEASED:
                 Jump_Screen(pMsg->hWin, 1);
-                if(htmpChild == _hWinManagerSysSet)
+                
+                if((htmpChild == _hWinManagerSysSet)
+                    &&(ManagerSetOptions != LOGIN_PASSWD))
                 {
                     WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
                     WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
