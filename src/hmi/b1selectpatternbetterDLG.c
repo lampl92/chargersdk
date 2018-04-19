@@ -28,7 +28,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 420, 164, 100, 36, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 410, 100, 100, 36, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, Checkboxfullx, Checkboxfully, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, Checkboxtimex, Checkboxtimey, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, Checkboxmonex, Checkboxmoney, 249, 74, 0, 0x0, 0 },

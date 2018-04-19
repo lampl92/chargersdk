@@ -49,9 +49,9 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 //        xPrev = x;
 //        yPrev = y;
 //    }
-    GUI_SetColor(0x006666);//青色还不错
+ //   GUI_SetColor(0x006666);//青色还不错
 //    GUI_SetColor(0xF9F900);//黄色不好
-//    GUI_SetColor(0x000079);//蓝色不好
+    GUI_SetColor(0x004B97);//蓝色不好
    // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
     GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 116*testfactor, 150*testfactor);
     GUI_AA_FillCircle(116*testfactor, 150*testfactor, 15*testfactor);
@@ -62,20 +62,23 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
 	WM_HWIN hWin;
-	int x0, y0;
+	//int x0, y0;
+    int x, y;
 	switch (pDrawItemInfo->Cmd)
 	{
 	case WIDGET_ITEM_CREATE:
 	case WIDGET_ITEM_DRAW_FRAME:
 	case WIDGET_ITEM_DRAW_BACKGROUND:
 //    	GUI_SetPenShape(3);
-    	if (WM_GetWindowOrgX(WM_GetParent(pDrawItemInfo->hWin)) == 112)
+    	x = WM_GetWindowOrgX(WM_GetParent(pDrawItemInfo->hWin));
+    	y = WM_GetWindowOrgY(WM_GetParent(pDrawItemInfo->hWin));
+    	if (x == 112)
     	{
-        	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, pDrawItemInfo->x0, pDrawItemInfo->y0);
+        	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, x, y);
     	}
-    	else if (WM_GetWindowOrgX(WM_GetParent(pDrawItemInfo->hWin)) == 456)
+    	else if (x == 456)
     	{
-        	GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, pDrawItemInfo->x0, pDrawItemInfo->y0);
+        	GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, x, y);
     	}
 //    	GUI_SetColor(GUI_BLACK);  	
 //    	GUI_FillPolygon(_aNeedle1, GUI_COUNTOF(_aNeedle1), 0, 0);
