@@ -1625,6 +1625,35 @@ void long_name_test(const char *mountpt)
 
 }
 
+int find_file(const char *dir, const char *key_name, char *find_name)
+{
+    yaffs_DIR *d;
+    struct yaffs_dirent *de;
+
+    d = yaffs_opendir(dir);
+
+    if (!d)
+    {
+        printf_safe("opendir failed\n");
+    }
+    else
+    {
+        while ((de = yaffs_readdir(d)) != NULL)
+        {
+            printf_safe("scanning %s\n", de->d_name);
+            if (strstr(de->d_name, key_name) != NULL)
+            {
+                strcpy(find_name, de->d_name);
+                printf_safe("fine file %s\n", find_name);
+                yaffs_closedir(d);
+                return 1;
+            }
+        }
+        yaffs_closedir(d);
+        return 0;
+    }
+    return 0;
+}
 
 void lookup_test(const char *mountpt)
 {
