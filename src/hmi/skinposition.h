@@ -23,8 +23,8 @@
 #define keyboardx  408
 #define keyboardy  157
 
-#define yuandufenx  410
-#define yuandufeny  100
+#define yuandufenx  408
+#define yuandufeny  95
 
 #define Checkboxfullx  100
 #define Checkboxfully  98
