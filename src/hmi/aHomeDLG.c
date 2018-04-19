@@ -35,8 +35,8 @@
 #define gunstateay  79 //枪A状态图标y位置
 #define gunstatebx  456 //枪B状态图标x位置
 #define gunstateby  79 //枪B状态图标y位置
-#define signalx  755 //信号位置x
-#define signaly  3 //信号位置y
+#define signalx  753 //信号位置x
+#define signaly  5 //信号位置y
 #define infoAx 119 //A枪充电信息位置x
 #define infoAy 125 //A枪充电信息位置y
 #define infoBx 462 //B枪充电信息位置x
@@ -60,8 +60,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 240, 30, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, gunbuttonax, gunbuttonay, 170, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, gunbuttonbx, gunbuttonby, 170, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 302, 422, 100, 44, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 557, 422, 100, 44, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 297, 422, 100, 44, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 100, 44, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
 };
@@ -182,7 +182,7 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
     }
 }
 
-static void updateprice(WM_MESSAGE * pMsg, int idpowerfee, int idservidefee)
+static void updateprice(WM_MESSAGE * pMsg, uint16_t idpowerfee, uint16_t idservidefee)
 {
     uint8_t pos = 0;
     uint8_t ucSegState;
@@ -190,12 +190,13 @@ static void updateprice(WM_MESSAGE * pMsg, int idpowerfee, int idservidefee)
     uint8_t strPowerFee[10];
     uint8_t strServiceFee[10];
     now = time(NULL);
+    WM_HWIN hWin = pMsg->hWin;
     extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
     ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
-    sprintf(strPowerFee, "%5.1f", pechProto->info.dSegEnergyFee[ucSegState]);
-    sprintf(strServiceFee, "%5.1f", pechProto->info.dSegServFee[ucSegState]);
-    TEXT_SetText(WM_GetDialogItem(pMsg->hWin, idpowerfee), strPowerFee);/**< 充电费*/
-    TEXT_SetText(WM_GetDialogItem(pMsg->hWin, idservidefee), strServiceFee);/**< 服务费 */  
+    sprintf(strPowerFee, "%5.2f", pechProto->info.dSegEnergyFee[ucSegState]);
+    sprintf(strServiceFee, "%5.2f", pechProto->info.dSegServFee[ucSegState]);
+    TEXT_SetText(WM_GetDialogItem(hWin, idpowerfee), strPowerFee);/**< 充电费*/
+    TEXT_SetText(WM_GetDialogItem(hWin, idservidefee), strServiceFee);/**< 服务费 */  
 }
 
 static void updatedatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
@@ -394,13 +395,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
     case WM_TIMER:
         if (pMsg->Data.v == _timersignalstateflash)
         {
-           //信号的更新
-            SignalIntensity = getSignalIntensity();
-            if (SignalIntensity != PreSignalIntensity)
-            {
-                //WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
-                PreSignalIntensity = SignalIntensity;
-            }
+           //在WM_PAINT消息里的MEMdev，只有无效化窗口才会被更新
+            WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 1000);
         }
         else if (pMsg->Data.v == _timerpriceflash)
