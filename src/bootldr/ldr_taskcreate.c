@@ -21,6 +21,7 @@
 #include "bsp_cpu_flash.h"
 #include "cfg_parse.h"
 #include "yaffsfs.h"
+#include "yaffs2misc.h"
 
 
 /*---------------------------------------------------------------------------/
@@ -151,6 +152,7 @@ void vTaskInit(void *pvParameters)
     
     char cli_std[1];
     uint32_t cli_std_len;
+    char strFindName[256];
     
     AppObjCreate();
     sys_Init();
@@ -202,7 +204,11 @@ void vTaskInit(void *pvParameters)
                     }
                 }
             }
-            else if (xSysconf.xUpFlag.chargesdk_bin != 1)
+            else if (find_file(pathUpgradeDir, "new_fw", strFindName) == 1)
+            {
+                printf_safe("find firmware %s%s \n",pathUpgradeDir, strFindName);
+            }
+            else// if (xSysconf.xUpFlag.chargesdk_bin != 1)
             {
                 printf_safe("direct app_start!\n");
                 Jump_To_APP();
