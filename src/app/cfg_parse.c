@@ -66,7 +66,7 @@ static cJSON *cfgobj_scan(cJSON *pCfgObj, char *str_key)
         printf_safe("size = %d\n", strlen(p));
         printf_safe("i = %d\n", i);
 #endif
-        str_n = strrchr(p, ':');
+        str_n = strchr(p, ':');
         if (str_n != NULL)
         {
             str_n = str_n + 1;      //":0" => "0"
