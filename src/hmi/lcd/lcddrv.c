@@ -481,7 +481,7 @@ void LCD_Init(void)
 
 	LCD_Display_Dir(1);		//默认为竖屏
 	//LCD_LED=1;				//点亮背光
-	LCD_Clear(WHITE);
+    LCD_Clear(BLUE);
 }
 //清屏函数
 //color:要清屏的填充色

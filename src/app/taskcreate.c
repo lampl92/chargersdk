@@ -188,15 +188,19 @@ void vTaskCLI(void *pvParameters)
 
 void vTaskGUI(void *pvParameters)
 {
-    char *disp_str[200];
+    char disp_str[200];
     //MainTask();
     while (1)
     {
-        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strIP);
-        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strGate);
-        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strMask);
-        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strDNS1);
-        LCD_ShowString(0, 0, 200, 200, 16, ifconfig.status.strDNS2);
+        LCD_ShowString(100, 100, 200, 20, 16, ifconfig.status.strIP);
+        LCD_ShowString(100, 120, 200, 20, 16, ifconfig.status.strGate);
+        LCD_ShowString(100, 140, 200, 20, 16, ifconfig.status.strMask);
+        LCD_ShowString(100, 160, 200, 20, 16, ifconfig.status.strDNS1);
+        LCD_ShowString(100, 180, 200, 20, 16, ifconfig.status.strDNS2);
+        
+        sprintf(disp_str, "ftp://admin:admin@%s", ifconfig.status.strIP);
+        LCD_ShowString(100, 220, 300, 20, 16, disp_str);
+        
         vTaskDelay(1000);
     }
 }

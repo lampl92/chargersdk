@@ -70,6 +70,7 @@ static void netStateInit(net_device_t *net_dev)
     error = net_dev->init(net_dev);
     if (error == NO_ERROR)
     {
+        ifconfig_update(net_dev);
         net_ftp_server_start(net_dev);
         netChangeState(net_dev, NET_STATE_TCP_ON);//临时改的，原来是CONNECT
     }
