@@ -46,6 +46,8 @@ typedef enum _filelist
 #define pathSelectGunBbottonNotpress        "nand/system/selectgunBbuttonnotpress.dta"
 #define pathSelectGunAbottonPress           "nand/system/selectgunAbuttonpress.dta"
 #define pathSelectGunBbottonPress           "nand/system/selectgunBbuttonpress.dta"
+#define pathSelectGunAbottonDisable          "nand/system/selectgunAbuttondisable.dta"
+#define pathSelectGunBbottonDisable          "nand/system/selectgunBbuttondisable.dta"
 //*********
 
 //************

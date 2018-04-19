@@ -25,9 +25,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_INIT_DIALOG:        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
         BUTTON_SetSkin(hItem, SKIN_selectbutton);
+        if (GBSgunstate[0] != GunfreeState)
+        {
+            WM_InvalidateWindow(hItem);   
+        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
         BUTTON_SetSkin(hItem, SKIN_selectbutton);
+        if (GBSgunstate[1] != GunfreeState)
+        {
+            WM_InvalidateWindow(hItem);   
+        }
                 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetSkin(hItem, SKIN_buttonquit);

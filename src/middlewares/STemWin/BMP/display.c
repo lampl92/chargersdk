@@ -202,7 +202,9 @@ GUI_MEMDEV_Handle MemdevSelectGunBack;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
-GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		  
+GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		
+GUI_MEMDEV_Handle MemdevSelectGunAbottonDisable;
+GUI_MEMDEV_Handle MemdevSelectGunBbottonDisable;	
 
 //选模式
 GUI_MEMDEV_Handle Memdevselectpatternback;
@@ -534,6 +536,8 @@ void creatememdev()
     MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
     MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
     MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
+    MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable);
+    MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable);
     
     //选模式
     Memdevselectpatternback = createMemdev(pathselectpatternback);

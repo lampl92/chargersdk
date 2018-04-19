@@ -374,7 +374,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
             }
             else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
             {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
+                GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonDisable, selectgunax, selectgunay);
             }
             else
             {
@@ -397,7 +397,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
             }
             else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
             {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
+                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunbx, selectgunby);
             }
             else
             {

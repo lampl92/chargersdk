@@ -199,7 +199,9 @@ extern GUI_MEMDEV_Handle MemdevSelectGunBack;
 extern GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
 extern GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
 extern GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
-extern GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		  
+extern GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;
+extern GUI_MEMDEV_Handle MemdevSelectGunAbottonDisable;
+extern GUI_MEMDEV_Handle MemdevSelectGunBbottonDisable;
 
 //ѡģʽ
 extern GUI_MEMDEV_Handle Memdevselectpatternback;
