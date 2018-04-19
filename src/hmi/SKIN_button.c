@@ -342,12 +342,11 @@ int SKIN_buttonhelp(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
-
-
 //选枪页上的枪A枪B按钮
 int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
+    char s[10];
     switch (pDrawItemInfo->Cmd)
     {
     case WIDGET_ITEM_CREATE:
@@ -360,48 +359,65 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BACKGROUND:
         if (pDrawItemInfo->hWin == WM_GetDialogItem(WM_GetParent(pDrawItemInfo->hWin), GUI_ID_USER + 0x01))
         {
-            if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonPress, selectgunax, selectgunay);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+            BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
+            if (strcmp("disable",s) == 0)
             {
                 GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonDisable, selectgunax, selectgunay);
             }
             else
             {
-                BUTTON_DrawSkinFlex(pDrawItemInfo); 
+                if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonPress, selectgunax, selectgunay);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonNotpress, selectgunax, selectgunay);
+                }
+                else
+                {
+                    BUTTON_DrawSkinFlex(pDrawItemInfo); 
+                }
             }
+           
         }
         else if (pDrawItemInfo->hWin == WM_GetDialogItem(WM_GetParent(pDrawItemInfo->hWin), GUI_ID_USER + 0x03))
         {
-            if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+            BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
+            if (strcmp("disable",s) == 0)
             {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonPress, selectgunbx, selectgunby);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
-            }
-            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
-            {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunbx, selectgunby);
+                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunax, selectgunay);
             }
             else
             {
-                BUTTON_DrawSkinFlex(pDrawItemInfo); 
+                if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonPress, selectgunbx, selectgunby);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
+                }
+                else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+                {
+                    GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonNotpress, selectgunbx, selectgunby);
+                }
+                else
+                {
+                    BUTTON_DrawSkinFlex(pDrawItemInfo); 
+                }
             }
         }
         break;

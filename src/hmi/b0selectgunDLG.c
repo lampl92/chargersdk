@@ -12,8 +12,8 @@
 static WM_HTIMER _timerstateflash;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 137, 200, 213, 76, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 454, 200, 213, 76, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 137, 200, 213, 76, 0, 0x0, 10 },
+    { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 454, 200, 213, 76, 0, 0x0, 10 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 0 },
 };
 
@@ -24,18 +24,19 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetSkin(hItem, SKIN_selectbutton);
+        BUTTON_SetUserData(hItem, "enable", 10);
         if (GBSgunstate[0] != GunfreeState)
         {
-            WM_InvalidateWindow(hItem);   
+            BUTTON_SetUserData(hItem, "disable", 10);
         }
+        BUTTON_SetSkin(hItem, SKIN_selectbutton);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetSkin(hItem, SKIN_selectbutton);
         if (GBSgunstate[1] != GunfreeState)
         {
-            WM_InvalidateWindow(hItem);   
+            BUTTON_SetUserData(hItem, "disable", 10);
         }
+        BUTTON_SetSkin(hItem, SKIN_selectbutton);
                 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetSkin(hItem, SKIN_buttonquit);
@@ -52,8 +53,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                Tempuserlike.user_like.ucCONID = 0;
-                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
+                if (GBSgunstate[0] == GunfreeState)
+                {
+                    Tempuserlike.user_like.ucCONID = 0;
+                    WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
+                }
                 break;
             }
             break;
@@ -62,8 +66,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                Tempuserlike.user_like.ucCONID = 1;
-                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
+                if (GBSgunstate[1] == GunfreeState)
+                {
+                    Tempuserlike.user_like.ucCONID = 1;
+                    WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTPATTERN);
+                }
                 break;
             }
             break;
