@@ -40,10 +40,10 @@ void timeInit()
     time(&settime);
 }
 
-uint8_t create_system_dir(void)
+uint8_t create_dir(char *dir)
 {
     int res = 1;
-    res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
+    res = yaffs_mkdir(dir, S_IREAD | S_IWRITE);
     if (res != 0)
     {
         res = yaffs_get_error();
@@ -97,7 +97,8 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-    create_system_dir();
+    create_dir(pathSystemDir);
+    create_dir(pathUpgradeDir);
     //yaffs_unlink(pathSysCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
 

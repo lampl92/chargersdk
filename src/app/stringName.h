@@ -192,6 +192,7 @@ typedef enum _filelist
 
 #define YAFFS_MOUNT_POINT   "/nand/"
 #define pathSystemDir       "/nand/system/"
+#define pathUpgradeDir      "/nand/upgrade/"
 
 
 #define jnEVSESN        "EVSESN"
