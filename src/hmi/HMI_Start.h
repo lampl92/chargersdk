@@ -12,7 +12,7 @@
 #include "lcddrv.h"
 #include "user_app.h"
 
-#define FONT_COLOR      0xFF330000
+#define FONT_COLOR      0xFFFFFFFF
 extern GUI_HMEM    qr_hmem;
 
 extern int SignalIntensity;
