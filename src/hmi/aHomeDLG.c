@@ -68,9 +68,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
     { WINDOW_CreateIndirect, "info-Window", ID_WINDOW_1, infoAx, infoAy, 218, 211, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 120, 55, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 120, 89, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 120, 123, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 107, 40, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 107, 84, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 107, 127, 240, 24, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
@@ -441,9 +441,9 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "");        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &fontwryhcg30e, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &fontwryhcg30e, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &fontwryhcg30e, GUI_BLACK, "");        
         break;
     case WM_PAINT:
         if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0)))
