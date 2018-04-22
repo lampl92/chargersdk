@@ -31,8 +31,8 @@
 #define gunstateax  112 //枪A状态图标x位置
 #define gunstateay  79 //枪A状态图标y位置
 
-#define signalx  755 //信号位置x
-#define signaly  3 //信号位置y
+#define signalx  753 //信号位置x
+#define signaly  5 //信号位置y
 
 #define infoAx 119 //A枪充电信息位置x
 #define infoAy 125 //A枪充电信息位置y
@@ -47,7 +47,6 @@ static WM_HTIMER    _timerstateflash;//后台状态
 static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
 int SignalIntensity;//信号强度
-int PreSignalIntensity;//之前的信号强度
 
 static GUNState_E homegunstate[2];
 
@@ -63,9 +62,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
     { WINDOW_CreateIndirect, "info-Window", ID_WINDOW_1, infoAx, infoAy, 218, 211, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 120, 55, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 120, 89, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 120, 123, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 107, 40, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 107, 83, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 107, 125, 240, 24, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
@@ -104,7 +103,6 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
             GUI_MEMDEV_WriteAt(Memdevhomesignal0, signalx, signaly);
             break;
         }
-        PreSignalIntensity = SignalIntensity;
     }
     else if (ifconfig.info.ucAdapterSel == 1)
     {
@@ -191,7 +189,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        SignalIntensity = getSignalIntensity();
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), GUI_WHITE);
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), GUI_WHITE);
@@ -258,12 +255,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         if (pMsg->Data.v == _timersignalstateflash)
         {
            //信号的更新
-            SignalIntensity = getSignalIntensity();
-            if (SignalIntensity != PreSignalIntensity)
-            {
-                //WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
-                PreSignalIntensity = SignalIntensity;
-            }
+            WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 1000);
         }
         else if (pMsg->Data.v == _timerpriceflash)
@@ -308,9 +300,9 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &SIF24_Font, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, GUI_BLACK, "");        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &fontwryhcg30e, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &fontwryhcg30e, GUI_BLACK, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &fontwryhcg30e, GUI_BLACK, "");        
         break;
     case WM_PAINT:
         if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0)))
@@ -401,8 +393,8 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
-                pkwpercent = pkw / 40;
-                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkw);               
+                pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           

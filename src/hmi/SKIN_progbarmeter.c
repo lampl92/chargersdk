@@ -7,7 +7,8 @@
 #include "GUI_backstage.h"
 
 #define testfactor 6
-static const GUI_POINT _aNeedle[] = { { -3*testfactor, 0 }, { -3*testfactor , -70*testfactor }, { 0, -80*testfactor  }, { 3*testfactor , -70*testfactor  }, { 3*testfactor , 0 } };
+//static const GUI_POINT _aNeedle[] = { { -3*testfactor, 0 }, { -3*testfactor , -70*testfactor }, { 0, -80*testfactor  }, { 3*testfactor , -70*testfactor  }, { 3*testfactor , 0 } };
+static const GUI_POINT _aNeedle[] = { { -7*testfactor, 0 }, { -3*testfactor, -70*testfactor }, { 0, -80*testfactor }, { 3*testfactor, -70*testfactor }, { 7*testfactor, 0 } };
 
 static const GUI_POINT _aNeedle2[] = { { -5*testfactor, 0 }, { 0*testfactor, -65*testfactor }, { 5*testfactor, 0 } };
 
@@ -50,11 +51,12 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 //        yPrev = y;
 //    }
  //   GUI_SetColor(0x006666);//青色还不错
-//    GUI_SetColor(0xF9F900);//黄色不好
-    GUI_SetColor(0x004B97);//蓝色不好
+    //GUI_SetColor(0xF9F900);//黄色不好
+    //006600绿色不错
+    GUI_SetColor(0x3366CC);
    // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
     GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 116*testfactor, 150*testfactor);
-    GUI_AA_FillCircle(116*testfactor, 150*testfactor, 15*testfactor);
+    GUI_AA_FillCircle(116*testfactor, 150*testfactor, 22*testfactor);
     GUI_AA_DisableHiRes();
 }
 

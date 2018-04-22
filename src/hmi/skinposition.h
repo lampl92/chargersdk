@@ -17,8 +17,8 @@
 #define quity  404 //退出按钮y位置
 
 //选模式页
-#define backquitx  52 //后退按钮x位置
-#define backquity  404 //后退按钮y位置
+#define backquitx  601 //后退按钮x位置
+#define backquity  422 //后退按钮y位置
 
 #define keyboardx  408
 #define keyboardy  157

@@ -57,20 +57,20 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 240, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, gunbuttonax, gunbuttonay, 170, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, gunbuttonbx, gunbuttonby, 170, 50, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 297, 422, 100, 44, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 100, 44, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 297, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
     { WINDOW_CreateIndirect, "info-Window", ID_WINDOW_1, infoAx, infoAy, 218, 211, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 107, 40, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 107, 84, 240, 24, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 107, 127, 240, 24, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingfee", ID_TEXT_3, 95, 40, 73, 24, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingcurrent", ID_TEXT_4, 95, 83, 73, 24, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "chargingpower", ID_TEXT_5, 95, 125, 73, 24, TEXT_CF_HCENTER, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
@@ -228,21 +228,21 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
         pCON = CONGetHandle(0);
         if (GBSgunstate[0] == GunchargingState)
         {
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-            sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//充电电流   
+            sprintf(temp_buf, "%.1f", pCON->status.dChargingCurrent);//充电电流   
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);
-            sprintf(temp_buf, "%.2f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000);
+            sprintf(temp_buf, "%.1f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电功率     
         }
         if (GBSgunstate[0] == GunchargedoneState)
         {
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalFee);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);//消费总额 
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-            sprintf(temp_buf, "%.2lf", time_charge / 60.0);
+            sprintf(temp_buf, "%d", (int)time_charge / 60.0);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电时间
         }
     }
@@ -441,9 +441,9 @@ static void _cbDialoginfo(WM_MESSAGE *pMsg)
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &fontwryhcg30e, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &fontwryhcg30e, GUI_BLACK, "");
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &fontwryhcg30e, GUI_BLACK, "");        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &fontwryhcg30e, 0xFF08263F, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &fontwryhcg30e, 0xFF08263F, "");
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &fontwryhcg30e, 0xFF08263F, "");        
         break;
     case WM_PAINT:
         if (BUTTON_IsPressed(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0)))
@@ -495,7 +495,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_BLACK);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg36e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         homegunstate[0] = GBSgunstate[0];
@@ -585,7 +585,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
     pCON = CONGetHandle(0);
     switch (pMsg->MsgId){
     case WM_INIT_DIALOG:        
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_WHITE);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_BLACK);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &fontwryhcg36e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         homegunstate[1] = GBSgunstate[1];

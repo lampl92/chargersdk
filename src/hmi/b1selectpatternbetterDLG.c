@@ -28,12 +28,12 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 552, 107, 100, 36, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 415, 107, 223, 36, TEXT_CF_RIGHT, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, Checkboxfullx, Checkboxfully, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, Checkboxtimex, Checkboxtimey, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, Checkboxmonex, Checkboxmoney, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxelectric", ID_CHECKBOX_3, Checkboxelectricx, Checkboxelectricy, 249, 74, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, backquitx, backquity, 171, 59, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Buttonquit", ID_BUTTON_14, backquitx, backquity, 149, 54, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
@@ -129,28 +129,6 @@ static void MakeStrNumber(char *number)
             }
             strcat(strNumber, number); 
         }
-    }
-}
-
-//*s的内存空间足以放下2倍*number字符串,（一个空格打印出来只有一半数字大小）
-static void justStrNumber(char *s,const char *number)//字符串左侧空白对齐
-{
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    int l = 0;
-    while (number[i] != '\0')
-    {
-        i++;
-    }
-    for (j = 0; j < (INPUTNUMBERLENGTH - 1 - i)*2; j++)
-    {
-        s[j] = ' ';
-    }
-    for (k = j; k <(j + i+1); k++)
-    {
-        s[k] = number[l];
-        l++;
     }
 }
 
@@ -355,7 +333,6 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
     int Id;
     WM_HWIN hItem;
     I16 skbID;
-    char justNumber[2*INPUTNUMBERLENGTH];
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:    
@@ -410,9 +387,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
                 else
                 {
                     MakeStrNumber(getbutton(skbID));
-                    justStrNumber(justNumber, strNumber);
-                    Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &fontwryhcg36e, GUI_BLACK, justNumber);
-                    //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), justNumber);
+                    Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &fontwryhcg36e, 0xFF08263F, strNumber);
                 }
                 break;
             }
