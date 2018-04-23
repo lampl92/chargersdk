@@ -241,6 +241,8 @@ extern GUI_MEMDEV_Handle Memdevcardinfonettimeout;
 extern GUI_MEMDEV_Handle Memdevcardinfopleaseplug;
 extern GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
 extern GUI_MEMDEV_Handle Memdevcardinforeadystart;
+extern GUI_MEMDEV_Handle MemdevcardinfoQuit;
+extern GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
 //extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //extern GUI_MEMDEV_Handle Memdevcardinfostartfail;

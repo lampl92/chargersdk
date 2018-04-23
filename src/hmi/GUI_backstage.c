@@ -101,7 +101,7 @@ void GBSTask()
             }
             break;
         case StateGetGunInfo:
-            if (Tempuserlike.UserLikeFlag == 1)     
+            if (Tempuserlike.UserLikeFlag == 1)
             {
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;
@@ -114,7 +114,16 @@ void GBSTask()
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.user_like.HMItimeout = 0;
                 quitflag = 0;
+                gbsstate = StateGetGunInfoQuit;
+                break;
             }
+            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+            {
+                gbsstate = StateHome;
+            }
+            break;
+        case StateGetGunInfoQuit:
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
@@ -160,6 +169,36 @@ void GBSTask()
         case StatePleasePlug:
             vTaskDelay(500);
             pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+            if (pCON->status.xPlugState == PLUG)
+            {
+                gbsstate = StatePlug;
+                break;
+            }
+            if (quitflag == 1)
+            {
+                Tempuserlike.user_like.HMItimeout = 1;
+                xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+                Tempuserlike.user_like.HMItimeout = 0;
+                quitflag = 0;
+                gbsstate = StatePleasePlugQuit;
+                break;
+            }
+            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+            {
+                gbsstate = StatePlugTimeout;
+            }
+            break;
+        case StatePleasePlugQuit:
+            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+            {
+                gbsstate = StateHome;
+            }
+            break;
+        case StatePlug:
+            vTaskDelay(1000);
+            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
             if (pCON->state == STATE_CON_CHARGING)
             {
                 gbsstate = StateChargingOk;
@@ -172,7 +211,7 @@ void GBSTask()
             }
             break;
         case StateChargingOk:
-            vTaskDelay(3000);
+            vTaskDelay(2000);
             flashGunState();
             gbsstate = StateHome;
             break;

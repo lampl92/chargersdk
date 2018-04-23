@@ -244,6 +244,9 @@ GUI_MEMDEV_Handle Memdevcardinfonettimeout;
 GUI_MEMDEV_Handle Memdevcardinfopleaseplug;
 GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
 GUI_MEMDEV_Handle Memdevcardinforeadystart;
+GUI_MEMDEV_Handle MemdevcardinfoQuit;
+GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
+
 //GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //GUI_MEMDEV_Handle Memdevcardinfostartfail;
@@ -577,6 +580,8 @@ void creatememdev()
     Memdevcardinfopleaseplug = createMemdev(pathcardinfopleaseplug);
     Memdevcardinfoplugtimeout = createMemdev(pathcardinfoplugtimeout);
     Memdevcardinforeadystart = createMemdev(pathcardinforeadystart);
+    MemdevcardinfoQuit = createMemdev(pathcardinfoquit);
+    MemdevcardinfoQuitPress = createMemdev(pathcardinfoquitpress);
     //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
 //    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
 //    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);

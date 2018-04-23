@@ -193,8 +193,8 @@ void vTaskEVSERFID(void *pvParameters)
             {
                 if (user_like.HMItimeout == 1)
                 {
-                    xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
-                    pRFIDDev->state = STATE_RFID_RETURN;
+                   // xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
+                    pRFIDDev->state = STATE_RFID_TIMEOUT;
                     break;
                 }
                 pRFIDDev->order.ucCONID = user_like.ucCONID;
@@ -331,6 +331,15 @@ void vTaskEVSERFID(void *pvParameters)
             pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_HOLD:
+            xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 0);
+            if (xResult == TRUE)
+            {
+                if (user_like.HMItimeout == 1)
+                {
+                    pRFIDDev->state = STATE_RFID_TIMEOUT;
+                    break;
+                }
+            }
 	        if (time(NULL) - pRFIDDev->status.tHoldStateStartTime > pRFIDDev->status.ulHoldMaxTime_s)
 	        {
 		        pRFIDDev->state = STATE_RFID_TIMEOUT;

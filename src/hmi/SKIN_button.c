@@ -513,3 +513,53 @@ int SKIN_buttonbackquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
+int SKIN_buttonPleasePlugQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    char s[10];
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+        BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
+        if (strcmp("plug", s) == 0)
+        {
+            ;
+        }
+        else
+        {
+            if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+            {
+                GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+            }
+            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+            {
+                GUI_MEMDEV_WriteAt(MemdevcardinfoQuitPress, quitPleasePlugx, quitPleasePlugy);
+            }
+            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+            {
+                GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+            }
+            else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+            {
+                GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+            }
+            else
+            {
+                BUTTON_DrawSkinFlex(pDrawItemInfo); 
+            }
+        }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+

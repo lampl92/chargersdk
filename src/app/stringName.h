@@ -113,6 +113,8 @@ typedef enum _filelist
 #define pathcardinfopleaseplug              "nand/system/cardinfopleaseplug.dta"
 #define pathcardinfoplugtimeout                 "nand/system/cardinfoplugtimeout.dta"
 #define pathcardinforeadystart              "nand/system/cardinforeadystart.dta"
+#define pathcardinfoquit                    "nand/system/cardinfoquit.dta"
+#define pathcardinfoquitpress                    "nand/system/cardinfoquitpress.dta"
 //#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
 //#define pathcardinfoUnavailable        "nand/system/cardinfoUnavailable.dta"
 //#define pathcardinfostartfail        "nand/system/cardinfostartfail.dta"

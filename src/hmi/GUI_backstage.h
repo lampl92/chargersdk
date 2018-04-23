@@ -14,11 +14,14 @@ typedef enum MyEnum
 {
     StateHome,//主状态
     StateGetGunInfo,//选枪状态
+    StateGetGunInfoQuit,//选枪页退出
     StateReadyStart,//启动充电
     StateNetTimeout,//网络超时
     StateCardconditionNotOk,//卡条件不足
     StatePlugTimeout,//连接超时
     StatePleasePlug,//请连接充电插头
+    StatePleasePlugQuit,//请连接充电插头退出
+    StatePlug,//插头已连接
     StateChargingOk,//启动充电成功
 }GBSState_E;//后台状态
 

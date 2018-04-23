@@ -7,7 +7,7 @@
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
-//#define ID_BUTTON_2 (GUI_ID_USER + 0x0A)
+#define ID_BUTTON_2 (GUI_ID_USER + 0x0A)
 
 #define ID_statechangeTime    1
 
@@ -18,6 +18,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     //45,77---x:45+320=365,³¤¶È:(405-320=85),y:47+77=124
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 365, 124, 85, 22, TEXT_CF_VCENTER | TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
+     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 10 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -25,6 +26,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int Id;
     WM_HWIN  hItem;
     uint8_t strblance[10];
+    char s[10];
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
@@ -33,33 +35,44 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strblance);
         
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
-//        BUTTON_SetSkin(hItem, SKIN_buttontest);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+        BUTTON_SetUserData(hItem, "unplug", 10);
+        BUTTON_SetSkin(hItem, SKIN_buttonPleasePlugQuit);
         break;
-//    case WM_NOTIFY_PARENT:
-//        Id    = WM_GetId(pMsg->hWinSrc);
-//        NCode = pMsg->Data.v;
-//        switch (Id) {
-//        case ID_BUTTON_2: //'testButton'
-//            switch (NCode) {
-//            case WM_NOTIFICATION_CLICKED:
-//
-//                break;
-//            case WM_NOTIFICATION_RELEASED:
-//                GUI_EndDialog(pMsg->hWin, 0);
-//                CreatechargingokDLG();
-//                break;
-//            }
-//            break;
-//        }
-//        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_2: //'quitButton'
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:
+
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+                BUTTON_GetUserData(hItem, s, 10);
+                if (strcmp("unplug", s) == 0)
+                {
+                    quitflag = 1;
+                }
+                break;
+            }
+            break;
+        }
+        break;
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
         GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplug, 45, 77);
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerstatechange)
-        { 
+        {    
+            if (gbsstate == StatePlug)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+                BUTTON_SetUserData(hItem, "plug", 10);
+                WM_InvalidateWindow(hItem);
+            }
             if (gbsstate == StatePlugTimeout)
             {
                 WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPStatePlugTimeout);

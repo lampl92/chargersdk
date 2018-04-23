@@ -20,6 +20,10 @@
 #define backquitx  601 //后退按钮x位置
 #define backquity  422 //后退按钮y位置
 
+//请连接充电插头页
+#define quitPleasePlugx  52
+#define quitPleasePlugy  404
+
 #define keyboardx  408
 #define keyboardy  157
 
