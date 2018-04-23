@@ -1644,7 +1644,7 @@ int find_file(const char *dir, const char *key_name, char *find_name)
             if (strstr(de->d_name, key_name) != NULL)
             {
                 strcpy(find_name, de->d_name);
-                printf_safe("fine file %s\n", find_name);
+                printf_safe("fine file %s%s\n", dir, find_name);
                 yaffs_closedir(d);
                 return 1;
             }

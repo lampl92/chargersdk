@@ -86,6 +86,31 @@ extern void fs_init(void);
 extern void *_app_start[];
 #define APP_ADDRESS         (uint32_t)_app_start
 
+
+uint8_t set_upgrade_tmp(char *path, char *flg)
+{
+    int fd;
+    int bw;
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-open");
+        return 0;
+    }
+    taskENTER_CRITICAL();
+    bw = yaffs_write(fd, flg, 1);
+    taskEXIT_CRITICAL();
+    if (1 != bw)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-write");
+        yaffs_close(fd);
+        return 0;
+    }
+    yaffs_close(fd);
+    return 1;
+}
+
+
 uint8_t *GetFileBuffer(char *path, uint32_t *psize)
 {
     int fd;
@@ -144,15 +169,20 @@ void vTaskInit(void *pvParameters)
 {
     uint8_t *pucBinBuffer;
     uint32_t size;
-    ul2uc xBinBuffer;
     uint32_t crc32;
-    uint32_t trymax = 5;
+    uint32_t trymax = 3;
     uint32_t tryread = 0;
-    uint8_t upflag;
+    char upflag;
     
     char cli_std[1];
     uint32_t cli_std_len;
     char strFindName[256];
+    
+    uint32_t crc32_calc, crc32_orig;
+    char ch_crc32[9] = { 0 };
+    ul2uc ul2ucCrc32;
+    char filepath[64 + 1];
+    int i;
     
     AppObjCreate();
     sys_Init();
@@ -177,58 +207,57 @@ void vTaskInit(void *pvParameters)
                 vTaskDelay(1000);
             }
         }
-        if (tryread <= trymax)
+        if (tryread < trymax)
         {
-            upflag = 0;
-            if (xSysconf.xUpFlag.chargesdk_bin == 1)
+            if (find_file(pathUpgradeDir, "new_fw", strFindName) == 1)
             {
                 ++tryread;
-                pucBinBuffer = GetFileBuffer(pathBin, &size);
-                printf_safe("Get Buffer OK!\n");
-
+                for (i = 0; i < 8; i++)
+                {
+                    ch_crc32[i] = strFindName[i + 7];
+                }
+                StrToHex(ch_crc32, ul2ucCrc32.ucVal, strlen(ch_crc32));
+                crc32_orig = utils_ntohl(ul2ucCrc32.ulVal);
+                
+                sprintf(filepath, "%s%s", pathUpgradeDir, strFindName);
+                pucBinBuffer = GetFileBuffer(filepath, &size);
                 if (pucBinBuffer != NULL && size > 0)
                 {
-                    GetBufferCrc32(pucBinBuffer, size, &crc32);
-                    if (crc32 != xSysconf.xUpFlag.chargesdk_bin_crc32)
+                    GetBufferCrc32(pucBinBuffer, size, &crc32_calc);
+                    printf_safe("crc32_calc = %x\n", crc32_calc);
+                    printf_safe("crc32_orgi = %x\n", crc32_orig);
+                    if (crc32_calc != crc32_orig)
                     {
                         printf_safe("Get Crc32 Err!\n");
                         free(pucBinBuffer);
-                        size = 0;
                     }
                     else
                     {
-                        printf_safe("Get Crc32 OK! crc32 = %x\n", crc32);
+                        printf_safe("Crc32 OK!\n");
+                        printf_safe("正在升级程序，请勿断电！\n");
                         bsp_WriteCpuFlash(APP_ADDRESS, pucBinBuffer, size);
                         free(pucBinBuffer);
-                        upflag = 2;
+                        yaffs_unlink(filepath);
+                        upflag = '2';
+                        set_upgrade_tmp(pathUpgradeTmp, &upflag);
                     }
                 }
             }
-            else if (find_file(pathUpgradeDir, "new_fw", strFindName) == 1)
+            else
             {
-                printf_safe("find firmware %s%s \n",pathUpgradeDir, strFindName);
-            }
-            else// if (xSysconf.xUpFlag.chargesdk_bin != 1)
-            {
-                printf_safe("direct app_start!\n");
-                Jump_To_APP();
-            }
-        
-            if (upflag == 2)
-            {
-                xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&upflag, ParamTypeU8);
-                printf_safe("up OK, app_start!\n");
+                printf_safe("app_start!\n");
                 Jump_To_APP();
             }
         }
         else
         {
-            upflag = 3;
-            xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&upflag, ParamTypeU8);
+            yaffs_unlink(filepath);
+            upflag = '3';
+            set_upgrade_tmp(pathUpgradeTmp, &upflag);
             printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
         }
        
-        vTaskDelay(1000);
+        vTaskDelay(2000);
     }
 }
 void vTaskCLI(void *pvParameters)
