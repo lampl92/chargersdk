@@ -62,7 +62,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
-        GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplug, 45, 77);
+        if (Tempuserlike.user_like.ucCONID == 0)
+        {
+            GUI_MEMDEV_WriteAt(Memdevcardinfopleasepluga, 45, 77);
+        }
+        else if (Tempuserlike.user_like.ucCONID == 1)
+        {
+            GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplugb, 45, 77);
+        }
         break;
     case WM_TIMER:
         if (pMsg->Data.v == _timerstatechange)
