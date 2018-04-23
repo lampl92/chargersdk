@@ -34,11 +34,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         { 
             if (gbsstate == StateHome)
             {
-                GUI_EndDialog(pMsg->hWin, 0);
-                
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
             }
             WM_RestartTimer(pMsg->Data.v, 300);
         }
+        break;
+    case MSG_JUMPHOME:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreateHomeDLG();
         break;
     default:
         WM_DefaultProc(pMsg);

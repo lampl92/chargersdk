@@ -122,7 +122,7 @@ void GBSTask()
             }
             break;
         case StateReadyStart:
-            vTaskDelay(1000);
+            vTaskDelay(500);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)
             {
@@ -172,22 +172,22 @@ void GBSTask()
             }
             break;
         case StateChargingOk:
-            vTaskDelay(1500);
+            vTaskDelay(3000);
             flashGunState();
             gbsstate = StateHome;
             break;
         case StateCardconditionNotOk:
-            vTaskDelay(1000);
+            vTaskDelay(2000);
             flashGunState();
             gbsstate = StateHome;
             break;
         case StateNetTimeout:
-            vTaskDelay(1000);
+            vTaskDelay(3500);
             flashGunState();
             gbsstate = StateHome;
             break;
         case StatePlugTimeout:
-            vTaskDelay(1000);
+            vTaskDelay(3500);
             flashGunState();
             gbsstate = StateHome;
             break;

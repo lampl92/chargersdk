@@ -15,7 +15,8 @@ static WM_HTIMER _timerstatechange;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 369, 128, 240, 24, 0, 0x0, 0 },
+    //45,77---x:45+320=365,³¤¶È:(405-320=85),y:47+77=124
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 365, 124, 85, 22, TEXT_CF_VCENTER | TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
 };
 
@@ -28,7 +29,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
         sprintf(strblance, "%6.1f", GBSBalance);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg24e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg36e);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strblance);
         
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);

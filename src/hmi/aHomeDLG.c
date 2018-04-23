@@ -242,7 +242,8 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
             sprintf(temp_buf, "%.1f", pCON->order.dTotalFee);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);//消费总额 
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-            sprintf(temp_buf, "%d", (int)time_charge / 60.0);
+            sprintf(temp_buf, "%.1f", time_charge / 60.0);
+            //sprintf(temp_buf, "%s", "999.9");
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电时间
         }
     }
