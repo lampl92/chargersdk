@@ -15,7 +15,7 @@ typedef enum MyEnum
     StateHome,//主状态
     StateGetGunInfo,//选枪状态
     StateGetGunInfoQuit,//选枪页退出
-    StateReadyStart,//启动充电
+    StateTestChargeCondition,//检测充电条件
     StateNetTimeout,//网络超时
     StateCardconditionNotOk,//卡条件不足
     StatePlugTimeout,//连接超时

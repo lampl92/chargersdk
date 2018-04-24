@@ -275,7 +275,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timerstateflash)
         {
-            if (gbsstate == StateReadyStart)
+            if (gbsstate == StateTestChargeCondition)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_READYSTART);
             }

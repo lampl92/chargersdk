@@ -91,7 +91,7 @@ void GBSTask()
                     Tempuserlike.user_like.dLimitEnergy = 0;
                     Tempuserlike.user_like.ulLimitTime = 0;
                     xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
-                    gbsstate = StateReadyStart;
+                    gbsstate = StateTestChargeCondition;
                 }
                 else
                 {
@@ -105,7 +105,7 @@ void GBSTask()
             {
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.UserLikeFlag = 0;
-                gbsstate = StateReadyStart;
+                gbsstate = StateTestChargeCondition;
                 break;
             }
             if (quitflag == 1)
@@ -130,7 +130,7 @@ void GBSTask()
                 gbsstate = StateHome;
             }
             break;
-        case StateReadyStart:
+        case StateTestChargeCondition:
             vTaskDelay(500);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
             if (xResult == pdTRUE)

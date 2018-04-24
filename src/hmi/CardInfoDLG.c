@@ -59,7 +59,7 @@ static void transformprompt(PROMPTSTATE_E state)
     switch (state)
     {
     case promptGetInfoState:
-//        if (gbsstate != StateReadyStart)
+//        if (gbsstate != StateTestChargeCondition)
 //        {
 //            
 //        }
@@ -117,7 +117,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerprompt)
         { 
-//            if (gbsstate == StateReadyStart)
+//            if (gbsstate == StateTestChargeCondition)
 //            {
 //                
 //            }
