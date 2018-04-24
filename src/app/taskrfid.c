@@ -73,6 +73,131 @@ static void make_rfidpkg(RFIDDev_t *dev, RfidQPkg_t *pkg)
     strcpy(pkg->strCardID, dev->order.strCardID);
 }
 
+//是否可充电函数
+//进入其他状态返回0
+//static int canChargeOrNot(RfidQPkg_t *rfid_pkg, UserChargeCondition_t *user_like)
+//{
+//    BaseType_t xResult;
+//    ErrorCode_t errcode;
+//    uint32_t remote_timeout_u100ms;
+//    uint8_t ucVaild = 0;//用于判断remote返回是否可以充电
+//    int res = 0; //remote 返回值;
+//    make_rfidpkg(pRFIDDev, rfid_pkg);
+//    xQueueSend(xHandleQueueRfidPkg, rfid_pkg, 0);
+//#if EVSE_USING_GUI
+//    xResult = xQueueReceive(xHandleQueueUserChargeCondition, user_like, 60000);
+//#else
+//    xResult = pdTRUE;
+//    user_like.ucCONID = 0;
+//    user_like.dLimitFee = 0;
+//    user_like.ulLimitTime = 0;
+//    user_like.dLimitEnergy = 0;
+//    user_like.HMItimeout = 0;
+//    strcpy(user_like.strPwd, "888888");
+//#endif
+//    if (xResult == pdTRUE)
+//    {
+//        if (user_like->HMItimeout == 1)
+//        {          
+//            pRFIDDev->state = STATE_RFID_TIMEOUT;
+//            return 0;
+//        }
+//        pRFIDDev->order.ucCONID = user_like->ucCONID;
+//        pRFIDDev->order.dLimitFee = user_like->dLimitFee;
+//        pRFIDDev->order.ulLimitTime = user_like->ulLimitTime;
+//        pRFIDDev->order.dLimitEnergy = user_like->dLimitEnergy;
+//        strcpy(pRFIDDev->status.strPwd, user_like->strPwd);
+//    }
+//    else
+//    {      
+//        pRFIDDev->state = STATE_RFID_TIMEOUT;
+//        return 0;
+//    }
+//    if (pRFIDDev->status.ucNeedPwd == 0)
+//    {
+//        errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);    
+//    }
+//    else if (pRFIDDev->status.ucNeedPwd == 1)
+//    {
+//        errcode = RemoteIF_SendCardStartPwd(pEVSE, pechProto, pRFIDDev);  
+//    }
+//    ucVaild = 0;
+//    switch (errcode)
+//    {
+//    case ERR_WHITE_LIST:
+//        pRFIDDev->order.ucCardStatus = 1;
+//        ucVaild = 1;
+//        break;
+//    case ERR_BLACK_LIST:
+//        pRFIDDev->order.ucCardStatus = 2;
+//        ucVaild = 2;
+//        break;
+//    case ERR_NO:
+//        pRFIDDev->order.ucCardStatus = 0;
+//        remote_timeout_u100ms = 0;
+//        break;
+//    default:
+//        pRFIDDev->order.ucCardStatus = 3;
+//        break;
+//    }
+//    errcode = ERR_REMOTE_NODATA;//初始化errorcode ；
+//    res = 0;
+//    while (pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
+//    {
+//        remote_timeout_u100ms++;
+//        if (remote_timeout_u100ms >= 600)//60s
+//        {
+//            pRFIDDev->state = STATE_RFID_TIMEOUT;
+//            break;
+//        }
+//        errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+//        vTaskDelay(100);
+//    }
+//#if (EVSE_USING_GUI==0)
+//    printf_safe("用户状态：");
+//    switch (pRFIDDev->order.ucAccountStatus)
+//    {
+//    case 0: printf_safe("该卡不可充电\n"); break;
+//    case 1: printf_safe("注册卡\n"); break;
+//    case 2: printf_safe("该卡不可充电\n"); break;
+//    }
+//    printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
+//    printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
+//#endif
+//    if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
+//    {
+//        return 0;
+//    }
+//    if (ucVaild == 2)//e充网定义 1 可充, 2不可充
+//    {
+//        //pRFIDDev->state = STATE_RFID_BADID;
+//        //break;@!
+//        return 2;
+//    }
+//    if (ucVaild == 3)//拒绝启动,需要密码校验
+//    {
+//        pRFIDDev->status.ucNeedPwd = 1;
+//        //break;@!
+//    }
+//
+//    if (pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
+//    {
+//        pRFIDDev->state = STATE_RFID_GOODID;
+//    }
+//    else if (pRFIDDev->order.ucAccountStatus == 0)
+//    {
+//        pRFIDDev->state = STATE_RFID_BADID;
+//    }
+//    else if (pRFIDDev->order.dBalance < 0)
+//    {
+//        pRFIDDev->state = STATE_RFID_OWE;
+//    }
+//    else
+//    {
+//        pRFIDDev->state = STATE_RFID_RETURN;
+//    }
+//}
+
 void vTaskEVSERFID(void *pvParameters)
 {
     CON_t *pCON = NULL;

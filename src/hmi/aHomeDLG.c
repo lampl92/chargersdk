@@ -76,7 +76,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, gunstateax, gunstateay, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 0, 0, 233, 266, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 90, 134, 52, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 70, 187, 52, 30, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
@@ -496,9 +496,10 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_BLACK);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg36e);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), "39.9");
         homegunstate[0] = GBSgunstate[0];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetValue(hItem, 0);
@@ -545,9 +546,10 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 pCON = CONGetHandle(0);
                 pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
+                //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
                 pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
-                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
+                //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 54);               
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           

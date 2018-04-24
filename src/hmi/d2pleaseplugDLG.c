@@ -64,11 +64,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
         if (Tempuserlike.user_like.ucCONID == 0)
         {
-            GUI_MEMDEV_WriteAt(Memdevcardinfopleasepluga, 45, 77);
+            GUI_MEMDEV_WriteAt(Memdevcardinfopleasepluga, 120, 103);
         }
         else if (Tempuserlike.user_like.ucCONID == 1)
         {
-            GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplugb, 45, 77);
+            GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplugb, 120, 103);
         }
         break;
     case WM_TIMER:
