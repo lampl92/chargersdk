@@ -23,6 +23,7 @@ typedef enum _RFIDState
     STATE_RFID_GOTID,           //获取到ID
     STATE_RFID_OLDID,
     STATE_RFID_NEWID,
+    STATE_RFID_PWD,             //输入密码
     STATE_RFID_GOODID,           //注册帐户
     STATE_RFID_BADID,           //非注册帐户
     STATE_RFID_OWE,                 //欠费

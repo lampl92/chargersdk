@@ -76,7 +76,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, gunstateax, gunstateay, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 0, 0, 233, 266, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 70, 187, 52, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 70, 187, 36, 16, TEXT_CF_LEFT, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
