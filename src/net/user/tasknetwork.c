@@ -102,7 +102,7 @@ static void netStateDisconnect(net_device_t *net_dev)
 }
 static void netStateTcpOn(net_device_t *net_dev)
 {
-    char_t buffer[5000]; 
+    uint8_t buffer[5000]; 
     size_t length; 
     error_t error; 
     int i;

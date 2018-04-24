@@ -106,6 +106,7 @@ void sys_Init(void)
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
     create_dir(pathSystemDir);
+    create_dir(pathDownloadDir);
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
