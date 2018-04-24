@@ -1929,6 +1929,9 @@
     <ClCompile Include="..\..\..\src\hmi\a0HomeDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\file_op.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">

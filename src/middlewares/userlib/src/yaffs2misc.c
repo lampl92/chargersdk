@@ -27,26 +27,28 @@ extern int yaffs_trace_mask;
 
 void dumpDir(const char *dname);
 
-void copy_in_a_file(const char *yaffsName,const char *inName)
+int copy_in_a_file(const char *yaffsName, const char *inName)
 {
-	int inh,outh;
-	unsigned char buffer[100];
-	int ni,no;
-	inh = open(inName,O_RDONLY);
-	outh = yaffs_open(yaffsName, O_CREAT | O_RDWR | O_TRUNC, S_IREAD | S_IWRITE);
+    int inh, outh;
+    unsigned char buffer[100];
+    int ni, no;
+    int res = 0;
+    
+    inh = yaffs_open(inName, O_RDONLY, S_IREAD | S_IWRITE);
+    outh = yaffs_open(yaffsName, O_CREAT | O_RDWR | O_TRUNC, S_IREAD | S_IWRITE);
 
-	while((ni = read(inh,buffer,100)) > 0)
-	{
-		no = yaffs_write(outh,buffer,ni);
-		if(ni != no)
-		{
-			printf_safe("problem writing yaffs file\n");
-		}
-
-	}
-
-	yaffs_close(outh);
-	close(inh);
+    while ((ni = yaffs_read(inh, buffer, 100)) > 0)
+    {
+        no = yaffs_write(outh, buffer, ni);
+        if (ni != no)
+        {
+            printf_safe("problem writing yaffs file\n");
+        }
+    }
+    yaffs_close(outh);
+    yaffs_close(inh);
+    
+    return res;
 }
 
 void make_a_file(const char *yaffsName,char bval,int sizeOfFile)

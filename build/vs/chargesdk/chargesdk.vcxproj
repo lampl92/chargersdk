@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\..\src\app\EVSE.c" />
     <ClCompile Include="..\..\..\src\app\evse_globals.c" />
     <ClCompile Include="..\..\..\src\app\factorycfg.c" />
+    <ClCompile Include="..\..\..\src\app\file_op.c" />
     <ClCompile Include="..\..\..\src\app\interface_charge.c" />
     <ClCompile Include="..\..\..\src\app\interface_data.c" />
     <ClCompile Include="..\..\..\src\app\interface_diag.c" />

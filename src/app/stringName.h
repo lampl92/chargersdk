@@ -360,10 +360,4 @@ typedef enum _filelist
 #define jnNetDNS1           "DNS1"
 #define jnNetDNS2           "DNS2"
 
-//#define jnProtoStart(n)              "Start"#n
-//#define jnProtoEnd(n)                "End"#n
-
-extern const char *jnProtoSegStart[];
-extern const char *jnProtoSegEnd[];
-
 #endif

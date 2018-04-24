@@ -29,7 +29,7 @@ struct _ftp_ctx_save_file
 static int _ftp_bg_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
-    sprintf(cctx->fpath, "%s%s", pathSystemDir, ftp_ctx->fname);
+    sprintf(cctx->fpath, "%s%s", pathUpgradeDir, ftp_ctx->fname);
     cctx->fd = yaffs_open(cctx->fpath, O_CREAT | O_RDWR | O_TRUNC, S_IWRITE | S_IREAD);
     pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 1;
     pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 1;
@@ -135,7 +135,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
         if (error)
             break;
 
-        error = ftpChangeWorkingDir(&ftpContext, ctx->fpath);
+        error = ftpChangeWorkingDir(&ftpContext, ctx->ftppath);
         if (error)
             break;
         error = ftpOpenFile(&ftpContext, ctx->fname, FTP_FOR_READING | FTP_BINARY_TYPE);
@@ -189,7 +189,7 @@ int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
     
     strcpy(ctx.parent.ftp_server, pechFtp->strServer);
     ctx.parent.port = pechFtp->usPort;
-    sprintf(ctx.parent.fpath, "/%s/", pechFtp->strNewVersion);
+    sprintf(ctx.parent.ftppath, "/%s/", pechFtp->strNewVersion);
     strcpy(ctx.parent.fname, pechFtp->strNewFileName);
     strcpy(ctx.parent.user, pechFtp->strUser);
     strcpy(ctx.parent.pass, pechFtp->strPassword);

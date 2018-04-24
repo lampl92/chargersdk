@@ -11,7 +11,7 @@ struct _ftp_ctx
 {
     char ftp_server[64];
     uint16_t port;
-    char fpath[128];
+    char ftppath[128];
     char fname[128];
     char user[64];
     char pass[64];
