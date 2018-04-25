@@ -74,7 +74,7 @@ static void make_rfidpkg(RFIDDev_t *dev, RfidQPkg_t *pkg)
 }
 
 //是否可充电函数,此函数先发送充电消息到服务器,服务器返回是否可以充电和充电相关数据
-//进入其他状态返回0
+//进入超时状态返回0
 //可以充电返回1
 //不可充电返回2
 //需要密码返回3
@@ -203,6 +203,7 @@ void vTaskEVSERFID(void *pvParameters)
     RfidQPkg_t rfid_pkg;
     
     int resCanChargeOrNot;
+    int timesPwd = 3;//输入密码次数
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -329,10 +330,31 @@ void vTaskEVSERFID(void *pvParameters)
             {
                 break;
             }
-            break;
         case STATE_RFID_PWD:
-            break;
-        case STATE_RFID_OLDID:
+            resCanChargeOrNot = canChargeOrNot();
+            if (resCanChargeOrNot == 3 || resCanChargeOrNot == 2)
+            {
+                timesPwd--;
+                if (timesPwd == 0)
+                {
+                    pRFIDDev->state = STATE_RFID_BADID;
+                    pRFIDDev->status.ucNeedPwd = 0;
+                    break; 
+                }
+                break;
+            }
+            else if (resCanChargeOrNot == 1)
+            {
+                pRFIDDev->state = STATE_RFID_GOODID;
+                pRFIDDev->status.ucNeedPwd = 0;
+                break;
+            }
+            else
+            {
+                pRFIDDev->status.ucNeedPwd = 0;
+                break;
+            }
+        case STATE_RFID_OLDID:                                      
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             //如果是正在充电中刷卡, 则停止充电
             //如果已经停止充电, 但是没有拔枪, 则不理会
