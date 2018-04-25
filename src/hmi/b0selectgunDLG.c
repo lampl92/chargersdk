@@ -32,6 +32,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         BUTTON_SetSkin(hItem, SKIN_selectbutton);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+        BUTTON_SetUserData(hItem, "enable", 10);
         if (GBSgunstate[1] != GunfreeState)
         {
             BUTTON_SetUserData(hItem, "disable", 10);

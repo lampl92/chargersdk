@@ -394,7 +394,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
             BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
             if (strcmp("disable",s) == 0)
             {
-                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunax, selectgunay);
+                GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunbx, selectgunby);
             }
             else
             {
