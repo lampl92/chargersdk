@@ -76,13 +76,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, gunstateax, gunstateay, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 0, 0, 233, 266, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 70, 187, 36, 16, TEXT_CF_LEFT, 0x0, 0 },
+    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 83, 198, 42, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_3, gunstatebx, gunstateby, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_1, 0, 0, 235, 268, 0, 0x0, 0 },    
-     { TEXT_CreateIndirect, "kwtext", ID_TEXT_7, 90, 134, 52, 30, 0, 0x0, 0 },
+     { TEXT_CreateIndirect, "kwtext", ID_TEXT_7, 83, 198, 42, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
@@ -548,8 +548,8 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 sprintf(temp_buf, "%.1f", pkw);
                 //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
                 pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
-                //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
-                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 54);               
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
+                //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 54);               
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           
@@ -588,8 +588,8 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
     pCON = CONGetHandle(0);
     switch (pMsg->MsgId){
     case WM_INIT_DIALOG:        
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_BLACK);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &fontwryhcg36e);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         homegunstate[1] = GBSgunstate[1];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);

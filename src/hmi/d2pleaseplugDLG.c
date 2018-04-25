@@ -18,7 +18,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     //45,77---x:45+320=365,³¤¶È:(405-320=85),y:47+77=124
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 365, 124, 85, 22, TEXT_CF_VCENTER | TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
-     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 10 },
+     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 51, 422, 147, 52, 0, 0x0, 10 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {

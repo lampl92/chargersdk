@@ -156,10 +156,13 @@ void GBSTask()
         case StateHome:
             flashGunState();
             recNewOperate();
+            break;
         case StateGetGunInfo:
             sendChose();
+            break;
         case StateQuit:
             quitBackHome();
+            break;
         case StateTestChargeCondition:
             vTaskDelay(500);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
