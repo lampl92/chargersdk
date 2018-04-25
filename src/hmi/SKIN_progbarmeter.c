@@ -8,7 +8,7 @@
 
 #define testfactor 6
 //static const GUI_POINT _aNeedle[] = { { -3*testfactor, 0 }, { -3*testfactor , -70*testfactor }, { 0, -80*testfactor  }, { 3*testfactor , -70*testfactor  }, { 3*testfactor , 0 } };
-static const GUI_POINT _aNeedle[] = { { -5*testfactor, 0 }, { -3*testfactor, -40*testfactor }, { 0, -70*testfactor }, { 3*testfactor, -40*testfactor }, { 5*testfactor, 0 } };
+static const GUI_POINT _aNeedle[] = { { -4*testfactor, 0 }, { -2*testfactor, -40*testfactor }, { 0, -70*testfactor }, { 2*testfactor, -40*testfactor }, { 4*testfactor, 0 } };
 
 static const GUI_POINT _aNeedle2[] = { { -5*testfactor, 0 }, { 0*testfactor, -65*testfactor }, { 5*testfactor, 0 } };
 
@@ -53,16 +53,18 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
  //   GUI_SetColor(0x006666);//青色还不错
     //GUI_SetColor(0xF9F900);//黄色不好
     //006600绿色不错
-    GUI_SetColor(0x3366CC);
+    GUI_SetColor(0x3366CC);//蓝色
    // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
     //227-112 = 115,228-79=149,572-456=116
     GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 115*testfactor, 149*testfactor);
-    //GUI_SetColor(0xF9F900);
-    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 11*testfactor);
-    GUI_SetColor(0xF9F900);//黄色不好
-    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 8*testfactor);
-    GUI_SetColor(0x006666);//青色还不错
-    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 4*testfactor);
+    GUI_SetColor(0x8c94ad);
+    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 6.5*testfactor);
+//    GUI_SetColor(0xF9F900);//黄色不好
+//    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 8*testfactor);
+//    GUI_SetColor(0x006666);//青色还不错
+//    GUI_SetColor(0x000000);//黑色
+    GUI_SetColor(0x3366CC);//蓝色
+    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 2*testfactor);
     GUI_AA_DisableHiRes();
 }
 
