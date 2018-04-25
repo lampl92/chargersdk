@@ -50,12 +50,9 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 //        xPrev = x;
 //        yPrev = y;
 //    }
- //   GUI_SetColor(0x006666);//青色还不错
-    //GUI_SetColor(0xF9F900);//黄色不好
-    //006600绿色不错
     GUI_SetColor(0x3366CC);//蓝色
    // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
-    //227-112 = 115,228-79=149,572-456=116
+    //227-112 = 115,228-79=149
     GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 115*testfactor, 149*testfactor);
     GUI_SetColor(0x8c94ad);
     GUI_AA_FillCircle(115*testfactor, 149*testfactor, 6.5*testfactor);

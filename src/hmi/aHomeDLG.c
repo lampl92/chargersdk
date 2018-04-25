@@ -76,13 +76,13 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunastate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_2, gunstateax, gunstateay, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 0, 0, 233, 266, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 83, 198, 42, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "kwtext", ID_TEXT_6, 88, 198, 38, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
     { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_3, gunstatebx, gunstateby, 233, 266, 0, 0x0, 0 },
     { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_1, 0, 0, 235, 268, 0, 0x0, 0 },    
-     { TEXT_CreateIndirect, "kwtext", ID_TEXT_7, 83, 198, 42, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
+     { TEXT_CreateIndirect, "kwtext", ID_TEXT_7, 88, 198, 38, 16, TEXT_CF_HCENTER | TEXT_CF_VCENTER, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
@@ -499,7 +499,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), "39.9");
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), "39.9");
         homegunstate[0] = GBSgunstate[0];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetValue(hItem, 0);
@@ -546,7 +546,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 pCON = CONGetHandle(0);
                 pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
+        //        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
                 pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
                 PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
                 //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 54);               
@@ -591,6 +591,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_WHITE);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), "39.9");
         homegunstate[1] = GBSgunstate[1];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
         PROGBAR_SetValue(hItem, 0);
@@ -637,7 +638,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
                 pCON = CONGetHandle(1);
                 pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), temp_buf);
+                //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), temp_buf);
                 pkwpercent = pkw / 40;
                 PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1), pkw);               
             }           
