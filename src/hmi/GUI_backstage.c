@@ -17,7 +17,9 @@ UserLike_S Tempuserlike;
 
 //破标志
 int flagGetMoney = 0;
-void flashGunState()
+
+//枪状态刷新
+static void flashGunState()
 {
     CON_t *pCON;  
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
@@ -61,6 +63,85 @@ void flashGunState()
         }
     }
 }
+
+//根据枪数量的不同采用不同的灯光控制
+static void ledcontrl()
+{
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        Led_Show();
+    }
+    else
+    {
+        ledShow();
+    } 
+}
+
+//接受刷卡消息,不阻塞
+void recNewOperate()
+{
+    BaseType_t xResult;
+    xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
+    if (xResult == pdTRUE)
+    {
+        if (pEVSE->info.ucTotalCON == 1)
+        {
+            Tempuserlike.user_like.ucCONID = 0;
+            Tempuserlike.user_like.dLimitFee = 0;
+            Tempuserlike.user_like.dLimitEnergy = 0;
+            Tempuserlike.user_like.ulLimitTime = 0;
+            xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+            gbsstate = StateTestChargeCondition;
+            return;
+        }
+        else
+        {
+            gbsstate = StateGetGunInfo;
+            return;
+        }
+    }
+}
+
+//发送选择的枪和模式
+void sendChose()
+{
+    EventBits_t uxBitHMI;
+    if (Tempuserlike.UserLikeFlag == 1)
+    {
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        Tempuserlike.UserLikeFlag = 0;
+        gbsstate = StateTestChargeCondition;
+        return;
+    }
+    if (quitflag == 1)
+    {
+        Tempuserlike.user_like.HMItimeout = 1;
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        Tempuserlike.user_like.HMItimeout = 0;
+        quitflag = 0;
+        gbsstate = StateQuit;
+        return ;
+    }
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StateHome;
+        return ;
+    }
+}
+
+//等超时回主页
+void quitBackHome()
+{
+    EventBits_t uxBitHMI;
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StateHome;
+        return ;
+    }
+}
+
 void GBSTask()
 {
     BaseType_t xResult;
@@ -68,68 +149,17 @@ void GBSTask()
     CON_t *pCON;   
     gbsstate = StateHome;
     while (1)
-    {
-        if (pEVSE->info.ucTotalCON == 1)
-        {
-            Led_Show();
-        }
-        else
-        {
-            ledShow();
-        }        
+    {       
+        ledcontrl();
         switch (gbsstate)
         {
         case StateHome:
             flashGunState();
-            xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
-            if (xResult == pdTRUE)
-            {
-                if (pEVSE->info.ucTotalCON == 1)
-                {
-                    Tempuserlike.user_like.ucCONID = 0;
-                    Tempuserlike.user_like.dLimitFee = 0;
-                    Tempuserlike.user_like.dLimitEnergy = 0;
-                    Tempuserlike.user_like.ulLimitTime = 0;
-                    xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
-                    gbsstate = StateTestChargeCondition;
-                }
-                else
-                {
-                    gbsstate = StateGetGunInfo;
-                    break;
-                }
-            }
-            break;
+            recNewOperate();
         case StateGetGunInfo:
-            if (Tempuserlike.UserLikeFlag == 1)
-            {
-                xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
-                Tempuserlike.UserLikeFlag = 0;
-                gbsstate = StateTestChargeCondition;
-                break;
-            }
-            if (quitflag == 1)
-            {
-                Tempuserlike.user_like.HMItimeout = 1;
-                xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
-                Tempuserlike.user_like.HMItimeout = 0;
-                quitflag = 0;
-                gbsstate = StateGetGunInfoQuit;
-                break;
-            }
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StateHome;
-            }
-            break;
-        case StateGetGunInfoQuit:
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StateHome;
-            }
-            break;
+            sendChose();
+        case StateQuit:
+            quitBackHome();
         case StateTestChargeCondition:
             vTaskDelay(500);
             xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
@@ -180,20 +210,13 @@ void GBSTask()
                 xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
                 Tempuserlike.user_like.HMItimeout = 0;
                 quitflag = 0;
-                gbsstate = StatePleasePlugQuit;
+                gbsstate = StateQuit;
                 break;
             }
             uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
             if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
             {
                 gbsstate = StatePlugTimeout;
-            }
-            break;
-        case StatePleasePlugQuit:
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StateHome;
             }
             break;
         case StatePlug:
