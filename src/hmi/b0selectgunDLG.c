@@ -14,13 +14,14 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 137, 200, 213, 76, 0, 0x0, 10 },
     { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 454, 200, 213, 76, 0, 0x0, 10 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 10 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int NCode;
     int Id;
     WM_HWIN hItem;
+    char s[10];
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
@@ -41,6 +42,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetSkin(hItem, SKIN_buttonquit);
+        BUTTON_SetUserData(hItem, "canPress", 10);
         break;
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(MemdevSelectGunBack,0,0);
@@ -80,7 +82,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
-                quitflag = 1;
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+                BUTTON_GetUserData(hItem, s, 10);
+                if (strcmp(s, "canPress") == 0)
+                {
+                    quitflag = 1;    
+                    BUTTON_SetUserData(hItem, "noPress", 10);
+                }                
                 break;
             }
             break;

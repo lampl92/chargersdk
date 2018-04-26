@@ -130,7 +130,7 @@ void sendChose()
     }
 }
 
-//等超时回主页
+//按取消按键后,等超时回主页
 void quitBackHome()
 {
     EventBits_t uxBitHMI;
@@ -140,6 +140,60 @@ void quitBackHome()
         gbsstate = StateHome;
         return ;
     }
+}
+
+//检测是否超时
+void testTimeout()
+{
+    EventBits_t uxBitHMI;
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StateNetTimeout;
+    }
+}
+
+//分析接受的数据
+void analyzeReceive()
+{
+//    BaseType_t xResult;
+//    CON_t *pCON;   
+//    xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
+//    if (xResult == pdTRUE)
+//    {
+//        if (Temprfid_pkg.ucNeedPwd == 1)
+//        {
+//            
+//        }
+//        else
+//        {
+//            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+//            GBSBalance = Temprfid_pkg.dBalance;
+//            if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
+//            {            
+//                flagGetMoney = 0;
+//                gbsstate = StatePleasePlug;
+//                break;
+//            }
+//            if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
+//            {
+//                flagGetMoney = 0;
+//                gbsstate = StateCardconditionNotOk;
+//                break;
+//            }
+//        }
+//    }
+//    if (flagGetMoney == 1)
+//    {
+//        
+//        if (pCON->state == STATE_CON_CHARGING)
+//        {
+//            flagGetMoney = 0;
+//            gbsstate = StateChargingOk;
+//            break;
+//        }
+//        
+//    }
 }
 
 void GBSTask()
