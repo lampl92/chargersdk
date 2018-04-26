@@ -15,7 +15,7 @@ static const GUI_POINT _aNeedle2[] = { { -5*testfactor, 0 }, { 0*testfactor, -65
 static const GUI_POINT _aNeedle1[] = { { 0, 0 }, { 0, 219  }, { 219, 219  }, { 219 , 0  } };
 
 //ProgbarMeter控件指针绘制函数
-static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo, short angleBEG, short angleEND, short valMIN, short valMAX)
+static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo, uint32_t angleBEG, uint32_t angleEND, uint32_t valMIN, uint32_t valMAX)
 {
 	GUI_POINT aPoints[GUI_COUNTOF(_aNeedle)];
 	GUI_RECT r;
@@ -30,11 +30,11 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
 	short Value; char i, Text[8], *p = (char *)((PROGBAR_SKINFLEX_INFO *)pDrawItemInfo->p)->pText;
 	for(i=0; i<7; i++){Text[i] = *p++; Text[i+1] = 0; if(*p == '%') break;}
 	Value = atoi(Text); if(Value<valMIN) Value = valMIN; if(Value>valMAX) Value = valMAX;
-	Angle = angleBEG - (abs(angleEND-angleBEG)/(valMAX-valMIN))*Value;
+	Angle = angleBEG - (float)(abs((int)angleEND-(int)angleBEG))/(valMAX-valMIN)*Value;
 	//PROGBAR_GetMinMax(pDrawItemInfo->hWin, &valMIN, &valMAX);//emwin v5.30
 	//Angle = angleBEG - (abs(angleEND-angleBEG)/(valMAX-valMIN))*PROGBAR_GetValue(pDrawItemInfo->hWin);//emwin v5.30
 
-	Angle *= 3.1415926f / 180;
+	Angle =Angle * 3.1415926f / 180;
 	GUI_SetColor(0x35bf5f);
 	GUI_RotatePolygon(aPoints, _aNeedle, GUI_COUNTOF(_aNeedle), Angle);
 	WM_GetWindowRectEx(pDrawItemInfo->hWin, &r);
@@ -53,15 +53,15 @@ static void PROGBARMETER_DispNeedle(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo,
     GUI_SetColor(0x3366CC);//蓝色
    // GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), (r.x1 - r.x0) / 2*testfactor, (r.y1 - r.y0) / 2*testfactor);
     //227-112 = 115,228-79=149
-    GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 115*testfactor, 149*testfactor);
+    GUI_AA_FillPolygon(aPoints, GUI_COUNTOF(aPoints), 115*testfactor, 148*testfactor);
     GUI_SetColor(0x8c94ad);
-    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 6.5*testfactor);
+    GUI_AA_FillCircle(115*testfactor, 148*testfactor, 6.5*testfactor);
 //    GUI_SetColor(0xF9F900);//黄色不好
 //    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 8*testfactor);
 //    GUI_SetColor(0x006666);//青色还不错
 //    GUI_SetColor(0x000000);//黑色
     GUI_SetColor(0x3366CC);//蓝色
-    GUI_AA_FillCircle(115*testfactor, 149*testfactor, 2*testfactor);
+    GUI_AA_FillCircle(115*testfactor, 148*testfactor, 2*testfactor);
     GUI_AA_DisableHiRes();
 }
 
@@ -109,7 +109,7 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 //		WM_SetUserClipRect(0);
 		break;
   case WIDGET_ITEM_DRAW_TEXT:
-			PROGBARMETER_DispNeedle(pDrawItemInfo, 119, -119, 0, 100);
+		PROGBARMETER_DispNeedle(pDrawItemInfo, 120,-120, 0, 100);
     	break;
 	default: return PROGBAR_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
 	}
