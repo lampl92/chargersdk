@@ -143,8 +143,7 @@ static void netStateFTP(net_device_t *net_dev)
     flist_t flist;
     EchFtpCfg_t ftpcfg;
     ErrorCode_t errcode;
-    
-    int res;
+    int res, res_copy;
     
     res = ftp_download_file(&pechProto->info.ftp, net_dev);
  
@@ -161,10 +160,19 @@ static void netStateFTP(net_device_t *net_dev)
             }
             sprintf(filepath, "%s%s", pathDownloadDir, flist.strFilename);
             GetFileCrc32(filepath, &crc32_calc);
-            if (crc32_calc == flist.ulCrc32)
+            if (crc32_calc == StrCrc32ToUint32(flist.strCrc32))
             {
+                printf_safe("下载%s成功\n", filepath);
                 sprintf(filepath_rename, "%s%s", flist.strLocalpath, flist.strFilename);
-                copy_in_a_file(filepath_rename, filepath);//拷贝下载文件到目的地址
+                res_copy = copy_in_a_file(filepath_rename, filepath);//拷贝下载文件到目的地址
+                if (res_copy == 1)
+                {
+                    printf_safe("移动%s到%s.\n", filepath, filepath_rename);
+                }
+                else
+                {
+                    printf_safe("移动%s到%s 失败.\n", filepath, filepath_rename);
+                }
             }
             else
             {

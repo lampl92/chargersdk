@@ -63,7 +63,7 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
         return res;
     }
     pechProto->info.ftp.ftp_proc.ulRecvFileSize += len;
-    TRACE_DEBUG("filesize = %d（recv %d）\n", pechProto->info.ftp.ftp_proc.ulRecvFileSize, len);
+    TRACE_DEBUG("filesize = %d（recv %d）\r", pechProto->info.ftp.ftp_proc.ulRecvFileSize, len);
     //vTaskDelay(1);//给其他任务喘气的机会
     return 0;
 }

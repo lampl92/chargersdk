@@ -14,6 +14,8 @@
 #include "cfg_parse.h"
 #include "cfg_order.h"
 #include "stringName.h"
+#include "file_op.h"
+#include "yaffsfs.h"
 
 #include "evse_debug.h"
 
@@ -128,26 +130,32 @@ static int taskremote_status_update(CON_t *pCON)
 
 int CheckSysUpFlags(void)
 {
+    int tmp = 2;
     int succ = 2;
-
-    switch (xSysconf.xUpFlag.chargesdk_bin)
+    char ch[1]; 
+    uint8_t res;
+    
+    res = get_upgrade_tmp(pathUpgradeTmp, ch);
+    tmp = atoi(ch);
+    if (res != 1)
+        succ = 0;
+    else
     {
-    case 0://无需升级
-        succ = 0;
-        break;
-    case 1://待升级
-        succ = 0;
-        break;
-    case 2://升级成功
-        succ = 1;
-        break;
-    case 3://升级失败
-        succ = 2;
-        break;
-    default:
-        succ = 0;
-        break;
+        switch (tmp)
+        {
+        case 2:
+            succ = 1;
+            break;
+        case 3:
+            succ = 2;
+            break;
+        default:
+            succ = 2;
+            break;
+        }
+        yaffs_unlink(pathUpgradeTmp);
     }
+
     return succ;
 }
 static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
@@ -183,11 +191,11 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     if (errcode == ERR_NO && network_res == 1)
     {
         pProto->info.ftp.ucDownloadStart = 1;
-        errcode_sdt = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStart, (void *)&(pProto->info.ftp.ucDownloadStart), ParamTypeU8);
+        errcode_sdt = cfg_set_uint8(pathFTPCfg, &pProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
         if (errcode_sdt == ERR_NO)
         {
             HAL_NVIC_SystemReset();
-            return 1;//Goodbye :)
+            return 1;//See you later :)
         }
     }
     
@@ -212,7 +220,7 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     if (errcode == ERR_NO && network_res == 1)
     {
         //happy time;
-        xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
+        //xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
         xSysconf.GetSysCfg(&xSysconf, NULL);
     }
     return 1;

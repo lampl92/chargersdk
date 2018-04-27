@@ -36,6 +36,11 @@ int copy_in_a_file(const char *yaffsName, const char *inName)
     
     inh = yaffs_open(inName, O_RDONLY, S_IREAD | S_IWRITE);
     outh = yaffs_open(yaffsName, O_CREAT | O_RDWR | O_TRUNC, S_IREAD | S_IWRITE);
+    if (inh < 0 || outh < 0)
+    {
+        res = 0;
+        return res;
+    }
 
     while ((ni = yaffs_read(inh, buffer, 100)) > 0)
     {
@@ -43,11 +48,14 @@ int copy_in_a_file(const char *yaffsName, const char *inName)
         if (ni != no)
         {
             printf_safe("problem writing yaffs file\n");
+            res = 0;
+            break;
         }
     }
     yaffs_close(outh);
     yaffs_close(inh);
     
+    res = 1;
     return res;
 }
 

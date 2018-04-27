@@ -37,7 +37,7 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
             return errcode;
         }
         cfgobj_get_uint32(jsRoot, &flist->size_byte, "flist:%d.size_byte", i);
-        cfgobj_get_uint32(jsRoot, &flist->ulCrc32, "flist:%d.crc32", i);
+        cfgobj_get_string(jsRoot, flist->strCrc32, "flist:%d.crc32", i);
         cfgobj_get_string(jsRoot, flist->strLocalpath, "flist:%d.localpath", i);
         cfgobj_get_string(jsRoot, flist->strFtpdir, "flist:%d.ftpdir", i);
         cfgobj_get_uint8(jsRoot, &flist->ucStatus, "flist:%d.status", i);
@@ -88,7 +88,7 @@ uint8_t get_upgrade_tmp(char *path, char *flg)
     fd = yaffs_open(path, O_RDWR, S_IWRITE | S_IREAD);
     if (fd < 0)
     {
-        ThrowFSCode(yaffs_get_error(), path, "get_upgrade_tmp()-open");
+        //ThrowFSCode(yaffs_get_error(), path, "get_upgrade_tmp()-open");
         return 0;
     }
     taskENTER_CRITICAL();
@@ -96,7 +96,7 @@ uint8_t get_upgrade_tmp(char *path, char *flg)
     taskEXIT_CRITICAL();
     if (1 != rb)
     {
-        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-read");
+        //ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-read");
         yaffs_close(fd);
         return 0;
     }

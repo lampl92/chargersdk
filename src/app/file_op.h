@@ -5,7 +5,7 @@ typedef struct _flist_t
 {
     char strFilename[64];
     size_t size_byte;
-    uint32_t ulCrc32;
+    char strCrc32[9];
     char strLocalpath[256];
     char strFtpdir[256];
     uint8_t ucStatus;

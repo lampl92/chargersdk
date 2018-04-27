@@ -8,6 +8,7 @@
 #include "includes.h"
 #include "xprintf.h"
 #include "yaffsfs.h"
+#include "utils.h"
 
 char *utils_strsep(char **stringp, const char *delim)
 {
@@ -176,10 +177,10 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
  * @return uint32_t
  *
  */
-uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
+uint32_t StrToHex(char *Str, uint8_t *Hex, int Strlen)
 {
-    uint8_t hexbuff[2];
-    uint8_t *src;
+    char hexbuff[2];
+    char *src;
     int i;
     src = Str;
 
@@ -288,6 +289,17 @@ int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
     *pulCrc32 = ~ulCrc32;
 
     return 1;
+}
+
+uint32_t StrCrc32ToUint32(char *strCrc32)
+{
+    uint32_t crc32_orig;
+    ul2uc ul2ucCrc32;
+    
+    StrToHex(strCrc32, ul2ucCrc32.ucVal, strlen(strCrc32));
+    crc32_orig = utils_ntohl(ul2ucCrc32.ulVal);
+    
+    return crc32_orig;
 }
 
 char *strdup(const char *s) __attribute__((alias("utils_strdup")));
