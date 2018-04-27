@@ -135,6 +135,7 @@ static void quitBackHome()
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
+        flashGunState();
         gbsstate = StateHome;
         vTaskDelay(100);
         quitflag = 0;
