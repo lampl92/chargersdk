@@ -337,8 +337,9 @@ void vTaskEVSERFID(void *pvParameters)
                 timesPwd--;
                 if (timesPwd == 0)
                 {
-                    pRFIDDev->state = STATE_RFID_BADID;
+                    pRFIDDev->state = STATE_RFID_PWDFULL;
                     pRFIDDev->status.ucNeedPwd = 0;
+                    timesPwd = 3;
                     break; 
                 }
                 break;
@@ -354,6 +355,12 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->status.ucNeedPwd = 0;
                 break;
             }
+        case STATE_RFID_PWDFULL:
+            make_rfidpkg(pRFIDDev, &rfid_pkg);
+            xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+            vTaskDelay(5000);
+            pRFIDDev->state = STATE_RFID_RETURN;
+            break;
         case STATE_RFID_OLDID:                                      
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             //如果是正在充电中刷卡, 则停止充电
