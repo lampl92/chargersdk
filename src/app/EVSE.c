@@ -616,13 +616,10 @@ void EVSEinit(void)
     uint8_t tmp = 1;
 	
     pEVSE = EVSECreate();
-<<<<<<< Updated upstream
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
 //    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
-=======
     cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
->>>>>>> Stashed changes
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
