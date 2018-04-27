@@ -47,6 +47,132 @@ int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 }
 
 //主页上的两个按键
+int SKIN_buttongunlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfopress, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo, gunbuttonsingleax, gunbuttonsingleay);
+            //BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
+int SKIN_buttongunscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunscancode, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunscancode, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunscancode, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunscancode, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else
+        {
+            BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
+int SKIN_buttongunerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunerror, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunerror, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunerror, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_MEMDEV_WriteAt(Memdevhomegunerror, gunbuttonsingleax, gunbuttonsingleay);
+        }
+        else
+        {
+            BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
 int SKIN_buttongunAlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;

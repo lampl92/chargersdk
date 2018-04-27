@@ -16,6 +16,8 @@ uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
 WM_HWIN startUpWin;//开机窗口句柄
+
+Fun home;
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
 
@@ -117,12 +119,13 @@ void MainTask(void)
 //        CreateKeyBoardWindow();
         if (pEVSE->info.ucTotalCON == 1)
         {
-            CreateHome0DLG();
+            home = CreateHome0DLG;
         }
         else
         {
-            CreateHomeDLG();    
+            home = CreateHomeDLG;    
         }        
+        home();
     }
     else
     {

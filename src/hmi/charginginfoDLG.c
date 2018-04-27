@@ -52,7 +52,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 break;
             case WM_NOTIFICATION_RELEASED:
                 GUI_EndDialog(pMsg->hWin, 0);
-                CreateHomeDLG();
+                home();
                 break;
             }
             break;

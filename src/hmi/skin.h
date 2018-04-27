@@ -13,6 +13,10 @@ int SKIN_checkboxmoney(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_checkboxelectric(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
 int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+int SKIN_buttongunlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+int SKIN_buttongunscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+int SKIN_buttongunerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+
 int SKIN_buttongunAlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttongunAscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 int SKIN_buttongunAerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);

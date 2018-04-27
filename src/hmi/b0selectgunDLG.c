@@ -116,7 +116,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPHOME:
         GUI_EndDialog(pMsg->hWin, 0);
-        CreateHomeDLG();
+        home();
         break;
     case MSG_JUMPSELECTPATTERN:
         GUI_EndDialog(pMsg->hWin,0);

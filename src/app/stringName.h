@@ -131,6 +131,12 @@ typedef enum _filelist
 //******************
 
 //主页图片路径
+#define pathhomebacksingle                "/nand/system/homebacksingle.dta"
+#define pathhomegunchargedonesingle                  "/nand/system/homegunchargedonesingle.dta"
+#define pathhomegunchargingsingle                "/nand/system/homegunchargingsingle.dta"
+#define pathhomegunerrorsingle                   "/nand/system/homegunerrorsingle.dta"
+#define pathhomegunfreesingle                "/nand/system/homegunfreesingle.dta"
+
 #define pathhomeback                "/nand/system/homeback.dta"
 #define pathhomegunAchargedone                  "/nand/system/homegunAchargedone.dta"
 #define pathhomegunAcharging                "/nand/system/homegunAcharging.dta"

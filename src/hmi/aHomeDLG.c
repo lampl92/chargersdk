@@ -52,15 +52,16 @@ static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstatefl
 static WM_HTIMER _timerinfoflash;
 int SignalIntensity;//信号强度
 int PreSignalIntensity;//之前的信号强度
-int gunstateOnce;//防止界面启动按钮和枪状态空白,所以在WM_PAINT消息里进行一次刷新图片
+static int gunstateOnce;//防止界面启动按钮和枪状态空白,所以在WM_PAINT消息里进行一次刷新图片
 
 static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, gunbuttonax, gunbuttonay, 170, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, gunbuttonbx, gunbuttonby, 170, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 345, 230, 45, 0, 0x0, 0 },
+    //{ BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 79, 230, 345-79+45, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, 456, 345, 230, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 297, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
@@ -87,7 +88,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreategunbstate[] = {
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
-    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_4, 62, 70, 674, 322, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "gunbstate-Window", ID_WINDOW_4, helpinfox, helpinfoy, 674, 322, 0, 0x0, 0 },
 };
 
 static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
@@ -411,8 +412,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
-            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState \
-                || GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
+            if (!( GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
             {
                 WM_HideWin(Hwininfo);
             }
@@ -503,6 +503,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), " ");
         //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), "39.9");
         homegunstate[0] = GBSgunstate[0];       
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
@@ -595,10 +596,10 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), GUI_WHITE);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &fontwryhcg24e);
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
-        //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), "39.9");
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), " ");
         homegunstate[1] = GBSgunstate[1];
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
-        PROGBAR_SetValue(hItem, 0);
+        //PROGBAR_SetValue(hItem, 0);
         PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
         if (homegunstate[1] != GunchargingState)
         {

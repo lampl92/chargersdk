@@ -1,6 +1,8 @@
 #ifndef SKINPOSITION_H
 #define SKINPOSITION_H
 //home页
+#define gunbuttonsingleax  324 //画按键皮肤时使用
+#define gunbuttonsingleay  345 //画按键皮肤时使用
 #define gunbuttonax  142 //画按键皮肤时使用
 #define gunbuttonay  349 //画按键皮肤时使用
 #define gunbuttonbx  486 //画按键皮肤时使用

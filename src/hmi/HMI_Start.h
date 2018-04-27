@@ -14,9 +14,12 @@
 #include "skin.h"
 #include "GUI_backstage.h"
 #include "skinposition.h"
+typedef WM_HWIN(*Fun)(void);
 extern GUI_HMEM    qr_hmem;
 
 extern int SignalFlag;//信号图标刷新标志
+
+extern Fun home;
 
 #define FONT_COLOR GUI_BLACK
 

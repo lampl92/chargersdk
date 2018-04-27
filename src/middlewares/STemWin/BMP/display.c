@@ -509,23 +509,67 @@ void createStartUpMemdev()
 
 void creatememdev()
 {   
-    //主页存储
     CON_t *pCON;   
-    MemdevhomegunAfree = createMemdev(pathhomegunAfree);
-    pCON = CONGetHandle(0);
-    createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+    //主页存储
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        MemdevhomegunAfree = createMemdev(pathhomegunfreesingle);
+        pCON = CONGetHandle(0);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+        
+        Memdevhomeback = createMemdev(pathhomebacksingle);
+        MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle);
+        MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle);
+        MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle); 
+    }
+    else
+    {
+        MemdevhomegunAfree = createMemdev(pathhomegunAfree);
+        pCON = CONGetHandle(0);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
     
-    MemdevhomegunBfree = createMemdev(pathhomegunBfree);
-    pCON = CONGetHandle(1);
-    createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
+        MemdevhomegunBfree = createMemdev(pathhomegunBfree);
+        pCON = CONGetHandle(1);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
     
-    Memdevhomeback = createMemdev(pathhomeback);
-    MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone);
-    MemdevhomegunAcharging = createMemdev(pathhomegunAcharging);
-    MemdevhomegunAerror = createMemdev(pathhomegunAerror); 
-    MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone);
-    MemdevhomegunBcharging = createMemdev(pathhomegunBcharging);
-    MemdevhomegunBerror = createMemdev(pathhomegunBerror);   
+        Memdevhomeback = createMemdev(pathhomeback);
+        MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone);
+        MemdevhomegunAcharging = createMemdev(pathhomegunAcharging);
+        MemdevhomegunAerror = createMemdev(pathhomegunAerror); 
+        MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone);
+        MemdevhomegunBcharging = createMemdev(pathhomegunBcharging);
+        MemdevhomegunBerror = createMemdev(pathhomegunBerror);       
+        
+         //选枪
+        MemdevSelectGunBack = createMemdev(pathSelectGunBack);
+        MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress);
+        MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
+        MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
+        MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
+        MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable);
+        MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable);
+    
+        //选模式
+        Memdevselectpatternback = createMemdev(pathselectpatternback);
+        Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber);
+        Memdevselectpatternfull = createMemdev(pathselectpatternfull);
+        Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber);
+        Memdevselectpatterntime = createMemdev(pathselectpatterntime);
+
+        Memdevselectpatternelectricnumberpress = createMemdev(pathselectpatternelectricnumberpress);
+        Memdevselectpatternfullpress = createMemdev(pathselectpatternfullpress);
+        Memdevselectpatternmoneynumberpress = createMemdev(pathselectpatternmoneynumberpress);
+        Memdevselectpatterntimepress = createMemdev(pathselectpatterntimepress);
+
+        Memdevselectpatternunityuan = createMemdev(pathselectpatternunityuan);
+        Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu);
+        Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen);
+        Memdevselectpatternunitno = createMemdev(pathselectpatternunitno);
+
+        Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
+        Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
+    }
+    
     Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
     Memdevhomegunscancode = createMemdev(pathhomegunscancode);
     Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);
@@ -547,34 +591,7 @@ void creatememdev()
     Memdevhomechargehelppress = createMemdev(pathhomechargehelppress);
     Memdevhomehelpinfo = createMemdev(pathhomehelpinfo);
         
-    //选枪
-    MemdevSelectGunBack = createMemdev(pathSelectGunBack);
-    MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress);
-    MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
-    MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
-    MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
-    MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable);
-    MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable);
-    
-    //选模式
-    Memdevselectpatternback = createMemdev(pathselectpatternback);
-    Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber);
-    Memdevselectpatternfull = createMemdev(pathselectpatternfull);
-    Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber);
-    Memdevselectpatterntime = createMemdev(pathselectpatterntime);
-
-    Memdevselectpatternelectricnumberpress = createMemdev(pathselectpatternelectricnumberpress);
-    Memdevselectpatternfullpress = createMemdev(pathselectpatternfullpress);
-    Memdevselectpatternmoneynumberpress = createMemdev(pathselectpatternmoneynumberpress);
-    Memdevselectpatterntimepress = createMemdev(pathselectpatterntimepress);
-
-    Memdevselectpatternunityuan = createMemdev(pathselectpatternunityuan);
-    Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu);
-    Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen);
-    Memdevselectpatternunitno = createMemdev(pathselectpatternunitno);
-
-    Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
-    Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
+   
     
     //提示信息页图片
     //Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
@@ -604,9 +621,7 @@ void creatememdev()
 //    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging);
 //    Memdevcardinfoget = createMemdev(pathcardinfoget);
 //    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
-    //Memdevcardinfounregister = createMemdev(pathcardinfounregister);
-    
-        
+    //Memdevcardinfounregister = createMemdev(pathcardinfounregister);  
 }
 
 

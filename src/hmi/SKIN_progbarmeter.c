@@ -87,6 +87,10 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     	{
         	GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, x, y);
     	}
+    	else if (x == 294)
+    	{
+        	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, x, y);
+    	}
 //    	GUI_SetColor(GUI_BLACK);  	
 //    	GUI_FillPolygon(_aNeedle1, GUI_COUNTOF(_aNeedle1), 0, 0);
 //    	GUI_SetColor(GUI_GREEN);
