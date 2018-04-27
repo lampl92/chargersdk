@@ -15,9 +15,6 @@ GBSState_E gbsstate;
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
 
-//破标志
-int flagGetMoney = 0;
-
 //枪状态刷新
 static void flashGunState()
 {
@@ -78,9 +75,10 @@ static void ledcontrl()
 }
 
 //接受刷卡消息,不阻塞
-void recNewOperate()
+static void recNewOperate()
 {
     BaseType_t xResult;
+    flashGunState();
     xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
     if (xResult == pdTRUE)
     {
@@ -102,15 +100,16 @@ void recNewOperate()
     }
 }
 
-//发送选择的枪和模式
-void sendChose()
+//发送选择的枪和模式或者发送密码
+static void sendChoseOrWithPwd(GBSState_E state)
 {
     EventBits_t uxBitHMI;
     if (Tempuserlike.UserLikeFlag == 1)
     {
-        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);       
+        gbsstate = state;
+        vTaskDelay(100);
         Tempuserlike.UserLikeFlag = 0;
-        gbsstate = StateTestChargeCondition;
         return;
     }
     if (quitflag == 1)
@@ -118,32 +117,33 @@ void sendChose()
         Tempuserlike.user_like.HMItimeout = 1;
         xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
         Tempuserlike.user_like.HMItimeout = 0;
-        quitflag = 0;
         gbsstate = StateQuit;
         return ;
     }
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
-        gbsstate = StateHome;
+        gbsstate = StateOperateTimeout;
         return ;
     }
 }
 
 //按取消按键后,等超时回主页
-void quitBackHome()
+static void quitBackHome()
 {
     EventBits_t uxBitHMI;
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
         gbsstate = StateHome;
+        vTaskDelay(100);
+        quitflag = 0;
         return ;
     }
 }
 
 //检测是否超时
-void testTimeout()
+static void testTimeout()
 {
     EventBits_t uxBitHMI;
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
@@ -154,161 +154,166 @@ void testTimeout()
 }
 
 //分析接受的数据
-void analyzeReceive()
+static void analyzeReceive()
 {
-//    BaseType_t xResult;
-//    CON_t *pCON;   
-//    xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
-//    if (xResult == pdTRUE)
-//    {
-//        if (Temprfid_pkg.ucNeedPwd == 1)
-//        {
-//            
-//        }
-//        else
-//        {
-//            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-//            GBSBalance = Temprfid_pkg.dBalance;
-//            if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
-//            {            
-//                flagGetMoney = 0;
-//                gbsstate = StatePleasePlug;
-//                break;
-//            }
-//            if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
-//            {
-//                flagGetMoney = 0;
-//                gbsstate = StateCardconditionNotOk;
-//                break;
-//            }
-//        }
-//    }
-//    if (flagGetMoney == 1)
-//    {
-//        
-//        if (pCON->state == STATE_CON_CHARGING)
-//        {
-//            flagGetMoney = 0;
-//            gbsstate = StateChargingOk;
-//            break;
-//        }
-//        
-//    }
+    EventBits_t uxBitHMI;
+    BaseType_t xResult;
+    CON_t *pCON;
+    xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
+    if (xResult == pdTRUE)
+    {
+        pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+        GBSBalance = Temprfid_pkg.dBalance;
+        if (gbsstate == StateTestChargeCondition)
+        {
+            if (Temprfid_pkg.ucNeedPwd == 1)
+            {
+                gbsstate = StatePwd;
+                return;
+            }
+            if ((Temprfid_pkg.state == STATE_RFID_BADID) || (Temprfid_pkg.state == STATE_RFID_OWE))
+            {                
+                gbsstate = StateCardconditionNotOk;                
+                return;
+            }
+        }
+        if (gbsstate == StateTestPwd)
+        {
+            if (Temprfid_pkg.state == STATE_RFID_PWD)
+            {
+                gbsstate = StatePwdErrorAgain;
+                return;
+            }   
+            if (Temprfid_pkg.state == STATE_RFID_PWDFULL)
+            {
+                gbsstate = StatePwdFull;
+                return;
+            }
+        }
+        if ((Temprfid_pkg.state == STATE_RFID_GOODID)  && (pCON->status.xPlugState == UNPLUG))
+        {            
+            gbsstate = StatePleasePlug;
+            return;
+        }
+        if ((Temprfid_pkg.state == STATE_RFID_GOODID)  && (pCON->status.xPlugState == PLUG))
+        {
+            gbsstate = StateWaitBecomeCharge;
+            return;
+        }      
+    }
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StateNetTimeout;
+    }
+}
+
+static void WaitBecomeCharging()
+{
+    CON_t *pCON; 
+    EventBits_t uxBitHMI;
+    pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+    if (pCON->state == STATE_CON_CHARGING)
+    {     
+        gbsstate = StateChargingOk;
+        return;
+    }
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StateCantChargeOfDevice;
+    }
+}
+
+static void pleasePlug()
+{
+    EventBits_t uxBitHMI;
+    CON_t *pCON;   
+    pCON = CONGetHandle(Temprfid_pkg.ucCONID);
+    if (pCON->status.xPlugState == PLUG)
+    {
+        gbsstate = StateWaitBecomeCharge;
+        return;
+    }
+    if (quitflag == 1)
+    {
+        Tempuserlike.user_like.HMItimeout = 1;
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        Tempuserlike.user_like.HMItimeout = 0;
+        gbsstate = StateQuit;
+        return;
+    }
+    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    {
+        gbsstate = StatePlugTimeout;
+        return;
+    }
+}
+
+static void showResultBackHome(int time_ms)
+{
+    vTaskDelay(time_ms);
+    flashGunState();
+    gbsstate = StateHome;
 }
 
 void GBSTask()
-{
-    BaseType_t xResult;
-    EventBits_t uxBitHMI;
-    CON_t *pCON;   
+{ 
     gbsstate = StateHome;
     while (1)
     {       
         ledcontrl();
         switch (gbsstate)
         {
-        case StateHome:
-            flashGunState();
+        case StateHome:            
             recNewOperate();
             break;
         case StateGetGunInfo:
-            sendChose();
+            sendChoseOrWithPwd(StateTestChargeCondition);
             break;
         case StateQuit:
             quitBackHome();
             break;
         case StateTestChargeCondition:
-            vTaskDelay(500);
-            xResult = xQueueReceive(xHandleQueueRfidPkg, &Temprfid_pkg, 0);
-            if (xResult == pdTRUE)
-            {
-                pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-                GBSBalance = Temprfid_pkg.dBalance;
-                flagGetMoney = 1;
-            }
-            if (flagGetMoney == 1)
-            {
-                if ((Temprfid_pkg.ucAccountStatus == 1)  && (pCON->status.xPlugState == UNPLUG))
-                {            
-                    flagGetMoney = 0;
-                    gbsstate = StatePleasePlug;
-                    break;
-                }
-                if (pCON->state == STATE_CON_CHARGING)
-                {
-                    flagGetMoney = 0;
-                    gbsstate = StateChargingOk;
-                    break;
-                }
-                if ((Temprfid_pkg.ucAccountStatus == 2) || (Temprfid_pkg.ucAccountStatus == 0))
-                {
-                    flagGetMoney = 0;
-                    gbsstate = StateCardconditionNotOk;
-                    break;
-                }
-            }
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StateNetTimeout;
-            }
+            analyzeReceive();
+            break;
+        case StateWaitBecomeCharge:
+            WaitBecomeCharging();
+            break;
+        case StatePwd:
+            sendChoseOrWithPwd(StateTestPwd);
+            break;
+        case StateTestPwd:
+            analyzeReceive();
+            break;
+        case StatePwdErrorAgain:
+            vTaskDelay(2000);
+            gbsstate = StatePwd;
+            break;
+        case StatePwdFull:
+            showResultBackHome(2000);
             break;
         case StatePleasePlug:
-            vTaskDelay(500);
-            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-            if (pCON->status.xPlugState == PLUG)
-            {
-                gbsstate = StatePlug;
-                break;
-            }
-            if (quitflag == 1)
-            {
-                Tempuserlike.user_like.HMItimeout = 1;
-                xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
-                Tempuserlike.user_like.HMItimeout = 0;
-                quitflag = 0;
-                gbsstate = StateQuit;
-                break;
-            }
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StatePlugTimeout;
-            }
-            break;
-        case StatePlug:
-            vTaskDelay(1000);
-            pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-            if (pCON->state == STATE_CON_CHARGING)
-            {
-                gbsstate = StateChargingOk;
-                break;
-            }
-            uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-            if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
-            {
-                gbsstate = StatePlugTimeout;
-            }
+            pleasePlug();
             break;
         case StateChargingOk:
-            vTaskDelay(2000);
-            flashGunState();
-            gbsstate = StateHome;
+            showResultBackHome(2000);
+            break;
+        case StateOperateTimeout://您的操作已超时
+            showResultBackHome(2000);
+            break;
+        case StateCantChargeOfDevice:
+            showResultBackHome(2000);
             break;
         case StateCardconditionNotOk:
-            vTaskDelay(2000);
-            flashGunState();
-            gbsstate = StateHome;
+            showResultBackHome(2000);
             break;
         case StateNetTimeout:
-            vTaskDelay(3500);
-            flashGunState();
-            gbsstate = StateHome;
+            showResultBackHome(3500);
             break;
         case StatePlugTimeout:
-            vTaskDelay(3500);
-            flashGunState();
-            gbsstate = StateHome;
+            showResultBackHome(3000);
             break;
         }
         vTaskDelay(100);
