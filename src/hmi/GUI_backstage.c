@@ -104,6 +104,7 @@ static void recNewOperate()
 static void sendChoseOrWithPwd(GBSState_E state)
 {
     EventBits_t uxBitHMI;
+    flashGunState();
     if (Tempuserlike.UserLikeFlag == 1)
     {
         xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);       

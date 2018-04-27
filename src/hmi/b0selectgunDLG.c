@@ -17,6 +17,26 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 10 },
 };
 
+static void selectGunButton(WM_MESSAGE * pMsg)
+{
+    WM_HWIN hItem;
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+    BUTTON_SetUserData(hItem, "enable", 10);
+    if (GBSgunstate[0] != GunfreeState)
+    {
+        BUTTON_SetUserData(hItem, "disable", 10);
+    }
+    BUTTON_SetSkin(hItem, SKIN_selectbutton);
+        
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+    BUTTON_SetUserData(hItem, "enable", 10);
+    if (GBSgunstate[1] != GunfreeState)
+    {
+        BUTTON_SetUserData(hItem, "disable", 10);
+    }
+    BUTTON_SetSkin(hItem, SKIN_selectbutton);
+}
+
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int NCode;
     int Id;
@@ -24,26 +44,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     char s[10];
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetUserData(hItem, "enable", 10);
-        if (GBSgunstate[0] != GunfreeState)
-        {
-            BUTTON_SetUserData(hItem, "disable", 10);
-        }
-        BUTTON_SetSkin(hItem, SKIN_selectbutton);
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
-        BUTTON_SetUserData(hItem, "enable", 10);
-        if (GBSgunstate[1] != GunfreeState)
-        {
-            BUTTON_SetUserData(hItem, "disable", 10);
-        }
-        BUTTON_SetSkin(hItem, SKIN_selectbutton);
-                
+        selectGunButton(pMsg);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
         BUTTON_SetSkin(hItem, SKIN_buttonquit);
         BUTTON_SetUserData(hItem, "canPress", 10);
         break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break; 
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(MemdevSelectGunBack,0,0);
         break;
@@ -101,6 +109,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
             }
+            selectGunButton(pMsg);
+            WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 100);
         }
         break;
