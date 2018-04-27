@@ -28,8 +28,8 @@
 #define ID_Timertimeflash               5
 #define ID_Timerinfoflash               6
 #define ID_Timerstateflash              7
-#define gunstateax  112 //枪A状态图标x位置
-#define gunstateay  79 //枪A状态图标y位置
+#define gunstateax  294 //枪状态图标x位置
+#define gunstateay  78 //枪状态图标y位置
 
 #define signalx  753 //信号位置x
 #define signaly  5 //信号位置y
@@ -275,7 +275,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timerstateflash)
         {
-            if (gbsstate == StateReadyStart)
+            if (gbsstate == StateTestChargeCondition)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_READYSTART);
             }

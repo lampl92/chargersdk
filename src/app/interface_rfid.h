@@ -23,8 +23,10 @@ typedef enum _RFIDState
     STATE_RFID_GOTID,           //获取到ID
     STATE_RFID_OLDID,
     STATE_RFID_NEWID,
+    STATE_RFID_PWD,             //输入密码
     STATE_RFID_GOODID,           //注册帐户
     STATE_RFID_BADID,           //非注册帐户
+    STATE_RFID_PWDFULL,         //密码次数超限
     STATE_RFID_OWE,                 //欠费
     STATE_RFID_HOLD,           //预约状态，还没开始充电
     STATE_RFID_RETURN

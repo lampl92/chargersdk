@@ -330,6 +330,7 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
     <ClCompile Include="startup_chargersdk.c" />
+    <ClCompile Include="start_up.c" />
     <ClCompile Include="system_chargersdk.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\cpu_endian.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common\date_time.c" />
