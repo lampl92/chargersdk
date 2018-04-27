@@ -106,6 +106,10 @@ typedef enum _filelist
 //*************
 
 //卡信息图片路径
+#define pathcardinfostartup         "nand/system/cardinfostartup.dta"
+#define pathcardinfostartone            "nand/system/cardinfostartone.dta"
+#define pathcardinfostatrttwo           "nand/system/cardinfostarttwo.dta"
+#define pathcardinfostatrtthree         "nand/system/cardinfostartthree.dta"
 #define pathcardinfoback                "nand/system/cardinfoback.dta"
 #define pathcardinfocardconditionnotok              "nand/system/cardinfocardconditionnotok.dta"
 #define pathcardinfochargingok              "nand/system/cardinfochargingok.dta"

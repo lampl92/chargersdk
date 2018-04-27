@@ -90,7 +90,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreatehelp[] = {
 };
 
 
-static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
+static void updategunState(WM_MESSAGE * pMsg, GUNState_E state)//枪状态刷新函数
 {
 //    WM_HWIN      hItem;
 //    switch (GBSgunstate[0])
@@ -501,6 +501,29 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), "39.9");
         homegunstate[0] = GBSgunstate[0];
+        switch (homegunstate[0])
+        {
+        case GunfreeState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAfree, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAscancode);
+            break;
+        case GunchargingState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+            break;
+        case GunchargedoneState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAchargedone, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAlookinfo);
+            break;
+        case Gunerror:
+            GUI_MEMDEV_WriteAt(MemdevhomegunAerror, gunstateax, gunstateay);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_0);
+            BUTTON_SetSkin(hItem, SKIN_buttongunAerror);
+            break;
+        }
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetValue(hItem, 0);
         PROGBAR_SetSkin(hItem, SKIN_progbarmeter);
@@ -593,6 +616,29 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
         TEXT_SetTextAlign(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), TEXT_CF_HCENTER | TEXT_CF_VCENTER);
         //TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), "39.9");
         homegunstate[1] = GBSgunstate[1];
+        switch (homegunstate[1])
+        {
+        case GunfreeState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBfree, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBscancode);
+            break;
+        case GunchargingState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+            break;
+        case GunchargedoneState:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBchargedone, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBlookinfo);
+            break;
+        case Gunerror:
+            GUI_MEMDEV_WriteAt(MemdevhomegunBerror, gunstatebx, gunstateby);
+            hItem = WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_BUTTON_1);
+            BUTTON_SetSkin(hItem, SKIN_buttongunBerror);
+            break;
+        }
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1);
         PROGBAR_SetValue(hItem, 0);
         PROGBAR_SetSkin(hItem, SKIN_progbarmeter);

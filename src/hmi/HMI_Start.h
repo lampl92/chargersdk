@@ -21,6 +21,7 @@ extern int SignalFlag;//信号图标刷新标志
 #define FONT_COLOR GUI_BLACK
 
 //**********单双枪新界面
+WM_HWIN CreatestartUpDLG(void);
 WM_HWIN CreateHome0DLG(void);
 WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateselectgunDLG(void);

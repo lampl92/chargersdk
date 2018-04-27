@@ -234,6 +234,10 @@ extern GUI_MEMDEV_Handle MemdevbackQuit;
 extern GUI_MEMDEV_Handle MemdevbackQuitPress;
 
 //ø®–≈œ¢“≥Õº∆¨
+extern GUI_MEMDEV_Handle Memdevcardinfostartup;
+extern GUI_MEMDEV_Handle Memdevcardinfostartone;
+extern GUI_MEMDEV_Handle Memdevcardinfostatrttwo;
+extern GUI_MEMDEV_Handle Memdevcardinfostatrtthree;
 extern GUI_MEMDEV_Handle Memdevcardinfoback;
 extern GUI_MEMDEV_Handle Memdevcardinfocardconditionnotok;
 extern GUI_MEMDEV_Handle Memdevcardinfochargingok;
@@ -257,6 +261,7 @@ p_inf *readPicInf(char *pfilepath);
 GUI_BITMAP readDtafile(char *pathfile);
 GUI_MEMDEV_Handle createMemdev(char *pfilepath);
 void createGUI_BITMAP();
+void createStartUpMemdev();
 void creatememdev();
 
 #endif

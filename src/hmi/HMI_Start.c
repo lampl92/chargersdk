@@ -15,18 +15,24 @@ uint8_t winInitDone = 0;
 uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
-
-
-
-
+WM_HWIN startUpWin;//开机窗口句柄
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
 
 GUI_QR_INFO QR_info;
 
-static void vTaskReadPic(void *pvParameters)
+static void vTaskStart_up(void *pvParameters)
 {
-    vTaskDelete(xTaskGetCurrentTaskHandle());
+    WM_MULTIBUF_Enable(1);
+    GUI_UC_SetEncodeUTF8();
+    createStartUpMemdev();
+    startUpWin = CreatestartUpDLG();
+    while (1)
+    {
+        GUI_Delay(8000);
+        vTaskDelay(100);
+    }
+    //vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 
 
@@ -91,13 +97,12 @@ void MainTask(void)
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
-
+    xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);
     if (calebrate_done != 0xff)
     {
         WM_MULTIBUF_Enable(1);
-        pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
-        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
-        GUI_Exec();
+//        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
+//        GUI_Exec();
         creatememdev();
         createfont();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
@@ -105,7 +110,8 @@ void MainTask(void)
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         GUI_UC_SetEncodeUTF8();
-
+        GUI_EndDialog(startUpWin, 0);
+        vTaskDelete(xHandleTaskReadPic);
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
 //        CreateKeyBoardWindow();
@@ -122,14 +128,12 @@ void MainTask(void)
     {
         calebrate_done = 1;
         WM_MULTIBUF_Enable(1);
-        pCON = CONGetHandle(0);/** @todo (zshare#1#): 双枪时修改ID */
         WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
 
         GUI_UC_SetEncodeUTF8();
 
         CreateHomeDLG();
     }
-    //xTaskCreate(vTaskReadPic, "TaskReadPic", 1024, NULL, 2, &xHandleTaskReadPic);
     while (1)
     {
 //	    printf_safe("exec start = %d\n", clock());

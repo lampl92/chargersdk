@@ -237,6 +237,10 @@ GUI_MEMDEV_Handle MemdevbackQuit;
 GUI_MEMDEV_Handle MemdevbackQuitPress;
 
 //卡信息页图片
+GUI_MEMDEV_Handle Memdevcardinfostartup;
+GUI_MEMDEV_Handle Memdevcardinfostartone;
+GUI_MEMDEV_Handle Memdevcardinfostatrttwo;
+GUI_MEMDEV_Handle Memdevcardinfostatrtthree;
 GUI_MEMDEV_Handle Memdevcardinfoback;
 GUI_MEMDEV_Handle Memdevcardinfocardconditionnotok;
 GUI_MEMDEV_Handle Memdevcardinfochargingok;
@@ -494,6 +498,15 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
     return 0;
 }
 
+void createStartUpMemdev()
+{
+    Memdevcardinfoback = createMemdev(pathcardinfoback);
+    Memdevcardinfostartup = createMemdev(pathcardinfostartup);
+    Memdevcardinfostartone = createMemdev(pathcardinfostartone);
+    Memdevcardinfostatrttwo = createMemdev(pathcardinfostatrttwo);
+    Memdevcardinfostatrtthree = createMemdev(pathcardinfostatrtthree);
+}
+
 void creatememdev()
 {   
     //主页存储
@@ -574,7 +587,7 @@ void creatememdev()
     MemdevbackQuitPress = createMemdev(pathbackquitpress);
 
     //卡信息页图片
-    Memdevcardinfoback = createMemdev(pathcardinfoback);
+    //Memdevcardinfoback = createMemdev(pathcardinfoback);
     Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok);
     Memdevcardinfochargingok = createMemdev(pathcardinfochargingok);
     Memdevcardinfonettimeout = createMemdev(pathcardinfonettimeout);
