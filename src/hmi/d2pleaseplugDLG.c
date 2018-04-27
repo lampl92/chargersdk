@@ -74,7 +74,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerstatechange)
         {    
-            if (gbsstate == StatePlug)
+            if (gbsstate == StateWaitBecomeCharge)
             {
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
                 BUTTON_SetUserData(hItem, "plug", 10);
