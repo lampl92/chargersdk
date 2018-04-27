@@ -231,7 +231,7 @@ static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32
     *pulCrc32 = ((*pulCrc32) >> 8) ^ pulCrc32Table[(byte) ^ ((*pulCrc32) & 0x000000FF)];
 }
 
-int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
+int GetFileCrc32(char *path, uint32_t *pulCrc32)
 {
     int fd;
     int res = 0;

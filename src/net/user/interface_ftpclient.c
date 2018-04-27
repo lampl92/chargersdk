@@ -29,7 +29,7 @@ struct _ftp_ctx_save_file
 static int _ftp_bg_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
-    sprintf(cctx->fpath, "%s%s", pathUpgradeDir, ftp_ctx->fname);
+    sprintf(cctx->fpath, "%s%s", pathDownloadDir, ftp_ctx->fname);
     cctx->fd = yaffs_open(cctx->fpath, O_CREAT | O_RDWR | O_TRUNC, S_IWRITE | S_IREAD);
     pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 1;
     pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 1;

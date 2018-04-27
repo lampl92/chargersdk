@@ -2,6 +2,61 @@
 #include "yaffsfs.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "libEcharge/ech_ftp.h"
+#include "cJSON.h"
+#include "cfg_parse.h"
+#include "stringName.h"
+#include "errorcode.h"
+#include "file_op.h"
+
+ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
+{
+    cJSON *jsRoot = NULL;
+    ErrorCode_t errcode = ERR_NO;
+    int i = 0;
+    uint8_t status = 0;
+    
+    jsRoot = GetCfgObj(pathDownloadList, &errcode);
+    if (jsRoot == NULL)
+    {
+        return errcode;
+    }
+    cfgobj_get_string(jsRoot, ftp->strServer, "ftp.server");
+    cfgobj_get_uint16(jsRoot, &ftp->usPort, "ftp.port");
+    cfgobj_get_string(jsRoot, ftp->strUser, "ftp.user");
+    cfgobj_get_string(jsRoot, ftp->strPassword, "ftp.pass");
+    
+   // while(1)
+    for(i = 0;;i++)
+    {
+        //i++;
+        errcode = cfgobj_get_string(jsRoot, flist->strFilename, "flist:%d.filename", i);
+        if (errcode != ERR_NO)
+        {
+            cJSON_Delete(jsRoot);
+            return errcode;
+        }
+        cfgobj_get_uint32(jsRoot, &flist->size_byte, "flist:%d.size_byte", i);
+        cfgobj_get_uint32(jsRoot, &flist->ulCrc32, "flist:%d.crc32", i);
+        cfgobj_get_string(jsRoot, flist->strLocalpath, "flist:%d.localpath", i);
+        cfgobj_get_string(jsRoot, flist->strFtpdir, "flist:%d.ftpdir", i);
+        cfgobj_get_uint8(jsRoot, &flist->ucStatus, "flist:%d.status", i);
+        if (flist->ucStatus == 1)
+        {
+            strcpy(ftp->strNewVersion, flist->strFtpdir);
+            strcpy(ftp->strNewFileName, flist->strFilename);
+            status = 0;
+            cfgobj_set_uint8(jsRoot, &status, "flist:%d.status", i);
+            break;
+        }
+        else
+        {
+            continue;
+        }
+    }
+    errcode = SetCfgObj(pathDownloadList, jsRoot);
+    return errcode;
+}
 
 uint8_t set_upgrade_tmp(char *path, char *flg)
 {

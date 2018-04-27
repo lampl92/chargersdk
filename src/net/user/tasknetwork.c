@@ -11,6 +11,7 @@
 #include "modem.h"
 #include "cfg_parse.h"
 #include "stringName.h"
+#include "errorcode.h"
 
 #include "taskcreate.h"
 #include "interface_network.h"
@@ -137,97 +138,53 @@ static void netStateFTP(net_device_t *net_dev)
     ul2uc ul2ucCrc32;
     char filepath[64 + 1];
     char filepath_rename[64 + 1];
-    uint8_t upflg;
+    char upflg;
     int i;
+    flist_t flist;
+    EchFtpCfg_t ftpcfg;
+    ErrorCode_t errcode;
     
     int res;
     
     res = ftp_download_file(&pechProto->info.ftp, net_dev);
+ 
     if (res == 1)
     {
-        StrToHex(pechProto->info.ftp.strNewFileName, (uint8_t*)&filelist, 2);//filename中前两个字符标识filelist
-        for (i = 0; i < 8; i++)
+        while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
         {
-            ch_crc32[i] = pechProto->info.ftp.strNewFileName[i + 2];
-        }
-        StrToHex(ch_crc32, ul2ucCrc32.ucVal, strlen(ch_crc32));
-        crc32_orig = ntohl(ul2ucCrc32.ulVal);
-        
-        sprintf(filepath, "%s%s", pathUpgradeDir, pechProto->info.ftp.strNewFileName);
-        GetFileCrc32(filepath, &crc32_calc);
-        printf_safe("crc32_calc = %x\n", crc32_calc);
-        printf_safe("crc32_orgi = %x\n", crc32_orig);
-        if (crc32_calc == crc32_orig)
-        {
-            taskENTER_CRITICAL();
-            switch (filelist)
+            res = ftp_download_file(&ftpcfg, net_dev);
+            if (res != 1)
             {
-            case FLIST_BIN:
-                sprintf(filepath_rename, "%snew_fw_%08x", pathUpgradeDir, crc32_calc);
-                yaffs_rename(filepath, filepath_rename);
-                break;
-            case FLIST_EVSE_CFG:
-                yaffs_unlink(pathEVSECfg);
-                yaffs_rename(filepath, pathEVSECfg);
-                upflg = '2';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
-                break;
-            case FLIST_PROTO_CFG:
-                yaffs_unlink(pathProtoCfg);
-                yaffs_rename(filepath, pathProtoCfg);
-                upflg = '2';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
-                break;
-            case FLIST_SYS_CFG:
-                yaffs_unlink(pathSysCfg);
-                yaffs_rename(filepath, pathSysCfg);
-                upflg = '2';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
-                break;
-            case FLIST_BLACKLIST_CFG:
-                yaffs_unlink(pathBlackList);
-                yaffs_rename(filepath, pathBlackList);
-                upflg = '2';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
-                break;
-            case FLIST_WHITELIST_CFG:
-                yaffs_unlink(pathWhiteList);
-                yaffs_rename(filepath, pathWhiteList);
-                upflg = '2';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
-                break;
-            case FLIST_AD_BMP:
-                yaffs_unlink(pathADPic);
-                copy_in_a_file(pathADPic, filepath);
-                upflg = '2';
+                upflg = '3';
                 set_upgrade_tmp(pathUpgradeTmp, &upflg);
                 break;
             }
-            taskEXIT_CRITICAL();
-            pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
-            pechProto->info.ftp.ucDownloadStart = 0;
-            cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
-            NVIC_SystemReset();
+            sprintf(filepath, "%s%s", pathDownloadDir, flist.strFilename);
+            GetFileCrc32(filepath, &crc32_calc);
+            if (crc32_calc == flist.ulCrc32)
+            {
+                sprintf(filepath_rename, "%s%s", flist.strLocalpath, flist.strFilename);
+                copy_in_a_file(filepath_rename, filepath);//拷贝下载文件到目的地址
+            }
+            else
+            {
+                upflg = '3';
+                set_upgrade_tmp(pathUpgradeTmp, &upflg);
+                break;
+            }
+            yaffs_unlink(filepath);//删除下载文件
         }
-        else
-        {
-            pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;
-        }
+        yaffs_unlink(pathDownloadList);
+
+        pechProto->info.ftp.ucDownloadStart = 0;
+        cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
+        NVIC_SystemReset();
     }
     else
     {
-        pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;
-    }
-    
-    if (pechProto->info.ftp.ftp_proc.ulFTPReGetCnt >= 2)
-    {
-        pechProto->info.ftp.ftp_proc.ulFTPReGetCnt = 0;
-        xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_UP_FAILD);
-        upflg = '3';
         pechProto->info.ftp.ucDownloadStart = 0;
-        set_upgrade_tmp(pathUpgradeTmp, &upflg);
-        cfg_set_uint8(pathFTPCfg, &(pechProto->info.ftp.ucDownloadStart), "%s", jnFtpDownloadStart);
-        netChangeState(net_dev, NET_STATE_TCP_ON);
+        cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
+        netChangeState(net_dev, NET_STATE_CONNECT);
     }
 }
 static void netStateErr(net_device_t *net_dev)

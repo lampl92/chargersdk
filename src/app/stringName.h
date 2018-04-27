@@ -204,6 +204,7 @@ typedef enum _filelist
 #define pathUpgradeDir      "/nand/upgrade/"
 #define pathDownloadDir     "/nand/download/"
 
+#define pathDownloadList      "/nand/download/flist.json"
 #define pathUpgradeTmp      "/nand/upgrade/upgrade.tmp"
 
 

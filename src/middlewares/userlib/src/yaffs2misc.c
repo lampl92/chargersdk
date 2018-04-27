@@ -12,12 +12,12 @@
  */
 
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <time.h>
-#include <ctype.h>
+//#include <stdio.h>
+//#include <string.h>
+//#include <unistd.h>
+//#include <fcntl.h>
+//#include <time.h>
+//#include <ctype.h>
 
 #include "yaffsfs.h"
 
@@ -26,7 +26,7 @@
 extern int yaffs_trace_mask;
 
 void dumpDir(const char *dname);
-
+//yaffsName: dest   inName:source
 int copy_in_a_file(const char *yaffsName, const char *inName)
 {
     int inh, outh;

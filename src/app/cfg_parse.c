@@ -381,7 +381,7 @@ static const char *select_ctx_from_path(char *path)
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
 {
     int fd;
-    uint8_t *pbuff;
+    char *pbuff;
     uint32_t len;
     uint32_t bw;
     ErrorCode_t errcode;

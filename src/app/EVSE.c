@@ -612,11 +612,13 @@ static void CONInit(void)
 }
 void EVSEinit(void)
 {
-	uint8_t str[17] = "2000000000000002";
-    uint8_t tmp = 2;
+	char str[17] = "3000000000000002";
+    uint8_t tmp = 1;
 	
     pEVSE = EVSECreate();
-    //cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
+//    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
+//    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
+//    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();

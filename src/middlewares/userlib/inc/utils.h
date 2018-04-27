@@ -48,6 +48,6 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen);
 uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);
 
-int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32);
+int GetFileCrc32(char *path, uint32_t *pulCrc32);
 int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
 #endif
