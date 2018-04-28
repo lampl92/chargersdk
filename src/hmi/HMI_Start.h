@@ -34,11 +34,16 @@ WM_HWIN CreateCardInfoDLG(void);
 WM_HWIN CreatechargedoneinfoDLG(void);
 WM_HWIN CreatecharginginfoDLG(void);
 WM_HWIN CreatereadystartDLG(void);
+WM_HWIN CreatePwdTest(void);
+WM_HWIN CreatePwdFull(void);
+WM_HWIN CreatePwdErrorAgain(void);
 WM_HWIN CreatenettimeoutDLG(void);
 WM_HWIN CreatecardconditionnotokDLG(void);
 WM_HWIN CreatepleaseplugDLG(void);
+WM_HWIN CreatePwdInput(void);
 WM_HWIN CreatechargingokDLG(void);
 WM_HWIN CreateplugtimeoutDLG(void);
+WM_HWIN CreateEquipmentFailureNoStartDLG(void);
 //*************
 
 

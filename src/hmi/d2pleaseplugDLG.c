@@ -60,15 +60,25 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             break;
         }
         break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break; 
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
-        if (Tempuserlike.user_like.ucCONID == 0)
+        if (gbsstate != StateWaitBecomeCharge)
         {
-            GUI_MEMDEV_WriteAt(Memdevcardinfopleasepluga, 120, 103);
+            if (Tempuserlike.user_like.ucCONID == 0)
+            {
+                GUI_MEMDEV_WriteAt(Memdevcardinfopleasepluga, 120, 103);
+            }
+            else if (Tempuserlike.user_like.ucCONID == 1)
+            {
+                GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplugb, 120, 103);
+            }   
         }
-        else if (Tempuserlike.user_like.ucCONID == 1)
+        else
         {
-            GUI_MEMDEV_WriteAt(Memdevcardinfopleaseplugb, 120, 103);
+            GUI_MEMDEV_WriteAt(MemdevcardinfoPlugOk, 120, 103);
         }
         break;
     case WM_TIMER:
@@ -92,6 +102,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
             }
+            WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 100);
         }
         break;

@@ -55,6 +55,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPNetTimeout);
             }
+            if (gbsstate == StatePwd)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPStatePwd);
+            }
             if (gbsstate == StateCardconditionNotOk)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPCardconditionNotOk);
@@ -67,8 +71,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPChargingOk);
             }
+            if (gbsstate == StateCantChargeOfDevice)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPStateEquipmentFailureNoStart);
+            }
             WM_RestartTimer(pMsg->Data.v,100);
         }
+        break;
+    case MSG_JUMPStatePwd:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreatePwdInput();
         break;
     case MSG_JUMPNetTimeout:
         GUI_EndDialog(pMsg->hWin, 0);
@@ -85,6 +97,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case MSG_JUMPChargingOk:
         GUI_EndDialog(pMsg->hWin, 0);
         CreatechargingokDLG();
+        break;
+    case MSG_JUMPStateEquipmentFailureNoStart:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreateEquipmentFailureNoStartDLG();
         break;
     default:
         WM_DefaultProc(pMsg);

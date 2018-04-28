@@ -383,7 +383,7 @@ void vTaskEVSERFID(void *pvParameters)
             xEventGroupSync(pCON->status.xHandleEventOrder,
                             defEventBitOrderTmp,
                             defEventBitOrderUpdateOK,
-                            60000);
+                            8000);
             pRFIDDev->state = STATE_RFID_HOLD;
 	        pRFIDDev->status.tHoldStateStartTime = time(NULL);
             break;

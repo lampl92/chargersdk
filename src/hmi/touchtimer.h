@@ -40,14 +40,12 @@
 #define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //创建故障弹窗消息
 #define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //删除故障窗口消息
 #define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //跳到HOME页消息
-#define MSG_READYSTART      (GUI_ID_USER + 0x33)    //跳到卡片信息页消息
+#define MSG_READYSTART      (GUI_ID_USER + 0x33)    //跳到检测充电条件消息
 #define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //跳到充电中页消息
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 #define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
-
-#define MSG_UPDATE           (GUI_ID_USER + 0x40) //更新存储设备
 
 #define MSG_JUMPSELECTPATTERN (GUI_ID_USER + 0x39)  //调到选择充电方式
 #define MSG_JUMPSELECTGUN   (GUI_ID_USER +0x3a)     //跳到选枪页
@@ -58,6 +56,13 @@
 #define MSG_JUMPChargingOk (GUI_ID_USER + 0x3e)//跳到启动成功页
 #define MSG_JUMPStatePlugTimeout (GUI_ID_USER + 0x3f)
 
+#define MSG_UPDATE           (GUI_ID_USER + 0x50) //更新存储设备
+
+#define MSG_JUMPStateEquipmentFailureNoStart (GUI_ID_USER + 0x51)
+#define MSG_JUMPStateTestPwd                 (GUI_ID_USER + 0x52)
+#define MSG_JUMPStatePwdErrorAgain          (GUI_ID_USER + 0x53)
+#define MSG_JUMPStatePwdFull                  (GUI_ID_USER + 0x54)
+#define MSG_JUMPStatePwd                  (GUI_ID_USER + 0x55)
 
 
 

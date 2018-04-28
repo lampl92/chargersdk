@@ -6,7 +6,7 @@
 //测试按键
 int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
-	WM_HWIN hWin;
+    WM_HWIN hWin;
     switch (pDrawItemInfo->Cmd)
     {
     case WIDGET_ITEM_CREATE:
@@ -38,12 +38,12 @@ int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         {
             BUTTON_DrawSkinFlex(pDrawItemInfo); 
         }
-		break;
-	case WIDGET_ITEM_DRAW_TEXT:
-//		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
         return 0;
-	}
-	return 0;
+    }
+    return 0;
 }
 
 //主页上的两个按键
@@ -189,7 +189,7 @@ int SKIN_buttongunAlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
         {
-            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo,gunbuttonax,gunbuttonay);
+            GUI_MEMDEV_WriteAt(Memdevhomegunlookinfo, gunbuttonax, gunbuttonay);
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
         {
@@ -486,7 +486,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         if (pDrawItemInfo->hWin == WM_GetDialogItem(WM_GetParent(pDrawItemInfo->hWin), GUI_ID_USER + 0x01))
         {
             BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
-            if (strcmp("disable",s) == 0)
+            if (strcmp("disable", s) == 0)
             {
                 GUI_MEMDEV_WriteAt(MemdevSelectGunAbottonDisable, selectgunax, selectgunay);
             }
@@ -518,7 +518,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         else if (pDrawItemInfo->hWin == WM_GetDialogItem(WM_GetParent(pDrawItemInfo->hWin), GUI_ID_USER + 0x03))
         {
             BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
-            if (strcmp("disable",s) == 0)
+            if (strcmp("disable", s) == 0)
             {
                 GUI_MEMDEV_WriteAt(MemdevSelectGunBbottonDisable, selectgunbx, selectgunby);
             }
@@ -681,6 +681,47 @@ int SKIN_buttonPleasePlugQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
                 BUTTON_DrawSkinFlex(pDrawItemInfo); 
             }
         }
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
+int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    //case WIDGET_ITEM_DRAW_BACKGROUND:
+    case WIDGET_ITEM_DRAW_BITMAP:
+    //case WIDGET_ITEM_DRAW_TEXT:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_MEMDEV_WriteAt(MemdevcardinfoQuitPress, quitPleasePlugx, quitPleasePlugy);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_MEMDEV_WriteAt(MemdevcardinfoQuit, quitPleasePlugx, quitPleasePlugy);
+        }
+        else
+        {
+            BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }        
         break;
     case WIDGET_ITEM_DRAW_TEXT:
     //		return BUTTON_DrawSkinFlex(pDrawItemInfo);

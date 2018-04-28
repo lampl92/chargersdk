@@ -303,8 +303,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
-            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState \
-                || GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
+            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState))
             {
                 WM_HideWin(Hwininfo);
             }
@@ -429,11 +428,11 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
             if (homegunstate[0] == GunchargingState)
             {
                 pCON = CONGetHandle(0);
-                pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000;
+                pkw = (pCON->status.dChargingPower) / 1000;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
-                pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
-                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
+                pkwpercent = pkw / pCON->info.dRatedPower * 100;
+                PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);  
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           

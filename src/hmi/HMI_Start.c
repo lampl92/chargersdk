@@ -126,6 +126,7 @@ void MainTask(void)
             home = CreateHomeDLG;    
         }        
         home();
+        //CreatePwdInput();
     }
     else
     {

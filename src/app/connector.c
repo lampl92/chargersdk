@@ -178,7 +178,14 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
     //cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
     cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
-    pCON->info.dRatedCurrent = pCON->info.dRatedPower / 220.0;
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        pCON->info.dRatedCurrent = pCON->info.dRatedPower * 1000 / 220.0;
+    }
+    else
+    {
+        pCON->info.dRatedCurrent = pCON->info.dRatedPower / 3.0 * 1000 / 220.0;
+    }
     cfgobj_get_string(jsCfgObj, pCON->info.strQRCode, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnQRCode);
     
     ////EVSE使用CON温度

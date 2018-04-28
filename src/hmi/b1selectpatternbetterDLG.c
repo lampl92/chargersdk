@@ -174,9 +174,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF36_Font, GUI_BLACK, "");
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_BLACK);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg36e, 0xFF08263F, "");
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), 0xFF08263F);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg36e);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetSkin(hItem, SKIN_checkboxfull);

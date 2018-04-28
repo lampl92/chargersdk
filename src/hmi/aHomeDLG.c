@@ -367,6 +367,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 //                    CreatechargedoneinfoDLG();
 //                }
                 WM_HideWin(Hwininfo);
+                break;
             case WM_NOTIFICATION_MOVED_OUT:
                 WM_HideWin(Hwininfo);
                 break;
@@ -412,7 +413,8 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
-            if (!( GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
+            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState\
+                || GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
             {
                 WM_HideWin(Hwininfo);
             }
@@ -549,12 +551,12 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
             if (homegunstate[0] == GunchargingState)
             {
                 pCON = CONGetHandle(0);
-                pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
+                pkw = (pCON->status.dChargingPower)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
-                pkwpercent = pkw / pEVSE->info.dACTempLowerLimits * 100;
+                pkwpercent = pkw / pCON->info.dRatedPower * 100;
                 PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), pkwpercent);               
-                //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 50);               
+                //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), 50);                               
             }           
             if (homegunstate[0] != GBSgunstate[0]) 
             {           
@@ -641,10 +643,10 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
             if (homegunstate[1] == GunchargingState)
             {
                 pCON = CONGetHandle(1);
-                pkw = (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent)/1000;
+                pkw = (pCON->status.dChargingPower)/1000;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), temp_buf);
-                pkwpercent = pkw / 40;
+                pkwpercent = pkw / pCON->info.dRatedPower;
                 PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1), pkw);               
                 //PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1), 77);
             }           
