@@ -120,6 +120,13 @@ typedef enum _filelist
 #define pathcardinforeadystart              "nand/system/cardinforeadystart.dta"
 #define pathcardinfoquit                    "nand/system/cardinfoquit.dta"
 #define pathcardinfoquitpress                    "nand/system/cardinfoquitpress.dta"
+
+#define pathcardinfoEquipmentFailureNoStart     "nand/system/cardinfoEquipmentFailureNoStart.dta"
+#define pathcardinfoPlugOk      "nand/system/cardinfoPlugOk.dta"
+
+#define pathcardinfoPwdLimted  "nand/system/cardinfoPwdLimted.dta"
+#define pathcardinfoPwdError  "nand/system/cardinfoPwdError.dta"
+#define pathcardinfoPwdTest  "nand/system/cardinfoPwdTest.dta"
 //#define pathcardinfoarrears        "nand/system/cardinfoarrears.dta"
 //#define pathcardinfoUnavailable        "nand/system/cardinfoUnavailable.dta"
 //#define pathcardinfostartfail        "nand/system/cardinfostartfail.dta"
@@ -129,7 +136,9 @@ typedef enum _filelist
 //#define pathcardinfoplug        "nand/system/cardinfoplug.dta"
 //#define pathcardinfounregister        "nand/system/cardinfounregister.dta"
 //******************
-
+//密码页
+#define pathPwdPromptPicture    "nand/system/PwdPromptPicture.dta"
+#define pathPwdInputBox         "nand/system/PwdInputBox.dta"
 //主页图片路径
 #define pathhomebacksingle                "/nand/system/homebacksingle.dta"
 #define pathhomegunchargedonesingle                  "/nand/system/homegunchargedonesingle.dta"

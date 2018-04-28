@@ -28,7 +28,7 @@
 #define ID_Timertimeflash               5
 #define ID_Timerinfoflash               6
 #define ID_Timerstateflash              7
-#define gunstateax  294 //枪状态图标x位置
+#define gunstateax  293 //枪状态图标x位置
 //#define gunstateay  79 //枪状态图标y位置
 #define gunstateay  76 //枪状态图标y位置
 

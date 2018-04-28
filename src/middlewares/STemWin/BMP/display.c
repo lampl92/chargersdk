@@ -251,6 +251,12 @@ GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
 GUI_MEMDEV_Handle Memdevcardinforeadystart;
 GUI_MEMDEV_Handle MemdevcardinfoQuit;
 GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
+GUI_MEMDEV_Handle MemdevcardinfoEquipmentFailureNoStart;
+GUI_MEMDEV_Handle MemdevcardinfoPlugOk;
+
+GUI_MEMDEV_Handle MemdevcardinfoPwdLimted;
+GUI_MEMDEV_Handle MemdevcardinfoPwdError;
+GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
 
 //GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
@@ -260,6 +266,10 @@ GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
 //GUI_MEMDEV_Handle Memdevcardinfoget;
 //GUI_MEMDEV_Handle Memdevcardinfoplug;
 //GUI_MEMDEV_Handle Memdevcardinfounregister;
+
+//密码页
+GUI_MEMDEV_Handle MemdevPwdPromptPicture;
+GUI_MEMDEV_Handle MemdevPwdInputBox;
 
 #pragma endregion
 
@@ -614,6 +624,12 @@ void creatememdev()
     Memdevcardinforeadystart = createMemdev(pathcardinforeadystart);
     MemdevcardinfoQuit = createMemdev(pathcardinfoquit);
     MemdevcardinfoQuitPress = createMemdev(pathcardinfoquitpress);
+    
+    MemdevcardinfoEquipmentFailureNoStart = createMemdev(pathcardinfoEquipmentFailureNoStart);
+    MemdevcardinfoPlugOk = createMemdev(pathcardinfoPlugOk);
+    MemdevcardinfoPwdLimted = createMemdev(pathcardinfoPwdLimted);
+    MemdevcardinfoPwdError = createMemdev(pathcardinfoPwdError);
+    MemdevcardinfoPwdTest = createMemdev(pathcardinfoPwdTest);
     //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
 //    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
 //    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);
@@ -622,6 +638,10 @@ void creatememdev()
 //    Memdevcardinfoget = createMemdev(pathcardinfoget);
 //    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
     //Memdevcardinfounregister = createMemdev(pathcardinfounregister);  
+    
+//密码页
+    MemdevPwdPromptPicture = createMemdev(pathPwdPromptPicture);
+    MemdevPwdInputBox = createMemdev(pathPwdInputBox);
 }
 
 

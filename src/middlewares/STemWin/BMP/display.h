@@ -248,6 +248,13 @@ extern GUI_MEMDEV_Handle Memdevcardinfoplugtimeout;
 extern GUI_MEMDEV_Handle Memdevcardinforeadystart;
 extern GUI_MEMDEV_Handle MemdevcardinfoQuit;
 extern GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
+extern GUI_MEMDEV_Handle MemdevcardinfoEquipmentFailureNoStart;
+extern GUI_MEMDEV_Handle MemdevcardinfoPlugOk;
+
+extern GUI_MEMDEV_Handle MemdevcardinfoPwdLimted;
+extern GUI_MEMDEV_Handle MemdevcardinfoPwdError;
+extern GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
+
 //extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //extern GUI_MEMDEV_Handle Memdevcardinfostartfail;
@@ -256,6 +263,10 @@ extern GUI_MEMDEV_Handle MemdevcardinfoQuitPress;
 //extern GUI_MEMDEV_Handle Memdevcardinfoget;
 //extern GUI_MEMDEV_Handle Memdevcardinfoplug;
 //extern GUI_MEMDEV_Handle Memdevcardinfounregister;
+//รÜย๋าณ
+extern GUI_MEMDEV_Handle MemdevPwdPromptPicture;
+extern GUI_MEMDEV_Handle MemdevPwdInputBox;
+
 
 p_inf *readPicInf(char *pfilepath);
 GUI_BITMAP readDtafile(char *pathfile);
