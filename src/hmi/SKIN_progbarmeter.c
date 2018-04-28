@@ -87,7 +87,7 @@ int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     	{
         	GUI_MEMDEV_WriteAt(MemdevhomegunBcharging, x, y);
     	}
-    	else if (x == 294)
+    	else if (x == 293)
     	{
         	GUI_MEMDEV_WriteAt(MemdevhomegunAcharging, x, y);
     	}

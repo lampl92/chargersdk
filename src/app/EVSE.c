@@ -613,7 +613,7 @@ static void CONInit(void)
 void EVSEinit(void)
 {
 	char str[17] = "3000000000000002";
-    uint8_t tmp = 2;
+    uint8_t tmp = 1;
 	
     pEVSE = EVSECreate();
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
