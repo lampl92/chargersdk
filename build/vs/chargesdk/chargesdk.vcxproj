@@ -329,6 +329,11 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
+    <ClCompile Include="EquipmentFailureNoStart.c" />
+    <ClCompile Include="PwdError.c" />
+    <ClCompile Include="PwdInput.c" />
+    <ClCompile Include="PwdLimted.c" />
+    <ClCompile Include="PwdTest.c" />
     <ClCompile Include="startup_chargersdk.c" />
     <ClCompile Include="start_up.c" />
     <ClCompile Include="system_chargersdk.c" />

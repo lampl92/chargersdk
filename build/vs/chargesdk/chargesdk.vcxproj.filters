@@ -1935,6 +1935,21 @@
     <ClCompile Include="start_up.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="PwdError.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="PwdInput.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="PwdLimted.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="PwdTest.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentFailureNoStart.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
