@@ -531,6 +531,8 @@ void creatememdev()
         MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle);
         MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle);
         MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle); 
+        
+        Memdevcardinfopleasepluga = createMemdev(pathcardinfopleaseplug);
     }
     else
     {
@@ -578,6 +580,9 @@ void creatememdev()
 
         Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
         Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
+        
+        Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga);
+        Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb);
     }
     
     Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
@@ -618,8 +623,7 @@ void creatememdev()
     Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok);
     Memdevcardinfochargingok = createMemdev(pathcardinfochargingok);
     Memdevcardinfonettimeout = createMemdev(pathcardinfonettimeout);
-    Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga);
-    Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb);
+
     Memdevcardinfoplugtimeout = createMemdev(pathcardinfoplugtimeout);
     Memdevcardinforeadystart = createMemdev(pathcardinforeadystart);
     MemdevcardinfoQuit = createMemdev(pathcardinfoquit);

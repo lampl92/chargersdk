@@ -114,6 +114,7 @@ typedef enum _filelist
 #define pathcardinfocardconditionnotok              "nand/system/cardinfocardconditionnotok.dta"
 #define pathcardinfochargingok              "nand/system/cardinfochargingok.dta"
 #define pathcardinfonettimeout              "nand/system/cardinfonettimeout.dta"
+#define pathcardinfopleaseplug              "nand/system/cardinfopleaseplug.dta"
 #define pathcardinfopleasepluga              "nand/system/cardinfopleasepluga.dta"
 #define pathcardinfopleaseplugb              "nand/system/cardinfopleaseplugb.dta"
 #define pathcardinfoplugtimeout                 "nand/system/cardinfoplugtimeout.dta"
