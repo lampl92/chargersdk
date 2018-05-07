@@ -17,7 +17,7 @@
 #define defLineN        3
 
 
-typedef ErrorCode_t(*pLine_ft)(void *pvLine, uint8_t ucCONID, uint8_t ucLineID);
+typedef ErrorCode_t(*pLine_ft)(void *pvLine, void *pvCON, uint8_t ucLineID);
 
 
 typedef struct _Line

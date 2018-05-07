@@ -9,6 +9,7 @@
 #include "evse_globals.h"
 #include "electric_energy_meter.h"
 #include "user_app.h"
+#include "interface.h"
 #include <string.h>
 
 //#define DEBUG_DIAG_DUMMY_METER
@@ -23,44 +24,54 @@
  * 
  * @return ErrorCode
  */
-static ErrorCode_t GetLineVolt(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
+static ErrorCode_t GetLineVolt(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     //如果电表发生故障, 例如通信故障, errcode 返回 ERR_CON_METER_FAULT; 其他情况返回ERR_NO
     Line_t *pLine;
+    CON_t *pCON;
     ErrorCode_t errcode;
     
     pLine = (Line_t *)pvLine;
+    pCON = (CON_t *)pvCON;
     errcode = ERR_NO;
 #ifdef DEBUG_DIAG_DUMMY_METER
     switch (ucLineID)
     {
     case defLineA:
-        pLine->status.dVolt = 220.1+ucCONID;
+        pLine->status.dVolt = 220.1 + pCON->info.ucCONID;
         break;
     case defLineB:
-        pLine->status.dVolt = 220.2+ucCONID;
+        pLine->status.dVolt = 220.2 + pCON->info.ucCONID;
         break;
     case defLineC:
-        pLine->status.dVolt = 220.3+ucCONID;
+        pLine->status.dVolt = 220.3 + pCON->info.ucCONID;
         break;
     default:
         break;
     }  
 #else
-    switch (ucLineID)
+    if (pCON->info.ucPhaseLine == 1)
     {
-    case defLineA:
-        pLine->status.dVolt = Get_Electricity_meter_massage_voltage(ucCONID + 1, voltage_a);
-        break;
-    case defLineB:
-        pLine->status.dVolt = Get_Electricity_meter_massage_voltage(ucCONID + 1, voltage_b);
-        break;
-    case defLineC:
-        pLine->status.dVolt = Get_Electricity_meter_massage_voltage(ucCONID + 1, voltage_c);
-        break;
-    default:
-        break;
+        pLine->status.dVolt = Get_meter_DDSD1352_voltage(pCON->info.ucCONID + 1);
     }
+    else
+    {
+        switch (ucLineID)
+        {
+        case defLineA:
+            pLine->status.dVolt = Get_meter_DTSF1352_voltage(pCON->info.ucCONID + 1, voltage_a);
+            break;
+        case defLineB:
+            pLine->status.dVolt = Get_meter_DTSF1352_voltage(pCON->info.ucCONID + 1, voltage_b);
+            break;
+        case defLineC:
+            pLine->status.dVolt = Get_meter_DTSF1352_voltage(pCON->info.ucCONID + 1, voltage_c);
+            break;
+        default:
+            break;
+        } 
+    }
+    
 #endif
     return errcode;
 }
@@ -73,43 +84,52 @@ static ErrorCode_t GetLineVolt(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
  * 
  * @return ErrorCode
  */
-static ErrorCode_t GetLineCurr(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
+static ErrorCode_t GetLineCurr(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     Line_t *pLine;
+    CON_t *pCON;
     ErrorCode_t errcode;
     
     pLine = (Line_t *)pvLine;
+    pCON = (CON_t *)pvCON;
     errcode = ERR_NO;
     
 #ifdef DEBUG_DIAG_DUMMY_METER
     switch (ucLineID)
     {
     case defLineA:
-        pLine->status.dCurr = 60.1 + ucCONID;
+        pLine->status.dCurr = 60.1 + pCON->info.ucCONID;
         break;
     case defLineB:
-        pLine->status.dCurr = 60.2 + ucCONID;
+        pLine->status.dCurr = 60.2 + pCON->info.ucCONID;
         break;
     case defLineC:
-        pLine->status.dCurr = 60.3 + ucCONID;
+        pLine->status.dCurr = 60.3 + pCON->info.ucCONID;
         break;
     default:
         break;
     }  
 #else
-    switch (ucLineID)
+    if (pCON->info.ucPhaseLine == 1)
     {
-    case defLineA:
-        pLine->status.dCurr = Get_Electricity_meter_massage_current(ucCONID + 1, current_a);
-        break;
-    case defLineB:
-        pLine->status.dCurr = Get_Electricity_meter_massage_current(ucCONID + 1, current_b);
-        break;
-    case defLineC:
-        pLine->status.dCurr = Get_Electricity_meter_massage_current(ucCONID + 1, current_c);
-        break;
-    default:
-        break;
+        pLine->status.dCurr = Get_meter_DDSD1352_current(pCON->info.ucCONID + 1);
+    }
+    else
+    {
+        switch (ucLineID)
+        {
+        case defLineA:
+            pLine->status.dCurr = Get_meter_DTSF1352_current(pCON->info.ucCONID + 1, current_a);
+            break;
+        case defLineB:
+            pLine->status.dCurr = Get_meter_DTSF1352_current(pCON->info.ucCONID + 1, current_b);
+            break;
+        case defLineC:
+            pLine->status.dCurr = Get_meter_DTSF1352_current(pCON->info.ucCONID + 1, current_c);
+            break;
+        default:
+            break;
+        }
     }
 #endif
     return errcode;
@@ -123,23 +143,32 @@ static ErrorCode_t GetLineCurr(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
  * 
  * @return ErrorCode
  */
-static ErrorCode_t GetLineFreq(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
+static ErrorCode_t GetLineFreq(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     Line_t *pLine;
+    CON_t *pCON;
     ErrorCode_t errcode;
     
     pLine = (Line_t *)pvLine;
+    pCON = (CON_t *)pvCON;
     errcode = ERR_NO;
     
-    switch (ucLineID)
+    if (pCON->info.ucPhaseLine == 1)
     {
-    case defLineA:
-    case defLineB:
-    case defLineC:
-        pLine->status.dFreq = 50;
-        break;
-    default:
-        break;
+        pLine->status.dCurr = Get_meter_DDSD1352_frequency(pCON->info.ucCONID + 1);
+    }
+    else
+    {
+        switch (ucLineID)
+        {
+        case defLineA:
+        case defLineB:
+        case defLineC:
+            pLine->status.dFreq = 50;
+            break;
+        default:
+            break;
+        }
     }
     return errcode;
 }
@@ -152,7 +181,7 @@ static ErrorCode_t GetLineFreq(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
  * 
  * @return ErrorCode
  */
-static ErrorCode_t GetLinePower(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
+static ErrorCode_t GetLinePower(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     Line_t *pLine;
     ErrorCode_t errcode;
@@ -182,9 +211,10 @@ static ErrorCode_t GetLinePower(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
  * 
  * @return ErrorCode
  */
-static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
+static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     Line_t *pLine;
+    CON_t *pCON;
     uint8_t a_channel;
     uint8_t b_channel;
     uint8_t c_channel;
@@ -192,9 +222,10 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
     ErrorCode_t errcode;
     
     pLine = (Line_t *)pvLine;
+    pCON = (CON_t *)pvCON;
     errcode = ERR_NO;
 #ifdef DEBUG_DIAG_DUMMY_TEMP
-    if (ucCONID == 0)
+    if (pCON->info.ucCONID == 0)
     {
         a_channel = 23;
         b_channel = 23;
@@ -209,7 +240,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
         }
         
     }
-    else if (ucCONID == 1)
+    else if (pCON->info.ucCONID == 1)
     {
         a_channel = 24;
         b_channel = 24;
@@ -234,7 +265,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
         break;
     }
 #else
-    if (ucCONID == 0)
+    if (pCON->info.ucCONID == 0)
     {
         a_channel = TEMP_L_OUT;
         b_channel = TEMP_L_OUT;
@@ -249,7 +280,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, uint8_t ucCONID, uint8_t ucLineID)
         }
         
     }
-    else if (ucCONID == 1)
+    else if (pCON->info.ucCONID == 1)
     {
         a_channel = TEMP_N_OUT;
         b_channel = TEMP_N_OUT;

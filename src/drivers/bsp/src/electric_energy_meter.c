@@ -256,8 +256,8 @@ void Get_electricity_meter_massage(uint8_t add, uint8_t cmd, uint16_t massage, u
     vTaskDelay(30);
     electricity_meter_analysis(add);
 }
-#ifdef DTSF1352
-double Get_Electricity_meter_massage_energy(uint8_t add)
+
+double Get_meter_DTSF1352_energy(uint8_t add)
 {
     double electricity_data;
     if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
@@ -277,7 +277,7 @@ double Get_Electricity_meter_massage_energy(uint8_t add)
 
     return electricity_data;
 }
-double Get_Electricity_meter_massage_current(uint8_t add, uint8_t massage)
+double Get_meter_DTSF1352_current(uint8_t add, uint8_t massage)
 {
     double electricity_data;
     if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
@@ -294,7 +294,7 @@ double Get_Electricity_meter_massage_current(uint8_t add, uint8_t massage)
     return electricity_data;
 }
 
-double Get_Electricity_meter_massage_voltage(uint8_t add, uint8_t massage)
+double Get_meter_DTSF1352_voltage(uint8_t add, uint8_t massage)
 {
     double electricity_data;
     if (xSemaphoreTake(xMeterMutex, 1000) == pdPASS)
@@ -311,8 +311,7 @@ double Get_Electricity_meter_massage_voltage(uint8_t add, uint8_t massage)
     return electricity_data;
 }
 
-#else
-double Get_Electricity_meter_massage_energy(uint8_t add)
+double Get_meter_DDSD1352_energy(uint8_t add)
 {
     double electricity_data;
     Get_electricity_meter_massage(add, read, electric_energy_h, 1);
@@ -322,34 +321,32 @@ double Get_Electricity_meter_massage_energy(uint8_t add)
     + Electricity_meter[add].massage.massage_electric_energy_l ) / 100.0;
     return electricity_data;
 }
-double Get_Electricity_meter_massage_current(uint8_t add)
+double Get_meter_DDSD1352_current(uint8_t add)
 {
     double electricity_data;
     Get_electricity_meter_massage(add, read, current, 1);
     electricity_data = Electricity_meter[add].massage.massage_ia / 100;
     return electricity_data;
 }
-double Get_Electricity_meter_massage_voltage(uint8_t add)
+double Get_meter_DDSD1352_voltage(uint8_t add)
 {
     double electricity_data;
     Get_electricity_meter_massage(add, read, voltage, 1);
     electricity_data = Electricity_meter[add].massage.massage_va / 10;
     return electricity_data;
 }
-double Get_Electricity_meter_massage_power(uint8_t add)
+double Get_meter_DDSD1352_power(uint8_t add)
 {
     double electricity_data;
     Get_electricity_meter_massage(add, read, power, 1);
     electricity_data = Electricity_meter[add].massage.massage_power / 1000;
     return electricity_data;
 }
-double Get_Electricity_meter_massage_frequency(uint8_t add)
+double Get_meter_DDSD1352_frequency(uint8_t add)
 {
     double electricity_data;
     Get_electricity_meter_massage(add, read, frequency, 1);
     electricity_data = Electricity_meter[add].massage.massage_frequency / 100;
     return electricity_data;
 }
-#endif
-
 /************************电表RS485END****************/
