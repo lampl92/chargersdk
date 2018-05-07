@@ -257,5 +257,5 @@ uint8_t   pwm_samp_timer, pwm_samp_flag,pwm_samp_timer_cp2, pwm_samp_flag_cp2;
 extern samp Sys_samp;
 
 double curr2duty(double rate_curr);
-void pwr2pwm(double rate_power, uint8_t con_id);
+void curr2pwm(double rate_curr, uint8_t con_id);
 #endif /* USER_APP_H_INCLUDED */

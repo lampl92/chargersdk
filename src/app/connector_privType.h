@@ -68,6 +68,7 @@ typedef struct _CONInfo
 {
     uint8_t ucCONID;                // 枪号
     uint8_t ucCONType;
+    uint8_t ucPhaseLine;            //1：单项 3：三相
     uint8_t ucSocketType;
     double dVolatageUpperLimits;
     double dVolatageLowerLimits;

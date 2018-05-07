@@ -352,6 +352,7 @@ void DiagCurrentError(CON_t *pCON)
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 break;
             case CURR_UPPER:
+                pCON->status.SetCPSwitch(pCON, SWITCH_ON);//过流可能是由于修改的额定电流，先按照修改的额定电流设定一次CP
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Dummy",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,

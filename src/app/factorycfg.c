@@ -22,6 +22,7 @@ const char *strEVSECfg =
         {\n \
             \"ID\":0,\n \
             \"Type\":2,\n \
+            \"PhaseLine\":1,\n \
             \"SocketType\":67,\n \
             \"VolatageUpperLimits\":260,\n \
             \"VolatageLowerLimits\":176,\n \
@@ -36,6 +37,7 @@ const char *strEVSECfg =
         {\n \
             \"ID\":1,\n \
             \"Type\":2,\n \
+            \"PhaseLine\":1,\n \
             \"SocketType\":67,\n \
             \"VolatageUpperLimits\":260,\n \
             \"VolatageLowerLimits\":176,\n \

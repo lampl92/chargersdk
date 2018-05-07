@@ -169,6 +169,7 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     }
     
     cfgobj_get_uint8(jsCfgObj, &pCON->info.ucCONType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnType);
+    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucPhaseLine, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnPhaseLine);
     cfgobj_get_uint8(jsCfgObj, &pCON->info.ucSocketType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketType);
     cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageUpperLimits);
     cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageLowerLimits);
@@ -178,11 +179,11 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
     //cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
     cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
-    if (pEVSE->info.ucTotalCON == 1)
+    if (pCON->info.ucPhaseLine == 1)
     {
         pCON->info.dRatedCurrent = pCON->info.dRatedPower * 1000 / 220.0;
     }
-    else
+    else// if(pCON->info.ucPhaseLine == 3)
     {
         pCON->info.dRatedCurrent = pCON->info.dRatedPower / 3.0 * 1000 / 220.0;
     }
@@ -412,7 +413,7 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_ON)
         {
-            pwr2pwm(pCON->info.dRatedPower, ucCONID);
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else if (cmd == SWITCH_OFF)
         {
@@ -423,7 +424,7 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_ON)
         {
-            pwr2pwm(pCON->info.dRatedPower, ucCONID);
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else
         {
@@ -575,7 +576,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
         return errcode;
     }
     /*********************/
-    pwr2pwm(pCON->info.dRatedPower * (ucLoadPercent / 100.0), ucCONID);
+    curr2pwm(pCON->info.dRatedCurrent * (ucLoadPercent / 100.0), ucCONID);
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;

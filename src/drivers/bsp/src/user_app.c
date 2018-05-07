@@ -508,7 +508,7 @@ double curr2duty(double rate_curr)
     return duty;
 }
 
-static void curr2pwm(double rate_curr, uint8_t con_id)
+void curr2pwm(double rate_curr, uint8_t con_id)
 {
     uint32_t compare;
     double duty;
@@ -524,11 +524,3 @@ static void curr2pwm(double rate_curr, uint8_t con_id)
         TIM_SetTIM4Compare1(compare);
     }
 }
-
-void pwr2pwm(double rate_power, uint8_t con_id)
-{
-    double rate_curr;
-    rate_curr = rate_power * 1000 / 220.0;
-    curr2pwm(rate_curr, con_id);
-}
-

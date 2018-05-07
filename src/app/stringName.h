@@ -241,6 +241,7 @@ typedef enum _filelist
 /*CONArray Item*/
 #define jnID                        "ID"
 #define jnType                      "Type"
+#define jnPhaseLine                 "PhaseLine"
 #define jnSocketType                "SocketType"
 #define jnVolatageUpperLimits       "VolatageUpperLimits"
 #define jnVolatageLowerLimits       "VolatageLowerLimits"
