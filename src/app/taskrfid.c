@@ -155,7 +155,15 @@ static int canChargeOrNot()
             pRFIDDev->state = STATE_RFID_TIMEOUT;
             break;
         }
-        errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
+        {
+            errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+        }
+        else //如果没有联网，则直接返回超时。
+        {
+            pRFIDDev->state = STATE_RFID_TIMEOUT;
+            break;
+        }
         vTaskDelay(100);
     }
 #if (EVSE_USING_GUI==0)
