@@ -461,7 +461,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     static uint32_t cp1_err_cont;
     static uint32_t cp2_err_cont;
     uint32_t *pCP_err_cont;
-    __IO uint32_t *pCCR1;
+    __IO uint32_t *pCCRx;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
@@ -475,20 +475,20 @@ static ErrorCode_t GetCPState(void *pvCON)
     if (ucCONID == 0)
     {
         pCP_err_cont = &cp1_err_cont;
-        pCCR1 = &(TIM2->CCR1);
+        pCCRx = &(TIM2->CCR1);
         pCON->status.dCPVolt = Sys_samp.DC.CP1; 
     }
     else if (ucCONID == 1)
     {
         pCP_err_cont = &cp2_err_cont;
-        pCCR1 = &(TIM4->CCR1);
+        pCCRx = &(TIM4->CCR2);
 
         pCON->status.dCPVolt = Sys_samp.DC.CP2; 
     }
     
     if ((pCON->status.dCPVolt < 12.8f) && (pCON->status.dCPVolt > 11.2f))
     {
-        if (*pCCR1 != TIMER_MAX)
+        if (*pCCRx != TIMER_MAX)
         {
             tmpCPState = CP_12V_PWM;
             *pCP_err_cont = 0;
@@ -502,7 +502,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.2f))
     {
-        if (*pCCR1 != TIMER_MAX)
+        if (*pCCRx != TIMER_MAX)
         {
             tmpCPState = CP_9V_PWM;
             *pCP_err_cont = 0;
@@ -516,7 +516,7 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else if((pCON->status.dCPVolt < 6.8f) && (pCON->status.dCPVolt > 5.2f))
     {
-        if (*pCCR1 != TIMER_MAX)
+        if (*pCCRx != TIMER_MAX)
         {
             tmpCPState = CP_6V_PWM;
             *pCP_err_cont = 0;
