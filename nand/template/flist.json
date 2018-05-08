@@ -1,0 +1,26 @@
+    {
+    "ftp":{
+        "server":"ftp.saas.zc3u.com",
+        "port":21,
+        "user":"dongliyu",
+        "pass":"UBHl7Vgp"
+    },
+    "flist":[
+        {
+            "filename": "new_fw_162ba7ef",
+            "size_byte":123,
+            "crc32":"162ba7ef",
+            "localpath":"/nand/upgrade/",
+            "ftpdir":"2018.04.27/upgrade",
+            "status":1 
+        },
+        {
+            "filename": "cardinfoback.dta",
+            "size_byte":123,
+            "crc32":"38A8ED99",
+            "localpath":"/nand/system/",
+            "ftpdir":"2018.04.27/system",
+            "status":1 
+        }
+    ]
+}
