@@ -222,7 +222,7 @@ void TIM_SetTIM4Compare1(unsigned int compare)
     else
     {
         flat_pwm_change_cp2 = 1;
-        TIM4->CCR1 = compare;
+        TIM4->CCR2 = compare;
         pwm4 = compare;
     }
 }
