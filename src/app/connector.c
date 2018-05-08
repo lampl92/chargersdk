@@ -236,7 +236,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
 #else
     for (i = 0; i < pCON->info.ucPhaseLine; i++)
     {
-        errcode = pCON->line[i].GetVolt(&(pCON->line[i]), ucCONID, i);
+        errcode = pCON->line[i].GetVolt(&(pCON->line[i]), pCON, i);
         if (pCON->line[i].status.dVolt > tmpVolt)
         {
             tmpVolt = pCON->line[i].status.dVolt;
@@ -277,7 +277,7 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
 #else
     for (i = 0; i < pCON->info.ucPhaseLine; i++)
     {
-        errcode = pCON->line[i].GetCurr(&(pCON->line[i]), ucCONID, i);
+        errcode = pCON->line[i].GetCurr(&(pCON->line[i]), pCON, i);
         if (pCON->line[i].status.dCurr > tmpCurr)
         {
             tmpCurr = pCON->line[i].status.dCurr;
@@ -318,7 +318,7 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #else
     for (i = 0; i < pCON->info.ucPhaseLine; i++)
     {
-        errcode = pCON->line[i].GetFreq(&(pCON->line[i]), ucCONID, i);
+        errcode = pCON->line[i].GetFreq(&(pCON->line[i]), pCON, i);
         if (pCON->line[i].status.dFreq > tmpFreq)
         {
             tmpFreq = pCON->line[i].status.dFreq;
@@ -352,7 +352,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 #else
     for (i = 0; i < pCON->info.ucPhaseLine; i++)
     {
-        errcode = pCON->line[i].GetPower(&(pCON->line[i]), ucCONID, i);
+        errcode = pCON->line[i].GetPower(&(pCON->line[i]), pCON, i);
         tmpPower += pCON->line[i].status.dPower;//求和
     }
 #endif

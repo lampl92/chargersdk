@@ -616,7 +616,10 @@ void EVSEinit(void)
     uint8_t tmp = 2;
 	
     pEVSE = EVSECreate();
-//    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
+    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON); 
+    tmp = 3;
+    cfg_set_uint8(pathEVSECfg, &tmp, "%s:0.%s", jnCONArray, jnPhaseLine); 
+    cfg_set_uint8(pathEVSECfg, &tmp, "%s:1.%s", jnCONArray, jnPhaseLine); 
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
 //    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
