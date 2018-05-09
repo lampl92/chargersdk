@@ -9,6 +9,7 @@
 #include "BUTTON.h"
 #include "cfg_parse.h"
 #include "touchtimer.h"
+#include "HMI_Start.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -249,7 +250,7 @@ void changecase(u8 change_flag, BUTTON_DATA *buttondata)
     u16 i;
     char	   	NumToStr;
     char buffer[5];
-    if (keypad_dev.LowerCase)		//小写,按钮修改为小写
+    if (change_flag)		//小写,按钮修改为小写
     {
     	//更改按钮的字符
         for (i = 0; i < 27; i++)
@@ -1444,34 +1445,35 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
         }
         else
         {
-            pCont = CONGetHandle(0);
-            if (pCont->state == STATE_CON_CHARGING)
-            {
-                CreateChargingPage();
-            }
-            else
-            {
-                if (pCont->state == statelog)
-                {
-                    CreateHomePage();
-                }
-                else
-                {
-                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
-                        defEventBitOrderUseless,
-                        pdTRUE,
-                        pdTRUE,
-                        10000);//要比remote中的order超时（60s）长
-                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
-                    {
-                        CreateHomePage();
-                    }
-                    else
-                    {
-                        CreateHomePage();
-                    }
-                }
-            }
+            home();
+//            pCont = CONGetHandle(0);
+//            if (pCont->state == STATE_CON_CHARGING)
+//            {
+//                CreateChargingPage();
+//            }
+//            else
+//            {
+//                if (pCont->state == statelog)
+//                {
+//                    CreateHomePage();
+//                }
+//                else
+//                {
+//                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
+//                        defEventBitOrderUseless,
+//                        pdTRUE,
+//                        pdTRUE,
+//                        10000);//要比remote中的order超时（60s）长
+//                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
+//                    {
+//                        CreateHomePage();
+//                    }
+//                    else
+//                    {
+//                        CreateHomePage();
+//                    }
+//                }
+//            }
         }
 //        (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
         break;
