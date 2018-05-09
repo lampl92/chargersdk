@@ -22,6 +22,8 @@
 #define ID_PROGBAR_1 (GUI_ID_USER + 0x14)
 #define  ID_TEXT_6  (GUI_ID_USER + 0x15)
 #define  ID_TEXT_7  (GUI_ID_USER + 0x16)
+#define ID_BUTTON_4 (GUI_ID_USER + 0x16)//进入管理员界面第一个按钮
+#define ID_BUTTON_5 (GUI_ID_USER + 0x17)//进入管理员界面第二个按钮
 
 //枪状态，信号状态，价格状态
 #define ID_Timergunastateflash           1
@@ -31,6 +33,7 @@
 #define ID_Timertimeflash               5
 #define ID_Timerinfoflash               6
 #define ID_Timerstateflash              7
+#define ID_TimerGotoSetting             8
 #define gunstateax  112 //枪A状态图标x位置
 #define gunstateay  79 //枪A状态图标y位置
 #define gunstatebx  456 //枪B状态图标x位置
@@ -50,6 +53,10 @@ static WM_HWIN      Hwinhelp;
 static WM_HTIMER    _timerstateflash;//后台状态
 static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
+static WM_HTIMER _timerGotoSetting;//进入管理员界面定时器
+
+static int gotoSettingFlag = 0;
+
 int SignalIntensity;//信号强度
 int PreSignalIntensity;//之前的信号强度
 static int gunstateOnce;//防止界面启动按钮和枪状态空白,所以在WM_PAINT消息里进行一次刷新图片
@@ -66,6 +73,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton1", ID_BUTTON_4, 0, 0, 330, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton2", ID_BUTTON_5, 690, 50, 110, 50, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
@@ -302,6 +311,10 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetSkin(hItem, SKIN_buttonhelp);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
+        BUTTON_SetSkin(hItem, SKIN_buttontest);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_5);
+        BUTTON_SetSkin(hItem, SKIN_buttontest);
         break;
     case MSG_UPDATE:
         WM_InvalidateWindow(pMsg->hWin);
@@ -397,6 +410,37 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 break;
             }
             break;
+        case ID_BUTTON_4: //进入设置界面第一个按钮
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:        
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                if (gotoSettingFlag == 0)
+                {
+                    gotoSettingFlag = 1;
+                    WM_RestartTimer(_timerGotoSetting, 5000);   
+                }                
+                break;
+            case WM_NOTIFICATION_MOVED_OUT:
+                break;
+            }
+            break;
+        case ID_BUTTON_5: //进入设置界面第二个按钮
+            switch (NCode) {
+            case WM_NOTIFICATION_CLICKED:             
+                break;
+            case WM_NOTIFICATION_RELEASED:
+                if (gotoSettingFlag == 1)
+                {
+                    gotoSettingFlag = 0;
+                    GUI_EndDialog(pMsg->hWin, 0);
+                    Keypad_GetValue(LOGIN_PASSWD, " ");
+                }
+                break;
+            case WM_NOTIFICATION_MOVED_OUT:
+                break;
+            }
+            break;
         }
         break;
     case WM_TIMER:
@@ -405,6 +449,10 @@ static void _cbDialog(WM_MESSAGE * pMsg)
            //在WM_PAINT消息里的MEMdev，只有无效化窗口才会被更新
             WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             WM_RestartTimer(pMsg->Data.v, 1000);
+        }
+        else if (pMsg->Data.v == _timerGotoSetting)
+        {
+            gotoSettingFlag = 0;
         }
         else if (pMsg->Data.v == _timerpriceflash)
         {
@@ -706,6 +754,7 @@ WM_HWIN CreateHomeDLG(void) {
     _timersignalstateflash = WM_CreateTimer(hWin, ID_Timersignalstateflash, 10, 0);
     _timerpriceflash = WM_CreateTimer(hWin, ID_Timerpriceflash, 10, 0);
     _timertimeflash = WM_CreateTimer(hWin, ID_Timertimeflash, 10, 0);
+    _timerGotoSetting = WM_CreateTimer(hWin, ID_TimerGotoSetting, 20, 0);
     
     _timergunastateflash = WM_CreateTimer(Hwingunastate, ID_Timergunastateflash, 10, 0);
     _timergunbstateflash = WM_CreateTimer(Hwingunbstate, ID_Timergunbstateflash, 10, 0);
