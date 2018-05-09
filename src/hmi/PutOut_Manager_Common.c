@@ -25,6 +25,7 @@
 */
 // USER START (Optionally insert additional includes)
 #include "touchtimer.h"
+#include "HMI_Start.h"
 // USER END
 
 #include "DIALOG.h"
@@ -50,7 +51,6 @@
 // USER END
 WM_HWIN _hWinManagerCommon;
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
-static uint8_t statelog = 0;
 volatile static int page = 0;
 /*********************************************************************
 *
@@ -105,7 +105,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         CaliDone_Analy(pMsg->hWin);
         break;
     case WM_INIT_DIALOG:
-        statelog = pCont->state;
         //
         // Initialization of 'Framewin'
         //
@@ -171,86 +170,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     WM_SendMessageNoPara(_hWinManagerTerminate, MSG_DELETEMANAGERWIN);
                     managerLevel = 1;
                 }
-//                WM_SendMessageNoPara(_hWinManagerCommon, MSG_DELERRWIN);
-//                
-//                GUI_EndDialog(_hWinManagerCommon, 0);
                 _deleteWin(_hWinManagerCommon);
-                
-                if (pCont->state == STATE_CON_CHARGING)
-                {
-                    CreateChargingPage();
-                }
-                else
-                {
-                    if (pCont->state == statelog)
-                    {
-                        CreateHomePage();   
-                    }
-                    else
-                    {
-                        uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
-                            defEventBitOrderUseless,
-                            pdTRUE,
-                            pdTRUE,
-                            10000);//要比remote中的order超时（60s）长
-                        if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
-                        {
-                            CreateHomePage();
-                        }
-                        else
-                        {
-                            CreateHomePage();
-                        }
-                    }
-                }
-//                if (pCont->state == statelog)
-//                {
-//                    if (pCont->state == STATE_CON_CHARGING)
-//                    {
-//                        CreateChargingPage();
-//                    }
-//                    else
-//                    {
-//                        CreateHomePage();//？
-//                    }                    
-//                }
-//                else
-//                {
-//                    if (statelog == STATE_CON_CHARGING)
-//                    {
-//                        xEventGroupWaitBits(xHandleEventHMI,
-//                            defEventBitHMI_ChargeReqDispDone,
-//                            pdTRUE,
-//                            pdTRUE,
-//                            0);
-//
-//                        bitclr(winInitDone, 0);
-//                        _hWinCharging = 0;
-//                        CreateChargeDonePage();
-//                        bitset(winInitDone, 7);
-//                    }
-//                    else
-//                    {
-//                        CreateHomePage();//？
-//                    }
-//                }
-//                WM_ShowWindow(cur_win);  
-//                //增加跳出管理员时界面选择，暂时只添加充电中和首页
-//                if (pCont->state == STATE_CON_STOPCHARGE || 
-//                    pCont->state == STATE_CON_IDLE ||
-//                    pCont->state == STATE_CON_RETURN)
-//                {
-//                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
-//                        defEventBitOrderMakeFinish,
-//                        pdFALSE,
-//                        pdTRUE,
-//                        0);
-//                    if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
-//                    {            
-//                    }
-//                    CreateHomePage();
-//                }
-
+                home();              
                 break;
             }
             break;
