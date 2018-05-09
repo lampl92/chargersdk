@@ -9,7 +9,8 @@
 #include <string.h>
 #include "RFIDReader_mt626.h"
 #include "bsp_uart.h"
-
+#include "retarget.h"
+#include "evse_debug.h"
 
 /** 移植说明：根据系统实现MT626DelayMS，MT626Write ，MT626Read 三个函数*/
 
@@ -122,6 +123,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pulRecvdLe
     uint8_t *pucRecvBuffer;
     uint8_t ucRecvdBCC, ucCalcBCC;
     MT_RESULT res;
+    int i;
 
     ucRecvdBCC = 0;
 
@@ -132,7 +134,13 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pulRecvdLe
     {
         return MT_COM_FAIL;
     }
-
+    printf_protolog("len = %d\n", *pulRecvdLen);
+    for (i = 0; i < *pulRecvdLen; i++)
+    {
+        printf_protolog("%02x ", pucRecvBuffer[i]);
+        
+    }
+    printf_protolog("\n");
     switch(ucSendID)
     {
     case MT626_FIND_CMD:                        //#0  寻卡
