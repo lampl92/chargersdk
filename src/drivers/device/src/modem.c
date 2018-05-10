@@ -1854,9 +1854,17 @@ DR_MODEM_e modem_set_FTPGET(DevModem_t *pModem)
 DR_MODEM_e modem_get_info(DevModem_t *pModem)
 {
     DR_MODEM_e ret;
+    int timeoutMax = 20;
+    int timeout = 0;
 
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         if (xSysconf.xModule.use_gprs == 2)
         {
             ret = M26_CPIN(pModem);
@@ -1895,6 +1903,12 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
 //    while(pModem->status.eGprsReg == REG_SEARCH );
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = modem_CSQ(pModem);
         if(ret != DR_MODEM_OK)
         {
