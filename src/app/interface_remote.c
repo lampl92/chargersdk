@@ -476,9 +476,26 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         break;
     case ERR_NO:
         //[0] 有无卡
+        if (pbuff[0] != pOrder->ucStartType)
+        {
+            printf_safe("启动类型不一致\n");
+            printf_safe("-Remote Type: %d \n", pbuff[0]);
+            printf_safe("-Local  Type: %d \n", pOrder->ucStartType);
+            errcode = ERR_REMOTE_PARAM;
+            break;
+        }
         //[1...8] 交易流水号
         //[9] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[9]);
+        if (id != pOrder->ucCONID)
+        {
+            printf_safe("订单枪号不一致\n");
+            printf_safe("-Remote ID: %d \n", id);
+            printf_safe("-Local  ID: %d \n", pOrder->ucCONID);
+            errcode = ERR_REMOTE_PARAM;
+            break;
+            
+        }
         pCON = CONGetHandle(id);
         if(pCON != NULL)
         {
