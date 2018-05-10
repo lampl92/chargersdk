@@ -391,6 +391,8 @@ DR_MODEM_e UC15_init(void *pvModem)
     DevModem_t *pModem;
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
+    int timeoutMax = 20;
+    int timeout = 0;
     
     pModem = (DevModem_t*)pvModem;
 
@@ -402,8 +404,15 @@ DR_MODEM_e UC15_init(void *pvModem)
     }
 
     //get info
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = UC15_CPIN(pModem);
         if (ret != DR_MODEM_OK)
         {
@@ -411,8 +420,15 @@ DR_MODEM_e UC15_init(void *pvModem)
         }
         modem_delayms(1000);
     } while (pModem->status.eSimStat != CPIN_READY);
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = UC15_CSQ(pModem);
         if (ret != DR_MODEM_OK)
         {

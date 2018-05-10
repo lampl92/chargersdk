@@ -800,6 +800,8 @@ DR_MODEM_e M26_init(void *pvModem)
     DevModem_t *pModem;
     uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
+    int timeoutMax = 20;
+    int timeout = 0;
     
     pModem = (DevModem_t*)pvModem;
 
@@ -809,8 +811,15 @@ DR_MODEM_e M26_init(void *pvModem)
     {
         return ret;
     }
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = M26_CPIN(pModem);
         if (ret == DR_MODEM_OK)
         {
@@ -824,8 +833,15 @@ DR_MODEM_e M26_init(void *pvModem)
         modem_delayms(1000);
     } while (1);
 #if 1
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = M26_CREG(pModem);
         if (ret == DR_MODEM_OK)
         {
@@ -840,8 +856,15 @@ DR_MODEM_e M26_init(void *pvModem)
     }
     while(1);
 
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = M26_CGREG(pModem);
         if (ret == DR_MODEM_OK)
         {
@@ -856,8 +879,15 @@ DR_MODEM_e M26_init(void *pvModem)
     }
     while(1);
 #endif
+    timeout = 0;
     do
     {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
         ret = M26_CSQ(pModem);
         if (ret == DR_MODEM_OK)
         {
