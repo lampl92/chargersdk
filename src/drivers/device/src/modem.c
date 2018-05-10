@@ -1857,6 +1857,7 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
     int timeoutMax = 20;
     int timeout = 0;
 
+    timeout = 0;
     do
     {
         timeout++;
@@ -1901,6 +1902,7 @@ DR_MODEM_e modem_get_info(DevModem_t *pModem)
 //        vTaskDelay(1000);
 //    }
 //    while(pModem->status.eGprsReg == REG_SEARCH );
+    timeout = 0;
     do
     {
         timeout++;
