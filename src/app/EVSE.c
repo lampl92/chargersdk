@@ -621,7 +621,7 @@ void EVSEinit(void)
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:0.%s", jnCONArray, jnPhaseLine); 
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:1.%s", jnCONArray, jnPhaseLine); 
 //    tmp = 2;
-//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);
+//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型
     
     
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
