@@ -440,7 +440,7 @@ static int makeStdCmd(void *pPObj,
     uint32_t ulMsgBodyCtxLen_enc;
     uint16_t usCheck;
     uint8_t ucIDLength;
-    uint8_t i;
+    int i;
 
     us2uc ustmpNetSeq;
     ul2uc ultmpNetSeq;
@@ -451,6 +451,12 @@ static int makeStdCmd(void *pPObj,
     ulMsgHeadLen = 0;
     ucIDLength = strlen(pE->info.strID);
 
+    printf_protodetail("Send(dec) 0x%02X[%d]:\n", pCMD->CMDType.usSendCmd, pCMD->CMDType.usSendCmd);
+    for (i = 0; i < ulMsgBodyCtxLen_dec; i++)
+    {
+        printf_protodetail("%02X ", pucMsgBodyCtx_dec[i]);
+    }
+    printf_protodetail("\n");
     ulMsgBodyCtxLen_enc = ech_aes_encrypt(pucMsgBodyCtx_dec,
                                       ulMsgBodyCtxLen_dec,
                                       pProto->info.strKey,
@@ -505,7 +511,7 @@ static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *
 {
     echProtocol_t *pProto;
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t i;
+    int i;
     ul2uc ultmpNetSeq;
 
     pProto = (echProtocol_t *)pPObj;
@@ -1782,10 +1788,10 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     uint32_t ulMsgBodyCtxLen_dec;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j;
+    int i,j;
     uint8_t ucOffset = 0;
-    uint8_t strID[16+1] = {0};
-    uint8_t path[64];
+    char strID[16+1] = {0};
+    char path[64];
 
     pProto = (echProtocol_t *)pPObj;
     pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
@@ -2465,12 +2471,12 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
         }
         else
         {
-            printf_protolog("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            printf_protodetail("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
-                printf_protolog("%02X ", pCMD->ucRecvdOptData[i]);
+                printf_protodetail("%02X ", pCMD->ucRecvdOptData[i]);
             }
-            printf_protolog("\n");
+            printf_protodetail("\n");
             lRecvElem.UID = 0;
             lRecvElem.timestamp = time(NULL);
             lRecvElem.len = pCMD->ulRecvdOptLen;

@@ -9,6 +9,7 @@
 #include "BUTTON.h"
 #include "cfg_parse.h"
 #include "touchtimer.h"
+#include "HMI_Start.h"
 #define lcd_height 480
 #define lcd_width 800
 
@@ -249,7 +250,7 @@ void changecase(u8 change_flag, BUTTON_DATA *buttondata)
     u16 i;
     char	   	NumToStr;
     char buffer[5];
-    if (keypad_dev.LowerCase)		//小写,按钮修改为小写
+    if (change_flag)		//小写,按钮修改为小写
     {
     	//更改按钮的字符
         for (i = 0; i < 27; i++)
@@ -681,7 +682,7 @@ void chinesekeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
 }
 
 //设置BUTTON要使用的皮肤
-static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+static int _DrawSkinFlex_BUTTON1(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     static GUI_MEMDEV_Handle ahMemEdges[4];
     GUI_MEMDEV_Handle        hMem;
@@ -791,6 +792,65 @@ static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         GUI_MEMDEV_WriteAt(ahMemEdges[1], xPos + xSize - 4, yPos +  0);		    //按钮右上角圆弧
         GUI_MEMDEV_WriteAt(ahMemEdges[2], xPos + xSize - 4, yPos + butheigh);   //按钮右下角圆弧
         GUI_MEMDEV_WriteAt(ahMemEdges[3], xPos +  0, yPos + butheigh);			//按钮左下角圆弧
+        break;
+    default:
+        return BUTTON_DrawSkinFlex(pDrawItemInfo);//其他命令就使用默认的皮肤
+    }
+    return 0;
+}
+
+static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    static GUI_MEMDEV_Handle ahMemEdges[4];
+    GUI_MEMDEV_Handle        hMem;
+    WM_HWIN                  hWin;
+    unsigned                 i;
+    int                      xPos;
+    int                      yPos;
+    int                      xSize;
+    int                      ySize;
+    int                      x;
+    int                      y;
+    int                      Id;
+    int                      IsPressed;
+    int                      butheigh;
+    void(* pfDraw)(WM_HWIN hWin);
+
+    x = 0;
+    y = 0;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    	//在按钮上显示自定义或者默认的颜色或者文本
+        hWin = pDrawItemInfo->hWin;
+        Id   = WM_GetId(hWin);
+        i    = Id - ID_BUTTON;
+        if (keypad_dev.padtype == ENGLISH_KEYPAD) pfDraw = _aEngButtonData[i].pfDraw;
+        else if (keypad_dev.padtype == NUMBER_KEYPAD) pfDraw = _aNumButtonData[i].pfDraw;
+        else if (keypad_dev.padtype == SIGN_KEYPAD) pfDraw = _aSinButtonData[keypad_dev.signpad_flag][i].pfDraw;
+        else if (keypad_dev.padtype == CHINESE_KEYPAD) pfDraw = _aChineseButtonData1[i].pfDraw;
+
+        if (pfDraw) pfDraw(hWin);
+        else BUTTON_DrawSkinFlex(pDrawItemInfo);
+        break;
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+    	//绘制按钮的背景
+        IsPressed = BUTTON_IsPressed(pDrawItemInfo->hWin); 	//判断是否按钮是否被按下
+        xPos      = WM_GetWindowOrgX(pDrawItemInfo->hWin);	//获取按钮小工具的X方向原点位置
+        yPos      = WM_GetWindowOrgY(pDrawItemInfo->hWin);	//获取按钮小工具的Y方向原点位置
+        xSize     = WM_GetWindowSizeX(pDrawItemInfo->hWin);	//获取按钮小工具的X大小
+        ySize     = WM_GetWindowSizeY(pDrawItemInfo->hWin);	//获取按钮小工具的Y大小
+        if (IsPressed) 										//如果按钮被按下
+        {
+            GUI_DrawGradientRoundedV(0, 0, xSize - 1, ySize - 1, 4, BUTTON_COLOR2, BUTTON_COLOR3);//绘制垂直颜色梯度填充的圆角矩形
+        }
+        else
+        {
+            GUI_DrawGradientRoundedV(0, 0, xSize - 1, ySize - 1, 4, BUTTON_COLOR0, BUTTON_COLOR1);//绘制垂直颜色梯度填充的圆角矩形
+        }
+        GUI_SetColor(COLOR_BORDER);
         break;
     default:
         return BUTTON_DrawSkinFlex(pDrawItemInfo);//其他命令就使用默认的皮肤
@@ -1184,7 +1244,7 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:
-            pCon->info.SetCONCfg(pCon, jnSocketType, result_input, ParamTypeString);
+            pCon->info.SetCONCfg(pCon, jnSocketType, &result_input[0], ParamTypeU8);
            // memset(pCon->info.ucSocketType,'\0',sizeof(pCon->info.ucSocketType));
            // pCon->info.ucSocketType = 0;
             if (result_input[0] <= 'B')
@@ -1444,34 +1504,35 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
         }
         else
         {
-            pCont = CONGetHandle(0);
-            if (pCont->state == STATE_CON_CHARGING)
-            {
-                CreateChargingPage();
-            }
-            else
-            {
-                if (pCont->state == statelog)
-                {
-                    CreateHomePage();
-                }
-                else
-                {
-                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
-                        defEventBitOrderUseless,
-                        pdTRUE,
-                        pdTRUE,
-                        10000);//要比remote中的order超时（60s）长
-                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
-                    {
-                        CreateHomePage();
-                    }
-                    else
-                    {
-                        CreateHomePage();
-                    }
-                }
-            }
+            home();
+//            pCont = CONGetHandle(0);
+//            if (pCont->state == STATE_CON_CHARGING)
+//            {
+//                CreateChargingPage();
+//            }
+//            else
+//            {
+//                if (pCont->state == statelog)
+//                {
+//                    CreateHomePage();
+//                }
+//                else
+//                {
+//                    uxBits = xEventGroupWaitBits(pCont->status.xHandleEventOrder,
+//                        defEventBitOrderUseless,
+//                        pdTRUE,
+//                        pdTRUE,
+//                        10000);//要比remote中的order超时（60s）长
+//                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
+//                    {
+//                        CreateHomePage();
+//                    }
+//                    else
+//                    {
+//                        CreateHomePage();
+//                    }
+//                }
+//            }
         }
 //        (IS_jump == 0) ? (CreateManagerCommon()):(CreateHomePage());
         break;
@@ -1634,6 +1695,7 @@ void Keypad_GetValue(uint8_t optios, char *varname)
     /// TODO (zshare#1#): ///增加键盘值返回函数
     //MULTIEDIT_GetText(hMulti,传参数组,个数);
 }
+
 void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkWin, uint8_t *name_p, uint8_t *eg_p)
 {
     WM_HWIN hFrame;

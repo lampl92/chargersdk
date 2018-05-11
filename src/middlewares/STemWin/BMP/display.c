@@ -594,8 +594,8 @@ void creatememdev()
     Memdevhomesignal1 = createMemdev(pathhomesignal1);
     Memdevhomesignal2 = createMemdev(pathhomesignal2);
     Memdevhomesignal3 = createMemdev(pathhomesignal3);
-    Memdevhomesignal3 = createMemdev(pathhomesignal4);
-    Memdevhomesignal3 = createMemdev(pathhomesignal5);
+    Memdevhomesignal4 = createMemdev(pathhomesignal4);
+    Memdevhomesignal5 = createMemdev(pathhomesignal5);
     
     Memdevhomesignallogined = createMemdev(pathhomesignalligined);
     Memdevhomesignalnotlogined = createMemdev(pathhomesignalnotlogined);

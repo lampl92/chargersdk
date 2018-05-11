@@ -104,7 +104,6 @@ static int canChargeOrNot()
     {
         if (user_like.HMItimeout == 1)
         {          
-            pRFIDDev->state = STATE_RFID_TIMEOUT;
             return 0;
         }
         pRFIDDev->order.ucCONID = user_like.ucCONID;
@@ -115,7 +114,6 @@ static int canChargeOrNot()
     }
     else
     {      
-        pRFIDDev->state = STATE_RFID_TIMEOUT;
         return 0;
     }
     if (pRFIDDev->status.ucNeedPwd == 0)
@@ -152,8 +150,7 @@ static int canChargeOrNot()
         remote_timeout_u100ms++;
         if (remote_timeout_u100ms >= 600)//60s
         {
-            pRFIDDev->state = STATE_RFID_TIMEOUT;
-            break;
+            return 0;
         }
         if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
         {
@@ -161,8 +158,7 @@ static int canChargeOrNot()
         }
         else //如果没有联网，则直接返回超时。
         {
-            pRFIDDev->state = STATE_RFID_TIMEOUT;
-            break;
+            return 0;
         }
         vTaskDelay(100);
     }
@@ -177,10 +173,6 @@ static int canChargeOrNot()
     printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
     printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
 #endif
-    if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
-    {
-        return 0;
-    }
     if (ucVaild == 2)//e充网定义 1 可充, 2不可充
     {
         //pRFIDDev->state = STATE_RFID_BADID;
@@ -334,8 +326,9 @@ void vTaskEVSERFID(void *pvParameters)
 //                    break;
 //                }
             }
-            else//已经转到其他状态
+            else//获取界面输入超时，云平台查询金额超时
             {
+                pRFIDDev->state = STATE_RFID_TIMEOUT;
                 break;
             }
         case STATE_RFID_PWD:
@@ -360,7 +353,7 @@ void vTaskEVSERFID(void *pvParameters)
             }
             else
             {
-                pRFIDDev->status.ucNeedPwd = 0;
+                pRFIDDev->state = STATE_RFID_TIMEOUT;
                 break;
             }
         case STATE_RFID_PWDFULL:
@@ -414,14 +407,19 @@ void vTaskEVSERFID(void *pvParameters)
                 if (user_likey.HMItimeout == 1)
                 {
                     pRFIDDev->state = STATE_RFID_TIMEOUT;
-                    break;
                 }
             }
 	        if (time(NULL) - pRFIDDev->status.tHoldStateStartTime > pRFIDDev->status.ulHoldMaxTime_s)
 	        {
 		        pRFIDDev->state = STATE_RFID_TIMEOUT;
-		        break;
 	        }
+            if (pRFIDDev->state == STATE_RFID_TIMEOUT)
+            {
+    	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+    	        OrderInit(&(pCON->order));
+		        break;
+            }
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
@@ -432,9 +430,6 @@ void vTaskEVSERFID(void *pvParameters)
             break;
         case STATE_RFID_TIMEOUT:
             xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
-	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-	        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-	        OrderInit(&(pCON->order));
 	        pRFIDDev->state = STATE_RFID_RETURN;
 	        break;
         case STATE_RFID_RETURN:

@@ -344,7 +344,7 @@ void vTaskEVSERemote(void *pvParameters)
                             }
                             else if (network_res == 0)
                             {
-                                if (errcode == ERR_REMOTE_ORDERSN)//服务器不接受该订单号
+                                if (errcode == ERR_REMOTE_ORDERSN || errcode == ERR_REMOTE_PARAM)//服务器不接受该订单号
                                 {
                                     RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;

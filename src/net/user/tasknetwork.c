@@ -75,6 +75,10 @@ static void netStateInit(net_device_t *net_dev)
     {
         netChangeState(net_dev, NET_STATE_CONNECT);
     }
+    else
+    {
+        netChangeState(net_dev, NET_STATE_ERR);
+    }
 }
 static void netStateConnect(net_device_t *net_dev)
 {

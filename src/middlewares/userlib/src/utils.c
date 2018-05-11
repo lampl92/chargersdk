@@ -177,16 +177,16 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
  * @return uint32_t
  *
  */
-uint32_t StrToHex(char *Str, uint8_t *Hex, int Strlen)
+uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen)
 {
-    char hexbuff[2];
-    char *src;
+    char hexbuff[3] = {0};
+    const char *src;
     int i;
     src = Str;
 
     for(i = 0; i < Strlen / 2; i++)
     {
-        strncpy((char *)hexbuff, src, 2);
+        strncpy(hexbuff, src, 2);
         Hex[i] = strtol(hexbuff, NULL, 16);
         src += 2;
     }

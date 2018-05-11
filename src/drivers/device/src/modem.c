@@ -73,15 +73,15 @@ static void modem_UART_putQue(DevModem_t *pModem)
 #endif
 	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
 	    {
-			printf_protodetail("PPP Send: ");
+			printf_protodetail3("PPP Send: ");
 	    }
         while (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
         {
             pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
-            printf_protodetail("%02X ", ch);
+            printf_protodetail3("%02X ", ch);
             gprs_uart_putc(ch);
         }
-        printf_protodetail("\n");
+        printf_protodetail3("\n");
 #if USE_FreeRTOS
         xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
     }

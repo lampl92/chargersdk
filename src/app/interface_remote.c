@@ -476,9 +476,26 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         break;
     case ERR_NO:
         //[0] 有无卡
+        if (pbuff[0] != pOrder->ucStartType)
+        {
+            printf_safe("启动类型不一致\n");
+            printf_safe("-Remote Type: %d \n", pbuff[0]);
+            printf_safe("-Local  Type: %d \n", pOrder->ucStartType);
+            errcode = ERR_REMOTE_PARAM;
+            break;
+        }
         //[1...8] 交易流水号
         //[9] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[9]);
+        if (id != pOrder->ucCONID)
+        {
+            printf_safe("订单枪号不一致\n");
+            printf_safe("-Remote ID: %d \n", id);
+            printf_safe("-Local  ID: %d \n", pOrder->ucCONID);
+            errcode = ERR_REMOTE_PARAM;
+            break;
+            
+        }
         pCON = CONGetHandle(id);
         if(pCON != NULL)
         {
@@ -1034,10 +1051,10 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
     ErrorCode_t errcode;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j;
+    int i,j;
     uint8_t ucOffset = 0;
-    uint8_t strID[16+1] = {0};
-    uint8_t path[64];
+    char strID[16+1] = {0};
+    char path[64];
 
     if(usCmdID == ECH_CMDID_SET_BLACK)
     {
@@ -1111,10 +1128,10 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
     ErrorCode_t errcode;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j,k;          //i:名单数  j:名单字节长度  k:名单种类
+    int i,j,k;          //i:名单数  j:名单字节长度  k:名单种类
     uint8_t ucOffset = 0;
-    uint8_t strID[16+1] = {0};
-    uint8_t path[64];
+    char strID[16+1] = {0};
+    char path[64];
 
     handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
     switch(handle_errcode)
@@ -1772,7 +1789,7 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
     uint8_t pbuff[1024] = { 0 };
     uint32_t len;
     uint32_t ftp_len = 0;
-    uint8_t i, j;
+    int i, j;
     uint8_t ucOffset = 0;
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;

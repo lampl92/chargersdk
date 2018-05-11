@@ -134,13 +134,6 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pulRecvdLe
     {
         return MT_COM_FAIL;
     }
-    printf_protolog("len = %d\n", *pulRecvdLen);
-    for (i = 0; i < *pulRecvdLen; i++)
-    {
-        printf_protolog("%02x ", pucRecvBuffer[i]);
-        
-    }
-    printf_protolog("\n");
     switch(ucSendID)
     {
     case MT626_FIND_CMD:                        //#0  寻卡
@@ -238,7 +231,7 @@ static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
     MT626CMD_t *pMT626CMDObj;
-    uint8_t i;
+    int i;
 
     pMT626CMDObj = ((MT626COM_t *)pObj)->pMT626CMD[ucSendID];
     pucSendBuffer = ((MT626COM_t *)pObj)->pucSendBuffer;

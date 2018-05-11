@@ -125,6 +125,7 @@ void MainTask(void)
         {
             home = CreateHomeDLG;    
         }        
+        //CreateManagerCommon();
         home();
         //CreatePwdInput();
     }

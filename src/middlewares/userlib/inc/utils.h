@@ -45,7 +45,7 @@ typedef union
 	uint8_t ucVal[2];
 }us2uc;
 uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen);
-uint32_t StrToHex(char *Str, uint8_t *Hex, int Strlen);
+uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);
 
 int GetFileCrc32(char *path, uint32_t *pulCrc32);

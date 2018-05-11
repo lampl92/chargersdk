@@ -92,12 +92,12 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     //modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
                     netSend(pechProtoElem->pbuff, pechProtoElem->len);
                     {//debug
-                        printf_protodetail("\nTCP Send: ");
+                        printf_protodetail3("\nTCP Send: ");
                         for (i_deb = 0; i_deb < pechProtoElem->len; i_deb++)
                         {
-                            printf_protodetail("%02X ", pechProtoElem->pbuff[i_deb]);
+                            printf_protodetail3("%02X ", pechProtoElem->pbuff[i_deb]);
                         }
-                        printf_protodetail("\n"); 
+                        printf_protodetail3("\n"); 
                     }
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;

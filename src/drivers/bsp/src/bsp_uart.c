@@ -505,6 +505,18 @@ can
                                             }
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
+    if (huart->Instance == CLI_USARTx_BASE)
+    {
+        bsp_Uart_Init(UART_PORT_CLI, 2);
+    }
+    if (huart->Instance == GPRS_USARTx_BASE)
+    {
+        bsp_Uart_Init(UART_PORT_GPRS, 2);
+    }
+    if (huart->Instance == RFID_USARTx_BASE)
+    {
+        bsp_Uart_Init(UART_PORT_RFID, 2);
+    }
 //    THROW_USART_ERR(RFID, PE, ERR_LEVEL_TIPS);
 //    THROW_USART_ERR(RFID, NE, ERR_LEVEL_TIPS);
 //    THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);

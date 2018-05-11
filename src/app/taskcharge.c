@@ -414,7 +414,6 @@ void vTaskEVSECharge(void *pvParameters)
             case STATE_CON_STOPCHARGE:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
 #ifdef DEBUG_DIAG_DUMMY
                 pCON->state = STATE_CON_RETURN;
                 break;
@@ -422,6 +421,7 @@ void vTaskEVSECharge(void *pvParameters)
                 errcode = pCON->status.StopCharge(pCON);
                 if (errcode == ERR_NO)
                 {
+                    xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                     printf_safe("\e[44;37mStop Charge!\e[0m\n");
                     stop_try = 0;
                     pCON->state = STATE_CON_UNLOCK;
@@ -430,7 +430,7 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     stop_try++;
                     printf_safe("paste!! try %d\n", stop_try);
-                    if (stop_try >= 3)
+                    if (stop_try >= 5)
                     {
                         pCON->state = STATE_CON_UNLOCK;//即便继电器失败, 也要解锁枪锁
                         break;
@@ -539,6 +539,7 @@ void vTaskEVSECharge(void *pvParameters)
                 stop_try = 0;
                 unlock_try = 0;
                 dev_err = 0;
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed); //清除认证标志
                 THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "Charging return");
                 pCON->status.ucLoadPercent = 100;
