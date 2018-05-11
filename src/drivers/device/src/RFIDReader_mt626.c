@@ -230,7 +230,7 @@ static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
     MT626CMD_t *pMT626CMDObj;
-    uint8_t i;
+    int i;
 
     pMT626CMDObj = ((MT626COM_t *)pObj)->pMT626CMD[ucSendID];
     pucSendBuffer = ((MT626COM_t *)pObj)->pucSendBuffer;
