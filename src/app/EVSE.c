@@ -613,17 +613,21 @@ static void CONInit(void)
 void EVSEinit(void)
 {
 	char str[17] = "3000000000000002";
+    uint8_t tmp = 2;
+    double dtmp = 41;
     pEVSE = EVSECreate();
     
-//    uint8_t tmp = 2;
+//    tmp = 2;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON); 
 //    tmp = 3;
-//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:0.%s", jnCONArray, jnPhaseLine); 
-//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:1.%s", jnCONArray, jnPhaseLine); 
-//    tmp = 2;
-//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型
-    
-    
+//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 0, jnPhaseLine); 
+//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
+////    tmp = 2;
+////    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
+//    dtmp = 41;
+//    cfg_set_double(pathEVSECfg, &dtmp, "%s:%d.%s", jnCONArray, 0, jnRatedPower);
+//    cfg_set_double(pathEVSECfg, &dtmp, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+//    
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
 //    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
