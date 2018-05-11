@@ -90,6 +90,115 @@ static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
     }
     return ret;
 }
+/** @brief 网络状态检测 get net reg
+ *
+ * @param void
+ * @return uint8_t
+ *
+ */
+static DR_MODEM_e UC15_CREG(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+CREG?\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CREG:", 3);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "%*[^,],%[0-9]", s);
+        switch (atoi(s))
+        {
+        case 1:
+            pModem->status.eNetReg = REG_LOCAl;
+            break;
+        case 2:
+            pModem->status.eNetReg = REG_SEARCH;
+            break;
+        case 5:
+            pModem->status.eNetReg = REG_ROAMING;
+            break;
+        default:
+            pModem->status.eNetReg = REG_UNKNOWN;
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+/** @brief get gprs reg
+ *
+ * @param pModem DevModem_t*
+ * @return DR_MODEM_e
+ *
+ */
+static DR_MODEM_e UC15_CGREG(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+CGREG?\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+CGREG:", 3);
+    switch (ret)
+    {
+    case DR_MODEM_OK:
+        sscanf(reply, "%*[^,],%[0-9]", s);
+        switch (atoi(s))
+        {
+        case 1:
+            pModem->status.eGprsReg = REG_LOCAl;
+            break;
+        case 2:
+            pModem->status.eGprsReg = REG_SEARCH;
+            break;
+        case 5:
+            pModem->status.eGprsReg = REG_ROAMING;
+            break;
+        default:
+            pModem->status.eGprsReg = REG_UNKNOWN;
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+DR_MODEM_e UC15_AT_CGDCONT(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("AT+CGDCONT=%d,\"%s\",\"%s\"\r", 1, "IP", pModem->info.strAPN);
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+
+    return ret;
+}
+
+DR_MODEM_e UC15_ATD(DevModem_t *pModem)
+{
+    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    uint8_t  s[8 + 1] = { 0 };
+    DR_MODEM_e ret;
+
+    modem_send_at("ATD*99#\r");
+
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
+
+    return ret;
+}
+
 
 /** @brief 关闭GPRS连接
  *
@@ -396,7 +505,7 @@ DR_MODEM_e UC15_init(void *pvModem)
     
     pModem = (DevModem_t*)pvModem;
 
-    printf_modem("modem init: \r\n");
+    printf_modem("UC15 init: \r\n");
     ret = UC15_disable_echo();
     if (ret != DR_MODEM_OK)
     {
@@ -420,6 +529,51 @@ DR_MODEM_e UC15_init(void *pvModem)
         }
         modem_delayms(1000);
     } while (pModem->status.eSimStat != CPIN_READY);
+#if 1
+    timeout = 0;
+    do
+    {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
+        ret = UC15_CREG(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.eNetReg == REG_LOCAl || pModem->status.eNetReg == REG_ROAMING)
+                break;
+        }
+        else
+        {
+            return ret;
+        }
+        modem_delayms(1000);
+    } while (1);
+
+    timeout = 0;
+    do
+    {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
+        ret = UC15_CGREG(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            if (pModem->status.eGprsReg == REG_LOCAl || pModem->status.eGprsReg == REG_ROAMING)
+                break;
+        }
+        else
+        {
+            return ret;
+        }
+        modem_delayms(1000);
+    } while (1);
+#endif
     timeout = 0;
     do
     {
@@ -440,6 +594,24 @@ DR_MODEM_e UC15_init(void *pvModem)
    
     return ret;
 }
+
+
+DR_MODEM_e UC15_diag_PPP(void *pModem)
+{
+    DR_MODEM_e ret;
+    ret = UC15_AT_CGDCONT(pModem);
+    if (ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    ret = UC15_ATD(pModem);
+    if (ret != DR_MODEM_OK)
+    {
+        return ret;
+    }
+    return ret;
+}
+
 
 DR_MODEM_e UC15_act_PDP(void *pModem)
 {
@@ -534,6 +706,7 @@ DevModem_t *UC15Create(void)
     pMod->set = UC15_set;
     pMod->reset = UC15_reset;
     pMod->init = UC15_init;
+    pMod->diag_PPP = UC15_diag_PPP;
     pMod->act_PDP = UC15_act_PDP;
     pMod->deact_PDP = UC15_deact_PDP;
     pMod->open_TCP = UC15_open_TCP;

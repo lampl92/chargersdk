@@ -112,6 +112,7 @@ typedef struct _dev_modem
     modem_ft init;
     modem_ft set;
     modem_ft reset;
+    modem_ft diag_PPP;
     modem_ft act_PDP;
     modem_ft deact_PDP;
     DR_MODEM_e(*open_TCP)(void *pModem, char *server_ip, uint16_t port);

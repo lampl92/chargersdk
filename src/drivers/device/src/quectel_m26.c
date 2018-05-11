@@ -805,7 +805,7 @@ DR_MODEM_e M26_init(void *pvModem)
     
     pModem = (DevModem_t*)pvModem;
 
-    printf_modem("modem init: \r\n");
+    printf_modem("m26 init: \r\n");
     ret = M26_disable_echo();
     if (ret != DR_MODEM_OK)
     {
@@ -1023,6 +1023,7 @@ DevModem_t *M26Create(void)
     pMod->reset = M26_reset;
     pMod->open = M26_open;
     pMod->init = M26_init;
+    pMod->diag_PPP = M26_diag_PPP;
     pMod->act_PDP = M26_act_PDP;
     pMod->deact_PDP = M26_deact_PDP;
     pMod->open_TCP = M26_open_TCP;

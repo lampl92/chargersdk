@@ -293,7 +293,7 @@ void Modem_Poll(DevModem_t *pModem)
 #endif
             break;
         case DS_MODEM_PPP_Diag:
-            ret = M26_diag_PPP(pModem);
+            ret = pModem->diag_PPP(pModem);
             if (ret == DR_MODEM_OK)
             {
                 xEventGroupSetBits(xHandleEventTCP, defEventBitPPPDiagOK);
