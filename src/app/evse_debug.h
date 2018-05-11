@@ -9,5 +9,6 @@ extern uint8_t dePrintTime;
 
 #define printf_protolog(...) do{if(protolog > 0)printf_safe(__VA_ARGS__);}while(0);
 #define printf_protodetail(...) do{if(protolog > 1)printf_safe(__VA_ARGS__);}while(0);
+#define printf_protodetail3(...) do{if(protolog > 2)printf_safe(__VA_ARGS__);}while(0);
 
 #endif
