@@ -894,7 +894,7 @@ static int makeStdCmd(void *pPObj,
     uint8_t ucMsgBodyCtx_enc[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_enc;
     uint16_t usCheck;
-    uint8_t i;
+    int i;
 
     us2uc ustmpNetSeq;
     ul2uc ultmpNetSeq;
@@ -972,7 +972,7 @@ static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *
 {
     echProtocol_t *pProto;
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t i;
+    int i;
     ul2uc ultmpNetSeq;
 
     pProto = (echProtocol_t *)pPObj;
@@ -2752,10 +2752,10 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     uint32_t ulMsgBodyCtxLen_dec;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j;
+    int i,j;
     uint8_t ucOffset = 0;
-    uint8_t strID[16+1] = {0};
-    uint8_t path[64];
+    char strID[16+1] = {0};
+    char path[64];
 
     pProto = (echProtocol_t *)pPObj;
     pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
