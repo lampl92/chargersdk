@@ -839,7 +839,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 #else
     for (i = 0; i < 3; i++)
     {
-        errcode = pCON->line[i].GetTemp(&(pCON->line[i]), ucCONID, i);
+        errcode = pCON->line[i].GetTemp(&(pCON->line[i]), pCON, i);
         if (pCON->line[i].status.dTemp > tmpACLTemp)
         {
             tmpACLTemp = pCON->line[i].status.dTemp;
@@ -881,7 +881,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpACNTemp = 25;
 #else
-    errcode = pCON->line[defLineN].GetTemp(&(pCON->line[defLineN]), ucCONID, defLineN);
+    errcode = pCON->line[defLineN].GetTemp(&(pCON->line[defLineN]), pCON, defLineN);
     if (pCON->line[defLineN].status.dTemp > tmpACNTemp)
     {
         tmpACNTemp = pCON->line[defLineN].status.dTemp;
