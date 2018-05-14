@@ -16,6 +16,7 @@
 #define ID_IMAGE_1_IMAGE_0 0x01
 
 #define ID_TimerTime    0
+#define ID_TimerSignal  1
 
 #define PROGBAR_X   200
 #define PROGBAR_Y   50
@@ -25,6 +26,8 @@
 #define TEXT_Y      (PROGBAR_Y+PROGBAR_YSIZE)
 #define TEXT_XSIZE  400
 #define TEXT_YSIZE  400
+
+static WM_HTIMER _timerSignal, _timerTime;
 
 WM_HWIN _hWinHome;//home界面句柄
 
@@ -186,115 +189,114 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_PAINT:
         break;
     case WM_TIMER:
-        if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
-        {
-            if (pModem->state == DS_MODEM_FTP_GET)
+        if (pMsg->Data.v == _timerTime)
+        {          
+            if ((bittest(winInitDone, 0))&&(_hWinHome == cur_win))
             {
-                if (((pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024))  < progbar_value)
-                    &&(textLogDone == 0))
+                if (pModem->state == DS_MODEM_FTP_GET)
                 {
-                    textLogDone = 1;
-                }
+                    if (((pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024))  < progbar_value)
+                        &&(textLogDone == 0))
+                    {
+                        textLogDone = 1;
+                    }
         
-                if (textLogDone == 1)
-                {
-                    memset(buff, '\0', sizeof(buff));
+                    if (textLogDone == 1)
+                    {
+                        memset(buff, '\0', sizeof(buff));
             
-                    sprintf(buff, "\n下载失败!\n第(%d/5)次尝试下载文件...", pechProto->info.ftp.ftp_proc.ulFTPReGetCnt + 1);
-                    memset(pDest, '\0', sizeof(pDest));
-                    TEXT_GetText(text_up, pDest, 256);
-                    strcat(pDest, buff);
-                    TEXT_SetText(text_up, pDest);
-                    textLogDone = 0;
+                        sprintf(buff, "\n下载失败!\n第(%d/5)次尝试下载文件...", pechProto->info.ftp.ftp_proc.ulFTPReGetCnt + 1);
+                        memset(pDest, '\0', sizeof(pDest));
+                        TEXT_GetText(text_up, pDest, 256);
+                        strcat(pDest, buff);
+                        TEXT_SetText(text_up, pDest);
+                        textLogDone = 0;
+                    }
+             /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
+          //        
+          //              5   xiazai
+          //             pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt 5  dakai ftp
+          //        if (pModem->status == DS_MODEM_FTP_OPEN)
+          //        {
+          //                        
+          //        }
+          //        if (pechProto->info.ftp.ftp_proc.ulRecvFileSize > 0)
+          //        {
+          //            pModem->state = DS_MODEM_FTP_OPEN //dakaizhong...
+          //                DS_MODEM_FTP_GET //xiazaizhong
+          //                DS_MODEM_FTP_REGET//jindutiao = 0// chongxinxiazai 
+          //                
+          //                memset(pDest,'\0',sizeof(pDest));
+          //            TEXT_GetText(text_up, pDest, 256);
+          //            strcat(pDest, "打开成功！\n正在下载...\n");
+          //            TEXT_SetText(text_up,pDest);
+          //        }
+                  //pechProto->info.ftp.ftp_proc.ulRecvFileSize = filesize  768 = 100 % filesize * 100 / 768
+                    progbar_value = pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024);
+                    PROGBAR_SetValue(progbar_up, progbar_value);
                 }
-       /// TODO (zshare#1#): 下面的if不起作用. 但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-   //        
-   //              5   xiazai
-   //             pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt 5  dakai ftp
-   //        if (pModem->status == DS_MODEM_FTP_OPEN)
-   //        {
-   //                        
-   //        }
-   //        if (pechProto->info.ftp.ftp_proc.ulRecvFileSize > 0)
-   //        {
-   //            pModem->state = DS_MODEM_FTP_OPEN //dakaizhong...
-   //                DS_MODEM_FTP_GET //xiazaizhong
-   //                DS_MODEM_FTP_REGET//jindutiao = 0// chongxinxiazai 
-   //                
-   //                memset(pDest,'\0',sizeof(pDest));
-   //            TEXT_GetText(text_up, pDest, 256);
-   //            strcat(pDest, "打开成功！\n正在下载...\n");
-   //            TEXT_SetText(text_up,pDest);
-   //        }
-           //pechProto->info.ftp.ftp_proc.ulRecvFileSize = filesize  768 = 100 % filesize * 100 / 768
-                progbar_value = pechProto->info.ftp.ftp_proc.ulRecvFileSize * 100 / (768 * 1024);
-                PROGBAR_SetValue(progbar_up, progbar_value);
-            }
             
-            uxbits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_UP_FAILD,pdTRUE,pdTRUE,0);
-            if((uxbits & defEventBitHMI_UP_FAILD) == defEventBitHMI_UP_FAILD)
-            {
-                GUI_EndDialog(progbar_up, 0);
-                GUI_EndDialog(text_up, 0);
-            }
+                uxbits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_UP_FAILD, pdTRUE, pdTRUE, 0);
+                if ((uxbits & defEventBitHMI_UP_FAILD) == defEventBitHMI_UP_FAILD)
+                {
+                    GUI_EndDialog(progbar_up, 0);
+                    GUI_EndDialog(text_up, 0);
+                }
             
-            Data_Process(pMsg);
-            Signal_Show();
-            Led_Show();
-            if (_hWinHome == cur_win)
-            {
-                Err_Analy(pMsg->hWin);
-                CaliDone_Analy(pMsg->hWin);
-            }    
+                Data_Process(pMsg);
+                Signal_Show();
+                Led_Show();
+                if (_hWinHome == cur_win)
+                {
+                    Err_Analy(pMsg->hWin);
+                    CaliDone_Analy(pMsg->hWin);
+                }    
+            }
+        /**< 显示时间和日期 */
+            Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
+            //费用显示
+
+            now = time(NULL);
+            extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
+            ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
+            sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[ucSegState]);
+            sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[ucSegState]);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
+
+                    /**< 重启定时器 */
+            WM_RestartTimer(pMsg->Data.v, 50);
         }
-    /**< 显示时间和日期 */
-        Caculate_RTC_Show(pMsg, ID_TEXT_2, ID_TEXT_3);
-        //费用显示
-
-        now = time(NULL);
-        extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
-        ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
-        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[ucSegState]);
-        sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[ucSegState]);
-        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
-        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
-
-        if ((SignalFlag == 12) || (SignalFlag > 12))
+        if (pMsg->Data.v == _timerSignal)
         {
             SignalIntensity = getSignalIntensity();
-            if (SignalIntensity != PreSignalIntensity)
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1);
+            if (SignalIntensity == 1)
             {
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_1);
-                if (SignalIntensity == 1)
-                {
-                    IMAGE_SetBMP(hItem, SignalImage1->pfilestring, SignalImage1->pfilesize);
-                }
-                else if (SignalIntensity == 2)
-                {
-                    IMAGE_SetBMP(hItem, SignalImage2->pfilestring, SignalImage2->pfilesize);
-                }
-                else if (SignalIntensity == 3)
-                {
-                    IMAGE_SetBMP(hItem, SignalImage3->pfilestring, SignalImage3->pfilesize);
-                }
-                else if (SignalIntensity == 4)
-                {
-                    IMAGE_SetBMP(hItem, SignalImage4->pfilestring, SignalImage4->pfilesize);
-                }
-                else if (SignalIntensity == 5)
-                {
-                    IMAGE_SetBMP(hItem, SignalImage5->pfilestring, SignalImage5->pfilesize);
-                }
-                else
-                {
-                    IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
-                }
-                
-            }  
+                IMAGE_SetBMP(hItem, SignalImage1->pfilestring, SignalImage1->pfilesize);
+            }
+            else if (SignalIntensity == 2)
+            {
+                IMAGE_SetBMP(hItem, SignalImage2->pfilestring, SignalImage2->pfilesize);
+            }
+            else if (SignalIntensity == 3)
+            {
+                IMAGE_SetBMP(hItem, SignalImage3->pfilestring, SignalImage3->pfilesize);
+            }
+            else if (SignalIntensity == 4)
+            {
+                IMAGE_SetBMP(hItem, SignalImage4->pfilestring, SignalImage4->pfilesize);
+            }
+            else if (SignalIntensity == 5)
+            {
+                IMAGE_SetBMP(hItem, SignalImage5->pfilestring, SignalImage5->pfilesize);
+            }
+            else
+            {
+                IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
+            }
+            WM_RestartTimer(pMsg->Data.v, 1000);
         }
-        SignalFlag++;
-        /**< 重启定时器 */
-        WM_RestartTimer(pMsg->Data.v, 50);
         break;
     case MSG_CREATERRWIN:
         /**< 故障界面不存在则创建,存在则刷新告警 */
@@ -347,7 +349,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateHomePage(void) {
     _hWinHome = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    WM_CreateTimer(WM_GetClientWindow(_hWinHome), ID_TimerTime, 50, 0);
+    _timerTime  = WM_CreateTimer(_hWinHome, ID_TimerTime, 50, 0);
+    _timerSignal = WM_CreateTimer(_hWinHome, ID_TimerSignal, 50, 0);
     cur_win = _hWinHome;
     bitset(winInitDone, 0);
     return 0;
