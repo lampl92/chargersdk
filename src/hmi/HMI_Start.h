@@ -14,14 +14,17 @@
 #include "skin.h"
 #include "GUI_backstage.h"
 #include "skinposition.h"
+
 typedef WM_HWIN(*Fun)(void);
+extern Fun home;
+
 extern GUI_HMEM    qr_hmem;
 
 extern int SignalFlag;//信号图标刷新标志
 
-extern Fun home;
-
 #define FONT_COLOR GUI_BLACK
+
+#define FontManager SIF24_Font;
 
 //**********单双枪新界面
 WM_HWIN CreatestartUpDLG(void);
