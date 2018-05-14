@@ -624,8 +624,9 @@ void EVSEinit(void)
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
 //    tmp = 2;
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
-//    tmp = 3;
+//    tmp = 2;
 //    cfg_set_uint8(pathSysCfg, &tmp, "%s", jnSysUSE_GPRSModem);
+//    xSysconf.xModule.use_gprs = 3;
     
 //    dtmp = 41;
 //    cfg_set_double(pathEVSECfg, &dtmp, "%s:%d.%s", jnCONArray, 0, jnRatedPower);
