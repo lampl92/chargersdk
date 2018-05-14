@@ -71,7 +71,7 @@
 
 #define QUE_BUFSIZE                  5000
 DevModem_t *pModem; ///< The modem
-uint32_t ulTaskDelay_ms = 1000; ///< The ul task delay in milliseconds
+uint32_t ulTaskDelay_ms = 100; ///< The ul task delay in milliseconds
 
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE];    ///< TCP客户端接收数据缓冲区
 
@@ -281,6 +281,67 @@ static DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t
     return ret;
 }
 
+DR_MODEM_e UC15_keyon(void)
+{
+    printf_safe("UC15 Key on!: \r\n");
+    GPRS_set;
+    vTaskDelay(300);// ≥ 0.1s
+    GPRS_reset;
+    return DR_MODEM_OK;
+}
+DR_MODEM_e UC15_keyoff(void)
+{
+    printf_safe("UC15 Key off!: \r\n");
+    GPRS_set;
+    vTaskDelay(800);//≥ 0.6s
+    GPRS_reset;
+    vTaskDelay(8000);//Log off network about 1s to 60s
+    return DR_MODEM_OK;
+}
+DR_MODEM_e M26_keyon(void)
+{
+    printf_safe("M26 Key on!: \r\n");
+    GPRS_set;
+    vTaskDelay(1100);// >1s
+    GPRS_reset;
+    return DR_MODEM_OK;
+}
+DR_MODEM_e M26_keyoff(void)
+{
+    printf_safe("M26 Key off!: \r\n");
+    GPRS_set;
+    vTaskDelay(800);//0.7s < keyoff < 1s
+    GPRS_reset;
+    vTaskDelay(8000);// 2s to 12s
+    return DR_MODEM_OK;
+}
+
+DR_MODEM_e modem_keyon(void)
+{
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        M26_keyon();
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        UC15_keyon();
+    }
+    return DR_MODEM_OK;
+}
+DR_MODEM_e modem_keyoff(void)
+{
+    if (xSysconf.xModule.use_gprs == 2)
+    {
+        M26_keyoff();
+    }
+    else if (xSysconf.xModule.use_gprs == 3)
+    {
+        UC15_keyoff();
+    }
+    return DR_MODEM_OK;
+}
+
+
 /**
  * @fn  DR_MODEM_e modem_quit(DevModem_t *pModem)
  *
@@ -297,7 +358,7 @@ DR_MODEM_e modem_quit(DevModem_t *pModem)
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("++++++");
+    modem_send_at("+++ATH\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "\r\n", 3);
 
     return ret;
@@ -317,10 +378,14 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
 {
     uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
     DR_MODEM_e ret;
-
+    
+    int timeout = 0;
+    int timeoutMax = 10;
+    
+    GPRS_reset;
     DEVDEBUG("modem open: \r\n");
     modem_send_at("AT\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
     if (ret == DR_MODEM_OK)
     {
         pModem->state = DS_MODEM_ON;
@@ -335,21 +400,18 @@ DR_MODEM_e modem_open(DevModem_t *pModem)
             return ret;
         }
     }
-    GPRS_set; //上电启动
-    DEVDEBUG("modem Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
-    switch(ret)
+    modem_keyon();
+    timeout = 0;
+    while (ret != DR_MODEM_OK)
     {
-    case DR_MODEM_OK:
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            return ret;
+        }
         modem_send_at("AT\r");
-        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
-        pModem->state = DS_MODEM_ON;
-        break;
-    case DR_MODEM_ERROR:
-    case DR_MODEM_TIMEOUT:
-        break;
-    default:
-        break;
+        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
+        ((DevModem_t*)pModem)->state = DS_MODEM_ON;
     }
 
     return ret;
@@ -1273,7 +1335,8 @@ DR_MODEM_e modem_RESET(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
+    printf_safe("\n");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Ready", 5);//Ready/RDY
 
     return ret;
 }
@@ -2045,9 +2108,7 @@ void Modem_Poll(DevModem_t *pModem)
             ret = modem_open(pModem);
             if (ret != DR_MODEM_OK)
             {
-                GPRS_reset;
-                DEVDEBUG("modem Key reset!: \r\n");
-                vTaskDelay(10000);
+                modem_keyoff();
             }
             break;
         case DS_MODEM_ON:
