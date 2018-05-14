@@ -180,7 +180,7 @@ ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 1);
 
     return errcode;
 }

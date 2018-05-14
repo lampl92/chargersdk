@@ -382,7 +382,7 @@ void vTaskEVSERemote(void *pvParameters)
             if(network_res != 1)
             {
                 heart_lost++;
-                if(heart_lost > 750)
+                if(heart_lost > 450)//三个心跳失败
                 {
                     heart_lost = 0;
                     eRmtHeartStat = REMOTEHEART_IDLE;
