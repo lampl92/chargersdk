@@ -279,6 +279,10 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 pModem->state = DS_MODEM_PPP_Diag;
             }
+            else
+            {
+                pModem->state = DS_MODEM_ERR;
+            }
 #if 0
             if (ret == DR_MODEM_OK)
             {
