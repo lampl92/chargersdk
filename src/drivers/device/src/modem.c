@@ -2058,7 +2058,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             else
             {
-                pModem->state = DS_MODEM_DEACT_PDP;
+                pModem->state = DS_MODEM_ERR;
             }
             break;
         case DS_MODEM_ACT_PDP:
@@ -2093,7 +2093,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             if (ret == DR_MODEM_OK)
             {
-                pModem->state = DS_MODEM_ACT_PDP;
+                pModem->state = DS_MODEM_ON;//DS_MODEM_ACT_PDP;
             }
             else
             {
