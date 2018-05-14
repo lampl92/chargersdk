@@ -44,8 +44,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define cs_zl_set   do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
-#define GPRS_reset      do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
-#define GPRS_set    do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
+#define GPRS_reset      do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
+#define GPRS_set    do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
 #define TIMER5_OFF   HAL_TIM_Base_Stop_IT(&htim5)

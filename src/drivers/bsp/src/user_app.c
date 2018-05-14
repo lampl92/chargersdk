@@ -21,6 +21,7 @@ static void value_reset(void)
     Sys_samp.DC.TEMP2 = 0;
     Sys_samp.DC.TEMP3 = 0;
     Sys_samp.DC.TEMP4 = 0;
+    Chip1.RESET_3G = 1;
 }
 const double  resistance[146] =
 {
