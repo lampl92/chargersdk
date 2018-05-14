@@ -120,7 +120,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 /*                               设置充电桩信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
 
-static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+static ErrorCode_t SetEVSECfg(void *pvEVSE, char *jnItemString, void *pvCfgParam, uint8_t type);
 
 /** @todo (rgw#1#): 所有设置参数增加范围校验, 可以在这里进行校验, 也可以在界面输入的时候进行校验.  */
 
@@ -133,7 +133,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgPa
  * @return ErrorCode_t
  *
  */
-static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+static ErrorCode_t SetEVSECfg(void *pvEVSE, char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsEVSECfgObj;
     cJSON *jsItem;
@@ -165,7 +165,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, uint8_t *jnItemString, void *pvCfgPa
                 cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
                 break;
             case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                cJSON_ReplaceItemInObject(jsEVSECfgObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
                 break;
             default:
                 break;
@@ -622,8 +622,8 @@ void EVSEinit(void)
 //    tmp = 3;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 0, jnPhaseLine); 
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
-    tmp = 1;
-    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
+//    tmp = 2;
+//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
 //    tmp = 3;
 //    cfg_set_uint8(pathSysCfg, &tmp, "%s", jnSysUSE_GPRSModem);
     
