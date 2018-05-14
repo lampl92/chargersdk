@@ -52,6 +52,7 @@ typedef enum
 typedef struct
 {
     char strAPN[16+1];
+    char strATD[32 + 1];
     uint8_t ucContext;
     uint8_t ucTPMode;
 } ModemInfo_t;
@@ -110,8 +111,8 @@ typedef struct _dev_modem
     
     modem_ft open;
     modem_ft init;
-    modem_ft set;
-    modem_ft reset;
+    modem_ft keyon;
+    modem_ft keyoff;
     modem_ft diag_PPP;
     modem_ft act_PDP;
     modem_ft deact_PDP;

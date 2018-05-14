@@ -10,7 +10,7 @@ DR_MODEM_e M26_quit(void *pvModem)
     char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("++++++");
+    modem_send_at("+++ATH\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "\r\n", 3);
 
     return ret;
@@ -229,7 +229,7 @@ DR_MODEM_e M26_ATD(DevModem_t *pModem)
     char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("ATD*99#\r");
+    modem_send_at("ATD%s\r", pModem->info.strATD);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
 
@@ -712,14 +712,21 @@ DR_MODEM_e M26_set_Transparent(DevModem_t *pModem)
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-DR_MODEM_e M26_set(void *pvModem)
+DR_MODEM_e M26_keyon(void *pvModem)
 {
+    printf_modem("M26 Key on!: \r\n");
     GPRS_set;
+    modem_delayms(1100);// >1s
+    GPRS_reset;
     return DR_MODEM_OK;
 }
-DR_MODEM_e M26_reset(void *pvModem)
+DR_MODEM_e M26_keyoff(void *pvModem)
 {
+    printf_modem("M26 Key off!: \r\n");
+    GPRS_set;
+    modem_delayms(800);//0.7s < keyoff < 1s
     GPRS_reset;
+    modem_delayms(8000);// 2s to 12s
     return DR_MODEM_OK;
 }
 
@@ -746,11 +753,16 @@ DR_MODEM_e M26_open(void *pvModem)
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
     
+    int timeout = 0;
+    int timeoutMax = 10;
+    
+    GPRS_reset;
+    
     pModem = (DevModem_t*)pvModem;
 
     printf_modem("M26 open: \r\n");
     modem_send_at("AT\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
     if (ret == DR_MODEM_OK)
     {
         pModem->state = DS_MODEM_ON;
@@ -765,21 +777,18 @@ DR_MODEM_e M26_open(void *pvModem)
             return ret;
         }
     }
-    M26_set(pModem); //上电启动
-    printf_modem("M26 Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
-    switch (ret)
+    M26_keyon(pModem); //上电启动
+    timeout = 0;
+    while (ret != DR_MODEM_OK)
     {
-    case DR_MODEM_OK:
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            return ret;
+        }
         modem_send_at("AT\r");
-        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
         pModem->state = DS_MODEM_ON;
-        break;
-    case DR_MODEM_ERROR:
-    case DR_MODEM_TIMEOUT:
-        break;
-    default:
-        break;
     }
 
     return ret;
@@ -804,7 +813,7 @@ DR_MODEM_e M26_init(void *pvModem)
     int timeout = 0;
     
     pModem = (DevModem_t*)pvModem;
-
+    GPRS_reset;
     printf_modem("m26 init: \r\n");
     ret = M26_disable_echo();
     if (ret != DR_MODEM_OK)
@@ -1012,6 +1021,7 @@ DevModem_t *M26Create(void)
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
     memset(pMod, 0, sizeof(DevModem_t));
     sprintf(pMod->info.strAPN, "CMNET");
+    sprintf(pMod->info.strATD, "*99#");
     pMod->info.ucContext = 0;
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
@@ -1019,8 +1029,8 @@ DevModem_t *M26Create(void)
     pMod->xMutex = xSemaphoreCreateMutex();
     pMod->pSendQue = QueueCreate(MAX_COMMAND_LEN);
     
-    pMod->set = M26_set;
-    pMod->reset = M26_reset;
+    pMod->keyon = M26_keyon;
+    pMod->keyoff = M26_keyoff;
     pMod->open = M26_open;
     pMod->init = M26_init;
     pMod->diag_PPP = M26_diag_PPP;

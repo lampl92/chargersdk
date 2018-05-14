@@ -10,7 +10,7 @@ DR_MODEM_e UC15_quit(DevModem_t *pModem)
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("++++++");
+    modem_send_at("+++ATH\r");
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "\r\n", 3);
 
     return ret;
@@ -192,7 +192,7 @@ DR_MODEM_e UC15_ATD(DevModem_t *pModem)
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("ATD*99#\r");
+    modem_send_at("ATD%s\r", pModem->info.strATD);
 
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "CONNECT", 75);
 
@@ -427,14 +427,21 @@ DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-DR_MODEM_e UC15_set(void *pModem)
+DR_MODEM_e UC15_keyon(void *pModem)
 {
+    printf_modem("UC15 Key on!: \r\n");
     GPRS_set;
+    modem_delayms(300);// ≥ 0.1s
+    GPRS_reset;
     return DR_MODEM_OK;
 }
-DR_MODEM_e UC15_reset(void *pModem)
+DR_MODEM_e UC15_keyoff(void *pModem)
 {
+    printf_modem("UC15 Key off!: \r\n");
+    GPRS_set;
+    modem_delayms(800);//≥ 0.6s
     GPRS_reset;
+    modem_delayms(8000);//Log off network about 1s to 60s
     return DR_MODEM_OK;
 }
 DR_MODEM_e UC15_soft_reset(void *pModem)
@@ -459,9 +466,14 @@ DR_MODEM_e UC15_open(void *pModem)
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
-    printf_modem("modem open: \r\n");
+    int timeout = 0;
+    int timeoutMax = 10;
+    
+    GPRS_reset;
+    
+    printf_modem("UC15 open: \r\n");
     modem_send_at("AT\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
     if (ret == DR_MODEM_OK)
     {
         ((DevModem_t*)pModem)->state = DS_MODEM_ON;
@@ -476,21 +488,18 @@ DR_MODEM_e UC15_open(void *pModem)
             return ret;
         }
     }
-    UC15_set(pModem); //上电启动
-    printf_modem("modem Key set!: \r\n");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "R", 10);//Ready/RDY
-    switch (ret)
+    UC15_keyon(pModem); //上电启动
+    timeout = 0;
+    while (ret != DR_MODEM_OK)
     {
-    case DR_MODEM_OK:
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            return ret;
+        }
         modem_send_at("AT\r");
-        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 3);
+        ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
         ((DevModem_t*)pModem)->state = DS_MODEM_ON;
-        break;
-    case DR_MODEM_ERROR:
-    case DR_MODEM_TIMEOUT:
-        break;
-    default:
-        break;
     }
 
     return ret;
@@ -504,7 +513,6 @@ DR_MODEM_e UC15_init(void *pvModem)
     int timeout = 0;
     
     pModem = (DevModem_t*)pvModem;
-
     printf_modem("UC15 init: \r\n");
     ret = UC15_disable_echo();
     if (ret != DR_MODEM_OK)
@@ -694,7 +702,8 @@ DevModem_t *UC15Create(void)
     DevModem_t *pMod;
     pMod = (DevModem_t *)malloc(sizeof(DevModem_t));
     memset(pMod, 0, sizeof(DevModem_t));
-    sprintf(pModem->info.strAPN, "3GNET");
+    sprintf(pMod->info.strAPN, "3GNET");
+    sprintf(pMod->info.strATD, "*99#");
     pMod->info.ucContext = 1;
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
@@ -703,8 +712,8 @@ DevModem_t *UC15Create(void)
     pMod->pSendQue = QueueCreate(MAX_COMMAND_LEN);
     
     pMod->open = UC15_open;
-    pMod->set = UC15_set;
-    pMod->reset = UC15_reset;
+    pMod->keyon = UC15_keyon;
+    pMod->keyoff = UC15_keyoff;
     pMod->init = UC15_init;
     pMod->diag_PPP = UC15_diag_PPP;
     pMod->act_PDP = UC15_act_PDP;

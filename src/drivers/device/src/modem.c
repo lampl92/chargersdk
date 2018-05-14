@@ -270,9 +270,7 @@ void Modem_Poll(DevModem_t *pModem)
             ret = pModem->open(pModem);
             if (ret != DR_MODEM_OK)
             {
-                pModem->reset(pModem); 
-                printf_modem("modem Key reset!: \r\n");
-                vTaskDelay(10000);
+                pModem->keyoff(pModem); 
             }
             break;
         case DS_MODEM_ON:
