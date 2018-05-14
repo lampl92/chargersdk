@@ -4,7 +4,7 @@
 #include "cfg_parse.h"
 #include <string.h>
 
-static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCfgItem, uint8_t type)
+static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, char *jnItemName, void *pvCfgItem, uint8_t type)
 {
     ErrorCode_t errcode;
 
@@ -36,7 +36,7 @@ static ErrorCode_t GetFTPCfgItem(void *pvCfgObj, uint8_t *jnItemName, void *pvCf
         *((double *)pvCfgItem) = (double)(jsItem->valuedouble);
         break;
     case ParamTypeString:
-        strcpy((uint8_t *)pvCfgItem, jsItem->valuestring);
+        strcpy((char *)pvCfgItem, jsItem->valuestring);
         break;
     default:
         break;
@@ -109,7 +109,7 @@ ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
 
 
 
-ErrorCode_t SetFTPCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
+ErrorCode_t SetFTPCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
 {
     cJSON *jsFTPCfgObj;
     cJSON *jsItem;
@@ -141,7 +141,7 @@ ErrorCode_t SetFTPCfg(uint8_t *jnItemString, void *pvCfgParam, uint8_t type)
                 cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
                 break;
             case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
                 break;
             default:
                 break;

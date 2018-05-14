@@ -30,12 +30,12 @@ typedef struct
 
 typedef struct _echProtoInfo
 {
-    uint8_t  strServerIP[64 + 1]; //可以是域名，也可以是IP地址
+    char  strServerIP[64 + 1]; //可以是域名，也可以是IP地址
     uint16_t usServerPort;
-    uint8_t  strUserName[8 + 1];
-    uint8_t  strUserPwd[12 + 1];
-    uint8_t  strKey[16 + 1];
-    uint8_t  strNewKey[16 + 1];
+    char  strUserName[8 + 1];
+    char  strUserPwd[12 + 1];
+    char  strKey[16 + 1];
+    char  strNewKey[16 + 1];
     time_t   tNewKeyChangeTime;
 
     uint32_t ulOptSN;           //重启命令操作序列号

@@ -131,7 +131,7 @@ void modem_delayms(int ms);
 DevModem_t *DevModemCreate(void);
 void Modem_Poll(DevModem_t *pModem);
 void modem_enQue(uint8_t *pbuff, uint32_t len);
-uint32_t modem_send_at(uint8_t *format, ...);
-DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, uint32_t second);
+uint32_t modem_send_at(char *format, ...);
+DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32_t second);
 
 #endif/*_MODEM_H_*/

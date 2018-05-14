@@ -98,11 +98,11 @@ static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *rbuff, uint32_t len
     return uart_read(UART_PORT_GPRS, rbuff, len, 100);
 }
 
-uint32_t modem_send_at(uint8_t *format, ...)
+uint32_t modem_send_at(char *format, ...)
 {
-    uint8_t     cmd[MAX_COMMAND_LEN + 1]  = {0};
-    va_list  va;
-    uint32_t      n;
+    char cmd[MAX_COMMAND_LEN + 1]  = {0};
+    va_list va;
+    uint32_t n;
 
 
     va_start(va, format);
@@ -110,7 +110,7 @@ uint32_t modem_send_at(uint8_t *format, ...)
     va_end(va);
 
 //    cmd[strlen(cmd)] = '\n';
-    modem_UART_puts(cmd, strlen(cmd));
+    modem_UART_puts((uint8_t *)cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
     printf_modem("%s", cmd);
@@ -129,9 +129,9 @@ uint32_t modem_send_at(uint8_t *format, ...)
  *
  * @return     { description_of_the_return_value }
  */
-DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, uint32_t second)
+DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32_t second)
 {
-    uint8_t  *p;
+    char  *p;
     uint32_t  time;
     uint32_t n;
     DR_MODEM_e    ret;
@@ -139,7 +139,7 @@ DR_MODEM_e modem_get_at_reply(uint8_t *reply, uint32_t len, const uint8_t *key, 
     time  = 0;
     while (1)
     {
-        n  = modem_UART_gets(pModem, reply, len);
+        n  = modem_UART_gets(pModem, (uint8_t *)reply, len);
         if ( n > 0 )
         {
             //优先判断这两个模块会主动发出的命令
@@ -311,7 +311,7 @@ void Modem_Poll(DevModem_t *pModem)
                     pppHdlcDriverWriteRxQueue(net_dev->interface, tcp_client_recvbuf[i]);
                 }
 
-                if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                if (strstr((char *)tcp_client_recvbuf, "CLOSED") != NULL)
                 {
                     printf_safe("\e[31;47mServer CLOSED\n\e[0m");
                     pModem->state = DS_MODEM_ERR;
@@ -436,7 +436,7 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 printf_protolog("\n");
 
-                if (strstr(tcp_client_recvbuf, "CLOSED") != NULL)
+                if (strstr((char *)tcp_client_recvbuf, "CLOSED") != NULL)
                 {
                     printf_safe("\e[31;47mServer CLOSED\n\e[0m");
                     pModem->state = DS_MODEM_ERR;
@@ -512,7 +512,7 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 recv_len = modem_read(pModem, pucQueBuffer, QUE_BUFSIZE);
                 pechProto->info.ftp.ftp_proc.ulRecvFileSize += recv_len;
-                if (strstr(pucQueBuffer, "+QFTPGET:") != NULL)
+                if (strstr((char *)pucQueBuffer, "+QFTPGET:") != NULL)
                 {
                     for (i = 0; i < recv_len; i++)
                     {

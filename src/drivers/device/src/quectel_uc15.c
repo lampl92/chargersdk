@@ -6,7 +6,7 @@
 
 DR_MODEM_e UC15_quit(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -24,7 +24,7 @@ DR_MODEM_e UC15_quit(DevModem_t *pModem)
  */
 static DR_MODEM_e UC15_disable_echo(void)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("ATE0V1\r");
@@ -42,8 +42,8 @@ static DR_MODEM_e UC15_disable_echo(void)
  */
 static DR_MODEM_e UC15_CSQ(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CSQ\r");
@@ -67,7 +67,7 @@ static DR_MODEM_e UC15_CSQ(DevModem_t *pModem)
  */
 static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CPIN?\r");
@@ -98,8 +98,8 @@ static DR_MODEM_e UC15_CPIN(DevModem_t *pModem)
  */
 static DR_MODEM_e UC15_CREG(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CREG?\r");
@@ -139,8 +139,8 @@ static DR_MODEM_e UC15_CREG(DevModem_t *pModem)
  */
 static DR_MODEM_e UC15_CGREG(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CGREG?\r");
@@ -175,7 +175,7 @@ static DR_MODEM_e UC15_CGREG(DevModem_t *pModem)
 
 DR_MODEM_e UC15_AT_CGDCONT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -188,7 +188,7 @@ DR_MODEM_e UC15_AT_CGDCONT(DevModem_t *pModem)
 
 DR_MODEM_e UC15_ATD(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -208,7 +208,7 @@ DR_MODEM_e UC15_ATD(DevModem_t *pModem)
  */
 DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -226,7 +226,7 @@ DR_MODEM_e UC15_QIDEACT(DevModem_t *pModem)
  */
 DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -239,7 +239,7 @@ DR_MODEM_e UC15_QIACT(DevModem_t *pModem)
 
 DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     uint8_t *p;
     DR_MODEM_e ret;
@@ -255,8 +255,8 @@ DR_MODEM_e UC15_LOCIP(DevModem_t *pModem)
 }
 DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIOPEN=%d,%d,\"%s\",\"%s\",%d,%d,%d\r",
@@ -313,7 +313,7 @@ DR_MODEM_e UC15_TCPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 }
 DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -325,7 +325,7 @@ DR_MODEM_e UC15_QICLOSE(DevModem_t *pModem)
 
 DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, uint8_t param)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
     if (usr != NULL)
@@ -344,7 +344,7 @@ DR_MODEM_e UC15_QFTPCFG(DevModem_t *pModem, char *cmd, char *usr, char *pass, ui
 
 DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
     uint32_t a, b;
@@ -372,7 +372,7 @@ DR_MODEM_e UC15_QFTPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 }
 DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
     uint32_t a, b;
@@ -400,7 +400,7 @@ DR_MODEM_e UC15_QFTPCWD(DevModem_t *pModem, char *path)
 }
 DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem, char *fname)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -412,7 +412,7 @@ DR_MODEM_e UC15_QFTPGET(DevModem_t *pModem, char *fname)
 }
 DR_MODEM_e UC15_QFTPCLOSE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -439,7 +439,7 @@ DR_MODEM_e UC15_reset(void *pModem)
 }
 DR_MODEM_e UC15_soft_reset(void *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint8_t  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
@@ -456,7 +456,7 @@ DR_MODEM_e UC15_soft_reset(void *pModem)
  */
 DR_MODEM_e UC15_open(void *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     printf_modem("modem open: \r\n");
@@ -498,7 +498,7 @@ DR_MODEM_e UC15_open(void *pModem)
 DR_MODEM_e UC15_init(void *pvModem)
 {
     DevModem_t *pModem;
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
     int timeoutMax = 20;
     int timeout = 0;

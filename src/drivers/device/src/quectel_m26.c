@@ -6,8 +6,8 @@
 
 DR_MODEM_e M26_quit(void *pvModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("++++++");
@@ -24,7 +24,7 @@ DR_MODEM_e M26_quit(void *pvModem)
  */
 static DR_MODEM_e M26_disable_echo(void)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("ATE0V1\r");
@@ -34,8 +34,8 @@ static DR_MODEM_e M26_disable_echo(void)
 }
 static DR_MODEM_e M26_ATI(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("ATI\r");
@@ -55,8 +55,8 @@ static DR_MODEM_e M26_ATI(DevModem_t *pModem)
 //运行商
 static DR_MODEM_e M26_AT_COPS(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+COPS?\r");
@@ -83,8 +83,8 @@ static DR_MODEM_e M26_AT_COPS(DevModem_t *pModem)
  */
 static DR_MODEM_e M26_CSQ(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CSQ\r");
@@ -103,7 +103,7 @@ static DR_MODEM_e M26_CSQ(DevModem_t *pModem)
 
 static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CPIN?\r");
@@ -135,8 +135,8 @@ static DR_MODEM_e M26_CPIN(DevModem_t *pModem)
  */
 static DR_MODEM_e M26_CREG(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CREG?\r");
@@ -176,8 +176,8 @@ static DR_MODEM_e M26_CREG(DevModem_t *pModem)
  */
 static DR_MODEM_e M26_CGREG(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CGREG?\r");
@@ -212,8 +212,8 @@ static DR_MODEM_e M26_CGREG(DevModem_t *pModem)
 
 DR_MODEM_e M26_AT_CGDCONT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CGDCONT=%d,\"%s\",\"%s\"\r", 1, "IP", pModem->info.strAPN);
@@ -225,8 +225,8 @@ DR_MODEM_e M26_AT_CGDCONT(DevModem_t *pModem)
 
 DR_MODEM_e M26_ATD(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("ATD*99#\r");
@@ -244,8 +244,8 @@ DR_MODEM_e M26_ATD(DevModem_t *pModem)
  */
 DR_MODEM_e M26_QIFGCNT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIFGCNT=%d\r", pModem->info.ucContext);
@@ -262,8 +262,8 @@ DR_MODEM_e M26_QIFGCNT(DevModem_t *pModem)
  */
 DR_MODEM_e M26_AT_QIREGAPP(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIREGAPP\r");
@@ -275,8 +275,8 @@ DR_MODEM_e M26_AT_QIREGAPP(DevModem_t *pModem)
 
 DR_MODEM_e M26_QIACT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIACT\r");
@@ -288,8 +288,8 @@ DR_MODEM_e M26_QIACT(DevModem_t *pModem)
 
 DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIDEACT\r");
@@ -307,8 +307,8 @@ DR_MODEM_e M26_QIDEACT(DevModem_t *pModem)
  */
 DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     uint8_t *p;
     DR_MODEM_e ret;
 
@@ -326,8 +326,8 @@ DR_MODEM_e M26_LOCIP(DevModem_t *pModem)
 
 DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIOPEN=\"TCP\",\"%s\",\"%d\"\r", server_ip, port);
@@ -377,7 +377,7 @@ DR_MODEM_e M26_TCPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 }
 DR_MODEM_e M26_QISACK(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QISACK\r");
@@ -390,7 +390,7 @@ DR_MODEM_e M26_QISACK(DevModem_t *pModem)
 }
 DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QISEND=%d\r", len);
@@ -400,7 +400,7 @@ DR_MODEM_e M26_QISEND(DevModem_t *pModem, uint32_t len)
 }
 static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     uint32_t recv_len = 0;
     int i = 0;
     DR_MODEM_e ret;
@@ -440,8 +440,8 @@ static uint32_t M26_QIRD(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 
 DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QICLOSE\r");
@@ -457,8 +457,8 @@ DR_MODEM_e M26_QICLOSE(DevModem_t *pModem)
  */
 DR_MODEM_e M26_STATE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[16 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[16 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QISTATE\r");
@@ -513,8 +513,8 @@ DR_MODEM_e M26_STATE(DevModem_t *pModem)
 
 DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem, char *user)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char  s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QFTPUSER=\"%s\"\r", user);
@@ -525,8 +525,8 @@ DR_MODEM_e M26_QFTPUSER(DevModem_t *pModem, char *user)
 }
 DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem, char *pass)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QFTPPASS=\"%s\"\r", pass);
@@ -537,8 +537,8 @@ DR_MODEM_e M26_QFTPPASS(DevModem_t *pModem, char *pass)
 }
 DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
     uint32_t a;
     
@@ -565,8 +565,8 @@ DR_MODEM_e M26_QFTPOPEN(DevModem_t *pModem, char *server_ip, uint16_t port)
 }
 DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem, char *path)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
     uint32_t a;
     
@@ -594,8 +594,8 @@ DR_MODEM_e M26_QFTPPATH(DevModem_t *pModem, char *path)
 
 DR_MODEM_e M26_QFTPGET(DevModem_t *pModem, char *fname)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QFTPGET=\"%s\"\r", fname);
@@ -607,8 +607,8 @@ DR_MODEM_e M26_QFTPGET(DevModem_t *pModem, char *fname)
 
 DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QFTPCLOSE\r");
@@ -626,8 +626,8 @@ DR_MODEM_e M26_QFTPCLOSE(DevModem_t *pModem)
  */
 DR_MODEM_e M26_set_RecvType(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QISHOWRA=%d\r", 0);  //在接收到的数据头位置增加数据来源的地址和端口号。具体的格式为：RECV FROM:<IP ADDRESS>:<PORT>
@@ -660,7 +660,7 @@ DR_MODEM_e M26_set_RecvType(DevModem_t *pModem)
 
 DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QIMODE=%d\r", pModem->info.ucTPMode);
@@ -671,7 +671,7 @@ DR_MODEM_e modem_QIMODE(DevModem_t *pModem)
 }
 DR_MODEM_e modem_QITCFG(DevModem_t *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+QITCFG=%d,%d,%d,%d\r", 3, 2, 512, 1);
@@ -725,8 +725,8 @@ DR_MODEM_e M26_reset(void *pvModem)
 
 DR_MODEM_e M26_soft_reset(void *pModem)
 {
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
-    uint8_t  s[8 + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
     modem_send_at("AT+CFUN=%d,%d\r", 1, 1);
@@ -743,7 +743,7 @@ DR_MODEM_e M26_soft_reset(void *pModem)
 DR_MODEM_e M26_open(void *pvModem)
 {
     DevModem_t *pModem;
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
     
     pModem = (DevModem_t*)pvModem;
@@ -798,7 +798,7 @@ DR_MODEM_e M26_open(void *pvModem)
 DR_MODEM_e M26_init(void *pvModem)
 {
     DevModem_t *pModem;
-    uint8_t  reply[MAX_COMMAND_LEN + 1] = { 0 };
+    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
     int timeoutMax = 20;
     int timeout = 0;
