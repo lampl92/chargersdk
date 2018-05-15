@@ -335,6 +335,7 @@
     <ClCompile Include="PwdInput.c" />
     <ClCompile Include="PwdLimted.c" />
     <ClCompile Include="PwdTest.c" />
+    <ClCompile Include="SKIN_mulitipage.c" />
     <ClCompile Include="startup_chargersdk.c" />
     <ClCompile Include="start_up.c" />
     <ClCompile Include="system_chargersdk.c" />

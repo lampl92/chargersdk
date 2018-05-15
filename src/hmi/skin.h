@@ -35,5 +35,7 @@ int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
 int SKIN_progbarmeter(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 
+int SKIN_mulitipage(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
+
 #endif
 
