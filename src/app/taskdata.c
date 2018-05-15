@@ -122,7 +122,7 @@ void vTaskEVSEData(void *pvParameters)
                 /*金额不足*/
                 if (pCON->order.ucStartType == defOrderStartType_Card)
                 {
-                    if (pCON->order.dTotalFee >= pCON->order.dBalance)
+                    if (pCON->order.dTotalFee + 0.5 >= pCON->order.dBalance)
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                         pCON->order.statOrder = STATE_ORDER_WAITSTOP;
@@ -133,7 +133,7 @@ void vTaskEVSEData(void *pvParameters)
                 /****金额判断****/
                 if(pCON->order.dLimitFee != 0) //0 时表示自动充满，非0即停止金额
                 {
-                    if(pCON->order.dTotalFee >= pCON->order.dLimitFee) // 达到充电金额
+                    if(pCON->order.dTotalFee + 0.5 >= pCON->order.dLimitFee) // 达到充电金额
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                         pCON->order.statOrder = STATE_ORDER_WAITSTOP;
