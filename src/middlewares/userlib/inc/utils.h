@@ -10,6 +10,8 @@
 
 #include "stm32f4xx.h"
 
+#define utils_min(a, b) (((a) < (b)) ? (a) : (b))
+
 char *utils_strdup(const char *s);
 
 uint16_t utils_htons(uint16_t n);
