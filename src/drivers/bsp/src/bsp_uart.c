@@ -13,6 +13,7 @@
 #include "bsp.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "cmsis_os.h"
 
 UART_HandleTypeDef CLI_UARTx_Handler;
 UART_HandleTypeDef RFID_UARTx_Handler;
@@ -29,6 +30,164 @@ static volatile uint8_t CLI_RX_Buffer[1];
 static volatile uint8_t RFID_RX_Buffer[1];
 static volatile uint8_t GPRS_RX_Buffer[1];
 static volatile uint8_t WIFI_RX_Buffer[1];
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+#include "ring_buffer.h"
+
+#define  UART_MAX   7
+
+#define USART1_RB_SIZE     1024
+#define USART2_RB_SIZE     1024
+#define USART3_RB_SIZE     1024
+#define UART4_RB_SIZE     1024
+#define UART5_RB_SIZE     1024
+#define USART6_RB_SIZE     1024
+#define UART7_RB_SIZE     1024
+
+struct _uart_driver
+{
+    int handle;
+    uint32_t is_initialized;
+    UART_HandleTypeDef UARTx_Handler;
+    volatile uint8_t rbuff[1];
+    ring_buffer_s *rb;
+    osMutexId lock;
+}uart_driver[UART_MAX];
+
+
+void uart_driver_init(void)
+{
+    int i;
+    for (i = 0; i < UART_MAX; i++)
+    {
+        uart_driver[i].handle = -1;
+        uart_driver[i].rb = NULL;
+    }
+}
+
+int uart_open(char *path, uint32_t bps)
+{
+    struct _uart_driver *driver;
+    if (strcmp(path, "USART1") == 0)
+    {
+        driver = &uart_driver[0];
+        driver->handle = 0;
+        driver->rb = ring_uint8_init(USART1_RB_SIZE);
+        osMutexDef(uart1_lock);
+        driver->lock = osMutexCreate(osMutex(uart1_lock));
+        driver->UARTx_Handler.Instance = USART1;
+    }
+    else if (strcmp(path, "USART2") == 0)
+    {
+        driver = &uart_driver[1];
+        driver->handle = 1;
+        driver->rb = ring_uint8_init(USART2_RB_SIZE);
+        osMutexDef(uart2_lock);
+        driver->lock = osMutexCreate(osMutex(uart2_lock));
+        driver->UARTx_Handler.Instance = USART2;
+    }
+    else if (strcmp(path, "USART3") == 0)
+    {
+        driver = &uart_driver[2];
+        driver->handle = 2;
+        driver->rb = ring_uint8_init(USART3_RB_SIZE);
+        osMutexDef(uart2_lock);
+        driver->lock = osMutexCreate(osMutex(uart2_lock));
+        driver->UARTx_Handler.Instance = USART3;
+    }
+    else if (strcmp(path, "UART4") == 0)
+    {
+        driver = &uart_driver[3];
+        driver->handle = 3;
+        driver->rb = ring_uint8_init(UART4_RB_SIZE);
+        osMutexDef(uart3_lock);
+        driver->lock = osMutexCreate(osMutex(uart3_lock));
+        driver->UARTx_Handler.Instance = UART4;
+    }
+    else if (strcmp(path, "UART5") == 0)
+    {
+        driver = &uart_driver[4];
+        driver->handle = 4;
+        driver->rb = ring_uint8_init(UART5_RB_SIZE);
+        osMutexDef(uart4_lock);
+        driver->lock = osMutexCreate(osMutex(uart4_lock));
+        driver->UARTx_Handler.Instance = UART5;
+    }
+    else if (strcmp(path, "USART6") == 0)
+    {
+        driver = &uart_driver[5];
+        driver->handle = 5;
+        driver->rb = ring_uint8_init(USART6_RB_SIZE);
+        osMutexDef(uart5_lock);
+        driver->lock = osMutexCreate(osMutex(uart5_lock));
+        driver->UARTx_Handler.Instance = USART6;
+    }
+    else if (strcmp(path, "UART7") == 0)
+    {
+        driver = &uart_driver[6];
+        driver->handle = 6;
+        driver->rb = ring_uint8_init(UART7_RB_SIZE);
+        osMutexDef(uart6_lock);
+        driver->lock = osMutexCreate(osMutex(uart6_lock));
+        driver->UARTx_Handler.Instance = UART7;
+    }
+    else
+    {
+        return -1;
+    }
+    driver->UARTx_Handler.Init.BaudRate = bps;
+    driver->UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+    driver->UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+    driver->UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+    driver->UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
+    driver->UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    driver->UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&(driver->UARTx_Handler));
+    HAL_UART_Receive_IT(&(driver->UARTx_Handler), (uint8_t *)(driver->rbuff), 1);
+    
+    driver->is_initialized = 1;
+    
+    return driver->handle;
+}
+
+int uart_close(int handle)
+{
+    int i;
+    if (handle < 0 || handle >= UART_MAX)
+    {
+        return -1;
+    }
+    uart_driver[handle].handle = -1;
+    uart_driver[handle].is_initialized = 0;
+    ring_buffer_free(uart_driver[handle].rb);
+    osMutexDelete(uart_driver[handle].lock);
+    
+    return 0;
+}
+
+uint32_t uart_read_rb(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms)
+{
+    uart_driver[handle].rb
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 static uint8_t readRecvQue(Queue *q, uint8_t *ch, uint32_t timeout_ms);
 

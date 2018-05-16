@@ -12,6 +12,21 @@
 #include "userlib_queue.h"
 #include "bsp_define.h"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 typedef enum
 {
     UART_PORT_CLI,
@@ -25,14 +40,14 @@ typedef enum
 #define CLI_USARTx_BASE                             UART4
 #define CLI_USARTx_BAUDRATE                         115200
 #define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
-#define CLI_QUEUE_SIZE                              1500
+#define CLI_QUEUE_SIZE                              1024
 #define CLI_IRQn                                    UART4_IRQn
 #define CLI_Priority                                bspUART4_PreemptPriority
 
 #define RFID_USARTx_BASE                            USART1
 #define RFID_USARTx_BAUDRATE                        115200
 #define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define RFID_QUEUE_SIZE                             100
+#define RFID_QUEUE_SIZE                             128
 
 #define GPRS_USARTx_BASE                            UART5
 #define GPRS_USARTx_BAUDRATE                        115200
@@ -44,9 +59,9 @@ typedef enum
 #define WIFI_USARTx_BASE                            UART5
 #define WIFI_USARTx_BAUDRATE                        115200
 #define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
-#define WIFI_QUEUE_SIZE                             100
+#define WIFI_QUEUE_SIZE                             128
 
-#define TERM_QUEUE_SIZE                             1500
+#define TERM_QUEUE_SIZE                             1024
 
 #endif
 #ifdef EVSE_DEVBOARD
