@@ -21,10 +21,11 @@ volatile static int page = 0;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 490, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 350, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
     { TEXT_CreateIndirect, "Headline", ID_TEXT_1, 10, 5, 230, 32, TEXT_CF_LEFT, 0x0, 0 },
-    { MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 20, 40, 760, 440, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 760, 5, 30, 30, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 730, 10, 50, 50, 0, 0x0, 0 },
+    { MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 10, 45, 780, 420, 0, 0x0, 0 },
+    //{ MULTIPAGE_CreateIndirect, "Multipage", ID_MULTIPAGE_0, 10, 45, 300, 100, 0, 0x0, 0 },
 };
 
 static void updatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
@@ -56,32 +57,50 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN     hWinPage;
     CON_t       *pCont;
     EventBits_t uxBits;
+    int i;
 
     pCont = CONGetHandle(0);
     
     switch (pMsg->MsgId)
     {
+    case WM_CREATE:
+        break;
     case WM_PAINT:
-        GUI_SetColor(0x3399FF);//蓝色
-        GUI_FillRect(0, 0, 800, 40);
+        //GUI_SetColor(0x3399FF);//蓝色
+        //GUI_SetColor(0x33CCFF);//绿蓝色
+        GUI_SetColor(color_manager_out);
+        GUI_FillRect(0, 0, 800, 480);
+//        GUI_FillRect(0, 0, 800, 40);
+//        GUI_FillRect(0, 0, 10, 480);
+//        GUI_FillRect(0, 460, 800, 480);
+//        GUI_FillRect(790, 0, 800, 480);
         break;
     case WM_INIT_DIALOG:                
+        LISTVIEW_SetDefaultGridColor(GUI_RED);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetFont(hItem, &fontwryhcg30e);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
         TEXT_SetTextColor(hItem, GUI_WHITE);
-        TEXT_SetFont(hItem, &fontwryhcg30e);
+        TEXT_SetFont(hItem, &fontwryhcg36e);
         TEXT_SetText(hItem, "充电桩管理系统");
-
-        //updatetime(pMsg, ID_TEXT_0);
         
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
-        MULTIPAGE_SetFont(hItem, &SIF24_Font);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetSkin(hItem, SKIN_buttonManagerQuit);
+        //GUI_SetColor(color_manager_out);
+       // BUTTON_SetFont(hItem, &fontwryhcg36e);
+       // BUTTON_SetText(hItem, "X");
+        
 
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
+        //MULTIPAGE_SetBkColor(hItem, color_manager_in, MULTIPAGE_CI_ENABLED);
+        //MULTIPAGE_SetFont(hItem, &SIF24_Font);
+        MULTIPAGE_SetFont(hItem, &fontwryhcg30e);
+        MULTIPAGE_SetTabHeight(hItem,50);                    
+        
         hWinPage = CreateManagerInfoAnalog(pMsg->hWin);
-        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "模拟量");
+        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态信息");
 
         hWinPage = CreateManagerInfoStatus(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态量");
@@ -99,6 +118,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
 
         MULTIPAGE_SelectPage(hItem, 0);
+        
+        //MULTIPAGE_SetSkin(hItem, SKIN_mulitipage);
+        for (i = 0; i < 6;i++)
+        {
+            MULTIPAGE_SetTabWidth(hItem, 120,i);   
+        }
 
         break;
     case WM_NOTIFY_PARENT:
@@ -111,12 +136,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             case WM_NOTIFICATION_CLICKED:
                 break;
             case WM_NOTIFICATION_RELEASED:
+            case WM_NOTIFICATION_MOVED_OUT:
                 WM_SendMessageNoPara(_hWinManagerInfoAnalog, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerInfoStatus, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerLogDate, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
                 WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN);
+                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN); 
                 GUI_EndDialog(pMsg->hWin, 0);
                 home();              
                 break;
@@ -163,19 +189,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             updatetime(pMsg, ID_TEXT_0);
             WM_RestartTimer(pMsg->Data.v, 400);
-        }
-        break;
-    case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
-        break;
-    case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if (bittest(winCreateFlag, 0))
-        {
-            bitclr(winCreateFlag, 0);
-            GUI_EndDialog(err_hItem, 0);
-            err_hItem = 0;
         }
         break;
     default:

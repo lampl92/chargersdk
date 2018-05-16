@@ -3,7 +3,7 @@
 #include "skin.h"
 #include "HMI_Start.h"
 
-//²âÊÔ°´¼ü
+//æµ‹è¯•æŒ‰é”®
 int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
@@ -14,7 +14,7 @@ int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -46,7 +46,7 @@ int SKIN_buttontest(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
-//Ö÷Ò³ÉÏµÄÁ½¸ö°´¼ü
+//ä¸»é¡µä¸Šçš„ä¸¤ä¸ªæŒ‰é”®
 int SKIN_buttongunlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
@@ -57,7 +57,7 @@ int SKIN_buttongunlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -100,7 +100,7 @@ int SKIN_buttongunscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
@@ -141,7 +141,7 @@ int SKIN_buttongunerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -183,7 +183,7 @@ int SKIN_buttongunAlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -226,7 +226,7 @@ int SKIN_buttongunAscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -268,7 +268,7 @@ int SKIN_buttongunAerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -310,7 +310,7 @@ int SKIN_buttongunBlookinfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -352,7 +352,7 @@ int SKIN_buttongunBscancode(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -394,7 +394,7 @@ int SKIN_buttongunBerror(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -436,7 +436,7 @@ int SKIN_buttonhelp(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -468,7 +468,7 @@ int SKIN_buttonhelp(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
-//Ñ¡Ç¹Ò³ÉÏµÄÇ¹AÇ¹B°´Å¥
+//é€‰æžªé¡µä¸Šçš„æžªAæžªBæŒ‰é’®
 int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
@@ -480,7 +480,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
         if (pDrawItemInfo->hWin == WM_GetDialogItem(WM_GetParent(pDrawItemInfo->hWin), GUI_ID_USER + 0x01))
@@ -554,7 +554,7 @@ int SKIN_selectbutton(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     return 0;
 }
 
-//¹²ÓÐ°´Å¥ÍË³öºÍºóÍË
+//å…±æœ‰æŒ‰é’®é€€å‡ºå’ŒåŽé€€
 int SKIN_buttonquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
@@ -565,7 +565,7 @@ int SKIN_buttonquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -607,7 +607,7 @@ int SKIN_buttonbackquit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
 
@@ -650,7 +650,7 @@ int SKIN_buttonPleasePlugQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
         BUTTON_GetUserData(pDrawItemInfo->hWin, s, 10);
@@ -699,7 +699,7 @@ int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
     //case WIDGET_ITEM_DRAW_TEXT:
         break;
-    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWinÄ¬ÈÏ¿Ø¼þ»æÖÆº¯Êý
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
 
     case WIDGET_ITEM_DRAW_BACKGROUND:
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
@@ -722,6 +722,73 @@ int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         {
             BUTTON_DrawSkinFlex(pDrawItemInfo); 
         }        
+        break;
+    case WIDGET_ITEM_DRAW_TEXT:
+    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
+        return 0;
+    }
+    return 0;
+}
+
+int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
+{
+    WM_HWIN hWin;
+    GUI_RECT h;
+    switch (pDrawItemInfo->Cmd)
+    {
+    case WIDGET_ITEM_CREATE:
+    case WIDGET_ITEM_DRAW_BITMAP:
+        break;
+    default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWiné»˜è®¤æŽ§ä»¶ç»˜åˆ¶å‡½æ•°
+
+    case WIDGET_ITEM_DRAW_BACKGROUND:
+        GUI_GetClientRect(&h);
+        if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
+        {
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg36e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
+        {
+            GUI_SetColor(GUI_RED);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg30e);
+            GUI_SetBkColor(GUI_RED);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
+        {
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg30e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+        }
+        else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
+        {
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg30e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+        }
+        else
+        {
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg30e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            //BUTTON_DrawSkinFlex(pDrawItemInfo); 
+        }
         break;
     case WIDGET_ITEM_DRAW_TEXT:
     //		return BUTTON_DrawSkinFlex(pDrawItemInfo);

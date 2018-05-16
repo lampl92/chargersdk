@@ -331,6 +331,7 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
     <ClCompile Include="EquipmentFailureNoStart.c" />
     <ClCompile Include="manager_common.c" />
+    <ClCompile Include="manager_states_info.c" />
     <ClCompile Include="PwdError.c" />
     <ClCompile Include="PwdInput.c" />
     <ClCompile Include="PwdLimted.c" />

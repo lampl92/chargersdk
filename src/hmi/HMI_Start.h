@@ -23,6 +23,8 @@ extern GUI_HMEM    qr_hmem;
 extern int SignalFlag;//信号图标刷新标志
 
 #define FONT_COLOR GUI_BLACK
+#define color_manager_in 0x0000CC
+#define color_manager_out GUI_BLACK
 
 #define FontManager SIF24_Font;
 
