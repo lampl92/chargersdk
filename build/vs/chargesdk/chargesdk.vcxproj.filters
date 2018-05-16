@@ -1959,6 +1959,9 @@
     <ClCompile Include="manager_states_info.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\ring_buffer.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">

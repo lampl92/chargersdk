@@ -94,10 +94,11 @@ void yaffs_init(void)
         yaffs_mount(YAFFS_MOUNT_POINT);
     }
 }
+extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
-
+    cli_init();
     timeInit();
     retarget_init();
     yaffs_init();

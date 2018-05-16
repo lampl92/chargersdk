@@ -101,4 +101,14 @@ uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
 uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 uint32_t uart_read_ymodem(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 
+
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+void uart_driver_init(void);
+int uart_open(char *path, uint32_t bps);
+int uart_close(int handle);
+uint32_t uart_read_fast(int handle, uint8_t *data, uint32_t len);
+uint32_t uart_read_wait(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 #endif

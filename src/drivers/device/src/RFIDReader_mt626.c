@@ -48,7 +48,7 @@ static uint32_t MT626Write(uint8_t *data, uint32_t len)
  */     
 static void MT626Read(uint8_t *data, uint32_t *pRecvdLen)
 {
-    *pRecvdLen = uart_read(UART_PORT_RFID, data, 0, 1);
+    *pRecvdLen = uart_read(UART_PORT_RFID, data, 0, 10);
 }
 
 /** @brief 异或计算

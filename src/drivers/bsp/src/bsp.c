@@ -140,7 +140,8 @@ void bsp_Init(void)
 #endif
     //bsp_LTDC_Init();//在GUI中初始化
 //    bsp_Touch_Init();
-    bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
+    uart_driver_init();
+    //bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
     bsp_Uart_Init(UART_PORT_RFID, 1);
     bsp_Uart_Init(UART_PORT_GPRS, 1);
     //IWDG_Init(IWDG_PRESCALER_64,500);  //在taskinit中初始化了	

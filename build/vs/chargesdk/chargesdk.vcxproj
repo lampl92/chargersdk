@@ -244,6 +244,7 @@
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\unzip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c" />
     <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c" />
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\ring_buffer.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />

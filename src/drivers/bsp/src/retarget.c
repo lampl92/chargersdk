@@ -38,11 +38,13 @@ int printf_safe(const char *format, ...)
 #endif
         xprintf("%s", buf_str);
         //strcpy(strTermCtx, buf_str);
+#if EVSE_USING_GUI
         for (i = 0; i < strlen(buf_str); i++)
         {
             pTermRecvQue->EnElem(pTermRecvQue, buf_str[i]);
         }
         buf_str[i] = '\0';
+#endif
 #if USE_FreeRTOS
         xSemaphoreGive(xprintfMutex);
     }
