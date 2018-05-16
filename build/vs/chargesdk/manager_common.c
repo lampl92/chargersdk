@@ -76,7 +76,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //        GUI_FillRect(790, 0, 800, 480);
         break;
     case WM_INIT_DIALOG:                
-        LISTVIEW_SetDefaultGridColor(GUI_RED);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
         TEXT_SetTextColor(hItem, GUI_WHITE);
         TEXT_SetFont(hItem, &fontwryhcg30e);
@@ -137,12 +136,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 break;
             case WM_NOTIFICATION_RELEASED:
             case WM_NOTIFICATION_MOVED_OUT:
-                WM_SendMessageNoPara(_hWinManagerInfoAnalog, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerInfoStatus, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerLogDate, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
-                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN); 
+//                WM_SendMessageNoPara(_hWinManagerInfoAnalog, MSG_DELETEMANAGERWIN);
+//                WM_SendMessageNoPara(_hWinManagerInfoStatus, MSG_DELETEMANAGERWIN);
+//                WM_SendMessageNoPara(_hWinManagerLogDate, MSG_DELETEMANAGERWIN);
+//                WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
+//                WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
+//                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN); 
                 GUI_EndDialog(pMsg->hWin, 0);
                 home();              
                 break;

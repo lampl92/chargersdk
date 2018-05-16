@@ -156,11 +156,11 @@ int SKIN_checkboxStateInfo(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         break;
     case WIDGET_ITEM_DRAW_BITMAP://选择打勾
         GUI_GetClientRect(&h);
-        GUI_SetColor(GUI_RED);
-        GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);        
-        GUI_SetBkColor(GUI_RED);
-        GUI_SetFont(&fontwryhcg30e);
         GUI_SetColor(GUI_BLACK);
+        GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);        
+        GUI_SetBkColor(GUI_BLACK);
+        GUI_SetFont(&fontwryhcg30e);
+        GUI_SetColor(GUI_WHITE);
         CHECKBOX_GetUserData(pDrawItemInfo->hWin, c, 10);
         if (strcmp("pile", c) == 0)
         {

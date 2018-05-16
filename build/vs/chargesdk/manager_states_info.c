@@ -50,7 +50,7 @@ WM_HWIN _hWinManagerInfoAnalog;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 95, 800, 300, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 95, 800, 465, 0, 0x0, 0 },
 //    { CHECKBOX_CreateIndirect, "Checkbox_pile", ID_CHECKBOX_0, 15, 110, 100, 40, 0, 0x0, 0 },
 //    { CHECKBOX_CreateIndirect, "Checkbox_gun1", ID_CHECKBOX_1, 15, 170, 100, 40, 0, 0x0, 0 },
 //    { CHECKBOX_CreateIndirect, "Checkbox_gun2", ID_CHECKBOX_2, 15, 230, 100, 40, 0, 0x0, 0 },
@@ -104,9 +104,9 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 
 static void RADIO3(WM_HWIN hItem1, WM_HWIN hItem2, WM_HWIN hItem3)
 {
-        CHECKBOX_SetState(hItem1, 1);
-        CHECKBOX_SetState(hItem2, 0);
-        CHECKBOX_SetState(hItem3, 0);
+    CHECKBOX_SetState(hItem1, 1);
+    CHECKBOX_SetState(hItem2, 0);
+    CHECKBOX_SetState(hItem3, 0);
 }
 
 static void RADIO2(WM_HWIN hItem1, WM_HWIN hItem2)
@@ -121,6 +121,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     WM_HWIN      hItem;
     const char *strdouble[3] = { "pile", "gunA", "gunB" };
     const char *strsingle[2] = { "pile", "gun" };
+    HEADER_SKINFLEX_PROPS head_skin;
     U32          FileSize;
     int          NCode;
     int          Id;
@@ -130,20 +131,74 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     CON_t	*pcont;
+    int x, y, x_size, y_size;
     
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
+        GUI_SetColor(GUI_BLACK);
+        if (CHECKBOX_GetState(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0)) == 1)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
+            x = WM_GetWindowOrgX(hItem) - WM_GetWindowOrgX(WM_GetParent(hItem));
+            x_size = WM_GetWindowSizeX(hItem);
+            y = WM_GetWindowOrgY(hItem) - WM_GetWindowOrgY(WM_GetParent(hItem));
+            y_size = WM_GetWindowSizeY(hItem);
+            GUI_FillRect(x + x_size-4, y, x + 2*x_size, y + y_size-1);
+        }
+        if (CHECKBOX_GetState(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1)) == 1)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1);
+            x = WM_GetWindowOrgX(hItem) - WM_GetWindowOrgX(WM_GetParent(hItem)) ;
+            x_size = WM_GetWindowSizeX(hItem);
+            y = WM_GetWindowOrgY(hItem) - WM_GetWindowOrgY(WM_GetParent(hItem));
+            y_size = WM_GetWindowSizeY(hItem);
+            GUI_FillRect(x + x_size-4, y, x + 2*x_size, y + y_size-1);
+        }
+        if (pEVSE->info.ucTotalCON == 2)
+        {
+            if (CHECKBOX_GetState(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2)) == 1)
+            {
+                hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2);
+                x = WM_GetWindowOrgX(hItem) - WM_GetWindowOrgX(WM_GetParent(hItem));
+                x_size = WM_GetWindowSizeX(hItem);
+                y = WM_GetWindowOrgY(hItem) - WM_GetWindowOrgY(WM_GetParent(hItem));
+                y_size = WM_GetWindowSizeY(hItem);
+                GUI_FillRect(x + x_size-4, y, x + 2*x_size, y + y_size-1);
+            }
+        }
         break;
+    case MSG_UPDATE:
+        WM_InvalidateWindow(pMsg->hWin);
+        break; 
     case WM_INIT_DIALOG:
-        //LISTVIEW_SetDefaultGridColor(GUI_WHITE);
+        head_skin.aColorFrame[0] = 0xAAAAAA;
+        head_skin.aColorFrame[1] = GUI_BLACK;
+        head_skin.aColorLower[0] = GUI_BLACK;
+        head_skin.aColorLower[1] = GUI_BLACK;
+        head_skin.aColorUpper[0] = GUI_BLACK;
+        head_skin.aColorUpper[1] = GUI_BLACK;
+        head_skin.ColorArrow = GUI_BLACK;
+        HEADER_SetSkinFlexProps(&head_skin, 0);
+        HEADER_SetDefaultTextColor(GUI_WHITE);
+        HEADER_SetDefaultBorderV(50);
+        //LISTVIEW_SetDefaultGridColor(GUI_BLACK);
         if (pEVSE->info.ucTotalCON == 1)
         {
             for (i = 0; i < 2; i++)
             {
-                hItem = LISTVIEW_CreateEx(125, 20, 670, 550, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0 + i);
+                hItem = LISTVIEW_CreateEx(125, 20,400,320, pMsg->hWin, WM_CF_SHOW,0,
+                    ID_LISTVIEW_0 + i);
                 WM_HideWindow(hItem);
-                hItem = CHECKBOX_CreateUser(15, 60 + i * 60, 100, 40, pMsg->hWin, WM_CF_SHOW, 0, ID_CHECKBOX_0 + i, 10);
+                hItem = CHECKBOX_CreateUser(15,
+                    60 + i * 60,
+                    100,
+                    40,
+                    pMsg->hWin,
+                    WM_CF_SHOW,
+                    0,
+                    ID_CHECKBOX_0 + i,
+                    10);
                 CHECKBOX_SetUserData(hItem, strsingle[i], 10);
                 CHECKBOX_SetSkin(hItem, SKIN_checkboxStateInfo);
             }
@@ -152,26 +207,45 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             for (i = 0; i < 3; i++)
             {
-                hItem = LISTVIEW_CreateEx(125, 20, 670, 550, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0 + i);
+                hItem = LISTVIEW_CreateEx(125,
+                    20,
+                    400,
+                    320,
+                    pMsg->hWin,
+                    WM_CF_SHOW,
+                    0,
+                    ID_LISTVIEW_0 + i);
                 WM_HideWindow(hItem);
-                hItem = CHECKBOX_CreateUser(15, 60 + i * 60, 100, 40, pMsg->hWin, WM_CF_SHOW, 0, ID_CHECKBOX_0 + i,10);
+                hItem = CHECKBOX_CreateUser(15,
+                    60 + i * 60,
+                    100,
+                    40,
+                    pMsg->hWin,
+                    WM_CF_SHOW,
+                    0,
+                    ID_CHECKBOX_0 + i,
+                    10);
                 CHECKBOX_SetUserData(hItem, strdouble[i], 10);
                 CHECKBOX_SetSkin(hItem, SKIN_checkboxStateInfo);
             }
         }
         WM_ShowWindow(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
         hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+        //LISTVIEW_SetHeaderHeight(hItem, 100);
         hHeader = LISTVIEW_GetHeader(hItem);
-        HEADER_SetHeight(hHeader, 45);
+        //HEADER_SetHeight(hHeader, 50);
         HEADER_SetFont(hHeader, &fontwryhcg30e);
+        HEADER_SetHeight(hHeader, 40);
+        HEADER_SetDragLimit(hHeader, 0);
+        //HEADER_SetTextColor()
         
         LISTVIEW_SetFont(hItem, &SIF16_Font);
         LISTVIEW_SetRowHeight(hItem, 35);
         LISTVIEW_SetGridVis(hItem, 1);
 
         /*模拟量   模拟值     模拟量     模拟值*/
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, "充电桩监测项", GUI_TA_HCENTER | GUI_TA_VCENTER);
-        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 100, "项目状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, "充电桩监测项", GUI_TA_HCENTER | GUI_TA_VCENTER);
+        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 200, "项目状态", GUI_TA_HCENTER | GUI_TA_VCENTER);
         
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         LISTVIEW_SetItemText(hItem, 0, 0, "急停状态");
@@ -205,14 +279,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                     RADIO3(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0),\
                         WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                         WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2));
-                }                         
+                }                        
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
             case WM_NOTIFICATION_VALUE_CHANGED:
                 break;
             }
-        break;
+            break;
         case ID_CHECKBOX_1:
             switch (NCode) {
             case WM_NOTIFICATION_CLICKED:
@@ -227,6 +302,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                         WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0),\
                         WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2)); 
                 }             
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -240,6 +316,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 RADIO3(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0));              
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
                 break;
             case WM_NOTIFICATION_RELEASED:
                 break;
@@ -249,38 +326,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         }
     case WM_TIMER:
-//        if(pMsg->Data.v == _timerRTC)
-//        {
-//            /**< 显示时间和日期 */
-//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-//            /**< 重启定时器 */
-//            WM_RestartTimer(pMsg->Data.v, 20);
-//        }
-//        if(pMsg->Data.v == _timerSignal)
-//        {
-//
-//            WM_RestartTimer(pMsg->Data.v, 2000);
-//        }
         if (pMsg->Data.v == _timerData)
         {
-            Status_Content_Analy(pMsg);
+            //Status_Content_Analy(pMsg);
             WM_RestartTimer(pMsg->Data.v, 1000);
         }
         break;
-//    case MSG_CREATERRWIN:
-//        /**< 故障界面不存在则创建,存在则刷新告警 */
-//        err_window(pMsg->hWin);
-//        break;
-//    case MSG_DELERRWIN:
-//        /**< 故障界面存在则删除故障界面 */
-//        if(bittest(winCreateFlag,0))
-//        {
-//            bitclr(winCreateFlag,0);
-//            GUI_EndDialog(err_hItem,0);
-//            err_hItem = 0;
-//        }
-//        break;
     case MSG_DELETEMANAGERWIN:
         GUI_EndDialog(_hWinManagerInfoAnalog, 0);
         break;
