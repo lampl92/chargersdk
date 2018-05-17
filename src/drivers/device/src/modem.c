@@ -33,10 +33,7 @@
 
 int modemlog = 1;
 
-#define TCP_CLIENT_BUFSIZE           MAX_COMMAND_LEN
-#define QUE_BUFSIZE                  5000
 DevModem_t *pModem;
-uint32_t ulTaskDelay_ms = 100;
 
 uint8_t  tcp_client_recvbuf[TCP_CLIENT_BUFSIZE]; //TCP客户端接收数据缓冲区
 
@@ -47,55 +44,38 @@ void modem_delayms(int ms)
     vTaskDelay(ms);
 }
 
-void modem_enQue(uint8_t *pbuff, uint32_t len)
+
+/** @brief 发送数据，超时时间20s
+ *
+ * @param pModem DevModem_t*
+ * @param pbuff uint8_t*
+ * @param len uint32_t
+ * @return DR_MODEM_e
+ *
+ */
+DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 {
-    int i;
-#if USE_FreeRTOS
-    if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
+    return uart_write_fast(pModem->uart_handle, pbuff, len);
+}
+uint32_t modem_read(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
+{
+    return uart_read_wait(pModem->uart_handle, rbuff, len, 10);
+}
+
+DevModem_t *DevModemCreate(void)
+{
+    DevModem_t *pMod = NULL;
+    
+    if (xSysconf.xModule.use_gprs == 2)
     {
-#endif
-        for (i = 0; i < len; i++)
-        {
-            pModem->pSendQue->EnElem(pModem->pSendQue, pbuff[i]);
-        }
-#if USE_FreeRTOS
-        xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
+        pMod = M26Create();
     }
-#endif
-}
-
-static void modem_UART_putQue(DevModem_t *pModem)
-{
-    uint8_t ch; //这里需要测试是单个字符发送还是用while全部发送后再give mutex
-#if USE_FreeRTOS
-    if (xSemaphoreTake(pModem->pSendQue->xHandleMutexQue, 300) == pdPASS)
+    else if (xSysconf.xModule.use_gprs == 3)
     {
-#endif
-	    if (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
-	    {
-			printf_protodetail3("PPP Send: ");
-	    }
-        while (pModem->pSendQue->isEmpty(pModem->pSendQue) != QUE_TRUE)
-        {
-            pModem->pSendQue->DeElem(pModem->pSendQue, &ch);
-            printf_protodetail3("%02X ", ch);
-            gprs_uart_putc(ch);
-        }
-        printf_protodetail3("\n");
-#if USE_FreeRTOS
-        xSemaphoreGive(pModem->pSendQue->xHandleMutexQue);            
+        pMod = UC15Create();
     }
-#endif
-}
-
-static uint32_t modem_UART_puts(uint8_t *pbuff, uint32_t len)
-{
-    return uart_write(UART_PORT_GPRS, pbuff, len);
-}
-
-static uint32_t modem_UART_gets(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
-{
-    return uart_read(UART_PORT_GPRS, rbuff, len, 100);
+    
+    return pMod;
 }
 
 uint32_t modem_send_at(char *format, ...)
@@ -109,8 +89,7 @@ uint32_t modem_send_at(char *format, ...)
     n  = vsnprintf(cmd, sizeof(cmd) - 1, format, va);
     va_end(va);
 
-//    cmd[strlen(cmd)] = '\n';
-    modem_UART_puts((uint8_t *)cmd, strlen(cmd));
+    modem_write(pModem, (uint8_t *)cmd, strlen(cmd));
 
     cmd[strlen(cmd) - 1]  = '\0';
     printf_modem("%s", cmd);
@@ -139,7 +118,7 @@ DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32
     time  = 0;
     while (1)
     {
-        n  = modem_UART_gets(pModem, (uint8_t *)reply, len);
+        n  = modem_read(pModem, (uint8_t *)reply, len);
         if ( n > 0 )
         {
             //优先判断这两个模块会主动发出的命令
@@ -153,7 +132,6 @@ DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32
             p  = strstr(reply, "+QIRDI:");
             if ( p )
             {
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid);
                 ret = DR_MODEM_READ;
                 break;
             }
@@ -190,57 +168,6 @@ DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32
 
     printf_modem("%s\r\n\r\n", reply);
     return ret;
-}
-
-
-/** @brief 发送数据，超时时间20s
- *
- * @param pModem DevModem_t*
- * @param pbuff uint8_t*
- * @param len uint32_t
- * @return DR_MODEM_e
- *
- */
-DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
-{
-    uint8_t  reply[MAX_COMMAND_LEN + 1]  = {0};
-    uint32_t n;
-    DR_MODEM_e ret;
-
-    n = 0;
-    ret = DR_MODEM_ERROR;
-
-    n = modem_UART_puts(pbuff, len);
-    if (n == len)
-    {
-        ret = DR_MODEM_OK;
-    }
-    else
-    {
-        ret = DR_MODEM_TIMEOUT;
-    }
-
-    return ret;
-}
-uint32_t modem_read(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
-{
-    return modem_UART_gets(pModem, pbuff, len);
-}
-
-DevModem_t *DevModemCreate(void)
-{
-    DevModem_t *pMod = NULL;
-    
-    if (xSysconf.xModule.use_gprs == 2)
-    {
-        pMod = M26Create();
-    }
-    else if (xSysconf.xModule.use_gprs == 3)
-    {
-        pMod = UC15Create();
-    }
-    
-    return pMod;
 }
 
 void Modem_Poll(DevModem_t *pModem)
@@ -303,9 +230,8 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_PPP_On:
-            modem_UART_putQue(pModem);
             /*=== read处理 ===*/
-            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+            recv_len = modem_read(pModem, tcp_client_recvbuf, TCP_CLIENT_BUFSIZE);
             if (recv_len > 0)
             {
                 for (i = 0; i < recv_len; i++)
@@ -379,54 +305,8 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_TCP_KEEP: //临时注释，不要删
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
-#if 0
-//            modem_get_STATE(pModem);
-//            if(pModem->state == PDP_DEACT)
-//            {
-//                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
-//                pModem->state = DS_MODEM_TCP_ACT_PDP;
-//            }
-//            if(pModem->state == IP_CLOSE)
-//            {
-//                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail);
-//                pModem->state = DS_MODEM_TCP_OPEN;
-//            }
-            //等待remote发送请求
-//            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-//                                         defEventBitTCPClientSendReq,
-//                                         pdTRUE, pdTRUE, 0);
-//            if((uxBits & defEventBitTCPClientSendReq) == defEventBitTCPClientSendReq) //有数据要发送
-//            {
-//                ret = modem_write(pModem, tcp_client_sendbuf, send_len);
-//                if(ret == DR_MODEM_OK)
-//                {
-//                    printf_safe("\nTCP Send: ");
-//                    for(i = 0; i < send_len; i++)
-//                    {
-//                        printf_safe("%02X ", tcp_client_sendbuf[i]);
-//                    }
-//                    printf_safe("\n");
-//                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
-//                }
-//                else if(ret == DR_MODEM_READ)
-//                {
-//                    xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientSendOK);
-//// 别删             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPClientRecvValid); //DR_MODEM_READ处已经发送读事件，此处作为提示用途。
-//                }
-//                else if(ret == DR_MODEM_TIMEOUT)
-//                {
-//                    vTaskDelay(500);
-//                }
-//                else
-//                {
-//                    pModem->state = DS_MODEM_TCP_CLOSE;
-//                    printf_safe("发送失败\r\n");
-//                }
-//            }
-#endif
-            modem_UART_putQue(pModem);
             /*=== read处理 ===*/
-            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
+            recv_len = modem_read(pModem, tcp_client_recvbuf, TCP_CLIENT_BUFSIZE);
             if (recv_len > 0)
             {
                     
@@ -466,7 +346,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_OPEN:
-            NVIC_SetPriority(GPRS_IRQn, 1);
+//            NVIC_SetPriority(GPRS_IRQn, 1);
             pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt++;
             if (pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt >= 5)
             {
@@ -496,7 +376,6 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_GET:
-            ulTaskDelay_ms = 100;
             pechProto->info.ftp.ftp_proc.ulFTPReGetCnt++;//FTPGet次数
             pucFileBuffer = (uint8_t *)malloc(1024);
             pucQueBuffer = (uint8_t *)malloc(QUE_BUFSIZE);
@@ -530,7 +409,6 @@ void Modem_Poll(DevModem_t *pModem)
                     pechProto->info.ftp.ftp_proc.ulRecvFileSize = 0;
                     ulPos = 0;
                     pModem->state = DS_MODEM_FTP_CHECK;
-                    ulTaskDelay_ms = 1000;
                     break;
                 }
                 else
@@ -602,7 +480,7 @@ void Modem_Poll(DevModem_t *pModem)
             }
             break;
         case DS_MODEM_FTP_CLOSE:
-            NVIC_SetPriority(GPRS_IRQn, GPRS_Priority);
+//            NVIC_SetPriority(GPRS_IRQn, GPRS_Priority);
             ret = pModem->close_FTP(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -627,7 +505,8 @@ void Modem_Poll(DevModem_t *pModem)
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
             xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
-            bsp_Uart_Init(UART_PORT_GPRS, 2);
+            uart_close(pModem->uart_handle);
+            pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BPS);
             ret = pModem->soft_reset(pModem);
             if(ret == DR_MODEM_OK)
             {
@@ -641,31 +520,6 @@ void Modem_Poll(DevModem_t *pModem)
         default:
             break;
         }
-#if 0
-//        uxBits = xEventGroupWaitBits(xHandleEventTCP,
-//                                     defEventBitTCPClientFlushBuff,
-//                                     pdTRUE, pdTRUE, 0); //定时请一次缓存
-//        if((uxBits & defEventBitTCPClientFlushBuff) == defEventBitTCPClientFlushBuff)
-//        {
-//            //printf_safe("看看是不是定时清缓存这里出问题了\n");
-//            recv_len = modem_read(pModem, tcp_client_recvbuf, MAX_COMMAND_LEN);
-//            if(recv_len > 0)
-//            {
-//                printf_safe("\nTCP Recv: ");
-//                for(i = 0; i < recv_len; i++)
-//                {
-//                    printf_safe("%02X ", tcp_client_recvbuf[i]);
-//                }
-//                printf_safe("\n");
-//
-//                pechProto->recvResponse(pechProto, pEVSE, tcp_client_recvbuf, recv_len, 3);
-//                memset(tcp_client_recvbuf, 0, recv_len);
-//                recv_len = 0;
-//            }
-//        }
-
-        //modem_get_info(pModem);
-#endif
-        vTaskDelay(ulTaskDelay_ms);
+        vTaskDelay(100);
     }
 }

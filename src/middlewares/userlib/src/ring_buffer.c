@@ -39,7 +39,11 @@ ring_buffer_s *ring_uint8_init(uint32_t size)
 {
     uint8_t *buffer;
     buffer = (uint8_t *)malloc(size);
-        __ring_buffer_init(buffer, size);
+    if (buffer == NULL)
+    {
+        return NULL;
+    }
+    return __ring_buffer_init(buffer, size);
 }
 //释放缓冲区
 void ring_buffer_free(ring_buffer_s *rb)

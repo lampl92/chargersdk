@@ -16,8 +16,8 @@
 //#include <string.h>
 //#include <unistd.h>
 //#include <fcntl.h>
-//#include <time.h>
-//#include <ctype.h>
+#include <time.h>
+#include <ctype.h>
 
 #include "yaffsfs.h"
 

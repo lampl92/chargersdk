@@ -10,6 +10,9 @@
 
 #include "stm32f4xx.h"
 
+#define RFID_UARTx                            "USART1"
+#define RFID_USARTx_BPS                        115200
+
 /* 命令相关变量 */
 #define MT626_CMD_MAX                   10  //命令数量
 #define MT626_SENDBUFF_MAX              100 //发送缓冲长度

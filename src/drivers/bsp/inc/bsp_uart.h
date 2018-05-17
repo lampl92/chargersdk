@@ -9,106 +9,27 @@
 #define BSP_USART_H_
 
 #include "stm32f4xx.h"
-#include "userlib_queue.h"
 #include "bsp_define.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-typedef enum
-{
-    UART_PORT_CLI,
-    UART_PORT_GPRS,
-    UART_PORT_RFID,
-    UART_PORT_WIFI,
-    UART_PORT_TERM
-} UART_Portdef;
-
-#ifndef EVSE_DEVBOARD
-#define CLI_USARTx_BASE                             UART4
-#define CLI_USARTx_BAUDRATE                         115200
-#define CLI_USARTx_IRQHandler                       void UART4_IRQHandler(void)
-#define CLI_QUEUE_SIZE                              1024
-#define CLI_IRQn                                    UART4_IRQn
-#define CLI_Priority                                bspUART4_PreemptPriority
-
-#define RFID_USARTx_BASE                            USART1
-#define RFID_USARTx_BAUDRATE                        115200
-#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define RFID_QUEUE_SIZE                             128
-
-#define GPRS_USARTx_BASE                            UART5
-#define GPRS_USARTx_BAUDRATE                        115200
-#define GPRS_USARTx_IRQHandler                      void UART5_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             (1024*1024)
-#define GPRS_IRQn                                   UART5_IRQn
-#define GPRS_Priority                               bspUART5_PreemptPriority
-
-#define WIFI_USARTx_BASE                            UART5
-#define WIFI_USARTx_BAUDRATE                        115200
-#define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
-#define WIFI_QUEUE_SIZE                             128
-
-#define TERM_QUEUE_SIZE                             1024
-
-#endif
-#ifdef EVSE_DEVBOARD
-#define CLI_USARTx_BASE                             USART2
-#define CLI_USARTx_BAUDRATE                         115200
-#define CLI_USARTx_IRQHandler                       void USART2_IRQHandler(void)
-#define CLI_QUEUE_SIZE                              10
-
-#define RFID_USARTx_BASE                            USART1
-#define RFID_USARTx_BAUDRATE                        115200
-#define RFID_USARTx_IRQHandler                      void USART1_IRQHandler(void)
-#define RFID_QUEUE_SIZE                             100
-
-#define GPRS_USARTx_BASE                            USART3
-#define GPRS_USARTx_BAUDRATE                        115200
-#define GPRS_USARTx_IRQHandler                      void USART3_IRQHandler(void)
-#define GPRS_QUEUE_SIZE                             (1024*1024)
-
-#define WIFI_USARTx_BASE                            UART5
-#define WIFI_USARTx_BAUDRATE                        115200
-#define WIFI_USARTx_IRQHandler                      void UARTXXX_IRQHandler(void)
-#define WIFI_QUEUE_SIZE                             100
-
-#endif
-
-/* Exported macro ------------------------------------------------------------*/
-#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
-
-extern UART_HandleTypeDef CLI_UARTx_Handler;
-extern UART_HandleTypeDef RFID_UARTx_Handler;
-extern UART_HandleTypeDef GPRS_UARTx_Handler;
-extern UART_HandleTypeDef WIFI_UARTx_Handler;
-
-void gprs_uart_putc(uint8_t ch);
-void bsp_Uart_Init(UART_Portdef uartport, uint8_t mode);
-uint32_t uart_write(UART_Portdef uart, uint8_t *data, uint32_t len);
-uint32_t uart_read(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
-uint32_t uart_read_ymodem(UART_Portdef uartport, uint8_t *data, uint32_t len, uint32_t timeout_ms);
-
-
+///////////////////////////////////////////
+#define USART1_RB_SIZE 128
+#define USART2_RB_SIZE 1024
+#define USART3_RB_SIZE 1024
+#define UART4_RB_SIZE 1024
+#define UART5_RB_SIZE 1024 * 10
+#define USART6_RB_SIZE 1024
+#define UART7_RB_SIZE 1024
 
 ///////////////////////////////////////////
-///////////////////////////////////////////
+#define UART_PATH_ERR       -1
+#define UART_IS_INITIALIZED -2
+#define UART_RB_INIT_FAIL   -3
+
 ///////////////////////////////////////////
 void uart_driver_init(void);
 int uart_open(char *path, uint32_t bps);
 int uart_close(int handle);
 uint32_t uart_read_fast(int handle, uint8_t *data, uint32_t len);
 uint32_t uart_read_wait(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms);
+uint32_t uart_write_fast(int handle, uint8_t *data, uint32_t len);
 #endif

@@ -1,6 +1,8 @@
 #include "modem.h"
 #include "retarget.h"
 #include "user_app.h"
+#include "bsp_uart.h"
+#include "quectel_uc15.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -708,8 +710,11 @@ DevModem_t *UC15Create(void)
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
     pMod->state = DS_MODEM_OFF;
-    pMod->xMutex = xSemaphoreCreateMutex();
-    pMod->pSendQue = QueueCreate(MAX_COMMAND_LEN);
+    pMod->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BPS);
+    if (pMod->uart_handle < 0)
+    {
+        printf_safe("UC15 %s 初始化失败，code = %d！\n", MODEM_UARTx, pMod->uart_handle);
+    }
     
     pMod->open = UC15_open;
     pMod->keyon = UC15_keyon;

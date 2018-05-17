@@ -5,18 +5,17 @@
 * @version v1.0
 * @date 2016-12-14
 */
-#include <stdlib.h>
-#include <string.h>
 #include "RFIDReader_mt626.h"
 #include "bsp_uart.h"
 #include "retarget.h"
 #include "evse_debug.h"
+#include <stdlib.h>
+#include <string.h>
 
-/** 移植说明：根据系统实现MT626DelayMS，MT626Write ，MT626Read 三个函数*/
+/** 移植说明：根据系统实现MT626DelayMS，MT626UartInit, MT626UartDeInit, MT626Write，MT626Read 函数*/
+#include "cmsis_os.h"
 
-
-extern void vTaskDelay( const TickType_t xTicksToDelay );
-
+int rfid_huart = -1;
 
 /** @brief 延时函数,用于命令传输过程中等待
  *
@@ -26,7 +25,16 @@ extern void vTaskDelay( const TickType_t xTicksToDelay );
  */
 static void MT626DelayMS(uint32_t ms)
 {
-    vTaskDelay(ms);
+    osDelay(ms);
+}
+static int MT626UartInit(char *path, uint32_t bps)
+{
+    rfid_huart = uart_open(path, bps);
+    return rfid_huart;
+}
+static void MT626UartDeInit(void)
+{
+    uart_close(rfid_huart);
 }
 /** @brief
  *
@@ -37,7 +45,7 @@ static void MT626DelayMS(uint32_t ms)
  */     
 static uint32_t MT626Write(uint8_t *data, uint32_t len)
 {
-    return uart_write(UART_PORT_RFID, data, len);
+    return uart_write_fast(rfid_huart, data, len);
 }
 /** @brief
  *
@@ -48,7 +56,7 @@ static uint32_t MT626Write(uint8_t *data, uint32_t len)
  */     
 static void MT626Read(uint8_t *data, uint32_t *pRecvdLen)
 {
-    *pRecvdLen = uart_read(UART_PORT_RFID, data, 0, 10);
+    *pRecvdLen = uart_read_wait(rfid_huart, data, sizeof(data), 10);
 }
 
 /** @brief 异或计算
@@ -442,6 +450,7 @@ static void deleteCOM(void *pObj)
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
     pMT626COMObj = NULL;
+    MT626UartDeInit();
 }
 
 /** @brief 构造MT626通讯实例
@@ -458,7 +467,6 @@ MT626COM_t *MT626COMCreate(void)
     {
         return NULL;
     }
-
     for(i = 0; i < MT626_CMD_MAX; i++)
     {
         pMT626->pMT626CMD[i] = NULL;
@@ -483,6 +491,8 @@ MT626COM_t *MT626COMCreate(void)
     pMT626->pucRecvBuffer = (uint8_t *)malloc(MT626_RECVBUFF_MAX * sizeof(uint8_t));
     memset(pMT626->pucRecvBuffer, 0, MT626_RECVBUFF_MAX);
 
+    MT626UartInit(RFID_UARTx, RFID_USARTx_BPS);
+    
     return pMT626;
 }
 #if 0

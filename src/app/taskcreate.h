@@ -34,8 +34,6 @@ extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
 extern SemaphoreHandle_t xMutexTimeStruct;
-extern SemaphoreHandle_t xMutexNandHW;
-extern SemaphoreHandle_t xprintfMutex;
 extern SemaphoreHandle_t xMeterMutex;
 extern SemaphoreHandle_t xTempMutex;
 

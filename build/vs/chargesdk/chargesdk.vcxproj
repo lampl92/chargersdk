@@ -120,7 +120,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_main.c" />
     <ClCompile Include="..\..\..\src\cli\cli_net.c" />
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c" />
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
     <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
@@ -248,7 +247,6 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c" />
-    <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\yaffs2misc.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.c" />
     <ClCompile Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\yaffscfg2k.c" />
@@ -808,11 +806,9 @@
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\unzip.h" />
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h" />
     <ClInclude Include="..\..\..\src\middlewares\unzip101e\zip.h" />
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h" />
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nanddrv.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim.h" />
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\direct\nanddrv\nandsim_file.h" />

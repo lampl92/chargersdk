@@ -879,9 +879,6 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
-      <Filter>Source files\middlewares\userlib\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c">
       <Filter>Source files\net\mbedTLS\library</Filter>
     </ClCompile>
@@ -920,9 +917,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\log_evse.c">
       <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
-      <Filter>Source files\cli</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
       <Filter>Source files\app\libEcharge</Filter>
@@ -2936,16 +2930,10 @@
     <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h">
       <Filter>Header files\middlewares\tinysh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h">

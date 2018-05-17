@@ -55,7 +55,6 @@
 #include "taskcreate.h"
 #include "bsp.h"
 #include "tinysh.h"
-#include "xprintf.h"
 #include "errorcode.h"
 
 #endif

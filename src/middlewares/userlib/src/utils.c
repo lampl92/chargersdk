@@ -6,7 +6,6 @@
 * @date 2017-03-13
 */
 #include "includes.h"
-#include "xprintf.h"
 #include "yaffsfs.h"
 #include "utils.h"
 

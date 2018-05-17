@@ -46,7 +46,7 @@ void RS485_Init(u32 bound)
 //´Ëº¯Êý»á±»HAL_UART_Init()µ÷ÓÃ
 //huart:´®¿Ú¾ä±ú
 
-void UART7_IRQHandler(void)
+__weak void UART7_IRQHandler(void)
 {
     u8 res;
     if (__HAL_UART_GET_FLAG(&UART7_RS485Handler, UART_FLAG_RXNE) != RESET)

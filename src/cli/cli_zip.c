@@ -2,7 +2,7 @@
 
 void cli_unzip_fnt(int argc, char **argv)
 {
-    miniunz_main(argc, argv);
+    //miniunz_main(argc, argv);
 }
 
 tinysh_cmd_t cli_unzip_cmd =
@@ -19,7 +19,7 @@ tinysh_cmd_t cli_unzip_cmd =
 
 void cli_zip_fnt(int argc, char **argv)
 {
-    minizip_main(argc, argv);
+    //minizip_main(argc, argv);
 }
 
 tinysh_cmd_t cli_zip_cmd =
