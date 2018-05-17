@@ -198,7 +198,6 @@
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_common.c" />
     <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdLimted.c" />

@@ -1956,9 +1956,6 @@
     <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
