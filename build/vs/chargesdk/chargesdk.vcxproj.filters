@@ -810,9 +810,6 @@
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -1935,28 +1932,37 @@
     <ClCompile Include="start_up.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="PwdError.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="PwdInput.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="PwdLimted.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="PwdTest.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="EquipmentFailureNoStart.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="manager_common.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="SKIN_mulitipage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="manager_states_info.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PwdError.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PwdInput.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PwdLimted.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PwdTest.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_common.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
   </ItemGroup>

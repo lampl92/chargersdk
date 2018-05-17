@@ -194,6 +194,15 @@
     <ClCompile Include="..\..\..\src\hmi\d2pleaseplugDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\d3chargingokDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\eplugtimeoutDLG.c" />
+    <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c" />
+    <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_common.c" />
+    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\PutOut_RegisterDisp.c" />
+    <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
+    <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
+    <ClCompile Include="..\..\..\src\hmi\PwdLimted.c" />
+    <ClCompile Include="..\..\..\src\hmi\PwdTest.c" />
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
@@ -202,7 +211,6 @@
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Alarm_Log.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c" />
     <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c" />
@@ -215,6 +223,7 @@
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c" />
+    <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_progbarmeter.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
@@ -329,14 +338,7 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
-    <ClCompile Include="EquipmentFailureNoStart.c" />
-    <ClCompile Include="manager_common.c" />
     <ClCompile Include="manager_states_info.c" />
-    <ClCompile Include="PwdError.c" />
-    <ClCompile Include="PwdInput.c" />
-    <ClCompile Include="PwdLimted.c" />
-    <ClCompile Include="PwdTest.c" />
-    <ClCompile Include="SKIN_mulitipage.c" />
     <ClCompile Include="startup_chargersdk.c" />
     <ClCompile Include="start_up.c" />
     <ClCompile Include="system_chargersdk.c" />

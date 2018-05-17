@@ -220,10 +220,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //LISTVIEW_SetDefaultGridColor(GUI_BLACK);
         if (pEVSE->info.ucTotalCON == 1)
         {
-            hItem = LISTVIEW_CreateEx(225, 20, 400, 220, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0);
+            hItem = LISTVIEW_CreateEx(225, 20, 400, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0);
             WM_HideWindow(hItem);
             hItem = LISTVIEW_CreateEx(225, 20, 400, 320, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_1);
-            WM_HideWindow(hItem);
+            WM_HideWindow(hItem);        
             for (i = 0; i < 2; i++)
             {
                 hItem = CHECKBOX_CreateUser(15,
@@ -244,7 +244,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         else if (pEVSE->info.ucTotalCON == 2)
         {
-            hItem = LISTVIEW_CreateEx(225, 20, 400, 220, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0);
+            hItem = LISTVIEW_CreateEx(225, 20, 400, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_0);
             WM_HideWindow(hItem);
             hItem = LISTVIEW_CreateEx(225, 20, 400, 320, pMsg->hWin, WM_CF_SHOW, 0, ID_LISTVIEW_1);
             WM_HideWindow(hItem);
