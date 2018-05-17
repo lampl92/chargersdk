@@ -15,8 +15,8 @@
 
 /* 命令相关变量 */
 #define MT626_CMD_MAX                   10  //命令数量
-#define MT626_SENDBUFF_MAX              100 //发送缓冲长度
-#define MT626_RECVBUFF_MAX              100 //接收缓冲长度
+#define MT626_SENDBUFF_MAX              128 //发送缓冲长度
+#define MT626_RECVBUFF_MAX              128 //接收缓冲长度
 
 /* 命令帧元素 */
 #define MT626_CMD_STX                   0x02
