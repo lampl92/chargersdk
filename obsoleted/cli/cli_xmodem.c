@@ -5,6 +5,7 @@
 #include "semphr.h"
 #include "bsp_dwt.h"
 #include "tinysh.h"
+#include "cli_main.h"
 #include <string.h>
 
 #define XMOD_SOH    0x01
@@ -25,12 +26,11 @@ typedef enum
 
 static uint32_t xmod_read(uint8_t *pbuff, uint32_t rlen)
 {
-    return uart_read(UART_PORT_CLI, pbuff, rlen, 10);    
+    return uart_read_wait(cli_huart, pbuff, rlen, 10);    
 }
 static uint32_t xmod_write(uint8_t *pbuff, uint32_t wlen)
 {
-    return uart_write(UART_PORT_CLI, pbuff, wlen);
-    
+    return uart_write_fast(cli_huart, pbuff, wlen);
 }
 static void xmod_delay(uint32_t ms)
 {
