@@ -884,7 +884,7 @@
 #define __cpp_decltype 200707
 #endif
 #ifndef EVSE_USING_RFID
-#define EVSE_USING_RFID 1
+#define EVSE_USING_RFID 0
 #endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
