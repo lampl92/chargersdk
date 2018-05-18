@@ -7,7 +7,7 @@
 #include "retarget.h"
 
 
-#define MODEM_UARTx         "USART3"
+#define MODEM_UARTx         "UART5"
 #define MODEM_UART_BPS      115200
 
 extern int modemlog;
