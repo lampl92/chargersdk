@@ -13,6 +13,10 @@ typedef struct __ring_buffer
     osMutexId lock;        //»¥³âËø
 }ring_buffer_s;
 
+uint32_t __ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len);
+uint32_t __ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len);
+uint32_t __ring_buffer_len(const ring_buffer_s *rb);
+
 uint32_t ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len);
 uint32_t ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len);
 uint32_t ring_buffer_len(const ring_buffer_s *rb);
