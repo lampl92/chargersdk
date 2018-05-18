@@ -240,10 +240,11 @@ void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
 
 uint32_t uart_write_fast(int handle, uint8_t *data, uint32_t len)
 {
+    uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
-    while (len > 0)
+    while (l > 0)
     {
-        len--;
+        l--;
         __uart_putc(uart_driver[handle].UARTx_Handler.Instance, *data);
         data++;
     }

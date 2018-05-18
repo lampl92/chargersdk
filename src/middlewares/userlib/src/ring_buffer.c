@@ -43,6 +43,7 @@ ring_buffer_s *ring_uint8_init(uint32_t size)
     {
         return NULL;
     }
+    memset(buffer, 0, size);
     return __ring_buffer_init(buffer, size);
 }
 //释放缓冲区

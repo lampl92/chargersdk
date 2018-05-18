@@ -97,9 +97,9 @@ extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
+    retarget_init();
     cli_init();
     timeInit();
-    retarget_init();
     yaffs_init();
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化

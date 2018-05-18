@@ -12,7 +12,7 @@
 #include "interface.h"
 #include <string.h>
 
-//#define DEBUG_DIAG_DUMMY_METER
+#define DEBUG_DIAG_DUMMY_METER
 //#define DEBUG_DIAG_DUMMY_TEMP
 
 /**
