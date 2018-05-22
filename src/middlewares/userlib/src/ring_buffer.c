@@ -61,12 +61,12 @@ void ring_buffer_free(ring_buffer_s *rb)
     }
 }
 //缓冲区的长度
-uint32_t __ring_buffer_len(const ring_buffer_s *rb)
+uint32_t ring_buffer_len(const ring_buffer_s *rb)
 {
     return (rb->in - rb->out);
 }
 //从缓冲区中取数据
-uint32_t __ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len)
+uint32_t ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len)
 {
     uint32_t l = 0;
     len = rb_min(len, rb->in - rb->out);
@@ -79,7 +79,7 @@ uint32_t __ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len)
     return len;
 }
 //向缓冲区中存放数据
-uint32_t __ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len)
+uint32_t ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len)
 {
     uint32_t l = 0;
     len = rb_min(len, rb->size - rb->in + rb->out);
@@ -92,32 +92,32 @@ uint32_t __ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len)
     return len;
 }
 
-uint32_t ring_buffer_len(const ring_buffer_s *rb)
-{
-    uint32_t len = 0;
-    osMutexWait(rb->lock, osWaitForever);
-    len = __ring_buffer_len(rb);
-    osMutexRelease(rb->lock);
-    return len;
-}
-
-uint32_t ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len)
-{
-    uint32_t ret;
-    osMutexWait(rb->lock, osWaitForever);
-    ret = __ring_buffer_get(rb, buffer, len);
-    //buffer中没有数据
-    if (rb->in == rb->out)
-        rb->in = rb->out = 0;
-    osMutexRelease(rb->lock);
-    return ret;
-}
-
-uint32_t ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len)
-{
-    uint32_t ret;
-    osMutexWait(rb->lock, osWaitForever);
-    ret = __ring_buffer_put(rb, buffer, len);
-    osMutexRelease(rb->lock);
-    return ret;
-}
+//uint32_t ring_buffer_len(const ring_buffer_s *rb)
+//{
+//    uint32_t len = 0;
+//    osMutexWait(rb->lock, osWaitForever);
+//    len = __ring_buffer_len(rb);
+//    osMutexRelease(rb->lock);
+//    return len;
+//}
+//
+//uint32_t ring_buffer_get(ring_buffer_s *rb, void *buffer, uint32_t len)
+//{
+//    uint32_t ret;
+//    osMutexWait(rb->lock, osWaitForever);
+//    ret = __ring_buffer_get(rb, buffer, len);
+//    //buffer中没有数据
+//    if (rb->in == rb->out)
+//        rb->in = rb->out = 0;
+//    osMutexRelease(rb->lock);
+//    return ret;
+//}
+//
+//uint32_t ring_buffer_put(ring_buffer_s *rb, void *buffer, uint32_t len)
+//{
+//    uint32_t ret;
+//    osMutexWait(rb->lock, osWaitForever);
+//    ret = __ring_buffer_put(rb, buffer, len);
+//    osMutexRelease(rb->lock);
+//    return ret;
+//}

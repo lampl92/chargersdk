@@ -453,7 +453,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         {
             if (HAL_UART_Receive_IT(&uart_driver[i].UARTx_Handler, (uint8_t *)uart_driver[i].rbuff, 1) == HAL_OK)
             {
-                __ring_buffer_put(uart_driver[i].rb, (uint8_t *)uart_driver[i].rbuff, 1);
+                ring_buffer_put(uart_driver[i].rb, (uint8_t *)uart_driver[i].rbuff, 1);
             }
         }
     }
