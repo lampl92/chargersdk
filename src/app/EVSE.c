@@ -622,8 +622,9 @@ void EVSEinit(void)
 //    tmp = 3;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 0, jnPhaseLine); 
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
-    tmp = 2;
-    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
+//    tmp = 2;
+//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
+    ifconfig.info.ucAdapterSel = 2;
     xSysconf.xModule.use_gprs = 2;
 //    cfg_set_uint8(pathSysCfg, &xSysconf.xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     
