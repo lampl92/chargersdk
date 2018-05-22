@@ -50,7 +50,7 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os/FreeRTOS;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/hmi;../../../src/hmi/lcd;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/net/mbedTLS/include;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer;../../../src/net/user;../../../src/middlewares/unzip101e;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os/FreeRTOS;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/hmi;../../../src/hmi/lcd;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/net/mbedTLS/include;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer;../../../src/net/user;../../../src/middlewares/unzip101e;../../../src/middlewares/libmodbus-3.1.4/src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -222,6 +222,9 @@
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_queue.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.c" />
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-data.c" />
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu.c" />
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\display.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\Config\LCDConf_Lin_Template.c" />
@@ -689,7 +692,12 @@
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\_gdsl_node.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_integers.h" />
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h" />
-    <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-config.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-private.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu-private.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-version.h" />
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\display.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIDRV_LTDC.h" />
