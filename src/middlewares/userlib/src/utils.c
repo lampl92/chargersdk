@@ -106,7 +106,7 @@ uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
         }
         else
         {
-            chTemp = chTemp & 0xF0 | (Str[i] & 0x0F);
+            chTemp = (chTemp & 0xF0) | (Str[i] & 0x0F);
             Des[i / 2] = chTemp;
         }
     }
@@ -145,9 +145,10 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 }
 #endif
 
-uint32_t HexToChar(uint8_t Hex, uint8_t *c)
+uint32_t HexToChar(uint8_t Hex, char *c)
 {
     sprintf(c, "%02X", Hex);
+    return 0;
 }
 
 /** @brief hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99  --> "E1FF99000..."
@@ -158,7 +159,7 @@ uint32_t HexToChar(uint8_t Hex, uint8_t *c)
  * @return uint32_t
  *
  */
-uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
+uint32_t HexToStr(uint8_t *Hex, char *Str, int Hexlen)
 {
     int i;
     for(i = 0; i < Hexlen; i++)
@@ -166,6 +167,7 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
         HexToChar(Hex[i], &(Str[i * 2]));
     }
     Str[i * 2] = '\0';
+    return 0;
 }
 
 /** @brief "E1FF991234567890" --> hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99 ......
@@ -189,6 +191,7 @@ uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen)
         Hex[i] = strtol(hexbuff, NULL, 16);
         src += 2;
     }
+    return 0;
 }
 
 int utils_abs(int num)

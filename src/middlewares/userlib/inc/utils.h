@@ -46,7 +46,7 @@ typedef union
 	uint16_t usVal;
 	uint8_t ucVal[2];
 }us2uc;
-uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen);
+uint32_t HexToStr(uint8_t *Hex, char *Src, int Hexlen);
 uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);
 
