@@ -171,12 +171,6 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
         osDelay(1);
 
         size = uart_write_fast(ctx->s, req, req_length);
-        printf("485send: ");
-        for (i = 0; i < req_length; i++)
-        {
-            printf("%02X ", req[i]);
-        }
-        printf("\n");
 
         osDelay(1);
 //        osDelay(ctx_rtu->onebyte_time * req_length + ctx_rtu->rts_delay);
