@@ -14,11 +14,17 @@
 #define BYTES_LEN 1024
 
 #define ID_WINDOW_0     (GUI_ID_USER + 0x00)
+#define ID_TEXT_0 (GUI_ID_USER + 0x01)
+#define ID_TEXT_1 (GUI_ID_USER + 0x02)
+#define ID_TEXT_2 (GUI_ID_USER + 0x03)
+#define ID_TEXT_3 (GUI_ID_USER + 0x04)
+#define ID_TEXT_4 (GUI_ID_USER + 0x05)
+#define ID_TEXT_5 (GUI_ID_USER + 0x06)
 
 #define ID_TimerTime    1
 
 #define sysInfoName "       系统信息"
-#define sysInfoEVSEName "系统名称:7kW交流充电桩"
+#define sysInfoEVSEName "系统名称:"
 #define sysInfoProtoVer "协议版本:"
 #define sysInfoVersion "软件版本:"
 
@@ -31,30 +37,13 @@ WM_HWIN _hWinManagerSysInfo;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 10, 95, 780, 370, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_0, 100, 70, 180, 40, TEXT_CF_RIGHT, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_1, 100, 120, 180, 40, TEXT_CF_RIGHT, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_2, 100, 170, 180, 40, TEXT_CF_RIGHT, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_3, 280, 70, 240, 40, TEXT_CF_LEFT, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_4, 280, 120, 240, 40, TEXT_CF_LEFT, 0x0, 0 },
+    { TEXT_CreateIndirect, "system_version_text", ID_TEXT_5, 280, 170, 240, 40, TEXT_CF_LEFT, 0x0, 0 },
 };
-
-static void Status_Content_Analy(WM_MESSAGE *pMsg)
-{
-//    CON_t *pCon;
-//    uint8_t tmp[10];
-//    uint8_t buf[50];
-//    WM_HWIN hItem;
-//
-//    hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-//    /**< 协议版本 */
-//    memset(buf,'\0',sizeof(buf));
-//    strcpy(buf,sysInfoProtoVer);
-//    memset(tmp,'\0',sizeof(tmp));
-//    sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-//    strcat(buf,tmp);
-//    LISTVIEW_SetItemText(hItem, 0, 1, buf);
-//    LISTVIEW_AddRow(hItem, NULL);//增加一行
-//    /**< 软件版本 */
-//    memset(buf,'\0',sizeof(buf));
-//    strcpy(buf,sysInfoVersion);
-//    strcat(buf,xSysconf.strVersion);
-//    LISTVIEW_SetItemText(hItem, 0, 2, buf);
-}
 
 static void _cbDialog(WM_MESSAGE *pMsg)
 {
@@ -66,58 +55,41 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     uint16_t     i, _strNum[3];
     volatile HEADER_Handle hHeader;
     uint8_t    buf[50];
-    uint8_t    tmp[10];
+    uint8_t    tmp[50];
     CON_t	*pcont;
-
+    GUI_RECT h;
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-        GUI_SetColor(GUI_WHITE);
-        GUI_FillRect(195, 85, 390, 200);
-        GUI_SetColor(GUI_BLACK);
-        GUI_FillRoundedRect(195, 85, 390, 200,10);
-        GUI_SetColor(GUI_WHITE);
-        GUI_FillRect(10, 50, 390 - 10, 200 - 10);
         break;
     case WM_INIT_DIALOG:
-//        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-//        /* 设置列表控件中header控件的所显示文本的字体 */
-//        hHeader = LISTVIEW_GetHeader(hItem);
-//        HEADER_SetFont(hHeader, &SIF36_Font);
-//
-//        LISTVIEW_SetFont(hItem, &SIF24_Font);
-//        /* 设置列表控件表格可见 */
-//        LISTVIEW_SetGridVis(hItem, 1);
-//
-//        column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
-//        for(i = 0;i < column_num;i++)
-//        {
-//            LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
-//        }
-//
-//        /*增加一列*/
-//        LISTVIEW_AddColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), GUI_MANAGERSYSINFO_XLENTH, sysInfoName, GUI_TA_VCENTER | GUI_TA_LEFT);
-////        LISTVIEW_SetTextAlign(hItem, 1, GUI_TA_CENTER | GUI_TA_LEFT);
-//
-//        LISTVIEW_AddRow(hItem, NULL);//增加一行
-//        /**< 7kW交流充电桩 */
-//        xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-//        LISTVIEW_SetItemText(hItem, 0, 0, sysInfoEVSEName);
-//        LISTVIEW_AddRow(hItem, NULL);//增加一行
-//        /**< 协议版本 */
-//        memset(buf,'\0',sizeof(buf));
-//        strcpy(buf,sysInfoProtoVer);
-//        memset(tmp,'\0',sizeof(tmp));
-//        sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-//        strcat(buf,tmp);
-//        LISTVIEW_SetItemText(hItem, 0, 1, buf);
-//        LISTVIEW_AddRow(hItem, NULL);//增加一行
-//        /**< 软件版本 */
-//        memset(buf,'\0',sizeof(buf));
-//        strcpy(buf,sysInfoVersion);
-//        strcat(buf,xSysconf.strVersion);
-//        LISTVIEW_SetItemText(hItem, 0, 2, buf);
-
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_BLACK);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), GUI_BLACK);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), GUI_BLACK);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), GUI_BLACK);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), GUI_BLACK);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), GUI_BLACK);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg30e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg30e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &fontwryhcg30e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), &fontwryhcg30e);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &fontwryhcg30e);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), "系统名称: ");
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), "协议版本: ");
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), "软件版本: ");
+        if (pEVSE->info.ucTotalCON == 1)
+        {
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "7kW交流充电桩");
+        }
+        else
+        {
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "40kW双枪交流桩");
+        }
+        memset(tmp,'\0',sizeof(tmp));
+        sprintf(tmp,"%d",pechProto->info.ucProtoVer);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), tmp);        
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), xSysconf.strVersion);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -127,37 +99,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             break;
         }
     case WM_TIMER:
-//        if(pMsg->Data.v == _timerRTC)
-//        {
-//            /**< 显示时间和日期 */
-//            Caculate_RTC_Show(pMsg, ID_TEXT_1, ID_TEXT_2);
-//           // TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), strCSQ);
-//            /**< 重启定时器 */
-//            WM_RestartTimer(pMsg->Data.v, 20);
-//        }
-//        if(pMsg->Data.v == _timerSignal)
-//        {
-//
-//            WM_RestartTimer(pMsg->Data.v, 2000);
-//        }
-        if (pMsg->Data.v == _timerRTC)
-        {
-            Status_Content_Analy(pMsg);
-            WM_RestartTimer(pMsg->Data.v, 3000);
-        }
         break;
     case MSG_CREATERRWIN:
-        /**< 故障界面不存在则创建,存在则刷新告警 */
-        err_window(pMsg->hWin);
         break;
     case MSG_DELERRWIN:
-        /**< 故障界面存在则删除故障界面 */
-        if (bittest(winCreateFlag, 0))
-        {
-            bitclr(winCreateFlag, 0);
-            GUI_EndDialog(err_hItem, 0);
-            err_hItem = 0;
-        }
         break;
     case MSG_DELETEMANAGERWIN:
         GUI_EndDialog(_hWinManagerSysInfo, 0);
@@ -185,9 +130,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin)
 {
     _hWinManagerSysInfo = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
-//    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerTime, 20, 0);
-    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerTime, 1000, 0);
-//    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
     return _hWinManagerSysInfo;
 }
 /*************************** End of file ****************************/
