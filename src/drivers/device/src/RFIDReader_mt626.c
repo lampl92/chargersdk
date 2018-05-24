@@ -15,8 +15,6 @@
 /** 移植说明：根据系统实现MT626DelayMS，MT626UartInit, MT626UartDeInit, MT626Write，MT626Read 函数*/
 #include "cmsis_os.h"
 
-int rfid_huart = -1;
-
 /** @brief 延时函数,用于命令传输过程中等待
  *
  * @param ms uint32_t 延时时间,单位:毫秒
@@ -27,15 +25,7 @@ static void MT626DelayMS(uint32_t ms)
 {
     osDelay(ms);
 }
-static int MT626UartInit(char *path, uint32_t bps)
-{
-    rfid_huart = uart_open(path, bps);
-    return rfid_huart;
-}
-static void MT626UartDeInit(void)
-{
-    uart_close(rfid_huart);
-}
+
 /** @brief
  *
  * @param data uint8_t* 要发送的数据
@@ -43,9 +33,10 @@ static void MT626UartDeInit(void)
  * @return uint32_t 已发送的长度
  *
  */     
+#include "evse_globals.h"
 static uint32_t MT626Write(uint8_t *data, uint32_t len)
 {
-    return uart_write_fast(rfid_huart, data, len);
+    return uart_write_fast(pRFIDDev->uart_handle, data, len);
 }
 /** @brief
  *
@@ -53,10 +44,10 @@ static uint32_t MT626Write(uint8_t *data, uint32_t len)
  * @param pRecvdLen uint8_t*  读取的数据长度
  * @return void
  *
- */     
+ */
 static void MT626Read(uint8_t *data, uint32_t *pRecvdLen)
 {
-    *pRecvdLen = uart_read_wait(rfid_huart, data, MT626_RECVBUFF_MAX, 10);
+    *pRecvdLen = uart_read_wait(pRFIDDev->uart_handle, data, MT626_RECVBUFF_MAX, 10);
 }
 
 /** @brief 异或计算
@@ -450,7 +441,6 @@ static void deleteCOM(void *pObj)
     free(pMT626COMObj ->pucSendBuffer);
     free(pMT626COMObj);
     pMT626COMObj = NULL;
-    MT626UartDeInit();
 }
 
 /** @brief 构造MT626通讯实例
@@ -491,8 +481,6 @@ MT626COM_t *MT626COMCreate(void)
     pMT626->pucRecvBuffer = (uint8_t *)malloc(MT626_RECVBUFF_MAX * sizeof(uint8_t));
     memset(pMT626->pucRecvBuffer, 0, MT626_RECVBUFF_MAX);
 
-    MT626UartInit(RFID_UARTx, RFID_USARTx_BPS);
-    
     return pMT626;
 }
 #if 0

@@ -16,6 +16,12 @@
 #include "evse_config.h"
 #include "order.h"
 
+#define RFID_UARTx          "USART1"
+#define RFID_UART_BAND      115200
+#define RFID_UART_DATA      8
+#define RFID_UART_PARI      'N'
+#define RFID_UART_STOP      1
+
 typedef enum _RFIDState
 {
     STATE_RFID_NOID,             //没有ID
@@ -48,6 +54,7 @@ typedef struct _RFIDDev
 {
     RFIDDevStatus_t status;
     void *com;
+    int uart_handle;
     SemaphoreHandle_t xHandleMutexRFID;
     EventGroupHandle_t xHandleEventGroupRFID;
     RFIDState_t state;
@@ -65,7 +72,7 @@ typedef struct _RfidQPkg
     uint8_t ucNeedPwd;
 }RfidQPkg_t;
 
-RFIDDev_t *RFIDDevCreate(void);
+RFIDDev_t *RFIDDevCreate(char *uart_name, uint32_t band, int data_bit, char parity, int stop_bit);
 
 
 

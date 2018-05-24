@@ -624,8 +624,8 @@ void EVSEinit(void)
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
 //    tmp = 2;
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
-    ifconfig.info.ucAdapterSel = 2;
-    xSysconf.xModule.use_gprs = 2;
+//    ifconfig.info.ucAdapterSel = 1;
+//    xSysconf.xModule.use_gprs = 2;
 //    cfg_set_uint8(pathSysCfg, &xSysconf.xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     
 //    dtmp = 41;
@@ -639,7 +639,7 @@ void EVSEinit(void)
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
 
-    pRFIDDev = RFIDDevCreate();
+    pRFIDDev = RFIDDevCreate(RFID_UARTx, RFID_UART_BAND, RFID_UART_DATA, RFID_UART_PARI, RFID_UART_STOP);
 
     pechProto = EchProtocolCreate();
     THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");

@@ -9,7 +9,7 @@
 #include "interface.h"
 #include "user_app.h"
 
-static ErrorCode_t MT626GetUID(void *pvRfid)
+static ErrorCode_t RFIDGetUID(void *pvRfid)
 {
     RFIDDev_t *pRfid;
     MT626CMD_t *pmt626cmd;
@@ -51,7 +51,7 @@ static ErrorCode_t MT626GetUID(void *pvRfid)
     return errcode;
 }
 
-RFIDDev_t *RFIDDevCreate(void)
+RFIDDev_t *RFIDDevCreate(char *uart_name, uint32_t band, int data_bit, char parity, int stop_bit)
 {
     RFIDDev_t *pRFID;
 
@@ -60,10 +60,11 @@ RFIDDev_t *RFIDDevCreate(void)
     
 	pRFID->status.ulHoldMaxTime_s = 60;
     pRFID->com = (void *)MT626COMCreate();
-    pRFID->status.GetCardID = MT626GetUID;
+    pRFID->status.GetCardID = RFIDGetUID;
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();
     pRFID->xHandleEventGroupRFID = xEventGroupCreate();
     pRFID->state = STATE_RFID_NOID;
+    pRFID->uart_handle = uart_open(uart_name, band, data_bit, parity, stop_bit);
 
     OrderInit(&(pRFID->order));
 
