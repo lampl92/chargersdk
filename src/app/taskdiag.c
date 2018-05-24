@@ -77,10 +77,14 @@ void vTaskEVSEDiag(void *pvParameters)
             pCON = CONGetHandle(i);
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
-                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) !=0 ||
+                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0 ||
+                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) != 0 ||
+                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) != 0 ||
                     (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
                 {
-                    //温度警告（非严重告警）算正常，不进行处理
+                    //温度\电流警告（非严重告警）算正常，不进行处理
+                    //过压欠压不进行处理
                 }
                 else if (pCON->status.ulSignalAlarm != 0 ||
                     pCON->status.ulSignalFault != 0 ||
