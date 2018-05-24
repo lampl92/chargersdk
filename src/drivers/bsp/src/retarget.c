@@ -26,6 +26,8 @@ int printf_safe(const char *fmt, ...)
     return 0;
 }
 
+int printf(const char *fmt, ...) __attribute__((alias("printf_safe")));
+
 #if 0
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
