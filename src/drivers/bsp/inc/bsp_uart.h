@@ -10,6 +10,7 @@
 
 #include "stm32f4xx.h"
 #include "bsp_define.h"
+#include "ring_buffer.h"
 
 ///////////////////////////////////////////
 #define USART1_RB_SIZE 128
@@ -26,10 +27,21 @@
 #define UART_RB_INIT_FAIL   -3
 
 ///////////////////////////////////////////
+typedef struct _uart_driver
+{
+    int handle;
+    uint32_t is_initialized;
+    UART_HandleTypeDef UARTx_Handler;
+    volatile uint8_t rbuff[1];
+    ring_buffer_s *rb;
+    osMutexId lock;
+}uart_driver_s;
+
 void uart_driver_init(void);
-int uart_open(char *path, uint32_t bps);
+uart_driver_s *uart_get_driver_des(int handle);
+int uart_open(char *path, uint32_t band, int data_bit, char parity, int stop_bit);
 int uart_close(int handle);
 uint32_t uart_read_fast(int handle, uint8_t *data, uint32_t len);
 uint32_t uart_read_wait(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms);
-uint32_t uart_write_fast(int handle, uint8_t *data, uint32_t len);
+uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len);
 #endif

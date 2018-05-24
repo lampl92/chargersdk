@@ -14,15 +14,20 @@
 
 #define UART_MAX 7
 
-struct _uart_driver
+uart_driver_s uart_driver[UART_MAX];
+
+uart_driver_s *uart_get_driver_des(int handle)
 {
-    int handle;
-    uint32_t is_initialized;
-    UART_HandleTypeDef UARTx_Handler;
-    volatile uint8_t rbuff[1];
-    ring_buffer_s *rb;
-    osMutexId lock;
-} uart_driver[UART_MAX];
+    if (handle >= 0 && handle < UART_MAX)
+    {
+        if (uart_driver[handle].is_initialized == 1)
+        {
+            return &uart_driver[handle];
+        }
+    }
+    return NULL;
+}
+
 
 void uart_driver_init(void)
 {
@@ -34,7 +39,7 @@ void uart_driver_init(void)
     }
 }
 
-int uart_open(char *path, uint32_t bps)
+int uart_open(char *path, uint32_t band, int data_bit, char parity, int stop_bit)
 {
     struct _uart_driver *driver;
     int handle = UART_PATH_ERR;
@@ -168,10 +173,43 @@ int uart_open(char *path, uint32_t bps)
     {
         return UART_PATH_ERR;
     }
-    driver->UARTx_Handler.Init.BaudRate = bps;
-    driver->UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
-    driver->UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
-    driver->UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+    driver->UARTx_Handler.Init.BaudRate = band;
+    switch (data_bit)
+    {
+    case 9:
+        driver->UARTx_Handler.Init.WordLength = UART_WORDLENGTH_9B;
+        break;
+    case 8:
+    default:
+        driver->UARTx_Handler.Init.WordLength = UART_WORDLENGTH_8B;
+        break;
+    }
+    switch (stop_bit)
+    {
+    case 2:
+        driver->UARTx_Handler.Init.StopBits = UART_STOPBITS_2;
+        break;
+    case 1:
+    default:
+        driver->UARTx_Handler.Init.StopBits = UART_STOPBITS_1;
+        break;
+    }
+    switch (parity)
+    {
+    case 'e':
+    case 'E':
+        driver->UARTx_Handler.Init.Parity = UART_PARITY_EVEN;
+        break;
+    case 'o':
+    case 'O':
+        driver->UARTx_Handler.Init.Parity = UART_PARITY_ODD;
+        break;
+    case 'n':
+    case 'N':
+    default:
+        driver->UARTx_Handler.Init.Parity = UART_PARITY_NONE;
+        break;
+    }
     driver->UARTx_Handler.Init.Mode = UART_MODE_TX_RX;
     driver->UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     driver->UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -238,7 +276,7 @@ void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
     USARTx_BASE->DR = ch;
 }
 
-uint32_t uart_write_fast(int handle, uint8_t *data, uint32_t len)
+uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len)
 {
     uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
