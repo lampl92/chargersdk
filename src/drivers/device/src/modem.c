@@ -506,7 +506,7 @@ void Modem_Poll(DevModem_t *pModem)
             xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
             xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             uart_close(pModem->uart_handle);
-            pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BPS);
+            pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
             ret = pModem->soft_reset(pModem);
             if(ret == DR_MODEM_OK)
             {

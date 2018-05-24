@@ -7,9 +7,11 @@
 #include "retarget.h"
 
 
-#define MODEM_UARTx         "UART5"
-#define MODEM_UART_BPS      115200
-
+#define MODEM_UARTx          "UART5"
+#define MODEM_UART_BAND      115200
+#define MODEM_UART_DATA      8
+#define MODEM_UART_PARI      'N'
+#define MODEM_UART_STOP      1
 extern int modemlog;
 #define printf_modem(...) do{if(modemlog > 0)printf_safe(__VA_ARGS__);}while(0);
 

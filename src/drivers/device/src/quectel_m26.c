@@ -1027,7 +1027,7 @@ DevModem_t *M26Create(void)
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
     pMod->state = DS_MODEM_OFF;
-    pMod->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BPS);
+    pMod->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
     if (pMod->uart_handle < 0)
     {
         printf_safe("M26 %s 初始化失败，code = %d！\n", MODEM_UARTx, pMod->uart_handle);

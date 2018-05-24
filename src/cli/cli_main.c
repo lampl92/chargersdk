@@ -16,7 +16,7 @@ void tinysh_char_out(unsigned char c)
 
 void cli_init(void)
 {
-    cli_huart = uart_open(CLI_UARTx, CLI_UART_BPS);
+    cli_huart = uart_open(CLI_UARTx, CLI_UART_BAND, CLI_UART_DATA, CLI_UART_PARI, CLI_UART_STOP);
 #if BOOTLOADER
     tinysh_set_prompt("\n[bootldr]$ ");
 #else

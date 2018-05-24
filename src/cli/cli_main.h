@@ -16,7 +16,10 @@
 #else
 #define CLI_UARTx         "UART4"
 #endif
-#define CLI_UART_BPS      115200
+#define CLI_UART_BAND      115200
+#define CLI_UART_DATA      8
+#define CLI_UART_PARI      'N'
+#define CLI_UART_STOP      1
 
 extern int cli_huart;
 
