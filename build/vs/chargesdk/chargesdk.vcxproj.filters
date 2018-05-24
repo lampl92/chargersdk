@@ -1968,6 +1968,9 @@
     <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu.c">
       <Filter>Source files\middlewares\libmodbus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">

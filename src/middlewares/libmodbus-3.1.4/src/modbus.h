@@ -7,29 +7,11 @@
 #ifndef MODBUS_H
 #define MODBUS_H
 
-/* Add this for macros that defined unix flavor */
-#if (defined(__unix__) || defined(unix)) && !defined(USG)
-#include <sys/param.h>
-#endif
-
-#ifndef _MSC_VER
 #include <stdint.h>
-#else
-#include "stdint.h"
-#endif
 
 #include "modbus-version.h"
 
-#if defined(_MSC_VER)
-# if defined(DLLBUILD)
-/* define DLLBUILD when building the DLL */
-#  define MODBUS_API __declspec(dllexport)
-# else
-#  define MODBUS_API __declspec(dllimport)
-# endif
-#else
 # define MODBUS_API
-#endif
 
 #ifdef  __cplusplus
 # define MODBUS_BEGIN_DECLS  extern "C" {
