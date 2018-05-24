@@ -134,7 +134,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_timer.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_uart.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c" />
@@ -145,6 +144,8 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
@@ -517,7 +518,6 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_uart_queue.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h" />
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\led_control.h" />
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\malloc.h" />
@@ -528,6 +528,7 @@
     <ClInclude Include="..\..\..\src\drivers\device\inc\card_m1.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\gprs_m26.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\led.h" />
+    <ClInclude Include="..\..\..\src\drivers\device\inc\meter.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\modem.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\RFIDReader_mt626.h" />
     <ClInclude Include="..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include\stm32f429xx.h" />

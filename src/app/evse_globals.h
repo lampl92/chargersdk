@@ -15,9 +15,11 @@
 #include "libEcharge/ech_globals.h"
 #include "net_device.h"
 #include "ifconfig.h"
+#include "meter.h"
 
 extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
+extern meter_s *meter;
 
 #endif

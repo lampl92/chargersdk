@@ -68,7 +68,6 @@ typedef struct _CONInfo
 {
     uint8_t ucCONID;                // 枪号
     uint8_t ucCONType;
-    uint8_t ucPhaseLine;            //1：单项 3：三相
     uint8_t ucSocketType;
     double dVolatageUpperLimits;
     double dVolatageLowerLimits;
@@ -97,12 +96,13 @@ typedef struct _CONStatus
     double dBTypeSocketTemp2;
     CONStatusType_t xBTypeSocketLockState; //lock unlock
     double dChargingVoltage;
+    double dLineVolt[3];
     double dChargingCurrent;
+    double dLineCurr[3];
     double dChargingFrequence;
     double dChargingPower;
     double dChargingEnergy;
-    double dPower_Total;
-    double dEnergy_Total;
+    
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
@@ -120,11 +120,7 @@ typedef struct _CONStatus
     uint32_t ulSignalFault;
     uint32_t ulSignalPool[CON_MAX_SIGNAL_BLOCK];
 
-    pCon_ft GetChargingVoltage;
-    pCon_ft GetChargingCurrent;
-    pCon_ft GetChargingFrequence;
-    pCon_ft GetChargingPower;
-    pCon_ft GetChargingEnergy;
+    pCon_ft GetChargingData;
     VoltState_t xVoltStat;
     CurrState_t xCurrStat;
     FreqState_t xFreqStat;

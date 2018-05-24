@@ -220,6 +220,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
     cfgobj_get_string(jsCfgObj, pEVSE->info.strID, "%s", jnEVSEID);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucType, "%s", jnEVSEType);
+    cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucPhaseLine, "%s", jnPhaseLine);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucTotalCON, "%s", jnTotalCON);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dLng, "%s", jnLng);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dLat, "%s", jnLat);
@@ -638,6 +639,8 @@ void EVSEinit(void)
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
+    
+    meter = meter_init(pEVSE->info.ucPhaseLine);
 
     pRFIDDev = RFIDDevCreate(RFID_UARTx, RFID_UART_BAND, RFID_UART_DATA, RFID_UART_PARI, RFID_UART_STOP);
 

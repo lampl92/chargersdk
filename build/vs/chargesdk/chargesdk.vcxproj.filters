@@ -1971,6 +1971,12 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -5032,6 +5038,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu-private.h">
       <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\meter.h">
+      <Filter>Header files\drivers\device\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
