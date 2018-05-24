@@ -23,7 +23,7 @@
 /*                               获取协议配置信息                            */
 /*---------------------------------------------------------------------------*/
 
-static void cfgobj_get_period(cJSON *jsCfgObj, EchSegTime_t *pSegTime, uint8_t *strCfgObjName)
+static void cfgobj_get_period(cJSON *jsCfgObj, EchSegTime_t *pSegTime, char *strCfgObjName)
 {
     int i;
     cfgobj_get_uint8(jsCfgObj, &pSegTime->ucPeriodCont, "%s.%s", strCfgObjName, jnProtoSegCont);
