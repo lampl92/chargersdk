@@ -55,11 +55,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     int          NCode;
     int          Id;
     WM_HWIN     hWinPage;
-    CON_t       *pCont;
+    //CON_t       *pCont;
     EventBits_t uxBits;
     int i;
 
-    pCont = CONGetHandle(0);
+    //pCont = CONGetHandle(0);
     
     switch (pMsg->MsgId)
     {
@@ -101,20 +101,31 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         hWinPage = CreateManagerInfoAnalog(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态信息");
 
-        hWinPage = CreateManagerInfoStatus(pMsg->hWin);
-        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态量");
+//        hWinPage = CreateManagerInfoStatus(pMsg->hWin);
+//        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "状态量");
 
         hWinPage = CreateManagerLogDate(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "记录查询");
 
-        hWinPage = CreateManagerConSet(pMsg->hWin);
-        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪A配置");
+        if (pEVSE->info.ucTotalCON == 1)
+        {
+            hWinPage = CreateManagerConSet(pMsg->hWin);
+            MULTIPAGE_AddEmptyPage(hItem, hWinPage, "电枪设置");
+        }
+        else
+        {
+            hWinPage = CreateManagerConSet(pMsg->hWin);
+            MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪A设置");
+        
+            hWinPage = CreateManagerConSet_1(pMsg->hWin);
+            MULTIPAGE_AddEmptyPage(hItem, hWinPage, "枪B设置");   
+        }
 
         hWinPage = CreateManagerSysSet(pMsg->hWin);
         MULTIPAGE_AddEmptyPage(hItem, hWinPage, "厂商配置");
 
         hWinPage = CreateManagerSysInfo(pMsg->hWin);
-        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "系统信息");
+        MULTIPAGE_AddEmptyPage(hItem, hWinPage, "关于");
 
         MULTIPAGE_SelectPage(hItem, 0);
         
@@ -123,7 +134,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             MULTIPAGE_SetTabWidth(hItem, 120,i);   
         }
-
+        MULTIPAGE_SetTabWidth(hItem, 60, 5); 
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);

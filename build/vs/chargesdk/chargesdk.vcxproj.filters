@@ -543,6 +543,9 @@
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\uart">
       <UniqueIdentifier>{f48c96c6-a0fb-4e52-b3f5-362276970cdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\hmi\manager_set">
+      <UniqueIdentifier>{43bf6f9d-419a-43b4-99c8-01c2eb361aa1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -1932,9 +1935,6 @@
     <ClCompile Include="start_up.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="manager_states_info.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PwdError.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -1945,9 +1945,6 @@
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\PwdTest.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\manager_common.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c">
@@ -1961,6 +1958,27 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c">
       <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\Keyboard.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set_1.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_states_info_win.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_Info.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_set.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_common.c">
+      <Filter>Source files\hmi\manager_set</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -196,7 +196,13 @@
     <ClCompile Include="..\..\..\src\hmi\eplugtimeoutDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c" />
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\manager_common.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\Keyboard.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_common.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set_1.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_states_info_win.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_Info.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_set.c" />
     <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
@@ -337,7 +343,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\timers.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c" />
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c" />
-    <ClCompile Include="manager_states_info.c" />
     <ClCompile Include="startup_chargersdk.c" />
     <ClCompile Include="start_up.c" />
     <ClCompile Include="system_chargersdk.c" />

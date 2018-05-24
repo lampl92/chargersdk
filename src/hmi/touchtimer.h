@@ -31,7 +31,7 @@
 #define GUI_MANAGER_YOFF 40     //管理员界面相关配置中每行的宽度
 #define GUI_MANAGER_YSIZE 35    //管理员界面相关配置中每行的edit的宽度
 #define HSCROLL_WIDTH   30  //水平滑轮宽度
-#define WSCROLL_WIDTH   30  //垂直滑轮宽度
+#define WSCROLL_WIDTH   60  //垂直滑轮宽度
 
 /*********************自定义GUI消息的宏******************************
 **
@@ -82,6 +82,11 @@
 #define MSG_MANAGERSETIDD       (GUI_ID_USER + 0x4D)
 #define MSG_MANAGERSETIDE       (GUI_ID_USER + 0x4E)
 #define MSG_MANAGERSETIDF       (GUI_ID_USER + 0x4F)
+#define MSG_MANAGERSETID10       (GUI_ID_USER + 0x70)
+#define MSG_MANAGERSETID11       (GUI_ID_USER + 0x71)
+#define MSG_MANAGERSETID12       (GUI_ID_USER + 0x72)
+#define MSG_MANAGERSETID13       (GUI_ID_USER + 0x73)
+#define MSG_MANAGERSETID14       (GUI_ID_USER + 0x74)
 
 extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;
@@ -107,6 +112,7 @@ extern WM_HWIN _hWinManagerInfoAnalog;
 extern WM_HWIN _hWinManagerInfoStatus;
 extern WM_HWIN _hWinManagerLogDate;
 extern WM_HWIN _hWinManagerConSet;
+extern WM_HWIN _hWinManagerConSet1;
 extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 extern WM_HWIN _hWinManagerTerminate;
@@ -155,6 +161,7 @@ WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin);
 //WM_HWIN CreateManagerAlarmLog();
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin);
+WM_HWIN CreateManagerConSet_1(WM_HWIN srcHwin);
 WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin);
 WM_HWIN CreateManagerTerminate(WM_HWIN srcHwin);
 WM_HWIN CreateManagerCommon(void);
