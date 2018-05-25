@@ -531,8 +531,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
-        SCROLLBAR_SetPageSize(wScroll, 130);
-        SCROLLBAR_SetNumItems(wScroll, 5*130);
+        SCROLLBAR_SetPageSize(wScroll, 205);
+        SCROLLBAR_SetNumItems(wScroll, 3*205);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
         SCROLLBAR_SetWidth(wScroll, WSCROLL_WIDTH);

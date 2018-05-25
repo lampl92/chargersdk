@@ -197,6 +197,7 @@
     <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c" />
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\Keyboard.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\manager_alarm_log.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_common.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_con_set_1.c" />
