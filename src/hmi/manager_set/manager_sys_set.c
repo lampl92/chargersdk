@@ -532,7 +532,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
         SCROLLBAR_SetPageSize(wScroll, 130);
-        SCROLLBAR_SetNumItems(wScroll, 6 * 130);
+        SCROLLBAR_SetNumItems(wScroll, 5*130);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
         SCROLLBAR_SetWidth(wScroll, WSCROLL_WIDTH);
@@ -632,7 +632,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[11][0], _tmpBuff);
         //mac
         _aahText[12][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _FONT_WIDTH*(strlen("MAC")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "MAC");
-        _aahEdit[12][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 32, strlen("100"));
+        _aahEdit[12][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 32, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strMAC);
         EDIT_SetText(_aahEdit[12][0], _tmpBuff);
@@ -649,31 +649,31 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         //本机ip
         _aahText[14][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _FONT_WIDTH*(strlen("本机ip")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "本机ip");
-        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, strlen("100"));
+        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strIP);
         EDIT_SetText(_aahEdit[14][0], _tmpBuff);
         //子网掩码
         _aahText[15][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _FONT_WIDTH*(strlen("子网掩码")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "子网掩码");
-        _aahEdit[15][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35, strlen("100"));
+        _aahEdit[15][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
         EDIT_SetText(_aahEdit[15][0], _tmpBuff);
         
         _aahText[16][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _FONT_WIDTH*(strlen("网关")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网关");
-        _aahEdit[16][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 36, strlen("100"));
+        _aahEdit[16][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 36, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
         EDIT_SetText(_aahEdit[16][0], _tmpBuff);
         
         _aahText[17][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
-        _aahEdit[17][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 37, strlen("100"));
+        _aahEdit[17][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 37, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
         EDIT_SetText(_aahEdit[17][0], _tmpBuff);
 
         _aahText[18][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
-        _aahEdit[18][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 38, strlen("100"));
+        _aahEdit[18][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 38, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
         EDIT_SetText(_aahEdit[18][0], _tmpBuff);

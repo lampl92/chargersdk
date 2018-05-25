@@ -1121,6 +1121,7 @@ static uint8_t Value_Check()
     double tmpDouble = 0.0;
     uint16_t i = 0;
     CON_t *pCon;
+    CON_t *pCon_for_PhaseLine;
 
     memset(result_input, 0, sizeof(result_input));
     MULTIEDIT_GetText(hMulti, result_input, MULTIEDIT_GetTextSize(hMulti));
@@ -1246,6 +1247,23 @@ static uint8_t Value_Check()
             }
             cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
             pEVSE->info.ucTotalCON = tmpU8;
+            if (tmpU8 == 1)
+            {
+                pCon_for_PhaseLine = CONGetHandle(0);
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, pCon_for_PhaseLine->info.ucCONID, jnPhaseLine);    
+                pCon_for_PhaseLine = CONGetHandle(1);
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, pCon_for_PhaseLine->info.ucCONID, jnPhaseLine); 
+            }
+            else
+            {
+                tmpU8 = 3;
+                //pCon_for_PhaseLine = CONGetHandle(0);
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, 0, jnPhaseLine);    
+                //pCon_for_PhaseLine = CONGetHandle(1);
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, 1, jnPhaseLine);
+                //GUI_Delay(1000);
+            }
+            NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
             break;
         case 31:
@@ -1535,9 +1553,21 @@ static uint8_t Value_Check()
             {
                 tmpU8 = 3;
             }
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnPhaseLine);
-            //pCon->info.SetCONCfg(pCon, jnPhaseLine, &tmpU8, ParamTypeU8);
-            pCon->info.ucPhaseLine = tmpU8;
+            //pCon_for_PhaseLine = CONGetHandle(0);
+            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, 0, jnPhaseLine);    
+            //pCon_for_PhaseLine = CONGetHandle(1);
+            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s:%d.%s", jnCONArray, 1, jnPhaseLine);  
+            //pCon->info.ucPhaseLine = tmpU8;
+            if (tmpU8 == 1)
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+            }
+            else
+            {
+                tmpU8 = 2;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+            }
+            NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             break;
         }

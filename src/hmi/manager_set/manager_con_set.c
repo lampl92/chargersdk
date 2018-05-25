@@ -528,8 +528,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(_tmpBuff,"%.1f",pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
-        
-        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("哈哈")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
+        //电相
+        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("电相")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
         _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("145.4"));
         _aahText[11][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "");
         sprintf(_tmpBuff,"%d",(int)pCon->info.ucPhaseLine);
