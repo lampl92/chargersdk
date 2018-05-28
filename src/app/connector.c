@@ -226,7 +226,7 @@ static ErrorCode_t GetChargingData(void *pvCON)
     errcode = ERR_NO;
 
     /** 从电表获取 */
-#ifndef  DEBUG_DIAG_DUMMY
+#ifdef  DEBUG_DIAG_DUMMY
     tmpVolt = 220;
     tmpCurr = 32;
     tmpFreq = 50;
@@ -1150,7 +1150,8 @@ CON_t *CONCreate(uint8_t ucCONID )
     }
     memset(pCON, 0, sizeof(CON_t));
    
-
+    pCON->info.ucCONID = ucCONID;
+    
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;
     
