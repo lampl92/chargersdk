@@ -20,6 +20,8 @@ meter_s *meter_create(meter_config_s *config)
         return NULL;
     }
     modbus_rtu_set_serial_mode(meter->mb, config->mode);
+//    modbus_set_debug(meter->mb, 1);
+    modbus_set_error_recovery(meter->mb, MODBUS_ERROR_RECOVERY_PROTOCOL);
     res = modbus_connect(meter->mb);
     if (res < 0)
     {
