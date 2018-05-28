@@ -693,9 +693,6 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c">
       <Filter>Source files</Filter>
     </ClCompile>
@@ -2178,9 +2175,6 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h">
