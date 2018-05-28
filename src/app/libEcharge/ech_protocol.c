@@ -23,7 +23,7 @@
 /*                               获取协议配置信息                            */
 /*---------------------------------------------------------------------------*/
 
-static void cfgobj_get_period(cJSON *jsCfgObj, EchSegTime_t *pSegTime, uint8_t *strCfgObjName)
+static void cfgobj_get_period(cJSON *jsCfgObj, EchSegTime_t *pSegTime, char *strCfgObjName)
 {
     int i;
     cfgobj_get_uint8(jsCfgObj, &pSegTime->ucPeriodCont, "%s.%s", strCfgObjName, jnProtoSegCont);
@@ -101,7 +101,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
 /*---------------------------------------------------------------------------/
 /                               黑白名单
 /---------------------------------------------------------------------------*/
-static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
+static int BnWIsListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -134,7 +134,7 @@ static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 
     return res;
 }
-static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
+static int BnWGetListSizeCfg(char *path, uint16_t *size)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -156,7 +156,7 @@ static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 
     return 1;
 }
-static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
+static int BnWGetListCfg(char *path, uint16_t idx, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -185,7 +185,7 @@ static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
  * @return int
  *
  */
-static int BnWFlushListCfg(uint8_t *path)
+static int BnWFlushListCfg(char *path)
 {
     cJSON *jsArrayObj;
     ErrorCode_t errcode;
@@ -216,7 +216,7 @@ static int BnWFlushListCfg(uint8_t *path)
  * @return int
  *
  */
-static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
+static int BnWAddListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -255,7 +255,7 @@ static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
     return res;
 }
 
-static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
+static int BnWDeleteListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -299,7 +299,7 @@ void testBnWList(void)
 {
     uint8_t total;
     uint16_t size;
-    uint8_t *strID[24] =
+    char *strID[24] =
     {
         "0000000000000001",
         "0000000000000002",
@@ -326,7 +326,7 @@ void testBnWList(void)
         "0000000000000023",
         "0000000000000024"
     };
-    uint8_t strIDCtx[17];
+    char strIDCtx[17];
     BnWFlushListCfg(pathBlackList);
     for (int i = 0; i < 20; ++i)
     {
@@ -457,10 +457,10 @@ static int makeStdCmd(void *pPObj,
         printf_protodetail("%02X ", pucMsgBodyCtx_dec[i]);
     }
     printf_protodetail("\n");
-    ulMsgBodyCtxLen_enc = ech_aes_encrypt(pucMsgBodyCtx_dec,
+    ulMsgBodyCtxLen_enc = ech_aes_encrypt((char *)pucMsgBodyCtx_dec,
                                       ulMsgBodyCtxLen_dec,
                                       pProto->info.strKey,
-                                      ucMsgBodyCtx_enc);
+                                      (char *)ucMsgBodyCtx_enc);
 
     //协议版本
     ucMsgHead[ulMsgHeadLen++] = pProto->info.ucProtoVer;
@@ -667,17 +667,17 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电压
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineA].status.dVolt * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineA] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineB].status.dVolt * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineB] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineC].status.dVolt * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineC] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -689,17 +689,17 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电流
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineA].status.dCurr * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineA] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineB].status.dCurr * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineB] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->line[defLineC].status.dCurr * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineC] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1854,7 +1854,7 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, u
     EVSE_t *pEVSE;
     RFIDDev_t *pRfid;
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strOrderSN[17] = {0};
+    char strOrderSN[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     uint8_t remote_id;
     ul2uc ultmpNetSeq;
@@ -2433,7 +2433,7 @@ static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t u
     {
         pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
-        ech_aes_decrypt(pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, pMsgBodyCtx_dec);
+        ech_aes_decrypt((char *)pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, (char *)pMsgBodyCtx_dec);
 
         memcpy(pProto->pCMD[usCmdID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
         pProto->pCMD[usCmdID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;

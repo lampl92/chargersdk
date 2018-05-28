@@ -141,7 +141,10 @@ error_t stm32f4x9EthInit(NetInterface *interface)
    //Perform a software reset
    ETH->DMABMR |= ETH_DMABMR_SR;
    //Wait for the reset to complete
-   while(ETH->DMABMR & ETH_DMABMR_SR);
+    while (ETH->DMABMR & ETH_DMABMR_SR)
+    {
+        osDelay(100);
+    }
 
    //Adjust MDC clock range depending on HCLK frequency
    ETH->MACMIIAR = ETH_MACMIIAR_CR_Div102;

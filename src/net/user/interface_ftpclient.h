@@ -2,6 +2,7 @@
 #define _INTERFACE_FTPCLIENT_H_
 
 #include  "stm32f4xx.h"
+#include "libEcharge/ech_ftp.h"
 
 struct _ftp_ctx;
 

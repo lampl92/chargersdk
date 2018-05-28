@@ -1,57 +1,32 @@
 #include "bsp.h"
-#include "xprintf.h"
 #include "taskcreate.h"
-extern UART_HandleTypeDef CLI_UARTx_Handler;
+#include "cli_main.h"
+#include "ring_buffer.h"
 
-void myputc(uint8_t ch)
-{
-    while((CLI_USARTx_BASE->SR&0X40)==0);
-    CLI_USARTx_BASE->DR = ch;
-}
-#if 1
-extern Queue *pTermRecvQue;
+ring_buffer_s *term_rb;
+
 void retarget_init(void)
 {
-    pTermRecvQue = QueueCreate(TERM_QUEUE_SIZE);
-    
-    if(xprintfMutex == NULL)
-    {
-        //
-    }
-    xdev_out(myputc);
+    term_rb = ring_uint8_init(1024);
 }
-int printf_safe(const char *format, ...)
+int printf_safe(const char *fmt, ...)
 {
-    char  buf_str[200 + 1];
-    va_list   v_args;
-    int i;
+    char str[256] = { 0 };
+    va_list va;
 
-    va_start(v_args, format);
-    (void)vsnprintf((char *)&buf_str[0],
-                    (size_t      ) sizeof(buf_str),
-                    (char const *) format,
-                    v_args);
-    va_end(v_args);
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xprintfMutex, 10) == pdPASS)
-    {
-#endif
-        xprintf("%s", buf_str);
-        //strcpy(strTermCtx, buf_str);
-        for (i = 0; i < strlen(buf_str); i++)
-        {
-            pTermRecvQue->EnElem(pTermRecvQue, buf_str[i]);
-        }
-        buf_str[i] = '\0';
-#if USE_FreeRTOS
-        xSemaphoreGive(xprintfMutex);
-    }
+    va_start(va, fmt);
+    vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+    
+    uart_write_fast(cli_huart, (uint8_t *)str, strlen(str));
+
+#if EVSE_USING_GUI
+    ring_buffer_put(term_rb, str, strlen(str));
 #endif
     return 0;
 }
 
-
-#endif
+int printf(const char *fmt, ...) __attribute__((alias("printf_safe")));
 
 #if 0
 #ifdef __GNUC__

@@ -86,7 +86,6 @@ void yaffs_init(void)
     int res;
     yaffs_start_up();
     yaffs_set_trace(0);
-    //yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
     res = yaffs_mount(YAFFS_MOUNT_POINT);
     if (res != 0)
     {
@@ -94,19 +93,22 @@ void yaffs_init(void)
         yaffs_mount(YAFFS_MOUNT_POINT);
     }
 }
+extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
-
-    timeInit();
     retarget_init();
+    cli_init();
+    timeInit();
     yaffs_init();
-#if 1
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
     create_dir(pathSystemDir);
     create_dir(pathDownloadDir);
+    create_dir(pathUpgradeDir);
+#if BOOTLOADER
+#else
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
@@ -117,16 +119,18 @@ void sys_Init(void)
     create_cfg_file(pathFTPCfg, strFtpCfg);
     create_cfg_file(pathNetCfg, strNetCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
-
+    
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
     sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+#endif
     /*---------------------------------------------------------------------------/
     /                               NET初始化
     /---------------------------------------------------------------------------*/
+#if EVSE_USING_NET
     ifconfig_init();
     net_stack_init();
-    
+#endif
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/
@@ -135,7 +139,10 @@ void sys_Init(void)
     GUI_Init();
     WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
 #endif
-    xprintf("\nsystem initialized\n\r");
-    xprintf("\nhello charger\n\r");
+    printf_safe("\nsystem initialized\n\r");
+#if BOOTLOADER
+    printf_safe("\nhello bootldr\n\r");
+#else
+    printf_safe("\nhello charger\n\r");
 #endif
 }

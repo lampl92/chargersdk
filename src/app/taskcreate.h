@@ -8,7 +8,9 @@
 #ifndef  __TASKCREATE_H
 #define  __TASKCREATE_H
 
-#include "includes.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "event_groups.h"
 #include "timercallback.h"
 
 #define defTIMERID_Temp             0
@@ -34,8 +36,6 @@ extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
 extern SemaphoreHandle_t xMutexTimeStruct;
-extern SemaphoreHandle_t xMutexNandHW;
-extern SemaphoreHandle_t xprintfMutex;
 extern SemaphoreHandle_t xMeterMutex;
 extern SemaphoreHandle_t xTempMutex;
 

@@ -248,7 +248,7 @@
     </None>
     <None Include="bootldr_flash.lds" />
     <None Include="..\..\..\src\cli\ldr_cli_bootldr.c">
-      <Filter>Source files\cli</Filter>
+      <Filter>Source files\bootldr</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +395,6 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
-      <Filter>Source files\middlewares\userlib\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\croutine.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
@@ -423,15 +420,6 @@
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\bootldr\ldr_taskcreate.c">
-      <Filter>Source files\bootldr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\bootldr\ldr_bsp.c">
-      <Filter>Source files\bootldr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\bootldr\ldr_main.c">
-      <Filter>Source files\bootldr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\bootldr\ldr_sysinit.c">
       <Filter>Source files\bootldr</Filter>
     </ClCompile>
     <ClCompile Include="system_bootldr.c">
@@ -533,9 +521,6 @@
     <ClCompile Include="..\..\..\src\cli\ymodem.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\ldr_cli_main.c">
-      <Filter>Source files\cli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\cli\cli_app.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
@@ -559,6 +544,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\yaffs2misc.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\ring_buffer.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_main.c">
+      <Filter>Source files\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\bootldr\ldr_main.c">
+      <Filter>Source files\bootldr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\app\sysinit.c">
+      <Filter>Source files\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1465,9 +1465,6 @@
     <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h">
       <Filter>Header files\middlewares\tinysh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
@@ -1475,9 +1472,6 @@
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\yaffs2\moduleconfig.h">

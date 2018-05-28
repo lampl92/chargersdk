@@ -8,7 +8,9 @@
 */
 
 /* Includes ------------------------------------------------------------------*/
-#include "includes.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "bsp.h"
 #include "bsp_define.h"
 /* Private functions ---------------------------------------------------------*/
 

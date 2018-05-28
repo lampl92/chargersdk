@@ -1,6 +1,8 @@
 #include "modem.h"
 #include "retarget.h"
 #include "user_app.h"
+#include "bsp_uart.h"
+#include "quectel_m26.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -807,7 +809,6 @@ DR_MODEM_e M26_open(void *pvModem)
 DR_MODEM_e M26_init(void *pvModem)
 {
     DevModem_t *pModem;
-    char reply[MAX_COMMAND_LEN + 1] = { 0 };
     DR_MODEM_e ret;
     int timeoutMax = 20;
     int timeout = 0;
@@ -1026,8 +1027,11 @@ DevModem_t *M26Create(void)
     pMod->info.ucTPMode = 1;
     pMod->status.ucSignalQuality = 0;
     pMod->state = DS_MODEM_OFF;
-    pMod->xMutex = xSemaphoreCreateMutex();
-    pMod->pSendQue = QueueCreate(MAX_COMMAND_LEN);
+    pMod->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
+    if (pMod->uart_handle < 0)
+    {
+        printf_safe("M26 %s 初始化失败，code = %d！\n", MODEM_UARTx, pMod->uart_handle);
+    }
     
     pMod->keyon = M26_keyon;
     pMod->keyoff = M26_keyoff;

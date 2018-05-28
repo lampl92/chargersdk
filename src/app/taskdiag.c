@@ -40,10 +40,6 @@ void vTaskEVSEDiag(void *pvParameters)
             {
             case ERR_RFID_FAULT:
                 break;
-            case ERR_CON_METER_FAULT:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
-                break;
             case ERR_CON_CP_FAULT:
                 pCON = CONGetHandle(errpack.ulDevID);
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCPSwitch);
@@ -75,8 +71,8 @@ void vTaskEVSEDiag(void *pvParameters)
                 {
                     pCON->status.SetLoadPercent(pCON, 50);
                 }
-                //温度警告（非严重告警）算正常，不进行处理
-                if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                //温度\电流警告（非严重告警）、电压过欠压算正常，不进行处理
+                if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_DontCare) != 0 ||
                     pCON->status.ulSignalFault != 0 ||
                    (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                     pEVSE->status.ulSignalFault != 0)
@@ -85,6 +81,15 @@ void vTaskEVSEDiag(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
             }
+            if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
+            {
+                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+            }
+            else
+            {
+                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+            }
+            
             if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
             {
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
@@ -94,23 +99,6 @@ void vTaskEVSEDiag(void *pvParameters)
                 xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
             }
         }
-        
-        /* 处理系统报警 */
-//        for(i = 0; i < ulTotalCON; i++)
-//        {
-//            pCON = CONGetHandle(i);
-//            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
-//                                                    defEventBitExceptionTempW, 
-//                                                    pdTRUE, pdFALSE, 0);
-//            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
-//            {
-//                if (pCON->state == STATE_CON_CHARGING)
-//                {
-//                    pCON->status.SetLoadPercent(pCON, 50);
-//                }
-//            }
-//        }
-        /* end of 处理系统报警 */
 
         /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */
 

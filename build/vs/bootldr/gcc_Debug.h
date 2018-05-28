@@ -556,6 +556,9 @@
 #ifndef __USES_INITFINI__
 #define __USES_INITFINI__ 1
 #endif
+#ifndef BOOTLOADER
+#define BOOTLOADER 1
+#endif
 #ifndef __DEC128_MIN__
 #define __DEC128_MIN__ 1E-6143DL
 #endif
@@ -609,6 +612,9 @@
 #endif
 #ifndef __UDA_FBIT__
 #define __UDA_FBIT__ 32
+#endif
+#ifndef EVSE_USING_NET
+#define EVSE_USING_NET 0
 #endif
 #ifndef __cpp_decltype_auto
 #define __cpp_decltype_auto 201304

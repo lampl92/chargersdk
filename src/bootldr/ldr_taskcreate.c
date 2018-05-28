@@ -12,7 +12,6 @@
 * @date 2016-11-03
 */
 #include "includes.h"
-#include "interface.h"
 #include "cli_main.h"
 #include "timercallback.h"
 #include "bsp.h"
@@ -65,9 +64,6 @@ static TaskHandle_t xHandleTaskOTA = NULL;
 / 任务间通信
 /---------------------------------------------------------------------------*/
 SemaphoreHandle_t xMutexTimeStruct;
-SemaphoreHandle_t xMutexNandHW;
-SemaphoreHandle_t  xprintfMutex = NULL;
-
 
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
 EventGroupHandle_t xHandleEventData = NULL;
@@ -189,7 +185,7 @@ void vTaskInit(void *pvParameters)
     printf_safe("\nPRESS 'C' IN 3 SECONDS FOR CLI MODE...\n");
     while (1)
     {
-        cli_std_len = uart_read(UART_PORT_CLI, cli_std, 1, 3000);
+        cli_std_len = uart_read_wait(cli_huart, (uint8_t *)cli_std, 1, 3000);
         if (cli_std_len >= 1 && (cli_std[0] == 'c' || cli_std[0] == 'C'))
         {
             cli_std[0] = 0;
@@ -281,9 +277,6 @@ void SysTaskCreate (void)
 void AppObjCreate (void)
 {
     xMutexTimeStruct = xSemaphoreCreateMutex();
-    xMutexNandHW = xSemaphoreCreateMutex();
-    xprintfMutex = xSemaphoreCreateMutex();
-    
 
     xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
 

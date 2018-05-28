@@ -568,6 +568,9 @@
 #ifndef __USES_INITFINI__
 #define __USES_INITFINI__ 1
 #endif
+#ifndef BOOTLOADER
+#define BOOTLOADER 1
+#endif
 #ifndef __DEC128_MIN__
 #define __DEC128_MIN__ 1E-6143DL
 #endif
@@ -618,6 +621,9 @@
 #endif
 #ifndef __UDA_FBIT__
 #define __UDA_FBIT__ 32
+#endif
+#ifndef EVSE_USING_NET
+#define EVSE_USING_NET 0
 #endif
 #ifndef __cpp_decltype_auto
 #define __cpp_decltype_auto 201304
@@ -1205,6 +1211,13 @@
 
 // --- Include directories begin --- //
 //.
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/app
 //../../../src/cli
 //../../../src/drivers/hal/CMSIS_RTOS
@@ -1229,18 +1242,11 @@
 //../../../src/hmi/lcd
 //../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
-//../../../src/net/user
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/fpu/cortex_m4
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //../../../src/middlewares/STemWin/SIF
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/user
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
 //../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer

@@ -17,64 +17,58 @@
 //#define TEST_TIME_EvseData  "EvseData"
 //#define TEST_TIME_rfid  "rfid"
 
-static TaskHandle_t xHandleTaskChData[defMaxCON] = { NULL };
+static TaskHandle_t xHandleTaskChData = NULL ;
 static TaskHandle_t xHandleTaskEvseData = NULL;
 
 void vTaskMonitor_ChData(void *pvParameters)
 {
     CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
     EventBits_t uxBitsTimerCB;
     ErrorCode_t errcode;
+    int i;
+    int trytime = 0;
+    int trymax = 3;
 
-    pCON = (CON_t *)pvParameters;
+    ulTotalCON = pListCON->Total; 
     uxBitsTimerCB = 0;
     errcode = ERR_NO;
 
     while (1)
     {
-        uxBitsTimerCB = xEventGroupWaitBits(pCON->status.xHandleEventTimerCBNotify, 
-                                            defEventBitTimerCBChargingData, 
-                                            pdTRUE, pdTRUE, 0);
+        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
         if ((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
         {
-#ifdef TEST_TIME_ChData
-            printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
-#endif // TEST_TIME_ChData
-            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingVoltage(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingCurrent(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingFrequence(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingPower(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-            THROW_ERROR(pCON->info.ucCONID, errcode = pCON->status.GetChargingEnergy(pCON), ERR_LEVEL_CRITICAL, "Monitor");
-#ifdef TEST_TIME_ChData
-            printf_safe("con%d end   %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
-#endif // TEST_TIME_ChData    
-            if (errcode == ERR_NO)
+            for (i = 0; i < ulTotalCON; i++)
             {
-                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+                pCON = CONGetHandle(i);
+#ifdef TEST_TIME_ChData
+                printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
+#endif // TEST_TIME_ChData
+                errcode = pCON->status.GetChargingData(pCON);
+                if (errcode == ERR_NO)
+                {
+                    trytime = 0;
+                    pCON->status.ulSignalFault &= ~defSignalCON_Fault_Meter;
+                    xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData);
+                }
+                else if (errcode == ERR_CON_METER_FAULT)
+                {
+                    ++trytime;
+                    printf("meter try %d\n", trytime);
+                    if (trytime > trymax)
+                    {
+                        trytime = 0;
+                        pCON->status.ulSignalFault |= defSignalCON_Fault_Meter;
+                    }
+                }
+                
+#ifdef TEST_TIME_ChData
+                printf_safe("con%d end   %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
+#endif // TEST_TIME_ChData   
             }
-            xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData);
         }
         
-#ifdef TEST_TIME_TEMP
-        printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
-#endif // TEST_TIME_TEMP
-        uxBitsTimerCB = xEventGroupWaitBits(pCON->status.xHandleEventTimerCBNotify, 
-                                            defEventBitTimerCBTemp, 
-                                            pdTRUE, pdTRUE, 0);
-        if ((uxBitsTimerCB & defEventBitTimerCBTemp) == defEventBitTimerCBTemp)
-        {
-            THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
-            THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
-            if (pCON->info.ucSocketType == defSocketTypeB)
-            {
-                THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING, "Monitor");
-                THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING, "Monitor");
-            }
-            xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagTemp);
-        }
-#ifdef TEST_TIME_TEMP
-        printf_safe("con%d end %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
-#endif // TEST_TIME_TEMP
         vTaskDelay(10);
     }
 }
@@ -83,9 +77,9 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
-    int i;
     EventBits_t uxBitsTimerCB;
     ErrorCode_t errcode;
+    int i;
 
     ulTotalCON = pListCON->Total; 
     uxBitsTimerCB = 0;
@@ -123,12 +117,27 @@ void vTaskMonitor_EvseStatus(void *pvParameters)
             for (i = 0; i < ulTotalCON; i++)
             {
                 pCON = CONGetHandle(i);
-                xEventGroupSetBits(pCON->status.xHandleEventTimerCBNotify, defEventBitTimerCBTemp);
+#ifdef TEST_TIME_TEMP
+                printf_safe("con%d begin %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
+#endif // TEST_TIME_TEMP
+                THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACLTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
+                THROW_ERROR(pCON->info.ucCONID, pCON->status.GetACNTemp(pCON), ERR_LEVEL_WARNING, "Monitor");
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp1(pCON), ERR_LEVEL_WARNING, "Monitor");
+                    THROW_ERROR(pCON->info.ucCONID, pCON->status.GetBTypeSocketTemp2(pCON), ERR_LEVEL_WARNING, "Monitor");
+                }
+#ifdef TEST_TIME_TEMP
+                printf_safe("con%d end %s %d\n", pCON->info.ucCONID, TEST_TIME_TEMP, clock());
+#endif // TEST_TIME_TEMP
+                xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagTemp);
             }
         }
         vTaskDelay(10);
     }
 }
+
+
 
 void vTaskEVSEMonitor(void *pvParameters)
 {
@@ -143,12 +152,7 @@ void vTaskEVSEMonitor(void *pvParameters)
     uxBitsTimerCB = 0;
     errcode = ERR_NO;
     
-    for (i = 0; i < ulTotalCON; i++)
-    {
-        pCON = CONGetHandle(i);
-        sprintf(pcName, "CON%d_ChData", i);
-        xTaskCreate(vTaskMonitor_ChData, pcName, 2048, pCON, 23, &xHandleTaskChData[i]);
-    }
+    xTaskCreate(vTaskMonitor_ChData, "TaskChData", 2048, NULL, 23, &xHandleTaskChData);
     xTaskCreate(vTaskMonitor_EvseStatus, "TaskEvseStatus", 2048, NULL, 23, &xHandleTaskEvseData);
     
     while(1)
@@ -191,16 +195,6 @@ void vTaskEVSEMonitor(void *pvParameters)
 #endif // TEST_TIME_PLUG
             }
             xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
-        }
-
-        uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBChargingData, pdTRUE, pdFALSE, 0);
-        if ((uxBitsTimerCB & defEventBitTimerCBChargingData) == defEventBitTimerCBChargingData)
-        {
-            for (i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                xEventGroupSetBits(pCON->status.xHandleEventTimerCBNotify, defEventBitTimerCBChargingData);
-            }
         }
 
         /* end of 获取EVSE和CON状态 */

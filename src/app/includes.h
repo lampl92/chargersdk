@@ -48,14 +48,10 @@
 *                                        APP / BSP
 *********************************************************************************************************
 */
-#include "evse_globals.h"
-#include "evse_config.h"
 #include "sysinit.h"
 #include "EVSE.h"
 #include "taskcreate.h"
-#include "bsp.h"
 #include "tinysh.h"
-#include "xprintf.h"
 #include "errorcode.h"
 
 #endif

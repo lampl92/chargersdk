@@ -89,7 +89,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 if (pechProtoElem->status == 0)
                 {
                     printf_protolog("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
-                    //modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
                     netSend(pechProtoElem->pbuff, pechProtoElem->len);
                     {//debug
                         printf_protodetail3("\nTCP Send: ");

@@ -165,9 +165,6 @@
     <Filter Include="Header files\middlewares\gdsl-1.8\src\examples">
       <UniqueIdentifier>{16bab13c-602f-40ec-ab07-235af80929b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header files\middlewares\minunit">
-      <UniqueIdentifier>{e589280b-3785-4347-a643-017b67a63dbe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\middlewares\STemWin">
       <UniqueIdentifier>{d21c1cd8-cc14-4948-a7cb-8d2901081754}</UniqueIdentifier>
     </Filter>
@@ -543,8 +540,15 @@
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\uart">
       <UniqueIdentifier>{f48c96c6-a0fb-4e52-b3f5-362276970cdf}</UniqueIdentifier>
     </Filter>
+
     <Filter Include="Source files\hmi\manager_set">
       <UniqueIdentifier>{43bf6f9d-419a-43b4-99c8-01c2eb361aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\libmodbus">
+      <UniqueIdentifier>{9c0236a3-a0e7-44fb-82a7-03b4a6e00dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\libmodbus">
+      <UniqueIdentifier>{639b4b10-7f5c-4f7d-bd6c-7d37a5c95744}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -691,9 +695,6 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c">
-      <Filter>Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c">
@@ -879,9 +880,6 @@
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\utils.c">
       <Filter>Source files\middlewares\userlib\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\middlewares\userlib\src\xprintf.c">
-      <Filter>Source files\middlewares\userlib\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c">
       <Filter>Source files\net\mbedTLS\library</Filter>
     </ClCompile>
@@ -920,9 +918,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\log_evse.c">
       <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\cli\cli_xmodem.c">
-      <Filter>Source files\cli</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_encrypt.c">
       <Filter>Source files\app\libEcharge</Filter>
@@ -1983,6 +1978,27 @@
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_alarm_log.c">
       <Filter>Source files\hmi\manager_set</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\userlib\src\ring_buffer.c">
+      <Filter>Source files\middlewares\userlib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus.c">
+      <Filter>Source files\middlewares\libmodbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-data.c">
+      <Filter>Source files\middlewares\libmodbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu.c">
+      <Filter>Source files\middlewares\libmodbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -2184,9 +2200,6 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\bsp_user_lib.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h">
@@ -2633,9 +2646,6 @@
     <ClInclude Include="..\..\..\src\middlewares\gdsl-1.8\src\examples\_strings.h">
       <Filter>Header files\middlewares\gdsl-1.8\src\examples</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\minunit\minunit.h">
-      <Filter>Header files\middlewares\minunit</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\STemWin\Config\GUIConf.h">
       <Filter>Header files\middlewares\STemWin\Config</Filter>
     </ClInclude>
@@ -2957,16 +2967,10 @@
     <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h">
       <Filter>Header files\middlewares\tinysh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\observer.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h">
-      <Filter>Header files\middlewares\userlib\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\middlewares\userlib\inc\xprintf.h">
       <Filter>Header files\middlewares\userlib\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h">
@@ -5035,6 +5039,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.h">
       <Filter>Header files\net\CycloneTCP\cyclone_tcp\drivers\uart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-config.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-private.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-version.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\libmodbus-3.1.4\src\modbus-rtu-private.h">
+      <Filter>Header files\middlewares\libmodbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\drivers\device\inc\meter.h">
+      <Filter>Header files\drivers\device\inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

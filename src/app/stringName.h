@@ -231,6 +231,7 @@ typedef enum _filelist
 #define jnEVSESN        "EVSESN"
 #define jnEVSEID        "EVSEID"
 #define jnEVSEType      "EVSEType"
+#define jnPhaseLine     "PhaseLine"
 #define jnTotalCON      "TotalCON"
 #define jnLng            "Lng"
 #define jnLat            "Lat"
@@ -241,7 +242,6 @@ typedef enum _filelist
 /*CONArray Item*/
 #define jnID                        "ID"
 #define jnType                      "Type"
-#define jnPhaseLine                 "PhaseLine"
 #define jnSocketType                "SocketType"
 #define jnVolatageUpperLimits       "VolatageUpperLimits"
 #define jnVolatageLowerLimits       "VolatageLowerLimits"

@@ -6,7 +6,6 @@
 
 #define NO_inline
 #define LOFF_T_32_BIT
-#define printf printf_safe
     
 #define CONFIG_YAFFS_DIRECT
 #define CONFIG_YAFFS_YAFFS2
