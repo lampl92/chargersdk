@@ -48,12 +48,14 @@ void vTaskMonitor_ChData(void *pvParameters)
                 errcode = pCON->status.GetChargingData(pCON);
                 if (errcode == ERR_NO)
                 {
+                    trytime = 0;
                     pCON->status.ulSignalFault &= ~defSignalCON_Fault_Meter;
                     xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData);
                 }
                 else if (errcode == ERR_CON_METER_FAULT)
                 {
                     ++trytime;
+                    printf("meter try %d\n", trytime);
                     if (trytime > trymax)
                     {
                         trytime = 0;
