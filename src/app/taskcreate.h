@@ -8,7 +8,9 @@
 #ifndef  __TASKCREATE_H
 #define  __TASKCREATE_H
 
-#include "includes.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "event_groups.h"
 #include "timercallback.h"
 
 #define defTIMERID_Temp             0

@@ -6,6 +6,7 @@
 * @date 2017-02-06
 */
 #include "includes.h"
+#include "bsp.h"
 #include "interface.h"
 #include "user_app.h"
 

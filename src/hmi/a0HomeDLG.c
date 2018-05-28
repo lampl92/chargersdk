@@ -2,6 +2,7 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
 #include "GUI_backstage.h"
+#include "bsp_rtc.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)

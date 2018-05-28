@@ -23,6 +23,7 @@
 #include "yaffsfs.h"
 #include "yaffs2misc.h"
 #include "file_op.h"
+#include "evse_globals.h"
 
 #include "debug.h"
 #include "evse_debug.h"

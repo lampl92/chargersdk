@@ -5,6 +5,9 @@
 #include "bsp.h"
 #include "bsp_define.h"
 
+#include "evse_globals.h"
+#include "sysinit.h"
+
 #include "taskcreate.h"
 #include "evse_define.h"
 #include "utils.h"

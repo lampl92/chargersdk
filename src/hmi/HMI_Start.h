@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <includes.h>
+#include "bsp.h"
 #include "siffontcreate.h"
 #include "display.h"
 #include "touch.h"

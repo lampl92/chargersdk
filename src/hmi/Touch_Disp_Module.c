@@ -9,6 +9,7 @@
 #include "DIALOG.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
+#include "bsp_rtc.h"
 
 #define ERR_SIMBOL  (0x3e000)
 
