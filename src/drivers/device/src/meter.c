@@ -29,6 +29,8 @@ meter_s *meter_create(meter_config_s *config)
     }
     modbus_set_response_timeout(meter->mb, 0, config->timeout_us);
     
+    memcpy(&meter->config, config, sizeof(meter_config_s));
+    
     return meter;
 }
 
