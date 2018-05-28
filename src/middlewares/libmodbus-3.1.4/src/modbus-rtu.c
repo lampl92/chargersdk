@@ -166,15 +166,16 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
         if (ctx->debug) {
             printf("Sending request using 485EN signal\n");
         }
-
+        osDelay(5);
         RS485_EN;
-        osDelay(1);
+        osDelay(5);
 
         size = uart_write_fast(ctx->s, req, req_length);
 
-        osDelay(1);
+        osDelay(5);
 //        osDelay(ctx_rtu->onebyte_time * req_length + ctx_rtu->rts_delay);
         RS485_DIS;
+        osDelay(5);
         
         return size;
     } else {
