@@ -144,6 +144,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_CLICKED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                home();   
                 break;
             case WM_NOTIFICATION_RELEASED:
             case WM_NOTIFICATION_MOVED_OUT:
@@ -153,8 +155,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //                WM_SendMessageNoPara(_hWinManagerConSet, MSG_DELETEMANAGERWIN);
 //                WM_SendMessageNoPara(_hWinManagerSysSet, MSG_DELETEMANAGERWIN);
 //                WM_SendMessageNoPara(_hWinManagerSysInfo, MSG_DELETEMANAGERWIN); 
-                GUI_EndDialog(pMsg->hWin, 0);
-                home();              
+           
                 break;
             }
             break;

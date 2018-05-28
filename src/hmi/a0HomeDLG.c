@@ -318,15 +318,15 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             break;
         case ID_BUTTON_5: //进入设置界面第二个按钮
             switch (NCode) {
-            case WM_NOTIFICATION_CLICKED:             
-                break;
-            case WM_NOTIFICATION_RELEASED:
+            case WM_NOTIFICATION_CLICKED:     
                 if (gotoSettingFlag == 1)
                 {
                     gotoSettingFlag = 0;
                     GUI_EndDialog(pMsg->hWin, 0);
                     Keypad_GetValue(LOGIN_PASSWD, " ");
                 }
+                break;
+            case WM_NOTIFICATION_RELEASED:
                 break;
             case WM_NOTIFICATION_MOVED_OUT:
                 break;
@@ -364,6 +364,26 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             if (gbsstate == StateTestChargeCondition)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_READYSTART);
+            }
+            if (bittest(flag_specially, 0))
+            {
+                bitclr(flag_specially, 0);
+                GUI_EndDialog(pMsg->hWin, 0);
+                vTaskDelay(100);
+                LCD_Init();
+                TP_Init();
+                vTaskDelay(100);
+                LCD_Clear(WHITE);
+                TP_Adjust();
+                home();
+            }
+            if (bittest(flag_specially, 1))
+            {
+                PIout(3) = 0;
+            }
+            else 
+            {
+                PIout(3) = 1;
             }
             WM_RestartTimer(pMsg->Data.v, 100);
         }

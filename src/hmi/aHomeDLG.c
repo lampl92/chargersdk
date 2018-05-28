@@ -3,6 +3,7 @@
 #include "touchtimer.h"
 #include "GUI_backstage.h"
 #include "bsp_rtc.h"
+#include "bsp_gpio.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
@@ -475,6 +476,26 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             if (gbsstate == StateGetGunInfo)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTGUN);
+            }          
+            if (bittest(flag_specially, 0))
+            {
+                bitclr(flag_specially, 0);
+                GUI_EndDialog(pMsg->hWin, 0);
+                vTaskDelay(100);
+                LCD_Init();
+                TP_Init();
+                vTaskDelay(100);
+                LCD_Clear(WHITE);
+                TP_Adjust();
+                home();
+            }
+            if (bittest(flag_specially, 1) && !bittest(flag_specially, 0))
+            {
+                PIout(3) = 0;
+            }
+            else 
+            {
+                PIout(3) = 1;
             }
             WM_RestartTimer(pMsg->Data.v, 100);
         }

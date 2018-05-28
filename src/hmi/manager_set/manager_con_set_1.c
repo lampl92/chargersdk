@@ -324,9 +324,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 31:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);            
-                Keypad_GetValueTest(CONSET_VALUE, 31, pMsg->hWin, _hWinManagerCommon, conRatedPower, "1或3");
+//                WM_HideWindow(pMsg->hWin);
+//                WM_HideWindow(_hWinManagerCommon);            
+//                Keypad_GetValueTest(CONSET_VALUE, 31, pMsg->hWin, _hWinManagerCommon, conRatedPower, "1或3");
             }
             break;
         }
@@ -534,6 +534,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[11][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "");
         sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
         EDIT_SetText(_aahEdit[11][0], _tmpBuff);
+        EDIT_SetBkColor(_aahEdit[11][0], EDIT_CI_ENABLED, GUI_GRAY);
         
         if (managerLevel == 0)
         {

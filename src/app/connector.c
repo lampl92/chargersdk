@@ -1151,6 +1151,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     memset(pCON, 0, sizeof(CON_t));
    
     pCON->info.ucCONID = ucCONID;
+    pCON->status.ucLoadPercent = 100;
     
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;

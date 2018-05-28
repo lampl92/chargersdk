@@ -20,6 +20,7 @@ typedef WM_HWIN(*Fun)(void);
 extern Fun home;
 
 extern GUI_HMEM    qr_hmem;
+extern uint16_t flag_specially;
 
 extern int SignalFlag;//信号图标刷新标志
 
