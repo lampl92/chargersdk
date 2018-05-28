@@ -5,7 +5,7 @@
 static int meter_get_all(void *pvmeter, int addr)
 {
     meter_s *meter;
-    uint32_t u32tab_reg[1] = { 0 };
+    uint32_t u32energy = 0;
     uint16_t u16tab_reg[3] = { 0 };
     int regs;
     
@@ -13,10 +13,11 @@ static int meter_get_all(void *pvmeter, int addr)
     
     modbus_set_slave(meter->mb, addr);
     //读取电能
-    regs = modbus_read_registers(meter->mb, meter->config.energy_addr, 2, (uint16_t *)u32tab_reg);
+    regs = modbus_read_registers(meter->mb, meter->config.energy_addr, 2, u16tab_reg);
     if (regs != 2)
         return -1;
-    meter->status.energy = u32tab_reg[0] * 0.01;//0.01kWh
+    u32energy = (u16tab_reg[0] << 16) + u16tab_reg[1];
+    meter->status.energy = u32energy * 0.01;//0.01kWh
     //同时读取了电压->电流->有功功率
     regs = modbus_read_registers(meter->mb, meter->config.volt_addr, 3, u16tab_reg);
     if (regs != 3)
