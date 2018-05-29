@@ -187,7 +187,11 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVolt");
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVoltSetRelayOff");
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(id, pCON->status.SetBTypeSocketLock(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVoltSetLockOff");
+                }
             }
             /********************************/
             /** @todo (rgw#1#): 向系统告警 */
@@ -266,10 +270,14 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVolt");
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVoltSetRelayOn");
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(id, pCON->status.SetBTypeSocketLock(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVoltSetLockOn");
+                }
             }
             /********************************/
-            /** @todo (rgw#1#): 系统恢复   */
+            /** 系统恢复   */
             /********************************/
             pCON->status.xVoltStat = STATE_VOLT_OK;
         }

@@ -336,6 +336,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitEnergy);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitEnergy);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if((uxBitsException & defEventBitExceptionLimitFee) == defEventBitExceptionLimitFee)    //达到充电金额限制
                 {
@@ -343,6 +344,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitFee);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if ((uxBitsException & defEventBitExceptionLimitTime) == defEventBitExceptionLimitTime)    //达到充电时间限制
                 {
@@ -350,6 +352,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeLimitTime);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionLimitTime);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if ((uxBitsException & defEventBitExceptionOfflineStop) == defEventBitExceptionOfflineStop)    //达到充电时间限制
                 {
@@ -357,6 +360,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if((uxBitsException & defEventBitExceptionRemoteStop) == defEventBitExceptionRemoteStop)    //远程停止
                 {
@@ -364,6 +368,7 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if((uxBitsException & defEventBitExceptionRFIDStop) == defEventBitExceptionRFIDStop)    //刷卡停止
                 {
@@ -371,18 +376,21 @@ void vTaskEVSECharge(void *pvParameters)
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRFIDStop);
                     xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
                 {
                     printf_safe("Curr Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeCurr);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_Scram) == defSignalEVSE_Alarm_Scram)
                 {
                     printf_safe("Scram Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeScram);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
                 /******************************/
 
@@ -393,22 +401,29 @@ void vTaskEVSECharge(void *pvParameters)
                     printf_safe("\e[44;37mS2 Opened, Full!\e[0m\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeFull);
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                 }
-                else if(((uxBitsCharge & (defEventBitChargeCondition)) | defEventBitCONVoltOK) != (defEventBitChargeCondition))//除去S2主动断开情况，如果被监测的点有False, 电压异常由diag处理
+                else if ((uxBitsCharge & defEventBitChargeCondition) != (defEventBitChargeCondition) &&
+                        (uxBitsCharge & defEventBitCONVoltOK) == defEventBitCONVoltOK)//除去S2主动断开情况，如果被监测的点有False的情況
                 {
-                    if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                    if ((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
                     {
                         printf_safe("\e[44;37mFource Unplug!\e[0m\n");
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
                     }
-                    else if((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
+                    else if ((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
                         //用户原因停止
                         printf_safe("\e[44;37mAuth Clear!\e[0m\n");
                     }
                     pCON->state = STATE_CON_STOPCHARGE;
+                    break;
                     
                     /** @todo (rgw#1#): 后续会增加判断失效点，并对失效点进行提示。或者在这里不进行提示，而在发现失效时进行提示 */
+                }
+                else // != VoltOK（电压异常由diag处理，电压异常时同时会关闭B型强锁，会导致Locked失效，但在Volt异常时，并不处理Locked失效）
+                {
+                    break;
                 }
                 break;
             case STATE_CON_STOPCHARGE:
