@@ -431,7 +431,8 @@ void vTaskEVSERemote(void *pvParameters)
                         pCON->order.statRemoteProc.rmt_ctrl.timestamp = time(NULL);
                         if (pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff == 1)
                         {
-                            if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby)
+                            if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby &&
+                                pRFIDDev->state == STATE_RFID_NOID)
                             {
                                 pCON->order.statOrder = STATE_ORDER_WAITSTART;//状态处理见taskdata.c文件
                                 pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_WAIT_START;

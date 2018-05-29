@@ -145,6 +145,13 @@ void vTaskEVSERFID(void *pvParameters)
             
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);//fix：防止结束时再次刷卡产生多余的刷卡停止标志
+            if (pCON->order.statRemoteProc.rmt_ctrl.stat != REMOTECTRL_IDLE)
+            {
+                printf_safe("APP正在启动充电!!!!\n");
+                vTaskDelay(2000);
+                pRFIDDev->state = STATE_RFID_RETURN;
+                break;
+            }
             if (pCON->order.statOrder != STATE_ORDER_IDLE)
             {
                 printf_safe("该接口有未完成订单!!!!\n");
