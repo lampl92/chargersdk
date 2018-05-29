@@ -547,7 +547,7 @@ void led_status_out(void)
     {
         LED2_G_RUN;
     }
-    if ((flag_satuse_g_2 == 0)&&(flag_breath_g_1 == 0)&&(flag_flicker_g_2 == 0))
+    if ((flag_satuse_g_2 == 0)&&(flag_breath_g_2 == 0)&&(flag_flicker_g_2 == 0))
     {
         LED2_G_OFF;
     }

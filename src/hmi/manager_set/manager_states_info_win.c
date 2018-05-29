@@ -764,7 +764,7 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
     rect_state.x1 = 10 + width_part_big;
     rect_state.y1 = head_high + 6* high;
     sprintf(strTmp, "%.1f", pcont->status.dChargingPower);
-    strcat(strTmp, "kW");
+    strcat(strTmp, "W");
     GUI_DispStringInRect("当前功率", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
     GUI_DispStringInRect(strTmp, &rect_state, GUI_TA_VCENTER | GUI_TA_HCENTER); 
     

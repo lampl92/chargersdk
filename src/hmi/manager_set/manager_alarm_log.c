@@ -575,8 +575,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apYear+i));
         }
-        LISTWHEEL_SetSel(hItem,1);
-        LISTWHEEL_SetPos(hItem,1);
+        LISTWHEEL_SetSel(hItem,3);
+        LISTWHEEL_SetPos(hItem,3);
 
         //设置终止月listwheel
         hItem = WM_GetDialogItem(pMsg->hWin,ID_LISTWHEEL_4);
