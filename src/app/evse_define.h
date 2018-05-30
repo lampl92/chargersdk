@@ -122,10 +122,7 @@
 #define defEventBitExceptionLimitTime   BIT_12  
 #define defEventBitExceptionRemoteStop  BIT_13  //远程停止
 #define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
-#define defEventBitExceptionCPSwitch    BIT_15
-#define defEventBitExceptionTempSensor  BIT_16
-#define defEventBitExceptionSocketTempSensor  BIT_17
-#define defEventBitExceptionOfflineStop    BIT_18  //刷卡停止
+#define defEventBitExceptionOfflineStop    BIT_15  //网络离线
 
 #define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
                                          defEventBitExceptionMeter)
@@ -304,6 +301,8 @@
                                              defSignalCON_Alarm_AC_A_CurrUp_War | \
                                              defSignalCON_Alarm_AC_A_VoltUp     | \
                                              defSignalCON_Alarm_AC_A_VoltLow)
+    
+#define defSignalGroupEVSE_Alarm_DontCare    (defSignalGroupEVSE_Alarm_Temp_War)
     
 #define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
                                                 defSignalCON_Alarm_SocketTemp2_War | \

@@ -176,8 +176,8 @@ void vTaskEVSEMonitor(void *pvParameters)
                     printf_safe("end %s %d\n", TEST_TIME_LOCK, clock());
 #endif // TEST_TIME_LOCK
                 }
+                xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagLockState);
             }
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagLockState);
         }
 
         uxBitsTimerCB = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBPlugState, pdTRUE, pdFALSE, 0);
@@ -193,8 +193,8 @@ void vTaskEVSEMonitor(void *pvParameters)
 #ifdef TEST_TIME_PLUG
                 printf_safe("end %s %d\n", TEST_TIME_PLUG, clock());
 #endif // TEST_TIME_PLUG
+                xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagPlugState);
             }
-            xEventGroupSetBits(xHandleEventDiag, defEventBitDiagPlugState);
         }
 
         /* end of 获取EVSE和CON状态 */
