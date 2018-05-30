@@ -86,8 +86,9 @@ static void Data_Flush(WM_MESSAGE *pMsg)
     if (((uxBitRFID & defEventBitOweIDReqDisp) == defEventBitOweIDReqDisp) && (!bittest(EventFlag, 2)))
     {
         sprintf(Timer_buf, "%.2lf", pRFIDDev->order.dBalance);
-        IMAGE_SetBMP(WM_GetDialogItem(pMsg->MsgId, ID_IMAGE_2), MoneyNotEnoughDoneImage->pfilestring, MoneyNotEnoughDoneImage->pfilesize);
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), &SIF24_Font, GUI_RED, Timer_buf);
+        IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), MoneyNotEnoughDoneImage->pfilestring, MoneyNotEnoughDoneImage->pfilesize);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), Timer_buf);
+        GUI_Delay(1000);
         xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID, defEventBitOwdIDReqDispOK);
         cardconditionnotokflag1 = 1;
         bitset(EventFlag, 2);

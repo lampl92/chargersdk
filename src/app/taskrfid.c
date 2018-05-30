@@ -209,7 +209,10 @@ void vTaskEVSERFID(void *pvParameters)
                 {
                     pRFIDDev->state = STATE_RFID_OWE;
                 }
-                pRFIDDev->state = STATE_RFID_GOODID;
+                else
+                {
+                    pRFIDDev->state = STATE_RFID_GOODID;
+                }
             }
             else if(pRFIDDev->order.ucAccountStatus == 0)
             {
