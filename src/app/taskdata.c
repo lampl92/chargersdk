@@ -122,7 +122,7 @@ void vTaskEVSEData(void *pvParameters)
                 /*金额不足*/
                 if (pCON->order.ucStartType == defOrderStartType_Card)
                 {
-                    if (pCON->order.dTotalFee + 0.5 >= pCON->order.dBalance)
+                    if (pCON->order.dTotalFee + (get_current_totalfee(time(NULL)) * 0.1) >= pCON->order.dBalance)
                     {
                         xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionLimitFee);
                         pCON->order.statOrder = STATE_ORDER_WAITSTOP;
