@@ -308,26 +308,18 @@ void vTaskEVSERFID(void *pvParameters)
             {
                 pRFIDDev->state = STATE_RFID_BADID;
                 break;
-//                if(pRFIDDev->order.ucAccountStatus == 0)
-//                {
-//                    pRFIDDev->state = STATE_RFID_BADID;
-//                    break;
-//                }
-//                else if(pRFIDDev->order.dBalance < 0)
-//                {
-//                    pRFIDDev->state = STATE_RFID_OWE;
-//                    break;
-//                }             
             }
             else if (resCanChargeOrNot == 1)//可以充电
             {
-                pRFIDDev->state = STATE_RFID_GOODID;
+                if (pRFIDDev->order.dBalance <= get_current_totalfee(time(NULL)) * 0.1)
+                {
+                    pRFIDDev->state = STATE_RFID_OWE;//账户金额低于当前费率0.1倍算欠费
+                }
+                else
+                {
+                    pRFIDDev->state = STATE_RFID_GOODID;
+                }
                 break;
-//                if (pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
-//                {
-//                    pRFIDDev->state = STATE_RFID_GOODID;
-//                    break;
-//                }
             }
             else//获取界面输入超时，云平台查询金额超时
             {
