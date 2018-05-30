@@ -1052,6 +1052,7 @@ static ErrorCode_t StopCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
+    
     SetCPSwitch(pCON, SWITCH_OFF);
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.xCPState = CP_12V;
