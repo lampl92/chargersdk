@@ -46,11 +46,14 @@ static int IsCONAvailable(void)
     for (i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        if(pCON->state == STATE_CON_STOPCHARGE)
+        if (pCON->state == STATE_CON_CHARGING ||
+            pCON->state == STATE_CON_STOPCHARGE || 
+            pCON->state == STATE_CON_ERROR || 
+            pCON->state == STATE_CON_DEV_ERROR)
         {
             continue;
         }
-        else if(pCON->state == STATE_CON_ERROR)
+        else if (pCON->order.statRemoteProc.rmt_ctrl.stat != REMOTECTRL_IDLE)
         {
             continue;
         }
