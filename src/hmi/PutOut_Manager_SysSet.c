@@ -249,7 +249,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：5~60");
+                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：1~99999");
 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);

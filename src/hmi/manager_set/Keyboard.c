@@ -1205,13 +1205,13 @@ static uint8_t Value_Check()
         case 26://屏保时间
             tmpU32 = (uint32_t)atoi(result_input);// * 60;
             tmpU32 = tmpU32 * 60;
-            if (tmpU32 <= (5 * 60))
+            if (tmpU32 < (1 * 60))
             {
-                tmpU32 = 5 * 60;
+                tmpU32 = 1 * 60;
             }
-            else if (tmpU32 >= (60 * 60))
+            else if (tmpU32 > (60 * 99999))
             {
-                tmpU32 = 60 * 60;
+                tmpU32 = 60 * 99999;
             }
             cfg_set_uint32(pathSysCfg, &tmpU32, "%s", jnSysDispSleepTime);
             //xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
