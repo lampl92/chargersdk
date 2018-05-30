@@ -1145,14 +1145,15 @@ static uint8_t Value_Check()
         case 26://屏保时间
             tmpU32 = (uint32_t)atoi(result_input);// * 60;
             tmpU32 = tmpU32 * 60;
-            if (tmpU32 <= (5 * 60))
+            if (tmpU32 < (1 * 60))
             {
-                tmpU32 = 5 * 60;
+                tmpU32 = 1 * 60;
             }
-            else if (tmpU32 >= (60 * 60))
+            else if (tmpU32 > 99999)
             {
-                tmpU32 = 60 * 60;
+                tmpU32 = 99999 * 60;
             }
+            
             xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
             xSysconf.ulDispSleepTime_s = tmpU32;
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
@@ -1463,7 +1464,7 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
                         pdTRUE,
                         pdTRUE,
                         10000);//要比remote中的order超时（60s）长
-                    if (uxBits & defEventBitOrderFinishToHMI == defEventBitOrderFinishToHMI)
+                    if ((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI)
                     {
                         CreateHomePage();
                     }
