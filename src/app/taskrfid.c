@@ -205,6 +205,10 @@ void vTaskEVSERFID(void *pvParameters)
 
             if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
             {
+                if (pRFIDDev->order.dBalance <= get_current_totalfee(time(NULL)) * 0.1)
+                {
+                    pRFIDDev->state = STATE_RFID_OWE;
+                }
                 pRFIDDev->state = STATE_RFID_GOODID;
             }
             else if(pRFIDDev->order.ucAccountStatus == 0)

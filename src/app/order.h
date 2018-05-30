@@ -148,5 +148,6 @@ typedef struct _OrderTmpData
 
 void OrderCreate(OrderData_t *pOrder);
 void OrderInit(OrderData_t *pOrder);
+double get_current_totalfee(time_t now);
 
 #endif
