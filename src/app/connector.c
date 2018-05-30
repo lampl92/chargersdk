@@ -15,7 +15,6 @@
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
-#include "electric_energy_meter.h"
 #include "timercallback.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
@@ -115,7 +114,7 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
                 cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
                 break;
             case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
                 break;
             case ParamTypeList:
                 break;
@@ -169,7 +168,6 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     }
     
     cfgobj_get_uint8(jsCfgObj, &pCON->info.ucCONType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnType);
-    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucPhaseLine, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnPhaseLine);
     cfgobj_get_uint8(jsCfgObj, &pCON->info.ucSocketType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketType);
     cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageUpperLimits);
     cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageLowerLimits);
@@ -179,11 +177,11 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
     //cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
     cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
-    if (pCON->info.ucPhaseLine == 1)
+    if (pEVSE->info.ucPhaseLine == 1)
     {
         pCON->info.dRatedCurrent = pCON->info.dRatedPower * 1000 / 220.0;
     }
-    else// if(pCON->info.ucPhaseLine == 3)
+    else// if(pEVSE->info.ucPhaseLine == 3)
     {
         pCON->info.dRatedCurrent = pCON->info.dRatedPower / 3.0 * 1000 / 220.0;
     }
@@ -207,197 +205,63 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 
-
-
-/** @brief 获取充电电压，检测精度 +/-0.1V
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingVoltage(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpVolt;
-    ErrorCode_t errcode;
-    int i;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpVolt = 0;
-    errcode = ERR_NO;
-
-    /** 获取电压 */
-#ifdef DEBUG_DIAG_DUMMY
-    tmpVolt = 220;
-#else
-    for (i = 0; i < pCON->info.ucPhaseLine; i++)
-    {
-        errcode = pCON->line[i].GetVolt(&(pCON->line[i]), pCON, i);
-        if (pCON->line[i].status.dVolt > tmpVolt)
-        {
-            tmpVolt = pCON->line[i].status.dVolt;
-        }
-    }
-#endif
-    /*********************/
-
-    pCON->status.dChargingVoltage = tmpVolt;
-
-    return errcode;
-}
-
-/** @brief 获取三相充电电流，取最大值
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingCurrent(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpCurr;
-    ErrorCode_t errcode;
-    int i;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpCurr = 0;
-    errcode = ERR_NO;
-
-    /** 获取电流 */
-#ifdef DEBUG_DIAG_DUMMY
-        tmpCurr = 32;
-#else
-    for (i = 0; i < pCON->info.ucPhaseLine; i++)
-    {
-        errcode = pCON->line[i].GetCurr(&(pCON->line[i]), pCON, i);
-        if (pCON->line[i].status.dCurr > tmpCurr)
-        {
-            tmpCurr = pCON->line[i].status.dCurr;
-        }
-    }
-#endif
-    /*********************/
-
-    pCON->status.dChargingCurrent = tmpCurr;
-
-    return errcode;
-}
-
-/** @brief 获取电源频率
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingFrequence(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpFreq;
-    ErrorCode_t errcode;
-    int i;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-	tmpFreq = 0;
-    errcode = ERR_NO;
-
-    /** 获取频率 */
-#ifdef DEBUG_DIAG_DUMMY
-    tmpFreq = 50;
-#else
-    for (i = 0; i < pCON->info.ucPhaseLine; i++)
-    {
-        errcode = pCON->line[i].GetFreq(&(pCON->line[i]), pCON, i);
-        if (pCON->line[i].status.dFreq > tmpFreq)
-        {
-            tmpFreq = pCON->line[i].status.dFreq;
-        }
-    }
-#endif
-    /*********************/
-
-    pCON->status.dChargingFrequence = tmpFreq;
-
-    return errcode;
-}
-
-static ErrorCode_t GetChargingPower(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpPower;
-    ErrorCode_t errcode;
-    int i;
-    
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-	tmpPower = 0;
-    errcode = ERR_NO;
-
-    /** 从电表获取 */
-#ifdef DEBUG_DIAG_DUMMY
-        tmpPower = pCON->status.dChargingPower;
-        tmpPower += 0.0001;
-#else
-    for (i = 0; i < pCON->info.ucPhaseLine; i++)
-    {
-        errcode = pCON->line[i].GetPower(&(pCON->line[i]), pCON, i);
-        tmpPower += pCON->line[i].status.dPower;//求和
-    }
-#endif
-
-    pCON->status.dChargingPower = tmpPower;
-
-    return errcode;
-}
-
 /**
-读电表读数
+读电表
 */
-static ErrorCode_t GetChargingEnergy(void *pvCON)
+static ErrorCode_t GetChargingData(void *pvCON)
 {
     CON_t *pCON;
     uint8_t ucCONID;
-    double tmpEnergy;
+    double tmpVolt = 0;
+    double tmpCurr = 0;
+    double tmpPower = 0;
+    double tmpFreq = 0;
+    double tmpEnergy = 0;
     ErrorCode_t errcode;
+    int res;
     int i;
     
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpEnergy = 0;
     errcode = ERR_NO;
 
     /** 从电表获取 */
 #ifdef  DEBUG_DIAG_DUMMY
+    tmpVolt = 220;
+    tmpCurr = 32;
+    tmpFreq = 50;
+    tmpPower = pCON->status.dChargingPower;
+    tmpPower += 0.001;
     tmpEnergy = pCON->status.dChargingEnergy;
-    tmpEnergy += 0.0001;
+    tmpEnergy += 0.001;
 #else
-    if (pCON->info.ucPhaseLine == 1)
+    res = meter->get_all(meter, ucCONID + 1);
+    if (res < 0)
     {
-        tmpEnergy = Get_meter_DDSD1352_energy(ucCONID + 1);/** 电表读数 */
+        errcode = ERR_CON_METER_FAULT;
+        return errcode; 
     }
-    else
+    for (i = 0; i < pEVSE->info.ucPhaseLine; i++)
     {
-        tmpEnergy = Get_meter_DTSF1352_energy(ucCONID + 1);/** 电表读数 */
+        pCON->status.dLineVolt[i] = meter->status.volt[i];
+        pCON->status.dLineCurr[i] = meter->status.curr[i];
+        
+        tmpVolt = meter->status.volt[i] > tmpVolt ? meter->status.volt[i] : tmpVolt;//取大
+        tmpCurr = meter->status.curr[i] > tmpCurr ? meter->status.curr[i] : tmpCurr;//取大
+        tmpPower += meter->status.pwr[i];//求和
     }
+    tmpFreq = meter->status.freq;
+    tmpEnergy = meter->status.energy;
 #endif
 
-    pCON->status.dChargingEnergy = tmpEnergy;
+    pCON->status.dChargingVoltage = tmpVolt;
+    pCON->status.dChargingCurrent = tmpCurr;
+    pCON->status.dChargingPower = tmpPower;
+    pCON->status.dChargingFrequence = tmpFreq; 
+    pCON->status.dChargingEnergy = tmpEnergy; 
 
     return errcode;
 }
-
 /** @brief 控制S1开关
  *
  * @param pvCON void*
@@ -1285,37 +1149,13 @@ CON_t *CONCreate(uint8_t ucCONID )
         return NULL;
     }
     memset(pCON, 0, sizeof(CON_t));
-    pCON->info.ucCONID                = ucCONID;
-    pCON->info.ucCONType              = defCONType_AC;
-    pCON->info.ucSocketType           = defSocketTypeC;
-    pCON->info.dVolatageUpperLimits   = 0;
-    pCON->info.dVolatageLowerLimits   = 0;
-    pCON->info.dACTempUpperLimits     = 0;
-    pCON->info.dACTempLowerLimits     = 0;
-    pCON->info.dSocketTempUpperLimits = 0;
-    pCON->info.dSocketTempLowerLimits = 0;
-    pCON->info.dRatedCurrent          = 32;
-    pCON->info.dRatedPower            = 7;
-    memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode));
-
+   
+    pCON->info.ucCONID = ucCONID;
+    pCON->status.ucLoadPercent = 100;
+    
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;
-
-    pCON->status.dCPVolt               = 0;
-    pCON->status.dACLTemp              = 0;
-    pCON->status.dACNTemp              = 0;
-    pCON->status.dBTypeSocketTemp1     = 0;
-    pCON->status.dBTypeSocketTemp2     = 0;
-    pCON->status.dChargingCurrent      = 0;
-    pCON->status.dChargingFrequence    = 0;
-    pCON->status.dChargingVoltage      = 0;
-    pCON->status.dChargingPower        = 0;
-    pCON->status.dChargingEnergy       = 0;
-    pCON->status.xBTypeSocketLockState = 0;
-    pCON->status.xCCState              = 0;
-    pCON->status.xCPState              = 0;
-    pCON->status.ucLoadPercent         = 100;//(%)
-    pCON->status.xPlugState            = 0;
+    
     pCON->status.xHandleEventCharge    = xEventGroupCreate();
     pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
@@ -1326,18 +1166,12 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.xHandleTimerFreq      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
     pCON->status.xHandleTimerRTData    = NULL;
-    pCON->status.GetChargingVoltage    = GetChargingVoltage;
-    pCON->status.GetChargingCurrent    = GetChargingCurrent;
-    pCON->status.GetChargingFrequence  = GetChargingFrequence;
-    pCON->status.GetChargingPower      = GetChargingPower;
-    pCON->status.GetChargingEnergy     = GetChargingEnergy;
+
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
     pCON->status.xFreqStat             = STATE_FREQ_OK;
-    pCON->status.ulSignalState         = 0;
-    pCON->status.ulSignalAlarm         = 0;
-    pCON->status.ulSignalFault         = 0;
 
+    pCON->status.GetChargingData     = GetChargingData;
     pCON->status.GetCPState          = GetCPState;
     pCON->status.SetCPSwitch         = SetCPSwitch;
     pCON->status.SetLoadPercent      = SetLoadPercent;

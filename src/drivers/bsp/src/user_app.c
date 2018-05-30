@@ -4,7 +4,6 @@
 #include <math.h>
 #include "user_app.h"
 #include "bsp_timer.h"
-#include "electric_energy_meter.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "evse_globals.h"
@@ -446,7 +445,6 @@ void Peripheral_Init(void)
     MX_TIM4_Init();//CP2PWM
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     MX_TIM8_Init();
-    RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
     PWM1_ON;

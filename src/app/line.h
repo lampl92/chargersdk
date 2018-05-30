@@ -28,17 +28,9 @@ typedef struct _Line
     }info;
     struct _status
     {
-        double dVolt;
-        double dCurr;
-        double dFreq;
-        double dPower;
         double dTemp;
         uint8_t ucRelayState;
     }status;
-    pLine_ft GetVolt;
-    pLine_ft GetCurr;
-    pLine_ft GetFreq;
-    pLine_ft GetPower;
     pLine_ft GetTemp;
 }Line_t;
 

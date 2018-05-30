@@ -220,6 +220,7 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
     cfgobj_get_string(jsCfgObj, pEVSE->info.strID, "%s", jnEVSEID);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucType, "%s", jnEVSEType);
+    cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucPhaseLine, "%s", jnPhaseLine);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucTotalCON, "%s", jnTotalCON);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dLng, "%s", jnLng);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dLat, "%s", jnLat);
@@ -620,13 +621,12 @@ void EVSEinit(void)
 //    tmp = 2;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON); 
 //    tmp = 3;
-//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 0, jnPhaseLine); 
-//    cfg_set_uint8(pathEVSECfg, &tmp, "%s:%d.%s", jnCONArray, 1, jnPhaseLine); 
-//    tmp = 2;
+//    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnPhaseLine); 
+//    tmp = 1;
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
-//    tmp = 2;
-//    cfg_set_uint8(pathSysCfg, &tmp, "%s", jnSysUSE_GPRSModem);
-//    xSysconf.xModule.use_gprs = 3;
+//    ifconfig.info.ucAdapterSel = 1;
+//    xSysconf.xModule.use_gprs = 2;
+//    cfg_set_uint8(pathSysCfg, &xSysconf.xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     
 //    dtmp = 41;
 //    cfg_set_double(pathEVSECfg, &dtmp, "%s:%d.%s", jnCONArray, 0, jnRatedPower);
@@ -638,8 +638,10 @@ void EVSEinit(void)
 	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
+    
+    meter = meter_init(pEVSE->info.ucPhaseLine);
 
-    pRFIDDev = RFIDDevCreate();
+    pRFIDDev = RFIDDevCreate(RFID_UARTx, RFID_UART_BAND, RFID_UART_DATA, RFID_UART_PARI, RFID_UART_STOP);
 
     pechProto = EchProtocolCreate();
     THROW_ERROR(defDevID_File, pechProto->info.GetProtoCfg(pechProto, NULL), ERR_LEVEL_WARNING, "EVSEinit GetProtoCfg");

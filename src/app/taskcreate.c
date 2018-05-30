@@ -131,8 +131,6 @@ static TaskHandle_t xHandleTaskEVSEData = NULL;
 / 任务间通信
 /---------------------------------------------------------------------------*/
 SemaphoreHandle_t xMutexTimeStruct;
-SemaphoreHandle_t xMutexNandHW;
-SemaphoreHandle_t xprintfMutex = NULL;
 SemaphoreHandle_t xMeterMutex = NULL;
 SemaphoreHandle_t xTempMutex = NULL;
 
@@ -238,8 +236,6 @@ void AppTaskCreate (void)
 void AppObjCreate (void)
 {
     xMutexTimeStruct = xSemaphoreCreateMutex();
-    xMutexNandHW = xSemaphoreCreateMutex();
-    xprintfMutex = xSemaphoreCreateMutex();
     xMeterMutex = xSemaphoreCreateMutex();
     xTempMutex = xSemaphoreCreateMutex();
     

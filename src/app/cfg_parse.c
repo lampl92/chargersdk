@@ -8,7 +8,6 @@
 #include "includes.h"
 #include "stringName.h"
 #include "factorycfg.h"
-#include "interface.h"
 #include "cJSON.h"
 #include "yaffsfs.h"
 #include "sysinit.h"
@@ -730,7 +729,7 @@ ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
     SetCfgObj(path, pObj);
     return errcode;      
 }
-#if 1
+#if 0
 int test_cfgobj_set(int val)
 {
     cJSON *pObj;

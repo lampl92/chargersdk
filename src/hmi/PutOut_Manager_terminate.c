@@ -26,6 +26,7 @@
 #include "touchtimer.h"
 #include "SCROLLBAR.h"
 #include "bsp_uart.h"
+#include "ring_buffer.h"
 // USER END
 
 #include "DIALOG.h"
@@ -130,7 +131,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     int x, y;
     volatile int id = 0;
     volatile int v = 0;
-    uint8_t _tmpBuff[50];
+    char _tmpBuff[50];
     CON_t *pCon;
     pCon = CONGetHandle(0);
 
@@ -446,8 +447,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //            sprintf(buff, "%d", terminaterCount);
 //            strcat(buff, "次\n");
 //        
-           // strcat(terminateBuff, buff);
-            uart_read(UART_PORT_TERM, strTermCtx, sizeof(strTermCtx), 1000);
+            extern ring_buffer_s *term_rb;
+
+            if (ring_buffer_len(term_rb) > 0)
+            {
+                ring_buffer_get(term_rb, strTermCtx, ring_buffer_len(term_rb));
+            }
+                
             MULTIEDIT_AddText(multiedit_handler, strTermCtx);
             
             sizeMul = MULTIEDIT_GetTextSize(multiedit_handler);

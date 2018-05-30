@@ -21,6 +21,7 @@
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
         <string>USE_FreeRTOS=1</string>
+        <string>BOOTLOADER=1</string>
       </PreprocessorMacros>
       <IncludeDirectories>
         <string>.</string>

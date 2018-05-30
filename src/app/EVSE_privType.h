@@ -16,6 +16,7 @@ typedef struct _EVSEInfo
     char strSN[defEVSESNLength + 1]; //设备唯一序列号
     char strID[defEVSEIDLength + 1]; //平台分配ID
     uint8_t ucType;   //1：直流设备 2：交流设备 3：交直流一体设备 4：无线设备 5：其他
+    uint8_t ucPhaseLine;            //1：单项 3：三相
     uint8_t ucTotalCON; //一共有多少枪
     double dLng;      //经度，保留后六位
     double dLat;      //纬度，保留后六位

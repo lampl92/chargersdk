@@ -100,23 +100,19 @@ void stm32f4x9UartDisableIrq(void)
 
 void stm32f4x9UartStartTx(void)
 {
-    int_t c;
-    uint8_t a;
+    int_t a;
+    uint8_t c[1];
     
-    while (pppHdlcDriverReadTxQueue(net_dev->interface, &c) == FALSE)
+    while (pppHdlcDriverReadTxQueue(net_dev->interface, &a) == FALSE)
     {
-        
-        //printf_safe("context switch\n");
-        if (c != EOF)
+        if (a != EOF)
         {
-            a = (uint8_t)c;
-            modem_enQue(&a, 1);
-            //printf_safe("%02x ", c);
+            c[0] = (uint8_t)a;
+            uart_write_fast(pModem->uart_handle, c, 1);
         }
         else
         {
             break;
         }
     }
-    //printf_safe("\n");
 }

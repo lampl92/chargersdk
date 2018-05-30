@@ -85,7 +85,6 @@
 #define defEventBitTCPClientSendOK      BIT_4
 #define defEventBitTCPConnectOK         BIT_5 //接收不清除， 服务器连接成功
 #define defEventBitTCPConnectFail       BIT_6 //接收主动清除
-#define defEventBitTCPClientRecvValid   BIT_7
 #define defEventBitTCPClientFlushBuff   BIT_8
 #define defEventBitPPPDiagOK            BIT_9
 #define defEventBitPPPClosed            BIT_10
@@ -300,6 +299,11 @@
 //                                                    defSignalCON_Fault_AC_B_RelayPaste | \
 //                                                    defSignalCON_Fault_AC_C_RelayPaste | \
 //                                                    defSignalCON_Fault_AC_N_RelayPaste )
+    
+#define defSignalGroupCON_Alarm_DontCare    (defSignalGroupCON_Alarm_Temp_War   | \
+                                             defSignalCON_Alarm_AC_A_CurrUp_War | \
+                                             defSignalCON_Alarm_AC_A_VoltUp     | \
+                                             defSignalCON_Alarm_AC_A_VoltLow)
     
 #define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
                                                 defSignalCON_Alarm_SocketTemp2_War | \

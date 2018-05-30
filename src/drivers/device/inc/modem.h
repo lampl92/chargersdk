@@ -6,10 +6,18 @@
 #include "userlib_queue.h"
 #include "retarget.h"
 
+
+#define MODEM_UARTx          "UART5"
+#define MODEM_UART_BAND      115200
+#define MODEM_UART_DATA      8
+#define MODEM_UART_PARI      'N'
+#define MODEM_UART_STOP      1
 extern int modemlog;
 #define printf_modem(...) do{if(modemlog > 0)printf_safe(__VA_ARGS__);}while(0);
 
-#define MAX_COMMAND_LEN                  5000  /* 最大命令长度 */
+#define MAX_COMMAND_LEN              128  /* 最大命令长度 */
+#define TCP_CLIENT_BUFSIZE           4096
+#define QUE_BUFSIZE                  4096
 
 typedef enum
 {
@@ -106,8 +114,7 @@ typedef struct _dev_modem
     ModemStatus_t status;
     volatile ModemState_e state;
     ModemFlag_t flag;
-    SemaphoreHandle_t xMutex;
-    Queue *pSendQue;
+    int uart_handle;
     
     modem_ft open;
     modem_ft init;
@@ -131,7 +138,6 @@ extern DevModem_t *pModem;
 void modem_delayms(int ms);
 DevModem_t *DevModemCreate(void);
 void Modem_Poll(DevModem_t *pModem);
-void modem_enQue(uint8_t *pbuff, uint32_t len);
 uint32_t modem_send_at(char *format, ...);
 DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32_t second);
 

@@ -636,7 +636,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
  *
  *       CreateManagerConSet
 */
-WM_HWIN CreateManagerConSet(WM_HWIN srcHwin)
+WM_HWIN CreateManagerConSet1(WM_HWIN srcHwin)
 {
     _hWinManagerConSet = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
 //    cur_win = _hWinManagerConSet;

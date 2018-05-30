@@ -30,8 +30,6 @@
 #include "iowin32.h"
 #endif
 
-#define printf printf_safe
-
 #define WRITEBUFFERSIZE (16384)
 #define MAXFILENAME (256)
 

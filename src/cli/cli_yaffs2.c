@@ -102,7 +102,7 @@ tinysh_cmd_t cli_format_cmd =
     0,
     0
 };
-extern void create_system_dir(void);
+extern void create_dir(char *dir);
 int yaffs2_main()
 {
     int output = 0;

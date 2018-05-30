@@ -53,12 +53,12 @@ typedef struct _echProtoInfo
     EchFtpCfg_t ftp;
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
-    int (*BnWIsListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWGetListSizeCfg)(uint8_t *path, uint16_t *size);
-    int (*BnWGetListCfg)(uint8_t *path, uint16_t idx, uint8_t *strID);
-    int (*BnWAddListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWDeleteListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWFlushListCfg)(uint8_t *path);
+    int (*BnWIsListCfg)(char *path, char *strID);
+    int (*BnWGetListSizeCfg)(char *path, uint16_t *size);
+    int (*BnWGetListCfg)(char *path, uint16_t idx, char *strID);
+    int (*BnWAddListCfg)(char *path, char *strID);
+    int (*BnWDeleteListCfg)(char *path, char *strID);
+    int (*BnWFlushListCfg)(char *path);
 
 } echProtoInfo_t;
 

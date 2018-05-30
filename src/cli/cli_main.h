@@ -11,6 +11,18 @@
 
 #include "tinysh.h"
 
+#ifdef EVSE_DEVBOARD
+#define CLI_UARTx         "USART2"
+#else
+#define CLI_UARTx         "UART4"
+#endif
+#define CLI_UART_BAND      115200
+#define CLI_UART_DATA      8
+#define CLI_UART_PARI      'N'
+#define CLI_UART_STOP      1
+
+extern int cli_huart;
+
 void cli_main(void);
 extern tinysh_cmd_t cli_parseJson_cmd;
 extern tinysh_cmd_t cli_makeJson_cmd;
@@ -40,6 +52,7 @@ extern tinysh_cmd_t cli_zip_cmd;
 extern tinysh_cmd_t cli_printlog_cmd;
 extern tinysh_cmd_t cli_taskstack_cmd;
 extern tinysh_cmd_t cli_setload_cmd;
+extern tinysh_cmd_t cli_exit_cmd;
 
 
 

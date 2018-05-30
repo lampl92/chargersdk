@@ -12,6 +12,7 @@ const char *strEVSECfg =
     \"EVSESN\":\"0102030405060708\",\n \
     \"EVSEID\":\"2000000000000002\",\n \
     \"EVSEType\":2,\n \
+    \"PhaseLine\":1,\n \
     \"TotalCON\":1,\n \
     \"Lng\":116.275833,\n \
     \"Lat\":39.831944,\n \
@@ -22,7 +23,6 @@ const char *strEVSECfg =
         {\n \
             \"ID\":0,\n \
             \"Type\":2,\n \
-            \"PhaseLine\":1,\n \
             \"SocketType\":67,\n \
             \"VolatageUpperLimits\":260,\n \
             \"VolatageLowerLimits\":176,\n \
@@ -37,7 +37,6 @@ const char *strEVSECfg =
         {\n \
             \"ID\":1,\n \
             \"Type\":2,\n \
-            \"PhaseLine\":1,\n \
             \"SocketType\":67,\n \
             \"VolatageUpperLimits\":260,\n \
             \"VolatageLowerLimits\":176,\n \

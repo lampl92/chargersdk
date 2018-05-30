@@ -740,7 +740,6 @@ int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
     case WIDGET_ITEM_DRAW_BITMAP:
         break;
     default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
-
     case WIDGET_ITEM_DRAW_BACKGROUND:
         GUI_GetClientRect(&h);
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)

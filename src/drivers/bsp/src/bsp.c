@@ -129,7 +129,9 @@ void bsp_Init(void)
     bsp_RTC_Init();
     RTC_Set_WakeUp(RTC_WAKEUPCLOCK_CK_SPRE_16BITS, 0); //配置 WAKE UP 中断,1 秒钟中断一次
     bsp_DWT_Init();
-#if 1
+    
+#if BOOTLOADER
+#else
     Peripheral_Init();
 #endif
     bsp_SDRAM_Init();
@@ -138,12 +140,8 @@ void bsp_Init(void)
     LCD_Init();
     TP_Init();
 #endif
-    //bsp_LTDC_Init();//在GUI中初始化
-//    bsp_Touch_Init();
-    bsp_Uart_Init(UART_PORT_CLI, 1);   /* 初始化串口 */
-    bsp_Uart_Init(UART_PORT_RFID, 1);
-    bsp_Uart_Init(UART_PORT_GPRS, 1);
-    //IWDG_Init(IWDG_PRESCALER_64,500);  //在taskinit中初始化了	
+    
+    uart_driver_init();
 }
 
 void bsp_Error_Handler(void)
