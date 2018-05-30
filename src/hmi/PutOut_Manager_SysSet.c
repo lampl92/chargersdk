@@ -305,10 +305,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             EDIT_SetText(_aahEdit[6][0],_tmpBuff);
             break;
         case MSG_MANAGERSETID7:
-            EDIT_SetText(_aahEdit[7][0], "******");
+            //EDIT_SetText(_aahEdit[7][0], "******");
             break;
         case MSG_MANAGERSETID8:
-            EDIT_SetText(_aahEdit[6][0], "******");
+            EDIT_SetText(_aahEdit[8][0], "******");
             break;        
         default:
             WM_DefaultProc(pMsg);
