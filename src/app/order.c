@@ -78,6 +78,19 @@ OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
     }
     return STATE_SEG_DEFAULT;
 }
+
+double get_current_totalfee(time_t now)
+{
+    uint8_t pos = 0;
+    uint8_t ucSegState;
+    double totalfee;
+    
+    ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
+    totalfee = pechProto->info.dSegEnergyFee[ucSegState] + pechProto->info.dSegServFee[ucSegState];
+ 
+    return totalfee;
+}
+
 ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e statOrderSeg)
 {
     ChargePeriodStatus_t *pPeriodStatus;
