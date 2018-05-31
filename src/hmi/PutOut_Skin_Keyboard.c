@@ -1251,17 +1251,17 @@ static uint8_t Value_Check()
                 && tmpDouble <= 240.0
                 && tmpDouble >= pCon->info.dVolatageUpperLimits)
             {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
+                tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
             }
             else if (tmpDouble > 240.0
-            &&tmpDouble >= pCon->info.dVolatageUpperLimits)
+            &&pCon->info.dVolatageUpperLimits > 240)
             {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
+                tmpDouble = 240;
             }
             else if (tmpDouble > 240.0
-                &&tmpDouble < pCon->info.dVolatageUpperLimits)
+                &&pCon->info.dVolatageUpperLimits <= 240)
             {
-                tmpDouble = 240.0;
+                tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
             }
 
             pCon->info.dVolatageLowerLimits = tmpDouble;
@@ -1291,11 +1291,14 @@ static uint8_t Value_Check()
             {
                 tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
             }
-            else if (tmpDouble < (-50.0))
+            else if (tmpDouble < (-50.0)&&tmpDouble < pCon->info.dACTempLowerLimits)
+            {
+                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
+            }
+            else if (tmpDouble < (-50.0) && tmpDouble >= pCon->info.dACTempLowerLimits)
             {
                 tmpDouble = -50.0;
             }
-
             pCon->info.dACTempUpperLimits = tmpDouble;
             pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
@@ -1345,9 +1348,13 @@ static uint8_t Value_Check()
             {
                 tmpDouble = pCon->info.dSocketTempLowerLimits + 1.0;
             }
-            else if (tmpDouble < (-50.0))
+            else if (tmpDouble < (-50.0)&&tmpDouble > pCon->info.dSocketTempLowerLimits)
             {
                 tmpDouble = -50.0;
+            }
+            else if (tmpDouble < (-50.0)&&tmpDouble <= pCon->info.dSocketTempLowerLimits)
+            {
+                tmpDouble = pCon->info.dSocketTempLowerLimits + 1.0;
             }
 
             pCon->info.dSocketTempUpperLimits = tmpDouble;
