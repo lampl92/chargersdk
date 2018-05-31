@@ -262,10 +262,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             case 21:
                 if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
                 {
-                    WM_HideWindow(_hWinManagerConSet);
-                    WM_HideWindow(_hWinManagerCommon);
-
-                    Keypad_GetValueTest(CONSET_VALUE, 21, _hWinManagerConSet, _hWinManagerCommon, conSocketType, "Note: B or C");
+//                    WM_HideWindow(_hWinManagerConSet);
+//                    WM_HideWindow(_hWinManagerCommon);
+//
+//                    Keypad_GetValueTest(CONSET_VALUE, 21, _hWinManagerConSet, _hWinManagerCommon, conSocketType, "Note: B or C");
                 }
                 break;
             case 22:
@@ -507,6 +507,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         memset(_tmpBuff,'\0',strlen(_tmpBuff));
         sprintf(_tmpBuff,"%c",pCon->info.ucSocketType);
         EDIT_SetText(_aahEdit[1][0],_tmpBuff);
+        EDIT_SetBkColor(_aahEdit[4][0], EDIT_CI_ENABLED, GUI_GRAY);
         //电压上限
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _FONT_WIDTH*(strlen(conVolatageUpperLimits)), GUI_MANAGER_YOFF,hWindow,WM_CF_SHOW,0,13,conVolatageUpperLimits);
         _aahEdit[2][0] = EDIT_CreateEx(_editxoff,GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*2, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE,hWindow,WM_CF_SHOW,0,22,strlen("255.5"));
