@@ -711,6 +711,7 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
 #else
         if (Electricity_meter[ucCONID + 1].flag.flag_erro == 1)
         {
+            tmpVolt = Get_Electricity_meter_massage_voltage(ucCONID + 1);//get_va();
             tmpVolt = 0;
             errcode = ERR_CON_METER_FAULT;
         }
