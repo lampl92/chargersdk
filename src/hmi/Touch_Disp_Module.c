@@ -485,7 +485,18 @@ void Led_Show()
     /**< 置位说明有故障存在闪烁红灯 */
     if (bittest(winCreateFlag, 1))
     {
-        bitset(led_signal, 0);
+        if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+        {
+            bitset(led_signal, 0);
+        }
+        else if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+        {
+            bitset(led_signal, 0);
+        }
+        else
+        {
+            bitset(led_signal, 6);
+        }
     }
     else
     {
@@ -546,13 +557,16 @@ void Led_Show()
         }
         if (bittest(ledSignalPool, 4))
         {
-            led_ctrl(1, blue, flicker);
+            led_ctrl(1, blue, keep_on);
         }
         if (bittest(ledSignalPool, 5))
         {
             led_ctrl(1, green, keep_on);
         }
-
+        if (bittest(ledSignalPool, 6))
+        {
+            led_ctrl(1, red, keep_on);
+        }
         led_signalold = led_signal;
     }
 }
