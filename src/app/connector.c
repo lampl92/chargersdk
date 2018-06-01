@@ -645,7 +645,7 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
         goto exit_parse;
     }
     iArraySize = cJSON_GetArraySize(jsCONArray);//有多少个充电枪配置
-    if(iArraySize != pEVSE->info.ucTotalCON)
+    if(iArraySize < pEVSE->info.ucTotalCON)
     {
         errcode = ERR_FILE_PARAM;
         goto exit_parse;
