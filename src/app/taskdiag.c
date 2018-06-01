@@ -77,16 +77,7 @@ void vTaskEVSEDiag(void *pvParameters)
             pCON = CONGetHandle(i);
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
-                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) !=0 ||
-                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0 ||
-                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) != 0 ||
-                    (pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) != 0 ||
-                    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
-                {
-                    //温度\电流警告（非严重告警）算正常，不进行处理
-                    //过压欠压不进行处理
-                }
-                else if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
+                if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
                     pCON->order.ucStartType == defOrderStartType_Remote)
                 {
                     if (pCON->status.ulSignalAlarm != 0 ||
@@ -106,7 +97,7 @@ void vTaskEVSEDiag(void *pvParameters)
                     //其他异常清除认证标志
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-            }
+            }//end of if isworking
             if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
             {
                 xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
@@ -128,7 +119,7 @@ void vTaskEVSEDiag(void *pvParameters)
             {
                 if (pCON->state == STATE_CON_CHARGING)
                 {
-                    pCON->status.SetLoadPercent(pCON, 50);
+                    pCON->status.SetLoadPercent(pCON, 70);
                 }
             }
         }
