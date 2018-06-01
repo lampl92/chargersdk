@@ -12,10 +12,10 @@
  */
 
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
+//#include <stdio.h>
+//#include <string.h>
+//#include <unistd.h>
+//#include <fcntl.h>
 #include <time.h>
 #include <ctype.h>
 
@@ -26,27 +26,37 @@
 extern int yaffs_trace_mask;
 
 void dumpDir(const char *dname);
-
-void copy_in_a_file(const char *yaffsName,const char *inName)
+//yaffsName: dest   inName:source
+int copy_in_a_file(const char *yaffsName, const char *inName)
 {
-	int inh,outh;
-	unsigned char buffer[100];
-	int ni,no;
-	inh = open(inName,O_RDONLY);
-	outh = yaffs_open(yaffsName, O_CREAT | O_RDWR | O_TRUNC, S_IREAD | S_IWRITE);
+    int inh, outh;
+    unsigned char buffer[100];
+    int ni, no;
+    int res = 0;
+    
+    inh = yaffs_open(inName, O_RDONLY, S_IREAD | S_IWRITE);
+    outh = yaffs_open(yaffsName, O_CREAT | O_RDWR | O_TRUNC, S_IREAD | S_IWRITE);
+    if (inh < 0 || outh < 0)
+    {
+        res = 0;
+        return res;
+    }
 
-	while((ni = read(inh,buffer,100)) > 0)
-	{
-		no = yaffs_write(outh,buffer,ni);
-		if(ni != no)
-		{
-			printf_safe("problem writing yaffs file\n");
-		}
-
-	}
-
-	yaffs_close(outh);
-	close(inh);
+    while ((ni = yaffs_read(inh, buffer, 100)) > 0)
+    {
+        no = yaffs_write(outh, buffer, ni);
+        if (ni != no)
+        {
+            printf_safe("problem writing yaffs file\n");
+            res = 0;
+            break;
+        }
+    }
+    yaffs_close(outh);
+    yaffs_close(inh);
+    
+    res = 1;
+    return res;
 }
 
 void make_a_file(const char *yaffsName,char bval,int sizeOfFile)
@@ -118,10 +128,6 @@ int check_pattern_file(char *fn)
 	return ok;
 }
 
-
-
-
-
 int dump_file_data(char *fn)
 {
 	int h;
@@ -152,7 +158,14 @@ int dump_file_data(char *fn)
 	return ok;
 }
 
-
+Y_LOFF_T yaffs_ftell(int fd)
+{
+    Y_LOFF_T len, curpos;
+    curpos = yaffs_lseek(fd, 0, SEEK_CUR);
+    len = yaffs_lseek(fd, 0, SEEK_END);
+    yaffs_lseek(fd, curpos, SEEK_SET);
+    return len;
+}
 
 void dump_file(const char *fn)
 {
@@ -167,12 +180,14 @@ void dump_file(const char *fn)
 	}
 	else
 	{
-		size = yaffs_lseek(h,0,SEEK_SET);
-		printf_safe("*****\nDump file %s size %d\n",fn,size);
-//		for(i = 0; i < size; i++)
-//		{
-//
-//		}
+		//size = yaffs_lseek(h,100,SEEK_SET);
+		//size = yaffs_lseek(h,0,SEEK_CUR);
+		//printf_safe("*****\nseek file %s size %d\n",fn,size);
+    	size = yaffs_ftell(h);
+		printf_safe("*****\ntell file %s size %d\n",fn,size);
+//    	size = yaffs_lseek(h, 0, SEEK_CUR);
+//		printf_safe("*****\nafter tell file %s size %d\n",fn,size);
+
     	yaffs_close(h);
 	}
 }
@@ -1620,6 +1635,35 @@ void long_name_test(const char *mountpt)
 
 }
 
+int find_file(const char *dir, const char *key_name, char *find_name)
+{
+    yaffs_DIR *d;
+    struct yaffs_dirent *de;
+
+    d = yaffs_opendir(dir);
+
+    if (!d)
+    {
+        printf_safe("opendir failed\n");
+    }
+    else
+    {
+        while ((de = yaffs_readdir(d)) != NULL)
+        {
+            printf_safe("scanning %s\n", de->d_name);
+            if (strstr(de->d_name, key_name) != NULL)
+            {
+                strcpy(find_name, de->d_name);
+                printf_safe("fine file %s%s\n", dir, find_name);
+                yaffs_closedir(d);
+                return 1;
+            }
+        }
+        yaffs_closedir(d);
+        return 0;
+    }
+    return 0;
+}
 
 void lookup_test(const char *mountpt)
 {
@@ -3174,7 +3218,7 @@ void xx_test(const char *mountpt)
 	dump_directory_tree(mountpt);
 }
 
-void yy_test(const char *mountpt)
+void yy1_test(const char *mountpt)
 {
 	yaffs_start_up();
 
@@ -3495,7 +3539,7 @@ int yaffs2test_main(int argc, char *argv[])
 	  //basic_utime_test("/nand");
 	  //case_insensitive_test("/nand");
 
-	  //yy_test("/nand");
+	  //yy1_test("/nand");
 	  //dir_rename_test("/nand");
 
 	  //dir_fd_test("/nand");
