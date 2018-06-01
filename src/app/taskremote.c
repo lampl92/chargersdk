@@ -463,7 +463,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 60)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
                         {
                             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
@@ -478,7 +478,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 60)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }
