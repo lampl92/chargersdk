@@ -84,7 +84,7 @@ void vTaskEVSERFID(void *pvParameters)
                 ul2ucTmp.ucVal[1] = pRFIDDev->status.ucCardID[1];
                 ul2ucTmp.ucVal[2] = pRFIDDev->status.ucCardID[2];
                 ul2ucTmp.ucVal[3] = pRFIDDev->status.ucCardID[3];
-                ul2ucTmp.ulVal = utils_ntohl(ul2ucTmp.ulVal);
+                //ul2ucTmp.ulVal = utils_ntohl(ul2ucTmp.ulVal);
                 sprintf(pRFIDDev->order.strCardID, "%016u", ul2ucTmp.ulVal);
                 printf_safe("CardID :%s\n", pRFIDDev->order.strCardID);
                 pRFIDDev->state = STATE_RFID_GOTID;
