@@ -1740,7 +1740,10 @@ void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkW
         TEXT_SetFont(_aahEditEg, &SIF16_Font);
         TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
         TEXT_SetText(_aahEditEg, eg_p);
-//        MULTIEDIT_SetText(hMulti,"eg,1122334455667788");
+        if (id == 21)
+        {
+            MULTIEDIT_SetText(hMulti,pEVSE->info.strID);
+        }
         break;
 
     case CONSET_VALUE:
