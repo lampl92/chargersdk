@@ -248,7 +248,7 @@ void Open_gun_2(void);
 void get_samp_point(void);//ÓÃÊ±30¦ÌS
 void Buzzer_control(uint8_t state);
 uint8_t Get_State_relay(void);
-uint8_t flag_rs485[255];
+uint16_t flag_rs485[255];
 uint8_t flag_pwm_out_n, flag_pwm_out_l, flag_gun_Close, flag_gun_Open, flag_power_out_l, flag_power_out_n;
 uint16_t num_cp1, num_cp2;
 double vref, va;

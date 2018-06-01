@@ -134,7 +134,8 @@ void electricity_meter_analysis(uint8_t add)
 {
     uint16_t crc_vref;
     uint8_t i;
-    crc_vref = c_crc(&RS485_RX_MODBUS[0], 5); if (flag_rs485[add] >= 5)
+    crc_vref = c_crc(&RS485_RX_MODBUS[0], 5); 
+    if (flag_rs485[add] >= 5)
     {
         Electricity_meter[add].flag.flag_erro = 1;
     }
