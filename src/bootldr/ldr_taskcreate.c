@@ -251,6 +251,7 @@ void vTaskInit(void *pvParameters)
             upflag = '3';
             set_upgrade_tmp(pathUpgradeTmp, &upflag);
             printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
+            Jump_To_APP();
         }
         vTaskDelay(2000);
     }
