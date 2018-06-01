@@ -709,7 +709,15 @@ static ErrorCode_t GetChargingVoltage(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
         tmpVolt = 220;
 #else
-        tmpVolt = Get_Electricity_meter_massage_voltage(ucCONID+1);//get_va();
+        if (Electricity_meter[ucCONID + 1].flag.flag_erro == 1)
+        {
+            tmpVolt = 0;
+            errcode = ERR_CON_METER_FAULT;
+        }
+        else
+        {
+            tmpVolt = Get_Electricity_meter_massage_voltage(ucCONID + 1);//get_va();
+        }
 #endif
     }
     if(ucCONID == 1)
@@ -748,8 +756,9 @@ static ErrorCode_t GetChargingCurrent(void *pvCON)
     errcode = ERR_NO;
 
     /** 获取电流 */
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    if(Electricity_meter[ucCONID + 1].flag.flag_erro == 1)
     {
+        tmpCurr = 0;
         errcode = ERR_CON_METER_FAULT;
     }
     else
@@ -798,8 +807,9 @@ static ErrorCode_t GetChargingFrequence(void *pvCON)
 #ifdef DEBUG_DIAG_DUMMY
     tmpFreq = 50;
 #else
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    if(Electricity_meter[ucCONID + 1].flag.flag_erro == 1)
     {
+        tmpFreq = 0;
         errcode = ERR_CON_METER_FAULT;
     }
     else
@@ -839,8 +849,9 @@ static ErrorCode_t GetChargingPower(void *pvCON)
     errcode = ERR_NO;
 
     /** @todo (yuye#1#): 从电表获取 */
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
+    if(Electricity_meter[ucCONID + 1].flag.flag_erro == 1)
     {
+        pCON->status.ulSignalFault |= defSignalCON_Fault_Meter;
 		tmpPower = pCON->status.dChargingPower;//通信失败后，获取上次的值
         errcode = ERR_CON_METER_FAULT;
     }
@@ -852,6 +863,7 @@ static ErrorCode_t GetChargingPower(void *pvCON)
 #else
         tmpPower = Get_Electricity_meter_massage_energy(ucCONID + 1);
 #endif
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_Meter;
     }
 
     /*********************/
