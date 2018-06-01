@@ -351,9 +351,18 @@ void vTaskEVSECharge(void *pvParameters)
                                                       pdFALSE, pdFALSE, 0);
                 if((uxBitsException & defEventBitExceptionDevFault) != 0)
                 {
-                    printf_safe("Dev Fault Stop Error!\n");
-                    pCON->state = STATE_CON_STOPCHARGE;
-                    break;
+                    if ((uxBitsException & defEventBitExceptionRFID) == defEventBitExceptionRFID &&
+                        pCON->order.ucStartType == defOrderStartType_Remote)
+                    {
+                        //不处理
+                    }
+                    else
+                    {
+                        printf_safe("Dev Fault Stop Error!\n");
+                        pCON->state = STATE_CON_STOPCHARGE;
+                        break;
+                    }
+                    
                 }
                 /*** 判断用户相关停止条件  ***/
                 uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
