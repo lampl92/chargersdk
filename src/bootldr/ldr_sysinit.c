@@ -57,7 +57,23 @@ uint8_t create_system_dir(void)
         return FALSE;
     }
 }
-
+uint8_t create_dir(char *dir)
+{
+    int res = 1;
+    res = yaffs_mkdir(dir, S_IREAD | S_IWRITE);
+    if (res != 0)
+    {
+        res = yaffs_get_error();
+    }
+    switch (res)
+    {
+    case 0:
+    case -EEXIST:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
 void create_cfg_file(const char *path, const char *context)
 {
     uint32_t bw;
@@ -97,7 +113,9 @@ void sys_Init(void)
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-    create_system_dir();
+    create_dir(pathSystemDir);
+    create_dir(pathDownloadDir);
+    create_dir(pathUpgradeDir);
     //yaffs_unlink(pathSysCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
 
