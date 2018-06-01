@@ -587,7 +587,7 @@ void ledShow()
             {
                 bitset(led_signal[i], 0);
             }
-            else if ((pcont->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+            else if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
             {
                 bitset(led_signal[i], 1);
             }
