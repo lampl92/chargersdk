@@ -734,7 +734,7 @@ void DiagTempError(CON_t *pCON)
         else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
           (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
         {
-            pCON->status.SetLoadPercent(pCON, 50);
+            pCON->status.SetLoadPercent(pCON, 70);
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
         }
@@ -761,7 +761,7 @@ void DiagTempError(CON_t *pCON)
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
+            pCON->status.SetLoadPercent(pCON, 70);
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_War;
@@ -792,7 +792,7 @@ void DiagTempError(CON_t *pCON)
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
+            pCON->status.SetLoadPercent(pCON, 70);
             xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_War;
