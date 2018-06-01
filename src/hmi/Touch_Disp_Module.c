@@ -579,7 +579,18 @@ void ledShow()
             pEVSE->status.ulSignalAlarm != 0 ||
             pEVSE->status.ulSignalFault != 0)
         {
-            bitset(led_signal[i], 0);
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+            {
+                bitset(led_signal[i], 0);
+            }
+            else if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+            {
+                bitset(led_signal[i], 0);
+            }
+            else
+            {
+                bitset(led_signal[i], 6);
+            }
         }
         else
         {
@@ -643,11 +654,15 @@ void ledShow()
             }
             if (bittest(ledSignalPool[i], 4))
             {
-                led_ctrl(i + 1, blue, flicker);
+                led_ctrl(i + 1, blue, keep_on);
             }
             if (bittest(ledSignalPool[i], 5))
             {
                 led_ctrl(i + 1, green, keep_on);
+            }
+            if (bittest(ledSignalPool[i], 6))
+            {
+                led_ctrl(i + 1, red, keep_on);
             }
             led_signalold[i] = led_signal[i];
         }
