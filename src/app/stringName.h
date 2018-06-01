@@ -66,6 +66,7 @@
 #define pathUpgradeDir      "/nand/upgrade/"
 #define pathDownloadDir     "/nand/download/"
 
+#define pathUpgradeTmp      "/nand/upgrade/upgrade.tmp"
 
 #define jnEVSESN        "EVSESN"
 #define jnEVSEID        "EVSEID"
