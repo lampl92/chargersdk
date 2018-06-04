@@ -472,12 +472,14 @@ void Err_Analy(WM_HWIN hWin)
  * @return
  *
  */
-void Led_Show()
+//#pragma GCC push_options
+//#pragma GCC optimize ("O0")
+void Led_Show1()
 {
     CON_t *pCON;
-    uint8_t ledSignalPool;
-    uint8_t led_signal;
-    static uint8_t led_signalold;
+    uint16_t ledSignalPool;
+    uint16_t led_signal;
+    volatile static uint16_t led_signalold;
 
     pCON = CONGetHandle(0);
 
@@ -501,6 +503,10 @@ void Led_Show()
         {
             bitset(led_signal, 6);
         }
+    }
+    else if(getSignalIntensity() == 0)
+    {
+        bitset(led_signal, 7);
     }
     else
     {
@@ -571,9 +577,93 @@ void Led_Show()
         {
             led_ctrl(1, red, keep_on);
         }
+        if (bittest(ledSignalPool, 7))
+        {
+            led_ctrl(1, red, keep_on);
+            //GUI_Delay(500);
+            vTaskDelay(500);
+            led_ctrl(1, blue, keep_on);
+            //GUI_Delay(400);
+            vTaskDelay(400);
+        }
         led_signalold = led_signal;
     }
 }
+//#pragma GCC pop_options
+
+
+void Led_Show()
+{
+    CON_t *pCON;
+    pCON = CONGetHandle(0);
+    /**< 置位说明有故障存在闪烁红灯 */
+    if (bittest(winCreateFlag, 1))
+    {
+        if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+        {
+            led_ctrl(1, red, flicker);
+        }
+        else if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+        {
+            led_ctrl(1, red, flicker);
+        }
+        else if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+        {
+            led_ctrl(1, red, keep_on);
+        }
+        else
+        {
+            led_ctrl(1, red, keep_on);
+        }
+    }
+    else if (getSignalIntensity() == 0)
+    {
+        led_ctrl(1, red, keep_on);
+        //GUI_Delay(500);
+        vTaskDelay(500);
+        led_ctrl(1, blue, keep_on);
+        //GUI_Delay(400);
+        vTaskDelay(400);
+    }
+    else
+    {
+        switch (pCON->state)
+        {
+        case STATE_CON_IDLE:
+            /**< 空闲状态 */
+            led_ctrl(1, green, keep_on);
+            break;
+        case STATE_CON_CHARGING:
+            /**< 充电过程中 */
+            led_ctrl(1, green, breath);
+            break;
+        default:
+            if (pCON->status.xPlugState == PLUG)
+            {
+                if (pCON->status.xCPState == CP_6V_PWM
+                    || pCON->status.xCPState == CP_6V)
+                {
+                    /**< 等待车端插枪 */
+                    led_ctrl(1, green, flicker);
+                }
+                else if (pCON->status.xCPState == CP_9V_PWM
+                    || pCON->status.xCPState == CP_9V)
+                {
+                    /**< S1未闭合 */
+                    led_ctrl(1, blue, keep_on);
+                }
+            }
+            else
+            {
+                /**< 未知状态 */
+                led_ctrl(1, green, keep_on);
+            }
+            break;
+        }
+    }
+}
+
+
 /** @brief
  *刷新故障列表;
  * @param msg_err:故障列表指针

@@ -244,8 +244,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 }
             
                 Data_Process(pMsg);
-                Signal_Show();
-                Led_Show();
                 if (_hWinHome == cur_win)
                 {
                     Err_Analy(pMsg->hWin);
@@ -295,7 +293,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
             }
-            WM_RestartTimer(pMsg->Data.v, 1000);
+            Led_Show();
+            WM_RestartTimer(pMsg->Data.v, 20);
         }
         break;
     case MSG_CREATERRWIN:
