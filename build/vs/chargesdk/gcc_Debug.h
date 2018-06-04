@@ -655,6 +655,9 @@
 #ifndef __INT_FAST32_TYPE__
 #define __INT_FAST32_TYPE__ int
 #endif
+#ifndef EVSE_ERRLOG
+#define EVSE_ERRLOG 1
+#endif
 #ifndef __UINT_LEAST16_TYPE__
 #define __UINT_LEAST16_TYPE__ short unsigned int
 #endif
@@ -690,9 +693,6 @@
 #endif
 #ifndef __LLFRACT_FBIT__
 #define __LLFRACT_FBIT__ 63
-#endif
-#ifndef DEBUG_RFID
-#define DEBUG_RFID 1
 #endif
 #ifndef __FLT_RADIX__
 #define __FLT_RADIX__ 2
@@ -916,9 +916,6 @@
 #ifndef __INT64_TYPE__
 #define __INT64_TYPE__ long long int
 #endif
-#ifndef EVSE_DEBUG
-#define EVSE_DEBUG 1
-#endif
 #ifndef __FLT_MAX_EXP__
 #define __FLT_MAX_EXP__ 128
 #endif
@@ -1117,9 +1114,6 @@
 #ifndef __PTRDIFF_TYPE__
 #define __PTRDIFF_TYPE__ int
 #endif
-#ifndef __DEBUG_CFG_PARSE
-#define __DEBUG_CFG_PARSE 1
-#endif
 #ifndef __LLFRACT_MIN__
 #define __LLFRACT_MIN__ (-0.5LLR-0.5LLR)
 #endif
@@ -1226,7 +1220,7 @@
 //../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc
 //../../../src/drivers/bsp/inc
 //../../../src/drivers/device/inc
-//../../../src/os
+//../../../src/os/FreeRTOS
 //../../../src/os/FreeRTOS/Source/include
 //../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F
 //../../../src/middlewares/tinysh
@@ -1238,16 +1232,22 @@
 //../../../src/middlewares/gdsl-1.8/src
 //../../../src/middlewares/gdsl-1.8/src/examples
 //../../../src/middlewares/STemWin/BMP
-//../../../src/middlewares/STemWin/XBF
-//../../../src/middlewares/tiny-AES128-C
 //../../../src/hmi
 //../../../src/hmi/lcd
-//../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/net/mbedTLS/include
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
+//../../../src/net/user
+//../../../src/middlewares/unzip101e
+//../../../src/middlewares/libmodbus-3.1.4/src
 // --- Include directories end --- //
 
 

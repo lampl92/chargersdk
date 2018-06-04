@@ -1,6 +1,6 @@
 /**
 * @file buzzer.c
-* @brief ·äÃùÆ÷Çý¶¯£¬¾ß±¸³£¿ªºÍPWM¿ØÖÆÁ½ÖÖÄ£Ê½
+* @brief èœ‚é¸£å™¨é©±åŠ¨ï¼Œå…·å¤‡å¸¸å¼€å’ŒPWMæŽ§åˆ¶ä¸¤ç§æ¨¡å¼
 * @author rgw
 * @version v1.0
 * @date 2017-01-23
@@ -8,4 +8,4 @@
 #include "bsp.h"
 #include "buzzer.h"
 
-//Ö»ÊµÏÖ²Ù×÷£¬¾ßÌå·äÃùÆ÷Çý¶¯µ¥¶ÀÊµÏÖ
+//åªå®žçŽ°æ“ä½œï¼Œå…·ä½“èœ‚é¸£å™¨é©±åŠ¨å•ç‹¬å®žçŽ°

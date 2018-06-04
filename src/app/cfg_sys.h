@@ -27,7 +27,7 @@ typedef struct
     uint8_t sys_cfg;
     uint8_t blacklist_cfg;
     uint8_t whitelist_cfg;
-    double chargesdk_bin_crc32;
+    uint32_t chargesdk_bin_crc32;
 }UpgradeFlag_t;
 typedef struct 
 {

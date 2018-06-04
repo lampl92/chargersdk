@@ -332,14 +332,12 @@ void led_breath_b(void)
 #define blue     2                                    */
 /********************************************/
 void led_ctrl(uint8_t num, uint8_t colour, uint8_t state)
-{
-	
+{	
     if (colour == red)
     {
         led_ctrl_g(num, keep_off);
         led_ctrl_b(num, keep_off);
-        led_ctrl_r(num, state);
-	    
+        led_ctrl_r(num, state);	    
     }
     else if (colour == green)
     {
@@ -457,17 +455,17 @@ void led_breath_out(void)
         } 
     }
    
-if(flag_breath_b_1==1)
-{
-    if (pwm_b_1 >= duty_ratio_b_1)
+    if (flag_breath_b_1 == 1)
     {
-        LED1_B_RUN;
-    }
-    else
-    {
-        LED1_B_OFF;
+        if (pwm_b_1 >= duty_ratio_b_1)
+        {
+            LED1_B_RUN;
+        }
+        else
+        {
+            LED1_B_OFF;
+        }   
     }   
-}   
 
 
     if (flag_breath_r_2 == 1)
@@ -549,7 +547,7 @@ void led_status_out(void)
     {
         LED2_G_RUN;
     }
-    if ((flag_satuse_g_2 == 0)&&(flag_breath_r_2 == 0)&&(flag_flicker_g_2 == 0))
+    if ((flag_satuse_g_2 == 0)&&(flag_breath_g_2 == 0)&&(flag_flicker_g_2 == 0))
     {
         LED2_G_OFF;
     }
@@ -564,13 +562,9 @@ void led_status_out(void)
 }
 void led_output(void)
 {
-
     led_breath_out();
     led_flicker_out();
     led_status_out();
-
-
-  
 }
 void led_state_init(void)
 {

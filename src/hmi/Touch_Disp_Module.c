@@ -9,6 +9,7 @@
 #include "DIALOG.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
+#include "bsp_rtc.h"
 
 #define ERR_SIMBOL  (0x3e000)
 
@@ -24,7 +25,7 @@ uint8_t *Arrester_err = "   防雷异常\n";
 uint8_t *PowerOff_err = "   停电异常\n";
 uint8_t *Curr_err = "   电流异常\n   请拔枪\n";
 uint8_t *Freq_err = "   频率异常\n";
-uint8_t *RaleyOn_err = "   继电器黏连\n";
+uint8_t *RaleyOn_err = "   继电器故障\n";
 
 WM_HWIN err_hItem = 0;
 
@@ -144,7 +145,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
     //uxBits = xEventGroupGetBits(xHandleEventTCP);
     //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
 
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {
         strcat(strCSQ, " 服务器未连接");
     }
@@ -161,7 +162,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 */
 int getSignalIntensity()
 {
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {
         return 0;
     }
@@ -556,6 +557,122 @@ void Led_Show()
         led_signalold = led_signal;
     }
 }
+
+/**
+*灯光控制新
+*
+*/
+void ledShow()
+{
+    int i;
+    CON_t *pCON;
+    uint8_t ledSignalPool[2];
+    uint8_t led_signal[2];
+    static uint8_t led_signalold[2];
+    for (i = 0; i < 2; i++)
+    {
+        pCON = CONGetHandle(i);
+        led_signal[i] = 0;
+        /**< 置位说明有故障存在闪烁红灯 */
+        if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+        {
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+            {
+                bitset(led_signal[i], 0);
+            }
+            else if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+            {
+                bitset(led_signal[i], 0);
+            }
+            else if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+            {
+                bitset(led_signal[i], 1);
+            }
+            else
+            {
+                bitset(led_signal[i], 6);
+            }
+        }
+        else
+        {
+            switch (pCON->state)
+            {
+            case STATE_CON_IDLE:
+                /**< 空闲状态 */
+                bitset(led_signal[i], 1);
+                break;
+            case STATE_CON_CHARGING:
+                /**< 充电过程中 */
+                bitset(led_signal[i], 2);
+                break;
+            default:
+                if (pCON->status.xPlugState == PLUG)
+                {
+                    if (pCON->status.xCPState == CP_6V_PWM
+                        || pCON->status.xCPState == CP_6V)
+                    {
+                        /**< 等待车端插枪 */
+                        bitset(led_signal[i], 3);
+                    }
+                    else if (pCON->status.xCPState == CP_9V_PWM
+                        || pCON->status.xCPState == CP_9V)
+                    {
+                        /**< S1未闭合 */
+                        bitset(led_signal[i], 4);
+                    }
+                }
+                else
+                {
+                    /**< 未知状态 */
+                    bitset(led_signal[i], 5);
+                }
+                break;
+            }
+        }
+    }
+   
+    for (i = 0; i < 2; i++)
+    {
+        ledSignalPool[i] = led_signalold[i] ^ led_signal[i];//有变化则ledSignalPool不为0
+        if (ledSignalPool[i] != 0)
+        {
+            ledSignalPool[i] = ledSignalPool[i] & led_signal[i];
+            if (bittest(ledSignalPool[i], 0))
+            {
+                led_ctrl(i + 1, red, flicker);
+            }
+            if (bittest(ledSignalPool[i], 1))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            if (bittest(ledSignalPool[i], 2))
+            {
+                led_ctrl(i + 1, green, breath);
+            }
+            if (bittest(ledSignalPool[i], 3))
+            {
+                led_ctrl(i + 1, green, flicker);
+            }
+            if (bittest(ledSignalPool[i], 4))
+            {
+                led_ctrl(i + 1, blue, keep_on);
+            }
+            if (bittest(ledSignalPool[i], 5))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            if (bittest(ledSignalPool[i], 6))
+            {
+                led_ctrl(i + 1, red, keep_on);
+            }
+            led_signalold[i] = led_signal[i];
+        }
+    }
+}
+
 /** @brief
  *刷新故障列表;
  * @param msg_err:故障列表指针
@@ -588,13 +705,18 @@ void Errlist_flush(uint8_t *msg_err)
         strncat(msg_err, Volt_err, strlen(Volt_err));
         ErrMultiEdit_Size.err_num++;
     }
-    if ((pCON->status.ulSignalAlarm & defSignalCON_Fault_RelayPaste) != 0)
+//    if(((uxBitsErr >> 5) & 0x01) == 0)
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
         strncat(msg_err, RaleyOn_err, strlen(RaleyOn_err));
         ErrMultiEdit_Size.err_num++;        
     }
-    if((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0 ||
-        (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
+    if(((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        ||((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri))
+    //if ((->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) == defSignalGroupCON_Alarm_Temp_Cri ||
+    //    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) == 0)
     //if (((uxBitsErr >> 9) & 0x01) == 0)
     {
         strncat(msg_err, ACTemp_err, strlen(ACTemp_err));

@@ -1,6 +1,6 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touchtimer.h"
 #include "DIALOG.h"
 
@@ -26,6 +26,10 @@
 #define TEXT_XSIZE  400
 #define TEXT_YSIZE  400
 
+//刷卡已经不再用这些事件, 为保证编译临时定义, 整改界面流程后删掉
+
+#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
+
 WM_HWIN _hWinHome;//home界面句柄
 
 static WM_HWIN hwinQR;//二维码句柄
@@ -37,7 +41,7 @@ uint32_t props_r, props_g, props_b;
 
 static TEXT_Handle text_up;
 
-int SignalFlag = 0;//信号图标刷新标志
+int SignalFlag;
 
 //home界面资源表
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
@@ -65,7 +69,7 @@ static void Data_Process(WM_MESSAGE *pMsg)
                                 pdTRUE, pdTRUE, 0);    
     if((uxBitRFID & defEventBitGotIDtoHMI) == defEventBitGotIDtoHMI)
     {
-        WM_SendMessageNoPara(hWin, MSG_JUMPCARDINFO);
+        WM_SendMessageNoPara(hWin, MSG_READYSTART);
     }
     
     /*如果扫码，发送跳页消息*/
@@ -254,7 +258,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         now = time(NULL);
         extern OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos);
         ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
-        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegPowerFee[ucSegState]);
+        sprintf(strPowerFee, "%.2lf", pechProto->info.dSegEnergyFee[ucSegState]);
         sprintf(strServiceFee, "%.2lf", pechProto->info.dSegServFee[ucSegState]);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strPowerFee);/**< 充电费*/
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strServiceFee);/**< 服务费 */   
@@ -308,7 +312,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             GUI_EndDialog(err_hItem, 0);
         }
         break;
-    case MSG_JUMPCARDINFO:
+    case MSG_READYSTART:
         if (AdvertisementRecordFlag == 1)
         {
             WM_HideWindow(_hWinAdvertizement);

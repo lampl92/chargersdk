@@ -13,7 +13,7 @@
 #endif
 
 #ifndef EVSE_USING_NET
-#define EVSE_USING_NET              0
+#define EVSE_USING_NET              1
 #endif
 
 #ifndef EVSE_USING_GUI
@@ -29,7 +29,7 @@
 #endif
 
 
-#define defTotalCON             2
+#define defMaxCON               32
 //#define defUIDLength            4
 #define defCardIDLength         16
 #define defEVSESNLength         64
@@ -43,7 +43,7 @@
 /* 单位：ms */
 #define defMonitorTempCyc           5000
 #define defMonitorLockStateCyc      1000
-#define defMonitorPlugStateCyc      50
+#define defMonitorPlugStateCyc      20
 #define defMonitorChargingDataCyc   50
 #define defMonitorEVSEStateCyc      50
 #define defMonitorRFIDCyc           100

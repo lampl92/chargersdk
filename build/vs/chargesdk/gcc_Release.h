@@ -1225,12 +1225,20 @@
 //../../../src/middlewares/STemWin/BMP
 //../../../src/hmi
 //../../../src/hmi/lcd
-//../../../src/net/mbedTLS/include
 //../../../src/hmi/qrencode/inc
 //../../../src/middlewares/STemWin/SIF
+//../../../src/net/mbedTLS/include
 //../../../src/middlewares/yaffs2
 //../../../src/middlewares/yaffs2/direct
 //../../../src/middlewares/yaffs2/direct/nanddrv
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl
+//../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer
+//../../../src/net/user
+//../../../src/middlewares/unzip101e
+//../../../src/middlewares/libmodbus-3.1.4/src
 // --- Include directories end --- //
 
 

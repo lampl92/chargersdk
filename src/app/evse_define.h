@@ -43,17 +43,6 @@
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
 #define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
-#define defEventBitGotIDtoHMI           BIT_1               //获取到ID，发送到HMI
-//#define defEventBitIsNewID              BIT_2             //此卡在本桩没有刷过
-#define defEventBitGetAccountStatus     BIT_3               //获取帐户状态
-#define defEventBitRFIDNewID            BIT_4
-#define defEventBitRFIDOldID            BIT_5
-#define defEventBitGoodIDReqDisp        BIT_6
-#define defEventBitGoodIDReqDispOK      BIT_7
-#define defEventBitBadIDReqDisp        BIT_8
-#define defEventBitBadIDReqDispOK      BIT_9
-#define defEventBitOweIDReqDisp        BIT_10
-#define defEventBitOwdIDReqDispOK      BIT_11
 
 /*------xHandleEventData*/
 
@@ -63,7 +52,6 @@
 #define defEventBitOrderMakeOK                   BIT_1    //充电前数据准备完成, Clear in makeCmdCardCtrlResBodyCtx
 #define defEventBitOrderUpdateOK                 BIT_2
 
-#define defEventBitOrder_HMIDispOK               BIT_3
 #define defEventBitOrder_RemoteOrderOK           BIT_4
 #define defEventBitOrder_RemoteRTDataOK          BIT_5
 #define defEventBitOrder_StoreOK                 BIT_6
@@ -72,74 +60,67 @@
 #define defEventBitOrderStopTypeScram            BIT_8
 #define defEventBitOrderStopTypeLimitFee         BIT_9
 #define defEventBitOrderStopTypeLimitTime        BIT_10
-#define defEventBitOrderStopTypeLimitPower       BIT_11
+#define defEventBitOrderStopTypeLimitEnergy      BIT_11
 #define defEventBitOrderStopTypeRemoteStop       BIT_12
 #define defEventBitOrderStopTypeRFIDStop         BIT_13
 #define defEventBitOrderStopTypeFull             BIT_14
 #define defEventBitOrderStopTypeUnPlug           BIT_15
+#define defEventBitOrderStopTypeOffline          BIT_16
 
-#define defEventBitOrderMakeFinish               BIT_16  //等待处不清除, 该事件置位后整个订单完成
-//#define defEventBitOrderFinishToChargetask       BIT_17
-#define defEventBitOrderFinishToHMI              BIT_18
+#define defEventBitOrderMakeFinish               BIT_17  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinishToRemote       BIT_18
+#define defEventBitOrderFinishToHMI              BIT_19
 
-#define defEventBitOrderTmpTimer                 BIT_19
+#define defEventBitOrderTmpTimer                 BIT_20
 
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
 
 /*------xHandleEventRemote*/
-#define defEventBitRemoteGetAccount     BIT_0
-#define defEventBitRemoteGotAccount     BIT_1
+#define defEventBitRemoteError          BIT_0
+
 /*------xHandleEventTCP*/
 #define defEventBitTCPReConnect         BIT_2
 #define defEventBitTCPClientSendReq     BIT_3
 #define defEventBitTCPClientSendOK      BIT_4
 #define defEventBitTCPConnectOK         BIT_5 //接收不清除， 服务器连接成功
 #define defEventBitTCPConnectFail       BIT_6 //接收主动清除
-#define defEventBitTCPClientRecvValid   BIT_7
 #define defEventBitTCPClientFlushBuff   BIT_8
+#define defEventBitPPPDiagOK            BIT_9
+#define defEventBitPPPClosed            BIT_10
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
-#define defEventBitHMI_ChargeReqClick       BIT_3
-#define defEventBitHMI_ChargeReqClickOK     BIT_4
-#define defEventBitHMI_ChargeReqLockLcdOK   BIT_5
-#define defEventBitHMI_RFIDOLD              BIT_6
 #define defEventBitHMI_UP_FAILD             BIT_7
+#define defEventBitHMI_TimeOut              BIT_3
     
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
 /*------xHandleEventDiag*/
-#define defEventBitDiagTempW            BIT_0              //温度报警
-#define defEventBitDiagTemp             BIT_1
+#define defEventBitDiagTemp             BIT_0              //温度报警
+//#define defEventBitDiagTempOut             BIT_1
 #define defEventBitDiagLockState        BIT_2
 #define defEventBitDiagPlugState        BIT_3
 #define defEventBitDiagVolt             BIT_4
 #define defEventBitDiagChargingData     BIT_5
 #define defEventBitDiagEVSEState        BIT_6
 /*------pCON->status.xHandleEventException*/
-#define defEventBitExceptionTempW       BIT_0   
-#define defEventBitExceptionTempC       BIT_1   //Critical
+//#define defEventBitExceptionTempW       BIT_0   
+//#define defEventBitExceptionTempC       BIT_1   //Critical
 #define defEventBitExceptionVolt        BIT_2
 //#define defEventBitExceptionCurr        BIT_3
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
-#define defEventBitExceptionRFID        BIT_7
-#define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionFreqTimer   BIT_9
 
-#define defEventBitExceptionLimitFee    BIT_10  //把LimitFee放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionLimitTime   BIT_16  //把LimitTime放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionRemoteStop  BIT_11
-#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
-#define defEventBitExceptionCPSwitch    BIT_13
-#define defEventBitExceptionTempSensor  BIT_14
-#define defEventBitExceptionSocketTempSensor  BIT_15
-
-#define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
-                                         defEventBitExceptionMeter)
+#define defEventBitExceptionLimitEnergy  BIT_10  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitFee    BIT_11  
+#define defEventBitExceptionLimitTime   BIT_12  
+#define defEventBitExceptionRemoteStop  BIT_13  //远程停止
+#define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
+#define defEventBitExceptionOfflineStop    BIT_15  //网络离线
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -154,7 +135,7 @@
 #define defEventBitCONACTempOK          BIT_9
 #define defEventBitCONPlugOK            BIT_10
 #define defEventBitCONStartOK           BIT_11
-//#define defEventBitCONStopOK          BIT_12
+#define defEventBitEVSETempOK           BIT_12
 #define defEventBitEVSEScramOK          BIT_13
 #define defEventBitEVSEPEOK             BIT_14
 #define defEventBitEVSEKnockOK          BIT_15
@@ -169,6 +150,7 @@
                                         defEventBitEVSEPEOK |       \
                                         defEventBitEVSEKnockOK |    \
                                         defEventBitEVSEArresterOK | \
+                                        defEventBitEVSETempOK | \
                                         defEventBitEVSEPowerOffOK)
 //(defEventBitCONLocked |
 #define defEventBitCPSwitchCondition    (defEventBitCONVoltOK |      \
@@ -217,12 +199,12 @@
 #define defSocketTypeC              ('C')//67
     
 ////////////////////////////////////////////
-//Signal原则：0-关  1-开  0-正常  1-异常  
+//Signal原则：0-关  1-开 or 0-正常  1-异常  
 ////////////////////////////////////////////
 /*EVSE Signal Pool*/
     //ulSignalState
 #define defSignalEVSE_State_Network_Online      BIT_0//
-#define defSignalEVSE_State_Network_Registed    BIT_1//
+#define defSignalEVSE_State_Network_Logined     BIT_1//
     //ulSignalAlarm
 #define defSignalEVSE_Alarm_Scram                BIT_0//
 #define defSignalEVSE_Alarm_Knock                BIT_1//
@@ -298,17 +280,10 @@
 #define defSignalCON_Fault_AC_C_Temp            BIT_3
 #define defSignalCON_Fault_AC_N_Temp            BIT_4
 #define defSignalCON_Fault_RelayPaste           BIT_5
-//#define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
-//#define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
-//#define defSignalCON_Fault_AC_N_RelayPaste      BIT_8
-#define defSignalCON_Fault_CP                   BIT_9        //CP传感故障
-#define defSignalCON_Fault_Plug                 BIT_10
-#define defSignalCON_Fault_Meter                BIT_11       //电表或电能芯片
+#define defSignalCON_Fault_CP                   BIT_6        //CP传感故障
+#define defSignalCON_Fault_Plug                 BIT_7
+#define defSignalCON_Fault_Meter                BIT_8       //电表或电能芯片
 
-//#define defSignalGroupCON_Fault_AC_RelayPaste       (defSignalCON_Fault_AC_A_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_B_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_C_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_N_RelayPaste )
     
 #define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
                                                 defSignalCON_Alarm_SocketTemp2_War | \

@@ -30,12 +30,12 @@ typedef struct
 
 typedef struct _echProtoInfo
 {
-    uint8_t  strServerIP[64 + 1]; //可以是域名，也可以是IP地址
+    char  strServerIP[64 + 1]; //可以是域名，也可以是IP地址
     uint16_t usServerPort;
-    uint8_t  strUserName[8 + 1];
-    uint8_t  strUserPwd[12 + 1];
-    uint8_t  strKey[16 + 1];
-    uint8_t  strNewKey[16 + 1];
+    char  strUserName[8 + 1];
+    char  strUserPwd[12 + 1];
+    char  strKey[16 + 1];
+    char  strNewKey[16 + 1];
     time_t   tNewKeyChangeTime;
 
     uint32_t ulOptSN;           //重启命令操作序列号
@@ -43,7 +43,7 @@ typedef struct _echProtoInfo
     uint32_t ulHeartBeatCyc_ms; //心跳周期 精确到秒
     uint8_t  ucResetAct;        //重启前进行置位，每次启动如果该位置1，则发送重启成功命令，然后清零。
 
-    double dSegPowerFee[defOrderSegMax];  //分段费率
+    double dSegEnergyFee[defOrderSegMax];  //分段费率
     double dSegServFee[defOrderSegMax];
     EchSegTime_t SegTime[defOrderSegMax];
 
@@ -53,19 +53,17 @@ typedef struct _echProtoInfo
     EchFtpCfg_t ftp;
 
     ErrorCode_t (*GetProtoCfg)(void *pvProto, void *pvCfgObj);
-    ErrorCode_t (*SetProtoCfg)(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam);
-    int (*BnWIsListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWGetListSizeCfg)(uint8_t *path, uint16_t *size);
-    int (*BnWGetListCfg)(uint8_t *path, uint16_t idx, uint8_t *strID);
-    int (*BnWAddListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWDeleteListCfg)(uint8_t *path, uint8_t *strID);
-    int (*BnWFlushListCfg)(uint8_t *path);
+    int (*BnWIsListCfg)(char *path, char *strID);
+    int (*BnWGetListSizeCfg)(char *path, uint16_t *size);
+    int (*BnWGetListCfg)(char *path, uint16_t idx, char *strID);
+    int (*BnWAddListCfg)(char *path, char *strID);
+    int (*BnWDeleteListCfg)(char *path, char *strID);
+    int (*BnWFlushListCfg)(char *path);
 
 } echProtoInfo_t;
 
 typedef struct _echProtoStatus
 {
-    uint32_t ulStatus;
     uint8_t fault[6];
     uint8_t warning[6];
     uint8_t protect[6];
@@ -94,12 +92,12 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_ORDER       6 //交易记录
 #define ECH_CMDID_SET_SUCC    7 //设置成功
 #define ECH_CMDID_SET_FAIL    8 //设置失败
-#define ECH_CMDID_SET_POWERFEE  9  //平台下发电价设置
+#define ECH_CMDID_SET_ENERGYFEE  9  //平台下发电价设置
 #define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
 #define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
 #define ECH_CMDID_SET_TIMESEG   12 //平台下发尖峰平谷时间段设置
 #define ECH_CMDID_SET_KEY       13 //平台下发密钥变更
-#define ECH_CMDID_REQ_POWERFEE  14 //平台查询充电桩当前电费
+#define ECH_CMDID_REQ_ENERGYFEE 14 //平台查询充电桩当前电费
 #define ECH_CMDID_REQ_SERVFEE   15 //平台查询充电桩当前服务费
 #define ECH_CMDID_REQ_CYC       16 //平台查询上报时间间隔
 #define ECH_CMDID_REQ_TIMESEG   17 //平台查询尖峰平谷时间段
@@ -114,20 +112,21 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_ADD_BNW       26 //平台新增黑白名单 BNW = Black and White
 #define ECH_CMDID_DEL_BNW       27 //平台删除黑白名单
 #define ECH_CMDID_CARD_START     28 //充电桩请求有卡启动充电
-#define ECH_CMDID_CARD_START_RES 29 //充电桩上报有卡充电启动结果
-#define ECH_CMDID_CARD_STOP_RES  30 //充电桩上报有卡充电停止充电
-#define ECH_CMDID_CARD_RTDATA    31 //充电桩上报有卡实时充电数据
+#define ECH_CMDID_CARD_START_PWD 29 //充电桩带密码请求有卡启动充电
+#define ECH_CMDID_CARD_START_RES 30 //充电桩上报有卡充电启动结果
+#define ECH_CMDID_CARD_STOP_RES  31 //充电桩上报有卡充电停止充电
+#define ECH_CMDID_CARD_RTDATA    32 //充电桩上报有卡实时充电数据
 //---运维监控
-#define ECH_CMDID_UP_FAULT      32 //充电桩上报故障信息
-#define ECH_CMDID_UP_WARNING    33 //充电桩上报告警与保护信息
+#define ECH_CMDID_UP_FAULT      33 //充电桩上报故障信息
+#define ECH_CMDID_UP_WARNING    34 //充电桩上报告警与保护信息
 //---远程升级
-#define ECH_CMDID_SET_OTA       34 //平台下发软件升级命令
-#define ECH_CMDID_REQ_OTA_DW    35 //平台查询软件下载是否成功
-#define ECH_CMDID_OTA_START     36 //充电桩上报进入升级状态
-#define ECH_CMDID_OTA_RESULT    37 //充电桩上报升级结果
+#define ECH_CMDID_SET_OTA       35 //平台下发软件升级命令
+#define ECH_CMDID_REQ_OTA_DW    36 //平台查询软件下载是否成功
+#define ECH_CMDID_OTA_START     37 //充电桩上报进入升级状态
+#define ECH_CMDID_OTA_RESULT    38 //充电桩上报升级结果
 
 /*命令个数*/
-#define ECH_CMD_MAX             38
+#define ECH_CMD_MAX             39
 
 typedef struct
 {

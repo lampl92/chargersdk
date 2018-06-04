@@ -10,10 +10,11 @@
 
 void DiagVoltageError(CON_t *pCON);
 void DiagCurrentError(CON_t *pCON);
-void DiagTempError(CON_t *pCON);
+void DiagCONTempError(CON_t *pCON);
 void DiagFreqError(CON_t *pCON);
 void DiagPlugError(CON_t *pCON);
 void DiagLockError(CON_t *pCON);
 void DiagEVSEError(CON_t *pCON);
+void DiagEVSETempError(EVSE_t *pEVSE);
 
 #endif

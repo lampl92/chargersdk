@@ -88,11 +88,11 @@ static void Data_Flush(WM_MESSAGE *pMsg)
 //    pCON->status.GetChargingPower(pCON);
     sprintf(temp_buf, "%.2f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent) / 1000);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_6), temp_buf);//充电功率
-    sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_7), temp_buf);//充入电量
     sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_8), temp_buf);//当前服务费
-    sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
+    sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergyFee);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_9), temp_buf);//当前电费
     sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_10), temp_buf);//消费总额

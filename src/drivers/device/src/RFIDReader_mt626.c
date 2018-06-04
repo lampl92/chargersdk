@@ -5,17 +5,15 @@
 * @version v1.0
 * @date 2016-12-14
 */
-#include <stdlib.h>
-#include <string.h>
 #include "RFIDReader_mt626.h"
 #include "bsp_uart.h"
+#include "retarget.h"
+#include "evse_debug.h"
+#include <stdlib.h>
+#include <string.h>
 
-
-/** 移植说明：根据系统实现MT626DelayMS，MT626Write ，MT626Read 三个函数*/
-
-
-extern void vTaskDelay( const TickType_t xTicksToDelay );
-
+/** 移植说明：根据系统实现MT626DelayMS，MT626UartInit, MT626UartDeInit, MT626Write，MT626Read 函数*/
+#include "cmsis_os.h"
 
 /** @brief 延时函数,用于命令传输过程中等待
  *
@@ -25,8 +23,9 @@ extern void vTaskDelay( const TickType_t xTicksToDelay );
  */
 static void MT626DelayMS(uint32_t ms)
 {
-    vTaskDelay(ms);
+    osDelay(ms);
 }
+
 /** @brief
  *
  * @param data uint8_t* 要发送的数据
@@ -34,9 +33,10 @@ static void MT626DelayMS(uint32_t ms)
  * @return uint32_t 已发送的长度
  *
  */     
+#include "evse_globals.h"
 static uint32_t MT626Write(uint8_t *data, uint32_t len)
 {
-    return uart_write(UART_PORT_RFID, data, len);
+    return uart_write_fast(pRFIDDev->uart_handle, data, len);
 }
 /** @brief
  *
@@ -44,10 +44,10 @@ static uint32_t MT626Write(uint8_t *data, uint32_t len)
  * @param pRecvdLen uint8_t*  读取的数据长度
  * @return void
  *
- */     
+ */
 static void MT626Read(uint8_t *data, uint32_t *pRecvdLen)
 {
-    *pRecvdLen = uart_read(UART_PORT_RFID, data, 0, 1);
+    *pRecvdLen = uart_read_wait(pRFIDDev->uart_handle, data, MT626_RECVBUFF_MAX, 10);
 }
 
 /** @brief 异或计算
@@ -122,6 +122,7 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pulRecvdLe
     uint8_t *pucRecvBuffer;
     uint8_t ucRecvdBCC, ucCalcBCC;
     MT_RESULT res;
+    int i;
 
     ucRecvdBCC = 0;
 
@@ -132,7 +133,6 @@ static MT_RESULT recvResponse(void *pObj, uint8_t ucSendID, uint32_t *pulRecvdLe
     {
         return MT_COM_FAIL;
     }
-
     switch(ucSendID)
     {
     case MT626_FIND_CMD:                        //#0  寻卡
@@ -230,7 +230,7 @@ static int makeStdCmd(void *pObj, uint8_t ucSendID, uint8_t *pucOptionData, uint
     uint8_t *pucSendBuffer;
     uint8_t ucOffset, bcc;
     MT626CMD_t *pMT626CMDObj;
-    uint8_t i;
+    int i;
 
     pMT626CMDObj = ((MT626COM_t *)pObj)->pMT626CMD[ucSendID];
     pucSendBuffer = ((MT626COM_t *)pObj)->pucSendBuffer;
@@ -457,7 +457,6 @@ MT626COM_t *MT626COMCreate(void)
     {
         return NULL;
     }
-
     for(i = 0; i < MT626_CMD_MAX; i++)
     {
         pMT626->pMT626CMD[i] = NULL;

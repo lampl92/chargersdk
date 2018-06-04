@@ -30,13 +30,15 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define PWM4_ON      HAL_TIM_OC_Start_IT(&htim8, TIM_CHANNEL_3)//¿ªÆôPWM2
 
 #define PWM1_OFF     ;//HAL_TIM_OC_Stop_IT(&htim2, TIM_CHANNEL_1)//¹Ø±ÕPWM1
-#define PWM2_OFF     HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
+#define PWM2_OFF     ;//HAL_TIM_OC_Stop_IT(&htim4, TIM_CHANNEL_2)//¹Ø±ÕPWM2
 
 #define GET_CC1          HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)
 #define GET_CC2         HAL_GPIO_ReadPin(GPIOI, GPIO_PIN_11)
 #define GET_GUN_STATE_1  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
 #define GET_GUN_STATE_2  HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9)
-#define Get_Power_Status (~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3) & 0x01)
+#define Get_Power_Status           (~HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_3) & 0x01)
+#define GET_RELAY1_STATE_1         (~HAL_GPIO_ReadPin(GPIOH, GPIO_PIN_7) & 0x01)//双枪交流接触器1常开辅助节点检测返回1位闭合0位断开 枪1
+#define GET_RELAY1_STATE_2         (~HAL_GPIO_ReadPin(GPIOH, GPIO_PIN_8) & 0x01)//双枪交流接触器2常开辅助节点检测返回1位闭合0位断开 枪2
 
 #define RS485_EN  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_SET)
 #define RS485_DIS HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,GPIO_PIN_RESET)
@@ -44,8 +46,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define cs_zl_set   do{Chip2.cs_zl=1;write_pca9554_2();}while(0)
 #define cs_zl_reset do{Chip2.cs_zl=0;write_pca9554_2();}while(0)
 
-#define GPRS_reset      do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
-#define GPRS_set    do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
+#define GPRS_reset      do {Chip1.GPRS_key=0;write_pca9554_1();} while(0)
+#define GPRS_set    do {Chip1.GPRS_key=1;write_pca9554_1();} while(0)
 
 #define TIMER5_ON    HAL_TIM_Base_Start_IT(&htim5)
 #define TIMER5_OFF   HAL_TIM_Base_Stop_IT(&htim5)
@@ -58,17 +60,19 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 
 #define PWM1_1000  TIM_SetTIM2Compare1(TIMER_MAX)
 #define PWM1_535   TIM_SetTIM2Compare1(465)
+#define PWM1_0   TIM_SetTIM2Compare1(1000)
 
-#define RELAY2_ON  user_pwm_relay2_setvalue(1000);
-#define RELAY2_KEEP  user_pwm_relay2_setvalue(500);
-#define RELAY2_OFF  user_pwm_relay2_setvalue(0);
+#define RELAY2_ON  user_pwm_relay2_setvalue(1000)
+#define RELAY2_KEEP  user_pwm_relay2_setvalue(500)
+#define RELAY2_OFF  user_pwm_relay2_setvalue(0)
 
-#define RELAY1_ON  user_pwm_relay1_setvalue(1000);
-#define RELAY1_KEEP   user_pwm_relay1_setvalue(500);
-#define RELAY1_OFF  user_pwm_relay1_setvalue(0);
+#define RELAY1_ON  user_pwm_relay1_setvalue(1000)
+#define RELAY1_KEEP   user_pwm_relay1_setvalue(500)
+#define RELAY1_OFF  user_pwm_relay1_setvalue(0)
 
-#define PWM2_1000  do{TIM_SetTIM4Compare1(TIMER_MAX);}while(0)
-#define PWM2_535   do{TIM_SetTIM4Compare1(535);}while(0)
+#define PWM2_1000  TIM_SetTIM4Compare1(TIMER_MAX)
+#define PWM2_535   TIM_SetTIM4Compare1(465)
+#define PWM2_0   TIM_SetTIM4Compare1(1000)
 
 #define write_chip1 0x40 //0100 0000
 #define read_chip1 0x41 //0100 0001
@@ -76,10 +80,10 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define write_chip2 0x42 //0100 0010
 #define read_chip2 0x43 //0100 0011
 
-#define TEMP_L_OUT 0X00 //板卡输出N
-#define TEMP_L_IN  0X01 //    L
-#define TEMP_N_OUT 0X02 //市电输入N
-#define TEMP_N_IN  0X03 //市电输入L
+#define TEMP_N_OUT  0X00 //板卡输出N
+#define TEMP_L_OUT  0X01 //    L
+#define TEMP_N_IN   0X02 //市电输入N
+#define TEMP_L_IN   0X03 //市电输入L
 #define TEMP_GUN1_POSITIVE  0X04
 #define TEMP_GUN1_NEGATIVE  0X05
 #define TEMP_GUN2_POSITIVE  0X06
@@ -95,12 +99,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define green    1
 #define blue     2
 
-#define voltage  0x000b
-#define current  0x000c
-#define power    0x000d
-#define electric_energy_l 0x0001
-#define electric_energy_h 0x0000
-#define frequency 0x0011
+
 
 #define	AXISDATA_REG	0x28
 #define lock_timer      20
@@ -112,8 +111,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define temper_k   100
 #define CP1_k      0.0032
 #define CP2_k      0.0032//14.1/3??·???±???
-#define electricity_meter_num 2
-#define TIMER_MAX 1
+#define electricity_meter_num 4
+#define TIMER_MAX 1 //不能写成0
 typedef struct
 {
     unsigned short va_samp[samp_sum];
@@ -247,13 +246,16 @@ void Close_gun_2(void);
 void Open_gun_2(void);
 void get_samp_point(void);//ÓÃÊ±30¦ÌS
 void Buzzer_control(uint8_t state);
-uint8_t Get_State_relay(void);
+uint8_t Get_State_relay(uint32_t relay_id);
 uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n, flag_pwm_out_l, flag_gun_Close, flag_gun_Open, flag_power_out_l, flag_power_out_n;
 uint16_t num_cp1, num_cp2;
 double vref, va;
 uint8_t RS485_RX_MODBUS_CNT;
 uint32_t CD4067_sum, leakage_current_sum, va_samp_sum, ia_samp_sum, CP2_sum, CP1_sum, CP1_sum_sys, CP2_sum_sys;
-uint8_t   pwm_samp_timer, pwm_samp_flag;
+uint8_t   pwm_samp_timer, pwm_samp_flag,pwm_samp_timer_cp2, pwm_samp_flag_cp2;
 extern samp Sys_samp;
+
+double curr2duty(double rate_curr);
+void curr2pwm(double rate_curr, uint8_t con_id);
 #endif /* USER_APP_H_INCLUDED */

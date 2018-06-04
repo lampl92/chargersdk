@@ -12,16 +12,10 @@ typedef enum
 {
     REMOTE_NO,
     REMOTE_CONNECTED,
-    REMOTE_REGEDITED,
+    REMOTE_LOGINED,
     REMOTE_RECONNECT,
     REMOTE_ERROR
 } RemoteState_t;
-
-typedef enum
-{
-    REMOTEHEART_IDLE,
-    REMOTEHEART_RECV
-} RemoteHeartState_e;
 
 ////////远程状态///////////
 

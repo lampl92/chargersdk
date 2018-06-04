@@ -4,7 +4,7 @@
   <BspID>com.visualgdb.bsp.in-place</BspID>
   <BspVersion>1.0</BspVersion>
   <McuID>STM32F429IG</McuID>
-  <MCUDefinitionFile>D:\DPC\workspace\Projects\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
+  <MCUDefinitionFile>D:\source\repos\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
   <MCUProperties>
     <Entries />
   </MCUProperties>
@@ -21,6 +21,7 @@
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
         <string>USE_FreeRTOS=1</string>
+        <string>BOOTLOADER=1</string>
       </PreprocessorMacros>
       <IncludeDirectories>
         <string>.</string>
@@ -52,6 +53,10 @@
         <string>../../../src/middlewares/yaffs2</string>
         <string>../../../src/middlewares/yaffs2/direct</string>
         <string>../../../src/middlewares/yaffs2/direct/nanddrv</string>
+        <string>../../../src/net/user</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common</string>
+        <string>../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer</string>
       </IncludeDirectories>
       <AdditionalLibraries>
         <string>compactcpp</string>
@@ -184,7 +189,7 @@
     <RAMSize>262144</RAMSize>
     <FLASHBase>134217728</FLASHBase>
     <RAMBase>536870912</RAMBase>
-    <MCUDefinitionFile>D:\DPC\workspace\Projects\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
+    <MCUDefinitionFile>D:\source\repos\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
     <AdditionalSourcesRequiredForTesting>false</AdditionalSourcesRequiredForTesting>
   </InPlaceMCU>
   <MCUMakFile>stm32.mak</MCUMakFile>

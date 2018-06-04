@@ -23,6 +23,4 @@ set folder3="%maj%.%min%.%patch%"
 for /f "delims=" %%t in ('%crc32sum% -r %source%') do set _crc32=%%t
 set crc32=%_crc32:~34,8%
 md .\Release\chargesdk\%folder1%\%folder2%\%maj%.%min%.%patch%
-copy /y %source% .\Release\chargesdk\%folder1%\%folder2%\chargesdk.bin.new
-copy /y %source% .\Release\chargesdk\%folder1%\%folder2%\01%crc32%
-copy /y %source% .\Release\chargesdk\%folder1%\%folder2%\%folder3%\01%crc32%
+copy /y %source% .\Release\chargesdk\%folder1%\%folder2%\%folder3%\new_fw_%crc32%

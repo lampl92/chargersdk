@@ -20,6 +20,34 @@
 #define ParamTypeObj        7
 #define ParamTypeS32        8
 
+ErrorCode_t cfgobj_get_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_get_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_get_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_get_int32(cJSON *pCfgObj, int32_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_get_double(cJSON *pCfgObj, double *retval, char *fmt, ...);
+ErrorCode_t cfgobj_get_string(cJSON *pCfgObj, char *retval, char *fmt, ...);
+
+ErrorCode_t cfgobj_set_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_set_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_set_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_set_int32(cJSON *pCfgObj, int32_t *retval, char *fmt, ...);
+ErrorCode_t cfgobj_set_double(cJSON *pCfgObj, double *retval, char *fmt, ...);
+ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *retval, char *fmt, ...);
+
+ErrorCode_t cfg_get_uint8(char *path, uint8_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_uint16(char *path, uint16_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_uint32(char *path, uint32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_int32(char *path, int32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_get_double(char *path, double *retval, char *fmt, ...);
+ErrorCode_t cfg_get_string(char *path, char *retval, char *fmt, ...);
+
+ErrorCode_t cfg_set_uint8(char *path, uint8_t *retval, char *fmt, ...);
+ErrorCode_t cfg_set_uint16(char *path, uint16_t *retval, char *fmt, ...);
+ErrorCode_t cfg_set_uint32(char *path, uint32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...);
+ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...);
+ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...);
+
 ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj);
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode);
 

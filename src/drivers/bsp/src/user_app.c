@@ -4,9 +4,10 @@
 #include <math.h>
 #include "user_app.h"
 #include "bsp_timer.h"
-#include "electric_energy_meter.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "evse_globals.h"
+#include "taskcreate.h"
 float frequency_test;
 samp Sys_samp;
 void user_pwm_relay2_setvalue(uint16_t value);
@@ -21,6 +22,7 @@ static void value_reset(void)
     Sys_samp.DC.TEMP2 = 0;
     Sys_samp.DC.TEMP3 = 0;
     Sys_samp.DC.TEMP4 = 0;
+    Chip1.RESET_3G = 1;
 }
 const double  resistance[146] =
 {
@@ -88,9 +90,36 @@ float get_CD4067(void)
     CD4067_sum = 0;
     return Sys_samp.DC.CD4067;
 }
-uint8_t Get_State_relay(void)
+uint8_t Get_State_relay(uint32_t relay_id)
 {
-    return ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+    if (relay_id == 0)//L
+    {
+        if (pEVSE->info.ucTotalCON > 1)
+        {
+            return GET_RELAY1_STATE_1;
+        }
+        else
+        {
+            uint16_t i, j = 0;
+            for (i = 0; i < 50; i++)
+            {
+                j += ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+                bsp_DelayUS(500);
+            }
+            if (j >= 3)
+            {
+                return 1; //on
+            }  
+            else
+            {    
+                return 0; //off
+            }
+        }
+    }
+    else if (relay_id == 1)//N
+    {
+        return GET_RELAY1_STATE_2;
+    }
 }
 /********************************
 *蜂鸣器状态控制函数
@@ -109,145 +138,153 @@ float get_dc_massage(uint8_t DC_channel)
     float ad_value, re_value;
     float dc_data;
 
-    Chip1.a_select = DC_channel >> 0 & 0x01;
-    Chip1.b_select = DC_channel >> 1 & 0x01;
-    Chip1.c_select = DC_channel >> 2 & 0x01;
-    Chip1.d_select = DC_channel >> 3 & 0x01;
-    Chip1.cs1_select = 1;
-    write_pca9554_1();
-    vTaskDelay(25);
-    ad_samp_value = get_CD4067();
-    switch (DC_channel)
+    if (xSemaphoreTake(xTempMutex, 1000) == pdPASS)
     {
-    case 0:
-        ad_value = (double)(ad_samp_value * 3) / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
+        Chip1.a_select = DC_channel >> 0 & 0x01;
+        Chip1.b_select = DC_channel >> 1 & 0x01;
+        Chip1.c_select = DC_channel >> 2 & 0x01;
+        Chip1.d_select = DC_channel >> 3 & 0x01;
+        Chip1.cs1_select = 1;
+        write_pca9554_1();
+        vTaskDelay(25);
+        ad_samp_value = get_CD4067();
+        switch (DC_channel)
         {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+        case 0:
+            ad_value = (double)(ad_samp_value * 3) / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP1 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP1;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP1 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP1;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 1:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 1:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP2 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP2;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP2 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP2;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 2:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 2:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP3 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP3;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP3 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP3;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 3:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 3:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP4 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP4;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP4 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP4;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 4:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 4:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM1 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM1;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM1 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM1;
+                }
             }
-        }
-        //  return dc_data;
-        break;
-    case 5:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //  return dc_data;
+            break;
+        case 5:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM2 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM2;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM2 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM2;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 6:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 6:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM3 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM3;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM3 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM3;
+                }
             }
-        }
-        //return dc_data;
-        break;
-    case 7:
-        ad_value = (double)ad_samp_value * 3 / 4096;
-        re_value = (ad_value * 30) / (3 - ad_value);
-        for (j = 0; j < 145; j++)
-        {
-            if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+            //return dc_data;
+            break;
+        case 7:
+            ad_value = (double)ad_samp_value * 3 / 4096;
+            re_value = (ad_value * 30) / (3 - ad_value);
+            for (j = 0; j < 145; j++)
             {
-                Sys_samp.DC.TEMP_ARM4 = j - 40;
-                dc_data = (float)Sys_samp.DC.TEMP_ARM4;
+                if ((re_value >= (resistance[j + 1])) && (re_value < (resistance[j])))
+                {
+                    Sys_samp.DC.TEMP_ARM4 = j - 40;
+                    dc_data = (float)Sys_samp.DC.TEMP_ARM4;
+                }
             }
-        }
 
-        //return dc_data;
-        break;
-    case 8:
-        break;
-    case 9:
-        break;
-    case 10:
-        break;
-    case 11:
-        break;
-    case 12:
-        break;
-    case 13:
-        break;
-    case 14:
-        break;
-    case 15:
-        dc_data = ad_samp_value;
-        //return dc_data;
-        break;
+                    //return dc_data;
+            break;
+        case 8:
+            break;
+        case 9:
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        case 12:
+            break;
+        case 13:
+            break;
+        case 14:
+            break;
+        case 15:
+            dc_data = ad_samp_value;
+            //return dc_data;
+            break;
 
-    default :
+        default :
 
-        break;
+            break;
+        }
+        xSemaphoreGive(xTempMutex);
+        return dc_data;
     }
-    return dc_data;
+    else
+    {
+        return -1;
+    }
 }
 void get_CP1(void)
 {
@@ -265,26 +302,13 @@ void get_CP1(void)
 double get_CP2(void)
 {
     unsigned short i;
-
-    for (i = 0; i < samp_sum; i++)
+    float dma_cp2_sum = 0;
+    for (i = 0; i < samp_dma; i++)
     {
-        if (Sys_samp.DC_samp.CP2[i] >= 1000)
-        {
-            CP2_sum_sys += Sys_samp.DC_samp.CP2[i];
-            num_cp2++;
-        }
+        dma_cp2_sum += AD_samp_dma[i].CP2;
     }
-    if (num_cp2 <= 20)
-    {
-        Sys_samp.DC.CP2 = 0;
-    }
-    else
-    {
-        Sys_samp.DC.CP2 = (CP2_sum_sys * CP2_k) / num_cp2 + 0.2;
-    }
-    CP2_sum_sys = 0;
-    num_cp2 = 0;
-    return Sys_samp.DC.CP2;
+    dma_cp2_sum = dma_cp2_sum / samp_dma;
+     Sys_samp.DC.CP2 = dma_cp2_sum * CP2_k + 0.2;
 }
 
 void Delay_ms(unsigned long long time)
@@ -416,12 +440,11 @@ void Peripheral_Init(void)
     led_state_init();
     MX_DMA_Init();
     MX_ADC1_Init();
-    MX_TIM2_Init();//1ºÅÇ¹PWMÆµÂÊ1K
+    MX_TIM2_Init();//CP1PWM
     MX_TIM3_Init();//1ºÅÇ¹PWMÆµÂÊ1K
-    MX_TIM4_Init();//2ºÅÇ¹PWMÆµÂÊ1K
+    MX_TIM4_Init();//CP2PWM
     MX_TIM5_Init();//ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     MX_TIM8_Init();
-    RS485_Init(9600);
     Lis2dh12_init();
     DMA_START();
     PWM1_ON;
@@ -434,13 +457,14 @@ void Peripheral_Init(void)
     //Close_gun_1();
     //POWER_L_CLOSE();
     //POWER_N_CLOSE();
-    vref = 2045;
-    PWM1_1000;
+   PWM1_1000;
+   PWM2_1000;
    //user_pwm_relay1_setvalue(1000);
   // user_pwm_relay2_setvalue(1000);
    // vref = Get_State_relay();
-  //  RELAY1_ON;
- //   RELAY2_ON;
+  // RELAY1_ON;
+   // RELAY2_ON;
+    //vref = Get_State_relay();
  //   vref=get_dc_massage(VREF_1v5);
 //   Get_State_relay();
 //         Get_Electricity_meter_massage_frequency();
@@ -462,4 +486,40 @@ void DMA2_Stream0_IRQHandler(void)
     /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
       /* USER CODE END DMA2_Stream0_IRQn 1 */
+}
+
+double curr2duty(double rate_curr)
+{
+    double duty;
+    //7kw duty = 53.3%, 40kw duty = 89.2%
+    if (rate_curr <= 51 && rate_curr >= 6)
+    { 
+        duty = rate_curr / 0.6;
+    }
+    else if (rate_curr > 51 && rate_curr <= 63)
+    {
+        duty = rate_curr / 2.5 + 64;
+    }
+    else//默认
+    {
+        duty = 53.3;
+    }
+    return duty;
+}
+
+void curr2pwm(double rate_curr, uint8_t con_id)
+{
+    uint32_t compare;
+    double duty;
+    
+    duty = curr2duty(rate_curr);
+    compare = 1001 - duty * 10;
+    if (con_id == 0)
+    {
+        TIM_SetTIM2Compare1(compare);//467=>7kw   108=>40kw
+    }
+    if (con_id == 1)
+    {
+        TIM_SetTIM4Compare1(compare);
+    }
 }

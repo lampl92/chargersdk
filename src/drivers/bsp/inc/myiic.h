@@ -2,7 +2,7 @@
 #define _MYIIC_H
 
 #include "stm32f4xx.h"
-#include "evse_define.h"
+#include "bsp_gpio.h"
 
 //IO方向设置
 #define SDA_IN()  {GPIOB->MODER&=~(3<<(7*2));GPIOB->MODER|=0<<7*2;}	//PH5输入模式

@@ -9,17 +9,18 @@
 #include <string.h>
 #include "evse_globals.h"
 #include "connector.h"
+#include "line.h"
 #include "bsp.h"
 #include "user_app.h"
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
-#include "electric_energy_meter.h"
 #include "timercallback.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "timers.h"
 
+#if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
     CON_t *pCON;
@@ -67,6 +68,7 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
         return 0;
     }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /*                               设置充电接口信息到配置文件                    */
 /*---------------------------------------------------------------------------*/
@@ -112,7 +114,7 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
                 cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
                 break;
             case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
+                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
                 break;
             case ParamTypeList:
                 break;
@@ -135,335 +137,6 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
 /*---------------------------------------------------------------------------*/
 /*                              从文件获取充电接口信息                         */
 /*---------------------------------------------------------------------------*/
-/** @todo (rgw#1#): 增加枪充电类型CONType */
-
-static ErrorCode_t GetCONType(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpType;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpType = defCONType_AC;
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnType);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpType = jsItem->valueint;
-
-    /*********************/
-    if(tmpType > 0 && tmpType < 6)
-    {
-        pCON->info.ucCONType = tmpType;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-    return  errcode;
-}
-static ErrorCode_t GetCONQRCode(void *pvCON, void *pvCfgObj)
-{
-    /** @todo (rgw#1#): 该函数未测试 */
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpQRCode[defQRCodeLength];
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    memset(tmpQRCode, 0, defQRCodeLength);
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnQRCode);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    strncpy(tmpQRCode, jsItem->valuestring, strlen(jsItem->valuestring));
-
-    /*********************/
-    if(strlen(tmpQRCode) > 0)
-    {
-        strncpy(pCON->info.strQRCode, tmpQRCode, strlen(tmpQRCode));
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-    return  errcode;
-}
-
-static ErrorCode_t GetSocketType(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    uint8_t tmpType;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpType = defSocketTypeB;
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketType);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpType = jsItem->valueint;
-
-    /*********************/
-    if(tmpType == defSocketTypeB || tmpType == defSocketTypeC)
-    {
-        pCON->info.ucSocketType = tmpType;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-static ErrorCode_t GetVolatageLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpVoltUpLim;
-    double tmpVoltLowLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpVoltUpLim = 250;//(V)
-    tmpVoltLowLim = 190;//(V)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-    /** @todo (rgw#1#): 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpVoltUpLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnVolatageLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpVoltLowLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpVoltLowLim > 0 && tmpVoltUpLim > 0)
-    {
-        pCON->info.dVolatageUpperLimits = tmpVoltUpLim;
-        pCON->info.dVolatageLowerLimits = tmpVoltLowLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetACTempLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpACTempUpperLim;
-    double tmpACTempLowerLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpACTempUpperLim = 105;//(℃)
-    tmpACTempLowerLim = -40;//(℃)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpACTempUpperLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnACTempLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpACTempLowerLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpACTempUpperLim < 1000 && tmpACTempLowerLim > -100)
-    {
-        pCON->info.dACTempUpperLimits = tmpACTempUpperLim;
-        pCON->info.dACTempLowerLimits = tmpACTempLowerLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetSocketTempLimits(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpSocketTempUpperLim;
-    double tmpSocketTempLowerLim;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpSocketTempUpperLim = 105;//(℃)
-    tmpSocketTempLowerLim = -40;//(℃)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempUpperLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpSocketTempUpperLim = jsItem->valuedouble;
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnSocketTempLowerLimits);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpSocketTempLowerLim = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpSocketTempUpperLim < 1000 && tmpSocketTempLowerLim > -100)
-    {
-        pCON->info.dSocketTempUpperLimits = tmpSocketTempUpperLim;
-        pCON->info.dSocketTempLowerLimits = tmpSocketTempLowerLim;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
-static ErrorCode_t GetRatedCurrent(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpCurr;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpCurr = 32;//(A)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedCurrent);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpCurr = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpCurr > 0)
-    {
-        pCON->info.dRatedCurrent = tmpCurr;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpPow;
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pCONCfgObj;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpPow = 7;//(kW)
-    errcode = ERR_NO;
-
-    pCONCfgObj = (cJSON *)pvCfgObj;
-
-    /** 从文件获取 */
-
-    jsItem = cJSON_GetObjectItem(pCONCfgObj, jnRatedPower);
-    if(jsItem == NULL)
-    {
-        return ERR_FILE_PARSE;
-    }
-    tmpPow = jsItem->valuedouble;
-
-    /*********************/
-    if(tmpPow > 0)
-    {
-        pCON->info.dRatedPower = tmpPow;
-    }
-    else
-    {
-        errcode = ERR_FILE_PARAM;
-    }
-
-    return  errcode;
-}
-
 /** @brief 从cfg文件获取充电枪配置
  *
  * @param pvCON void*
@@ -474,10 +147,6 @@ static ErrorCode_t GetRatedPower(void *pvCON, void *pvCfgObj)
 static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
 {
     cJSON *jsCfgObj;
-    cJSON *jsCONArray;
-    cJSON *jsCONObj;
-    int iArraySize;
-
     CON_t *pCON;
     int i;
     ErrorCode_t errcode = ERR_NO;
@@ -485,42 +154,45 @@ static ErrorCode_t GetCONCfg(void *pvCON, void *pvCfgObj)
     pCON = (CON_t *)pvCON;
 
     /*json解析*/
-    jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    if(jsCfgObj == NULL)
+    if (pvCfgObj == NULL)
     {
-        //errcode 已经在GetCfgObj中获得
-        goto exit;
+        jsCfgObj = GetCfgObj(pathEVSECfg, &errcode);
+        if (jsCfgObj == NULL)
+        {
+            return errcode;
+        }
     }
-    /*取出CON相关配置*/
-    jsCONArray = cJSON_GetObjectItem(jsCfgObj, jnCONArray);
-    if(jsCONArray == NULL)
+    else
     {
-        errcode = ERR_FILE_PARSE;
-        goto exit_parse;
+        jsCfgObj = (cJSON *)pvCfgObj;
     }
-    iArraySize = cJSON_GetArraySize(jsCONArray);//有多少个充电枪配置
-    if(iArraySize != pEVSE->info.ucTotalCON)
+    
+    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucCONType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnType);
+    cfgobj_get_uint8(jsCfgObj, &pCON->info.ucSocketType, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketType);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dVolatageLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnVolatageLowerLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dACTempUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnACTempUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dACTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnACTempLowerLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempUpperLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempUpperLimits);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dSocketTempLowerLimits, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnSocketTempLowerLimits);
+    //cfgobj_get_double(jsCfgObj, &pCON->info.dRatedCurrent, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedCurrent);
+    cfgobj_get_double(jsCfgObj, &pCON->info.dRatedPower, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnRatedPower);
+    if (pEVSE->info.ucPhaseLine == 1)
     {
-        errcode = ERR_FILE_PARAM;
-        goto exit_parse;
+        pCON->info.dRatedCurrent = pCON->info.dRatedPower * 1000 / 220.0;
     }
-    jsCONObj = cJSON_GetArrayItem(jsCONArray, pCON->info.ucCONID);
-    if(jsCONObj == NULL)
+    else// if(pEVSE->info.ucPhaseLine == 3)
     {
-        errcode = ERR_FILE_PARSE;
-        goto exit_parse;
+        pCON->info.dRatedCurrent = pCON->info.dRatedPower / 3.0 * 1000 / 220.0;
     }
-    THROW_ERROR(defDevID_File, errcode = GetCONType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONType()");
-    THROW_ERROR(defDevID_File, errcode = GetSocketType(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketType()");
-    THROW_ERROR(defDevID_File, errcode = GetVolatageLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetVolatageLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetACTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetACTempLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetSocketTempLimits(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetSocketTempLimits()");
-    THROW_ERROR(defDevID_File, errcode = GetRatedCurrent(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedCurrent()");
-    THROW_ERROR(defDevID_File, errcode = GetRatedPower(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetRatedPower()");
-    THROW_ERROR(defDevID_File, errcode = GetCONQRCode(pvCON, jsCONObj), ERR_LEVEL_WARNING, "GetCONQRCode()");
-exit_parse:
+    cfgobj_get_string(jsCfgObj, pCON->info.strQRCode, "%s:%d.%s", jnCONArray, pCON->info.ucCONID, jnQRCode);
+    
+    ////EVSE使用CON温度
+    pEVSE->info.dACTempLowerLimits = pCON->info.dACTempLowerLimits;
+    pEVSE->info.dACTempUpperLimits = pCON->info.dACTempUpperLimits;
+    ////
+    
     cJSON_Delete(jsCfgObj);
-exit:
     return errcode;
 }
 
@@ -533,171 +205,63 @@ exit:
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 /** ！！！ 注意不同ID对硬件的不同操作 ！！！ */
 
-
-
-/** @brief 获取充电电压，检测精度 +/-0.1V
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingVoltage(void *pvCON)
+/**
+读电表
+*/
+static ErrorCode_t GetChargingData(void *pvCON)
 {
     CON_t *pCON;
     uint8_t ucCONID;
-    double tmpVolt;
+    double tmpVolt = 0;
+    double tmpCurr = 0;
+    double tmpPower = 0;
+    double tmpFreq = 0;
+    double tmpEnergy = 0;
     ErrorCode_t errcode;
-
+    int res;
+    int i;
+    
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpVolt = 0;
     errcode = ERR_NO;
 
-    /** 获取电压 */
-
-    if(ucCONID == 0)
-    {
-#ifdef DEBUG_DIAG_DUMMY
-        tmpVolt = 220;
+    /** 从电表获取 */
+#ifdef  DEBUG_DIAG_DUMMY
+    tmpVolt = 220;
+    tmpCurr = 32;
+    tmpFreq = 50;
+    tmpPower = pCON->status.dChargingPower;
+    tmpPower += 0.001;
+    tmpEnergy = pCON->status.dChargingEnergy;
+    tmpEnergy += 0.001;
 #else
-        tmpVolt = Get_Electricity_meter_massage_voltage(ucCONID+1);//get_va();
-#endif
-    }
-    if(ucCONID == 1)
+    res = meter->get_all(meter, ucCONID + 1);
+    if (res < 0)
     {
-        //tmpVolt=get_va();
+        errcode = ERR_CON_METER_FAULT;
+        return errcode; 
     }
-
-    /*********************/
+    for (i = 0; i < pEVSE->info.ucPhaseLine; i++)
+    {
+        pCON->status.dLineVolt[i] = meter->status.volt[i];
+        pCON->status.dLineCurr[i] = meter->status.curr[i];
+        
+        tmpVolt = meter->status.volt[i] > tmpVolt ? meter->status.volt[i] : tmpVolt;//取大
+        tmpCurr = meter->status.curr[i] > tmpCurr ? meter->status.curr[i] : tmpCurr;//取大
+        tmpPower += meter->status.pwr[i];//求和
+    }
+    tmpFreq = meter->status.freq;
+    tmpEnergy = meter->status.energy;
+#endif
 
     pCON->status.dChargingVoltage = tmpVolt;
-
-    return errcode;
-}
-
-/** @brief 获取充电电流，检测精度+/-0.1A
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingCurrent(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpCurr;
-    ErrorCode_t errcode;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    tmpCurr = 0;
-    errcode = ERR_NO;
-
-    /** 获取电流 */
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
-    {
-        errcode = ERR_CON_METER_FAULT;
-    }
-    else
-    {
-
-#ifdef DEBUG_DIAG_DUMMY
-        tmpCurr = 32;
-#else
-        tmpCurr = Get_Electricity_meter_massage_current(ucCONID + 1);
-#endif
-
-    }
-
-    /*********************/
-
     pCON->status.dChargingCurrent = tmpCurr;
-
-    return errcode;
-}
-
-/** @brief 获取电源频率
- *
- * @param pvCON void*
- * @return ErrorCode_t
- *                  ERR_NO
- *                  ERR_CON_METER_FAULT
- *
- */
-static ErrorCode_t GetChargingFrequence(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpFreq;
-    ErrorCode_t errcode;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-	tmpFreq = 0;
-    errcode = ERR_NO;
-
-    /** @todo (yuye#1#): 从电表获取 */
-    //meter id 0 == CON id 0
-#ifdef DEBUG_DIAG_DUMMY
-    tmpFreq = 50;
-#else
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
-    {
-        errcode = ERR_CON_METER_FAULT;
-    }
-    else
-    {
-        tmpFreq = Get_Electricity_meter_massage_frequency(ucCONID + 1);
-    }
-
-#endif
-
-    /*********************/
-
-    pCON->status.dChargingFrequence = tmpFreq;
-
-    return errcode;
-}
-
-static ErrorCode_t GetChargingPower(void *pvCON)
-{
-    CON_t *pCON;
-    uint8_t ucCONID;
-    double tmpPower;
-    ErrorCode_t errcode;
-
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-	tmpPower = 0;
-    errcode = ERR_NO;
-
-    /** @todo (yuye#1#): 从电表获取 */
-    if(Electricity_meter[ucCONID].flag.flag_erro == 1)
-    {
-		tmpPower = pCON->status.dChargingPower;//通信失败后，获取上次的值
-        errcode = ERR_CON_METER_FAULT;
-    }
-    else
-    {
-#ifdef DEBUG_DIAG_DUMMY
-        tmpPower = pCON->status.dChargingPower;
-        tmpPower += 0.0001;
-#else
-        tmpPower = Get_Electricity_meter_massage_energy(ucCONID + 1);
-#endif
-    }
-
-    /*********************/
-
     pCON->status.dChargingPower = tmpPower;
+    pCON->status.dChargingFrequence = tmpFreq; 
+    pCON->status.dChargingEnergy = tmpEnergy; 
 
     return errcode;
 }
-
 /** @brief 控制S1开关
  *
  * @param pvCON void*
@@ -716,13 +280,11 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     errcode = ERR_NO;
 
     /** ****************  */
-
-    //...
     if (ucCONID == 0)
     {
         if (cmd == SWITCH_ON)
         {
-            PWM1_535;
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else if (cmd == SWITCH_OFF)
         {
@@ -731,20 +293,15 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
     }
     else if (ucCONID == 1)
     {
-
-
         if (cmd == SWITCH_ON)
         {
-            PWM2_535;
+            curr2pwm(pCON->info.dRatedCurrent, ucCONID);
         }
         else
         {
             PWM2_1000;
         }
-
     }
-
-
     /*********************/
 
     return errcode;
@@ -760,12 +317,15 @@ static ErrorCode_t SetCPSwitch(void *pvCON, uint8_t cmd)
  */
 static ErrorCode_t GetCPState(void *pvCON)
 {
-    float cp1, cp2;
+    float cp;
     CON_t *pCON;
     uint8_t ucCONID;
     CONStatusType_t tmpCPState;
     ErrorCode_t errcode;
-    static uint32_t cp_err_cont;
+    static uint32_t cp1_err_cont;
+    static uint32_t cp2_err_cont;
+    uint32_t *pCP_err_cont;
+    __IO uint32_t *pCCRx;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
@@ -773,127 +333,90 @@ static ErrorCode_t GetCPState(void *pvCON)
     errcode = ERR_NO;
 
     /** ***********/
-
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpCPState = CP_6V_PWM;
 #else
-        cp1 = Sys_samp.DC.CP1;//get_CP1();
-        pCON->status.dCPVolt = cp1;
-        if((cp1 < 12.8f) && (cp1 > 11.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_12V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_12V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp1 < 9.8f) && (cp1 > 8.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_9V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_9V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp1 < 6.8f) && (cp1 > 5.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_6V_PWM;
-                cp_err_cont = 0;
-            }
-            else
-            {
-                tmpCPState = CP_6V;
-                cp_err_cont = 0;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else
-        {
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            tmpCPState = CP_ERR;
-            if (tmpCPState == CP_ERR)
-            {
-                cp_err_cont++;
-                tmpCPState = pCON->status.xCPState;
-            }
-            if (cp_err_cont >= 1)//50ms
-            {
-                SetCPSwitch(pCON, SWITCH_OFF);
-                cp_err_cont = 0;
-                tmpCPState = CP_ERR;
-                pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
-                errcode =  ERR_CON_CP_FAULT;
-            }
-        }
-#endif
-    }
-    else if(ucCONID == 1)
+    if (ucCONID == 0)
     {
-        cp1 = get_CP2();
-        if((cp2 < 12.8f) && (cp2 > 11.2f))
+        pCP_err_cont = &cp1_err_cont;
+        pCCRx = &(TIM2->CCR1);
+        pCON->status.dCPVolt = Sys_samp.DC.CP1; 
+    }
+    else if (ucCONID == 1)
+    {
+        pCP_err_cont = &cp2_err_cont;
+        pCCRx = &(TIM4->CCR2);
+
+        pCON->status.dCPVolt = Sys_samp.DC.CP2; 
+    }
+    
+    if ((pCON->status.dCPVolt < 12.8f) && (pCON->status.dCPVolt > 11.2f))
+    {
+        if (*pCCRx != TIMER_MAX)
         {
-            if(TIM4->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_12V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_12V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp2 < 9.8f) && (cp2 > 8.2f))
-        {
-            if(TIM4->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_9V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_9V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
-        }
-        else if((cp2 < 6.8f) && (cp2 > 5.2f))
-        {
-            if(TIM2->CCR1 != TIMER_MAX)
-            {
-                tmpCPState = CP_6V_PWM;
-            }
-            else
-            {
-                tmpCPState = CP_6V;
-            }
-            pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+            tmpCPState = CP_12V_PWM;
+            *pCP_err_cont = 0;
         }
         else
         {
+            tmpCPState = CP_12V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.2f))
+    {
+        if (*pCCRx != TIMER_MAX)
+        {
+            tmpCPState = CP_9V_PWM;
+            *pCP_err_cont = 0;
+        }
+        else
+        {
+            tmpCPState = CP_9V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else if((pCON->status.dCPVolt < 6.8f) && (pCON->status.dCPVolt > 5.2f))
+    {
+        if (*pCCRx != TIMER_MAX)
+        {
+            tmpCPState = CP_6V_PWM;
+            *pCP_err_cont = 0;
+        }
+        else
+        {
+            tmpCPState = CP_6V;
+            *pCP_err_cont = 0;
+        }
+        pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
+    }
+    else
+    {
+
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+        tmpCPState = CP_ERR;
+        if (tmpCPState == CP_ERR)
+        {
+            (*pCP_err_cont)++;
+            tmpCPState = pCON->status.xCPState;
+        }
+        if (*pCP_err_cont >= 2)//50ms
+        {
+            SetCPSwitch(pCON, SWITCH_OFF);
+            *pCP_err_cont = 0;
             tmpCPState = CP_ERR;
             pCON->status.ulSignalFault |= defSignalCON_Fault_CP;
             errcode =  ERR_CON_CP_FAULT;
-        } ;
+        }
     }
+#endif
     /*********************/
 
     pCON->status.xCPState = tmpCPState;
@@ -913,34 +436,18 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
 {
     CON_t *pCON;
     uint8_t ucCONID;
-    uint8_t tmpCPPWM;
     ErrorCode_t errcode;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpCPPWM = 53; //负载100%时，PWM=53, 负载50%时，PWM= 27
     errcode = ERR_NO;
 
     if (ucLoadPercent == pCON->status.ucLoadPercent)//相同负载百分比不进行设置
     {
         return errcode;
     }
-    else//由于目前设置负载百分比会导致cp检测不准，暂时屏蔽该功能，技术突破后，屏蔽掉该else
-    {
-        pCON->status.ucLoadPercent = ucLoadPercent;
-        return errcode;
-    }
-    /** ************* */
-    if(ucCONID == 0)
-    {
-        TIM2->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent); //1001 - (53 * 10) * (ucLoadPercent / 100.0)
-    }
-    else if(ucCONID == 1)
-    {
-        TIM4->CCR1 = 1001 - (uint32_t)(5.3 * ucLoadPercent);
-    }
-    //负载百分比输入范围0~100；
-    //PWM
+    /*********************/
+    curr2pwm(pCON->info.dRatedCurrent * (ucLoadPercent / 100.0), ucCONID);
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;
@@ -1086,12 +593,11 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpLockState = LOCK;
 #else
+    if(ucCONID == 0)
+    {
         if(GET_GUN_STATE_1 == 1)
         {
             tmpLockState = UNLOCK;
@@ -1100,7 +606,6 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
         {
             tmpLockState = LOCK;
         }
-#endif
     }
     else if(ucCONID == 1)
     {
@@ -1113,6 +618,7 @@ static ErrorCode_t GetBTypeSocketLock(void *pvCON)
             tmpLockState = LOCK;
         }
     }
+#endif
     /*********************/
 
 
@@ -1184,6 +690,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     uint8_t ucCONID;
     double  tmpACLTemp;
     ErrorCode_t errcode;
+    int i;
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
@@ -1191,25 +698,23 @@ static ErrorCode_t GetACLTemp(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
-        tmpACLTemp = 40;
+    tmpACLTemp = 40;
 #else
-	    
-//        tmpACLTemp = (double)Sys_samp.DC.TEMP1;
-        tmpACLTemp = (double)get_dc_massage(TEMP_L_IN);
-        if(tmpACLTemp > 200 || tmpACLTemp < -40)
-        {
-            errcode = ERR_CON_ACTEMP_DECT_FAULT;
-        }
-#endif
-    }
-    else if(ucCONID == 1)
+    for (i = 0; i < 3; i++)
     {
+        errcode = pCON->line[i].GetTemp(&(pCON->line[i]), pCON, i);
+        if (pCON->line[i].status.dTemp > tmpACLTemp)
+        {
+            tmpACLTemp = pCON->line[i].status.dTemp;
+        }
     }
-
-
+        
+    if (tmpACLTemp > 200 || tmpACLTemp < -40)
+    {
+        errcode = ERR_CON_ACTEMP_DECT_FAULT;
+    }
+#endif
     /*********************/
 
     pCON->status.dACLTemp = tmpACLTemp;
@@ -1237,26 +742,20 @@ static ErrorCode_t GetACNTemp(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
-    //...
-    if(ucCONID == 0)
-    {
 #ifdef DEBUG_DIAG_DUMMY
         tmpACNTemp = 25;
 #else
-        
-        //tmpACNTemp = (double)Sys_samp.DC.TEMP3;
-        tmpACNTemp = (double)get_dc_massage(TEMP_L_OUT); 
-        if(tmpACNTemp > 200 || tmpACNTemp < -40)
-        {
-           errcode = ERR_CON_ACTEMP_DECT_FAULT;
-        }
-#endif
-    }
-    else if(ucCONID == 1)
+    errcode = pCON->line[defLineN].GetTemp(&(pCON->line[defLineN]), pCON, defLineN);
+    if (pCON->line[defLineN].status.dTemp > tmpACNTemp)
     {
+        tmpACNTemp = pCON->line[defLineN].status.dTemp;
     }
-
+    
+    if (tmpACNTemp > 200 || tmpACNTemp < -40)
+    {
+        errcode = ERR_CON_ACTEMP_DECT_FAULT;
+    }
+#endif
     /*********************/
 
     pCON->status.dACNTemp = tmpACNTemp;
@@ -1285,10 +784,9 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
     if(ucCONID == 0)
     {
-#ifndef DEBUG_DIAG_DUMMY_C
+#ifdef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
@@ -1300,11 +798,15 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
     }
     else if(ucCONID == 1)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpTemp = 25;
+#else
         tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
+#endif
     }
     /*********************/
 
@@ -1332,11 +834,9 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-
-    //...
     if(ucCONID == 0)
     {
-#ifndef DEBUG_DIAG_DUMMY_C
+#ifdef DEBUG_DIAG_DUMMY
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
@@ -1348,13 +848,16 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
     }
     else if(ucCONID == 1)
     {
+#ifdef DEBUG_DIAG_DUMMY
+        tmpTemp = 25;
+#else
         tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
         if(tmpTemp > 100 || tmpTemp < -40)
         {
             errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
+#endif
     }
-
     /*********************/
 
     pCON->status.dBTypeSocketTemp2 = tmpTemp;
@@ -1371,6 +874,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
 {
     CON_t *pCON;
     uint8_t ucCONID;
+    uint8_t ucRelayID;
     uint8_t tmpLStat;
     uint8_t tmpNStat;
     ErrorCode_t errcode;
@@ -1386,27 +890,36 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpLStat = SWITCH_ON;
     tmpNStat = tmpLStat;
 #else
-
-    tmpLStat = Get_State_relay();//1 : switch on
-    tmpNStat = tmpLStat;
+    if (pEVSE->info.ucTotalCON > 1)
+    {
+        ucRelayID = ucCONID;
+        tmpLStat = Get_State_relay(ucRelayID);//1 : switch on
+        tmpNStat = tmpLStat; 
+    }
+    else
+    {
+        //tmpLStat = 1 ==》switch on
+        tmpLStat = Get_State_relay(0);//L
+        tmpNStat = tmpLStat; 
+    }
     if (tmpLStat == SWITCH_ON)
     {
         pCON->status.ulSignalState |= defSignalCON_State_AC_A_Relay;
-        pCON->status.ulSignalState |= defSignalCON_State_AC_N_Relay;
     }
-    else if(tmpLStat == SWITCH_OFF)
+    else if (tmpLStat == SWITCH_OFF)
     {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_A_Relay;
+    }
+    if (tmpNStat == SWITCH_ON)
+    {
+        pCON->status.ulSignalState |= defSignalCON_State_AC_N_Relay;
+    }
+    else if (tmpNStat == SWITCH_OFF)
+    {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_N_Relay;
     }
 #endif
     /*********************/
-    /* @todo (yuye#1#): 触电粘连处理2017年4月10日 */
-//    if(触电粘连)
-//    {
-//        errcode = ERR_RELAY_PASTE;
-//    }
-
 
     pCON->status.ucRelayLState = tmpLStat;
     pCON->status.ucRelayNState = tmpNStat;
@@ -1419,7 +932,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
  * @param cmd uint8_t SWITCH_ON SWITCH_OFF
  * @return ErrorCode_t
  *
- */          //K1 K2指的是什么
+ */
 static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
 {
     CON_t *pCON;
@@ -1439,22 +952,49 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-            POWER_L_OPEN();
-            POWER_N_OPEN();
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                POWER_L_OPEN();
+            }
+            else
+            {
+                POWER_L_OPEN();
+                POWER_N_OPEN();
+            }
 #endif
         }
         else if(cmd == SWITCH_ON)
         {
 #ifdef DEBUG_DIAG_DUMMY
 #else
-            POWER_L_CLOSE();
-            POWER_N_CLOSE();
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                POWER_L_CLOSE();
+            }
+            else
+            {
+                POWER_L_CLOSE();
+                POWER_N_CLOSE();
+            }
 #endif
         }
     }
     else if(ucCONID == 1)
     {
-        ;
+        if (cmd == SWITCH_OFF)
+        {
+#ifdef DEBUG_DIAG_DUMMY
+#else
+            POWER_N_OPEN();
+#endif
+        }
+        else if (cmd == SWITCH_ON)
+        {
+#ifdef DEBUG_DIAG_DUMMY
+#else
+            POWER_N_CLOSE();
+#endif
+        }
     }
     /*********************/
 
@@ -1512,8 +1052,7 @@ static ErrorCode_t StopCharge(void *pvCON)
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
     errcode = ERR_NO;
-    clock_t old;
-    printf_safe("set cp clock = %d\n", old = clock());
+    
     SetCPSwitch(pCON, SWITCH_OFF);
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.xCPState = CP_12V;
@@ -1523,38 +1062,45 @@ static ErrorCode_t StopCharge(void *pvCON)
        pCON->status.xCPState == CP_9V ||
        pCON->status.xCPState == CP_12V)
     {
-        printf_safe("cp switch ok clock = %d\n", clock() - old );
-        old = clock();
         uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
             defEventBitCONS2Opened,
             pdFALSE,
             pdTRUE,
-            100);//S1转换到12V后S2应在100ms内断开，否则强制带载断电。
-        //此处判断uxbits无意义，因为无论如何100ms内或者100ms外都要断电。
-
-        errcode = SetRelay(pvCON, SWITCH_OFF);
-        printf_safe("total = %d\n", clock() - old);
-        //vTaskDelay(defRelayDelay);//没什么用
-        THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
-#ifdef DEBUG_DIAG_DUMMY
-        pCON->status.ucRelayLState = SWITCH_OFF;
-        pCON->status.ucRelayNState = SWITCH_OFF;
-#endif
-        if (pCON->status.ucRelayLState == SWITCH_OFF &&
-            pCON->status.ucRelayNState == SWITCH_OFF)
+            3000);//S1转换到12V后S2应在3s内断开，否则强制带载断电。
+        //此处判断uxbits无意义，因为无论如何3s内或者3s外都要断电。
+        if ((uxBits & defEventBitCONS2Opened) == defEventBitCONS2Opened)
         {
-            errcode = ERR_NO;
+            printf_safe("S2 Opened OK\n");
         }
         else
         {
-            errcode = ERR_RELAY_PASTE;
+            printf_safe("S2 Opend timeout\n");
         }
+    }
+    else if (pCON->status.xCPState != CP_ERR) //PWM
+    {
+        //CP未转换;
+        return ERR_CON_CP_SWITCH_FAULT;
+    }
+    else//CP_ERR
+    {
+        
+    }
+    errcode = SetRelay(pvCON, SWITCH_OFF);
+    THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
+#ifdef DEBUG_DIAG_DUMMY
+    pCON->status.ucRelayLState = SWITCH_OFF;
+    pCON->status.ucRelayNState = SWITCH_OFF;
+#endif
+    if (pCON->status.ucRelayLState == SWITCH_OFF &&
+        pCON->status.ucRelayNState == SWITCH_OFF)
+    {
+        errcode = ERR_NO;
     }
     else
     {
-        errcode = ERR_CON_CP_SWITCH_FAULT;
+        errcode = ERR_RELAY_PASTE;
     }
-
     /*********************/
     return errcode;
 }
@@ -1589,6 +1135,7 @@ static void CONDelete(CON_t *pCON)
     vEventGroupDelete(pCON->status.xHandleEventOrder);
     vEventGroupDelete(pCON->status.xHandleEventException);
     vEventGroupDelete(pCON->status.xHandleEventTimerCBNotify);
+    vEventGroupDelete(pCON->status.xHandleEventDiag);
     xTimerDelete(pCON->status.xHandleTimerRTData, 100);
     xTimerDelete(pCON->OrderTmp.xHandleTimerOrderTmp, 100);
     free(pCON);
@@ -1602,56 +1149,30 @@ CON_t *CONCreate(uint8_t ucCONID )
     {
         return NULL;
     }
-    pCON->info.ucCONID                = ucCONID;
-    pCON->info.ucCONType              = defCONType_AC;
-    pCON->info.ucSocketType           = defSocketTypeC;
-    pCON->info.dVolatageUpperLimits   = 0;
-    pCON->info.dVolatageLowerLimits   = 0;
-    pCON->info.dACTempUpperLimits     = 0;
-    pCON->info.dACTempLowerLimits     = 0;
-    pCON->info.dSocketTempUpperLimits = 0;
-    pCON->info.dSocketTempLowerLimits = 0;
-    pCON->info.dRatedCurrent          = 32;
-    pCON->info.dRatedPower            = 7;
-    memset(pCON->info.strQRCode, 0, sizeof(pCON->info.strQRCode));
-
+    memset(pCON, 0, sizeof(CON_t));
+   
+    pCON->info.ucCONID = ucCONID;
+    pCON->status.ucLoadPercent = 100;
+    
     pCON->info.GetCONCfg = GetCONCfg;
     pCON->info.SetCONCfg = SetCONCfg;
-
-    pCON->status.dCPVolt               = 0;
-    pCON->status.dACLTemp              = 0;
-    pCON->status.dACNTemp              = 0;
-    pCON->status.dBTypeSocketTemp1     = 0;
-    pCON->status.dBTypeSocketTemp2     = 0;
-    pCON->status.dChargingCurrent      = 0;
-    pCON->status.dChargingFrequence    = 0;
-    pCON->status.dChargingVoltage      = 0;
-    pCON->status.dChargingPower        = 0;
-    pCON->status.xBTypeSocketLockState = 0;
-    pCON->status.xCCState              = 0;
-    pCON->status.xCPState              = 0;
-    pCON->status.ucLoadPercent         = 100;//(%)
-    pCON->status.xPlugState            = 0;
+    
     pCON->status.xHandleEventCharge    = xEventGroupCreate();
     pCON->status.xHandleEventOrder     = xEventGroupCreate();
     pCON->status.xHandleEventException = xEventGroupCreate();
     pCON->status.xHandleEventTimerCBNotify = xEventGroupCreate();
+    pCON->status.xHandleEventDiag      = xEventGroupCreate();
     pCON->status.xHandleTimerVolt      = NULL;
     pCON->status.xHandleTimerCurr      = NULL;
     pCON->status.xHandleTimerFreq      = NULL;
     pCON->status.xHandleTimerCharge    = NULL;
     pCON->status.xHandleTimerRTData    = NULL;
-    pCON->status.GetChargingVoltage    = GetChargingVoltage;
-    pCON->status.GetChargingCurrent    = GetChargingCurrent;
-    pCON->status.GetChargingFrequence  = GetChargingFrequence;
-    pCON->status.GetChargingPower      = GetChargingPower;
+
     pCON->status.xVoltStat             = STATE_VOLT_OK;
     pCON->status.xCurrStat             = STATE_CURR_INIT;
     pCON->status.xFreqStat             = STATE_FREQ_OK;
-    pCON->status.ulSignalState         = 0;
-    pCON->status.ulSignalAlarm         = 0;
-    pCON->status.ulSignalFault         = 0;
 
+    pCON->status.GetChargingData     = GetChargingData;
     pCON->status.GetCPState          = GetCPState;
     pCON->status.SetCPSwitch         = SetCPSwitch;
     pCON->status.SetLoadPercent      = SetLoadPercent;
@@ -1675,6 +1196,12 @@ CON_t *CONCreate(uint8_t ucCONID )
                                       pdTRUE,
                                       (void *)(int)ucCONID,
                                       vRemoteRTDataTimerCB);
+    
+    LineInit(&pCON->line[defLineA], defLineA);
+    LineInit(&pCON->line[defLineB], defLineB);
+    LineInit(&pCON->line[defLineC], defLineC);
+    LineInit(&pCON->line[defLineN], defLineN);
+    
     //order init
     OrderInit(&(pCON->order));
     //OrderTmp init

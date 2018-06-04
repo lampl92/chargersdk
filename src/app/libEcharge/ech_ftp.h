@@ -21,7 +21,7 @@ typedef struct
     uint8_t ucDownloadStart;
     uint8_t ucDownloadStatus;
     ErrorCode_t(*GetFtpCfg)(void *pvFtp, void *pvCfgObj);
-    ErrorCode_t(*SetFtpCfg)(uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
+    ErrorCode_t(*SetFtpCfg)(char *jnItemString, void *pvCfgParam, uint8_t type);
     ftp_proc_t ftp_proc;
 }EchFtpCfg_t;
 

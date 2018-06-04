@@ -99,7 +99,7 @@
 #define configTICK_RATE_HZ				( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES			( 32 )  //0 is lowest
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 512 )
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 18*1024 * 1024 ) )
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 11*1024 * 1024 ) )
 #define configMAX_TASK_NAME_LEN			( 24 )
 #define configUSE_TRACE_FACILITY		1
 #define configUSE_16_BIT_TICKS			0
@@ -137,7 +137,7 @@
 /* Software timer definitions. */
 #define configUSE_TIMERS				1
 #define configTIMER_TASK_PRIORITY		( 22 )
-#define configTIMER_QUEUE_LENGTH		64
+#define configTIMER_QUEUE_LENGTH		256
 #define configTIMER_TASK_STACK_DEPTH	( configMINIMAL_STACK_SIZE * 2 )
 
 /* Set the following definitions to 1 to include the API function, or zero
@@ -154,8 +154,8 @@ to exclude the API function. */
 /* task utilities */
 #define INCLUDE_eTaskGetState                   0
 #define INCLUDE_pcTaskGetTaskName               0
-#define INCLUDE_xTaskGetHandle                  0 //xTaskGetHandle
-#define INCLUDE_uxTaskGetStackHighWaterMark     0
+#define INCLUDE_xTaskGetHandle                  1 //xTaskGetHandle
+#define INCLUDE_uxTaskGetStackHighWaterMark     1
 #define INCLUDE_xTaskGetCurrentTaskHandle       1
 #define INCLUDE_xTaskGetIdleTaskHandle          0
 #define INCLUDE_xTaskGetSchedulerState          1

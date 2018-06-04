@@ -6,12 +6,14 @@
 #include "factorycfg.h"
 #include "cfg_sys.h"
 #include "cfg_parse.h"
-#include "yaffs2msic.h"
+#include "yaffs2misc.h"
 #include "evse_version.h"
+#include "ifconfig.h"
+#include "interface_network.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
-uint8_t *ucHeap = (uint8_t *)(0XC0E00000);//used by heap_4.c
+uint8_t *ucHeap = (uint8_t *)(0XC1500000);//used by heap_4.c
 #endif
 
 Sysconf_t   xSysconf;//存放系统初始化参数
@@ -43,10 +45,10 @@ void timeInit()
     time(&settime);
 }
 
-uint8_t create_system_dir(void)
+uint8_t create_dir(char *dir)
 {
     int res = 1;
-    res = yaffs_mkdir(pathSystemDir, S_IREAD | S_IWRITE);
+    res = yaffs_mkdir(dir, S_IREAD | S_IWRITE);
     if (res != 0)
     {
         res = yaffs_get_error();
@@ -84,7 +86,6 @@ void yaffs_init(void)
     int res;
     yaffs_start_up();
     yaffs_set_trace(0);
-    //yaffs_format(YAFFS_MOUNT_POINT, 0, 0, 0);
     res = yaffs_mount(YAFFS_MOUNT_POINT);
     if (res != 0)
     {
@@ -92,39 +93,22 @@ void yaffs_init(void)
         yaffs_mount(YAFFS_MOUNT_POINT);
     }
 }
+extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
-    evse_ver ver_from_cfg;
-    //ifconfig_init();
-    timeInit();
     retarget_init();
+    cli_init();
+    timeInit();
     yaffs_init();
-#if 1
     /*---------------------------------------------------------------------------/
     /                               系统参数初始化
     /---------------------------------------------------------------------------*/
-//    dump_directory_tree(YAFFS_MOUNT_POINT);
-//    res = yaffs_unlink(pathEVSECfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathProtoCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathWhiteList);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathBlackList);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathEVSELog);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathOrder);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathSysCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_unlink(pathFTPCfg);
-//    res = yaffsfs_GetLastError();
-//    res = yaffs_rmdir(pathSystemDir);
-//    res = yaffsfs_GetLastError();
-//    dump_directory_tree(YAFFS_MOUNT_POINT);
-    create_system_dir();
+    create_dir(pathSystemDir);
+    create_dir(pathDownloadDir);
+    create_dir(pathUpgradeDir);
+#if BOOTLOADER
+#else
     create_cfg_file(pathEVSECfg, strEVSECfg);
     create_cfg_file(pathProtoCfg, strProtoCfg);
     create_cfg_file(pathWhiteList, strWhiteListCfg);
@@ -133,17 +117,20 @@ void sys_Init(void)
     create_cfg_file(pathEVSELog, strLogCfg);
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
+    create_cfg_file(pathNetCfg, strNetCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
-
+    
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-    sscanf(xSysconf.strVersion, "%d.%d.%d", &(ver_from_cfg.major), &(ver_from_cfg.minor), &(ver_from_cfg.patch));
-    if (ver_from_cfg.major != EVSE_MAJOR || ver_from_cfg.minor != EVSE_MINOR || ver_from_cfg.patch != EVSE_PATCH)
-    {
-        sprintf(xSysconf.strVersion, "%02d.%02d.%04d", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
-        xSysconf.SetSysCfg(jnSysVersion, xSysconf.strVersion, ParamTypeString);
-    }
-
+    sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+#endif
+    /*---------------------------------------------------------------------------/
+    /                               NET初始化
+    /---------------------------------------------------------------------------*/
+#if EVSE_USING_NET
+    ifconfig_init();
+    net_stack_init();
+#endif
     /*---------------------------------------------------------------------------/
     /                               GUI初始化
     /---------------------------------------------------------------------------*/
@@ -152,7 +139,10 @@ void sys_Init(void)
     GUI_Init();
     WM_MULTIBUF_Enable(1);  //开启STemWin多缓冲,RGB屏会用到
 #endif
-    xprintf("\nsystem initialized\n\r");
-    xprintf("\nhello charger\n\r");
+    printf_safe("\nsystem initialized\n\r");
+#if BOOTLOADER
+    printf_safe("\nhello bootldr\n\r");
+#else
+    printf_safe("\nhello charger\n\r");
 #endif
 }

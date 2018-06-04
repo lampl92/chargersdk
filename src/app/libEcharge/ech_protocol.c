@@ -16,148 +16,24 @@
 #include "cfg_parse.h"
 #include "cJSON.h"
 #include "sysinit.h"
-
+#include "evse_debug.h"
 
 
 /*---------------------------------------------------------------------------*/
 /*                               获取协议配置信息                            */
 /*---------------------------------------------------------------------------*/
 
-/** @brief 获取ProtoCfg中参数的值
- *
- * @param pvProtoInfoItem void* 传入要获取的参数的指针
- * @param type uint8_t 要获取参数的类型
- * @param pvCfgObj void*
- * @param jnItemName uint8_t* 参数名称
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t GetProtoCfgItem(void *pvProtoInfoItem, uint8_t type, void *pvCfgObj, uint8_t *jnItemName)
+static void cfgobj_get_period(cJSON *jsCfgObj, EchSegTime_t *pSegTime, char *strCfgObjName)
 {
-    ErrorCode_t errcode;
-
-    cJSON *jsItem;
-    cJSON *pProtoCfgObj;
-    errcode = ERR_NO;
-
-    pProtoCfgObj = (cJSON *)pvCfgObj;
-
-    //  解析
-    jsItem = cJSON_GetObjectItem(pProtoCfgObj, jnItemName);
-    if(jsItem == NULL)
-    {
-        errcode = ERR_FILE_PARSE;
-        goto err_return;
-    }
-    switch(type)
-    {
-    case ParamTypeU8:
-        *((uint8_t *)pvProtoInfoItem) = (uint8_t)(jsItem->valueint);
-        break;
-    case ParamTypeU16:
-        *((uint16_t *)pvProtoInfoItem) = (uint16_t)(jsItem->valueint);
-        break;
-    case ParamTypeU32:
-        *((uint32_t *)pvProtoInfoItem) = (uint32_t)(jsItem->valueint);
-        break;
-    case ParamTypeDouble:
-        *((double *)pvProtoInfoItem) = (double)(jsItem->valuedouble);
-        break;
-    case ParamTypeString:
-        strcpy((uint8_t *)pvProtoInfoItem, jsItem->valuestring);
-        break;
-    case ParamTypeObj:
-        *(uint32_t *)pvProtoInfoItem = (uint32_t)jsItem; //很不喜欢这种投机取巧，应为这个参数增加一个二级指针
-        break;
-    default:
-        break;
-    }
-
-#ifdef DEBUG_CFG_PARSE_PROTO
-    switch(type)
-    {
-    case ParamTypeU8:
-        printf_safe("%s\t = %d\n", jnItemName, *((uint8_t *)pvProtoInfoItem));
-        break;
-    case ParamTypeU16:
-        printf_safe("%s\t = %d\n", jnItemName, *((uint16_t *)pvProtoInfoItem));
-        break;
-    case ParamTypeU32:
-        printf_safe("%s\t = %d\n", jnItemName, *((uint32_t *)pvProtoInfoItem));
-        break;
-    case ParamTypeDouble:
-        printf_safe("%s\t = %.2lf\n", jnItemName, *((double *)pvProtoInfoItem));
-        break;
-    case ParamTypeString:
-        printf_safe("%s\t = %s\n", jnItemName, (uint8_t *)pvProtoInfoItem);
-        break;
-    case ParamTypeObj:
-        printf_safe("%s: %x\n", jnItemName, jsItem);
-        break;
-    default:
-        break;
-    }
-#endif
-
-    /*********************/
-
-err_return:
-    return errcode;
-}
-/** @brief 获取Proto中Obj的子参数
- *
- * @param jsProtoObj cJSON*     Obj的父Obj
- * @param pSegTime EchSegTime_t* Obj对应的时间段结构体
- * @param jnNameObj uint8_t*    Obj的名称
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uint8_t *jnNameObj)
-{
-    uint32_t ItemAddr;
-    cJSON *jsItem;
     int i;
-    uint8_t strName[16] = {0};
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)&ItemAddr,
-                                          ParamTypeObj,
-                                          jsProtoObj,
-                                          jnNameObj),
-                ERR_LEVEL_WARNING,
-                "GetProtoCfgObj_Item");
-    jsItem = (cJSON *)ItemAddr;
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pSegTime->ucPeriodCont)),
-                                          ParamTypeU8,
-                                          jsItem,
-                                          jnProtoSegCont),
-                ERR_LEVEL_WARNING,
-                "GetProtoCfgObj_SegCont()");
-    for(i = 0; i < pSegTime->ucPeriodCont; i++)
+    cfgobj_get_uint8(jsCfgObj, &pSegTime->ucPeriodCont, "%s.%s", strCfgObjName, jnProtoSegCont);
+    for (i = 0; i < pSegTime->ucPeriodCont; i++)
     {
-        sprintf(strName, "Start%d", i + 1);
-        THROW_ERROR(defDevID_File,
-                    errcode = GetProtoCfgItem((void *)(&(pSegTime->ucStart[i])),
-                                              ParamTypeU8,
-                                              jsItem,
-                                              strName),
-                    ERR_LEVEL_WARNING,
-                    "GetProtoCfgObj_Start()");
-        sprintf(strName, "End%d", i + 1);
-        THROW_ERROR(defDevID_File,
-                    errcode = GetProtoCfgItem((void *)(&(pSegTime->ucEnd[i])),
-                                              ParamTypeU8,
-                                              jsItem,
-                                              strName),
-                    ERR_LEVEL_WARNING,
-                    "GetProtoCfgObj_End()");
+        cfgobj_get_uint8(jsCfgObj, &pSegTime->ucStart[i], "%s.Start%d", strCfgObjName, i + 1);
+        cfgobj_get_uint8(jsCfgObj, &pSegTime->ucEnd[i], "%s.End%d", strCfgObjName, i + 1);
     }
-    return errcode;
 }
+
 /** @brief 获取protocol.cfg全部参数
  *
  * @param pvProto void*
@@ -167,263 +43,65 @@ static ErrorCode_t GetProtoCfgObj(cJSON *jsProtoObj, EchSegTime_t *pSegTime, uin
  */
 static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
 {
-    cJSON *jsProtoObj;
-    ErrorCode_t errcode;
+    cJSON *jsCfgObj = NULL;
+    ErrorCode_t errcode = ERR_NO;
     echProtocol_t *pProto;
+    int i;
 
-    errcode = ERR_NO;
     pProto = (echProtocol_t *)pvProto;
 
     /*json解析*/
-    jsProtoObj = GetCfgObj(pathProtoCfg, &errcode);
-    if(jsProtoObj == NULL || errcode != ERR_NO)
+    if (pvCfgObj == NULL)
     {
-        return errcode;
+        jsCfgObj = GetCfgObj(pathProtoCfg, &errcode);
+        if (jsCfgObj == NULL)
+        {
+            return errcode;
+        }
+    }
+    else
+    {
+        jsCfgObj = (cJSON *)pvCfgObj;
     }
 
-    THROW_ERROR(defDevID_File, errcode = GetProtoCfgItem((void *)(pProto->info.strServerIP),
-                                         ParamTypeString,
-                                         jsProtoObj,
-                                         jnProtoServerIP),
-                ERR_LEVEL_WARNING,
-                "GetServerInfo()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.usServerPort)),
-                                          ParamTypeU16,
-                                          jsProtoObj,
-                                          jnProtoServerPort),
-                ERR_LEVEL_WARNING,
-                "GetServerPort()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(pProto->info.strUserName),
-                                          ParamTypeString,
-                                          jsProtoObj,
-                                          jnProtoUserName),
-                ERR_LEVEL_WARNING,
-                "GetUserName()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(pProto->info.strUserPwd),
-                                          ParamTypeString,
-                                          jsProtoObj,
-                                          jnProtoUserPwd),
-                ERR_LEVEL_WARNING,
-                "GetUserPwd()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(pProto->info.strKey),
-                                          ParamTypeString,
-                                          jsProtoObj,
-                                          jnProtoKey),
-                ERR_LEVEL_WARNING,
-                "GetKey()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(pProto->info.strNewKey),
-                                          ParamTypeString,
-                                          jsProtoObj,
-                                          jnProtoNewKey),
-                ERR_LEVEL_WARNING,
-                "GetNewKey()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.tNewKeyChangeTime)),
-                                          ParamTypeU32,
-                                          jsProtoObj,
-                                          jnProtoNewKeyChangeTime),
-                ERR_LEVEL_WARNING,
-                "GetNewKeyChangeTime()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulOptSN)),
-                                          ParamTypeU32,
-                                          jsProtoObj,
-                                          jnProtoOptSN),
-                ERR_LEVEL_WARNING,
-                "GetOptSN()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ucProtoVer)),
-                                          ParamTypeU8,
-                                          jsProtoObj,
-                                          jnProtoProtoVer),
-                ERR_LEVEL_WARNING,
-                "GetProtoVer()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulHeartBeatCyc_ms)),
-                                          ParamTypeU32,
-                                          jsProtoObj,
-                                          jnProtoHeartBeatCyc_ms),
-                ERR_LEVEL_WARNING,
-                "GetHeartBeatCyc()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulStatusCyc_ms)),
-                                          ParamTypeU32,
-                                          jsProtoObj,
-                                          jnProtoStatusCyc_ms),
-                ERR_LEVEL_WARNING,
-                "GetStatusCyc()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ulRTDataCyc_ms)),
-                                          ParamTypeU32,
-                                          jsProtoObj,
-                                          jnProtoRTDataCyc_ms),
-                ERR_LEVEL_WARNING,
-                "GetRTDataCyc()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.ucResetAct)),
-                                          ParamTypeU8,
-                                          jsProtoObj,
-                                          jnProtoResetAct),
-                ERR_LEVEL_WARNING,
-                "GetResetAct()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegPowerFee[0])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoPowerFee_sharp),
-                ERR_LEVEL_WARNING,
-                "GetPowerFee_sharp()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegPowerFee[1])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoPowerFee_peak),
-                ERR_LEVEL_WARNING,
-                "GetPowerFee_peak()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegPowerFee[2])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoPowerFee_shoulder),
-                ERR_LEVEL_WARNING,
-                "GetPowerFee_shoulder()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegPowerFee[3])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoPowerFee_off_peak),
-                ERR_LEVEL_WARNING,
-                "GetPowerFee_off_peak()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegServFee[0])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoServFee_sharp),
-                ERR_LEVEL_WARNING,
-                "GetServiceFee_sharp()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegServFee[1])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoServFee_peak),
-                ERR_LEVEL_WARNING,
-                "GetServiceFee_peak()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegServFee[2])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoServFee_shoulder),
-                ERR_LEVEL_WARNING,
-                "GetServiceFee_shoulder()");
-    THROW_ERROR(defDevID_File,
-                errcode = GetProtoCfgItem((void *)(&(pProto->info.dSegServFee[3])),
-                                          ParamTypeDouble,
-                                          jsProtoObj,
-                                          jnProtoServFee_off_peak),
-                ERR_LEVEL_WARNING,
-                "GetServiceFee_off_peak()");
+    cfgobj_get_string(jsCfgObj, pProto->info.strServerIP, "%s", jnProtoServerIP);
+    cfgobj_get_uint16(jsCfgObj, &pProto->info.usServerPort, "%s", jnProtoServerPort);
+    cfgobj_get_string(jsCfgObj, pProto->info.strUserName, "%s", jnProtoUserName);
+    cfgobj_get_string(jsCfgObj, pProto->info.strUserPwd, "%s", jnProtoUserPwd);
+    cfgobj_get_string(jsCfgObj, pProto->info.strKey, "%s", jnProtoKey);
+    cfgobj_get_string(jsCfgObj, pProto->info.strNewKey, "%s", jnProtoNewKey);
+    cfgobj_get_int32(jsCfgObj, (int32_t*)&pProto->info.tNewKeyChangeTime, "%s", jnProtoNewKeyChangeTime);
+    cfgobj_get_uint32(jsCfgObj, &pProto->info.ulOptSN, "%s", jnProtoOptSN);
+    cfgobj_get_uint8(jsCfgObj, &pProto->info.ucProtoVer, "%s", jnProtoProtoVer);
+    cfgobj_get_uint32(jsCfgObj, &pProto->info.ulHeartBeatCyc_ms, "%s", jnProtoHeartBeatCyc_ms);
+    cfgobj_get_uint32(jsCfgObj, &pProto->info.ulStatusCyc_ms, "%s", jnProtoStatusCyc_ms);
+    cfgobj_get_uint32(jsCfgObj, &pProto->info.ulRTDataCyc_ms, "%s", jnProtoRTDataCyc_ms);
+    cfgobj_get_uint8(jsCfgObj, &pProto->info.ucResetAct, "%s", jnProtoResetAct);
+    
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[0], "%s", jnProtoEnergyFee_sharp);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[1], "%s", jnProtoEnergyFee_peak);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[2], "%s", jnProtoEnergyFee_shoulder);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[3], "%s", jnProtoEnergyFee_off_peak);
+    
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[0], "%s", jnProtoServFee_sharp);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[1], "%s", jnProtoServFee_peak);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[2], "%s", jnProtoServFee_shoulder);
+    cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[3], "%s", jnProtoServFee_off_peak);
+
     /*获取尖峰平谷时间段*/
-    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime[0]), jnProtoSegTime_sharp);
-    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime[1]), jnProtoSegTime_peak);
-    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime[2]), jnProtoSegTime_shoulder);
-    GetProtoCfgObj(jsProtoObj, &(pProto->info.SegTime[3]), jnProtoSegTime_off_peak);
+    cfgobj_get_period(jsCfgObj, &pProto->info.SegTime[0], jnProtoSegTime_sharp);
+    cfgobj_get_period(jsCfgObj, &pProto->info.SegTime[1], jnProtoSegTime_peak);
+    cfgobj_get_period(jsCfgObj, &pProto->info.SegTime[2], jnProtoSegTime_shoulder);
+    cfgobj_get_period(jsCfgObj, &pProto->info.SegTime[3], jnProtoSegTime_off_peak);
 
-#ifdef DEBUG_CFG_PARSE
-    printf_safe("********************************\n");
-#endif
-    cJSON_Delete(jsProtoObj);
+    cJSON_Delete(jsCfgObj);
     return errcode;
-}
-
-/** @brief 设置参数
- *
- * @param jnItemString uint8_t*     要设置参数的名称 或 要设置参数所在的Obj名称
- * @param ObjType uint8_t           要设置参数的类型 或 Obj类型
- * @param jnSubItemString uint8_t*  假如要设置参数在另一个Obj中，则传入这个Obj中该参数的名称
- * @param SubType uint8_t           要设置参数的类型
- * @param pvCfgParam void*          要设置的参数
- * @return ErrorCode_t
- *
- */
-static ErrorCode_t SetProtoCfg(const uint8_t *jnItemString, uint8_t ObjType, const uint8_t *jnSubItemString, uint8_t SubType, void *pvCfgParam)
-{
-    cJSON *jsProtoCfgObj;
-    cJSON *jsItem;
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-    jsProtoCfgObj = GetCfgObj(pathProtoCfg, &errcode);
-    if(jsProtoCfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsItem = jsProtoCfgObj->child;
-    do
-    {
-        if(strcmp(jsItem->string, jnItemString) == 0)
-        {
-            switch(ObjType)
-            {
-            case ParamTypeU8:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            case ParamTypeU16:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
-                break;
-            case ParamTypeU32:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
-                break;
-            case ParamTypeDouble:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
-                break;
-            case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsProtoCfgObj, jnItemString, cJSON_CreateString((uint8_t *)pvCfgParam));
-                break;
-            case ParamTypeObj:
-                //subtype在这里没有使用，因为目前只有uint8一种类型
-                cJSON_ReplaceItemInObject(jsItem, jnSubItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            default:
-                break;
-            }
-            break;//退出while循环
-        }
-        else
-        {
-            jsItem = jsItem->next;
-        }
-    }
-    while(jsItem != NULL);
-    errcode = SetCfgObj(pathProtoCfg, jsProtoCfgObj);
-
-    return errcode;
-}
-
-/** @brief 测试参数设置函数
- *
- * @return void
- *
- */
-void testSetProtoCfg()
-{
-    uint8_t ucParam;
-    uint32_t ulParam;
-    ucParam = 4;
-    ulParam = 232;
-    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, jnProtoSegCont, ParamTypeU8, (void *)&ucParam);
-    SetProtoCfg(jnProtoSegTime_sharp, ParamTypeObj, "Start1", ParamTypeU8, (void *)&ucParam);
-    SetProtoCfg(jnProtoNewKeyChangeTime, ParamTypeU32, NULL, 0, (void *)&ulParam);
 }
 
 /*---------------------------------------------------------------------------/
 /                               黑白名单
 /---------------------------------------------------------------------------*/
-static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
+static int BnWIsListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -456,7 +134,7 @@ static int BnWIsListCfg(uint8_t *path, uint8_t *strID)
 
     return res;
 }
-static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
+static int BnWGetListSizeCfg(char *path, uint16_t *size)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -478,7 +156,7 @@ static int BnWGetListSizeCfg(uint8_t *path, uint16_t *size)
 
     return 1;
 }
-static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
+static int BnWGetListCfg(char *path, uint16_t idx, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -507,7 +185,7 @@ static int BnWGetListCfg(uint8_t *path, uint16_t idx, uint8_t *strID)
  * @return int
  *
  */
-static int BnWFlushListCfg(uint8_t *path)
+static int BnWFlushListCfg(char *path)
 {
     cJSON *jsArrayObj;
     ErrorCode_t errcode;
@@ -538,7 +216,7 @@ static int BnWFlushListCfg(uint8_t *path)
  * @return int
  *
  */
-static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
+static int BnWAddListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -577,7 +255,7 @@ static int BnWAddListCfg(uint8_t *path, uint8_t *strID)
     return res;
 }
 
-static int BnWDeleteListCfg(uint8_t *path, uint8_t *strID)
+static int BnWDeleteListCfg(char *path, char *strID)
 {
     cJSON *jsArrayObj;
     cJSON *jsArrayItem;
@@ -621,7 +299,7 @@ void testBnWList(void)
 {
     uint8_t total;
     uint16_t size;
-    uint8_t *strID[24] =
+    char *strID[24] =
     {
         "0000000000000001",
         "0000000000000002",
@@ -648,7 +326,7 @@ void testBnWList(void)
         "0000000000000023",
         "0000000000000024"
     };
-    uint8_t strIDCtx[17];
+    char strIDCtx[17];
     BnWFlushListCfg(pathBlackList);
     for (int i = 0; i < 20; ++i)
     {
@@ -761,7 +439,8 @@ static int makeStdCmd(void *pPObj,
     uint8_t ucMsgBodyCtx_enc[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_enc;
     uint16_t usCheck;
-    uint8_t i;
+    uint8_t ucIDLength;
+    int i;
 
     us2uc ustmpNetSeq;
     ul2uc ultmpNetSeq;
@@ -770,11 +449,18 @@ static int makeStdCmd(void *pPObj,
     pCMD = pProto->pCMD[usCmdID];
     pE = (EVSE_t *)pEObj;
     ulMsgHeadLen = 0;
+    ucIDLength = strlen(pE->info.strID);
 
-    ulMsgBodyCtxLen_enc = ech_aes_encrypt(pucMsgBodyCtx_dec,
+    printf_protodetail("Send(dec) 0x%02X[%d]:\n", pCMD->CMDType.usSendCmd, pCMD->CMDType.usSendCmd);
+    for (i = 0; i < ulMsgBodyCtxLen_dec; i++)
+    {
+        printf_protodetail("%02X ", pucMsgBodyCtx_dec[i]);
+    }
+    printf_protodetail("\n");
+    ulMsgBodyCtxLen_enc = ech_aes_encrypt((char *)pucMsgBodyCtx_dec,
                                       ulMsgBodyCtxLen_dec,
                                       pProto->info.strKey,
-                                      ucMsgBodyCtx_enc);
+                                      (char *)ucMsgBodyCtx_enc);
 
     //协议版本
     ucMsgHead[ulMsgHeadLen++] = pProto->info.ucProtoVer;
@@ -791,7 +477,7 @@ static int makeStdCmd(void *pPObj,
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[2];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[3];
     //消息体长度
-    ultmpNetSeq.ulVal = htonl(pE->info.ucIDLength + ulMsgBodyCtxLen_enc);
+    ultmpNetSeq.ulVal = htonl(ucIDLength + ulMsgBodyCtxLen_enc);
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[1];
     ucMsgHead[ulMsgHeadLen++] = ultmpNetSeq.ucVal[2];
@@ -800,7 +486,7 @@ static int makeStdCmd(void *pPObj,
     ustmpNetSeq.usVal = htons(echVerifCheck(pProto->info.ucProtoVer,
                                             0,
                                             pCMD->CMDType.usSendCmd,
-                                            pE->info.ucIDLength + ulMsgBodyCtxLen_enc));
+                                            ucIDLength + ulMsgBodyCtxLen_enc));
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[0];
     ucMsgHead[ulMsgHeadLen++] = ustmpNetSeq.ucVal[1];
 
@@ -808,7 +494,7 @@ static int makeStdCmd(void *pPObj,
     {
         pucSendBuffer[i] = ucMsgHead[i];
     }
-    for(i = 0; i < pE->info.ucIDLength; i++)  //此处借用ulMsgHeadLen表示pucSendBuffer位置，运行之后ulMsgHeadLen表示的就是原ulMsgHeadLen + 桩号长度
+    for(i = 0; i < ucIDLength; i++)  //此处借用ulMsgHeadLen表示pucSendBuffer位置，运行之后ulMsgHeadLen表示的就是原ulMsgHeadLen + 桩号长度
     {
         pucSendBuffer[ulMsgHeadLen++] = pE->info.strID[i];
     }
@@ -825,7 +511,7 @@ static int makeCmdRegBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *
 {
     echProtocol_t *pProto;
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t i;
+    int i;
     ul2uc ultmpNetSeq;
 
     pProto = (echProtocol_t *)pPObj;
@@ -974,48 +660,50 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 5;
     }
-    //输出电压xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //输出电压xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电压
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //输出电流xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineA] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineB] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineVolt[defLineC] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    //输出电流xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //A B C 相电流
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineA] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineB] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dLineCurr[defLineC] * 100));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //继电器状态 1开，2关
     if(pCON->status.ucRelayLState == SWITCH_ON &&
             pCON->status.ucRelayNState == SWITCH_ON)
@@ -1036,17 +724,18 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //有功功率 无功功率 xx.xxxx
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 10000));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
 
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     //电能表有功电能 xx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1178,37 +867,37 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //[8] 桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
     //[9...12] 当前充电总电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[13...16] 尖电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[17...20] 峰电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[21...24] 平电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[25...28] 谷电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[29...32] 当前充电金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1232,14 +921,14 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     //[42,43] 剩余充电时间
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[44...47] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //[44...47] 输出电压 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[48...51] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    //[48...51] 输出电流 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1309,37 +998,37 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.strCardID[i];
     }
     //[25...28] 当前充电总电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[29...32] 尖电量 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[33...36] 峰电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[37...40] 平电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[41...44] 谷电量
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[45...48] 当前充电金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1363,14 +1052,14 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     //[58,59] 剩余充电时间
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
-    //[60...63] 输出电压 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 10));
+    //[60...63] 输出电压 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingVoltage * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //[64...67] 输出电流 xxx.x
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 10));
+    //[64...67] 输出电流 xxx.xx
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingCurrent * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1450,19 +1139,19 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
         }
     }
     //[26...29] 充电前总电能示值 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dStartPower * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dStartEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[30...33] 充电后电能总示值 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)((pOrder->dStartPower + pOrder->dTotalPower) * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)((pOrder->dStartEnergy + pOrder->dTotalEnergy) * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[34...37] 本次充电电费总金额 xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dTotalPowerFee * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dTotalEnergyFee * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1474,7 +1163,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[42...45] 尖电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[0] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[0] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1486,13 +1175,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[50...53] 尖电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[54...57] 尖充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[0] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[0] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1509,7 +1198,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[64...85]峰
     //[64...67] 峰电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[1] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[1] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1521,13 +1210,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[72...75] 峰电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[76...79] 峰充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[1] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[1] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1544,7 +1233,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[86...107]平
     //[86...89] 平电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[2] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[2] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1556,13 +1245,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[94...97] 平电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[98...101] 平充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[2] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[2] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1579,7 +1268,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ustmpNetSeq.ucVal[1];
     //[108...129]谷
     //[108...111] 谷电价       xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[3] * 10000));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[3] * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1591,13 +1280,13 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[116...119] 谷电量       xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPower[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergy[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     //[120...123] 谷充电金额   xxx.xx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalPowerFee[3] * 100));
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pOrder->dSegTotalEnergyFee[3] * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1636,7 +1325,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
         reason = 4;//达到充电金额
         break;
     case defOrderStopType_Scram:
-    case defOrderStopType_NetLost:
+    case defOrderStopType_Offline:
     case defOrderStopType_Poweroff:
     case defOrderStopType_OverCurr:
     case defOrderStopType_Knock:
@@ -1734,27 +1423,27 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
     switch(usCmdID)
     {
-    case ECH_CMDID_REQ_POWERFEE:
+    case ECH_CMDID_REQ_ENERGYFEE:
         //[8...11] 尖
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[0] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[0] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[12...15] 峰
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[1] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[1] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[16...19] 平
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[2] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[2] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
         //[20...23] 谷
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegPowerFee[3] * 10000));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pProto->info.dSegEnergyFee[3] * 10000));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -1791,14 +1480,14 @@ static int makeCmdReqFeeBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
     return 1;    
 }
-static int makeCmdReqPowerFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+static int makeCmdReqEnergyFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
 {
     uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
-    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWERFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    makeCmdReqFeeBodyCtx(pPObj, ECH_CMDID_REQ_ENERGYFEE, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_ENERGYFEE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
 static int makeCmdReqServFee(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
@@ -2099,10 +1788,10 @@ static int makeCmdReqBnWBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBo
     uint32_t ulMsgBodyCtxLen_dec;
     us2uc ustmpNetSeq;
     uint16_t usListCont;
-    uint8_t i,j;
+    int i,j;
     uint8_t ucOffset = 0;
-    uint8_t strID[16+1] = {0};
-    uint8_t path[64];
+    char strID[16+1] = {0};
+    char path[64];
 
     pProto = (echProtocol_t *)pPObj;
     pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;  // -------注意修改ID
@@ -2160,12 +1849,12 @@ static int makeCmdReqWhite(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_WHITE, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
-static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     EVSE_t *pEVSE;
     RFIDDev_t *pRfid;
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strOrderSN[17] = {0};
+    char strOrderSN[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     uint8_t remote_id;
     ul2uc ultmpNetSeq;
@@ -2200,6 +1889,15 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBody
     {
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
+    if (usCmdID == ECH_CMDID_CARD_START_PWD)
+    {
+      //[25...30]密码
+        for (i = 0; i < 6; i++)
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pRfid->status.strPwd[i];
+        }  
+    }
+    
     //保存流水号到order
     HexToStr(ucOrderSN, strOrderSN, 8);
     strcpy(pRfid->order.strOrderSN, strOrderSN);
@@ -2214,8 +1912,18 @@ static int makeCmdCardStart(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdCardStartBodyCtx(pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdCardStartBodyCtx(pEObj, pCObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
+}
+static int makeCmdCardStartPwd(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdCardStartBodyCtx(pEObj, pCObj, ECH_CMDID_CARD_START_PWD, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_START_PWD, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
 static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
@@ -2259,7 +1967,7 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
                                 pdFALSE, pdTRUE, 10000);
     if ((uxBit & defEventBitOrderMakeOK) == defEventBitOrderMakeOK)
     {
-        ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartPower * 100));
+        ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dStartEnergy * 100));
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
@@ -2340,7 +2048,7 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
             pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 4;
             break;
         case defOrderStopType_Scram:
-        case defOrderStopType_NetLost:
+        case defOrderStopType_Offline:
         case defOrderStopType_Poweroff:
         case defOrderStopType_OverCurr:
         case defOrderStopType_Knock:
@@ -2725,7 +2433,7 @@ static int analyStdRes(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t u
     {
         pMsgBodyCtx_dec = (uint8_t *)malloc(ulMsgBodyCtxLen_enc * sizeof(uint8_t));
 
-        ech_aes_decrypt(pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, pMsgBodyCtx_dec);
+        ech_aes_decrypt((char *)pMsgBodyCtx_enc, ulMsgBodyCtxLen_enc, pProto->info.strKey, (char *)pMsgBodyCtx_dec);
 
         memcpy(pProto->pCMD[usCmdID]->ucRecvdOptData, pMsgBodyCtx_dec, ulMsgBodyCtxLen_enc);
         pProto->pCMD[usCmdID]->ulRecvdOptLen = ulMsgBodyCtxLen_enc;
@@ -2763,14 +2471,12 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
         }
         else
         {
-            printf_safe("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
-#if DEBUG_PROTO_LOG
+            printf_protodetail("\e[34;43mRecv:\e[0m %02X [%d]\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             for (i = 0; i < pCMD->ulRecvdOptLen; i++)
             {
-                printf_safe("%02X ", pCMD->ucRecvdOptData[i]);
+                printf_protodetail("%02X ", pCMD->ucRecvdOptData[i]);
             }
-            printf_safe("\n");
-#endif
+            printf_protodetail("\n");
             lRecvElem.UID = 0;
             lRecvElem.timestamp = time(NULL);
             lRecvElem.len = pCMD->ulRecvdOptLen;
@@ -2806,12 +2512,15 @@ static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t
         ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
         ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
         timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-        printf_safe("server: ");
-        printTime(timestamp);
-        printf_safe("\n");
-        printf_safe("local:  ");
-        printTime(time(NULL));
-        printf_safe("\n");
+        if (dePrintTime == 1)
+        {
+            printf_safe("server: ");
+            printTime(timestamp);
+            printf_safe("\n");
+            printf_safe("local:  ");
+            printTime(time(NULL));
+            printf_safe("\n");
+        }
         if(utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
         {
             time(&timestamp);
@@ -2957,38 +2666,11 @@ echProtocol_t *EchProtocolCreate(void)
     {
         return NULL;
     }
-    strcpy(pProto->info.strServerIP, "123.56.113.123");//"124.207.112.70");//
-    pProto->info.usServerPort      = 6677;//8051;//
-    strcpy(pProto->info.strUserName, "esaasusr");
-    strcpy(pProto->info.strUserPwd, "esaaspasswrd");
-    strcpy(pProto->info.strKey, "0123456789abcdeg");
-//   strcpy(pProto->info.strKey, "1234567890abcde2");
-    memset(pProto->info.strNewKey, 0, 17);
-    pProto->info.tNewKeyChangeTime = 0;
-    pProto->info.ulOptSN           = 0;
-    pProto->info.ucProtoVer        = 0x68;
-    pProto->info.ulHeartBeatCyc_ms = 15000;
-    pProto->info.ucResetAct        = 0;
-
-    for (i = 0; i < defOrderSegMax; i++)
-    {
-        pProto->info.dSegPowerFee[i]    = 0; //尖峰费率
-        pProto->info.dSegServFee[i]    = 0;
-        for (j = 0; j < defOrderPeriodMax; j++)
-        {
-            pProto->info.SegTime[i].ucStart[j] = 0;
-            pProto->info.SegTime[i].ucEnd[j] = 0;
-        }
-        pProto->info.SegTime[i].ucPeriodCont = 0;
-    }
-
-    pProto->info.ulStatusCyc_ms = 20000; //状态数据上报间隔
-    pProto->info.ulRTDataCyc_ms = 10000; //实时数据上报间隔  10s
+    memset(pProto, 0, sizeof(echProtocol_t));
 
     EchFtpInit(&pProto->info.ftp);
     
     pProto->info.GetProtoCfg = GetProtoCfg;
-    pProto->info.SetProtoCfg = SetProtoCfg;
 
     pProto->info.BnWIsListCfg = BnWIsListCfg;
     pProto->info.BnWGetListCfg = BnWGetListCfg;
@@ -2996,19 +2678,6 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->info.BnWAddListCfg = BnWAddListCfg;
     pProto->info.BnWDeleteListCfg = BnWDeleteListCfg;
     pProto->info.BnWFlushListCfg = BnWFlushListCfg;
-
-    pProto->status.ulStatus |= defSignalCON_State_Standby;
-    for(i = 0; i < 6; i++)
-    {
-        pProto->status.fault[i] = 0;
-        pProto->status.warning[i] = 0;
-        pProto->status.protect[i] = 0;
-    }
-
-    for(i = 0; i < ECH_CMD_MAX; i++)
-    {
-        pProto->pCMD[i] = NULL;
-    }
 
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
@@ -3021,12 +2690,12 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ORDER]          = EchCMDCreate(46,  47,  30, makeCmdOrder,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SUCC]       = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,      NULL);
     pProto->pCMD[ECH_CMDID_SET_FAIL]       = EchCMDCreate(8,   0,   0,  makeCmdSetFail,      NULL);
-    pProto->pCMD[ECH_CMDID_SET_POWERFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_ENERGYFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SERVFEE]    = EchCMDCreate(0,   12,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_CYC]        = EchCMDCreate(0,   13,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_TIMESEG]    = EchCMDCreate(0,   14,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_KEY]        = EchCMDCreate(0,   15,  30, NULL,                analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_POWERFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqPowerFee,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_ENERGYFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqEnergyFee,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_SERVFEE]    = EchCMDCreate(24,  23,  30, makeCmdReqServFee,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_CYC]        = EchCMDCreate(26,  25,  30, makeCmdReqCyc,       analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]    = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,   analyCmdCommon);
@@ -3041,6 +2710,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ADD_BNW]        = EchCMDCreate(0,   105, 30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_DEL_BNW]        = EchCMDCreate(0,   106, 30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_START]     = EchCMDCreate(90,  91,  30, makeCmdCardStart,    analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_CARD_START_PWD] = EchCMDCreate(89,  91,  30, makeCmdCardStartPwd, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_START_RES] = EchCMDCreate(92,  93,  30, makeCmdCardStartRes, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_STOP_RES]  = EchCMDCreate(95,  96,  30, makeCmdCardStopRes,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_CARD_RTDATA]    = EchCMDCreate(94,  0,   30, makeCmdCardRTData,   NULL);

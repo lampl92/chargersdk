@@ -13,17 +13,200 @@
 
 //#define DEBUG_NO_TASKRFID
 
+static int IsOldID(char *pCardID)
+{
+    CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
+    int i;
+    
+    ulTotalCON = pListCON->Total;
+    
+    for (i = 0; i < ulTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        if (pCON->state == STATE_CON_CHARGING)
+        {
+            if (strcmp(pCON->order.strCardID, pCardID) == 0)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+static int IsCONAvailable(void)
+{
+    CON_t *pCON = NULL;
+    uint32_t ulTotalCON;
+    int i;
+    
+    ulTotalCON = pListCON->Total;
+    
+    for (i = 0; i < ulTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        if (pCON->state == STATE_CON_CHARGING ||
+            pCON->state == STATE_CON_STOPCHARGE || 
+            pCON->state == STATE_CON_ERROR || 
+            pCON->state == STATE_CON_DEV_ERROR)
+        {
+            continue;
+        }
+        else if (pCON->order.statRemoteProc.rmt_ctrl.stat != REMOTECTRL_IDLE)
+        {
+            continue;
+        }
+        if (pCON->order.statOrder == STATE_ORDER_IDLE)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static void make_rfidpkg(RFIDDev_t *dev, RfidQPkg_t *pkg)
+{
+    pkg->state = dev->state;
+    pkg->ucAccountStatus = dev->order.ucAccountStatus;
+    pkg->ucCardStatus = dev->order.ucCardStatus;
+    pkg->dBalance = dev->order.dBalance;
+    pkg->ucCONID = dev->order.ucCONID;
+    pkg->ucNeedPwd = dev->status.ucNeedPwd;
+    strcpy(pkg->strCardID, dev->order.strCardID);
+}
+
+//是否可充电函数,此函数先发送充电消息到服务器,服务器返回是否可以充电和充电相关数据
+//进入超时状态返回0
+//可以充电返回1
+//不可充电返回2
+//需要密码返回3
+static int canChargeOrNot()
+{
+    RfidQPkg_t rfid_pkg;
+    UserChargeCondition_t user_like;
+    BaseType_t xResult;
+    ErrorCode_t errcode;
+    uint32_t remote_timeout_u100ms;
+    uint8_t ucVaild = 0;//用于判断remote返回是否可以充电
+    int res = 0; //remote 返回值;
+    make_rfidpkg(pRFIDDev, &rfid_pkg);
+    xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+#if EVSE_USING_GUI
+    xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_like, 60000);
+#else
+    xResult = pdTRUE;
+    user_like.ucCONID = 0;
+    user_like.dLimitFee = 0;
+    user_like.ulLimitTime = 0;
+    user_like.dLimitEnergy = 0;
+    user_like.HMItimeout = 0;
+    strcpy(user_like.strPwd, "888888");
+#endif
+    if (xResult == pdTRUE)
+    {
+        if (user_like.HMItimeout == 1)
+        {          
+            return 0;
+        }
+        pRFIDDev->order.ucCONID = user_like.ucCONID;
+        pRFIDDev->order.dLimitFee = user_like.dLimitFee;
+        pRFIDDev->order.ulLimitTime = user_like.ulLimitTime;
+        pRFIDDev->order.dLimitEnergy = user_like.dLimitEnergy;
+        strcpy(pRFIDDev->status.strPwd, user_like.strPwd);
+    }
+    else
+    {      
+        return 0;
+    }
+    if (pRFIDDev->status.ucNeedPwd == 0)
+    {
+        errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);    
+    }
+    else if (pRFIDDev->status.ucNeedPwd == 1)
+    {
+        errcode = RemoteIF_SendCardStartPwd(pEVSE, pechProto, pRFIDDev);  
+    }
+    ucVaild = 0;
+    switch (errcode)
+    {
+    case ERR_WHITE_LIST:
+        pRFIDDev->order.ucCardStatus = 1;
+        ucVaild = 1;
+        break;
+    case ERR_BLACK_LIST:
+        pRFIDDev->order.ucCardStatus = 2;
+        ucVaild = 2;
+        break;
+    case ERR_NO:
+        pRFIDDev->order.ucCardStatus = 0;
+        remote_timeout_u100ms = 0;
+        break;
+    default:
+        pRFIDDev->order.ucCardStatus = 3;
+        break;
+    }
+    errcode = ERR_REMOTE_NODATA;//初始化errorcode ；
+    res = 0;
+    while (pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
+    {
+        remote_timeout_u100ms++;
+        if (remote_timeout_u100ms >= 600)//60s
+        {
+            return 0;
+        }
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
+        {
+            errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+        }
+        else //如果没有联网，则直接返回超时。
+        {
+            return 0;
+        }
+        vTaskDelay(100);
+    }
+#if (EVSE_USING_GUI==0)
+    printf_safe("用户状态：");
+    switch (pRFIDDev->order.ucAccountStatus)
+    {
+    case 0: printf_safe("该卡不可充电\n"); break;
+    case 1: printf_safe("注册卡\n"); break;
+    case 2: printf_safe("该卡不可充电\n"); break;
+    }
+    printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
+    printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
+#endif
+    if (ucVaild == 2)//e充网定义 1 可充, 2不可充
+    {
+        //pRFIDDev->state = STATE_RFID_BADID;
+        //break;@!
+        return 2;
+    }
+    if (ucVaild == 3)//拒绝启动,需要密码校验
+    {
+        //pRFIDDev->status.ucNeedPwd = 1;
+        //break;@!
+        return 3;
+    }
+    return 1;
+}
 
 void vTaskEVSERFID(void *pvParameters)
 {
     CON_t *pCON = NULL;
     uint32_t ulTotalCON;
-    int i;
+    int id;
     EventBits_t uxBits;
     ErrorCode_t errcode;
     int res; //remote 返回值;
     uint32_t remote_timeout_u100ms;
     uint8_t ucVaild = 0;//用于判断remote返回是否可以充电
+    BaseType_t xResult;
+    UserChargeCondition_t user_likey;
+    RfidQPkg_t rfid_pkg;
+    
+    int resCanChargeOrNot;
+    int timesPwd = 3;//输入密码次数
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -36,14 +219,16 @@ void vTaskEVSERFID(void *pvParameters)
         xTimerStop(xHandleTimerRFID, 100); 
 #endif
     }
+    while (pEVSE->status.ulTimeUpdated == 0)
+    {
+        vTaskDelay(100);
+    }
+#if EVSE_USING_RFID
+    xTimerStart(xHandleTimerRFID, 0);
+#endif
     while(1)
     {
 #ifndef DEBUG_NO_TASKRFID
-        
-
-        
-        
-        
         switch(pRFIDDev->state)
         {
         case STATE_RFID_NOID:
@@ -72,8 +257,6 @@ void vTaskEVSERFID(void *pvParameters)
         
             /////////////////////
             
-            
-            
             uxBits = xEventGroupWaitBits(pRFIDDev->xHandleEventGroupRFID,
                                          defEventBitGotIDtoRFID,
                                          pdTRUE, pdTRUE, 0);
@@ -84,7 +267,7 @@ void vTaskEVSERFID(void *pvParameters)
                 ul2ucTmp.ucVal[1] = pRFIDDev->status.ucCardID[1];
                 ul2ucTmp.ucVal[2] = pRFIDDev->status.ucCardID[2];
                 ul2ucTmp.ucVal[3] = pRFIDDev->status.ucCardID[3];
-                ul2ucTmp.ulVal = utils_ntohl(ul2ucTmp.ulVal);
+                //ul2ucTmp.ulVal = utils_ntohl(ul2ucTmp.ulVal);
                 sprintf(pRFIDDev->order.strCardID, "%016u", ul2ucTmp.ulVal);
                 printf_safe("CardID :%s\n", pRFIDDev->order.strCardID);
                 pRFIDDev->state = STATE_RFID_GOTID;
@@ -94,253 +277,162 @@ void vTaskEVSERFID(void *pvParameters)
             }
             break;
         case STATE_RFID_GOTID:
-	        xEventGroupClearBits(xHandleEventHMI,defEventBitHMITimeOutToRFID);//防止其他状态产生timeout没有处理
-            for(i = 0; i < ulTotalCON; i++)  //2.判断卡是否刷过
+            // 判断卡是否刷过
+            id = IsOldID(pRFIDDev->order.strCardID);
+            if (id >= 0)
             {
-                pCON =  CONGetHandle(i);
-                if(pCON->state == STATE_CON_CHARGING)
-                {
-                    if(strcmp(pCON->order.strCardID, pRFIDDev->order.strCardID) == 0)
-                    {
-                        //此卡已刷
-#ifdef DEBUG_RFID
-                        printf_safe("connector %d 此卡已刷\n", i);
-#endif
-                        pRFIDDev->order.ucCONID = i;
-                        pRFIDDev->state = STATE_RFID_OLDID;
-                        break;
-                    }
-                    else
-                    {
-                        OrderInit(&(pRFIDDev->order));
-                        pRFIDDev->state = STATE_RFID_RETURN;
-                    }
-                }
-                else if(pCON->state == STATE_CON_STOPCHARGE)
-                {
-	                pCON->state = STATE_CON_RETURN;
-                    //while(1);
-                }
-                else if(pCON->state == STATE_CON_ERROR)
-                {
-	                pCON->state = STATE_CON_RETURN;
-	               //while(1);
-                }
-                else// if(pCON->state == STATE_CON_IDLE)
-                {
-                    //未刷过卡
-#ifdef DEBUG_RFID
-                    printf_safe("connector %d 空闲\n", i);
-#endif
-					xEventGroupSetBits(pRFIDDev->xHandleEventGroupRFID,
-									   defEventBitGotIDtoHMI);
-                    pRFIDDev->state = STATE_RFID_NEWID;
-                }
+                pRFIDDev->order.ucCONID = id;
+                pRFIDDev->state = STATE_RFID_OLDID;
+                break;
             }
+            // 卡之前没有刷过, 判断是否有可用枪
+            id = IsCONAvailable();
+            if (id >= 0)
+            {
+                printf_safe("有枪可以用\n");
+                pRFIDDev->state = STATE_RFID_NEWID;
+                break;
+            }
+            // 无枪可用
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
-        case STATE_RFID_NEWID:
-            pRFIDDev->order.ucCONID = 0;/** @fixme (rgw#1#): 这是模拟HMI返回选择ID ,选好枪后进行卡信息显示*/
-            pRFIDDev->order.dLimitFee = 0;
-            pRFIDDev->order.ulLimitTime = 0;
-            
-            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);//fix：防止结束时再次刷卡产生多余的刷卡停止标志
-            if (pCON->order.statOrder != STATE_ORDER_IDLE)
+        case STATE_RFID_NEWID:            
+            resCanChargeOrNot = canChargeOrNot();
+            if (resCanChargeOrNot == 3)//需要密码
             {
-                printf_safe("该接口有未完成订单!!!!\n");
-                vTaskDelay(2000);
-                pRFIDDev->state = STATE_RFID_RETURN;
+                pRFIDDev->status.ucNeedPwd = 1;
+                pRFIDDev->state = STATE_RFID_PWD;
                 break;
             }
-            errcode = RemoteIF_SendCardStart(pEVSE, pechProto, pRFIDDev);
-            ucVaild = 0;
-            switch(errcode)
-            {
-            case ERR_WHITE_LIST:
-                pRFIDDev->order.ucCardStatus = 1;
-                ucVaild = 1;
-                break;
-            case ERR_BLACK_LIST:
-                pRFIDDev->order.ucCardStatus = 2;
-                ucVaild = 2;
-                break;
-            case ERR_NO:
-                pRFIDDev->order.ucCardStatus = 0;
-                remote_timeout_u100ms = 0;
-                break;
-            default:
-                pRFIDDev->order.ucCardStatus = 3;
-                break;
-            }
-            errcode = ERR_REMOTE_NODATA;//初始化errorcode ；
-            res = 0;
-            while(pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
-            {
-                remote_timeout_u100ms++;
-                if(remote_timeout_u100ms >= 300)//30s
-                {
-                    pRFIDDev->state = STATE_RFID_TIMEOUT;
-                    break;
-                }
-                errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
-                vTaskDelay(100);
-            }
-            
-            if (pRFIDDev->state == STATE_RFID_TIMEOUT)//while超时情况的额外判断,以便退出当前case
-            {
-                break;
-            }
-            if(ucVaild == 2)//e充网定义 1 可充, 2不可充
+            else if (resCanChargeOrNot == 2)//不可充电
             {
                 pRFIDDev->state = STATE_RFID_BADID;
                 break;
             }
-
-            if(pRFIDDev->order.ucAccountStatus != 0 && pRFIDDev->order.dBalance > 0)
+            else if (resCanChargeOrNot == 1)//可以充电
+            {
+                if (pRFIDDev->order.dBalance <= get_current_totalfee(time(NULL)) * 0.1)
+                {
+                    pRFIDDev->state = STATE_RFID_OWE;//账户金额低于当前费率0.1倍算欠费
+                }
+                else
+                {
+                    pRFIDDev->state = STATE_RFID_GOODID;
+                }
+                break;
+            }
+            else//获取界面输入超时，云平台查询金额超时
+            {
+                pRFIDDev->state = STATE_RFID_TIMEOUT;
+                break;
+            }
+        case STATE_RFID_PWD:
+            resCanChargeOrNot = canChargeOrNot();
+            if (resCanChargeOrNot == 3 || resCanChargeOrNot == 2)
+            {
+                timesPwd--;
+                if (timesPwd == 0)
+                {
+                    pRFIDDev->state = STATE_RFID_PWDFULL;
+                    pRFIDDev->status.ucNeedPwd = 0;
+                    timesPwd = 3;
+                    break; 
+                }
+                break;
+            }
+            else if (resCanChargeOrNot == 1)
             {
                 pRFIDDev->state = STATE_RFID_GOODID;
-            }
-            else if(pRFIDDev->order.ucAccountStatus == 0)
-            {
-                pRFIDDev->state = STATE_RFID_BADID;
-            }
-            else if(pRFIDDev->order.dBalance < 0)
-            {
-                pRFIDDev->state = STATE_RFID_OWE;
+                pRFIDDev->status.ucNeedPwd = 0;
+                break;
             }
             else
             {
-                pRFIDDev->state = STATE_RFID_RETURN;
+                pRFIDDev->state = STATE_RFID_TIMEOUT;
+                break;
             }
-	        //卡信息界面立即点退出
-	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
-		        defEventBitHMITimeOutToRFID,
-		        pdTRUE,
-		        pdTRUE,
-		        0);
-	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-	        {
-		        pRFIDDev->state = STATE_RFID_TIMEOUT;
-		        break;
-	        }
+        case STATE_RFID_PWDFULL:
+            make_rfidpkg(pRFIDDev, &rfid_pkg);
+            xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+            vTaskDelay(5000);
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
-        case STATE_RFID_OLDID:
-#ifdef DEBUG_RFID
-            printf_safe("用户再次刷卡\n");
-            printf_safe("等待HMI操作...\n");
-#endif
-            /** @fixme (rgw#1#): 假设用户选择停止充电 */
-                pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
-                pRFIDDev->state = STATE_RFID_RETURN;
+        case STATE_RFID_OLDID:                                      
+            pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+            //如果是正在充电中刷卡, 则停止充电
+            //如果已经停止充电, 但是没有拔枪, 则不理会
+            if (pCON->order.statOrder == STATE_ORDER_UPDATE) 
+            {
+                uxBits = xEventGroupGetBits(pCON->status.xHandleEventException);
+                if ((uxBits & defEventBitExceptionRFIDStop) != defEventBitExceptionRFIDStop)
+                {
+                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFIDStop);
+                }
+            }
+            pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_GOODID:
-            /** @todo (rgw#1#): 1. 本任务会，通知HMI显示余额，此时如果为双枪，HMI应提示用户选择枪
-                                    HMI填充好选择的枪后，发送回Order队列*/
-#if EVSE_USING_GUI
-            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
-                            defEventBitGoodIDReqDisp,
-                            defEventBitGoodIDReqDispOK,
-                            10000);
-#endif
-			//卡信息界面立即点退出
-	        uxBits = xEventGroupWaitBits(xHandleEventHMI,
-		        defEventBitHMITimeOutToRFID,
-		        pdTRUE,
-		        pdTRUE,
-		        0);
-	        if ((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-	        {
-		        pRFIDDev->state = STATE_RFID_TIMEOUT;
-		        break;
-	        }
-
-#ifdef DEBUG_RFID
-            printf_safe("用户状态：");
-            switch(pRFIDDev->order.ucAccountStatus)
-            {
-            case 0:
-                printf_safe("未注册卡\n");
-                break;
-            case 1:
-                printf_safe("注册卡\n");
-                break;
-            case 2:
-                printf_safe("欠费卡\n");
-                break;
-            }
-            printf_safe("余额：%.2lf\n", pRFIDDev->order.dBalance);
-            printf_safe("用户选择充电枪ID：%d\n", pRFIDDev->order.ucCONID);
-#endif
-	        //此时如果没有进行充电，应在HMI倒计时完成后退出到IDLE状态
+            make_rfidpkg(pRFIDDev, &rfid_pkg);
+            xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             xEventGroupSync(pCON->status.xHandleEventOrder,
                             defEventBitOrderTmp,
                             defEventBitOrderUpdateOK,
-                            portMAX_DELAY);
+                            8000);
             pRFIDDev->state = STATE_RFID_HOLD;
 	        pRFIDDev->status.tHoldStateStartTime = time(NULL);
             break;
         case STATE_RFID_BADID:
-            /** @todo (rgw#1#): 通知HMI显示未注册 */
-            /** @todo (rgw#1#): 等待HMI事件通知结束 */
-#if EVSE_USING_GUI
-            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
-                            defEventBitBadIDReqDisp,
-                            defEventBitBadIDReqDispOK,
-                            portMAX_DELAY);
-#endif
-            OrderInit(&(pRFIDDev->order));
+            make_rfidpkg(pRFIDDev, &rfid_pkg);
+            xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+            vTaskDelay(5000);
             pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_OWE:
-            /** @todo (rgw#1#): 通知HMI显示欠费 */
-            /** @todo (rgw#1#): 等待HMI事件通知结束 */
-#if EVSE_USING_GUI
-            xEventGroupSync(pRFIDDev->xHandleEventGroupRFID,
-                            defEventBitOweIDReqDisp,
-                            defEventBitOwdIDReqDispOK,
-                            portMAX_DELAY);
-#endif
-            OrderInit(&pRFIDDev->order);
+            make_rfidpkg(pRFIDDev, &rfid_pkg);
+            xQueueSend(xHandleQueueRfidPkg, &rfid_pkg, 0);
+            vTaskDelay(5000);
             pRFIDDev->state = STATE_RFID_RETURN;
             break;
         case STATE_RFID_HOLD:
+            xResult = xQueueReceive(xHandleQueueUserChargeCondition, &user_likey, 0);
+            if (xResult == TRUE)
+            {
+                if (user_likey.HMItimeout == 1)
+                {
+                    pRFIDDev->state = STATE_RFID_TIMEOUT;
+                }
+            }
 	        if (time(NULL) - pRFIDDev->status.tHoldStateStartTime > pRFIDDev->status.ulHoldMaxTime_s)
 	        {
 		        pRFIDDev->state = STATE_RFID_TIMEOUT;
-		        break;
 	        }
+            if (pRFIDDev->state == STATE_RFID_TIMEOUT)
+            {
+    	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+                xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+    	        OrderInit(&(pCON->order));
+		        break;
+            }
             pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-            uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-                                         defEventBitCONStartOK,
-                                         pdFALSE, pdFALSE, 0);
+            uxBits = xEventGroupGetBits(pCON->status.xHandleEventCharge);
             if((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
             {
-                vTaskDelay(10000);
+                vTaskDelay(5000);
                 pRFIDDev->state = STATE_RFID_RETURN;
             }
-            uxBits = xEventGroupWaitBits(xHandleEventHMI,
-                                         defEventBitHMITimeOutToRFID,
-                                         pdTRUE, pdTRUE,0);
-            if((uxBits & defEventBitHMITimeOutToRFID) == defEventBitHMITimeOutToRFID)
-            {
-                pRFIDDev->state = STATE_RFID_TIMEOUT;
-            }
-            /** @todo (rgw#1#): 监控Charge状态，如果用户未充电前终止充电流程，则返回到NOID */
             break;
         case STATE_RFID_TIMEOUT:
-	        pCON = CONGetHandle(pRFIDDev->order.ucCONID);
-	        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-	        OrderInit(&(pCON->order));
+            xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_TimeOut);
 	        pRFIDDev->state = STATE_RFID_RETURN;
 	        break;
         case STATE_RFID_RETURN:
-            xEventGroupClearBits(pRFIDDev->xHandleEventGroupRFID,
-                                defEventBitGotIDtoHMI);
+            pRFIDDev->status.ucNeedPwd = 0;
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);
+            memset(pRFIDDev->status.strPwd, 0, sizeof(pRFIDDev->status.strPwd));
+            vTaskDelay(3000);
 #if EVSE_USING_RFID
             xTimerStart(xHandleTimerRFID, 100); 
 #endif

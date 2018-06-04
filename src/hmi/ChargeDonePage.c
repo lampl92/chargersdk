@@ -90,16 +90,19 @@ static void Data_Process(WM_MESSAGE *pMsg)
 
         diffsec = (uint32_t)difftime(now, first);
 
-        sec = 3 - diffsec;
+        sec = 5 - diffsec;
         if (sec < 0)
             sec = 0;
         sprintf((char *)_secDown, "(%02dS)", sec);
         if (sec == 0)
         {
-            orderFinish = 0;
+            //orderFinish = 0;
             first_flag = 0;
             			//跳到HOME
-            WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
+            if (pCON->state != STATE_CON_ERROR)
+            {
+                WM_SendMessageNoPara(hWin, MSG_JUMPHOME);
+            }
         }      
     }
 }
@@ -160,11 +163,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         pCON = CONGetHandle(0);
         memset(temp_buf, '\0', sizeof(temp_buf));
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
         sprintf(temp_buf, "%.2f", pCON->order.dTotalServFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), &SIF24_Font, FONT_COLOR, temp_buf);//服务费
-        sprintf(temp_buf, "%.2f", pCON->order.dTotalPowerFee);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergyFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), &SIF24_Font, FONT_COLOR, temp_buf);//电费
         sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
         Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_8), &SIF24_Font, FONT_COLOR, temp_buf);//消费总额  
@@ -264,7 +267,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     else if ((pCON->order.ucStopType == defOrderStopType_Scram)\
                         || (pCON->order.ucStopType == defOrderStopType_OverCurr)\
                         || (pCON->order.ucStopType == defOrderStopType_Poweroff)\
-                        || (pCON->order.ucStopType == defOrderStopType_NetLost)\
+                        || (pCON->order.ucStopType == defOrderStopType_Offline)\
                         || (pCON->order.ucStopType == defOrderStopType_Scram))
                     {
                         IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, ID_IMAGE_2), DevErrDoneImage->pfilestring, DevErrDoneImage->pfilesize);

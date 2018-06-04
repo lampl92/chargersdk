@@ -63,6 +63,7 @@ typedef ErrorCode_t(*pCONGetCfg_ft)(void *pvCON, void *pvCfgObj);
 typedef ErrorCode_t(*pCONSetCfg_ft)(void *pvCON, void *pvCfgParam);
 typedef ErrorCode_t(*pCon_ft)(void *pvCon);
 
+
 typedef struct _CONInfo
 {
     uint8_t ucCONID;                // 枪号
@@ -76,7 +77,7 @@ typedef struct _CONInfo
     double dSocketTempLowerLimits;
     double dRatedCurrent;
     double dRatedPower;                      //保留一位小数
-    uint8_t strQRCode[defQRCodeLength];
+    char strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
     ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
@@ -84,7 +85,6 @@ typedef struct _CONInfo
 
 typedef struct _CONStatus
 {
-    //uint8_t ucHeldCardID[defCardIDLength];
     CONStatusType_t xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM
     uint8_t ucLoadPercent;        // 负载百分比
     CONStatusType_t xCCState;     // 检测点4 CC state --PE
@@ -96,13 +96,18 @@ typedef struct _CONStatus
     double dBTypeSocketTemp2;
     CONStatusType_t xBTypeSocketLockState; //lock unlock
     double dChargingVoltage;
+    double dLineVolt[3];
     double dChargingCurrent;
+    double dLineCurr[3];
     double dChargingFrequence;
     double dChargingPower;
+    double dChargingEnergy;
+    
     EventGroupHandle_t xHandleEventCharge;
     EventGroupHandle_t xHandleEventOrder;
     EventGroupHandle_t xHandleEventException;
     EventGroupHandle_t xHandleEventTimerCBNotify;
+    EventGroupHandle_t xHandleEventDiag;
     TimerHandle_t xHandleTimerVolt;     //电压状态判断过程中使用
     TimerHandle_t xHandleTimerCurr;     //电流状态判断过程中使用
     TimerHandle_t xHandleTimerFreq;     //频率状态判断过程中使用
@@ -115,10 +120,7 @@ typedef struct _CONStatus
     uint32_t ulSignalFault;
     uint32_t ulSignalPool[CON_MAX_SIGNAL_BLOCK];
 
-    pCon_ft GetChargingVoltage;
-    pCon_ft GetChargingCurrent;
-    pCon_ft GetChargingFrequence;
-    pCon_ft GetChargingPower;
+    pCon_ft GetChargingData;
     VoltState_t xVoltStat;
     CurrState_t xCurrStat;
     FreqState_t xFreqStat;

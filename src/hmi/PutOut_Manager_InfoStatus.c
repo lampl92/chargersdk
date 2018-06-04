@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 *                                                                    *
 *                SEGGER Microcontroller GmbH & Co. KG                *
 *        Solutions for real time microcontroller applications        *
@@ -313,14 +313,14 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
     }
     
 	/**< 继电器输出L温度 */
-    if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+    if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
     {
-        printf_safe("x\n");
+        //printf_safe("x\n");
         LISTVIEW_SetItemText(hItem, 5, 5, "×");
     }
     else
     {
-        printf_safe("y\n");
+        //printf_safe("y\n");
         LISTVIEW_SetItemText(hItem, 5, 5, "√");
     }    
 }

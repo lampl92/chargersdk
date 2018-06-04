@@ -1,9 +1,26 @@
-#include "includes.h"
+#include "bsp.h"
 #include "utils.h"
 #include <time.h>
-#include "interface.h"
 #include "sys_types.h"
+#include "tinysh.h"
+
 extern void testBnWList(void);
+
+
+void Get_ChipID(void)
+{
+    int i;
+    __IO uint8_t *pid;
+    pid = (__IO uint8_t *)0x1FFF7A10;
+    printf_safe("id :\n");
+    for (i = 0; i < 12; i++)
+    {
+        printf_safe("%02X ",pid[i]);
+    }
+    printf_safe("\n");
+}
+
+
 void cli_hello_fnt(int argc, char **argv)
 {
     int i;
@@ -12,7 +29,14 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
+    Get_ChipID();
     //testBnWList();
+    //eth_main();
+    for (i = 0; i < 1000; i++)
+    {
+        //test_cfg_set(i);
+    }
+    //test_cfg_get();
 #if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);

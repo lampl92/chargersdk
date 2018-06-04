@@ -6,12 +6,37 @@
 * @date 2017-03-13
 */
 #include "includes.h"
-#include "xprintf.h"
 #include "yaffsfs.h"
+#include "utils.h"
+
+char *utils_strsep(char **stringp, const char *delim)
+{
+    char *s;
+    const char *spanp;
+    int c, sc;
+    char *tok;
+    if ((s = *stringp) == NULL)
+        return (NULL);
+    for (tok = s;;) {
+        c = *s++;
+        spanp = delim;
+        do {
+            if ((sc = *spanp++) == c) {
+                if (c == 0)
+                    s = NULL;
+                else
+                    s[-1] = 0;
+                *stringp = s;
+                return (tok);
+            }
+        } while (sc != 0);
+    }
+    /* NOTREACHED */
+}
 
 char *utils_strdup(const char *s)
 {
-    size_t len = strlen(s) + 1;//计算字符串的长度
+    size_t len = strlen(s) + sizeof("");//计算字符串的长度
     void *new = malloc(len);//分配一个新的空间给new
     if(new == NULL)
     {
@@ -81,7 +106,7 @@ uint32_t StrToBCD(const char *Str, char *Des, int iDesLen)
         }
         else
         {
-            chTemp = chTemp & 0xF0 | (Str[i] & 0x0F);
+            chTemp = (chTemp & 0xF0) | (Str[i] & 0x0F);
             Des[i / 2] = chTemp;
         }
     }
@@ -120,9 +145,10 @@ uint32_t BCDToStr(const char *Src, char *Des, int iSrcLen)
 }
 #endif
 
-uint32_t HexToChar(uint8_t Hex, uint8_t *c)
+uint32_t HexToChar(uint8_t Hex, char *c)
 {
     sprintf(c, "%02X", Hex);
+    return 0;
 }
 
 /** @brief hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99  --> "E1FF99000..."
@@ -133,7 +159,7 @@ uint32_t HexToChar(uint8_t Hex, uint8_t *c)
  * @return uint32_t
  *
  */
-uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
+uint32_t HexToStr(uint8_t *Hex, char *Str, int Hexlen)
 {
     int i;
     for(i = 0; i < Hexlen; i++)
@@ -141,6 +167,7 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
         HexToChar(Hex[i], &(Str[i * 2]));
     }
     Str[i * 2] = '\0';
+    return 0;
 }
 
 /** @brief "E1FF991234567890" --> hex[0] = 0xE1, hex[1] = 0xFF,  hex[2] = 0x99 ......
@@ -151,19 +178,20 @@ uint32_t HexToStr(uint8_t *Hex, uint8_t *Str, int Hexlen)
  * @return uint32_t
  *
  */
-uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen)
+uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen)
 {
-    uint8_t hexbuff[2];
-    uint8_t *src;
+    char hexbuff[3] = {0};
+    const char *src;
     int i;
     src = Str;
 
     for(i = 0; i < Strlen / 2; i++)
     {
-        strncpy((char *)hexbuff, src, 2);
+        strncpy(hexbuff, src, 2);
         Hex[i] = strtol(hexbuff, NULL, 16);
         src += 2;
     }
+    return 0;
 }
 
 int utils_abs(int num)
@@ -206,7 +234,7 @@ static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32
     *pulCrc32 = ((*pulCrc32) >> 8) ^ pulCrc32Table[(byte) ^ ((*pulCrc32) & 0x000000FF)];
 }
 
-int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32)
+int GetFileCrc32(char *path, uint32_t *pulCrc32)
 {
     int fd;
     int res = 0;
@@ -264,3 +292,16 @@ int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
 
     return 1;
 }
+
+uint32_t StrCrc32ToUint32(char *strCrc32)
+{
+    uint32_t crc32_orig;
+    ul2uc ul2ucCrc32;
+    
+    StrToHex(strCrc32, ul2ucCrc32.ucVal, strlen(strCrc32));
+    crc32_orig = utils_ntohl(ul2ucCrc32.ulVal);
+    
+    return crc32_orig;
+}
+
+char *strdup(const char *s) __attribute__((alias("utils_strdup")));

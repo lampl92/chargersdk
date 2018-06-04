@@ -35,7 +35,7 @@ error:
 	$(error Invalid configuration, please check your inputs)
 endif
 
-SOURCEFILES := ../../../src/app/cfg_order.c ../../../src/app/cfg_parse.c ../../../src/app/cfg_sys.c ../../../src/app/connector.c ../../../src/app/errorcode.c ../../../src/app/EVSE.c ../../../src/app/evse_globals.c ../../../src/app/factorycfg.c ../../../src/app/interface_charge.c ../../../src/app/interface_data.c ../../../src/app/interface_diag.c ../../../src/app/interface_monitor.c ../../../src/app/interface_remote.c ../../../src/app/interface_rfid.c ../../../src/app/libEcharge/ech_encrypt.c ../../../src/app/libEcharge/ech_ftp.c ../../../src/app/libEcharge/ech_globals.c ../../../src/app/libEcharge/ech_protocol.c ../../../src/app/libEcharge/ech_protocol_proc.c ../../../src/app/log_evse.c ../../../src/app/app_main.c ../../../src/app/order.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/sysinit.c ../../../src/app/taskcharge.c ../../../src/app/taskcreate.c ../../../src/app/taskdata.c ../../../src/app/taskdiag.c ../../../src/app/taskmonitor.c ../../../src/app/taskOTA.c ../../../src/app/taskremote.c ../../../src/app/taskrfid.c ../../../src/app/timercallback.c ../../../src/cli/cli_app.c ../../../src/cli/cli_evse.c ../../../src/cli/cli_main.c ../../../src/cli/cli_rtos.c ../../../src/cli/cli_xmodem.c ../../../src/cli/cli_yaffs2.c ../../../src/cli/cli_ymodem.c ../../../src/cli/tofile.c ../../../src/cli/yaffs2msic.c ../../../src/cli/ymodem.c ../../../src/drivers/bsp/src/bsp.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_flash.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_timer.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/electric_energy_meter.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/led_control.c ../../../src/drivers/bsp/src/myiic.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/ST_LIS2DH12.c ../../../src/drivers/bsp/src/user_app.c ../../../src/drivers/device/src/buzzer.c ../../../src/drivers/device/src/card_m1.c ../../../src/drivers/device/src/led.c ../../../src/drivers/device/src/modem.c ../../../src/drivers/device/src/RFIDReader_mt626.c ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_msp.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_rcc.c ../../../src/hmi/AdvertisementPage.c ../../../src/hmi/CardInfoPage.c ../../../src/hmi/ChargeDonePage.c ../../../src/hmi/ChargingPage.c ../../../src/hmi/HMI_Start.c ../../../src/hmi/HomePage.c ../../../src/hmi/lcd/lcddrv.c ../../../src/hmi/lcd/ltdc.c ../../../src/hmi/lcd/touch.c ../../../src/hmi/PutOut_Alarm_Log.c ../../../src/hmi/PutOut_Card_Info.c ../../../src/hmi/PutOut_Manager_AlarmLog.c ../../../src/hmi/PutOut_Manager_Common.c ../../../src/hmi/PutOut_Manager_ConSet.c ../../../src/hmi/PutOut_Manager_InfoAnalog.c ../../../src/hmi/PutOut_Manager_InfoStatus.c ../../../src/hmi/PutOut_Manager_SysInfo.c ../../../src/hmi/PutOut_Manager_SysSet.c ../../../src/hmi/PutOut_Manager_terminate.c ../../../src/hmi/PutOut_Skin_Keyboard.c ../../../src/hmi/pyinput.c ../../../src/hmi/Touch_Disp_Module.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/gdsl-1.8/src/gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/gdsl_perm.c ../../../src/middlewares/gdsl-1.8/src/gdsl_queue.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c ../../../src/middlewares/STemWin/BMP/bmpdisplay.c ../../../src/middlewares/STemWin/Config/GUIConf.c ../../../src/middlewares/STemWin/Config/LCDConf_Lin_Template.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_FreeRTOS.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_Touch_Analog.c ../../../src/middlewares/STemWin/SIF/siffontcreate.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/xprintf.c ../../../src/middlewares/yaffs2/direct/nanddrv/nanddrv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffscfg2k.c ../../../src/middlewares/yaffs2/direct/nanddrv/chip_mt29.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_mt29_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_nand_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_osglue.c ../../../src/middlewares/yaffs2/direct/yaffsfs.c ../../../src/middlewares/yaffs2/direct/yaffs_attribs.c ../../../src/middlewares/yaffs2/direct/yaffs_error.c ../../../src/middlewares/yaffs2/direct/yaffs_hweight.c ../../../src/middlewares/yaffs2/yaffs_allocator.c ../../../src/middlewares/yaffs2/yaffs_bitmap.c ../../../src/middlewares/yaffs2/yaffs_checkptrw.c ../../../src/middlewares/yaffs2/yaffs_ecc.c ../../../src/middlewares/yaffs2/yaffs_endian.c ../../../src/middlewares/yaffs2/yaffs_guts.c ../../../src/middlewares/yaffs2/yaffs_nameval.c ../../../src/middlewares/yaffs2/yaffs_nand.c ../../../src/middlewares/yaffs2/yaffs_packedtags1.c ../../../src/middlewares/yaffs2/yaffs_packedtags2.c ../../../src/middlewares/yaffs2/yaffs_summary.c ../../../src/middlewares/yaffs2/yaffs_tagscompat.c ../../../src/middlewares/yaffs2/yaffs_tagsmarshall.c ../../../src/middlewares/yaffs2/yaffs_verify.c ../../../src/middlewares/yaffs2/yaffs_yaffs1.c ../../../src/middlewares/yaffs2/yaffs_yaffs2.c ../../../src/net/mbedTLS/library/aes.c ../../../src/net/mbedTLS/library/platform.c ../../../src/os/FreeRTOS/FreeRTOSHook.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/stream_buffer.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_chargersdk.c system_chargersdk.c
+SOURCEFILES := ../../../src/drivers/device/src/quectel_uc15.c ../../../src/app/cfg_order.c ../../../src/app/cfg_parse.c ../../../src/app/cfg_sys.c ../../../src/app/connector.c ../../../src/app/errorcode.c ../../../src/app/EVSE.c ../../../src/app/evse_globals.c ../../../src/app/factorycfg.c ../../../src/app/file_op.c ../../../src/app/interface_charge.c ../../../src/app/interface_data.c ../../../src/app/interface_diag.c ../../../src/app/interface_monitor.c ../../../src/app/interface_remote.c ../../../src/app/interface_rfid.c ../../../src/app/libEcharge/ech_encrypt.c ../../../src/app/libEcharge/ech_ftp.c ../../../src/app/libEcharge/ech_globals.c ../../../src/app/libEcharge/ech_protocol.c ../../../src/app/libEcharge/ech_protocol_proc.c ../../../src/app/line.c ../../../src/app/log_evse.c ../../../src/app/app_main.c ../../../src/app/order.c ../../../src/app/stm32f4xx_it.c ../../../src/app/stringName.c ../../../src/app/sysinit.c ../../../src/app/taskcharge.c ../../../src/app/taskcreate.c ../../../src/app/taskdata.c ../../../src/app/taskdiag.c ../../../src/app/taskmonitor.c ../../../src/app/taskOTA.c ../../../src/app/taskremote.c ../../../src/app/taskrfid.c ../../../src/app/timercallback.c ../../../src/cli/cli_app.c ../../../src/cli/cli_evse.c ../../../src/cli/cli_log.c ../../../src/cli/cli_main.c ../../../src/cli/cli_net.c ../../../src/cli/cli_rtos.c ../../../src/cli/cli_yaffs2.c ../../../src/cli/cli_ymodem.c ../../../src/cli/cli_zip.c ../../../src/cli/tofile.c ../../../src/cli/ymodem.c ../../../src/drivers/bsp/src/bsp.c ../../../src/drivers/bsp/src/bsp_dwt.c ../../../src/drivers/bsp/src/bsp_gpio.c ../../../src/drivers/bsp/src/bsp_nand_flash.c ../../../src/drivers/bsp/src/bsp_rtc.c ../../../src/drivers/bsp/src/bsp_sdram.c ../../../src/drivers/bsp/src/bsp_timer.c ../../../src/drivers/bsp/src/bsp_uart.c ../../../src/drivers/bsp/src/bsp_user_lib.c ../../../src/drivers/bsp/src/iwdg.c ../../../src/drivers/bsp/src/led_control.c ../../../src/drivers/bsp/src/myiic.c ../../../src/drivers/bsp/src/retarget.c ../../../src/drivers/bsp/src/ST_LIS2DH12.c ../../../src/drivers/bsp/src/user_app.c ../../../src/drivers/device/src/buzzer.c ../../../src/drivers/device/src/card_m1.c ../../../src/drivers/device/src/led.c ../../../src/drivers/device/src/meter.c ../../../src/drivers/device/src/meter_p1_DDSD1352.c ../../../src/drivers/device/src/meter_p3_DTSF1352.c ../../../src/drivers/device/src/modem.c ../../../src/drivers/device/src/quectel_m26.c ../../../src/drivers/device/src/RFIDReader_mt626.c ../../../src/drivers/hal/CMSIS_RTOS/cmsis_os.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_crc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_ltdc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_msp.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nand.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_rcc.c ../../../src/hmi/a0HomeDLG.c ../../../src/hmi/AdvertisementPage.c ../../../src/hmi/aHomeDLG.c ../../../src/hmi/b0selectgunDLG.c ../../../src/hmi/CardInfoDLG.c ../../../src/hmi/CardInfoPage.c ../../../src/hmi/chargedoneinfoDLG.c ../../../src/hmi/ChargeDonePage.c ../../../src/hmi/charginginfoDLG.c ../../../src/hmi/ChargingPage.c ../../../src/hmi/b1selectpatternbetterDLG.c ../../../src/hmi/creadystartDLG.c ../../../src/hmi/d0nettimeoutDLG.c ../../../src/hmi/d1cardconditionnotokDLG.c ../../../src/hmi/d2pleaseplugDLG.c ../../../src/hmi/d3chargingokDLG.c ../../../src/hmi/eplugtimeoutDLG.c ../../../src/hmi/EquipmentFailureNoStart.c ../../../src/hmi/EVSEDLG.c ../../../src/hmi/manager_set/Keyboard.c ../../../src/hmi/manager_set/manager_alarm_log.c ../../../src/hmi/manager_set/manager_common.c ../../../src/hmi/manager_set/manager_con_set.c ../../../src/hmi/manager_set/manager_con_set_1.c ../../../src/hmi/manager_set/manager_states_info_win.c ../../../src/hmi/manager_set/manager_sys_Info.c ../../../src/hmi/manager_set/manager_sys_set.c ../../../src/hmi/PlugOrDeverrPage.c ../../../src/hmi/PwdError.c ../../../src/hmi/PwdInput.c ../../../src/hmi/PwdLimted.c ../../../src/hmi/PwdTest.c ../../../src/hmi/SkinCheckBox.c ../../../src/hmi/GUI_backstage.c ../../../src/hmi/HMI_Start.c ../../../src/hmi/HomePage.c ../../../src/hmi/selectpatternDLG.c ../../../src/hmi/lcd/lcddrv.c ../../../src/hmi/lcd/ltdc.c ../../../src/hmi/lcd/touch.c ../../../src/hmi/PutOut_Manager_AlarmLog.c ../../../src/hmi/PutOut_Manager_Common.c ../../../src/hmi/PutOut_Manager_ConSet.c ../../../src/hmi/PutOut_Manager_InfoAnalog.c ../../../src/hmi/PutOut_Manager_InfoStatus.c ../../../src/hmi/PutOut_Manager_SysInfo.c ../../../src/hmi/PutOut_Manager_SysSet.c ../../../src/hmi/PutOut_Manager_terminate.c ../../../src/hmi/PutOut_Skin_Keyboard.c ../../../src/hmi/pyinput.c ../../../src/hmi/SKIN_button.c ../../../src/hmi/SKIN_buttonSKB.c ../../../src/hmi/SKIN_mulitipage.c ../../../src/hmi/SKIN_progbarmeter.c ../../../src/hmi/Touch_Disp_Module.c ../../../src/middlewares/cJSON/cJSON.c ../../../src/middlewares/gdsl-1.8/src/gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/gdsl_perm.c ../../../src/middlewares/gdsl-1.8/src/gdsl_queue.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_list.c ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c ../../../src/middlewares/libmodbus-3.1.4/src/modbus-data.c ../../../src/middlewares/libmodbus-3.1.4/src/modbus-rtu.c ../../../src/middlewares/libmodbus-3.1.4/src/modbus.c ../../../src/middlewares/STemWin/BMP/display.c ../../../src/middlewares/STemWin/Config/GUIConf.c ../../../src/middlewares/STemWin/Config/LCDConf_Lin_Template.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_FreeRTOS.c ../../../src/middlewares/STemWin/GUI_X/GUI_X_Touch_Analog.c ../../../src/middlewares/STemWin/SIF/siffontcreate.c ../../../src/middlewares/tinysh/tinysh.c ../../../src/middlewares/unzip101e/adler32.c ../../../src/middlewares/unzip101e/crc32.c ../../../src/middlewares/unzip101e/deflate.c ../../../src/middlewares/unzip101e/inffast.c ../../../src/middlewares/unzip101e/inflate.c ../../../src/middlewares/unzip101e/inftrees.c ../../../src/middlewares/unzip101e/ioapi.c ../../../src/middlewares/unzip101e/miniunz.c ../../../src/middlewares/unzip101e/minizip.c ../../../src/middlewares/unzip101e/mztools.c ../../../src/middlewares/unzip101e/trees.c ../../../src/middlewares/unzip101e/unzip.c ../../../src/middlewares/unzip101e/zip.c ../../../src/middlewares/unzip101e/zutil.c ../../../src/middlewares/userlib/src/ring_buffer.c ../../../src/middlewares/userlib/src/userlib_list.c ../../../src/middlewares/userlib/src/userlib_queue.c ../../../src/middlewares/userlib/src/utils.c ../../../src/middlewares/userlib/src/yaffs2misc.c ../../../src/middlewares/yaffs2/direct/nanddrv/nanddrv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffscfg2k.c ../../../src/middlewares/yaffs2/direct/nanddrv/chip_mt29.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_mt29_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_nand_drv.c ../../../src/middlewares/yaffs2/direct/nanddrv/yaffs_osglue.c ../../../src/middlewares/yaffs2/direct/yaffsfs.c ../../../src/middlewares/yaffs2/direct/yaffs_attribs.c ../../../src/middlewares/yaffs2/direct/yaffs_error.c ../../../src/middlewares/yaffs2/direct/yaffs_hweight.c ../../../src/middlewares/yaffs2/yaffs_allocator.c ../../../src/middlewares/yaffs2/yaffs_bitmap.c ../../../src/middlewares/yaffs2/yaffs_checkptrw.c ../../../src/middlewares/yaffs2/yaffs_ecc.c ../../../src/middlewares/yaffs2/yaffs_endian.c ../../../src/middlewares/yaffs2/yaffs_guts.c ../../../src/middlewares/yaffs2/yaffs_nameval.c ../../../src/middlewares/yaffs2/yaffs_nand.c ../../../src/middlewares/yaffs2/yaffs_packedtags1.c ../../../src/middlewares/yaffs2/yaffs_packedtags2.c ../../../src/middlewares/yaffs2/yaffs_summary.c ../../../src/middlewares/yaffs2/yaffs_tagscompat.c ../../../src/middlewares/yaffs2/yaffs_tagsmarshall.c ../../../src/middlewares/yaffs2/yaffs_verify.c ../../../src/middlewares/yaffs2/yaffs_yaffs1.c ../../../src/middlewares/yaffs2/yaffs_yaffs2.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/fs_port_yaffs.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer/debug.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/dtls_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/dtls_record.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/ssl_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_cache.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_certificate.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_cipher_suites.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_client.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_client_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_common.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake_hash.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_key_material.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_record.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_server.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_server_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_signature.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_cache.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_client.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_common.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_debug.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/uart/stm32f4x9_uart_driver.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_client.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_commands.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_events.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/smtp/smtp_client.c ../../../src/net/mbedTLS/library/mbedtls_aes.c ../../../src/net/mbedTLS/library/platform.c ../../../src/net/user/ifconfig.c ../../../src/net/user/interface_ftpclient.c ../../../src/net/user/interface_ftpserver.c ../../../src/net/user/interface_network.c ../../../src/net/user/interface_smtpclient.c ../../../src/net/user/net_device.c ../../../src/net/user/net_eth.c ../../../src/net/user/net_ppp.c ../../../src/net/user/tasknetwork.c ../../../src/net/user/taskppp.c ../../../src/os/FreeRTOS/FreeRTOSHook.c ../../../src/os/FreeRTOS/Source/croutine.c ../../../src/os/FreeRTOS/Source/event_groups.c ../../../src/os/FreeRTOS/Source/list.c ../../../src/os/FreeRTOS/Source/queue.c ../../../src/os/FreeRTOS/Source/stream_buffer.c ../../../src/os/FreeRTOS/Source/tasks.c ../../../src/os/FreeRTOS/Source/timers.c ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c startup_chargersdk.c start_up.c system_chargersdk.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/cpu_endian.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/date_time.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/os_port_freertos.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/path.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/resource_manager.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/str.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/bsd_socket.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ethernet.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ip.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/net.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/net_mem.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/nic.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ping.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/raw_socket.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/socket.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_fsm.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_timer.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/udp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_client.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_common.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_debug.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_server.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/mac/stm32f4x9_eth_driver.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/phy/lan8720_driver.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/arp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/auto_ip.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/icmp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/igmp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/ipv4.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/ipv4_frag.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/chap.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ipcp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ipv6cp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/lcp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/pap.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_debug.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_fsm.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_hdlc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_misc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/chargen.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/daytime.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/discard.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/echo.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/asn1.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/base64.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/oid.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/rng/yarrow.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/ccm.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/chacha20_poly1305.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/gcm.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/pem_import.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_cert_parse.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_cert_validate.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_common.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/aes.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/aria.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/camellia.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/chacha.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/des.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/des3.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/idea.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/present.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/rc4.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/rc6.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/seed.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/cbc.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/cfb.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ctr.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ecb.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ofb.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/xts.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ec.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ecdh.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ecdsa.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ec_curves.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b160.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b256.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b384.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b512.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s128.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s160.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s224.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s256.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md2.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md4.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md5.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/ripemd128.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/ripemd160.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha1.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha224.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha256.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha384.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_224.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_256.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_384.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_512.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512_224.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512_256.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/tiger.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/whirlpool.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/kdf/pkcs5.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/cmac.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/gmac.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/hmac.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/poly1305.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mpi/mpi.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/dh.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/dsa.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/rsa.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/keccak.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/shake128.c ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/shake256.c
 EXTERNAL_LIBS := ../../../src/middlewares/STemWin/Lib/STemWin540_CM4_OS_GCC_ot_ARGB.a
 EXTERNAL_LIBS_COPIED := $(foreach lib, $(EXTERNAL_LIBS),$(BINARYDIR)/$(notdir $(lib)))
 
@@ -188,6 +188,10 @@ $(BINARYDIR)/%.o : %.cxx $(all_make_files) |$(BINARYDIR)
 #VisualGDB: GeneratedRules				#<--- All lines below are auto-generated. Remove this line to suppress auto-generation of file rules.
 
 
+$(BINARYDIR)/quectel_uc15.o : ../../../src/drivers/device/src/quectel_uc15.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/cfg_order.o : ../../../src/app/cfg_order.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -217,6 +221,10 @@ $(BINARYDIR)/evse_globals.o : ../../../src/app/evse_globals.c $(all_make_files) 
 
 
 $(BINARYDIR)/factorycfg.o : ../../../src/app/factorycfg.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/file_op.o : ../../../src/app/file_op.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -261,6 +269,10 @@ $(BINARYDIR)/ech_protocol.o : ../../../src/app/libEcharge/ech_protocol.c $(all_m
 
 
 $(BINARYDIR)/ech_protocol_proc.o : ../../../src/app/libEcharge/ech_protocol_proc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/line.o : ../../../src/app/line.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -332,15 +344,19 @@ $(BINARYDIR)/cli_evse.o : ../../../src/cli/cli_evse.c $(all_make_files) |$(BINAR
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/cli_log.o : ../../../src/cli/cli_log.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/cli_main.o : ../../../src/cli/cli_main.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/cli_rtos.o : ../../../src/cli/cli_rtos.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/cli_net.o : ../../../src/cli/cli_net.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/cli_xmodem.o : ../../../src/cli/cli_xmodem.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/cli_rtos.o : ../../../src/cli/cli_rtos.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -352,11 +368,11 @@ $(BINARYDIR)/cli_ymodem.o : ../../../src/cli/cli_ymodem.c $(all_make_files) |$(B
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/tofile.o : ../../../src/cli/tofile.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/cli_zip.o : ../../../src/cli/cli_zip.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/yaffs2msic.o : ../../../src/cli/yaffs2msic.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/tofile.o : ../../../src/cli/tofile.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -400,10 +416,6 @@ $(BINARYDIR)/bsp_user_lib.o : ../../../src/drivers/bsp/src/bsp_user_lib.c $(all_
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/electric_energy_meter.o : ../../../src/drivers/bsp/src/electric_energy_meter.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
 $(BINARYDIR)/iwdg.o : ../../../src/drivers/bsp/src/iwdg.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -440,7 +452,23 @@ $(BINARYDIR)/led.o : ../../../src/drivers/device/src/led.c $(all_make_files) |$(
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/meter.o : ../../../src/drivers/device/src/meter.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/meter_p1_DDSD1352.o : ../../../src/drivers/device/src/meter_p1_DDSD1352.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/meter_p3_DTSF1352.o : ../../../src/drivers/device/src/meter_p3_DTSF1352.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/modem.o : ../../../src/drivers/device/src/modem.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/quectel_m26.o : ../../../src/drivers/device/src/quectel_m26.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -524,6 +552,10 @@ $(BINARYDIR)/stm32f4xx_hal_rcc_ex.o : ../../../src/drivers/hal/STM32F4xx_HAL_Dri
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/stm32f4xx_hal_rng.o : ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/stm32f4xx_hal_rtc.o : ../../../src/drivers/hal/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -560,7 +592,23 @@ $(BINARYDIR)/stm32f4xx_ll_rcc.o : ../../../src/drivers/hal/STM32F4xx_HAL_Driver/
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/a0HomeDLG.o : ../../../src/hmi/a0HomeDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/AdvertisementPage.o : ../../../src/hmi/AdvertisementPage.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/aHomeDLG.o : ../../../src/hmi/aHomeDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/b0selectgunDLG.o : ../../../src/hmi/b0selectgunDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/CardInfoDLG.o : ../../../src/hmi/CardInfoDLG.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -568,11 +616,115 @@ $(BINARYDIR)/CardInfoPage.o : ../../../src/hmi/CardInfoPage.c $(all_make_files) 
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/chargedoneinfoDLG.o : ../../../src/hmi/chargedoneinfoDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/ChargeDonePage.o : ../../../src/hmi/ChargeDonePage.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/charginginfoDLG.o : ../../../src/hmi/charginginfoDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/ChargingPage.o : ../../../src/hmi/ChargingPage.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/b1selectpatternbetterDLG.o : ../../../src/hmi/b1selectpatternbetterDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/creadystartDLG.o : ../../../src/hmi/creadystartDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/d0nettimeoutDLG.o : ../../../src/hmi/d0nettimeoutDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/d1cardconditionnotokDLG.o : ../../../src/hmi/d1cardconditionnotokDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/d2pleaseplugDLG.o : ../../../src/hmi/d2pleaseplugDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/d3chargingokDLG.o : ../../../src/hmi/d3chargingokDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/eplugtimeoutDLG.o : ../../../src/hmi/eplugtimeoutDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/EquipmentFailureNoStart.o : ../../../src/hmi/EquipmentFailureNoStart.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/EVSEDLG.o : ../../../src/hmi/EVSEDLG.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/Keyboard.o : ../../../src/hmi/manager_set/Keyboard.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_alarm_log.o : ../../../src/hmi/manager_set/manager_alarm_log.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_common.o : ../../../src/hmi/manager_set/manager_common.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_con_set.o : ../../../src/hmi/manager_set/manager_con_set.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_con_set_1.o : ../../../src/hmi/manager_set/manager_con_set_1.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_states_info_win.o : ../../../src/hmi/manager_set/manager_states_info_win.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_sys_Info.o : ../../../src/hmi/manager_set/manager_sys_Info.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/manager_sys_set.o : ../../../src/hmi/manager_set/manager_sys_set.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PlugOrDeverrPage.o : ../../../src/hmi/PlugOrDeverrPage.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PwdError.o : ../../../src/hmi/PwdError.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PwdInput.o : ../../../src/hmi/PwdInput.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PwdLimted.o : ../../../src/hmi/PwdLimted.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PwdTest.o : ../../../src/hmi/PwdTest.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/SkinCheckBox.o : ../../../src/hmi/SkinCheckBox.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/GUI_backstage.o : ../../../src/hmi/GUI_backstage.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -581,6 +733,10 @@ $(BINARYDIR)/HMI_Start.o : ../../../src/hmi/HMI_Start.c $(all_make_files) |$(BIN
 
 
 $(BINARYDIR)/HomePage.o : ../../../src/hmi/HomePage.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/selectpatternDLG.o : ../../../src/hmi/selectpatternDLG.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -593,14 +749,6 @@ $(BINARYDIR)/ltdc.o : ../../../src/hmi/lcd/ltdc.c $(all_make_files) |$(BINARYDIR
 
 
 $(BINARYDIR)/touch.o : ../../../src/hmi/lcd/touch.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/PutOut_Alarm_Log.o : ../../../src/hmi/PutOut_Alarm_Log.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/PutOut_Card_Info.o : ../../../src/hmi/PutOut_Card_Info.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -644,6 +792,22 @@ $(BINARYDIR)/pyinput.o : ../../../src/hmi/pyinput.c $(all_make_files) |$(BINARYD
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/SKIN_button.o : ../../../src/hmi/SKIN_button.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/SKIN_buttonSKB.o : ../../../src/hmi/SKIN_buttonSKB.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/SKIN_mulitipage.o : ../../../src/hmi/SKIN_mulitipage.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/SKIN_progbarmeter.o : ../../../src/hmi/SKIN_progbarmeter.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/Touch_Disp_Module.o : ../../../src/hmi/Touch_Disp_Module.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -672,7 +836,19 @@ $(BINARYDIR)/_gdsl_node.o : ../../../src/middlewares/gdsl-1.8/src/_gdsl_node.c $
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/bmpdisplay.o : ../../../src/middlewares/STemWin/BMP/bmpdisplay.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/modbus-data.o : ../../../src/middlewares/libmodbus-3.1.4/src/modbus-data.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/modbus-rtu.o : ../../../src/middlewares/libmodbus-3.1.4/src/modbus-rtu.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/modbus.o : ../../../src/middlewares/libmodbus-3.1.4/src/modbus.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/display.o : ../../../src/middlewares/STemWin/BMP/display.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -700,6 +876,66 @@ $(BINARYDIR)/tinysh.o : ../../../src/middlewares/tinysh/tinysh.c $(all_make_file
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
+$(BINARYDIR)/adler32.o : ../../../src/middlewares/unzip101e/adler32.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/crc32.o : ../../../src/middlewares/unzip101e/crc32.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/deflate.o : ../../../src/middlewares/unzip101e/deflate.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/inffast.o : ../../../src/middlewares/unzip101e/inffast.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/inflate.o : ../../../src/middlewares/unzip101e/inflate.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/inftrees.o : ../../../src/middlewares/unzip101e/inftrees.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ioapi.o : ../../../src/middlewares/unzip101e/ioapi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/miniunz.o : ../../../src/middlewares/unzip101e/miniunz.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/minizip.o : ../../../src/middlewares/unzip101e/minizip.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/mztools.o : ../../../src/middlewares/unzip101e/mztools.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/trees.o : ../../../src/middlewares/unzip101e/trees.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/unzip.o : ../../../src/middlewares/unzip101e/unzip.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/zip.o : ../../../src/middlewares/unzip101e/zip.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/zutil.o : ../../../src/middlewares/unzip101e/zutil.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ring_buffer.o : ../../../src/middlewares/userlib/src/ring_buffer.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
 $(BINARYDIR)/userlib_list.o : ../../../src/middlewares/userlib/src/userlib_list.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -712,7 +948,7 @@ $(BINARYDIR)/utils.o : ../../../src/middlewares/userlib/src/utils.c $(all_make_f
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/xprintf.o : ../../../src/middlewares/userlib/src/xprintf.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/yaffs2misc.o : ../../../src/middlewares/userlib/src/yaffs2misc.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -820,11 +1056,179 @@ $(BINARYDIR)/yaffs_yaffs2.o : ../../../src/middlewares/yaffs2/yaffs_yaffs2.c $(a
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/aes.o : ../../../src/net/mbedTLS/library/aes.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/fs_port_yaffs.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/fs_port_yaffs.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/debug.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer/debug.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dtls_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/dtls_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dtls_record.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/dtls_record.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ssl_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/ssl_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_cache.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_cache.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_certificate.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_certificate.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_cipher_suites.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_cipher_suites.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_client.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_client.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_client_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_client_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_common.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_common.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_handshake.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_handshake_hash.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake_hash.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_handshake_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_handshake_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_key_material.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_key_material.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_record.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_record.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_server.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_server.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_server_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_server_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tls_signature.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl/tls_signature.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dns_cache.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_cache.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dns_client.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_client.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dns_common.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_common.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dns_debug.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dns/dns_debug.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4x9_uart_driver.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/uart/stm32f4x9_uart_driver.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ftp_client.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_client.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ftp_server.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ftp_server_commands.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_commands.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ftp_server_events.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_events.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ftp_server_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ftp/ftp_server_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/smtp_client.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/smtp/smtp_client.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/mbedtls_aes.o : ../../../src/net/mbedTLS/library/mbedtls_aes.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
 $(BINARYDIR)/platform.o : ../../../src/net/mbedTLS/library/platform.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ifconfig.o : ../../../src/net/user/ifconfig.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/interface_ftpclient.o : ../../../src/net/user/interface_ftpclient.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/interface_ftpserver.o : ../../../src/net/user/interface_ftpserver.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/interface_network.o : ../../../src/net/user/interface_network.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/interface_smtpclient.o : ../../../src/net/user/interface_smtpclient.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/net_device.o : ../../../src/net/user/net_device.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/net_eth.o : ../../../src/net/user/net_eth.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/net_ppp.o : ../../../src/net/user/net_ppp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tasknetwork.o : ../../../src/net/user/tasknetwork.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/taskppp.o : ../../../src/net/user/taskppp.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -865,6 +1269,478 @@ $(BINARYDIR)/port.o : ../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F/port
 
 
 $(BINARYDIR)/heap_4.o : ../../../src/os/FreeRTOS/Source/portable/MemMang/heap_4.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cpu_endian.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/cpu_endian.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/date_time.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/date_time.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/os_port_freertos.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/os_port_freertos.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/path.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/path.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/resource_manager.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/resource_manager.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/str.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common/str.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/bsd_socket.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/bsd_socket.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ethernet.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ethernet.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ip.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ip.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/net.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/net.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/net_mem.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/net_mem.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/nic.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/nic.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ping.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/ping.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/raw_socket.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/raw_socket.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/socket.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/socket.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tcp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tcp_fsm.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_fsm.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tcp_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tcp_timer.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/tcp_timer.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/udp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/core/udp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dhcp_client.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_client.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dhcp_common.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_common.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dhcp_debug.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_debug.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dhcp_server.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/dhcp/dhcp_server.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4x9_eth_driver.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/mac/stm32f4x9_eth_driver.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/lan8720_driver.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/drivers/phy/lan8720_driver.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/arp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/arp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/auto_ip.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/auto_ip.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/icmp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/icmp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/igmp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/igmp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ipv4.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/ipv4.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ipv4_frag.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ipv4/ipv4_frag.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/chap.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/chap.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ipcp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ipcp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ipv6cp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ipv6cp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/lcp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/lcp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/pap.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/pap.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ppp.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ppp_debug.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_debug.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ppp_fsm.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_fsm.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ppp_hdlc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_hdlc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ppp_misc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/ppp/ppp_misc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/chargen.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/chargen.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/daytime.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/daytime.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/discard.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/discard.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/echo.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp/std_services/echo.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/asn1.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/asn1.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/base64.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/base64.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/oid.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/encoding/oid.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/yarrow.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/rng/yarrow.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ccm.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/ccm.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/chacha20_poly1305.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/chacha20_poly1305.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/gcm.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/aead/gcm.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/pem_import.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/pem_import.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/x509_cert_parse.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_cert_parse.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/x509_cert_validate.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_cert_validate.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/x509_common.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/certificate/x509_common.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/aes.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/aes.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/aria.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/aria.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/camellia.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/camellia.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/chacha.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/chacha.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/des.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/des.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/des3.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/des3.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/idea.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/idea.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/present.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/present.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/rc4.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/rc4.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/rc6.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/rc6.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/seed.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher/seed.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cbc.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/cbc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cfb.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/cfb.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ctr.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ctr.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ecb.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ecb.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ofb.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/ofb.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/xts.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/cipher_mode/xts.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ec.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ec.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ecdh.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ecdh.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ecdsa.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ecdsa.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ec_curves.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/ecc/ec_curves.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2b.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2b160.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b160.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2b256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b256.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2b384.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b384.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2b512.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2b512.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2s.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2s128.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s128.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2s160.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s160.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2s224.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s224.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/blake2s256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/blake2s256.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/md2.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md2.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/md4.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md4.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/md5.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/md5.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ripemd128.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/ripemd128.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/ripemd160.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/ripemd160.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha1.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha1.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha224.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha224.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha256.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha384.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha384.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha3_224.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_224.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha3_256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_256.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha3_384.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_384.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha3_512.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha3_512.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha512.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha512_224.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512_224.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sha512_256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/sha512_256.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/tiger.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/tiger.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/whirlpool.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/hash/whirlpool.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/pkcs5.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/kdf/pkcs5.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cmac.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/cmac.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/gmac.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/gmac.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/hmac.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/hmac.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/poly1305.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mac/poly1305.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/mpi.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/mpi/mpi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dh.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/dh.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/dsa.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/dsa.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/rsa.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/pkc/rsa.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/keccak.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/keccak.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/shake128.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/shake128.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/shake256.o : ../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto/xof/shake256.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 $(BINARYDIR)/STemWin540_CM4_OS_GCC_ot_ARGB.a : ../../../src/middlewares/STemWin/Lib/STemWin540_CM4_OS_GCC_ot_ARGB.a

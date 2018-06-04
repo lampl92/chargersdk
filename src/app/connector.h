@@ -10,12 +10,14 @@
 
 #include "order.h"
 #include "connector_privType.h"
+#include "line.h"
 
 typedef struct _CON
 {
     CONInfo_t info;
     CONStatus_t status;
     CONState_t state;
+    Line_t line[4];
     OrderData_t order;
     OrderTmpData_t OrderTmp;
 } CON_t;
