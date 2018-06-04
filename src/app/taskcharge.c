@@ -318,7 +318,20 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_CHARGING:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Working);
-                if (pCON->status.ulSignalFault != 0 ||
+                
+                if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
+                    pCON->order.ucStartType == defOrderStartType_Remote)
+                {
+                    if (pCON->status.ulSignalFault != 0 ||
+                        (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)
+                    {
+                        printf_safe("Dev Fault Stop Error!\n");
+                        pCON->state = STATE_CON_STOPCHARGE;
+                        dev_err = 1;
+                        break;
+                    }
+                }
+                else if (pCON->status.ulSignalFault != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
                     printf_safe("Dev Fault Stop Error!\n");
