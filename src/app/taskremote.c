@@ -462,7 +462,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 60)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }
@@ -476,7 +476,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 60)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }
