@@ -48,11 +48,13 @@
 #define ID_WINDOW_0     (GUI_ID_USER + 0x00)
 #define ID_BUTTON_1  (GUI_ID_USER + 0x01)
 #define ID_BUTTON_2  (GUI_ID_USER + 0x02)
-#define ID_TEXT_1     (GUI_ID_USER + 0x03)
 #define ID_LISTVIEW_0   (GUI_ID_USER + 0x04)
+
 #define ID_FRAMEWIN_0     (GUI_ID_USER + 0x05)
+#define ID_TEXT_1     (GUI_ID_USER + 0x03)
 #define ID_BUTTON_3  (GUI_ID_USER + 0x06)
 #define ID_BUTTON_4  (GUI_ID_USER + 0x07)
+
 
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
@@ -69,8 +71,8 @@
 
 #define GUI_MANAGERSYSINFO_XLENTH 400
 
-static WM_HTIMER _timerRTC,_timerData,_timerSignal;
-uint16_t column_num,row_num;
+static WM_HTIMER _timerRTC, _timerData, _timerSignal;
+uint16_t column_num, row_num;
 WM_HWIN _hWinManagerSysInfo;
 WM_HWIN _hWinFrame;
 /*********************************************************************
@@ -81,6 +83,16 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 0, 40, 800, 440, 0, 0x0, 0 },
     { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, GUI_MANAGERSYSINFO_XLENTH, 180, 0, 0x0, 0 },//560,276
+//    { BUTTON_CreateIndirect, "清空数据", ID_BUTTON_3, 650, 100, 80, 50, 0, 0x0, 0 },
+//    { BUTTON_CreateIndirect, "恢复默认", ID_BUTTON_4, 650, 200, 80, 50, 0, 0x0, 0 },
+};
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
+{
+    { FRAMEWIN_CreateIndirect, "!!!!", ID_FRAMEWIN_0, 250, 50, 300, 200, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text", ID_TEXT_1, 0, 50, 300, 50, TEXT_CF_HCENTER, 0x0, 0 },
+    { BUTTON_CreateIndirect, "确定-重启", ID_BUTTON_3, 50, 110, 80, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "取消", ID_BUTTON_4, 200, 110, 80, 50, 0, 0x0, 0 },
 };
 
 /*********************************************************************
@@ -105,17 +117,17 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 
     hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
     /**< 协议版本 */
-    memset(buf,'\0',sizeof(buf));
-    strcpy(buf,sysInfoProtoVer);
-    memset(tmp,'\0',sizeof(tmp));
-    sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-    strcat(buf,tmp);
+    memset(buf, '\0', sizeof(buf));
+    strcpy(buf, sysInfoProtoVer);
+    memset(tmp, '\0', sizeof(tmp));
+    sprintf(tmp, "%d", pechProto->info.ucProtoVer);
+    strcat(buf, tmp);
     LISTVIEW_SetItemText(hItem, 0, 1, buf);
     LISTVIEW_AddRow(hItem, NULL);//增加一行
     /**< 软件版本 */
-    memset(buf,'\0',sizeof(buf));
-    strcpy(buf,sysInfoVersion);
-    strcat(buf,xSysconf.strVersion);
+    memset(buf, '\0', sizeof(buf));
+    strcpy(buf, sysInfoVersion);
+    strcat(buf, xSysconf.strVersion);
     LISTVIEW_SetItemText(hItem, 0, 2, buf);
 }
 
@@ -123,27 +135,23 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 *
 *       _cbDialog
 */
-static void _cbDialog_frame(WM_MESSAGE *pMsg)
+static void _cbDialog_frame_record(WM_MESSAGE *pMsg)
 {
+    WM_HWIN      hItem;
     int          NCode;
     int          Id;
     char buff[10];
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-//        FRAMEWIN_GetText(pMsg->hWin, buff, 10);
-//        if (str_cmp(buff, "!!") == 0)
-//        {
-//            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将删除所有记录文件");
-//        }
-//        else
-//        {
-//            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将清空所有配置和记录文件");
-//        }
-        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0,ID_BUTTON_3);
+        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_1);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        TEXT_SetText(hItem, "将删除所有记录文件!");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_3), &SIF16_Font);
         BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
-        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
         BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_4), &SIF16_Font);
         BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
         break;
@@ -155,25 +163,65 @@ static void _cbDialog_frame(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                WM_GetUserData(pMsg->hWin, buff, 10);
-                if (str_cmp("record",buff) == 0)
-                {
-                    yaffs_unlink(pathOrder);
-                    yaffs_unlink(pathOrderTmp);
-                    yaffs_unlink(pathEVSELog);
-                    NVIC_SystemReset();
-                }
-                else
-                {
-                    yaffs_unlink(pathOrder);
-                    yaffs_unlink(pathOrderTmp);
-                    yaffs_unlink(pathEVSELog);
-                    yaffs_unlink(pathEVSECfg);
-                    yaffs_unlink(pathSysCfg);
-                    yaffs_unlink(pathFTPCfg);
-                    yaffs_unlink(pathProtoCfg);
-                    NVIC_SystemReset();
-                }
+                yaffs_unlink(pathOrder);
+                yaffs_unlink(pathOrderTmp);
+                yaffs_unlink(pathEVSELog);
+                NVIC_SystemReset();
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_4:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
+
+static void _cbDialog_frame_default(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        FRAMEWIN_SetFont(pMsg->hWin,&SIF24_Font);
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_1);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        TEXT_SetText(hItem, "将清空所有配置和记录文件!");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
+        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_3), &SIF16_Font);
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
+        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_4), &SIF16_Font);
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_3:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                yaffs_unlink(pathOrder);
+                yaffs_unlink(pathOrderTmp);
+                yaffs_unlink(pathEVSELog);
+                yaffs_unlink(pathEVSECfg);
+                yaffs_unlink(pathSysCfg);
+                yaffs_unlink(pathFTPCfg);
+                yaffs_unlink(pathProtoCfg);
+                NVIC_SystemReset();
                 break;
             default:
                 break;
@@ -200,11 +248,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     U32          FileSize;
     int          NCode;
     int          Id;
-    uint16_t     i,_strNum[3];
-	volatile HEADER_Handle hHeader;
-	uint8_t    buf[50];
-	uint8_t    tmp[10];
-//	static char  Value = 0;
+    uint16_t     i, _strNum[3];
+    volatile HEADER_Handle hHeader;
+    uint8_t    buf[50];
+    uint8_t    tmp[10];
+    //	static char  Value = 0;
     SCROLLBAR_Handle hScroll;
     SCROLLBAR_Handle wScroll;
     CON_t	*pcont;
@@ -219,14 +267,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     case WM_INIT_DIALOG:
         if (managerLevel == 0)
         {
-            BUTTON_CreateEx(650, 200, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_1);
+            BUTTON_CreateEx(450, 80, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_1);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
             BUTTON_SetFont(hItem, &SIF16_Font);
-            BUTTON_SetText(hItem, "恢复默认");
-            BUTTON_CreateEx(650, 100, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_2);
+            BUTTON_SetText(hItem, "清空数据");
+            BUTTON_CreateEx(450, 180, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_2);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
             BUTTON_SetFont(hItem, &SIF16_Font);
-            BUTTON_SetText(hItem, "清空数据");
+            BUTTON_SetText(hItem, "恢复默认");
         }
         //
         // 初始列表控件
@@ -242,9 +290,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         LISTVIEW_SetGridVis(hItem, 1);
 
         column_num = LISTVIEW_GetNumColumns(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0));
-        for(i = 0;i < column_num;i++)
+        for (i = 0; i < column_num; i++)
         {
-            LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0),0);
+            LISTVIEW_DeleteColumn(WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0), 0);
         }
 
         /*增加一列*/
@@ -257,33 +305,29 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         LISTVIEW_SetItemText(hItem, 0, 0, sysInfoEVSEName);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 协议版本 */
-        memset(buf,'\0',sizeof(buf));
-        strcpy(buf,sysInfoProtoVer);
-        memset(tmp,'\0',sizeof(tmp));
-        sprintf(tmp,"%d",pechProto->info.ucProtoVer);
-        strcat(buf,tmp);
+        memset(buf, '\0', sizeof(buf));
+        strcpy(buf, sysInfoProtoVer);
+        memset(tmp, '\0', sizeof(tmp));
+        sprintf(tmp, "%d", pechProto->info.ucProtoVer);
+        strcat(buf, tmp);
         LISTVIEW_SetItemText(hItem, 0, 1, buf);
         LISTVIEW_AddRow(hItem, NULL);//增加一行
         /**< 软件版本 */
-        memset(buf,'\0',sizeof(buf));
-        strcpy(buf,sysInfoVersion);
-        strcat(buf,xSysconf.strVersion);
+        memset(buf, '\0', sizeof(buf));
+        strcpy(buf, sysInfoVersion);
+        strcat(buf, xSysconf.strVersion);
         LISTVIEW_SetItemText(hItem, 0, 2, buf);
 
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
-        switch(Id) {
+        switch (Id) {
         case ID_BUTTON_1:
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                _hWinFrame = WM_CreateWindowAsChild(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_MEMDEV, _cbDialog_frame, 10);
-                WM_SetUserData(_hWinFrame, "record", 10);
-//                _hWinFrame = FRAMEWIN_CreateEx(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!", _cbDialog_frame);
-//                FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
-//                FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_YELLOW);
+                GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_record, WM_GetClientWindow(pMsg->hWin), 0, 0);
                 break;
             default:
                 break;
@@ -293,17 +337,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                _hWinFrame = WM_CreateWindowAsChild(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW | WM_CF_MEMDEV, _cbDialog_frame, 10);
-                WM_SetUserData(_hWinFrame, "default", 10);
-//                _hWinFrame = FRAMEWIN_CreateEx(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!!!", _cbDialog_frame);
-//                FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
-//                FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_RED);
+                GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_default, WM_GetClientWindow(pMsg->hWin), 0, 0);
                 break;
             default:
                 break;
             }
             break;
-    }
+        }
     case WM_TIMER:
 //        if(pMsg->Data.v == _timerRTC)
 //        {
@@ -318,10 +358,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 //
 //            WM_RestartTimer(pMsg->Data.v, 2000);
 //        }
-        if(pMsg->Data.v == _timerData)
+        if (pMsg->Data.v == _timerData)
         {
             Status_Content_Analy(pMsg);
-            WM_RestartTimer(pMsg->Data.v,3000);
+            WM_RestartTimer(pMsg->Data.v, 3000);
         }
         break;
     case MSG_CREATERRWIN:
@@ -330,10 +370,10 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         break;
     case MSG_DELERRWIN:
         /**< 故障界面存在则删除故障界面 */
-        if(bittest(winCreateFlag,0))
+        if (bittest(winCreateFlag, 0))
         {
-            bitclr(winCreateFlag,0);
-            GUI_EndDialog(err_hItem,0);
+            bitclr(winCreateFlag, 0);
+            GUI_EndDialog(err_hItem, 0);
             err_hItem = 0;
         }
         break;
@@ -364,7 +404,7 @@ WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin)
 {
     _hWinManagerSysInfo = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_GetClientWindow(srcHwin), 0, 0);
 //    _timerRTC = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerTime, 20, 0);
-    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerFlush,1000,0);
+    _timerData = WM_CreateTimer(WM_GetClientWindow(_hWinManagerSysInfo), ID_TimerFlush, 1000, 0);
 //    _timerSignal = WM_CreateTimer(WM_GetClientWindow(_hWinManagerInfoAnalog), ID_TimerSignal,5000,0);
     return _hWinManagerSysInfo;
 }

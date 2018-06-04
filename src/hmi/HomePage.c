@@ -293,8 +293,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 IMAGE_SetBMP(hItem, SignalImage0->pfilestring, SignalImage0->pfilesize);
             }
-            Led_Show();
-            WM_RestartTimer(pMsg->Data.v, 20);
+            WM_RestartTimer(pMsg->Data.v, 1000);
         }
         break;
     case MSG_CREATERRWIN:
