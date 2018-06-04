@@ -18,6 +18,7 @@
 #include "gprs_m26.h"
 #include "bsp.h"
 #include "modem.h"
+#include "touchtimer.h"
 
 
 /*---------------------------------------------------------------------------/
@@ -27,6 +28,7 @@
 #define defSTACK_TaskCLI                    (1024 * 50)
 //#define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskGUI                    (1024*20)
+#define defSTACK_TaskGuidingLights           512
 //#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskTouch                  1024
 #define defSTACK_TaskOTA                    1024
@@ -65,6 +67,7 @@
 #define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
+#define defPRIORITY_TaskGuidingLights       3
 #define defPRIORITY_TaskCLI                 16  //1. 原优先级2，修改16保证执行添加订单时订单存储被高优先级任务打断。2017年12月15日
 
 //#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
@@ -76,6 +79,7 @@
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
+const char *TASKNAME_GuidingLights  = "TaskGuidingLights";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
 const char *TASKNAME_PPP            = "TaskPPP";
@@ -95,6 +99,7 @@ const char *TASKNAME_EVSEData       = "TaskEVSEData";
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
+void vTaskGuidingLights(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
 void vTaskPPP(void *pvParameters);
@@ -114,6 +119,7 @@ void vTaskEVSEData(void *pvParameters);
 static TaskHandle_t xHandleTaskInit = NULL;
 static TaskHandle_t xHandleTaskCLI = NULL;
 static TaskHandle_t xHandleTaskGUI = NULL;
+static TaskHandle_t xHandleTaskGuidingLights = NULL;
 static TaskHandle_t xHandleTaskTouch = NULL;
 static TaskHandle_t xHandleTaskOTA = NULL;
 static TaskHandle_t xHandleTaskPPP = NULL;
@@ -197,6 +203,14 @@ void vTaskGUI(void *pvParameters)
 {
     MainTask();
 }
+void vTaskGuidingLights(void *pvParameters)
+{
+    while (1)
+    {
+        LedShow();
+        vTaskDelay(100);
+    }
+}
 
 void vTaskTouch(void *pvParameters)
 {
@@ -217,6 +231,7 @@ void SysTaskCreate (void)
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
 #if EVSE_USING_GUI
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
+    xTaskCreate(vTaskGuidingLights, TASKNAME_GuidingLights, defSTACK_TaskGuidingLights, NULL, defPRIORITY_TaskGuidingLights, &xHandleTaskGuidingLights);
     xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
 #endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );

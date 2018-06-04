@@ -594,6 +594,10 @@ void Led_Show1()
 
 void Led_Show()
 {
+}
+
+void LedShow()
+{
     CON_t *pCON;
     pCON = CONGetHandle(0);
     /**< 置位说明有故障存在闪烁红灯 */
@@ -662,7 +666,6 @@ void Led_Show()
         }
     }
 }
-
 
 /** @brief
  *刷新故障列表;
