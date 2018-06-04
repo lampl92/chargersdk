@@ -48,42 +48,38 @@ void vTaskEVSEDiag(void *pvParameters)
         for (i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
+            /** 未启动时有故障清除认证标志*/
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
-                //发生温度告警（max_temp-10 ~ max_temp）
-                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
-                    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
-                {
-                    pCON->status.SetLoadPercent(pCON, 80);
-                }
-                //温度\电流警告（非严重告警）、电压过欠压算正常，不进行处理
-                if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_DontCare) != 0 ||
+                if (pCON->status.ulSignalAlarm != 0 ||
                     pCON->status.ulSignalFault != 0 ||
-                   (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_DontCare) != 0 ||
+                    pEVSE->status.ulSignalAlarm != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
-                    //其他异常清除认证标志
+                    //异常清除认证标志
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-            }
-            if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
+            }//end of Not working
+            //发生温度告警（max_temp-10 ~ max_temp）
+            if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
             {
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+                pCON->status.SetLoadPercent(pCON, 70);
             }
             else
             {
-                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
+                pCON->status.SetLoadPercent(pCON, 100);
             }
-            
-            if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+            //发生电流告警
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
             {
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+                pCON->status.SetLoadPercent(pCON, 70);
             }
             else
             {
-                xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
+                pCON->status.SetLoadPercent(pCON, 100);
             }
-        }//end of for()
+        }//end of for() id
 
         /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */
 

@@ -113,8 +113,6 @@
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
-#define defEventBitExceptionRFID        BIT_7
-#define defEventBitExceptionMeter       BIT_8
 #define defEventBitExceptionFreqTimer   BIT_9
 
 #define defEventBitExceptionLimitEnergy  BIT_10  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
@@ -123,9 +121,6 @@
 #define defEventBitExceptionRemoteStop  BIT_13  //远程停止
 #define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
 #define defEventBitExceptionOfflineStop    BIT_15  //网络离线
-
-#define defEventBitExceptionDevFault    (defEventBitExceptionRFID | \
-                                         defEventBitExceptionMeter)
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -204,7 +199,7 @@
 #define defSocketTypeC              ('C')//67
     
 ////////////////////////////////////////////
-//Signal原则：0-关  1-开  0-正常  1-异常  
+//Signal原则：0-关  1-开 or 0-正常  1-异常  
 ////////////////////////////////////////////
 /*EVSE Signal Pool*/
     //ulSignalState
@@ -285,24 +280,10 @@
 #define defSignalCON_Fault_AC_C_Temp            BIT_3
 #define defSignalCON_Fault_AC_N_Temp            BIT_4
 #define defSignalCON_Fault_RelayPaste           BIT_5
-//#define defSignalCON_Fault_AC_B_RelayPaste      BIT_6
-//#define defSignalCON_Fault_AC_C_RelayPaste      BIT_7
-//#define defSignalCON_Fault_AC_N_RelayPaste      BIT_8
-#define defSignalCON_Fault_CP                   BIT_9        //CP传感故障
-#define defSignalCON_Fault_Plug                 BIT_10
-#define defSignalCON_Fault_Meter                BIT_11       //电表或电能芯片
+#define defSignalCON_Fault_CP                   BIT_6        //CP传感故障
+#define defSignalCON_Fault_Plug                 BIT_7
+#define defSignalCON_Fault_Meter                BIT_8       //电表或电能芯片
 
-//#define defSignalGroupCON_Fault_AC_RelayPaste       (defSignalCON_Fault_AC_A_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_B_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_C_RelayPaste | \
-//                                                    defSignalCON_Fault_AC_N_RelayPaste )
-    
-#define defSignalGroupCON_Alarm_DontCare    (defSignalGroupCON_Alarm_Temp_War   | \
-                                             defSignalCON_Alarm_AC_A_CurrUp_War | \
-                                             defSignalCON_Alarm_AC_A_VoltUp     | \
-                                             defSignalCON_Alarm_AC_A_VoltLow)
-    
-#define defSignalGroupEVSE_Alarm_DontCare    (defSignalGroupEVSE_Alarm_Temp_War)
     
 #define defSignalGroupCON_Alarm_Temp_War           (defSignalCON_Alarm_SocketTemp1_War | \
                                                 defSignalCON_Alarm_SocketTemp2_War | \

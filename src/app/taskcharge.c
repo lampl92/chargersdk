@@ -318,16 +318,15 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_CHARGING:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Working);
-                uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
-                                                      defEventBitExceptionDevFault,
-                                                      pdFALSE, pdFALSE, 0);
-                if((uxBitsException & defEventBitExceptionDevFault) != 0)
+                if (pCON->status.ulSignalFault != 0 ||
+                    pEVSE->status.ulSignalFault != 0)
                 {
                     printf_safe("Dev Fault Stop Error!\n");
                     pCON->state = STATE_CON_STOPCHARGE;
                     dev_err = 1;
                     break;
                 }
+
                 /*** 判断用户相关停止条件  ***/
                 uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
                 if ((uxBitsException & defEventBitExceptionLimitEnergy) == defEventBitExceptionLimitEnergy)    //达到充电电量限制
@@ -354,7 +353,7 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_STOPCHARGE;
                     break;
                 }
-                if ((uxBitsException & defEventBitExceptionOfflineStop) == defEventBitExceptionOfflineStop)    //达到充电时间限制
+                if ((uxBitsException & defEventBitExceptionOfflineStop) == defEventBitExceptionOfflineStop)    //设备离线时间超时
                 {
                     printf_safe("Offline Stop Charge!\n");
                     xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
@@ -542,13 +541,13 @@ void vTaskEVSECharge(void *pvParameters)
                 vTaskDelay(500);
                 break;
             case STATE_CON_DEV_ERROR:
-                uxBitsException = xEventGroupGetBits(pCON->status.xHandleEventException);
-                if ((uxBitsException & defEventBitExceptionDevFault) == 0)
+                if (pCON->status.ulSignalFault == 0 &&
+                    pEVSE->status.ulSignalFault == 0)
                 {
                     printf_safe("Error recovery!\n");
                     dev_err = 0;
                     pCON->state = STATE_CON_ERROR;
-                } 
+                }
                 break;
             case STATE_CON_RETURN:
                 stop_try = 0;
