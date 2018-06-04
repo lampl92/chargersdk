@@ -35,6 +35,7 @@
 #include "stringName.h"
 #include "errorcode.h"
 #include <string.h>
+#include "yaffsfs.h"
 
 #define BYTES_LEN 1024
 
@@ -45,31 +46,13 @@
 **********************************************************************
 */
 #define ID_WINDOW_0     (GUI_ID_USER + 0x00)
-// USER START (Optionally insert additional defines)
-#define ID_IMAGE_0    (GUI_ID_USER + 0x1C)
-#define ID_TEXT_1     (GUI_ID_USER + 0x0B)
-#define ID_TEXT_2     (GUI_ID_USER + 0x0C)
-#define ID_TEXT_3     (GUI_ID_USER + 0x0D)
-#define ID_TEXT_4     (GUI_ID_USER + 0x0E)
-
-#define ID_BUTTON_0  (GUI_ID_USER + 0x00)//信息
-#define ID_BUTTON_1  (GUI_ID_USER + 0x01)//历史
-#define ID_BUTTON_2  (GUI_ID_USER + 0x02)//系统
-#define ID_BUTTON_3  (GUI_ID_USER + 0x03)//退出
-#define ID_BUTTON_4  (GUI_ID_USER + 0x04)//模拟
-#define ID_BUTTON_5  (GUI_ID_USER + 0x05)//状态
-#define ID_TEXT_5  (GUI_ID_USER + 0x06)//
-#define ID_EDIT_0  (GUI_ID_USER + 0x07)//
-#define ID_TEXT_6  (GUI_ID_USER + 0x08)//
-
-#define ID_LISTWHEEL_0  (GUI_ID_USER + 0x10)
-#define ID_LISTWHEEL_1  (GUI_ID_USER + 0x11)
-#define ID_LISTWHEEL_2  (GUI_ID_USER + 0x12)
-#define ID_LISTWHEEL_3  (GUI_ID_USER + 0x13)
-#define ID_LISTWHEEL_4  (GUI_ID_USER + 0x14)
-#define ID_LISTWHEEL_5  (GUI_ID_USER + 0x15)
-#define ID_MULTIEDIT_0  (GUI_ID_USER + 0x16)
-#define ID_LISTVIEW_0   (GUI_ID_USER + 0x17)
+#define ID_BUTTON_1  (GUI_ID_USER + 0x01)
+#define ID_BUTTON_2  (GUI_ID_USER + 0x02)
+#define ID_TEXT_1     (GUI_ID_USER + 0x03)
+#define ID_LISTVIEW_0   (GUI_ID_USER + 0x04)
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x05)
+#define ID_BUTTON_3  (GUI_ID_USER + 0x06)
+#define ID_BUTTON_4  (GUI_ID_USER + 0x07)
 
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
@@ -89,6 +72,7 @@
 static WM_HTIMER _timerRTC,_timerData,_timerSignal;
 uint16_t column_num,row_num;
 WM_HWIN _hWinManagerSysInfo;
+WM_HWIN _hWinFrame;
 /*********************************************************************
 *
 *       _aDialogCreate
@@ -139,6 +123,75 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 *
 *       _cbDialog
 */
+static void _cbDialog_frame(WM_MESSAGE *pMsg)
+{
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        FRAMEWIN_GetText(pMsg->hWin, buff, 10);
+        if (str_cmp(buff, "!!") == 0)
+        {
+            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将删除所有记录文件");
+        }
+        else
+        {
+            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将清空所有配置和记录文件");
+        }
+        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0,ID_BUTTON_3);
+        BUTTON_SetFont(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), &SIF24_Font);
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定");
+        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
+        BUTTON_SetFont(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), &SIF24_Font);
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_3:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                if (FRAMEWIN_GetBarColor(pMsg->hWin, 1) == GUI_YELLOW)
+                {
+                    yaffs_unlink(pathOrder);
+                    yaffs_unlink(pathOrderTmp);
+                    yaffs_unlink(pathEVSELog);
+                    NVIC_SystemReset();
+                }
+                else
+                {
+                    yaffs_unlink(pathOrder);
+                    yaffs_unlink(pathOrderTmp);
+                    yaffs_unlink(pathEVSELog);
+                    yaffs_unlink(pathEVSECfg);
+                    yaffs_unlink(pathSysCfg);
+                    yaffs_unlink(pathFTPCfg);
+                    yaffs_unlink(pathProtoCfg);
+                    NVIC_SystemReset();
+                }
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_4:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
+
 static void _cbDialog(WM_MESSAGE *pMsg)
 {
     const void *pData;
@@ -161,28 +214,17 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_PAINT:
-//        WM_SetFocus(_hWinManagerAlarmLog);
-//        /// TODO (zshare#1#): 下面的if不起作用.\
-//        但是if里嵌套的if起作用,目前先用此来规避不起作用的if
-//        if(_hWinManagerAlarmLog == cur_win)
-//        {
-//            /**< 数据处理 */
-//            //Data_Process(pMsg);
-//            /**< 信号数据处理 */
-//            Signal_Show();
-//            /**< 灯光控制 */
-//            Led_Show();
-//            /**< 如果界面发生了切换 */
-//            if(_hWinManagerAlarmLog == cur_win)
-//            {
-//                /**< 故障分析 */
-//                //Err_Analy(pMsg->hWin);
-//                /**< 特殊触控点分析 */
-//                CaliDone_Analy(pMsg->hWin);
-//            }
-//        }
         break;
     case WM_INIT_DIALOG:
+        if (managerLevel == 0)
+        {
+            BUTTON_CreateEx(650, 200, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_1);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+            BUTTON_SetText(hItem, "恢复默认");
+            BUTTON_CreateEx(650, 100, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_2);
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+            BUTTON_SetText(hItem, "清空数据");
+        }
         //
         // 初始列表控件
         //
@@ -190,15 +232,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         /* 设置列表控件中header控件的所显示文本的字体 */
         hHeader = LISTVIEW_GetHeader(hItem);
         HEADER_SetFont(hHeader, &SIF36_Font);
-
-        /*srollbar*/
-//        hScroll = SCROLLBAR_CreateAttached(hItem, 0);//水平滑轮
-//        SCROLLBAR_SetNumItems(hScroll, 30 * 4);
-//        SCROLLBAR_SetWidth(hScroll,20);
-//        wScroll = SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);//垂直滑轮
-//        SCROLLBAR_SetNumItems(wScroll, 30 * 20);
-//        SCROLLBAR_SetWidth(wScroll,20);
-        /*end*/
 
         /* 设置列表控件选项中所显示文本的字体 */
         LISTVIEW_SetFont(hItem, &SIF24_Font);
@@ -239,8 +272,30 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         Id    = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
         switch(Id) {
-
-        break;
+        case ID_BUTTON_1:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                _hWinFrame = FRAMEWIN_CreateEx(250, 140, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!", _cbDialog_frame);
+                FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
+                FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_YELLOW);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_2:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                _hWinFrame = FRAMEWIN_CreateEx(250, 140, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!!!", _cbDialog_frame);
+                FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
+                FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_RED);
+                break;
+            default:
+                break;
+            }
+            break;
     }
     case WM_TIMER:
 //        if(pMsg->Data.v == _timerRTC)
