@@ -462,9 +462,9 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)
     {
-        printf_safe("cfg file parse fail, remove orig file and create new cfg file!!\n");
-        yaffs_unlink(path);
-        create_cfg_file(path, select_ctx_from_path(path));
+//        printf_safe("cfg file parse fail, remove orig file and create new cfg file!!\n");
+//        yaffs_unlink(path);
+//        create_cfg_file(path, select_ctx_from_path(path));
         *perrcode = ERR_FILE_PARSE;
         goto exit_parse;
     }
