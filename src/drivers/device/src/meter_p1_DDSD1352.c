@@ -24,7 +24,7 @@ static int meter_get_all(void *pvmeter, int addr)
         return -1;
     meter->status.volt[0] = u16tab_reg[0] * 0.1;//0.1V
     meter->status.curr[0] = u16tab_reg[1] * 0.01;//0.01A
-    meter->status.pwr[0] = u16tab_reg[2] * 0.01;//0.001kW
+    meter->status.pwr[0] = u16tab_reg[2] * 0.001;//0.001kW
     //读取频率
     regs = modbus_read_registers(meter->mb, meter->config.freq_addr, 1, u16tab_reg);
     if (regs != 1)
