@@ -131,21 +131,21 @@ static void _cbDialog_frame(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-        FRAMEWIN_GetText(pMsg->hWin, buff, 10);
-        if (str_cmp(buff, "!!") == 0)
-        {
-            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将删除所有记录文件");
-        }
-        else
-        {
-            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将清空所有配置和记录文件");
-        }
-        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0,ID_BUTTON_3);
-        BUTTON_SetFont(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), &SIF24_Font);
-        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定(重启）");
-        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
-        BUTTON_SetFont(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), &SIF24_Font);
-        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
+//        FRAMEWIN_GetText(pMsg->hWin, buff, 10);
+//        if (str_cmp(buff, "!!") == 0)
+//        {
+//            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将删除所有记录文件");
+//        }
+//        else
+//        {
+//            TEXT_CreateEx(0, 50, 300, 50, pMsg->hWin, WM_CF_SHOW, TEXT_CF_HCENTER, ID_TEXT_1, "将清空所有配置和记录文件");
+//        }
+//        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0,ID_BUTTON_3);
+//        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_3), &SIF24_Font);
+//        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
+//        BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
+//        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_4), &SIF24_Font);
+//        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -220,9 +220,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             BUTTON_CreateEx(650, 200, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_1);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
+            BUTTON_SetFont(hItem, &SIF24_Font);
             BUTTON_SetText(hItem, "恢复默认");
             BUTTON_CreateEx(650, 100, 80, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_2);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+            BUTTON_SetFont(hItem, &SIF24_Font);
             BUTTON_SetText(hItem, "清空数据");
         }
         //
@@ -276,9 +278,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:                
-                _hWinFrame = FRAMEWIN_CreateEx(250, 140, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!", _cbDialog_frame);
+                _hWinFrame = FRAMEWIN_CreateEx(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!", _cbDialog_frame);
                 FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
                 FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_YELLOW);
+                BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_3);
+                BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(_hWinFrame), ID_BUTTON_3), &SIF24_Font);
+                BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
+                BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
+                BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(_hWinFrame), ID_BUTTON_4), &SIF24_Font);
+                BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
                 break;
             default:
                 break;
@@ -288,9 +296,15 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                _hWinFrame = FRAMEWIN_CreateEx(250, 140, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!!!", _cbDialog_frame);
+                _hWinFrame = FRAMEWIN_CreateEx(250, 50, 300, 200, pMsg->hWin, WM_CF_SHOW, 0, ID_FRAMEWIN_0, "!!!!", _cbDialog_frame);
                 FRAMEWIN_SetFont(_hWinFrame, &SIF24_Font);
                 FRAMEWIN_SetBarColor(_hWinFrame, 1, GUI_RED);
+                BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_3);
+                BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(_hWinFrame), ID_BUTTON_3), &SIF24_Font);
+                BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
+                BUTTON_CreateEx(40, 110, 70, 50, pMsg->hWin, WM_CF_SHOW, 0, ID_BUTTON_4);
+                BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(_hWinFrame), ID_BUTTON_4), &SIF24_Font);
+                BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
                 break;
             default:
                 break;

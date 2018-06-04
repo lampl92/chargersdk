@@ -458,7 +458,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             }
             memset(strTermCtx, 0, sizeof(strTermCtx));
             
-            WM_RestartTimer(pMsg->Data.v,500);
+            WM_RestartTimer(pMsg->Data.v,2000);
         }
         break;
 //    case MSG_CREATERRWIN:
