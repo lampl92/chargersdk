@@ -10,8 +10,7 @@ int cli_huart = -1;
 
 void tinysh_char_out(unsigned char c)
 {
-//    uart_write_fast(cli_huart, &c, 1);//为确保线程安全，不要直接使用串口输出。
-    printf_safe("%c", c);
+    uart_write_fast(cli_huart, &c, 1);
 }
 
 void cli_init(void)
