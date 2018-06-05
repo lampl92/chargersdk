@@ -159,7 +159,7 @@ const char *strSysCfg =
     \"yoff\": 65486,\n \
     \"Version\":\"888888\",\n \
     \"USE_GPRSModem\":2,\n \
-    \"USE_Meter\": 1,\n \
+    \"USE_Meter\": 2,\n \
     \"USE_RFID\": 1,\n \
     \"USE_GUI\":1\n \
 }\n";
@@ -179,7 +179,34 @@ const char *strNetCfg =
     \"DNS1\":\"192.168.30.1\",\n \
     \"DNS2\":\"0.0.0.0\"\n \
 }\n";
-        
+     
+const char *strMeterCfg =
+"{\n \
+    \"meter2\":\n \
+    {\n \
+        \"energy_addr\": 0,\n \
+        \"volt_addr\": 11,\n \
+        \"curr_addr\": 12,\n \
+        \"pwr_addr\": 13,\n \
+        \"freq_addr\": 17\n \
+    },\n \
+    \"meter3\":\n \
+    {\n \
+        \"energy_addr\": 0,\n \
+        \"volt_addr\": 97,\n \
+        \"curr_addr\": 100,\n \
+        \"pwr_addr\": 362,\n \
+        \"freq_addr\": 119\n \
+    },\n \
+    \"meter4\":\n \
+    {\n \
+        \"energy_addr\": 00,\n \
+        \"volt_addr\": 66,\n \
+        \"curr_addr\": 69,\n \
+        \"pwr_addr\": -1,\n \
+        \"freq_addr\": -1\n \
+    }\n \
+}\n";
 const char *strWhiteListCfg ="[]\n";
 const char *strBlackListCfg ="[]\n";
     

@@ -18,6 +18,7 @@
 #define pathWhiteList       "/nand/system/whitelist.cfg"
 #define pathBlackList       "/nand/system/blacklist.cfg"
 #define pathNetCfg          "/nand/system/ifconfig.cfg"
+#define pathMeterCfg        "/nand/system/meter.cfg"
 #define pathBin             "/nand/system/chargesdk.bin.new"
 
 typedef enum _filelist
@@ -382,5 +383,13 @@ typedef enum _filelist
 #define jnNetGate           "Gate"
 #define jnNetDNS1           "DNS1"
 #define jnNetDNS2           "DNS2"
+
+/*meter.cfg*/
+#define jnMeter             "meter"
+#define jnMeterEnergyAddr   "energy_addr"
+#define jnMeterVoltAddr     "volt_addr"
+#define jnMeterCurrAddr     "curr_addr"
+#define jnMeterPwrAddr      "pwr_addr"
+#define jnMeterFreqAddr     "freq_addr"
 
 #endif

@@ -36,17 +36,13 @@ meter_s *meter_create(meter_config_s *config)
     return meter;
 }
 
-#include "meter_p1_DDSD1352.h"
-#include "meter_p3_DTSF1352.h"
+#include "meter_acrel.h"
 
 meter_s *meter_init(int phase)
 {
     meter_s *meter;
     
-    if (phase == 1)
-        meter = meter_DDSD1352_init();
-    else
-        meter = meter_DTSF1352_init();
+    meter = meter_acrel_init();
 
     return meter;
 }

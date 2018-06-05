@@ -3,6 +3,15 @@
 
 #include "modbus.h"
 
+typedef struct _meter_reg
+{ 
+    uint16_t energy_addr;
+    uint16_t volt_addr;
+    uint16_t curr_addr;
+    uint16_t freq_addr;
+    uint16_t pwr_addr;
+}meter_reg_s;
+
 typedef struct _meter_config
 {
     char *strUART;
@@ -12,31 +21,25 @@ typedef struct _meter_config
     int stop_bit;
     int mode;
     uint32_t timeout_us;
-    
-    uint16_t volt_addr;
-    uint16_t curr_addr;
-    uint16_t freq_addr;
-    uint16_t pwr_addr;
-    uint16_t energy_addr;
-    
 }meter_config_s;
 
 typedef struct _meter_status
 {
+    double energy;
     double volt[3];
     double curr[3];
     double pwr[3];
     double freq;
-    double energy;
     
 }meter_status_s;
 
 typedef struct _meter
 {
     modbus_t *mb;
+    meter_reg_s regs;
     meter_config_s config;
     meter_status_s status;
-    int (*get_all)(void *meter, int addr);
+    int (*get_all)(void *meter, int dev_addr);
     
 }meter_s;
 

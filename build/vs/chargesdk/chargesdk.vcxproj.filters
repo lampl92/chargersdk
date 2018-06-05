@@ -540,7 +540,6 @@
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\uart">
       <UniqueIdentifier>{f48c96c6-a0fb-4e52-b3f5-362276970cdf}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="Source files\hmi\manager_set">
       <UniqueIdentifier>{43bf6f9d-419a-43b4-99c8-01c2eb361aa1}</UniqueIdentifier>
     </Filter>
@@ -990,9 +989,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
       <Filter>Source files\app\libEcharge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\errorcode.c">
       <Filter>Source files\app</Filter>
@@ -1993,10 +1989,7 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c">
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3781,9 +3774,6 @@
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\led_control.h">
