@@ -159,7 +159,7 @@ const char *strSysCfg =
     \"yoff\": 65486,\n \
     \"Version\":\"888888\",\n \
     \"USE_GPRSModem\":2,\n \
-    \"USE_Meter\": 1,\n \
+    \"USE_Meter\": 2,\n \
     \"USE_RFID\": 1,\n \
     \"USE_GUI\":1\n \
 }\n";
