@@ -270,8 +270,8 @@ double Get_Electricity_meter_massage_energy(uint8_t add)
     Get_electricity_meter_massage(add, read, electric_energy_h, 1);
     Get_electricity_meter_massage(add, read, electric_energy_l, 1);
     electricity_data =
-    Electricity_meter[add].massage.massage_electric_energy_h * 65536
-    + Electricity_meter[add].massage.massage_electric_energy_l / 100;
+    (Electricity_meter[add].massage.massage_electric_energy_h * 65536
+    + Electricity_meter[add].massage.massage_electric_energy_l )/ 100;
     return electricity_data;
 }
 double Get_Electricity_meter_massage_current(uint8_t add)
