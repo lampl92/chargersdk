@@ -61,18 +61,6 @@ static void flashGunState()
     }
 }
 
-//根据枪数量的不同采用不同的灯光控制
-static void ledcontrl()
-{
-    if (pEVSE->info.ucTotalCON == 1)
-    {
-        Led_Show();
-    }
-    else
-    {
-        ledShow();
-    } 
-}
 
 //接受刷卡消息,不阻塞
 static void recNewOperate()
@@ -265,7 +253,6 @@ void GBSTask()
     gbsstate = StateHome;
     while (1)
     {       
-        ledcontrl();
         switch (gbsstate)
         {
         case StateHome:            

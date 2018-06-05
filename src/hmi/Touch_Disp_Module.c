@@ -562,7 +562,7 @@ void Led_Show()
 *灯光控制新
 *
 */
-void ledShow()
+void ledShow1()
 {
     int i;
     CON_t *pCON;
@@ -673,6 +673,112 @@ void ledShow()
     }
 }
 
+void ledShow(int j)
+{
+    int i;
+    CON_t *pCON;
+    int flag_not_connect = 0;
+    if ((ifconfig.info.ucAdapterSel == 2) || (ifconfig.info.ucAdapterSel == 3) || (ifconfig.info.ucAdapterSel == 4))
+    {
+        if (getSignalIntensity() == 0)
+        {
+            flag_not_connect = 1;
+        }
+    }
+    else if (ifconfig.info.ucAdapterSel == 1)
+    {
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
+        {
+            flag_not_connect = 1;
+        }
+    }
+    for (i = 0; i < j; i++)
+    {
+        pCON = CONGetHandle(i);
+        /**<故障存在闪烁红灯 */
+        if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+        {
+            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)
+            {
+                led_ctrl(i + 1, red, flicker);
+            }
+            else if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow)
+            {
+                led_ctrl(i + 1, red, flicker);
+            }
+            else if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+            {
+                led_ctrl(i + 1, red, keep_on);
+            }
+            else
+            {
+                led_ctrl(i + 1, red, keep_on);
+            }
+        }
+        else if (flag_not_connect)
+        {
+            led_ctrl(1, blue, keep_on);
+            led_ctrl(2, blue, keep_on);
+            vTaskDelay(500);
+            led_ctrl(1, red, keep_on);
+            led_ctrl(2, red, keep_on);
+            vTaskDelay(400);
+        }
+        else
+        {
+            switch (pCON->state)
+            {
+            case STATE_CON_IDLE:
+                /**< 空闲状态 */
+                led_ctrl(i + 1, green, keep_on);
+                break;
+            case STATE_CON_CHARGING:
+                /**< 充电过程中 */
+                led_ctrl(i + 1, green, breath);
+                break;
+            default:
+                if (pCON->status.xPlugState == PLUG)
+                {
+                    if (pCON->status.xCPState == CP_6V_PWM
+                        || pCON->status.xCPState == CP_6V)
+                    {
+                        /**< 等待车端插枪 */
+                        led_ctrl(i + 1, green, flicker);
+                    }
+                    else if (pCON->status.xCPState == CP_9V_PWM
+                        || pCON->status.xCPState == CP_9V)
+                    {
+                        /**< S1未闭合 */
+                        led_ctrl(i + 1, blue, keep_on);
+                    }
+                }
+                else
+                {
+                    /**< 未知状态 */
+                    led_ctrl(i + 1, green, keep_on);
+                }
+                break;
+            }
+        }
+    }
+}
+
+//根据枪数量的不同采用不同的灯光控制
+void ledcontrl()
+{
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        ledShow(1);
+    }
+    else
+    {
+        ledShow(2);
+    } 
+}
+
 /** @brief
  *刷新故障列表;
  * @param msg_err:故障列表指针
@@ -680,7 +786,6 @@ void ledShow()
  * @return
  *
  */
-
 void Errlist_flush(uint8_t *msg_err)
 {
     CON_t *pCON;
