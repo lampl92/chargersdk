@@ -68,13 +68,13 @@ const char *strProtoCfg =
     \"RTDataCyc_ms\": 10000,\n \
     \"ResetAct\": 0,\n \
     \"PowerFee_sharp\": 1,\n \
-    \"PowerFee_peak\": 0,\n \
-    \"PowerFee_shoulder\": 0,\n \
-    \"PowerFee_off_peak\": 0,\n \
+    \"PowerFee_peak\": 1,\n \
+    \"PowerFee_shoulder\": 1,\n \
+    \"PowerFee_off_peak\": 1,\n \
     \"ServiceFee_sharp\": 0.8,\n \
-    \"ServiceFee_peak\": 0,\n \
-    \"ServiceFee_shoulder\": 0,\n \
-    \"ServiceFee_off_peak\": 0,\n \
+    \"ServiceFee_peak\": 0.8,\n \
+    \"ServiceFee_shoulder\": 0.8,\n \
+    \"ServiceFee_off_peak\": 0.8,\n \
     \"SegTime_sharp\": {\n \
         \"SegCont\": 2,\n \
         \"Start1\": 11,\n \
