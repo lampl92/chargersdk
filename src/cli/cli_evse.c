@@ -697,7 +697,7 @@ void cli_setload_fnt(int argc, char **argv)
 }
 void cli_meter_fnt(int argc, char **argv)
 {
-    printf("=========电表配置==========");
+    printf("\r\n=========电表配置=========\n");
     switch (xSysconf.xModule.use_meter)
     {
     case 0:
