@@ -1182,7 +1182,7 @@ static uint8_t Value_Check()
         case 23://
             tmpU16 = (uint16_t)atoi(result_input);
             if (tmpU16 <= 0
-            || tmpU16 >= 10000)
+            || tmpU16 >= 65535)
             {
                 tmpU16 = 6677;
             }
@@ -1219,16 +1219,16 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
             break;
         case 27:
-            if (strcmp("1", result_input) != 0)
-            {
-                sprintf(result_input, "%s", "2");
-            }
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetAdapter);
             tmpU8 = atoi(result_input);
+            if (tmpU8 != 1)
+            {
+                tmpU8 = 2;
+            }
+            cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetAdapter);
             ifconfig.info.ucAdapterSel = tmpU8;
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
             break;
-        case 28://passwd
+        case 28://秘钥
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoKey);
             memset(pechProto->info.strKey, '\0', strlen(pechProto->info.strKey));
             strcpy(pechProto->info.strKey, result_input);
@@ -1237,6 +1237,7 @@ static uint8_t Value_Check()
         case 29://manager passwd
             cfg_set_string(pathProtoCfg, result_input, "%s", jnSysVersion);
             sprintf(passwd, "%s", result_input);
+            strncpy(passwd, result_input, sizeof(passwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
             break;
         case 30://枪数
@@ -1246,60 +1247,117 @@ static uint8_t Value_Check()
                 tmpU8 = 2;
             }
             cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-            pEVSE->info.ucTotalCON = tmpU8;
-            if (tmpU8 == 1)
-            {
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
-            }
-            else
-            {
-                tmpU8 = 3;
-                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
-            }
+//            pEVSE->info.ucTotalCON = tmpU8;
+//            if (tmpU8 == 1)
+//            {
+//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
+//            }
+//            else
+//            {
+//                tmpU8 = 3;
+//                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
+//            }
             NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
             break;
         case 31:
-            result_input[16] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetHostName);
-            strcpy(ifconfig.info.strHostName, result_input);            
+            tmpU8 = atoi(result_input);
+            if (tmpU8 != 1)
+            {
+                tmpU8 = 3;
+            }
+            //pCon_for_PhaseLine = CONGetHandle(0);
+            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+            //pCon_for_PhaseLine = CONGetHandle(1);
+            //pCon->info.ucPhaseLine = tmpU8;
+            pEVSE->info.ucPhaseLine = tmpU8;
+            if (tmpU8 == 1)
+            {
+                tmpU8 = 2;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+            }
+            else
+            {
+                tmpU8 = 3;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+            }
+//            if (tmpU8 == 1)
+//            {
+//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+//            }
+//            else
+//            {
+//                tmpU8 = 2;
+//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+//            }
+            NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             break;
         case 32:
-            result_input[17] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMAC);
-            strcpy(ifconfig.info.strMAC, result_input);            
+            tmpU8 = atoi(result_input);
+            if (tmpU8 == 1 || tmpU8 == 2)
+            {
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpU8 = 1;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);  
+            }
+            else if (tmpU8 == 3 || tmpU8 == 4)
+            {
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpU8 = 3;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
+            }
+            else 
+            {
+                tmpU8 = 3;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpU8 = 3;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
+            }
+            NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
             break;
-        case 34:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetIP);
-            strcpy(ifconfig.info.strIP, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
+        case 33:
+            result_input[16] = '\0';
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetHostName);
+            strncpy(ifconfig.info.strHostName, result_input, strlen(ifconfig.info.strHostName));            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
             break;
-        case 35:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMask);
-            strcpy(ifconfig.info.strMask, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDF);
+        case 34:
+            result_input[17] = '\0';
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMAC);
+            strncpy(ifconfig.info.strMAC, result_input);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
             break;
         case 36:
             result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetGate);
-            strcpy(ifconfig.info.strGate, result_input);            
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetIP);
+            strcpy(ifconfig.info.strIP, result_input);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID10);
             break;
         case 37:
             result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS1);
-            strcpy(ifconfig.info.strDNS1, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID10);
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMask);
+            strcpy(ifconfig.info.strMask, result_input);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
             break;
         case 38:
             result_input[15] = '\0';
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetGate);
+            strcpy(ifconfig.info.strGate, result_input);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID12);
+            break;
+        case 39:
+            result_input[15] = '\0';
+            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS1);
+            strcpy(ifconfig.info.strDNS1, result_input);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID13);
+            break;
+        case 40:
+            result_input[15] = '\0';
             cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
             strcpy(ifconfig.info.strDNS2, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
             break;
         }
         break;

@@ -11,8 +11,8 @@
 */
 /*编辑窗口14行1列，状态项14个*/
 #define _SYSEDIT_MAX_X 2
-#define _SYSEDIT_MAX_Y 12
-#define _SYSSTATUE_LINE 12
+#define _SYSEDIT_MAX_Y 11
+#define _SYSSTATUE_LINE 11
 #define _SYSSTATUE_CAL 3
 //后续将编辑和文本的滚轮方式用链表进行封装
 #define _FONT_WIDTH 24
@@ -434,9 +434,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //设置滑轮条目数量
         //SCROLLBAR_SetNumItems(wScroll, 25 * 9);
         //当前会占用一页
-        SCROLLBAR_SetPageSize(wScroll, 130);
+        SCROLLBAR_SetPageSize(wScroll, 90);
         //SCROLLBAR_SetNumItems(wScroll, 180);
-        SCROLLBAR_SetNumItems(wScroll, 2 * 130);
+        SCROLLBAR_SetNumItems(wScroll, 2 * 90);
         
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
@@ -530,12 +530,12 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
         EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
         //电相
-        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("电相")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
-        _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("145.4"));
-        _aahText[11][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "");
-        sprintf(_tmpBuff,"%d",(int)pEVSE->info.ucPhaseLine);
-        EDIT_SetText(_aahEdit[11][0], _tmpBuff);
-        EDIT_SetBkColor(_aahEdit[11][0], EDIT_CI_ENABLED, GUI_GRAY);
+//        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("电相")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
+//        _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("145.4"));
+//        _aahText[11][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "");
+//        sprintf(_tmpBuff,"%d",(int)pEVSE->info.ucPhaseLine);
+//        EDIT_SetText(_aahEdit[11][0], _tmpBuff);
+//        EDIT_SetBkColor(_aahEdit[11][0], EDIT_CI_ENABLED, GUI_GRAY);
         
         if (managerLevel == 0)
         {
