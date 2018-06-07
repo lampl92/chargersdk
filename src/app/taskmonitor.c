@@ -28,7 +28,7 @@ void vTaskMonitor_ChData(void *pvParameters)
     ErrorCode_t errcode;
     int i;
     int trytime = 0;
-    int trymax = 3;
+    int trymax = 5;
 
     ulTotalCON = pListCON->Total; 
     uxBitsTimerCB = 0;
