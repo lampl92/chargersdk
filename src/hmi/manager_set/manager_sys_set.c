@@ -218,7 +218,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "note:1~9999");
+                Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "note:1~65536");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -250,7 +250,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：5~60");
+                Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：5~99999");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -261,7 +261,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 27, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "1:以太网,2:GPRS");
+                Keypad_GetValueTest(SYSSET_VALUE, 27, _hWinManagerSysSet, _hWinManagerCommon, "网卡类型", "1:以太网,2:GPRS");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -305,7 +305,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式电表");
+                Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
             }
             break;
         case 33:
@@ -609,8 +609,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s / 60);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
         //GPRS模块选择 暂时不能设置 需要将设置项进行两种分类，一种模拟量 一种状态量
-        _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _FONT_WIDTH*(strlen("网络类型")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网络类型");
-        _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("网络类型")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 27, strlen("网络类型"));
+        _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _FONT_WIDTH*(strlen("网卡类型")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网卡类型");
+        _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("网卡类型")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 27, strlen("网卡类型"));
         if (ifconfig.info.ucAdapterSel == 1)
         {
             EDIT_SetText(_aahEdit[7][0], "以太网");

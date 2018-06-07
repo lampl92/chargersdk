@@ -306,19 +306,19 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 29:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-            //                    WM_HideWindow(pMsg->hWin);
-            //                    WM_HideWindow(_hWinManagerCommon);
-            //
-            //                    Keypad_GetValueTest(CONSET_VALUE, 29, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "eg,32");
+                                WM_HideWindow(pMsg->hWin);
+                                WM_HideWindow(_hWinManagerCommon);
+            
+                                Keypad_GetValueTest(CONSET_VALUE, 29, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "eg,32");
             }
             break;
         case 30:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-            //                    WM_HideWindow(pMsg->hWin);
-            //                    WM_HideWindow(_hWinManagerCommon);
-            //
-            //                    Keypad_GetValueTest(CONSET_VALUE, 30, pMsg->hWin, _hWinManagerCommon, conRatedPower, "7");
+                                WM_HideWindow(pMsg->hWin);
+                                WM_HideWindow(_hWinManagerCommon);
+            
+                                Keypad_GetValueTest(CONSET_VALUE, 30, pMsg->hWin, _hWinManagerCommon, conRatedPower, "7");
             }
             break;
         case 31:
@@ -374,8 +374,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     case MSG_MANAGERSETID9:
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+        EDIT_SetText(_aahEdit[10][0], _tmpBuff);
         break;
     case MSG_MANAGERSETIDA:
+        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+        EDIT_SetText(_aahEdit[9][0], _tmpBuff);
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
         break;
@@ -406,7 +410,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
     CON_t *pCon;
     int i;
 
-    pCon = CONGetHandle(0);
+    pCon = CONGetHandle(1);
     // USER START (Optionally insert additional variables)
     // USER END
 
@@ -521,14 +525,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[9][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "A");
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[9][0], _tmpBuff);
-        EDIT_SetBkColor(_aahEdit[9][0], EDIT_CI_ENABLED, GUI_GRAY);
+        //EDIT_SetBkColor(_aahEdit[9][0], EDIT_CI_ENABLED, GUI_GRAY);
         //额定功率
         _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedPower);
         _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 30, strlen("145.4"));
         _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "kW");
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
-        EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
+       // EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
         
 //        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("哈哈")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
 //        _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("145.4"));
