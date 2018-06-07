@@ -83,14 +83,14 @@ void vTaskEVSEDiag(void *pvParameters)
                 pCON->status.SetLoadPercent(pCON, 100);
             }
             //发生电流告警
-            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
-            {
-                pCON->status.SetLoadPercent(pCON, 70);
-            }
-            else
-            {
-                pCON->status.SetLoadPercent(pCON, 100);
-            }
+//            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
+//            {
+//                pCON->status.SetLoadPercent(pCON, 70);
+//            }
+//            else
+//            {
+//                pCON->status.SetLoadPercent(pCON, 100);
+//            }
         }//end of for() id
 
         /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */
