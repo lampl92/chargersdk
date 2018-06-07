@@ -27,7 +27,6 @@ void vTaskMonitor_ChData(void *pvParameters)
     EventBits_t uxBitsTimerCB;
     ErrorCode_t errcode;
     int i;
-    int trytime = 0;
     int trymax = 5;
 
     ulTotalCON = pListCON->Total; 
@@ -48,17 +47,17 @@ void vTaskMonitor_ChData(void *pvParameters)
                 errcode = pCON->status.GetChargingData(pCON);
                 if (errcode == ERR_NO)
                 {
-                    trytime = 0;
+                    pCON->tmp.meterTryTime = 0;
                     pCON->status.ulSignalFault &= ~defSignalCON_Fault_Meter;
                     xEventGroupSetBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData);
                 }
                 else if (errcode == ERR_CON_METER_FAULT)
                 {
-                    ++trytime;
-                    printf("meter try %d\n", trytime);
-                    if (trytime > trymax)
+                    ++pCON->tmp.meterTryTime;
+                    printf("meter try %d\n", pCON->tmp.meterTryTime);
+                    if (pCON->tmp.meterTryTime > trymax)
                     {
-                        trytime = 0;
+                        pCON->tmp.meterTryTime = 0;
                         pCON->status.ulSignalFault |= defSignalCON_Fault_Meter;
                     }
                 }

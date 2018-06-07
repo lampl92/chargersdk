@@ -143,6 +143,14 @@ typedef struct _CONStatus
 
 } CONStatus_t;
 
+typedef struct _CONTmp
+{
+    int meterTryTime;
+    int dev_err;
+    int unlock_try;
+    int stop_try;
+}CONTmp_t;
+
 typedef enum _CONState
 {
     STATE_CON_IDLE,
