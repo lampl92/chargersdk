@@ -796,10 +796,10 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
     if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
     {
         GUI_SetColor(GUI_RED);
-        rect_item.x0 = 10 + width_part_big + width_part;
-        rect_item.y0 = head_high;
-        rect_item.x1 = 10 + width_part_big + width_part + alarm_width;
-        rect_item.y1 = head_high + high;
+        rect_alarm.x0 = 10 + width_part_big + width_part;
+        rect_alarm.y0 = head_high;
+        rect_alarm.x1 = 10 + width_part_big + width_part + alarm_width;
+        rect_alarm.y1 = head_high + high;
         strcat(strTmp, "-超限");
         GUI_DispStringInRect("!", &rect_alarm, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("输出(L)温度", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
@@ -826,10 +826,10 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
     if ((pcont->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
     {
         GUI_SetColor(GUI_RED);
-        rect_item.x0 = 10 + width_part_big + width_part;
-        rect_item.y0 = head_high + high;
-        rect_item.x1 = 10 + width_part_big + width_part + alarm_width;
-        rect_item.y1 = head_high + 2*high;
+        rect_alarm.x0 = 10 + width_part_big + width_part;
+        rect_alarm.y0 = head_high + high;
+        rect_alarm.x1 = 10 + width_part_big + width_part + alarm_width;
+        rect_alarm.y1 = head_high + 2*high;
         strcat(strTmp, "-超限");
         GUI_DispStringInRect("!", &rect_alarm, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("输出(N)温度", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
@@ -853,10 +853,10 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
     if ((pcont->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
     {
         GUI_SetColor(GUI_RED);
-        rect_item.x0 = 10 + width_part_big + width_part;
-        rect_item.y0 = head_high + 2*high;
-        rect_item.x1 = 10 + width_part_big + width_part + alarm_width;
-        rect_item.y1 = head_high + 3*high;
+        rect_alarm.x0 = 10 + width_part_big + width_part;
+        rect_alarm.y0 = head_high + 2*high;
+        rect_alarm.x1 = 10 + width_part_big + width_part + alarm_width;
+        rect_alarm.y1 = head_high + 3*high;
         GUI_DispStringInRect("!", &rect_alarm, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("电表通信", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("故障", &rect_state, GUI_TA_VCENTER | GUI_TA_HCENTER);        
