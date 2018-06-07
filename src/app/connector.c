@@ -447,7 +447,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
         return errcode;
     }
     /*********************/
-    curr2pwm(pCON->info.dRatedCurrent * (ucLoadPercent / 100.0), ucCONID);
+    curr2pwm(pCON->info.dRatedPower * (ucLoadPercent / 100.0) * 1000 / pEVSE->info.ucPhaseLine / 220, ucCONID);
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;
