@@ -713,6 +713,10 @@ void ledShow(int j)
             {
                 led_ctrl(i + 1, red, keep_on);
             }
+            else if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
             else
             {
                 led_ctrl(i + 1, red, keep_on);

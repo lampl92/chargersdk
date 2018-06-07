@@ -55,7 +55,14 @@ static void flashGunState()
             pEVSE->status.ulSignalAlarm != 0 ||
             pEVSE->status.ulSignalFault != 0)
         {
-            GBSgunstate[i] = Gunerror;
+            if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+            {
+                GBSgunstate[i] = GunfreeState;
+            }
+            else
+            {
+                GBSgunstate[i] = Gunerror;
+            }
             continue;
         }
     }
