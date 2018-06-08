@@ -701,35 +701,44 @@ void ledShow(int j)
             pEVSE->status.ulSignalAlarm != 0 ||
             pEVSE->status.ulSignalFault != 0)
         {
-            if ((pCON->status.ulSignalAlarm!=0)&&\
+            if ((pCON->status.ulSignalAlarm != 0)&&\
                 (pCON->status.ulSignalFault == 0)&&\
                 ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
                 (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault==0))
+                (pEVSE->status.ulSignalFault == 0))
             {
                 led_ctrl(i + 1, red, flicker);
             }
-            else if ((pCON->status.ulSignalAlarm!=0)&&\
+            else if ((pCON->status.ulSignalAlarm != 0)&&\
                 (pCON->status.ulSignalFault == 0)&&\
                 (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault==0)&&\
+                (pEVSE->status.ulSignalFault == 0)&&\
                 ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
             {
                 led_ctrl(i + 1, red, flicker);
             }
-            else if ((pCON->status.ulSignalFault!=0)&&\
-                 (pCON->status.ulSignalAlarm==0)&&\
+            else if ((pCON->status.ulSignalFault != 0)&&\
+                 (pCON->status.ulSignalAlarm == 0)&&\
                  (pEVSE->status.ulSignalAlarm == 0)&&\
-                 (pEVSE->status.ulSignalFault==0)&&\
+                 (pEVSE->status.ulSignalFault == 0)&&\
                 ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
             {
                 led_ctrl(i + 1, green, keep_on);
             }
-            else if (((pEVSE->status.ulSignalFault!=0)&&\
+            else if (((pEVSE->status.ulSignalFault != 0)&&\
                 (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pCON->status.ulSignalFault==0)&&\
-                (pCON->status.ulSignalAlarm==0)&&\
+                (pCON->status.ulSignalFault == 0)&&\
+                (pCON->status.ulSignalAlarm == 0)&&\
                 (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            else if (((pEVSE->status.ulSignalFault != 0)&&\
+                (pEVSE->status.ulSignalAlarm == 0)&&\
+                (pCON->status.ulSignalFault != 0)&&\
+                (pCON->status.ulSignalAlarm == 0)&&\
+                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
             {
                 led_ctrl(i + 1, green, keep_on);
             }
