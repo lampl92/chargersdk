@@ -74,6 +74,7 @@ static void netStateInit(net_device_t *net_dev)
     error = net_dev->init(net_dev);
     if (error == NO_ERROR)
     {
+        ifconfig_update(net_dev);
         netChangeState(net_dev, NET_STATE_CONNECT);
     }
     else
@@ -84,7 +85,7 @@ static void netStateInit(net_device_t *net_dev)
 static void netStateConnect(net_device_t *net_dev)
 {
     error_t error; 
-    ifconfig_update(net_dev);
+
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
         netChangeState(net_dev, NET_STATE_FTP);
