@@ -238,7 +238,13 @@ static ErrorCode_t GetChargingData(void *pvCON)
     res = meter->get_all(meter, ucCONID + 1);
     if (res < 0)
     {
+        pCON->status.dChargingVoltage = 0;
+        pCON->status.dChargingCurrent = 0;
+        pCON->status.dChargingPower = 0;
+        pCON->status.dChargingFrequence = 0; 
+        //保留电表读数不清零
         errcode = ERR_CON_METER_FAULT;
+        
         return errcode; 
     }
     for (i = 0; i < pEVSE->info.ucPhaseLine; i++)
