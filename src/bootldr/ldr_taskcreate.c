@@ -83,7 +83,7 @@ extern void *_app_start[];
 #define APP_ADDRESS         (uint32_t)_app_start
 
 
-uint8_t set_upgrade_tmp(char *path, char *flg)
+uint8_t set_tmp_file(char *path, char *flg)
 {
     int fd;
     int bw;
@@ -235,7 +235,7 @@ void vTaskInit(void *pvParameters)
                         free(pucBinBuffer);
                         yaffs_unlink(filepath);
                         upflag = '2';
-                        set_upgrade_tmp(pathUpgradeTmp, &upflag);
+                        set_tmp_file(pathUpgradeTmp, &upflag);
                     }
                 }
             }
@@ -249,7 +249,7 @@ void vTaskInit(void *pvParameters)
         {
             yaffs_unlink(filepath);
             upflag = '3';
-            set_upgrade_tmp(pathUpgradeTmp, &upflag);
+            set_tmp_file(pathUpgradeTmp, &upflag);
             printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
             Jump_To_APP();
         }

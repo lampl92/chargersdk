@@ -28,6 +28,9 @@
 #define EVSE_USING_STORE_LOG        1
 #endif
 
+#ifndef BOOTLOADER
+#define BOOTLOADER                  0
+#endif
 
 #define defMaxCON               32
 //#define defUIDLength            4

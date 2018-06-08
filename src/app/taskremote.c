@@ -135,7 +135,7 @@ int CheckSysUpFlags(void)
     char ch[1]; 
     uint8_t res;
     
-    res = get_upgrade_tmp(pathUpgradeTmp, ch);
+    res = get_tmp_file(pathUpgradeTmp, ch);
     tmp = atoi(ch);
     if (res != 1)
         succ = 0;

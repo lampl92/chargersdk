@@ -91,9 +91,9 @@
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
-#define defEventBitHMI_UP_FAILD             BIT_7
-#define defEventBitHMI_TimeOut              BIT_3
-    
+#define defEventBitHMI_UP_FAILD             BIT_1
+#define defEventBitHMI_TimeOut              BIT_2
+#define defEventBitHMI_REQ_StartFTP         BIT_3 
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 

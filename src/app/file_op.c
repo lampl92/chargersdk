@@ -1,4 +1,4 @@
-﻿#include "stm32f4xx.h"
+#include "stm32f4xx.h"
 #include "yaffsfs.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -58,7 +58,7 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
     return errcode;
 }
 
-uint8_t set_upgrade_tmp(char *path, char *flg)
+uint8_t set_tmp_file(char *path, char *flg)
 {
     int fd;
     int bw;
@@ -81,7 +81,7 @@ uint8_t set_upgrade_tmp(char *path, char *flg)
     return 1;
 }
 
-uint8_t get_upgrade_tmp(char *path, char *flg)
+uint8_t get_tmp_file(char *path, char *flg)
 {
     int fd;
     int rb;
@@ -102,4 +102,27 @@ uint8_t get_upgrade_tmp(char *path, char *flg)
     }
     yaffs_close(fd);
     return 1;
+}
+
+
+int get_bmp_check_tmp(void)
+{
+    char ch[1];
+    char flg;
+    if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
+    {
+        flg = atoi(ch);
+        if (flg == 3)//有文件并且设置过3
+        {
+            return flg;
+        }
+        else
+        {
+            return flg;
+        }
+    }
+    else//无文件
+    {
+        return -1;
+    }
 }

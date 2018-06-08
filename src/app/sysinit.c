@@ -107,6 +107,7 @@ void sys_Init(void)
     create_dir(pathSystemDir);
     create_dir(pathDownloadDir);
     create_dir(pathUpgradeDir);
+    create_dir(pathResourceDir);
 #if BOOTLOADER
 #else
     create_cfg_file(pathEVSECfg, strEVSECfg);

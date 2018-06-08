@@ -20,6 +20,13 @@
 static TaskHandle_t xHandleTaskChData = NULL ;
 static TaskHandle_t xHandleTaskEvseData = NULL;
 
+void taskmonitorChildSuspend(void)
+{
+    vTaskSuspend(xHandleTaskChData);
+    vTaskSuspend(xHandleTaskEvseData);
+}
+
+
 void vTaskMonitor_ChData(void *pvParameters)
 {
     CON_t *pCON = NULL;
