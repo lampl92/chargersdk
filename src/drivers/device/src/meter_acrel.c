@@ -66,9 +66,9 @@ static int meter_p3_get_all(void *pvmeter, int addr)
     meter->status.curr[1] = u16tab_reg[4] * 0.01;//0.01A
     meter->status.curr[2] = u16tab_reg[5] * 0.01;//0.01A
     //计算功率
-    meter->status.pwr[0] = meter->status.volt[0] * meter->status.curr[0];
-    meter->status.pwr[1] = meter->status.volt[1] * meter->status.curr[1];
-    meter->status.pwr[2] = meter->status.volt[2] * meter->status.curr[2];
+    meter->status.pwr[0] = meter->status.volt[0] * meter->status.curr[0] / 1000;
+    meter->status.pwr[1] = meter->status.volt[1] * meter->status.curr[1] / 1000;
+    meter->status.pwr[2] = meter->status.volt[2] * meter->status.curr[2] / 1000;
 
     //读取频率
     if (meter->regs.freq_addr != 0xffff)
