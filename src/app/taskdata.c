@@ -504,7 +504,7 @@ void vTaskEVSEData(void *pvParameters)
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "插枪检测");
                             break;
                         case defSignalCON_Fault_Meter:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "电能计量故障");
+                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "电表故障");
                             break;
                         default:
                             AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, 1, "充电枪未知故障");
