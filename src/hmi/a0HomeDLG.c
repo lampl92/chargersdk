@@ -497,7 +497,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
             if (homegunstate[0] == GunchargingState)
             {
                 pCON = CONGetHandle(0);
-                pkw = (pCON->status.dChargingPower) / 1000;
+                pkw = pCON->status.dChargingPower;
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
                 pkwpercent = pkw / pCON->info.dRatedPower * 100;
