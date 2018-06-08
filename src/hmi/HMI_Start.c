@@ -5,6 +5,7 @@
 #include "touchtimer.h"
 #include "interface.h"
 #include "stringName.h"
+#include "file_op.h"
 
 static TaskHandle_t xHandleTaskReadPic = NULL;
 
@@ -28,6 +29,10 @@ static void vTaskStart_up(void *pvParameters)
     WM_MULTIBUF_Enable(1);
     GUI_UC_SetEncodeUTF8();
     createStartUpMemdev();
+    if (get_bmp_check_tmp() == 3)
+    {
+        vTaskSuspend(NULL);
+    }
     startUpWin = CreatestartUpDLG();
     while (1)
     {
