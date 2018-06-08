@@ -52,7 +52,8 @@ void vTaskOTA(void *pvParameters)
                 LCD_Clear(BLUE);
                 LCD_ShowString(100, 20, 340, 20, 16, "Please MUST plug the PHY moudle And cable!");
                 LCD_ShowString(100, 60, 300, 20, 16, "network starting...");
-                while (net_dev->state != NET_STATE_CONNECT)
+                while (net_dev->state != NET_STATE_CONNECT &&
+                    net_dev->state != NET_STATE_TCP_ON)
                 {
                     vTaskDelay(100);
                 }
