@@ -12,6 +12,7 @@
 #include "semphr.h"
 #include "event_groups.h"
 #include "timercallback.h"
+#include "taskmonitor.h"
 
 #define defTIMERID_Temp             0
 #define defTIMERID_LockState        1
@@ -62,4 +63,5 @@ void SysTaskCreate (void);
 void AppTaskCreate (void);
 void AppObjCreate(void);
 
+void taskappSuspend(void);
 #endif

@@ -481,7 +481,7 @@ void LCD_Init(void)
 
 	LCD_Display_Dir(1);		//默认为竖屏
 	//LCD_LED=1;				//点亮背光
-	LCD_Clear(WHITE);
+    LCD_Clear(BLUE);
 }
 //清屏函数
 //color:要清屏的填充色
@@ -728,6 +728,7 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
 	uint8_t x0=x;
 	width+=x;
 	height+=y;
+    printf_safe("%s", p);
     while((*p<='~')&&(*p>=' '))//判断是不是非法字符!
     {
         if(x>=width){x=x0;y+=size;}
@@ -736,6 +737,7 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
         x+=size/2;
         p++;
     }
+    printf_safe("\n");
 }
 
 

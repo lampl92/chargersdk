@@ -161,7 +161,7 @@ static void netStateFTP(net_device_t *net_dev)
             if (res != 1)
             {
                 upflg = '3';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
+                set_tmp_file(pathUpgradeTmp, &upflg);
                 break;
             }
             sprintf(filepath, "%s%s", pathDownloadDir, flist.strFilename);
@@ -183,7 +183,7 @@ static void netStateFTP(net_device_t *net_dev)
             else
             {
                 upflg = '3';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
+                set_tmp_file(pathUpgradeTmp, &upflg);
                 break;
             }
             yaffs_unlink(filepath);//删除下载文件
@@ -207,9 +207,27 @@ static void netStateErr(net_device_t *net_dev)
     netChangeState(net_dev, NET_STATE_INIT);
 }
 
+void ifconfig_change_for_ftp(void)
+{
+    ifconfig.info.ucAdapterSel = 1;
+    ifconfig.info.ucDHCPEnable = 1;
+    sprintf(ifconfig.info.strHostName, "startup");
+    sprintf(ifconfig.info.strMAC, "00-AB-CD-EF-04-29");
+}
+
 extern error_t smtpClientTest(void);
 void vTaskTCPClient(void *pvParameters)
 {
+#if EVSE_USING_GUI
+    char flg;
+
+    flg = get_bmp_check_tmp();
+    if (flg == 3)
+    {
+        ifconfig_change_for_ftp();
+    }
+#endif
+    
     net_dev = net_device_create(ifconfig.info.ucAdapterSel);
 
     netChangeState(net_dev, NET_STATE_INIT);

@@ -117,22 +117,22 @@ void vTaskEVSEData(void *pvParameters);
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
-static TaskHandle_t xHandleTaskInit = NULL;
-static TaskHandle_t xHandleTaskCLI = NULL;
-static TaskHandle_t xHandleTaskGUI = NULL;
-static TaskHandle_t xHandleTaskGuidingLights = NULL;
-static TaskHandle_t xHandleTaskGUIBS = NULL;
-static TaskHandle_t xHandleTaskTouch = NULL;
-static TaskHandle_t xHandleTaskOTA = NULL;
-static TaskHandle_t xHandleTaskTCPClient = NULL;
-static TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
+TaskHandle_t xHandleTaskInit = NULL;
+TaskHandle_t xHandleTaskCLI = NULL;
+TaskHandle_t xHandleTaskGUI = NULL;
+TaskHandle_t xHandleTaskGuidingLights = NULL;
+TaskHandle_t xHandleTaskGUIBS = NULL;
+TaskHandle_t xHandleTaskTouch = NULL;
+TaskHandle_t xHandleTaskOTA = NULL;
+TaskHandle_t xHandleTaskTCPClient = NULL;
+TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
 
-static TaskHandle_t xHandleTaskEVSERemote = NULL;
-static TaskHandle_t xHandleTaskEVSERFID = NULL;
-static TaskHandle_t xHandleTaskEVSECharge = NULL;
-static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
-static TaskHandle_t xHandleTaskEVSEDiag = NULL;
-static TaskHandle_t xHandleTaskEVSEData = NULL;
+TaskHandle_t xHandleTaskEVSERemote = NULL;
+TaskHandle_t xHandleTaskEVSERFID = NULL;
+TaskHandle_t xHandleTaskEVSECharge = NULL;
+TaskHandle_t xHandleTaskEVSEMonitor = NULL;
+TaskHandle_t xHandleTaskEVSEDiag = NULL;
+TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
@@ -291,3 +291,20 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器
 }
+
+void taskappSuspend(void)
+{
+    vTaskSuspend(xHandleTaskEVSERemote);
+    vTaskSuspend(xHandleTaskEVSERFID);
+    vTaskSuspend(xHandleTaskEVSECharge);
+    vTaskSuspend(xHandleTaskEVSEMonitor);
+    vTaskSuspend(xHandleTaskEVSEDiag);
+    vTaskSuspend(xHandleTaskEVSEData);
+    vTaskSuspend(xHandleTaskRemoteCmdProc);
+    vTaskSuspend(xHandleTaskGUIBS);
+    vTaskSuspend(xHandleTaskTouch);
+    vTaskSuspend(xHandleTaskGuidingLights);
+    taskmonitorChildSuspend();
+}
+
+
