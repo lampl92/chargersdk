@@ -224,6 +224,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucCONID = pCON->info.ucCONID;
         pCON->order.dLimitFee = pRFIDDev->order.dLimitFee;
         pCON->order.ulLimitTime = pRFIDDev->order.ulLimitTime;
+        pCON->order.dLimitEnergy = pRFIDDev->order.dLimitEnergy;
         strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:
