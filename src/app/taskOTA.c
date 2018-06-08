@@ -46,29 +46,25 @@ void vTaskOTA(void *pvParameters)
     {
         if (flg == 3)//有文件并且设置过3
         {
-            bits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP, pdTRUE, pdTRUE, 60000);
+            bits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP, pdTRUE, pdTRUE, 0);
             if ((bits & defEventBitHMI_REQ_StartFTP) == defEventBitHMI_REQ_StartFTP)
             {
                 LCD_Clear(BLUE);
-                LCD_ShowString(100, 20, 300, 20, 16, "Please MUST plug the PHY moudle And cable!");
+                LCD_ShowString(100, 20, 340, 20, 16, "Please MUST plug the PHY moudle And cable!");
                 LCD_ShowString(100, 60, 300, 20, 16, "network starting...");
                 while (net_dev->state != NET_STATE_CONNECT)
-                    ;
+                {
+                    vTaskDelay(100);
+                }
                 net_ftp_server_start(net_dev);
                 LCD_ShowString(100, 80, 300, 20, 16, "ftp start...");
-            
+                ota_gui();
             }
             else
             {
                 LCD_ShowString(100, 40, 300, 20, 16, "Checking files, please wait...");
                 vTaskDelay(500);
             }
-            
-        }
-
-        if (flg == 3)
-        {
-            ota_gui();
         }
 
 #if DEBUG_TASK
