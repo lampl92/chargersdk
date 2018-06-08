@@ -379,7 +379,7 @@ static void pile_draw_data(WM_MESSAGE *pMsg)
     //市电A项温度
     sprintf(strTmp, "%.1f", pEVSE->status.dAC_A_Temp_IN);
     strcat(strTmp, "℃");
-    if ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_AC_A_Temp_Cri) == defSignalEVSE_Alarm_AC_A_Temp_Cri)
     {
         GUI_SetColor(GUI_RED);
         rect_str.x0 = 10;
@@ -417,7 +417,7 @@ static void pile_draw_data(WM_MESSAGE *pMsg)
     //市电N项温度
     sprintf(strTmp, "%.1f", pEVSE->status.dAC_N_Temp_IN);
     strcat(strTmp, "℃");
-    if ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+    if ((pEVSE->status.ulSignalAlarm & defSignalEVSE_Alarm_AC_N_Temp_Cri) == defSignalEVSE_Alarm_AC_N_Temp_Cri)
     {
         GUI_SetColor(GUI_RED);
         rect_str.x0 = 10;
