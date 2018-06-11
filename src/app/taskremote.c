@@ -16,6 +16,7 @@
 #include "stringName.h"
 #include "file_op.h"
 #include "yaffsfs.h"
+#include "tasknetwork.h"
 
 #include "evse_debug.h"
 
@@ -194,7 +195,9 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
         errcode_sdt = cfg_set_uint8(pathFTPCfg, &pProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
         if (errcode_sdt == ERR_NO)
         {
-            HAL_NVIC_SystemReset();
+            //HAL_NVIC_SystemReset();
+            netChangeState(net_dev, NET_STATE_DISCONNECT);
+            
             return 1;//See you later :)
         }
     }
