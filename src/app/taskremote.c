@@ -25,6 +25,7 @@
 //#define DEBUG_NO_TASKREMOTE
 #define defRemoteMaxDelay       60000
 
+extern TaskHandle_t xHandleTaskRemoteCmdProc;
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 {
@@ -284,6 +285,7 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
                 last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
+                vTaskResume(xHandleTaskRemoteCmdProc);//重启协议处理任务
                 remotestat = REMOTE_LOGINED;
             }
             else
@@ -334,7 +336,6 @@ void vTaskEVSERemote(void *pvParameters)
                             break;
                         case REMOTEOrder_Send:
                             RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->OrderTmp.order));
-                            pCON->OrderTmp.order.statRemoteProc.order.timestamp = time(NULL);
                             pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                             break;
                         case REMOTEOrder_WaitRecv:
@@ -354,9 +355,10 @@ void vTaskEVSERemote(void *pvParameters)
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                                     break;
                                 }
-                                if (time(NULL) - pCON->OrderTmp.order.statRemoteProc.order.timestamp > 60)
+                                if(errcode == ERR_REMOTE_TIMEOUT)
                                 {
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                                    remotestat = REMOTE_ERROR;
                                     break;
                                 }
                             }
@@ -672,12 +674,11 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 case REMOTEOrder_Send:
                     RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->order));
-                    pCON->order.statRemoteProc.order.timestamp = time(NULL);
                     pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
                 case REMOTEOrder_WaitRecv:
-                    RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
-                    if(network_res == 1)
+                    errcode = RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
+                    if(network_res == 1 && errcode == ERR_NO)
                     {
                         network_res = 0;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
@@ -685,11 +686,10 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else if(network_res == 0)
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.order.timestamp > 60)
+                        if(errcode == ERR_REMOTE_TIMEOUT)
                         {
-                            //超时就不要发送使用完成OK了，下面这条语句注释 ↓
-                            //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
                             pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                            remotestat = REMOTE_ERROR;
                         }
                     }
                     break;
@@ -747,6 +747,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_ERROR:
+            vTaskSuspend(xHandleTaskRemoteCmdProc);//停止协议处理任务
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
             remotestat = REMOTE_RECONNECT;
