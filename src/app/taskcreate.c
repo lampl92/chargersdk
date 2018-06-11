@@ -301,9 +301,11 @@ void taskappSuspend(void)
     vTaskSuspend(xHandleTaskEVSEDiag);
     vTaskSuspend(xHandleTaskEVSEData);
     vTaskSuspend(xHandleTaskRemoteCmdProc);
+#if EVSE_USING_GUI
     vTaskSuspend(xHandleTaskGUIBS);
     vTaskSuspend(xHandleTaskTouch);
     vTaskSuspend(xHandleTaskGuidingLights);
+#endif
     taskmonitorChildSuspend();
 }
 
