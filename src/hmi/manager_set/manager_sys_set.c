@@ -36,8 +36,8 @@
 */
 /*编辑窗口14行1列，状态项14个*/
 #define _SYSEDIT_MAX_X 5
-#define _SYSEDIT_MAX_Y 21
-#define _SYSSTATUE_LINE 21
+#define _SYSEDIT_MAX_Y 22
+#define _SYSSTATUE_LINE 22
 #define _SYSSTATUE_CAL 5
 //后续将编辑和文本的滚轮方式用链表进行封装
 #define _FONT_WIDTH 24
@@ -289,7 +289,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "枪数", "1,2");
+                Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "-40-120");
             }
             break;
         case 31:
@@ -297,7 +297,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 31, _hWinManagerSysSet, _hWinManagerCommon, "电相", "1,3");
+                Keypad_GetValueTest(SYSSET_VALUE, 31, _hWinManagerSysSet, _hWinManagerCommon, "枪数", "1,2");
             }
             break;
         case 32:
@@ -305,7 +305,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
+                Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电相", "1,3");
             }
             break;
         case 33:
@@ -313,7 +313,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "");
+                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
             }
             break;
         case 34:
@@ -321,18 +321,26 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "");
+                Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "");
             }
             break;
         case 35:
+            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+            {
+                WM_HideWindow(_hWinManagerSysSet);
+                WM_HideWindow(_hWinManagerCommon);
+                Keypad_GetValueTest(SYSSET_VALUE, 35, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "");
+            }
+            break;
+        case 36:
            // if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                if (CHECKBOX_GetState(_aahEdit[15][0]) == 1)
+                if (CHECKBOX_GetState(_aahEdit[16][0]) == 1)
                 {
                     tmpU8 = 1;
                     cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetDHCP);
-                    for (y = 16; y < _SYSEDIT_MAX_Y; y++)
+                    for (y = 17; y < _SYSEDIT_MAX_Y; y++)
                     {
                         for (x = 0; x < _SYSEDIT_MAX_X; x++)
                         {
@@ -345,7 +353,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 {
                     tmpU8 = 0;
                     cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetDHCP);
-                    for (y = 16; y < _SYSEDIT_MAX_Y; y++)
+                    for (y = 17; y < _SYSEDIT_MAX_Y; y++)
                     {
                         for (x = 0; x < _SYSEDIT_MAX_X; x++)
                         {
@@ -359,20 +367,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
 //                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "", "");
             }
             break;
-        case 36:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 36, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "");
-            }
-            break;
         case 37:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "子网掩码", "255.255.255.0");
+                Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "");
             }
             break;
         case 38:
@@ -380,7 +380,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 38, _hWinManagerSysSet, _hWinManagerCommon, "网关", "192.168.1.1");
+                Keypad_GetValueTest(SYSSET_VALUE, 38, _hWinManagerSysSet, _hWinManagerCommon, "子网掩码", "255.255.255.0");
             }
             break;
         case 39:
@@ -388,7 +388,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 39, _hWinManagerSysSet, _hWinManagerCommon, "DNS1", "114.215.126.16");
+                Keypad_GetValueTest(SYSSET_VALUE, 39, _hWinManagerSysSet, _hWinManagerCommon, "网关", "192.168.1.1");
             }
             break;
         case 40:
@@ -396,7 +396,15 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 40, _hWinManagerSysSet, _hWinManagerCommon, "DNS2", "112.124.47.27");
+                Keypad_GetValueTest(SYSSET_VALUE, 40, _hWinManagerSysSet, _hWinManagerCommon, "DNS1", "114.215.126.16");
+            }
+            break;
+        case 41:
+            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+            {
+                WM_HideWindow(_hWinManagerSysSet);
+                WM_HideWindow(_hWinManagerCommon);
+                Keypad_GetValueTest(SYSSET_VALUE, 41, _hWinManagerSysSet, _hWinManagerCommon, "DNS2", "112.124.47.27");
             }
             break;
         }
@@ -446,47 +454,51 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         
         break;    
     case MSG_MANAGERSETIDA:
-        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucTotalCON);
+        sprintf(_tmpBuff, "%.1f", pEVSE->info.dACTempUpperLimits);
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
-        break;   
-    case MSG_MANAGERSETIDB://31
-        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
+        break; 
+    case MSG_MANAGERSETIDB:
+        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucTotalCON);
         EDIT_SetText(_aahEdit[11][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETIDC://32
-        sprintf(_tmpBuff, "%d", (int)xSysconf.xModule.use_meter);
+        break;   
+    case MSG_MANAGERSETIDC://
+        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
         EDIT_SetText(_aahEdit[12][0], _tmpBuff);
         break;
-    case MSG_MANAGERSETIDD://33
-        sprintf(_tmpBuff, "%s", ifconfig.info.strHostName);
+    case MSG_MANAGERSETIDD://
+        sprintf(_tmpBuff, "%d", (int)xSysconf.xModule.use_meter);
         EDIT_SetText(_aahEdit[13][0], _tmpBuff);
-        break;  
-    case MSG_MANAGERSETIDE://34
-        sprintf(_tmpBuff, "%s", ifconfig.info.strMAC);
+        break;
+    case MSG_MANAGERSETIDE://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strHostName);
         EDIT_SetText(_aahEdit[14][0], _tmpBuff);
         break;  
-    case MSG_MANAGERSETIDF://35
+    case MSG_MANAGERSETIDF://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strMAC);
+        EDIT_SetText(_aahEdit[15][0], _tmpBuff);
+        break;  
+    case MSG_MANAGERSETID10://
 
         break;  
-    case MSG_MANAGERSETID10://36
+    case MSG_MANAGERSETID11://
         sprintf(_tmpBuff, "%s", ifconfig.info.strIP);
-        EDIT_SetText(_aahEdit[16][0], _tmpBuff);
-        break;  
-    case MSG_MANAGERSETID11://37
-        sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
         EDIT_SetText(_aahEdit[17][0], _tmpBuff);
         break;  
-    case MSG_MANAGERSETID12://38
-        sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
+    case MSG_MANAGERSETID12://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
         EDIT_SetText(_aahEdit[18][0], _tmpBuff);
         break;  
-    case MSG_MANAGERSETID13://39
-        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
+    case MSG_MANAGERSETID13://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
         EDIT_SetText(_aahEdit[19][0], _tmpBuff);
         break;  
-    case MSG_MANAGERSETID14://40
-        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
+    case MSG_MANAGERSETID14://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
         EDIT_SetText(_aahEdit[20][0], _tmpBuff);
+        break;  
+    case MSG_MANAGERSETID15://
+        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
+        EDIT_SetText(_aahEdit[21][0], _tmpBuff);
         break;  
     default:
         WM_DefaultProc(pMsg);
@@ -555,8 +567,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //创建垂直滑轮
         wScroll = SCROLLBAR_CreateAttached(hWindow, SCROLLBAR_CF_VERTICAL);//垂直滑轮
         //设置滑轮条目数量
-        SCROLLBAR_SetPageSize(wScroll, 245);
-        SCROLLBAR_SetNumItems(wScroll, 3*245);
+        SCROLLBAR_SetPageSize(wScroll, 285);
+        SCROLLBAR_SetNumItems(wScroll, 3*285);
         //设置页尺寸
         //SCROLLBAR_SetPageSize(wScroll, 220);
         SCROLLBAR_SetWidth(wScroll, WSCROLL_WIDTH);
@@ -642,82 +654,89 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             EDIT_SetText(_aahEdit[9][0], "******");            
         }
-        //枪数
-        _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _FONT_WIDTH*(strlen("枪数")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "枪数");
-        _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 30, strlen("100"));
+        //温度限制
+        _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _FONT_WIDTH*(strlen("温度限制")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "温度限制");
+        _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen("120.668")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 30, strlen("120.468"));
+        _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("120.668")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "℃");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucTotalCON);
+        sprintf(_tmpBuff, "%.1f", pEVSE->info.dACTempUpperLimits);
         EDIT_SetText(_aahEdit[10][0], _tmpBuff);
-        //电相
-        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("电相")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "电相");
+        //枪数
+        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("枪数")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "枪数");
         _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("110")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("110"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
+        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucTotalCON);
         EDIT_SetText(_aahEdit[11][0], _tmpBuff);
-        //EDIT_SetBkColor(_aahEdit[11][0], EDIT_CI_ENABLED, GUI_GRAY);
-        //电表选择
-        _aahText[12][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _FONT_WIDTH*(strlen("电表")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "电表");
+        //电相
+        _aahText[12][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _FONT_WIDTH*(strlen("电相")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "电相");
         _aahEdit[12][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen("120")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 32, strlen("120"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%d", (int)xSysconf.xModule.use_meter);
+        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
         EDIT_SetText(_aahEdit[12][0], _tmpBuff);
+        //EDIT_SetBkColor(_aahEdit[12][0], EDIT_CI_ENABLED, GUI_GRAY);
+        //电表选择
+        _aahText[13][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 13, _FONT_WIDTH*(strlen("电表")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "电表");
+        _aahEdit[13][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 13, _WORD_WIDTH*(strlen("130")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 33, strlen("130"));
+        memset(_tmpBuff, '\0', strlen(_tmpBuff));
+        sprintf(_tmpBuff, "%d", (int)xSysconf.xModule.use_meter);
+        EDIT_SetText(_aahEdit[13][0], _tmpBuff);
         //主机名
-        _aahText[13][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 13, _FONT_WIDTH*(strlen("主机名")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "主机名");
-        _aahEdit[13][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 13, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 33, strlen("100"));
+        _aahText[14][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _FONT_WIDTH*(strlen("主机名")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "主机名");
+        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, strlen("100"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strHostName);
-        EDIT_SetText(_aahEdit[13][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[14][0], _tmpBuff);
         //mac
-        _aahText[14][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _FONT_WIDTH*(strlen("MAC")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "MAC");
-        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(strlen("1142334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, strlen("1142334455667788"));
+        _aahText[15][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _FONT_WIDTH*(strlen("MAC")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "MAC");
+        _aahEdit[15][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("1152334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35, strlen("1152334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strMAC);
-        EDIT_SetText(_aahEdit[14][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[15][0], _tmpBuff);
         //DHCP
-        _aahText[15][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _FONT_WIDTH*(strlen("DHCP")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 15, "DHCP");
-        _aahEdit[15][0] = CHECKBOX_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35);
+        _aahText[16][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _FONT_WIDTH*(strlen("DHCP")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 16, "DHCP");
+        _aahEdit[16][0] = CHECKBOX_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 36);
         if (ifconfig.info.ucDHCPEnable == 1)
         {
-            CHECKBOX_SetState(_aahEdit[15][0], 1);
+            CHECKBOX_SetState(_aahEdit[16][0], 1);
         }
         else
         {
-            CHECKBOX_SetState(_aahEdit[15][0], 0);
+            CHECKBOX_SetState(_aahEdit[16][0], 0);
         }
         //本机ip
-        _aahText[16][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _FONT_WIDTH*(strlen("本机ip")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "本机ip");
-        _aahEdit[16][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 16, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 36, strlen("1122334455667788"));
-        memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%s", ifconfig.info.strIP);
-        EDIT_SetText(_aahEdit[16][0], _tmpBuff);
-        //子网掩码
-        _aahText[17][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _FONT_WIDTH*(strlen("子网掩码")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "子网掩码");
+        _aahText[17][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _FONT_WIDTH*(strlen("本机ip")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "本机ip");
         _aahEdit[17][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 17, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 37, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
+        sprintf(_tmpBuff, "%s", ifconfig.info.strIP);
         EDIT_SetText(_aahEdit[17][0], _tmpBuff);
-        
-        _aahText[18][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _FONT_WIDTH*(strlen("网关")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网关");
+        //子网掩码
+        _aahText[18][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _FONT_WIDTH*(strlen("子网掩码")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "子网掩码");
         _aahEdit[18][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 18, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 38, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
+        sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
         EDIT_SetText(_aahEdit[18][0], _tmpBuff);
         
-        _aahText[19][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 19, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
+        _aahText[19][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 19, _FONT_WIDTH*(strlen("网关")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网关");
         _aahEdit[19][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 19, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 39, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
+        sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
         EDIT_SetText(_aahEdit[19][0], _tmpBuff);
-
+        
         _aahText[20][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 20, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
         _aahEdit[20][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 20, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 40, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
+        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
         EDIT_SetText(_aahEdit[20][0], _tmpBuff);
 
-        if (CHECKBOX_GetState(_aahEdit[15][0]) == 1)
+        _aahText[21][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
+        _aahEdit[21][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 41, strlen("1122334455667788"));
+        memset(_tmpBuff, '\0', strlen(_tmpBuff));
+        sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
+        EDIT_SetText(_aahEdit[21][0], _tmpBuff);
+
+        if (CHECKBOX_GetState(_aahEdit[16][0]) == 1)
         {
-            for (y = 16; y < _SYSEDIT_MAX_Y; y++)
+            for (y = 17; y < _SYSEDIT_MAX_Y; y++)
             {
                 for (x = 0; x < _SYSEDIT_MAX_X; x++)
                 {
@@ -728,7 +747,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         else
         {
-            for (y = 14; y < _SYSEDIT_MAX_Y; y++)
+            for (y = 17; y < _SYSEDIT_MAX_Y; y++)
             {
                 for (x = 0; x < _SYSEDIT_MAX_X; x++)
                 {

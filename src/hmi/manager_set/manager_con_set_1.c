@@ -262,71 +262,18 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 25:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);
-
-                Keypad_GetValueTest(CONSET_VALUE, 25, pMsg->hWin, _hWinManagerCommon, conACTempUpperLimits, "note,-50~120");
-                //                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
-                //                    EDIT_SetText(_aahEdit[5][0], _tmpBuff);
+                                WM_HideWindow(pMsg->hWin);
+                                WM_HideWindow(_hWinManagerCommon);
+            
+                                Keypad_GetValueTest(CONSET_VALUE, 25, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "eg,32");
             }
             break;
         case 26:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-            //                    WM_HideWindow(pMsg->hWin);
-            //                    WM_HideWindow(_hWinManagerCommon);
-            //
-            //                    Keypad_GetValueTest(CONSET_VALUE, 26, pMsg->hWin, _hWinManagerCommon, conACTempLowerLimits, "note,-50~120");
-            //                    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
-            //                    EDIT_SetText(_aahEdit[6][0], _tmpBuff);
-            }
-            break;
-        case 27:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);
-
-                Keypad_GetValueTest(CONSET_VALUE, 27, pMsg->hWin, _hWinManagerCommon, conSocketTempUpperLimits, "note,-50~120");
-                //                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
-                //                    EDIT_SetText(_aahEdit[7][0], _tmpBuff);
-            }
-            break;
-        case 28:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
-            //                    WM_HideWindow(pMsg->hWin);
-            //                    WM_HideWindow(_hWinManagerCommon);
-            //
-            //                    Keypad_GetValueTest(CONSET_VALUE, 28, pMsg->hWin, _hWinManagerCommon, conSocketTempLowerLimits, "note,-50~120");
-            //                    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
-            //                    EDIT_SetText(_aahEdit[8][0], _tmpBuff);
-            }
-            break;
-        case 29:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
                                 WM_HideWindow(pMsg->hWin);
-                                WM_HideWindow(_hWinManagerCommon);
-            
-                                Keypad_GetValueTest(CONSET_VALUE, 29, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "eg,32");
-            }
-            break;
-        case 30:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
-                                WM_HideWindow(pMsg->hWin);
-                                WM_HideWindow(_hWinManagerCommon);
-            
-                                Keypad_GetValueTest(CONSET_VALUE, 30, pMsg->hWin, _hWinManagerCommon, conRatedPower, "7");
-            }
-            break;
-        case 31:
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
-//                WM_HideWindow(pMsg->hWin);
-//                WM_HideWindow(_hWinManagerCommon);            
-//                Keypad_GetValueTest(CONSET_VALUE, 31, pMsg->hWin, _hWinManagerCommon, conRatedPower, "1或3");
+                                WM_HideWindow(_hWinManagerCommon);            
+                                Keypad_GetValueTest(CONSET_VALUE, 26, pMsg->hWin, _hWinManagerCommon, conRatedPower, "7");
             }
             break;
         }
@@ -356,36 +303,16 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID5:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
+        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[5][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETID6:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
+        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
         break;
-    case MSG_MANAGERSETID7:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
-        EDIT_SetText(_aahEdit[7][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETID8:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
-        EDIT_SetText(_aahEdit[8][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETID9:
+    case MSG_MANAGERSETID6:
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
-        EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[5][0], _tmpBuff);
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
-        EDIT_SetText(_aahEdit[10][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETIDA:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
-        EDIT_SetText(_aahEdit[9][0], _tmpBuff);
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
-        EDIT_SetText(_aahEdit[10][0], _tmpBuff);
-        break;
-    case MSG_MANAGERSETIDB:
-        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
-        EDIT_SetText(_aahEdit[11][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[6][0], _tmpBuff);
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -491,55 +418,20 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(_tmpBuff, "%.1f", (pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         EDIT_SetBkColor(_aahEdit[4][0], EDIT_CI_ENABLED, GUI_GRAY);
-        //交流输入端子温度上限
-        _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _FONT_WIDTH*(strlen(conACTempUpperLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conACTempUpperLimits);
-        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, strlen("145.4"));
-        _aahText[5][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "℃");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
-        EDIT_SetText(_aahEdit[5][0], _tmpBuff);
-        //交流输入端子温度下限
-        _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(conACTempLowerLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conACTempLowerLimits);
-        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("145.4"));
-        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "℃");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
-        EDIT_SetText(_aahEdit[6][0], _tmpBuff);
-        EDIT_SetBkColor(_aahEdit[6][0], EDIT_CI_ENABLED, GUI_GRAY);
-
-        //交流输出端子温度上限
-        _aahText[7][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _FONT_WIDTH*(strlen(conSocketTempUpperLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conSocketTempUpperLimits);
-        _aahEdit[7][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 27, strlen("145.4"));
-        _aahText[7][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 7, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "℃");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
-        EDIT_SetText(_aahEdit[7][0], _tmpBuff);
-        //交流输出端子温度下限
-        _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _FONT_WIDTH*(strlen(conSocketTempLowerLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conSocketTempLowerLimits);
-        _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 28, strlen("145.4"));
-        _aahText[8][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*(strlen(" ℃")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "℃");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
-        EDIT_SetText(_aahEdit[8][0], _tmpBuff);
-        EDIT_SetBkColor(_aahEdit[8][0], EDIT_CI_ENABLED, GUI_GRAY);
-
         //额定电流
-        _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedCurrent);
-        _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 29, strlen("145.4"));
-        _aahText[9][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "A");
+        _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedCurrent);
+        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, strlen("145.4"));
+        _aahText[5][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "A");
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
-        EDIT_SetText(_aahEdit[9][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[5][0], _tmpBuff);
         //EDIT_SetBkColor(_aahEdit[9][0], EDIT_CI_ENABLED, GUI_GRAY);
         //额定功率
-        _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedPower);
-        _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 30, strlen("145.4"));
-        _aahText[10][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "kW");
+        _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedPower);
+        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("145.4"));
+        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "kW");
         sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
-        EDIT_SetText(_aahEdit[10][0], _tmpBuff);
+        EDIT_SetText(_aahEdit[6][0], _tmpBuff);
        // EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
-        
-//        _aahText[11][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen("哈哈")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "电相");
-//        _aahEdit[11][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 31, strlen("145.4"));
-//        _aahText[11][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 12, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "");
-//        sprintf(_tmpBuff, "%d", (int)pEVSE->info.ucPhaseLine);
-//        EDIT_SetText(_aahEdit[11][0], _tmpBuff);
-//        EDIT_SetBkColor(_aahEdit[11][0], EDIT_CI_ENABLED, GUI_GRAY);
         
         if (managerLevel == 0)
         {

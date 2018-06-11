@@ -87,6 +87,7 @@
 #define MSG_MANAGERSETID12       (GUI_ID_USER + 0x72)
 #define MSG_MANAGERSETID13       (GUI_ID_USER + 0x73)
 #define MSG_MANAGERSETID14       (GUI_ID_USER + 0x74)
+#define MSG_MANAGERSETID15       (GUI_ID_USER + 0x75)
 
 extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;

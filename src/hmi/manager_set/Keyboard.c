@@ -1121,7 +1121,7 @@ static uint8_t Value_Check()
     double tmpDouble = 0.0;
     uint16_t i = 0;
     CON_t *pCon;
-    CON_t *pCon_for_PhaseLine;
+    CON_t *pCon_tmp;
 
     memset(result_input, 0, sizeof(result_input));
     //MULTIEDIT_GetText(hMulti, result_input, MULTIEDIT_GetTextSize(hMulti));
@@ -1241,7 +1241,38 @@ static uint8_t Value_Check()
             strncpy(passwd, result_input, sizeof(passwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
             break;
-        case 30://枪数
+        case 30://接触点温度限制
+            tmpDouble = atof(result_input);
+            if (tmpDouble >= 120.0)
+            {
+                tmpDouble = 120.0;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-40.0)
+                &&tmpDouble > pCon->info.dACTempLowerLimits)
+            {
+                pCon->info.dACTempUpperLimits = tmpDouble;
+            }
+            else if (tmpDouble <= 120.0
+                &&tmpDouble >= (-40.0)
+                &&tmpDouble <= pCon->info.dACTempLowerLimits)
+            {
+                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
+            }
+            else if (tmpDouble < (-40.0))
+            {
+                tmpDouble = -40.0;
+            }
+            pEVSE->info.dACTempUpperLimits = tmpDouble;
+            pCon_tmp = CONGetHandle(0);
+            pCon_tmp->info.dACTempUpperLimits = tmpDouble;
+            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnACTempUpperLimits);
+            pCon_tmp = CONGetHandle(1);
+            pCon_tmp->info.dACTempUpperLimits = tmpDouble;
+            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnACTempUpperLimits);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
+            break;
+        case 31://枪数
             tmpU8 = atoi(result_input);
             if (tmpU8 != 1)
             {
@@ -1259,18 +1290,15 @@ static uint8_t Value_Check()
 //                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
 //            }
             NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             break;
-        case 31:
+        case 32:
             tmpU8 = atoi(result_input);
             if (tmpU8 != 1)
             {
                 tmpU8 = 3;
             }
-            //pCon_for_PhaseLine = CONGetHandle(0);
             cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
-            //pCon_for_PhaseLine = CONGetHandle(1);
-            //pCon->info.ucPhaseLine = tmpU8;
             pEVSE->info.ucPhaseLine = tmpU8;
             if (tmpU8 == 1)
             {
@@ -1292,9 +1320,9 @@ static uint8_t Value_Check()
 //                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
 //            }
             NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
             break;
-        case 32:
+        case 33:
             tmpU8 = atoi(result_input);
             if (tmpU8 == 1 || tmpU8 == 2)
             {
@@ -1316,56 +1344,56 @@ static uint8_t Value_Check()
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
             }
             NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
             break;
-        case 33:
+        case 34:
             //result_input[16] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetHostName);
             memset(ifconfig.info.strHostName, '\0', strlen(ifconfig.info.strHostName));
             strncpy(ifconfig.info.strHostName, result_input, sizeof(ifconfig.info.strHostName)-1);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
             break;
-        case 34:
+        case 35:
             //result_input[17] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetMAC);
             memset(ifconfig.info.strMAC, '\0', strlen(ifconfig.info.strMAC));
             strncpy(ifconfig.info.strMAC, result_input, sizeof(ifconfig.info.strMAC));            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDF);
             break;
-        case 36:
+        case 37:
             //result_input[15] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetIP);
             memset(ifconfig.info.strIP, '\0', strlen(ifconfig.info.strIP));
             strncpy(ifconfig.info.strIP, result_input, sizeof(ifconfig.info.strIP));            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID10);
-            break;
-        case 37:
-            //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
-            memset(ifconfig.info.strMask, '\0', strlen(ifconfig.info.strMask));
-            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask));            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
             break;
         case 38:
             //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
-            memset(ifconfig.info.strGate, '\0', strlen(ifconfig.info.strGate));
-            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate));            
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
+            memset(ifconfig.info.strMask, '\0', strlen(ifconfig.info.strMask));
+            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask));            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID12);
             break;
         case 39:
             //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
-            memset(ifconfig.info.strDNS1, '\0', strlen(ifconfig.info.strDNS1));
-            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1));            
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
+            memset(ifconfig.info.strGate, '\0', strlen(ifconfig.info.strGate));
+            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate));            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID13);
             break;
         case 40:
             //result_input[15] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
+            memset(ifconfig.info.strDNS1, '\0', strlen(ifconfig.info.strDNS1));
+            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1));            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
+            break;
+        case 41:
+            //result_input[15] = '\0';
             cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
             memset(ifconfig.info.strDNS2, '\0', strlen(ifconfig.info.strDNS2));
             strncpy(ifconfig.info.strDNS2, result_input, sizeof(ifconfig.info.strDNS2));            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID15);
             break;
         }
         break;
@@ -1470,7 +1498,6 @@ static uint8_t Value_Check()
             {
                 tmpDouble = 240.0;
             }
-
             pCon->info.dVolatageLowerLimits = tmpDouble;
             cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageLowerLimits);
             //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
@@ -1481,119 +1508,12 @@ static uint8_t Value_Check()
             //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
-        case 25://交流输入端子温度上限 -50 120 > lower
+        case 25:
             tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
+            if (tmpDouble < 0)
             {
-                tmpDouble = 120.0;
+                tmpDouble = 0;
             }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble > pCon->info.dACTempLowerLimits)
-            {
-                pCon->info.dACTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble <= pCon->info.dACTempLowerLimits)
-            {
-                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dACTempUpperLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnACTempUpperLimits);
-            //pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
-            break;
-        case 26://-50 120 < upper
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble < pCon->info.dACTempUpperLimits)
-            {
-                pCon->info.dACTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble >= pCon->info.dACTempUpperLimits)
-            {
-                tmpDouble = pCon->info.dACTempUpperLimits - 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-            pCon->info.dACTempLowerLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnACTempLowerLimits);
-           // pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
-            break;
-        case 27://插座温度上限
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble > pCon->info.dSocketTempLowerLimits)
-            {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble <= pCon->info.dSocketTempLowerLimits)
-            {
-                tmpDouble = pCon->info.dSocketTempLowerLimits + 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dSocketTempUpperLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnSocketTempUpperLimits); 
-            //pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
-            break;
-        case 28:
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble < pCon->info.dSocketTempUpperLimits)
-            {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble >= pCon->info.dSocketTempUpperLimits)
-            {
-                tmpDouble = pCon->info.dSocketTempUpperLimits - 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dSocketTempLowerLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnSocketTempLowerLimits); 
-            //pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
-            break;
-        case 29:
-            tmpDouble = atof(result_input);
             if (pEVSE->info.ucPhaseLine == 3)
             {
                 if (tmpDouble > 63)
@@ -1610,53 +1530,35 @@ static uint8_t Value_Check()
                 }
                 pCon->info.dRatedPower = 220 * tmpDouble / 1000;
             }
-
             pCon->info.dRatedCurrent  = tmpDouble;
-            cfg_set_double(pathEVSECfg, &pCon->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
-            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
+            cfg_set_double(pathEVSECfg, &pCon->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower);             
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
             break;
-        case 30:
+        case 26:
             tmpDouble = atof(result_input);
+            if (tmpDouble < 0)
+            {
+                tmpDouble = 0;
+            }
             if (pEVSE->info.ucPhaseLine == 3)
             {
                 if (tmpDouble > (63 * 220 * 3 / 1000))
                 {
                     tmpDouble = 63 * 220 * 3 / 1000;
                 }
+                pCon->info.dRatedCurrent = tmpDouble * 1000 / (220 * 3);
             }
             else
             {
-                if (tmpDouble > (63 * 220 / 1000))
+                if (tmpDouble > (32 * 220 / 1000))
                 {
-                    tmpDouble = 63 * 220 / 1000;
+                    tmpDouble = 32 * 220 / 1000;
                 }
+                pCon->info.dRatedCurrent = tmpDouble * 1000 / 220;
             }
             pCon->info.dRatedPower = tmpDouble;
             cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
-            break;
-        case 31:
-            tmpU8 = atoi(result_input);
-            if (tmpU8 != 1)
-            {
-                tmpU8 = 3;
-            }
-            //pCon_for_PhaseLine = CONGetHandle(0);
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
-            //pCon_for_PhaseLine = CONGetHandle(1);
-            //pCon->info.ucPhaseLine = tmpU8;
-            if (tmpU8 == 1)
-            {
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-            }
-            else
-            {
-                tmpU8 = 2;
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-            }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
             break;
         }
         break;
