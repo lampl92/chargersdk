@@ -626,7 +626,7 @@ void LCD_Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r)
 //num:要显示的字符:" "--->"~"
 //size:字体大小 12/16/24/32
 //mode:叠加方式(1)还是非叠加方式(0)
-void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
+void LCD_ShowChar(uint16_t x,uint16_t y,char num,uint8_t size,uint8_t mode)
 {
     uint8_t temp,t1,t;
 	uint16_t y0=y;
@@ -723,7 +723,7 @@ void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,ui
 //width,height:区域大小
 //size:字体大小
 //*p:字符串起始地址
-void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p)
+void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,char *p)
 {
 	uint8_t x0=x;
 	width+=x;
