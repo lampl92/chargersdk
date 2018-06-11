@@ -310,7 +310,7 @@ void vTaskEVSERemote(void *pvParameters)
                 if (pCON->OrderTmp.ucCheckOrderTmp == 1)
                 {
                     if (pCON->state != STATE_CON_CHARGING && 
-                        pCON->order.statRemoteProc.order.stat == REMOTEOrder_WaitRecv)//远程还在等待回复时，不进行临时订单检查
+                        pCON->order.statRemoteProc.order.stat == REMOTEOrder_IDLE)//只有在处理订单idle时，才进行临时订单检查
                     {
                         switch (pCON->OrderTmp.order.statRemoteProc.order.stat)
                         {
