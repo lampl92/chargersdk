@@ -25,7 +25,7 @@ void ota_gui(void)
     LCD_ShowString(100, 140, 200, 20, 16, ifconfig.status.strMask);
     LCD_ShowString(100, 160, 200, 20, 16, ifconfig.status.strDNS1);
     LCD_ShowString(100, 180, 200, 20, 16, ifconfig.status.strDNS2);
-    
+
     sprintf(disp_str, "ftp://admin:admin@%s", ifconfig.status.strIP);
     LCD_ShowString(100, 220, 300, 20, 16, disp_str);
 }
@@ -34,16 +34,16 @@ extern TaskHandle_t xHandleTaskTCPClient;
 void vTaskOTA(void *pvParameters)
 {
 #if EVSE_USING_GUI
-    int i;
-#endif
-    
     EventBits_t bits;
     char disp_str[200] = { 0 };
     int flg;
-    
+
     flg = get_bmp_check_tmp();
-    while(1)
+#endif
+
+    while (1)
     {
+#if EVSE_USING_GUI
         if (flg == 3)//有文件并且设置过3
         {
             bits = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP, pdTRUE, pdTRUE, 0);
@@ -67,6 +67,7 @@ void vTaskOTA(void *pvParameters)
                 vTaskDelay(500);
             }
         }
+#endif
 
 #if DEBUG_TASK
         printf_safe("%s\n", TASKNAME_OTA);
