@@ -125,7 +125,9 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 {
                     if (pechProtoElem->trycount >= pechProtoElem->trycountmax)
                     {
+                        xEventGroupSetBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd, defEventBitProtoCmdDataTimeout);
                         gdsl_list_cursor_delete(cs);
+                        printf_protolog("cmd %d[0x02X] 超时\n", pechProtoElem->cmd_id, pechProtoElem->cmd_id);
                         continue;
                     }
                     pechProtoElem->timestamp = time(NULL);

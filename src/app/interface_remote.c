@@ -46,6 +46,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     echProtoElem_t *pechProtoElem;
     gdsl_list_cursor_t cur;//命令队列光标
     gdsl_list_cursor_t cs;//发送队列光标
+    EventBits_t bits;
 
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
@@ -92,6 +93,12 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
             {
                 printf_safe("xMutexProtoSend Timeout---> [%0X]%d!!!\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             }
+        }
+        
+        bits = xEventGroupWaitBits(pCMD->xHandleEventCmd, defEventBitProtoCmdDataTimeout, pdTRUE, pdTRUE, 0);
+        if ((bits & defEventBitProtoCmdDataTimeout) == defEventBitProtoCmdDataTimeout)
+        {
+            errcode = ERR_REMOTE_TIMEOUT;
         }
     }//if mutex
 
@@ -471,6 +478,9 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_REMOTE_TIMEOUT:
         *psiRetVal = 0;
         break;
     case ERR_NO:
