@@ -307,4 +307,19 @@ void taskappSuspend(void)
     taskmonitorChildSuspend();
 }
 
+void taskappResume(void)
+{
+    vTaskResume(xHandleTaskEVSERemote);
+    vTaskResume(xHandleTaskEVSERFID);
+    vTaskResume(xHandleTaskEVSECharge);
+    vTaskResume(xHandleTaskEVSEMonitor);
+    vTaskResume(xHandleTaskEVSEDiag);
+    vTaskResume(xHandleTaskEVSEData);
+    vTaskResume(xHandleTaskRemoteCmdProc);
+    vTaskResume(xHandleTaskGUIBS);
+    vTaskResume(xHandleTaskTouch);
+    vTaskResume(xHandleTaskGuidingLights);
+    taskmonitorChildResume();
+}
+
 

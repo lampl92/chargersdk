@@ -25,6 +25,11 @@ void taskmonitorChildSuspend(void)
     vTaskSuspend(xHandleTaskChData);
     vTaskSuspend(xHandleTaskEvseData);
 }
+void taskmonitorChildResume(void)
+{
+    vTaskResume(xHandleTaskChData);
+    vTaskResume(xHandleTaskEvseData);
+}
 
 
 void vTaskMonitor_ChData(void *pvParameters)

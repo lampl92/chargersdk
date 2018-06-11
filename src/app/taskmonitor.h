@@ -9,5 +9,6 @@
 #define  __TASKMONITOR_H
 
 void taskmonitorChildSuspend(void);
+void taskmonitorChildResume(void);
     
 #endif
