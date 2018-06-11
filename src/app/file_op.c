@@ -107,7 +107,7 @@ uint8_t get_tmp_file(char *path, char *flg)
 
 int get_bmp_check_tmp(void)
 {
-    char ch[1];
+    char ch[2] = { 0 };//!!!
     char flg;
     if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
     {
