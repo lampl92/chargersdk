@@ -155,6 +155,7 @@ static void netStateFTP(net_device_t *net_dev)
  
     if (res == 1)
     {
+        taskappSuspend();
         while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
         {
             res = ftp_download_file(&ftpcfg, net_dev);
