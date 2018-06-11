@@ -545,7 +545,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apYear+i));
         }
-        //LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetSel(hItem,0);
         LISTWHEEL_SetPos(hItem,0);
 
         //设置起始月listwheel
@@ -888,7 +888,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             //获取当前句柄索引
             list_start_index[0] = LISTWHEEL_GetPos(hItem);
             //设置当前句柄数据项
-            //LISTWHEEL_SetSel(hItem,list_start_index[0]);
+            LISTWHEEL_SetSel(hItem,list_start_index[0]);
             LISTWHEEL_GetItemText(hItem,list_start_index[0],sel_start_date.year,5);
             // USER END
             break;

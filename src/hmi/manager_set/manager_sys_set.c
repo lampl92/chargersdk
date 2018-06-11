@@ -715,19 +715,19 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strMask);
         EDIT_SetText(_aahEdit[18][0], _tmpBuff);
-        
+        //网关
         _aahText[19][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 19, _FONT_WIDTH*(strlen("网关")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "网关");
         _aahEdit[19][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 19, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 39, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strGate);
         EDIT_SetText(_aahEdit[19][0], _tmpBuff);
-        
+        //DNS1
         _aahText[20][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 20, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
         _aahEdit[20][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 20, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 40, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
         EDIT_SetText(_aahEdit[20][0], _tmpBuff);
-
+        //DNS2
         _aahText[21][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
         _aahEdit[21][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 41, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
@@ -774,7 +774,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
                 WIDGET_SetEffect(_aahEdit[y][x], &WIDGET_Effect_3D);//不需要设置的就改成 &WIDGET_Effect_None模式
             }
         }
-
         WM_SetStayOnTop(hWindow, 1);
         break;
     case WM_NOTIFY_PARENT:
