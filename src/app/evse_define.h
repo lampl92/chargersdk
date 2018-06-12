@@ -54,7 +54,7 @@
 
 #define defEventBitOrder_RemoteOrderOK           BIT_4
 #define defEventBitOrder_RemoteRTDataOK          BIT_5
-#define defEventBitOrder_StoreOK                 BIT_6
+#define defEventBitOrder_RemoteOrderTimeOut      BIT_6
 
 #define defEventBitOrderStopTypeCurr             BIT_7
 #define defEventBitOrderStopTypeScram            BIT_8

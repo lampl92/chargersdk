@@ -135,6 +135,15 @@ static void netStateTcpOn(net_device_t *net_dev)
     {
         netChangeState(net_dev, NET_STATE_DISCONNECT);
     }
+    if (net_dev->interface->linkState)
+    {
+        
+    }
+    else
+    {
+        //Link is down
+        netChangeState(net_dev, NET_STATE_DISCONNECT);
+    }
 }
 static void netStateFTP(net_device_t *net_dev)
 {

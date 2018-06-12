@@ -300,7 +300,11 @@ void vTaskEVSERemote(void *pvParameters)
             break;
         case REMOTE_LOGINED:
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Logined;
-            
+            if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) != defSignalEVSE_State_Network_Online)
+            {
+                remotestat = REMOTE_OFFLINE;
+                break;
+            }
             /*********上传未处理的订单**************/
 #if 1
             for (i = 0; i < ulTotalCON; i++)
@@ -549,17 +553,30 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
 
                 case CARDCTRL_WAIT_START_RECV:
-                    RemoteIF_RecvCardStartRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStartRes(pechProto, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
                     }
+                    if (errcode == ERR_REMOTE_TIMEOUT)
+                    {
+                        printf_safe("平台回复刷卡启动充电超时\n");
+                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                        remotestat = REMOTE_ERROR;
+                    }
                     break;
                 case CARDCTRL_WAIT_STOP_RECV:
-                    RemoteIF_RecvCardStopRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStopRes(pechProto, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                    }
+                    if (errcode == ERR_REMOTE_TIMEOUT)
+                    {
+                        printf_safe("平台回复刷卡停止充电超时\n");
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                        remotestat = REMOTE_ERROR;
                     }
                     break;
                 }
@@ -687,6 +704,8 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         if(errcode == ERR_REMOTE_TIMEOUT)
                         {
+                            printf_safe("平台Order回复超时\n");
+                            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut);
                             pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                             remotestat = REMOTE_ERROR;
                         }
@@ -751,7 +770,14 @@ void vTaskEVSERemote(void *pvParameters)
             xTimerStop(xHandleTimerRemoteStatus, 100);
             remotestat = REMOTE_RECONNECT;
             xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
-            printf_safe("remote state error ,Call TCP close!!\n");
+            printf_safe("remote state error ,remote state -> reconnect!!\n");
+            break;
+        case REMOTE_OFFLINE:
+            vTaskSuspend(xHandleTaskRemoteCmdProc); //停止协议处理任务
+            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+            xTimerStop(xHandleTimerRemoteStatus, 100);
+            remotestat = REMOTE_NO;
+            printf_safe("net offline ,remote state -> remote no!!\n");
             break;
         default:
             break;

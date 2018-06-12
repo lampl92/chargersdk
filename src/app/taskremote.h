@@ -14,7 +14,8 @@ typedef enum
     REMOTE_CONNECTED,
     REMOTE_LOGINED,
     REMOTE_RECONNECT,
-    REMOTE_ERROR
+    REMOTE_ERROR,
+    REMOTE_OFFLINE
 } RemoteState_t;
 
 ////////远程状态///////////

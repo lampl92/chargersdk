@@ -285,38 +285,33 @@ void vTaskEVSEData(void *pvParameters)
 
                 xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
                 
-                /**存储订单 */
+                pCON->order.statOrder = STATE_ORDER_WAITUSE;
+                break;
+            case STATE_ORDER_WAITUSE:
 #if EVSE_USING_NET
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                if (pCON->order.ucStopType == defOrderStopType_Offline)
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
+                if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
                 {
-                    printf_safe("Order Offline.....................\n");
-//                    pCON->order.ucPayStatus = 0;
-//                    /* 临时订单 在这里存储订单*/
-//                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                    printf_safe("Order OK.....................\n");
+                    pCON->order.ucPayStatus = 1;
+                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                    pCON->order.statOrder = STATE_ORDER_STORE;
+                    break;
                 }
                 else
                 {
-                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                     defEventBitOrderUseless,
-                                                     pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
-                    if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
+                    if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
                     {
-                        printf_safe("Order OK.....................\n");
-                        pCON->order.ucPayStatus = 1;
-                        RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-                    }
-                    else
-                    {
-                        printf_safe("Order TimeOut.....................\n");
-//                        pCON->order.ucPayStatus = 0;
-//                        /* 临时订单 在这里存储订单*/
-//                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                        printf_safe("Order TimeOut.....................\r");
+                        pCON->order.statOrder = STATE_ORDER_STORE;
                     }
                 }
-                
+                break;
+            case STATE_ORDER_STORE:
                 AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
