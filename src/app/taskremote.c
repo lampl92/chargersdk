@@ -25,6 +25,8 @@
 //#define DEBUG_NO_TASKREMOTE
 #define defRemoteMaxDelay       60000
 
+RemoteState_t remotestat;
+
 extern TaskHandle_t xHandleTaskRemoteCmdProc;
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
@@ -200,7 +202,8 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
         {
             //HAL_NVIC_SystemReset();
             netChangeState(net_dev, NET_STATE_DISCONNECT);
-            
+            remotestat = REMOTE_NO;
+            vTaskDelay(1000);
             return 1;//See you later :)
         }
     }
@@ -233,7 +236,6 @@ void vTaskEVSERemote(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBits;
-    RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
