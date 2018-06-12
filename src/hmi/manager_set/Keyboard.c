@@ -1125,7 +1125,7 @@ static uint8_t Value_Check()
 
     memset(result_input, 0, sizeof(result_input));
     //MULTIEDIT_GetText(hMulti, result_input, MULTIEDIT_GetTextSize(hMulti));
-    MULTIEDIT_GetText(hMulti, result_input, sizeof(result_input));
+    MULTIEDIT_GetText(hMulti, result_input, sizeof(result_input)-1);
 
     switch (ManagerSetOptions)
     {
@@ -1171,13 +1171,13 @@ static uint8_t Value_Check()
             cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
             //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
             memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
-            strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID));
+            strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
         case 22:
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoServerIP);
             memset(pechProto->info.strServerIP, '\0', strlen(pechProto->info.strServerIP));
-            strncpy(pechProto->info.strServerIP, result_input, sizeof(pechProto->info.strServerIP));
+            strncpy(pechProto->info.strServerIP, result_input, sizeof(pechProto->info.strServerIP)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
         case 23://
@@ -1194,13 +1194,13 @@ static uint8_t Value_Check()
         case 24://user name
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserName);
             memset(pechProto->info.strUserName, '\0', strlen(pechProto->info.strUserName));
-            strncpy(pechProto->info.strUserName, result_input, sizeof(pechProto->info.strUserName));
+            strncpy(pechProto->info.strUserName, result_input, sizeof(pechProto->info.strUserName)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25://user passwd
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserPwd);
             memset(pechProto->info.strUserPwd, '\0', strlen(pechProto->info.strUserPwd));
-            strncpy(pechProto->info.strUserPwd, result_input, sizeof(pechProto->info.strUserPwd));
+            strncpy(pechProto->info.strUserPwd, result_input, sizeof(pechProto->info.strUserPwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
             break;
         case 26://屏保时间
@@ -1232,7 +1232,7 @@ static uint8_t Value_Check()
         case 28://秘钥
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoKey);
             memset(pechProto->info.strKey, '\0', strlen(pechProto->info.strKey));
-            strncpy(pechProto->info.strKey, result_input, sizeof(pechProto->info.strKey));
+            strncpy(pechProto->info.strKey, result_input, sizeof(pechProto->info.strKey)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
             break;
         case 29://manager passwd
@@ -1393,42 +1393,42 @@ static uint8_t Value_Check()
             //result_input[17] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetMAC);
             memset(ifconfig.info.strMAC, '\0', strlen(ifconfig.info.strMAC));
-            strncpy(ifconfig.info.strMAC, result_input, sizeof(ifconfig.info.strMAC));            
+            strncpy(ifconfig.info.strMAC, result_input, sizeof(ifconfig.info.strMAC)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDF);
             break;
         case 37:
             //result_input[15] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetIP);
             memset(ifconfig.info.strIP, '\0', strlen(ifconfig.info.strIP));
-            strncpy(ifconfig.info.strIP, result_input, sizeof(ifconfig.info.strIP));            
+            strncpy(ifconfig.info.strIP, result_input, sizeof(ifconfig.info.strIP)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
             break;
         case 38:
             //result_input[15] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
             memset(ifconfig.info.strMask, '\0', strlen(ifconfig.info.strMask));
-            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask));            
+            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID12);
             break;
         case 39:
             //result_input[15] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
             memset(ifconfig.info.strGate, '\0', strlen(ifconfig.info.strGate));
-            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate));            
+            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID13);
             break;
         case 40:
             //result_input[15] = '\0';
             cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
             memset(ifconfig.info.strDNS1, '\0', strlen(ifconfig.info.strDNS1));
-            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1));            
+            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
             break;
         case 41:
             //result_input[15] = '\0';
             cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
             memset(ifconfig.info.strDNS2, '\0', strlen(ifconfig.info.strDNS2));
-            strncpy(ifconfig.info.strDNS2, result_input, sizeof(ifconfig.info.strDNS2));            
+            strncpy(ifconfig.info.strDNS2, result_input, sizeof(ifconfig.info.strDNS2)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID15);
             break;
         }
@@ -1943,10 +1943,10 @@ void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkW
         }
         TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
         TEXT_SetText(_aahEditEg, eg_p);
-        if (id == 21)
-        {
-            MULTIEDIT_SetText(hMulti, pEVSE->info.strID);
-        }
+//        if (id == 21)
+//        {
+//            MULTIEDIT_SetText(hMulti, pEVSE->info.strID);
+//        }
         break;
 
     case CONSET_VALUE:

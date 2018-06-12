@@ -183,7 +183,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "eg,1122334455667788");
+                Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "1122334455667788");
                 //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
                 //                    EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
             }
@@ -194,7 +194,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "eg,1122334455667788");
+                Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "2000000000000002");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
                 //                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
@@ -206,7 +206,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "eg,192.168.1.101");
+                Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "123.56.113.123");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
                 //                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
@@ -218,7 +218,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "note:1~65536");
+                Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "1-65535");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -230,7 +230,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "eg,dpc");
+                Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "dpcuser");
                 //                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
             }
             break;
@@ -240,7 +240,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "eg,8888");
+                Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "1234567890");
                 //                    EDIT_SetText(_aahEdit[5][0], "******");
             }
             break;
@@ -250,7 +250,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "note：5~99999");
+                Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "1-99999");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -273,7 +273,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "eg,8888");
+                Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "123456");
             }
             break;
         case 29:
@@ -281,7 +281,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "eg,8888");
+                Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "123456");
             }
             break;
         case 30:
@@ -321,7 +321,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "");
+                Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "DPC");
             }
             break;
         case 35:
@@ -329,7 +329,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 35, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "");
+                Keypad_GetValueTest(SYSSET_VALUE, 35, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "AB-CD-EF-GH-IK-00");
             }
             break;
         case 36:
@@ -372,7 +372,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "");
+                Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "192.168.1.2");
             }
             break;
         case 38:
@@ -584,27 +584,27 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
 
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysEVSEID);
-        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("1122334455667788"));
+        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("20000000000000002")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("20000000000000002"));
         EDIT_SetText(_aahEdit[1][0], pEVSE->info.strID);
 
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _FONT_WIDTH*(strlen(sysServerIP)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysServerIP);
-        _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("255.255.255.255")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("255.255.255.255"));
+        _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("123.561.113.123")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("123.561.113.123"));
 //        memset(_tmpBuff,'\0',strlen(_tmpBuff));
 //        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
         EDIT_SetText(_aahEdit[2][0], pechProto->info.strServerIP);
 
         _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _FONT_WIDTH*(strlen(sysServerPort)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysServerPort);
-        _aahEdit[3][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*strlen("8080"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 23, strlen("8080"));
+        _aahEdit[3][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*strlen("88080"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 23, strlen("88080"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%d", pechProto->info.usServerPort);
         EDIT_SetText(_aahEdit[3][0], _tmpBuff);
 
         _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _FONT_WIDTH*(strlen(sysUserName)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysUserName);
-        _aahEdit[4][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _WORD_WIDTH*strlen("woshinidaye"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 24, strlen("woshinidaye"));
+        _aahEdit[4][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _WORD_WIDTH*strlen("12345678"), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 24, strlen("12345678"));
         EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
 
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _FONT_WIDTH*(strlen(sysUserPwd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysUserPwd);
-        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*strlen(pechProto->info.strUserPwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, strlen(pechProto->info.strUserPwd));
+        _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*sizeof(pechProto->info.strUserPwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, sizeof(pechProto->info.strUserPwd));
         if (managerLevel == 0)
         {
             EDIT_SetText(_aahEdit[5][0], pechProto->info.strUserPwd);
@@ -616,7 +616,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysDispSleepTime);
         _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("100"));
-        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "分");
+        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("10000000")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "10000000");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s / 60);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
@@ -634,7 +634,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         //秘钥
         _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _FONT_WIDTH*(strlen(sysPasswd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysPasswd);
-        _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*strlen(pechProto->info.strKey), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 28, strlen(pechProto->info.strKey));
+        _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*sizeof(pechProto->info.strKey), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 28, sizeof(pechProto->info.strKey));
         if (managerLevel == 0)
         {
             EDIT_SetText(_aahEdit[8][0], pechProto->info.strKey);                        
@@ -645,7 +645,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
         //管理员密码
         _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _FONT_WIDTH*(strlen(sysManagerPwd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysManagerPwd);
-        _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*strlen(passwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 29, strlen(passwd));
+        _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*sizeof(passwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 29, sizeof(passwd));
         if (managerLevel == 0)
         {
             EDIT_SetText(_aahEdit[9][0], passwd);
@@ -682,7 +682,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[13][0], _tmpBuff);
         //主机名
         _aahText[14][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _FONT_WIDTH*(strlen("主机名")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 14, "主机名");
-        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, strlen("100"));
+        _aahEdit[14][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 14, _WORD_WIDTH*(sizeof(ifconfig.info.strHostName)), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 34, sizeof(ifconfig.info.strHostName));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strHostName);
         EDIT_SetText(_aahEdit[14][0], _tmpBuff);
