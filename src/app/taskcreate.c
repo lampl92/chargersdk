@@ -301,10 +301,28 @@ void taskappSuspend(void)
     vTaskSuspend(xHandleTaskEVSEDiag);
     vTaskSuspend(xHandleTaskEVSEData);
     vTaskSuspend(xHandleTaskRemoteCmdProc);
+    taskmonitorChildSuspend();
+#if EVSE_USING_GUI
+    vTaskSuspend(xHandleTaskGUI);
     vTaskSuspend(xHandleTaskGUIBS);
     vTaskSuspend(xHandleTaskTouch);
     vTaskSuspend(xHandleTaskGuidingLights);
-    taskmonitorChildSuspend();
+#endif
+}
+
+void taskappResume(void)
+{
+    vTaskResume(xHandleTaskEVSERemote);
+    vTaskResume(xHandleTaskEVSERFID);
+    vTaskResume(xHandleTaskEVSECharge);
+    vTaskResume(xHandleTaskEVSEMonitor);
+    vTaskResume(xHandleTaskEVSEDiag);
+    vTaskResume(xHandleTaskEVSEData);
+    vTaskResume(xHandleTaskRemoteCmdProc);
+    vTaskResume(xHandleTaskGUIBS);
+    vTaskResume(xHandleTaskTouch);
+    vTaskResume(xHandleTaskGuidingLights);
+    taskmonitorChildResume();
 }
 
 

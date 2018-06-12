@@ -567,11 +567,11 @@
     <None Include="stm32.mak">
       <Filter>Make files</Filter>
     </None>
-    <None Include="..\..\..\readme.md" />
     <None Include="chargersdk_flash.lds" />
     <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c">
       <Filter>Source files\drivers\device\src</Filter>
     </None>
+    <None Include="..\..\..\doc\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">

@@ -293,9 +293,9 @@ void vTaskEVSEData(void *pvParameters)
                 if (pCON->order.ucStopType == defOrderStopType_Offline)
                 {
                     printf_safe("Order Offline.....................\n");
-                    pCON->order.ucPayStatus = 0;
-                    /* 临时订单 在这里存储订单*/
-                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+//                    pCON->order.ucPayStatus = 0;
+//                    /* 临时订单 在这里存储订单*/
+//                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 }
                 else
                 {
@@ -311,9 +311,9 @@ void vTaskEVSEData(void *pvParameters)
                     else
                     {
                         printf_safe("Order TimeOut.....................\n");
-                        pCON->order.ucPayStatus = 0;
-                        /* 临时订单 在这里存储订单*/
-                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+//                        pCON->order.ucPayStatus = 0;
+//                        /* 临时订单 在这里存储订单*/
+//                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                     }
                 }
                 

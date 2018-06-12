@@ -25,6 +25,11 @@ void taskmonitorChildSuspend(void)
     vTaskSuspend(xHandleTaskChData);
     vTaskSuspend(xHandleTaskEvseData);
 }
+void taskmonitorChildResume(void)
+{
+    vTaskResume(xHandleTaskChData);
+    vTaskResume(xHandleTaskEvseData);
+}
 
 
 void vTaskMonitor_ChData(void *pvParameters)
@@ -61,7 +66,7 @@ void vTaskMonitor_ChData(void *pvParameters)
                 else if (errcode == ERR_CON_METER_FAULT)
                 {
                     ++pCON->tmp.meterTryTime;
-                    printf("meter try %d\n", pCON->tmp.meterTryTime);
+                    //printf("meter try %d\n", pCON->tmp.meterTryTime);
                     if (pCON->tmp.meterTryTime > trymax)
                     {
                         pCON->tmp.meterTryTime = 0;

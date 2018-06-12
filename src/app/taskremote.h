@@ -47,7 +47,6 @@ typedef struct
 {
     uint8_t ucCheckOrderTmp;
     statRemoteOrder_e stat;
-    time_t timestamp;
 }RemoteOrderStatus_t;
 
 //远程启停数据结构

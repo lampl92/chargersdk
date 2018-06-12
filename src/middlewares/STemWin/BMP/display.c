@@ -527,15 +527,38 @@ void gui_halt(void)
 {
     char ch[2] = { 0 };
     char flg;
+    TaskHandle_t ht;
+    extern TaskHandle_t xHandleTaskReadPic;
     if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
     {
         flg = atoi(ch);
         if (flg == 3)//有文件并且设置过3
         {
-            printf("缺少图片，暂停GUI\n");
+            printf_safe("缺少图片，暂停GUI\n");
             xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP);
-            taskappSuspend();
-            vTaskSuspend(NULL);
+            
+            vTaskSuspend(xHandleTaskEVSERemote);
+            vTaskSuspend(xHandleTaskEVSERFID);
+            vTaskSuspend(xHandleTaskEVSECharge);
+            vTaskSuspend(xHandleTaskEVSEMonitor);
+            vTaskSuspend(xHandleTaskEVSEDiag);
+            vTaskSuspend(xHandleTaskEVSEData);
+            vTaskSuspend(xHandleTaskRemoteCmdProc);
+            taskmonitorChildSuspend();
+            vTaskSuspend(xHandleTaskGUIBS);
+            vTaskSuspend(xHandleTaskTouch);
+            vTaskSuspend(xHandleTaskGuidingLights);
+            ht = xTaskGetCurrentTaskHandle();
+            if (ht == xHandleTaskGUI)
+            {
+                vTaskSuspend(xHandleTaskReadPic);
+                vTaskSuspend(xHandleTaskGUI);
+            }
+            if (ht == xHandleTaskReadPic)
+            {
+                vTaskSuspend(xHandleTaskGUI);
+                vTaskSuspend(xHandleTaskReadPic);
+            }
         }
         else
         {

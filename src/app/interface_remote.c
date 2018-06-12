@@ -46,6 +46,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     echProtoElem_t *pechProtoElem;
     gdsl_list_cursor_t cur;//命令队列光标
     gdsl_list_cursor_t cs;//发送队列光标
+    EventBits_t bits;
 
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
@@ -92,6 +93,12 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
             {
                 printf_safe("xMutexProtoSend Timeout---> [%0X]%d!!!\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             }
+        }
+        
+        bits = xEventGroupWaitBits(pCMD->xHandleEventCmd, defEventBitProtoCmdDataTimeout, pdTRUE, pdTRUE, 0);
+        if ((bits & defEventBitProtoCmdDataTimeout) == defEventBitProtoCmdDataTimeout)
+        {
+            errcode = ERR_REMOTE_TIMEOUT;
         }
     }//if mutex
 
@@ -141,7 +148,7 @@ ErrorCode_t RemoteIF_SendHeart(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 0, 1);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 1);
 
     return errcode;
 }
@@ -332,7 +339,7 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
-    uint8_t strOrderSN_tmp[17];
+    char strOrderSN_tmp[17] = { 0 };
     double dLimetFee;
     ul2uc ulTmp;
 
@@ -462,16 +469,18 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     uint32_t len;
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
-    uint8_t strOrderSN_tmp[17];
+    char strOrderSN_tmp[17] = { 0 };
 
     id = 0;
-    memset(strOrderSN_tmp, 0, 17);
     errcode = ERR_NO;
 
     handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_ORDER, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_REMOTE_TIMEOUT:
         *psiRetVal = 0;
         break;
     case ERR_NO:
@@ -891,7 +900,7 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     ErrorCode_t set_errcode_key;
     ErrorCode_t set_errcode_time;
     ErrorCode_t errcode;
-    uint8_t strTmpKey[16+1] = {0};
+    char strTmpKey[16+1] = {0};
     uint32_t ultmpTim;
     ul2uc ultmpNetSeq;
     int i;
@@ -961,7 +970,7 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
     uint8_t id_cont;
     uint8_t id;//本地枪ID,从0开始
     uint8_t len_qr;
-    uint8_t qrcode[64] = {0};
+    char qrcode[64] = {0};
     uint8_t ucOffset;
     int i,j;
 
@@ -1274,7 +1283,7 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strOrderSN[17] = {0};
+    char strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
     ErrorCode_t errcode = ERR_NO;
 
@@ -1327,9 +1336,9 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     uint8_t con_id;
-    uint8_t strCardID[17] = {0};
+    char strCardID[17] = {0};
     uint8_t ucOrderSN[8] = {0};
-    uint8_t strOrderSN[17] = {0};
+    char strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
     uint8_t ucOffset;
     int i;
@@ -1862,6 +1871,7 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
         break;
     }
 
+    pProto->info.ftp.GetFtpCfg((void *)&(pechProto->info.ftp), NULL);
     return errcode;
 }
 
@@ -1892,7 +1902,7 @@ ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
     uint32_t len;
     uint8_t ucOffset = 0;
     int i;
-    uint8_t tmpVersion[10 + 1] = {0};
+    char tmpVersion[10 + 1] = {0};
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
@@ -1952,7 +1962,7 @@ ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
     uint32_t len;
     uint8_t ucOffset = 0;
     int i;
-    uint8_t tmpVersion[10 + 1] = { 0 };
+    char tmpVersion[10 + 1] = { 0 };
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
@@ -2004,7 +2014,7 @@ ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
     uint32_t len;
     uint8_t ucOffset = 0;
     int i;
-    uint8_t tmpVersion[10 + 1] = { 0 };
+    char tmpVersion[10 + 1] = { 0 };
     ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 

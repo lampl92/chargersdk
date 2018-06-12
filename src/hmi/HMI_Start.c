@@ -7,7 +7,7 @@
 #include "stringName.h"
 #include "file_op.h"
 
-static TaskHandle_t xHandleTaskReadPic = NULL;
+TaskHandle_t xHandleTaskReadPic = NULL;
 
 I32 memoryfree;
 uint16_t calebrate_done = 0;

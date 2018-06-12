@@ -12,6 +12,6 @@
 
 
 
-ErrorCode_t  AddEVSELog(uint8_t *path, uint8_t device, uint8_t level, uint8_t state, uint8_t *msg);
+ErrorCode_t  AddEVSELog(char *path, uint8_t device, uint8_t level, uint8_t state, char *msg);
 
 #endif

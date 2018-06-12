@@ -16,6 +16,7 @@ struct _ftp_ctx
     char fname[128];
     char user[64];
     char pass[64];
+    uint32_t fsize;
     ftp_cb on_bg;
     ftp_cb on_data;
     ftp_cb on_end;
