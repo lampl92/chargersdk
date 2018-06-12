@@ -265,6 +265,7 @@ void vTaskEVSERemote(void *pvParameters)
             }
             break;
         case REMOTE_CONNECTED:
+            vTaskResume(xHandleTaskRemoteCmdProc); //重启协议处理任务
             /********** 登录 **************/
             RemoteIF_RecvLogin(pEVSE, pechProto, &network_res);
             if(network_res == 1)
@@ -282,7 +283,6 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
                 last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
-                vTaskResume(xHandleTaskRemoteCmdProc);//重启协议处理任务
                 remotestat = REMOTE_LOGINED;
             }
             else
