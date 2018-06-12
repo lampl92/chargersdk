@@ -63,8 +63,9 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
         return res;
     }
     pechProto->info.ftp.ftp_proc.ulRecvFileSize += len;
-    TRACE_DEBUG("filesize = %d（recv %d）\r", pechProto->info.ftp.ftp_proc.ulRecvFileSize, len);
-    //vTaskDelay(1);//给其他任务喘气的机会
+    pechProto->info.ftp.ftp_proc.precent = (double)(pechProto->info.ftp.ftp_proc.ulRecvFileSize) / cctx->parent.fsize  * 100;
+    
+    TRACE_DEBUG("download %d/%d(%d%%),rate= %d\r", pechProto->info.ftp.ftp_proc.ulRecvFileSize, cctx->parent.fsize, pechProto->info.ftp.ftp_proc.precent, len);
     return 0;
 }
 
@@ -84,6 +85,7 @@ static int _ftp_end_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
 
+    TRACE_DEBUG("\n");
     yaffs_close(cctx->fd);
     cctx->fd = -1;
     
@@ -193,6 +195,7 @@ int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
     strcpy(ctx.parent.fname, pechFtp->strNewFileName);
     strcpy(ctx.parent.user, pechFtp->strUser);
     strcpy(ctx.parent.pass, pechFtp->strPassword);
+    ctx.parent.fsize = pechFtp->fsize;
     ctx.parent.on_bg = _ftp_bg_cb;
     ctx.parent.on_data = _ftp_tof_cb;
     ctx.parent.on_end = _ftp_end_cb;

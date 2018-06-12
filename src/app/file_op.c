@@ -37,6 +37,7 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
             return errcode;
         }
         cfgobj_get_uint32(jsRoot, &flist->size_byte, "flist:%d.size_byte", i);
+        ftp->fsize = flist->size_byte;
         cfgobj_get_string(jsRoot, flist->strCrc32, "flist:%d.crc32", i);
         cfgobj_get_string(jsRoot, flist->strLocalpath, "flist:%d.localpath", i);
         cfgobj_get_string(jsRoot, flist->strFtpdir, "flist:%d.ftpdir", i);
