@@ -179,12 +179,18 @@ static void netStateFTP(net_device_t *net_dev)
                 else
                 {
                     printf_safe("移动%s到%s 失败.\n", filepath, filepath_rename);
+                    upflg = '3';
+                    set_tmp_file(pathUpgradeTmp, &upflg);
+                    yaffs_unlink(filepath); //删除下载文件
+                    break;
                 }
             }
             else
             {
+                printf_safe("CRC32校验失败 %s\n", filepath);
                 upflg = '3';
                 set_tmp_file(pathUpgradeTmp, &upflg);
+                yaffs_unlink(filepath); //删除下载文件
                 break;
             }
             yaffs_unlink(filepath);//删除下载文件
