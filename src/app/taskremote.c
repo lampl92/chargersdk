@@ -129,20 +129,22 @@ static int taskremote_status_update(CON_t *pCON)
         return 0;
     }
 }
-
+//0：无升级操作   1：升级成功  2：升级失败
 int CheckSysUpFlags(void)
 {
     int tmp = 2;
     int succ = 2;
-    char ch[1]; 
+    char ch[2] = { 0 }; 
     uint8_t res;
     
     res = get_tmp_file(pathUpgradeTmp, ch);
-    tmp = atoi(ch);
     if (res != 1)
+    {
         succ = 0;
+    }
     else
     {
+        tmp = atoi(ch);
         switch (tmp)
         {
         case 2:
@@ -211,20 +213,15 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     
     /*升级结果*/
     succ = CheckSysUpFlags();
-    if (succ != 0)
+    if (succ != 0)//succ == 1 升级成功
     {
         RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
         xSysconf.xUpFlag.chargesdk_bin = 0;
-    }
-    if (succ == 1)//succ == 1 升级成功
-    {
-        //xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString); // 不再文件中设置版本, 程序中自带版本
     }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {
         //happy time;
-        //xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
         xSysconf.GetSysCfg(&xSysconf, NULL);
     }
     return 1;
