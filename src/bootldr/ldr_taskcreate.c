@@ -57,9 +57,9 @@ void vTaskOTA(void *pvParameters);
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
-static TaskHandle_t xHandleTaskInit = NULL;
-static TaskHandle_t xHandleTaskCLI = NULL;
-static TaskHandle_t xHandleTaskOTA = NULL;
+TaskHandle_t xHandleTaskInit = NULL;
+TaskHandle_t xHandleTaskCLI = NULL;
+TaskHandle_t xHandleTaskOTA = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
