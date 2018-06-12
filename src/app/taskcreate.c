@@ -301,12 +301,13 @@ void taskappSuspend(void)
     vTaskSuspend(xHandleTaskEVSEDiag);
     vTaskSuspend(xHandleTaskEVSEData);
     vTaskSuspend(xHandleTaskRemoteCmdProc);
+    taskmonitorChildSuspend();
 #if EVSE_USING_GUI
+    vTaskSuspend(xHandleTaskGUI);
     vTaskSuspend(xHandleTaskGUIBS);
     vTaskSuspend(xHandleTaskTouch);
     vTaskSuspend(xHandleTaskGuidingLights);
 #endif
-    taskmonitorChildSuspend();
 }
 
 void taskappResume(void)

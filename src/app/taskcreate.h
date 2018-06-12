@@ -36,6 +36,23 @@ extern const char *TASKNAME_EVSEMonitor;
 extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
+extern TaskHandle_t xHandleTaskInit;
+extern TaskHandle_t xHandleTaskCLI;
+extern TaskHandle_t xHandleTaskGUI;
+extern TaskHandle_t xHandleTaskGuidingLights;
+extern TaskHandle_t xHandleTaskGUIBS;
+extern TaskHandle_t xHandleTaskTouch;
+extern TaskHandle_t xHandleTaskOTA;
+extern TaskHandle_t xHandleTaskTCPClient;
+extern TaskHandle_t xHandleTaskRemoteCmdProc;
+
+extern TaskHandle_t xHandleTaskEVSERemote;
+extern TaskHandle_t xHandleTaskEVSERFID;
+extern TaskHandle_t xHandleTaskEVSECharge;
+extern TaskHandle_t xHandleTaskEVSEMonitor;
+extern TaskHandle_t xHandleTaskEVSEDiag;
+extern TaskHandle_t xHandleTaskEVSEData;
+
 extern SemaphoreHandle_t xMutexTimeStruct;
 extern SemaphoreHandle_t xMeterMutex;
 extern SemaphoreHandle_t xTempMutex;
