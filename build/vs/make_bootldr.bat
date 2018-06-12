@@ -14,4 +14,3 @@ set crc32=%_crc32:~30,8%
 
 md .\Release\bootldr\%folder1%\
 copy /y %source% .\Release\bootldr\%folder1%\bootldr.bin.%crc32%
-pause
