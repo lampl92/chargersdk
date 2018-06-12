@@ -1278,21 +1278,42 @@ static uint8_t Value_Check()
             {
                 tmpU8 = 2;
             }
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-//            pEVSE->info.ucTotalCON = tmpU8;
-//            if (tmpU8 == 1)
-//            {
-//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
-//            }
-//            else
-//            {
-//                tmpU8 = 3;
-//                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
-//            }
+            if (tmpU8 == 1)
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
+                tmpU8 = 2;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
+                tmpU8 = 1;
+                pEVSE->info.ucTotalCON = tmpU8;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+            }
+            else
+            {   
+                tmpU8 = 2;
+                pEVSE->info.ucTotalCON = tmpU8;
+                tmpU8 = 3;
+                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 63.0*3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 63.0*3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
+                tmpU8 = 2;
+                pEVSE->info.ucTotalCON = tmpU8;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+            }
             NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             break;
-        case 32:
+        case 32://电相
             tmpU8 = atoi(result_input);
             if (tmpU8 != 1)
             {
@@ -1304,37 +1325,52 @@ static uint8_t Value_Check()
             {
                 tmpU8 = 2;
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
             }
             else
             {
                 tmpU8 = 3;
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
             }
-//            if (tmpU8 == 1)
-//            {
-//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-//            }
-//            else
-//            {
-//                tmpU8 = 2;
-//                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-//            }
             NVIC_SystemReset();
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
             break;
-        case 33:
+        case 33://电表
             tmpU8 = atoi(result_input);
             if (tmpU8 == 1 || tmpU8 == 2)
             {
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
                 tmpU8 = 1;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);  
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
             }
             else if (tmpU8 == 3 || tmpU8 == 4)
             {
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
                 tmpU8 = 3;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
             }
             else 
             {
@@ -1443,27 +1479,36 @@ static uint8_t Value_Check()
             pCon->info.ucSocketType = result_input[0];
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
-        case 22:// 178 - 280  > lower
+        case 22://最大电压 178 - 280  > lower
             tmpDouble = atof(result_input);
             if (tmpDouble >= 280.0)
             {
                 tmpDouble = 280.0;
             }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble > pCon->info.dVolatageLowerLimits)
+            else if (tmpDouble <= 280.0&&tmpDouble >= 178.0)
             {
-                pCon->info.dVolatageUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble <= pCon->info.dVolatageLowerLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
+                if (tmpDouble <= pCon->info.dVolatageLowerLimits)
+                {
+                    tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
+                }
             }
             else if (tmpDouble < 178.0)
             {
-                tmpDouble = 178.0;
+                if (tmpDouble >= pCon->info.dVolatageLowerLimits)
+                {
+                    tmpDouble = 178.0;
+                }
+                else if (tmpDouble < pCon->info.dVolatageLowerLimits)
+                {
+                    if (pCon->info.dVolatageLowerLimits >= 178)
+                    {
+                        tmpDouble = pCon->info.dVolatageLowerLimits + 1;
+                    }
+                    else if(pCon->info.dVolatageLowerLimits < 178)
+                    {
+                        tmpDouble = 178;
+                    }
+                }
             }
             pCon->info.dVolatageUpperLimits = tmpDouble;
             cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageUpperLimits);
@@ -1476,27 +1521,30 @@ static uint8_t Value_Check()
             {
                 tmpDouble = 100.0;
             }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble < pCon->info.dVolatageUpperLimits)
+            else if (tmpDouble >= 100.0&& tmpDouble <= 240.0)
             {
-                pCon->info.dVolatageLowerLimits = tmpDouble;
+                if (tmpDouble >= pCon->info.dVolatageUpperLimits)
+                {
+                    tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
+                }
             }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble >= pCon->info.dVolatageUpperLimits)
+            else if (tmpDouble > 240.0)
             {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
-            }
-            else if (tmpDouble > 240.0
-            &&tmpDouble >= pCon->info.dVolatageUpperLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
-            }
-            else if (tmpDouble > 240.0
-                &&tmpDouble < pCon->info.dVolatageUpperLimits)
-            {
-                tmpDouble = 240.0;
+                if (tmpDouble <= pCon->info.dVolatageUpperLimits)
+                {
+                    tmpDouble = 240;
+                }
+                else if (tmpDouble > pCon->info.dVolatageUpperLimits)
+                {
+                    if (pCon->info.dVolatageUpperLimits >= 240)
+                    {
+                        tmpDouble = 240;
+                    }
+                    else if (pCon->info.dVolatageUpperLimits < 240)
+                    {
+                        tmpDouble = pCon->info.dVolatageUpperLimits - 1;
+                    }
+                }
             }
             pCon->info.dVolatageLowerLimits = tmpDouble;
             cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageLowerLimits);
@@ -1885,7 +1933,7 @@ void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkW
         TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
         _aahEditEg = TEXT_CreateEx(10, 70, 160, 25, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, 13, name_p);
-        if (id == 32)//如果是电表设置
+        if (id == 33)//如果是电表设置
         {
             TEXT_SetFont(_aahEditEg, &SIF12_Font);
         }
