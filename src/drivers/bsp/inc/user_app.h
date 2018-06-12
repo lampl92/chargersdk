@@ -104,7 +104,7 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define	AXISDATA_REG	0x28
 #define lock_timer      20
 #define samp_sum    124
-#define samp_dma    10
+#define samp_dma    2
 #define ia_k       0.02197265
 #define va_k       0.22056//0.38?????÷??????????·?????×è300??1
 #define leakage_current_k   0.073242
