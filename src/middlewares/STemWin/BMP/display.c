@@ -525,7 +525,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 
 void gui_halt(void)
 {
-    char ch[1];
+    char ch[2] = { 0 };
     char flg;
     if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
     {
