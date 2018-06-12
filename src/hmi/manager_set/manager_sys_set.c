@@ -339,6 +339,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 if (CHECKBOX_GetState(_aahEdit[16][0]) == 1)
                 {
                     tmpU8 = 1;
+                    ifconfig.info.ucDHCPEnable = 1;
                     cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetDHCP);
                     for (y = 17; y < _SYSEDIT_MAX_Y; y++)
                     {
@@ -352,6 +353,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 else
                 {
                     tmpU8 = 0;
+                    ifconfig.info.ucDHCPEnable = 0;
                     cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetDHCP);
                     for (y = 17; y < _SYSEDIT_MAX_Y; y++)
                     {
@@ -728,7 +730,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         sprintf(_tmpBuff, "%s", ifconfig.info.strDNS1);
         EDIT_SetText(_aahEdit[20][0], _tmpBuff);
         //DNS2
-        _aahText[21][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _FONT_WIDTH*(strlen("DNS1")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS1");
+        _aahText[21][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _FONT_WIDTH*(strlen("DNS2")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "DNS2");
         _aahEdit[21][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 21, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 41, strlen("1122334455667788"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strDNS2);
