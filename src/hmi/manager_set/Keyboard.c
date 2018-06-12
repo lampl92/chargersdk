@@ -1247,17 +1247,12 @@ static uint8_t Value_Check()
             {
                 tmpDouble = 120.0;
             }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-40.0)
-                &&tmpDouble > pCon->info.dACTempLowerLimits)
+            else if (tmpDouble <= 120.0&&tmpDouble >= (-40.0))
             {
-                pCon->info.dACTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-40.0)
-                &&tmpDouble <= pCon->info.dACTempLowerLimits)
-            {
-                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
+                if (tmpDouble <= pCon->info.dACTempLowerLimits)
+                {
+                    tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
+                }
             }
             else if (tmpDouble < (-40.0))
             {

@@ -615,8 +615,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         }
 
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysDispSleepTime);
-        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("100")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("100"));
-        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("10000000")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "10000000");
+        _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("12345678")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("12345678"));
+        _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("12345678")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen("分")), 25, hWindow, WM_CF_SHOW, 0, 13, "分");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s / 60);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);

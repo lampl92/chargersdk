@@ -448,7 +448,6 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             {
                 LISTVIEW_SetItemText(hItem, 1, i, "扫码");
             }
-
             jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
             LISTVIEW_SetItemText(hItem, 2, i, jsItem->valuestring);
 
