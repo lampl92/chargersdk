@@ -45,9 +45,18 @@ static void flashGunState()
         case STATE_CON_RETURN: 
             break;
         }
-        if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH)
+        if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH\
+             || pCON->order.statOrder == STATE_ORDER_WAITSTOP||pCON->order.statOrder == STATE_ORDER_WAITUSE\
+            || pCON->order.statOrder == STATE_ORDER_STORE)
         {
-            GBSgunstate[i] = GunchargedoneState;
+            if (pCON->status.xPlugState == PLUG)
+            {
+                GBSgunstate[i] = GunchargedoneState;
+            }
+            else
+            {
+                GBSgunstate[i] = GunfreeState;
+            }            
             continue;
         }
         if (pCON->status.ulSignalAlarm != 0 ||
