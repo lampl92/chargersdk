@@ -318,6 +318,8 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
         {
             printf_safe("**************Signal Item example Arr[%d]*************\n", i);
             jsChild = cJSON_GetArrayItem(jsParent, i);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderCONID);
+            printf_safe("CONID\t%d\n", jsItem->valueint);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             printf_safe("StartType\t%d\n", jsItem->valueint);
 	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
