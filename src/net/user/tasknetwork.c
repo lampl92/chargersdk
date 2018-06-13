@@ -37,7 +37,8 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
         "NET_STATE_CONNECT",
         "NET_STATE_FTP",
         "NET_STATE_TCP_ON",
-        "NET_STATE_DISCONNECT"
+        "NET_STATE_DISCONNECT",
+        "NET_STATE_ERR"
     };
 
     if (net_dev->state < arraysize(stateLabel) && new_state < arraysize(stateLabel))
