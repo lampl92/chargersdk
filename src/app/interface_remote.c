@@ -37,6 +37,76 @@ ErrorCode_t RemoteIF_SendLogin(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     return errcode;
 }
+//从队尾取，取到后删除，并传出element
+ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto, 
+                                uint16_t usSendID, 
+                                uint8_t con_id, uint8_t con_id_pos, 
+                                uint8_t *pbuff, uint32_t *pLen)
+{
+    ErrorCode_t errcode;
+    echCMD_t *pCMD;
+    echCmdElem_t *pechCmdElem;
+    echProtoElem_t *pechProtoElem;
+    gdsl_list_cursor_t cur; //命令队列光标
+    gdsl_list_cursor_t cs; //发送队列光标
+    EventBits_t bits;
+
+    errcode = ERR_REMOTE_NODATA;
+    pCMD = pProto->pCMD[usSendID];
+    if (xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
+    {
+        cur = gdsl_list_cursor_alloc(pCMD->plRecvCmd);
+        gdsl_list_cursor_move_to_tail(cur); //只要链表中最新接收的协议, 因此从tail开始
+        while ((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
+        {
+            if (EchRemoteIDtoCONID(pechCmdElem->pbuff[con_id_pos]) == con_id)
+            {
+                printf_protolog("CON%d RecvCmd %02X [%d]\n", con_id, pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+                memcpy(pbuff, pechCmdElem->pbuff, pechCmdElem->len);
+                *pLen = pechCmdElem->len;
+                gdsl_list_cursor_delete(cur);
+                errcode = ERR_NO;
+                break;
+            }
+            gdsl_list_cursor_step_backward(cur);
+        }
+        gdsl_list_cursor_free(cur);
+        xSemaphoreGive(pCMD->xMutexCmd);
+        
+        if (errcode != ERR_REMOTE_NODATA)
+        {
+            if (xSemaphoreTake(pProto->xMutexProtoSend, 1000) == pdPASS)
+            {
+                cs = gdsl_list_cursor_alloc(pProto->plechSendCmd);
+                gdsl_list_cursor_move_to_head(cs);
+                while ((pechProtoElem = gdsl_list_cursor_get_content(cs)) != NULL)
+                {
+                    if (pechProtoElem->cmd_id == usSendID && pechProtoElem->con_id == con_id)
+                    {
+                        gdsl_list_cursor_delete(cs);  //请求命令收到平台回复并已处理, 删除命令
+                        printf_protolog("CON%d SendCmd %02X [%d] Recved\n", con_id, pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                        break;
+                    }
+                    gdsl_list_cursor_step_forward(cs);
+                }
+                gdsl_list_cursor_free(cs);
+                xSemaphoreGive(pProto->xMutexProtoSend);
+            }//if mutex
+            else
+            {
+                printf_safe("xMutexProtoSend Timeout---> [%0X]%d!!!\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            }
+        }
+        
+        bits = xEventGroupWaitBits(pCMD->xHandleEventCmd, defEventBitProtoCmdDataTimeout, pdTRUE, pdTRUE, 0);
+        if ((bits & defEventBitProtoCmdDataTimeout) == defEventBitProtoCmdDataTimeout)
+        {
+            errcode = ERR_REMOTE_TIMEOUT;
+        }
+    }//if mutex
+
+    return errcode;
+}
 
 ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *pbuff, uint32_t *pLen)
 {
@@ -56,16 +126,16 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
         gdsl_list_cursor_move_to_tail (cur);//只要链表中最新接收的协议, 因此从tail开始
         while((pechCmdElem = gdsl_list_cursor_get_content (cur)) != NULL)
         {
-            printf_protolog("RemoteRecvHandle: RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
-            memcpy(pbuff, pCMD->ucRecvdOptData, pCMD->ulRecvdOptLen);
-            *pLen = pCMD->ulRecvdOptLen;
+            printf_protolog("RecvCmd %d\n", pCMD->CMDType.usRecvCmd);
+            memcpy(pbuff, pechCmdElem->pbuff, pechCmdElem->len);
+            *pLen = pechCmdElem->len;
             errcode = ERR_NO;
             break;
         }
         gdsl_list_cursor_move_to_head (cur);
         while((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
-            printf_protolog("RemoteRecvHandle: RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
+            printf_protolog("RecvCmd %02X [%d] Delete\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
             gdsl_list_cursor_delete(cur);
         }
         gdsl_list_cursor_free(cur);
@@ -81,7 +151,8 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
                 {
                     if (pechProtoElem->cmd_id == usSendID)
                     {
-                        xEventGroupSetBits(pCMD->xHandleEventCmd, defEventBitProtoCmdHandled);
+                        gdsl_list_cursor_delete(cs);   //请求命令收到平台回复并已处理, 删除命令
+                        printf_protolog("SendCmd %02X [%d] Recved\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         break;
                     }
                     gdsl_list_cursor_step_forward(cs);
@@ -474,7 +545,8 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     id = 0;
     errcode = ERR_NO;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_ORDER, pbuff, &len);
+    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_ORDER, pOrder->ucCONID, 9, pbuff, &len);
+    //handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_ORDER, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -499,11 +571,11 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         if (id != pOrder->ucCONID)
         {
             printf_safe("订单枪号不一致\n");
-            printf_safe("-Remote ID: %d \n", id);
+            printf_safe("-Remote ID: %d \n", pbuff[9]);
+            printf_safe("-Remote ID conv: %d \n", id);
             printf_safe("-Local  ID: %d \n", pOrder->ucCONID);
             errcode = ERR_REMOTE_PARAM;
             break;
-            
         }
         pCON = CONGetHandle(id);
         if(pCON != NULL)

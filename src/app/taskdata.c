@@ -295,7 +295,7 @@ void vTaskEVSEData(void *pvParameters)
                 uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
                 if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
                 {
-                    printf_safe("Order OK.....................\n");
+                    printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
                     pCON->order.ucPayStatus = 1;
                     RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                     pCON->order.statOrder = STATE_ORDER_STORE;
@@ -306,7 +306,7 @@ void vTaskEVSEData(void *pvParameters)
                     uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
                     if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
                     {
-                        printf_safe("Order TimeOut.....................\r");
+                        printf_safe("CON%d Order TimeOut.....................\r", pCON->info.ucCONID);
                         pCON->order.statOrder = STATE_ORDER_STORE;
                     }
                 }
@@ -318,11 +318,11 @@ void vTaskEVSEData(void *pvParameters)
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;
             case STATE_ORDER_HOLD:
-                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
-                {
-                    break;
-                }
-                else
+//                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
+//                {
+//                    break;
+//                }
+//                else
                 {
                     pCON->order.statOrder = STATE_ORDER_RETURN;
                 }

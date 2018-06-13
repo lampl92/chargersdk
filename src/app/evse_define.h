@@ -180,7 +180,6 @@
 #define defEventBitTimerCBStatus            BIT_9
 
 /*pProto->pCMD[i]->xHandleEventCmd*/
-#define defEventBitProtoCmdHandled          BIT_0
 #define defEventBitProtoCmdDataTimeout      BIT_1
 
 /*充电桩类型*/

@@ -396,6 +396,10 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, 
     {
         return 0;
     }
+    if (pCObj != NULL)
+    {
+        echSendCmdElem.con_id = ((CON_t *)pCObj)->info.ucCONID;
+    }
     echSendCmdElem.timestamp = time(NULL);
     echSendCmdElem.timeout_s = timeout_s;
     echSendCmdElem.cmd = pProto->pCMD[usCmdID]->CMDType;
