@@ -311,7 +311,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
         pwm_samp_timer_cp2 = 0;
         flat_pwm_change_cp2 = 0;
     }
-    if ((pwm_samp_flag == 1)&&(pwm_samp_timer >= 3))
+    if ((pwm_samp_flag == 1)&&(pwm_samp_timer >= 2))
     {
         RUN_ON;
         get_CP1();
@@ -319,7 +319,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
         pwm_samp_flag = 0;
 
     }
-    if ((pwm_samp_flag_cp2 == 1)&&(pwm_samp_timer_cp2 >= 3))
+    if ((pwm_samp_flag_cp2 == 1)&&(pwm_samp_timer_cp2 >=2))
     {
         get_CP2();
         pwm_samp_timer_cp2 = 0;

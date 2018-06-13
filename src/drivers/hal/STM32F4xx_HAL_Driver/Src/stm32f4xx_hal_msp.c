@@ -263,7 +263,7 @@ void MX_DMA_Init(void)
 }
 void DMA_START(void)
 {
-    if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, 30) != HAL_OK)
+    if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, (3*samp_dma)) != HAL_OK)
     {
         Error_Handler();
     }
