@@ -736,7 +736,7 @@ void cli_dummyordersn_fnt(int argc, char **argv)
     }
     else
     {
-        printf_safe("checkordersn %d\n", dummyordersn);
+        printf_safe("dummyordersn %d\n", dummyordersn);
     }
 }
 tinysh_cmd_t cli_networkinfo_cmd =
