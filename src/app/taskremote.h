@@ -40,6 +40,7 @@ typedef struct
 typedef enum _statRemoteOrder_e
 {
     REMOTEOrder_IDLE,
+    REMOTEOrder_WaitOrder,
     REMOTEOrder_Send,
     REMOTEOrder_WaitRecv
 } statRemoteOrder_e;

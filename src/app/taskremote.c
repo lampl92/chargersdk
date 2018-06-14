@@ -683,9 +683,22 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(pCON->order.statRemoteProc.order.stat)
                 {
                 case REMOTEOrder_IDLE:
+                    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                        defEventBitCONStartOK,
+                        pdFALSE,
+                        pdTRUE,
+                        0);
+                    if ((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+                    {
+                        pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitOrder;
+                    }
+                    break;
+                case REMOTEOrder_WaitOrder:
                     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
                         defEventBitOrderMakeFinishToRemote, 
-                        pdTRUE, pdTRUE, 0);
+                        pdTRUE,
+                        pdTRUE,
+                        0);
                     if ((uxBits & defEventBitOrderMakeFinishToRemote) == defEventBitOrderMakeFinishToRemote)
                     {
                         pCON->order.statRemoteProc.order.stat = REMOTEOrder_Send;
