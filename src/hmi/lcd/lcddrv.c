@@ -728,7 +728,7 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
 	uint8_t x0=x;
 	width+=x;
 	height+=y;
-    printf_safe("%s", p);
+    //printf_safe("%s", p);
     while((*p<='~')&&(*p>=' '))//判断是不是非法字符!
     {
         if(x>=width){x=x0;y+=size;}
@@ -737,7 +737,7 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
         x+=size/2;
         p++;
     }
-    printf_safe("\n");
+    //printf_safe("\n");
 }
 
 

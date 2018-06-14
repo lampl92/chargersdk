@@ -35,6 +35,10 @@ static int _ftp_bg_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
     pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 1;
     pechProto->info.ftp.ftp_proc.ulRecvFileSize = 0;
     
+#if EVSE_USING_GUI
+    LCD_Clear(BLUE);
+#endif
+    
     return 0;
 }
 
@@ -54,6 +58,7 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     int n;
     int res;
+    char disp_str[200] = { 0 };
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
     n = yaffs_write(cctx->fd, data_in, len);
     if (n != len)
@@ -65,7 +70,16 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
     pechProto->info.ftp.ftp_proc.ulRecvFileSize += len;
     pechProto->info.ftp.ftp_proc.precent = (double)(pechProto->info.ftp.ftp_proc.ulRecvFileSize) / cctx->parent.fsize  * 100;
     
-    TRACE_DEBUG("download %d/%d(%d%%),rate= %d\r", pechProto->info.ftp.ftp_proc.ulRecvFileSize, cctx->parent.fsize, pechProto->info.ftp.ftp_proc.precent, len);
+#if EVSE_USING_GUI
+    sprintf(disp_str, "file:%s", cctx->parent.fname);
+    LCD_ShowString(100, 20, 300, 20, 16, disp_str);
+#endif
+    sprintf(disp_str, "download %d/%d(%d%%), recv %dByte", pechProto->info.ftp.ftp_proc.ulRecvFileSize, cctx->parent.fsize, pechProto->info.ftp.ftp_proc.precent, len);
+#if EVSE_USING_GUI
+    LCD_ShowString(100, 40, 380, 20, 16, disp_str);
+#endif
+    TRACE_DEBUG("%s\r", disp_str);
+    
     return 0;
 }
 
