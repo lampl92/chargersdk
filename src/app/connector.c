@@ -20,6 +20,8 @@
 #include "event_groups.h"
 #include "timers.h"
 
+#define DEBUG_DIAG_DUMMY_RELAY
+
 #if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
@@ -892,8 +894,8 @@ static ErrorCode_t GetRelayState(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-#ifdef DEBUG_DIAG_DUMMY
-    tmpLStat = SWITCH_ON;
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+    tmpLStat = pCON->status.ucRelayLState;
     tmpNStat = tmpLStat;
 #else
     if (pEVSE->info.ucTotalCON > 1)
@@ -908,6 +910,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
         tmpLStat = Get_State_relay(0);//L
         tmpNStat = tmpLStat; 
     }
+#endif
     if (tmpLStat == SWITCH_ON)
     {
         pCON->status.ulSignalState |= defSignalCON_State_AC_A_Relay;
@@ -924,7 +927,6 @@ static ErrorCode_t GetRelayState(void *pvCON)
     {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_N_Relay;
     }
-#endif
     /*********************/
 
     pCON->status.ucRelayLState = tmpLStat;
@@ -956,7 +958,16 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     {
         if(cmd == SWITCH_OFF)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                pCON->status.ucRelayLState = SWITCH_OFF;
+            }
+            else
+            {
+                pCON->status.ucRelayLState = SWITCH_OFF;
+                pCON->status.ucRelayNState = SWITCH_OFF;
+            }
 #else
             if (pEVSE->info.ucTotalCON > 1)
             {
@@ -971,7 +982,16 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         }
         else if(cmd == SWITCH_ON)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            if (pEVSE->info.ucTotalCON > 1)
+            {
+                pCON->status.ucRelayLState = SWITCH_ON;
+            }
+            else
+            {
+                pCON->status.ucRelayLState = SWITCH_ON;
+                pCON->status.ucRelayNState = SWITCH_ON;
+            }
 #else
             if (pEVSE->info.ucTotalCON > 1)
             {
@@ -989,14 +1009,16 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_OFF)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            pCON->status.ucRelayNState = SWITCH_OFF;
 #else
             POWER_N_OPEN();
 #endif
         }
         else if (cmd == SWITCH_ON)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            pCON->status.ucRelayNState = SWITCH_ON;
 #else
             POWER_N_CLOSE();
 #endif
