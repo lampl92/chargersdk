@@ -217,7 +217,8 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
         jsCfgObj = (cJSON *)pvCfgObj;
     }
     
-    cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
+    //cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
+    sprintf(pEVSE->info.strSN, "%s", g_strChipID);
     cfgobj_get_string(jsCfgObj, pEVSE->info.strID, "%s", jnEVSEID);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucType, "%s", jnEVSEType);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucPhaseLine, "%s", jnPhaseLine);

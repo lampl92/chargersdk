@@ -6,21 +6,7 @@
 
 extern void testBnWList(void);
 
-
-void Get_ChipID(void)
-{
-    int i;
-    __IO uint8_t *pid;
-    pid = (__IO uint8_t *)0x1FFF7A10;
-    printf_safe("id :\n");
-    for (i = 0; i < 12; i++)
-    {
-        printf_safe("%02X ",pid[i]);
-    }
-    printf_safe("\n");
-}
-
-
+extern void Get_ChipID(void);
 void cli_hello_fnt(int argc, char **argv)
 {
     int i;
