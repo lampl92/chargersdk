@@ -329,7 +329,7 @@ void vTaskEVSERemote(void *pvParameters)
                             else if (errcode == ERR_NO)
                             {
                                 //当前枪有订单临时文件
-                                printf_safe("枪%d有订单临时文件\n", pCON->info.ucCONID);
+                                printf_safe("stat %d, 枪%d有订单临时文件\n", pCON->order.statRemoteProc.order.stat,pCON->info.ucCONID);
                                 pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_Send;
                             }
                             else//解析错误
@@ -338,6 +338,7 @@ void vTaskEVSERemote(void *pvParameters)
                             }
                             break;
                         case REMOTEOrder_Send:
+                            printf_safe("CON%d,临时订单发送\n", pCON->info.ucCONID);
                             RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->OrderTmp.order));
                             pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                             break;
@@ -553,7 +554,7 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
 
                 case CARDCTRL_WAIT_START_RECV:
-                    errcode = RemoteIF_RecvCardStartRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStartRes(pechProto, pCON, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
@@ -567,7 +568,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     break;
                 case CARDCTRL_WAIT_STOP_RECV:
-                    errcode = RemoteIF_RecvCardStopRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStopRes(pechProto, pCON, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
@@ -689,6 +690,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     break;
                 case REMOTEOrder_Send:
+                    printf_safe("CON%d,正常订单发送\n", pCON->info.ucCONID);
                     RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->order));
                     pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;

@@ -1499,9 +1499,9 @@ ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_
 
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
+ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, CON_t *pCON, int *psiRetVal)
 {
-    CON_t *pCON;
+    CON_t *pCONtmp;
     uint8_t id;
 
     uint8_t pbuff[1024] = {0};
@@ -1511,7 +1511,7 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
 
     id = 0;
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_START_RES, pbuff, &len);
+    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START_RES, pCON->info.ucCONID, 0, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -1520,8 +1520,8 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal)
     case ERR_NO:
         //pbuff[0] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[0]);
-        pCON = CONGetHandle(id);
-        if(pCON != NULL)
+        pCONtmp = CONGetHandle(id);
+        if (pCONtmp != NULL)
         {
             *psiRetVal = 1;
         }
@@ -1540,9 +1540,9 @@ ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t
 
     return ERR_NO;
 }
-ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
+ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, CON_t *pCON, int *psiRetVal)
 {
-    CON_t *pCON;
+    CON_t *pCONtmp;
     uint8_t id;
 
     uint8_t pbuff[1024] = {0};
@@ -1552,7 +1552,7 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
 
     id = 0;
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_CARD_STOP_RES, pbuff, &len);
+    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_STOP_RES, pCON->info.ucCONID, 0, pbuff, &len);
     switch(handle_errcode)
     {
     case ERR_REMOTE_NODATA:
@@ -1561,8 +1561,8 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal)
     case ERR_NO:
         //pbuff[0] 充电桩接口
         id = EchRemoteIDtoCONID(pbuff[0]);
-        pCON = CONGetHandle(id);
-        if(pCON != NULL)
+        pCONtmp = CONGetHandle(id);
+        if (pCONtmp != NULL)
         {
             *psiRetVal = 1;
         }
