@@ -285,7 +285,6 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
                 last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
-                RemoteIF_SendHeart(pEVSE, pechProto);
                 remotestat = REMOTE_LOGINED;
                 break;
             }
