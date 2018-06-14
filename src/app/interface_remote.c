@@ -54,7 +54,7 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
     if (gdsl_list_get_size(pCMD->plRecvCmd) > 0)
-        printf_safe("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
+        printf_protolog("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
     if (xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
     {
         cur = gdsl_list_cursor_alloc(pCMD->plRecvCmd);
@@ -124,7 +124,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     errcode = ERR_REMOTE_NODATA;
     pCMD = pProto->pCMD[usSendID];
     if (gdsl_list_get_size(pCMD->plRecvCmd) > 0)
-        printf_safe("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
+        printf_protolog("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
     if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
     {
         cur = gdsl_list_cursor_alloc (pCMD->plRecvCmd);
