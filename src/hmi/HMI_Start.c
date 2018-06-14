@@ -28,7 +28,11 @@ static void vTaskStart_up(void *pvParameters)
 {
     WM_MULTIBUF_Enable(1);
     GUI_UC_SetEncodeUTF8();
-    createStartUpMemdev();
+    
+//    createfont();
+//    CreateManagerCommon();
+    
+    createStartUpMemdev();    
     if (get_bmp_check_tmp() == 3)
     {
         vTaskSuspend(NULL);
@@ -112,6 +116,7 @@ void MainTask(void)
 //        GUI_Exec();
         creatememdev();
         createfont();
+        //CreateManagerCommon();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();

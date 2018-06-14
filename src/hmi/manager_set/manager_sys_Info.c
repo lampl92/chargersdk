@@ -80,11 +80,11 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), "软件版本: ");
         if (pEVSE->info.ucTotalCON == 1)
         {
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "7kW交流充电桩");
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "单枪交流充电桩");
         }
         else
         {
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "40kW双枪交流桩");
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), "双枪交流充电桩");
         }
         memset(tmp,'\0',sizeof(tmp));
         sprintf(tmp,"%d",pechProto->info.ucProtoVer);

@@ -180,10 +180,10 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 20:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-
-                Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "1122334455667788");
+//                WM_HideWindow(_hWinManagerSysSet);
+//                WM_HideWindow(_hWinManagerCommon);
+//
+//                Keypad_GetValueTest(SYSSET_VALUE, 20, _hWinManagerSysSet, _hWinManagerCommon, sysEVSESN, "1122334455667788");
                 //Keypad_GetValue(SYSSET_VALUE,"交流桩序列号");
                 //                    EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
             }
@@ -582,8 +582,9 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _editxoff = GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysServerPort)) / 3;
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysEVSESN);
-        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("1122334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 20, strlen("1122334455667788"));
+        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("112233445566778812345678")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 20, strlen("112233445566778812345678"));
         EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
+        EDIT_SetBkColor(_aahEdit[0][0], EDIT_CI_ENABLED, GUI_GRAY);
 
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysEVSEID);
         _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("20000000000000002")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("20000000000000002"));
@@ -690,7 +691,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[14][0], _tmpBuff);
         //mac
         _aahText[15][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _FONT_WIDTH*(strlen("MAC")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "MAC");
-        _aahEdit[15][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("1152334455667788")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35, strlen("1152334455667788"));
+        _aahEdit[15][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 15, _WORD_WIDTH*(strlen("AB-CD-EF-AB-CD-00")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 35, strlen("AB-CD-EF-AB-CD-00"));
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         sprintf(_tmpBuff, "%s", ifconfig.info.strMAC);
         EDIT_SetText(_aahEdit[15][0], _tmpBuff);

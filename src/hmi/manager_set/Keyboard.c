@@ -1228,6 +1228,7 @@ static uint8_t Value_Check()
             cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetAdapter);
             ifconfig.info.ucAdapterSel = tmpU8;
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
+            NVIC_SystemReset();
             break;
         case 28://秘钥
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoKey);
@@ -1269,77 +1270,71 @@ static uint8_t Value_Check()
             break;
         case 31://枪数
             tmpU8 = atoi(result_input);
-            if (tmpU8 != 1)
-            {
-                tmpU8 = 2;
-            }
             if (tmpU8 == 1)
             {
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
                 tmpU8 = 2;
-                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);                
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
                 tmpU8 = 1;
                 pEVSE->info.ucTotalCON = tmpU8;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             }
-            else
+            else if (tmpU8 == 2)
             {   
                 tmpU8 = 2;
                 pEVSE->info.ucTotalCON = tmpU8;
-                tmpU8 = 3;
-                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
-                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 63.0*3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 63.0*3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
-                tmpU8 = 2;
-                pEVSE->info.ucTotalCON = tmpU8;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-            }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
-            break;
-        case 32://电相
-            tmpU8 = atoi(result_input);
-            if (tmpU8 != 1)
-            {
                 tmpU8 = 3;
-            }
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
-            pEVSE->info.ucPhaseLine = tmpU8;
-            if (tmpU8 == 1)
-            {
-                tmpU8 = 2;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, jnPhaseLine);    
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             }
             else
             {
+                ;
+            }
+            break;
+        case 32://电相
+            tmpU8 = atoi(result_input);
+            if (tmpU8 == 1)
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+                pEVSE->info.ucPhaseLine = tmpU8;
+                tmpU8 = 2;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower); 
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+            }
+            else if (tmpU8 == 3)
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+                pEVSE->info.ucPhaseLine = tmpU8;
                 tmpU8 = 3;
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
+
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
             }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+            else
+            {
+                ;
+            }
             break;
         case 33://电表
             tmpU8 = atoi(result_input);
@@ -1348,34 +1343,27 @@ static uint8_t Value_Check()
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
                 tmpU8 = 1;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);  
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 32.0 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower); 
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
             }
             else if (tmpU8 == 3 || tmpU8 == 4)
             {
                 cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
                 tmpU8 = 3;
                 cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
-                pCon_tmp = CONGetHandle(0);
-                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower); 
-                pCon_tmp = CONGetHandle(1);
-                pCon_tmp->info.dRatedPower = 220 * 63.0 * 3 / 1000;
-                cfg_set_double(pathEVSECfg, &pCon_tmp->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnRatedPower);
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
             }
             else 
             {
-                tmpU8 = 3;
-                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
-                tmpU8 = 3;
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
+                ;
             }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
             break;
         case 34:
             //result_input[16] = '\0';
