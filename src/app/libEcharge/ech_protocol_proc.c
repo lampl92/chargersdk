@@ -88,7 +88,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 /* 1. 判断协议是否发送 */
                 if (pechProtoElem->status == 0)
                 {
-                    printf_protolog("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                    printf_protolog("SendCmd %d[0x%02X]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                     netSend(pechProtoElem->pbuff, pechProtoElem->len);
                     {//debug
                         printf_protodetail3("\nTCP Send: ");
@@ -126,7 +126,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     {
                         xEventGroupSetBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd, defEventBitProtoCmdDataTimeout);
                         gdsl_list_cursor_delete(cs);
-                        printf_protolog("cmd %d[0x%02X] 超时\n", pProto->pCMD[pechProtoElem->cmd_id]->CMDType.usSendCmd, pProto->pCMD[pechProtoElem->cmd_id]->CMDType.usSendCmd);
+                        printf_protolog("SendCmd %d[0x%02X] 超时\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
                     pechProtoElem->timestamp = time(NULL);
