@@ -126,7 +126,7 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     {
                         xEventGroupSetBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd, defEventBitProtoCmdDataTimeout);
                         gdsl_list_cursor_delete(cs);
-                        printf_protolog("SendCmd %d[0x%02X] 超时\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                        printf_protolog("SendCmd %d[0x%02X] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
                     pechProtoElem->timestamp = time(NULL);
