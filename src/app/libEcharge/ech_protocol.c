@@ -398,7 +398,18 @@ static int sendCommand(void *pPObj, void *pEObj, void *pCObj, uint16_t usCmdID, 
     }
     if (pCObj != NULL)
     {
-        echSendCmdElem.con_id = ((CON_t *)pCObj)->info.ucCONID;
+        if (usCmdID == ECH_CMDID_ORDER)
+        {
+            echSendCmdElem.con_id = ((OrderData_t *)pCObj)->ucCONID;
+        }
+        else if (usCmdID == ECH_CMDID_CARD_START || usCmdID == ECH_CMDID_CARD_START_PWD)
+        {
+            echSendCmdElem.con_id = ((RFIDDev_t *)pCObj)->order.ucCONID;
+        }
+        else
+        {
+            echSendCmdElem.con_id = ((CON_t *)pCObj)->info.ucCONID;
+        }
     }
     echSendCmdElem.timestamp = time(NULL);
     echSendCmdElem.timeout_s = timeout_s;
