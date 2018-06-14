@@ -92,33 +92,37 @@ float get_CD4067(void)
 }
 uint8_t Get_State_relay(uint32_t relay_id)
 {
-    if (relay_id == 0)//L
+    if(pEVSE->info.ucPhaseLine == 3)
     {
-        if (pEVSE->info.ucTotalCON > 1)
+        if (relay_id == 0)
         {
             return GET_RELAY1_STATE_1;
         }
+        else if (relay_id == 1)
+        {
+            return GET_RELAY1_STATE_2;
+        }
         else
         {
-            uint16_t i, j = 0;
-            for (i = 0; i < 50; i++)
-            {
-                j += ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
-                bsp_DelayUS(500);
-            }
-            if (j >= 3)
-            {
-                return 1; //on
-            }  
-            else
-            {    
-                return 0; //off
-            }
+            return 0;
         }
     }
-    else if (relay_id == 1)//N
+    else
     {
-        return GET_RELAY1_STATE_2;
+        uint16_t i, j = 0;
+        for (i = 0; i < 50; i++)
+        {
+            j += ((~HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9)) & 0x01);
+            bsp_DelayUS(500);
+        }
+        if (j >= 3)
+        {
+            return 1; //on
+        }  
+        else
+        {    
+            return 0; //off
+        }
     }
 }
 /********************************

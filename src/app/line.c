@@ -40,7 +40,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
         a_channel = 23;
         b_channel = 23;
         c_channel = 23;
-        if (pEVSE->info.ucTotalCON > 1)
+        if (pEVSE->info.ucPhaseLine == 3)
         {
             n_channel = 23;
         }
@@ -80,7 +80,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
         a_channel = TEMP_L_OUT;
         b_channel = TEMP_L_OUT;
         c_channel = TEMP_L_OUT;
-        if (pEVSE->info.ucTotalCON > 1)
+        if (pEVSE->info.ucPhaseLine == 3)
         {
             n_channel = TEMP_L_OUT;
         }

@@ -900,7 +900,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
     tmpLStat = pCON->status.ucRelayLState;
     tmpNStat = tmpLStat;
 #else
-    if (pEVSE->info.ucTotalCON > 1)
+    if (pEVSE->info.ucPhaseLine == 3)
     {
         ucRelayID = ucCONID;
         tmpLStat = Get_State_relay(ucRelayID);//1 : switch on
@@ -961,7 +961,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         if(cmd == SWITCH_OFF)
         {
 #ifdef DEBUG_DIAG_DUMMY_RELAY
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 pCON->status.ucRelayLState = SWITCH_OFF;
             }
@@ -971,7 +971,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
                 pCON->status.ucRelayNState = SWITCH_OFF;
             }
 #else
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 POWER_L_OPEN();
             }
@@ -985,7 +985,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         else if(cmd == SWITCH_ON)
         {
 #ifdef DEBUG_DIAG_DUMMY_RELAY
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 pCON->status.ucRelayLState = SWITCH_ON;
             }
@@ -995,7 +995,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
                 pCON->status.ucRelayNState = SWITCH_ON;
             }
 #else
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 POWER_L_CLOSE();
             }
