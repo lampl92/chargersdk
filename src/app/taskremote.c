@@ -431,7 +431,7 @@ void vTaskEVSERemote(void *pvParameters)
                 switch (pCON->order.statRemoteProc.rmt_ctrl.stat)
                 {
                 case REMOTECTRL_IDLE:
-                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, 
+                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, pCON,
                                             &(pCON->order.statRemoteProc.rmt_ctrl.id), 
                                             &(pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff), 
                                             &network_res);
