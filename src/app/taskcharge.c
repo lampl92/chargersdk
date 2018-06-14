@@ -304,7 +304,7 @@ void vTaskEVSECharge(void *pvParameters)
                         {
                             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);//rfid任务在等待
                             pCON->state = STATE_CON_CHARGING;
-                            printf_safe("\e[44;37mStart Charge!\e[0m\n");
+                            printf_safe("\e[44;37mCON%d Start Charge!\e[0m\n", pCON->info.ucCONID);
                         }
                         /** @todo (rgw#1#): 如果继电器操作失败，转换到ERR状态 */
                     }
@@ -443,7 +443,7 @@ void vTaskEVSECharge(void *pvParameters)
                 if (errcode == ERR_NO)
                 {
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
-                    printf_safe("\e[44;37mStop Charge!\e[0m\n");
+                    printf_safe("\e[44;37mCON%d Stop Charge!\e[0m\n", pCON->info.ucCONID);
                     pCON->tmp.stop_try = 0;
                     pCON->state = STATE_CON_UNLOCK;
                 }
