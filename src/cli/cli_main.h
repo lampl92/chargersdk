@@ -54,6 +54,7 @@ extern tinysh_cmd_t cli_taskstack_cmd;
 extern tinysh_cmd_t cli_setload_cmd;
 extern tinysh_cmd_t cli_exit_cmd;
 extern tinysh_cmd_t cli_meter_cmd;
+extern tinysh_cmd_t cli_dummyordersn_cmd;
 
 
 #endif

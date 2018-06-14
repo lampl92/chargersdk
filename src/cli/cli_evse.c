@@ -727,6 +727,18 @@ void cli_meter_fnt(int argc, char **argv)
     printf("频率:\t%04XH\n", meter->regs.freq_addr);
     
 }
+int dummyordersn;
+void cli_dummyordersn_fnt(int argc, char **argv)
+{
+    if (argc == 2)
+    {
+        dummyordersn = atoi(argv[1]);
+    }
+    else
+    {
+        printf_safe("checkordersn %d\n", dummyordersn);
+    }
+}
 tinysh_cmd_t cli_networkinfo_cmd =
 {
     0,
@@ -813,6 +825,17 @@ tinysh_cmd_t cli_meter_cmd =
     "meter info",
     0,
     cli_meter_fnt,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_dummyordersn_cmd =
+{
+    0,
+    "dummyordersn",
+    "dummy order sn",
+    0,
+    cli_dummyordersn_fnt,
     "<cr>",
     0,
     0

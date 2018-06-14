@@ -73,6 +73,7 @@ void cli_init(void)
     tinysh_add_command(&cli_printlog_cmd);
     tinysh_add_command(&cli_setload_cmd);
     tinysh_add_command(&cli_meter_cmd);
+    tinysh_add_command(&cli_dummyordersn_cmd);
 #endif
     /************设备测试****************/
 //    tinysh_add_command(&cli_gprs_cmd);
