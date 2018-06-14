@@ -96,6 +96,9 @@ uint32_t modem_send_at(char *format, ...)
 
     cmd[strlen(cmd) - 1]  = '\0';
     printf_modem("%s", cmd);
+#if EVSE_USING_GUI
+    LCD_ShowString(400, 460, 380, 20, 16, cmd);
+#endif
 
     return n;
 }
