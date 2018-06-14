@@ -208,7 +208,7 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
         sprintf(temp_buf, "%.1f", pCON->status.dChargingCurrent);//充电电流   
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);
-        sprintf(temp_buf, "%.1f", (pCON->status.dChargingVoltage * pCON->status.dChargingCurrent));
+        sprintf(temp_buf, "%.1f", (pCON->status.dChargingPower));
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电功率     
     }
     if (GBSgunstate[0] == GunchargedoneState)
@@ -352,7 +352,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         else if (pMsg->Data.v == _timertimeflash)
         {
-            if (!(GBSgunstate[1] == GunchargingState || GBSgunstate[1] == GunchargedoneState))
+            if (!(GBSgunstate[0] == GunchargingState || GBSgunstate[0] == GunchargedoneState))
             {
                 WM_HideWin(Hwininfo);
             }
