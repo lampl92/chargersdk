@@ -84,7 +84,7 @@ error_t net_ppp_init(void *pvnet_dev)
         TRACE_ERROR("配置接口 %s 失败!code = %d\r\n", interface->name, error);
         return error;
     }
-    xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, portMAX_DELAY);
+    xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, 60000);
     if ((xBits & defEventBitPPPDiagOK) == defEventBitPPPDiagOK)
     {
         error = pppConnect(interface);
@@ -93,6 +93,11 @@ error_t net_ppp_init(void *pvnet_dev)
             TRACE_ERROR("PPP连接失败!code = %d\r\n", error);
             return error;
         }
+    }
+    else
+    {
+        TRACE_ERROR("等待Modem拨号超时!\r\n");
+        return ERROR_FAILURE;
     }
     return error;
 }
