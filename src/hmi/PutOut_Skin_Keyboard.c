@@ -1215,21 +1215,30 @@ static uint8_t Value_Check()
             {
                 tmpDouble = 280.0;
             }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble > pCon->info.dVolatageLowerLimits)
+            else if (tmpDouble <= 280.0&&tmpDouble >= 178.0)
             {
-                pCon->info.dVolatageUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble <= pCon->info.dVolatageLowerLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
+                if (tmpDouble <= pCon->info.dVolatageLowerLimits)
+                {
+                    tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
+                }
             }
             else if (tmpDouble < 178.0)
             {
-                tmpDouble = 178.0;
+                if (tmpDouble >= pCon->info.dVolatageLowerLimits)
+                {
+                    tmpDouble = 178.0;
+                }
+                else if (tmpDouble < pCon->info.dVolatageLowerLimits)
+                {
+                    if (pCon->info.dVolatageLowerLimits >= 178)
+                    {
+                        tmpDouble = pCon->info.dVolatageLowerLimits + 1;
+                    }
+                    else if (pCon->info.dVolatageLowerLimits < 178)
+                    {
+                        tmpDouble = 178;
+                    }
+                }
             }
             pCon->info.dVolatageUpperLimits = tmpDouble;
             pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
@@ -1241,29 +1250,31 @@ static uint8_t Value_Check()
             {
                 tmpDouble = 100.0;
             }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble < pCon->info.dVolatageUpperLimits)
+            else if (tmpDouble >= 100.0&& tmpDouble <= 240.0)
             {
-                pCon->info.dVolatageLowerLimits = tmpDouble;
+                if (tmpDouble >= pCon->info.dVolatageUpperLimits)
+                {
+                    tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
+                }
             }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble >= pCon->info.dVolatageUpperLimits)
+            else if (tmpDouble > 240.0)
             {
-                tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
+                if (tmpDouble <= pCon->info.dVolatageUpperLimits)
+                {
+                    tmpDouble = 240;
+                }
+                else if (tmpDouble > pCon->info.dVolatageUpperLimits)
+                {
+                    if (pCon->info.dVolatageUpperLimits >= 240)
+                    {
+                        tmpDouble = 240;
+                    }
+                    else if (pCon->info.dVolatageUpperLimits < 240)
+                    {
+                        tmpDouble = pCon->info.dVolatageUpperLimits - 1;
+                    }
+                }
             }
-            else if (tmpDouble > 240.0
-            &&pCon->info.dVolatageUpperLimits > 240)
-            {
-                tmpDouble = 240;
-            }
-            else if (tmpDouble > 240.0
-                &&pCon->info.dVolatageUpperLimits <= 240)
-            {
-                tmpDouble = pCon->info.dVolatageUpperLimits - 1.0;
-            }
-
             pCon->info.dVolatageLowerLimits = tmpDouble;
             pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
