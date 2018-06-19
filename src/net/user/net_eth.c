@@ -115,6 +115,7 @@ error_t net_eth_init(void *pvnet_dev)
                 if (dhcp_waittime > 60)
                 {
                     TRACE_ERROR("Link up & DHCP客户端超时!\n");
+                    dhcp_waittime = 0;
                     return ERROR_FAILURE;
                 }
             }
@@ -123,6 +124,7 @@ error_t net_eth_init(void *pvnet_dev)
                 if (dhcp_waittime > 15)
                 {
                     TRACE_ERROR("Link down & DHCP客户端超时!\n");
+                    dhcp_waittime = 0;
                     return ERROR_FAILURE;
                 }
             }
