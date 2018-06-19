@@ -1,7 +1,3 @@
-cd .\chargesdk
-call .\make_clean.bat
-call .\make.bat
-cd ..
 SET source=".\chargesdk\Release\chargesdk.bin"
 set crc32sum=..\..\tools\crc32sum.exe
 set dd=%date:~8,2%

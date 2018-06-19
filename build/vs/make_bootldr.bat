@@ -1,7 +1,3 @@
-cd .\bootldr
-call make_clean.bat
-call make.bat
-cd ..
 SET source=".\bootldr\Release\bootldr.bin"
 set crc32sum=..\..\tools\crc32sum.exe
 set dd=%date:~8,2%
