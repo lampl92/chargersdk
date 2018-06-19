@@ -5,7 +5,6 @@
 #include "evse_globals.h"
 #include <stdlib.h>
 
-
 static int meter_p1_get_all(void *pvmeter, int dev_addr)
 {
     meter_s *meter;
@@ -86,17 +85,34 @@ static int meter_p3_get_all(void *pvmeter, int addr)
     return 0;
 }
 
-static int meter_module_get_all(void *pvmeter, int dev_addr)
+static int modbus_config(meter_s *meter, meter_config_s *config)
 {
-    return 0; //内部模块在meterinit中初始化
-}
-static int meter_dummy_get_all(void *pvmeter, int dev_addr)
-{
+    int res;
+    
+    meter->mb = modbus_new_rtu(config->strUART, config->band, config->parity, config->data_bit, config->stop_bit);
+    if (meter->mb == NULL)
+    {
+        return -1;
+    }
+    modbus_rtu_set_serial_mode(meter->mb, config->mode);
+//    modbus_set_debug(meter->mb, 1);
+    modbus_set_error_recovery(meter->mb, MODBUS_ERROR_RECOVERY_PROTOCOL);
+    res = modbus_connect(meter->mb);
+    if (res < 0)
+    {
+        free(meter->mb);
+        return -2;
+    }
+    modbus_set_response_timeout(meter->mb, 0, config->timeout_us);
+    
+    memcpy(&meter->config, config, sizeof(meter_config_s));
+    
     return 0;
 }
-meter_s *meter_acrel_init(void)
+
+int meter_acrel_init(meter_s *meter)
 {
-    meter_s *meter;
+    int res;
     meter_config_s config;
     
     config.strUART = "UART7";
@@ -107,37 +123,24 @@ meter_s *meter_acrel_init(void)
     config.mode = MODBUS_RTU_RS485;
     config.timeout_us = 100000;
     
-    meter = meter_create(&config);
-    if (meter == NULL)
-        return NULL;
+    res = modbus_config(meter, &config);
+    if (res < 0)
+        return res;
+
+    cfg_get_uint16(pathMeterCfg, &meter->regs.energy_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterEnergyAddr);
+    cfg_get_uint16(pathMeterCfg, &meter->regs.volt_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterVoltAddr);
+    cfg_get_uint16(pathMeterCfg, &meter->regs.curr_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterCurrAddr);
+    cfg_get_uint16(pathMeterCfg, &meter->regs.pwr_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterPwrAddr);
+    cfg_get_uint16(pathMeterCfg, &meter->regs.freq_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterFreqAddr);
     
-    if (xSysconf.xModule.use_meter == 2 ||//2:DDSD1352-C(安科瑞单相)
-        xSysconf.xModule.use_meter == 3 ||//
-        xSysconf.xModule.use_meter == 4)  //
+    if (pEVSE->info.ucPhaseLine == 1)
     {
-        cfg_get_uint16(pathMeterCfg, &meter->regs.energy_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterEnergyAddr);
-        cfg_get_uint16(pathMeterCfg, &meter->regs.volt_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterVoltAddr);
-        cfg_get_uint16(pathMeterCfg, &meter->regs.curr_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterCurrAddr);
-        cfg_get_uint16(pathMeterCfg, &meter->regs.pwr_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterPwrAddr);
-        cfg_get_uint16(pathMeterCfg, &meter->regs.freq_addr, "%s%d.%s", jnMeter, xSysconf.xModule.use_meter, jnMeterFreqAddr);
-    
-        if (pEVSE->info.ucPhaseLine == 1)
-        {
-            meter->get_all = meter_p1_get_all;
-        }
-        else if (pEVSE->info.ucPhaseLine == 3)
-        {
-            meter->get_all = meter_p3_get_all;
-        }
+        meter->get_all = meter_p1_get_all;
     }
-    else if (xSysconf.xModule.use_meter == 1)// 内部模块
+    else if (pEVSE->info.ucPhaseLine == 3)
     {
-        meter->get_all = meter_module_get_all;
-    }
-    else
-    {
-        meter->get_all = meter_dummy_get_all;
+        meter->get_all = meter_p3_get_all;
     }
     
-    return meter;
+    return 0;
 }

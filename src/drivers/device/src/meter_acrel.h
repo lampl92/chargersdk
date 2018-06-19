@@ -3,6 +3,6 @@
 
 #include "meter.h"
 
-meter_s *meter_acrel_init(void);
+int meter_acrel_init(meter_s *meter);
 
 #endif

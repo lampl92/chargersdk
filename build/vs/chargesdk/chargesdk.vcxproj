@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_ADE7953.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />

@@ -1992,6 +1992,9 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_ADE7953.c">
+      <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
