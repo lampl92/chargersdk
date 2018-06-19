@@ -11,13 +11,14 @@ void cli_taskstack_fnt(int argc, char **argv)
 {
     UBaseType_t uxHighWaterMark;
     TaskHandle_t xHandle;
+    int i;
 
     xHandle = xTaskGetHandle(argv[1]);
-    while (1)
+    for(i = 0; i < 100; i++)
     {
         uxHighWaterMark = uxTaskGetStackHighWaterMark(xHandle);
         printf_safe("%s stack = %d\n", argv[1], uxHighWaterMark);
-        vTaskDelay(1);
+        vTaskDelay(100);
     }
 }
 
