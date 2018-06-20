@@ -10,7 +10,10 @@
 #include "HMI_Start.h"
 #include "touchtimer.h"
 
-#define ERR_SIMBOL  (0x3e000)
+//#define ERR_SIMBOL  (0x3e000)
+//故障标志
+#define ERR_SIMBOL (defEventBitCONVoltOK|defEventBitCONCurrOK|defEventBitCONFreqOK|defEventBitEVSEScramOK|\
+defEventBitEVSEPEOK|defEventBitEVSEKnockOK|defEventBitEVSEArresterOK|defEventBitEVSEPowerOffOK)
 
 
 uint8_t *cur_err = "       当前故障列表\n";
@@ -36,6 +39,7 @@ WM_HWIN err_hItem = 0;
 uint8_t winCreateFlag = 0;
 
 static EventBits_t uxBitsErrTmp;
+static uint8_t other_err_tmp = 0;//第0位为黏连故障，第1位为温度故障
 static uint8_t timer_count = 0;//用于故障列表存在且没有故障的计时
 
 extern p_inf *HomeImage;
@@ -284,6 +288,7 @@ uint8_t _deleteWin(WM_HWIN hItem)
         GUI_EndDialog(err_hItem, 0);
     }
     uxBitsErrTmp = 0;
+    other_err_tmp = 0;
     err_hItem = 0;
     GUI_EndDialog(hItem, 0);
     hItem = 0;
@@ -432,16 +437,38 @@ void Err_Analy(WM_HWIN hWin)
 {
     CON_t *pCON;
     static EventBits_t uxBitsErr;
+    static uint8_t other_err = 0; //第0位为黏连故障，第1位为温度故障
 
     pCON = CONGetHandle(0);
 
     uxBitsErr = xEventGroupGetBits(pCON->status.xHandleEventCharge);
-
-    if (((uxBitsErr & ERR_SIMBOL) != ERR_SIMBOL))
+    
+    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
-        if (uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
+        bitset(other_err, 0);      
+    }
+    else
+    {
+        bitclr(other_err, 0);
+    }
+    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        || ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+        || ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        || ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri))
+    {
+        bitset(other_err, 1);
+    }
+    else
+    {
+        bitclr(other_err, 1);
+    }
+
+    if (((uxBitsErr & ERR_SIMBOL) != ERR_SIMBOL) || (other_err!=0))
+    {
+        if (uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL)||(other_err_tmp!=other_err))
         {
             uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
+            other_err_tmp = other_err;
             WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
         }
     }

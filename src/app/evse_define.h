@@ -144,9 +144,9 @@
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
 #define defEventBitCONLocked            BIT_1
-#define defEventBitCONVoltOK            BIT_2
-#define defEventBitCONCurrOK            BIT_3
-#define defEventBitCONFreqOK            BIT_4
+#define defEventBitCONVoltOK            BIT_2   //电压异常
+#define defEventBitCONCurrOK            BIT_3   //电流异常
+#define defEventBitCONFreqOK            BIT_4   //频率异常
 #define defEventBitCONS2Closed          BIT_5
 #define defEventBitCONS2Opened          BIT_6
 #define defEventBitCONCCOK              BIT_7
@@ -155,11 +155,11 @@
 #define defEventBitCONPlugOK            BIT_10
 #define defEventBitCONStartOK           BIT_11
 //#define defEventBitCONStopOK          BIT_12
-#define defEventBitEVSEScramOK          BIT_13
-#define defEventBitEVSEPEOK             BIT_14
-#define defEventBitEVSEKnockOK          BIT_15
-#define defEventBitEVSEArresterOK       BIT_16
-#define defEventBitEVSEPowerOffOK       BIT_17
+#define defEventBitEVSEScramOK          BIT_13  //急停
+#define defEventBitEVSEPEOK             BIT_14  //PE故障
+#define defEventBitEVSEKnockOK          BIT_15  //撞击异常
+#define defEventBitEVSEArresterOK       BIT_16  //防雷异常
+#define defEventBitEVSEPowerOffOK       BIT_17  //停电异常
 
 #define defEventBitCONOrderStart        BIT_18
 #define defEventBitChargeRTDataTimer    BIT_19
