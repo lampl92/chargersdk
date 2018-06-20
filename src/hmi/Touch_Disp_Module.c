@@ -970,6 +970,7 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
             bitclr(calebrate_done, 4);
         }
     }
+    return 0;
 }
 
 
