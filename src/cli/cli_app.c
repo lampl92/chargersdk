@@ -18,8 +18,9 @@ void cli_hello_fnt(int argc, char **argv)
     Get_ChipID();
     //testBnWList();
     //eth_main();
-    for (i = 0; i < 1000; i++)
+    for (i = 0; i < 100000; i++)
     {
+        printTime(time(NULL));
         //test_cfg_set(i);
     }
     //test_cfg_get();
