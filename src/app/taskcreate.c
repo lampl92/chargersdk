@@ -207,7 +207,7 @@ void vTaskGuidingLights(void *pvParameters)
 {
     while (1)
     {
-        LedShow();
+        ledShow(1);
         vTaskDelay(100);
     }
 }

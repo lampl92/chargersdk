@@ -39,8 +39,8 @@ WM_HWIN err_hItem = 0;
 uint8_t winCreateFlag = 0;
 
 static EventBits_t uxBitsErrTmp;
-static uint8_t other_err_tmp = 0;//第0位为黏连故障，第1位为温度故障
-static uint8_t timer_count = 0;//用于故障列表存在且没有故障的计时
+static uint8_t other_err_tmp = 0; //第0位为黏连故障，第1位为温度故障
+static uint8_t timer_count = 0; //用于故障列表存在且没有故障的计时
 
 extern p_inf *HomeImage;
 
@@ -71,8 +71,8 @@ extern p_inf *HomeImage;
 void FrameWin_Init(WM_MESSAGE *pMsg, uint16_t textid0, uint16_t textid1, uint16_t textid2, uint16_t textid3, uint16_t imageBack)
 {
     FrameWin_Show(pMsg->hWin, GUI_TA_HCENTER | GUI_TA_VCENTER, 40, &SIF24_Font, GUI_RED, "欢迎使用北京动力源交流充电桩");
-//    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), HomeImage->pfilestring, HomeImage->pfilesize);
-    Text_Show(WM_GetDialogItem(pMsg->hWin, textid2), &SIF16_Font, GUI_RED, "信号:");
+    //    IMAGE_SetBMP(WM_GetDialogItem(pMsg->hWin, imageBack), HomeImage->pfilestring, HomeImage->pfilesize);
+        Text_Show(WM_GetDialogItem(pMsg->hWin, textid2), &SIF16_Font, GUI_RED, "信号:");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid3), &SIF16_Font, GUI_BLACK, "感谢您为空气的清新奉献一份力量");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid0), &SIF16_Font, GUI_RED, "2017-02-28");
     Text_Show(WM_GetDialogItem(pMsg->hWin, textid1), &SIF16_Font, GUI_RED, "14:00:00");
@@ -148,7 +148,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
     //uxBits = xEventGroupGetBits(xHandleEventTCP);
     //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
 
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
     {
         strcat(strCSQ, " 服务器未连接");
     }
@@ -212,8 +212,8 @@ void FrameWin_Show(WM_HWIN hItem, uint8_t aglin, uint8_t heigh, GUI_FONT *font, 
     FRAMEWIN_SetFont(hItem, font);
     FRAMEWIN_SetTextColor(hItem, color);
     FRAMEWIN_SetText(hItem, buf);
-//    FRAMEWIN_SetDefaultBarColor(1,GUI_BLUE);
-//    FRAMEWIN_AddMinButton(hItem,FRAMEWIN_BUTTON_RIGHT,0);
+    //    FRAMEWIN_SetDefaultBarColor(1,GUI_BLUE);
+    //    FRAMEWIN_AddMinButton(hItem,FRAMEWIN_BUTTON_RIGHT,0);
 }
 /** Text显示
  *
@@ -338,13 +338,13 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         }
         bitclr(calebrate_done, 4);
         WM_SendMessageNoPara(hWin, MSG_DELERRWIN);
-//        if(bittest(winCreateFlag,0))
-//        {
-//            bitclr(winCreateFlag,0);
-//            WM_SendMessageNoPara(cur_hWin,MSG_DELERRWIN);
-//           // WM_SendMessageNoPara(hWin,MSG_DELERRWIN);
-//            //WM_DeleteWindow(err_hItem);
-//        }
+        //        if(bittest(winCreateFlag,0))
+        //        {
+        //            bitclr(winCreateFlag,0);
+        //            WM_SendMessageNoPara(cur_hWin,MSG_DELERRWIN);
+        //           // WM_SendMessageNoPara(hWin,MSG_DELERRWIN);
+        //            //WM_DeleteWindow(err_hItem);
+        //        }
     }
 
     if (bittest(calebrate_done, 5))
@@ -369,17 +369,17 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         //MainTask();
         CreateHomePage();
     }
-/// TODO (zshare#1#): ///添加跳转首页会有问题???
+    /// TODO (zshare#1#): ///添加跳转首页会有问题???
 
-//    if(bittest(calebrate_done,6))
-//    {
-//        bitclr(calebrate_done,6);
-//        //WM_DeleteWindow(hWin);
-//        _deleteWin(hWin);
-//        PutOut_SelAOrB();
-//    }
+    //    if(bittest(calebrate_done,6))
+    //    {
+    //        bitclr(calebrate_done,6);
+    //        //WM_DeleteWindow(hWin);
+    //        _deleteWin(hWin);
+    //        PutOut_SelAOrB();
+    //    }
 
-    if (bittest(calebrate_done, 7))
+        if(bittest(calebrate_done, 7))
     {
         if (AdvertisementRecordFlag == 1)
         {
@@ -391,7 +391,7 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
         /**< 跳转管理员界面的密码输入页 */
         bitclr(calebrate_done, 7);
         //WM_DeleteWindow(hWin);
-        if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
+        if((cur_win == _hWinHome) || (cur_win == _hWinCharging))
         {
             _deleteWin(hWin);
             //        WM_HideWindow(hWin);
@@ -416,10 +416,10 @@ void CaliDone_Analy(WM_HWIN hWin)//Jump_IsManager(WM_HWIN hWin)
             if (AdvertisementRecordFlag == 0)
             {
                 WM_HideWindow(cur_win);       
-               // IMAGE_SetBMP(WM_GetDialogItem(_hWinAdvertizement, (GUI_ID_USER + 0x01)), AdvertisementImage->pfilestring, AdvertisementImage->pfilesize);
-                WM_ShowWindow(_hWinAdvertizement);           
-               // CreateAdvertisementPage();
-                AdvertisementRecordFlag = 1;
+                // IMAGE_SetBMP(WM_GetDialogItem(_hWinAdvertizement, (GUI_ID_USER + 0x01)), AdvertisementImage->pfilestring, AdvertisementImage->pfilesize);
+                 WM_ShowWindow(_hWinAdvertizement);           
+                // CreateAdvertisementPage();
+                 AdvertisementRecordFlag = 1;
                 GUI_Exec();
             }
         }   
@@ -437,7 +437,7 @@ void Err_Analy(WM_HWIN hWin)
 {
     CON_t *pCON;
     static EventBits_t uxBitsErr;
-    static uint8_t other_err = 0; //第0位为黏连故障，第1位为温度故障
+    static uint8_t other_err = 0;  //第0位为黏连故障，第1位为温度故障
 
     pCON = CONGetHandle(0);
 
@@ -463,9 +463,9 @@ void Err_Analy(WM_HWIN hWin)
         bitclr(other_err, 1);
     }
 
-    if (((uxBitsErr & ERR_SIMBOL) != ERR_SIMBOL) || (other_err!=0))
+    if (((uxBitsErr & ERR_SIMBOL) != ERR_SIMBOL) || (other_err != 0))
     {
-        if (uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL)||(other_err_tmp!=other_err))
+        if (uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL) || (other_err_tmp != other_err))
         {
             uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
             other_err_tmp = other_err;
@@ -474,11 +474,11 @@ void Err_Analy(WM_HWIN hWin)
     }
     else
     {
-//        if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
- //       {
-        uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
+        //        if(uxBitsErrTmp != (uxBitsErr & ERR_SIMBOL))
+         //       {
+                uxBitsErrTmp = (uxBitsErr & ERR_SIMBOL);
         WM_SendMessageNoPara(hWin, MSG_CREATERRWIN);
-      //      }
+        //      }
     }
 
     if (!bittest(winCreateFlag, 1)&&bittest(winCreateFlag, 0))
@@ -501,7 +501,7 @@ void Err_Analy(WM_HWIN hWin)
  */
 //#pragma GCC push_options
 //#pragma GCC optimize ("O0")
-void Led_Show1()
+void Led_Show2()
 {
     CON_t *pCON;
     uint16_t ledSignalPool;
@@ -531,7 +531,7 @@ void Led_Show1()
             bitset(led_signal, 6);
         }
     }
-    else if(getSignalIntensity() == 0)
+    else if (getSignalIntensity() == 0)
     {
         bitset(led_signal, 7);
     }
@@ -623,7 +623,7 @@ void Led_Show()
 {
 }
 
-void LedShow()
+void LedShow1()
 {
     CON_t *pCON;
     pCON = CONGetHandle(0);
@@ -694,6 +694,118 @@ void LedShow()
     }
 }
 
+void ledShow(int j)
+{
+    int i;
+    CON_t *pCON;
+    int flag_not_connect = 0;
+    if (getSignalIntensity() == 0)
+    {
+        flag_not_connect = 1;
+    }
+    for (i = 0; i < j; i++)
+    {
+        pCON = CONGetHandle(i);
+        /**<故障存在闪烁红灯 */
+        if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+        {
+            if ((pCON->status.ulSignalAlarm != 0)&&\
+                (pCON->status.ulSignalFault == 0)&&\
+                ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
+                (pEVSE->status.ulSignalAlarm == 0)&&\
+                (pEVSE->status.ulSignalFault == 0))
+            {
+                led_ctrl(i + 1, red, flicker);
+            }
+            else if ((pCON->status.ulSignalAlarm != 0)&&\
+                (pCON->status.ulSignalFault == 0)&&\
+                (pEVSE->status.ulSignalAlarm == 0)&&\
+                (pEVSE->status.ulSignalFault == 0)&&\
+                ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+            {
+                led_ctrl(i + 1, red, flicker);
+            }
+            else if ((pCON->status.ulSignalFault != 0)&&\
+                 (pCON->status.ulSignalAlarm == 0)&&\
+                 (pEVSE->status.ulSignalAlarm == 0)&&\
+                 (pEVSE->status.ulSignalFault == 0)&&\
+                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            else if (((pEVSE->status.ulSignalFault != 0)&&\
+                (pEVSE->status.ulSignalAlarm == 0)&&\
+                (pCON->status.ulSignalFault == 0)&&\
+                (pCON->status.ulSignalAlarm == 0)&&\
+                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            else if (((pEVSE->status.ulSignalFault != 0)&&\
+                (pEVSE->status.ulSignalAlarm == 0)&&\
+                (pCON->status.ulSignalFault != 0)&&\
+                (pCON->status.ulSignalAlarm == 0)&&\
+                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+            {
+                led_ctrl(i + 1, green, keep_on);
+            }
+            else
+            {
+                led_ctrl(i + 1, red, keep_on);
+            }
+        }
+        else if (flag_not_connect)
+        {
+            led_ctrl(1, blue, keep_on);
+            led_ctrl(2, blue, keep_on);
+            vTaskDelay(500);
+            led_ctrl(1, red, keep_on);
+            led_ctrl(2, red, keep_on);
+            vTaskDelay(400);
+        }
+        else
+        {
+            switch (pCON->state)
+            {
+            case STATE_CON_IDLE:
+                /**< 空闲状态 */
+                led_ctrl(i + 1, green, keep_on);
+                break;
+            case STATE_CON_CHARGING:
+                /**< 充电过程中 */
+                led_ctrl(i + 1, green, breath);
+                break;
+            default:
+                if (pCON->status.xPlugState == PLUG)
+                {
+                    if (pCON->status.xCPState == CP_6V_PWM
+                        || pCON->status.xCPState == CP_6V)
+                    {
+                        /**< 等待车端插枪 */
+                        led_ctrl(i + 1, green, flicker);
+                    }
+                    else if (pCON->status.xCPState == CP_9V_PWM
+                        || pCON->status.xCPState == CP_9V)
+                    {
+                        /**< S1未闭合 */
+                        led_ctrl(i + 1, blue, keep_on);
+                    }
+                }
+                else
+                {
+                    /**< 未知状态 */
+                    led_ctrl(i + 1, green, keep_on);
+                }
+                break;
+            }
+        }
+    }
+}
+
 /** @brief
  *刷新故障列表;
  * @param msg_err:故障列表指针
@@ -726,23 +838,23 @@ void Errlist_flush(uint8_t *msg_err)
         strncat(msg_err, Volt_err, strlen(Volt_err));
         ErrMultiEdit_Size.err_num++;
     }
-//    if(((uxBitsErr >> 5) & 0x01) == 0)
-    if ((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
+    //    if(((uxBitsErr >> 5) & 0x01) == 0)
+        if((pCON->status.ulSignalFault & defSignalCON_Fault_RelayPaste) == defSignalCON_Fault_RelayPaste)
     {
         strncat(msg_err, RaleyOn_err, strlen(RaleyOn_err));
         ErrMultiEdit_Size.err_num++;        
     }
-    if(((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
-        ||((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
-        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
-        ||((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri))
-    //if ((->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) == defSignalGroupCON_Alarm_Temp_Cri ||
-    //    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) == 0)
-    //if (((uxBitsErr >> 9) & 0x01) == 0)
-    {
-        strncat(msg_err, ACTemp_err, strlen(ACTemp_err));
-        ErrMultiEdit_Size.err_num++;
-    }
+    if (((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        || ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri)
+        || ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_N_Temp_Cri) == defSignalCON_Alarm_AC_N_Temp_Cri)
+        || ((pEVSE->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_Temp_Cri) == defSignalCON_Alarm_AC_A_Temp_Cri))
+        //if ((->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) == defSignalGroupCON_Alarm_Temp_Cri ||
+        //    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) == 0)
+        //if (((uxBitsErr >> 9) & 0x01) == 0)
+        {
+            strncat(msg_err, ACTemp_err, strlen(ACTemp_err));
+            ErrMultiEdit_Size.err_num++;
+        }
     if (((uxBitsErr >> 14) & 0x01) == 0)
     {
         strncat(msg_err, PE_err, strlen(PE_err));
@@ -793,7 +905,7 @@ void Errlist_flush(uint8_t *msg_err)
         ErrMultiEdit_Size.ypos = (400 - ErrMultiEdit_Size.ylength);
         bitset(winCreateFlag, 1);
     }
-//    printf_safe("msg_err = %s\n",msg_err);
+    //    printf_safe("msg_err = %s\n",msg_err);
 }
 /** @brief 故障弹窗内容组装
  *
@@ -808,14 +920,14 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
     EventBits_t uxBitsErr;
 
     //故障界面是否存在
-    if (bittest(winCreateFlag, 0))//存在故障界面
+    if(bittest(winCreateFlag, 0))//存在故障界面
     {
         //MULTIEDIT_SetText(err_hItem, msg_err);
         //刷新故障列表
         Errlist_flush(msg_err);
         MULTIEDIT_SetText(err_hItem, msg_err);
-//        bitclr(winCreateFlag,0);
-//        GUI_EndDialog(err_hItem,0);
+        //        bitclr(winCreateFlag,0);
+        //        GUI_EndDialog(err_hItem,0);
     }
     else
     {
@@ -830,8 +942,8 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
                 AdvertisementRecordFlag = 0;
                 GUI_Exec();
             }
-        //创建故障界面
-            err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos,
+            //创建故障界面
+                err_hItem = MULTIEDIT_CreateEx(ErrMultiEdit_Size.xpos,
                 ErrMultiEdit_Size.ypos,
                 ErrMultiEdit_Size.xlength,
                 ErrMultiEdit_Size.ylength,
@@ -842,7 +954,7 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
                 100,
                 NULL);
             bitset(winCreateFlag, 0);
-            MULTIEDIT_SetInsertMode(err_hItem, 1);  //开启插入模式
+            MULTIEDIT_SetInsertMode(err_hItem, 1);   //开启插入模式
             MULTIEDIT_SetFont(err_hItem, &SIF24_Font);
             WM_SetFocus(err_hItem);
             MULTIEDIT_SetInsertMode(err_hItem, 1);
@@ -852,13 +964,14 @@ uint8_t err_window(WM_HWIN hWin)//,EventBits_t uxBitsErr)
             MULTIEDIT_SetText(err_hItem, msg_err);
             MULTIEDIT_SetCursorOffset(err_hItem, 300);
 
-            MULTIEDIT_SetBkColor(err_hItem, MULTIEDIT_CI_EDIT, GUI_RED);//GUI_INVALID_COLOR);
+            MULTIEDIT_SetBkColor(err_hItem, MULTIEDIT_CI_EDIT, GUI_RED); //GUI_INVALID_COLOR);
 
             WM_SetFocus(err_hItem);
             bitclr(calebrate_done, 4);
         }
     }
 }
+
 
 
 
