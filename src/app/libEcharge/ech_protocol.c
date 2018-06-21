@@ -640,7 +640,7 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     errcode = 0;
 
     //充电桩接口   0：默认 1：A 2：B
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pEVSE->info.ucTotalCON);
     //预约状态 1：无预约  2:有预约
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 1;
     //车位状态 1：空闲   2：占用   3：未知
@@ -880,7 +880,7 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
     //[8] 桩接口
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->info.ucCONID + 1;
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pEVSE->info.ucTotalCON);
     //[9...12] 当前充电总电量 xxx.xx
     ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->order.dTotalEnergy * 100));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
@@ -1137,7 +1137,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
     }
     //[9] 充电桩接口
-    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pOrder->ucCONID + 1;
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pOrder->ucCONID, pEVSE->info.ucTotalCON);
     //[10...25] 卡号
     if(pbuff[0] == 4)
     {
