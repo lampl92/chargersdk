@@ -384,7 +384,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //枪类型
 
         i = _FONT_WIDTH*(strlen(conQRCode));
-        printf_safe("%d\n\n\n", i);
+        //printf_safe("%d\n\n\n", i);
         _editxoff = GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(conQRCode)); //+ 50;
         //可以创建一个固定长度的text 和 edit
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(conQRCode)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conQRCode);
