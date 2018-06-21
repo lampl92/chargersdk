@@ -139,32 +139,36 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     {
     case WM_NOTIFY_PARENT:
         /**< 添加两个滑轮的事件 */
-        switch (WM_GetId(pMsg->hWinSrc))
+        if (managerLevel == 0)
         {
-            if (managerLevel == 0)
+            switch (WM_GetId(pMsg->hWinSrc))
             {
             case MANUALSTART:
-                switch (pMsg->Data.v)
                 {
-                case WM_NOTIFICATION_CLICKED:
-                    if (manualType == 0)
+                    switch (pMsg->Data.v)
                     {
-                        if ((manual_charge(pCon, 1)) == 1)
-                            manualType = 1;
-                    }
-                    else if (manualType == 1)
-                    {
-                        if ((manual_charge(pCon, 0)) == 1)
-                            manualType = 0;                    
-                    }
-                    break;
-                case WM_NOTIFICATION_RELEASED:
+                    case WM_NOTIFICATION_CLICKED:
+                        if (manualType == 0)
+                        {
+                            if ((manual_charge(pCon, 1)) == 1)
+                                manualType = 1;
+                        }
+                        else if (manualType == 1)
+                        {
+                            if ((manual_charge(pCon, 0)) == 1)
+                                manualType = 0;                    
+                        }
+                        break;
+                    case WM_NOTIFICATION_RELEASED:
 
-                    break;
+                        break;
+                    }
                 }
                 break;
             }
-                
+        }
+        switch (WM_GetId(pMsg->hWinSrc))
+        {
         case GUI_ID_HSCROLL://水平
             if (pMsg->Data.v == WM_NOTIFICATION_VALUE_CHANGED)
             {

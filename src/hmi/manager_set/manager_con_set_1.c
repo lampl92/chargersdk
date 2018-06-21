@@ -139,9 +139,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     {
     case WM_NOTIFY_PARENT:
         /**< 添加两个滑轮的事件 */
-        switch (WM_GetId(pMsg->hWinSrc))
+        if (managerLevel == 0)
         {
-            if (managerLevel == 0)
+            switch (WM_GetId(pMsg->hWinSrc))
             {
             case MANUALSTART:
                 switch (pMsg->Data.v)
@@ -164,7 +164,9 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 }
                 break;
             }
-                
+        }
+        switch (WM_GetId(pMsg->hWinSrc))
+        {
         case GUI_ID_HSCROLL://水平
             if (pMsg->Data.v == WM_NOTIFICATION_VALUE_CHANGED)
             {
