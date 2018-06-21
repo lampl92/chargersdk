@@ -16,6 +16,7 @@
 #include "cfg_parse.h"
 #include "cJSON.h"
 #include "sysinit.h"
+#include "bsp_rtc.h"
 #include "evse_debug.h"
 
 
