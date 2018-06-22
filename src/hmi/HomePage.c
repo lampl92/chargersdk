@@ -244,7 +244,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             Data_Process(pMsg);
             Signal_Show();
-            Led_Show();
+            //Led_Show();
             if (_hWinHome == cur_win)
             {
                 Err_Analy(pMsg->hWin);

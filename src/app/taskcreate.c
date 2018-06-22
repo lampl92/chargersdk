@@ -197,11 +197,8 @@ void vTaskGUI(void *pvParameters)
 
 void vTaskGuidingLights(void *pvParameters)
 {
-    while (1)
-    {
-        ledcontrl();
-        vTaskDelay(100);
-    }
+    extern void ledcontrl();
+    ledcontrl();
 }
 
 void vTaskGUIBS(void *pvParameters)

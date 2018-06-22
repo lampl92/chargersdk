@@ -282,7 +282,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 /**< 信号数据处理 */
                 Signal_Show();
                 /**< 灯光控制 */
-                Led_Show();
+               // Led_Show();
                 /**< 如果界面发生了切换 */
                 if ((bittest(winInitDone, 0))&&(_hWinCardInfo == cur_win))
                 //if(_hWinCardInfo == cur_win)
