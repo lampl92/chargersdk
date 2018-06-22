@@ -9,7 +9,7 @@
 #include "DIALOG.h"
 #include "HMI_Start.h"
 #include "touchtimer.h"
-
+#include "evse_define.h"
 //#define ERR_SIMBOL  (0x3e000)
 //故障标志
 #define ERR_SIMBOL (defEventBitCONVoltOK|defEventBitCONCurrOK|defEventBitCONFreqOK|defEventBitEVSEScramOK|\
@@ -694,114 +694,101 @@ void LedShow1()
     }
 }
 
+void signal_error(CON_t *pCON, int i)
+{
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Registed) != defSignalEVSE_State_Network_Registed)
+    {
+        led_ctrl(1, blue, keep_on);
+        led_ctrl(2, blue, keep_on);
+        vTaskDelay(500);
+        led_ctrl(1, red, keep_on);
+        led_ctrl(2, red, keep_on);
+        vTaskDelay(400);
+    }
+    if (pCON->status.ulSignalAlarm != 0 ||
+pCON->status.ulSignalFault != 0 ||
+pEVSE->status.ulSignalAlarm != 0 ||
+pEVSE->status.ulSignalFault != 0)
+    {
+        if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0))
+        {
+            led_ctrl(i + 1, red, flicker);
+        }
+        else if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+        {
+            led_ctrl(i + 1, red, flicker);
+        }
+        else if ((pCON->status.ulSignalFault != 0)&&\
+             (pCON->status.ulSignalAlarm == 0)&&\
+             (pEVSE->status.ulSignalAlarm == 0)&&\
+             (pEVSE->status.ulSignalFault == 0)&&\
+    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+        {
+            //led_ctrl(i + 1, green, keep_on);
+        }
+        else if (((pEVSE->status.ulSignalFault != 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            (pCON->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+        {
+            //led_ctrl(i + 1, green, keep_on);
+        }
+        else if (((pEVSE->status.ulSignalFault != 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pCON->status.ulSignalFault != 0)&&\
+            (pCON->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+            ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+        {
+            //led_ctrl(i + 1, green, keep_on);
+        }
+        else
+        {
+            led_ctrl(i + 1, red, keep_on);
+        }
+    }
+}
+
 void ledShow(int j)
 {
     int i;
     CON_t *pCON;
-    int flag_not_connect = 0;
-    if (getSignalIntensity() == 0)
-    {
-        flag_not_connect = 1;
-    }
     for (i = 0; i < j; i++)
     {
         pCON = CONGetHandle(i);
-        /**<故障存在闪烁红灯 */
-        if (pCON->status.ulSignalAlarm != 0 ||
-            pCON->status.ulSignalFault != 0 ||
-            pEVSE->status.ulSignalAlarm != 0 ||
-            pEVSE->status.ulSignalFault != 0)
+        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)//在充电中
         {
-            if ((pCON->status.ulSignalAlarm != 0)&&\
-                (pCON->status.ulSignalFault == 0)&&\
-                ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault == 0))
-            {
-                led_ctrl(i + 1, red, flicker);
-            }
-            else if ((pCON->status.ulSignalAlarm != 0)&&\
-                (pCON->status.ulSignalFault == 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault == 0)&&\
-                ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
-            {
-                led_ctrl(i + 1, red, flicker);
-            }
-            else if ((pCON->status.ulSignalFault != 0)&&\
-                 (pCON->status.ulSignalAlarm == 0)&&\
-                 (pEVSE->status.ulSignalAlarm == 0)&&\
-                 (pEVSE->status.ulSignalFault == 0)&&\
-                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-            {
-                led_ctrl(i + 1, green, keep_on);
-            }
-            else if (((pEVSE->status.ulSignalFault != 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pCON->status.ulSignalFault == 0)&&\
-                (pCON->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
-            {
-                led_ctrl(i + 1, green, keep_on);
-            }
-            else if (((pEVSE->status.ulSignalFault != 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pCON->status.ulSignalFault != 0)&&\
-                (pCON->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
-                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-            {
-                led_ctrl(i + 1, green, keep_on);
-            }
-            else
-            {
-                led_ctrl(i + 1, red, keep_on);
-            }
+            led_ctrl(i + 1, green, breath);
+            signal_error(pCON, i);
         }
-        else if (flag_not_connect)
+        else//不在充电中 
         {
-            led_ctrl(1, blue, keep_on);
-            led_ctrl(2, blue, keep_on);
-            vTaskDelay(500);
-            led_ctrl(1, red, keep_on);
-            led_ctrl(2, red, keep_on);
-            vTaskDelay(400);
-        }
-        else
-        {
-            switch (pCON->state)
+            led_ctrl(i + 1, green, keep_on);
+            if (pCON->status.xPlugState == PLUG)
             {
-            case STATE_CON_IDLE:
-                /**< 空闲状态 */
-                led_ctrl(i + 1, green, keep_on);
-                break;
-            case STATE_CON_CHARGING:
-                /**< 充电过程中 */
-                led_ctrl(i + 1, green, breath);
-                break;
-            default:
-                if (pCON->status.xPlugState == PLUG)
+                if (pCON->status.xCPState == CP_6V_PWM
+                    || pCON->status.xCPState == CP_6V)
                 {
-                    if (pCON->status.xCPState == CP_6V_PWM
-                        || pCON->status.xCPState == CP_6V)
-                    {
-                        /**< 等待车端插枪 */
-                        led_ctrl(i + 1, green, flicker);
-                    }
-                    else if (pCON->status.xCPState == CP_9V_PWM
-                        || pCON->status.xCPState == CP_9V)
-                    {
-                        /**< S1未闭合 */
-                        led_ctrl(i + 1, blue, keep_on);
-                    }
+                    /**< 等待车端插枪 */
+                    led_ctrl(i + 1, green, flicker);
                 }
-                else
+                else if (pCON->status.xCPState == CP_9V_PWM
+                    || pCON->status.xCPState == CP_9V)
                 {
-                    /**< 未知状态 */
-                    led_ctrl(i + 1, green, keep_on);
+                    /**< S1未闭合 */
+                    led_ctrl(i + 1, blue, keep_on);
                 }
-                break;
             }
+            signal_error(pCON, i);
         }
     }
 }
