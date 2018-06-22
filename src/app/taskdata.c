@@ -318,11 +318,11 @@ void vTaskEVSEData(void *pvParameters)
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;
             case STATE_ORDER_HOLD:
-//                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
-//                {
-//                    break;
-//                }
-//                else
+                if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
+                {
+                    break;
+                }
+                else
                 {
                     pCON->order.statOrder = STATE_ORDER_RETURN;
                 }

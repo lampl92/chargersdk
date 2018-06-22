@@ -77,7 +77,8 @@ static void flashGunState()
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)//在充电中
+        if (((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)\
+            || ((pCON->status.ulSignalState & defSignalCON_State_Stopping) == defSignalCON_State_Stopping))//在充电中
         {
             GBSgunstate[i] = GunchargingState;         
             change_condition(pCON, i);
@@ -86,8 +87,7 @@ static void flashGunState()
         {
             GBSgunstate[i] = GunfreeState;
             change_condition(pCON, i);
-        }
-        
+        }        
         if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH\
      || pCON->order.statOrder == STATE_ORDER_WAITSTOP || pCON->order.statOrder == STATE_ORDER_WAITUSE\
     || pCON->order.statOrder == STATE_ORDER_STORE)
