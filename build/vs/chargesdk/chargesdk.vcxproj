@@ -213,7 +213,6 @@
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_states_info_win.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_Info.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_set.c" />
-    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdLimted.c" />
@@ -226,15 +225,6 @@
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c" />

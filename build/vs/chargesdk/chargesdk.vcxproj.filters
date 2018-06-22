@@ -813,15 +813,6 @@
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\pyinput.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -905,12 +896,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c">
-      <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\cfg_order.c">
       <Filter>Source files\app</Filter>
@@ -1284,23 +1269,11 @@
     <ClCompile Include="..\..\..\src\hmi\HomePage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\factorycfg.c">
       <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
-      <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\line.c">
       <Filter>Source files\app</Filter>
@@ -1939,9 +1912,6 @@
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c">
