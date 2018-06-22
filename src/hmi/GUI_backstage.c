@@ -15,6 +15,61 @@ GBSState_E gbsstate;
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
 
+static void change_condition(CON_t *pCON ,int i)
+{
+    if (pCON->status.ulSignalAlarm != 0 ||
+    pCON->status.ulSignalFault != 0 ||
+    pEVSE->status.ulSignalAlarm != 0 ||
+    pEVSE->status.ulSignalFault != 0)
+    {
+        if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0))
+        {
+            ;
+        }
+        else if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+        {
+            ;
+        }
+        else if ((pCON->status.ulSignalFault != 0)&&\
+             (pCON->status.ulSignalAlarm == 0)&&\
+             (pEVSE->status.ulSignalAlarm == 0)&&\
+             (pEVSE->status.ulSignalFault == 0)&&\
+    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+        {
+            ;
+        }
+        else if (((pEVSE->status.ulSignalFault != 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            (pCON->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+        {
+            ;
+        }
+        else if (((pEVSE->status.ulSignalFault != 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pCON->status.ulSignalFault != 0)&&\
+            (pCON->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+            ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+        {
+            ;
+        }
+        else
+        {
+            GBSgunstate[i] = Gunerror;
+        }
+    }
+}
+
 //枪状态刷新
 static void flashGunState()
 {
@@ -22,67 +77,20 @@ static void flashGunState()
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        switch (pCON->state)
+        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)//在充电中
         {
-        case STATE_CON_IDLE:
-        case STATE_CON_PLUGED:
-        case STATE_CON_PRECONTRACT:
-        case STATE_CON_PRECONTRACT_LOSEPLUG:
-        case STATE_CON_STARTCHARGE:                 
-            GBSgunstate[i] = GunfreeState;
-            break;
-        case STATE_CON_CHARGING:
-            GBSgunstate[i] = GunchargingState;
-            break;
-        case STATE_CON_STOPCHARGE:
-        case STATE_CON_UNLOCK:
-        //                    GBSgunstate[i] = GunchargedoneState;
-            break;
-        case STATE_CON_ERROR:
-        case STATE_CON_DEV_ERROR:
-            if (pCON->status.ulSignalAlarm != 0 ||
-            pCON->status.ulSignalFault != 0 ||
-            pEVSE->status.ulSignalAlarm != 0 ||
-            pEVSE->status.ulSignalFault != 0)
-            {
-                if (((pEVSE->status.ulSignalFault != 0)&&\
-                    (pEVSE->status.ulSignalAlarm == 0)&&\
-                    (pCON->status.ulSignalFault == 0)&&\
-                    (pCON->status.ulSignalAlarm == 0)&&\
-                    (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
-                {
-                    GBSgunstate[i] = GunfreeState;
-                }
-                else if ((pCON->status.ulSignalFault != 0)&&\
-                    (pCON->status.ulSignalAlarm == 0)&&\
-                    (pEVSE->status.ulSignalAlarm == 0)&&\
-                    (pEVSE->status.ulSignalFault == 0)&&\
-                    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-                {
-                    GBSgunstate[i] = GunfreeState;
-                }
-                else if (((pEVSE->status.ulSignalFault != 0)&&\
-                    (pEVSE->status.ulSignalAlarm == 0)&&\
-                    (pCON->status.ulSignalFault != 0)&&\
-                    (pCON->status.ulSignalAlarm == 0)&&\
-                    (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
-                    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-                {
-                    GBSgunstate[i] = GunfreeState;
-                }
-                else
-                {
-                    GBSgunstate[i] = Gunerror;
-                }
-                continue;
-            }
-            break;
-        case STATE_CON_RETURN: 
-            break;
+            GBSgunstate[i] = GunchargingState;         
+            change_condition(pCON, i);
         }
+        else
+        {
+            GBSgunstate[i] = GunfreeState;
+            change_condition(pCON, i);
+        }
+        
         if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH\
-             || pCON->order.statOrder == STATE_ORDER_WAITSTOP||pCON->order.statOrder == STATE_ORDER_WAITUSE\
-            || pCON->order.statOrder == STATE_ORDER_STORE)
+     || pCON->order.statOrder == STATE_ORDER_WAITSTOP || pCON->order.statOrder == STATE_ORDER_WAITUSE\
+    || pCON->order.statOrder == STATE_ORDER_STORE)
         {
             if (pCON->status.xPlugState == PLUG)
             {
@@ -93,8 +101,7 @@ static void flashGunState()
                 GBSgunstate[i] = GunfreeState;
             }            
             continue;
-        }
-        
+        }      
     }
 }
 

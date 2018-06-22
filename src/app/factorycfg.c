@@ -140,6 +140,10 @@ const char *strFtpCfg =
     \"DownloadStart\" : 0,\n \
     \"DownloadStatus\": 123\n \
 }\n";
+//	"xfac":	-0.21240916848182678,
+//	"yfac":	-0.13341419398784637,
+//	"xoff":	827,
+//	"yoff":	512,
 
 const char *strSysCfg =
 "{\n \
@@ -153,10 +157,10 @@ const char *strSysCfg =
     \"DispSleepTime\" : 60,\n \
     \"touchtype\": 0,\n \
     \"is_calibrate\": 170,\n \
-    \"xfac\": -0.21276596188545227,\n \
-    \"yfac\": 0.1423487514257431,\n \
-    \"xoff\": 830,\n \
-    \"yoff\": 65486,\n \
+    \"xfac\": -0.21240916848182678,\n \
+    \"yfac\": -0.13341419398784637,\n \
+    \"xoff\": 827,\n \
+    \"yoff\": 512,\n \
     \"Version\":\"888888\",\n \
     \"USE_GPRSModem\":2,\n \
     \"USE_Meter\": 2,\n \
