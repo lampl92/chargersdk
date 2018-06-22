@@ -40,7 +40,42 @@ static void flashGunState()
             break;
         case STATE_CON_ERROR:
         case STATE_CON_DEV_ERROR:
-            GBSgunstate[i] = Gunerror;
+            if (pCON->status.ulSignalAlarm != 0 ||
+            pCON->status.ulSignalFault != 0 ||
+            pEVSE->status.ulSignalAlarm != 0 ||
+            pEVSE->status.ulSignalFault != 0)
+            {
+                if (((pEVSE->status.ulSignalFault != 0)&&\
+                    (pEVSE->status.ulSignalAlarm == 0)&&\
+                    (pCON->status.ulSignalFault == 0)&&\
+                    (pCON->status.ulSignalAlarm == 0)&&\
+                    (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+                {
+                    GBSgunstate[i] = GunfreeState;
+                }
+                else if ((pCON->status.ulSignalFault != 0)&&\
+                    (pCON->status.ulSignalAlarm == 0)&&\
+                    (pEVSE->status.ulSignalAlarm == 0)&&\
+                    (pEVSE->status.ulSignalFault == 0)&&\
+                    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+                {
+                    GBSgunstate[i] = GunfreeState;
+                }
+                else if (((pEVSE->status.ulSignalFault != 0)&&\
+                    (pEVSE->status.ulSignalAlarm == 0)&&\
+                    (pCON->status.ulSignalFault != 0)&&\
+                    (pCON->status.ulSignalAlarm == 0)&&\
+                    (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+                    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+                {
+                    GBSgunstate[i] = GunfreeState;
+                }
+                else
+                {
+                    GBSgunstate[i] = Gunerror;
+                }
+                continue;
+            }
             break;
         case STATE_CON_RETURN: 
             break;
@@ -59,42 +94,7 @@ static void flashGunState()
             }            
             continue;
         }
-        if (pCON->status.ulSignalAlarm != 0 ||
-            pCON->status.ulSignalFault != 0 ||
-            pEVSE->status.ulSignalAlarm != 0 ||
-            pEVSE->status.ulSignalFault != 0)
-        {
-            if (((pEVSE->status.ulSignalFault != 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pCON->status.ulSignalFault == 0)&&\
-                (pCON->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
-            {
-                GBSgunstate[i] = GunfreeState;
-            }
-            else if ((pCON->status.ulSignalFault != 0)&&\
-                (pCON->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault == 0)&&\
-				((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-            {
-                GBSgunstate[i] = GunfreeState;
-            }
-            else if (((pEVSE->status.ulSignalFault != 0)&&\
-                (pEVSE->status.ulSignalAlarm == 0)&&\
-                (pCON->status.ulSignalFault != 0)&&\
-                (pCON->status.ulSignalAlarm == 0)&&\
-                (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
-                ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-            {
-                GBSgunstate[i] = GunfreeState;
-            }
-            else
-            {
-                GBSgunstate[i] = Gunerror;
-            }
-            continue;
-        }
+        
     }
 }
 
