@@ -1008,12 +1008,12 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         else
         {
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
-            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
+//            printf_safe("CP_ERR %lf\n", cp1);
             tmpCPState = CP_ERR;
             if (tmpCPState == CP_ERR)
             {
