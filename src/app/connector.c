@@ -404,20 +404,19 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else
     {
-
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
         tmpCPState = CP_ERR;
         if (tmpCPState == CP_ERR)
         {
             (*pCP_err_cont)++;
             tmpCPState = pCON->status.xCPState;
         }
-        if (*pCP_err_cont >= 2)//50ms
+        if (*pCP_err_cont >= 3)//3次cp故障
         {
             SetCPSwitch(pCON, SWITCH_OFF);
             *pCP_err_cont = 0;
