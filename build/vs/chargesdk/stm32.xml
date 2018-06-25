@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <EmbeddedProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ToolchainID>com.visualgdb.arm-eabi</ToolchainID>
+  <ToolchainVersion>
+    <Revision>0</Revision>
+  </ToolchainVersion>
   <BspID>com.visualgdb.bsp.in-place</BspID>
   <BspVersion>1.0</BspVersion>
   <McuID>STM32F429IG</McuID>
-  <MCUDefinitionFile>D:\source\repos\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
+  <MCUDefinitionFile>stm32f429xx.xml</MCUDefinitionFile>
   <MCUProperties>
     <Entries />
   </MCUProperties>
@@ -65,9 +68,6 @@
         <string>../../../src/net/user</string>
         <string>../../../src/middlewares/unzip101e</string>
       </IncludeDirectories>
-      <AdditionalLibraries>
-        <string>compactcpp</string>
-      </AdditionalLibraries>
       <CFLAGS />
       <CXXFLAGS />
       <LDFLAGS>--specs=nano.specs -u _printf_float -u _scanf_float --specs=nosys.specs</LDFLAGS>
@@ -172,13 +172,6 @@
               <AllowFreeEntry>false</AllowFreeEntry>
             </PropertyEntry>
             <PropertyEntry xsi:type="Boolean">
-              <Name>Reduce the size of C++ binaries</Name>
-              <UniqueID>com.sysprogs.toolchainoptions.arm.compactcpp</UniqueID>
-              <OmitPrefixIfEmpty>false</OmitPrefixIfEmpty>
-              <DefaultValue>true</DefaultValue>
-              <ValueForTrue>compactcpp</ValueForTrue>
-            </PropertyEntry>
-            <PropertyEntry xsi:type="Boolean">
               <Name>Provide default stubs for system calls</Name>
               <UniqueID>com.sysprogs.toolchainoptions.arm.libnosys</UniqueID>
               <OmitPrefixIfEmpty>false</OmitPrefixIfEmpty>
@@ -196,7 +189,7 @@
     <RAMSize>262144</RAMSize>
     <FLASHBase>134217728</FLASHBase>
     <RAMBase>536870912</RAMBase>
-    <MCUDefinitionFile>D:\source\repos\chargersdk\build\vs\chargesdk\stm32f429xx.xml</MCUDefinitionFile>
+    <MCUDefinitionFile>stm32f429xx.xml</MCUDefinitionFile>
     <AdditionalSourcesRequiredForTesting>false</AdditionalSourcesRequiredForTesting>
   </InPlaceMCU>
   <MCUMakFile>stm32.mak</MCUMakFile>

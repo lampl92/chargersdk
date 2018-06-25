@@ -115,7 +115,7 @@ void sys_Init(void)
 //    create_cfg_file(pathEVSELog, strLogCfg);
 //    create_cfg_file(pathSysCfg, strSysCfg);
 //    create_cfg_file(pathFTPCfg, strFtpCfg);
-    create_cfg_file(pathNetCfg, strNetCfg);
+//    create_cfg_file(pathNetCfg, strNetCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
 
 //    SysCfgInit(&xSysconf);
