@@ -19,14 +19,6 @@ SECTIONS
 
 	  /*Other sections not related with VTRAM may go here before the RAMVectorTable definition*/
 
-	.bootldr :
-	{
-		. = ALIGN(4);
-		KEEP(*(.bootldr))
-		FILL(0xFFFFFFFF)
-		. = 0x40000;
-	} > FLASH
-
 	.isr_vector :
 	{
 		. = ALIGN(4);
