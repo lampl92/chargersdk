@@ -82,8 +82,8 @@ static const char *_apDay[]=
     "19", "20", "21", "22", "23", "24",
     "25", "26", "27", "28", "29", "30", "31",
 };
-static DateStruct sel_start_date = {"2004","01","01"};
-static DateStruct sel_end_date = {"2004","01","01"};
+static DateStruct sel_start_date = {"2017","01","01"};
+static DateStruct sel_end_date = {"2020","01","01"};
 static uint8_t list_start_index[3];
 static uint8_t list_end_index[3];
 // USER END

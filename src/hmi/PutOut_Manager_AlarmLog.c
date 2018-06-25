@@ -125,7 +125,7 @@ typedef struct
     int tm_mday;
 }_MANAGERDate;
 static DateStruct sel_start_date = {"2017","01","01"};
-static DateStruct sel_end_date = {"2018","01","01"};
+static DateStruct sel_end_date = {"2020","01","01"};
 static uint8_t list_start_index[3];
 static uint8_t list_end_index[3];
 
