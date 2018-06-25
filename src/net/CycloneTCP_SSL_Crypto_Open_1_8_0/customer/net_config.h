@@ -30,7 +30,7 @@
 #define _NET_CONFIG_H
 
 #define PPP_SUPPORT             ENABLED
-#define PPP_TRACE_LEVEL         TRACE_LEVEL_INFO
+#define PPP_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
 
 #define NET_TASK_PRIORITY       12
 #define DNS_CLIENT_SUPPORT      ENABLED
@@ -45,8 +45,8 @@
 // TRACE_LEVEL_WARNING  3
 // TRACE_LEVEL_INFO     4
 // TRACE_LEVEL_DEBUG    5
-#define MEM_TRACE_LEVEL          4
-#define NIC_TRACE_LEVEL          4
+#define MEM_TRACE_LEVEL          TRACE_LEVEL_ERROR//4
+#define NIC_TRACE_LEVEL          TRACE_LEVEL_ERROR//4
 #define ETH_TRACE_LEVEL          2
 #define ARP_TRACE_LEVEL          2
 #define IP_TRACE_LEVEL           2
@@ -62,18 +62,18 @@
 #define SOCKET_TRACE_LEVEL       2
 #define RAW_SOCKET_TRACE_LEVEL   2
 #define BSD_SOCKET_TRACE_LEVEL   2
-#define SLAAC_TRACE_LEVEL        4
-#define DHCP_TRACE_LEVEL         4
-#define DHCPV6_TRACE_LEVEL       4
-#define DNS_TRACE_LEVEL          4
-#define MDNS_TRACE_LEVEL         4
+#define SLAAC_TRACE_LEVEL        TRACE_LEVEL_ERROR//4
+#define DHCP_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
+#define DHCPV6_TRACE_LEVEL       TRACE_LEVEL_ERROR//4
+#define DNS_TRACE_LEVEL          TRACE_LEVEL_ERROR//4
+#define MDNS_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
 #define NBNS_TRACE_LEVEL         2
-#define LLMNR_TRACE_LEVEL        4
-#define FTP_TRACE_LEVEL          4
-#define HTTP_TRACE_LEVEL         4
-#define SMTP_TRACE_LEVEL         4
-#define SNTP_TRACE_LEVEL         4
-#define STD_SERVICES_TRACE_LEVEL 4
+#define LLMNR_TRACE_LEVEL        TRACE_LEVEL_ERROR//4
+#define FTP_TRACE_LEVEL          TRACE_LEVEL_ERROR//4
+#define HTTP_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
+#define SMTP_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
+#define SNTP_TRACE_LEVEL         TRACE_LEVEL_ERROR//4
+#define STD_SERVICES_TRACE_LEVEL TRACE_LEVEL_ERROR//4
 
 //Number of network adapters
 #define NET_INTERFACE_COUNT 1
