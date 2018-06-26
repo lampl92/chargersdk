@@ -1937,6 +1937,7 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
         {
             *psiRetVal = 1;
             errcode = ERR_NO;
+            pProto->info.ftp.GetFtpCfg((void *)&(pechProto->info.ftp), NULL);
         }
         else
         {
@@ -1949,7 +1950,6 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
         break;
     }
 
-    pProto->info.ftp.GetFtpCfg((void *)&(pechProto->info.ftp), NULL);
     return errcode;
 }
 
