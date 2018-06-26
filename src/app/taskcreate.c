@@ -300,7 +300,10 @@ void taskappSuspend(void)
     vTaskSuspend(xHandleTaskRemoteCmdProc);
     taskmonitorChildSuspend();
 #if EVSE_USING_GUI
-    vTaskSuspend(xHandleTaskGUI);
+//    extern TaskHandle_t xHandleTaskReadPic;
+//    if (xHandleTaskReadPic != NULL)
+//        vTaskSuspend(xHandleTaskReadPic);
+//    vTaskSuspend(xHandleTaskGUI);
     vTaskSuspend(xHandleTaskGUIBS);
     vTaskSuspend(xHandleTaskTouch);
     vTaskSuspend(xHandleTaskGuidingLights);
