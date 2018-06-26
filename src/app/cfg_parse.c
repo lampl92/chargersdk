@@ -404,6 +404,11 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     yaffs_stat(path, &st);
     fsize = st.st_size;
     rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
+    if (rbuff == NULL)
+    {
+        *perrcode = ERR_MEMORY;
+        goto exit;
+    }
     taskENTER_CRITICAL();
     br = yaffs_read(fd, rbuff, fsize);
     taskEXIT_CRITICAL();
