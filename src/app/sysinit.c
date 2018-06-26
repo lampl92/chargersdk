@@ -51,7 +51,12 @@ void Get_ChipID(void)
     int i;
     __IO uint8_t *pid;
     pid = (__IO uint8_t *)0x1FFF7A10;
-    HexToStr((uint8_t *)pid, g_strChipID, 12);
+    for (i = 0; i < 6; i++)
+    {
+        g_strChipID[i] = pid[i+6];
+    }
+    //printf_safe("ChipID: %s\n", g_strChipID);
+//    HexToStr((uint8_t *)pid, g_strChipID, 12);
 }
 uint8_t create_dir(char *dir)
 {
