@@ -30,6 +30,7 @@ void cli_tasklist_fnt(int argc, char **argv)
     double usedkb;
     char paddr[20] = { 0 };
 
+#if 0
     printf_safe("\r\n");
     printf_safe("=================================================\r\n");
     printf_safe("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
@@ -39,7 +40,7 @@ void cli_tasklist_fnt(int argc, char **argv)
     printf_safe("\r\n任务名       运行计数         使用率\r\n");
     vTaskGetRunTimeStats(acTaskStatusBuffer);
     printf_safe("%s", acTaskStatusBuffer);
-    
+#endif
     FreeBytesRemaining = xPortGetFreeHeapSize();
     memused = (configTOTAL_HEAP_SIZE - FreeBytesRemaining) * 100.0 / configTOTAL_HEAP_SIZE;
     sprintf(paddr, "%.2lf%%", memused);
