@@ -520,9 +520,17 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     {
         if (uart_driver[i].UARTx_Handler.Instance == huart->Instance)
         {
-            HAL_UART_DeInit(&(uart_driver[i].UARTx_Handler));
-            HAL_UART_Init(&(uart_driver[i].UARTx_Handler));
-            HAL_UART_Receive_IT(&(uart_driver[i].UARTx_Handler), (uint8_t *)uart_driver[i].rbuff, 1);
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE) != RESET) 
+            {
+                __HAL_UART_CLEAR_OREFLAG(huart);
+                HAL_UART_Receive_IT(huart, (uint8_t *)uart_driver[i].rbuff, 1);
+            }
+            else
+            {
+                HAL_UART_DeInit(huart);
+                HAL_UART_Init(huart);
+                HAL_UART_Receive_IT(huart, (uint8_t *)uart_driver[i].rbuff, 1);
+            }
         }
     }
 
