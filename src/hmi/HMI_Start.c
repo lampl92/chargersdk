@@ -167,7 +167,6 @@ void MainTask(void)
     }
     while (1)
     {
-        wait_download();
 //	    printf_safe("exec start = %d\n", clock());
 //        GUI_Exec();
         GUI_Delay(8000);

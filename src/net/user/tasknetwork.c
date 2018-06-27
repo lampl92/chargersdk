@@ -166,6 +166,11 @@ static void netStateFTP(net_device_t *net_dev)
     if (res == 1)
     {
         taskappSuspend();
+#if EVSE_USING_GUI
+        vTaskDelay(1500);
+        LCD_Clear(BLUE);
+#endif
+        
         while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
         {
             res = ftp_download_file(&ftpcfg, net_dev);
