@@ -1,4 +1,5 @@
 #include "SPI_GPIO.h"
+#include "bsp.h"
 //////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -6,7 +7,6 @@
 static unsigned char SPI_MCUReadByte(void);
 static void SPI_MCUWriteByte(unsigned char wByte);
 static void ADE7953_SPI_Enable(void);
-extern void DelayUS(uint32_t _ulDelayTime);
 static void ADE7953_SPI_Enable(void)
 {
     ADE_SCLK_H;
@@ -21,16 +21,16 @@ static unsigned char SPI_MCUReadByte(void)
     for (i = 0; i < 8; i++)
     {
         ADE_SCLK_L;
-        DelayUS(10);
+        bsp_DelayUS(10);
         rByte <<= 1;
 
         if (ADE_MISO)
         {
             rByte |= 0x01;
         }
-        DelayUS(2);
+        bsp_DelayUS(2);
         ADE_SCLK_H;
-        DelayUS(8);
+        bsp_DelayUS(8);
     }
     return rByte;
 }
@@ -41,7 +41,7 @@ static void SPI_MCUWriteByte(unsigned char wByte)
     for (i = 0; i < 8; i++)
     {
         ADE_SCLK_L;
-        DelayUS(10);
+        bsp_DelayUS(10);
         if ((wByte & 0x80))
         {
             ADE_MOSI_H;
@@ -50,10 +50,10 @@ static void SPI_MCUWriteByte(unsigned char wByte)
         {
             ADE_MOSI_L;
         }
-        DelayUS(2);
+        bsp_DelayUS(2);
         ADE_SCLK_H;
         wByte <<= 1;
-        DelayUS(8);
+        bsp_DelayUS(8);
     }
 }
 
@@ -93,15 +93,15 @@ void Write_ADE7953_SPI(unsigned int ADE_Addr, unsigned char Nr_Bytes, unsigned c
 
     LS_Addr = (unsigned char)ADE_Addr;
     MS_Addr = (unsigned char)(ADE_Addr >> 8);
-    DelayUS(1);
+    bsp_DelayUS(1);
     ADE_SPI_ENABLE;
     SPI_MCUWriteByte(MS_Addr);
-    DelayUS(1);
+    bsp_DelayUS(1);
     SPI_MCUWriteByte(LS_Addr);
-    DelayUS(1);
+    bsp_DelayUS(1);
     SPI_MCUWriteByte(0x00);
     pReg_Data = pReg_Data + (Nr_Bytes - 1);
-    DelayUS(1);
+    bsp_DelayUS(1);
     for (i = 0; i < Nr_Bytes; i++)
     {
         SPI_MCUWriteByte(*pReg_Data);
@@ -120,15 +120,15 @@ void Read_ADE7953_SPI(unsigned int ADE_Addr, unsigned char Nr_Bytes,
     MS_Addr = (unsigned char)(ADE_Addr >> 8);
     ADE_SPI_ENABLE;
     SPI_MCUWriteByte(MS_Addr);
-    DelayUS(10);
+    bsp_DelayUS(10);
     SPI_MCUWriteByte(LS_Addr);
-    DelayUS(10);
+    bsp_DelayUS(10);
     SPI_MCUWriteByte(0x80);
     pReg_Data = pReg_Data + (Nr_Bytes - 1);
     for (i = 0; i < Nr_Bytes; i++)
     {
         *pReg_Data = SPI_MCUReadByte();
-        DelayUS(10);
+        bsp_DelayUS(10);
         pReg_Data--;
     }
     ADE_SPI_DISABLE;

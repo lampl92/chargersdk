@@ -4,6 +4,8 @@
 
 #include "ADE79xx_Data.h"
 
+extern double TEST_YUYE_VA;
+
 extern unsigned long ActiveEnergy;
 extern unsigned long ReactiveEnergy;
 extern unsigned long ActivePowerA;

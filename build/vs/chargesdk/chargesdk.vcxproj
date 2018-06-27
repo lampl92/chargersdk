@@ -134,6 +134,7 @@
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
