@@ -29,15 +29,16 @@
 #include "file_op.h"
 #include <stdio.h>
 
+int nums_picture = 0;
+
 #define IS_BMP_OK(_fun)   do{                                           \
                                                             int _macro_errcode = _fun;         \
                                                             if(_macro_errcode == -1)                  \
                                                             {                                       \
                                                                 gui_halt();  \
                                                             }                                       \
+                                                            nums_picture++;\
                                                         }while(0);
-
-
 #pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
@@ -577,12 +578,14 @@ void gui_halt(void)
 
 int createStartUpMemdev(void)
 {
+    //5个文件
     IS_BMP_OK(Memdevcardinfoback = createMemdev(pathcardinfoback));
     IS_BMP_OK(Memdevcardinfostartup = createMemdev(pathcardinfostartup));
     IS_BMP_OK(Memdevcardinfostartone = createMemdev(pathcardinfostartone));
     IS_BMP_OK(Memdevcardinfostatrttwo = createMemdev(pathcardinfostatrttwo));
     IS_BMP_OK(Memdevcardinfostatrtthree = createMemdev(pathcardinfostatrtthree));
-    
+    extern void create_sif_font(u8 *fxpath, GUI_FONT * pFont, const GUI_SIF_TYPE * pFontType);
+    create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
     return 1;
 }
 
@@ -592,6 +595,7 @@ int creatememdev(void)
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
     {
+        //6个文件
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
@@ -599,12 +603,13 @@ int creatememdev(void)
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
-        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle);) 
+        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle)); 
         
         IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleaseplug));
     }
     else
     {
+        //33个文件
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
@@ -653,7 +658,7 @@ int creatememdev(void)
         IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga));
         IS_BMP_OK(Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb));
     }
-    
+    //下面一共35个文件
     IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));
     IS_BMP_OK(Memdevhomegunscancode = createMemdev(pathhomegunscancode));
     IS_BMP_OK(Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress));

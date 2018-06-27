@@ -98,24 +98,8 @@ void MainTask1(void)
     }
 }
 
-static void wait_download(void)
-{
-    if (pechProto->info.ftp.ucDownloadStart == 1)
-    {
-        while (1)
-        {
-            if (pechProto->info.ftp.ucDownloadStart == 0)
-            {
-                break;
-            }
-            vTaskDelay(1000);
-        }
-    }
-}
 void MainTask(void)
 {
-    LCD_Clear(BLUE);
-    wait_download();
     CON_t *pCON;
     if (calebrate_done == 0)
     {
@@ -123,6 +107,14 @@ void MainTask(void)
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        home = CreateHome0DLG;
+    }
+    else
+    {
+        home = CreateHomeDLG;    
+    } 
     xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);
     if (calebrate_done != 0xff)
     {
@@ -137,20 +129,16 @@ void MainTask(void)
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         GUI_UC_SetEncodeUTF8();
+        while (!WM_IsWindow(startUpWin))
+        {
+            vTaskDelay(50);
+        }
         GUI_EndDialog(startUpWin, 0);
         vTaskDelete(xHandleTaskReadPic);
         xHandleTaskReadPic = NULL;
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
-//        CreateKeyBoardWindow();
-        if (pEVSE->info.ucTotalCON == 1)
-        {
-            home = CreateHome0DLG;
-        }
-        else
-        {
-            home = CreateHomeDLG;    
-        }        
+//        CreateKeyBoardWindow();       
         //CreateManagerCommon();   
         home();
         //CreatePwdInput();

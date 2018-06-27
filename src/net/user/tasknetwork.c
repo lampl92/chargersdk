@@ -146,6 +146,7 @@ static void netStateTcpOn(net_device_t *net_dev)
         netChangeState(net_dev, NET_STATE_DISCONNECT);
     }
 }
+EchFtpCfg_t ftpcfg;
 static void netStateFTP(net_device_t *net_dev)
 {
     uint32_t crc32_calc, crc32_orig;
@@ -157,7 +158,6 @@ static void netStateFTP(net_device_t *net_dev)
     char upflg;
     int i;
     flist_t flist;
-    EchFtpCfg_t ftpcfg;
     ErrorCode_t errcode;
     int res, res_copy;
     
@@ -166,11 +166,6 @@ static void netStateFTP(net_device_t *net_dev)
     if (res == 1)
     {
         taskappSuspend();
-#if EVSE_USING_GUI
-        vTaskDelay(1500);
-        LCD_Clear(BLUE);
-#endif
-        
         while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
         {
             res = ftp_download_file(&ftpcfg, net_dev);
