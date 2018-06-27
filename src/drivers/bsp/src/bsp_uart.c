@@ -523,14 +523,25 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
             if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE) != RESET) 
             {
                 __HAL_UART_CLEAR_OREFLAG(huart);
-                HAL_UART_Receive_IT(huart, (uint8_t *)uart_driver[i].rbuff, 1);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE) != RESET) 
+            {
+                __HAL_UART_CLEAR_PEFLAG(huart);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_NE) != RESET) 
+            {
+                __HAL_UART_CLEAR_NEFLAG(huart);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_FE) != RESET) 
+            {
+                __HAL_UART_CLEAR_FEFLAG(huart);
             }
             else
             {
                 HAL_UART_DeInit(huart);
                 HAL_UART_Init(huart);
-                HAL_UART_Receive_IT(huart, (uint8_t *)uart_driver[i].rbuff, 1);
             }
+            HAL_UART_Receive_IT(huart, (uint8_t *)uart_driver[i].rbuff, 1);
         }
     }
 
