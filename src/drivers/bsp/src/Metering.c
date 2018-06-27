@@ -26,31 +26,31 @@ void setgain(void)
 void ReadAde7953DataRegister(void)
 {
     long YUYE_REG;
-    Read_ADE7953_SPI(Reg_PGA_IA.ADD, Reg_PGA_IA.COMM_Bytes, DATA_PGA_IA.Data_Array);
+//    Read_ADE7953_SPI(Reg_PGA_IA.ADD, Reg_PGA_IA.COMM_Bytes, DATA_PGA_IA.Data_Array);
 
-    Read_ADE7953_SPI(Reg_PGA_V.ADD, Reg_PGA_V.COMM_Bytes, DATA_PGA_V.Data_Array);
+//    Read_ADE7953_SPI(Reg_PGA_V.ADD, Reg_PGA_V.COMM_Bytes, DATA_PGA_V.Data_Array);
 
-    Read_ADE7953_SPI(Reg_AP_NOLOAD.ADD, Reg_AWATT.COMM_Bytes, DATA_AWATT.Data_Array);
-
-    Read_ADE7953_SPI(Reg_BWATT.ADD, Reg_BWATT.COMM_Bytes, DATA_BWATT.Data_Array);
-
-    Read_ADE7953_SPI(Reg_AVAR.ADD, Reg_AVAR.COMM_Bytes, DATA_AVAR.Data_Array);
-
-    Read_ADE7953_SPI(Reg_BVAR.ADD, Reg_BVAR.COMM_Bytes, DATA_BVAR.Data_Array);
-
-    Read_ADE7953_SPI(Reg_IRMSA.ADD, Reg_IRMSA.COMM_Bytes, DATA_IRMSA.Data_Array);
-
-    Read_ADE7953_SPI(Reg_IRMSB.ADD, Reg_IRMSB.COMM_Bytes, DATA_IRMSB.Data_Array);
-
+//    Read_ADE7953_SPI(Reg_AP_NOLOAD.ADD, Reg_AWATT.COMM_Bytes, DATA_AWATT.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_BWATT.ADD, Reg_BWATT.COMM_Bytes, DATA_BWATT.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_AVAR.ADD, Reg_AVAR.COMM_Bytes, DATA_AVAR.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_BVAR.ADD, Reg_BVAR.COMM_Bytes, DATA_BVAR.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_IRMSA.ADD, Reg_IRMSA.COMM_Bytes, DATA_IRMSA.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_IRMSB.ADD, Reg_IRMSB.COMM_Bytes, DATA_IRMSB.Data_Array);
+//
     Read_ADE7953_SPI(Reg_VRMS.ADD, Reg_VRMS.COMM_Bytes, DATA_VRMS.Data_Array);
+//
+//    Read_ADE7953_SPI(0x31C, 4, (unsigned char *)(hzxiede));
+//
+//    Read_ADE7953_SPI(Reg_PERIOD.ADD, Reg_PERIOD.COMM_Bytes, DATA_PERIOD.Data_Array);
+//
+//    Read_ADE7953_SPI(Reg_PFB.ADD, Reg_PFB.COMM_Bytes, DATA_PFB.Data_Array);
 
-    Read_ADE7953_SPI(0x31C, 4, (unsigned char *)(hzxiede));
-
-    Read_ADE7953_SPI(Reg_PERIOD.ADD, Reg_PERIOD.COMM_Bytes, DATA_PERIOD.Data_Array);
-
-    Read_ADE7953_SPI(Reg_PFB.ADD, Reg_PFB.COMM_Bytes, DATA_PFB.Data_Array);
-
-    Read_ADE7953_SPI(Reg_PFA.ADD, Reg_PFA.COMM_Bytes, DATA_PFA.Data_Array);
+//    Read_ADE7953_SPI(Reg_PFA.ADD, Reg_PFA.COMM_Bytes, DATA_PFA.Data_Array);
     YUYE_REG = DATA_VRMS.Data_Array[0] + DATA_VRMS.Data_Array[1] * 256 + DATA_VRMS.Data_Array[2] * 256 * 256;
     TEST_YUYE_VA = YUYE_REG / 17191;
 }
