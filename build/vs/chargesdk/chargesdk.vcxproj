@@ -232,6 +232,7 @@
     <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_progbarmeter.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
+    <ClCompile Include="..\..\..\src\hmi\UpdateSystem.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />

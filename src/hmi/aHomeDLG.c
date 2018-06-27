@@ -476,7 +476,11 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             if (gbsstate == StateGetGunInfo)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTGUN);
-            }          
+            }     
+            if (pechProto->info.ftp.ucDownloadStart == 1)//系统要升级
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPUpdateSystem);
+            }      
             if (bittest(flag_specially, 0))
             {
                 bitclr(flag_specially, 0);
@@ -501,6 +505,10 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         }
         break;
     case MSG_JUMPSELECTGUN:
+        GUI_EndDialog(pMsg->hWin, 0);
+        CreateselectgunDLG();
+        break;
+    case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
         CreateselectgunDLG();
         break;
