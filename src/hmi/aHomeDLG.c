@@ -510,7 +510,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         break;
     case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
-        CreateselectgunDLG();
+        CreateUpdateSystem();
         break;
     default:
         WM_DefaultProc(pMsg);

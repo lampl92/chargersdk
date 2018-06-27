@@ -22,12 +22,12 @@ static WM_HTIMER    _timerUpdateSystem; //更新系统进度
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 200, 20, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_1, 200, 60, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_2, 200, 100, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_3, 200, 140, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_4, 200, 180, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
-    { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 300, 220, 200, 40, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 200, 135, 400, 70, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_1, 200, 205, 400, 70, TEXT_CF_HCENTER, 0x0, 0 },
+//    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_2, 200, 100, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
+//    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_3, 200, 140, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
+//    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_4, 200, 180, 400, 40, TEXT_CF_HCENTER, 0x0, 0 },
+    { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 300, 275, 200, 40, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -40,10 +40,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_INIT_DIALOG:
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), FontColor);
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), FontColor);
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), FontColor);
+       // TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), FontColor);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg30e);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg30e);
+       // TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg30e);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
         PROGBAR_SetValue(hItem, 0);
         PROGBAR_SetMinMax(hItem, 0, 100);
