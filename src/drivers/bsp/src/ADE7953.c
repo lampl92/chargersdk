@@ -10,52 +10,39 @@ extern void Read_ADE7953_SPI_TEST(void);
 extern void setgain(void);
 extern void delay_ms(u16 nms);
 extern int get_ade7953(void);
-#define  DWT_CYCCNT  *(volatile unsigned int *)0xE0001004
-
-
-
-
+#define DWT_CYCCNT *(volatile unsigned int *)0xE0001004
 
 void DelayUS(uint32_t _ulDelayTime)
 {
-  uint32_t tCnt, tDelayCnt;
-	uint32_t tStart;
-		
-	tStart = DWT_CYCCNT;                                     /* ¸Õ½øÈëÊ±µÄ¼ÆÊýÆ÷Öµ */
-	tCnt = 0;
-	tDelayCnt = _ulDelayTime * (SystemCoreClock / 1000000);	 /* ÐèÒªµÄ½ÚÅÄÊý */ 		
+    uint32_t tCnt, tDelayCnt;
+    uint32_t tStart;
 
-	while(tCnt < tDelayCnt)
-	{
-		tCnt = DWT_CYCCNT - tStart; /* Çó¼õ¹ý³ÌÖÐ£¬Èç¹û·¢ÉúµÚÒ»´Î32Î»¼ÆÊýÆ÷ÖØÐÂ¼ÆÊý£¬ÒÀÈ»¿ÉÒÔÕýÈ·¼ÆËã */	
-	}
+    tStart = DWT_CYCCNT; /* åˆšè¿›å…¥æ—¶çš„è®¡æ•°å™¨å€¼ */
+    tCnt = 0;
+    tDelayCnt = _ulDelayTime * (SystemCoreClock / 1000000); /* éœ€è¦çš„èŠ‚æ‹æ•° */
+
+    while (tCnt < tDelayCnt)
+    {
+        tCnt = DWT_CYCCNT - tStart; /* æ±‚å‡è¿‡ç¨‹ä¸­ï¼Œå¦‚æžœå‘ç”Ÿç¬¬ä¸€æ¬¡32ä½è®¡æ•°å™¨é‡æ–°è®¡æ•°ï¼Œä¾ç„¶å¯ä»¥æ­£ç¡®è®¡ç®— */
+    }
 }
-
-
 
 int get_ade7953(void)
 {
-  //  HAL_Init();
-  //  SystemClock_Config(); //ÏµÍ³Ê¼ÖÕÅäÖÃÎª192MHz
-   // SystemCoreClockUpdate();
-	 Init_ADE7953_SPI();
-	setgain();
-	bsp_DelayMS(2000);
- // ConfigAde7953();
-	//while (1)
-	//{
-	 //LED_OFF;
-	// Main_Delay(100);	
- ReadAde7953DataRegister();
-	
-//Read_ADE7953_SPI_TEST();
-	//Main_Delay(100);
-//	}
-	 
+    //  HAL_Init();
+    //  SystemClock_Config(); //ç³»ç»Ÿå§‹ç»ˆé…ç½®ä¸º192MHz
+    // SystemCoreClockUpdate();
+    Init_ADE7953_SPI();
+    setgain();
+    bsp_DelayMS(2000);
+    // ConfigAde7953();
+    //while (1)
+    //{
+    //LED_OFF;
+    // Main_Delay(100);
+    ReadAde7953DataRegister();
+
+    //Read_ADE7953_SPI_TEST();
+    //Main_Delay(100);
+    //	}
 }
- 
-
- 
-
-
-
