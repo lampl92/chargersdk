@@ -303,7 +303,7 @@ void taskappSuspend(void)
 //    extern TaskHandle_t xHandleTaskReadPic;
 //    if (xHandleTaskReadPic != NULL)
 //        vTaskSuspend(xHandleTaskReadPic);
-//    vTaskSuspend(xHandleTaskGUI);
+    //vTaskSuspend(xHandleTaskGUI);
     vTaskSuspend(xHandleTaskGUIBS);
     vTaskSuspend(xHandleTaskTouch);
     vTaskSuspend(xHandleTaskGuidingLights);
