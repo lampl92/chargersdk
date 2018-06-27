@@ -614,11 +614,12 @@ static void CONInit(void)
 }
 void EVSEinit(void)
 {
-	char str[17] = "3000000000000002";
+    char str[17] = "3000000000001018";
+    char key[] = "0123456789abcder";
     uint8_t tmp = 2;
     double dtmp = 41;
     pEVSE = EVSECreate();
-    
+#if 0
 //    tmp = 2;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON); 
 //    tmp = 3;
@@ -635,8 +636,14 @@ void EVSEinit(void)
 //    
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
 //    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
+//    cfg_set_string(pathProtoCfg, key, "%s", jnProtoKey);    
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
-	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
+    
+//    char tmpip[] = "v.daizc.com";
+//    uint16_t tmport = 6999;
+//    cfg_set_string(pathProtoCfg, tmpip, "%s", jnProtoServerIP);
+//    cfg_set_uint16(pathProtoCfg, &tmport, "%s", jnProtoServerPort);
+#endif
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
     
