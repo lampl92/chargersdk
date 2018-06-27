@@ -49,7 +49,7 @@ Purpose     : Config / System dependent externals for GUI
 #include "touchtimer.h"
 
 #define CALEBRATE_DEBUG 0
-#define CALEBRATE_TIME  500
+#define CALEBRATE_TIME  860
 
 #define DOWN_VALID		2	/* 按下30ms 后, 开始统计ADC */
 

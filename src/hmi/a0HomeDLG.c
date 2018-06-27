@@ -369,7 +369,11 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPUpdateSystem);
             } 
-            if (bittest(flag_specially, 0))
+            if (WM_IsVisible(Hwinhelp))
+            {
+                bitclr(flag_specially, 0);
+            }
+            if (bittest(flag_specially, 0) && !WM_IsVisible(Hwinhelp))
             {
                 bitclr(flag_specially, 0);
                 GUI_EndDialog(pMsg->hWin, 0);
