@@ -1980,6 +1980,12 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\super_manager.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\UpdateSystem.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
