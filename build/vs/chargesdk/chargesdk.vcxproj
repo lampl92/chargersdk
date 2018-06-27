@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
@@ -144,8 +145,10 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\Metering.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\SPI_GPIO.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ST_LIS2DH12.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\user_app.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\buzzer.c" />

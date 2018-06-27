@@ -1968,6 +1968,15 @@
     <ClCompile Include="..\..\..\src\hmi\indicator_light.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\Metering.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\SPI_GPIO.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
