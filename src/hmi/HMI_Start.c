@@ -107,6 +107,14 @@ void MainTask(void)
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        home = CreateHome0DLG;
+    }
+    else
+    {
+        home = CreateHomeDLG;    
+    } 
     xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);
     if (calebrate_done != 0xff)
     {
@@ -130,15 +138,7 @@ void MainTask(void)
         xHandleTaskReadPic = NULL;
 //        WM_HideWindow(_hWinAdvertizement);
 //        WM_ShowWindow(cur_win);
-//        CreateKeyBoardWindow();
-        if (pEVSE->info.ucTotalCON == 1)
-        {
-            home = CreateHome0DLG;
-        }
-        else
-        {
-            home = CreateHomeDLG;    
-        }        
+//        CreateKeyBoardWindow();       
         //CreateManagerCommon();   
         home();
         //CreatePwdInput();

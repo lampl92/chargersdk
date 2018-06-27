@@ -165,7 +165,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
 
         while (1)
         {
-            error = ftpReadFile(&ftpContext, buffer, 10, &length, 0);
+            error = ftpReadFile(&ftpContext, buffer, sizeof(buffer), &length, 0);
             if (ctx->on_data != NULL)
             {
                 ctx->on_data(ctx, buffer, length);
