@@ -121,8 +121,8 @@ void MainTask(void)
         WM_MULTIBUF_Enable(1);
 //        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
 //        GUI_Exec();
-        creatememdev();
         createfont();
+        creatememdev();
         //CreateManagerCommon();
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();

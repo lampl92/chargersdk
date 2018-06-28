@@ -255,6 +255,10 @@ extern GUI_MEMDEV_Handle MemdevcardinfoPwdLimted;
 extern GUI_MEMDEV_Handle MemdevcardinfoPwdError;
 extern GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
 
+extern GUI_MEMDEV_Handle MemdevManagerQuitButton;
+extern GUI_MEMDEV_Handle MemdevManagerQuitButtonPress;
+
+
 //extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //extern GUI_MEMDEV_Handle Memdevcardinfostartfail;

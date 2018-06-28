@@ -741,56 +741,61 @@ int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         break;
     default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
     case WIDGET_ITEM_DRAW_BACKGROUND:
-        GUI_GetClientRect(&h);
+        //GUI_GetClientRect(&h);
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
         {
-            GUI_SetColor(0xAAAAAA);                       
-            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-            GUI_SetColor(GUI_BLACK);
-            GUI_SetFont(&fontwryhcg36e);
-            GUI_SetBkColor(0xAAAAAA);
-            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+//            GUI_SetColor(0xAAAAAA);                       
+//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+//            GUI_SetColor(GUI_BLACK);
+//            GUI_SetFont(&fontwryhcg36e);
+//            GUI_SetBkColor(0xAAAAAA);
+//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
         {
-            GUI_SetColor(GUI_RED);                       
-            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-            GUI_SetColor(GUI_BLACK);
-            GUI_SetFont(&fontwryhcg30e);
-            GUI_SetBkColor(GUI_RED);
-            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            GUI_MEMDEV_WriteAt(MemdevManagerQuitButtonPress, quitManagerButtonX, quitManagerButtonY);
+//            GUI_SetColor(GUI_RED);                       
+//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+//            GUI_SetColor(GUI_BLACK);
+//            GUI_SetFont(&fontwryhcg36e);
+//            GUI_SetBkColor(GUI_RED);
+//            GUI_DispStringInRect("x", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
         {
-            GUI_SetColor(0xAAAAAA);                       
-            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-            GUI_SetColor(GUI_BLACK);
-            GUI_SetFont(&fontwryhcg30e);
-            GUI_SetBkColor(0xAAAAAA);
-            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+//            GUI_SetColor(0xAAAAAA);                       
+//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+//            GUI_SetColor(GUI_BLACK);
+//            GUI_SetFont(&fontwryhcg36e);
+//            GUI_SetBkColor(0xAAAAAA);
+//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
         {
-            GUI_SetColor(0xAAAAAA);                       
-            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-            GUI_SetColor(GUI_BLACK);
-            GUI_SetFont(&fontwryhcg30e);
-            GUI_SetBkColor(0xAAAAAA);
-            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+//            GUI_SetColor(0xAAAAAA);                       
+//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+//            GUI_SetColor(GUI_BLACK);
+//            GUI_SetFont(&fontwryhcg36e);
+//            GUI_SetBkColor(0xAAAAAA);
+//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else
         {
-            GUI_SetColor(0xAAAAAA);                       
-            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-            GUI_SetColor(GUI_BLACK);
-            GUI_SetFont(&fontwryhcg30e);
-            GUI_SetBkColor(0xAAAAAA);
-            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            BUTTON_DrawSkinFlex(pDrawItemInfo);
+            //GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+//            GUI_SetColor(0xAAAAAA);                       
+//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+//            GUI_SetColor(GUI_BLACK);
+//            GUI_SetFont(&fontwryhcg36e);
+//            GUI_SetBkColor(0xAAAAAA);
+//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
             //BUTTON_DrawSkinFlex(pDrawItemInfo); 
         }
         break;
     case WIDGET_ITEM_DRAW_TEXT:
-    //		return BUTTON_DrawSkinFlex(pDrawItemInfo);
         return 0;
     }
     return 0;
