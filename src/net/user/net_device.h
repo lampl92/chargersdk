@@ -30,12 +30,12 @@ typedef struct _net_device
 {
     NetInterface *interface;
     char name[16];
+    uint8_t is_dhcp_inited;
     net_state state;
     net_dev_ft init;
     net_dev_ft connect;
     net_dev_ft disconnect;
     net_dev_ft close_hard;
-    
 }net_device_t;
 
 extern net_device_t *net_dev;

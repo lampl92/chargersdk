@@ -88,16 +88,21 @@ error_t net_eth_init(void *pvnet_dev)
 
     if (ifconfig.info.ucDHCPEnable == 1)
     {
-        dhcpClientGetDefaultSettings(&dhcpClientSettings);
-        dhcpClientSettings.interface = interface;
-        error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
-        if (error)
+        if (net_dev->is_dhcp_inited == 0)
         {
-            TRACE_ERROR("DHCP客户端初始化失败!code = %d\r\n", error);
-            return error;
-        }
+            dhcpClientGetDefaultSettings(&dhcpClientSettings);
+            dhcpClientSettings.interface = interface;
+            error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
+            if (error)
+            {
+                TRACE_ERROR("DHCP客户端初始化失败!code = %d\r\n", error);
+                return error;
+            }
+            net_dev->is_dhcp_inited = 1;
+        } 
 
         //启动DHCP客户端
+        dhcpClientStop(&dhcpClientContext);
         error = dhcpClientStart(&dhcpClientContext);
         if (error)
         {
