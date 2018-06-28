@@ -283,7 +283,7 @@ void vTaskEVSEData(void *pvParameters)
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
 
-                xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
+                //xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
                 
                 pCON->order.statOrder = STATE_ORDER_WAITUSE;
                 break;
