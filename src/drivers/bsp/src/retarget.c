@@ -2,6 +2,7 @@
 #include "taskcreate.h"
 #include "cli_main.h"
 #include "ring_buffer.h"
+#include "evse_config.h"
 
 ring_buffer_s *term_rb;
 
