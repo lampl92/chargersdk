@@ -209,8 +209,8 @@ static void _cbDialog1(WM_MESSAGE *pMsg)
         break;
     case WM_INIT_DIALOG:                
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetFont(hItem, &fontwryhcg36e);
-        BUTTON_SetText(hItem, "X");
+//        BUTTON_SetFont(hItem, &fontwryhcg36e);
+//        BUTTON_SetText(hItem, "X");
         BUTTON_SetSkin(hItem, SKIN_buttonManagerQuit);
         //GUI_SetColor(color_manager_out);
        // BUTTON_SetFont(hItem, &fontwryhcg36e);

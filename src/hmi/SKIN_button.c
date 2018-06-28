@@ -733,7 +733,7 @@ int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
-    GUI_RECT h;
+    //GUI_RECT h;
     switch (pDrawItemInfo->Cmd)
     {
     case WIDGET_ITEM_CREATE:
