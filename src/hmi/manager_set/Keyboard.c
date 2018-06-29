@@ -26,7 +26,6 @@ KEYPADStructTypeDef keypad_dev;
 uint8_t ManagerSetOptions = 0;
 uint8_t passwd[16];
 uint8_t *passwdDebug = "01.02.1222";
-uint8_t managerLevel = 1;
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static uint32_t statelog = 0;
@@ -1142,8 +1141,7 @@ static uint8_t Value_Check()
         }
         else if (strcmp(result_input, passwdDebug) == 0)
         {
-            managerLevel = 0;
-            return VALUE_OK_SAV;
+            return VALUE_OK_SAV_SUPER;
         }
         else
         {
@@ -1237,7 +1235,7 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
             break;
         case 29://manager passwd
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnSysVersion);
+            cfg_set_string(pathSysCfg, result_input, "%s", jnSysVersion);
             memset(passwd, '\0', strlen(passwd));
             strncpy(passwd, result_input, sizeof(passwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
@@ -1642,6 +1640,10 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
         {
             CreateManagerCommon();
         }
+        else if (IS_jump == 2)
+        {
+            CreateSuperManager();
+        }
         else
         {
             home();
@@ -1706,7 +1708,8 @@ static void _cbFrame(WM_MESSAGE * pMsg)
     WM_HWIN      hItem;
     int          NCode;
     int          Id;
-
+    uint8_t     result;
+    
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
@@ -1722,10 +1725,15 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             case WM_NOTIFICATION_RELEASED:
                 WM_SetFocus(hMulti);
                 /**< 进入密码、设置值操作 */
-                if (Value_Check() == VALUE_OK_SAV)
+                result = Value_Check();
+                if (result == VALUE_OK_SAV)
                 {
                     //跳页操作
                     Jump_Screen(pMsg->hWin, 0);
+                }
+                else if (result == VALUE_OK_SAV_SUPER)
+                {
+                    Jump_Screen(pMsg->hWin, 2);
                 }
                 break;
             }

@@ -139,34 +139,6 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
     {
     case WM_NOTIFY_PARENT:
         /**< 添加两个滑轮的事件 */
-        if (managerLevel == 0)
-        {
-            switch (WM_GetId(pMsg->hWinSrc))
-            {
-            case MANUALSTART:
-                {
-                    switch (pMsg->Data.v)
-                    {
-                    case WM_NOTIFICATION_CLICKED:
-                        if (manualType == 0)
-                        {
-                            if ((manual_charge(pCon, 1)) == 1)
-                                manualType = 1;
-                        }
-                        else if (manualType == 1)
-                        {
-                            if ((manual_charge(pCon, 0)) == 1)
-                                manualType = 0;                    
-                        }
-                        break;
-                    case WM_NOTIFICATION_RELEASED:
-
-                        break;
-                    }
-                }
-                break;
-            }
-        }
         switch (WM_GetId(pMsg->hWinSrc))
         {
         case GUI_ID_HSCROLL://水平
@@ -439,13 +411,6 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
         //EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
         
-        if (managerLevel == 0)
-        {
-            _aahButton[0][0] = BUTTON_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 11, _FONT_WIDTH*(strlen(conManual)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, MANUALSTART);
-            BUTTON_SetText(_aahButton[0][0], conManual);
-            BUTTON_SetFont(_aahButton[0][0], &SIF24_Font);
-            _aahText[11][0] = _aahButton[0][0];            
-        }
         
         for (x = 0; x < _SYSSTATUE_LINE; x++)
         {

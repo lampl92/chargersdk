@@ -215,7 +215,7 @@
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_states_info_win.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_Info.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_set.c" />
-    <ClCompile Include="..\..\..\src\hmi\manager_set\super_manager.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdLimted.c" />

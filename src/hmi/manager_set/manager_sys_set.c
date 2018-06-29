@@ -608,14 +608,8 @@ static void _cbDialog(WM_MESSAGE *pMsg)
 
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _FONT_WIDTH*(strlen(sysUserPwd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysUserPwd);
         _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*sizeof(pechProto->info.strUserPwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, sizeof(pechProto->info.strUserPwd));
-        if (managerLevel == 0)
-        {
-            EDIT_SetText(_aahEdit[5][0], pechProto->info.strUserPwd);
-        }
-        else
-        {
-            EDIT_SetText(_aahEdit[5][0], "******");            
-        }
+        EDIT_SetText(_aahEdit[5][0], "******");            
+
 
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(sysDispSleepTime)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysDispSleepTime);
         _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("12345678")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("12345678"));
@@ -638,25 +632,13 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         //秘钥
         _aahText[8][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _FONT_WIDTH*(strlen(sysPasswd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysPasswd);
         _aahEdit[8][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 8, _WORD_WIDTH*sizeof(pechProto->info.strKey), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 28, sizeof(pechProto->info.strKey));
-        if (managerLevel == 0)
-        {
-            EDIT_SetText(_aahEdit[8][0], pechProto->info.strKey);                        
-        }
-        else
-        {
-            EDIT_SetText(_aahEdit[8][0], "******");            
-        }
+        EDIT_SetText(_aahEdit[8][0], "******");            
+
         //管理员密码
         _aahText[9][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _FONT_WIDTH*(strlen(sysManagerPwd)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysManagerPwd);
         _aahEdit[9][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 9, _WORD_WIDTH*sizeof(passwd), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 29, sizeof(passwd));
-        if (managerLevel == 0)
-        {
-            EDIT_SetText(_aahEdit[9][0], passwd);
-        }
-        else
-        {
-            EDIT_SetText(_aahEdit[9][0], "******");            
-        }
+        EDIT_SetText(_aahEdit[9][0], "******");            
+
         //温度限制
         _aahText[10][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _FONT_WIDTH*(strlen("温度限制")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "温度限制");
         _aahEdit[10][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 10, _WORD_WIDTH*(strlen("120.668")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 30, strlen("120.468"));

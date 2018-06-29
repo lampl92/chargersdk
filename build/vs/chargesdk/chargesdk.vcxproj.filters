@@ -1971,11 +1971,11 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c">
       <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\manager_set\super_manager.c">
-      <Filter>Source files\hmi\manager_set</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\UpdateSystem.c">
       <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c">
+      <Filter>Source files\hmi\manager_set</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

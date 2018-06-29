@@ -108,7 +108,6 @@ void _cbHomeDialog(WM_MESSAGE *pMsg);
 extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
-extern uint8_t managerLevel;
 extern GUI_HMEM    qr_hmem;
 extern GUI_QR_INFO QR_info;
 extern WM_HWIN _hWinManagerCommon;

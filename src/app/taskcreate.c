@@ -211,7 +211,7 @@ void vTaskTouch(void *pvParameters)
     while(1)
     {
         GUI_TOUCH_Exec();//激活XY轴的测量
-        vTaskDelay(2);
+        vTaskDelay(10);
     }
 }
 
