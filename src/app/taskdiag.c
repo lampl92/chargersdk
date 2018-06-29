@@ -54,18 +54,18 @@ void vTaskEVSEDiag(void *pvParameters)
                 if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
                     pCON->order.ucStartType == defOrderStartType_Remote)
                 {
-                    if (pCON->status.ulSignalAlarm != 0 ||
+                    if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                         pCON->status.ulSignalFault != 0 ||
-                        pEVSE->status.ulSignalAlarm != 0 ||
+                        (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                         (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)
                     {
                         //其他异常清除认证标志
                         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                     }
                 }
-                else if (pCON->status.ulSignalAlarm != 0 ||
+                else if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                     pCON->status.ulSignalFault != 0 ||
-                    pEVSE->status.ulSignalAlarm != 0 ||
+                    (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
                     //异常清除认证标志
