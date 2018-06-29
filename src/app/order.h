@@ -32,12 +32,13 @@
 #define defOrderStopType_Poweroff       9
 #define defOrderStopType_Scram          10
 #define defOrderStopType_SocketError    11
-#define defOrderStopType_UnPlug     12
+#define defOrderStopType_UnPlug         12
 #define defOrderStopType_OverVolt       13
 #define defOrderStopType_UnderVolt      14
 #define defOrderStopType_OverCurr       15
 #define defOrderStopType_UnderCurr      16
 #define defOrderStopType_Knock          17
+#define defOrderStopType_Temp           18
 
 /*支付方式 PayType*/
 #define defOrderPayType_Online          0
