@@ -66,10 +66,10 @@
 #define defEventBitOrderStopTypeFull             BIT_14
 #define defEventBitOrderStopTypeUnPlug           BIT_15
 #define defEventBitOrderStopTypeOffline          BIT_16
+#define defEventBitOrderStopTypeTemp             BIT_17
 
-#define defEventBitOrderMakeFinish               BIT_17  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderMakeFinishToRemote       BIT_18
-#define defEventBitOrderFinishToHMI              BIT_19
+#define defEventBitOrderMakeFinish               BIT_18  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinishToRemote       BIT_19
 
 #define defEventBitOrderTmpTimer                 BIT_20
 

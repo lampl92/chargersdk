@@ -497,6 +497,9 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             case defOrderStopType_Offline:
                 LISTVIEW_SetItemText(hItem, 6, i, "断网结束");
                 break;
+            case defOrderStopType_Temp:
+                LISTVIEW_SetItemText(hItem, 6, i, "过温结束");
+                break;
             case defOrderStopType_Poweroff:
             case defOrderStopType_Knock:
                 LISTVIEW_SetItemText(hItem, 6, i, "异常结束");
