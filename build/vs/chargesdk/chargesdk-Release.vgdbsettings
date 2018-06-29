@@ -38,7 +38,6 @@
             <Value>$(TOOLCHAIN_ROOT)\bin;%PATH%</Value>
           </Record>
         </Records>
-        <EnvironmentSetupFiles />
       </Environment>
       <BackgroundMode xsi:nil="true" />
     </MakeCommandTemplate>
@@ -79,7 +78,7 @@
     <DebugMethod>
       <ID>jlink-jtag</ID>
       <Configuration xsi:type="com.visualgdb.edp.segger.settings">
-        <CommandLine>-select IP=192.168.1.103 -device $$SYS:MCU_ID$$ -speed auto -if SWD</CommandLine>
+        <CommandLine>-select USB -device $$SYS:MCU_ID$$ -speed auto -if SWD</CommandLine>
         <ProgramMode>Enabled</ProgramMode>
         <StartupCommands>
           <string>target remote :$$SYS:GDB_PORT$$</string>
