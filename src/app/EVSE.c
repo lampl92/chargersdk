@@ -628,6 +628,7 @@ void EVSEinit(void)
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
 //    ifconfig.info.ucAdapterSel = 1;
 //    xSysconf.xModule.use_gprs = 2;
+//    cfg_set_uint8(pathNetCfg, &ifconfig.info.ucAdapterSel, "%s", jnNetAdapter);
 //    cfg_set_uint8(pathSysCfg, &xSysconf.xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     
 //    dtmp = 41;
