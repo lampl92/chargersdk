@@ -279,6 +279,12 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
                     pCON->order.ucStopType = defOrderStopType_Offline;
                 }
+                //过温
+                if((uxBitsData & defEventBitOrderStopTypeTemp) == defEventBitOrderStopTypeTemp)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeTemp);
+                    pCON->order.ucStopType = defOrderStopType_Temp;
+                }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
@@ -314,7 +320,6 @@ void vTaskEVSEData(void *pvParameters)
             case STATE_ORDER_STORE:
                 AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;
             case STATE_ORDER_HOLD:

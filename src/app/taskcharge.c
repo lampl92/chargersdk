@@ -417,6 +417,12 @@ void vTaskEVSECharge(void *pvParameters)
                         printf_safe("\e[44;37mFource Unplug!\e[0m\n");
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
                     }
+                    else if ((uxBitsCharge & defEventBitEVSETempOK) != defEventBitEVSETempOK || 
+                        (uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
+                    {
+                        printf_safe("\e[44;37mOver temp stop!\e[0m\n");
+                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeTemp);
+                    }
                     else if ((uxBitsCharge & defEventBitCONAuthed) != defEventBitCONAuthed)
                     {
                         //用户原因停止
