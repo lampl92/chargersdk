@@ -41,8 +41,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 250, 20, 530, 360, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 60, 60, 130, 60, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test", ID_BUTTON_1, 60, 180, 130, 60, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "recover", ID_BUTTON_2, 300, 220, 130, 60, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "reset", ID_BUTTON_3, 420, 316, 130, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "recover", ID_BUTTON_2, 60, 300, 130, 60, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "reset", ID_BUTTON_3, 60, 420, 130, 60, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "stop", ID_BUTTON_4, 325, 400, 120, 60, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "go", ID_BUTTON_5, 590, 400, 120, 60, 0, 0x0, 0 },
 };
@@ -121,10 +121,10 @@ static void _cbDialog_frame_default(WM_MESSAGE *pMsg)
         TEXT_SetText(hItem, "将清空所有配置和记录文件!");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3);
         BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_6), &SIF16_Font);
-        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_3), "确定-重启");
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_6), "确定-重启");
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4);
         BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_7), &SIF16_Font);
-        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_4), "取消");
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_7), "取消");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
