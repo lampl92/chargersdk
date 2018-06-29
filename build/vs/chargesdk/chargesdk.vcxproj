@@ -195,11 +195,8 @@
     <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\b0selectgunDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\CardInfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
     <ClCompile Include="..\..\..\src\hmi\chargedoneinfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\charginginfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
     <ClCompile Include="..\..\..\src\hmi\b1selectpatternbetterDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\creadystartDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\d0nettimeoutDLG.c" />

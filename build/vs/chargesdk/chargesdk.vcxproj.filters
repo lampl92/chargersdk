@@ -1257,15 +1257,6 @@
     <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\HomePage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
