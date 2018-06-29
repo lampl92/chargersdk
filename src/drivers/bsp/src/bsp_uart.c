@@ -273,6 +273,8 @@ void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
 {
     while ((USARTx_BASE->SR & USART_SR_TC) == 0)
         ;
+    while ((USARTx_BASE->SR & USART_SR_TXE) == 0) 
+        ;
     USARTx_BASE->DR = ch;
 }
 
@@ -280,12 +282,16 @@ uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len)
 {
     uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
+#if 1
     while (l > 0)
     {
         l--;
         __uart_putc(uart_driver[handle].UARTx_Handler.Instance, *data);
         data++;
     }
+#else
+    HAL_UART_Transmit(&uart_driver[handle].UARTx_Handler, (uint8_t *)data, len, 100);
+#endif
     osMutexRelease(uart_driver[handle].lock);
 
     return len;
