@@ -60,7 +60,7 @@ static WM_HTIMER  _timerData;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 250, 2, 548, 476, 0, 0x0, 0 },
+   // { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, 250, 2, 548, 476, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 60, 80, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test", ID_BUTTON_1, 60, 170, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "recover", ID_BUTTON_2, 60, 260, 130, 50, 0, 0x0, 0 },
@@ -228,7 +228,7 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
           switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-
+                
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -517,6 +517,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     WM_HWIN hItem;
     int     NCode;
     int     Id;
+    int i;
     uint32_t sizeMul = 0;
     static char strShow[3000] = { 0 };
     static char strTermCtx[105] = { 0 };
@@ -524,18 +525,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        memset(strShow, 0, sizeof(strShow));
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
-        //MULTIEDIT_SetReadOnly(hItem, 1);
-        MULTIEDIT_SetBkColor(hItem, MULTIEDIT_CI_READONLY, GUI_BLACK);
-        MULTIEDIT_SetTextColor(hItem, MULTIEDIT_CI_READONLY, GUI_WHITE);
-        MULTIEDIT_SetFont(hItem, &SIF12_Font);
-        MULTIEDIT_SetWrapWord(hItem);
-        MULTIEDIT_SetBufferSize(hItem, 500);
-        MULTIEDIT_SetMaxNumChars(hItem, 4000);
-        MULTIEDIT_SetInsertMode(hItem, 0);        
-        hScrollMul = SCROLLBAR_CreateAttached(hItem, GUI_ID_VSCROLL);
-        SCROLLBAR_SetWidth(hScrollMul, 50);        
+//        memset(strShow, 0, sizeof(strShow));
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
+//        MULTIEDIT_SetReadOnly(hItem, 1);
+//        MULTIEDIT_SetBkColor(hItem, MULTIEDIT_CI_READONLY, GUI_BLACK);
+//        MULTIEDIT_SetTextColor(hItem, MULTIEDIT_CI_READONLY, GUI_WHITE);
+//        MULTIEDIT_SetFont(hItem, &SIF12_Font);
+//        MULTIEDIT_SetWrapWord(hItem);
+//        MULTIEDIT_SetBufferSize(hItem, 1500);
+//        MULTIEDIT_SetMaxNumChars(hItem, 4000);
+//        hScrollMul = SCROLLBAR_CreateAttached(hItem, GUI_ID_VSCROLL);
+//        SCROLLBAR_SetWidth(hScrollMul, 50);        
         break;
     case WM_PAINT:
         GUI_SetColor(GUI_BLACK);    
@@ -655,45 +655,52 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER :
         if (pMsg->Data.v == _timerData)
         {      
-            extern ring_buffer_s *term_rb;
+//            extern ring_buffer_s *term_rb;
 //            if (ring_buffer_len(term_rb) > 0)
 //            {
 //                //ring_buffer_get(term_rb, strTermCtx, ring_buffer_len(term_rb));
 //                ring_buffer_get(term_rb, strTermCtx, 50);
-//                
+//                            
 //                hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
 //                MULTIEDIT_AddText(hItem, strTermCtx);  
-//                //MULTIEDIT_AddText(hItem, "sahdjasiodibasdbasddsadasdasdasdasdasdasd\n"); 
-//            
+//                        
 //                sizeMul = MULTIEDIT_GetTextSize(hItem);
+//                printf_safe("sizemul %d\n", sizeMul);
 //                if (sizeMul > 1500)
 //                {
-//                    MULTIEDIT_SetBufferSize(hItem, 500);
+//                    printf_safe("CLEAN\n");
+//                    printf_safe("CLEAN\n");
+//                    printf_safe("CLEAN\n");
+//                    printf_safe("CLEAN\n");
+//                    printf_safe("CLEAN\n");
+//                    printf_safe("CLEAN\n");
+//                    MULTIEDIT_SetBufferSize(hItem, 1500);
 //                }
 //                memset(strTermCtx, 0, sizeof(strTermCtx));
-//            }                
-           // if(ring_buffer_len(term_rb) > 0)
-            //{
-                //ring_buffer_get(term_rb, strTermCtx, ring_buffer_len(term_rb));
-               // ring_buffer_get(term_rb, strTermCtx, 50);
-                //strcat(strShow, strTermCtx);
-                strcat(strShow, "sahdjasiodibasdbasddsadasdasdasdasdasdasd\n");
-                hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
-                //MULTIEDIT_SetText(hItem, strShow);  
-                MULTIEDIT_AddText(hItem, "sahdjasiodibasdbasddsadasdasdasdasdasdasd\n"); 
-				//MULTIEDIT_AddText(hItem, strTermCtx);
-                
-                if (strlen(strShow) > 2900)
-                {
-                    memset(strShow, 0, sizeof(strShow));
-                    MULTIEDIT_SetBufferSize(hItem, 500);
-                }
-                memset(strTermCtx, 0, sizeof(strTermCtx));
-           // } 
-
-            
-            
-            WM_RestartTimer(pMsg->Data.v, 100);
+//            }               
+//#if 0
+//                       // if(ring_buffer_len(term_rb) > 0)
+//                        //{
+//                //ring_buffer_get(term_rb, strTermCtx, ring_buffer_len(term_rb));
+//                ring_buffer_get(term_rb, strTermCtx, 50);
+//                strcat(strShow, strTermCtx);
+//                //strcat(strShow, "sahdjasiodibasdbasddsadasdasdasdasdasdasd\n");
+//                hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
+//                //MULTIEDIT_SetText(hItem, strShow);  
+//                //MULTIEDIT_AddText(hItem, "sahdjasiodibasdbasddsadasdasdasdasdasdasd\n"); 
+//			    MULTIEDIT_AddText(hItem, strTermCtx);
+//                
+//                if (strlen(strShow) > 1500)
+//                {
+//                    memset(strShow, 0, sizeof(strShow));
+//                    MULTIEDIT_SetBufferSize(hItem, 1500);
+//                }
+//                memset(strTermCtx, 0, sizeof(strTermCtx));
+//           // } 
+//
+//#endif
+//            
+//            WM_RestartTimer(pMsg->Data.v, 100);
         }
         break;
     default:
