@@ -745,20 +745,22 @@ void vTaskEVSERemote(void *pvParameters)
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
-            
-            {   //丢失9个心跳停止充电
-                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 9) 
+            {   //如果是APP启动，丢失9个心跳停止充电
+                if((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 1) 
                 {
                     for (i = 0; i < ulTotalCON; i++)
                     {
                         pCON = CONGetHandle(i);
-                        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                        if (pCON->order.ucStartType == defOrderStartType_Remote)
                         {
-                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                            if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                            {
+                                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                                remotestat = REMOTE_NO;
+                                break;
+                            }
                         }
                     }
-                    remotestat = REMOTE_NO;
-                    break;
                 }
             }
             {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断ConnectOK事件
@@ -792,8 +794,8 @@ void vTaskEVSERemote(void *pvParameters)
             vTaskSuspend(xHandleTaskRemoteCmdProc); //停止协议处理任务
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
-            remotestat = REMOTE_NO;
-            printf_safe("net offline ,remote state -> remote no!!\n");
+            remotestat = REMOTE_RECONNECT;
+            printf_safe("net offline ,remote state -> remote reconnect!!\n");
             break;
         default:
             break;
