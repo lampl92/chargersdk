@@ -745,8 +745,8 @@ void vTaskEVSERemote(void *pvParameters)
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
-            {   //如果是APP启动，丢失9个心跳停止充电
-                if((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 1) 
+            {   //如果是APP启动，丢失60个心跳停止充电
+                if((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 60) 
                 {
                     for (i = 0; i < ulTotalCON; i++)
                     {
