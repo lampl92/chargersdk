@@ -733,7 +733,7 @@ int SKIN_buttonPwdQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
 {
     WM_HWIN hWin;
-    //GUI_RECT h;
+    GUI_RECT h;
     switch (pDrawItemInfo->Cmd)
     {
     case WIDGET_ITEM_CREATE:
@@ -741,46 +741,46 @@ int SKIN_buttonManagerQuit(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo)
         break;
     default: return BUTTON_DrawSkinFlex(pDrawItemInfo);//emWin默认控件绘制函数
     case WIDGET_ITEM_DRAW_BACKGROUND:
-        //GUI_GetClientRect(&h);
+        GUI_GetClientRect(&h);
         if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_ENABLED)
         {
-            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
-//            GUI_SetColor(0xAAAAAA);                       
-//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-//            GUI_SetColor(GUI_BLACK);
-//            GUI_SetFont(&fontwryhcg36e);
-//            GUI_SetBkColor(0xAAAAAA);
-//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            //GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg36e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_PRESSED)
         {
-            GUI_MEMDEV_WriteAt(MemdevManagerQuitButtonPress, quitManagerButtonX, quitManagerButtonY);
-//            GUI_SetColor(GUI_RED);                       
-//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-//            GUI_SetColor(GUI_BLACK);
-//            GUI_SetFont(&fontwryhcg36e);
-//            GUI_SetBkColor(GUI_RED);
-//            GUI_DispStringInRect("x", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+           // GUI_MEMDEV_WriteAt(MemdevManagerQuitButtonPress, quitManagerButtonX, quitManagerButtonY);
+            GUI_SetColor(GUI_RED);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg36e);
+            GUI_SetBkColor(GUI_RED);
+            GUI_DispStringInRect("x", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_FOCUSSED)
         {
-            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
-//            GUI_SetColor(0xAAAAAA);                       
-//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-//            GUI_SetColor(GUI_BLACK);
-//            GUI_SetFont(&fontwryhcg36e);
-//            GUI_SetBkColor(0xAAAAAA);
-//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            //GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg36e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else if (pDrawItemInfo->ItemIndex == BUTTON_SKINFLEX_PI_DISABLED)
         {
-            GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
-//            GUI_SetColor(0xAAAAAA);                       
-//            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
-//            GUI_SetColor(GUI_BLACK);
-//            GUI_SetFont(&fontwryhcg36e);
-//            GUI_SetBkColor(0xAAAAAA);
-//            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+            //GUI_MEMDEV_WriteAt(MemdevManagerQuitButton, quitManagerButtonX, quitManagerButtonY);
+            GUI_SetColor(0xAAAAAA);                       
+            GUI_FillRoundedRect(pDrawItemInfo->x0, pDrawItemInfo->y0, pDrawItemInfo->x1, pDrawItemInfo->y1, 3);
+            GUI_SetColor(GUI_BLACK);
+            GUI_SetFont(&fontwryhcg36e);
+            GUI_SetBkColor(0xAAAAAA);
+            GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
         }
         else
         {

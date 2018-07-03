@@ -664,37 +664,37 @@ int creatememdev(void)
         IS_BMP_OK(Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb));
     }
 
-    MemdevManagerQuitButton = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
-    GUI_MEMDEV_Select(MemdevManagerQuitButton);
-    h.x0 = 20;
-    h.y0 = 20;
-    h.x1 = 70;
-    h.y1 = 70;
-    GUI_SetColor(GUI_BLACK);    
-    GUI_FillRect(0, 0, 90, 90);
-    GUI_SetColor(0xAAAAAA);                       
-    GUI_FillRoundedRect(20, 20, 70, 70, 3);
-    GUI_SetColor(GUI_BLACK);
-    GUI_SetFont(&fontwryhcg36e);
-    GUI_SetBkColor(0xAAAAAA);
-    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
-    GUI_MEMDEV_Select(0);
-    
-    MemdevManagerQuitButtonPress = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
-    GUI_MEMDEV_Select(MemdevManagerQuitButtonPress);
-    h.x0 = 20;
-    h.y0 = 20;
-    h.x1 = 70;
-    h.y1 = 70;
-    GUI_SetColor(GUI_BLACK);    
-    GUI_FillRect(0,0,90,90);
-    GUI_SetColor(GUI_RED);                       
-    GUI_FillRoundedRect(20, 20, 70, 70, 3);
-    GUI_SetColor(GUI_BLACK);
-    GUI_SetFont(&fontwryhcg30e);
-    GUI_SetBkColor(GUI_RED);
-    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
-    GUI_MEMDEV_Select(0);
+//    MemdevManagerQuitButton = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
+//    GUI_MEMDEV_Select(MemdevManagerQuitButton);
+//    h.x0 = 20;
+//    h.y0 = 20;
+//    h.x1 = 70;
+//    h.y1 = 70;
+//    GUI_SetColor(GUI_BLACK);    
+//    GUI_FillRect(0, 0, 90, 90);
+//    GUI_SetColor(0xAAAAAA);                       
+//    GUI_FillRoundedRect(20, 20, 70, 70, 3);
+//    GUI_SetColor(GUI_BLACK);
+//    GUI_SetFont(&fontwryhcg36e);
+//    GUI_SetBkColor(0xAAAAAA);
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_MEMDEV_Select(0);
+//    
+//    MemdevManagerQuitButtonPress = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
+//    GUI_MEMDEV_Select(MemdevManagerQuitButtonPress);
+//    h.x0 = 20;
+//    h.y0 = 20;
+//    h.x1 = 70;
+//    h.y1 = 70;
+//    GUI_SetColor(GUI_BLACK);    
+//    GUI_FillRect(0,0,90,90);
+//    GUI_SetColor(GUI_RED);                       
+//    GUI_FillRoundedRect(20, 20, 70, 70, 3);
+//    GUI_SetColor(GUI_BLACK);
+//    GUI_SetFont(&fontwryhcg30e);
+//    GUI_SetBkColor(GUI_RED);
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_MEMDEV_Select(0);
     
     //下面一共35个文件
     IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));

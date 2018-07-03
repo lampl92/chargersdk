@@ -31,8 +31,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] =
 {
-    { WINDOW_CreateIndirect, "Home", ID_WINDOW_1, 710, 0, 90, 90, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 0, 0, 90, 90, 0, 0x0, 0 },
+    { WINDOW_CreateIndirect, "Home", ID_WINDOW_1, 730, 10, 50, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "quit", ID_BUTTON_0, 0, 0, 50, 50, 0, 0x0, 0 },
 };
 
 static void updatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
