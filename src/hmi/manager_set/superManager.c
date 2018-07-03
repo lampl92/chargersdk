@@ -232,7 +232,10 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 pCon = CONGetHandle(0);
-                manual_charge(pCon, 1);
+                if (pCon != NULL)
+                {
+                    manual_charge(pCon, 1);
+                }
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -247,7 +250,10 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 pCon = CONGetHandle(0);
-    			manual_charge(pCon, 0);
+    			if (pCon != NULL)
+    			{
+        			manual_charge(pCon, 0);
+    			}
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -262,7 +268,10 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 pCon = CONGetHandle(1);
-                manual_charge(pCon, 1);
+                if (pCon != NULL)
+                {
+                    manual_charge(pCon, 1);
+                }
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -277,7 +286,10 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
                 pCon = CONGetHandle(1);
-                manual_charge(pCon, 0);
+                if (pCon != NULL)
+                {
+                    manual_charge(pCon, 0);
+                }
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
