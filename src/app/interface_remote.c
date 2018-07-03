@@ -565,7 +565,7 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         //[0] 有无卡
         if (pbuff[0] != pOrder->ucStartType)
         {
-            printf_safe("启动类型不一致\n");
+            printf_safe("CON%d 启动类型不一致\n", EchRemoteIDtoCONID(pbuff[9]));
             printf_safe("-Remote Type: %d \n", pbuff[0]);
             printf_safe("-Local  Type: %d \n", pOrder->ucStartType);
             errcode = ERR_REMOTE_PARAM;
