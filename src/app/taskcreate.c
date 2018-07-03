@@ -67,7 +67,7 @@
 
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
-#define defPRIORITY_TaskGuidingLights       3
+#define defPRIORITY_TaskGuidingLights       4
 #define defPRIORITY_TaskGUIBS               5
 #define defPRIORITY_TaskCLI                 16  //1. 原优先级2，修改16保证执行添加订单时订单存储被高优先级任务打断。2017年12月15日
 
