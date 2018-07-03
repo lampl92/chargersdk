@@ -9,8 +9,9 @@
 #include "errorcode.h"
 #include "yaffsfs.h"
 #include "factorycfg.h"
+#include "libEcharge/ech_globals.h"
 #include <string.h>
-
+//程序中的Order枪号从0开始，文件中的枪号从1开始
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsNewOrderCfgObj;
@@ -18,7 +19,7 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
     jsNewOrderCfgObj = cJSON_CreateObject();
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartType, cJSON_CreateNumber(pOrder->ucStartType));                            //有卡无卡标志
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateString(pOrder->strOrderSN));                               //1 交易流水
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(pOrder->ucCONID + 1));                                //2 充电桩接口
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(EchCONIDtoRemoteID(pOrder->ucCONID, pEVSE->info.ucTotalCON)));                                 //2 充电桩接口
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(pOrder->strCardID));                                             //3 卡号
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartEnergy, cJSON_CreateNumber(pOrder->dStartEnergy));                           //4 充电前电能总示值
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStopEnergy, cJSON_CreateNumber(pOrder->dStartEnergy + pOrder->dTotalEnergy));  //5 充电后电能总示值
@@ -150,6 +151,7 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     cJSON *jsParent;
     ErrorCode_t errcode;
     double dStopEnergy;
+    uint8_t remote_id;
     
     errcode = ERR_NO;
     jsParent = GetCfgObj(path, &errcode);
@@ -160,8 +162,8 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     
     GetOrderCfgItem(jsParent, jnOrderStartType, &pOrder->ucStartType, ParamTypeU8);
     GetOrderCfgItem(jsParent, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
-    GetOrderCfgItem(jsParent, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
-    pOrder->ucCONID = pOrder->ucCONID - 1;
+    GetOrderCfgItem(jsParent, jnOrderCONID, &remote_id, ParamTypeU8);
+    pOrder->ucCONID = EchRemoteIDtoCONID(remote_id);
     GetOrderCfgItem(jsParent, jnOrderCardID, pOrder->strCardID, ParamTypeString);
     GetOrderCfgItem(jsParent, jnOrderStartEnergy, &pOrder->dStartEnergy, ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderStopEnergy, &dStopEnergy, ParamTypeDouble);
