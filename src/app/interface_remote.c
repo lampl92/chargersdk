@@ -58,7 +58,7 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
     if (xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
     {
         cur = gdsl_list_cursor_alloc(pCMD->plRecvCmd);
-        gdsl_list_cursor_move_to_tail(cur); //只要链表中最新接收的协议, 因此从tail开始
+        gdsl_list_cursor_move_to_head(cur);
         while ((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
             if (EchRemoteIDtoCONID(pechCmdElem->pbuff[con_id_pos]) == con_id)
@@ -68,9 +68,9 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
                 *pLen = pechCmdElem->len;
                 gdsl_list_cursor_delete(cur);
                 errcode = ERR_NO;
-                break;
+                continue;//旧的head删除，只提取最新的（插入到tail）的协议
             }
-            gdsl_list_cursor_step_backward(cur);
+            gdsl_list_cursor_step_forward(cur);
         }
         gdsl_list_cursor_free(cur);
         xSemaphoreGive(pCMD->xMutexCmd);
@@ -439,6 +439,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
             //pbuff[13] 操作 1启动，2停止
             if(pbuff[13] == 1)
             {
+                pCON->order.ucCONID = id;//启动枪号
+                
                 //pbuff[4...11] 交易流水号
                 HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
 
