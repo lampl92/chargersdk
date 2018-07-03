@@ -481,11 +481,11 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPUpdateSystem);
             }      
-            if (WM_IsVisible(Hwinhelp) && WM_IsWindow(Hwinhelp))
+            if ((WM_IsVisible(Hwinhelp) && WM_IsWindow(Hwinhelp)) || BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0)) || BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1)))
             {
                 bitclr(flag_specially, 0);
             }
-            if (bittest(flag_specially, 0) && !WM_IsVisible(Hwinhelp))
+            if (bittest(flag_specially, 0) && !WM_IsVisible(Hwinhelp) && !BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0))&&!BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1)))
             {
                 bitclr(flag_specially, 0);
                 GUI_EndDialog(pMsg->hWin, 0);
