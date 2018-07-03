@@ -252,6 +252,11 @@ static void WaitBecomeCharging()
         gbsstate = StateChargingOk;
         return;
     }
+    else if (pCON->state == STATE_CON_IDLE)
+    {
+        gbsstate = StateHome;
+        return;
+    }
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
