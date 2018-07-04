@@ -70,9 +70,9 @@
 #define defMonitorFreqUpper         51  //(Hz)
 #define defMonitorFreqPeriod        0.5 //(Hz)
 
-#define defCfgOrderMaxItem          50
+#define defCfgOrderMaxItem          100
 #define defCfgOrderRemoveOldItem    10
-#define defCfgLogMaxItem            100
+#define defCfgLogMaxItem            200
 #define defCfgLogRemoveOldItem      10
 
 #endif /* EVSE_CONFIG_H_INCLUDED */

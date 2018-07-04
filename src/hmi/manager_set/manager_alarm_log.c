@@ -204,6 +204,8 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
     struct tm *ts;
     char buf[80] = "\0";
     _MANAGERDate ts_start, ts_end;
+    char strSignalON[16] = { 0 };//1
+    char strSignalOFF[16] = { 0 };//0
 
     if (0 == log_type)   //故障记录
         {
@@ -319,15 +321,23 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
                 {
                 case 0:
                     LISTVIEW_SetItemText(hItem, 3, i, "状态");
+                    sprintf(strSignalOFF, "NO");
+                    sprintf(strSignalON, "YES");
                     break;
                 case 1:
                     LISTVIEW_SetItemText(hItem, 3, i, "警告");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
                 case 2:
                     LISTVIEW_SetItemText(hItem, 3, i, "严重警告");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
                 case 3:
                     LISTVIEW_SetItemText(hItem, 3, i, "故障");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
                 }
 
@@ -335,10 +345,10 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
                 switch (jsItem->valueint)
                 {
                 case 0:
-                    LISTVIEW_SetItemText(hItem, 4, i, "消除");
+                    LISTVIEW_SetItemText(hItem, 4, i, strSignalOFF);
                     break;
                 case 1:
-                    LISTVIEW_SetItemText(hItem, 4, i, "发生");
+                    LISTVIEW_SetItemText(hItem, 4, i, strSignalON);
                     break;
                 }
 

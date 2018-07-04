@@ -26,6 +26,7 @@ void vTaskEVSEData(void *pvParameters)
     uint32_t ulSignalPoolXor;
     uint32_t ulSignalCONAlarmOld_CON[defMaxCON] = { 0 };
     uint32_t ulSignalCONFaultOld_CON[defMaxCON] = { 0 };
+    uint32_t ulSignalEVSEStateOld = 0;
     uint32_t ulSignalEVSEAlarmOld = 0;
     uint32_t ulSignalEVSEFaultOld = 0;
     EventBits_t uxBitsTimer;
@@ -365,7 +366,30 @@ void vTaskEVSEData(void *pvParameters)
             cfg_set_string(pathProtoCfg, pechProto->info.strNewKey, "%s", jnProtoKey);
             cfg_set_uint32(pathProtoCfg, &max_time, "%s", jnProtoNewKeyChangeTime);
         }
-        
+        /********** 状态记录 **************/
+        //proc evse state
+        ulSignalPoolXor = ulSignalEVSEStateOld ^ pEVSE->status.ulSignalState;
+        if (ulSignalPoolXor != 0)
+        {
+            for (i = 0; i < 32; i++)
+            {
+                if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                {
+                    switch (1 << i)
+                    {
+                    case defSignalEVSE_State_Network_Online: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Online");
+                        break;
+                    case defSignalEVSE_State_Network_Logined: 
+                        AddEVSELog(pathEVSELog, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Login");
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+        }//if (ulSignalPoolXor != 0)
+        ulSignalEVSEStateOld = pEVSE->status.ulSignalState;    //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
         /********** 告警记录 **************/
 #if EVSE_USING_STORE_LOG
         for (id = 0; id < ulTotalCON; id++)
