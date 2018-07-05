@@ -297,8 +297,6 @@ void Modem_Poll(DevModem_t *pModem)
             switch (pModem->status.eConnect)
             {
             case CONNECT_OK:
-                xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
             case CONNECT_FAIL:
@@ -339,8 +337,6 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_TCP_CLOSE:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             pModem->close_TCP(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -509,8 +505,6 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_ERR:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             uart_close(pModem->uart_handle);
             pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
             ret = pModem->soft_reset(pModem);

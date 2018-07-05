@@ -54,11 +54,9 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     {
     case NET_STATE_TCP_ON:
         pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
-        xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
         break;
     case NET_STATE_DISCONNECT:
         pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-        xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
         break;
     }
     

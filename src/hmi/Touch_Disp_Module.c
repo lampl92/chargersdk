@@ -142,8 +142,6 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 
     memset(strCSQ, '\0', strlen(strCSQ));
     sprintf(strCSQ, "信号:%.2d", pModem->status.ucSignalQuality);
-    //uxBits = xEventGroupGetBits(xHandleEventTCP);
-    //if((uxBits & defEventBitTCPConnectOK) != defEventBitTCPConnectOK)
 
     if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {

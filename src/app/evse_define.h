@@ -80,12 +80,6 @@
 #define defEventBitRemoteError          BIT_0
 
 /*------xHandleEventTCP*/
-#define defEventBitTCPReConnect         BIT_2
-#define defEventBitTCPClientSendReq     BIT_3
-#define defEventBitTCPClientSendOK      BIT_4
-#define defEventBitTCPConnectOK         BIT_5 //接收不清除， 服务器连接成功
-#define defEventBitTCPConnectFail       BIT_6 //接收主动清除
-#define defEventBitTCPClientFlushBuff   BIT_8
 #define defEventBitPPPDiagOK            BIT_9
 #define defEventBitPPPClosed            BIT_10
 

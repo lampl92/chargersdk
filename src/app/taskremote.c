@@ -257,10 +257,7 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPConnectOK,
-                                         pdFALSE, pdTRUE, 10000);
-            if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+            if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) == defSignalEVSE_State_Network_Online)
             {
                 RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
@@ -763,20 +760,14 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                 }
             }
-            {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断ConnectOK事件
+            {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断Online
                 uxBits = xEventGroupGetBits(xHandleEventRemote);
                 if ((uxBits & defEventBitRemoteError) == defEventBitRemoteError)
                 {
-                    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
                     break;
                 }
             }
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                defEventBitTCPConnectOK,
-                pdFALSE,
-                pdTRUE,
-                10000);
-            if ((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+            if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) == defSignalEVSE_State_Network_Online)
             {
                 RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;

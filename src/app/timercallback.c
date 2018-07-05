@@ -51,7 +51,6 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     if(uxTimerID == defTIMERID_RemoteHeartbeat)//15000
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
-        xEventGroupSetBits(xHandleEventTCP,defEventBitTCPClientFlushBuff);
     }
     if(uxTimerID == defTIMERID_RemoteStatus)//120000
     {
