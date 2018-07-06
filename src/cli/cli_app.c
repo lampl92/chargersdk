@@ -20,7 +20,7 @@ void cli_hello_fnt(int argc, char **argv)
     //eth_main();
     for (i = 0; i < 100000; i++)
     {
-        printTime(time(NULL));
+        //printTime(time(NULL));
         //test_cfg_set(i);
     }
     //test_cfg_get();
