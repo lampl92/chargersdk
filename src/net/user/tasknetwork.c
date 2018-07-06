@@ -58,6 +58,8 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     case NET_STATE_DISCONNECT:
         pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
         break;
+    default:
+        break;
     }
     
     net_dev->state = new_state;
