@@ -23,7 +23,6 @@
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 
 //#define DEBUG_NO_TASKREMOTE
-#define defRemoteMaxDelay       60000
 
 RemoteState_t remotestat;
 
@@ -386,7 +385,7 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
-                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 3)//心跳丢失3个进行重连
+                if ((time(NULL) - last_heart_stamp) * 1000 / (pechProto->info.ulHeartBeatCyc_ms + 5000) >= 3)//心跳丢失3个进行重连
                 {
                     printf_safe("\n\nHeart LOST!!!!\n\n");
                     remotestat = REMOTE_ERROR;
@@ -764,6 +763,7 @@ void vTaskEVSERemote(void *pvParameters)
                 uxBits = xEventGroupGetBits(xHandleEventRemote);
                 if ((uxBits & defEventBitRemoteError) == defEventBitRemoteError)
                 {
+                    vTaskDelay(1000);
                     break;
                 }
             }
