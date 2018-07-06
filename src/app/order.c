@@ -167,7 +167,7 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     if(statOrder == STATE_ORDER_FINISH)
     {
-        pPeriodStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
+        pPeriodStatus->tEndTime = now; //pPeriodStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
     }
 
     /*2. 汇总时段*/
