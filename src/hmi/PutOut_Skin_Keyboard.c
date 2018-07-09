@@ -24,6 +24,14 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
     { BUTTON_CreateIndirect, "确定", ID_BUTTON_0, 125, 110, 80, 50, 0, 0x0, 0 },
 };
 
+int flag_password_error_prompt = 0;
+WM_HWIN hwin_password;       //密码错误提醒
+WM_HWIN hwin_password_text;  //密码错误提醒text
+WM_HWIN hwin_password_button;  //密码错误提醒button
+WM_HWIN hFrame;  //键盘
+WM_HWIN hMulti = 0;         //多行文本
+WM_HWIN htmpChild;        //用于存放传递过来的子窗口句柄
+WM_HWIN htmpBK;           //用于存放传递过来的背景窗口句柄
 //密码错误窗口回调
 static void _cbDialog_frame(WM_MESSAGE *pMsg)
 {
@@ -34,13 +42,13 @@ static void _cbDialog_frame(WM_MESSAGE *pMsg)
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
-        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
-        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_0);
-        TEXT_SetFont(hItem, &SIF16_Font);
-        TEXT_SetText(hItem, "密码错误!");
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_0), &SIF16_Font);
-        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), "OK");
+//        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+//        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_0);
+//        TEXT_SetFont(hItem, &SIF16_Font);
+//        TEXT_SetText(hItem, "密码错误!");
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_0), &SIF16_Font);
+//        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), "OK");
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -50,7 +58,17 @@ static void _cbDialog_frame(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                GUI_EndDialog(pMsg->hWin, 0);
+                WM_DeleteWindow(hwin_password_text);
+                WM_DeleteWindow(hwin_password_button);
+                WM_DeleteWindow(hwin_password);
+                //WM_ShowWindow(hFrame);
+                MULTIEDIT_SetReadOnly(hMulti, 0);
+                MULTIEDIT_EnableBlink(hMulti, 500, 1);   //开启光标,周期500ms
+                MULTIEDIT_SetInsertMode(hMulti, 1);     //开启插入模式
+                MULTIEDIT_SetFont(hMulti, &SIF24_Font);
+                MULTIEDIT_SetText(hMulti, "");
+                WM_SetFocus(hMulti);
+                flag_password_error_prompt = 0;
                 break;
             default:
                 break;
@@ -60,10 +78,6 @@ static void _cbDialog_frame(WM_MESSAGE *pMsg)
     }
 }
 
-WM_HWIN hwin_password;    //密码提醒
-WM_HWIN hMulti = 0;       //多行文本
-WM_HWIN htmpChild;      //用于存放传递过来的子窗口句柄
-WM_HWIN htmpBK;         //用于存放传递过来的背景窗口句柄
 static uint8_t htmpID;  //用于存放传递过来的设置句柄ID
 BUTTON_Handle _aahButtonOk;
 BUTTON_Handle _aahButtonCancel;
@@ -520,8 +534,11 @@ void numkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
         }
         else
         {
-            GUI_StoreKeyMsg(c, 1);				//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);				//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)
+            {
+                GUI_StoreKeyMsg(c, 1);   				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0);   				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -1126,8 +1143,13 @@ static uint8_t Value_Check()
     case LOGIN_PASSWD:
         if (strlen(result_input) == 0)
         {
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
-            BUTTON_SetText(_aahButtonOk, "确定");
+//            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+//            BUTTON_SetText(_aahButtonOk, "确定");
+            MULTIEDIT_EnableBlink(hMulti, 500, 1);      //开启光标,周期500ms
+            MULTIEDIT_SetInsertMode(hMulti, 1);        //开启插入模式
+            MULTIEDIT_SetFont(hMulti, &SIF24_Font);
+            MULTIEDIT_SetText(hMulti, "");
+            WM_SetFocus(hMulti);
             return VALUE_ERROR;
         }
         else if (strcmp(result_input, passwd) == 0)
@@ -1143,16 +1165,29 @@ static uint8_t Value_Check()
         {
             //            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED, GUI_RED);
             //            BUTTON_SetText(_aahButtonOk, "密码错误");
-            if(!WM_IsWindow(hwin_password))
+            if(flag_password_error_prompt == 0)
             {
-                hwin_password = GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame, WM_HBKWIN, 0, 0);
+                hwin_password = FRAMEWIN_CreateEx(250, 100, 300, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "！！！！", _cbDialog_frame);
+                FRAMEWIN_SetTextColor(hwin_password, GUI_RED);
+                FRAMEWIN_SetFont(hwin_password, &SIF24_Font);
+                //FRAMEWIN_SetClientColor(hwin_password, GUI_WHITE);
+
+                //创建一个multi edit(多行文本小工具)小工具
+                hwin_password_text = TEXT_CreateEx(0, 30, 300, 50, WM_GetClientWindow(hwin_password), WM_CF_SHOW, TEXT_CF_HCENTER | TEXT_CF_VCENTER, ID_TEXT_0, "密码错误");
+                TEXT_SetFont(hwin_password_text, &SIF24_Font);
+
+                _aahButtonOk = BUTTON_CreateEx(100, 100, 100, 60, WM_GetClientWindow(hwin_password), WM_CF_SHOW, 0, ID_BUTTON_0);
+                BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
+                //                BUTTON_SetTextAlign(_aahButtonOk, GUI_TA_HCENTER | GUI_TA_VCENTER);
+                //                BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
+                //                BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+                                BUTTON_SetText(_aahButtonOk, "OK");
+                flag_password_error_prompt = 1;
             }
             MULTIEDIT_SetText(hMulti, "");
-//            for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
-//            {
-//                GUI_StoreKeyMsg('\b', 1);
-//                GUI_StoreKeyMsg('\b', 0);
-//            }
+            //            MULTIEDIT_EnableBlink(hMulti, 500, 0);   //关闭光标,周期500ms
+            //            MULTIEDIT_SetInsertMode(hMulti, 0);     //关闭插入模式
+            MULTIEDIT_SetReadOnly(hMulti, 1);
             return VALUE_ERROR;
         }
         break;
@@ -1597,12 +1632,15 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                WM_SetFocus(hMulti);
-                /**< 进入密码、设置值操作 */
-                if (Value_Check() == VALUE_OK_SAV)
+                if (flag_password_error_prompt == 0)
                 {
-                    //跳页操作
-                    Jump_Screen(pMsg->hWin, 0);
+                    WM_SetFocus(hMulti);
+                    /**< 进入密码、设置值操作 */
+                    if (Value_Check() == VALUE_OK_SAV)
+                    {
+                        //跳页操作
+                        Jump_Screen(pMsg->hWin, 0);
+                    }
                 }
                 break;
             }
@@ -1611,20 +1649,22 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                Jump_Screen(pMsg->hWin, 1);
-                
-                if((htmpChild == _hWinManagerSysSet)
-                    &&(ManagerSetOptions != LOGIN_PASSWD))
+                if (flag_password_error_prompt == 0)
                 {
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
-                    WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);                    
+                    Jump_Screen(pMsg->hWin, 1);                
+                    if ((htmpChild == _hWinManagerSysSet)
+                        &&(ManagerSetOptions != LOGIN_PASSWD))
+                    {
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
+                        WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);                    
+                    }   
                 }
                 break;
             }
