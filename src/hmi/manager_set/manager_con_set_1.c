@@ -205,7 +205,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(pMsg->hWin);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(CONSET_VALUE, 22, pMsg->hWin, _hWinManagerCommon, conVolatageUpperLimits, "178-280");
+                Keypad_GetValueTest(CONSET_VALUE, 22, pMsg->hWin, _hWinManagerCommon, conVolatageUpperLimits, "lowest-280");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
                 //                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
@@ -217,7 +217,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 WM_HideWindow(pMsg->hWin);
                 WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(CONSET_VALUE, 23, pMsg->hWin, _hWinManagerCommon, conVolatageLowerLimits, "100-240");
+                Keypad_GetValueTest(CONSET_VALUE, 23, pMsg->hWin, _hWinManagerCommon, conVolatageLowerLimits, "100-highest");
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -239,9 +239,8 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
                                 WM_HideWindow(pMsg->hWin);
-                                WM_HideWindow(_hWinManagerCommon);
-            
-                                Keypad_GetValueTest(CONSET_VALUE, 25, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "32,63");
+                                WM_HideWindow(_hWinManagerCommon);           
+                                Keypad_GetValueTest(CONSET_VALUE, 25, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "1相max:32,3相max:63");
             }
             break;
         case 26:
@@ -249,7 +248,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                                 WM_HideWindow(pMsg->hWin);
                                 WM_HideWindow(_hWinManagerCommon);            
-                                Keypad_GetValueTest(CONSET_VALUE, 26, pMsg->hWin, _hWinManagerCommon, conRatedPower, "7,41");
+                Keypad_GetValueTest(CONSET_VALUE, 26, pMsg->hWin, _hWinManagerCommon, conRatedPower, "1相max:7,3相max:41");
             }
             break;
         }

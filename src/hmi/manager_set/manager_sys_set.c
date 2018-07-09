@@ -289,7 +289,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
             {
                 WM_HideWindow(_hWinManagerSysSet);
                 WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "-40-120");
+                Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "0-120");
             }
             break;
         case 31:
@@ -453,7 +453,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         EDIT_SetText(_aahEdit[8][0], "******");
         break;
     case MSG_MANAGERSETID9:
-        
+        EDIT_SetText(_aahEdit[9][0], "******");
         break;    
     case MSG_MANAGERSETIDA:
         sprintf(_tmpBuff, "%.1f", pEVSE->info.dACTempUpperLimits);
