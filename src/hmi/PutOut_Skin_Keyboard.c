@@ -12,6 +12,55 @@
 #define lcd_height 480
 #define lcd_width 800
 
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x95)
+#define ID_TEXT_0     (GUI_ID_USER + 0x96)
+#define ID_BUTTON_0  (GUI_ID_USER + 0x97)
+
+//密码错误窗口资源表
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
+{
+    { FRAMEWIN_CreateIndirect, "!!!!", ID_FRAMEWIN_0, 250, 50, 300, 200, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "密码错误", ID_TEXT_0, 0, 50, 300, 50, TEXT_CF_HCENTER, 0x0, 0 },
+    { BUTTON_CreateIndirect, "确定", ID_BUTTON_0, 125, 110, 80, 50, 0, 0x0, 0 },
+};
+
+//密码错误窗口回调
+static void _cbDialog_frame(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_0);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        TEXT_SetText(hItem, "密码错误!");
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_0), &SIF16_Font);
+        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), "OK");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_0:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
+
+WM_HWIN hwin_password;    //密码提醒
 WM_HWIN hMulti = 0;       //多行文本
 WM_HWIN htmpChild;      //用于存放传递过来的子窗口句柄
 WM_HWIN htmpBK;         //用于存放传递过来的背景窗口句柄
@@ -439,8 +488,11 @@ void engkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
             {
                 c += 0x20;
             }
-            GUI_StoreKeyMsg(c, 1);	//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);	//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)//如果不是回车
+            {
+                GUI_StoreKeyMsg(c, 1);  				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0);  				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -516,8 +568,11 @@ void signkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
         }
         else
         {
-            GUI_StoreKeyMsg(c, 1);				//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);				//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)
+            {
+                GUI_StoreKeyMsg(c, 1); 				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0); 				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -1051,7 +1106,6 @@ static void _cbBk(WM_MESSAGE * pMsg)
  * @return
  *  0：数据合法，并且保存成功;1：数据非法;2：保存不成功;
  */
-
 static uint8_t Value_Check()
 {
     uint8_t result_input[0x100];
@@ -1087,13 +1141,18 @@ static uint8_t Value_Check()
         }
         else
         {
-//            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED, GUI_RED);
-            BUTTON_SetText(_aahButtonOk, "密码错误");
-            for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
+            //            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED|BUTTON_CI_PRESSED, GUI_RED);
+            //            BUTTON_SetText(_aahButtonOk, "密码错误");
+            if(!WM_IsWindow(hwin_password))
             {
-                GUI_StoreKeyMsg('\b', 1);
-                GUI_StoreKeyMsg('\b', 0);
+                hwin_password = GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame, WM_HBKWIN, 0, 0);
             }
+            MULTIEDIT_SetText(hMulti, "");
+//            for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
+//            {
+//                GUI_StoreKeyMsg('\b', 1);
+//                GUI_StoreKeyMsg('\b', 0);
+//            }
             return VALUE_ERROR;
         }
         break;
@@ -1519,7 +1578,6 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
  * @return
  *
  */
-
 static void _cbFrame(WM_MESSAGE * pMsg)
 {
     WM_HWIN      hItem;

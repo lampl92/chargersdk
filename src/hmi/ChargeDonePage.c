@@ -71,7 +71,6 @@ static void Data_Process(WM_MESSAGE *pMsg)
         0);
     //if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) && !bittest(EventChargeDoneFlag,0))//订单上传完成
     if (((uxBits & defEventBitOrderFinishToHMI) == defEventBitOrderFinishToHMI) )//订单上传完成
-
     {        
         orderFinish = 1;
         bitset(EventChargeDoneFlag, 0);
@@ -117,9 +116,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     CON_t *pCON;
     uint32_t time_charge;
     uint8_t temp_buf[32];
-    volatile int8_t hour;
-    volatile int8_t min;
-    volatile int8_t sec;
+    uint32_t hour;
+    uint32_t min;
+    uint32_t sec;
     EventBits_t uxBits;
     WM_HWIN hWin = pMsg->hWin;
 
@@ -168,9 +167,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             65000);
         if ((uxBits & defEventBitOrderMakeFinish) == defEventBitOrderMakeFinish)
         {
-            time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
+            time_charge = abs(pCON->order.tStopTime - pCON->order.tStartTime);
         //        time_charge = 0;
-            pCON = CONGetHandle(0);
             memset(temp_buf, '\0', sizeof(temp_buf));
             sprintf(temp_buf, "%.2f", pCON->order.dTotalPower);
             Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), &SIF24_Font, FONT_COLOR, temp_buf);//充入电量
