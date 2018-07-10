@@ -1072,6 +1072,7 @@ EVSE_t *EVSECreate(void)
 {
     EVSE_t *pEVSE;
     pEVSE = (EVSE_t *)malloc(sizeof(EVSE_t));
+    memset(pEVSE, 0, sizeof(EVSE_t));
 
     memset(pEVSE->info.strSN, 0, defEVSESNLength);
     memset(pEVSE->info.strID, 0, defEVSEIDLength);

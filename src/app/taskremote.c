@@ -393,6 +393,7 @@ void vTaskEVSERemote(void *pvParameters)
             else
             {
                 printf_safe("\n\nRecv Heart  !!!!!!!!!!\n\n");
+                pEVSE->status.ulTimeUpdated = 1;
                 heart_lost = 0;
             }
 

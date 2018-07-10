@@ -2132,9 +2132,6 @@ void Modem_Poll(DevModem_t *pModem)
                 }
                 else
                 {
-#if EVSE_USING_RFID
-                    xTimerStart(xHandleTimerRFID, 100); 
-#endif
                     pModem->state = DS_MODEM_TCP_OPEN;
                 }
             }
