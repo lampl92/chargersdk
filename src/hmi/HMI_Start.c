@@ -87,9 +87,7 @@ static void vTaskReadPic(void *pvParameters)
     DevErrDoneImage = readPicInf(pathDevErrDoneImage);
     MoneyNotEnoughDoneImage = readPicInf(pathMoneyNotEnoughDoneImage);
     ChargeDoneVoidImage = readPicInf(pathChargeDoneVoidImage);
-#if EVSE_USING_RFID
-    xTimerStart(xHandleTimerRFID, 100);
-#endif
+    pEVSE->status.ulPicOK = 1;
     vTaskDelete(xTaskGetCurrentTaskHandle());
 }
 void MainTask(void)

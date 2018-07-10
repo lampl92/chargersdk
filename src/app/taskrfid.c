@@ -36,7 +36,7 @@ void vTaskEVSERFID(void *pvParameters)
         xTimerStop(xHandleTimerRFID, 100); 
 #endif
     }
-    while (pEVSE->status.ulTimeUpdated == 0)
+    while (pEVSE->status.ulTimeUpdated == 0 || pEVSE->status.ulPicOK == 0)
     {
         vTaskDelay(100);
     }

@@ -108,6 +108,7 @@ typedef struct _EVSEStatus
     uint32_t ulSignalFault;                         ///< The signal fault
     uint32_t ulSignalPool[EVSE_MAX_SIGNAL_BLOCK];   ///< The signal pool[ evse maximum signal block]
     uint32_t ulTimeUpdated;
+    uint32_t ulPicOK;
     
     pEVSE_ft GetScramState;                         ///< State of the get scram
     pEVSE_ft GetKnockState;                         ///< State of the get knock
