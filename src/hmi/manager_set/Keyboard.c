@@ -1281,6 +1281,7 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
         case 23://
+            tmpU16 = (uint16_t)atoi(result_input);
             if ((tmpU16 > 0) && (tmpU16 <= 65535))
             {
                 cfg_set_uint16(pathProtoCfg, &tmpU16, "%s", jnProtoServerPort);
