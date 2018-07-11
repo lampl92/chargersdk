@@ -176,8 +176,11 @@ void vTaskInit(void *pvParameters)
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
+#if BOOTLOADER
+#else
 #ifdef RELEASE
     IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
+#endif
 #endif
     while (1)
     {
