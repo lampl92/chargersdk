@@ -286,6 +286,12 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeTemp);
                     pCON->order.ucStopType = defOrderStopType_Temp;
                 }
+                //远程急停
+                if((uxBitsData & defEventBitOrderStopTypeRemoteEmergencyStop) == defEventBitOrderStopTypeRemoteEmergencyStop)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteEmergencyStop);
+                    pCON->order.ucStopType = defOrderStopType_RemoteEmergencyStop;
+                }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);

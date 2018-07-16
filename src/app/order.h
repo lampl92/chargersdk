@@ -39,6 +39,7 @@
 #define defOrderStopType_UnderCurr      16
 #define defOrderStopType_Knock          17
 #define defOrderStopType_Temp           18
+#define defOrderStopType_RemoteEmergencyStop 19
 
 /*支付方式 PayType*/
 #define defOrderPayType_Online          0

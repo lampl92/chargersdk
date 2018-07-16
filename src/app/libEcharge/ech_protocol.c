@@ -2296,6 +2296,44 @@ static int makeCmdOTA_Result(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_OTA_RESULT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+static int makeCmdEmergencyStopBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    int i;
+
+    pProto = (echProtocol_t *)pPObj;
+    pCON = (CON_t *)pCObj;
+    pbuff = pProto->pCMD[ECH_CMDID_EMERGENCY_STOP]->ucRecvdOptData;   // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    for (i = 0; i < 4; i++)
+    {
+        //[0...3] 操作ID
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[i];  //不变
+    }
+    //[4] 充电桩接口
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pEVSE->info.ucTotalCON);  
+    //[5] 停止结果
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[5];
+    
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec;  //不要忘记赋值
+
+    return 1;
+}
+static int makeCmdEmergencyStop(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdEmergencyStopBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_EMERGENCY_STOP, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2736,6 +2774,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_OTA_DW]     = EchCMDCreate(113, 112, 30, makeCmdReqOTA_DW,    analyCmdCommon);
     pProto->pCMD[ECH_CMDID_OTA_START]      = EchCMDCreate(114, 115, 30, makeCmdOTA_Start,    analyCmdCommon);
     pProto->pCMD[ECH_CMDID_OTA_RESULT]     = EchCMDCreate(116, 117, 30, makeCmdOTA_Result,   analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_EMERGENCY_STOP] = EchCMDCreate(75,  74,  30, makeCmdEmergencyStop,analyCmdCommon);
 
     //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 

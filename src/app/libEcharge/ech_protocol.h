@@ -125,8 +125,12 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_OTA_START     37 //充电桩上报进入升级状态
 #define ECH_CMDID_OTA_RESULT    38 //充电桩上报升级结果
 
+//---紧急停止
+#define ECH_CMDID_EMERGENCY_STOP 39 //平台下发紧急停止充电
+
+
 /*命令个数*/
-#define ECH_CMD_MAX             39
+#define ECH_CMD_MAX             40
 
 typedef struct
 {

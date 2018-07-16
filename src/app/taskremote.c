@@ -738,6 +738,48 @@ void vTaskEVSERemote(void *pvParameters)
             /******** OTA ****************/
             taskremote_ota(pEVSE, pechProto);
 
+            /******** 紧急停止 ****************/
+            for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                switch (pCON->order.statRemoteProc.rmt_emer_stop.stat)
+                {
+                case REMOTE_EMER_STOP_IDLE:
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                    {
+                        RemoteIF_RecvEmergencyStop(pechProto, pCON->info.ucCONID, &network_res);
+                        if (network_res == 1)
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            pCON->order.statRemoteProc.rmt_emer_stop.timestamp = time(NULL);
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_WAIT_STOP;
+                        }
+                    }
+                    break;
+                case REMOTE_EMER_STOP_WAIT_STOP:
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
+                    {
+                        RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 1);//成功
+                        pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                        break;
+                    }
+                    else
+                    {
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_emer_stop.timestamp > 20)
+                        {
+                            RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 0); //超时失败
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                            break;
+                        }
+                    }
+                    break;
+                case REMOTE_EMER_STOP_RETURN:
+                    pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_IDLE;
+                    break;
+                }
+            }
+            
+            
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;

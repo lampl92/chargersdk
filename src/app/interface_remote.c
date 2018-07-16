@@ -186,12 +186,11 @@ ErrorCode_t RemoteIF_RecvLogin(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_REGISTER, pbuff, &len);
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_REGISTER, pbuff, &len);
 
-    switch(handle_errcode)
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -234,11 +233,10 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_HEARTBEAT, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_HEARTBEAT, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -250,7 +248,6 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
         *psiRetVal = 0;
         break;
     }
-    errcode = handle_errcode;
     return errcode;
 }
 
@@ -290,12 +287,11 @@ ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *p
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     ul2uc ultmpNetSeq;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_RESET, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_RESET, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -313,7 +309,6 @@ ErrorCode_t RemoteIF_RecvReset(echProtocol_t *pProto, uint32_t *pulOptSN, int *p
         *psiRetVal = 0;
         break;
     }
-    errcode = handle_errcode;
     return errcode;
 }
 ErrorCode_t RemoteIF_SendStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
@@ -331,11 +326,10 @@ ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     uint8_t id;
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode = ERR_NO;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_STATUS, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_STATUS, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -414,17 +408,15 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
 
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
-    ErrorCode_t errcode;
+    ErrorCode_t errcode = ERR_NO;
 
     char strOrderSN_tmp[17] = { 0 };
     double dLimetFee;
     ul2uc ulTmp;
 
     id = 0;
-    errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_REMOTE_CTRL, pCONin->info.ucCONID, 12, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_REMOTE_CTRL, pCONin->info.ucCONID, 12, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -546,16 +538,14 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
 
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     char strOrderSN_tmp[17] = { 0 };
 
     id = 0;
     errcode = ERR_NO;
 
-    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_ORDER, pOrder->ucCONID, 9, pbuff, &len);
-    //handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_ORDER, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_ORDER, pOrder->ucCONID, 9, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -626,7 +616,6 @@ ErrorCode_t RemoteIF_RecvSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t set_errcode_sharp;
     ErrorCode_t set_errcode_peak;
     ErrorCode_t set_errcode_shoulder;
@@ -635,12 +624,11 @@ ErrorCode_t RemoteIF_RecvSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint
     ul2uc ultmpNetSeq;
     double dtmpEnergyFee;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_ENERGYFEE, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_ENERGYFEE, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         if(flag_set == 0)
@@ -721,7 +709,6 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t set_errcode_sharp;
     ErrorCode_t set_errcode_peak;
     ErrorCode_t set_errcode_shoulder;
@@ -730,12 +717,11 @@ ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     ul2uc ultmpNetSeq;
     double dtmpServFee;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_SERVFEE, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_SERVFEE, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         if(flag_set == 0)
@@ -816,18 +802,16 @@ ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t set_errcode_stat;
     ErrorCode_t set_errcode_rt;
     ErrorCode_t errcode;
     uint32_t ultmpTimCyc_ms;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_CYC, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_CYC, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         *psiRetVal = 1;
@@ -871,7 +855,6 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     EchSegTime_t tmpSegTime;
     uint8_t ucOffset;
@@ -879,12 +862,11 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
     cJSON *jsCfgObj;
 
     ucOffset = 0;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_TIMESEG, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_TIMESEG, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         jsCfgObj = GetCfgObj(pathProtoCfg, &errcode);//为避免以下多次操作文件，选择cfgobj接口
@@ -976,7 +958,6 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t set_errcode_key;
     ErrorCode_t set_errcode_time;
     ErrorCode_t errcode;
@@ -986,12 +967,11 @@ ErrorCode_t RemoteIF_RecvSetKey(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRe
     int i;
     uint8_t ucOffset;
 
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_KEY, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_KEY, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         *psiRetVal = 1;
@@ -1044,7 +1024,6 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
     CON_t *pCON = NULL;
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t set_errcode;
     ErrorCode_t errcode;
     uint8_t id_cont;
@@ -1056,12 +1035,11 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
 
     set_errcode = ERR_NO;
     ucOffset = 0;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_QR, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_QR, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         *psiRetVal = 1;
@@ -1135,7 +1113,6 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     int set_errcode;
     ErrorCode_t errcode;
     us2uc ustmpNetSeq;
@@ -1154,12 +1131,11 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
         strcpy(path, pathWhiteList);
     }
 
-    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         *psiRetVal = 1;
@@ -1212,7 +1188,6 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     int set_errcode;
     ErrorCode_t errcode;
     us2uc ustmpNetSeq;
@@ -1222,12 +1197,11 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
     char strID[16+1] = {0};
     char path[64];
 
-    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         *psiRetVal = 1;
@@ -1316,15 +1290,13 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
-    handle_errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
-        errcode = handle_errcode;
         break;
     case ERR_NO:
         RemoteIF_SendReqCmdid(usCmdID, pEVSE, pProto, psiRetVal);
@@ -1413,7 +1385,6 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     uint8_t con_id;
     char strCardID[17] = {0};
@@ -1423,8 +1394,8 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     uint8_t ucOffset;
     int i;
 
-    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START, pRfid->order.ucCONID, 0, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START, pRfid->order.ucCONID, 0, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -1482,7 +1453,6 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
         *psiRetVal = 0;
         break;
     }
-    errcode = handle_errcode;
     return errcode;
 }
 
@@ -1514,13 +1484,12 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, CON_t *pCON, int *p
 
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
     id = 0;
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START_RES, pCON->info.ucCONID, 0, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START_RES, pCON->info.ucCONID, 0, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -1555,13 +1524,12 @@ ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, CON_t *pCON, int *ps
 
     uint8_t pbuff[1024] = {0};
     uint32_t len;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
     id = 0;
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_STOP_RES, pCON->info.ucCONID, 0, pbuff, &len);
-    switch(handle_errcode)
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_STOP_RES, pCON->info.ucCONID, 0, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -1880,13 +1848,12 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
     uint32_t ftp_len = 0;
     int i, j;
     uint8_t ucOffset = 0;
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
     ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil, errcode_stat;
 
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
-    switch (handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -1983,12 +1950,11 @@ ErrorCode_t RemoteIF_RecvReqOTA_DW(echProtocol_t *pProto, int *psiRetVal)
     uint8_t ucOffset = 0;
     int i;
     char tmpVersion[10 + 1] = {0};
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_OTA_DW, pbuff, &len);
-    switch (handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_OTA_DW, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -2043,12 +2009,11 @@ ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal)
     uint8_t ucOffset = 0;
     int i;
     char tmpVersion[10 + 1] = { 0 };
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_START, pbuff, &len);
-    switch (handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_START, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -2095,12 +2060,11 @@ ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal)
     uint8_t ucOffset = 0;
     int i;
     char tmpVersion[10 + 1] = { 0 };
-    ErrorCode_t handle_errcode;
     ErrorCode_t errcode;
 
     errcode = ERR_NO;
-    handle_errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_RESULT, pbuff, &len);
-    switch (handle_errcode)
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_OTA_RESULT, pbuff, &len);
+    switch (errcode)
     {
     case ERR_REMOTE_NODATA:
         *psiRetVal = 0;
@@ -2141,6 +2105,63 @@ ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
     pbuff[20] = succ;
 
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_RESULT, 20, 3);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvEmergencyStop(echProtocol_t *pProto, uint8_t con_id, int *psiRetVal)
+{
+    CON_t *pCON = NULL;
+    uint8_t id = 0;
+    uint8_t id_pos = 4;
+
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len = 0;
+    ErrorCode_t errcode = ERR_NO;
+
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_EMERGENCY_STOP, con_id, id_pos, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0...3] 操作ID ，不处理，留在ucRecvdOptData中待回复时使用
+        //pbuff[4] 充电桩接口, id_pos
+        id = EchRemoteIDtoCONID(pbuff[id_pos]);
+        pCON = CONGetHandle(id);
+        if (pCON != NULL)
+        {
+            *psiRetVal = 1;
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendEmergencyStop(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    /*** 如下操作为破坏了程序结构，用pCMD中的缓存空间带入一些需要传递的参数*/
+    /*** 2017年6月16日：现在pCMD的缓存专用于接收与传递参数，程序结构上不用担心了*/
+    pbuff = pProto->pCMD[ECH_CMDID_EMERGENCY_STOP]->ucRecvdOptData;
+    if (succ == 1)
+    {
+        pbuff[5] = 0;
+    }
+    else if (succ == 0)
+    {
+        pbuff[5] = 1;
+    }
+    /*********************/
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 0, 1);
 
     return errcode;
 }

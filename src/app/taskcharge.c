@@ -384,6 +384,14 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_STOPCHARGE;
                     break;
                 }
+                if ((uxBitsException & defEventBitExceptionRmtEmergencyStop) == defEventBitExceptionRmtEmergencyStop)    //紧急停止
+                {
+                    printf_safe("Remote Emergency Stop!\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteEmergencyStop);
+                    xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                    pCON->state = STATE_CON_STOPCHARGE;
+                    break;
+                }
                 if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_Cri) == defSignalCON_Alarm_AC_A_CurrUp_Cri)
                 {
                     printf_safe("Curr Stop Charge!\n");
