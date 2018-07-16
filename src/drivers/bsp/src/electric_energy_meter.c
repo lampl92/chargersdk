@@ -93,9 +93,11 @@ uint16_t c_crc(uint8_t *pushdata, uint8_t length)
 void RS485_Send_Data(u8 *buf, u8 len)
 
 {
-    RS485_EN;			//ÉèÖÃÎª·¢ËÍÄ£Ê½
-    HAL_UART_Transmit(&UART7_RS485Handler, buf, len, 1000);//´®¿Ú2·¢ËÍÊý¾Ý
+    __HAL_UART_DISABLE_IT(&UART7_RS485Handler, UART_IT_RXNE); 
+    RS485_EN;
+    HAL_UART_Transmit(&UART7_RS485Handler, buf, len, 1000);
     RS485_DIS;
+    __HAL_UART_ENABLE_IT(&UART7_RS485Handler, UART_IT_RXNE);
     RS485_RX_CNT = 0;
 }
 //RS485²éÑ¯½ÓÊÕµ½µÄÊý¾Ý
