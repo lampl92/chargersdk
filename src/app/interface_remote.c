@@ -39,7 +39,7 @@ ErrorCode_t RemoteIF_SendLogin(EVSE_t *pEVSE, echProtocol_t *pProto)
 }
 //从队尾取，取到后删除，并传出element
 ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto, 
-                                uint16_t usSendID, 
+                                uint16_t usCmdID, 
                                 uint8_t con_id, uint8_t con_id_pos, 
                                 uint8_t *pbuff, uint32_t *pLen)
 {
@@ -52,7 +52,7 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
     EventBits_t bits;
 
     errcode = ERR_REMOTE_NODATA;
-    pCMD = pProto->pCMD[usSendID];
+    pCMD = pProto->pCMD[usCmdID];
     if (gdsl_list_get_size(pCMD->plRecvCmd) > 0)
         printf_protolog("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
     if (xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
@@ -61,6 +61,11 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
         gdsl_list_cursor_move_to_head(cur);
         while ((pechCmdElem = gdsl_list_cursor_get_content(cur)) != NULL)
         {
+            if (time(NULL) - pechCmdElem->timestamp > 20)//接收命令20s未处理则超时删除
+            {
+                gdsl_list_cursor_delete(cur);
+                continue;
+            }
             if (EchRemoteIDtoCONID(pechCmdElem->pbuff[con_id_pos]) == con_id)
             {
                 printf_protolog("CON%d RecvCmd %02X [%d]\n", con_id, pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd);
@@ -83,7 +88,7 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
                 gdsl_list_cursor_move_to_head(cs);
                 while ((pechProtoElem = gdsl_list_cursor_get_content(cs)) != NULL)
                 {
-                    if (pechProtoElem->cmd_id == usSendID && pechProtoElem->con_id == con_id)
+                    if (pechProtoElem->cmd_id == usCmdID && pechProtoElem->con_id == con_id)
                     {
                         gdsl_list_cursor_delete(cs);  //请求命令收到平台回复并已处理, 删除命令
                         printf_protolog("CON%d SendCmd %02X [%d] Recved\n", con_id, pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
@@ -111,7 +116,7 @@ ErrorCode_t RemoteRecvHandleWithCON(echProtocol_t *pProto,
     return errcode;
 }
 
-ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *pbuff, uint32_t *pLen)
+ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usCmdID, uint8_t *pbuff, uint32_t *pLen)
 {
     ErrorCode_t errcode;
     echCMD_t *pCMD;
@@ -122,7 +127,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
     EventBits_t bits;
 
     errcode = ERR_REMOTE_NODATA;
-    pCMD = pProto->pCMD[usSendID];
+    pCMD = pProto->pCMD[usCmdID];
     if (gdsl_list_get_size(pCMD->plRecvCmd) > 0)
         printf_protolog("CMD %d[0x%02X] plRecvCmd size = %d\n", pCMD->CMDType.usRecvCmd, pCMD->CMDType.usRecvCmd, gdsl_list_get_size(pCMD->plRecvCmd));
     if(xSemaphoreTake(pCMD->xMutexCmd, 1000) == pdPASS)
@@ -154,7 +159,7 @@ ErrorCode_t RemoteRecvHandle(echProtocol_t *pProto, uint16_t usSendID, uint8_t *
                 gdsl_list_cursor_move_to_head(cs);
                 while ((pechProtoElem = gdsl_list_cursor_get_content(cs)) != NULL)
                 {
-                    if (pechProtoElem->cmd_id == usSendID)
+                    if (pechProtoElem->cmd_id == usCmdID)
                     {
                         gdsl_list_cursor_delete(cs);   //请求命令收到平台回复并已处理, 删除命令
                         printf_protolog("SendCmd %d[0x%02X] Recved\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
