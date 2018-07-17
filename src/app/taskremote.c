@@ -65,6 +65,8 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 }
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
+    CON_t *pCON;
+    int i;
     int res;
     uint8_t flag_set;
 
@@ -101,7 +103,11 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     /******* end 充电过程中不允许设置************/
 
     RemoteIF_RecvSetKey(pEVSE, pProto, &res);
-
+    for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        RemoteIF_RecvSetPower(pEVSE, pProto, pCON->info.ucCONID, &res);
+    }
 }
 
 void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)

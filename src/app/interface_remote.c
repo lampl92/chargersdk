@@ -1275,17 +1275,6 @@ ErrorCode_t RemoteIF_RecvAddDelBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProto
 
     return errcode;
 }
-static ErrorCode_t RemoteIF_SendReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
-{
-    ErrorCode_t errcode;
-    errcode = ERR_NO;
-
-    pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0, 1);
-
-    *psiRetVal = 1;
-
-    return errcode;
-}
 static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};
@@ -1299,7 +1288,7 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
         *psiRetVal = 0;
         break;
     case ERR_NO:
-        RemoteIF_SendReqCmdid(usCmdID, pEVSE, pProto, psiRetVal);
+        pProto->sendCommand(pProto, pEVSE, NULL, usCmdID, 0, 1);
         break;
     default:
         *psiRetVal = 0;
@@ -1308,8 +1297,32 @@ static ErrorCode_t RemoteIF_RecvReqCmdid(uint16_t usCmdID, EVSE_t *pEVSE, echPro
 
     return errcode;
 }
+ErrorCode_t RemoteIF_RecvReqCmdidWithCON(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t errcode;
+
+    errcode = RemoteRecvHandleWithCON(pProto, usCmdID, pCON->info.ucCONID, 4, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        pProto->sendCommand(pProto, pEVSE, pCON, usCmdID, 0, 1);
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;  
+}
 ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
 {
+    CON_t *pCON;
+    int i;
     int res;
     ErrorCode_t errcode;
 
@@ -1329,6 +1342,11 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_ADD_BNW, pEVSE, pProto, &res);
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
     
+    for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        RemoteIF_RecvReqCmdidWithCON(ECH_CMDID_REQ_POWER, pEVSE, pProto, pCON, &res);
+    }
     return errcode;
 }
 
@@ -2162,6 +2180,93 @@ ErrorCode_t RemoteIF_SendEmergencyStop(EVSE_t *pEVSE, echProtocol_t *pProto, CON
     }
     /*********************/
     pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 0, 1);
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvSetPower(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal)
+{
+    CON_t *pCON = NULL;
+    uint8_t id = 0;
+    uint8_t id_pos = 4;
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t set_errcode_power;
+    ErrorCode_t errcode;
+    ul2uc ultmpPower_kw;
+    double dtmpPower_kw;
+
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_SET_POWER, con_id, id_pos, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        //pbuff[4] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[id_pos]);
+        pCON = CONGetHandle(id);
+        if (pCON == NULL)
+        {
+            errcode = ERR_REMOTE_PARAM;
+            break;
+        }
+
+        //pbuff[5...8] 充电桩接口功率 单位:W
+        ultmpPower_kw.ucVal[0] = pbuff[5];
+        ultmpPower_kw.ucVal[1] = pbuff[6];
+        ultmpPower_kw.ucVal[2] = pbuff[7];
+        ultmpPower_kw.ucVal[3] = pbuff[8];
+        dtmpPower_kw = (double)ntohl(ultmpPower_kw.ulVal) / 1000.0;
+        if (pEVSE->info.ucPhaseLine < 3)
+        {
+            if (dtmpPower_kw <= 7.04)//220*32
+            {
+                set_errcode_power = cfg_set_double(pathEVSECfg, &dtmpPower_kw, "%s:%d.%s", jnCONArray, con_id, jnRatedPower);
+            }
+            else
+            {
+                set_errcode_power = ERR_REMOTE_PARAM;
+            }
+        }
+        else//phase = 3
+        {
+            if (dtmpPower_kw <= 41.58)//220*63*3
+            {
+                set_errcode_power = cfg_set_double(pathEVSECfg, &dtmpPower_kw, "%s:%d.%s", jnCONArray, con_id, jnRatedPower);
+            }
+            else
+            {
+                set_errcode_power = ERR_REMOTE_PARAM;
+            }
+        }
+            
+        //pbuff[0...3] 操作ID
+        if(set_errcode_power == ERR_NO)
+        {
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_NO;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0, 1);
+        }
+        else
+        {
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_FILE_RW;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0, 1);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
 
     return errcode;
 }

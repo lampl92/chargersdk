@@ -128,9 +128,12 @@ typedef struct _echProtoStatus
 //---紧急停止
 #define ECH_CMDID_EMERGENCY_STOP 39 //平台下发紧急停止充电
 
+//
+#define ECH_CMDID_SET_POWER      40  //平台下发功率设置
+#define ECH_CMDID_REQ_POWER      41  //平台查询功率设置
 
 /*命令个数*/
-#define ECH_CMD_MAX             40
+#define ECH_CMD_MAX             42
 
 typedef struct
 {

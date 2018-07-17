@@ -2334,6 +2334,49 @@ static int makeCmdEmergencyStop(void *pPObj, void *pEObj, void *pCObj, uint8_t *
     makeStdCmd(pPObj, pEObj, ECH_CMDID_EMERGENCY_STOP, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+static int makeCmdReqPowerBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    EVSE_t *pE;
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpPower;
+
+
+    pProto = (echProtocol_t *)pPObj;
+    pE = (EVSE_t *)pEObj;
+    pCON = (CON_t *)pCObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_POWER]->ucRecvdOptData;   // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4] 充电桩接口
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pE->info.ucTotalCON);
+    //[5] 充电桩功率 (单位:W)
+    ultmpPower.ulVal = htonl((uint32_t)(pCON->info.dRatedPower * 1000));
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpPower.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpPower.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpPower.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpPower.ucVal[3];
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec;  //不要忘记赋值
+    return 1;    
+}
+static int makeCmdReqPower(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdReqPowerBodyCtx(pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2422,7 +2465,6 @@ static int recvResponse(void *pPObj,
     {
         return ECH_ERR_CHECK;
     }
-//    StrToHex(&pbuff[ulOffset + 14], EVSEID, 16);
     if(memcmp(&pbuff[ulOffset + 14], pE->info.strID, 16) != 0 )
     {
         return ECH_ERR_ID;
@@ -2744,12 +2786,12 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_ORDER]          = EchCMDCreate(46,  47,  30, makeCmdOrder,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SUCC]       = EchCMDCreate(7,   0,   0,  makeCmdSetSucc,      NULL);
     pProto->pCMD[ECH_CMDID_SET_FAIL]       = EchCMDCreate(8,   0,   0,  makeCmdSetFail,      NULL);
-    pProto->pCMD[ECH_CMDID_SET_ENERGYFEE]   = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_ENERGYFEE]  = EchCMDCreate(0,   11,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_SERVFEE]    = EchCMDCreate(0,   12,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_CYC]        = EchCMDCreate(0,   13,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_TIMESEG]    = EchCMDCreate(0,   14,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_KEY]        = EchCMDCreate(0,   15,  30, NULL,                analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_REQ_ENERGYFEE]   = EchCMDCreate(22,  21,  30, makeCmdReqEnergyFee,  analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_ENERGYFEE]  = EchCMDCreate(22,  21,  30, makeCmdReqEnergyFee, analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_SERVFEE]    = EchCMDCreate(24,  23,  30, makeCmdReqServFee,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_CYC]        = EchCMDCreate(26,  25,  30, makeCmdReqCyc,       analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_TIMESEG]    = EchCMDCreate(28,  27,  30, makeCmdReqTimeSeg,   analyCmdCommon);
@@ -2775,6 +2817,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_OTA_START]      = EchCMDCreate(114, 115, 30, makeCmdOTA_Start,    analyCmdCommon);
     pProto->pCMD[ECH_CMDID_OTA_RESULT]     = EchCMDCreate(116, 117, 30, makeCmdOTA_Result,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_EMERGENCY_STOP] = EchCMDCreate(75,  74,  30, makeCmdEmergencyStop,analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_POWER]      = EchCMDCreate(0,   200, 30, NULL,                analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_POWER]      = EchCMDCreate(202, 201, 30, makeCmdReqPower,     analyCmdCommon);
 
     //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 
