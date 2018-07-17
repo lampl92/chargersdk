@@ -105,20 +105,10 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 /* 2. 已发送，判断发送情况*///由于要根据枪ID判断删除命令，已经将发送处理放到协议接收（inerface_remote.c）中处理
                 if (pechProtoElem->status == 1)
                 {
-//                    /* 判断命令字，
+//                    /* 预留:判断命令字，
 //                       如果是请求命令，则等待主机回复
 //                       如果是回复命令，则直接超时删除
 //                    */
-//                    uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
-//                        defEventBitProtoCmdHandled,
-//                        pdTRUE,
-//                        pdTRUE,
-//                        0);
-//                    if ((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
-//                    {
-//
-//                        continue;
-//                    }
                 }
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
