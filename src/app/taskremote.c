@@ -773,6 +773,7 @@ void vTaskEVSERemote(void *pvParameters)
                     {
                         if (time(NULL) - pCON->order.statRemoteProc.rmt_emer_stop.timestamp > 20)
                         {
+                            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
                             RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 0); //超时失败
                             pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
                             break;
