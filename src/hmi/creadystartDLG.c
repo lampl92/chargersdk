@@ -75,6 +75,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPStateEquipmentFailureNoStart);
             }
+            if (gbsstate == StateHome)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+            }
             WM_RestartTimer(pMsg->Data.v,100);
         }
         break;
@@ -101,6 +105,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case MSG_JUMPStateEquipmentFailureNoStart:
         GUI_EndDialog(pMsg->hWin, 0);
         CreateEquipmentFailureNoStartDLG();
+        break;
+    case MSG_JUMPHOME:
+        GUI_EndDialog(pMsg->hWin, 0);
+        home();
         break;
     default:
         WM_DefaultProc(pMsg);

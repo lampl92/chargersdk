@@ -385,7 +385,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 TP_Adjust();
                 home();
             }
-            if (bittest(flag_specially, 1))
+            if (bittest(flag_specially, 1) && !bittest(flag_specially, 0))
             {
                 PIout(3) = 0;
             }
