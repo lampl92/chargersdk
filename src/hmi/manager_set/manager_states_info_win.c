@@ -882,7 +882,7 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
     GUI_DispStringInRect("电表读数", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
     GUI_DispStringInRect(strTmp, &rect_state, GUI_TA_VCENTER | GUI_TA_HCENTER); 
     
-    /**< 继电器黏连 */
+    /**< 继电器粘连 */
     rect_item.x0 = 10 + width_part_big + width_part;
     rect_item.y0 = head_high + 4*high;
     rect_item.x1 = 10 + width_part_big + width_part + width_part_big / 2;
@@ -899,13 +899,13 @@ static void gunA_B_draw_data(WM_MESSAGE *pMsg, CON_t *pcont)
         rect_alarm.x1 = 10 + width_part_big + width_part + alarm_width;
         rect_alarm.y1 = head_high + 5*high;
         GUI_DispStringInRect("!", &rect_alarm, GUI_TA_VCENTER | GUI_TA_HCENTER);
-        GUI_DispStringInRect("黏连", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
+        GUI_DispStringInRect("粘连", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("发生", &rect_state, GUI_TA_VCENTER | GUI_TA_HCENTER);        
         GUI_SetColor(GUI_BLACK);
     }
     else
     {
-        GUI_DispStringInRect("黏连", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
+        GUI_DispStringInRect("粘连", &rect_item, GUI_TA_VCENTER | GUI_TA_HCENTER);
         GUI_DispStringInRect("未发生", &rect_state, GUI_TA_VCENTER | GUI_TA_HCENTER);
     }
     
