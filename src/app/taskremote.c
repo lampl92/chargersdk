@@ -2,7 +2,7 @@
 * @file taskremote.c
 * @brief 远程通信的操作
 *        重连：丢失3个心跳
-*        停止充电：丢失9个心跳
+*        停止充电：丢失12个心跳
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
