@@ -448,6 +448,7 @@ void vTaskEVSECharge(void *pvParameters)
                 errcode = pCON->status.StopCharge(pCON);
                 if (errcode == ERR_NO)
                 {
+                    vTaskDelay(2000)
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                     printf_safe("\e[44;37mCON%d Stop Charge!\e[0m\n", pCON->info.ucCONID);
                     pCON->tmp.stop_try = 0;
