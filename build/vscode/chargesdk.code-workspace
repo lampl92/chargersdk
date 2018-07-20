@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "D:\\source\\repos\\chargersdk\\src"
+		}
+	],
+	"settings": {
+		"files.autoGuessEncoding": true,
+		"files.hotExit": "onExitAndWindowClose",
+		"files.insertFinalNewline": true,
+		"files.trimTrailingWhitespace": true,
+		"files.associations": {
+			"bsp.h": "c",
+			"bsp_define.h": "c",
+			"stm32f4xx.h": "c",
+			"interface.h": "c",
+			"evse_globals.h": "c",
+			"meter.h": "c",
+			"modbus.h": "c",
+			"modbus-tcp.h": "c",
+			"net_device.h": "c",
+			"net.h": "c",
+			"os_port.h": "c",
+			"os_port_config.h": "c",
+			"taskcreate.h": "c"
+		}
+	}
+}
