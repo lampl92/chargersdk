@@ -785,7 +785,40 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 }
             }
-            
+            /******** 预约 ****************/
+            /*  0：未知
+                1：无预约
+                2：已预约
+                3：预约失败
+            */
+            for (i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                errcode = RemoteIF_RecvSetAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO)
+                {
+                    if (network_res == 1)//2：预约成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 2);
+                    }
+                    else//3：预约失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 3);
+                    }
+                }
+                errcode = RemoteIF_RecvReqAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO )
+                {
+                    if (network_res == 1)//查询成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, pCON->appoint.status);
+                    }
+                    else//查询失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, 0);
+                    }
+                }
+            }
             
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:

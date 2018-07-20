@@ -94,4 +94,8 @@ ErrorCode_t RemoteIF_RecvEmergencyStop(echProtocol_t *pProto, uint8_t con_id, in
 ErrorCode_t RemoteIF_SendEmergencyStop(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ);
 
 ErrorCode_t RemoteIF_RecvSetPower(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+
+ErrorCode_t RemoteIF_RecvSetAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+ErrorCode_t RemoteIF_RecvReqAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+ErrorCode_t RemoteIF_SendAppoint(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int status);
 #endif

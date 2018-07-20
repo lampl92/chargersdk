@@ -455,6 +455,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
                 pCON->order.dLimitPower = 0;
 #endif
                 pCON->order.ucStartType = 5;//Remote无卡
+                
+                pCON->appoint.status = 1;
 
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
@@ -2272,6 +2274,114 @@ ErrorCode_t RemoteIF_RecvSetPower(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t 
         *psiRetVal = 0;
         break;
     }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvSetAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal)
+{
+    CON_t *pCON = NULL;
+    uint8_t id = 0;
+    uint8_t id_pos = 4;
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t errcode;
+    ul2uc ultmpTime_s;
+
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_SET_APPOINT, con_id, id_pos, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0...3] 操作ID
+        //pbuff[4] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[id_pos]);
+        pCON = CONGetHandle(id);
+        if (pCON == NULL)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        //pbuff[5] 预约操作
+        //  0：未知
+        //  1：无预约
+        //  2：已预约
+        //  3：预约失败
+        if (pCON->appoint.status > 1)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        pCON->appoint.status = pbuff[5];
+        //pbuff[6...9] 预约时长 单位:S
+        ultmpTime_s.ucVal[0] = pbuff[6];
+        ultmpTime_s.ucVal[1] = pbuff[7];
+        ultmpTime_s.ucVal[2] = pbuff[8];
+        ultmpTime_s.ucVal[3] = pbuff[9];
+        pCON->appoint.time_s = ntohl(ultmpTime_s.ulVal);
+        //预约时间点
+        pCON->appoint.timestamp = time(NULL);
+        *psiRetVal = 1;
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_RecvReqAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal)
+{
+    CON_t *pCON = NULL;
+    uint8_t id = 0;
+    uint8_t id_pos = 4;
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t errcode;
+
+    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_REQ_APPOINT, con_id, id_pos, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        //pbuff[0...3] 操作ID
+        //pbuff[4] 充电桩接口
+        id = EchRemoteIDtoCONID(pbuff[id_pos]);
+        pCON = CONGetHandle(id);
+        if (pCON == NULL)
+        {
+            *psiRetVal = 0;
+            break;
+        }
+        *psiRetVal = 1;
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendAppoint(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int status)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;
+    //[0...3] 操作序列号
+    //[4] 充电桩接口
+    //[5] 预约状态
+    pbuff[5] = status;
+    //[6...9] 预约剩余时间
+    /*********************/
+    pProto->sendCommand(pProto, pEVSE, pCON, usCmdID, 0, 1);
 
     return errcode;
 }

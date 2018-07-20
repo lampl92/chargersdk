@@ -2377,6 +2377,72 @@ static int makeCmdReqPower(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_POWER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+static int makeCmdAppointBodyCtx(uint16_t usCmdID, void *pPObj, void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    EVSE_t *pE;
+    CON_t *pCON;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    ul2uc ultmpTime_s;
+    int remain_time;
+
+
+    pProto = (echProtocol_t *)pPObj;
+    pE = (EVSE_t *)pEObj;
+    pCON = (CON_t *)pCObj;
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;    // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4] 充电桩接口
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pE->info.ucTotalCON);
+    //[5] 预约状态
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[5];
+    //[6] 预约剩余时间 (单位:S) //剩余时间 = 预约时间-已预约时间
+    if (pbuff[5] == 2)
+    {
+        remain_time = pCON->appoint.time_s - (time(NULL) - pCON->appoint.timestamp);
+        if (remain_time < 0)
+            remain_time = 0;
+        ultmpTime_s.ulVal = htonl(remain_time);
+    }
+    else
+    {
+        ultmpTime_s.ulVal = 0;
+    }
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpTime_s.ucVal[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpTime_s.ucVal[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpTime_s.ucVal[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpTime_s.ucVal[3];
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec;  //不要忘记赋值
+    return 1;
+}
+static int makeCmdReqAppoint(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdAppointBodyCtx(ECH_CMDID_REQ_APPOINT, pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_APPOINT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;
+}
+static int makeCmdSetAppoint(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdAppointBodyCtx(ECH_CMDID_SET_APPOINT, pPObj, pEObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_APPOINT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;
+}
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2819,6 +2885,8 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_EMERGENCY_STOP] = EchCMDCreate(75,  74,  30, makeCmdEmergencyStop,analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_POWER]      = EchCMDCreate(0,   200, 30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_POWER]      = EchCMDCreate(202, 201, 30, makeCmdReqPower,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_APPOINT]    = EchCMDCreate(204, 203, 30, makeCmdSetAppoint,   analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_APPOINT]    = EchCMDCreate(204, 205, 30, makeCmdReqAppoint,   analyCmdCommon);
 
     //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 
