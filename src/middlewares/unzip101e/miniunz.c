@@ -97,8 +97,8 @@ int mymkdir(dirname)
 #else
 #ifdef unix
     ret = mkdir (dirname,0775);
-#endif
-#endif
+#endif#endif
+    ret = yaffs_mkdir(dirname, 0755);
     return ret;
 }
 
