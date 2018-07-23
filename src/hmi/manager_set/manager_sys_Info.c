@@ -241,6 +241,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             if (!WM_IsWindow(_hWinRecover))
             {
                 _hWinRecover =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_record, WM_GetClientWindow(pMsg->hWin), 0, 0);
+                WM_MakeModal(_hWinRecover);
             }
                 // USER START (Optionally insert code for reacting on notification message)
                 // USER END
@@ -259,6 +260,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
               if (!WM_IsWindow(_hWinReset))
               {
                   _hWinReset = GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_default, WM_GetClientWindow(pMsg->hWin), 0, 0);                  
+                  WM_MakeModal(_hWinReset);
               }
                 // USER START (Optionally insert code for reacting on notification message)
                 // USER END

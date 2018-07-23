@@ -34,6 +34,16 @@
 *
 ********************************************************************
 */
+typedef enum Hardware_options
+{
+    HARD_NUMS_GUN, //枪数量
+    HARD_ELECTRIC_TERM, //电项
+    HARD_METER_TYPE, //电表类型
+    HARD_PASSWORD,//桩密码
+}HARD_OPT;
+
+HARD_OPT hard_opt = HARD_NUMS_GUN;
+
 /*编辑窗口14行1列，状态项14个*/
 #define _SYSEDIT_MAX_X 5
 #define _SYSEDIT_MAX_Y 22
@@ -63,8 +73,6 @@ static uint8_t _checkbox;
 
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
-#define ID_TEXT_6  (GUI_ID_USER + 0x08)//
-#define ID_TEXT_7  (GUI_ID_USER + 0x09)//
 #define ID_TEXT_8  (GUI_ID_USER + 0x0A)//
 #define ID_TEXT_9  (GUI_ID_USER + 0x0F)//
 #define ID_TEXT_10  (GUI_ID_USER + 0x10)//
@@ -78,19 +86,28 @@ static uint8_t _checkbox;
 #define ID_MULTIEDIT_0 (GUI_ID_USER + 0x18)
 #define ID_CHECKBOX_0 (GUI_ID_USER + 0x19)
 #define ID_CHECKBOX_1 (GUI_ID_USER + 0x1A)
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x28)
+#define ID_TEXT_6     (GUI_ID_USER + 0x29)
+#define ID_TEXT_7  (GUI_ID_USER + 0x2C)//
+#define ID_BUTTON_6  (GUI_ID_USER + 0x2A)
+#define ID_BUTTON_7  (GUI_ID_USER + 0x2B)
+
+
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
 #define ID_TimerSignal  3
 
-#define sysEVSESN "交流桩SN"
-#define sysEVSEID "交流桩ID"
-#define sysServerIP "服务器IP"
+WM_HWIN _hWinchangepile;
+
+#define sysEVSESN "出厂编号"
+#define sysEVSEID "SN序列号"//在程序中为ID号
+#define sysServerIP "服务器域名"
 #define sysServerPort "服务器端口"
 #define sysUserName "用户名"
-#define sysUserPwd "用户密码"
+#define sysUserPwd "口令"
 #define sysDispSleepTime "屏保时间"
 #define sysUSEGPRSModem "GPRS类型"
-#define sysPasswd "秘钥"
+#define sysPasswd "密钥"
 #define sysManagerPwd "管理员密码"
 // USER END
 static WM_HWIN hWindow;
@@ -116,6 +133,109 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 //	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_0, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
 //	{ CHECKBOX_CreateIndirect, "Checkbox", ID_CHECKBOX_1, GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysUSEGPRSModem)) + 90, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF*7, 90, 32, 0, 0x0, 0 },
 };
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
+{
+    { FRAMEWIN_CreateIndirect, "!!!!", ID_FRAMEWIN_0, 240, 45, 300, 200, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text6", ID_TEXT_6, 0, 20, 300, 45, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text7", ID_TEXT_7, 0, 65, 300, 45, TEXT_CF_HCENTER, 0x0, 0 },
+    { BUTTON_CreateIndirect, "确定", ID_BUTTON_6, 50, 110, 80, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "取消", ID_BUTTON_7, 200, 110, 80, 50, 0, 0x0, 0 },
+};
+
+
+static void _cbDialog_frame_changePile(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_6);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        switch (hard_opt)
+        {
+        case HARD_NUMS_GUN:
+            TEXT_SetText(hItem, "枪数设置属于硬件匹配设置!");
+            break;
+        case HARD_ELECTRIC_TERM:
+            TEXT_SetText(hItem, "电相设置属于硬件匹配设置!");
+            break;
+        case HARD_METER_TYPE:
+            TEXT_SetText(hItem, "电表设置属于硬件匹配设置!");
+            break;
+        case HARD_PASSWORD:
+            TEXT_SetText(hItem, "此项为桩管理密码设置!");
+            break;
+        default:
+            break;
+        }
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_7);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        if (hard_opt == HARD_PASSWORD)
+        {
+            TEXT_SetText(hItem, "!!!警告,请牢记新密码!!!");
+        }
+        else
+        {
+            TEXT_SetText(hItem, "!!!警告,请确保设置与硬件相符!!!");
+        }
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_6);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        BUTTON_SetText(hItem, "继续");
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_7);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        BUTTON_SetText(hItem, "取消");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_6:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                WM_HideWindow(_hWinManagerSysSet);
+                WM_HideWindow(_hWinManagerCommon);
+                switch (hard_opt)
+                {
+                case HARD_NUMS_GUN:
+                    Keypad_GetValueTest(SYSSET_VALUE, 31, _hWinManagerSysSet, _hWinManagerCommon, "枪数", "1,2");
+                    break;
+                case HARD_ELECTRIC_TERM:
+                    Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电相", "1,3");
+                    break;
+                case HARD_METER_TYPE:
+                    Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
+                    break;
+                case HARD_PASSWORD:
+                    Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "123456");
+                    break;
+                default:
+                    break;
+                }
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_7:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
 /*******************************************************************
 *
 *       _cbWindow
@@ -191,10 +311,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 21:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "2000000000000002");
+                    Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "2000000000000002");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
                 //                    EDIT_SetText(_aahEdit[1][0], _tmpBuff);
@@ -203,10 +326,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 22:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "123.56.113.123");
+                    Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "123.56.113.123");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
                 //                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
@@ -215,10 +341,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 23:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "1-65535");
+                    Keypad_GetValueTest(SYSSET_VALUE, 23, _hWinManagerSysSet, _hWinManagerCommon, sysServerPort, "1-65535");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pechProto->info.usServerPort);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -227,30 +356,39 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 24:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "dpcuser");
+                    Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "dpcuser");
+                }
                 //                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
             }
             break;
         case 25:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "1234567890");
+                    Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "1234567890");
+                }
                 //                    EDIT_SetText(_aahEdit[5][0], "******");
             }
             break;
         case 26:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "1-99999");
+                    Keypad_GetValueTest(SYSSET_VALUE, 26, _hWinManagerSysSet, _hWinManagerCommon, sysDispSleepTime, "1-99999");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -259,9 +397,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 27:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 27, _hWinManagerSysSet, _hWinManagerCommon, "网卡类型", "1:以太网,2:GPRS");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 27, _hWinManagerSysSet, _hWinManagerCommon, "网卡类型", "1:以太网,2:GPRS");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", xSysconf.ulDispSleepTime_s);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
@@ -270,72 +411,94 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 28:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "123456");
+                    Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "123456");
+                }
             }
             break;
         case 29:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "123456");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    hard_opt = HARD_PASSWORD;
+                    _hWinchangepile =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePile, _hWinManagerSysSet, 0, 0);
+                }
             }
             break;
         case 30:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "0-120");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "0-120");
+                }
             }
             break;
         case 31:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 31, _hWinManagerSysSet, _hWinManagerCommon, "枪数", "1,2");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    hard_opt = HARD_NUMS_GUN;
+                    _hWinchangepile =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePile, _hWinManagerSysSet, 0, 0);
+                    WM_MakeModal(_hWinchangepile);
+                }
             }
             break;
         case 32:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 32, _hWinManagerSysSet, _hWinManagerCommon, "电相", "1,3");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    hard_opt = HARD_ELECTRIC_TERM;
+                    _hWinchangepile =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePile, _hWinManagerSysSet, 0, 0);
+                    WM_MakeModal(_hWinchangepile);
+                }
             }
             break;
         case 33:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    hard_opt = HARD_METER_TYPE;
+                    _hWinchangepile =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePile, _hWinManagerSysSet, 0, 0);
+                }
             }
             break;
         case 34:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "DPC");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "DPC");
+                }
             }
             break;
         case 35:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 35, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "AB-CD-EF-GH-IK-00");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 35, _hWinManagerSysSet, _hWinManagerCommon, "MAC", "AB-CD-EF-GH-IK-00");
+                }
             }
             break;
         case 36:
            // if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
-            {
+            if(pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+            {             
                 if (CHECKBOX_GetState(_aahEdit[16][0]) == 1)
                 {
                     tmpU8 = 1;
@@ -363,50 +526,65 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                             WM_ShowWindow(_aahText[y][x]);
                         }
                     }
-                }
-//                WM_HideWindow(_hWinManagerSysSet);
-//                WM_HideWindow(_hWinManagerCommon);
-//                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "", "");
+                }                
+                //                WM_HideWindow(_hWinManagerSysSet);
+                //                WM_HideWindow(_hWinManagerCommon);
+                //                Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "", "");
             }
             break;
         case 37:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "192.168.1.2");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 37, _hWinManagerSysSet, _hWinManagerCommon, "本机ip", "192.168.1.2");
+                }
             }
             break;
         case 38:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 38, _hWinManagerSysSet, _hWinManagerCommon, "子网掩码", "255.255.255.0");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 38, _hWinManagerSysSet, _hWinManagerCommon, "子网掩码", "255.255.255.0");
+                }
             }
             break;
         case 39:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 39, _hWinManagerSysSet, _hWinManagerCommon, "网关", "192.168.1.1");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 39, _hWinManagerSysSet, _hWinManagerCommon, "网关", "192.168.1.1");
+                }
             }
             break;
         case 40:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 40, _hWinManagerSysSet, _hWinManagerCommon, "DNS1", "114.215.126.16");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 40, _hWinManagerSysSet, _hWinManagerCommon, "DNS1", "114.215.126.16");
+                }
             }
             break;
         case 41:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(_hWinManagerSysSet);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(SYSSET_VALUE, 41, _hWinManagerSysSet, _hWinManagerCommon, "DNS2", "112.124.47.27");
+                if (!WM_IsWindow(_hWinchangepile))
+                {
+                    WM_HideWindow(_hWinManagerSysSet);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(SYSSET_VALUE, 41, _hWinManagerSysSet, _hWinManagerCommon, "DNS2", "112.124.47.27");
+                }
             }
             break;
         }

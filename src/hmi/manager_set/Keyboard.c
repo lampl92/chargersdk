@@ -1233,6 +1233,7 @@ static uint8_t Value_Check()
             if(flag_password_error_prompt == 0)
             {
                 hwin_password = FRAMEWIN_CreateEx(250, 100, 300, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "！！！！", _cbDialog_frame);
+                WM_MakeModal(hwin_password);
                 FRAMEWIN_SetTextColor(hwin_password, GUI_RED);
                 FRAMEWIN_SetFont(hwin_password, &SIF24_Font);
                 //FRAMEWIN_SetClientColor(hwin_password, GUI_WHITE);

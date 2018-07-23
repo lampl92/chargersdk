@@ -3,12 +3,15 @@
 // USER END
 
 #include "DIALOG.h"
-/*******************************************************************
-*
-*       defines
-*
-********************************************************************
-*/
+
+typedef enum power_current
+{
+    PC_P,  //功率电流之功率
+    PC_C,  //功率电流之电流
+}PC_OPT;
+
+PC_OPT pc_opt1 = PC_P;
+
 /*编辑窗口14行1列，状态项14个*/
 #define _SYSEDIT_MAX_X 2
 #define _SYSEDIT_MAX_Y 11
@@ -39,8 +42,6 @@ static uint8_t manualType = 0;
 
 #define ID_TEXT_5  (GUI_ID_USER + 0x06)//
 #define ID_EDIT_0  (GUI_ID_USER + 0x07)//
-#define ID_TEXT_6  (GUI_ID_USER + 0x08)//
-#define ID_TEXT_7  (GUI_ID_USER + 0x09)//
 #define ID_TEXT_8  (GUI_ID_USER + 0x0A)//
 #define ID_TEXT_9  (GUI_ID_USER + 0x0F)//
 #define ID_TEXT_10  (GUI_ID_USER + 0x10)//
@@ -52,6 +53,12 @@ static uint8_t manualType = 0;
 #define ID_EDIT_5  (GUI_ID_USER + 0x16)//
 #define ID_EDIT_6  (GUI_ID_USER + 0x17)//
 #define ID_MULTIEDIT_0 (GUI_ID_USER + 0x18)
+
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x28)
+#define ID_TEXT_6     (GUI_ID_USER + 0x29)
+#define ID_TEXT_7  (GUI_ID_USER + 0x2C)//
+#define ID_BUTTON_6  (GUI_ID_USER + 0x2A)
+#define ID_BUTTON_7  (GUI_ID_USER + 0x2B)
 
 #define ID_TimerTime    1
 #define ID_TimerFlush   2
@@ -77,6 +84,7 @@ static uint8_t manualType = 0;
 
 static WM_HWIN hWindow;
 WM_HWIN _hWinManagerConSet1;
+WM_HWIN _hWin_hard1;
 static WM_HTIMER _timerRTC, _timerData, _timerSignal;
 extern int manual_charge(void *pvCON, int onoff);
 
@@ -84,6 +92,89 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
     { WINDOW_CreateIndirect, "window", ID_WINDOW_0, 10, 95, 780, 370, 0, 0x0, 0 },
 };
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
+{
+    { FRAMEWIN_CreateIndirect, "!!!!", ID_FRAMEWIN_0, 240, 45, 300, 200, 0, 0x64, 0 },
+    { TEXT_CreateIndirect, "Text6", ID_TEXT_6, 0, 20, 300, 45, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "Text7", ID_TEXT_7, 0, 65, 300, 45, TEXT_CF_HCENTER, 0x0, 0 },
+    { BUTTON_CreateIndirect, "确定", ID_BUTTON_6, 50, 110, 80, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "取消", ID_BUTTON_7, 200, 110, 80, 50, 0, 0x0, 0 },
+};
+
+static void _cbDialog_frame_changePC(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_6);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        switch (pc_opt1)
+        {
+        case PC_C:
+            TEXT_SetText(hItem, "电流设置属于硬件匹配设置!");
+            break;
+        case PC_P:
+            TEXT_SetText(hItem, "功率设置属于硬件匹配设置!");
+            break;
+        default:
+            break;
+        }
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_7);
+        TEXT_SetFont(hItem, &SIF16_Font);
+        TEXT_SetText(hItem, "!!!警告,请确保设置与硬件相符!!!");
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_6);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        BUTTON_SetText(hItem, "继续");
+        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_7);
+        BUTTON_SetFont(hItem, &SIF16_Font);
+        BUTTON_SetText(hItem, "取消");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_6:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                WM_HideWindow(_hWinManagerConSet);
+                WM_HideWindow(_hWinManagerCommon);
+                switch (pc_opt1)
+                {
+                case PC_C:
+                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet1, _hWinManagerCommon, conRatedCurrent, "1相max:32,3相max:63");
+                    break;
+                case PC_P:
+                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet1, _hWinManagerCommon, conRatedPower, "1相max:7,3相max:41");
+                    break;
+                default:
+                    break;
+                }
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        case ID_BUTTON_7:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                GUI_EndDialog(pMsg->hWin, 0);
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
 
 static void Data_Flush()
 {
@@ -185,9 +276,12 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 //                        WM_SetStayOnTop(_hWinManagerConSet,0);
                 //                        GUI_EndDialog(_hWinManagerConSet,0);
                 //                       _deleteWin(_hWinManagerCommon);
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);
-                Keypad_GetValueTest(CONSET_VALUE, 20, pMsg->hWin, _hWinManagerCommon, conQRCode, "200000000000003");
+                if(!WM_IsWindow(_hWin_hard1))
+                {
+                    WM_HideWindow(pMsg->hWin);
+                    WM_HideWindow(_hWinManagerCommon);
+                    Keypad_GetValueTest(CONSET_VALUE, 20, pMsg->hWin, _hWinManagerCommon, conQRCode, "200000000000003");
+                }
             }
             break;
         case 21:
@@ -202,10 +296,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 22:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWin_hard1))
+                {
+                    WM_HideWindow(pMsg->hWin);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(CONSET_VALUE, 22, pMsg->hWin, _hWinManagerCommon, conVolatageUpperLimits, "lowest-280");
+                    Keypad_GetValueTest(CONSET_VALUE, 22, pMsg->hWin, _hWinManagerCommon, conVolatageUpperLimits, "lowest-280");   
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
                 //                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
@@ -214,10 +311,13 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 23:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                WM_HideWindow(pMsg->hWin);
-                WM_HideWindow(_hWinManagerCommon);
+                if (!WM_IsWindow(_hWin_hard1))
+                {
+                    WM_HideWindow(pMsg->hWin);
+                    WM_HideWindow(_hWinManagerCommon);
 
-                Keypad_GetValueTest(CONSET_VALUE, 23, pMsg->hWin, _hWinManagerCommon, conVolatageLowerLimits, "100-highest");
+                    Keypad_GetValueTest(CONSET_VALUE, 23, pMsg->hWin, _hWinManagerCommon, conVolatageLowerLimits, "100-highest");
+                }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
@@ -238,17 +338,23 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         case 25:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                                WM_HideWindow(pMsg->hWin);
-                                WM_HideWindow(_hWinManagerCommon);           
-                                Keypad_GetValueTest(CONSET_VALUE, 25, pMsg->hWin, _hWinManagerCommon, conRatedCurrent, "1相max:32,3相max:63");
+                if (!WM_IsWindow(_hWin_hard1))
+                {
+                    pc_opt1 = PC_C;
+                    _hWin_hard1 =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePC, _hWinManagerConSet1, 0, 0);       
+                    WM_MakeModal(_hWin_hard1);
+                }
             }
             break;
         case 26:
             if (pMsg->Data.v == WM_NOTIFICATION_RELEASED)
             {
-                                WM_HideWindow(pMsg->hWin);
-                                WM_HideWindow(_hWinManagerCommon);            
-                Keypad_GetValueTest(CONSET_VALUE, 26, pMsg->hWin, _hWinManagerCommon, conRatedPower, "1相max:7,3相max:41");
+                if (!WM_IsWindow(_hWin_hard1))
+                {
+                    pc_opt1 = PC_P;
+                    _hWin_hard1 =  GUI_CreateDialogBox(_aDialogCreateFrame, GUI_COUNTOF(_aDialogCreateFrame), _cbDialog_frame_changePC, _hWinManagerConSet1, 0, 0);
+                    WM_MakeModal(_hWin_hard1);
+                }
             }
             break;
         }
