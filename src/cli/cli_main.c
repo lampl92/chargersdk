@@ -49,17 +49,18 @@ void cli_init(void)
 #else
     tinysh_add_command(&cli_ftpserver_cmd);
 #endif
-//    tinysh_add_command(&cli_unzip_cmd);
-//    tinysh_add_command(&cli_zip_cmd);
+    //    tinysh_add_command(&cli_unzip_cmd);
+    //    tinysh_add_command(&cli_zip_cmd);
 
-    /************系统测试****************/
-//    tinysh_add_command(&cli_fatfs_cmd);
-//    tinysh_add_command(&cli_testsdram_cmd);
-//    tinysh_add_command(&cli_parseJson_cmd);
-//    tinysh_add_command(&cli_makeJson_cmd);
-//    tinysh_add_command(&cli_aestest_cmd);
-//    tinysh_add_command(&cli_yaffs2test_cmd);
-//    tinysh_add_command(&cli_crctest_cmd);
+        /************系统测试****************/
+        //    tinysh_add_command(&cli_fatfs_cmd);
+        //    tinysh_add_command(&cli_testsdram_cmd);
+        //    tinysh_add_command(&cli_parseJson_cmd);
+        //    tinysh_add_command(&cli_makeJson_cmd);
+        //    tinysh_add_command(&cli_aestest_cmd);
+        //    tinysh_add_command(&cli_yaffs2test_cmd);
+        //    tinysh_add_command(&cli_crctest_cmd);
+    tinysh_add_command(&cli_sqlite3_cmd);
     /************电桩信息****************/
 #if BOOTLOADER
 #else

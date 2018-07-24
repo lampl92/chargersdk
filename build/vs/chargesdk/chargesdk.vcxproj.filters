@@ -549,6 +549,9 @@
     <Filter Include="Header files\middlewares\libmodbus">
       <UniqueIdentifier>{639b4b10-7f5c-4f7d-bd6c-7d37a5c95744}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\sqlite3">
+      <UniqueIdentifier>{6b766cc2-dda3-4321-aa5a-7a20dcb88f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -1976,6 +1979,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c">
       <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\sqlite-amalgamation-3240000\sqlite3.c">
+      <Filter>Source files\middlewares\sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\sqlite-amalgamation-3240000\sqlvfs.c">
+      <Filter>Source files\middlewares\sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\cli\cli_sqlite3.c">
+      <Filter>Source files\cli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

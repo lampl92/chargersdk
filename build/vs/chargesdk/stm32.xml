@@ -24,6 +24,7 @@
         <string>OS_SUPPORT</string>
         <string>USE_HAL_DRIVER</string>
         <string>USE_FreeRTOS=1</string>
+        <string>SQLITE_OS_OTHER</string>
       </PreprocessorMacros>
       <IncludeDirectories>
         <string>.</string>
@@ -68,6 +69,7 @@
         <string>../../../src/net/user</string>
         <string>../../../src/middlewares/unzip101e</string>
         <string>../../../src/middlewares/libmodbus-3.1.4/src</string>
+        <string>../../../src/middlewares/sqlite-amalgamation-3240000</string>
       </IncludeDirectories>
       <CFLAGS />
       <CXXFLAGS />

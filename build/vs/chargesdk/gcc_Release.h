@@ -353,6 +353,9 @@
 #ifndef __INT32_MAX__
 #define __INT32_MAX__ 0x7fffffffL
 #endif
+#ifndef SQLITE_OS_OTHER
+#define SQLITE_OS_OTHER 1
+#endif
 #ifndef __UQQ_FBIT__
 #define __UQQ_FBIT__ 8
 #endif
@@ -1431,6 +1434,7 @@
 //../../../src/net/user
 //../../../src/middlewares/unzip101e
 //../../../src/middlewares/libmodbus-3.1.4/src
+//../../../src/middlewares/sqlite-amalgamation-3240000
 // --- Include directories end --- //
 
 

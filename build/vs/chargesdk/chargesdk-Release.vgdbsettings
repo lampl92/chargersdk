@@ -38,6 +38,7 @@
             <Value>$(TOOLCHAIN_ROOT)\bin;%PATH%</Value>
           </Record>
         </Records>
+        <EnvironmentSetupFiles />
       </Environment>
       <BackgroundMode xsi:nil="true" />
     </MakeCommandTemplate>
@@ -134,7 +135,7 @@
   <UserDefinedVariables />
   <ImportedPropertySheets />
   <CodeSense>
-    <Enabled>Unknown</Enabled>
+    <Enabled>True</Enabled>
     <CFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CFLAGS>
     <CXXFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CXXFLAGS>
     <ExternalSourceFileList />

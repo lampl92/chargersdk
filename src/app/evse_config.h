@@ -17,7 +17,7 @@
 #endif
 
 #ifndef EVSE_USING_GUI
-#define EVSE_USING_GUI              1
+#define EVSE_USING_GUI              0
 #endif
 
 #ifndef EVSE_USING_STORE_ORDER
