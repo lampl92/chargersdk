@@ -122,10 +122,10 @@ static void _cbDialog_frame_changePC(WM_MESSAGE *pMsg)
         switch (pc_opt)
         {
         case PC_C:
-            TEXT_SetText(hItem, "电流设置属于硬件匹配设置!");
+            TEXT_SetText(hItem, "电流设置重启生效!");
             break;
         case PC_P:
-            TEXT_SetText(hItem, "功率设置属于硬件匹配设置!");
+            TEXT_SetText(hItem, "功率设置重启生效!");
             break;
         default:
             break;
@@ -153,10 +153,10 @@ static void _cbDialog_frame_changePC(WM_MESSAGE *pMsg)
                 switch (pc_opt)
                 {
                 case PC_C:
-                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet, _hWinManagerCommon, conRatedCurrent, "1相max:32,3相max:63");
+                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet, _hWinManagerCommon, conRatedCurrent, "1相16-32,3相16-63");
                     break;
                 case PC_P:
-                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conRatedPower, "1相max:7,3相max:41");
+                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet, _hWinManagerCommon, conRatedPower, "1相1-7,3相10-41");
                     break;
                 default:
                     break;

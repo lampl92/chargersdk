@@ -1571,7 +1571,7 @@ static uint8_t Value_Check()
             tmpDouble = atof(result_input);
             if (pEVSE->info.ucPhaseLine == 3)
             {
-                if ((tmpDouble>0) && (tmpDouble <= 63))
+                if ((tmpDouble>=16) && (tmpDouble <= 63))
                 {
                     pCon->info.dRatedPower = 220 * tmpDouble * 3 / 1000;
                     pCon->info.dRatedCurrent  = tmpDouble;
@@ -1580,7 +1580,7 @@ static uint8_t Value_Check()
             }
             else
             {
-                if ((tmpDouble > 0) && (tmpDouble <= 32))
+                if ((tmpDouble >=16) && (tmpDouble <= 32))
                 {
                     pCon->info.dRatedPower = 220 * tmpDouble / 1000;
                     pCon->info.dRatedCurrent  = tmpDouble;
