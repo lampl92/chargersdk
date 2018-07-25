@@ -844,6 +844,9 @@
 #ifndef __FLT64_DIG__
 #define __FLT64_DIG__ 15
 #endif
+#ifndef EVSE_USING_GUI
+#define EVSE_USING_GUI 0
+#endif
 #ifndef __UINT_FAST32_MAX__
 #define __UINT_FAST32_MAX__ 0xffffffffU
 #endif
@@ -1015,6 +1018,9 @@
 #ifndef __cpp_decltype
 #define __cpp_decltype 200707
 #endif
+#ifndef EVSE_USING_RFID
+#define EVSE_USING_RFID 0
+#endif
 #ifndef __FLT32_DECIMAL_DIG__
 #define __FLT32_DECIMAL_DIG__ 9
 #endif
@@ -1152,6 +1158,9 @@
 #endif
 #ifndef __FLT32_EPSILON__
 #define __FLT32_EPSILON__ 1.1920928955078125e-7F32
+#endif
+#ifndef DEBUG_DIAG_DUMMY
+#define DEBUG_DIAG_DUMMY 1
 #endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
