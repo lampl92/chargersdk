@@ -1593,18 +1593,18 @@ static uint8_t Value_Check()
             tmpDouble = atof(result_input);
             if (pEVSE->info.ucPhaseLine == 3)
             {
-                if ((tmpDouble >= (16 * 220 * 3 / 1000))&&(tmpDouble <= (63 * 220 * 3 / 1000)))
+                if ((tmpDouble >= (16 * 220 * 3 / 1000.0))&&(tmpDouble <= (63 * 220 * 3 / 1000.0)))
                 {
-                    pCon->info.dRatedCurrent = tmpDouble * 1000 / (220 * 3);
+                    pCon->info.dRatedCurrent = tmpDouble * 1000.0 / (220 * 3);
                     pCon->info.dRatedPower = tmpDouble;
                     cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
                 }
             }
             else
             {
-                if ((tmpDouble > (16 * 220 / 1000))&&(tmpDouble <=  (32 * 220 / 1000)))
+                if ((tmpDouble > (16 * 220 / 1000.0))&&(tmpDouble <=  (32 * 220 / 1000.0)))
                 {
-                    pCon->info.dRatedCurrent = tmpDouble * 1000 / 220;
+                    pCon->info.dRatedCurrent = tmpDouble * 1000.0 / 220;
                     pCon->info.dRatedPower = tmpDouble;
                     cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
                 }
