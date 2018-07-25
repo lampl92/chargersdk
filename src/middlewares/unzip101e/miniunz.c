@@ -11,7 +11,6 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
-#include <fcntl.h>
 
 #ifdef unix
 # include <unistd.h>
@@ -20,6 +19,7 @@
 //# include <direct.h>
 //# include <io.h>
 #include "yaffsfs.h"
+#include "retarget.h"
 #endif
 
 #include "unzip.h"
@@ -97,7 +97,8 @@ int mymkdir(dirname)
 #else
 #ifdef unix
     ret = mkdir (dirname,0775);
-#endif#endif
+#endif
+#endif
     ret = yaffs_mkdir(dirname, 0755);
     return ret;
 }
@@ -155,14 +156,14 @@ static void do_banner()
 
 static void do_help()
 {
-    printf("Usage : miniunz [-e] [-x] [-v] [-l] [-o] [-p password] file.zip [file_to_extr.] [-d extractdir]\n\n" \
-           "  -e  Extract without pathname (junk paths)\n" \
-           "  -x  Extract with pathname\n" \
-           "  -v  list files\n" \
-           "  -l  list files\n" \
-           "  -d  directory to extract into\n" \
-           "  -o  overwrite files without prompting\n" \
-           "  -p  extract crypted file using password\n\n");
+    printf("Usage : miniunz [-e] [-x] [-v] [-l] [-o] [-p password] file.zip [file_to_extr.] [-d extractdir]\n\n");
+    printf("  -e  Extract without pathname (junk paths)\n");
+    printf("  -x  Extract with pathname\n");
+    printf("  -v  list files\n");
+    printf("  -l  list files\n");
+    printf("  -d  directory to extract into\n");
+    printf("  -o  overwrite files without prompting\n");
+    printf("  -p  extract crypted file using password\n\n");
 }
 
 

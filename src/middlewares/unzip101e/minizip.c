@@ -128,18 +128,18 @@ int check_exist_file(filename)
 
 static void do_banner()
 {
-    printf("MiniZip 1.01b, demo of zLib + Zip package written by Gilles Vollant\n");
-    printf("more info at http://www.winimage.com/zLibDll/unzip.html\n\n");
+    printf_safe("MiniZip 1.01b, demo of zLib + Zip package written by Gilles Vollant\n");
+    printf_safe("more info at http://www.winimage.com/zLibDll/unzip.html\n\n");
 }
 
 static void do_help()
 {
-    printf("Usage : minizip [-o] [-a] [-0 to -9] [-p password] file.zip [files_to_add]\n\n" \
-           "  -o  Overwrite existing file.zip\n" \
-           "  -a  Append to existing file.zip\n" \
-           "  -0  Store only\n" \
-           "  -1  Compress faster\n" \
-           "  -9  Compress better\n\n");
+    printf_safe("Usage : minizip [-o] [-a] [-0 to -9] [-p password] file.zip [files_to_add]\n\n");
+    printf_safe("  -o  Overwrite existing file.zip\n");
+    printf_safe("  -a  Append to existing file.zip\n");
+    printf_safe("  -0  Store only\n");
+    printf_safe("  -1  Compress faster\n");
+    printf_safe("  -9  Compress better\n\n");
 }
 
 /* calculate the CRC32 of a file,
