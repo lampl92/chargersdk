@@ -117,17 +117,27 @@ static void _cbDialog_frame_changePC(WM_MESSAGE *pMsg)
         switch (pc_opt1)
         {
         case PC_C:
-            TEXT_SetText(hItem, "电流设置属于硬件匹配设置!");
+            TEXT_SetText(hItem, "电流设置下次充电时生效!");
             break;
         case PC_P:
-            TEXT_SetText(hItem, "功率设置属于硬件匹配设置!");
+            TEXT_SetText(hItem, "功率设置下次充电时生效!");
             break;
         default:
             break;
         }
         hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_7);
         TEXT_SetFont(hItem, &SIF16_Font);
-        TEXT_SetText(hItem, "!!!警告,请确保设置与硬件相符!!!");
+        switch (pc_opt1)
+        {
+        case PC_C:
+            TEXT_SetText(hItem, "单相:16-32 三相:16-63");
+            break;
+        case PC_P:
+            TEXT_SetText(hItem, "单相:3.52-7.04 三相:10.56-41.58");
+            break;
+        default:
+            break;
+        }
         hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_6);
         BUTTON_SetFont(hItem, &SIF16_Font);
         BUTTON_SetText(hItem, "继续");
@@ -148,10 +158,10 @@ static void _cbDialog_frame_changePC(WM_MESSAGE *pMsg)
                 switch (pc_opt1)
                 {
                 case PC_C:
-                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet1, _hWinManagerCommon, conRatedCurrent, "1相max:32,3相max:63");
+                    Keypad_GetValueTest(CONSET_VALUE, 25, _hWinManagerConSet1, _hWinManagerCommon, conRatedCurrent, "单位:A");
                     break;
                 case PC_P:
-                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet1, _hWinManagerCommon, conRatedPower, "1相max:7,3相max:41");
+                    Keypad_GetValueTest(CONSET_VALUE, 26, _hWinManagerConSet1, _hWinManagerCommon, conRatedPower, "单位:kW");
                     break;
                 default:
                     break;
@@ -191,28 +201,28 @@ static void Data_Flush()
 
     EDIT_SetText(_aahEdit[2][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageLowerLimits);
     EDIT_SetText(_aahEdit[3][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
     EDIT_SetText(_aahEdit[4][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempUpperLimits);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dACTempUpperLimits);
     EDIT_SetText(_aahEdit[5][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dACTempLowerLimits);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dACTempLowerLimits);
     EDIT_SetText(_aahEdit[6][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempUpperLimits);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dSocketTempUpperLimits);
     EDIT_SetText(_aahEdit[7][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dSocketTempLowerLimits);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dSocketTempLowerLimits);
     EDIT_SetText(_aahEdit[8][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
     EDIT_SetText(_aahEdit[9][0], _tmpBuff);
 
-    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+    sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedPower);
     EDIT_SetText(_aahEdit[10][0], _tmpBuff);
 
 }
@@ -304,7 +314,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     Keypad_GetValueTest(CONSET_VALUE, 22, pMsg->hWin, _hWinManagerCommon, conVolatageUpperLimits, "lowest-280");   
                 }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
+                //                    sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageUpperLimits);
                 //                    EDIT_SetText(_aahEdit[2][0], _tmpBuff);
             }
             break;
@@ -319,7 +329,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     Keypad_GetValueTest(CONSET_VALUE, 23, pMsg->hWin, _hWinManagerCommon, conVolatageLowerLimits, "100-highest");
                 }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
-                //                    sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+                //                    sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageLowerLimits);
                 //                    EDIT_SetText(_aahEdit[3][0], _tmpBuff);
             }
             break;
@@ -331,7 +341,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 //                    WM_HideWindow(_hWinManagerCommon);
                 //
                 //                    Keypad_GetValueTest(CONSET_VALUE, 24, pMsg->hWin, _hWinManagerCommon, conACCurrentUpperLimits, "eg,38");
-                //                    sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+                //                    sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
                 //                    EDIT_SetText(_aahEdit[4][0], _tmpBuff);
             }
             break;
@@ -372,31 +382,31 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
         EDIT_SetText(_aahEdit[1][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID2:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageUpperLimits);
         EDIT_SetText(_aahEdit[2][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID3:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageLowerLimits);
         EDIT_SetText(_aahEdit[3][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID4:
-        sprintf(_tmpBuff, "%.1f", (pCon->info.dRatedCurrent * 1.1));
+        sprintf(_tmpBuff, "%.2lf", (pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID5:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[5][0], _tmpBuff);
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
-        sprintf(_tmpBuff, "%.1f", (pCon->info.dRatedCurrent * 1.1));
+        sprintf(_tmpBuff, "%.2lf", (pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         break;
     case MSG_MANAGERSETID6:
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[5][0], _tmpBuff);
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
-        sprintf(_tmpBuff, "%.1f", (pCon->info.dRatedCurrent * 1.1));
+        sprintf(_tmpBuff, "%.2lf", (pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         break;
     default:
@@ -485,14 +495,14 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("255.5"));
         _aahText[2][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen(" V")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, " V");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageUpperLimits);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageUpperLimits);
         EDIT_SetText(_aahEdit[2][0], _tmpBuff);
         //电压下限
         _aahText[3][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _FONT_WIDTH*(strlen(conVolatageLowerLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conVolatageLowerLimits);
         _aahEdit[3][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 23, strlen("255.5"));
         _aahText[3][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 3, _WORD_WIDTH*(strlen(" V")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, " V");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
-        sprintf(_tmpBuff, "%.1f", pCon->info.dVolatageLowerLimits);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dVolatageLowerLimits);
         EDIT_SetText(_aahEdit[3][0], _tmpBuff);
         //电流上限
         _aahText[4][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _FONT_WIDTH*(strlen(conACCurrentUpperLimits)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conACCurrentUpperLimits);
@@ -500,21 +510,21 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _aahText[4][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("255.5")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 4, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, " A");
         memset(_tmpBuff, '\0', strlen(_tmpBuff));
         /// TODO (zshare#1#): 电流上限设置值？？？？？
-        sprintf(_tmpBuff, "%.1f", (pCon->info.dRatedCurrent * 1.1));
+        sprintf(_tmpBuff, "%.2lf", (pCon->info.dRatedCurrent * 1.1));
         EDIT_SetText(_aahEdit[4][0], _tmpBuff);
         EDIT_SetBkColor(_aahEdit[4][0], EDIT_CI_ENABLED, GUI_GRAY);
         //额定电流
         _aahText[5][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _FONT_WIDTH*(strlen(conRatedCurrent)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedCurrent);
         _aahEdit[5][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 25, strlen("145.4"));
         _aahText[5][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 5, _WORD_WIDTH*(strlen(" A")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "A");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedCurrent);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedCurrent);
         EDIT_SetText(_aahEdit[5][0], _tmpBuff);
         //EDIT_SetBkColor(_aahEdit[9][0], EDIT_CI_ENABLED, GUI_GRAY);
         //额定功率
         _aahText[6][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _FONT_WIDTH*(strlen(conRatedPower)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, conRatedPower);
         _aahEdit[6][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 26, strlen("145.4"));
         _aahText[6][1] = TEXT_CreateEx(_editxoff + _WORD_WIDTH*(strlen("145.4")), GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 6, _WORD_WIDTH*(strlen(" kW")), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, "kW");
-        sprintf(_tmpBuff, "%.1f", pCon->info.dRatedPower);
+        sprintf(_tmpBuff, "%.2lf", pCon->info.dRatedPower);
         EDIT_SetText(_aahEdit[6][0], _tmpBuff);
        // EDIT_SetBkColor(_aahEdit[10][0], EDIT_CI_ENABLED, GUI_GRAY);
         
