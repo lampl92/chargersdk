@@ -23,16 +23,15 @@ uint8_t EchRemoteIDtoCONID(uint8_t remote_id)
 uint8_t EchCONIDtoRemoteID(uint8_t con_id, uint8_t total)
 {
     uint8_t id;
-//    if(total > 1)
-//    {
-//        id = con_id + 1;
-//    }
-//    else
-//    {
-//        id = 0;
-//    }
-
-    id = con_id + 1;
+    if(total > 1)
+    {
+        id = con_id + 1;
+    }
+    else
+    {
+        id = 0;
+    }
+//    id = con_id + 1;
 
     return id;
 }
