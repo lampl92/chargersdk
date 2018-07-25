@@ -246,14 +246,14 @@ static void signal_error(CON_t *pCON, int i)
         {
             led_state = State_red_flicker;
         }
-        else if ((pCON->status.ulSignalFault != 0)&&\
-             (pCON->status.ulSignalAlarm == 0)&&\
-             (pEVSE->status.ulSignalAlarm == 0)&&\
-             (pEVSE->status.ulSignalFault == 0)&&\
-    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-        {
-            ;
-        }
+//        else if ((pCON->status.ulSignalFault != 0)&&\
+//             (pCON->status.ulSignalAlarm == 0)&&\
+//             (pEVSE->status.ulSignalAlarm == 0)&&\
+//             (pEVSE->status.ulSignalFault == 0)&&\
+//    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+//        {
+//            ;
+//        }
         else if (((pEVSE->status.ulSignalFault != 0)&&\
             (pEVSE->status.ulSignalAlarm == 0)&&\
             (pCON->status.ulSignalFault == 0)&&\
