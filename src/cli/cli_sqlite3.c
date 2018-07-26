@@ -30,15 +30,17 @@ int cli_sqlite3_main(int argc, char **argv) {
     }
 //    rc = sqlite3_exec(db, argv[2], callback, 0, &zErrMsg);
     rc = sqlite3_exec(db, "create table MyTable_1( ID integer primary key autoincrement, name nvarchar(32) ) ", callback, 0, &zErrMsg);
-    for (int i = 0; i < 1000; i++)
-    {
-        printf_safe("%d\r",i);
-    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( 'walk' )", callback, 0, &zErrMsg);
-    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( 'bike')  ", callback, 0, &zErrMsg);
-    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( ' bus' ) ", callback, 0, &zErrMsg);
-    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( 'subway' ) ", callback, 0, &zErrMsg);
-        
-    }
+//    for (int i = 0; i < 100; i++)
+//    {
+//        printf_safe("%d\r",i);
+//    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( '走路' )", callback, 0, &zErrMsg);
+//    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( '自行车')  ", callback, 0, &zErrMsg);
+//    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( ' 公交车' ) ", callback, 0, &zErrMsg);
+//    rc = sqlite3_exec(db, "insert into MyTable_1( name ) values ( '地铁' ) ", callback, 0, &zErrMsg);
+//        
+//    }
+    rc = sqlite3_exec(db, "update MyTable_1 set name = '走路' where name = 'walk'", callback, 0, &zErrMsg);
+//    rc = sqlite3_exec(db, "select * from MyTable_1 WHERE name like '%wal%'", callback, 0, &zErrMsg);
     rc = sqlite3_exec(db, "select * from MyTable_1", callback, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         printf_safe("SQL error: %s\n", zErrMsg);
