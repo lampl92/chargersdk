@@ -204,21 +204,21 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
     pCON = CONGetHandle(0);
     if (GBSgunstate[0] == GunchargingState)
     {
-        sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-        sprintf(temp_buf, "%.1f", pCON->status.dChargingCurrent);//充电电流   
+        sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//充电电流   
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);
-        sprintf(temp_buf, "%.1f", (pCON->status.dChargingPower));
+        sprintf(temp_buf, "%.2f", (pCON->status.dChargingPower));
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电功率     
     }
     if (GBSgunstate[0] == GunchargedoneState)
     {
-        sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-        sprintf(temp_buf, "%.1f", pCON->order.dTotalFee);
+        sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);//消费总额 
         time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-        sprintf(temp_buf, "%.1f", time_charge / 60.0);
+        sprintf(temp_buf, "%.2f", time_charge / 60.0);
         TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电时间
     }         
 }
