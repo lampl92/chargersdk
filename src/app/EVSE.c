@@ -450,7 +450,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = -40;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -458,7 +458,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
     tmpACTemp = 25;
 #else
     tmpACTemp = (double)get_dc_massage(TEMP_L_IN); 
-	if (tmpACTemp > 200 || tmpACTemp < -40)
+	if (tmpACTemp > 200 || tmpACTemp < -60)
 	{
 		errcode = ERR_EVSE_AC_A_TEMP_DECT_FAULT;
 	}
@@ -483,7 +483,7 @@ static ErrorCode_t GetAC_B_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = -40;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -512,7 +512,7 @@ static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = -40;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -542,7 +542,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = -40;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -550,7 +550,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
     tmpACTemp = 25;
 #else
     tmpACTemp = (double)get_dc_massage(TEMP_N_IN); 
-	if (tmpACTemp > 200 || tmpACTemp < -40)
+	if (tmpACTemp > 200 || tmpACTemp < -60)
 	{
 		errcode = ERR_EVSE_AC_N_TEMP_DECT_FAULT;
 	}

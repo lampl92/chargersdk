@@ -703,7 +703,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACLTemp = -40;
+    tmpACLTemp = -60;
     errcode = ERR_NO;
 
     /** 实现代码  */
@@ -719,7 +719,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
         }
     }
         
-    if (tmpACLTemp > 200 || tmpACLTemp < -40)
+    if (tmpACLTemp > 200 || tmpACLTemp < -60)
     {
         errcode = ERR_CON_ACTEMP_DECT_FAULT;
     }
@@ -747,7 +747,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACNTemp = -40;
+    tmpACNTemp = -60;
     errcode = ERR_NO;
 
     /** 实现代码  */
@@ -760,7 +760,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
         tmpACNTemp = pCON->line[defLineN].status.dTemp;
     }
     
-    if (tmpACNTemp > 200 || tmpACNTemp < -40)
+    if (tmpACNTemp > 200 || tmpACNTemp < -60)
     {
         errcode = ERR_CON_ACTEMP_DECT_FAULT;
     }
@@ -799,7 +799,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
-        if(tmpTemp > 200 || tmpTemp < -40)
+        if(tmpTemp > 200 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -811,7 +811,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -849,7 +849,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
@@ -861,7 +861,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
