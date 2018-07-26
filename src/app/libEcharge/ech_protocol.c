@@ -2683,6 +2683,7 @@ echProtocol_t *EchProtocolCreate(void)
         return NULL;
     }
     memset(pProto, 0, sizeof(echProtocol_t));
+    pProto->info.tNewKeyChangeTime = 2147483647;//初始化成最大值
 
     EchFtpInit(&pProto->info.ftp);
     
