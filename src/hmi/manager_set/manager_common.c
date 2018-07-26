@@ -225,7 +225,14 @@ static void _cbDialog1(WM_MESSAGE *pMsg)
             {
             case WM_NOTIFICATION_CLICKED:
                 GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
-                home();  
+                if (gbsstate == StateHome)
+                {
+                    home();  
+                }
+                if (gbsstate == StateGetGunInfo)
+                {
+                    CreateselectgunDLG();
+                }
                 break;
             case WM_NOTIFICATION_RELEASED:
 //                GUI_EndDialog(WM_GetParent(pMsg->hWin), 0);
