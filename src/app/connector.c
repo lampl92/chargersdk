@@ -703,7 +703,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACLTemp = 0;
+    tmpACLTemp = -40;
     errcode = ERR_NO;
 
     /** 实现代码  */
@@ -747,7 +747,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACNTemp = 0;
+    tmpACNTemp = -40;
     errcode = ERR_NO;
 
     /** 实现代码  */
