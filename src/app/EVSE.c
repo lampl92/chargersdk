@@ -450,7 +450,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -40;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -483,7 +483,7 @@ static ErrorCode_t GetAC_B_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -40;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -512,7 +512,7 @@ static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -40;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -542,7 +542,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -40;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
