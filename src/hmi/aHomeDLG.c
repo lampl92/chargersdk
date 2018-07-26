@@ -75,8 +75,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gotoSetingButton1", ID_BUTTON_4, 0, 0, 330, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gotoSetingButton2", ID_BUTTON_5, 690, 50, 110, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton1", ID_BUTTON_4, 0, 0, 200, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton2", ID_BUTTON_5, 600, 0, 200, 50, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
