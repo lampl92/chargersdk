@@ -24,6 +24,8 @@ Fun home;
 
 GUI_QR_INFO QR_info;
 
+int flag_start_exist;//开机界面存在与否标志,1表示存在,0表示不存在
+
 static void vTaskStart_up(void *pvParameters)
 {
     WM_MULTIBUF_Enable(1);
@@ -38,6 +40,7 @@ static void vTaskStart_up(void *pvParameters)
         vTaskSuspend(NULL);
     }
     startUpWin = CreatestartUpDLG();
+    flag_start_exist = 1;
     while (1)
     {
         GUI_Delay(8000);
@@ -129,8 +132,10 @@ void MainTask(void)
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
         GUI_UC_SetEncodeUTF8();
-        while (!WM_IsWindow(startUpWin))
+        //while (!WM_IsWindow(startUpWin))
+        while (!flag_start_exist)
         {
+            printf_safe("start up no\n");
             vTaskDelay(50);
         }
         GUI_EndDialog(startUpWin, 0);

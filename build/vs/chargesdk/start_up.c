@@ -86,6 +86,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
+        extern int flag_start_exist;
+        flag_start_exist = 0;
         CreateUpdateSystem();
         break;
     default:
