@@ -172,9 +172,10 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
         RS485_EN;
         size = uart_write_fast(ctx->s, req, req_length);
 //        osDelay(ctx_rtu->onebyte_time * req_length + ctx_rtu->rts_delay);
+        osDelay(3);
         RS485_DIS;
         __HAL_UART_ENABLE_IT(&puart->UARTx_Handler, UART_IT_RXNE);
-        
+
         return size;
     } else {
         return uart_write_fast(ctx->s, req, req_length);
