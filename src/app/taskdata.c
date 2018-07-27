@@ -304,7 +304,7 @@ void vTaskEVSEData(void *pvParameters)
         }
         
         /********** 告警记录 **************/
-#if 1
+#if EVSE_USING_STORE_LOG
         for (id = 0; id < ulTotalCON; id++)
         {
             pCON = CONGetHandle(id);
