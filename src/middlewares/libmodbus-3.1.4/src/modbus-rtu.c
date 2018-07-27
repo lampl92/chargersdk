@@ -168,11 +168,13 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
             printf("Sending request using 485EN signal\n");
         }
         puart = uart_get_driver_des(ctx->s);
+        osDelay(5);
         __HAL_UART_DISABLE_IT(&puart->UARTx_Handler, UART_IT_RXNE);
         RS485_EN;
+        osDelay(5);
         size = uart_write_fast(ctx->s, req, req_length);
 //        osDelay(ctx_rtu->onebyte_time * req_length + ctx_rtu->rts_delay);
-        osDelay(3);
+        osDelay(5);
         RS485_DIS;
         __HAL_UART_ENABLE_IT(&puart->UARTx_Handler, UART_IT_RXNE);
 
