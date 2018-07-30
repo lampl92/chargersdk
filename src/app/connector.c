@@ -22,6 +22,7 @@
 
 #if DEBUG_DIAG_DUMMY
     #define DEBUG_DIAG_DUMMY_RELAY
+    #define DEBUG_DIAG_DUMMY_METER
 #endif
 
 #if 0
@@ -230,14 +231,14 @@ static ErrorCode_t GetChargingData(void *pvCON)
     errcode = ERR_NO;
 
     /** 从电表获取 */
-#ifdef  DEBUG_DIAG_DUMMY
+#ifdef  DEBUG_DIAG_DUMMY_METER
     tmpVolt = 220;
     tmpCurr = 32;
     tmpFreq = 50;
     tmpPower = pCON->status.dChargingPower;
-    tmpPower += 0.001;
+    tmpPower += 0.005;
     tmpEnergy = pCON->status.dChargingEnergy;
-    tmpEnergy += 0.001;
+    tmpEnergy += 0.005;
 #else
     res = meter->get_all(meter, ucCONID + 1);
     if (res < 0)
