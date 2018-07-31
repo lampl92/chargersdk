@@ -335,6 +335,7 @@
     <ClCompile Include="..\..\..\src\net\user\interface_ftpserver.c" />
     <ClCompile Include="..\..\..\src\net\user\interface_network.c" />
     <ClCompile Include="..\..\..\src\net\user\interface_smtpclient.c" />
+    <ClCompile Include="..\..\..\src\net\user\interface_webserver.c" />
     <ClCompile Include="..\..\..\src\net\user\net_device.c" />
     <ClCompile Include="..\..\..\src\net\user\net_eth.c" />
     <ClCompile Include="..\..\..\src\net\user\net_ppp.c" />
@@ -471,6 +472,11 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\keccak.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake128.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto\xof\shake256.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_auth.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_misc.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\mime.c" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\ssi.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_parse.h" />

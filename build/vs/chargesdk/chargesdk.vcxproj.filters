@@ -549,6 +549,9 @@
     <Filter Include="Header files\middlewares\libmodbus">
       <UniqueIdentifier>{639b4b10-7f5c-4f7d-bd6c-7d37a5c95744}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\net\CycloneTCP\cyclone_tcp\http">
+      <UniqueIdentifier>{b12b1cc8-8375-4f6b-b46b-25fcf54cbb50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -572,6 +575,21 @@
       <Filter>Source files\drivers\device\src</Filter>
     </None>
     <None Include="..\..\..\doc\readme.md" />
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_auth.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\http_server_misc.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\mime.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\http\ssi.c">
+      <Filter>Source files\net\CycloneTCP\cyclone_tcp\http</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -1976,6 +1994,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c">
       <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\net\user\interface_webserver.c">
+      <Filter>Source files\net\user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
