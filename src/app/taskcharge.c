@@ -137,6 +137,9 @@ void vTaskEVSECharge(void *pvParameters)
             {
             case STATE_CON_IDLE://状态1
                 SetCONSignalWorkState(pCON, defSignalCON_State_Standby);
+#ifdef DEBUG_DIAG_DUMMY
+                pCON->status.xCPState = CP_6V_PWM;
+#endif
                 uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
                                                    defEventBitCONPlugOK,
                                                    pdFALSE, pdFALSE, 0);
@@ -441,13 +444,13 @@ void vTaskEVSECharge(void *pvParameters)
             case STATE_CON_STOPCHARGE:
                 SetCONSignalWorkState(pCON, defSignalCON_State_Stopping);
                 xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
-#ifdef DEBUG_DIAG_DUMMY
-                pCON->state = STATE_CON_RETURN;
-                break;
-#endif
+
                 errcode = pCON->status.StopCharge(pCON);
                 if (errcode == ERR_NO)
                 {
+#ifdef DEBUG_DIAG_DUMMY
+                    pCON->status.xCPState = CP_12V;
+#endif
                     vTaskDelay(2000);
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONStartOK);
                     printf_safe("\e[44;37mCON%d Stop Charge!\e[0m\n", pCON->info.ucCONID);
