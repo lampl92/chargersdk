@@ -233,7 +233,7 @@ static void analyzeReceive()
         {
             gbsstate = StateWaitBecomeCharge;
             return;
-        }      
+        }
     }
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
@@ -245,9 +245,10 @@ static void analyzeReceive()
 static void WaitBecomeCharging()
 {
     CON_t *pCON; 
-    EventBits_t uxBitHMI;
+    EventBits_t uxBit;
     pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-    if (pCON->state == STATE_CON_CHARGING)
+    uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+    if((uxBit & defEventBitCONStartOK) == defEventBitCONStartOK)
     {     
         gbsstate = StateChargingOk;
         return;
@@ -257,8 +258,8 @@ static void WaitBecomeCharging()
         gbsstate = StateHome;
         return;
     }
-    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+    uxBit = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBit & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
         gbsstate = StateCantChargeOfDevice;
     }
