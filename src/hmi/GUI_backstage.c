@@ -253,9 +253,17 @@ static void WaitBecomeCharging()
         gbsstate = StateChargingOk;
         return;
     }
+//    else if (pCON->status.xPlugState == UNPLUG)
+//    {
+//        gbsstate = StatePleasePlug;
+//        return;
+//    }
     else if (pCON->state == STATE_CON_IDLE)
     {
-        gbsstate = StateHome;
+        Tempuserlike.user_like.HMItimeout = 1;
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        Tempuserlike.user_like.HMItimeout = 0;
+        gbsstate = StateQuit;
         return;
     }
     uxBit = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);

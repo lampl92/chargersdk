@@ -90,6 +90,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 BUTTON_SetUserData(hItem, "plug", 10);
                 WM_InvalidateWindow(hItem);
             }
+//            if (gbsstate == StatePleasePlug)
+//            {
+//                hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+//                BUTTON_SetUserData(hItem, "unplug", 10);
+//                WM_InvalidateWindow(hItem);
+//            }
             if (gbsstate == StatePlugTimeout)
             {
                 WM__SendMessageNoPara(pMsg->hWin, MSG_JUMPStatePlugTimeout);
