@@ -25,7 +25,7 @@
         <Transport>BuiltinShortcut</Transport>
       </RemoteHost>
       <Command>cmd.exe</Command>
-      <Arguments>/c "$(TOOLCHAIN_ROOT)\bin\rgw-make.exe"</Arguments>
+      <Arguments>/c "$(TOOLCHAIN_ROOT)\bin\make.exe"</Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
         <Records>
@@ -38,6 +38,7 @@
             <Value>$(TOOLCHAIN_ROOT)\bin;%PATH%</Value>
           </Record>
         </Records>
+        <EnvironmentSetupFiles />
       </Environment>
       <BackgroundMode xsi:nil="true" />
     </MakeCommandTemplate>
