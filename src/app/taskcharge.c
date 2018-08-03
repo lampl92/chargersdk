@@ -156,7 +156,7 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     pCON->status.SetLoadPercent(pCON, pCON->status.ucLoadPercent);
                     THROW_ERROR(i, pCON->status.SetCPSwitch(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "STATE_CON_PLUGED");
-                    vTaskDelay(defRelayDelay);
+                    //vTaskDelay(defRelayDelay);
 	                if ((pCON->status.xCPState == CP_9V_PWM || pCON->status.xCPState == CP_6V_PWM)//后一种情况适用于无S2车辆, 即S1闭合后直接进入6V_PWM状态。
                        &&(pCON->status.xCPState != CP_12V_PWM)) 
                     {
@@ -203,10 +203,23 @@ void vTaskEVSECharge(void *pvParameters)
                 break;
             case STATE_CON_PRECONTRACT://状态2' 充电设备准备就绪，等待车的S2，由车辆决定，可用于预约充电等
 		        //---预备充电过程中对异常进行检测
-				uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
-					defEventBitCPSwitchCondition,
-					pdFALSE, pdTRUE, 0);
-	            if ((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
+            	uxBitsCharge = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                    defEventBitCPSwitchCondition,
+                    pdFALSE,
+                    pdTRUE,
+                    0);
+                if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //状态1'触发条件
+                {
+                    pCON->status.xHandleTimerCharge = xTimerCreate("TimerCON_Charge_AntiShake",
+                        defChargeAntiShakeCyc,
+                        pdFALSE,
+                        (void *)i,
+                        vChargeStateTimerCB);
+                    xTimerStart(pCON->status.xHandleTimerCharge, 0);
+                    pCON->state = STATE_CON_PRECONTRACT_LOSEPLUG;
+                    break;
+                }
+	            else if ((uxBitsCharge & defEventBitCPSwitchCondition) == defEventBitCPSwitchCondition)
 	            {
 	            }
 	            else
@@ -220,16 +233,6 @@ void vTaskEVSECharge(void *pvParameters)
                 {
                     pCON->state = STATE_CON_STARTCHARGE;
                 }
-                if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK) //状态1'触发条件
-                {
-                    pCON->status.xHandleTimerCharge = xTimerCreate("TimerCON_Charge_AntiShake",
-                                                      defChargeAntiShakeCyc,
-                                                      pdFALSE,
-                                                      (void *)i,
-                                                      vChargeStateTimerCB);
-                    xTimerStart(pCON->status.xHandleTimerCharge, 0);
-                    pCON->state = STATE_CON_PRECONTRACT_LOSEPLUG;
-                }
                 break;
             case STATE_CON_PRECONTRACT_LOSEPLUG://状态1' 未连接PWM，充电设备准备好后失去连接
                 uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
@@ -238,16 +241,14 @@ void vTaskEVSECharge(void *pvParameters)
                 if((uxBitsException & defEventBitExceptionChargeTimer) == defEventBitExceptionChargeTimer)
                 {
                     xTimerDelete(pCON->status.xHandleTimerCharge, 0);
-                    if(pCON->status.xCPState == CP_12V)
-                    {
-                        pCON->state = STATE_CON_RETURN;
-                    }
+                    pCON->state = STATE_CON_RETURN;
                 }
                 else
                 {
                     uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
                     if((uxBitsCharge & defEventBitCONPlugOK) == defEventBitCONPlugOK)
                     {
+                        xTimerDelete(pCON->status.xHandleTimerCharge, 0);
                         pCON->state = STATE_CON_PRECONTRACT;
                     }
                 }
