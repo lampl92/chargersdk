@@ -65,7 +65,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break; 
     case WM_PAINT:
         GUI_MEMDEV_WriteAt(Memdevcardinfoback, 0, 0);
-        if (gbsstate != StateWaitBecomeCharge)
+        if (gbsstate == StatePleasePlug)
         {
             if (Tempuserlike.user_like.ucCONID == 0)
             {
