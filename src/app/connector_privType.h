@@ -82,7 +82,12 @@ typedef struct _CONInfo
     pCONGetCfg_ft GetCONCfg;
     ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
 } CONInfo_t;
-
+typedef struct _CONAppoint
+{
+    int status;
+    time_t timestamp;
+    int time_s;
+} CONAppoint_t;
 typedef struct _CONStatus
 {
     CONStatusType_t xCPState;     // 检测点1 CP state --12V / 9V / 9V_PWM / 6V_PWM

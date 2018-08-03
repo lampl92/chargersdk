@@ -2,7 +2,7 @@
 * @file taskremote.c
 * @brief 远程通信的操作
 *        重连：丢失3个心跳
-*        停止充电：丢失9个心跳
+*        停止充电：丢失12个心跳
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -65,6 +65,8 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 }
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
+    CON_t *pCON;
+    int i;
     int res;
     uint8_t flag_set;
 
@@ -101,7 +103,11 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     /******* end 充电过程中不允许设置************/
 
     RemoteIF_RecvSetKey(pEVSE, pProto, &res);
-
+    for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        RemoteIF_RecvSetPower(pEVSE, pProto, pCON->info.ucCONID, &res);
+    }
 }
 
 void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
@@ -738,6 +744,82 @@ void vTaskEVSERemote(void *pvParameters)
             /******** OTA ****************/
             taskremote_ota(pEVSE, pechProto);
 
+            /******** 紧急停止 ****************/
+            for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                switch (pCON->order.statRemoteProc.rmt_emer_stop.stat)
+                {
+                case REMOTE_EMER_STOP_IDLE:
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                    {
+                        RemoteIF_RecvEmergencyStop(pechProto, pCON->info.ucCONID, &network_res);
+                        if (network_res == 1)
+                        {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            pCON->order.statRemoteProc.rmt_emer_stop.timestamp = time(NULL);
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_WAIT_STOP;
+                        }
+                    }
+                    break;
+                case REMOTE_EMER_STOP_WAIT_STOP:
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
+                    {
+                        RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 1);//成功
+                        pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                        break;
+                    }
+                    else
+                    {
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_emer_stop.timestamp > 20)
+                        {
+                            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 0); //超时失败
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                            break;
+                        }
+                    }
+                    break;
+                case REMOTE_EMER_STOP_RETURN:
+                    pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_IDLE;
+                    break;
+                }
+            }
+            /******** 预约 ****************/
+            /*  0：未知
+                1：无预约
+                2：已预约
+                3：预约失败
+            */
+            for (i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                errcode = RemoteIF_RecvSetAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO)
+                {
+                    if (network_res == 1)//2：预约成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 2);
+                    }
+                    else//3：预约失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 3);
+                    }
+                }
+                errcode = RemoteIF_RecvReqAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO )
+                {
+                    if (network_res == 1)//查询成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, pCON->appoint.status);
+                    }
+                    else//查询失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, 0);
+                    }
+                }
+            }
+            
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;

@@ -1,4 +1,3 @@
-
 #ifndef _EVSE_DEFINE_H
 #define _EVSE_DEFINE_H
 
@@ -39,7 +38,7 @@
 #define BIT_31 ( 1 << 31 )
 
 /*---------------------------------------------------------------------------/
-/ xEventGroup
+/ xEventGroup 0~23是事件标志位, 第24~31位设置成相应的控制位
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
 #define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
@@ -67,11 +66,10 @@
 #define defEventBitOrderStopTypeUnPlug           BIT_15
 #define defEventBitOrderStopTypeOffline          BIT_16
 #define defEventBitOrderStopTypeTemp             BIT_17
-
-#define defEventBitOrderMakeFinish               BIT_18  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderMakeFinishToRemote       BIT_19
-
-#define defEventBitOrderTmpTimer                 BIT_20
+#define defEventBitOrderStopTypeRemoteEmergencyStop   BIT_18
+#define defEventBitOrderMakeFinish               BIT_19  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinishToRemote       BIT_20
+#define defEventBitOrderTmpTimer                 BIT_21
 
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
@@ -107,14 +105,15 @@
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
-#define defEventBitExceptionFreqTimer   BIT_9
+#define defEventBitExceptionFreqTimer   BIT_7
 
-#define defEventBitExceptionLimitEnergy  BIT_10  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionLimitFee    BIT_11  
-#define defEventBitExceptionLimitTime   BIT_12  
-#define defEventBitExceptionRemoteStop  BIT_13  //远程停止
-#define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
-#define defEventBitExceptionOfflineStop    BIT_15  //网络离线
+#define defEventBitExceptionLimitEnergy  BIT_8  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitFee    BIT_9  
+#define defEventBitExceptionLimitTime   BIT_10  
+#define defEventBitExceptionRemoteStop  BIT_11  //远程停止
+#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
+#define defEventBitExceptionOfflineStop    BIT_13  //网络离线
+#define defEventBitExceptionRmtEmergencyStop    BIT_14  //网络急停
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK

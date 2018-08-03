@@ -17,6 +17,7 @@ typedef struct _CON
     CONInfo_t info;
     CONStatus_t status;
     CONState_t state;
+    CONAppoint_t appoint;
     Line_t line[4];
     OrderData_t order;
     OrderTmpData_t OrderTmp;

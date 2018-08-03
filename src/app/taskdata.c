@@ -286,6 +286,12 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeTemp);
                     pCON->order.ucStopType = defOrderStopType_Temp;
                 }
+                //远程急停
+                if((uxBitsData & defEventBitOrderStopTypeRemoteEmergencyStop) == defEventBitOrderStopTypeRemoteEmergencyStop)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteEmergencyStop);
+                    pCON->order.ucStopType = defOrderStopType_RemoteEmergencyStop;
+                }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
@@ -369,6 +375,20 @@ void vTaskEVSEData(void *pvParameters)
             cfg_set_string(pathProtoCfg, pechProto->info.strNewKey, "%s", jnProtoKey);
             cfg_set_uint32(pathProtoCfg, &max_time, "%s", jnProtoNewKeyChangeTime);
         }
+        /********** 预约状态 **************/
+        /* 0：未知 1：无预约 2：已预约 3：预约失败*/
+        for (id = 0; id < ulTotalCON; id++)
+        {
+            pCON = CONGetHandle(id);
+            if (pCON->appoint.status == 2)
+            {
+                if (time(NULL) - pCON->appoint.timestamp > pCON->appoint.time_s)
+                {
+                    pCON->appoint.status = 1;
+                }
+            }
+        }
+
         /********** 状态记录 **************/
         //proc evse state
         ulSignalPoolXor = ulSignalEVSEStateOld ^ pEVSE->status.ulSignalState;

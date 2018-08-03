@@ -76,11 +76,23 @@ typedef enum
     REMOTERTData_START,
     REMOTERTData_STOP
 } RemoteRTDataState_e;
+typedef enum
+{
+    REMOTE_EMER_STOP_IDLE,
+    REMOTE_EMER_STOP_WAIT_STOP,
+    REMOTE_EMER_STOP_RETURN
+} RemoteEmergencyStopState_e;
+
 typedef struct
 {
     uint8_t stop_reason;
     RemoteRTDataState_e stat;
 }RemoteRTDataStatus_t;
+typedef struct
+{
+    time_t timestamp;
+    RemoteEmergencyStopState_e stat;
+}RemoteEmergencyStopStatus_t;
 
 typedef struct _statRemote
 {
@@ -88,6 +100,7 @@ typedef struct _statRemote
     RemoteOrderStatus_t order;
     RemoteCtrlStatus_t rmt_ctrl;
     RemoteRTDataStatus_t rtdata;
+    RemoteEmergencyStopStatus_t rmt_emer_stop;
 }statRemote_t;
 
 #endif
