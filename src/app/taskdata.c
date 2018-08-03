@@ -319,7 +319,7 @@ void vTaskEVSEData(void *pvParameters)
                     uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
                     if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
                     {
-                        printf_safe("CON%d Order TimeOut.....................\r", pCON->info.ucCONID);
+                        printf_safe("CON%d Order TimeOut.....................\n", pCON->info.ucCONID);
                         pCON->order.statOrder = STATE_ORDER_STORE;
                     }
                 }
