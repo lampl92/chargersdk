@@ -228,7 +228,7 @@ static void signal_error(CON_t *pCON, int i)
     if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
     pCON->status.ulSignalFault != 0 ||
     (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
-    pEVSE->status.ulSignalFault != 0)//屏蔽温度告警，严重告警才显示
+    (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)//屏蔽温度告警，严重告警才显示
     {
         if ((pCON->status.ulSignalAlarm != 0)&&\
             (pCON->status.ulSignalFault == 0)&&\
@@ -254,23 +254,23 @@ static void signal_error(CON_t *pCON, int i)
 //        {
 //            ;
 //        }
-        else if (((pEVSE->status.ulSignalFault != 0)&&\
-            (pEVSE->status.ulSignalAlarm == 0)&&\
-            (pCON->status.ulSignalFault == 0)&&\
-            (pCON->status.ulSignalAlarm == 0)&&\
-            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
-        {
-            ;
-        }
-        else if (((pEVSE->status.ulSignalFault != 0)&&\
-            (pEVSE->status.ulSignalAlarm == 0)&&\
-            (pCON->status.ulSignalFault != 0)&&\
-            (pCON->status.ulSignalAlarm == 0)&&\
-            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
-            ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
-        {
-            ;
-        }
+//        else if (((pEVSE->status.ulSignalFault != 0)&&\
+//            (pEVSE->status.ulSignalAlarm == 0)&&\
+//            (pCON->status.ulSignalFault == 0)&&\
+//            (pCON->status.ulSignalAlarm == 0)&&\
+//            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+//        {
+//            ;
+//        }
+//        else if (((pEVSE->status.ulSignalFault != 0)&&\
+//            (pEVSE->status.ulSignalAlarm == 0)&&\
+//            (pCON->status.ulSignalFault != 0)&&\
+//            (pCON->status.ulSignalAlarm == 0)&&\
+//            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+//            ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+//        {
+//            ;
+//        }
         else
         {
             led_state = State_red_keep_on;
