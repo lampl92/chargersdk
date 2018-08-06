@@ -89,6 +89,7 @@ static void flashGunState()
             change_condition(pCON, i);
         }        
         if (pCON->order.statOrder == STATE_ORDER_HOLD\
+     ||pCON->order.statOrder == STATE_ORDER_FINISH\
     || pCON->order.statOrder == STATE_ORDER_WAITUSE\
     || pCON->order.statOrder == STATE_ORDER_STORE)
         {
