@@ -437,7 +437,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
-                    Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "0-120");
+                    Keypad_GetValueTest(SYSSET_VALUE, 30, _hWinManagerSysSet, _hWinManagerCommon, "温度限制", "1-120");
                 }
             }
             break;

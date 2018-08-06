@@ -88,8 +88,8 @@ static void flashGunState()
             GBSgunstate[i] = GunfreeState;
             change_condition(pCON, i);
         }        
-        if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH\
-     || pCON->order.statOrder == STATE_ORDER_WAITSTOP || pCON->order.statOrder == STATE_ORDER_WAITUSE\
+        if (pCON->order.statOrder == STATE_ORDER_HOLD\
+    || pCON->order.statOrder == STATE_ORDER_WAITUSE\
     || pCON->order.statOrder == STATE_ORDER_STORE)
         {
             if (pCON->status.xPlugState == PLUG)
@@ -99,6 +99,7 @@ static void flashGunState()
             else
             {
                 GBSgunstate[i] = GunfreeState;
+                change_condition(pCON, i);
             }            
             continue;
         }      
