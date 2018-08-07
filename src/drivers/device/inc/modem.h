@@ -83,6 +83,7 @@ typedef enum
     DS_MODEM_ERR,
     DS_MODEM_PPP_Diag,
     DS_MODEM_PPP_On,
+#if MODEM_CMD
     DS_MODEM_ACT_PDP,
     DS_MODEM_DEACT_PDP,
 //    DS_MODEM_TRANSPARENT,
@@ -95,6 +96,7 @@ typedef enum
     DS_MODEM_FTP_REGET,
     DS_MODEM_FTP_CHECK,
     DS_MODEM_FTP_ERR
+#endif
 } ModemState_e;
 
 

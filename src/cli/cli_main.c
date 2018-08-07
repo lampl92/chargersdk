@@ -13,20 +13,14 @@ void tinysh_char_out(unsigned char c)
     uart_write_fast(cli_huart, &c, 1);
 }
 
-void cli_init(void)
+void cli_add_cmd(void)
 {
-    cli_huart = uart_open(CLI_UARTx, CLI_UART_BAND, CLI_UART_DATA, CLI_UART_PARI, CLI_UART_STOP);
-#if BOOTLOADER
-    tinysh_set_prompt("\n[bootldr]$ ");
-#else
-    tinysh_set_prompt("\n[charger]$ ");
-#endif
     /************系统信息****************/
-    tinysh_add_command(&cli_hello_cmd);
+    //tinysh_add_command(&cli_hello_cmd);
     tinysh_add_command(&cli_reboot_cmd);
-    tinysh_add_command(&cli_systemdate_cmd);
+    //tinysh_add_command(&cli_systemdate_cmd);
     tinysh_add_command(&cli_tasklist_cmd);
-    tinysh_add_command(&cli_taskstack_cmd);
+    //tinysh_add_command(&cli_taskstack_cmd);
 #if BOOTLOADER
     tinysh_add_command(&cli_exit_cmd);
 #else
@@ -39,13 +33,12 @@ void cli_init(void)
 //    tinysh_add_command(&cli_umount_cmd);
 //    tinysh_add_command(&cli_cat_cmd);
     tinysh_add_command(&cli_ls_cmd);
-    tinysh_add_command(&cli_file_cmd);
+    //tinysh_add_command(&cli_file_cmd);
     tinysh_add_command(&cli_cat_cmd);
     tinysh_add_command(&cli_rm_cmd);
-    tinysh_add_command(&cli_ymodem_cmd);
+    //tinysh_add_command(&cli_ymodem_cmd);
 #if BOOTLOADER
     tinysh_add_command(&cli_format_cmd);
-    tinysh_add_command(&cli_set_crc32_cmd);
 #else
     tinysh_add_command(&cli_ftpserver_cmd);
 #endif
@@ -90,7 +83,16 @@ void cli_init(void)
 
     /* add atoxi support test command */
 //    tinysh_add_command(&atoxi_cmd);
-
+}
+void cli_init(void)
+{
+    cli_huart = uart_open(CLI_UARTx, CLI_UART_BAND, CLI_UART_DATA, CLI_UART_PARI, CLI_UART_STOP);
+#if BOOTLOADER
+    tinysh_set_prompt("\n[bootldr]$ ");
+#else
+    tinysh_set_prompt("\n[charger]$ ");
+#endif
+    cli_add_cmd();
 }
 
 void cli_main(void)

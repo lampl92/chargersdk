@@ -18,7 +18,6 @@
 #include "utils.h"
 #include "stringName.h"
 #include "bsp_cpu_flash.h"
-#include "cfg_parse.h"
 #include "yaffsfs.h"
 #include "yaffs2misc.h"
 
@@ -196,7 +195,6 @@ void vTaskInit(void *pvParameters)
             {
                 if (initstart == 1)
                 {
-                    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
                     initstart = 0;
                     break;
                 }
