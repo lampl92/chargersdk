@@ -1257,9 +1257,6 @@
     <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\HomePage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
