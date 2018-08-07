@@ -282,7 +282,7 @@ uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len)
 {
     uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
-#if 1
+#if 0
     while (l > 0)
     {
         l--;
