@@ -17,6 +17,8 @@ uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
 WM_HWIN startUpWin;//开机窗口句柄
+char QR_saveA[defQRCodeLength];//保存的枪A二维码
+char QR_saveB[defQRCodeLength];//保存的枪B二维码
 
 Fun home;
 //int QR_Width;//NUmber of "Moudle"
@@ -112,10 +114,16 @@ void MainTask(void)
     }
     if (pEVSE->info.ucTotalCON == 1)
     {
+        pCON = CONGetHandle(0);
+        strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
         home = CreateHome0DLG;
     }
     else
     {
+        pCON = CONGetHandle(0);
+        strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
+        pCON = CONGetHandle(1);
+        strncpy(QR_saveB, pCON->info.strQRCode, defQRCodeLength);
         home = CreateHomeDLG;    
     } 
     xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);

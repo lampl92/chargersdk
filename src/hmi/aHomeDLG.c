@@ -4,6 +4,7 @@
 #include "GUI_backstage.h"
 #include "bsp_rtc.h"
 #include "bsp_gpio.h"
+#include "evse_config.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
@@ -36,6 +37,8 @@
 #define ID_Timerinfoflash               6
 #define ID_Timerstateflash              7
 #define ID_TimerGotoSetting             8
+#define ID_TimerQRFlashA                 9
+#define ID_TimerQRFlashB                 10
 #define gunstateax  112 //枪A状态图标x位置
 #define gunstateay  79 //枪A状态图标y位置
 #define gunstatebx  456 //枪B状态图标x位置
@@ -56,6 +59,8 @@ static WM_HTIMER    _timerstateflash;//后台状态
 static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
 static WM_HTIMER _timerGotoSetting;//进入管理员界面定时器
+static WM_HTIMER _timerQRFlashA;//刷新二维码
+static WM_HTIMER _timerQRFlashB; //刷新二维码
 
 static int gotoSettingFlag = 0;
 
@@ -580,8 +585,6 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     float pkw;//功率
     int pkwpercent;//功率百分比
     uint8_t temp_buf[32];
-    
-    pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
@@ -655,7 +658,20 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 }
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             }
-            WM_RestartTimer(pMsg->Data.v, 20);    
+            WM_RestartTimer(pMsg->Data.v, 100);    
+        }
+        if (pMsg->Data.v == _timerQRFlashA)
+        {
+            extern char QR_saveA[defQRCodeLength]; //保存的枪A二维码
+            pCON = CONGetHandle(0);
+            if (strcmp(pCON->info.strQRCode,QR_saveA))
+            {
+                extern int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem);
+                createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+                strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+            }
+            WM_RestartTimer(pMsg->Data.v, 1000);    
         }
         break;
     default:
@@ -749,6 +765,19 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
             }
             WM_RestartTimer(pMsg->Data.v, 20);    
         }
+        if (pMsg->Data.v == _timerQRFlashB)
+        {
+            extern char QR_saveB[defQRCodeLength]; //保存的枪B二维码
+            pCON = CONGetHandle(1);
+            if (strcmp(pCON->info.strQRCode, QR_saveB))
+            {
+                extern int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem);
+                createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
+                strncpy(QR_saveB, pCON->info.strQRCode, defQRCodeLength);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+            }
+            WM_RestartTimer(pMsg->Data.v, 1000); 
+        }
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -777,6 +806,7 @@ static void _cbDialoghelp(WM_MESSAGE *pMsg)
 WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateHomeDLG(void) {
     WM_HWIN hWin;
+    CON_t *pCON;
     gunstateOnce = 1;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     //GUI_Delay(3000);
@@ -792,6 +822,8 @@ WM_HWIN CreateHomeDLG(void) {
     
     _timergunastateflash = WM_CreateTimer(Hwingunastate, ID_Timergunastateflash, 10, 0);
     _timergunbstateflash = WM_CreateTimer(Hwingunbstate, ID_Timergunbstateflash, 10, 0);
+    _timerQRFlashA = WM_CreateTimer(Hwingunastate, ID_TimerQRFlashA, 100, 0);
+    _timerQRFlashB = WM_CreateTimer(Hwingunbstate, ID_TimerQRFlashB, 100, 0);
     
     Hwininfo = GUI_CreateDialogBox(_aDialogCreateinfo, GUI_COUNTOF(_aDialogCreateinfo), _cbDialoginfo, hWin, 0, 0);
     _timerinfoflash = WM_CreateTimer(Hwininfo, ID_Timerinfoflash, 200, 0);
