@@ -506,24 +506,58 @@ void createGUI_BITMAP()
 //返回-1时出错
 int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 {
-    int memx;
+    int memx,memy;
     int qrx;
     int qry;
     GUI_HMEM qr_hmem;
+    int qr_coefficient;
+    //1-17:21
+    //18-32:25
+    //33-53:29
+    //54-70:33
+//    if((strlen(pText) >= 1) && (strlen(pText) <= 17))
+//    {
+//        qr_coefficient = 21;
+//    }
+//    else if ((strlen(pText) >= 18) && (strlen(pText) <= 32))
+//    {
+//        qr_coefficient = 25;
+//    }
+//    else if((strlen(pText) >= 33) && (strlen(pText) <= 53))
+//    {
+//        qr_coefficient = 29;
+//    }
+//    else if((strlen(pText) >= 54) && (strlen(pText) <= 70))
+//    {
+//        qr_coefficient = 33;
+//    }
+//    else
+//    {
+//        qr_coefficient = 21;
+//    }
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
     GUI_QR_INFO QR_info_struct;//仿真时看值
-    qr_hmem = GUI_QR_Create(pText, 8, GUI_QR_ECLEVEL_L, 0);
+    qr_hmem = GUI_QR_Create(pText, 6, GUI_QR_ECLEVEL_L, 0);
+    GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
+    qr_coefficient = QR_info_struct.Width;
+    GUI_QR_Delete(qr_hmem);
+    
+    qr_hmem = GUI_QR_Create(pText, 180/qr_coefficient, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     GUI_MEMDEV_Select(mem);
     memx =  GUI_MEMDEV_GetXSize(mem);
+    memy = GUI_MEMDEV_GetYSize(mem);
+    GUI_SetColor(GUI_WHITE);                       
+    GUI_FillRect((memx - QR_info_struct.Size) / 2, (48 + (200 - QR_info_struct.Size) / 2), QR_info_struct.Size, QR_info_struct.Size);
     if (memx < QR_info_struct.Size)
     {
         return -1;
     }
     qrx = (memx - QR_info_struct.Size) / 2;
-    qry = 65;
+    qry = 48+(200 - QR_info_struct.Size) / 2;
     GUI_QR_Draw(qr_hmem, qrx, qry);
+    GUI_QR_Delete(qr_hmem);
     GUI_MEMDEV_Select(0);  
     return 0;
 }

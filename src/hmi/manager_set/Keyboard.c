@@ -1269,10 +1269,13 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:
-            cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
-            //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
-            memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
-            strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID)-1);
+            if (strlen(result_input) == 16)
+            {
+                cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
+                //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
+                strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID) - 1);   
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
         case 22:
@@ -1508,14 +1511,16 @@ static uint8_t Value_Check()
         switch (htmpID)
         {
         case 20:
-            cfg_set_string(pathEVSECfg, result_input, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnQRCode);
-            //pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
-            memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
-            strncpy(pCon->info.strQRCode, result_input, sizeof(pCon->info.strQRCode));
-//            GUI_QR_Delete(qr_hmem);
-//            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
-//            GUI_QR_GetInfo(qr_hmem, &QR_info);
-
+            if ((strlen(result_input) > 0) && (strlen(result_input) <= 64))
+            {                
+                cfg_set_string(pathEVSECfg, result_input, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnQRCode);
+                //pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
+                memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
+                strncpy(pCon->info.strQRCode, result_input, sizeof(pCon->info.strQRCode));
+                //            GUI_QR_Delete(qr_hmem);
+                //            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
+                //            GUI_QR_GetInfo(qr_hmem, &QR_info);   
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:
