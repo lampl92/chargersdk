@@ -405,12 +405,12 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else
     {
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
         tmpCPState = CP_ERR;
         if (tmpCPState == CP_ERR)
         {
