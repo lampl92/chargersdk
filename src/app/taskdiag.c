@@ -29,19 +29,19 @@ void vTaskEVSEDiag(void *pvParameters)
     {
 #ifndef DEBUG_NO_TASKDIAG
         /* 处理系统失效故障 */
+#ifdef EVSE_DEBUG_ERRLOG
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef EVSE_ERRLOG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
-#endif
             switch(errpack.code) // ！！！ 这里一定要仔细查看errpack.ulDevID是否可以用作 CONID， 主要是看设备是否是归属于枪还是桩。 ！！！
             {
             default:
                 break;
             }
         }
+#endif
 
         /* end of 处理系统失效故障 */
         
