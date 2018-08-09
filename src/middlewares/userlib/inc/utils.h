@@ -50,7 +50,7 @@ uint32_t HexToStr(uint8_t *Hex, char *Src, int Hexlen);
 uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);
 
-int GetFileCrc32(char *path, uint32_t *pulCrc32);
-int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
+void crc32_init(uint32_t *pulCrc32Table);
+void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table);
 uint32_t StrCrc32ToUint32(char *strCrc32);
 #endif

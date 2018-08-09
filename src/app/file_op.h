@@ -17,5 +17,8 @@ uint8_t set_tmp_file(char *path, char *flg);
 uint8_t get_tmp_file(char *path, char *flg);
 ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist);
 int get_bmp_check_tmp(void);
+uint8_t *GetFileBuffer(char *path, uint32_t *psize);
+int GetFileCrc32(char *path, uint32_t *pulCrc32);
+int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
 
 #endif
