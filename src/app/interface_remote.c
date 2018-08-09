@@ -1643,34 +1643,34 @@ ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto)
             CLEAR_BIT(pProto->status.fault[0], BIT_7);
         }
     }
-    //[1]:3  2-4 电能表故障
+    //[1]:2  2-3 电能表故障
     for(i = 0; i < ulTotalCON; i++)
     {
         pCON = CONGetHandle(i);
 	    if ((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter)
         {
-            SET_BIT(pProto->status.fault[1], BIT_3);
+            SET_BIT(pProto->status.fault[1], BIT_2);
             break;//有一个有故障就退出
         }
         else
         {
-            CLEAR_BIT(pProto->status.fault[1], BIT_3);
+            CLEAR_BIT(pProto->status.fault[1], BIT_2);
         }
     }
     //[1]:5 2-6 PWM切换故障
-    for(i = 0; i < ulTotalCON; i++)
-    {
-        pCON = CONGetHandle(i);
-	    if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
-        {
-            SET_BIT(pProto->status.fault[1], BIT_5);
-            break;//有一个有故障就退出
-        }
-        else
-        {
-            CLEAR_BIT(pProto->status.fault[1], BIT_5);
-        }
-    }
+//    for(i = 0; i < ulTotalCON; i++)
+//    {
+//        pCON = CONGetHandle(i);
+//	    if ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP)
+//        {
+//            SET_BIT(pProto->status.fault[1], BIT_5);
+//            break;//有一个有故障就退出
+//        }
+//        else
+//        {
+//            CLEAR_BIT(pProto->status.fault[1], BIT_5);
+//        }
+//    }
     //[1]:6 2-7 温度传感器故障
     for(i = 0; i < ulTotalCON; i++)
     {
