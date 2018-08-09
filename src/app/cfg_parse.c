@@ -358,9 +358,7 @@ ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
         errcode = ERR_FILE_NO;
         goto exit;
     }
-    taskENTER_CRITICAL();
     bw = yaffs_write(fd, pbuff, len);
-    taskEXIT_CRITICAL();
     if(len != bw)
     {
         ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-write");
@@ -409,9 +407,7 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
         *perrcode = ERR_MEMORY;
         goto exit;
     }
-    taskENTER_CRITICAL();
     br = yaffs_read(fd, rbuff, fsize);
-    taskEXIT_CRITICAL();
     if(fsize != br)
     {
         ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-read");

@@ -69,9 +69,7 @@ uint8_t set_tmp_file(char *path, char *flg)
         ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-open");
         return 0;
     }
-    taskENTER_CRITICAL();
     bw = yaffs_write(fd, flg, 1);
-    taskEXIT_CRITICAL();
     if (1 != bw)
     {
         ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-write");
@@ -92,9 +90,7 @@ uint8_t get_tmp_file(char *path, char *flg)
         //ThrowFSCode(yaffs_get_error(), path, "get_upgrade_tmp()-open");
         return 0;
     }
-    taskENTER_CRITICAL();
     rb = yaffs_read(fd, flg, 1);
-    taskEXIT_CRITICAL();
     if (1 != rb)
     {
         //ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-read");

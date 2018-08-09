@@ -258,18 +258,14 @@ int GetFileCrc32(char *path, uint32_t *pulCrc32)
     yaffs_stat(path, &st);
     fsize = st.st_size;
     crc32_init(ulCrc32Table);
-    taskENTER_CRITICAL();
     br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
-    taskEXIT_CRITICAL();
     while (br)
     {
         for (i = 0; i < br; i++)
         {
             CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
         }
-        taskENTER_CRITICAL();
         br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
-        taskEXIT_CRITICAL();
     }
     *pulCrc32 = ~ulCrc32;
 

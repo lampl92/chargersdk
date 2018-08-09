@@ -116,9 +116,7 @@ void fsmc_sdram_test()
 
 void cli_testsdram_fnt(int argc, char **argv)
 {
-    taskENTER_CRITICAL();
     fsmc_sdram_test();
-    taskEXIT_CRITICAL();
 }
 
 tinysh_cmd_t cli_testsdram_cmd =
