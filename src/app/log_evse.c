@@ -46,7 +46,35 @@ ErrorCode_t  AddEVSELog(char *path, uint8_t device, uint8_t level, uint8_t state
     }
     jsChild = CreateNewEVSELog(device, level, state, msg);
     cJSON_AddItemToArray(jsParent, jsChild);
-    errcode = SetCfgObj(path, jsParent);
+    errcode = SetCfgObj(path, jsParent, 0);
+    
+    return errcode;
+}
+
+ErrorCode_t  AddEVSELogObj(cJSON *jsEVSELogObj, uint8_t device, uint8_t level, uint8_t state, char *msg)
+{
+    cJSON *jsChild;
+    ErrorCode_t errcode = ERR_NO;
+    uint32_t ulMaxItem;
+    int i;
+
+    if (jsEVSELogObj == NULL)
+    {
+        return ERR_OTHER;
+    }
+    ulMaxItem  = cJSON_GetArraySize(jsEVSELogObj);
+    
+    if (ulMaxItem > defCfgLogMaxItem)
+    {
+        for (i = 0; i < defCfgLogRemoveOldItem; i++)
+        {
+            cJSON_DeleteItemFromArray(jsEVSELogObj, i);
+        }
+    }
+    jsChild = CreateNewEVSELog(device, level, state, msg);
+    cJSON_AddItemToArray(jsEVSELogObj, jsChild);
+    
+    xTimerReset(xHandleTimerStoreLog, 0);
     
     return errcode;
 }

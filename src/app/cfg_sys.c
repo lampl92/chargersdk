@@ -170,7 +170,7 @@ static ErrorCode_t SetSysCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
             jsItem = jsItem->next;
         }
     } while (jsItem != NULL);
-    errcode = SetCfgObj(pathSysCfg, jsSysCfgObj);
+    errcode = SetCfgObj(pathSysCfg, jsSysCfgObj, 0);
 
     return errcode;
 }

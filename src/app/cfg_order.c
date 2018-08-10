@@ -87,7 +87,7 @@ ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     }
     jsChild = CreateNewOrderCfg(pOrder, pProto);
     cJSON_AddItemToArray(jsParent, jsChild);
-    errcode = SetCfgObj(path, jsParent);
+    errcode = SetCfgObj(path, jsParent, 0);
     
     return errcode;
 }
@@ -98,7 +98,7 @@ ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     ErrorCode_t errcode;
     pOrder->tStopTime = time(NULL);//添加临时订单时或无停止时间，增加添加临时订单时间作为临时停止时间
     jsObj = CreateNewOrderCfg(pOrder, pProto);
-    errcode = SetCfgObj(path, jsObj);
+    errcode = SetCfgObj(path, jsObj, 0);
     
     return errcode;
 }
@@ -289,7 +289,7 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
         return ERR_OTHER;
     }
     cJSON_DeleteItemFromArray(jsParent, i);
-    errcode = SetCfgObj(path, jsParent);
+    errcode = SetCfgObj(path, jsParent, 0);
     
     return errcode;
 }

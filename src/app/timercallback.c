@@ -56,6 +56,10 @@ void vEVSETimerCB(TimerHandle_t xTimer)
     {
         xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBStatus);
     }
+    if (uxTimerID == defTIMERID_StoreLog)//5000
+    {
+        xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBStoreLog);
+    }
 }
 
 void vRFIDTimerCB(TimerHandle_t xTimer) //500ms

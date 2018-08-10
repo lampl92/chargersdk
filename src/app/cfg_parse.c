@@ -333,7 +333,7 @@ ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *retval, char *fmt, ...)
  * @return ErrorCode_t
  *
  */
-ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj)
+ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj, int DoNotDeleteObj)
 {
     int fd;
     char *pbuff;
@@ -369,7 +369,13 @@ exit_write:
     yaffs_close(fd);
     free(pbuff);
 exit:
-    cJSON_Delete(jsCfgObj);
+    if (DoNotDeleteObj == 0x5555)
+    {
+    }
+    else
+    {
+        cJSON_Delete(jsCfgObj);
+    }
     return errcode;
 }
 
@@ -575,7 +581,7 @@ ErrorCode_t cfg_set_uint8(char *path, uint8_t *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeU8);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode;
 }
 ErrorCode_t cfg_set_uint16(char *path, uint16_t *retval, char *fmt, ...)
@@ -596,7 +602,7 @@ ErrorCode_t cfg_set_uint16(char *path, uint16_t *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeU16);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode;
 }
 ErrorCode_t cfg_set_uint32(char *path, uint32_t *retval, char *fmt, ...)
@@ -617,7 +623,7 @@ ErrorCode_t cfg_set_uint32(char *path, uint32_t *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeU32);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode;     
 }
 ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...)
@@ -638,7 +644,7 @@ ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeS32);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode;   
 }
 ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...)
@@ -659,7 +665,7 @@ ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeDouble);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode; 
 }
 ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
@@ -680,7 +686,7 @@ ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
         return errcode;
     }
     errcode = cfgobj_set(pObj, retval, str, ParamTypeString);
-    SetCfgObj(path, pObj);
+    SetCfgObj(path, pObj, 0);
     return errcode;      
 }
 #if 0
@@ -707,7 +713,7 @@ int test_cfgobj_set(int val)
     cfgobj_set_string(pObj, strVal, "%s", jnEVSESN);
     sprintf(strVal, "QR_%d",val);
     cfgobj_set_string(pObj, strVal, "%s:%d.%s", jnCONArray, 0, jnQRCode);
-    SetCfgObj(pathEVSECfg, pObj);
+    SetCfgObj(pathEVSECfg, pObj, 0);
 }
 int test_cfgobj_get(void)
 {

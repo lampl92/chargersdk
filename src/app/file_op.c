@@ -56,7 +56,7 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
             continue;
         }
     }
-    errcode = SetCfgObj(pathDownloadList, jsRoot);
+    errcode = SetCfgObj(pathDownloadList, jsRoot, 0);
     return errcode;
 }
 

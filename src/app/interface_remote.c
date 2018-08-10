@@ -936,7 +936,7 @@ ErrorCode_t RemoteIF_RecvSetTimeSeg(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_
             cfgobj_set_uint8(jsCfgObj, &(tmpSegTime.ucEnd[i]), "%s.End%d", jnProtoSegTime_off_peak, i + 1);
         }
         //pbuff[0...3] 操作ID
-        errcode = SetCfgObj(pathProtoCfg, jsCfgObj);
+        errcode = SetCfgObj(pathProtoCfg, jsCfgObj, 0);
         if (errcode == ERR_NO)
         {
             pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];

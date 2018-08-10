@@ -178,7 +178,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, char *jnItemString, void *pvCfgParam
         }
     }
     while(jsItem != NULL);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj, 0);
 
     return errcode;
 }

@@ -134,7 +134,7 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
         }
     }
     while(jsItem != NULL);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj, 0);
 
     return errcode;
 }

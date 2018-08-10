@@ -203,7 +203,7 @@ static int BnWFlushListCfg(char *path)
         return res;
     }
 
-    errcode = SetCfgObj(path, jsArrayObj);
+    errcode = SetCfgObj(path, jsArrayObj, 0);
     if(errcode != ERR_NO)
     {
         res = 0;
@@ -248,7 +248,7 @@ static int BnWAddListCfg(char *path, char *strID)
     }
     cJSON_AddItemToArray(jsArrayObj, cJSON_CreateString(strID));
 
-    errcode = SetCfgObj(path, jsArrayObj);
+    errcode = SetCfgObj(path, jsArrayObj, 0);
     if(errcode != ERR_NO)
     {
         res = 0;
@@ -287,7 +287,7 @@ static int BnWDeleteListCfg(char *path, char *strID)
         }
     }
 
-    errcode = SetCfgObj(path, jsArrayObj);
+    errcode = SetCfgObj(path, jsArrayObj, 0);
     if(errcode != ERR_NO)
     {
         res = 0;

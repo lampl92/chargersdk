@@ -62,6 +62,7 @@
 #define defRemoteStatusCyc          120000    //状态上报
 #define defRemoteRTDataCyc          10000     //充电实时数据
 #define defOrderTmpCyc              60000     //充电订单临时文件更新时间
+#define defStoreLogCyc              5000      //无故障时间, 开始存储Log
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
