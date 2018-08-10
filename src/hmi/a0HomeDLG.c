@@ -400,11 +400,13 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         break;
     case MSG_READYSTART:
         GUI_EndDialog(pMsg->hWin, 0);
+        bitclr(flag_specially, 1);
         PIout(3) = 1;
         CreatereadystartDLG();
         break;
     case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
+        bitclr(flag_specially, 1);
         PIout(3) = 1;
         CreateUpdateSystem();
         break;
