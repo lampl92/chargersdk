@@ -288,6 +288,9 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
+#if DEBUG
+                smtpClientTest();
+#endif
                 break;
             }
             else
