@@ -38,6 +38,7 @@
             <Value>$(TOOLCHAIN_ROOT)\bin;%PATH%</Value>
           </Record>
         </Records>
+        <EnvironmentSetupFiles />
       </Environment>
       <BackgroundMode xsi:nil="true" />
     </MakeCommandTemplate>
