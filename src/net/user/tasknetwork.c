@@ -100,7 +100,6 @@ static void netStateConnect(net_device_t *net_dev)
     else
     {
         netChangeState(net_dev, NET_STATE_ERR);
-//        vTaskDelay(10000);
     }
 }
 static void netStateDisconnect(net_device_t *net_dev)
@@ -221,6 +220,7 @@ static void netStateFTP(net_device_t *net_dev)
 static void netStateErr(net_device_t *net_dev)
 {
     net_dev->close_hard(net_dev);
+    vTaskDelay(1000);
     netChangeState(net_dev, NET_STATE_INIT);
 }
 
@@ -232,7 +232,6 @@ void ifconfig_change_for_ftp(void)
     sprintf(ifconfig.info.strMAC, "00-AB-CD-EF-04-29");
 }
 
-extern error_t smtpClientTest(void);
 void vTaskTCPClient(void *pvParameters)
 {
 #if EVSE_USING_GUI
