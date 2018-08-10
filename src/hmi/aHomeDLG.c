@@ -515,10 +515,12 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         break;
     case MSG_JUMPSELECTGUN:
         GUI_EndDialog(pMsg->hWin, 0);
+        PIout(3) = 1;
         CreateselectgunDLG();
         break;
     case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
+        PIout(3) = 1;
         CreateUpdateSystem();
         break;
     default:
