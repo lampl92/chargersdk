@@ -137,7 +137,7 @@ void Buzzer_control(uint8_t state)
 }
 float get_dc_massage(uint8_t DC_channel)
 {
-    uint32_t j;
+    int32_t j;
     double ad_samp_value;
     float ad_value, re_value;
     float dc_data;
