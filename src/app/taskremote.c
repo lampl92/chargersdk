@@ -754,16 +754,16 @@ void vTaskEVSERemote(void *pvParameters)
                 switch (pCON->order.statRemoteProc.rmt_emer_stop.stat)
                 {
                 case REMOTE_EMER_STOP_IDLE:
-                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
-                    {
                         RemoteIF_RecvEmergencyStop(pechProto, pCON->info.ucCONID, &network_res);
                         if (network_res == 1)
                         {
-                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                            {
+                                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            }
                             pCON->order.statRemoteProc.rmt_emer_stop.timestamp = time(NULL);
                             pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_WAIT_STOP;
                         }
-                    }
                     break;
                 case REMOTE_EMER_STOP_WAIT_STOP:
                     if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
