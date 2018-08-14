@@ -126,7 +126,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
     FtpClientContext ftpContext;
     char_t buffer[1500];
 
-    TRACE_INFO("\r\n\r\n解析FTP服务器域名...\r\n");
+    TRACE_INFO("\r\n\r\n解析FTP服务器域名%s...\r\n", ctx->ftp_server);
     error = getHostByName(net_dev->interface, ctx->ftp_server, &ipAddr, 0);
     if (error)
     {

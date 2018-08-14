@@ -50,7 +50,7 @@ Socket *netif_connect_server_via_tcp(net_device_t *net_dev, const char *server_i
     IpAddr ipAddr; //DNS 解析得到的地址 
     Socket *socketfd;
  
-    TRACE_INFO("\r\n\r\n解析域名...\r\n"); 
+    TRACE_INFO("\r\n\r\n解析域名%s...\r\n", server_ip); 
  
     //解析地址 
     error = getHostByName(net_dev->interface, server_ip, &ipAddr, 0); 
