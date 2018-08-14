@@ -32,7 +32,7 @@ ErrorCode_t RemoteIF_SendLogin(EVSE_t *pEVSE, echProtocol_t *pProto)
     errcode = ERR_NO;
 
     /** 调用平台注册接口 */
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_REGISTER, 10, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_REGISTER, 10, 1);
     /**********/
 
     return errcode;
@@ -2186,7 +2186,7 @@ ErrorCode_t RemoteIF_SendEmergencyStop(EVSE_t *pEVSE, echProtocol_t *pProto, CON
         pbuff[5] = 1;
     }
     /*********************/
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_REMOTE_CTRL, 0, 1);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_EMERGENCY_STOP, 0, 1);
 
     return errcode;
 }
