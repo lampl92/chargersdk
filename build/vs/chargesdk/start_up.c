@@ -69,7 +69,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             if (pechProto->info.ftp.ucDownloadStart == 1)//系统要升级
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPUpdateSystem);
-            }  
+            }
+            extern int flag_read_data;
+            if (flag_read_data == 1)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+            }
             extern int nums_picture;
             if (pEVSE->info.ucTotalCON == 1)
             {
@@ -86,9 +91,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         break;
     case MSG_JUMPUpdateSystem:
         GUI_EndDialog(pMsg->hWin, 0);
-        extern int flag_start_exist;
-        flag_start_exist = 0;
         CreateUpdateSystem();
+        break;
+    case MSG_JUMPHOME:
+        GUI_EndDialog(pMsg->hWin, 0);
+        home();
+        //NVIC_SystemReset();
         break;
     default:
         WM_DefaultProc(pMsg);

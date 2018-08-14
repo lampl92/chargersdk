@@ -567,7 +567,7 @@ void gui_halt(void)
     char ch[2] = { 0 };
     char flg;
     TaskHandle_t ht;
-    extern TaskHandle_t xHandleTaskReadPic;
+    extern TaskHandle_t xHandleTaskReadData;
     if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
     {
         flg = atoi(ch);
@@ -590,13 +590,13 @@ void gui_halt(void)
             ht = xTaskGetCurrentTaskHandle();
             if (ht == xHandleTaskGUI)
             {
-                vTaskSuspend(xHandleTaskReadPic);
+                vTaskSuspend(xHandleTaskReadData);
                 vTaskSuspend(xHandleTaskGUI);
             }
-            if (ht == xHandleTaskReadPic)
+            if (ht == xHandleTaskReadData)
             {
                 vTaskSuspend(xHandleTaskGUI);
-                vTaskSuspend(xHandleTaskReadPic);
+                vTaskSuspend(xHandleTaskReadData);
             }
         }
         else

@@ -7,7 +7,7 @@
 #include "stringName.h"
 #include "file_op.h"
 
-TaskHandle_t xHandleTaskReadPic = NULL;
+TaskHandle_t xHandleTaskReadData = NULL;
 
 I32 memoryfree;
 uint16_t calebrate_done = 0;
@@ -26,29 +26,14 @@ Fun home;
 
 GUI_QR_INFO QR_info;
 
-int flag_start_exist;//开机界面存在与否标志,1表示存在,0表示不存在
+int flag_read_data = 0;//开机界面存在与否标志,1表示存在,0表示不存在
 
-static void vTaskStart_up(void *pvParameters)
+static void vTask_read_data(void *pvParameters)
 {
-    WM_MULTIBUF_Enable(1);
-    GUI_UC_SetEncodeUTF8();
-    
-//    createfont();
-//    CreateManagerCommon();
-    
-    createStartUpMemdev();    
-    if (get_bmp_check_tmp() == 3)
-    {
-        vTaskSuspend(NULL);
-    }
-    startUpWin = CreatestartUpDLG();
-    flag_start_exist = 1;
-    while (1)
-    {
-        GUI_Delay(8000);
-        vTaskDelay(100);
-    }
-    //vTaskDelete(xTaskGetCurrentTaskHandle());
+    createfont();
+    creatememdev();
+    flag_read_data = 1;
+    vTaskDelete(NULL);
 }
 
 
@@ -126,45 +111,21 @@ void MainTask(void)
         strncpy(QR_saveB, pCON->info.strQRCode, defQRCodeLength);
         home = CreateHomeDLG;    
     } 
-    xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);
     if (calebrate_done != 0xff)
     {
         WM_MULTIBUF_Enable(1);
-//        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
-//        GUI_Exec();
-        createfont();
-        creatememdev();
-        //CreateManagerCommon();
+        GUI_UC_SetEncodeUTF8();
+        createStartUpMemdev();    
+        if (get_bmp_check_tmp() == 3)
+        {
+            vTaskSuspend(NULL);
+        }
+        startUpWin = CreatestartUpDLG();
+        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
-        GUI_UC_SetEncodeUTF8();
-        //while (!WM_IsWindow(startUpWin))
-        while (!flag_start_exist)
-        {
-            printf_safe("start up no\n");
-            vTaskDelay(50);
-        }
-        GUI_EndDialog(startUpWin, 0);
-        vTaskDelete(xHandleTaskReadPic);
-        xHandleTaskReadPic = NULL;
-//        WM_HideWindow(_hWinAdvertizement);
-//        WM_ShowWindow(cur_win);
-//        CreateKeyBoardWindow();       
-        //CreateManagerCommon();   
-        home();
-        //CreatePwdInput();
-    }
-    else
-    {
-        calebrate_done = 1;
-        WM_MULTIBUF_Enable(1);
-        WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
-
-        GUI_UC_SetEncodeUTF8();
-
-        CreateHomeDLG();
     }
     while (1)
     {
