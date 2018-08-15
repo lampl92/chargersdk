@@ -20,7 +20,7 @@ void IIC_Init(void)
 {
     GPIO_InitTypeDef GPIO_Initure;
 
-    __HAL_RCC_GPIOH_CLK_ENABLE();   //使能GPIOH时钟
+    __HAL_RCC_GPIOB_CLK_ENABLE();   //使能GPIOB时钟
 
     //PH4,5初始化设置
     GPIO_Initure.Pin = GPIO_PIN_6 | GPIO_PIN_7;
