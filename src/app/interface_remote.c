@@ -1129,15 +1129,6 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
     char strID[16+1] = {0};
     char path[64];
 
-    if(usCmdID == ECH_CMDID_SET_BLACK)
-    {
-        strcpy(path, pathBlackList);
-    }
-    else if(usCmdID == ECH_CMDID_SET_WHITE)
-    {
-        strcpy(path, pathWhiteList);
-    }
-
     errcode = RemoteRecvHandle(pProto, usCmdID, pbuff, &len);
     switch (errcode)
     {
@@ -1146,6 +1137,14 @@ ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol
         break;
     case ERR_NO:
         *psiRetVal = 1;
+        if (usCmdID == ECH_CMDID_SET_BLACK)
+        {
+            strcpy(path, pathBlackList);
+        }
+        else if (usCmdID == ECH_CMDID_SET_WHITE)
+        {
+            strcpy(path, pathWhiteList);
+        }
         pProto->info.BnWFlushListCfg(path);//设置黑白名单需要清除原有名单
         //pbuff[0...3] 操作ID
         //pbuff[4,5] 名单个数
