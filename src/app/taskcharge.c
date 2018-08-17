@@ -421,15 +421,17 @@ void vTaskEVSECharge(void *pvParameters)
                     pCON->state = STATE_CON_STOPCHARGE;
                     break;
                 }
+                else if ((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
+                {
+                    printf_safe("\e[44;37mFource Unplug!\e[0m\n");
+                    xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
+                    pCON->state = STATE_CON_STOPCHARGE;
+                    break;
+                }
                 else if ((uxBitsCharge & defEventBitChargeCondition) != (defEventBitChargeCondition) &&
                         (uxBitsCharge & defEventBitCONVoltOK) == defEventBitCONVoltOK)//除去S2主动断开情况，如果被监测的点有False的情況
                 {
-                    if ((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
-                    {
-                        printf_safe("\e[44;37mFource Unplug!\e[0m\n");
-                        xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeUnPlug);
-                    }
-                    else if ((uxBitsCharge & defEventBitEVSETempOK) != defEventBitEVSETempOK || 
+                    if ((uxBitsCharge & defEventBitEVSETempOK) != defEventBitEVSETempOK || 
                         (uxBitsCharge & defEventBitCONACTempOK) != defEventBitCONACTempOK)
                     {
                         printf_safe("\e[44;37mOver temp stop!\e[0m\n");
