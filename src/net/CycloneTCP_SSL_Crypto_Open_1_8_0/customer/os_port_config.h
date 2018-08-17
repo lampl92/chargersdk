@@ -30,6 +30,8 @@
 #define GPL_LICENSE_TERMS_ACCEPTED
 
 //Select underlying RTOS
+#ifndef USE_FREERTOS
 #define USE_FREERTOS
+#endif // !USE_FREERTOS
 
 #endif

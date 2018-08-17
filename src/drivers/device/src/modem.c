@@ -75,7 +75,7 @@ DevModem_t *DevModemCreate(void)
     }
     else if (xSysconf.xModule.use_gprs == 3)
     {
-        pMod = UC15Create();
+        //pMod = UC15Create();
     }
     
     return pMod;
@@ -96,6 +96,9 @@ uint32_t modem_send_at(char *format, ...)
 
     cmd[strlen(cmd) - 1]  = '\0';
     printf_modem("%s", cmd);
+#if EVSE_USING_GUI
+    LCD_ShowString(400, 460, 380, 20, 16, cmd);
+#endif
 
     return n;
 }
@@ -128,14 +131,8 @@ DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32
             p  = strstr(reply, "CLOSED");
             if ( p )
             {
-                pModem->state = DS_MODEM_TCP_CLOSE;
+                pModem->state = DS_MODEM_ERR;
                 ret = DR_MODEM_CLOSED;
-                break;
-            }
-            p  = strstr(reply, "+QIRDI:");
-            if ( p )
-            {
-                ret = DR_MODEM_READ;
                 break;
             }
             if(key == NULL)
@@ -213,7 +210,7 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 pModem->state = DS_MODEM_ERR;
             }
-#if 0
+#if MODEM_CMD
             if (ret == DR_MODEM_OK)
             {
                 pModem->state = DS_MODEM_ACT_PDP;
@@ -260,6 +257,7 @@ void Modem_Poll(DevModem_t *pModem)
                 pModem->state = DS_MODEM_ERR;
             }
             break;
+#if MODEM_CMD
         case DS_MODEM_ACT_PDP:
             ret = pModem->act_PDP(pModem);
             if (ret == DR_MODEM_OK)
@@ -294,8 +292,6 @@ void Modem_Poll(DevModem_t *pModem)
             switch (pModem->status.eConnect)
             {
             case CONNECT_OK:
-                xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-                xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
                 pModem->state = DS_MODEM_TCP_KEEP;
                 break;
             case CONNECT_FAIL:
@@ -336,8 +332,6 @@ void Modem_Poll(DevModem_t *pModem)
             break;
         case DS_MODEM_TCP_CLOSE:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             pModem->close_TCP(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -504,10 +498,9 @@ void Modem_Poll(DevModem_t *pModem)
                 ParamTypeU8);
             pModem->state = DS_MODEM_FTP_CLOSE;
             break;
+#endif
         case DS_MODEM_ERR:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-            xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectFail); //rgw OK
-            xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
             uart_close(pModem->uart_handle);
             pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
             ret = pModem->soft_reset(pModem);

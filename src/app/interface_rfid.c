@@ -62,7 +62,7 @@ RFIDDev_t *RFIDDevCreate(char *uart_name, uint32_t band, int data_bit, char pari
     pRFID = (RFIDDev_t *)malloc(sizeof(RFIDDev_t));
     memset(pRFID, 0, sizeof(RFIDDev_t));
     
-	pRFID->status.ulHoldMaxTime_s = 60;
+	pRFID->status.ulHoldMaxTime_s = 30;
     pRFID->com = (void *)MT626COMCreate();
     pRFID->status.GetCardID = RFIDGetUID;
     pRFID->xHandleMutexRFID = xSemaphoreCreateMutex();

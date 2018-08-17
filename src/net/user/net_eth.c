@@ -35,6 +35,11 @@ error_t net_eth_disconnect(void *pvnet_dev)
 }
 error_t net_eth_close_hard(void *pvnet_dev)
 {
+    PAout(8) = 0;
+    bsp_DelayMS(500);
+    PAout(8) = 1;
+    bsp_DelayMS(500);
+    
     return NO_ERROR;
 }
 /**
@@ -83,24 +88,51 @@ error_t net_eth_init(void *pvnet_dev)
 
     if (ifconfig.info.ucDHCPEnable == 1)
     {
-        dhcpClientGetDefaultSettings(&dhcpClientSettings);
-        dhcpClientSettings.interface = interface;
-        error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
-        if (error)
+        if (net_dev->is_dhcp_inited == 0)
         {
-            TRACE_ERROR("DHCP客户端初始化失败!code = %d\r\n", error);
-            return error;
-        }
+            dhcpClientGetDefaultSettings(&dhcpClientSettings);
+            dhcpClientSettings.interface = interface;
+            error = dhcpClientInit(&dhcpClientContext, &dhcpClientSettings);
+            if (error)
+            {
+                TRACE_ERROR("DHCP客户端初始化失败!code = %d\r\n", error);
+                return error;
+            }
+            net_dev->is_dhcp_inited = 1;
+        } 
 
         //启动DHCP客户端
+        dhcpClientStop(&dhcpClientContext);
         error = dhcpClientStart(&dhcpClientContext);
         if (error)
         {
             TRACE_ERROR("启动DHCP客户端失败! code = %d\r\n", error);
             return error;
         }
+        time_t dhcp_start = time(NULL);
+        uint32_t dhcp_waittime = 0;
         while ((dhcpstate = dhcpClientGetState(&dhcpClientContext)) != DHCP_STATE_BOUND)
         {
+            dhcp_waittime = time(NULL) - dhcp_start;
+
+            if (interface->linkState)
+            {
+                if (dhcp_waittime > 60)
+                {
+                    TRACE_ERROR("Link up & DHCP客户端超时!\n");
+                    dhcp_waittime = 0;
+                    return ERROR_FAILURE;
+                }
+            }
+            else//LINK DOWN 
+            {            
+                if (dhcp_waittime > 15)
+                {
+                    TRACE_ERROR("Link down & DHCP客户端超时!\n");
+                    dhcp_waittime = 0;
+                    return ERROR_FAILURE;
+                }
+            }
             vTaskDelay(1000);
         }
     }
@@ -123,7 +155,7 @@ error_t net_eth_init(void *pvnet_dev)
         ipv4SetDnsServer(interface, 0, ipv4Addr);
         ipv4StringToAddr(ifconfig.info.strDNS2, &ipv4Addr);
         ipv4SetDnsServer(interface, 1, ipv4Addr);
-    }
+    } 
     
     return error;
 }

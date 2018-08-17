@@ -54,6 +54,10 @@ u8 *GetFont_Info(u8 *fxpath)
 	u8 *FontBuffer;
 
 	fd=yaffs_open(fxpath, O_RDONLY, 0);	//打开字库文件
+    if(fd < 0)
+    {
+        return NULL;
+    }
     yaffs_stat(fxpath, &st);
     fsize = st.st_size;
     FontBuffer = malloc(fsize); //从外部SDRAM申请内存
@@ -61,7 +65,7 @@ u8 *GetFont_Info(u8 *fxpath)
     if(FontBuffer==NULL)
 	{
 		printf("内存申请失败\r\n");
-    	return FontBuffer;
+    	return NULL;
 	}
 
     bread = yaffs_read(fd, FontBuffer, fsize); //读取数据
@@ -76,41 +80,56 @@ u8 *GetFont_Info(u8 *fxpath)
 }
 
 
-void create_sif_font(u8 *fxpath, GUI_FONT * pFont, const GUI_SIF_TYPE * pFontType)
+int create_sif_font(u8 *fxpath, GUI_FONT * pFont, const GUI_SIF_TYPE * pFontType)
 {
-    GUI_SIF_CreateFont(GetFont_Info(fxpath), pFont, pFontType);
+    u8 *result = GetFont_Info(fxpath);
+    if (result == NULL)
+    {
+        return -1;
+    }
+    GUI_SIF_CreateFont(result, pFont, pFontType);
+    return 0;
 }
-
+extern void gui_halt(void);
+#define IS_FONT_OK(_fun)   do{                                           \
+                                                            int _macro_errcode = _fun;         \
+                                                            if(_macro_errcode == -1)                  \
+                                                            {                                       \
+                                                                gui_halt();  \
+                                                            }                                     \                                                            
+                                                        }while(0);
 void createfont()
 {
-    create_sif_font(pathstSIF12, &SIF12_Font, GUI_SIF_TYPE_PROP);
-    create_sif_font(pathstSIF16, &SIF16_Font, GUI_SIF_TYPE_PROP);
-    create_sif_font(pathstSIF24, &SIF24_Font, GUI_SIF_TYPE_PROP);
-    create_sif_font(pathstSIF36, &SIF36_Font, GUI_SIF_TYPE_PROP);
+    int result;
+    //9个文件
+    IS_FONT_OK(create_sif_font(pathstSIF12, &SIF12_Font, GUI_SIF_TYPE_PROP));
+    IS_FONT_OK(create_sif_font(pathstSIF16, &SIF16_Font, GUI_SIF_TYPE_PROP));
+    IS_FONT_OK(create_sif_font(pathstSIF24, &SIF24_Font, GUI_SIF_TYPE_PROP));
+    IS_FONT_OK(create_sif_font(pathstSIF36, &SIF36_Font, GUI_SIF_TYPE_PROP));
     
-    create_sif_font(pathfontwryhct12aa4, &fontwryhct12aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhct16aa4, &fontwryhct16aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhct24aa4, &fontwryhct24aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhct36aa4, &fontwryhct36aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhct12aa4, &fontwryhct12aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhct16aa4, &fontwryhct16aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhct24aa4, &fontwryhct24aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhct36aa4, &fontwryhct36aa4, GUI_SIF_TYPE_PROP_AA4);
     
-    create_sif_font(pathfontwryhcg12aa4, &fontwryhcg12aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhcg16aa4, &fontwryhcg16aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhcg24aa4, &fontwryhcg24aa4, GUI_SIF_TYPE_PROP_AA4);
-    create_sif_font(pathfontwryhcg36aa4, &fontwryhcg36aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhcg12aa4, &fontwryhcg12aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhcg16aa4, &fontwryhcg16aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhcg24aa4, &fontwryhcg24aa4, GUI_SIF_TYPE_PROP_AA4);
+//    create_sif_font(pathfontwryhcg36aa4, &fontwryhcg36aa4, GUI_SIF_TYPE_PROP_AA4);
     
-    create_sif_font(pathfontwryhcg12aa4e, &fontwryhcg12aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
-    create_sif_font(pathfontwryhcg16aa4e, &fontwryhcg16aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
-    create_sif_font(pathfontwryhcg24aa4e, &fontwryhcg24aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
-    create_sif_font(pathfontwryhcg36aa4e, &fontwryhcg36aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+//    create_sif_font(pathfontwryhcg12aa4e, &fontwryhcg12aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+//    create_sif_font(pathfontwryhcg16aa4e, &fontwryhcg16aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+//    create_sif_font(pathfontwryhcg24aa4e, &fontwryhcg24aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+//    create_sif_font(pathfontwryhcg36aa4e, &fontwryhcg36aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
     
-    create_sif_font(pathfontwryhcg12e, &fontwryhcg12e, GUI_SIF_TYPE_PROP_EXT);
-    create_sif_font(pathfontwryhcg16e, &fontwryhcg16e, GUI_SIF_TYPE_PROP_EXT);
-    create_sif_font(pathfontwryhcg24e, &fontwryhcg24e, GUI_SIF_TYPE_PROP_EXT);
-    create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
-    create_sif_font(pathfontwryhcg36e, &fontwryhcg36e, GUI_SIF_TYPE_PROP_EXT);
+    IS_FONT_OK(create_sif_font(pathfontwryhcg12e, &fontwryhcg12e, GUI_SIF_TYPE_PROP_EXT));
+    IS_FONT_OK(create_sif_font(pathfontwryhcg16e, &fontwryhcg16e, GUI_SIF_TYPE_PROP_EXT));
+    IS_FONT_OK(create_sif_font(pathfontwryhcg24e, &fontwryhcg24e, GUI_SIF_TYPE_PROP_EXT));
+    //create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
+    IS_FONT_OK(create_sif_font(pathfontwryhcg36e, &fontwryhcg36e, GUI_SIF_TYPE_PROP_EXT));
+    IS_FONT_OK(create_sif_font(pathfontwryhcg44e, &fontwryhcg44e, GUI_SIF_TYPE_PROP_EXT));
     
-    create_sif_font(pathfontwryhcg44e, &fontwryhcg44e, GUI_SIF_TYPE_PROP_EXT);
-    create_sif_font(pathfontwryhcg44aa4e, &fontwryhcg44aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
+//    create_sif_font(pathfontwryhcg44aa4e, &fontwryhcg44aa4e, GUI_SIF_TYPE_PROP_AA4_EXT);
 }
 
 

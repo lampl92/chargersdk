@@ -32,7 +32,7 @@ typedef struct
 typedef struct 
 {
     uint8_t use_gprs; // 0:无网络 2:2G 3:3G
-    uint8_t use_meter; //1:内部计量  2:外部计量
+    uint8_t use_meter; //1:内部计量  2:单相电表 3：三相电表  4：other电表，需配置
     uint8_t use_rfid; // 1:使用rfid
     uint8_t use_gui; //1:使用GUI
 }ModuleSelect_t;

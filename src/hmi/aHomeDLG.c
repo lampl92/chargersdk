@@ -4,6 +4,7 @@
 #include "GUI_backstage.h"
 #include "bsp_rtc.h"
 #include "bsp_gpio.h"
+#include "evse_config.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
@@ -36,6 +37,8 @@
 #define ID_Timerinfoflash               6
 #define ID_Timerstateflash              7
 #define ID_TimerGotoSetting             8
+#define ID_TimerQRFlashA                 9
+#define ID_TimerQRFlashB                 10
 #define gunstateax  112 //枪A状态图标x位置
 #define gunstateay  79 //枪A状态图标y位置
 #define gunstatebx  456 //枪B状态图标x位置
@@ -56,6 +59,8 @@ static WM_HTIMER    _timerstateflash;//后台状态
 static WM_HTIMER _timergunastateflash, _timergunbstateflash, _timersignalstateflash, _timerpriceflash, _timertimeflash;
 static WM_HTIMER _timerinfoflash;
 static WM_HTIMER _timerGotoSetting;//进入管理员界面定时器
+static WM_HTIMER _timerQRFlashA;//刷新二维码
+static WM_HTIMER _timerQRFlashB; //刷新二维码
 
 static int gotoSettingFlag = 0;
 
@@ -75,8 +80,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 552, 422, 65, 44, TEXT_CF_HCENTER, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "help", ID_BUTTON_3, helpbuttonx, helpbuttony, 170, 70, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gotoSetingButton1", ID_BUTTON_4, 0, 0, 330, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "gotoSetingButton2", ID_BUTTON_5, 690, 50, 110, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton1", ID_BUTTON_4, 0, 0, 200, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "gotoSetingButton2", ID_BUTTON_5, 600, 0, 200, 50, 0, 0x0, 0 },
 };
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateinfo[] = {
@@ -244,7 +249,7 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
             sprintf(temp_buf, "%.1f", pCON->status.dChargingCurrent);//充电电流   
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);
-            sprintf(temp_buf, "%.1f", (pCON->status.dChargingPower) / 1000);
+            sprintf(temp_buf, "%.1f", (pCON->status.dChargingPower));
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电功率     
         }
         if (GBSgunstate[0] == GunchargedoneState)
@@ -264,21 +269,21 @@ static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
         pCON = CONGetHandle(1);
         if (GBSgunstate[1] == GunchargingState)
         {
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-            sprintf(temp_buf, "%.2f", pCON->status.dChargingCurrent);//充电电流   
+            sprintf(temp_buf, "%.1f", pCON->status.dChargingCurrent);//充电电流   
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);
-            sprintf(temp_buf, "%.2f", (pCON->status.dChargingPower) / 1000);
+            sprintf(temp_buf, "%.1f", (pCON->status.dChargingPower));
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电功率   
         }
         if (GBSgunstate[1] == GunchargedoneState)
         {
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalEnergy);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalEnergy);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_3), temp_buf);//充入电量
-            sprintf(temp_buf, "%.2f", pCON->order.dTotalFee);
+            sprintf(temp_buf, "%.1f", pCON->order.dTotalFee);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_4), temp_buf);//消费总额 
             time_charge = pCON->order.tStopTime - pCON->order.tStartTime;
-            sprintf(temp_buf, "%.2lf", time_charge / 60.0);
+            sprintf(temp_buf, "%.1f", time_charge / 60.0);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_5), temp_buf);//充电时间
         } 
     }
@@ -476,8 +481,16 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             if (gbsstate == StateGetGunInfo)
             {
                 WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPSELECTGUN);
-            }          
-            if (bittest(flag_specially, 0))
+            }     
+            if (pechProto->info.ftp.ucDownloadStart == 1)//系统要升级
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPUpdateSystem);
+            }      
+            if ((WM_IsVisible(Hwinhelp) && WM_IsWindow(Hwinhelp)) || BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0)) || BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1)))
+            {
+                bitclr(flag_specially, 0);
+            }
+            if (bittest(flag_specially, 0) && !WM_IsVisible(Hwinhelp) && !BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0))&&!BUTTON_IsPressed(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1)))
             {
                 bitclr(flag_specially, 0);
                 GUI_EndDialog(pMsg->hWin, 0);
@@ -502,7 +515,15 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         break;
     case MSG_JUMPSELECTGUN:
         GUI_EndDialog(pMsg->hWin, 0);
+        bitclr(flag_specially, 1);
+        PIout(3) = 1;
         CreateselectgunDLG();
+        break;
+    case MSG_JUMPUpdateSystem:
+        GUI_EndDialog(pMsg->hWin, 0);
+        bitclr(flag_specially, 1);
+        PIout(3) = 1;
+        CreateUpdateSystem();
         break;
     default:
         WM_DefaultProc(pMsg);
@@ -568,8 +589,6 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
     float pkw;//功率
     int pkwpercent;//功率百分比
     uint8_t temp_buf[32];
-    
-    pCON = CONGetHandle(0);
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG: 
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), GUI_WHITE);
@@ -621,7 +640,7 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
             if (homegunstate[0] == GunchargingState)
             {
                 pCON = CONGetHandle(0);
-                pkw = (pCON->status.dChargingPower)/1000;
+                pkw = (pCON->status.dChargingPower);
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_6), temp_buf);
                 pkwpercent = pkw / pCON->info.dRatedPower * 100;
@@ -643,7 +662,20 @@ static void _cbDialoggunastate(WM_MESSAGE *pMsg)
                 }
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             }
-            WM_RestartTimer(pMsg->Data.v, 20);    
+            WM_RestartTimer(pMsg->Data.v, 100);    
+        }
+        if (pMsg->Data.v == _timerQRFlashA)
+        {
+            extern char QR_saveA[defQRCodeLength]; //保存的枪A二维码
+            pCON = CONGetHandle(0);
+            if (strcmp(pCON->info.strQRCode,QR_saveA))
+            {
+                extern int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem);
+                createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+                strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+            }
+            WM_RestartTimer(pMsg->Data.v, 1000);    
         }
         break;
     default:
@@ -713,7 +745,7 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
             if (homegunstate[1] == GunchargingState)
             {
                 pCON = CONGetHandle(1);
-                pkw = (pCON->status.dChargingPower)/1000;
+                pkw = (pCON->status.dChargingPower);
                 sprintf(temp_buf, "%.1f", pkw);
                 TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_7), temp_buf);
                 pkwpercent = pkw / pCON->info.dRatedPower;
@@ -736,6 +768,19 @@ static void _cbDialoggunbstate(WM_MESSAGE *pMsg)
                 WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
             }
             WM_RestartTimer(pMsg->Data.v, 20);    
+        }
+        if (pMsg->Data.v == _timerQRFlashB)
+        {
+            extern char QR_saveB[defQRCodeLength]; //保存的枪B二维码
+            pCON = CONGetHandle(1);
+            if (strcmp(pCON->info.strQRCode, QR_saveB))
+            {
+                extern int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem);
+                createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
+                strncpy(QR_saveB, pCON->info.strQRCode, defQRCodeLength);
+                WM_SendMessageNoPara(pMsg->hWin, MSG_UPDATE);
+            }
+            WM_RestartTimer(pMsg->Data.v, 1000); 
         }
         break;
     default:
@@ -765,6 +810,7 @@ static void _cbDialoghelp(WM_MESSAGE *pMsg)
 WM_HWIN CreateHomeDLG(void);
 WM_HWIN CreateHomeDLG(void) {
     WM_HWIN hWin;
+    CON_t *pCON;
     gunstateOnce = 1;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     //GUI_Delay(3000);
@@ -780,6 +826,8 @@ WM_HWIN CreateHomeDLG(void) {
     
     _timergunastateflash = WM_CreateTimer(Hwingunastate, ID_Timergunastateflash, 10, 0);
     _timergunbstateflash = WM_CreateTimer(Hwingunbstate, ID_Timergunbstateflash, 10, 0);
+    _timerQRFlashA = WM_CreateTimer(Hwingunastate, ID_TimerQRFlashA, 100, 0);
+    _timerQRFlashB = WM_CreateTimer(Hwingunbstate, ID_TimerQRFlashB, 100, 0);
     
     Hwininfo = GUI_CreateDialogBox(_aDialogCreateinfo, GUI_COUNTOF(_aDialogCreateinfo), _cbDialoginfo, hWin, 0, 0);
     _timerinfoflash = WM_CreateTimer(Hwininfo, ID_Timerinfoflash, 200, 0);

@@ -9,8 +9,9 @@
 #include "errorcode.h"
 #include "yaffsfs.h"
 #include "factorycfg.h"
+#include "libEcharge/ech_globals.h"
 #include <string.h>
-
+//程序中的Order枪号从0开始，文件中的枪号从1开始
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsNewOrderCfgObj;
@@ -18,7 +19,7 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
     jsNewOrderCfgObj = cJSON_CreateObject();
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartType, cJSON_CreateNumber(pOrder->ucStartType));                            //有卡无卡标志
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateString(pOrder->strOrderSN));                               //1 交易流水
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(pOrder->ucCONID + 1));                                //2 充电桩接口
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(EchCONIDtoRemoteID(pOrder->ucCONID, pEVSE->info.ucTotalCON)));                                 //2 充电桩接口
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(pOrder->strCardID));                                             //3 卡号
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartEnergy, cJSON_CreateNumber(pOrder->dStartEnergy));                           //4 充电前电能总示值
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStopEnergy, cJSON_CreateNumber(pOrder->dStartEnergy + pOrder->dTotalEnergy));  //5 充电后电能总示值
@@ -86,7 +87,7 @@ ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     }
     jsChild = CreateNewOrderCfg(pOrder, pProto);
     cJSON_AddItemToArray(jsParent, jsChild);
-    errcode = SetCfgObj(path, jsParent);
+    errcode = SetCfgObj(path, jsParent, 0);
     
     return errcode;
 }
@@ -97,7 +98,7 @@ ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     ErrorCode_t errcode;
     pOrder->tStopTime = time(NULL);//添加临时订单时或无停止时间，增加添加临时订单时间作为临时停止时间
     jsObj = CreateNewOrderCfg(pOrder, pProto);
-    errcode = SetCfgObj(path, jsObj);
+    errcode = SetCfgObj(path, jsObj, 0);
     
     return errcode;
 }
@@ -150,6 +151,7 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     cJSON *jsParent;
     ErrorCode_t errcode;
     double dStopEnergy;
+    uint8_t remote_id;
     
     errcode = ERR_NO;
     jsParent = GetCfgObj(path, &errcode);
@@ -160,8 +162,8 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     
     GetOrderCfgItem(jsParent, jnOrderStartType, &pOrder->ucStartType, ParamTypeU8);
     GetOrderCfgItem(jsParent, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
-    GetOrderCfgItem(jsParent, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
-    pOrder->ucCONID = pOrder->ucCONID - 1;
+    GetOrderCfgItem(jsParent, jnOrderCONID, &remote_id, ParamTypeU8);
+    pOrder->ucCONID = EchRemoteIDtoCONID(remote_id);
     GetOrderCfgItem(jsParent, jnOrderCardID, pOrder->strCardID, ParamTypeString);
     GetOrderCfgItem(jsParent, jnOrderStartEnergy, &pOrder->dStartEnergy, ParamTypeDouble);
     GetOrderCfgItem(jsParent, jnOrderStopEnergy, &dStopEnergy, ParamTypeDouble);
@@ -287,7 +289,7 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
         return ERR_OTHER;
     }
     cJSON_DeleteItemFromArray(jsParent, i);
-    errcode = SetCfgObj(path, jsParent);
+    errcode = SetCfgObj(path, jsParent, 0);
     
     return errcode;
 }
@@ -318,6 +320,8 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
         {
             printf_safe("**************Signal Item example Arr[%d]*************\n", i);
             jsChild = cJSON_GetArrayItem(jsParent, i);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderCONID);
+            printf_safe("CONID\t%d\n", jsItem->valueint);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
             printf_safe("StartType\t%d\n", jsItem->valueint);
 	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);

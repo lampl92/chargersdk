@@ -34,6 +34,7 @@ extern int SignalFlag;//信号图标刷新标志
 WM_HWIN CreatestartUpDLG(void);
 WM_HWIN CreateHome0DLG(void);
 WM_HWIN CreateHomeDLG(void);
+WM_HWIN CreateSuperManager(void);
 WM_HWIN CreateselectgunDLG(void);
 WM_HWIN CreateselectpatternDLG(void);
 WM_HWIN CreateselectpatternbetterDLG(void);

@@ -48,7 +48,7 @@ ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...);
 ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...);
 ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...);
 
-ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj);
+ErrorCode_t SetCfgObj(char *path, cJSON *jsCfgObj, int DoNotDeleteObj);
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode);
 
 #endif

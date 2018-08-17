@@ -7,14 +7,13 @@
 #include "debug.h"
 #include "os_port.h"
 
-
 YarrowContext yarrowContext;
 uint8_t seed[32];
 /**
  * @brief SMTP client test routine
  * @return Error code
  **/
-
+static int is_smtp_initialized = 0;
 error_t smtpClientTest(void)
 {
     error_t error;
@@ -22,10 +21,20 @@ error_t smtpClientTest(void)
     uint32_t value;
 
     RNG_HandleTypeDef hrng; 
-    __HAL_RCC_RNG_CLK_ENABLE();
-    hrng.Instance = RNG;
-    HAL_RNG_Init(&hrng);
-
+    if (is_smtp_initialized == 0)
+    {
+        __HAL_RCC_RNG_CLK_ENABLE();
+        hrng.Instance = RNG;
+        HAL_RNG_Init(&hrng);
+        //PRNG 初始化
+        error = yarrowInit(&yarrowContext);
+        if (error)
+        {
+            TRACE_ERROR("初始化PRNG失败!\r\n");
+            return error;
+        }
+        is_smtp_initialized = 1;
+    }
     //生成随机数种子
     for (i = 0; i < 32; i += 4)
     {
@@ -37,17 +46,12 @@ error_t smtpClientTest(void)
         seed[i + 2] = (value >> 16) & 0xFF;
         seed[i + 3] = (value >> 24) & 0xFF;
     }
-    //PRNG 初始化
-    error = yarrowInit(&yarrowContext);
-    if (error)
-    {
-        TRACE_ERROR("初始化PRNG失败!\r\n");
-    }
 
     error = yarrowSeed(&yarrowContext, seed, sizeof(seed));
     if (error)
     {
         TRACE_ERROR("PRNG种子失败!\r\n");
+        return error;
     }
     
     //认证信息
@@ -64,10 +68,11 @@ error_t smtpClientTest(void)
     };
 
     //Recipients
+    //    { "RGW", "renguangwei@dpc.com.cn", SMTP_RCPT_TYPE_TO }, //First recipient
+    //    { "RGW", "rgw5267@gmail.com", SMTP_RCPT_TYPE_CC }      //Second recipient
     static SmtpMailAddr recipients[2] =
     {
-        { "RGW", "renguangwei@dpc.com.cn", SMTP_RCPT_TYPE_TO }, //First recipient
-        { "RGW", "rgw5267@gmail.com", SMTP_RCPT_TYPE_CC }      //Second recipient
+        { "RGW", "rgw5267@163.com", SMTP_RCPT_TYPE_TO }
     };
 
     //Mail contents

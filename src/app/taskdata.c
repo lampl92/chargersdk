@@ -26,11 +26,14 @@ void vTaskEVSEData(void *pvParameters)
     uint32_t ulSignalPoolXor;
     uint32_t ulSignalCONAlarmOld_CON[defMaxCON] = { 0 };
     uint32_t ulSignalCONFaultOld_CON[defMaxCON] = { 0 };
+    uint32_t ulSignalEVSEStateOld = 0;
     uint32_t ulSignalEVSEAlarmOld = 0;
     uint32_t ulSignalEVSEFaultOld = 0;
     EventBits_t uxBitsTimer;
     EventBits_t uxBitsData;
     EventBits_t uxBitsCharge;
+    cJSON *jsEVSELogObj;
+    ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
     ulSignalPoolXor = 0;
@@ -41,6 +44,14 @@ void vTaskEVSEData(void *pvParameters)
     {
         while (1)
             ;//你看, 你设置的ulSignalCONAlarmOld_CON 数组小了
+    }
+    jsEVSELogObj = GetCfgObj(pathEVSELog, &errcode);
+    if (jsEVSELogObj == NULL)
+    {
+        while (1)
+        {
+            vTaskDelay(1000);
+        }
     }
     while(1)
     {
@@ -279,55 +290,64 @@ void vTaskEVSEData(void *pvParameters)
                     xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeOffline);
                     pCON->order.ucStopType = defOrderStopType_Offline;
                 }
+                //过温
+                if((uxBitsData & defEventBitOrderStopTypeTemp) == defEventBitOrderStopTypeTemp)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeTemp);
+                    pCON->order.ucStopType = defOrderStopType_Temp;
+                }
+                //远程急停
+                if((uxBitsData & defEventBitOrderStopTypeRemoteEmergencyStop) == defEventBitOrderStopTypeRemoteEmergencyStop)
+                {
+                    xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderStopTypeRemoteEmergencyStop);
+                    pCON->order.ucStopType = defOrderStopType_RemoteEmergencyStop;
+                }
                 AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinishToRemote);
 
-                xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
+                //xQueueSend(xHandleQueueOrders, &(pCON->order), 0);
                 
-                /**存储订单 */
+                pCON->order.statOrder = STATE_ORDER_WAITUSE;
+                break;
+            case STATE_ORDER_WAITUSE:
 #if EVSE_USING_NET
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                if (pCON->order.ucStopType == defOrderStopType_Offline)
+                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
+                if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
                 {
-                    printf_safe("Order Offline.....................\n");
-                    pCON->order.ucPayStatus = 0;
-                    /* 临时订单 在这里存储订单*/
-                    AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                    printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
+                    pCON->order.ucPayStatus = 1;
+                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                    pCON->order.statOrder = STATE_ORDER_STORE;
+                    break;
                 }
                 else
                 {
-                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
-                                                     defEventBitOrderUseless,
-                                                     pdTRUE, pdTRUE, 65000);//要比remote中的order超时（60s）长
-                    if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
+                    if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
                     {
-                        printf_safe("Order OK.....................\n");
-                        pCON->order.ucPayStatus = 1;
-                        RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-                    }
-                    else
-                    {
-                        printf_safe("Order TimeOut.....................\n");
-                        pCON->order.ucPayStatus = 0;
-                        /* 临时订单 在这里存储订单*/
-                        AddOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->order), pechProto);
+                        printf_safe("CON%d Order TimeOut.....................\n", pCON->info.ucCONID);
+                        pCON->order.statOrder = STATE_ORDER_STORE;
                     }
                 }
-                
+                break;
+            case STATE_ORDER_STORE:
                 AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
-                xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderFinishToHMI);
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;
             case STATE_ORDER_HOLD:
+#if DEBUG_DIAG_DUMMY
+#else
                 if ((pCON->status.ulSignalState & defSignalCON_State_Plug) == defSignalCON_State_Plug)
                 {
                     break;
                 }
                 else
+#endif
                 {
                     pCON->order.statOrder = STATE_ORDER_RETURN;
                 }
@@ -365,7 +385,44 @@ void vTaskEVSEData(void *pvParameters)
             cfg_set_string(pathProtoCfg, pechProto->info.strNewKey, "%s", jnProtoKey);
             cfg_set_uint32(pathProtoCfg, &max_time, "%s", jnProtoNewKeyChangeTime);
         }
-        
+        /********** 预约状态 **************/
+        /* 0：未知 1：无预约 2：已预约 3：预约失败*/
+        for (id = 0; id < ulTotalCON; id++)
+        {
+            pCON = CONGetHandle(id);
+            if (pCON->appoint.status == 2)
+            {
+                if (time(NULL) - pCON->appoint.timestamp > pCON->appoint.time_s)
+                {
+                    pCON->appoint.status = 1;
+                }
+            }
+        }
+
+        /********** 状态记录 **************/
+        //proc evse state
+        ulSignalPoolXor = ulSignalEVSEStateOld ^ pEVSE->status.ulSignalState;
+        if (ulSignalPoolXor != 0)
+        {
+            for (i = 0; i < 32; i++)
+            {
+                if ((ulSignalPoolXor & (1 << i)) == (1 << i))
+                {
+                    switch (1 << i)
+                    {
+                    case defSignalEVSE_State_Network_Online: 
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Online");
+                        break;
+                    case defSignalEVSE_State_Network_Logined: 
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Login");
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+        }//if (ulSignalPoolXor != 0)
+        ulSignalEVSEStateOld = pEVSE->status.ulSignalState;    //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
         /********** 告警记录 **************/
 #if EVSE_USING_STORE_LOG
         for (id = 0; id < ulTotalCON; id++)
@@ -382,85 +439,85 @@ void vTaskEVSEData(void *pvParameters)
                         switch (1 << i)
                         {
                         case defSignalCON_Alarm_SocketLock:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪锁");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪锁");
                             break;
                         case defSignalCON_Alarm_SocketTemp1_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
                             break;
                         case defSignalCON_Alarm_SocketTemp2_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
                             break;
                         case defSignalCON_Alarm_SocketTemp1_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度1");
                             break;
                         case defSignalCON_Alarm_SocketTemp2_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "枪座温度2");
                             break;
                         case defSignalCON_Alarm_AC_A_Temp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
                             break;
                         case defSignalCON_Alarm_AC_B_Temp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
                             break;
                         case defSignalCON_Alarm_AC_C_Temp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
                             break;
                         case defSignalCON_Alarm_AC_N_Temp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
                             break;
                         case defSignalCON_Alarm_AC_A_Temp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相温度");
                             break;
                         case defSignalCON_Alarm_AC_B_Temp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相温度");
                             break;
                         case defSignalCON_Alarm_AC_C_Temp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相温度");
                             break;
                         case defSignalCON_Alarm_AC_N_Temp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "N相温度");
                             break;
                         case defSignalCON_Alarm_AC_A_VoltUp:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压过压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压过压");
                             break;
                         case defSignalCON_Alarm_AC_B_VoltUp:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压过压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压过压");
                             break;
                         case defSignalCON_Alarm_AC_C_VoltUp:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压过压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压过压");
                             break;
                         case defSignalCON_Alarm_AC_A_VoltLow:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压欠压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电压欠压");
                             break;
                         case defSignalCON_Alarm_AC_B_VoltLow:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压欠压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电压欠压");
                             break;
                         case defSignalCON_Alarm_AC_C_VoltLow:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压欠压");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电压欠压");
                             break;
                         case defSignalCON_Alarm_AC_A_CurrUp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_B_CurrUp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_C_CurrUp_War:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_A_CurrUp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "A(L)相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_B_CurrUp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "B相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_C_CurrUp_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "C相电流过流");
                             break;
                         case defSignalCON_Alarm_AC_Freq_Cri:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "频率");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelCritical, (pCON->status.ulSignalAlarm >> i) & 1, "频率");
                             break;
                         default:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelWarning, 1, "充电枪未知警告");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelWarning, 1, "充电枪未知警告");
                             break;
                             
                         }
@@ -480,34 +537,34 @@ void vTaskEVSEData(void *pvParameters)
                         switch (1 << i)
                         {
                         case defSignalCON_Fault_SocketLock: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "枪锁");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "枪锁");
                             break;
                         case defSignalCON_Fault_AC_A_Temp: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "A(L)相温度检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "A(L)相温度检测");
                             break;
                         case defSignalCON_Fault_AC_B_Temp: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "B相温度检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "B相温度检测");
                             break;
                         case defSignalCON_Fault_AC_C_Temp: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "C相温度检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "C相温度检测");
                             break;
                         case defSignalCON_Fault_AC_N_Temp: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "N相温度检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "N相温度检测");
                             break;
                         case defSignalCON_Fault_RelayPaste: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "继电器粘连");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "继电器粘连");
                             break;
                         case defSignalCON_Fault_CP: 
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "CP检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "CP检测");
                             break;
                         case defSignalCON_Fault_Plug:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "插枪检测");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "插枪检测");
                             break;
                         case defSignalCON_Fault_Meter:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "电能计量故障");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, (pCON->status.ulSignalFault >> i) & 1, "电表故障");
                             break;
                         default:
-                            AddEVSELog(pathEVSELog, id + 1, defLogLevelFault, 1, "充电枪未知故障");
+                            AddEVSELogObj(jsEVSELogObj, id + 1, defLogLevelFault, 1, "充电枪未知故障");
                             break;
                         }
                     }
@@ -527,46 +584,46 @@ void vTaskEVSEData(void *pvParameters)
                     switch (1 << i)
                     {
                     case defSignalEVSE_Alarm_Scram: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "急停");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "急停");
                         break;
                     case defSignalEVSE_Alarm_Knock: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "撞击");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "撞击");
                         break;
                     case defSignalEVSE_Alarm_PE: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "接地");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "接地");
                         break;
                     case defSignalEVSE_Alarm_PowerOff: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "掉电");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "掉电");
                         break;
                     case defSignalEVSE_Alarm_Arrester: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "防雷");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "防雷");
                         break;
                     case defSignalEVSE_Alarm_AC_A_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_B_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_C_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_N_Temp_War: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelWarning, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_A_Temp_Cri: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电A(L)相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_B_Temp_Cri: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电B相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_C_Temp_Cri: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电C相过温");
                         break;
                     case defSignalEVSE_Alarm_AC_N_Temp_Cri: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, (pEVSE->status.ulSignalAlarm >> i) & 1, "市电N相过温");
                         break;
                     default:
-                        AddEVSELog(pathEVSELog, 0, defLogLevelCritical, 1, "EVSE未知警告");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelCritical, 1, "EVSE未知警告");
                         break;
                     }
                 }
@@ -585,28 +642,37 @@ void vTaskEVSEData(void *pvParameters)
                     switch (1 << i)
                     {
                     case defSignalEVSE_Fault_RFID: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "读卡器");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "读卡器");
                         break;
                     case defSignalEVSE_Fault_Bluetooth: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "蓝牙");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "蓝牙");
                         break;
                     case defSignalEVSE_Fault_Wifi: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "WI-FI");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "WI-FI");
                         break;
                     case defSignalEVSE_Fault_GPRS: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "GPRS");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "GPRS");
                         break;
                     case defSignalEVSE_Fault_GSensor: 
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "加速度传感器");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, (pEVSE->status.ulSignalFault >> i) & 1, "加速度传感器");
                         break;
                     default:
-                        AddEVSELog(pathEVSELog, 0, defLogLevelFault, 1, "EVSE未知故障");
+                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelFault, 1, "EVSE未知故障");
                         break;
                     }
                 }
             }
         }//if (ulSignalPoolXor != 0)
         ulSignalEVSEFaultOld = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
+        
+        /////////////////存储EVSELog/////////////////////
+        uxBitsData = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBStoreLog, pdTRUE, pdTRUE, 0);
+        if ((uxBitsData & defEventBitTimerCBStoreLog) == defEventBitTimerCBStoreLog)
+        {
+            SetCfgObj(pathEVSELog, jsEVSELogObj, 0x5555);
+        }
+        
+        
 #endif //if 1
         
 #endif //DEBUG_NO_TASKDATA

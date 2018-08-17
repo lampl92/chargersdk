@@ -10,6 +10,7 @@
 #include "evse_version.h"
 #include "ifconfig.h"
 #include "interface_network.h"
+#include "utils.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
 //uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
@@ -19,7 +20,6 @@ uint8_t *ucHeap = (uint8_t *)(0XC1500000);//used by heap_4.c
 Sysconf_t   xSysconf;//存放系统初始化参数
 
 extern time_t time_dat;
-
 void timeInit()
 {
     time_t settime;
@@ -45,6 +45,19 @@ void timeInit()
     time(&settime);
 }
 
+char g_strChipID[24 + 1] = { 0 };
+void Get_ChipID(void)
+{
+    int i;
+    __IO uint8_t *pid;
+    pid = (__IO uint8_t *)0x1FFF7A10;
+    for (i = 0; i < 6; i++)
+    {
+        g_strChipID[i] = pid[i+6];
+    }
+    //printf_safe("ChipID: %s\n", g_strChipID);
+//    HexToStr((uint8_t *)pid, g_strChipID, 12);
+}
 uint8_t create_dir(char *dir)
 {
     int res = 1;
@@ -97,6 +110,7 @@ extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
+    Get_ChipID();
     retarget_init();
     cli_init();
     timeInit();
@@ -107,6 +121,7 @@ void sys_Init(void)
     create_dir(pathSystemDir);
     create_dir(pathDownloadDir);
     create_dir(pathUpgradeDir);
+    create_dir(pathResourceDir);
 #if BOOTLOADER
 #else
     create_cfg_file(pathEVSECfg, strEVSECfg);
@@ -118,6 +133,7 @@ void sys_Init(void)
     create_cfg_file(pathSysCfg, strSysCfg);
     create_cfg_file(pathFTPCfg, strFtpCfg);
     create_cfg_file(pathNetCfg, strNetCfg);
+    create_cfg_file(pathMeterCfg, strMeterCfg);
     dump_directory_tree(YAFFS_MOUNT_POINT);
     
     SysCfgInit(&xSysconf);

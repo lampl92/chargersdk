@@ -12,6 +12,7 @@
 #include "task.h"
 #include "bsp.h"
 #include "bsp_define.h"
+#include "taskcreate.h"
 /* Private functions ---------------------------------------------------------*/
 
 int main(void)

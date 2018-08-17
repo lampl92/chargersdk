@@ -16,9 +16,9 @@
 #include "timercallback.h"
 #include "bsp.h"
 #include "utils.h"
+#include "file_op.h"
 #include "stringName.h"
 #include "bsp_cpu_flash.h"
-#include "cfg_parse.h"
 #include "yaffsfs.h"
 #include "yaffs2misc.h"
 
@@ -57,9 +57,9 @@ void vTaskOTA(void *pvParameters);
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
-static TaskHandle_t xHandleTaskInit = NULL;
-static TaskHandle_t xHandleTaskCLI = NULL;
-static TaskHandle_t xHandleTaskOTA = NULL;
+TaskHandle_t xHandleTaskInit = NULL;
+TaskHandle_t xHandleTaskCLI = NULL;
+TaskHandle_t xHandleTaskOTA = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
@@ -81,77 +81,6 @@ QueueHandle_t xHandleQueueErrorPackage = NULL;
 extern void fs_init(void);
 extern void *_app_start[];
 #define APP_ADDRESS         (uint32_t)_app_start
-
-
-uint8_t set_upgrade_tmp(char *path, char *flg)
-{
-    int fd;
-    int bw;
-    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
-    if (fd < 0)
-    {
-        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-open");
-        return 0;
-    }
-    taskENTER_CRITICAL();
-    bw = yaffs_write(fd, flg, 1);
-    taskEXIT_CRITICAL();
-    if (1 != bw)
-    {
-        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-write");
-        yaffs_close(fd);
-        return 0;
-    }
-    yaffs_close(fd);
-    return 1;
-}
-
-
-uint8_t *GetFileBuffer(char *path, uint32_t *psize)
-{
-    int fd;
-    uint32_t fsize;
-    struct yaffs_stat st;
-    uint32_t br;
-    int fres = 0;
-    
-    uint8_t *pbuff = NULL;
-    
-    fd = yaffs_open(path, O_EXCL | O_RDONLY, 0);
-    if (fd < 0)
-    {
-        fres = yaffs_get_error();
-    }
-    if (fres != 0)
-    {
-        printf_safe("No %s!\n", path);
-        return NULL;
-    }
-    yaffs_stat(path, &st);
-    fsize = st.st_size;
-    pbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
-    if (pbuff == NULL)
-    {
-        printf_safe("Malloc error!\n");
-        yaffs_close(fd);
-        return NULL;
-    }
-    br = yaffs_read(fd, pbuff, fsize);
-    if (fsize == br)
-    {
-        yaffs_close(fd);
-        *psize = fsize;
-        return pbuff;
-    }
-    else
-    {
-        yaffs_close(fd);
-        *psize = 0;
-        free(pbuff);
-        pbuff = NULL;
-        return NULL;
-    }
-}
 
 void Jump_To_APP(void)
 {
@@ -196,7 +125,6 @@ void vTaskInit(void *pvParameters)
             {
                 if (initstart == 1)
                 {
-                    xSysconf.GetSysCfg((void *)&xSysconf, NULL);
                     initstart = 0;
                     break;
                 }
@@ -235,7 +163,7 @@ void vTaskInit(void *pvParameters)
                         free(pucBinBuffer);
                         yaffs_unlink(filepath);
                         upflag = '2';
-                        set_upgrade_tmp(pathUpgradeTmp, &upflag);
+                        set_tmp_file(pathUpgradeTmp, &upflag);
                     }
                 }
             }
@@ -249,7 +177,7 @@ void vTaskInit(void *pvParameters)
         {
             yaffs_unlink(filepath);
             upflag = '3';
-            set_upgrade_tmp(pathUpgradeTmp, &upflag);
+            set_tmp_file(pathUpgradeTmp, &upflag);
             printf_safe("升级失败, 请手动重启或检查待升级固件与CRC32值!\n");
             Jump_To_APP();
         }

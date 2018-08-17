@@ -28,6 +28,9 @@
 #define EVSE_USING_STORE_LOG        1
 #endif
 
+#ifndef BOOTLOADER
+#define BOOTLOADER                  0
+#endif
 
 #define defMaxCON               32
 //#define defUIDLength            4
@@ -59,6 +62,7 @@
 #define defRemoteStatusCyc          120000    //状态上报
 #define defRemoteRTDataCyc          10000     //充电实时数据
 #define defOrderTmpCyc              60000     //充电订单临时文件更新时间
+#define defStoreLogCyc              5000      //无故障时间, 开始存储Log
 
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
@@ -67,9 +71,9 @@
 #define defMonitorFreqUpper         51  //(Hz)
 #define defMonitorFreqPeriod        0.5 //(Hz)
 
-#define defCfgOrderMaxItem          50
+#define defCfgOrderMaxItem          100
 #define defCfgOrderRemoveOldItem    10
-#define defCfgLogMaxItem            100
+#define defCfgLogMaxItem            200
 #define defCfgLogRemoveOldItem      10
 
 #endif /* EVSE_CONFIG_H_INCLUDED */

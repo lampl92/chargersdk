@@ -37,7 +37,8 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
         "NET_STATE_CONNECT",
         "NET_STATE_FTP",
         "NET_STATE_TCP_ON",
-        "NET_STATE_DISCONNECT"
+        "NET_STATE_DISCONNECT",
+        "NET_STATE_ERR"
     };
 
     if (net_dev->state < arraysize(stateLabel) && new_state < arraysize(stateLabel))
@@ -53,11 +54,11 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     {
     case NET_STATE_TCP_ON:
         pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
-        xEventGroupSetBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
         break;
     case NET_STATE_DISCONNECT:
         pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
-        xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK); //rgw OK
+        break;
+    default:
         break;
     }
     
@@ -74,6 +75,7 @@ static void netStateInit(net_device_t *net_dev)
     error = net_dev->init(net_dev);
     if (error == NO_ERROR)
     {
+        ifconfig_update(net_dev);
         netChangeState(net_dev, NET_STATE_CONNECT);
     }
     else
@@ -84,7 +86,7 @@ static void netStateInit(net_device_t *net_dev)
 static void netStateConnect(net_device_t *net_dev)
 {
     error_t error; 
-    ifconfig_update(net_dev);
+
     if (pechProto->info.ftp.ucDownloadStart == 1)
     {
         netChangeState(net_dev, NET_STATE_FTP);
@@ -98,7 +100,6 @@ static void netStateConnect(net_device_t *net_dev)
     else
     {
         netChangeState(net_dev, NET_STATE_ERR);
-//        vTaskDelay(10000);
     }
 }
 static void netStateDisconnect(net_device_t *net_dev)
@@ -108,7 +109,7 @@ static void netStateDisconnect(net_device_t *net_dev)
 }
 static void netStateTcpOn(net_device_t *net_dev)
 {
-    uint8_t buffer[5000]; 
+    uint8_t buffer[1500]; 
     size_t length; 
     error_t error; 
     int i;
@@ -134,7 +135,17 @@ static void netStateTcpOn(net_device_t *net_dev)
     {
         netChangeState(net_dev, NET_STATE_DISCONNECT);
     }
+    if (net_dev->interface->linkState)
+    {
+        
+    }
+    else
+    {
+        //Link is down
+        netChangeState(net_dev, NET_STATE_DISCONNECT);
+    }
 }
+EchFtpCfg_t ftpcfg;
 static void netStateFTP(net_device_t *net_dev)
 {
     uint32_t crc32_calc, crc32_orig;
@@ -146,7 +157,6 @@ static void netStateFTP(net_device_t *net_dev)
     char upflg;
     int i;
     flist_t flist;
-    EchFtpCfg_t ftpcfg;
     ErrorCode_t errcode;
     int res, res_copy;
     
@@ -154,13 +164,14 @@ static void netStateFTP(net_device_t *net_dev)
  
     if (res == 1)
     {
+        taskappSuspend();
         while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
         {
             res = ftp_download_file(&ftpcfg, net_dev);
             if (res != 1)
             {
                 upflg = '3';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
+                set_tmp_file(pathUpgradeTmp, &upflg);
                 break;
             }
             sprintf(filepath, "%s%s", pathDownloadDir, flist.strFilename);
@@ -177,12 +188,18 @@ static void netStateFTP(net_device_t *net_dev)
                 else
                 {
                     printf_safe("移动%s到%s 失败.\n", filepath, filepath_rename);
+                    upflg = '3';
+                    set_tmp_file(pathUpgradeTmp, &upflg);
+                    yaffs_unlink(filepath); //删除下载文件
+                    break;
                 }
             }
             else
             {
+                printf_safe("CRC32校验失败 %s\n", filepath);
                 upflg = '3';
-                set_upgrade_tmp(pathUpgradeTmp, &upflg);
+                set_tmp_file(pathUpgradeTmp, &upflg);
+                yaffs_unlink(filepath); //删除下载文件
                 break;
             }
             yaffs_unlink(filepath);//删除下载文件
@@ -203,12 +220,30 @@ static void netStateFTP(net_device_t *net_dev)
 static void netStateErr(net_device_t *net_dev)
 {
     net_dev->close_hard(net_dev);
+    vTaskDelay(1000);
     netChangeState(net_dev, NET_STATE_INIT);
 }
 
-extern error_t smtpClientTest(void);
+void ifconfig_change_for_ftp(void)
+{
+    ifconfig.info.ucAdapterSel = 1;
+    ifconfig.info.ucDHCPEnable = 1;
+    sprintf(ifconfig.info.strHostName, "startup");
+    sprintf(ifconfig.info.strMAC, "00-AB-CD-EF-04-29");
+}
+
 void vTaskTCPClient(void *pvParameters)
 {
+#if EVSE_USING_GUI
+    char flg;
+
+    flg = get_bmp_check_tmp();
+    if (flg == 3)
+    {
+        ifconfig_change_for_ftp();
+    }
+#endif
+    
     net_dev = net_device_create(ifconfig.info.ucAdapterSel);
 
     netChangeState(net_dev, NET_STATE_INIT);

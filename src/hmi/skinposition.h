@@ -22,6 +22,10 @@
 #define backquitx  601 //后退按钮x位置
 #define backquity  422 //后退按钮y位置
 
+//管理员退出按钮位置
+#define quitManagerButtonX 710
+#define quitManagerButtonY 0
+
 //请连接充电插头页
 #define quitPleasePlugx  51
 #define quitPleasePlugy  422

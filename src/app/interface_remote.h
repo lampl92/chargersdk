@@ -48,7 +48,7 @@ ErrorCode_t RemoteIF_SendStatus(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCO
 ErrorCode_t RemoteIF_RecvStatus(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
 
 ErrorCode_t RemoteIF_SendRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ, uint8_t reason);
-ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t *pid, uint8_t *pctrl, int *psiRetVal );
+ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t *pid, uint8_t *pctrl, int *psiRetVal);
 
 ErrorCode_t RemoteIF_SendRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason);
 ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t ctrl, uint8_t reason);
@@ -70,10 +70,10 @@ ErrorCode_t RemoteIF_SendCardStartPwd(EVSE_t *pEVSE, echProtocol_t *pProto, RFID
 ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal);
 
 ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ);
-ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, int *psiRetVal);
+ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, CON_t *pCON, int *psiRetVal);
 
 ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON);
-ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, int *psiRetVal);
+ErrorCode_t RemoteIF_RecvCardStopRes(echProtocol_t *pProto, CON_t *pCON, int *psiRetVal);
 
 ErrorCode_t RemoteIF_SendUpFault(EVSE_t *pEVSE, echProtocol_t *pProto);
 ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto);
@@ -90,4 +90,12 @@ ErrorCode_t RemoteIF_RecvOTA_Start(echProtocol_t *pProto, int *psiRetVal);
 ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int succ);
 ErrorCode_t RemoteIF_RecvOTA_Result(echProtocol_t *pProto, int *psiRetVal);
 
+ErrorCode_t RemoteIF_RecvEmergencyStop(echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+ErrorCode_t RemoteIF_SendEmergencyStop(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, uint8_t succ);
+
+ErrorCode_t RemoteIF_RecvSetPower(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+
+ErrorCode_t RemoteIF_RecvSetAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+ErrorCode_t RemoteIF_RecvReqAppoint(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t con_id, int *psiRetVal);
+ErrorCode_t RemoteIF_SendAppoint(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON, int status);
 #endif

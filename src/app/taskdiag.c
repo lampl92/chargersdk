@@ -29,19 +29,19 @@ void vTaskEVSEDiag(void *pvParameters)
     {
 #ifndef DEBUG_NO_TASKDIAG
         /* 处理系统失效故障 */
+#ifdef EVSE_DEBUG_ERRLOG
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef EVSE_ERRLOG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
-#endif
             switch(errpack.code) // ！！！ 这里一定要仔细查看errpack.ulDevID是否可以用作 CONID， 主要是看设备是否是归属于枪还是桩。 ！！！
             {
             default:
                 break;
             }
         }
+#endif
 
         /* end of 处理系统失效故障 */
         
@@ -54,18 +54,18 @@ void vTaskEVSEDiag(void *pvParameters)
                 if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
                     pCON->order.ucStartType == defOrderStartType_Remote)
                 {
-                    if (pCON->status.ulSignalAlarm != 0 ||
+                    if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                         pCON->status.ulSignalFault != 0 ||
-                        pEVSE->status.ulSignalAlarm != 0 ||
+                        (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                         (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)
                     {
                         //其他异常清除认证标志
                         xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                     }
                 }
-                else if (pCON->status.ulSignalAlarm != 0 ||
+                else if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                     pCON->status.ulSignalFault != 0 ||
-                    pEVSE->status.ulSignalAlarm != 0 ||
+                    (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
                     //异常清除认证标志
@@ -83,14 +83,14 @@ void vTaskEVSEDiag(void *pvParameters)
                 pCON->status.SetLoadPercent(pCON, 100);
             }
             //发生电流告警
-            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
-            {
-                pCON->status.SetLoadPercent(pCON, 70);
-            }
-            else
-            {
-                pCON->status.SetLoadPercent(pCON, 100);
-            }
+//            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
+//            {
+//                pCON->status.SetLoadPercent(pCON, 70);
+//            }
+//            else
+//            {
+//                pCON->status.SetLoadPercent(pCON, 100);
+//            }
         }//end of for() id
 
         /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */

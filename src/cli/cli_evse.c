@@ -17,6 +17,7 @@
 #include "stringName.h" 
 #include "cfg_order.h"
 #include "ifconfig.h"
+#include "evse_globals.h"
 
 void cli_networkinfo_fnt(int argc, char **argv)
 {
@@ -333,6 +334,7 @@ void cli_evseorder_fnt(int argc, char **argv)
             printf_safe("名称=========状态=======   CONID %d\r\n", id);
             switch(statOrder)
             {
+            default:
             case STATE_ORDER_IDLE:
                 printf_safe("订单状态：\tIDLE");
                 break;
@@ -693,6 +695,50 @@ void cli_setload_fnt(int argc, char **argv)
         printf_safe("help:\"setload 0 50\" means set con0 load to 50%%\n");
     }
 }
+void cli_meter_fnt(int argc, char **argv)
+{
+    printf("\r\n=========电表配置=========\n");
+    switch (xSysconf.xModule.use_meter)
+    {
+    case 0:
+        printf("电表：无电表\n");
+        break;
+    case 1:
+        printf("电表：内部模块\n");
+        break;
+    case 2:
+        printf("电表：DDSD1352-C(安科瑞单相)\n");
+        break;
+    case 3:
+        printf("电表：DTSD1352(III)\n");
+        break;
+    case 4:
+        printf("电表：DTSF1352安科瑞三相\n");
+        break;
+    default:
+        printf("电表：假电表\n");
+        break;
+    }
+    printf("寄存器:\n");
+    printf("电度:\t%04XH\n", meter->regs.energy_addr);
+    printf("电压:\t%04XH\n", meter->regs.volt_addr);
+    printf("电流:\t%04XH\n", meter->regs.curr_addr);
+    printf("功率:\t%04XH\n", meter->regs.pwr_addr);
+    printf("频率:\t%04XH\n", meter->regs.freq_addr);
+    
+}
+int dummyordersn;
+void cli_dummyordersn_fnt(int argc, char **argv)
+{
+    if (argc == 2)
+    {
+        dummyordersn = atoi(argv[1]);
+    }
+    else
+    {
+        printf_safe("dummyordersn %d\n", dummyordersn);
+    }
+}
 tinysh_cmd_t cli_networkinfo_cmd =
 {
     0,
@@ -767,6 +813,29 @@ tinysh_cmd_t cli_setload_cmd =
     "set evse load present",
     0,
     cli_setload_fnt,
+    "<cr>",
+    0,
+    0
+};
+
+tinysh_cmd_t cli_meter_cmd =
+{
+    0,
+    "meter",
+    "meter info",
+    0,
+    cli_meter_fnt,
+    "<cr>",
+    0,
+    0
+};
+tinysh_cmd_t cli_dummyordersn_cmd =
+{
+    0,
+    "dummyordersn",
+    "dummy order sn",
+    0,
+    cli_dummyordersn_fnt,
     "<cr>",
     0,
     0

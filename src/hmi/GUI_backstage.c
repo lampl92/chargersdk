@@ -15,6 +15,61 @@ GBSState_E gbsstate;
 RfidQPkg_t Temprfid_pkg;//没选枪之前保存刷卡的卡号
 UserLike_S Tempuserlike;
 
+static void change_condition(CON_t *pCON ,int i)
+{
+    if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
+    pCON->status.ulSignalFault != 0 ||
+    (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
+    (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)//屏蔽温度告警，严重告警才显示
+    {
+        if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltUp) == defSignalCON_Alarm_AC_A_VoltUp)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0))
+        {
+            ;
+        }
+        else if ((pCON->status.ulSignalAlarm != 0)&&\
+            (pCON->status.ulSignalFault == 0)&&\
+            (pEVSE->status.ulSignalAlarm == 0)&&\
+            (pEVSE->status.ulSignalFault == 0)&&\
+            ((pCON->status.ulSignalAlarm | defSignalCON_Alarm_AC_A_VoltLow) == defSignalCON_Alarm_AC_A_VoltLow))
+        {
+            ;
+        }
+//        else if ((pCON->status.ulSignalFault != 0)&&\
+//             (pCON->status.ulSignalAlarm == 0)&&\
+//             (pEVSE->status.ulSignalAlarm == 0)&&\
+//             (pEVSE->status.ulSignalFault == 0)&&\
+//    ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+//        {
+//            ;
+//        }
+//        else if (((pEVSE->status.ulSignalFault != 0)&&\
+//            (pEVSE->status.ulSignalAlarm == 0)&&\
+//            (pCON->status.ulSignalFault == 0)&&\
+//            (pCON->status.ulSignalAlarm == 0)&&\
+//            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID))
+//        {
+//            ;
+//        }
+//        else if (((pEVSE->status.ulSignalFault != 0)&&\
+//            (pEVSE->status.ulSignalAlarm == 0)&&\
+//            (pCON->status.ulSignalFault != 0)&&\
+//            (pCON->status.ulSignalAlarm == 0)&&\
+//            (pEVSE->status.ulSignalFault | defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)&&\
+//            ((pCON->status.ulSignalFault & defSignalCON_Fault_CP) == defSignalCON_Fault_CP))
+//        {
+//            ;
+//        }
+        else
+        {
+            GBSgunstate[i] = Gunerror;
+        }
+    }
+}
+
 //枪状态刷新
 static void flashGunState()
 {
@@ -22,57 +77,36 @@ static void flashGunState()
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);
-        switch (pCON->state)
+        if (((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)\
+            || ((pCON->status.ulSignalState & defSignalCON_State_Stopping) == defSignalCON_State_Stopping))//在充电中
         {
-        case STATE_CON_IDLE:
-        case STATE_CON_PLUGED:
-        case STATE_CON_PRECONTRACT:
-        case STATE_CON_PRECONTRACT_LOSEPLUG:
-        case STATE_CON_STARTCHARGE:                 
+            GBSgunstate[i] = GunchargingState;         
+            change_condition(pCON, i);
+        }
+        else
+        {
             GBSgunstate[i] = GunfreeState;
-            break;
-        case STATE_CON_CHARGING:
-            GBSgunstate[i] = GunchargingState;
-            break;
-        case STATE_CON_STOPCHARGE:
-        case STATE_CON_UNLOCK:
-        //                    GBSgunstate[i] = GunchargedoneState;
-            break;
-        case STATE_CON_ERROR:
-        case STATE_CON_DEV_ERROR:
-            GBSgunstate[i] = Gunerror;
-            break;
-        case STATE_CON_RETURN: 
-            break;
-        }
-        if (pCON->order.statOrder == STATE_ORDER_HOLD || pCON->order.statOrder == STATE_ORDER_FINISH)
+            change_condition(pCON, i);
+        }        
+        if (pCON->order.statOrder == STATE_ORDER_HOLD\
+     ||pCON->order.statOrder == STATE_ORDER_FINISH\
+    || pCON->order.statOrder == STATE_ORDER_WAITUSE\
+    || pCON->order.statOrder == STATE_ORDER_STORE)
         {
-            GBSgunstate[i] = GunchargedoneState;
+            if (pCON->status.xPlugState == PLUG)
+            {
+                GBSgunstate[i] = GunchargedoneState;
+            }
+            else
+            {
+                GBSgunstate[i] = GunfreeState;
+                change_condition(pCON, i);
+            }            
             continue;
-        }
-        if (pCON->status.ulSignalAlarm != 0 ||
-            pCON->status.ulSignalFault != 0 ||
-            pEVSE->status.ulSignalAlarm != 0 ||
-            pEVSE->status.ulSignalFault != 0)
-        {
-            GBSgunstate[i] = Gunerror;
-            continue;
-        }
+        }      
     }
 }
 
-//根据枪数量的不同采用不同的灯光控制
-static void ledcontrl()
-{
-    if (pEVSE->info.ucTotalCON == 1)
-    {
-        Led_Show();
-    }
-    else
-    {
-        ledShow();
-    } 
-}
 
 //接受刷卡消息,不阻塞
 static void recNewOperate()
@@ -201,7 +235,7 @@ static void analyzeReceive()
         {
             gbsstate = StateWaitBecomeCharge;
             return;
-        }      
+        }
     }
     uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
     if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
@@ -213,15 +247,29 @@ static void analyzeReceive()
 static void WaitBecomeCharging()
 {
     CON_t *pCON; 
-    EventBits_t uxBitHMI;
+    EventBits_t uxBit;
     pCON = CONGetHandle(Temprfid_pkg.ucCONID);
-    if (pCON->state == STATE_CON_CHARGING)
+    uxBit = xEventGroupGetBits(pCON->status.xHandleEventCharge);
+    if((uxBit & defEventBitCONStartOK) == defEventBitCONStartOK)
     {     
         gbsstate = StateChargingOk;
         return;
     }
-    uxBitHMI = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
-    if ((uxBitHMI & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
+//    else if (pCON->status.xPlugState == UNPLUG)
+//    {
+//        gbsstate = StatePleasePlug;
+//        return;
+//    }
+    else if (pCON->state == STATE_CON_IDLE)
+    {
+        Tempuserlike.user_like.HMItimeout = 1;
+        xQueueSend(xHandleQueueUserChargeCondition, &(Tempuserlike.user_like), 0);
+        Tempuserlike.user_like.HMItimeout = 0;
+        gbsstate = StateQuit;
+        return;
+    }
+    uxBit = xEventGroupWaitBits(xHandleEventHMI, defEventBitHMI_TimeOut, pdTRUE, pdTRUE, 0);
+    if ((uxBit & defEventBitHMI_TimeOut) == defEventBitHMI_TimeOut)
     {
         gbsstate = StateCantChargeOfDevice;
     }
@@ -265,7 +313,6 @@ void GBSTask()
     gbsstate = StateHome;
     while (1)
     {       
-        ledcontrl();
         switch (gbsstate)
         {
         case StateHome:            

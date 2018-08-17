@@ -8,13 +8,20 @@
 #ifndef  __ERRORCODE_H
 #define  __ERRORCODE_H
 
-#define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
+#ifdef EVSE_DEBUG_ERRLOG
+    #define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
                                                             ErrorCode_t _macro_errcode = _errcode;         \
                                                             if(_macro_errcode != ERR_NO)                  \
                                                             {                                       \
                                                                 ThrowErrorCode(_dev, _macro_errcode,_errlevel, _msg);  \
                                                             }                                       \
                                                         }while(0);
+#else
+#define THROW_ERROR(_dev, _errcode,_errlevel,_msg)   do{                                           \
+                                                            ErrorCode_t _macro_errcode = _errcode;         \
+                                                        }while(0);
+#endif
+
 typedef enum _ErrorCode
 {
     ERR_NO,			            //No Error
@@ -64,6 +71,7 @@ typedef enum _ErrorCode
     ERR_MEMORY,			//Malloc错误
 
     ERR_REMOTE_NODATA,  //无数据
+    ERR_REMOTE_TIMEOUT,  //协议超时
     ERR_REMOTE_REGEDIT,  //注册失败
     ERR_REMOTE_ORDERSN,  //订单号不相等
     ERR_REMOTE_PARAM,    //协议参数与本机无法兼容

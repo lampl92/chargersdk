@@ -13,10 +13,10 @@ int netSend(uint8_t *pbuff, uint32_t len)
     switch (ifconfig.info.ucAdapterSel)
     {
     case NET_DEVICE_ETH:
-        error = socketSend(socket_eth, pbuff, len, NULL, 0); 
+        error = socketSend(socket_eth, pbuff, len, NULL, SOCKET_FLAG_DONT_WAIT); 
         break;
     case NET_DEVICE_MODEM:
-        error = socketSend(socket_ppp, pbuff, len, NULL, 0); 
+        error = socketSend(socket_ppp, pbuff, len, NULL, SOCKET_FLAG_DONT_WAIT); 
         break;
     default:
         break;
@@ -32,10 +32,10 @@ int netRecv(uint8_t *pbuff, uint32_t buff_len)
     switch (ifconfig.info.ucAdapterSel)
     {
     case NET_DEVICE_ETH:
-        error = socketReceive(socket_eth, pbuff, buff_len, &recv_len, 0); 
+        error = socketReceive(socket_eth, pbuff, buff_len, &recv_len, SOCKET_FLAG_DONT_WAIT); 
         break;
     case NET_DEVICE_MODEM:
-        error = socketReceive(socket_ppp, pbuff, buff_len, &recv_len, 0); 
+        error = socketReceive(socket_ppp, pbuff, buff_len, &recv_len, SOCKET_FLAG_DONT_WAIT); 
         break;
     default:
         break;
@@ -50,7 +50,7 @@ Socket *netif_connect_server_via_tcp(net_device_t *net_dev, const char *server_i
     IpAddr ipAddr; //DNS 解析得到的地址 
     Socket *socketfd;
  
-    TRACE_INFO("\r\n\r\n解析域名...\r\n"); 
+    TRACE_INFO("\r\n\r\n解析域名%s...\r\n", server_ip); 
  
     //解析地址 
     error = getHostByName(net_dev->interface, server_ip, &ipAddr, 0); 

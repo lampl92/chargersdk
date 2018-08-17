@@ -57,30 +57,88 @@
 //};
 WM_HWIN _hWinManagerLogDate;
 static WM_HWIN _hWinManagerLog;
-static WM_HTIMER _timerRTC,_timerData,_timerSignal;
-uint16_t column_num,row_num;
+static WM_HTIMER _timerRTC, _timerData, _timerSignal;
+uint16_t column_num, row_num;
 
-static const char *_apYear[]=
+static const char *_apYear[] =
 {
-    "2017", "2018", "2019", "2020", "2021",
-    "2022", "2023", "2024", "2025", "2026",
-    "2027", "2028", "2029", "2030", "2031",
-    "2032", "2033", "2034", "2035", "2036",
-    "2037", "2038", "2039", "2040", "2041",
-    "2042", "2043", "2044",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
+    "2026",
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "2034",
+    "2035",
+    "2036",
+    "2037",
+    "2038",
+    "2039",
+    "2040",
+    "2041",
+    "2042",
+    "2043",
+    "2044",
 };
-static const char *_apMonth[]=
+static const char *_apMonth[] =
 {
-    "01","02","03","04","05","06",
-    "07","08","09","10","11","12",
+    "01", 
+    "02",
+     "03", 
+    "04",
+     "05",
+     "06",
+    "07",
+     "08",
+     "09", 
+    "10",
+     "11",
+     "12",
 };
-static const char *_apDay[]=
+static const char *_apDay[] =
 {
-    "01", "02", "03", "04", "05", "06",
-    "07", "08", "09", "10", "11", "12",
-    "13", "14", "15", "16", "17", "18",
-    "19", "20", "21", "22", "23", "24",
-    "25", "26", "27", "28", "29", "30", "31",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
 };
 typedef struct
 {
@@ -88,8 +146,8 @@ typedef struct
     int tm_mon;
     int tm_mday;
 }_MANAGERDate;
-static DateStruct sel_start_date = {"2017","01","01"};
-static DateStruct sel_end_date = {"2019","01","01"};
+static DateStruct sel_start_date = { "2017", "01", "01" };
+static DateStruct sel_end_date = { "2020", "01", "01" };
 static uint8_t list_start_index[3];
 static uint8_t list_end_index[3];
 
@@ -101,7 +159,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
 #define LISTWHEEL_XLEFTOFF  80
     { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0, 0 },
-    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 250, 0, 0x0, 0 },//560,276
+    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 20, 40, 750, 250, 0, 0x0, 0 },
+     //560,276
 
     { TEXT_CreateIndirect, "起始", ID_TEXT_5, 100 - LISTWHEEL_XLEFTOFF, 140, 70, 40, 0, 0x0, 0 },
 
@@ -122,8 +181,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
 {
-//    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
-//    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
+    //    { WINDOW_CreateIndirect, "Framewin", ID_WINDOW_0, 0, 20, 800, 300, 0, 0x64, 0 },
+    //    { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0, 0, 20, 800, 276, 0, 0x0, 0 },//560,276
 };
 
 
@@ -133,7 +192,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
 *
 **********************************************************************
 */
-int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
+int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
 {
     cJSON *jsParent;
     cJSON *jsChild;
@@ -141,155 +200,169 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
     cJSON *jsItemTmp;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
-    int i = 0,j = 0;
-	struct tm *ts;
-	char buf[80] = "\0";
+    int i = 0, j = 0;
+    struct tm *ts;
+    char buf[80] = "\0";
     _MANAGERDate ts_start, ts_end;
+    char strSignalON[16] = { 0 };//1
+    char strSignalOFF[16] = { 0 };//0
 
-	if(0 == log_type)   //故障记录
-    {
-        jsParent = GetCfgObj(pathEVSELog, &errcode);
-        if (jsParent == NULL)
+    if (0 == log_type)   //故障记录
         {
-            cJSON_Delete(jsParent);
-            return errcode;
-        }
-        ulMaxItem  = cJSON_GetArraySize(jsParent);
-        if (ulMaxItem == 0)
-        {
-            cJSON_Delete(jsParent);
-            LISTVIEW_AddRow(hItem, NULL);
-            LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
-            return 0;
-        }
-
-        ts_start.tm_year = (sel_start_date.year[0]-48)*1000+
-                            (sel_start_date.year[1]-48)*100+
-                            (sel_start_date.year[2]-48)*10+
-                            (sel_start_date.year[3]-48);
-        ts_start.tm_mon = (sel_start_date.month[0]-48)*10+
-            (sel_start_date.month[1]-48);
-        ts_start.tm_mday = (sel_start_date.day[0]-48)*10+
-            (sel_start_date.day[1]-48);
-
-        ts_end.tm_year = (sel_end_date.year[0] - 48) * 1000 +
-            (sel_end_date.year[1]-48) * 100 +
-            (sel_end_date.year[2]-48) * 10 +
-            (sel_end_date.year[3]-48);
-        ts_end.tm_mon = (sel_end_date.month[0]-48) * 10 +
-            (sel_end_date.month[1]-48);
-        ts_end.tm_mday = (sel_end_date.day[0]-48) * 10 +
-            (sel_end_date.day[1]-48);
-
-        for (j = 0; j < ulMaxItem; j++)
-        {
-            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - j - 1);
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
-	        ts = localtime((time_t*)&(jsItem->valueint));
-
-            //判断起始年
-            if((ts->tm_year+1900) < ts_start.tm_year)
+            jsParent = GetCfgObj(pathEVSELog, &errcode);
+            if (jsParent == NULL)
             {
-                continue;
+                cJSON_Delete(jsParent);
+                return errcode;
             }
-            else if((ts->tm_year+1900) == ts_start.tm_year)
+            ulMaxItem  = cJSON_GetArraySize(jsParent);
+            if (ulMaxItem == 0)
             {
-                if((ts->tm_mon+1) < ts_start.tm_mon)
+                cJSON_Delete(jsParent);
+                LISTVIEW_AddRow(hItem, NULL);
+                LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
+                return 0;
+            }
+
+            ts_start.tm_year = (sel_start_date.year[0] - 48) * 1000 +
+                                (sel_start_date.year[1] - 48) * 100 +
+                                (sel_start_date.year[2] - 48) * 10 +
+                                (sel_start_date.year[3] - 48);
+            ts_start.tm_mon = (sel_start_date.month[0] - 48) * 10 +
+                (sel_start_date.month[1] - 48);
+            ts_start.tm_mday = (sel_start_date.day[0] - 48) * 10 +
+                (sel_start_date.day[1] - 48);
+
+            ts_end.tm_year = (sel_end_date.year[0] - 48) * 1000 +
+                (sel_end_date.year[1] - 48) * 100 +
+                (sel_end_date.year[2] - 48) * 10 +
+                (sel_end_date.year[3] - 48);
+            ts_end.tm_mon = (sel_end_date.month[0] - 48) * 10 +
+                (sel_end_date.month[1] - 48);
+            ts_end.tm_mday = (sel_end_date.day[0] - 48) * 10 +
+                (sel_end_date.day[1] - 48);
+
+            for (j = 0; j < ulMaxItem; j++)
+            {
+                jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - j - 1);
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+                ts = localtime((time_t*)&(jsItem->valueint));
+
+                //判断起始年
+                if((ts->tm_year + 1900) < ts_start.tm_year)
                 {
                     continue;
                 }
-                else if((ts->tm_mon+1) == ts_start.tm_mon)
+                else if((ts->tm_year + 1900) == ts_start.tm_year)
                 {
-                    if(ts->tm_mday < ts_start.tm_mday)
+                    if ((ts->tm_mon + 1) < ts_start.tm_mon)
                     {
                         continue;
                     }
+                    else if ((ts->tm_mon + 1) == ts_start.tm_mon)
+                    {
+                        if (ts->tm_mday < ts_start.tm_mday)
+                        {
+                            continue;
+                        }
+                    }
                 }
-            }
-            //判断截止年
-            if((ts->tm_year+1900) > ts_end.tm_year)
-            {
-                continue;
-            }
-            else if((ts->tm_year+1900) == ts_end.tm_year)
-            {
-                if((ts->tm_mon+1) > ts_end.tm_mon)
+                //判断截止年
+                if((ts->tm_year + 1900) > ts_end.tm_year)
                 {
                     continue;
                 }
-                else if((ts->tm_mon+1) == ts_end.tm_mon)
+                else if((ts->tm_year + 1900) == ts_end.tm_year)
                 {
-                    if(ts->tm_mday > ts_end.tm_mday)
+                    if ((ts->tm_mon + 1) > ts_end.tm_mon)
                     {
                         continue;
                     }
+                    else if ((ts->tm_mon + 1) == ts_end.tm_mon)
+                    {
+                        if (ts->tm_mday > ts_end.tm_mday)
+                        {
+                            continue;
+                        }
+                    }
                 }
-            }
 
-            //序号 记录时间  枪号  故障等级  故障状态  故障信息
-            LISTVIEW_AddRow(hItem, NULL);
+                //序号 记录时间  枪号  故障等级  故障状态  故障信息
+                LISTVIEW_AddRow(hItem, NULL);
 
-            sprintf((char *)buf, "%d", i+1);
-            LISTVIEW_SetItemText(hItem, 0, i, buf);
+                sprintf((char *)buf, "%d", i + 1);
+                LISTVIEW_SetItemText(hItem, 0, i, buf);
 
-//            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - i - 1);
+                //            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - i - 1);
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
-	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
-            LISTVIEW_SetItemText(hItem, 1, i, buf);
+                            jsItem = cJSON_GetObjectItem(jsChild, jnLogTime);
+                ts = localtime((time_t*)&(jsItem->valueint));
+                strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
+                LISTVIEW_SetItemText(hItem, 1, i, buf);
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
-            sprintf((char *)buf, "%d", jsItem->valueint);
-            if (jsItem->valueint == 0)
-            {
-                LISTVIEW_SetItemText(hItem, 2, i, "桩");
-            }
-            else if (jsItem->valueint == 1)
-            {
-                LISTVIEW_SetItemText(hItem, 2, i, "枪");
-            }
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogDevice);
+                sprintf((char *)buf, "%d", jsItem->valueint);
+                if (jsItem->valueint == 0)
+                {
+                    LISTVIEW_SetItemText(hItem, 2, i, "桩");
+                }
+                else if (jsItem->valueint == 1)
+                {
+                    LISTVIEW_SetItemText(hItem, 2, i, "枪A");
+                }
+                else if (jsItem->valueint == 2)
+                {
+                    LISTVIEW_SetItemText(hItem, 2, i, "枪B");
+                }
 
-            //0 状态 1 告警 2 异常 3 故障
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
-            switch (jsItem->valueint)
-            {
+                //0 状态 1 告警 2 异常 3 故障
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogLevel);
+                switch (jsItem->valueint)
+                {
                 case 0:
                     LISTVIEW_SetItemText(hItem, 3, i, "状态");
+                    sprintf(strSignalOFF, "NO");
+                    sprintf(strSignalON, "YES");
                     break;
                 case 1:
                     LISTVIEW_SetItemText(hItem, 3, i, "警告");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
                 case 2:
                     LISTVIEW_SetItemText(hItem, 3, i, "严重警告");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
                 case 3:
                     LISTVIEW_SetItemText(hItem, 3, i, "故障");
+                    sprintf(strSignalOFF, "消除");
+                    sprintf(strSignalON, "发生");
                     break;
-            }
+                }
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogState);
-            switch (jsItem->valueint)
-            {
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogState);
+                switch (jsItem->valueint)
+                {
                 case 0:
-                    LISTVIEW_SetItemText(hItem, 4, i, "消除");
+                    LISTVIEW_SetItemText(hItem, 4, i, strSignalOFF);
                     break;
                 case 1:
-                    LISTVIEW_SetItemText(hItem, 4, i, "发生");
+                    LISTVIEW_SetItemText(hItem, 4, i, strSignalON);
                     break;
-            }
+                }
 
-            jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
-            LISTVIEW_SetItemText(hItem, 5, i, jsItem->valuestring);
-            i++;
+                jsItem = cJSON_GetObjectItem(jsChild, jnLogMessage);
+                LISTVIEW_SetItemText(hItem, 5, i, jsItem->valuestring);
+                i++;
+            }
+            if (i == 0)
+            {
+                LISTVIEW_AddRow(hItem, NULL);
+                LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
+            }
         }
-        if (i == 0)
-        {
-            LISTVIEW_AddRow(hItem, NULL);
-            LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
-        }
-    }
-    else if(1 == log_type)
+    else if (1 == log_type)
     {
         jsParent = GetCfgObj(pathOrder, &errcode);
         if (jsParent == NULL)
@@ -326,44 +399,44 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
         for (j = 0; j < ulMaxItem; j++)
         {
 
-            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem-j-1);
+            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - j - 1);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
-	        ts = localtime((time_t*)&(jsItem->valueint));
+            ts = localtime((time_t*)&(jsItem->valueint));
 
             //判断起始年
-            if((ts->tm_year+1900) < ts_start.tm_year)
+            if((ts->tm_year + 1900) < ts_start.tm_year)
             {
                 continue;
             }
-            else if((ts->tm_year+1900) == ts_start.tm_year)
+            else if((ts->tm_year + 1900) == ts_start.tm_year)
             {
-                if((ts->tm_mon+1) < ts_start.tm_mon)
+                if ((ts->tm_mon + 1) < ts_start.tm_mon)
                 {
                     continue;
                 }
-                else if((ts->tm_mon+1) == ts_start.tm_mon)
+                else if ((ts->tm_mon + 1) == ts_start.tm_mon)
                 {
-                    if(ts->tm_mday < ts_start.tm_mday)
+                    if (ts->tm_mday < ts_start.tm_mday)
                     {
                         continue;
                     }
                 }
             }
             //判断截止年
-            if((ts->tm_year+1900) > ts_end.tm_year)
+            if((ts->tm_year + 1900) > ts_end.tm_year)
             {
                 continue;
             }
-            else if((ts->tm_year+1900) == ts_end.tm_year)
+            else if((ts->tm_year + 1900) == ts_end.tm_year)
             {
-                if((ts->tm_mon+1) > ts_end.tm_mon)
+                if ((ts->tm_mon + 1) > ts_end.tm_mon)
                 {
                     continue;
                 }
-                else if((ts->tm_mon+1) == ts_end.tm_mon)
+                else if ((ts->tm_mon + 1) == ts_end.tm_mon)
                 {
-                    if(ts->tm_mday > ts_end.tm_mday)
+                    if (ts->tm_mday > ts_end.tm_mday)
                     {
                         continue;
                     }
@@ -372,12 +445,12 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
             /*序号    启动方式    卡号  订单流水号   起始时间    结束时间   结束类型 总电量 总电费 总服务费 总费用 支付方式*/
             LISTVIEW_AddRow(hItem, NULL);
-            sprintf((char *)buf, "%d", i+1);
+            sprintf((char *)buf, "%d", i + 1);
             LISTVIEW_SetItemText(hItem, 0, i, buf);
 
-            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem-i-1);
+            jsChild = cJSON_GetArrayItem(jsParent, ulMaxItem - i - 1);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartType);
-            if(jsItem->valueint == 4)
+            if (jsItem->valueint == 4)
             {
                 LISTVIEW_SetItemText(hItem, 1, i, "刷卡");
             }
@@ -385,8 +458,7 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
             {
                 LISTVIEW_SetItemText(hItem, 1, i, "扫码");
             }
-
-	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
+            jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
             LISTVIEW_SetItemText(hItem, 2, i, jsItem->valuestring);
 
 
@@ -395,71 +467,76 @@ int  Data_Flush(uint8_t log_type,WM_HWIN hItem)
 
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
-	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
+            ts = localtime((time_t*)&(jsItem->valueint));
+            strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
             LISTVIEW_SetItemText(hItem, 4, i, buf);
 
-	        jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopTime);
-	        ts = localtime((time_t*)&(jsItem->valueint));
-	        strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopTime);
+            ts = localtime((time_t*)&(jsItem->valueint));
+            strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
             LISTVIEW_SetItemText(hItem, 5, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
-//            printf_safe("StopType\t%d\n", jsItem->valueint);
-            switch(jsItem->valueint)
+            //            printf_safe("StopType\t%d\n", jsItem->valueint);
+                        switch(jsItem->valueint)
             {
-                case defOrderStopType_RFID:
-                    LISTVIEW_SetItemText(hItem, 6, i, "刷卡结束");
-                    break;
-                case defOrderStopType_Remote:
-                    LISTVIEW_SetItemText(hItem, 6, i, "远程结束");
-                    break;
-                case defOrderStopType_Full:
-                    LISTVIEW_SetItemText(hItem, 6, i, "充满结束");
-                    break;
-                case defOrderStopType_Fee:
-                    LISTVIEW_SetItemText(hItem, 6, i, "达到充电金额");
-                    break;
-                case defOrderStopType_Time:
-                    LISTVIEW_SetItemText(hItem, 6, i, "达到充电时间");
-                    break;
-                case defOrderStopType_Scram:
-                    LISTVIEW_SetItemText(hItem, 6, i, "急停结束");
-                    break;
-                case defOrderStopType_OverCurr:
-                    LISTVIEW_SetItemText(hItem, 6, i, "过流结束");
-                    break;
-                case defOrderStopType_UnPlug:
-                    LISTVIEW_SetItemText(hItem, 6, i, "强制拔枪");
-                    break;
-                case defOrderStopType_Offline:
-                case defOrderStopType_Poweroff:
-                case defOrderStopType_Knock:
-                    LISTVIEW_SetItemText(hItem, 6, i, "异常结束");
-                    break;
-                default:
-                    LISTVIEW_SetItemText(hItem, 6, i, "未知原因结束");
-                    break;
+            case defOrderStopType_RFID:
+                LISTVIEW_SetItemText(hItem, 6, i, "刷卡结束");
+                break;
+            case defOrderStopType_Remote:
+                LISTVIEW_SetItemText(hItem, 6, i, "远程结束");
+                break;
+            case defOrderStopType_Full:
+                LISTVIEW_SetItemText(hItem, 6, i, "充满结束");
+                break;
+            case defOrderStopType_Fee:
+                LISTVIEW_SetItemText(hItem, 6, i, "达到充电金额");
+                break;
+            case defOrderStopType_Time:
+                LISTVIEW_SetItemText(hItem, 6, i, "达到充电时间");
+                break;
+            case defOrderStopType_Scram:
+                LISTVIEW_SetItemText(hItem, 6, i, "急停结束");
+                break;
+            case defOrderStopType_OverCurr:
+                LISTVIEW_SetItemText(hItem, 6, i, "过流结束");
+                break;
+            case defOrderStopType_UnPlug:
+                LISTVIEW_SetItemText(hItem, 6, i, "强制拔枪");
+                break;
+            case defOrderStopType_Offline:
+                LISTVIEW_SetItemText(hItem, 6, i, "断网结束");
+                break;
+            case defOrderStopType_Temp:
+                LISTVIEW_SetItemText(hItem, 6, i, "过温结束");
+                break;
+            case defOrderStopType_Poweroff:
+            case defOrderStopType_Knock:
+                LISTVIEW_SetItemText(hItem, 6, i, "异常结束");
+                break;
+            default:
+                LISTVIEW_SetItemText(hItem, 6, i, "未知原因结束");
+                break;
             }
 
-            jsItem = cJSON_GetObjectItem(jsChild,jnOrderStopEnergy);
-            jsItemTmp = cJSON_GetObjectItem(jsChild,jnOrderStartEnergy);
-            sprintf((char *)buf,"%.2lf",(jsItem->valuedouble - jsItemTmp->valuedouble)*100 / 100.0);
+            jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopEnergy);
+            jsItemTmp = cJSON_GetObjectItem(jsChild, jnOrderStartEnergy);
+            sprintf((char *)buf, "%.2lf", (jsItem->valuedouble - jsItemTmp->valuedouble) * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 7, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderTotalEnergyFee);
-            sprintf((char *)buf,"%.2lf",jsItem->valuedouble * 100 / 100.0);
+            sprintf((char *)buf, "%.2lf", jsItem->valuedouble * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 8, i, buf);
 
             jsItemTmp = cJSON_GetObjectItem(jsChild, jnOrderTotalServFee);
-            sprintf((char *)buf,"%.2lf",jsItemTmp->valuedouble * 100 / 100.0);
+            sprintf((char *)buf, "%.2lf", jsItemTmp->valuedouble * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 9, i, buf);
 
-            sprintf((char *)buf,"%.2lf",(jsItem->valuedouble + jsItemTmp->valuedouble) * 100 / 100.0);
+            sprintf((char *)buf, "%.2lf", (jsItem->valuedouble + jsItemTmp->valuedouble) * 100 / 100.0);
             LISTVIEW_SetItemText(hItem, 10, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderPayStatus);
-            if(jsItem->valueint == 0)
+            if (jsItem->valueint == 0)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "未支付");
             }
@@ -545,7 +622,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         {
             LISTWHEEL_AddString(hItem,*(_apYear+i));
         }
-        //LISTWHEEL_SetSel(hItem,0);
+        LISTWHEEL_SetSel(hItem,0);
         LISTWHEEL_SetPos(hItem,0);
 
         //设置起始月listwheel
@@ -888,7 +965,7 @@ static void _cbDialog(WM_MESSAGE *pMsg)
             //获取当前句柄索引
             list_start_index[0] = LISTWHEEL_GetPos(hItem);
             //设置当前句柄数据项
-            //LISTWHEEL_SetSel(hItem,list_start_index[0]);
+            LISTWHEEL_SetSel(hItem,list_start_index[0]);
             LISTWHEEL_GetItemText(hItem,list_start_index[0],sel_start_date.year,5);
             // USER END
             break;

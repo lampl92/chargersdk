@@ -560,6 +560,9 @@
     <ClCompile Include="..\..\..\src\app\sysinit.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\app\file_op.c">
+      <Filter>Source files\app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\app\cfg_order.h">

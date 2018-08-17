@@ -11,6 +11,7 @@
 #include "interface.h"
 #include <string.h>
 
+//#define DEBUG_DIAG_DUMMY_TEMP
 
 /**
  * @brief 获取相温度
@@ -25,10 +26,10 @@ static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
 {
     Line_t *pLine;
     CON_t *pCON;
-    uint8_t a_channel;
-    uint8_t b_channel;
-    uint8_t c_channel;
-    uint8_t n_channel;
+    double a_channel;
+    double b_channel;
+    double c_channel;
+    double n_channel;
     ErrorCode_t errcode;
     
     pLine = (Line_t *)pvLine;
@@ -37,16 +38,16 @@ static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
 #ifdef DEBUG_DIAG_DUMMY_TEMP
     if (pCON->info.ucCONID == 0)
     {
-        a_channel = 23;
-        b_channel = 23;
-        c_channel = 23;
-        if (pEVSE->info.ucTotalCON > 1)
+        a_channel = -23;
+        b_channel = -23;
+        c_channel = -23;
+        if (pEVSE->info.ucPhaseLine == 3)
         {
             n_channel = 23;
         }
         else
         {
-            n_channel = 24;
+            n_channel = -24;
         }
         
     }
@@ -80,7 +81,7 @@ static ErrorCode_t GetLineTemp(void *pvLine, void *pvCON, uint8_t ucLineID)
         a_channel = TEMP_L_OUT;
         b_channel = TEMP_L_OUT;
         c_channel = TEMP_L_OUT;
-        if (pEVSE->info.ucTotalCON > 1)
+        if (pEVSE->info.ucPhaseLine == 3)
         {
             n_channel = TEMP_L_OUT;
         }

@@ -83,6 +83,7 @@ static void make_rfidpkg(RFIDDev_t *dev, RfidQPkg_t *pkg)
 //需要密码返回3
 static int canChargeOrNot()
 {
+    CON_t *pCON;
     RfidQPkg_t rfid_pkg;
     UserChargeCondition_t user_like;
     BaseType_t xResult;
@@ -118,6 +119,11 @@ static int canChargeOrNot()
     else
     {      
         return 0;
+    }
+    pCON = CONGetHandle(pRFIDDev->order.ucCONID);
+    if (pCON->appoint.status == 2)
+    {
+        return 2;
     }
     if (pRFIDDev->status.ucNeedPwd == 0)
     {

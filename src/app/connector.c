@@ -20,6 +20,11 @@
 #include "event_groups.h"
 #include "timers.h"
 
+#if DEBUG_DIAG_DUMMY
+    #define DEBUG_DIAG_DUMMY_RELAY
+    #define DEBUG_DIAG_DUMMY_METER
+#endif
+
 #if 0
 static int SetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
 {
@@ -129,7 +134,7 @@ static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, 
         }
     }
     while(jsItem != NULL);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj, 0);
 
     return errcode;
 }
@@ -226,19 +231,25 @@ static ErrorCode_t GetChargingData(void *pvCON)
     errcode = ERR_NO;
 
     /** 从电表获取 */
-#ifdef  DEBUG_DIAG_DUMMY
+#ifdef  DEBUG_DIAG_DUMMY_METER
     tmpVolt = 220;
     tmpCurr = 32;
     tmpFreq = 50;
     tmpPower = pCON->status.dChargingPower;
-    tmpPower += 0.001;
+    tmpPower += 0.005;
     tmpEnergy = pCON->status.dChargingEnergy;
-    tmpEnergy += 0.001;
+    tmpEnergy += 0.005;
 #else
     res = meter->get_all(meter, ucCONID + 1);
     if (res < 0)
     {
+        pCON->status.dChargingVoltage = 0;
+        pCON->status.dChargingCurrent = 0;
+        pCON->status.dChargingPower = 0;
+        pCON->status.dChargingFrequence = 0; 
+        //保留电表读数不清零
         errcode = ERR_CON_METER_FAULT;
+        
         return errcode; 
     }
     for (i = 0; i < pEVSE->info.ucPhaseLine; i++)
@@ -364,7 +375,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
     }
-    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.2f))
+    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.0f))//标准8.2~9.8
     {
         if (*pCCRx != TIMER_MAX)
         {
@@ -394,20 +405,19 @@ static ErrorCode_t GetCPState(void *pvCON)
     }
     else
     {
-
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
-        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
+//        printf_safe("CP%d_ERR %lf\n", ucCONID+1, pCON->status.dCPVolt);
         tmpCPState = CP_ERR;
         if (tmpCPState == CP_ERR)
         {
             (*pCP_err_cont)++;
             tmpCPState = pCON->status.xCPState;
         }
-        if (*pCP_err_cont >= 2)//50ms
+        if (*pCP_err_cont >= 3)//3次cp故障
         {
             SetCPSwitch(pCON, SWITCH_OFF);
             *pCP_err_cont = 0;
@@ -447,7 +457,7 @@ static ErrorCode_t SetLoadPercent(void *pvCON, uint8_t ucLoadPercent)
         return errcode;
     }
     /*********************/
-    curr2pwm(pCON->info.dRatedCurrent * (ucLoadPercent / 100.0), ucCONID);
+    curr2pwm(pCON->info.dRatedPower * (ucLoadPercent / 100.0) * 1000 / pEVSE->info.ucPhaseLine / 220, ucCONID);
     /*********************/
 
     pCON->status.ucLoadPercent = ucLoadPercent;
@@ -694,7 +704,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACLTemp = 0;
+    tmpACLTemp = -60;
     errcode = ERR_NO;
 
     /** 实现代码  */
@@ -710,7 +720,7 @@ static ErrorCode_t GetACLTemp(void *pvCON)
         }
     }
         
-    if (tmpACLTemp > 200 || tmpACLTemp < -40)
+    if (tmpACLTemp > 200 || tmpACLTemp < -60)
     {
         errcode = ERR_CON_ACTEMP_DECT_FAULT;
     }
@@ -738,7 +748,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
 
     pCON = (CON_t *)pvCON;
     ucCONID = pCON->info.ucCONID;
-    tmpACNTemp = 0;
+    tmpACNTemp = -60;
     errcode = ERR_NO;
 
     /** 实现代码  */
@@ -751,7 +761,7 @@ static ErrorCode_t GetACNTemp(void *pvCON)
         tmpACNTemp = pCON->line[defLineN].status.dTemp;
     }
     
-    if (tmpACNTemp > 200 || tmpACNTemp < -40)
+    if (tmpACNTemp > 200 || tmpACNTemp < -60)
     {
         errcode = ERR_CON_ACTEMP_DECT_FAULT;
     }
@@ -790,7 +800,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_NEGATIVE);
-        if(tmpTemp > 200 || tmpTemp < -40)
+        if(tmpTemp > 200 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -802,7 +812,7 @@ static ErrorCode_t GetBTypeSocketTemp1(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN2_NEGATIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP1_DECT_FAULT;
         }
@@ -840,7 +850,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN1_POSITIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
@@ -852,7 +862,7 @@ static ErrorCode_t GetBTypeSocketTemp2(void *pvCON)
         tmpTemp = 25;
 #else
         tmpTemp = get_dc_massage(TEMP_GUN2_POSITIVE);
-        if(tmpTemp > 100 || tmpTemp < -40)
+        if(tmpTemp > 100 || tmpTemp < -60)
         {
             errcode = ERR_CON_BTEMP2_DECT_FAULT;
         }
@@ -886,11 +896,11 @@ static ErrorCode_t GetRelayState(void *pvCON)
     errcode = ERR_NO;
 
     /** 实现代码  */
-#ifdef DEBUG_DIAG_DUMMY
-    tmpLStat = SWITCH_ON;
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+    tmpLStat = pCON->status.ucRelayLState;
     tmpNStat = tmpLStat;
 #else
-    if (pEVSE->info.ucTotalCON > 1)
+    if (pEVSE->info.ucPhaseLine == 3)
     {
         ucRelayID = ucCONID;
         tmpLStat = Get_State_relay(ucRelayID);//1 : switch on
@@ -902,6 +912,7 @@ static ErrorCode_t GetRelayState(void *pvCON)
         tmpLStat = Get_State_relay(0);//L
         tmpNStat = tmpLStat; 
     }
+#endif
     if (tmpLStat == SWITCH_ON)
     {
         pCON->status.ulSignalState |= defSignalCON_State_AC_A_Relay;
@@ -918,7 +929,6 @@ static ErrorCode_t GetRelayState(void *pvCON)
     {
         pCON->status.ulSignalState &= ~defSignalCON_State_AC_N_Relay;
     }
-#endif
     /*********************/
 
     pCON->status.ucRelayLState = tmpLStat;
@@ -950,9 +960,18 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     {
         if(cmd == SWITCH_OFF)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            if (pEVSE->info.ucPhaseLine == 3)
+            {
+                pCON->status.ucRelayLState = SWITCH_OFF;
+            }
+            else
+            {
+                pCON->status.ucRelayLState = SWITCH_OFF;
+                pCON->status.ucRelayNState = SWITCH_OFF;
+            }
 #else
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 POWER_L_OPEN();
             }
@@ -965,9 +984,18 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         }
         else if(cmd == SWITCH_ON)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            if (pEVSE->info.ucPhaseLine == 3)
+            {
+                pCON->status.ucRelayLState = SWITCH_ON;
+            }
+            else
+            {
+                pCON->status.ucRelayLState = SWITCH_ON;
+                pCON->status.ucRelayNState = SWITCH_ON;
+            }
 #else
-            if (pEVSE->info.ucTotalCON > 1)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
                 POWER_L_CLOSE();
             }
@@ -983,14 +1011,16 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
     {
         if (cmd == SWITCH_OFF)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            pCON->status.ucRelayNState = SWITCH_OFF;
 #else
             POWER_N_OPEN();
 #endif
         }
         else if (cmd == SWITCH_ON)
         {
-#ifdef DEBUG_DIAG_DUMMY
+#ifdef DEBUG_DIAG_DUMMY_RELAY
+            pCON->status.ucRelayNState = SWITCH_ON;
 #else
             POWER_N_CLOSE();
 #endif

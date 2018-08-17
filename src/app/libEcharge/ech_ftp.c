@@ -153,7 +153,7 @@ ErrorCode_t SetFTPCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
             jsItem = jsItem->next;
         }
     } while (jsItem != NULL);
-    errcode = SetCfgObj(pathFTPCfg, jsFTPCfgObj);
+    errcode = SetCfgObj(pathFTPCfg, jsFTPCfgObj, 0);
 
     return errcode;
 }

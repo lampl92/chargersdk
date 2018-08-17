@@ -263,7 +263,7 @@ void MX_DMA_Init(void)
 }
 void DMA_START(void)
 {
-    if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, 30) != HAL_OK)
+    if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&AD_samp_dma, (3*samp_dma)) != HAL_OK)
     {
         Error_Handler();
     }
@@ -308,7 +308,7 @@ void MX_GPIO_Init(void)
     HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PH3 PH4 */
-    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5|GPIO_PIN_6 ;
+    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6 ;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     //GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -322,13 +322,19 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4;
+    GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4; //led4|led5|led6
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_4;//led3|led2
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_7;//led1
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -362,13 +368,18 @@ void MX_GPIO_Init(void)
     HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0 | GPIO_PIN_3 | GPIO_PIN_14, GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOH, GPIO_PIN_5, GPIO_PIN_RESET);
+
+    //led init status
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3 | GPIO_PIN_4, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4, GPIO_PIN_RESET);
 
    // HAL_GPIO_WritePin(GPIOB, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_6, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(GPIOI, GPIO_PIN_8, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(GPIOI, GPIO_PIN_3, GPIO_PIN_SET);
-
+    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);//485 Select
 }
 void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_pwm)
 {

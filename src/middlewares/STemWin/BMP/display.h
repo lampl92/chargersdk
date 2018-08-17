@@ -2,17 +2,17 @@
 #define _BMPDISPLAY_H
 #include "includes.h"
 
-#define BMPMEMORYSIZE	(8*1024*1024)	//Í¼Æ¬´óĞ¡²»´óÓÚ8M
+#define BMPMEMORYSIZE	(8*1024*1024)	//å›¾ç‰‡å¤§å°ä¸å¤§äº8M
 
-//»æÖÆÎŞĞè¼ÓÔØµ½RAMÖĞµÄBMPÍ¼Æ¬Ê±£¬Í¼Æ¬Ã¿ĞĞµÄ×Ö½ÚÊı
+//ç»˜åˆ¶æ— éœ€åŠ è½½åˆ°RAMä¸­çš„BMPå›¾ç‰‡æ—¶ï¼Œå›¾ç‰‡æ¯è¡Œçš„å­—èŠ‚æ•°
 #define BMPPERLINESIZE	2*1024
 
 
 typedef struct
 {
-    uint32_t pfilesize;//Í¼Æ¬´óĞ¡picture_file_size
-    char *pfilestring;//Í¼Æ¬µÄ×Ö·û´®ĞÎÊ½picture_file_string
-}p_inf;//Í¼Æ¬ĞÅÏ¢½á¹¹Ìåpicture_information
+    uint32_t pfilesize;//å›¾ç‰‡å¤§å°picture_file_size
+    char *pfilestring;//å›¾ç‰‡çš„å­—ç¬¦ä¸²å½¢å¼picture_file_string
+}p_inf;//å›¾ç‰‡ä¿¡æ¯ç»“æ„ä½“picture_information
 			 
 extern int SignalIntensity;
 extern int PreSignalIntensity;
@@ -65,14 +65,14 @@ extern GUI_BITMAP BitmapCheckboxDisable;
 extern GUI_BITMAP BitmapBeijing;
 
 
-//¹«ÓÃÍ¼Æ¬¡°ÍË³ö¡±
+//å…¬ç”¨å›¾ç‰‡â€œé€€å‡ºâ€
 extern GUI_BITMAP BitmapQuit;
 extern GUI_BITMAP BitmapQuitPress;
 extern GUI_BITMAP BitmapbackQuit;
 extern GUI_BITMAP BitmapbackQuitPress;
 
 //********
-//Ñ¡Ç¹Ò³Ïà¹ØÍ¼Æ¬
+//é€‰æªé¡µç›¸å…³å›¾ç‰‡
 extern GUI_BITMAP BitmapSelectGunBack;
 extern GUI_BITMAP BitmapSelectGunAbottonNotpress;
 extern GUI_BITMAP BitmapSelectGunBbottonNotpress;
@@ -81,7 +81,7 @@ extern GUI_BITMAP BitmapSelectGunBbottonPress;
 //********
 
 //***********
-//Ñ¡Ôñ³äµçÄ£Ê½Ò³Í¼Æ¬
+//é€‰æ‹©å……ç”µæ¨¡å¼é¡µå›¾ç‰‡
 extern GUI_BITMAP Bitmapselectpatternback;
 extern GUI_BITMAP Bitmapselectpatternelectricnumber;
 extern GUI_BITMAP Bitmapselectpatternfull;
@@ -131,7 +131,7 @@ extern GUI_BITMAP BitmapKeyboardokpress;
 extern GUI_BITMAP BitmapKeyboardpointpress;
 //************
 
-//¿¨ĞÅÏ¢Í¼Æ¬
+//å¡ä¿¡æ¯å›¾ç‰‡
 extern GUI_BITMAP Bitmapcardinfoarrears;
 extern GUI_BITMAP Bitmapcardinfoback;
 extern GUI_BITMAP Bitmapcardinforeadycharging;
@@ -140,7 +140,7 @@ extern GUI_BITMAP Bitmapcardinfoplug;
 extern GUI_BITMAP Bitmapcardinfounregister;
 
 
-//Ö÷Ò³Í¼Æ¬
+//ä¸»é¡µå›¾ç‰‡
 extern GUI_BITMAP Bitmaphomeback;
 extern GUI_BITMAP BitmaphomegunAchargedone;
 extern GUI_BITMAP BitmaphomegunAcharging;
@@ -159,11 +159,11 @@ extern GUI_BITMAP Bitmaphomesignal1;
 extern GUI_BITMAP Bitmaphomesignal2;
 extern GUI_BITMAP Bitmaphomesignal3;
 
-//ÌáÊ¾ĞÅÏ¢Ò³Í¼Æ¬
+//æç¤ºä¿¡æ¯é¡µå›¾ç‰‡
 extern GUI_BITMAP Bitmapchargedoneinfo;
 extern GUI_BITMAP Bitmapcharginginfo;
 
-//Ö÷Ò³´¢´æÉè±¸
+//ä¸»é¡µå‚¨å­˜è®¾å¤‡
 extern GUI_MEMDEV_Handle Memdevhomeback;
 extern GUI_MEMDEV_Handle MemdevhomegunAchargedone;
 extern GUI_MEMDEV_Handle MemdevhomegunAcharging;
@@ -194,7 +194,7 @@ extern GUI_MEMDEV_Handle Memdevhomechargehelp;
 extern GUI_MEMDEV_Handle Memdevhomechargehelppress;
 extern GUI_MEMDEV_Handle Memdevhomehelpinfo;
 
-//Ñ¡Ç¹Ò³
+//é€‰æªé¡µ
 extern GUI_MEMDEV_Handle MemdevSelectGunBack;
 extern GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
 extern GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
@@ -203,7 +203,7 @@ extern GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;
 extern GUI_MEMDEV_Handle MemdevSelectGunAbottonDisable;
 extern GUI_MEMDEV_Handle MemdevSelectGunBbottonDisable;
 
-//Ñ¡Ä£Ê½
+//é€‰æ¨¡å¼
 extern GUI_MEMDEV_Handle Memdevselectpatternback;
 extern GUI_MEMDEV_Handle Memdevselectpatternelectricnumber;
 extern GUI_MEMDEV_Handle Memdevselectpatternfull;
@@ -223,17 +223,17 @@ extern GUI_MEMDEV_Handle Memdevselectpatternunitno;
 extern GUI_MEMDEV_Handle Memdevselectpatternkeyboard;
 extern GUI_MEMDEV_Handle Memdevselectpatternkeyboardpress;
 
-//ÌáÊ¾ĞÅÏ¢Ò³Í¼Æ¬
+//æç¤ºä¿¡æ¯é¡µå›¾ç‰‡
 extern GUI_MEMDEV_Handle Memdevchargedoneinfo;
 extern GUI_MEMDEV_Handle Memdevcharginginfo;	
 
-//¹«ÓÃÍ¼Æ¬¡°ÍË³ö¡±
+//å…¬ç”¨å›¾ç‰‡â€œé€€å‡ºâ€
 extern GUI_MEMDEV_Handle MemdevQuit;
 extern GUI_MEMDEV_Handle MemdevQuitPress;
 extern GUI_MEMDEV_Handle MemdevbackQuit;
 extern GUI_MEMDEV_Handle MemdevbackQuitPress;
 
-//¿¨ĞÅÏ¢Ò³Í¼Æ¬
+//å¡ä¿¡æ¯é¡µå›¾ç‰‡
 extern GUI_MEMDEV_Handle Memdevcardinfostartup;
 extern GUI_MEMDEV_Handle Memdevcardinfostartone;
 extern GUI_MEMDEV_Handle Memdevcardinfostatrttwo;
@@ -255,6 +255,10 @@ extern GUI_MEMDEV_Handle MemdevcardinfoPwdLimted;
 extern GUI_MEMDEV_Handle MemdevcardinfoPwdError;
 extern GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
 
+extern GUI_MEMDEV_Handle MemdevManagerQuitButton;
+extern GUI_MEMDEV_Handle MemdevManagerQuitButtonPress;
+
+
 //extern GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //extern GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //extern GUI_MEMDEV_Handle Memdevcardinfostartfail;
@@ -263,7 +267,7 @@ extern GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
 //extern GUI_MEMDEV_Handle Memdevcardinfoget;
 //extern GUI_MEMDEV_Handle Memdevcardinfoplug;
 //extern GUI_MEMDEV_Handle Memdevcardinfounregister;
-//ÃÜÂëÒ³
+//å¯†ç é¡µ
 extern GUI_MEMDEV_Handle MemdevPwdPromptPicture;
 extern GUI_MEMDEV_Handle MemdevPwdInputBox;
 
@@ -272,8 +276,8 @@ p_inf *readPicInf(char *pfilepath);
 GUI_BITMAP readDtafile(char *pathfile);
 GUI_MEMDEV_Handle createMemdev(char *pfilepath);
 void createGUI_BITMAP();
-void createStartUpMemdev();
-void creatememdev();
+int createStartUpMemdev(void);
+int creatememdev(void);
 
 #endif
 

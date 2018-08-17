@@ -8,4 +8,7 @@
 #ifndef  __TASKMONITOR_H
 #define  __TASKMONITOR_H
 
+void taskmonitorChildSuspend(void);
+void taskmonitorChildResume(void);
+    
 #endif

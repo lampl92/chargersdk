@@ -44,7 +44,6 @@ extern tinysh_cmd_t cli_cat_cmd;
 extern tinysh_cmd_t cli_rm_cmd;
 extern tinysh_cmd_t cli_reboot_cmd;
 extern tinysh_cmd_t cli_format_cmd;
-extern tinysh_cmd_t cli_set_crc32_cmd;
 extern tinysh_cmd_t cli_networkinfo_cmd;
 extern tinysh_cmd_t cli_ftpserver_cmd;
 extern tinysh_cmd_t cli_unzip_cmd;
@@ -53,7 +52,8 @@ extern tinysh_cmd_t cli_printlog_cmd;
 extern tinysh_cmd_t cli_taskstack_cmd;
 extern tinysh_cmd_t cli_setload_cmd;
 extern tinysh_cmd_t cli_exit_cmd;
-
+extern tinysh_cmd_t cli_meter_cmd;
+extern tinysh_cmd_t cli_dummyordersn_cmd;
 
 
 #endif

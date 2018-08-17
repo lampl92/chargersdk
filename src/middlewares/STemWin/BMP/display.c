@@ -22,7 +22,23 @@
 #include "stringName.h"
 #include "HMI_Start.h"
 #include "interface.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "event_groups.h"
+#include "evse_define.h"
+#include "file_op.h"
+#include <stdio.h>
 
+int nums_picture = 0;
+
+#define IS_BMP_OK(_fun)   do{                                           \
+                                                            int _macro_errcode = _fun;         \
+                                                            if(_macro_errcode == -1)                  \
+                                                            {                                       \
+                                                                gui_halt();  \
+                                                            }                                       \
+                                                            nums_picture++;\
+                                                        }while(0);
 #pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
@@ -258,6 +274,10 @@ GUI_MEMDEV_Handle MemdevcardinfoPwdLimted;
 GUI_MEMDEV_Handle MemdevcardinfoPwdError;
 GUI_MEMDEV_Handle MemdevcardinfoPwdTest;
 
+//管理员退出按钮
+GUI_MEMDEV_Handle MemdevManagerQuitButton;
+GUI_MEMDEV_Handle MemdevManagerQuitButtonPress;
+
 //GUI_MEMDEV_Handle Memdevcardinfoarrears;
 //GUI_MEMDEV_Handle MemdevcardinfoUnavailable;
 //GUI_MEMDEV_Handle Memdevcardinfostartfail;
@@ -486,168 +506,298 @@ void createGUI_BITMAP()
 //返回-1时出错
 int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
 {
-    int memx;
+    int memx,memy;
     int qrx;
     int qry;
     GUI_HMEM qr_hmem;
+    int qr_coefficient;
+    //1-17:21
+    //18-32:25
+    //33-53:29
+    //54-70:33
+//    if((strlen(pText) >= 1) && (strlen(pText) <= 17))
+//    {
+//        qr_coefficient = 21;
+//    }
+//    else if ((strlen(pText) >= 18) && (strlen(pText) <= 32))
+//    {
+//        qr_coefficient = 25;
+//    }
+//    else if((strlen(pText) >= 33) && (strlen(pText) <= 53))
+//    {
+//        qr_coefficient = 29;
+//    }
+//    else if((strlen(pText) >= 54) && (strlen(pText) <= 70))
+//    {
+//        qr_coefficient = 33;
+//    }
+//    else
+//    {
+//        qr_coefficient = 21;
+//    }
 //int QR_Width;//NUmber of "Moudle"
 //int QR_Size;//Size of Bitmap in pixels
     GUI_QR_INFO QR_info_struct;//仿真时看值
-    qr_hmem = GUI_QR_Create(pText, 8, GUI_QR_ECLEVEL_L, 0);
+    qr_hmem = GUI_QR_Create(pText, 6, GUI_QR_ECLEVEL_L, 0);
+    GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
+    qr_coefficient = QR_info_struct.Width;
+    GUI_QR_Delete(qr_hmem);
+    
+    qr_hmem = GUI_QR_Create(pText, 180/qr_coefficient, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     GUI_MEMDEV_Select(mem);
     memx =  GUI_MEMDEV_GetXSize(mem);
+    memy = GUI_MEMDEV_GetYSize(mem);
+    GUI_SetColor(GUI_WHITE);                       
+    GUI_FillRect((memx - QR_info_struct.Size) / 2, (48 + (200 - QR_info_struct.Size) / 2), QR_info_struct.Size, QR_info_struct.Size);
     if (memx < QR_info_struct.Size)
     {
         return -1;
     }
     qrx = (memx - QR_info_struct.Size) / 2;
-    qry = 65;
+    qry = 48+(200 - QR_info_struct.Size) / 2;
     GUI_QR_Draw(qr_hmem, qrx, qry);
+    GUI_QR_Delete(qr_hmem);
     GUI_MEMDEV_Select(0);  
     return 0;
 }
 
-void createStartUpMemdev()
+void gui_halt(void)
 {
-    Memdevcardinfoback = createMemdev(pathcardinfoback);
-    Memdevcardinfostartup = createMemdev(pathcardinfostartup);
-    Memdevcardinfostartone = createMemdev(pathcardinfostartone);
-    Memdevcardinfostatrttwo = createMemdev(pathcardinfostatrttwo);
-    Memdevcardinfostatrtthree = createMemdev(pathcardinfostatrtthree);
+    char ch[2] = { 0 };
+    char flg;
+    TaskHandle_t ht;
+    extern TaskHandle_t xHandleTaskReadData;
+    if (get_tmp_file(pathBmpCheckTmp, ch) == 1)
+    {
+        flg = atoi(ch);
+        if (flg == 3)//有文件并且设置过3
+        {
+            printf_safe("缺少图片，暂停GUI\n");
+            xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP);
+            
+            vTaskSuspend(xHandleTaskEVSERemote);
+            vTaskSuspend(xHandleTaskEVSERFID);
+            vTaskSuspend(xHandleTaskEVSECharge);
+            vTaskSuspend(xHandleTaskEVSEMonitor);
+            vTaskSuspend(xHandleTaskEVSEDiag);
+            vTaskSuspend(xHandleTaskEVSEData);
+            vTaskSuspend(xHandleTaskRemoteCmdProc);
+            taskmonitorChildSuspend();
+            vTaskSuspend(xHandleTaskGUIBS);
+            vTaskSuspend(xHandleTaskTouch);
+            vTaskSuspend(xHandleTaskGuidingLights);
+            ht = xTaskGetCurrentTaskHandle();
+            if (ht == xHandleTaskGUI)
+            {
+                vTaskSuspend(xHandleTaskReadData);
+                vTaskSuspend(xHandleTaskGUI);
+            }
+            if (ht == xHandleTaskReadData)
+            {
+                vTaskSuspend(xHandleTaskGUI);
+                vTaskSuspend(xHandleTaskReadData);
+            }
+        }
+        else
+        {
+            ch[0] = '3';
+            set_tmp_file(pathBmpCheckTmp, ch);
+            NVIC_SystemReset();
+        }
+    }
+    else//无文件
+    {
+        ch[0] = '3';
+        set_tmp_file(pathBmpCheckTmp, ch);
+        NVIC_SystemReset();
+    }
 }
 
-void creatememdev()
+int createStartUpMemdev(void)
+{
+    //5个文件
+    IS_BMP_OK(Memdevcardinfoback = createMemdev(pathcardinfoback));
+    IS_BMP_OK(Memdevcardinfostartup = createMemdev(pathcardinfostartup));
+    IS_BMP_OK(Memdevcardinfostartone = createMemdev(pathcardinfostartone));
+    IS_BMP_OK(Memdevcardinfostatrttwo = createMemdev(pathcardinfostatrttwo));
+    IS_BMP_OK(Memdevcardinfostatrtthree = createMemdev(pathcardinfostatrtthree));
+    extern void create_sif_font(u8 *fxpath, GUI_FONT * pFont, const GUI_SIF_TYPE * pFontType);
+    create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
+    return 1;
+}
+
+int creatememdev(void)
 {   
     CON_t *pCON;   
+    GUI_RECT h;
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
     {
-        MemdevhomegunAfree = createMemdev(pathhomegunfreesingle);
+        //6个文件
+        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
         
-        Memdevhomeback = createMemdev(pathhomebacksingle);
-        MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle);
-        MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle);
-        MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle); 
+        IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
+        IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
+        IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
+        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle)); 
         
-        Memdevcardinfopleasepluga = createMemdev(pathcardinfopleaseplug);
+        IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleaseplug));
     }
     else
     {
-        MemdevhomegunAfree = createMemdev(pathhomegunAfree);
+        //33个文件
+        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
     
-        MemdevhomegunBfree = createMemdev(pathhomegunBfree);
+        IS_BMP_OK(MemdevhomegunBfree = createMemdev(pathhomegunBfree));
         pCON = CONGetHandle(1);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
     
-        Memdevhomeback = createMemdev(pathhomeback);
-        MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone);
-        MemdevhomegunAcharging = createMemdev(pathhomegunAcharging);
-        MemdevhomegunAerror = createMemdev(pathhomegunAerror); 
-        MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone);
-        MemdevhomegunBcharging = createMemdev(pathhomegunBcharging);
-        MemdevhomegunBerror = createMemdev(pathhomegunBerror);       
+        IS_BMP_OK(Memdevhomeback = createMemdev(pathhomeback));
+        IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone));
+        IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunAcharging));
+        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunAerror);) 
+        IS_BMP_OK(MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone));
+        IS_BMP_OK(MemdevhomegunBcharging = createMemdev(pathhomegunBcharging));
+        IS_BMP_OK(MemdevhomegunBerror = createMemdev(pathhomegunBerror);      ) 
         
          //选枪
-        MemdevSelectGunBack = createMemdev(pathSelectGunBack);
-        MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress);
-        MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress);
-        MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress);
-        MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress);
-        MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable);
-        MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable);
+        IS_BMP_OK(MemdevSelectGunBack = createMemdev(pathSelectGunBack));
+        IS_BMP_OK(MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress));
+        IS_BMP_OK(MemdevSelectGunBbottonNotpress = createMemdev(pathSelectGunBbottonNotpress));
+        IS_BMP_OK(MemdevSelectGunAbottonPress = createMemdev(pathSelectGunAbottonPress));
+        IS_BMP_OK(MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress));
+        IS_BMP_OK(MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable));
+        IS_BMP_OK(MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable));
     
         //选模式
-        Memdevselectpatternback = createMemdev(pathselectpatternback);
-        Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber);
-        Memdevselectpatternfull = createMemdev(pathselectpatternfull);
-        Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber);
-        Memdevselectpatterntime = createMemdev(pathselectpatterntime);
+        IS_BMP_OK(Memdevselectpatternback = createMemdev(pathselectpatternback));
+        IS_BMP_OK(Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber));
+        IS_BMP_OK(Memdevselectpatternfull = createMemdev(pathselectpatternfull));
+        IS_BMP_OK(Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber));
+        IS_BMP_OK(Memdevselectpatterntime = createMemdev(pathselectpatterntime));
 
-        Memdevselectpatternelectricnumberpress = createMemdev(pathselectpatternelectricnumberpress);
-        Memdevselectpatternfullpress = createMemdev(pathselectpatternfullpress);
-        Memdevselectpatternmoneynumberpress = createMemdev(pathselectpatternmoneynumberpress);
-        Memdevselectpatterntimepress = createMemdev(pathselectpatterntimepress);
+        IS_BMP_OK(Memdevselectpatternelectricnumberpress = createMemdev(pathselectpatternelectricnumberpress));
+        IS_BMP_OK(Memdevselectpatternfullpress = createMemdev(pathselectpatternfullpress));
+        IS_BMP_OK(Memdevselectpatternmoneynumberpress = createMemdev(pathselectpatternmoneynumberpress));
+        IS_BMP_OK(Memdevselectpatterntimepress = createMemdev(pathselectpatterntimepress));
 
-        Memdevselectpatternunityuan = createMemdev(pathselectpatternunityuan);
-        Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu);
-        Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen);
-        Memdevselectpatternunitno = createMemdev(pathselectpatternunitno);
+        IS_BMP_OK(Memdevselectpatternunityuan = createMemdev(pathselectpatternunityuan));
+        IS_BMP_OK(Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu));
+        IS_BMP_OK(Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen));
+        IS_BMP_OK(Memdevselectpatternunitno = createMemdev(pathselectpatternunitno));
 
-        Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard);
-        Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress);
+        IS_BMP_OK(Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard));
+        IS_BMP_OK(Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress));
         
-        Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga);
-        Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb);
+        IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga));
+        IS_BMP_OK(Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb));
     }
+
+//    MemdevManagerQuitButton = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
+//    GUI_MEMDEV_Select(MemdevManagerQuitButton);
+//    h.x0 = 20;
+//    h.y0 = 20;
+//    h.x1 = 70;
+//    h.y1 = 70;
+//    GUI_SetColor(GUI_BLACK);    
+//    GUI_FillRect(0, 0, 90, 90);
+//    GUI_SetColor(0xAAAAAA);                       
+//    GUI_FillRoundedRect(20, 20, 70, 70, 3);
+//    GUI_SetColor(GUI_BLACK);
+//    GUI_SetFont(&fontwryhcg36e);
+//    GUI_SetBkColor(0xAAAAAA);
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_MEMDEV_Select(0);
+//    
+//    MemdevManagerQuitButtonPress = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
+//    GUI_MEMDEV_Select(MemdevManagerQuitButtonPress);
+//    h.x0 = 20;
+//    h.y0 = 20;
+//    h.x1 = 70;
+//    h.y1 = 70;
+//    GUI_SetColor(GUI_BLACK);    
+//    GUI_FillRect(0,0,90,90);
+//    GUI_SetColor(GUI_RED);                       
+//    GUI_FillRoundedRect(20, 20, 70, 70, 3);
+//    GUI_SetColor(GUI_BLACK);
+//    GUI_SetFont(&fontwryhcg30e);
+//    GUI_SetBkColor(GUI_RED);
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_MEMDEV_Select(0);
     
-    Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo);
-    Memdevhomegunscancode = createMemdev(pathhomegunscancode);
-    Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress);
-    //Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress);
-    Memdevhomegunerror = createMemdev(pathhomegunerror);
-    Memdevhomesignal0 = createMemdev(pathhomesignal0);
-    Memdevhomesignal1 = createMemdev(pathhomesignal1);
-    Memdevhomesignal2 = createMemdev(pathhomesignal2);
-    Memdevhomesignal3 = createMemdev(pathhomesignal3);
-    Memdevhomesignal4 = createMemdev(pathhomesignal4);
-    Memdevhomesignal5 = createMemdev(pathhomesignal5);
+    //下面一共35个文件
+    IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));
+    IS_BMP_OK(Memdevhomegunscancode = createMemdev(pathhomegunscancode));
+    IS_BMP_OK(Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress));
+    //Memdevhomegunscancodepress = createMemdev(pathhomegunscancodepress));
+    IS_BMP_OK(Memdevhomegunerror = createMemdev(pathhomegunerror));
+    IS_BMP_OK(Memdevhomesignal0 = createMemdev(pathhomesignal0));
+    IS_BMP_OK(Memdevhomesignal1 = createMemdev(pathhomesignal1));
+    IS_BMP_OK(Memdevhomesignal2 = createMemdev(pathhomesignal2));
+    IS_BMP_OK(Memdevhomesignal3 = createMemdev(pathhomesignal3));
+    IS_BMP_OK(Memdevhomesignal4 = createMemdev(pathhomesignal4));
+    IS_BMP_OK(Memdevhomesignal5 = createMemdev(pathhomesignal5));
     
-    Memdevhomesignallogined = createMemdev(pathhomesignalligined);
-    Memdevhomesignalnotlogined = createMemdev(pathhomesignalnotlogined);
+    IS_BMP_OK(Memdevhomesignallogined = createMemdev(pathhomesignalligined));
+    IS_BMP_OK(Memdevhomesignalnotlogined = createMemdev(pathhomesignalnotlogined));
     
-    Memdevhomechargedoneinfo = createMemdev(pathhomechargedoneinfo);
-    Memdevhomecharginginfo = createMemdev(pathhomecharginginfo);
-    Memdevhomechargehelp = createMemdev(pathhomechargehelp);
-    Memdevhomechargehelppress = createMemdev(pathhomechargehelppress);
-    Memdevhomehelpinfo = createMemdev(pathhomehelpinfo);
+    IS_BMP_OK(Memdevhomechargedoneinfo = createMemdev(pathhomechargedoneinfo));
+    IS_BMP_OK(Memdevhomecharginginfo = createMemdev(pathhomecharginginfo));
+    IS_BMP_OK(Memdevhomechargehelp = createMemdev(pathhomechargehelp));
+    IS_BMP_OK(Memdevhomechargehelppress = createMemdev(pathhomechargehelppress));
+    IS_BMP_OK(Memdevhomehelpinfo = createMemdev(pathhomehelpinfo));
         
    
     
     //提示信息页图片
-    //Memdevchargedoneinfo = createMemdev(pathchargedoneinfo);
-    //Memdevcharginginfo = createMemdev(pathcharginginfo);
+    //Memdevchargedoneinfo = createMemdev(pathchargedoneinfo));
+    //Memdevcharginginfo = createMemdev(pathcharginginfo));
 
     //公用图片“退出”
-    MemdevQuit = createMemdev(pathQuit);
-    MemdevQuitPress = createMemdev(pathQuitPress);
-    MemdevbackQuit = createMemdev(pathbackquit);
-    MemdevbackQuitPress = createMemdev(pathbackquitpress);
+    IS_BMP_OK(MemdevQuit = createMemdev(pathQuit));
+    IS_BMP_OK(MemdevQuitPress = createMemdev(pathQuitPress));
+    IS_BMP_OK(MemdevbackQuit = createMemdev(pathbackquit));
+    IS_BMP_OK(MemdevbackQuitPress = createMemdev(pathbackquitpress));
 
     //卡信息页图片
-    //Memdevcardinfoback = createMemdev(pathcardinfoback);
-    Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok);
-    Memdevcardinfochargingok = createMemdev(pathcardinfochargingok);
-    Memdevcardinfonettimeout = createMemdev(pathcardinfonettimeout);
+    //Memdevcardinfoback = createMemdev(pathcardinfoback));
+    IS_BMP_OK(Memdevcardinfocardconditionnotok = createMemdev(pathcardinfocardconditionnotok));
+    IS_BMP_OK(Memdevcardinfochargingok = createMemdev(pathcardinfochargingok));
+    IS_BMP_OK(Memdevcardinfonettimeout = createMemdev(pathcardinfonettimeout));
 
-    Memdevcardinfoplugtimeout = createMemdev(pathcardinfoplugtimeout);
-    Memdevcardinforeadystart = createMemdev(pathcardinforeadystart);
-    MemdevcardinfoQuit = createMemdev(pathcardinfoquit);
-    MemdevcardinfoQuitPress = createMemdev(pathcardinfoquitpress);
+    IS_BMP_OK(Memdevcardinfoplugtimeout = createMemdev(pathcardinfoplugtimeout));
+    IS_BMP_OK(Memdevcardinforeadystart = createMemdev(pathcardinforeadystart));
+    IS_BMP_OK(MemdevcardinfoQuit = createMemdev(pathcardinfoquit));
+    IS_BMP_OK(MemdevcardinfoQuitPress = createMemdev(pathcardinfoquitpress));
     
-    MemdevcardinfoEquipmentFailureNoStart = createMemdev(pathcardinfoEquipmentFailureNoStart);
-    MemdevcardinfoPlugOk = createMemdev(pathcardinfoPlugOk);
-    MemdevcardinfoPwdLimted = createMemdev(pathcardinfoPwdLimted);
-    MemdevcardinfoPwdError = createMemdev(pathcardinfoPwdError);
-    MemdevcardinfoPwdTest = createMemdev(pathcardinfoPwdTest);
-    //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears);
-//    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable);
-//    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail);
-//    Memdevcardinfoback = createMemdev(pathcardinfoback);
-//    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging);
-//    Memdevcardinfoget = createMemdev(pathcardinfoget);
-//    Memdevcardinfoplug = createMemdev(pathcardinfoplug);
-    //Memdevcardinfounregister = createMemdev(pathcardinfounregister);  
+    IS_BMP_OK(MemdevcardinfoEquipmentFailureNoStart = createMemdev(pathcardinfoEquipmentFailureNoStart));
+    IS_BMP_OK(MemdevcardinfoPlugOk = createMemdev(pathcardinfoPlugOk));
+    IS_BMP_OK(MemdevcardinfoPwdLimted = createMemdev(pathcardinfoPwdLimted));
+    IS_BMP_OK(MemdevcardinfoPwdError = createMemdev(pathcardinfoPwdError));
+    IS_BMP_OK(MemdevcardinfoPwdTest = createMemdev(pathcardinfoPwdTest));
+    //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears));
+//    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable));
+//    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail));
+//    Memdevcardinfoback = createMemdev(pathcardinfoback));
+//    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging));
+//    Memdevcardinfoget = createMemdev(pathcardinfoget));
+//    Memdevcardinfoplug = createMemdev(pathcardinfoplug));
+    //Memdevcardinfounregister = createMemdev(pathcardinfounregister); ) 
     
 //密码页
-    MemdevPwdPromptPicture = createMemdev(pathPwdPromptPicture);
-    MemdevPwdInputBox = createMemdev(pathPwdInputBox);
+    IS_BMP_OK(MemdevPwdPromptPicture = createMemdev(pathPwdPromptPicture));
+    IS_BMP_OK(MemdevPwdInputBox = createMemdev(pathPwdInputBox));
+    
+    if (get_bmp_check_tmp() == 3)//检测文件正常,但是还存在tmp,删除tmp并重启
+    {
+        yaffs_unlink(pathBmpCheckTmp);
+        NVIC_SystemReset();
+    }
+    
+    return 1;
 }
-
-
-
-

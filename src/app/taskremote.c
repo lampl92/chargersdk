@@ -2,7 +2,7 @@
 * @file taskremote.c
 * @brief 远程通信的操作
 *        重连：丢失3个心跳
-*        停止充电：丢失9个心跳
+*        停止充电：丢失12个心跳
 * @author rgw
 * @version v1.0
 * @date 2017-01-18
@@ -16,14 +16,17 @@
 #include "stringName.h"
 #include "file_op.h"
 #include "yaffsfs.h"
+#include "tasknetwork.h"
 
 #include "evse_debug.h"
 
 /** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
 
 //#define DEBUG_NO_TASKREMOTE
-#define defRemoteMaxDelay       60000
 
+RemoteState_t remotestat;
+
+extern TaskHandle_t xHandleTaskRemoteCmdProc;
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 {
@@ -62,6 +65,8 @@ void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 }
 void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
+    CON_t *pCON;
+    int i;
     int res;
     uint8_t flag_set;
 
@@ -98,7 +103,11 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     /******* end 充电过程中不允许设置************/
 
     RemoteIF_RecvSetKey(pEVSE, pProto, &res);
-
+    for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {
+        pCON = CONGetHandle(i);
+        RemoteIF_RecvSetPower(pEVSE, pProto, pCON->info.ucCONID, &res);
+    }
 }
 
 void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
@@ -127,20 +136,22 @@ static int taskremote_status_update(CON_t *pCON)
         return 0;
     }
 }
-
+//0：无升级操作   1：升级成功  2：升级失败
 int CheckSysUpFlags(void)
 {
     int tmp = 2;
     int succ = 2;
-    char ch[1]; 
+    char ch[2] = { 0 }; 
     uint8_t res;
     
-    res = get_upgrade_tmp(pathUpgradeTmp, ch);
-    tmp = atoi(ch);
+    res = get_tmp_file(pathUpgradeTmp, ch);
     if (res != 1)
+    {
         succ = 0;
+    }
     else
     {
+        tmp = atoi(ch);
         switch (tmp)
         {
         case 2:
@@ -194,7 +205,10 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
         errcode_sdt = cfg_set_uint8(pathFTPCfg, &pProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
         if (errcode_sdt == ERR_NO)
         {
-            HAL_NVIC_SystemReset();
+            //HAL_NVIC_SystemReset();
+            netChangeState(net_dev, NET_STATE_DISCONNECT);
+            remotestat = REMOTE_NO;
+            vTaskDelay(1000);
             return 1;//See you later :)
         }
     }
@@ -207,20 +221,15 @@ static int taskremote_ota(EVSE_t *pEVSE, echProtocol_t *pProto)
     
     /*升级结果*/
     succ = CheckSysUpFlags();
-    if (succ != 0)
+    if (succ != 0)//succ == 1 升级成功
     {
         RemoteIF_SendOTA_Result(pEVSE, pProto, NULL, succ);
         xSysconf.xUpFlag.chargesdk_bin = 0;
-    }
-    if (succ == 1)//succ == 1 升级成功
-    {
-        //xSysconf.SetSysCfg(jnSysVersion, pProto->info.ftp.strNewVersion, ParamTypeString); // 不再文件中设置版本, 程序中自带版本
     }
     errcode = RemoteIF_RecvOTA_Result(pProto, &network_res);
     if (errcode == ERR_NO && network_res == 1)
     {
         //happy time;
-        //xSysconf.SetSysCfg(jnSysChargersdk_bin, (void *)&(xSysconf.xUpFlag.chargesdk_bin), ParamTypeU8);
         xSysconf.GetSysCfg(&xSysconf, NULL);
     }
     return 1;
@@ -232,7 +241,6 @@ void vTaskEVSERemote(void *pvParameters)
     uint32_t ulTotalCON;
     int i;
     EventBits_t uxBits;
-    RemoteState_t remotestat;
     Heartbeat_t *pHeart;
     ErrorCode_t errcode;
     int network_res;
@@ -254,16 +262,14 @@ void vTaskEVSERemote(void *pvParameters)
         {
         case REMOTE_NO:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                                         defEventBitTCPConnectOK,
-                                         pdFALSE, pdTRUE, 10000);
-            if((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+            if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) == defSignalEVSE_State_Network_Online)
             {
                 RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
             }
             break;
         case REMOTE_CONNECTED:
+            vTaskResume(xHandleTaskRemoteCmdProc); //重启协议处理任务
             /********** 登录 **************/
             RemoteIF_RecvLogin(pEVSE, pechProto, &network_res);
             if(network_res == 1)
@@ -282,6 +288,10 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
+#if DEBUG
+                smtpClientTest();
+#endif
+                break;
             }
             else
             {
@@ -296,7 +306,11 @@ void vTaskEVSERemote(void *pvParameters)
             break;
         case REMOTE_LOGINED:
             pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Logined;
-            
+            if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) != defSignalEVSE_State_Network_Online)
+            {
+                remotestat = REMOTE_OFFLINE;
+                break;
+            }
             /*********上传未处理的订单**************/
 #if 1
             for (i = 0; i < ulTotalCON; i++)
@@ -304,7 +318,8 @@ void vTaskEVSERemote(void *pvParameters)
                 pCON = CONGetHandle(i);
                 if (pCON->OrderTmp.ucCheckOrderTmp == 1)
                 {
-                    if (pCON->state != STATE_CON_CHARGING)
+                    if (pCON->state != STATE_CON_CHARGING && 
+                        pCON->order.statRemoteProc.order.stat == REMOTEOrder_IDLE)//只有在处理订单idle时，才进行临时订单检查
                     {
                         switch (pCON->OrderTmp.order.statRemoteProc.order.stat)
                         {
@@ -320,7 +335,7 @@ void vTaskEVSERemote(void *pvParameters)
                             else if (errcode == ERR_NO)
                             {
                                 //当前枪有订单临时文件
-                                printf_safe("枪%d有订单临时文件\n", pCON->info.ucCONID);
+                                printf_safe("stat %d, 枪%d有订单临时文件\n", pCON->order.statRemoteProc.order.stat,pCON->info.ucCONID);
                                 pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_Send;
                             }
                             else//解析错误
@@ -329,8 +344,8 @@ void vTaskEVSERemote(void *pvParameters)
                             }
                             break;
                         case REMOTEOrder_Send:
+                            printf_safe("CON%d,临时订单发送\n", pCON->info.ucCONID);
                             RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->OrderTmp.order));
-                            pCON->OrderTmp.order.statRemoteProc.order.timestamp = time(NULL);
                             pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                             break;
                         case REMOTEOrder_WaitRecv:
@@ -350,9 +365,10 @@ void vTaskEVSERemote(void *pvParameters)
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                                     break;
                                 }
-                                if (time(NULL) - pCON->OrderTmp.order.statRemoteProc.order.timestamp > 60)
+                                if(errcode == ERR_REMOTE_TIMEOUT)
                                 {
                                     pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                                    remotestat = REMOTE_ERROR;
                                     break;
                                 }
                             }
@@ -378,7 +394,7 @@ void vTaskEVSERemote(void *pvParameters)
             RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
-                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 3)//心跳丢失3个进行重连
+                if ((time(NULL) - last_heart_stamp) * 1000 / (pechProto->info.ulHeartBeatCyc_ms + 5000) >= 3)//心跳丢失3个进行重连
                 {
                     printf_safe("\n\nHeart LOST!!!!\n\n");
                     remotestat = REMOTE_ERROR;
@@ -421,7 +437,7 @@ void vTaskEVSERemote(void *pvParameters)
                 switch (pCON->order.statRemoteProc.rmt_ctrl.stat)
                 {
                 case REMOTECTRL_IDLE:
-                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, 
+                    RemoteIF_RecvRemoteCtrl(pEVSE, pechProto, pCON,
                                             &(pCON->order.statRemoteProc.rmt_ctrl.id), 
                                             &(pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff), 
                                             &network_res);
@@ -544,17 +560,30 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
 
                 case CARDCTRL_WAIT_START_RECV:
-                    RemoteIF_RecvCardStartRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStartRes(pechProto, pCON, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_WAIT_STOP;
                     }
+                    if (errcode == ERR_REMOTE_TIMEOUT)
+                    {
+                        printf_safe("平台回复刷卡启动充电超时\n");
+                        xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                        remotestat = REMOTE_ERROR;
+                    }
                     break;
                 case CARDCTRL_WAIT_STOP_RECV:
-                    RemoteIF_RecvCardStopRes(pechProto, &network_res);
+                    errcode = RemoteIF_RecvCardStopRes(pechProto, pCON, &network_res);
                     if(network_res == 1)
                     {
                         pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                    }
+                    if (errcode == ERR_REMOTE_TIMEOUT)
+                    {
+                        printf_safe("平台回复刷卡停止充电超时\n");
+                        pCON->order.statRemoteProc.card.stat = CARDCTRL_IDLE;
+                        remotestat = REMOTE_ERROR;
                     }
                     break;
                 }
@@ -658,22 +687,35 @@ void vTaskEVSERemote(void *pvParameters)
                 switch(pCON->order.statRemoteProc.order.stat)
                 {
                 case REMOTEOrder_IDLE:
+                    uxBits = xEventGroupWaitBits(pCON->status.xHandleEventCharge,
+                        defEventBitCONStartOK,
+                        pdFALSE,
+                        pdTRUE,
+                        0);
+                    if ((uxBits & defEventBitCONStartOK) == defEventBitCONStartOK)
+                    {
+                        pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitOrder;
+                    }
+                    break;
+                case REMOTEOrder_WaitOrder:
                     uxBits = xEventGroupWaitBits(pCON->status.xHandleEventOrder, 
                         defEventBitOrderMakeFinishToRemote, 
-                        pdTRUE, pdTRUE, 0);
+                        pdTRUE,
+                        pdTRUE,
+                        0);
                     if ((uxBits & defEventBitOrderMakeFinishToRemote) == defEventBitOrderMakeFinishToRemote)
                     {
                         pCON->order.statRemoteProc.order.stat = REMOTEOrder_Send;
                     }
                     break;
                 case REMOTEOrder_Send:
+                    printf_safe("CON%d,正常订单发送\n", pCON->info.ucCONID);
                     RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->order));
-                    pCON->order.statRemoteProc.order.timestamp = time(NULL);
                     pCON->order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
                     break;
                 case REMOTEOrder_WaitRecv:
-                    RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
-                    if(network_res == 1)
+                    errcode = RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->order), &network_res);
+                    if(network_res == 1 && errcode == ERR_NO)
                     {
                         network_res = 0;
                         xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
@@ -681,11 +723,12 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else if(network_res == 0)
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.order.timestamp > 60)
+                        if(errcode == ERR_REMOTE_TIMEOUT)
                         {
-                            //超时就不要发送使用完成OK了，下面这条语句注释 ↓
-                            //xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderOK);
+                            printf_safe("平台Order回复超时\n");
+                            xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut);
                             pCON->order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
+                            remotestat = REMOTE_ERROR;
                         }
                     }
                     break;
@@ -704,50 +747,131 @@ void vTaskEVSERemote(void *pvParameters)
             /******** OTA ****************/
             taskremote_ota(pEVSE, pechProto);
 
+            /******** 紧急停止 ****************/
+            for (i = 0; i < pEVSE->info.ucTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                switch (pCON->order.statRemoteProc.rmt_emer_stop.stat)
+                {
+                case REMOTE_EMER_STOP_IDLE:
+                        RemoteIF_RecvEmergencyStop(pechProto, pCON->info.ucCONID, &network_res);
+                        if (network_res == 1)
+                        {
+                            if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                            {
+                                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            }
+                            pCON->order.statRemoteProc.rmt_emer_stop.timestamp = time(NULL);
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_WAIT_STOP;
+                        }
+                    break;
+                case REMOTE_EMER_STOP_WAIT_STOP:
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
+                    {
+                        RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 1);//成功
+                        pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                        break;
+                    }
+                    else
+                    {
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_emer_stop.timestamp > 20)
+                        {
+                            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionRmtEmergencyStop);
+                            RemoteIF_SendEmergencyStop(pEVSE, pechProto, pCON, 0); //超时失败
+                            pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_RETURN;
+                            break;
+                        }
+                    }
+                    break;
+                case REMOTE_EMER_STOP_RETURN:
+                    pCON->order.statRemoteProc.rmt_emer_stop.stat = REMOTE_EMER_STOP_IDLE;
+                    break;
+                }
+            }
+            /******** 预约 ****************/
+            /*  0：未知
+                1：无预约
+                2：已预约
+                3：预约失败
+            */
+            for (i = 0; i < ulTotalCON; i++)
+            {
+                pCON = CONGetHandle(i);
+                errcode = RemoteIF_RecvSetAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO)
+                {
+                    if (network_res == 1)//2：预约成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 2);
+                    }
+                    else//3：预约失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_SET_APPOINT, pEVSE, pechProto, pCON, 3);
+                    }
+                }
+                errcode = RemoteIF_RecvReqAppoint(pEVSE, pechProto, pCON->info.ucCONID, &network_res);
+                if (errcode == ERR_NO )
+                {
+                    if (network_res == 1)//查询成功
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, pCON->appoint.status);
+                    }
+                    else//查询失败
+                    {
+                        RemoteIF_SendAppoint(ECH_CMDID_REQ_APPOINT, pEVSE, pechProto, pCON, 0);
+                    }
+                }
+            }
+            
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Logined;
-            
-            {   //丢失9个心跳停止充电
-                if ((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 9) 
+            {   //如果是APP启动，丢失12个心跳停止充电
+                if((time(NULL) - last_heart_stamp) * 1000 / pechProto->info.ulHeartBeatCyc_ms >= 12) 
                 {
                     for (i = 0; i < ulTotalCON; i++)
                     {
                         pCON = CONGetHandle(i);
-                        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                        if (pCON->order.ucStartType == defOrderStartType_Remote)
                         {
-                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                            if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                            {
+                                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionOfflineStop);
+                                remotestat = REMOTE_NO;
+                                break;
+                            }
                         }
                     }
-                    remotestat = REMOTE_NO;
-                    break;
                 }
             }
-            {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断ConnectOK事件
+            {   //从REMOTE_ERR状态过来后，先等defEventBitRemoteError事件处理完，再判断Online
                 uxBits = xEventGroupGetBits(xHandleEventRemote);
                 if ((uxBits & defEventBitRemoteError) == defEventBitRemoteError)
                 {
-                    xEventGroupClearBits(xHandleEventTCP, defEventBitTCPConnectOK);
+                    vTaskDelay(1000);
                     break;
                 }
             }
-            uxBits = xEventGroupWaitBits(xHandleEventTCP,
-                defEventBitTCPConnectOK,
-                pdFALSE,
-                pdTRUE,
-                10000);
-            if ((uxBits & defEventBitTCPConnectOK) == defEventBitTCPConnectOK)
+            if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) == defSignalEVSE_State_Network_Online)
             {
                 RemoteIF_SendLogin(pEVSE, pechProto);
                 remotestat = REMOTE_CONNECTED;
             }
             break;
         case REMOTE_ERROR:
+            vTaskSuspend(xHandleTaskRemoteCmdProc);//停止协议处理任务
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
             remotestat = REMOTE_RECONNECT;
             xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
-            printf_safe("remote state error ,Call TCP close!!\n");
+            printf_safe("remote state error ,remote state -> reconnect!!\n");
+            break;
+        case REMOTE_OFFLINE:
+            vTaskSuspend(xHandleTaskRemoteCmdProc); //停止协议处理任务
+            xTimerStop(xHandleTimerRemoteHeartbeat, 100);
+            xTimerStop(xHandleTimerRemoteStatus, 100);
+            remotestat = REMOTE_RECONNECT;
+            printf_safe("net offline ,remote state -> remote reconnect!!\n");
             break;
         default:
             break;

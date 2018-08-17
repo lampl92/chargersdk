@@ -206,7 +206,7 @@ int utils_abs(int num)
     }
 }
 
-static void crc32_init(uint32_t *pulCrc32Table)
+void crc32_init(uint32_t *pulCrc32Table)
 {
     // This is the official polynomial used by CRC32 in PKZip.
 	// Often times the polynomial shown reversed as 0x04C11DB7.
@@ -229,69 +229,11 @@ static void crc32_init(uint32_t *pulCrc32Table)
     }
 }
 
-static void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table)
+void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table)
 {
     *pulCrc32 = ((*pulCrc32) >> 8) ^ pulCrc32Table[(byte) ^ ((*pulCrc32) & 0x000000FF)];
 }
 
-int GetFileCrc32(char *path, uint32_t *pulCrc32)
-{
-    int fd;
-    int res = 0;
-    uint8_t pbuff[1024];
-    uint32_t fsize;
-    struct yaffs_stat st;
-    uint32_t br;
-    uint32_t ulCrc32 = 0xFFFFFFFF;
-    uint32_t ulCrc32Table[256] = { 0 };
-    int i;
-    
-    fd = yaffs_open(path, O_RDONLY, 0);
-    if (fd < 0)
-    {
-        res = yaffs_get_error();
-    }
-    if (res != 0)
-    {
-        return 0;
-    }
-    yaffs_stat(path, &st);
-    fsize = st.st_size;
-    crc32_init(ulCrc32Table);
-    taskENTER_CRITICAL();
-    br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
-    taskEXIT_CRITICAL();
-    while (br)
-    {
-        for (i = 0; i < br; i++)
-        {
-            CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
-        }
-        taskENTER_CRITICAL();
-        br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
-        taskEXIT_CRITICAL();
-    }
-    *pulCrc32 = ~ulCrc32;
-
-    yaffs_close(fd);
-    return 1;
-}
-
-int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32)
-{
-    uint32_t ulCrc32 = 0xFFFFFFFF;
-    uint32_t ulCrc32Table[256] = { 0 };
-    int i;
-    
-    crc32_init(ulCrc32Table);
-    for (i = 0; i < size; i++)
-    {
-        CalcCrc32(pbuff[i], &ulCrc32, ulCrc32Table);
-    }
-    *pulCrc32 = ~ulCrc32;
-
-    return 1;
-}
 
 uint32_t StrCrc32ToUint32(char *strCrc32)
 {

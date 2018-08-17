@@ -68,13 +68,13 @@ const char *strProtoCfg =
     \"RTDataCyc_ms\": 10000,\n \
     \"ResetAct\": 0,\n \
     \"PowerFee_sharp\": 1,\n \
-    \"PowerFee_peak\": 0,\n \
-    \"PowerFee_shoulder\": 0,\n \
-    \"PowerFee_off_peak\": 0,\n \
+    \"PowerFee_peak\": 1,\n \
+    \"PowerFee_shoulder\": 1,\n \
+    \"PowerFee_off_peak\": 1,\n \
     \"ServiceFee_sharp\": 0.8,\n \
-    \"ServiceFee_peak\": 0,\n \
-    \"ServiceFee_shoulder\": 0,\n \
-    \"ServiceFee_off_peak\": 0,\n \
+    \"ServiceFee_peak\": 0.8,\n \
+    \"ServiceFee_shoulder\": 0.8,\n \
+    \"ServiceFee_off_peak\": 0.8,\n \
     \"SegTime_sharp\": {\n \
         \"SegCont\": 2,\n \
         \"Start1\": 11,\n \
@@ -140,6 +140,10 @@ const char *strFtpCfg =
     \"DownloadStart\" : 0,\n \
     \"DownloadStatus\": 123\n \
 }\n";
+//	"xfac":	-0.21240916848182678,
+//	"yfac":	-0.13341419398784637,
+//	"xoff":	827,
+//	"yoff":	512,
 
 const char *strSysCfg =
 "{\n \
@@ -153,13 +157,13 @@ const char *strSysCfg =
     \"DispSleepTime\" : 60,\n \
     \"touchtype\": 0,\n \
     \"is_calibrate\": 170,\n \
-    \"xfac\": -0.21276596188545227,\n \
-    \"yfac\": 0.1423487514257431,\n \
-    \"xoff\": 830,\n \
-    \"yoff\": 65486,\n \
+    \"xfac\": -0.21240916848182678,\n \
+    \"yfac\": -0.13341419398784637,\n \
+    \"xoff\": 827,\n \
+    \"yoff\": 512,\n \
     \"Version\":\"888888\",\n \
     \"USE_GPRSModem\":2,\n \
-    \"USE_Meter\": 1,\n \
+    \"USE_Meter\": 2,\n \
     \"USE_RFID\": 1,\n \
     \"USE_GUI\":1\n \
 }\n";
@@ -171,15 +175,42 @@ const char *strNetCfg =
 "{\n \
     \"Adapter\": 1,\n \
     \"DHCP\": 1,\n \
-    \"HostName\":\"RGW1 Charger\",\n \
+    \"HostName\":\"DUET Charger\",\n \
     \"MAC\":\"00-AB-CD-EF-04-29\",\n \
-    \"IP\":\"192.168.153.105\",\n \
-    \"Mask\":\"192.168.30.1\",\n \
-    \"Gate\":\"255.255.255.0\",\n \
-    \"DNS1\":\"192.168.30.1\",\n \
+    \"IP\":\"192.168.1.100\",\n \
+    \"Mask\":\"255.255.255.0\",\n \
+    \"Gate\":\"192.168.1.1\",\n \
+    \"DNS1\":\"192.168.1.1\",\n \
     \"DNS2\":\"0.0.0.0\"\n \
 }\n";
-        
+     
+const char *strMeterCfg =
+"{\n \
+    \"meter2\":\n \
+    {\n \
+        \"energy_addr\": 0,\n \
+        \"volt_addr\": 11,\n \
+        \"curr_addr\": 12,\n \
+        \"pwr_addr\": 13,\n \
+        \"freq_addr\": 17\n \
+    },\n \
+    \"meter3\":\n \
+    {\n \
+        \"energy_addr\": 0,\n \
+        \"volt_addr\": 97,\n \
+        \"curr_addr\": 100,\n \
+        \"pwr_addr\": 362,\n \
+        \"freq_addr\": 119\n \
+    },\n \
+    \"meter4\":\n \
+    {\n \
+        \"energy_addr\": 00,\n \
+        \"volt_addr\": 66,\n \
+        \"curr_addr\": 69,\n \
+        \"pwr_addr\": -1,\n \
+        \"freq_addr\": -1\n \
+    }\n \
+}\n";
 const char *strWhiteListCfg ="[]\n";
 const char *strBlackListCfg ="[]\n";
     

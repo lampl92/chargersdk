@@ -13,9 +13,72 @@
 #define lcd_height 480
 #define lcd_width 800
 
-WM_HWIN hMulti = 0;       //多行文本
-WM_HWIN htmpChild;      //用于存放传递过来的子窗口句柄
-WM_HWIN htmpBK;         //用于存放传递过来的背景窗口句柄
+#define ID_FRAMEWIN_0     (GUI_ID_USER + 0x95)
+#define ID_TEXT_0     (GUI_ID_USER + 0x96)
+#define ID_BUTTON_0  (GUI_ID_USER + 0x97)
+
+//密码错误窗口资源表
+static const GUI_WIDGET_CREATE_INFO _aDialogCreateFrame[] =
+{
+    { FRAMEWIN_CreateIndirect, "!!!!", ID_FRAMEWIN_0, 490, 4, 300, 200, WM_CF_SHOW | WM_CF_STAYONTOP, 0x64, 0 },
+    { TEXT_CreateIndirect, "密码错误", ID_TEXT_0, 0, 50, 300, 50, TEXT_CF_HCENTER, 0x0, 0 },
+    { BUTTON_CreateIndirect, "确定", ID_BUTTON_0, 125, 110, 80, 50, 0, 0x0, 0 },
+};
+
+int flag_password_error_prompt = 0;
+WM_HWIN hwin_password;      //密码错误提醒
+WM_HWIN hwin_password_text; //密码错误提醒text
+WM_HWIN hwin_password_button; //密码错误提醒button
+WM_HWIN hFrame; //键盘
+WM_HWIN hMulti = 0;        //多行文本
+WM_HWIN htmpChild;       //用于存放传递过来的子窗口句柄
+WM_HWIN htmpBK;          //用于存放传递过来的背景窗口句柄
+//密码错误窗口回调
+static void _cbDialog_frame(WM_MESSAGE *pMsg)
+{
+    WM_HWIN      hItem;
+    int          NCode;
+    int          Id;
+    char buff[10];
+    switch (pMsg->MsgId)
+    {
+    case WM_INIT_DIALOG:
+//        FRAMEWIN_SetFont(pMsg->hWin, &SIF24_Font);
+//        hItem = WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_TEXT_0);
+//        TEXT_SetFont(hItem, &SIF16_Font);
+//        TEXT_SetText(hItem, "密码错误!");
+//        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+//        BUTTON_SetFont(WM_GetDialogItem(WM_GetClientWindow(pMsg->hWin), ID_BUTTON_0), &SIF16_Font);
+//        BUTTON_SetText(WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0), "OK");
+        break;
+    case WM_NOTIFY_PARENT:
+        Id    = WM_GetId(pMsg->hWinSrc);
+        NCode = pMsg->Data.v;
+        switch (Id) {
+        case ID_BUTTON_0:
+            switch (NCode)
+            {
+            case WM_NOTIFICATION_RELEASED:
+                WM_DeleteWindow(hwin_password_text);
+                WM_DeleteWindow(hwin_password_button);
+                WM_DeleteWindow(hwin_password);
+                //WM_ShowWindow(hFrame);
+                MULTIEDIT_SetReadOnly(hMulti, 0);
+                MULTIEDIT_EnableBlink(hMulti, 500, 1);  //开启光标,周期500ms
+                MULTIEDIT_SetInsertMode(hMulti, 1);    //开启插入模式
+                MULTIEDIT_SetFont(hMulti, &SIF24_Font);
+                MULTIEDIT_SetText(hMulti, "");
+                WM_SetFocus(hMulti);
+                flag_password_error_prompt = 0;
+                break;
+            default:
+                break;
+            }
+            break;
+        }
+    }
+}
+
 static uint8_t htmpID;  //用于存放传递过来的设置句柄ID
 BUTTON_Handle _aahButtonOk;
 BUTTON_Handle _aahButtonCancel;
@@ -26,7 +89,6 @@ KEYPADStructTypeDef keypad_dev;
 uint8_t ManagerSetOptions = 0;
 uint8_t passwd[16];
 uint8_t *passwdDebug = "01.02.1222";
-uint8_t managerLevel = 1;
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static uint32_t statelog = 0;
@@ -440,8 +502,11 @@ void engkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
             {
                 c += 0x20;
             }
-            GUI_StoreKeyMsg(c, 1);	//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);	//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)
+            {
+                GUI_StoreKeyMsg(c, 1);  				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0);  				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -469,8 +534,11 @@ void numkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
         }
         else
         {
-            GUI_StoreKeyMsg(c, 1);				//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);				//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)
+            {
+                GUI_StoreKeyMsg(c, 1);  				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0);  				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -517,8 +585,11 @@ void signkeypad_process(BUTTON_DATA *buttondata, int Id, WM_MESSAGE *pMsg)
         }
         else
         {
-            GUI_StoreKeyMsg(c, 1);				//把消息存进键盘缓冲器，按下状态
-            GUI_StoreKeyMsg(c, 0);				//把消息存进键盘缓冲器，松开状态
+            if (0x0d != c)
+            {
+                GUI_StoreKeyMsg(c, 1);  				//把消息存进键盘缓冲器，按下状态
+                GUI_StoreKeyMsg(c, 0);  				//把消息存进键盘缓冲器，松开状态
+            }
         }
     }
 }
@@ -1114,25 +1185,31 @@ static void _cbBk(WM_MESSAGE * pMsg)
 
 static uint8_t Value_Check()
 {
-    uint8_t result_input[0x100];
+    uint8_t result_input[128] = {0};
     uint8_t tmpU8 = 0;
     uint16_t tmpU16 = 0;
     uint32_t tmpU32 = 0;
     double tmpDouble = 0.0;
     uint16_t i = 0;
     CON_t *pCon;
-    CON_t *pCon_for_PhaseLine;
+    CON_t *pCon_tmp;
 
     memset(result_input, 0, sizeof(result_input));
-    MULTIEDIT_GetText(hMulti, result_input, MULTIEDIT_GetTextSize(hMulti));
+    //MULTIEDIT_GetText(hMulti, result_input, MULTIEDIT_GetTextSize(hMulti));
+    MULTIEDIT_GetText(hMulti, result_input, sizeof(result_input)-1);
 
     switch (ManagerSetOptions)
     {
     case LOGIN_PASSWD:
         if (strlen(result_input) == 0)
         {
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
-            BUTTON_SetText(_aahButtonOk, "确定");
+            //            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+            //            BUTTON_SetText(_aahButtonOk, "确定");
+            MULTIEDIT_EnableBlink(hMulti, 500, 1);    //开启光标,周期500ms
+            MULTIEDIT_SetInsertMode(hMulti, 1);      //开启插入模式
+            MULTIEDIT_SetFont(hMulti, &SIF24_Font);
+            MULTIEDIT_SetText(hMulti, "");
+            WM_SetFocus(hMulti);
             return VALUE_ERROR;
         }
         else if (strcmp(result_input, passwd) == 0)
@@ -1141,18 +1218,43 @@ static uint8_t Value_Check()
         }
         else if (strcmp(result_input, passwdDebug) == 0)
         {
-            managerLevel = 0;
-            return VALUE_OK_SAV;
+            return VALUE_OK_SAV_SUPER;
         }
         else
         {
-            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
-            BUTTON_SetText(_aahButtonOk, "密码错误");
-            for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
+//            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_RED);
+//            BUTTON_SetText(_aahButtonOk, "密码错误");
+//            for (i = 0; i < MULTIEDIT_GetTextSize(hMulti); i++)
+//            {
+//                GUI_StoreKeyMsg('\b', 1);
+//                GUI_StoreKeyMsg('\b', 0);
+//            }
+            //if(!WM_IsWindow(hwin_password))
+            if(flag_password_error_prompt == 0)
             {
-                GUI_StoreKeyMsg('\b', 1);
-                GUI_StoreKeyMsg('\b', 0);
+                hwin_password = FRAMEWIN_CreateEx(250, 100, 300, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_STAYONTOP, 0, 0, "！！！！", _cbDialog_frame);
+                WM_MakeModal(hwin_password);
+                FRAMEWIN_SetTextColor(hwin_password, GUI_RED);
+                FRAMEWIN_SetFont(hwin_password, &SIF24_Font);
+                //FRAMEWIN_SetClientColor(hwin_password, GUI_WHITE);
+
+                //创建一个multi edit(多行文本小工具)小工具
+                hwin_password_text = TEXT_CreateEx(0, 30, 300, 50, WM_GetClientWindow(hwin_password), WM_CF_SHOW, TEXT_CF_HCENTER | TEXT_CF_VCENTER, ID_TEXT_0, "密码错误");
+                TEXT_SetFont(hwin_password_text, &SIF24_Font);
+
+                _aahButtonOk = BUTTON_CreateEx(100, 100, 100, 60, WM_GetClientWindow(hwin_password), WM_CF_SHOW, 0, ID_BUTTON_0);
+                BUTTON_SetFont(_aahButtonOk, &SIF24_Font);
+//                BUTTON_SetTextAlign(_aahButtonOk, GUI_TA_HCENTER | GUI_TA_VCENTER);
+//                BUTTON_SetBkColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_GRAY);
+//                BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+                BUTTON_SetText(_aahButtonOk, "OK");
+                flag_password_error_prompt = 1;
             }
+            MULTIEDIT_SetText(hMulti, "");
+            //            MULTIEDIT_EnableBlink(hMulti, 500, 0);   //关闭光标,周期500ms
+            //            MULTIEDIT_SetInsertMode(hMulti, 0);     //关闭插入模式
+            MULTIEDIT_SetReadOnly(hMulti, 1);
+            //WM_HideWindow(hFrame);
             return VALUE_ERROR;
         }
         break;
@@ -1163,143 +1265,237 @@ static uint8_t Value_Check()
             cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSESN);
             //pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
             memset(pEVSE->info.strSN, '\0', strlen(pEVSE->info.strSN));
-            strcpy(pEVSE->info.strSN, result_input);
+            strncpy(pEVSE->info.strSN, result_input, sizeof(pEVSE->info.strSN)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:
-            cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
-            //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
-            memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
-            strcpy(pEVSE->info.strID, result_input);
+            if (strlen(result_input) == 16)
+            {
+                cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
+                //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
+                memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
+                strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID) - 1);   
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
         case 22:
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoServerIP);
             memset(pechProto->info.strServerIP, '\0', strlen(pechProto->info.strServerIP));
-            strcpy(pechProto->info.strServerIP, result_input);
+            strncpy(pechProto->info.strServerIP, result_input, sizeof(pechProto->info.strServerIP)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
         case 23://
             tmpU16 = (uint16_t)atoi(result_input);
-            if (tmpU16 <= 0
-            || tmpU16 >= 10000)
+            if ((tmpU16 > 0) && (tmpU16 <= 65535))
             {
-                tmpU16 = 6677;
+                cfg_set_uint16(pathProtoCfg, &tmpU16, "%s", jnProtoServerPort);
+                pechProto->info.usServerPort = tmpU16;
             }
-            cfg_set_uint16(pathProtoCfg, &tmpU16, "%s", jnProtoServerPort);
-            pechProto->info.usServerPort = tmpU16;
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
             break;
         case 24://user name
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserName);
             memset(pechProto->info.strUserName, '\0', strlen(pechProto->info.strUserName));
-            strcpy(pechProto->info.strUserName, result_input);
+            strncpy(pechProto->info.strUserName, result_input, sizeof(pechProto->info.strUserName)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25://user passwd
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserPwd);
             memset(pechProto->info.strUserPwd, '\0', strlen(pechProto->info.strUserPwd));
-            strcpy(pechProto->info.strUserPwd, result_input);
+            strncpy(pechProto->info.strUserPwd, result_input, sizeof(pechProto->info.strUserPwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
             break;
         case 26://屏保时间
             tmpU32 = (uint32_t)atoi(result_input);// * 60;
-            tmpU32 = tmpU32 * 60;
-            if (tmpU32 < (1 * 60))
+            if ((tmpU32 > 0) && (tmpU32 <= 99999))
             {
-                tmpU32 = 1 * 60;
+                tmpU32 = tmpU32 * 60;
+                cfg_set_uint32(pathSysCfg, &tmpU32, "%s", jnSysDispSleepTime);
+                //xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
+                xSysconf.ulDispSleepTime_s = tmpU32;
             }
-            else if (tmpU32 > (60 * 99999))
-            {
-                tmpU32 = 60 * 99999;
-            }
-            cfg_set_uint32(pathSysCfg, &tmpU32, "%s", jnSysDispSleepTime);
-            //xSysconf.SetSysCfg(jnSysDispSleepTime, (void *)&tmpU32, ParamTypeU32);
-            xSysconf.ulDispSleepTime_s = tmpU32;
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
             break;
         case 27:
-            if (strcmp("1", result_input) != 0)
-            {
-                sprintf(result_input, "%s", "2");
-            }
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetAdapter);
             tmpU8 = atoi(result_input);
-            ifconfig.info.ucAdapterSel = tmpU8;
+            if ((tmpU8 == 1 || tmpU8 == 2) && (tmpU8 != ifconfig.info.ucAdapterSel))
+            {
+                cfg_set_uint8(pathNetCfg, &tmpU8, "%s", jnNetAdapter);
+                ifconfig.info.ucAdapterSel = tmpU8;
+                NVIC_SystemReset();
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
             break;
-        case 28://passwd
+        case 28://秘钥
             cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoKey);
             memset(pechProto->info.strKey, '\0', strlen(pechProto->info.strKey));
-            strcpy(pechProto->info.strKey, result_input);
+            strncpy(pechProto->info.strKey, result_input, sizeof(pechProto->info.strKey)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
             break;
         case 29://manager passwd
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnSysVersion);
-            sprintf(passwd, "%s", result_input);
+            cfg_set_string(pathSysCfg, result_input, "%s", jnSysVersion);
+            memset(passwd, '\0', strlen(passwd));
+            strncpy(passwd, result_input, sizeof(passwd)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
             break;
-        case 30://枪数
-            tmpU8 = atoi(result_input);
-            if (tmpU8 != 1)
+        case 30://接触点温度限制
+            tmpDouble = atof(result_input);
+            if ((tmpDouble > 0) && (tmpDouble <= 120))
             {
-                tmpU8 = 2;
+                pEVSE->info.dACTempUpperLimits = tmpDouble;
+                pCon_tmp = CONGetHandle(0);
+                pCon_tmp->info.dACTempUpperLimits = tmpDouble;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnACTempUpperLimits);
+                pCon_tmp = CONGetHandle(1);
+                pCon_tmp->info.dACTempUpperLimits = tmpDouble;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon_tmp->info.ucCONID, jnACTempUpperLimits);
             }
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
-            pEVSE->info.ucTotalCON = tmpU8;
-            if (tmpU8 == 1)
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
+            break;
+        case 31://枪数
+            tmpU8 = atoi(result_input);
+            if ((tmpU8 == 1) && (pEVSE->info.ucTotalCON != tmpU8))
             {
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s",jnPhaseLine);    
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+                tmpU8 = 2;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);                
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                tmpU8 = 1;
+                pEVSE->info.ucTotalCON = tmpU8;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
+            }
+            else if ((tmpU8 == 2) && (pEVSE->info.ucTotalCON != tmpU8))
+            {   
+                tmpU8 = 2;
+                pEVSE->info.ucTotalCON = tmpU8;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+                tmpU8 = 3;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, jnPhaseLine);    
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
             }
             else
             {
-                tmpU8 = 3;
-                cfg_set_uint8(pathEVSECfg, &tmpU8,jnPhaseLine);    
+                ;
             }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
             break;
-        case 31:
-            result_input[16] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetHostName);
-            strcpy(ifconfig.info.strHostName, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
+        case 32://电相
+            tmpU8 = atoi(result_input);
+            if ((tmpU8 == 1)&&(pEVSE->info.ucPhaseLine != 1))
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+                pEVSE->info.ucPhaseLine = tmpU8;
+                tmpU8 = 2;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower); 
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+            }
+            else if ((tmpU8 == 3) && (pEVSE->info.ucPhaseLine != 3))
+            {
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
+                pEVSE->info.ucPhaseLine = tmpU8;
+                tmpU8 = 3;
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+            }
+            else
+            {
+                ;
+            }
             break;
-        case 32:
-            result_input[17] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMAC);
-            strcpy(ifconfig.info.strMAC, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDC);
+        case 33://电表
+            tmpU8 = atoi(result_input);
+            if ((tmpU8 == 1 || tmpU8 == 2) && ((int)xSysconf.xModule.use_meter != tmpU8))
+            {
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpU8 = 1;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);  
+                tmpDouble = 220 * 32.0 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower); 
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
+            }
+            else if ((tmpU8 == 3 || tmpU8 == 4) && ((int)xSysconf.xModule.use_meter != tmpU8))
+            {
+                cfg_set_uint8(pathSysCfg, &tmpU8, "%s", jnSysUSE_Meter);
+                tmpU8 = 3;
+                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine); 
+                tmpDouble = 220 * 63.0 * 3 / 1000;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 0, jnRatedPower); 
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, 1, jnRatedPower);
+                NVIC_SystemReset();
+                WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDD);
+            }
+            else 
+            {
+                ;
+            }
             break;
         case 34:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetIP);
-            strcpy(ifconfig.info.strIP, result_input);            
+            //result_input[16] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetHostName);
+            memset(ifconfig.info.strHostName, '\0', strlen(ifconfig.info.strHostName));
+            strncpy(ifconfig.info.strHostName, result_input, sizeof(ifconfig.info.strHostName)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
             break;
         case 35:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetMask);
-            strcpy(ifconfig.info.strMask, result_input);            
+            //result_input[17] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMAC);
+            memset(ifconfig.info.strMAC, '\0', strlen(ifconfig.info.strMAC));
+            strncpy(ifconfig.info.strMAC, result_input, sizeof(ifconfig.info.strMAC)-1);            
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDF);
             break;
-        case 36:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetGate);
-            strcpy(ifconfig.info.strGate, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID10);
-            break;
         case 37:
-            result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS1);
-            strcpy(ifconfig.info.strDNS1, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID10);
+            //result_input[15] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetIP);
+            memset(ifconfig.info.strIP, '\0', strlen(ifconfig.info.strIP));
+            strncpy(ifconfig.info.strIP, result_input, sizeof(ifconfig.info.strIP)-1);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
             break;
         case 38:
-            result_input[15] = '\0';
+            //result_input[15] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
+            memset(ifconfig.info.strMask, '\0', strlen(ifconfig.info.strMask));
+            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask)-1);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID12);
+            break;
+        case 39:
+            //result_input[15] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
+            memset(ifconfig.info.strGate, '\0', strlen(ifconfig.info.strGate));
+            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate)-1);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID13);
+            break;
+        case 40:
+            //result_input[15] = '\0';
+            cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
+            memset(ifconfig.info.strDNS1, '\0', strlen(ifconfig.info.strDNS1));
+            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1)-1);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
+            break;
+        case 41:
+            //result_input[15] = '\0';
             cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
-            strcpy(ifconfig.info.strDNS2, result_input);            
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
+            memset(ifconfig.info.strDNS2, '\0', strlen(ifconfig.info.strDNS2));
+            strncpy(ifconfig.info.strDNS2, result_input, sizeof(ifconfig.info.strDNS2)-1);            
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID15);
             break;
         }
         break;
@@ -1315,14 +1511,16 @@ static uint8_t Value_Check()
         switch (htmpID)
         {
         case 20:
-            cfg_set_string(pathEVSECfg, result_input, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnQRCode);
-            //pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
-            memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
-            strcpy(pCon->info.strQRCode, result_input);
-//            GUI_QR_Delete(qr_hmem);
-//            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
-//            GUI_QR_GetInfo(qr_hmem, &QR_info);
-
+            if ((strlen(result_input) > 0) && (strlen(result_input) <= 64))
+            {                
+                cfg_set_string(pathEVSECfg, result_input, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnQRCode);
+                //pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
+                memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
+                strncpy(pCon->info.strQRCode, result_input, sizeof(pCon->info.strQRCode));
+                //            GUI_QR_Delete(qr_hmem);
+                //            qr_hmem = GUI_QR_Create(pCon->info.strQRCode, 7, GUI_QR_ECLEVEL_L, 0);
+                //            GUI_QR_GetInfo(qr_hmem, &QR_info);   
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
             break;
         case 21:
@@ -1349,64 +1547,23 @@ static uint8_t Value_Check()
             pCon->info.ucSocketType = result_input[0];
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
-        case 22:// 178 - 280  > lower
+        case 22://lowest-280
             tmpDouble = atof(result_input);
-            if (tmpDouble >= 280.0)
-            {
-                tmpDouble = 280.0;
-            }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble > pCon->info.dVolatageLowerLimits)
+            if ((tmpDouble > pCon->info.dVolatageLowerLimits) && (tmpDouble <= 280))
             {
                 pCon->info.dVolatageUpperLimits = tmpDouble;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageUpperLimits);
             }
-            else if (tmpDouble <= 280.0
-                &&tmpDouble >= 178.0
-                &&tmpDouble <= pCon->info.dVolatageLowerLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits + 1.0;
-            }
-            else if (tmpDouble < 178.0)
-            {
-                tmpDouble = 178.0;
-            }
-            pCon->info.dVolatageUpperLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageUpperLimits);
             //pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
-        case 23:    // 100 - 240 < upper
+        case 23:    // 100 - highest
             tmpDouble = atof(result_input);
-            if (tmpDouble < 100.0)
-            {
-                tmpDouble = 100.0;
-            }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble < pCon->info.dVolatageUpperLimits)
+            if ((tmpDouble >= 100) && (tmpDouble < pCon->info.dVolatageUpperLimits))
             {
                 pCon->info.dVolatageLowerLimits = tmpDouble;
+                cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageLowerLimits);
             }
-            else if (tmpDouble >= 100.0
-                && tmpDouble <= 240.0
-                && tmpDouble >= pCon->info.dVolatageUpperLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
-            }
-            else if (tmpDouble > 240.0
-            &&tmpDouble >= pCon->info.dVolatageUpperLimits)
-            {
-                tmpDouble = pCon->info.dVolatageLowerLimits - 1.0;
-            }
-            else if (tmpDouble > 240.0
-                &&tmpDouble < pCon->info.dVolatageUpperLimits)
-            {
-                tmpDouble = 240.0;
-            }
-
-            pCon->info.dVolatageLowerLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageLowerLimits);
             //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
             break;
@@ -1415,152 +1572,49 @@ static uint8_t Value_Check()
             //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
-        case 25://交流输入端子温度上限 -50 120 > lower
+        case 25:
             tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
+            if (pEVSE->info.ucPhaseLine == 3)
             {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble > pCon->info.dACTempLowerLimits)
-            {
-                pCon->info.dACTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble <= pCon->info.dACTempLowerLimits)
-            {
-                tmpDouble = pCon->info.dACTempLowerLimits + 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dACTempUpperLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnACTempUpperLimits);
-            //pCon->info.SetCONCfg(pCon, jnACTempUpperLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
-            break;
-        case 26://-50 120 < upper
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble < pCon->info.dACTempUpperLimits)
-            {
-                pCon->info.dACTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble >= pCon->info.dACTempUpperLimits)
-            {
-                tmpDouble = pCon->info.dACTempUpperLimits - 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-            pCon->info.dACTempLowerLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnACTempLowerLimits);
-           // pCon->info.SetCONCfg(pCon, jnACTempLowerLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
-            break;
-        case 27://插座温度上限
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble > pCon->info.dSocketTempLowerLimits)
-            {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble <= pCon->info.dSocketTempLowerLimits)
-            {
-                tmpDouble = pCon->info.dSocketTempLowerLimits + 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dSocketTempUpperLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnSocketTempUpperLimits); 
-            //pCon->info.SetCONCfg(pCon, jnSocketTempUpperLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
-            break;
-        case 28:
-            tmpDouble = atof(result_input);
-            if (tmpDouble >= 120.0)
-            {
-                tmpDouble = 120.0;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble < pCon->info.dSocketTempUpperLimits)
-            {
-                pCon->info.dSocketTempUpperLimits = tmpDouble;
-            }
-            else if (tmpDouble <= 120.0
-                &&tmpDouble >= (-50.0)
-                &&tmpDouble >= pCon->info.dSocketTempUpperLimits)
-            {
-                tmpDouble = pCon->info.dSocketTempUpperLimits - 1.0;
-            }
-            else if (tmpDouble < (-50.0))
-            {
-                tmpDouble = -50.0;
-            }
-
-            pCon->info.dSocketTempLowerLimits = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnSocketTempLowerLimits); 
-            //pCon->info.SetCONCfg(pCon, jnSocketTempLowerLimits, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
-            break;
-        case 29:
-            tmpDouble = atof(result_input);
-            pCon->info.dRatedCurrent = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedCurrent); 
-            //pCon->info.SetCONCfg(pCon, jnRatedCurrent, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
-            break;
-        case 30:
-            tmpDouble = atof(result_input);
-            pCon->info.dRatedPower = tmpDouble;
-            cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
-            //pCon->info.SetCONCfg(pCon, jnRatedPower, &tmpDouble, ParamTypeDouble);
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDA);
-            break;
-        case 31:
-            tmpU8 = atoi(result_input);
-            if (tmpU8 != 1)
-            {
-                tmpU8 = 3;
-            }
-            //pCon_for_PhaseLine = CONGetHandle(0);
-            cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnPhaseLine);    
-            //pCon_for_PhaseLine = CONGetHandle(1);
-            //pCon->info.ucPhaseLine = tmpU8;
-            if (tmpU8 == 1)
-            {
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+                if ((tmpDouble>=16) && (tmpDouble <= 63))
+                {
+                    pCon->info.dRatedPower = 220 * tmpDouble * 3 / 1000;
+                    pCon->info.dRatedCurrent  = tmpDouble;
+                    cfg_set_double(pathEVSECfg, &pCon->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower);
+                }
             }
             else
             {
-                tmpU8 = 2;
-                cfg_set_uint8(pathEVSECfg, &tmpU8, "%s", jnTotalCON);
+                if ((tmpDouble >=16) && (tmpDouble <= 32))
+                {
+                    pCon->info.dRatedPower = 220 * tmpDouble / 1000;
+                    pCon->info.dRatedCurrent  = tmpDouble;
+                    cfg_set_double(pathEVSECfg, &pCon->info.dRatedPower, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower);
+                }
+            }             
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
+            break;
+        case 26:
+            tmpDouble = atof(result_input);
+            if (pEVSE->info.ucPhaseLine == 3)
+            {
+                if ((tmpDouble >= (16 * 220 * 3 / 1000.0))&&(tmpDouble <= (63 * 220 * 3 / 1000.0)))
+                {
+                    pCon->info.dRatedCurrent = tmpDouble * 1000.0 / (220 * 3);
+                    pCon->info.dRatedPower = tmpDouble;
+                    cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
+                }
             }
-            NVIC_SystemReset();
-            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDB);
+            else
+            {
+                if ((tmpDouble > (16 * 220 / 1000.0))&&(tmpDouble <=  (32 * 220 / 1000.0)))
+                {
+                    pCon->info.dRatedCurrent = tmpDouble * 1000.0 / 220;
+                    pCon->info.dRatedPower = tmpDouble;
+                    cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnRatedPower); 
+                }
+            }
+            WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID6);
             break;
         }
         break;
@@ -1612,6 +1666,10 @@ static void Jump_Screen(WM_HWIN hWin, uint8_t IS_jump)
         if (IS_jump == 0)
         {
             CreateManagerCommon();
+        }
+        else if (IS_jump == 2)
+        {
+            CreateSuperManager();
         }
         else
         {
@@ -1677,7 +1735,8 @@ static void _cbFrame(WM_MESSAGE * pMsg)
     WM_HWIN      hItem;
     int          NCode;
     int          Id;
-
+    uint8_t     result;
+    
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:
@@ -1691,12 +1750,21 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                WM_SetFocus(hMulti);
-                /**< 进入密码、设置值操作 */
-                if (Value_Check() == VALUE_OK_SAV)
+                //if (!WM_IsWindow(hwin_password))
+                if(flag_password_error_prompt == 0)
                 {
-                    //跳页操作
-                    Jump_Screen(pMsg->hWin, 0);
+                    WM_SetFocus(hMulti);
+                    /**< 进入密码、设置值操作 */
+                    result = Value_Check();
+                    if (result == VALUE_OK_SAV)
+                    {
+                        //跳页操作
+                        Jump_Screen(pMsg->hWin, 0);
+                    }
+                    else if (result == VALUE_OK_SAV_SUPER)
+                    {
+                        Jump_Screen(pMsg->hWin, 2);
+                    }   
                 }
                 break;
             }
@@ -1705,7 +1773,11 @@ static void _cbFrame(WM_MESSAGE * pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                Jump_Screen(pMsg->hWin, 1);
+                //if (!WM_IsWindow(hwin_password))
+                if(flag_password_error_prompt == 0)
+                {
+                    Jump_Screen(pMsg->hWin, 1);                
+                }
                 break;
             }
             break;
@@ -1809,7 +1881,7 @@ void Keypad_GetValue(uint8_t optios, char *varname)
 
 void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkWin, uint8_t *name_p, uint8_t *eg_p)
 {
-    WM_HWIN hFrame;
+   // WM_HWIN hFrame;
     CON_t       *pCont;
 
     pCont = CONGetHandle(0);
@@ -1886,14 +1958,21 @@ void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkW
         _aahEditVar = TEXT_CreateEx(30, 45, 140, 25, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, 13, name_p);
         TEXT_SetFont(_aahEditVar, &SIF16_Font);
         TEXT_SetTextColor(_aahEditVar, GUI_BLACK);
-        _aahEditEg = TEXT_CreateEx(15, 70, 160, 25, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, 13, name_p);
-        TEXT_SetFont(_aahEditEg, &SIF16_Font);
+        _aahEditEg = TEXT_CreateEx(10, 70, 160, 25, WM_GetClientWindow(hFrame), WM_CF_SHOW, 0, 13, name_p);
+        if (id == 33)//如果是电表设置
+        {
+            TEXT_SetFont(_aahEditEg, &SIF12_Font);
+        }
+        else
+        {
+            TEXT_SetFont(_aahEditEg, &SIF16_Font);
+        }
         TEXT_SetTextColor(_aahEditEg, GUI_BLACK);
         TEXT_SetText(_aahEditEg, eg_p);
-        if (id == 21)
-        {
-            MULTIEDIT_SetText(hMulti, pEVSE->info.strID);
-        }
+//        if (id == 21)
+//        {
+//            MULTIEDIT_SetText(hMulti, pEVSE->info.strID);
+//        }
         break;
 
     case CONSET_VALUE:

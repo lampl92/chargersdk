@@ -25,6 +25,14 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Label="VisualGDBPackageDefinitions">
+    <ToolchainID>com.visualgdb.arm-eabi</ToolchainID>
+    <BSP_ID>com.visualgdb.bsp.in-place</BSP_ID>
+    <BSP_VERSION>1.0</BSP_VERSION>
+  </PropertyGroup>
+  <ImportGroup Label="VisualGDBFindComponents">
+    <Import Project="$(LOCALAPPDATA)\VisualGDB\FindComponents.props" />
+  </ImportGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -38,11 +46,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os/FreeRTOS;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/hmi;../../../src/hmi/lcd;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/net/mbedTLS/include;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer;../../../src/net/user;../../../src/middlewares/unzip101e;../../../src/middlewares/libmodbus-3.1.4/src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
-    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\hmi\qrencode\inc;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\net\mbedTLS\include;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\unzip101e;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(BSP_ROOT)stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
     <NMakeOutput>$(ProjectDir)chargesdk-Debug.vgdbsettings</NMakeOutput>
     <IncludePath />
     <ReferencePath />
@@ -50,11 +58,11 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>.;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\arm-eabi\thumb\fpu\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\6.2.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\6.2.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;../../../src/app;../../../src/cli;../../../src/drivers/hal/CMSIS_RTOS;../../../src/drivers/hal/CMSIS/Include;../../../src/drivers/hal/CMSIS/Device/ST/STM32F4xx/Include;../../../src/drivers/hal/STM32F4xx_HAL_Driver/Inc;../../../src/drivers/bsp/inc;../../../src/drivers/device/inc;../../../src/os/FreeRTOS;../../../src/os/FreeRTOS/Source/include;../../../src/os/FreeRTOS/Source/portable/GCC/ARM_CM4F;../../../src/middlewares/tinysh;../../../src/middlewares/STemWin/inc;../../../src/middlewares/STemWin/Config;../../../src/middlewares/STemWin/Demo;../../../src/middlewares/userlib/inc;../../../src/middlewares/cJSON;../../../src/middlewares/gdsl-1.8/src;../../../src/middlewares/gdsl-1.8/src/examples;../../../src/middlewares/STemWin/BMP;../../../src/hmi;../../../src/hmi/lcd;../../../src/hmi/qrencode/inc;../../../src/middlewares/STemWin/SIF;../../../src/net/mbedTLS/include;../../../src/middlewares/yaffs2;../../../src/middlewares/yaffs2/direct;../../../src/middlewares/yaffs2/direct/nanddrv;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/common;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_tcp;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_crypto;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/cyclone_ssl;../../../src/net/CycloneTCP_SSL_Crypto_Open_1_8_0/customer;../../../src/net/user;../../../src/middlewares/unzip101e;../../../src/middlewares/libmodbus-3.1.4/src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
-    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\hmi\qrencode\inc;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\net\mbedTLS\include;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\unzip101e;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(BSP_ROOT)stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
     <NMakeOutput>$(ProjectDir)chargesdk-Release.vgdbsettings</NMakeOutput>
     <IncludePath />
     <ReferencePath />
@@ -64,7 +72,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\..\readme.md" />
+    <None Include="..\..\..\doc\readme.md" />
     <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c" />
     <None Include="chargesdk-Debug.vgdbsettings" />
     <None Include="chargesdk-Release.vgdbsettings" />
@@ -125,6 +133,8 @@
     <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
@@ -136,16 +146,18 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_user_lib.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\led_control.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\Metering.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\myiic.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\retarget.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\SPI_GPIO.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ST_LIS2DH12.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\user_app.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\buzzer.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\card_m1.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\led.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c" />
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c" />
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_ADE7953.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
@@ -183,11 +195,8 @@
     <ClCompile Include="..\..\..\src\hmi\aHomeDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\b0selectgunDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\CardInfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c" />
     <ClCompile Include="..\..\..\src\hmi\chargedoneinfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c" />
     <ClCompile Include="..\..\..\src\hmi\charginginfoDLG.c" />
-    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c" />
     <ClCompile Include="..\..\..\src\hmi\b1selectpatternbetterDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\creadystartDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\d0nettimeoutDLG.c" />
@@ -197,6 +206,7 @@
     <ClCompile Include="..\..\..\src\hmi\eplugtimeoutDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\EquipmentFailureNoStart.c" />
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c" />
+    <ClCompile Include="..\..\..\src\hmi\indicator_light.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_alarm_log.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_common.c" />
@@ -205,7 +215,7 @@
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_states_info_win.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_Info.c" />
     <ClCompile Include="..\..\..\src\hmi\manager_set\manager_sys_set.c" />
-    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c" />
+    <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdError.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdInput.c" />
     <ClCompile Include="..\..\..\src\hmi\PwdLimted.c" />
@@ -213,26 +223,17 @@
     <ClCompile Include="..\..\..\src\hmi\SkinCheckBox.c" />
     <ClCompile Include="..\..\..\src\hmi\GUI_backstage.c" />
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c" />
-    <ClCompile Include="..\..\..\src\hmi\HomePage.c" />
     <ClCompile Include="..\..\..\src\hmi\selectpatternDLG.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\lcddrv.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\ltdc.c" />
     <ClCompile Include="..\..\..\src\hmi\lcd\touch.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c" />
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c" />
     <ClCompile Include="..\..\..\src\hmi\pyinput.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_button.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_buttonSKB.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c" />
     <ClCompile Include="..\..\..\src\hmi\SKIN_progbarmeter.c" />
     <ClCompile Include="..\..\..\src\hmi\Touch_Disp_Module.c" />
+    <ClCompile Include="..\..\..\src\hmi\UpdateSystem.c" />
     <ClCompile Include="..\..\..\src\middlewares\cJSON\cJSON.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\gdsl-1.8\src\gdsl_perm.c" />

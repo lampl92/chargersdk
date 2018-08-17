@@ -167,7 +167,7 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     if(statOrder == STATE_ORDER_FINISH)
     {
-        pPeriodStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
+        pPeriodStatus->tEndTime = now; //pPeriodStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
     }
 
     /*2. 汇总时段*/
@@ -224,6 +224,7 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucCONID = pCON->info.ucCONID;
         pCON->order.dLimitFee = pRFIDDev->order.dLimitFee;
         pCON->order.ulLimitTime = pRFIDDev->order.ulLimitTime;
+        pCON->order.dLimitEnergy = pRFIDDev->order.dLimitEnergy;
         strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
         break;
     case STATE_ORDER_MAKE:

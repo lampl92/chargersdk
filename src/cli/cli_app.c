@@ -6,21 +6,7 @@
 
 extern void testBnWList(void);
 
-
-void Get_ChipID(void)
-{
-    int i;
-    __IO uint8_t *pid;
-    pid = (__IO uint8_t *)0x1FFF7A10;
-    printf_safe("id :\n");
-    for (i = 0; i < 12; i++)
-    {
-        printf_safe("%02X ",pid[i]);
-    }
-    printf_safe("\n");
-}
-
-
+extern void Get_ChipID(void);
 void cli_hello_fnt(int argc, char **argv)
 {
     int i;
@@ -32,8 +18,9 @@ void cli_hello_fnt(int argc, char **argv)
     Get_ChipID();
     //testBnWList();
     //eth_main();
-    for (i = 0; i < 1000; i++)
+    for (i = 0; i < 100000; i++)
     {
+        //printTime(time(NULL));
         //test_cfg_set(i);
     }
     //test_cfg_get();
@@ -129,9 +116,7 @@ void fsmc_sdram_test()
 
 void cli_testsdram_fnt(int argc, char **argv)
 {
-    taskENTER_CRITICAL();
     fsmc_sdram_test();
-    taskEXIT_CRITICAL();
 }
 
 tinysh_cmd_t cli_testsdram_cmd =

@@ -178,7 +178,7 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, char *jnItemString, void *pvCfgParam
         }
     }
     while(jsItem != NULL);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj);
+    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj, 0);
 
     return errcode;
 }
@@ -217,7 +217,8 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
         jsCfgObj = (cJSON *)pvCfgObj;
     }
     
-    cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
+    //cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
+    sprintf(pEVSE->info.strSN, "%s", g_strChipID);
     cfgobj_get_string(jsCfgObj, pEVSE->info.strID, "%s", jnEVSEID);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucType, "%s", jnEVSEType);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucPhaseLine, "%s", jnPhaseLine);
@@ -449,7 +450,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -457,7 +458,7 @@ static ErrorCode_t GetAC_A_Temp_in(void *pvEVSE)
     tmpACTemp = 25;
 #else
     tmpACTemp = (double)get_dc_massage(TEMP_L_IN); 
-	if (tmpACTemp > 200 || tmpACTemp < -40)
+	if (tmpACTemp > 200 || tmpACTemp < -60)
 	{
 		errcode = ERR_EVSE_AC_A_TEMP_DECT_FAULT;
 	}
@@ -482,7 +483,7 @@ static ErrorCode_t GetAC_B_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -511,7 +512,7 @@ static ErrorCode_t GetAC_C_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -541,7 +542,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
 	ErrorCode_t errcode;
 
 	pEVSE = (EVSE_t *)pvEVSE;
-	tmpACTemp = 0;
+	tmpACTemp = -60;
 	errcode = ERR_NO;
 
 	    /** 实现代码  */
@@ -549,7 +550,7 @@ static ErrorCode_t GetAC_N_Temp_in(void *pvEVSE)
     tmpACTemp = 25;
 #else
     tmpACTemp = (double)get_dc_massage(TEMP_N_IN); 
-	if (tmpACTemp > 200 || tmpACTemp < -40)
+	if (tmpACTemp > 200 || tmpACTemp < -60)
 	{
 		errcode = ERR_EVSE_AC_N_TEMP_DECT_FAULT;
 	}
@@ -613,11 +614,12 @@ static void CONInit(void)
 }
 void EVSEinit(void)
 {
-	char str[17] = "3000000000000002";
+    char str[17] = "3000000000001018";
+    char key[] = "0123456789abcder";
     uint8_t tmp = 2;
     double dtmp = 41;
     pEVSE = EVSECreate();
-    
+#if 0
 //    tmp = 2;
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON); 
 //    tmp = 3;
@@ -626,6 +628,7 @@ void EVSEinit(void)
 //    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);//网络类型 
 //    ifconfig.info.ucAdapterSel = 1;
 //    xSysconf.xModule.use_gprs = 2;
+//    cfg_set_uint8(pathNetCfg, &ifconfig.info.ucAdapterSel, "%s", jnNetAdapter);
 //    cfg_set_uint8(pathSysCfg, &xSysconf.xModule.use_gprs, "%s", jnSysUSE_GPRSModem);
     
 //    dtmp = 41;
@@ -634,8 +637,14 @@ void EVSEinit(void)
 //    
 //    cfg_set_string(pathEVSECfg, str, "%s", jnEVSEID);    
 //    cfg_set_string(pathEVSECfg, str, "%s:0.%s", jnCONArray, jnQRCode);    
+//    cfg_set_string(pathProtoCfg, key, "%s", jnProtoKey);    
 //    cfg_set_uint8(pathEVSECfg, &tmp, "%s", jnTotalCON);    
-	    //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, str, ParamTypeString);
+    
+//    char tmpip[] = "v.daizc.com";
+//    uint16_t tmport = 6999;
+//    cfg_set_string(pathProtoCfg, tmpip, "%s", jnProtoServerIP);
+//    cfg_set_uint16(pathProtoCfg, &tmport, "%s", jnProtoServerPort);
+#endif
     THROW_ERROR(defDevID_File, pEVSE->info.GetEVSECfg(pEVSE, NULL), ERR_LEVEL_WARNING, "EVSEinit GetEVSECfg");
     CONInit();
     

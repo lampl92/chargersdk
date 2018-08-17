@@ -5,8 +5,9 @@
 #include "touchtimer.h"
 #include "interface.h"
 #include "stringName.h"
+#include "file_op.h"
 
-static TaskHandle_t xHandleTaskReadPic = NULL;
+TaskHandle_t xHandleTaskReadData = NULL;
 
 I32 memoryfree;
 uint16_t calebrate_done = 0;
@@ -16,6 +17,8 @@ uint8_t current_page = 0;
 GUI_HMEM    qr_hmem;
 WM_HWIN cur_win;//记录当前界面
 WM_HWIN startUpWin;//开机窗口句柄
+char QR_saveA[defQRCodeLength];//保存的枪A二维码
+char QR_saveB[defQRCodeLength];//保存的枪B二维码
 
 Fun home;
 //int QR_Width;//NUmber of "Moudle"
@@ -23,18 +26,14 @@ Fun home;
 
 GUI_QR_INFO QR_info;
 
-static void vTaskStart_up(void *pvParameters)
+int flag_read_data = 0;//开机界面存在与否标志,1表示存在,0表示不存在
+
+static void vTask_read_data(void *pvParameters)
 {
-    WM_MULTIBUF_Enable(1);
-    GUI_UC_SetEncodeUTF8();
-    createStartUpMemdev();
-    startUpWin = CreatestartUpDLG();
-    while (1)
-    {
-        GUI_Delay(8000);
-        vTaskDelay(100);
-    }
-    //vTaskDelete(xTaskGetCurrentTaskHandle());
+    createfont();
+    creatememdev();
+    flag_read_data = 1;
+    vTaskDelete(NULL);
 }
 
 
@@ -89,7 +88,6 @@ void MainTask1(void)
     }
 }
 
-
 void MainTask(void)
 {
     CON_t *pCON;
@@ -99,45 +97,35 @@ void MainTask(void)
         GUI_Touch_Calibrate();
         calebrate_done = 1;
     }
-    xTaskCreate(vTaskStart_up, "vTaskStart_up", 1024*20, NULL, 4, &xHandleTaskReadPic);
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        pCON = CONGetHandle(0);
+        strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
+        home = CreateHome0DLG;
+    }
+    else
+    {
+        pCON = CONGetHandle(0);
+        strncpy(QR_saveA, pCON->info.strQRCode, defQRCodeLength);
+        pCON = CONGetHandle(1);
+        strncpy(QR_saveB, pCON->info.strQRCode, defQRCodeLength);
+        home = CreateHomeDLG;    
+    } 
     if (calebrate_done != 0xff)
     {
         WM_MULTIBUF_Enable(1);
-//        WM_SetDesktopColor(GUI_BLUE);//设置背景颜色
-//        GUI_Exec();
-        creatememdev();
-        createfont();
+        GUI_UC_SetEncodeUTF8();
+        createStartUpMemdev();    
+        if (get_bmp_check_tmp() == 3)
+        {
+            vTaskSuspend(NULL);
+        }
+        startUpWin = CreatestartUpDLG();
+        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
 //        memoryfree = GUI_ALLOC_GetNumFreeBytes();
-        GUI_UC_SetEncodeUTF8();
-        GUI_EndDialog(startUpWin, 0);
-        vTaskDelete(xHandleTaskReadPic);
-//        WM_HideWindow(_hWinAdvertizement);
-//        WM_ShowWindow(cur_win);
-//        CreateKeyBoardWindow();
-        if (pEVSE->info.ucTotalCON == 1)
-        {
-            home = CreateHome0DLG;
-        }
-        else
-        {
-            home = CreateHomeDLG;    
-        }        
-        //CreateManagerCommon();   
-        home();
-        //CreatePwdInput();
-    }
-    else
-    {
-        calebrate_done = 1;
-        WM_MULTIBUF_Enable(1);
-        WM_SetDesktopColor(GUI_WHITE);//设置背景颜色
-
-        GUI_UC_SetEncodeUTF8();
-
-        CreateHomeDLG();
     }
     while (1)
     {

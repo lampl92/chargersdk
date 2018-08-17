@@ -1,4 +1,3 @@
-
 #ifndef _EVSE_DEFINE_H
 #define _EVSE_DEFINE_H
 
@@ -39,7 +38,7 @@
 #define BIT_31 ( 1 << 31 )
 
 /*---------------------------------------------------------------------------/
-/ xEventGroup
+/ xEventGroup 0~23是事件标志位, 第24~31位设置成相应的控制位
 /---------------------------------------------------------------------------*/
 /*------pRFIDDev->xHandleEventGroupRFID*/
 #define defEventBitGotIDtoRFID          BIT_0             //获取到ID，发送到RFID任务
@@ -54,7 +53,7 @@
 
 #define defEventBitOrder_RemoteOrderOK           BIT_4
 #define defEventBitOrder_RemoteRTDataOK          BIT_5
-#define defEventBitOrder_StoreOK                 BIT_6
+#define defEventBitOrder_RemoteOrderTimeOut      BIT_6
 
 #define defEventBitOrderStopTypeCurr             BIT_7
 #define defEventBitOrderStopTypeScram            BIT_8
@@ -66,12 +65,11 @@
 #define defEventBitOrderStopTypeFull             BIT_14
 #define defEventBitOrderStopTypeUnPlug           BIT_15
 #define defEventBitOrderStopTypeOffline          BIT_16
-
-#define defEventBitOrderMakeFinish               BIT_17  //等待处不清除, 该事件置位后整个订单完成
-#define defEventBitOrderMakeFinishToRemote       BIT_18
-#define defEventBitOrderFinishToHMI              BIT_19
-
-#define defEventBitOrderTmpTimer                 BIT_20
+#define defEventBitOrderStopTypeTemp             BIT_17
+#define defEventBitOrderStopTypeRemoteEmergencyStop   BIT_18
+#define defEventBitOrderMakeFinish               BIT_19  //等待处不清除, 该事件置位后整个订单完成
+#define defEventBitOrderMakeFinishToRemote       BIT_20
+#define defEventBitOrderTmpTimer                 BIT_21
 
 #define defEventBitOrderUseless      (defEventBitOrder_RemoteOrderOK | \
                                       defEventBitOrder_RemoteRTDataOK)
@@ -80,20 +78,14 @@
 #define defEventBitRemoteError          BIT_0
 
 /*------xHandleEventTCP*/
-#define defEventBitTCPReConnect         BIT_2
-#define defEventBitTCPClientSendReq     BIT_3
-#define defEventBitTCPClientSendOK      BIT_4
-#define defEventBitTCPConnectOK         BIT_5 //接收不清除， 服务器连接成功
-#define defEventBitTCPConnectFail       BIT_6 //接收主动清除
-#define defEventBitTCPClientFlushBuff   BIT_8
 #define defEventBitPPPDiagOK            BIT_9
 #define defEventBitPPPClosed            BIT_10
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0
-#define defEventBitHMI_UP_FAILD             BIT_7
-#define defEventBitHMI_TimeOut              BIT_3
-    
+#define defEventBitHMI_UP_FAILD             BIT_1
+#define defEventBitHMI_TimeOut              BIT_2
+#define defEventBitHMI_REQ_StartFTP         BIT_3 
 
 //#define defEventBitHMI_ChargeReqDoneOK  BIT_4
 
@@ -113,14 +105,15 @@
 #define defEventBitExceptionVoltTimer   BIT_4
 #define defEventBitExceptionCurrTimer   BIT_5
 #define defEventBitExceptionChargeTimer BIT_6
-#define defEventBitExceptionFreqTimer   BIT_9
+#define defEventBitExceptionFreqTimer   BIT_7
 
-#define defEventBitExceptionLimitEnergy  BIT_10  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
-#define defEventBitExceptionLimitFee    BIT_11  
-#define defEventBitExceptionLimitTime   BIT_12  
-#define defEventBitExceptionRemoteStop  BIT_13  //远程停止
-#define defEventBitExceptionRFIDStop    BIT_14  //刷卡停止
-#define defEventBitExceptionOfflineStop    BIT_15  //网络离线
+#define defEventBitExceptionLimitEnergy  BIT_8  //把LimitEnergy放在这里，Exception名字虽说有点不搭，但都是满足条件即停止充电。
+#define defEventBitExceptionLimitFee    BIT_9  
+#define defEventBitExceptionLimitTime   BIT_10  
+#define defEventBitExceptionRemoteStop  BIT_11  //远程停止
+#define defEventBitExceptionRFIDStop    BIT_12  //刷卡停止
+#define defEventBitExceptionOfflineStop    BIT_13  //网络离线
+#define defEventBitExceptionRmtEmergencyStop    BIT_14  //网络急停
 
 /*------pCON->status.xHandleEventCharge*/
 #define defEventBitCONAuthed            BIT_0       //帐户认证OK
@@ -178,10 +171,10 @@
 #define defEventBitTimerCBDataRefresh       BIT_7
 #define defEventBitTimerCBHeartbeat         BIT_8
 #define defEventBitTimerCBStatus            BIT_9
+#define defEventBitTimerCBStoreLog          BIT_10
 
 /*pProto->pCMD[i]->xHandleEventCmd*/
-#define defEventBitProtoCmdHandled          BIT_0
-
+#define defEventBitProtoCmdDataTimeout      BIT_1
 
 /*充电桩类型*/
 #define defEVSEType_DC                  1

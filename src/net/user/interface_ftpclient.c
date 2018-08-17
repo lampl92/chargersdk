@@ -35,6 +35,10 @@ static int _ftp_bg_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
     pechProto->info.ftp.ftp_proc.ulFTPReOpenCnt = 1;
     pechProto->info.ftp.ftp_proc.ulRecvFileSize = 0;
     
+#if _EVSE_USING_GUI
+    LCD_Clear(BLUE);
+#endif
+    
     return 0;
 }
 
@@ -54,6 +58,7 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     int n;
     int res;
+    char disp_str[200] = { 0 };
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
     n = yaffs_write(cctx->fd, data_in, len);
     if (n != len)
@@ -63,8 +68,19 @@ static int _ftp_tof_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
         return res;
     }
     pechProto->info.ftp.ftp_proc.ulRecvFileSize += len;
-    TRACE_DEBUG("filesize = %d（recv %d）\r", pechProto->info.ftp.ftp_proc.ulRecvFileSize, len);
-    //vTaskDelay(1);//给其他任务喘气的机会
+    pechProto->info.ftp.ftp_proc.precent = (double)(pechProto->info.ftp.ftp_proc.ulRecvFileSize) / cctx->parent.fsize  * 100;
+    
+#if _EVSE_USING_GUI
+    sprintf(disp_str, "file:%s", cctx->parent.fname);
+    LCD_ShowString(100, 20, 300, 20, 16, disp_str);
+#endif
+    sprintf(disp_str, "download %d/%d(%d%%), recv %dByte", pechProto->info.ftp.ftp_proc.ulRecvFileSize, cctx->parent.fsize, pechProto->info.ftp.ftp_proc.precent, len);
+#if _EVSE_USING_GUI
+    LCD_ShowString(100, 40, 380, 20, 16, disp_str);
+#endif
+    TRACE_DEBUG("%s\r", disp_str);
+    vTaskDelay(1);
+    
     return 0;
 }
 
@@ -84,6 +100,7 @@ static int _ftp_end_cb(struct _ftp_ctx *ftp_ctx, char *data_in, uint32_t len)
 {
     struct _ftp_ctx_save_file *cctx = (struct _ftp_ctx_save_file*)ftp_ctx;
 
+    TRACE_DEBUG("\n");
     yaffs_close(cctx->fd);
     cctx->fd = -1;
     
@@ -109,7 +126,7 @@ static error_t ftp_recv_data(struct _ftp_ctx *ctx, net_device_t *net_dev)
     FtpClientContext ftpContext;
     char_t buffer[1500];
 
-    TRACE_INFO("\r\n\r\n解析FTP服务器域名...\r\n");
+    TRACE_INFO("\r\n\r\n解析FTP服务器域名%s...\r\n", ctx->ftp_server);
     error = getHostByName(net_dev->interface, ctx->ftp_server, &ipAddr, 0);
     if (error)
     {
@@ -193,6 +210,7 @@ int ftp_download_file(EchFtpCfg_t *pechFtp, net_device_t *net_dev)
     strcpy(ctx.parent.fname, pechFtp->strNewFileName);
     strcpy(ctx.parent.user, pechFtp->strUser);
     strcpy(ctx.parent.pass, pechFtp->strPassword);
+    ctx.parent.fsize = pechFtp->fsize;
     ctx.parent.on_bg = _ftp_bg_cb;
     ctx.parent.on_data = _ftp_tof_cb;
     ctx.parent.on_end = _ftp_end_cb;

@@ -93,7 +93,7 @@ void _error_print(modbus_t *ctx, const char *context)
 }
 static int nanosleep(const struct timespec *req, struct timespec *rem)
 {
-    osDelay(req->tv_nsec / 1000);
+    osDelay(req->tv_nsec / 1000000);
     return 0;
 }
 static void _sleep_response_timeout(modbus_t *ctx)

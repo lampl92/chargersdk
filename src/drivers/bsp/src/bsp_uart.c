@@ -273,6 +273,8 @@ void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
 {
     while ((USARTx_BASE->SR & USART_SR_TC) == 0)
         ;
+    while ((USARTx_BASE->SR & USART_SR_TXE) == 0) 
+        ;
     USARTx_BASE->DR = ch;
 }
 
@@ -280,12 +282,16 @@ uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len)
 {
     uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
+#if 0
     while (l > 0)
     {
         l--;
         __uart_putc(uart_driver[handle].UARTx_Handler.Instance, *data);
         data++;
     }
+#else
+    HAL_UART_Transmit(&uart_driver[handle].UARTx_Handler, (uint8_t *)data, len, 100);
+#endif
     osMutexRelease(uart_driver[handle].lock);
 
     return len;
@@ -308,7 +314,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_10; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -328,7 +333,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_3; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(USART2_IRQn);
@@ -347,7 +351,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_11; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(USART3_IRQn);
@@ -366,7 +369,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_11; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(UART4_IRQn);
@@ -386,7 +388,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_2; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(UART5_IRQn);
@@ -405,7 +406,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_7; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(USART6_IRQn);
@@ -424,7 +424,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
         HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
         GPIO_InitStruct.Pin = GPIO_PIN_6; //PIN_RX
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
         HAL_NVIC_EnableIRQ(UART7_IRQn);
@@ -435,30 +434,37 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 void USART1_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[0].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[0].UARTx_Handler, (uint8_t *)uart_driver[0].rbuff, 1);
 }
 void USART2_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[1].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[1].UARTx_Handler, (uint8_t *)uart_driver[1].rbuff, 1);
 }
 void USART3_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[2].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[2].UARTx_Handler, (uint8_t *)uart_driver[2].rbuff, 1);
 }
 void UART4_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[3].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[3].UARTx_Handler, (uint8_t *)uart_driver[3].rbuff, 1);
 }
 void UART5_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[4].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[4].UARTx_Handler, (uint8_t *)uart_driver[4].rbuff, 1);
 }
 void USART6_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[5].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[5].UARTx_Handler, (uint8_t *)uart_driver[5].rbuff, 1);
 }
 void UART7_IRQHandler(void)
 {
     HAL_UART_IRQHandler(&(uart_driver[6].UARTx_Handler));
+    HAL_UART_Receive_IT(&uart_driver[6].UARTx_Handler, (uint8_t *)uart_driver[6].rbuff, 1);
 }
 
 /**
@@ -489,10 +495,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
         if (uart_driver[i].UARTx_Handler.Instance == huart->Instance)
         {
-            if (HAL_UART_Receive_IT(&uart_driver[i].UARTx_Handler, (uint8_t *)uart_driver[i].rbuff, 1) == HAL_OK)
-            {
-                ring_buffer_put(uart_driver[i].rb, (uint8_t *)uart_driver[i].rbuff, 1);
-            }
+            ring_buffer_put(uart_driver[i].rb, (uint8_t *)uart_driver[i].rbuff, 1);
         }
     }
 }
@@ -513,6 +516,7 @@ can
             ThrowErrorCode(defDevID_##DEV, ERR_UART_##ERR, LEVEL, "USART ERR"); \
         }                                                                       \
     }
+
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
     int i;
@@ -520,9 +524,38 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     {
         if (uart_driver[i].UARTx_Handler.Instance == huart->Instance)
         {
-            HAL_UART_DeInit(&(uart_driver[i].UARTx_Handler));
-            HAL_UART_Init(&(uart_driver[i].UARTx_Handler));
-            HAL_UART_Receive_IT(&(uart_driver[i].UARTx_Handler), (uint8_t *)uart_driver[i].rbuff, 1);
+//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_ORE)
+//            {
+//                buzz(1, 100, 100);
+//            }
+//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_PE)
+//            {
+//                buzz(2, 1000, 1000);
+//            }
+//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_NE)
+//            {
+//                buzz(3, 50, 50);
+//            }
+//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_FE)
+//            {
+//                buzz(4, 50, 50);
+//            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE) != RESET) 
+            {
+                __HAL_UART_CLEAR_OREFLAG(huart);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE) != RESET) 
+            {
+                __HAL_UART_CLEAR_PEFLAG(huart);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_NE) != RESET) 
+            {
+                __HAL_UART_CLEAR_NEFLAG(huart);
+            }
+            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_FE) != RESET) 
+            {
+                __HAL_UART_CLEAR_FEFLAG(huart);
+            }
         }
     }
 

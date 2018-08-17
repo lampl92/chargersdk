@@ -540,7 +540,6 @@
     <Filter Include="Header files\net\CycloneTCP\cyclone_tcp\drivers\uart">
       <UniqueIdentifier>{f48c96c6-a0fb-4e52-b3f5-362276970cdf}</UniqueIdentifier>
     </Filter>
-
     <Filter Include="Source files\hmi\manager_set">
       <UniqueIdentifier>{43bf6f9d-419a-43b4-99c8-01c2eb361aa1}</UniqueIdentifier>
     </Filter>
@@ -568,11 +567,11 @@
     <None Include="stm32.mak">
       <Filter>Make files</Filter>
     </None>
-    <None Include="..\..\..\readme.md" />
     <None Include="chargersdk_flash.lds" />
     <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c">
       <Filter>Source files\drivers\device\src</Filter>
     </None>
+    <None Include="..\..\..\doc\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
@@ -814,15 +813,6 @@
     <ClCompile Include="..\..\..\src\hmi\HMI_Start.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoAnalog.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_InfoStatus.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Skin_Keyboard.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\pyinput.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -907,12 +897,6 @@
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\portable\MemMang\heap_4.c">
       <Filter>Source files\os\FreeRTOS\Source\portable\MemMang</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_AlarmLog.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysSet.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\cfg_order.c">
       <Filter>Source files\app</Filter>
     </ClCompile>
@@ -990,9 +974,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\libEcharge\ech_protocol_proc.c">
       <Filter>Source files\app\libEcharge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\bsp\src\electric_energy_meter.c">
-      <Filter>Source files\drivers\bsp\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\errorcode.c">
       <Filter>Source files\app</Filter>
@@ -1276,35 +1257,11 @@
     <ClCompile Include="..\..\..\src\hmi\AdvertisementPage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\CardInfoPage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\ChargeDonePage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\ChargingPage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\HomePage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_Common.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_ConSet.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_SysInfo.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\os\FreeRTOS\Source\stream_buffer.c">
       <Filter>Source files\os\FreeRTOS\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\factorycfg.c">
       <Filter>Source files\app</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PutOut_Manager_terminate.c">
-      <Filter>Source files\hmi</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\app\line.c">
       <Filter>Source files\app</Filter>
@@ -1945,9 +1902,6 @@
     <ClCompile Include="..\..\..\src\hmi\EVSEDLG.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\hmi\PlugOrDeverrPage.c">
-      <Filter>Source files\hmi</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\hmi\SKIN_mulitipage.c">
       <Filter>Source files\hmi</Filter>
     </ClCompile>
@@ -1993,11 +1947,32 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\meter.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p1_DDSD1352.c">
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\meter_p3_DTSF1352.c">
+    <ClCompile Include="..\..\..\src\drivers\device\src\meter_ADE7953.c">
       <Filter>Source files\drivers\device\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\indicator_light.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\Metering.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\SPI_GPIO.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c">
+      <Filter>Source files\drivers\bsp\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\UpdateSystem.c">
+      <Filter>Source files\hmi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\superManager.c">
+      <Filter>Source files\hmi\manager_set</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2524,9 +2499,6 @@
       <Filter>Header files\hmi</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hmi\pymb.h">
-      <Filter>Header files\hmi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\hmi\touchtimer.h">
       <Filter>Header files\hmi</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\hmi\dimen_barcode\qrdecode.h">
@@ -3781,9 +3753,6 @@
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\iwdg.h">
-      <Filter>Header files\drivers\bsp\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\bsp\inc\electric_energy_meter.h">
       <Filter>Header files\drivers\bsp\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\led_control.h">
@@ -5060,6 +5029,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\device\inc\meter.h">
       <Filter>Header files\drivers\device\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\hmi\touchtimer.h">
+      <Filter>Header files\hmi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
