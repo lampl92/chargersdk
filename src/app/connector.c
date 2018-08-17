@@ -245,7 +245,7 @@ static ErrorCode_t GetChargingData(void *pvCON)
     {
         pCON->status.dChargingVoltage = 0;
         pCON->status.dChargingCurrent = 0;
-        pCON->status.dChargingPower = 0;
+//        pCON->status.dChargingPower = 0;
         pCON->status.dChargingFrequence = 0; 
         //保留电表读数不清零
         errcode = ERR_CON_METER_FAULT;
@@ -1027,7 +1027,7 @@ static ErrorCode_t SetRelay(void *pvCON, uint8_t cmd)
         }
     }
     /*********************/
-
+    vTaskDelay(defRelayDelay);
     errcode = GetRelayState(pvCON);
     return errcode;
 }
@@ -1052,8 +1052,6 @@ static ErrorCode_t StartCharge(void *pvCON)
     /**  操作输出继电器，保存继电器状态 */
 
     errcode = SetRelay(pvCON, SWITCH_ON);
-    vTaskDelay(defRelayDelay);
-    THROW_ERROR(ucCONID, errcode = pCON->status.GetRelayState(pCON), ERR_LEVEL_CRITICAL, "STATE_CON_STARTCHARGE");
     if (pCON->status.ucRelayLState == SWITCH_ON &&
             pCON->status.ucRelayNState == SWITCH_ON)
     {
@@ -1117,7 +1115,6 @@ static ErrorCode_t StopCharge(void *pvCON)
         
     }
     errcode = SetRelay(pvCON, SWITCH_OFF);
-    THROW_ERROR(ucCONID, errcode = GetRelayState(pCON), ERR_LEVEL_CRITICAL, "conAPI stop charge");
 #ifdef DEBUG_DIAG_DUMMY
     pCON->status.ucRelayLState = SWITCH_OFF;
     pCON->status.ucRelayNState = SWITCH_OFF;
