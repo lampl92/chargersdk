@@ -17,7 +17,7 @@
 //#define DEBUG_NO_TASKDATA
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
-
+cJSON *jsEVSELogObj;
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -32,7 +32,6 @@ void vTaskEVSEData(void *pvParameters)
     EventBits_t uxBitsTimer;
     EventBits_t uxBitsData;
     EventBits_t uxBitsCharge;
-    cJSON *jsEVSELogObj;
     ErrorCode_t errcode;
 
     ulTotalCON = pListCON->Total;
