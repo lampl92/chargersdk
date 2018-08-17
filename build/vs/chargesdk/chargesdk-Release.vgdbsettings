@@ -135,7 +135,7 @@
   <UserDefinedVariables />
   <ImportedPropertySheets />
   <CodeSense>
-    <Enabled>Unknown</Enabled>
+    <Enabled>True</Enabled>
     <CFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CFLAGS>
     <CXXFLAGS>-Wno-pointer-sign -Wno-include-next-outside-header</CXXFLAGS>
     <ExternalSourceFileList />
