@@ -68,7 +68,7 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 452, 7, 240, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 447, 7, 240, 30, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 295, 340, 230, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 302, 422, 100, 44, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 557, 422, 100, 44, 0, 0x0, 0 },
