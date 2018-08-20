@@ -184,6 +184,8 @@ extern GUI_MEMDEV_Handle Memdevhomesignal2;
 extern GUI_MEMDEV_Handle Memdevhomesignal3;
 extern GUI_MEMDEV_Handle Memdevhomesignal4;
 extern GUI_MEMDEV_Handle Memdevhomesignal5;
+extern GUI_MEMDEV_Handle MemdevhomeRfidStateY;
+extern GUI_MEMDEV_Handle MemdevhomeRfidStateN;
 
 extern GUI_MEMDEV_Handle Memdevhomesignallogined;
 extern GUI_MEMDEV_Handle Memdevhomesignalnotlogined;

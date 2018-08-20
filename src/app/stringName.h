@@ -172,6 +172,8 @@ typedef enum _filelist
 #define pathhomesignal3                          "nand/resource/homesignal3.dta"
 #define pathhomesignal4                          "nand/resource/homesignal4.dta"
 #define pathhomesignal5                          "nand/resource/homesignal5.dta"
+#define pathhomeRfidStateY                       "nand/resource/homeRfidStateY.dta"
+#define pathhomeRfidStateN                       "nand/resource/homeRfidStateN.dta"
 
 #define pathhomesignalligined     "nand/resource/homesignalligined.dta"
 #define pathhomesignalnotlogined  "nand/resource/homesignalnotlogined.dta"

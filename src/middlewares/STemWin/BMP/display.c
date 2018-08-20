@@ -203,6 +203,8 @@ GUI_MEMDEV_Handle Memdevhomesignal2;
 GUI_MEMDEV_Handle Memdevhomesignal3;
 GUI_MEMDEV_Handle Memdevhomesignal4;
 GUI_MEMDEV_Handle Memdevhomesignal5;
+GUI_MEMDEV_Handle MemdevhomeRfidStateY;
+GUI_MEMDEV_Handle MemdevhomeRfidStateN;
 
 GUI_MEMDEV_Handle Memdevhomesignallogined;
 GUI_MEMDEV_Handle Memdevhomesignalnotlogined;
@@ -730,7 +732,7 @@ int creatememdev(void)
 //    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
 //    GUI_MEMDEV_Select(0);
     
-    //下面一共35个文件
+    //下面一共37个文件
     IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));
     IS_BMP_OK(Memdevhomegunscancode = createMemdev(pathhomegunscancode));
     IS_BMP_OK(Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress));
@@ -742,6 +744,9 @@ int creatememdev(void)
     IS_BMP_OK(Memdevhomesignal3 = createMemdev(pathhomesignal3));
     IS_BMP_OK(Memdevhomesignal4 = createMemdev(pathhomesignal4));
     IS_BMP_OK(Memdevhomesignal5 = createMemdev(pathhomesignal5));
+    IS_BMP_OK(MemdevhomeRfidStateY = createMemdev(pathhomeRfidStateY));
+    IS_BMP_OK(MemdevhomeRfidStateN = createMemdev(pathhomeRfidStateN));
+    
     
     IS_BMP_OK(Memdevhomesignallogined = createMemdev(pathhomesignalligined));
     IS_BMP_OK(Memdevhomesignalnotlogined = createMemdev(pathhomesignalnotlogined));

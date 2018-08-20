@@ -45,6 +45,8 @@
 #define gunstateby  79 //枪B状态图标y位置
 #define signalx  753 //信号位置x
 #define signaly  5 //信号位置y
+#define Rfidx    710//刷卡版状态位置x
+#define Rfidy    5//刷卡版状态位置x
 #define infoAx 119 //A枪充电信息位置x
 #define infoAy 125 //A枪充电信息位置y
 #define infoBx 462 //B枪充电信息位置x
@@ -72,7 +74,7 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 510, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 467, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 345, 230, 45, 0, 0x0, 0 },
     //{ BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 79, 230, 345-79+45, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun2infobutton", ID_BUTTON_1, 456, 345, 230, 45, 0, 0x0, 0 },
@@ -196,6 +198,14 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
         {
             GUI_MEMDEV_WriteAt(Memdevhomesignalnotlogined, signalx, signaly);
         }
+    }
+    if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeRfidStateN, Rfidx, Rfidy);
+    }
+    else
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeRfidStateY, Rfidx, Rfidy);
     }
 }
 
