@@ -137,7 +137,7 @@ static ErrorCode_t cfgobj_get(cJSON *pCfgObj, void *retval, char *str_key, uint8
 exit:
     return errcode;
 }
-static ErrorCode_t cfgobj_set(cJSON *pCfgObj, void *retval, char *str_key, uint8_t type)
+static ErrorCode_t cfgobj_set(cJSON *pCfgObj, void *setval, char *str_key, uint8_t type)
 {
     ErrorCode_t errcode = ERR_NO;
     cJSON *pRootObj;
@@ -151,23 +151,23 @@ static ErrorCode_t cfgobj_set(cJSON *pCfgObj, void *retval, char *str_key, uint8
     switch (type)
     {
     case ParamTypeU8:
-        cJSON_SetNumberValue(pRootObj, *(uint8_t *)retval);
+        cJSON_SetNumberValue(pRootObj, *(uint8_t *)setval);
         break;
     case ParamTypeU16:
-        cJSON_SetNumberValue(pRootObj, *(uint16_t *)retval);
+        cJSON_SetNumberValue(pRootObj, *(uint16_t *)setval);
         break;
     case ParamTypeU32:
-        cJSON_SetNumberValue(pRootObj, *(uint32_t *)retval);
+        cJSON_SetNumberValue(pRootObj, *(uint32_t *)setval);
         break;
     case ParamTypeS32:
-        cJSON_SetNumberValue(pRootObj, *(int32_t *)retval);
+        cJSON_SetNumberValue(pRootObj, *(int32_t *)setval);
         break;
     case ParamTypeDouble:
-        cJSON_SetNumberValue(pRootObj, *(double *)retval);
+        cJSON_SetNumberValue(pRootObj, *(double *)setval);
         break;
     case ParamTypeString:
         free(pRootObj->valuestring);
-        pRootObj->valuestring = utils_strdup((char *)retval);
+        pRootObj->valuestring = utils_strdup((char *)setval);
         break;
     default:
         errcode = ERR_FILE_PARAM;
@@ -251,7 +251,7 @@ ErrorCode_t cfgobj_get_string(cJSON *pCfgObj, char *retval, char *fmt, ...)
 
     return cfgobj_get(pCfgObj, (void *)retval, str, ParamTypeString);
 }
-ErrorCode_t cfgobj_set_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...)
+ErrorCode_t cfgobj_set_uint8(cJSON *pCfgObj, uint8_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -261,9 +261,9 @@ ErrorCode_t cfgobj_set_uint8(cJSON *pCfgObj, uint8_t *retval, char *fmt, ...)
     n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
     va_end(va);
 
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeU8);
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeU8);
 }
-ErrorCode_t cfgobj_set_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...)
+ErrorCode_t cfgobj_set_uint16(cJSON *pCfgObj, uint16_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -273,9 +273,9 @@ ErrorCode_t cfgobj_set_uint16(cJSON *pCfgObj, uint16_t *retval, char *fmt, ...)
     n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
     va_end(va);
 
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeU16);
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeU16);
 }
-ErrorCode_t cfgobj_set_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...)
+ErrorCode_t cfgobj_set_uint32(cJSON *pCfgObj, uint32_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -285,23 +285,10 @@ ErrorCode_t cfgobj_set_uint32(cJSON *pCfgObj, uint32_t *retval, char *fmt, ...)
     n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
     va_end(va);
 
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeU32);
-}
-
-ErrorCode_t cfgobj_set_int32(cJSON *pCfgObj, int32_t *retval, char *fmt, ...)
-{
-    char str[MAX_STRING_LEN] = { 0 };
-    va_list va;
-    uint32_t n;
-
-    va_start(va, fmt);
-    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
-    va_end(va);
-
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeS32);
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeU32);
 }
 
-ErrorCode_t cfgobj_set_double(cJSON *pCfgObj, double *retval, char *fmt, ...)
+ErrorCode_t cfgobj_set_int32(cJSON *pCfgObj, int32_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -311,9 +298,10 @@ ErrorCode_t cfgobj_set_double(cJSON *pCfgObj, double *retval, char *fmt, ...)
     n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
     va_end(va);
 
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeDouble);
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeS32);
 }
-ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *retval, char *fmt, ...)
+
+ErrorCode_t cfgobj_set_double(cJSON *pCfgObj, double *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -323,7 +311,19 @@ ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *retval, char *fmt, ...)
     n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
     va_end(va);
 
-    return cfgobj_set(pCfgObj, (void *)retval, str, ParamTypeString);
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeDouble);
+}
+ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *setval, char *fmt, ...)
+{
+    char str[MAX_STRING_LEN] = { 0 };
+    va_list va;
+    uint32_t n;
+
+    va_start(va, fmt);
+    n  = vsnprintf(str, sizeof(str) - 1, fmt, va);
+    va_end(va);
+
+    return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeString);
 }
 
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
@@ -563,7 +563,7 @@ ErrorCode_t cfg_get_string(char *path, char *retval, char *fmt, ...)
     return errcode;
 }
 
-ErrorCode_t cfg_set_uint8(char *path, uint8_t *retval, char *fmt, ...)
+ErrorCode_t cfg_set_uint8(char *path, uint8_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -580,11 +580,11 @@ ErrorCode_t cfg_set_uint8(char *path, uint8_t *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeU8);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeU8);
     SetCfgObj(path, pObj, 0);
     return errcode;
 }
-ErrorCode_t cfg_set_uint16(char *path, uint16_t *retval, char *fmt, ...)
+ErrorCode_t cfg_set_uint16(char *path, uint16_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -601,11 +601,11 @@ ErrorCode_t cfg_set_uint16(char *path, uint16_t *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeU16);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeU16);
     SetCfgObj(path, pObj, 0);
     return errcode;
 }
-ErrorCode_t cfg_set_uint32(char *path, uint32_t *retval, char *fmt, ...)
+ErrorCode_t cfg_set_uint32(char *path, uint32_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -622,11 +622,11 @@ ErrorCode_t cfg_set_uint32(char *path, uint32_t *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeU32);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeU32);
     SetCfgObj(path, pObj, 0);
     return errcode;     
 }
-ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...)
+ErrorCode_t cfg_set_int32(char *path, int32_t *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -643,11 +643,11 @@ ErrorCode_t cfg_set_int32(char *path, int32_t *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeS32);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeS32);
     SetCfgObj(path, pObj, 0);
     return errcode;   
 }
-ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...)
+ErrorCode_t cfg_set_double(char *path, double *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -664,11 +664,11 @@ ErrorCode_t cfg_set_double(char *path, double *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeDouble);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeDouble);
     SetCfgObj(path, pObj, 0);
     return errcode; 
 }
-ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
+ErrorCode_t cfg_set_string(char *path, char *setval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };
     va_list va;
@@ -685,7 +685,7 @@ ErrorCode_t cfg_set_string(char *path, char *retval, char *fmt, ...)
     {
         return errcode;
     }
-    errcode = cfgobj_set(pObj, retval, str, ParamTypeString);
+    errcode = cfgobj_set(pObj, setval, str, ParamTypeString);
     SetCfgObj(path, pObj, 0);
     return errcode;      
 }
