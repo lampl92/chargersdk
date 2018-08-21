@@ -25,7 +25,6 @@ error_t smtpClientTest(void)
     {
         __HAL_RCC_RNG_CLK_ENABLE();
         hrng.Instance = RNG;
-        HAL_RNG_Init(&hrng);
         //PRNG 初始化
         error = yarrowInit(&yarrowContext);
         if (error)
@@ -36,6 +35,7 @@ error_t smtpClientTest(void)
         is_smtp_initialized = 1;
     }
     //生成随机数种子
+    HAL_RNG_Init(&hrng);
     for (i = 0; i < 32; i += 4)
     {
         while (HAL_RNG_GetState(&hrng) != HAL_RNG_STATE_READY)
