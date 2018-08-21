@@ -1873,7 +1873,7 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
     int i, j;
     uint8_t ucOffset = 0;
     ErrorCode_t errcode;
-    ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil, errcode_stat;
+    ErrorCode_t errcode_ser, errcode_usr, errcode_pass, errcode_ver, errcode_fil;
 
     errcode = ERR_NO;
     errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_OTA, pbuff, &len);
@@ -1914,19 +1914,16 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
             pProto->info.ftp.strNewFileName[i] = pbuff[ucOffset++];
         }
         //存储FTP数据
-        errcode_ver = pProto->info.ftp.SetFtpCfg(jnFtpNewVersion, (void *)(pProto->info.ftp.strNewVersion), ParamTypeString);
-        errcode_ser = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strServer), ParamTypeString);
-        errcode_usr = pProto->info.ftp.SetFtpCfg(jnFtpUsername, (void *)(pProto->info.ftp.strUser), ParamTypeString);
-        errcode_pass = pProto->info.ftp.SetFtpCfg(jnFtpPassword, (void *)(pProto->info.ftp.strPassword), ParamTypeString);
-        errcode_fil = pProto->info.ftp.SetFtpCfg(jnFtpNewFilename, (void *)(pProto->info.ftp.strNewFileName), ParamTypeString);
-        pechProto->info.ftp.ucDownloadStatus = 1;
-        errcode_stat = cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
+        errcode_ver = cfg_set_string(pathFTPCfg, pProto->info.ftp.strNewVersion, "%s", jnFtpNewVersion);
+        errcode_ser = cfg_set_string(pathFTPCfg, pProto->info.ftp.strServer, "%s", jnFtpServer);
+        errcode_usr = cfg_set_string(pathFTPCfg, pProto->info.ftp.strUser, "%s", jnFtpUsername);
+        errcode_pass = cfg_set_string(pathFTPCfg, pProto->info.ftp.strPassword, "%s", jnFtpPassword);
+        errcode_fil = cfg_set_string(pathFTPCfg, pProto->info.ftp.strNewFileName, "%s", jnFtpNewFilename);
         if (errcode_ver == ERR_NO &&
             errcode_ser == ERR_NO &&
             errcode_usr == ERR_NO &&
             errcode_pass == ERR_NO &&
-            errcode_fil == ERR_NO &&
-            errcode_stat == ERR_NO)
+            errcode_fil == ERR_NO)
         {
             *psiRetVal = 1;
             errcode = ERR_NO;

@@ -107,60 +107,8 @@ ErrorCode_t GetFTPCfg(void *pvFtp, void *pvCfgObj)
     return errcode;
 }
 
-
-
-ErrorCode_t SetFTPCfg(char *jnItemString, void *pvCfgParam, uint8_t type)
-{
-    cJSON *jsFTPCfgObj;
-    cJSON *jsItem;
-    ErrorCode_t errcode;
-
-    errcode = ERR_NO;
-    jsFTPCfgObj = GetCfgObj(pathFTPCfg, &errcode);
-    if (jsFTPCfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsItem = jsFTPCfgObj->child;
-    do
-    {
-        if (strcmp(jsItem->string, jnItemString) == 0)
-        {
-            switch (type)
-            {
-            case ParamTypeU8:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            case ParamTypeU16:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
-                break;
-            case ParamTypeU32:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
-                break;
-            case ParamTypeDouble:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
-                break;
-            case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsFTPCfgObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
-                break;
-            default:
-                break;
-            }
-            break;//退出while循环
-        }
-        else
-        {
-            jsItem = jsItem->next;
-        }
-    } while (jsItem != NULL);
-    errcode = SetCfgObj(pathFTPCfg, jsFTPCfgObj, 0);
-
-    return errcode;
-}
-
 void EchFtpInit(EchFtpCfg_t *ftp)
 {
     memset(ftp, '\0', sizeof(EchFtpCfg_t));
-    ftp->SetFtpCfg = SetFTPCfg;
     ftp->GetFtpCfg = GetFTPCfg;
 }
