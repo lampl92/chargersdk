@@ -128,7 +128,7 @@ HAL_StatusTypeDef HAL_RNG_Init(RNG_HandleTypeDef *hrng)
     return HAL_ERROR;
   }
   
-  __HAL_LOCK(hrng);
+  //__HAL_LOCK(hrng);
   
   if(hrng->State == HAL_RNG_STATE_RESET)
   {  
