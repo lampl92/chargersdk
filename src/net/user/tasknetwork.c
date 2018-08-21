@@ -160,6 +160,8 @@ static void netStateFTP(net_device_t *net_dev)
     ErrorCode_t errcode;
     int res, res_copy;
     
+    pechProto->info.ftp.ucDownloadStatus = 1;
+    cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
     res = ftp_download_file(&pechProto->info.ftp, net_dev);
  
     if (res == 1)
