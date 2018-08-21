@@ -389,7 +389,7 @@ exit:
 cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
 {
     int fd;
-    uint8_t *rbuff;
+    char *rbuff;
     uint32_t fsize;
     struct yaffs_stat st;
     uint32_t  br;   //byte read
@@ -407,7 +407,7 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     }
     yaffs_stat(path, &st);
     fsize = st.st_size;
-    rbuff = (uint8_t *)malloc(fsize * sizeof(uint8_t));
+    rbuff = (char *)malloc(fsize * sizeof(char));
     if (rbuff == NULL)
     {
         *perrcode = ERR_MEMORY;
