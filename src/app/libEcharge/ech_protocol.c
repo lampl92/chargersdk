@@ -238,7 +238,6 @@ static int BnWAddListCfg(char *path, char *strID)
     usTotalList = cJSON_GetArraySize(jsArrayObj);
     for(i = 0; i < usTotalList; i++)
     {
-        res = 0;
         jsArrayItem = cJSON_GetArrayItem(jsArrayObj, i);
         if(strcmp(jsArrayItem->valuestring, strID) == 0)
         {
