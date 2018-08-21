@@ -2445,6 +2445,14 @@ static int makeCmdSetAppoint(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
+    if(usRecvCmd == 91)//平台回复充电桩有卡启动充电(具有相同回复的命令, 只能通过其他条件判断命令ID)
+    {
+        if (pRFIDDev->status.ucNeedPwd == 0)
+            id = ECH_CMDID_CARD_START;
+        if (pRFIDDev->status.ucNeedPwd == 1)
+            id = ECH_CMDID_CARD_START_PWD;
+        return id;
+    }
     for(id = 0; id < ECH_CMD_MAX; id++)
     {
         if(pProto->pCMD[id]->CMDType.usRecvCmd == usRecvCmd)
@@ -2626,6 +2634,10 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
     if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdPASS)
     {
         analyStdRes(pPObj, usCmdID, pbuff, ulRecvLen);
+        if (usCmdID == ECH_CMDID_CARD_START_PWD)
+        {
+            printf_protodetail("hhhh\n");
+        }
         if (pCMD->ulRecvdOptLen == 0)
         {
             

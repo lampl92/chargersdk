@@ -157,13 +157,20 @@ static int canChargeOrNot()
     while (pRFIDDev->order.ucCardStatus == 0 && (errcode != ERR_NO || res != 1))
     {
         remote_timeout_u100ms++;
-        if (remote_timeout_u100ms >= 600)//60s
+        if (remote_timeout_u100ms >= 300)//30s
         {
             return 0;
         }
         if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
         {
-            errcode = RemoteIF_RecvCardStart(pechProto, pRFIDDev, &ucVaild, &res);
+            if (pRFIDDev->status.ucNeedPwd == 0)
+            {
+                errcode = RemoteIF_RecvCardStart(pechProto, ECH_CMDID_CARD_START, pRFIDDev, &ucVaild, &res);
+            }
+            if (pRFIDDev->status.ucNeedPwd == 1)
+            {
+                errcode = RemoteIF_RecvCardStart(pechProto, ECH_CMDID_CARD_START_PWD, pRFIDDev, &ucVaild, &res);
+            }
         }
         else //如果没有联网，则直接返回超时。
         {
@@ -225,7 +232,10 @@ void vTaskEVSERFID(void *pvParameters)
         xTimerStop(xHandleTimerRFID, 100); 
 #endif
     }
-    while (pEVSE->status.ulTimeUpdated == 0)
+#if EVSE_USING_GUI
+    while (pEVSE->status.ulTimeUpdated == 0 || pEVSE->status.ulPicOK == 0)
+#else    while (pEVSE->status.ulTimeUpdated == 0)
+#endif
     {
         vTaskDelay(100);
     }
@@ -434,6 +444,7 @@ void vTaskEVSERFID(void *pvParameters)
 	        pRFIDDev->state = STATE_RFID_RETURN;
 	        break;
         case STATE_RFID_RETURN:
+            timesPwd = 3;
             pRFIDDev->status.ucNeedPwd = 0;
             OrderInit(&(pRFIDDev->order));
             memset(pRFIDDev->status.ucCardID, 0, defCardIDLength);

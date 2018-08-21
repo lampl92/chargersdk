@@ -1396,16 +1396,16 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
         return ERR_WHITE_LIST;
     }
 
-    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 20, 3); //注意传的参数是 pRfid
+    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START, 10, 3); //注意传的参数是 pRfid
     return errcode;
 }
 ErrorCode_t RemoteIF_SendCardStartPwd(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
     ErrorCode_t errcode = ERR_NO;
-    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START_PWD, 20, 3); //注意传的参数是 pRfid
+    pProto->sendCommand(pProto, pEVSE, pRfid, ECH_CMDID_CARD_START_PWD, 10, 3); //注意传的参数是 pRfid
     return errcode;
 }
-ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
+ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, uint16_t usCmdID, RFIDDev_t *pRfid, uint8_t *pucVaild, int *psiRetVal)
 {
     uint8_t pbuff[1024] = {0};
     uint32_t len;
@@ -1418,7 +1418,7 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, RFIDDev_t *pRfid, uint
     uint8_t ucOffset;
     int i;
 
-    errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_CARD_START, pRfid->order.ucCONID, 0, pbuff, &len);
+    errcode = RemoteRecvHandleWithCON(pProto, usCmdID, pRfid->order.ucCONID, 0, pbuff, &len);
     switch (errcode)
     {
     case ERR_REMOTE_NODATA:

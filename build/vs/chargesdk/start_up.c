@@ -96,6 +96,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case MSG_JUMPHOME:
         GUI_EndDialog(pMsg->hWin, 0);
         home();
+        pEVSE->status.ulPicOK = 1;
         //NVIC_SystemReset();
         break;
     default:

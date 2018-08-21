@@ -154,14 +154,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case WM_TIMER:
         if (pMsg->Data.v == _timerstateflash)
         {
-//            if (gbsstate == StateTestPwd)
-//            {
-//                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPStateTestPwd);
-//            }
-//            if (gbsstate == StateHome)
-//            {
-//                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
-//            }
+            if (gbsstate == StateTestPwd)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPStateTestPwd);
+            }
+            if (gbsstate == StateHome)
+            {
+                WM_SendMessageNoPara(pMsg->hWin, MSG_JUMPHOME);
+            }
             WM_RestartTimer(pMsg->Data.v, 100);
         }
         break;
@@ -236,6 +236,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
 WM_HWIN CreatePwdInput(void);
 WM_HWIN CreatePwdInput(void) {
     WM_HWIN hWin;
+    strNumber[0] = '\0';
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     _timerstateflash = WM_CreateTimer(hWin, ID_Timerstateflash, 100, 0);
     HwinKeyboard = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog1, hWin, 0, 0);
