@@ -183,10 +183,14 @@ static void netStateFTP(net_device_t *net_dev)
                 res_copy = copy_in_a_file(filepath_rename, filepath);//拷贝下载文件到目的地址
                 if (res_copy == 1)
                 {
+                    pechProto->info.ftp.ucDownloadStatus = 2;
+                    cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
                     printf_safe("移动%s到%s.\n", filepath, filepath_rename);
                 }
                 else
                 {
+                    pechProto->info.ftp.ucDownloadStatus = 3;
+                    cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
                     printf_safe("移动%s到%s 失败.\n", filepath, filepath_rename);
                     upflg = '3';
                     set_tmp_file(pathUpgradeTmp, &upflg);
@@ -196,6 +200,8 @@ static void netStateFTP(net_device_t *net_dev)
             }
             else
             {
+                pechProto->info.ftp.ucDownloadStatus = 3;
+                cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
                 printf_safe("CRC32校验失败 %s\n", filepath);
                 upflg = '3';
                 set_tmp_file(pathUpgradeTmp, &upflg);
@@ -212,6 +218,8 @@ static void netStateFTP(net_device_t *net_dev)
     }
     else
     {
+        pechProto->info.ftp.ucDownloadStatus = 3;
+        cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
         pechProto->info.ftp.ucDownloadStart = 0;
         cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
         netChangeState(net_dev, NET_STATE_CONNECT);
