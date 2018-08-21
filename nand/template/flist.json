@@ -1,26 +1,34 @@
-    {
-    "ftp":{
-        "server":"ftp.saas.zc3u.com",
-        "port":21,
-        "user":"dongliyu",
-        "pass":"UBHl7Vgp"
+{
+    "ftp": {
+        "server": "124.207.112.70",
+        "port": 21,
+        "user": "dpcpower",
+        "pass": "dpcpower"
     },
-    "flist":[
+    "flist": [
         {
-            "filename": "new_fw_162ba7ef",
-            "size_byte":123,
-            "crc32":"162ba7ef",
-            "localpath":"/nand/upgrade/",
-            "ftpdir":"2018.04.27/upgrade",
-            "status":1 
+            "filename": "homeRfidStateN.dta",
+            "size_byte": 2976,
+            "crc32": "1dec0d51",
+            "localpath": "/nand/resource/",
+            "ftpdir": "02.04.0821/resource",
+            "status": 1
         },
         {
-            "filename": "cardinfoback.dta",
-            "size_byte":123,
-            "crc32":"38A8ED99",
-            "localpath":"/nand/system/",
-            "ftpdir":"2018.04.27/system",
-            "status":1 
+            "filename": "homeRfidStateY.dta",
+            "size_byte": 2976,
+            "crc32": "cbabd986",
+            "localpath": "/nand/resource/",
+            "ftpdir": "02.04.0821/resource",
+            "status": 1
+        },
+        {
+            "filename": "new_fw_d6ecda8b",
+            "size_byte": 617900,
+            "crc32": "d6ecda8b",
+            "localpath": "/nand/upgrade/",
+            "ftpdir": "02.04.0821/upgrade",
+            "status": 1
         }
     ]
 }
