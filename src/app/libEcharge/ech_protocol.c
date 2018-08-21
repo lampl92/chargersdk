@@ -2149,7 +2149,7 @@ static int makeCmdUpWarning(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucS
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdUpFaultBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdUpWarningBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_UP_WARNING, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }

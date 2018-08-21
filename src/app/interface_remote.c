@@ -1856,7 +1856,7 @@ ErrorCode_t RemoteIF_SendUpWarning(EVSE_t *pEVSE, echProtocol_t *pProto)
     if(memcmp(pProto->status.warning, data_old_w, 6) != 0 ||
        memcmp(pProto->status.protect, data_old_p, 6) != 0)
     {
-        pbuff = pProto->pCMD[ECH_CMDID_UP_FAULT]->ucRecvdOptData;
+        pbuff = pProto->pCMD[ECH_CMDID_UP_WARNING]->ucRecvdOptData;
         memcpy(pbuff, pProto->status.warning, 6);
         memcpy(&pbuff[6], pProto->status.protect, 6);
         pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_UP_WARNING, 0, 1);
@@ -1914,13 +1914,13 @@ ErrorCode_t RemoteIF_RecvSetOTA(echProtocol_t *pProto, int *psiRetVal)
             pProto->info.ftp.strNewFileName[i] = pbuff[ucOffset++];
         }
         //存储FTP数据
-        pProto->info.ftp.ucDownloadStatus = 1;
         errcode_ver = pProto->info.ftp.SetFtpCfg(jnFtpNewVersion, (void *)(pProto->info.ftp.strNewVersion), ParamTypeString);
         errcode_ser = pProto->info.ftp.SetFtpCfg(jnFtpServer, (void *)(pProto->info.ftp.strServer), ParamTypeString);
         errcode_usr = pProto->info.ftp.SetFtpCfg(jnFtpUsername, (void *)(pProto->info.ftp.strUser), ParamTypeString);
         errcode_pass = pProto->info.ftp.SetFtpCfg(jnFtpPassword, (void *)(pProto->info.ftp.strPassword), ParamTypeString);
         errcode_fil = pProto->info.ftp.SetFtpCfg(jnFtpNewFilename, (void *)(pProto->info.ftp.strNewFileName), ParamTypeString);
-        errcode_stat = pProto->info.ftp.SetFtpCfg(jnFtpDownloadStatus, (void *)&(pProto->info.ftp.ucDownloadStatus), ParamTypeU8);
+        pechProto->info.ftp.ucDownloadStatus = 1;
+        errcode_stat = cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStatus, "%s", jnFtpDownloadStatus);
         if (errcode_ver == ERR_NO &&
             errcode_ser == ERR_NO &&
             errcode_usr == ERR_NO &&
