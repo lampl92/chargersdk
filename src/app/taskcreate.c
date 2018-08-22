@@ -180,8 +180,14 @@ void vTaskInit(void *pvParameters)
 #ifdef RELEASE
     IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
 #endif
+    int gps_handle;
+    char ch[1024];
+    gps_handle = uart_open("USART6", 9600, 8, 'N', 1);
     while (1)
     {
+        memset(ch, 0, 1024);
+        uart_read_wait(gps_handle, ch, 1024, 100);
+        printf_safe("%s\n", ch);
         IWDG_Feed();
         vTaskDelay(1000);
     }
