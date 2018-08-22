@@ -636,12 +636,15 @@ int creatememdev(void)
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
     {
-        //6个文件
+        //9个文件
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
         
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
+        IS_BMP_OK(Memdevselectpatternback = createMemdev(pathselectpatternback));
+        IS_BMP_OK(Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard));
+        IS_BMP_OK(Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
         IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle)); 
@@ -650,7 +653,7 @@ int creatememdev(void)
     }
     else
     {
-        //33个文件
+        //30个文件
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
@@ -677,7 +680,6 @@ int creatememdev(void)
         IS_BMP_OK(MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable));
     
         //选模式
-        IS_BMP_OK(Memdevselectpatternback = createMemdev(pathselectpatternback));
         IS_BMP_OK(Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber));
         IS_BMP_OK(Memdevselectpatternfull = createMemdev(pathselectpatternfull));
         IS_BMP_OK(Memdevselectpatternmoneynumber = createMemdev(pathselectpatternmoneynumber));
@@ -692,9 +694,6 @@ int creatememdev(void)
         IS_BMP_OK(Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu));
         IS_BMP_OK(Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen));
         IS_BMP_OK(Memdevselectpatternunitno = createMemdev(pathselectpatternunitno));
-
-        IS_BMP_OK(Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard));
-        IS_BMP_OK(Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress));
         
         IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga));
         IS_BMP_OK(Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb));
