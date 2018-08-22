@@ -37,7 +37,16 @@ void flush_reconnect_time(void)
 }
 uint32_t get_reconnect_remain_time(void)
 {
-    return delay_ms - (clock() - start_delay_ms); 
+    if (start_delay_ms != 0)
+    {
+        if((int)(delay_ms - (clock() - start_delay_ms)) < 0)
+            return 0;
+        return delay_ms - (clock() - start_delay_ms); 
+    }
+    else
+    {
+        return 0;
+    }
 }
 static void inc_reconnect_time(void)
 {
