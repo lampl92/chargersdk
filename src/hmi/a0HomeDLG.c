@@ -6,6 +6,7 @@
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
 #define ID_TEXT_0 (GUI_ID_USER + 0x02)
+#define ID_TEXT_10 (GUI_ID_USER + 0x03)
 #define ID_BUTTON_0 (GUI_ID_USER + 0x06)
 #define ID_TEXT_1 (GUI_ID_USER + 0x08)
 #define ID_TEXT_2 (GUI_ID_USER + 0x09)
@@ -69,6 +70,7 @@ static GUNState_E homegunstate[2];
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 447, 7, 240, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "netConnectText", ID_TEXT_10, 700, 45, 90, 30, TEXT_CF_RIGHT | TEXT_CF_TOP, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 295, 340, 230, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 302, 422, 100, 44, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "severFeetext", ID_TEXT_2, 557, 422, 100, 44, 0, 0x0, 0 },
@@ -206,6 +208,26 @@ static void updatedatetime(WM_MESSAGE *pMsg, uint16_t ID_TEXT)
     
     sprintf((char*)date_time_buf, "%s   %s", Date_buf, Time_buf);
     TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT), date_time_buf);
+    extern uint32_t get_reconnect_remain_time(void);
+    int remiantime = get_reconnect_remain_time();
+    if (remiantime > 0)
+    {
+        WM_ShowWin(WM_GetDialogItem(hWin, ID_TEXT_10));  
+        sprintf((char *)Date_buf, "%d", remiantime / 1000);
+        TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_10), Date_buf);
+    }
+    else
+    {
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Online) == defSignalEVSE_State_Network_Online)
+        {
+            WM_HideWin(WM_GetDialogItem(hWin, ID_TEXT_10));
+        }
+        else
+        {
+            WM_ShowWin(WM_GetDialogItem(hWin, ID_TEXT_10));  
+            TEXT_SetText(WM_GetDialogItem(hWin, ID_TEXT_10), "...");
+        }
+    }
 }
 
 static void updateinfo(WM_MESSAGE *pMsg)//详细信息刷新专用
@@ -248,9 +270,11 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), GUI_WHITE);
         TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), GUI_WHITE);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), GUI_WHITE);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg30e);
         TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), &fontwryhcg30e);
+       // TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_10), &fontwryhcg30e);
         updatedatetime(pMsg, ID_TEXT_0);
         updateprice(pMsg, ID_TEXT_1, ID_TEXT_2);       
         
