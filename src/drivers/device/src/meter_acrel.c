@@ -116,7 +116,7 @@ int meter_acrel_init(meter_s *meter)
     meter_config_s config;
     
     config.strUART = "UART7";
-    config.band = 4800;
+    config.band = 9600;
     config.data_bit = 8;
     config.parity = 'N';
     config.stop_bit = 1;
