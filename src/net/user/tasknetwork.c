@@ -28,6 +28,25 @@
 #include "debug.h"
 #include "evse_debug.h"
 
+static uint32_t delay_ms = 1000; // 重连时间, 如果重连不成功, 时间加1000ms, 最大600000(10分钟), 重连成功后变为1000
+static uint32_t start_delay_ms;
+void flush_reconnect_time(void)
+{
+    delay_ms = 1000;
+    start_delay_ms = 0;
+}
+uint32_t get_reconnect_remain_time(void)
+{
+    return delay_ms - (clock() - start_delay_ms); 
+}
+static void inc_reconnect_time(void)
+{
+    start_delay_ms = clock();
+    if(delay_ms == 600000)
+        return;
+    delay_ms += 1000;
+}
+
 void netChangeState(net_device_t *net_dev, net_state new_state)
 {
     static const char_t *stateLabel[] =
@@ -95,6 +114,7 @@ static void netStateConnect(net_device_t *net_dev)
     error = net_dev->connect(net_dev);
     if (error == NO_ERROR)
     {
+        flush_reconnect_time();
         netChangeState(net_dev, NET_STATE_TCP_ON);
     }
     else
@@ -229,8 +249,9 @@ static void netStateFTP(net_device_t *net_dev)
 }
 static void netStateErr(net_device_t *net_dev)
 {
+    inc_reconnect_time();
+    vTaskDelay(delay_ms);
     net_dev->close_hard(net_dev);
-    vTaskDelay(1000);
     netChangeState(net_dev, NET_STATE_INIT);
 }
 
