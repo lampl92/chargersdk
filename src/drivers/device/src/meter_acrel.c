@@ -109,7 +109,7 @@ static int modbus_config(meter_s *meter, meter_config_s *config)
     
     return 0;
 }
-
+extern int meter_dummy_get_all(void *pvmeter, int dev_addr);
 int meter_acrel_init(meter_s *meter)
 {
     int res;
@@ -140,6 +140,10 @@ int meter_acrel_init(meter_s *meter)
     else if (pEVSE->info.ucPhaseLine == 3)
     {
         meter->get_all = meter_p3_get_all;
+    }
+    else
+    {
+        meter->get_all = meter_dummy_get_all;
     }
     
     return 0;

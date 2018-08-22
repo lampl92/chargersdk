@@ -7,7 +7,7 @@
 #include "meter_acrel.h"
 #include "meter_ADE7953.h"
 
-static int meter_dummy_get_all(void *pvmeter, int dev_addr)
+int meter_dummy_get_all(void *pvmeter, int dev_addr)
 {
     //不支持的电表
     return 0;
