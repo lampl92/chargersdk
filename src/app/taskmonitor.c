@@ -73,13 +73,12 @@ void vTaskMonitor_ChData(void *pvParameters)
                         pCON->status.ulSignalFault |= defSignalCON_Fault_Meter;
                     }
                 }
-                
+                vTaskDelay(100);
 #ifdef TEST_TIME_ChData
                 printf_safe("con%d end   %s %d\n", pCON->info.ucCONID, TEST_TIME_ChData, clock());
 #endif // TEST_TIME_ChData   
             }
         }
-        
         vTaskDelay(10);
     }
 }
