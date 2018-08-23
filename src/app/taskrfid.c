@@ -234,7 +234,8 @@ void vTaskEVSERFID(void *pvParameters)
     }
 #if EVSE_USING_GUI
     while (pEVSE->status.ulTimeUpdated == 0 || pEVSE->status.ulPicOK == 0)
-#else    while (pEVSE->status.ulTimeUpdated == 0)
+#else
+    while (pEVSE->status.ulTimeUpdated == 0)
 #endif
     {
         vTaskDelay(100);
