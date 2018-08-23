@@ -555,7 +555,7 @@ ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;
 
     pbuff[0] = pOrder->ucStartType;//4 有卡，5 无卡
-    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_ORDER, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_ORDER, 10, 3);
 
     return errcode;
 }
@@ -664,7 +664,7 @@ ErrorCode_t RemoteIF_SendReqOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderDat
     pbuff = pProto->pCMD[ECH_CMDID_REQ_ORDER]->ucRecvdOptData;
 
     pbuff[0] = pOrder->ucStartType; //4 有卡，5 无卡
-    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_REQ_ORDER, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_REQ_ORDER, 0, 1);
 
     return errcode;
 }
@@ -674,7 +674,7 @@ ErrorCode_t RemoteIF_SendSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto)
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_HEARTBEAT, 10, 3);
 
     return errcode;
 }
@@ -1544,7 +1544,7 @@ ErrorCode_t RemoteIF_SendCardStartRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_
         pbuff[18] = 2;
     }
     /*********************/
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_START_RES, 30, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_START_RES, 10, 3);
 
     return errcode;
 }
@@ -1584,7 +1584,7 @@ ErrorCode_t RemoteIF_RecvCardStartRes(echProtocol_t *pProto, CON_t *pCON, int *p
 
 ErrorCode_t RemoteIF_SendCardStopRes(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *pCON)
 {
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 30, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_CARD_STOP_RES, 10, 3);
 
     return ERR_NO;
 }
@@ -2116,7 +2116,7 @@ ErrorCode_t RemoteIF_SendOTA_Start(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t *
     ErrorCode_t errcode;
     errcode = ERR_NO;
 
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_START, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_START, 10, 3);
 
     return errcode;
 }
@@ -2172,7 +2172,7 @@ ErrorCode_t RemoteIF_SendOTA_Result(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
 
     pbuff[20] = succ;
 
-    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_RESULT, 20, 3);
+    pProto->sendCommand(pProto, pEVSE, pCON, ECH_CMDID_OTA_RESULT, 10, 3);
 
     return errcode;
 }
