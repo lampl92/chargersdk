@@ -630,6 +630,45 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     return errcode;
 }
 
+ErrorCode_t RemoteIF_RecvReqOrder(EVSE_t *pEVSE, echProtocol_t *pProto, uint64_t *pullOrderSN, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t errcode;
+    ull2uc ulltmpNetOrderSN;
+
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_REQ_ORDER, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        memcpy(ulltmpNetOrderSN.ucArray, pbuff, 8);
+        *pullOrderSN = ntohll(ulltmpNetOrderSN.ullVal);
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+    return errcode;
+}
+
+ErrorCode_t RemoteIF_SendReqOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder)
+{
+    uint8_t *pbuff;
+    ErrorCode_t errcode;
+    errcode = ERR_NO;
+
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_ORDER]->ucRecvdOptData;
+
+    pbuff[0] = pOrder->ucStartType; //4 有卡，5 无卡
+    pProto->sendCommand(pProto, pEVSE, pOrder, ECH_CMDID_REQ_ORDER, 20, 3);
+
+    return errcode;
+}
+
 ErrorCode_t RemoteIF_SendSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     ErrorCode_t errcode;

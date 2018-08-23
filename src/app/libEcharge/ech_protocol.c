@@ -1379,6 +1379,16 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
+static int makeCmdReqOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
+}
 static int makeCmdSetResBodyCtx(void *pPObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
@@ -2842,6 +2852,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_POWER]      = EchCMDCreate(202, 201, 30, makeCmdReqPower,     analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_APPOINT]    = EchCMDCreate(204, 203, 30, makeCmdSetAppoint,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_APPOINT]    = EchCMDCreate(204, 205, 30, makeCmdReqAppoint,   analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_ORDER]      = EchCMDCreate(46,  48,  30, makeCmdReqOrder,     analyCmdCommon);
 
     //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 

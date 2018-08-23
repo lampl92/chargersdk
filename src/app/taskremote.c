@@ -114,7 +114,23 @@ void taskremote_req(EVSE_t *pEVSE, echProtocol_t *pProto)
 {
     int res;
     RemoteIF_RecvReq(pEVSE, pProto, &res);
+}
 
+void taskremote_req_order(EVSE_t *pEVSE, echProtocol_t *pProto)
+{
+    uint64_t ullOrderSN;
+    int res;
+    OrderData_t order;
+    ErrorCode_t errcode;
+    RemoteIF_RecvReqOrder(pEVSE, pProto, &ullOrderSN, &res);
+    if (res == 1)
+    {
+        errcode = GetOrderBySN(pathOrder, ullOrderSN, &order);
+        if (errcode == ERR_NO && order.ullOrderSN == ullOrderSN)
+        {
+            RemoteIF_SendReqOrder(pEVSE, pProto, &order);
+        }
+    }
 }
 // 1 更新  0 不更新
 static uint32_t ulSignalState_old[defMaxCON];
@@ -737,6 +753,9 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 }//switch
             }
+            /******** 查询交易记录(订单) ****************/
+            taskremote_req_order(pEVSE, pechProto);
+            
             /******** 平台下发设置 ****************/
             taskremote_set(pEVSE, pechProto);
             taskremote_req(pEVSE, pechProto);
@@ -825,6 +844,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                 }
             }
+            
             
             break;//REMOTE_REGEDITED
         case REMOTE_RECONNECT:

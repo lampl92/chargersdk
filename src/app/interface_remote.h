@@ -56,6 +56,9 @@ ErrorCode_t RemoteIF_SendCardRTData(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
 ErrorCode_t RemoteIF_SendOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder);
 ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder, int *psiRetVal);
 
+ErrorCode_t RemoteIF_RecvReqOrder(EVSE_t *pEVSE, echProtocol_t *pProto, uint64_t *pullOrderSN, int *psiRetVal);
+ErrorCode_t RemoteIF_SendReqOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t *pOrder);
+
 ErrorCode_t RemoteIF_RecvSetEnergyFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
 ErrorCode_t RemoteIF_RecvSetServFee(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set, int *psiRetVal );
 ErrorCode_t RemoteIF_RecvSetCyc(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal );
