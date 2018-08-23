@@ -18,7 +18,7 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 
     jsNewOrderCfgObj = cJSON_CreateObject();
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartType, cJSON_CreateNumber(pOrder->ucStartType));                            //有卡无卡标志
-    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateString(pOrder->strOrderSN));                               //1 交易流水
+    cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderOrderSN, cJSON_CreateNumber((double)(pOrder->ullOrderSN)));                               //1 交易流水
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCONID, cJSON_CreateNumber(EchCONIDtoRemoteID(pOrder->ucCONID, pEVSE->info.ucTotalCON)));                                 //2 充电桩接口
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderCardID, cJSON_CreateString(pOrder->strCardID));                                             //3 卡号
     cJSON_AddItemToObject(jsNewOrderCfgObj, jnOrderStartEnergy, cJSON_CreateNumber(pOrder->dStartEnergy));                           //4 充电前电能总示值
@@ -151,6 +151,7 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     cJSON *jsParent;
     ErrorCode_t errcode;
     double dStopEnergy;
+    double dOrderSN;
     uint8_t remote_id;
     
     errcode = ERR_NO;
@@ -161,7 +162,8 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     }
     
     GetOrderCfgItem(jsParent, jnOrderStartType, &pOrder->ucStartType, ParamTypeU8);
-    GetOrderCfgItem(jsParent, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
+    GetOrderCfgItem(jsParent, jnOrderOrderSN, &dOrderSN, ParamTypeDouble);
+    pOrder->ullOrderSN = (uint64_t)dOrderSN;
     GetOrderCfgItem(jsParent, jnOrderCONID, &remote_id, ParamTypeU8);
     pOrder->ucCONID = EchRemoteIDtoCONID(remote_id);
     GetOrderCfgItem(jsParent, jnOrderCardID, pOrder->strCardID, ParamTypeString);
@@ -210,6 +212,7 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
     uint8_t ucPayStatus;
     char strCardID[17] = { 0 };
     double dStopEnergy;
+    double dOrderSN;
     
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
@@ -248,7 +251,8 @@ ErrorCode_t GetNoPayOrder(char *path, OrderData_t *pOrder)
             return errcode;
         }
         GetOrderCfgItem(jsChild, jnOrderStartType, &pOrder->ucStartType, ParamTypeU8);
-        GetOrderCfgItem(jsChild, jnOrderOrderSN, pOrder->strOrderSN, ParamTypeString);
+        GetOrderCfgItem(jsChild, jnOrderOrderSN, &dOrderSN, ParamTypeDouble);
+        pOrder->ullOrderSN = (uint64_t)dOrderSN;
         GetOrderCfgItem(jsChild, jnOrderCONID, &pOrder->ucCONID, ParamTypeU8);
         pOrder->ucCONID = pOrder->ucCONID - 1;
         GetOrderCfgItem(jsChild, jnOrderCardID, pOrder->strCardID, ParamTypeString);

@@ -862,10 +862,10 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     echProtocol_t *pProto;
     CON_t *pCON;
     uint8_t *pbuff;
-    uint8_t ucOrderSN[8] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
+    ull2uc ulltmpNetOrderSN;
     int i;
 
     pProto = (echProtocol_t *)pPObj;
@@ -874,10 +874,10 @@ static int makeCmdRTDataBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx
     ulMsgBodyCtxLen_dec = 0;
 
     //[0...7] 交易流水号
-    StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
+    ulltmpNetOrderSN.ullVal = htonll(pCON->order.ullOrderSN);
     for(i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ulltmpNetOrderSN.ucArray[i];
     }
     //[8] 桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->info.ucCONID, pEVSE->info.ucTotalCON);
@@ -991,6 +991,7 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
+    ull2uc ullTmpNetOrderSN;
     int i;
 
     pProto = (echProtocol_t *)pPObj;
@@ -1002,10 +1003,10 @@ static int makeCmdCardRTDataBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint8
     //[0] 充电桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pCON->order.ucCONID, pEVSE->info.ucTotalCON);
     //[1...8] 交易流水号
-    StrToHex(pCON->order.strOrderSN, ucOrderSN, strlen(pCON->order.strOrderSN));
+    ullTmpNetOrderSN.ullVal = htonll(pCON->order.ullOrderSN);
     for(i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ullTmpNetOrderSN.ucArray[i];
     }
     //[9...24] 卡号
     for(i = 0; i < 16; i++)
@@ -1120,6 +1121,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
+    ull2uc ullTmpNetOrderSN;
     uint8_t reason;
     int i;
 
@@ -1131,10 +1133,10 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
     //[0] 有卡 04 无卡05
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
     //[1...8] 交易流水号
-    StrToHex(pOrder->strOrderSN, ucOrderSN, strlen(pOrder->strOrderSN));
+    ullTmpNetOrderSN.ullVal = htonll(pOrder->ullOrderSN);
     for(i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ullTmpNetOrderSN.ucArray[i];
     }
     //[9] 充电桩接口
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = EchCONIDtoRemoteID(pOrder->ucCONID, pEVSE->info.ucTotalCON);
@@ -1869,10 +1871,9 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, u
     EVSE_t *pEVSE;
     RFIDDev_t *pRfid;
     uint8_t ucOrderSN[8] = {0};
-    char strOrderSN[17] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     uint8_t remote_id;
-    ul2uc ultmpNetSeq;
+    ull2uc ullTmpNetOrderSN;
     int i;
 
     pEVSE = (EVSE_t *)pEObj;
@@ -1887,22 +1888,10 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, u
         pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pRfid->order.strCardID[i];
     }
     //[17...24] 有卡充电流水号
-    ultmpNetSeq.ulVal = htonl(time(NULL)); // 采用时间戳作为交易流水号
-    while (ultmpNetSeq.ulVal == 0)
-	{
-		printf_safe("有卡充电时， time null == 0！！！！！！\n");
-	}
-    ucOrderSN[0] = 0;
-    ucOrderSN[1] = 0;
-    ucOrderSN[2] = 0;
-    ucOrderSN[3] = 0;
-    ucOrderSN[4] = ultmpNetSeq.ucVal[0];
-    ucOrderSN[5] = ultmpNetSeq.ucVal[1];
-    ucOrderSN[6] = ultmpNetSeq.ucVal[2];
-    ucOrderSN[7] = ultmpNetSeq.ucVal[3];
+    ullTmpNetOrderSN.ullVal = htonll(time(NULL));  // 采用时间戳作为交易流水号
     for (i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ullTmpNetOrderSN.ucArray[i];
     }
     if (usCmdID == ECH_CMDID_CARD_START_PWD)
     {
@@ -1914,8 +1903,7 @@ static int makeCmdCardStartBodyCtx(void *pEObj, void *pCObj, uint16_t usCmdID, u
     }
     
     //保存流水号到order
-    HexToStr(ucOrderSN, strOrderSN, 8);
-    strcpy(pRfid->order.strOrderSN, strOrderSN);
+    pRfid->order.ullOrderSN = ntohll(ullTmpNetOrderSN.ullVal);
 
     *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec; //不要忘记赋值
    
@@ -1948,8 +1936,8 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     EVSE_t *pEVSE;
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
-    uint8_t ucOrderSN[8] = {0};
     ul2uc ultmpNetSeq;
+    ull2uc ulltmpNetOrderSN;
     int i;
     EventBits_t uxBit;
 
@@ -1971,10 +1959,10 @@ static int makeCmdCardStartResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uin
     //[18] 启动结果
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[18];
     //[19...26] 有卡充电流水号
-    StrToHex(pCON->order.strOrderSN, ucOrderSN, 16);
+    ulltmpNetOrderSN.ullVal = htonll(pCON->order.ullOrderSN);
     for(i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ulltmpNetOrderSN.ucArray[i];
     }
     //[27...30] 当前电表读数
     uxBit = xEventGroupWaitBits(pCON->status.xHandleEventOrder,
@@ -2020,7 +2008,7 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
     uint8_t *pbuff;
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
-    uint8_t ucOrderSN[8] = {0};
+    ull2uc ullTmpNetOrderSN;
     int i;
     EventBits_t uxBits;
 
@@ -2041,10 +2029,10 @@ static int makeCmdCardStopResBodyCtx(void *pPObj, void *pEObj, void *pCObj, uint
     //[17] 卡号状态
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pCON->order.ucCardStatus;
     //[18...25] 有卡充电流水号
-    StrToHex(pCON->order.strOrderSN, ucOrderSN, 16);
+    ullTmpNetOrderSN.ullVal = htonll(pCON->order.ullOrderSN);
     for(i = 0; i < 8; i++)
     {
-        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ucOrderSN[i];
+        pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ullTmpNetOrderSN.ucArray[i];
     }
     //[26] 停止充电原因
     uxBits = xEventGroupGetBits(pCON->status.xHandleEventOrder);

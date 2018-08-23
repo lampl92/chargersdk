@@ -18,7 +18,8 @@ uint16_t utils_htons(uint16_t n);
 uint16_t utils_ntohs(uint16_t n);
 uint32_t utils_htonl(uint32_t n);
 uint32_t utils_ntohl(uint32_t n);
-
+uint64_t utils_htonll(uint64_t n);
+uint64_t utils_ntohll(uint64_t n);
 #ifndef htons
 #define htons(x) utils_htons(x)
 #endif
@@ -35,6 +36,14 @@ uint32_t utils_ntohl(uint32_t n);
 #define ntohl(x) utils_ntohl(x)
 #endif
 
+#ifndef htonll
+#define htonll(x) utils_htonll(x)
+#endif
+
+#ifndef ntohll
+#define ntohll(x) utils_ntohll(x)
+#endif
+
 typedef union
 {
 	uint32_t ulVal;
@@ -46,6 +55,12 @@ typedef union
 	uint16_t usVal;
 	uint8_t ucVal[2];
 }us2uc;
+
+typedef union
+{
+    uint64_t ullVal;
+    uint8_t ucArray[8];
+}ull2uc;
 uint32_t HexToStr(uint8_t *Hex, char *Src, int Hexlen);
 uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);

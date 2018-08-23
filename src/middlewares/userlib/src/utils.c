@@ -68,6 +68,16 @@ uint32_t utils_ntohl(uint32_t n)
     return utils_htonl(n);
 }
 
+uint64_t utils_htonll(uint64_t n)
+{
+    return (((uint64_t) utils_htonl(n)) << 32) + utils_htonl(n >> 32);
+}
+
+uint64_t utils_ntohll(uint64_t n)
+{
+    return utils_htonll(n);
+}
+    
 /** @brief "1234567890123456"  --> bcd[0]= 0x12  bcd[1]= 0x34 ......
  *
  * @param Str const char*

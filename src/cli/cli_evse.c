@@ -383,8 +383,8 @@ void cli_evseorder_fnt(int argc, char **argv)
             {
                 printf_safe("启动方式:\t网络\n");
             }
-            //strOrderSN[defOrderSNLength]; //交易流水号
-            printf_safe("交易流水号:\t%s\n", pCON->OrderTmp.order.strOrderSN);
+            //ullOrderSN; //交易流水号
+            printf_safe("交易流水号:\t%ll\n", pCON->OrderTmp.order.ullOrderSN);
             //dLimitFee;                      //充电截至金额
             printf_safe("充电截止金额:\t%.2lf\n", pCON->OrderTmp.order.dLimitFee);
             ts = localtime (& pCON->OrderTmp.order.tStartTime);

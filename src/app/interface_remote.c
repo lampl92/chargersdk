@@ -415,9 +415,9 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
     uint32_t len;
     ErrorCode_t errcode = ERR_NO;
 
-    char strOrderSN_tmp[17] = { 0 };
     double dLimetFee;
     ul2uc ulTmp;
+    ull2uc ullOrderSN;
 
     id = 0;
     errcode = RemoteRecvHandleWithCON(pProto, ECH_CMDID_REMOTE_CTRL, pCONin->info.ucCONID, 12, pbuff, &len);
@@ -439,7 +439,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
                 pCON->order.ucCONID = id;//启动枪号
                 
                 //pbuff[4...11] 交易流水号
-                HexToStr(&pbuff[4], pCON->order.strOrderSN, 8);
+                memcpy(ullOrderSN.ucArray, &pbuff[4], 8);
+                pCON->order.ullOrderSN = ntohll(ullOrderSN.ullVal);
 
                 *pctrl = pbuff[13];
 
@@ -463,8 +464,8 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
             else if(pbuff[13] == 2)
             {
                 /**在这里判断交易号是否相等 */
-                HexToStr(&pbuff[4], strOrderSN_tmp, 8);
-                if(strcmp(strOrderSN_tmp, pCON->order.strOrderSN) == 0 || dummyordersn)//checkordersn可以通过cli设置，防止发生异常时，APP无法停止
+                memcpy(ullOrderSN.ucArray, &pbuff[4], 8);
+                if(pCON->order.ullOrderSN == ntohll(ullOrderSN.ullVal) || dummyordersn)//checkordersn可以通过cli设置，防止发生异常时，APP无法停止
                 {
                     *pctrl = pbuff[13];
                     xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
@@ -546,7 +547,7 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
     uint8_t pbuff[1024] = {0};
     uint32_t len;
     ErrorCode_t errcode;
-    char strOrderSN_tmp[17] = { 0 };
+    ull2uc ullOrderSN;
 
     id = 0;
     errcode = ERR_NO;
@@ -585,8 +586,8 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         pCON = CONGetHandle(id);
         if(pCON != NULL)
         {
-            HexToStr(&pbuff[1], strOrderSN_tmp, 8);
-            if(strcmp(strOrderSN_tmp, pOrder->strOrderSN) == 0)
+            memcpy(ullOrderSN.ucArray, &pbuff[1], 8);
+            if(pCON->order.ullOrderSN == ntohll(ullOrderSN.ullVal))
             {
                 *psiRetVal = 1;
             }
@@ -594,8 +595,8 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
             {
                 *psiRetVal = 0;
                 printf_safe("OrderSN not equal!!! \n");
-                printf_safe("-Remote OrderSN: %s \n", strOrderSN_tmp);
-                printf_safe("-Local  OrderSN: %s \n", pOrder->strOrderSN);
+                printf_safe("-Remote OrderSN: %lf \n", (double)(ntohll(ullOrderSN.ullVal)));
+                printf_safe("-Local  OrderSN: %lf \n", (double)(pOrder->ullOrderSN));
                 
                 errcode = ERR_REMOTE_ORDERSN;
             }
@@ -1358,9 +1359,7 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
 
 ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev_t *pRfid)
 {
-    uint8_t ucOrderSN[8] = {0};
-    char strOrderSN[17] = {0};
-    ul2uc ultmpNetSeq;
+    ull2uc ullTmpNetOrderSN;
     ErrorCode_t errcode = ERR_NO;
 
     if (pProto->info.BnWIsListCfg(pathBlackList, pRfid->order.strCardID) == 1)
@@ -1379,19 +1378,10 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
 
-        ultmpNetSeq.ulVal = htonl(time(NULL)); // 采用时间戳作为交易流水号
-        ucOrderSN[0] = 0;
-        ucOrderSN[1] = 0;
-        ucOrderSN[2] = 0;
-        ucOrderSN[3] = 0;
-        ucOrderSN[4] = ultmpNetSeq.ucVal[0];
-        ucOrderSN[5] = ultmpNetSeq.ucVal[1];
-        ucOrderSN[6] = ultmpNetSeq.ucVal[2];
-        ucOrderSN[7] = ultmpNetSeq.ucVal[3];
+        ullTmpNetOrderSN.ullVal = htonll(time(NULL));   // 采用时间戳作为交易流水号
 
         //保存流水号到order
-        HexToStr(ucOrderSN, strOrderSN, 8);
-        strcpy(pRfid->order.strOrderSN, strOrderSN);
+        pRfid->order.ullOrderSN = ntohll(ullTmpNetOrderSN.ullVal);
 
         return ERR_WHITE_LIST;
     }
@@ -1412,9 +1402,8 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, uint16_t usCmdID, RFID
     ErrorCode_t errcode;
     uint8_t con_id;
     char strCardID[17] = {0};
-    uint8_t ucOrderSN[8] = {0};
-    char strOrderSN[17] = {0};
     ul2uc ultmpNetSeq;
+    ull2uc ullOrderSN;
     uint8_t ucOffset;
     int i;
 
@@ -1447,10 +1436,9 @@ ErrorCode_t RemoteIF_RecvCardStart(echProtocol_t *pProto, uint16_t usCmdID, RFID
         //pbuff[17...24] 流水号
         for(i = 0; i < 8; i++)
         {
-            ucOrderSN[i] = pbuff[ucOffset++];
+            ullOrderSN.ucArray[i] = pbuff[ucOffset++];
         }
-        HexToStr(ucOrderSN, strOrderSN, 8);
-        if(strcmp(strOrderSN, pRfid->order.strOrderSN) != 0)
+        if(pRfid->order.ullOrderSN != ntohll(ullOrderSN.ullVal))
         {
             *psiRetVal = 0;
             break;
