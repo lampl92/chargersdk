@@ -549,6 +549,18 @@
     <Filter Include="Header files\middlewares\libmodbus">
       <UniqueIdentifier>{639b4b10-7f5c-4f7d-bd6c-7d37a5c95744}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\middlewares\minmea">
+      <UniqueIdentifier>{ff029dc3-fa2d-443f-b207-97e1a98d596e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\middlewares\minmea\compat">
+      <UniqueIdentifier>{d785de65-0dbc-4a5f-9c20-943ef040274a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\minmea">
+      <UniqueIdentifier>{1f15c828-7696-4e4a-b520-f0ce6725d0dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\middlewares\minmea\compat">
+      <UniqueIdentifier>{dc9afe8b-425a-4728-9339-5182bc7fb2d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -572,6 +584,27 @@
       <Filter>Source files\drivers\device\src</Filter>
     </None>
     <None Include="..\..\..\doc\readme.md" />
+    <ClCompile Include="..\..\..\src\middlewares\minmea\example.c">
+      <Filter>Source files\middlewares\minmea</Filter>
+    </ClCompile>
+    <None Include="..\..\..\src\middlewares\minmea\Makefile">
+      <Filter>Source files\middlewares\minmea</Filter>
+    </None>
+    <ClCompile Include="..\..\..\src\middlewares\minmea\minmea.c">
+      <Filter>Source files\middlewares\minmea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\minmea\tests.c">
+      <Filter>Source files\middlewares\minmea</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\..\src\middlewares\minmea\minmea.h">
+      <Filter>Header files\middlewares\minmea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\minmea\compat\minmea_compat_ti-rtos.h">
+      <Filter>Header files\middlewares\minmea\compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\minmea\compat\minmea_compat_windows.h">
+      <Filter>Header files\middlewares\minmea\compat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="stm32.xml">
