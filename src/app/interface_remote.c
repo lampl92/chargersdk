@@ -239,6 +239,8 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
     uint8_t pbuff[1024] = {0};
     uint32_t len;
     ErrorCode_t errcode;
+    ul2uc ultmpNetSeq;
+    time_t timestamp;
 
     errcode = RemoteRecvHandle(pProto, ECH_CMDID_HEARTBEAT, pbuff, &len);
     switch (errcode)
@@ -248,6 +250,24 @@ ErrorCode_t RemoteIF_RecvHeart(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRet
         break;
     case ERR_NO:
         *psiRetVal = 1;
+        ultmpNetSeq.ucVal[0] = pbuff[0];
+        ultmpNetSeq.ucVal[1] = pbuff[1];
+        ultmpNetSeq.ucVal[2] = pbuff[2];
+        ultmpNetSeq.ucVal[3] = pbuff[3];
+        timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
+        if (dePrintTime == 1)
+        {
+            printf_safe("server: ");
+            printTime(timestamp);
+            printf_safe("\n");
+            printf_safe("local:  ");
+            printTime(time(NULL));
+            printf_safe("\n");
+        }
+        if (utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
+        {
+            time(&timestamp);
+        }
         break;
     default:
         *psiRetVal = 0;

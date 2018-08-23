@@ -286,8 +286,9 @@ void vTaskEVSERemote(void *pvParameters)
                     pCON = CONGetHandle(i);
                     pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
-                last_heart_stamp = time(NULL);//防止重连时心跳检测测还是上次丢失的时间
+                last_heart_stamp = time(NULL);    //防止重连时心跳检测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
+                xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
 #if DEBUG_SMTP
                 smtpClientTest();
 #endif
@@ -372,6 +373,8 @@ void vTaskEVSERemote(void *pvParameters)
                                     break;
                                 }
                             }
+                            break;
+                        default:
                             break;
                         }//switch stat
                     }

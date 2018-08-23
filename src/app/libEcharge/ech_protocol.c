@@ -75,6 +75,7 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulOptSN, "%s", jnProtoOptSN);
     cfgobj_get_uint8(jsCfgObj, &pProto->info.ucProtoVer, "%s", jnProtoProtoVer);
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulHeartBeatCyc_ms, "%s", jnProtoHeartBeatCyc_ms);
+    pProto->info.ulHeartBeatCyc_ms -= 5000;
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulStatusCyc_ms, "%s", jnProtoStatusCyc_ms);
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulRTDataCyc_ms, "%s", jnProtoRTDataCyc_ms);
     cfgobj_get_uint8(jsCfgObj, &pProto->info.ucResetAct, "%s", jnProtoResetAct);
@@ -2652,52 +2653,6 @@ static int analyCmdCommon(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_
     return 1;
 }
 
-static int analyCmdHeart(void *pPObj, uint16_t usCmdID, uint8_t *pbuff, uint32_t ulRecvLen)
-{
-    echProtocol_t *pProto;
-    echCMD_t *pCMD;
-    uint8_t *pMsgBodyCtx_dec;
-    ul2uc ultmpNetSeq;
-    time_t timestamp;
-    echCmdElem_t lRecvElem;
-
-    pProto = (echProtocol_t *)pPObj;
-    pCMD = pProto->pCMD[usCmdID];
-    if(xSemaphoreTake(pCMD->xMutexCmd, 10000) == pdTRUE)
-    {
-        analyStdRes(pPObj, usCmdID, pbuff, ulRecvLen);
-        pMsgBodyCtx_dec = pCMD->ucRecvdOptData;
-
-        ultmpNetSeq.ucVal[0] = pMsgBodyCtx_dec[0];
-        ultmpNetSeq.ucVal[1] = pMsgBodyCtx_dec[1];
-        ultmpNetSeq.ucVal[2] = pMsgBodyCtx_dec[2];
-        ultmpNetSeq.ucVal[3] = pMsgBodyCtx_dec[3];
-        timestamp = (time_t)ntohl(ultmpNetSeq.ulVal);
-        if (dePrintTime == 1)
-        {
-            printf_safe("server: ");
-            printTime(timestamp);
-            printf_safe("\n");
-            printf_safe("local:  ");
-            printTime(time(NULL));
-            printf_safe("\n");
-        }
-        if(utils_abs(timestamp - time(NULL)) > 10)//大于10s进行校时
-        {
-            time(&timestamp);
-        }
-        lRecvElem.UID = 0;
-        lRecvElem.timestamp = time(NULL);
-        lRecvElem.len = pCMD->ulRecvdOptLen;
-        lRecvElem.pbuff = pCMD->ucRecvdOptData;
-        lRecvElem.status = 0;
-        gdsl_list_insert_tail(pCMD->plRecvCmd, (void *)&lRecvElem);
-
-        xSemaphoreGive(pCMD->xMutexCmd);
-    }//if mutex
-
-    return 1;
-}
 static gdsl_element_t echCmdListAlloc(gdsl_element_t e)
 {
     echCmdElem_t *copyCmdElem;
@@ -2844,7 +2799,7 @@ echProtocol_t *EchProtocolCreate(void)
     /* @todo (rgw#1#): 接收命令超时参数现在已经不用了, 随便设置, 调试完成后剔除 */
     //注册                                 (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
     pProto->pCMD[ECH_CMDID_REGISTER]       = EchCMDCreate(1,   2,   0,  makeCmdReg,          analyCmdCommon);
-    pProto->pCMD[ECH_CMDID_HEARTBEAT]      = EchCMDCreate(3,   4,   0,  makeCmdHeart,        analyCmdHeart);
+    pProto->pCMD[ECH_CMDID_HEARTBEAT]      = EchCMDCreate(3,   4,   0,  makeCmdHeart,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_RESET]          = EchCMDCreate(6,   5,   30, makeCmdReset,        analyCmdCommon);
     pProto->pCMD[ECH_CMDID_STATUS]         = EchCMDCreate(41,  42,  30, makeCmdStatus,       analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REMOTE_CTRL]    = EchCMDCreate(44,  43,  30, makeCmdRemoteCtrl,   analyCmdCommon);
