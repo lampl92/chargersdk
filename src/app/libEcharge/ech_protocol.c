@@ -1113,12 +1113,11 @@ static int makeCmdCardRTData(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_CARD_RTDATA, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
-static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint16_t usCmdID, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
 {
     echProtocol_t *pProto;
     OrderData_t *pOrder;
     uint8_t *pbuff;
-    uint8_t ucOrderSN[8] = {0};
     uint32_t ulMsgBodyCtxLen_dec;
     ul2uc ultmpNetSeq;
     us2uc ustmpNetSeq;
@@ -1128,7 +1127,7 @@ static int makeCmdOrderBodyCtx(void *pPObj, void *pCObj, uint8_t *pucMsgBodyCtx_
 
     pProto = (echProtocol_t *)pPObj;
     pOrder = (OrderData_t *)pCObj;
-    pbuff = pProto->pCMD[ECH_CMDID_ORDER]->ucRecvdOptData;  // -------注意修改ID
+    pbuff = pProto->pCMD[usCmdID]->ucRecvdOptData;   // -------注意修改ID
     ulMsgBodyCtxLen_dec = 0;
 
     //[0] 有卡 04 无卡05
@@ -1375,7 +1374,7 @@ static int makeCmdOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendB
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdOrderBodyCtx(pPObj, pCObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }
@@ -1385,7 +1384,7 @@ static int makeCmdReqOrder(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSe
     uint32_t ulMsgBodyCtxLen_dec;
 
     // -------注意修改ID
-    makeCmdOrderBodyCtx(pPObj, pCObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeCmdOrderBodyCtx(pPObj, pCObj, ECH_CMDID_REQ_ORDER, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
     makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_ORDER, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;    
 }

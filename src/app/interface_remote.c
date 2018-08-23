@@ -607,7 +607,7 @@ ErrorCode_t RemoteIF_RecvOrder(EVSE_t *pEVSE, echProtocol_t *pProto, OrderData_t
         if(pCON != NULL)
         {
             memcpy(ullOrderSN.ucArray, &pbuff[1], 8);
-            if(pCON->order.ullOrderSN == ntohll(ullOrderSN.ullVal))
+            if(pOrder->ullOrderSN == ntohll(ullOrderSN.ullVal))
             {
                 *psiRetVal = 1;
             }
