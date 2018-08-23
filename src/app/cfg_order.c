@@ -307,7 +307,7 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
     uint32_t ulMaxItem;
     int i;
 	struct tm *ts;
-	char buf[80];
+    char buf[80] = { 0 };
     jsParent = GetCfgObj(path, &errcode);
     if (jsParent == NULL)
     {
@@ -331,7 +331,7 @@ int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
 	        jsItem = cJSON_GetObjectItem(jsChild, jnCardID);
 	        printf_safe("CardID\t%s\n", jsItem->valuestring);
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderOrderSN);
-            printf_safe("OrderSN\t%s\n", jsItem->valuestring);
+            printf_safe("OrderSN\t%lf\n", jsItem->valuedouble);
 	        
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
 	        ts = localtime((time_t*)&(jsItem->valueint));
