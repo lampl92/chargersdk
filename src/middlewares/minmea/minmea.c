@@ -15,6 +15,7 @@
 #include <time.h>
 
 #define boolstr(s) ((s) ? "true" : "false")
+#define timegm  mktime
 
 static int hex2int(char c)
 {

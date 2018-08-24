@@ -1431,6 +1431,7 @@
 //../../../src/net/user
 //../../../src/middlewares/unzip101e
 //../../../src/middlewares/libmodbus-3.1.4/src
+//../../../src/middlewares/minmea
 // --- Include directories end --- //
 
 

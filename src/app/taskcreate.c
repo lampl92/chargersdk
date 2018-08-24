@@ -182,12 +182,12 @@ void vTaskInit(void *pvParameters)
 #endif
     int gps_handle;
     char ch[1024];
-    gps_handle = uart_open("USART6", 9600, 8, 'N', 1);
+    //gps_handle = uart_open("USART6", 38400, 8, 'N', 1);
     while (1)
     {
-        memset(ch, 0, 1024);
-        uart_read_wait(gps_handle, ch, 1024, 100);
-        printf_safe("%s\n", ch);
+        //memset(ch, 0, 1024);
+        //uart_read_wait(gps_handle, ch, 1024, 100);
+        //printf_safe("%s\n", ch);
         IWDG_Feed();
         vTaskDelay(1000);
     }

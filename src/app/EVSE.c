@@ -612,6 +612,7 @@ static void CONInit(void)
         pListCON->Add(pListCON, pCON[i]);
     }
 }
+int gps_handle;
 void EVSEinit(void)
 {
     char str[17] = "3000000000001018";
@@ -649,6 +650,8 @@ void EVSEinit(void)
     CONInit();
     
     meter = meter_init(pEVSE->info.ucPhaseLine);
+
+    gps_handle = uart_open("USART6", 38400, 8, 'N', 1);
 
     pRFIDDev = RFIDDevCreate(RFID_UARTx, RFID_UART_BAND, RFID_UART_DATA, RFID_UART_PARI, RFID_UART_STOP);
 
