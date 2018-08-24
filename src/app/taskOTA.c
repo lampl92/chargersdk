@@ -10,6 +10,7 @@
 #include "evse_define.h"
 #include "evse_config.h"
 #include "interface_ftpserver.h"
+#include "bsp.h"
 
 #include "lcddrv.h"
 #include "ifconfig.h"
@@ -41,6 +42,11 @@ void vTaskOTA(void *pvParameters)
     flg = get_bmp_check_tmp();
 #endif
 
+    int gps_handle;
+    char ch[10] = { 0 };
+    uint8_t i = 0;
+    gps_handle = uart_open("USART6", 115200, 8, 'N', 1);
+    
     while (1)
     {
 #if EVSE_USING_GUI
@@ -69,6 +75,8 @@ void vTaskOTA(void *pvParameters)
         }
 #endif
 
+        sprintf(ch, "GPS,%d\r\n", i++);
+        uart_write_fast(gps_handle, ch, strlen(ch));
 #if DEBUG_TASK
         printf_safe("%s\n", TASKNAME_OTA);
 #endif
