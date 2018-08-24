@@ -461,7 +461,8 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
 
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderOrderSN);
-            LISTVIEW_SetItemText(hItem, 3, i, jsItem->valuestring);
+            sprintf(buf, "%.0lf", jsItem->valuedouble);
+            LISTVIEW_SetItemText(hItem, 3, i, buf);
 
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStartTime);
