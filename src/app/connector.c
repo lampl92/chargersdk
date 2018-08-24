@@ -375,7 +375,7 @@ static ErrorCode_t GetCPState(void *pvCON)
         }
         pCON->status.ulSignalFault &= ~defSignalCON_Fault_CP;
     }
-    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 8.0f))//标准8.2~9.8
+    else if((pCON->status.dCPVolt < 9.8f) && (pCON->status.dCPVolt > 7.8f))//标准8.2~9.8
     {
         if (*pCCRx != TIMER_MAX)
         {
