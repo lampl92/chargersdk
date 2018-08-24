@@ -16,10 +16,10 @@
 #define USART1_RB_SIZE 128
 #define USART2_RB_SIZE 1024
 #define USART3_RB_SIZE 1024
-#define UART4_RB_SIZE 1024
-#define UART5_RB_SIZE 1024 * 16
-#define USART6_RB_SIZE 1024
-#define UART7_RB_SIZE 1024
+#define UART4_RB_SIZE  1024
+#define UART5_RB_SIZE  (1024 * 16)
+#define USART6_RB_SIZE 256
+#define UART7_RB_SIZE  1024
 
 ///////////////////////////////////////////
 #define UART_PATH_ERR       -1
