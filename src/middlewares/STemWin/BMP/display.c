@@ -547,20 +547,27 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
     
     qr_hmem = GUI_QR_Create(pText, 180/qr_coefficient, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
-    GUI_MEMDEV_Select(mem);
     memx =  GUI_MEMDEV_GetXSize(mem);
     memy = GUI_MEMDEV_GetYSize(mem);
-    GUI_SetColor(GUI_WHITE);                       
-    GUI_FillRect((memx - QR_info_struct.Size) / 2, (48 + (200 - QR_info_struct.Size) / 2), QR_info_struct.Size, QR_info_struct.Size);
+    GUI_MEMDEV_Select(mem);
+    //GUI_SetColor(GUI_WHITE);             
+    GUI_SetBkColor(GUI_WHITE);
+    //GUI_FillRect((memx - QR_info_struct.Size) / 2, (48 + (200 - QR_info_struct.Size) / 2), QR_info_struct.Size, QR_info_struct.Size);
+    int cx0, cy0, cx1, cy1;
+    cx0 = (memx - 180) / 2;
+    cy0 = (50 + (200 - 180) / 2);
+    cx1 = cx0 + 180;
+    cy1 = cy0 + 180;
+    GUI_ClearRect(cx0,cy0, cx1,cy1);
     if (memx < QR_info_struct.Size)
     {
         return -1;
     }
     qrx = (memx - QR_info_struct.Size) / 2;
-    qry = 48+(200 - QR_info_struct.Size) / 2;
+    qry = 50+(200 - QR_info_struct.Size) / 2;
     GUI_QR_Draw(qr_hmem, qrx, qry);
-    GUI_QR_Delete(qr_hmem);
     GUI_MEMDEV_Select(0);  
+    GUI_QR_Delete(qr_hmem);
     return 0;
 }
 
@@ -618,7 +625,8 @@ void gui_halt(void)
 
 int createStartUpMemdev(void)
 {
-    //5个文件
+    CON_t *pCON;  
+    //单枪6个文件,双枪7个
     IS_BMP_OK(Memdevcardinfoback = createMemdev(pathcardinfoback));
     IS_BMP_OK(Memdevcardinfostartup = createMemdev(pathcardinfostartup));
     IS_BMP_OK(Memdevcardinfostartone = createMemdev(pathcardinfostartone));
@@ -626,6 +634,22 @@ int createStartUpMemdev(void)
     IS_BMP_OK(Memdevcardinfostatrtthree = createMemdev(pathcardinfostatrtthree));
     extern void create_sif_font(u8 *fxpath, GUI_FONT * pFont, const GUI_SIF_TYPE * pFontType);
     create_sif_font(pathfontwryhcg30e, &fontwryhcg30e, GUI_SIF_TYPE_PROP_EXT);
+    if (pEVSE->info.ucTotalCON == 1)
+    {
+        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
+        pCON = CONGetHandle(0);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+    }
+    else
+    {
+        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
+        pCON = CONGetHandle(0);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
+    
+        IS_BMP_OK(MemdevhomegunBfree = createMemdev(pathhomegunBfree));
+        pCON = CONGetHandle(1);
+        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
+    }
     return 1;
 }
 
@@ -636,11 +660,7 @@ int creatememdev(void)
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
     {
-        //6个文件
-        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
-        pCON = CONGetHandle(0);
-        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
-        
+        //5个文件
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
@@ -650,22 +670,14 @@ int creatememdev(void)
     }
     else
     {
-        //30个文件
-        IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
-        pCON = CONGetHandle(0);
-        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
-    
-        IS_BMP_OK(MemdevhomegunBfree = createMemdev(pathhomegunBfree));
-        pCON = CONGetHandle(1);
-        createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
-    
+        //28个文件    
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomeback));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunAcharging));
         IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunAerror);) 
         IS_BMP_OK(MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone));
         IS_BMP_OK(MemdevhomegunBcharging = createMemdev(pathhomegunBcharging));
-        IS_BMP_OK(MemdevhomegunBerror = createMemdev(pathhomegunBerror);      ) 
+        IS_BMP_OK(MemdevhomegunBerror = createMemdev(pathhomegunBerror));
         
          //选枪
         IS_BMP_OK(MemdevSelectGunBack = createMemdev(pathSelectGunBack));
