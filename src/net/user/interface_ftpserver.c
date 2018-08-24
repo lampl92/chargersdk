@@ -122,7 +122,7 @@ uint_t ftpServerGetFilePermCallback(FtpClientConnection *connection,
 {
     uint_t perm;
 
-    TRACE_INFO("FTP server: Checking access rights for %s\r\n", path);
+    //TRACE_INFO("FTP server: Checking access rights for %s\r\n", path);
 
     //管理权限
     if (!strcmp(user, "anonymous"))
