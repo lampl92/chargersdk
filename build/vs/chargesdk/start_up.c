@@ -82,7 +82,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
             else
             {
-                system_start_percent = (int)(100.0*( nums_picture-5.0) / 67.0);
+                system_start_percent = (int)(100.0*( nums_picture-5.0) / 70.0);
             }
             sprintf(temp_buf, "%d%%", system_start_percent);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), temp_buf); 
