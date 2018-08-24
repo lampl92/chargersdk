@@ -24,7 +24,6 @@ void cli_hello_fnt(int argc, char **argv)
         //test_cfg_set(i);
     }
     //test_cfg_get();
-    printf_safe("reconnect_remain_time %d", get_reconnect_remain_time());
 #if 0
     CON_t *pCON;
     pCON = CONGetHandle(0);
