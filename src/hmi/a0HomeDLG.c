@@ -69,7 +69,7 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 447, 7, 240, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 417, 7, 240, 30, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "netConnectText", ID_TEXT_10, 700, 45, 90, 30, TEXT_CF_RIGHT | TEXT_CF_TOP, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 295, 340, 230, 45, 0, 0x0, 0 },
     { TEXT_CreateIndirect, "electricFeetext", ID_TEXT_1, 302, 422, 100, 44, 0, 0x0, 0 },

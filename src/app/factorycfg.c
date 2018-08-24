@@ -54,8 +54,8 @@ const char *strEVSECfg =
 
 const char *strProtoCfg =
 "{\
-    \"ServerIP\": \"123.56.113.123\",\n \
-    \"ServerPort\": 6677,\n \
+    \"ServerIP\": \"s.dpcpower.com\",\n \
+    \"ServerPort\": 6999,\n \
     \"UserName\": \"esaasusr\",\n \
     \"UserPwd\": \"esaaspasswrd\",\n \
     \"Key\": \"0123456789abcdeg\",\n \

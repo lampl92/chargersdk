@@ -331,7 +331,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "123.56.113.123");
+                    Keypad_GetValueTest(SYSSET_VALUE, 22, _hWinManagerSysSet, _hWinManagerCommon, sysServerIP, "s.dpcpower.com");
                 }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pechProto->info.strServerIP);
