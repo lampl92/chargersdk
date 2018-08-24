@@ -269,6 +269,37 @@ uint32_t uart_read_wait(int handle, uint8_t *data, uint32_t len, uint32_t timeou
     return sum;
 }
 
+uint32_t uart_read_line(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms)
+{
+    uint32_t rl = 0;
+    uint32_t sum = 0;
+    uint8_t ch[1];
+
+    do
+    {
+        if (len - sum == 0)
+            break;
+        rl = uart_read_fast(handle, data + sum, 1);
+        if (*(data + sum) == '\n')
+        {
+            sum += rl;
+            break;
+        }
+        sum += rl;
+        if (timeout_ms == 0)
+            break;
+        osDelay(1);
+    } while (timeout_ms--);
+    
+    if (sum == len || timeout_ms == 0)
+    {
+        memset(data, 0, len);
+        sum = 0;
+    }
+    
+    return sum;
+}
+
 void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
 {
     while ((USARTx_BASE->SR & USART_SR_TC) == 0)

@@ -43,5 +43,6 @@ int uart_open(char *path, uint32_t band, int data_bit, char parity, int stop_bit
 int uart_close(int handle);
 uint32_t uart_read_fast(int handle, uint8_t *data, uint32_t len);
 uint32_t uart_read_wait(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms);
+uint32_t uart_read_line(int handle, uint8_t *data, uint32_t len, uint32_t timeout_ms);
 uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len);
 #endif
