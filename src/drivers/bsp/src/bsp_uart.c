@@ -214,7 +214,8 @@ int uart_open(char *path, uint32_t band, int data_bit, char parity, int stop_bit
     driver->UARTx_Handler.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     driver->UARTx_Handler.Init.OverSampling = UART_OVERSAMPLING_16;
     HAL_UART_Init(&(driver->UARTx_Handler));
-    HAL_UART_Receive_IT(&(driver->UARTx_Handler), (uint8_t *)(driver->rbuff), 1);
+    //HAL_UART_Receive_IT(&(driver->UARTx_Handler), (uint8_t *)(driver->rbuff), 1);
+    LL_USART_EnableIT_RXNE(driver->UARTx_Handler.Instance);
 
     driver->is_initialized = 1;
 
@@ -300,24 +301,25 @@ uint32_t uart_read_line(int handle, uint8_t *data, uint32_t len, uint32_t timeou
     return sum;
 }
 
-void __uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
+void ll_uart_putc(USART_TypeDef *USARTx_BASE, uint8_t ch)
 {
-    while ((USARTx_BASE->SR & USART_SR_TC) == 0)
-        ;
-    while ((USARTx_BASE->SR & USART_SR_TXE) == 0) 
-        ;
-    USARTx_BASE->DR = ch;
+    /* Wait for TXE flag to be raised */
+    while (!LL_USART_IsActiveFlag_TXE(USARTx_BASE)) ;
+
+    LL_USART_ClearFlag_TC(USARTx_BASE);
+
+    LL_USART_TransmitData8(USARTx_BASE, ch);
 }
 
 uint32_t uart_write_fast(int handle, const uint8_t *data, uint32_t len)
 {
     uint32_t l = len;
     osMutexWait(uart_driver[handle].lock, osWaitForever);
-#if 0
+#if 1
     while (l > 0)
     {
         l--;
-        __uart_putc(uart_driver[handle].UARTx_Handler.Instance, *data);
+        ll_uart_putc(uart_driver[handle].UARTx_Handler.Instance, *data);
         data++;
     }
 #else
@@ -462,143 +464,37 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     }
 }
 
+#define LL_UART_IRQHandler(x)       if (LL_USART_IsActiveFlag_RXNE(uart_driver[x-1].UARTx_Handler.Instance) == 1)\
+                                    {\
+                                        LL_USART_ClearFlag_RXNE(uart_driver[x-1].UARTx_Handler.Instance);\
+                                        uart_driver[x-1].rbuff[0] = LL_USART_ReceiveData8(uart_driver[x-1].UARTx_Handler.Instance);\
+                                        ring_buffer_put(uart_driver[x-1].rb, (uint8_t *)uart_driver[x-1].rbuff, 1);\
+                                    }
 void USART1_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[0].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[0].UARTx_Handler, (uint8_t *)uart_driver[0].rbuff, 1);
+    LL_UART_IRQHandler(1);
 }
 void USART2_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[1].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[1].UARTx_Handler, (uint8_t *)uart_driver[1].rbuff, 1);
+    LL_UART_IRQHandler(2);
 }
 void USART3_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[2].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[2].UARTx_Handler, (uint8_t *)uart_driver[2].rbuff, 1);
+    LL_UART_IRQHandler(3);
 }
 void UART4_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[3].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[3].UARTx_Handler, (uint8_t *)uart_driver[3].rbuff, 1);
+    LL_UART_IRQHandler(4);
 }
 void UART5_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[4].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[4].UARTx_Handler, (uint8_t *)uart_driver[4].rbuff, 1);
+    LL_UART_IRQHandler(5);
 }
 void USART6_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[5].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[5].UARTx_Handler, (uint8_t *)uart_driver[5].rbuff, 1);
+    LL_UART_IRQHandler(6);
 }
 void UART7_IRQHandler(void)
 {
-    HAL_UART_IRQHandler(&(uart_driver[6].UARTx_Handler));
-    HAL_UART_Receive_IT(&uart_driver[6].UARTx_Handler, (uint8_t *)uart_driver[6].rbuff, 1);
-}
-
-/**
-  * @brief  Tx Transfer completed callback
-  * @param  UartHandle: UART handler.
-  * @note   This example shows a simple way to report end of IT Tx transfer,
-and
-  *         you can add your own implementation.
-  * @retval None
-  */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-}
-
-/**
-  * @brief  Rx Transfer completed callback
-  * @param  UartHandle: UART handler
-  * @note   This example shows a simple way to report end of IT Rx transfer,
-and
-  *         you can add your own implementation.
-  * @retval None
-  */
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-    int i;
-    for (i = 0; i < UART_MAX; i++)
-    {
-        if (uart_driver[i].UARTx_Handler.Instance == huart->Instance)
-        {
-            ring_buffer_put(uart_driver[i].rb, (uint8_t *)uart_driver[i].rbuff, 1);
-        }
-    }
-}
-
-/**
-  * @brief  UART error callbacks
-  * @param  UartHandle: UART handler
-  * @note   This example shows a simple way to report transfer error, and you
-can
-  *         add your own implementation.
-  * @retval None
-  */
-#define THROW_USART_ERR(DEV, ERR, LEVEL)                                        \
-    if (huart->Instance == DEV##_USARTx_BASE)                                   \
-    {                                                                           \
-        if (huart->ErrorCode == HAL_USART_ERROR_##ERR)                          \
-        {                                                                       \
-            ThrowErrorCode(defDevID_##DEV, ERR_UART_##ERR, LEVEL, "USART ERR"); \
-        }                                                                       \
-    }
-
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
-{
-    int i;
-    for (i = 0; i < UART_MAX; i++)
-    {
-        if (uart_driver[i].UARTx_Handler.Instance == huart->Instance)
-        {
-//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_ORE)
-//            {
-//                buzz(1, 100, 100);
-//            }
-//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_PE)
-//            {
-//                buzz(2, 1000, 1000);
-//            }
-//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_NE)
-//            {
-//                buzz(3, 50, 50);
-//            }
-//            if (HAL_UART_GetError(huart) == HAL_UART_ERROR_FE)
-//            {
-//                buzz(4, 50, 50);
-//            }
-            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE) != RESET) 
-            {
-                __HAL_UART_CLEAR_OREFLAG(huart);
-            }
-            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE) != RESET) 
-            {
-                __HAL_UART_CLEAR_PEFLAG(huart);
-            }
-            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_NE) != RESET) 
-            {
-                __HAL_UART_CLEAR_NEFLAG(huart);
-            }
-            if (__HAL_UART_GET_FLAG(huart, UART_FLAG_FE) != RESET) 
-            {
-                __HAL_UART_CLEAR_FEFLAG(huart);
-            }
-        }
-    }
-
-    //    THROW_USART_ERR(RFID, PE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(RFID, NE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(RFID, FE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(RFID, ORE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(RFID, DMA, ERR_LEVEL_TIPS);
-    //
-    //    THROW_USART_ERR(GPRS, PE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(GPRS, NE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(GPRS, FE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(GPRS, ORE, ERR_LEVEL_TIPS);
-    //    THROW_USART_ERR(GPRS, DMA, ERR_LEVEL_TIPS);
+    LL_UART_IRQHandler(7);
 }

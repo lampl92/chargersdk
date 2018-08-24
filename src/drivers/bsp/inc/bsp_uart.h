@@ -9,6 +9,7 @@
 #define BSP_USART_H_
 
 #include "stm32f4xx.h"
+#include "stm32f4xx_ll_usart.h"
 #include "bsp_define.h"
 #include "ring_buffer.h"
 
