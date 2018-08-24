@@ -101,7 +101,6 @@ void vTaskRemoteCmdProc(void *pvParameters)
                     }
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
-                    vTaskDelay(1000);
                 }
                 /* 2. 已发送，判断发送情况*///由于要根据枪ID判断删除命令，已经将发送处理放到协议接收（inerface_remote.c）中处理
                 if (pechProtoElem->status == 1)
