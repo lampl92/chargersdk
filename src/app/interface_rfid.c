@@ -29,8 +29,10 @@ static ErrorCode_t RFIDGetUID(void *pvRfid)
     if(state == MT_STATE_Y)
     {
         Buzzer_control(1);
+        Buzzer_control(1);
         //vTaskDelay(200);
         bsp_DelayMS(200);
+        Buzzer_control(0);
         Buzzer_control(0);
         ulRecvdOptLen = pmt626cmd->ulRecvdOptLen;
         memset(pRfid->status.ucCardID, 0, defCardIDLength);
