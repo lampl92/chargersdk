@@ -636,15 +636,12 @@ int creatememdev(void)
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
     {
-        //9个文件
+        //6个文件
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunfreesingle));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
         
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
-        IS_BMP_OK(Memdevselectpatternback = createMemdev(pathselectpatternback));
-        IS_BMP_OK(Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard));
-        IS_BMP_OK(Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
         IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle)); 
@@ -731,7 +728,7 @@ int creatememdev(void)
 //    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
 //    GUI_MEMDEV_Select(0);
     
-    //下面一共37个文件
+    //下面一共40个文件
     IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));
     IS_BMP_OK(Memdevhomegunscancode = createMemdev(pathhomegunscancode));
     IS_BMP_OK(Memdevhomegunlookinfopress = createMemdev(pathhomegunlookinfopress));
@@ -784,6 +781,9 @@ int creatememdev(void)
     IS_BMP_OK(MemdevcardinfoPwdLimted = createMemdev(pathcardinfoPwdLimted));
     IS_BMP_OK(MemdevcardinfoPwdError = createMemdev(pathcardinfoPwdError));
     IS_BMP_OK(MemdevcardinfoPwdTest = createMemdev(pathcardinfoPwdTest));
+    IS_BMP_OK(Memdevselectpatternback = createMemdev(pathselectpatternback));
+    IS_BMP_OK(Memdevselectpatternkeyboard = createMemdev(pathselectpatternkeyboard));
+    IS_BMP_OK(Memdevselectpatternkeyboardpress = createMemdev(pathselectpatternkeyboardpress));
     //Memdevcardinfoarrears = createMemdev(pathcardinfoarrears));
 //    MemdevcardinfoUnavailable = createMemdev(pathcardinfoUnavailable));
 //    Memdevcardinfostartfail = createMemdev(pathcardinfostartfail));
