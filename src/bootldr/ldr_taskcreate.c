@@ -86,6 +86,7 @@ void Jump_To_APP(void)
 {
     asm("cpsid i");
     asm("ldr sp, =_estack");
+    SYSCFG->MEMRMP = SYSCFG->MEMRMP | SYSCFG_MEMRMP_SWP_FMC_0; 
     ((void(*)())_app_start[1])();
 }
 
