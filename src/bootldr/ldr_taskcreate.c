@@ -159,11 +159,14 @@ void vTaskInit(void *pvParameters)
                     {
                         printf_safe("Crc32 OK!\n");
                         printf_safe("正在升级程序，请勿断电！\n");
-                        bsp_WriteCpuFlash(APP_ADDRESS, pucBinBuffer, size);
+                        FMC_SDRAM_WriteBuffer(pucBinBuffer, APP_ADDRESS, size);
+                        //bsp_WriteCpuFlash(APP_ADDRESS, pucBinBuffer, size);
                         free(pucBinBuffer);
-                        yaffs_unlink(filepath);
-                        upflag = '2';
-                        set_tmp_file(pathUpgradeTmp, &upflag);
+                        //yaffs_unlink(filepath);
+//                        upflag = '2';
+//                        set_tmp_file(pathUpgradeTmp, &upflag);
+                        printf_safe("app_start!\n");
+                        Jump_To_APP();
                     }
                 }
             }
