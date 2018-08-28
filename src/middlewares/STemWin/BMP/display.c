@@ -809,11 +809,5 @@ int creatememdev(void)
     IS_BMP_OK(MemdevPwdPromptPicture = createMemdev(pathPwdPromptPicture));
     IS_BMP_OK(MemdevPwdInputBox = createMemdev(pathPwdInputBox));
     
-    if (get_bmp_check_tmp() == 3)//检测文件正常,但是还存在tmp,删除tmp并重启
-    {
-        yaffs_unlink(pathBmpCheckTmp);
-        NVIC_SystemReset();
-    }
-    
     return 1;
 }

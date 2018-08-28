@@ -96,6 +96,7 @@ static void netStateInit(net_device_t *net_dev)
 {
     error_t error; 
     uint32_t n = 0;//接口号
+    char flg;
     
     //初始化网络设备
     net_dev->interface = &netInterface[n];
@@ -104,7 +105,16 @@ static void netStateInit(net_device_t *net_dev)
     if (error == NO_ERROR)
     {
         ifconfig_update(net_dev);
-        netChangeState(net_dev, NET_STATE_CONNECT);
+
+        flg = get_bmp_check_tmp();
+        if (flg == 3)
+        {
+            netChangeState(net_dev, NET_STATE_IDLE);
+        }
+        else
+        {
+            netChangeState(net_dev, NET_STATE_CONNECT);
+        }
     }
     else
     {

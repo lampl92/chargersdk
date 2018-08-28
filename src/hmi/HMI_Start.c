@@ -6,6 +6,7 @@
 #include "interface.h"
 #include "stringName.h"
 #include "file_op.h"
+#include "yaffsfs.h"
 
 TaskHandle_t xHandleTaskReadData = NULL;
 
@@ -32,6 +33,11 @@ static void vTask_read_data(void *pvParameters)
 {
     createfont();
     creatememdev();
+    if (get_bmp_check_tmp() == 3)//检测文件正常,但是还存在tmp,删除tmp并重启
+    {
+        yaffs_unlink(pathBmpCheckTmp);
+        NVIC_SystemReset();
+    }
     flag_read_data = 1;
     vTaskDelete(NULL);
 }
@@ -116,12 +122,12 @@ void MainTask(void)
         WM_MULTIBUF_Enable(1);
         GUI_UC_SetEncodeUTF8();
         createStartUpMemdev();    
+        startUpWin = CreatestartUpDLG();
+        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
         if (get_bmp_check_tmp() == 3)
         {
             vTaskSuspend(NULL);
         }
-        startUpWin = CreatestartUpDLG();
-        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();
 //        memoryfree = GUI_ALLOC_GetNumFreeBlocks();
 //        memoryfree = GUI_ALLOC_GetNumUsedBytes();
