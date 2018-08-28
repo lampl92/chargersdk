@@ -4,7 +4,7 @@
 #include "stm32f4xx.h"
 
 extern SDRAM_HandleTypeDef SDRAM_Handler;//SDRAM句柄
-#define Bank5_SDRAM_ADDR    ((uint32_t)(0XC0000000)) //SDRAM开始地址
+#define Bank5_SDRAM_ADDR    ((uint32_t)(0X80000000)) //SDRAM开始地址
 
 //SDRAM配置参数
 

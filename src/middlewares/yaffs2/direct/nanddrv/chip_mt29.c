@@ -78,7 +78,7 @@ static int power_check(struct nand_chip *this)
 
 void chip_mt29f4g08_init(struct nand_chip *this)
 {
-    g_m29_priv.nand_bank_addr = 0x80000000;
+    g_m29_priv.nand_bank_addr = 0xC0000000;
     g_m29_priv.nand_init = nand_hal_init;
     this->private_data = &g_m29_priv;
     
