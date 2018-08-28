@@ -374,7 +374,7 @@ void LTDC_Init(void)
 	lcdltdc.pixsize=4;				//每个像素占4个字节
 #else
     lcdltdc.pixsize=2;				//每个像素占2个字节
-	ltdc_framebuf[0]=(u32*)(0xc0000000);//ltdc_lcd_framebuf;
+	ltdc_framebuf[0]=(u32*)(0x80000000);//ltdc_lcd_framebuf;
 #endif
     //LTDC配置
     LTDC_Handler.Instance=LTDC;
