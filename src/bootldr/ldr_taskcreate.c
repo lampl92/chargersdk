@@ -86,7 +86,6 @@ void Jump_To_APP(void)
 {
     asm("cpsid i");
     asm("ldr sp, =_estack");
-    SYSCFG->MEMRMP = SYSCFG->MEMRMP | SYSCFG_MEMRMP_SWP_FMC_0; 
     ((void(*)())_app_start[1])();
 }
 
@@ -160,6 +159,7 @@ void vTaskInit(void *pvParameters)
                     {
                         printf_safe("Crc32 OK!\n");
                         printf_safe("正在升级程序，请勿断电！\n");
+                        memset((void *)APP_ADDRESS, 0, size);
                         FMC_SDRAM_WriteBuffer(pucBinBuffer, APP_ADDRESS, size);
                         //bsp_WriteCpuFlash(APP_ADDRESS, pucBinBuffer, size);
                         free(pucBinBuffer);
