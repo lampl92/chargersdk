@@ -91,21 +91,21 @@ void fsmc_sdram_test()
     printf_safe("每隔16K字节,写入一个数据,总共写入2048个数据,刚好是32M字节\n");
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
-        *(vu32 *)(Bank5_SDRAM_ADDR + i) = temp;
+        *(vu32 *)(Bank1_SDRAM_ADDR + i) = temp;
         temp++;
     }
     temp = 0;
     //依次读出之前写入的数据,进行校验
     for(i = 0; i < 32 * 1024 * 1024; i += 16 * 1024)
     {
-        sval = *(vu32 *)(Bank5_SDRAM_ADDR + i);
+        sval = *(vu32 *)(Bank1_SDRAM_ADDR + i);
         if(temp == sval)
         {
-            printf_safe("[@0x%x]=OK!\n", Bank5_SDRAM_ADDR | i);
+            printf_safe("[@0x%x]=OK!\n", Bank1_SDRAM_ADDR | i);
         }
         else
         {
-            printf_safe("[@0x%x]=ERR!\n", Bank5_SDRAM_ADDR | i);
+            printf_safe("[@0x%x]=ERR!\n", Bank1_SDRAM_ADDR | i);
             break;
         }
         temp++;

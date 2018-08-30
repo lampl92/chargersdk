@@ -131,11 +131,13 @@ void bsp_Init(void)
     bsp_DWT_Init();
     
 #if BOOTLOADER
+    bsp_SDRAM_Init();
+#else
+#endif
+#if BOOTLOADER
 #else
     Peripheral_Init();
 #endif
-    bsp_SDRAM_Init();
-
 #if EVSE_USING_GUI
     LCD_Init();
     TP_Init();
