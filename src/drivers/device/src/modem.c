@@ -62,7 +62,7 @@ DR_MODEM_e modem_write(DevModem_t *pModem, uint8_t *pbuff, uint32_t len)
 }
 uint32_t modem_read(DevModem_t *pModem, uint8_t *rbuff, uint32_t len)
 {
-    return uart_read_line(pModem->uart_handle, rbuff, len, 100);
+    return uart_read_wait(pModem->uart_handle, rbuff, len, 10);
 }
 
 DevModem_t *DevModemCreate(void)

@@ -46,14 +46,14 @@ static DR_MODEM_e M26_ATI(DevModem_t *pModem)
     switch (ret)
     {
     case DR_MODEM_OK:
-        strcpy(pModem->info.strATI, reply);
+        sscanf(reply, "%s%s", pModem->info.strManufacturer, pModem->info.strDeviceModule);
         break;
     default:
         break;
     }
     return ret;
 }
-//运行商
+//ICCID
 static DR_MODEM_e M26_AT_QCCID(DevModem_t *pModem)
 {
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -66,7 +66,7 @@ static DR_MODEM_e M26_AT_QCCID(DevModem_t *pModem)
     switch (ret)
     {
     case DR_MODEM_OK:
-        strcpy(pModem->info.strICCID, reply);
+        sscanf(reply, "%20s", pModem->info.strICCID);
         break;
     default:
         break;

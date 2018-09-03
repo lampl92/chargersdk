@@ -43,9 +43,11 @@ void cli_networkinfo_fnt(int argc, char **argv)
 }
 void cli_modeminfo_fnt(int argc, char **argv)
 {
-    printf_safe("=============信息=============\n");
-
-    printf_safe("=============状态=============\n");
+    printf_safe("=============模块信息=============\n");
+    printf_safe("制造商: %s\n", pModem->info.strManufacturer);
+    printf_safe("模块: %s\n", pModem->info.strDeviceModule);
+    printf_safe("=============SIM卡状态=============\n");
+    printf_safe("ICCID: %s\n", pModem->info.strICCID);
     printf_safe("插卡状态：      ");
     if(pModem->status.eSimStat == CPIN_READY)
     {

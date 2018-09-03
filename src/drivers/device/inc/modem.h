@@ -64,7 +64,8 @@ typedef struct
     uint8_t ucContext;
     uint8_t ucTPMode;
     char strICCID[20 + 1];
-    char strATI[128];
+    char strManufacturer[32];
+    char strDeviceModule[32];
 } ModemInfo_t;
 
 typedef struct
