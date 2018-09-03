@@ -33,12 +33,14 @@ void net_ftp_server_start(net_device_t *net_dev)
     ftpServerSettings.port = FTP_PORT;
     //设置根目录
     strcpy(ftpServerSettings.rootDir, YAFFS_MOUNT_POINT);
+#if 0
     //用户验证回调函数
     ftpServerSettings.checkUserCallback = ftpServerCheckUserCallback;
     //密码验证回调函数
     ftpServerSettings.checkPasswordCallback = ftpServerCheckPasswordCallback;
     //检索文件权限
     ftpServerSettings.getFilePermCallback = ftpServerGetFilePermCallback;
+#endif
 
     //使用配置参数初始化 FTP 服务器
     error = ftpServerInit(&ftpServerContext, &ftpServerSettings);

@@ -27,7 +27,7 @@ void ota_gui(void)
     LCD_ShowString(100, 160, 200, 20, 16, ifconfig.status.strDNS1);
     LCD_ShowString(100, 180, 200, 20, 16, ifconfig.status.strDNS2);
 
-    sprintf(disp_str, "ftp://admin:admin@%s", ifconfig.status.strIP);
+    sprintf(disp_str, "ftp://%s", ifconfig.status.strIP);
     LCD_ShowString(100, 220, 300, 20, 16, disp_str);
 }
 
