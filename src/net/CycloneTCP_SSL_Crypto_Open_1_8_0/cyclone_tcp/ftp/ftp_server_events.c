@@ -459,6 +459,7 @@ void ftpServerReceiveData(FtpServerContext *context, FtpClientConnection *connec
             //Write data to the specified file
             error = fsWriteFile(connection->file,
                connection->buffer, connection->bufferLength);
+             osDelay(1);
 
             //Any error to report?
             if(error)
