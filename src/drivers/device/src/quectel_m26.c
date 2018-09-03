@@ -41,13 +41,12 @@ static DR_MODEM_e M26_ATI(DevModem_t *pModem)
     DR_MODEM_e ret;
 
     modem_send_at("ATI\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "Q", 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, NULL, 3);
     printf_safe("%s", reply);
     switch (ret)
     {
     case DR_MODEM_OK:
-        sscanf(reply, "%*[^ ] %[0-9]", s);
-        pModem->status.ucSignalQuality = atoi(s);
+        strcpy(pModem->info.strATI, reply);
         break;
     default:
         break;
@@ -55,22 +54,19 @@ static DR_MODEM_e M26_ATI(DevModem_t *pModem)
     return ret;
 }
 //运行商
-static DR_MODEM_e M26_AT_COPS(DevModem_t *pModem)
+static DR_MODEM_e M26_AT_QCCID(DevModem_t *pModem)
 {
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
     char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
 
-    modem_send_at("AT+COPS?\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "+COPS", 3);
-    //printf_safe("%s", reply);
+    modem_send_at("AT+QCCID\r");
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, NULL, 3);
+    printf_safe("%s", reply);
     switch (ret)
     {
     case DR_MODEM_OK:
-        if (strstr(reply, "CHINA MOBILE") != NULL)
-        {
-            //printf_safe("%s", reply);
-        }
+        strcpy(pModem->info.strICCID, reply);
         break;
     default:
         break;
@@ -822,6 +818,8 @@ DR_MODEM_e M26_init(void *pvModem)
         return ret;
     }
     timeout = 0;
+    M26_ATI(pModem);
+    M26_AT_QCCID(pModem);
     do
     {
         timeout++;

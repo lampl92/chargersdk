@@ -59,10 +59,12 @@ typedef enum
 
 typedef struct
 {
-    char strAPN[16+1];
+    char strAPN[16 + 1];
     char strATD[32 + 1];
     uint8_t ucContext;
     uint8_t ucTPMode;
+    char strICCID[20 + 1];
+    char strATI[128];
 } ModemInfo_t;
 
 typedef struct
