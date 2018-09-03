@@ -64,12 +64,13 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
         "NET_STATE_INIT",
         "NET_STATE_CONNECT",
         "NET_STATE_FTP",
+        "NET_STATE_FTPServer",
         "NET_STATE_TCP_ON",
         "NET_STATE_DISCONNECT",
         "NET_STATE_ERR"
     };
 
-    if (net_dev->state < arraysize(stateLabel) && new_state < arraysize(stateLabel))
+    if ((int)(net_dev->state) < arraysize(stateLabel) && (int)new_state < arraysize(stateLabel))
     {
         TRACE_INFO("TASK NET FSM: %s (%u) -> %s (%u)\r\n",
             stateLabel[net_dev->state],
@@ -109,7 +110,7 @@ static void netStateInit(net_device_t *net_dev)
         flg = get_bmp_check_tmp();
         if (flg == 3)
         {
-            netChangeState(net_dev, NET_STATE_IDLE);
+            netChangeState(net_dev, NET_STATE_FTPServer);
         }
         else
         {
@@ -266,6 +267,15 @@ static void netStateFTP(net_device_t *net_dev)
         netChangeState(net_dev, NET_STATE_CONNECT);
     }
 }
+static void netStateFTPServer(net_device_t *net_dev)
+{
+    #include "stm32f4xx_hal_adc.h"
+    extern ADC_HandleTypeDef hadc1;
+    HAL_ADC_Stop_DMA(&hadc1);
+    net_ftp_server_start(net_dev);
+    xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP);
+    netChangeState(net_dev, NET_STATE_IDLE);
+}
 static void netStateErr(net_device_t *net_dev)
 {
     inc_reconnect_time();
@@ -318,6 +328,9 @@ void vTaskTCPClient(void *pvParameters)
             break;
         case NET_STATE_FTP:
             netStateFTP(net_dev);
+            break;
+        case NET_STATE_FTPServer:
+            netStateFTPServer(net_dev);
             break;
         case NET_STATE_ERR:
             netStateErr(net_dev);

@@ -20,10 +20,10 @@ typedef enum
     NET_STATE_INIT,
     NET_STATE_CONNECT,
     NET_STATE_FTP,
+    NET_STATE_FTPServer,
     NET_STATE_TCP_ON,
     NET_STATE_DISCONNECT,
-    NET_STATE_ERR,
-    
+    NET_STATE_ERR
 }net_state;
 
 typedef struct _net_device 

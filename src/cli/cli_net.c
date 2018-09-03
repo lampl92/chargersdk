@@ -3,7 +3,8 @@
 #include "evse_globals.h"
 void cli_ftpserver_fnt(int argc, char **argv)
 {
-    net_ftp_server_start(net_dev);
+    extern void netChangeState(net_device_t *net_dev, net_state new_state);
+    netChangeState(net_dev, NET_STATE_FTPServer);
 }
 
 tinysh_cmd_t cli_ftpserver_cmd =

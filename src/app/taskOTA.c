@@ -31,7 +31,6 @@ void ota_gui(void)
     LCD_ShowString(100, 220, 300, 20, 16, disp_str);
 }
 
-extern TaskHandle_t xHandleTaskTCPClient;
 void vTaskOTA(void *pvParameters)
 {
 #if EVSE_USING_GUI
@@ -62,7 +61,6 @@ void vTaskOTA(void *pvParameters)
                 {
                     vTaskDelay(100);
                 }
-                net_ftp_server_start(net_dev);
                 LCD_ShowString(100, 80, 300, 20, 16, "ftp start...");
                 ota_gui();
             }

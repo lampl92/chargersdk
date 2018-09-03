@@ -583,7 +583,6 @@ void gui_halt(void)
         if (flg == 3)//有文件并且设置过3
         {
             printf_safe("缺少图片，暂停GUI\n");
-            xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP);
             
             vTaskSuspend(xHandleTaskEVSERemote);
             vTaskSuspend(xHandleTaskEVSERFID);
