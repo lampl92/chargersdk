@@ -173,7 +173,7 @@ const char *strSysCfg =
 //DHCP   1:使能  0:禁止
 const char *strNetCfg =
 "{\n \
-    \"Adapter\": 1,\n \
+    \"Adapter\": 2,\n \
     \"DHCP\": 1,\n \
     \"HostName\":\"DUET Charger\",\n \
     \"MAC\":\"00-AB-CD-EF-04-29\",\n \
