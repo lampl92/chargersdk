@@ -45,15 +45,24 @@ void timeInit()
     time(&settime);
 }
 
-char g_strChipID[24 + 1] = { 0 };
-void Get_ChipID(void)
+char g_strChipID[16 + 1] = { 0 };
+void Get_ChipID(int contype, int total_con)
 {
     int i;
     __IO uint8_t *pid;
     pid = (__IO uint8_t *)0x1FFF7A10;
-    for (i = 0; i < 6; i++)
+    uint8_t offset = 0;
+    
+    g_strChipID[offset++] =  '0' + contype;
+    g_strChipID[offset++] =  '0' + total_con;
+    
+    for (i = 0; i < 7; i++)
     {
-        g_strChipID[i] = pid[i+6];
+        g_strChipID[offset++] = '0';
+    }
+    for (i = 0; i < 7; i++)
+    {
+        g_strChipID[offset++] = pid[i + 5];
     }
     //printf_safe("ChipID: %s\n", g_strChipID);
 //    HexToStr((uint8_t *)pid, g_strChipID, 12);
@@ -110,7 +119,6 @@ extern void cli_init(void);
 void sys_Init(void)
 {
     int res;
-    Get_ChipID();
     retarget_init();
     cli_init();
     timeInit();

@@ -186,6 +186,9 @@
 /*充电枪类型*/
 #define defCONType_DC                   1
 #define defCONType_AC                   2
+#define defCONType_ACDC                 3
+    
+
 
 /*充电桩接口类型*/
 #define defSocketTypeB              ('B')//66

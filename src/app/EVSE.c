@@ -218,7 +218,6 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     }
     
     //cfgobj_get_string(jsCfgObj, pEVSE->info.strSN, "%s", jnEVSESN);
-    sprintf(pEVSE->info.strSN, "%s", g_strChipID);
     cfgobj_get_string(jsCfgObj, pEVSE->info.strID, "%s", jnEVSEID);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucType, "%s", jnEVSEType);
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucPhaseLine, "%s", jnPhaseLine);
@@ -228,6 +227,9 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucServiceFeeType, "%s", jnServiceFeeType);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dServiceFee, "%s", jnServiceFee);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dDefSegFee, "%s", jnDefSegFee);
+    extern void Get_ChipID(int contype, int total_con);
+    Get_ChipID(EVSE_CONFIG_CONType, pEVSE->info.ucTotalCON);
+    sprintf(pEVSE->info.strSN, "%s", g_strChipID);
     
     cJSON_Delete(jsCfgObj);
     return errcode;

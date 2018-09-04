@@ -8,6 +8,10 @@
 #ifndef __EVSE_CONFIG_H
 #define __EVSE_CONFIG_H
 
+#ifndef EVSE_CONFIG_CONType
+#define EVSE_CONFIG_CONType             defCONType_AC
+#endif
+
 #ifndef EVSE_USING_RFID
 #define EVSE_USING_RFID             1
 #endif
