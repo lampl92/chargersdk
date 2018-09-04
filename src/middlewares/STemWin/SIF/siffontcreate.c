@@ -96,7 +96,7 @@ extern void gui_halt(void);
                                                             if(_macro_errcode == -1)                  \
                                                             {                                       \
                                                                 gui_halt();  \
-                                                            }                                     \                                                            
+                                                            }                                     \
                                                         }while(0);
 void createfont()
 {
