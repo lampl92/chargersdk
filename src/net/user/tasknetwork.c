@@ -269,9 +269,6 @@ static void netStateFTP(net_device_t *net_dev)
 }
 static void netStateFTPServer(net_device_t *net_dev)
 {
-    #include "stm32f4xx_hal_adc.h"
-    extern ADC_HandleTypeDef hadc1;
-    HAL_ADC_Stop_DMA(&hadc1);
     net_ftp_server_start(net_dev);
     xEventGroupSetBits(xHandleEventHMI, defEventBitHMI_REQ_StartFTP);
     netChangeState(net_dev, NET_STATE_IDLE);
