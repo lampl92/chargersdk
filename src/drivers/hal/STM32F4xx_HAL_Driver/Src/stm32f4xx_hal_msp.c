@@ -258,7 +258,7 @@ void MX_DMA_Init(void)
     /* DMA interrupt init */
     /* DMA2_Stream0_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, bspDMA2_Stream0_PreemptPriority, bspDMA2_Stream0_SubPriority);
-    HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+   // HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 
 }
 void DMA_START(void)
