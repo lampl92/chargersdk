@@ -35,8 +35,8 @@
 #define defMaxCON               32
 //#define defUIDLength            4
 #define defCardIDLength         16
-#define defEVSESNLength         64
-#define defEVSEIDLength         64
+#define defEVSESNLength         16
+#define defEVSEIDLength         16
 #define defFileNameLength       64
 #define defNodeNameLength       64
 #define defQRCodeLength         64
