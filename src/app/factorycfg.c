@@ -10,7 +10,7 @@
 const char *strEVSECfg = 
 "{\
     \"EVSESN\":\"0102030405060708\",\n \
-    \"EVSEID\":\"2000000000000002\",\n \
+    \"EVSEID\":\"1234567890012001\",\n \
     \"EVSEType\":2,\n \
     \"PhaseLine\":1,\n \
     \"TotalCON\":1,\n \
@@ -32,7 +32,7 @@ const char *strEVSECfg =
             \"SocketTempLowerLimits\":-40,\n \
             \"RatedCurrent\":32,\n \
             \"RatedPower\":7,\n \
-            \"QRCode\":\"2000000000000002\"\n \
+            \"QRCode\":\"12345678900120010\"\n \
         },\n \
         {\n \
             \"ID\":1,\n \
@@ -46,7 +46,7 @@ const char *strEVSECfg =
             \"SocketTempLowerLimits\":-40,\n \
             \"RatedCurrent\":32,\n \
             \"RatedPower\":7,\n \
-            \"QRCode\":\"2000000000000013\"\n \
+            \"QRCode\":\"12345678900120012\"\n \
         }\n \
     ],\n \
     \"TemplSegArray\":[]\n \
@@ -56,8 +56,8 @@ const char *strProtoCfg =
 "{\
     \"ServerIP\": \"s.dpcpower.com\",\n \
     \"ServerPort\": 6999,\n \
-    \"UserName\": \"esaasusr\",\n \
-    \"UserPwd\": \"esaaspasswrd\",\n \
+    \"UserName\": \"dpcpower\",\n \
+    \"UserPwd\": \"dpcpowerpass\",\n \
     \"Key\": \"0123456789abcdeg\",\n \
     \"NewKey\": \"\",\n \
     \"NewKeyChangeTime\": 2147483647,\n \
