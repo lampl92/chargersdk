@@ -87,8 +87,8 @@ EDIT_Handle _aahEditEg;//示例
 KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
-uint8_t passwd[16];
-uint8_t *passwdDebug = "01.02.1222";
+char passwd[16+1];
+char *passwdDebug = "01.02.1222";
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static uint32_t statelog = 0;
@@ -1262,26 +1262,33 @@ static uint8_t Value_Check()
         switch (htmpID)
         {
         case 20:
-            cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSESN);
-            //pEVSE->info.SetEVSECfg(pEVSE, jnEVSESN, result_input, ParamTypeString);
-            memset(pEVSE->info.strSN, '\0', strlen(pEVSE->info.strSN));
-            strncpy(pEVSE->info.strSN, result_input, sizeof(pEVSE->info.strSN)-1);
+#if 0
+            if (strlen(result_input) < sizeof(pEVSE->info.strSN))
+            {
+                cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSESN);
+                memset(pEVSE->info.strSN, '\0', sizeof(pEVSE->info.strSN));
+                strcpy(pEVSE->info.strSN, result_input);
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID0);
+#endif
             break;
         case 21:
             if (strlen(result_input) == 16)
             {
                 cfg_set_string(pathEVSECfg, result_input, "%s", jnEVSEID);
-                //pEVSE->info.SetEVSECfg(pEVSE, jnEVSEID, result_input, ParamTypeString);
-                memset(pEVSE->info.strID, '\0', strlen(pEVSE->info.strID));
-                strncpy(pEVSE->info.strID, result_input, sizeof(pEVSE->info.strID) - 1);   
+                memset(pEVSE->info.strID, '\0', sizeof(pEVSE->info.strID));
+                strcpy(pEVSE->info.strID, result_input);   
             }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID1);
             break;
         case 22:
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoServerIP);
-            memset(pechProto->info.strServerIP, '\0', strlen(pechProto->info.strServerIP));
-            strncpy(pechProto->info.strServerIP, result_input, sizeof(pechProto->info.strServerIP)-1);
+            if (strlen(result_input) < sizeof(pechProto->info.strServerIP))
+            {
+                cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoServerIP);
+                memset(pechProto->info.strServerIP, '\0', sizeof(pechProto->info.strServerIP));
+                strcpy(pechProto->info.strServerIP, result_input);   
+            }
+            //strncpy(pechProto->info.strServerIP, result_input, sizeof(pechProto->info.strServerIP)-1);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
         case 23://
@@ -1294,15 +1301,19 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
             break;
         case 24://user name
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserName);
-            memset(pechProto->info.strUserName, '\0', strlen(pechProto->info.strUserName));
-            strncpy(pechProto->info.strUserName, result_input, sizeof(pechProto->info.strUserName)-1);
+            if (strlen(result_input) < sizeof(pechProto->info.strUserName))
+            {
+                sscanf(result_input, "%8s", pechProto->info.strUserName);
+                cfg_set_string(pathProtoCfg, pechProto->info.strUserName, "%8s", jnProtoUserName);               
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25://user passwd
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoUserPwd);
-            memset(pechProto->info.strUserPwd, '\0', strlen(pechProto->info.strUserPwd));
-            strncpy(pechProto->info.strUserPwd, result_input, sizeof(pechProto->info.strUserPwd)-1);
+            if (strlen(result_input) < sizeof(pechProto->info.strUserName))
+            {
+                sscanf(result_input, "%12s", pechProto->info.strUserPwd);
+                cfg_set_string(pathProtoCfg, pechProto->info.strUserPwd, "%12s", jnProtoUserPwd);                
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
             break;
         case 26://屏保时间
@@ -1327,15 +1338,20 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID7);
             break;
         case 28://秘钥
-            cfg_set_string(pathProtoCfg, result_input, "%s", jnProtoKey);
-            memset(pechProto->info.strKey, '\0', strlen(pechProto->info.strKey));
-            strncpy(pechProto->info.strKey, result_input, sizeof(pechProto->info.strKey)-1);
+            if (strlen(result_input) == 16)
+            {
+                sscanf(result_input, "%16s", pechProto->info.strKey);
+                cfg_set_string(pathProtoCfg, pechProto->info.strKey, "%s", jnProtoKey);
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID8);
             break;
         case 29://manager passwd
-            cfg_set_string(pathSysCfg, result_input, "%s", jnSysVersion);
-            memset(passwd, '\0', strlen(passwd));
-            strncpy(passwd, result_input, sizeof(passwd)-1);
+            if (strlen(result_input) < sizeof(passwd))
+            {
+                cfg_set_string(pathSysCfg, result_input, "%s", jnSysVersion);
+                memset(passwd, '\0', sizeof(passwd));
+                strcpy(passwd, result_input);
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID9);
             break;
         case 30://接触点温度限制
@@ -1449,52 +1465,66 @@ static uint8_t Value_Check()
             }
             break;
         case 34:
-            //result_input[16] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetHostName);
-            memset(ifconfig.info.strHostName, '\0', strlen(ifconfig.info.strHostName));
-            strncpy(ifconfig.info.strHostName, result_input, sizeof(ifconfig.info.strHostName)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strHostName))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetHostName);
+                memset(ifconfig.info.strHostName, '\0', sizeof(ifconfig.info.strHostName));
+                strcpy(ifconfig.info.strHostName, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDE);
             break;
         case 35:
-            //result_input[17] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMAC);
-            memset(ifconfig.info.strMAC, '\0', strlen(ifconfig.info.strMAC));
-            strncpy(ifconfig.info.strMAC, result_input, sizeof(ifconfig.info.strMAC)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strMAC))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetMAC);
+                memset(ifconfig.info.strMAC, '\0', sizeof(ifconfig.info.strMAC));
+                strcpy(ifconfig.info.strMAC, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETIDF);
             break;
         case 37:
-            //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetIP);
-            memset(ifconfig.info.strIP, '\0', strlen(ifconfig.info.strIP));
-            strncpy(ifconfig.info.strIP, result_input, sizeof(ifconfig.info.strIP)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strIP))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetIP);
+                memset(ifconfig.info.strIP, '\0', sizeof(ifconfig.info.strIP));
+                strcpy(ifconfig.info.strIP, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID11);
             break;
         case 38:
-            //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
-            memset(ifconfig.info.strMask, '\0', strlen(ifconfig.info.strMask));
-            strncpy(ifconfig.info.strMask, result_input, sizeof(ifconfig.info.strMask)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strMask))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetMask);
+                memset(ifconfig.info.strMask, '\0', sizeof(ifconfig.info.strMask));
+                strcpy(ifconfig.info.strMask, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID12);
             break;
         case 39:
-            //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
-            memset(ifconfig.info.strGate, '\0', strlen(ifconfig.info.strGate));
-            strncpy(ifconfig.info.strGate, result_input, sizeof(ifconfig.info.strGate)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strGate))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetGate);
+                memset(ifconfig.info.strGate, '\0', sizeof(ifconfig.info.strGate));
+                strcpy(ifconfig.info.strGate, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID13);
             break;
         case 40:
-            //result_input[15] = '\0';
-            cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
-            memset(ifconfig.info.strDNS1, '\0', strlen(ifconfig.info.strDNS1));
-            strncpy(ifconfig.info.strDNS1, result_input, sizeof(ifconfig.info.strDNS1)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strDNS1))
+            {
+                cfg_set_string(pathNetCfg, result_input, "%s", jnNetDNS1);
+                memset(ifconfig.info.strDNS1, '\0', sizeof(ifconfig.info.strDNS1));
+                strcpy(ifconfig.info.strDNS1, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID14);
             break;
         case 41:
-            //result_input[15] = '\0';
-            cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
-            memset(ifconfig.info.strDNS2, '\0', strlen(ifconfig.info.strDNS2));
-            strncpy(ifconfig.info.strDNS2, result_input, sizeof(ifconfig.info.strDNS2)-1);            
+            if (strlen(result_input) < sizeof(ifconfig.info.strDNS2))
+            {
+                cfg_set_uint8(pathNetCfg, result_input, "%s", jnNetDNS2);
+                memset(ifconfig.info.strDNS2, '\0', sizeof(ifconfig.info.strDNS2));
+                strcpy(ifconfig.info.strDNS2, result_input);            
+            }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID15);
             break;
         }

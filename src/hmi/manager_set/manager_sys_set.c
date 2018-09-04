@@ -760,16 +760,16 @@ static void _cbDialog(WM_MESSAGE *pMsg)
         _editxoff = GUI_MANAGER_XLEFT + _FONT_WIDTH*(strlen(sysServerPort)) / 3;
         xSysconf.GetSysCfg((void *)&xSysconf, NULL);
         _aahText[0][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT, _FONT_WIDTH*(strlen(sysEVSESN)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysEVSESN);
-        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("112233445566778812345678")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 20, strlen("112233445566778812345678"));
+        _aahEdit[0][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT, _WORD_WIDTH*(strlen("20000000000000002"))*3/4, GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 20, strlen("20000000000000002"));
         EDIT_SetText(_aahEdit[0][0], pEVSE->info.strSN);
         EDIT_SetBkColor(_aahEdit[0][0], EDIT_CI_ENABLED, GUI_GRAY);
 
         _aahText[1][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _FONT_WIDTH*(strlen(sysEVSEID)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysEVSEID);
-        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("20000000000000002")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("20000000000000002"));
+        _aahEdit[1][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF, _WORD_WIDTH*(strlen("20000000000000002"))*3/4, GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 21, strlen("20000000000000002"));
         EDIT_SetText(_aahEdit[1][0], pEVSE->info.strID);
 
         _aahText[2][0] = TEXT_CreateEx(GUI_MANAGER_XLEFT, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _FONT_WIDTH*(strlen(sysServerIP)), GUI_MANAGER_YOFF, hWindow, WM_CF_SHOW, 0, 13, sysServerIP);
-        _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*(strlen("123.561.113.123")), GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("123.561.113.123"));
+        _aahEdit[2][0] = EDIT_CreateEx(_editxoff, GUI_MANAGER_YLEFT + GUI_MANAGER_YOFF * 2, _WORD_WIDTH*strlen("112233445566778812345678")*3/4, GUI_MANAGER_YSIZE, hWindow, WM_CF_SHOW, 0, 22, strlen("112233445566778812345678"));
 //        memset(_tmpBuff,'\0',strlen(_tmpBuff));
 //        sprintf(_tmpBuff,"%d",pechProto->info.strServerIP);
         EDIT_SetText(_aahEdit[2][0], pechProto->info.strServerIP);
