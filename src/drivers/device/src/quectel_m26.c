@@ -59,14 +59,16 @@ static DR_MODEM_e M26_AT_QCCID(DevModem_t *pModem)
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
     char s[8 + 1] = { 0 };
     DR_MODEM_e ret;
+    char *p;
 
     modem_send_at("AT+QCCID\r");
-    ret = modem_get_at_reply(reply, sizeof(reply) - 1, NULL, 3);
+    ret = modem_get_at_reply(reply, sizeof(reply) - 1, "89", 3);
     printf_safe("%s", reply);
     switch (ret)
     {
     case DR_MODEM_OK:
-        sscanf(reply, "%20s", pModem->info.strICCID);
+        p  = strstr(reply, "89");
+        sscanf(p, "%20s", pModem->info.strICCID);
         break;
     default:
         break;
@@ -819,7 +821,23 @@ DR_MODEM_e M26_init(void *pvModem)
     }
     timeout = 0;
     M26_ATI(pModem);
-    M26_AT_QCCID(pModem);
+    do
+    {
+        timeout++;
+        if (timeout > timeoutMax)
+        {
+            timeout = 0;
+            return DR_MODEM_TIMEOUT;
+        }
+        ret = M26_AT_QCCID(pModem);
+        if (ret == DR_MODEM_OK)
+        {
+            break;
+        }
+        modem_delayms(1000);
+    } while (1);
+    
+    timeout = 0;
     do
     {
         timeout++;
