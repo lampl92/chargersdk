@@ -137,8 +137,9 @@ typedef struct _echProtoStatus
 #define ECH_CMDID_REQ_APPOINT    43  //平台查询预约设置
 
 #define ECH_CMDID_REQ_ORDER   44//查询交易记录
+#define ECH_CMDID_REQ_ICCID   45//查询SIM卡ICCID
 /*命令个数*/
-#define ECH_CMD_MAX              45
+#define ECH_CMD_MAX              46
 
 typedef struct
 {

@@ -1401,12 +1401,14 @@ ErrorCode_t RemoteIF_RecvReq(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVa
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_QR,       pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_BLACK,    pEVSE, pProto, &res);
     RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_WHITE,    pEVSE, pProto, &res);
+    RemoteIF_RecvReqCmdid(ECH_CMDID_REQ_ICCID,    pEVSE, pProto, &res);
 
     RemoteIF_RecvSetBnWList(ECH_CMDID_SET_BLACK, pEVSE, pProto, &res);
     RemoteIF_RecvSetBnWList(ECH_CMDID_SET_WHITE, pEVSE, pProto, &res);
 
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_ADD_BNW, pEVSE, pProto, &res);
     RemoteIF_RecvAddDelBnWList(ECH_CMDID_DEL_BNW, pEVSE, pProto, &res);
+    
     
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {

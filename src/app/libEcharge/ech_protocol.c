@@ -2440,6 +2440,54 @@ static int makeCmdSetAppoint(void *pPObj, void *pEObj, void *pCObj, uint8_t *puc
     makeStdCmd(pPObj, pEObj, ECH_CMDID_SET_APPOINT, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
     return 1;
 }
+
+static int makeCmdReqICCIDBodyCtx(void *pPObj, uint8_t *pucMsgBodyCtx_dec, uint32_t *pulMsgBodyCtxLen_dec)
+{
+    echProtocol_t *pProto;
+    uint8_t *pbuff;
+    uint32_t ulMsgBodyCtxLen_dec;
+    int i;
+
+    pProto = (echProtocol_t *)pPObj;
+    pbuff = pProto->pCMD[ECH_CMDID_REQ_ICCID]->ucRecvdOptData;   // -------注意修改ID
+    ulMsgBodyCtxLen_dec = 0;
+
+    //[0...3] 操作ID
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[0];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[1];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[2];
+    pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pbuff[3];
+    //[4...23] SIM卡ICCID
+    for(i = 0 ; i < 20 ; i++)
+    {
+        if (ifconfig.info.ucAdapterSel == 2)//GPRS
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = pModem->info.strICCID[i];   //eg. "898600220909A0206023"
+        }
+        else//其他网卡无ICCID
+        {
+            pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = 0;
+        }
+    }
+
+    *pulMsgBodyCtxLen_dec = ulMsgBodyCtxLen_dec;  //不要忘记赋值
+    return 1;    
+}
+static int makeCmdReqICCID(void *pPObj, void *pEObj, void *pCObj, uint8_t *pucSendBuffer, uint32_t *pulSendLen)
+{
+    uint8_t ucMsgBodyCtx_dec[REMOTE_SENDBUFF_MAX];
+    uint32_t ulMsgBodyCtxLen_dec;
+
+    // -------注意修改ID
+    makeCmdReqICCIDBodyCtx(pPObj, ucMsgBodyCtx_dec, &ulMsgBodyCtxLen_dec);
+    makeStdCmd(pPObj, pEObj, ECH_CMDID_REQ_ICCID, ucMsgBodyCtx_dec, ulMsgBodyCtxLen_dec, pucSendBuffer, pulSendLen);
+    return 1;    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static uint16_t GetCmdIDViaRecvCmd(echProtocol_t *pProto, uint16_t usRecvCmd)
 {
     uint32_t id;
@@ -2852,6 +2900,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_SET_APPOINT]    = EchCMDCreate(204, 203, 30, makeCmdSetAppoint,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_APPOINT]    = EchCMDCreate(204, 205, 30, makeCmdReqAppoint,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_ORDER]      = EchCMDCreate(46,  48,  30, makeCmdReqOrder,     analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_REQ_ICCID]      = EchCMDCreate(207, 206, 30, makeCmdReqICCID,     analyCmdCommon);
 
     //end of 注册                                       (桩命令, 平台命令, 接收的命令处理超时, 发送命令制作, 接收分析)
 
