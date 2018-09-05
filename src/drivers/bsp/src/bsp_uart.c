@@ -464,12 +464,18 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     }
 }
 
-#define LL_UART_IRQHandler(x)       if (LL_USART_IsActiveFlag_RXNE(uart_driver[x-1].UARTx_Handler.Instance) == 1)\
-                                    {\
-                                        LL_USART_ClearFlag_RXNE(uart_driver[x-1].UARTx_Handler.Instance);\
-                                        uart_driver[x-1].rbuff[0] = LL_USART_ReceiveData8(uart_driver[x-1].UARTx_Handler.Instance);\
-                                        ring_buffer_put(uart_driver[x-1].rb, (uint8_t *)uart_driver[x-1].rbuff, 1);\
-                                    }
+#define LL_UART_IRQHandler(x)                                                                               \
+    do                                                                                                      \
+    {                                                                                                       \
+        if (LL_USART_IsActiveFlag_ORE(uart_driver[x - 1].UARTx_Handler.Instance) == 1)                      \
+            LL_USART_ClearFlag_ORE(uart_driver[x - 1].UARTx_Handler.Instance);                              \
+        if (LL_USART_IsActiveFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance) == 1)                     \
+        {                                                                                                   \
+            LL_USART_ClearFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance);                             \
+            uart_driver[x - 1].rbuff[0] = LL_USART_ReceiveData8(uart_driver[x - 1].UARTx_Handler.Instance); \
+            ring_buffer_put(uart_driver[x - 1].rb, (uint8_t *)uart_driver[x - 1].rbuff, 1);                 \
+        }                                                                                                   \
+    } while (0);
 void USART1_IRQHandler(void)
 {
     LL_UART_IRQHandler(1);
