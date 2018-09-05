@@ -212,7 +212,7 @@ static void _cbDialog_frame_changePile(WM_MESSAGE *pMsg)
                     Keypad_GetValueTest(SYSSET_VALUE, 33, _hWinManagerSysSet, _hWinManagerCommon, "电表", "1:内部,2:单相,3:三相,4:老式");
                     break;
                 case HARD_PASSWORD:
-                    Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "123456");
+                    Keypad_GetValueTest(SYSSET_VALUE, 29, _hWinManagerSysSet, _hWinManagerCommon, sysManagerPwd, "小于17位");
                     break;
                 default:
                     break;
@@ -316,7 +316,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "2000000000000002");
+                    Keypad_GetValueTest(SYSSET_VALUE, 21, _hWinManagerSysSet, _hWinManagerCommon, sysEVSEID, "16位");
                 }
                 //                    memset(_tmpBuff, '\0', sizeof(_tmpBuff));
                 //                    sprintf(_tmpBuff, "%d", pEVSE->info.strID);
@@ -361,7 +361,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "dpcuser");
+                    Keypad_GetValueTest(SYSSET_VALUE, 24, _hWinManagerSysSet, _hWinManagerCommon, sysUserName, "8位");
                 }
                 //                    EDIT_SetText(_aahEdit[4][0], pechProto->info.strUserName);
             }
@@ -374,7 +374,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "1234567890");
+                    Keypad_GetValueTest(SYSSET_VALUE, 25, _hWinManagerSysSet, _hWinManagerCommon, sysUserPwd, "12位");
                 }
                 //                    EDIT_SetText(_aahEdit[5][0], "******");
             }
@@ -416,7 +416,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
 
-                    Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "123456");
+                    Keypad_GetValueTest(SYSSET_VALUE, 28, _hWinManagerSysSet, _hWinManagerCommon, sysPasswd, "16位");
                 }
             }
             break;
@@ -480,7 +480,7 @@ static void _cbWindow(WM_MESSAGE *pMsg) {
                 {
                     WM_HideWindow(_hWinManagerSysSet);
                     WM_HideWindow(_hWinManagerCommon);
-                    Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "DPC");
+                    Keypad_GetValueTest(SYSSET_VALUE, 34, _hWinManagerSysSet, _hWinManagerCommon, "主机名", "小于17位");
                 }
             }
             break;

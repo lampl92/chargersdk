@@ -10,6 +10,27 @@
 #include "file_op.h"
 #include "utils.h"
 
+void file_config_reset(void)
+{
+    yaffs_unlink(pathOrder);
+    yaffs_unlink(pathOrderTmp);
+    yaffs_unlink(pathEVSELog);
+    yaffs_unlink(pathEVSECfg);
+    yaffs_unlink(pathSysCfg);
+    yaffs_unlink(pathFTPCfg);
+    yaffs_unlink(pathProtoCfg);
+    yaffs_unlink(pathNetCfg);
+    yaffs_unlink(pathBlackList);
+    yaffs_unlink(pathWhiteList);
+    NVIC_SystemReset();
+}
+void file_log_reset(void)
+{
+    yaffs_unlink(pathOrder);
+    yaffs_unlink(pathOrderTmp);
+    yaffs_unlink(pathEVSELog);
+    NVIC_SystemReset();
+}
 ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
 {
     cJSON *jsRoot = NULL;

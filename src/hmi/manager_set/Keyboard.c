@@ -1301,18 +1301,18 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
             break;
         case 24://user name
-            if (strlen(result_input) < sizeof(pechProto->info.strUserName))
+            if (strlen(result_input) == 8)
             {
                 sscanf(result_input, "%8s", pechProto->info.strUserName);
-                cfg_set_string(pathProtoCfg, pechProto->info.strUserName, "%8s", jnProtoUserName);               
+                cfg_set_string(pathProtoCfg, pechProto->info.strUserName, "%s", jnProtoUserName);               
             }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25://user passwd
-            if (strlen(result_input) < sizeof(pechProto->info.strUserPwd))
+            if (strlen(result_input) == 12)
             {
                 sscanf(result_input, "%12s", pechProto->info.strUserPwd);
-                cfg_set_string(pathProtoCfg, pechProto->info.strUserPwd, "%12s", jnProtoUserPwd);                
+                cfg_set_string(pathProtoCfg, pechProto->info.strUserPwd, "%s", jnProtoUserPwd);                
             }
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID5);
             break;

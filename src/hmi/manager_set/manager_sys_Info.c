@@ -11,6 +11,7 @@
 #include "errorcode.h"
 #include <string.h>
 #include "yaffsfs.h"
+#include "file_op.h"
 
 #define BYTES_LEN 1024
 
@@ -94,10 +95,7 @@ static void _cbDialog_frame_record(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                yaffs_unlink(pathOrder);
-                yaffs_unlink(pathOrderTmp);
-                yaffs_unlink(pathEVSELog);
-                NVIC_SystemReset();
+                file_log_reset();
                 break;
             default:
                 break;
@@ -145,14 +143,7 @@ static void _cbDialog_frame_default(WM_MESSAGE *pMsg)
             switch (NCode)
             {
             case WM_NOTIFICATION_RELEASED:
-                yaffs_unlink(pathOrder);
-                yaffs_unlink(pathOrderTmp);
-                yaffs_unlink(pathEVSELog);
-                yaffs_unlink(pathEVSECfg);
-                yaffs_unlink(pathSysCfg);
-                yaffs_unlink(pathFTPCfg);
-                yaffs_unlink(pathProtoCfg);
-                NVIC_SystemReset();
+                file_config_reset();
                 break;
             default:
                 break;

@@ -3,6 +3,7 @@
 
 #include "libEcharge/ech_ftp.h"
 
+
 typedef struct _flist_t
 {
     char strFilename[64];
@@ -20,5 +21,7 @@ int get_bmp_check_tmp(void);
 uint8_t *GetFileBuffer(char *path, uint32_t *psize);
 int GetFileCrc32(char *path, uint32_t *pulCrc32);
 int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
+void file_config_reset(void);
+void file_log_reset(void);
 
 #endif
