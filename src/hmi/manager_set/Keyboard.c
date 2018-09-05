@@ -1309,7 +1309,7 @@ static uint8_t Value_Check()
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25://user passwd
-            if (strlen(result_input) < sizeof(pechProto->info.strUserName))
+            if (strlen(result_input) < sizeof(pechProto->info.strUserPwd))
             {
                 sscanf(result_input, "%12s", pechProto->info.strUserPwd);
                 cfg_set_string(pathProtoCfg, pechProto->info.strUserPwd, "%12s", jnProtoUserPwd);                
