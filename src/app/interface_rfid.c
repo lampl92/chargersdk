@@ -48,6 +48,8 @@ static ErrorCode_t RFIDGetUID(void *pvRfid)
     }
     else if(state == MT_COM_FAIL)
     {
+        uart_close(pRFIDDev->uart_handle);
+        pRFIDDev->uart_handle = uart_open(RFID_UARTx, RFID_UART_BAND, RFID_UART_DATA, RFID_UART_PARI, RFID_UART_STOP);
         pEVSE->status.ulSignalFault |= defSignalEVSE_Fault_RFID;
         errcode = ERR_RFID_FAULT;
     }
