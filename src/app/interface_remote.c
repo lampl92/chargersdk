@@ -1430,11 +1430,7 @@ ErrorCode_t RemoteIF_SendCardStart(EVSE_t *pEVSE, echProtocol_t *pProto, RFIDDev
 
         return ERR_BLACK_LIST;
     }
-#if EVSE_USING_NET
     else if(pProto->info.BnWIsListCfg(pathWhiteList, pRfid->order.strCardID) == 1)
-#else
-    else if(1)
-#endif
     {
         pRfid->order.ucAccountStatus = 1;
         pRfid->order.dBalance = 9999.99;
