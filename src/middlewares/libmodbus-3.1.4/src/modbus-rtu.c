@@ -169,6 +169,7 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
         }
         puart = uart_get_driver_des(ctx->s);
         osDelay(5);
+        LL_USART_DisableDirectionRx(puart->UARTx_Handler.Instance);
         LL_USART_DisableIT_RXNE(puart->UARTx_Handler.Instance);
         RS485_EN;
         osDelay(5);
@@ -176,6 +177,7 @@ static ssize_t _modbus_rtu_send(modbus_t *ctx, const uint8_t *req, int req_lengt
 //        osDelay(ctx_rtu->onebyte_time * req_length + ctx_rtu->rts_delay);
         osDelay(5);
         RS485_DIS;
+        LL_USART_EnableDirectionRx(puart->UARTx_Handler.Instance);
         LL_USART_EnableIT_RXNE(puart->UARTx_Handler.Instance);
 
         return size;
