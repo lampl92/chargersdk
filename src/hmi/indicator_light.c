@@ -221,10 +221,13 @@ static void ledShow1()//·ÏÆú
 
 static void signal_error(CON_t *pCON, int i)
 {
+
+#if EVSE_USING_NET
     if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
     {
         led_state = State_red_blue_replace;
     }
+#endif
     if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
     pCON->status.ulSignalFault != 0 ||
     (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
