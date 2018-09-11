@@ -6,7 +6,6 @@
 
 extern void testBnWList(void);
 
-extern void Get_ChipID(void);
 void cli_hello_fnt(int argc, char **argv)
 {
     int i;
@@ -15,7 +14,6 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("AHB  = SYSCLK / DIV1 = %dMHz\n", SystemCoreClock / 1000000 / 1);
     printf_safe("APB1 = SYSCLK / DIV4 = %dMHz\n", SystemCoreClock / 1000000 / 4);
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
-    Get_ChipID();
     //testBnWList();
     //eth_main();
     for (i = 0; i < 100000; i++)

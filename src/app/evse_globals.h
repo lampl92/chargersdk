@@ -21,6 +21,7 @@ extern EVSE_t *pEVSE;
 extern UserList_t *pListCON;
 extern RFIDDev_t *pRFIDDev;
 extern meter_s *meter;
-extern char g_strChipID[];
+extern char g_strEVSESN[];
+extern uint8_t g_ucNandUID[8];
 
 #endif

@@ -182,6 +182,27 @@ static ErrorCode_t SetEVSECfg(void *pvEVSE, char *jnItemString, void *pvCfgParam
 
     return errcode;
 }
+
+char g_strEVSESN[16 + 1] = { 0 };
+void Get_EVSESN(int contype, int total_con)
+{
+    int i;
+    uint8_t offset = 0;
+    char mac[12 + 1] = { 0 };
+    
+    g_strEVSESN[offset++] =  '0' + contype;
+    g_strEVSESN[offset++] =  '0' + total_con;
+    
+    HexToStr(&g_ucNandUID[2], mac, 6);
+    for (i = 0; i < 2; i++)
+    {
+        g_strEVSESN[offset++] = '0';
+    }
+    for (i = 0; i < 12; i++)
+    {
+        g_strEVSESN[offset++] = mac[i];
+    }
+}
 /*--------------------------------------------------------------------------*/
 /*                              从文件获取充电桩信息						*/
 /*--------------------------------------------------------------------------*/
@@ -227,9 +248,8 @@ static ErrorCode_t GetEVSECfg(void *pvEVSE, void *pvCfgObj)
     cfgobj_get_uint8(jsCfgObj, &pEVSE->info.ucServiceFeeType, "%s", jnServiceFeeType);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dServiceFee, "%s", jnServiceFee);
     cfgobj_get_double(jsCfgObj, &pEVSE->info.dDefSegFee, "%s", jnDefSegFee);
-    extern void Get_ChipID(int contype, int total_con);
-    Get_ChipID(EVSE_CONFIG_CONType, pEVSE->info.ucTotalCON);
-    sprintf(pEVSE->info.strSN, "%s", g_strChipID);
+    Get_EVSESN(EVSE_CONFIG_CONType, pEVSE->info.ucTotalCON);
+    sprintf(pEVSE->info.strSN, "%s", g_strEVSESN);
     
     cJSON_Delete(jsCfgObj);
     return errcode;

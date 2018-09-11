@@ -45,28 +45,6 @@ void timeInit()
     time(&settime);
 }
 
-char g_strChipID[16 + 1] = { 0 };
-void Get_ChipID(int contype, int total_con)
-{
-    int i;
-    __IO uint8_t *pid;
-    pid = (__IO uint8_t *)0x1FFF7A10;
-    uint8_t offset = 0;
-    
-    g_strChipID[offset++] =  '0' + contype;
-    g_strChipID[offset++] =  '0' + total_con;
-    
-    for (i = 0; i < 7; i++)
-    {
-        g_strChipID[offset++] = '0';
-    }
-    for (i = 0; i < 7; i++)
-    {
-        g_strChipID[offset++] = pid[i + 5];
-    }
-    //printf_safe("ChipID: %s\n", g_strChipID);
-//    HexToStr((uint8_t *)pid, g_strChipID, 12);
-}
 uint8_t create_dir(char *dir)
 {
     int res = 1;

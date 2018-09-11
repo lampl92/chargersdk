@@ -8,15 +8,29 @@
 #include "ifconfig.h"
 #include "cfg_parse.h"
 #include "stringName.h"
+#include "evse_globals.h"
 
 ifconfig_t ifconfig;
 
 void ifconfig_get(void)
 {
+    MacAddr macaddr;
     cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucAdapterSel), "%s", jnNetAdapter);
     cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucDHCPEnable), "%s", jnNetDHCP);
     cfg_get_string(pathNetCfg, ifconfig.info.strHostName, "%s", jnNetHostName);
-    cfg_get_string(pathNetCfg, ifconfig.info.strMAC, "%s", jnNetMAC);
+    if (g_ucNandUID[0] || g_ucNandUID[1] || g_ucNandUID[2] || g_ucNandUID[3] ||
+        g_ucNandUID[4] || g_ucNandUID[5] || g_ucNandUID[6] || g_ucNandUID[7])
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            macaddr.b[i] = g_ucNandUID[i + 2];
+        }
+        macAddrToString(&macaddr, ifconfig.info.strMAC);
+    }
+    else
+    {
+        cfg_get_string(pathNetCfg, ifconfig.info.strMAC, "%s", jnNetMAC);
+    }
     cfg_get_string(pathNetCfg, ifconfig.info.strIP, "%s", jnNetIP);
     cfg_get_string(pathNetCfg, ifconfig.info.strMask, "%s", jnNetMask);
     cfg_get_string(pathNetCfg, ifconfig.info.strGate, "%s", jnNetGate);
