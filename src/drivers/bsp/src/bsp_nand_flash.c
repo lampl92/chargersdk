@@ -5,6 +5,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "taskcreate.h"
+#include "utils.h"
 
 /* 定义调试打印语句，用于排错 */
 #define printf_err	printf_safe
@@ -260,6 +261,56 @@ u32 NAND_ReadID(void)
     //所以我们就可以抛弃这个0X2C，只取后面四字节的ID值。
     id = ((u32)deviceid[1]) << 24 | ((u32)deviceid[2]) << 16 | ((u32)deviceid[3]) << 8 | deviceid[4];
     return id;
+}
+uint8_t g_ucNandUID[8];
+int NAND_ReadUID(void)
+{
+    uint8_t data[64];
+    int stat;
+    ul2uc uid[16];
+    
+    NAND_CMD_AREA = 0xED;  //发送读取ID命令
+    NAND_ADDR_AREA = 0X00;
+    //ID一共有5个字节
+    stat = FMC_NAND_GetStatus();
+    NAND_CMD_AREA = 0x00;  //发送读取命令
+    NAND_ADDR_AREA = 0X00;
+    for(int i = 0 ; i < 64 ; i++)
+    {
+        data[i] = *(vu8 *)Bank_NAND_ADDR;
+    }
+    
+    for (int i = 0; i < 64; i++)
+    {
+        uid[i / 4].ucVal[i % 4] = data[i];
+    }
+    if ((uid[0].ulVal ^ uid[4].ulVal) == 0xffffffff && 
+        (uid[1].ulVal ^ uid[5].ulVal) == 0xffffffff)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            g_ucNandUID[i] = uid[i / 4].ucVal[i % 4];
+        }
+        return 0;
+    }
+    else
+    {
+        if ((uid[8].ulVal ^ uid[12].ulVal) == 0xffffffff && 
+            (uid[9].ulVal ^ uid[13].ulVal) == 0xffffffff)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                g_ucNandUID[i] = uid[i / 4].ucVal[i % 4];
+            }
+            return 0;
+        }
+        else
+        {
+            memset(g_ucNandUID, 0, 8);
+            return -1;
+        }
+    }
+    
 }
 /*
 *********************************************************************************************************
@@ -941,8 +992,8 @@ uint8_t NAND_Init(void)
     FMC_NAND_Reset();			/* 通过复位命令复位NAND Flash到读状态 */
     
     NAND_DelayMS(100);
+    NAND_ReadUID();
 
-    //Status = NAND_BuildLUT();	/* 建立块管理表 LUT = Look up table */
     return Status;
 }
 
