@@ -133,7 +133,6 @@ static void Status_Content_Analy(WM_MESSAGE *pMsg)
 //    LISTVIEW_SetItemText(hItem, 3, 0, strTmp);
 //
 //    /**< 控制导引电压确认 */
-//    sprintf(strTmp, "%.1f", Sys_samp.DC.CP1);
 //    strcat(strTmp, "V");
 //    LISTVIEW_SetItemText(hItem, 1, 1, strTmp);
 //

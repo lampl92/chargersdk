@@ -77,27 +77,27 @@ static void Led_Show()//록폴
         ledSignalPool = ledSignalPool & led_signal;
         if (bittest(ledSignalPool, 0))
         {
-            led_ctrl(1, red, flicker);
+            led_ctrl(1, led_red, flicker);
         }
         if (bittest(ledSignalPool, 1))
         {
-            led_ctrl(1, green, keep_on);
+            led_ctrl(1, led_green, keep_on);
         }
         if (bittest(ledSignalPool, 2))
         {
-            led_ctrl(1, green, breath);
+            led_ctrl(1, led_green, breath);
         }
         if (bittest(ledSignalPool, 3))
         {
-            led_ctrl(1, green, flicker);
+            led_ctrl(1, led_green, flicker);
         }
         if (bittest(ledSignalPool, 4))
         {
-            led_ctrl(1, blue, flicker);
+            led_ctrl(1, led_blue, flicker);
         }
         if (bittest(ledSignalPool, 5))
         {
-            led_ctrl(1, green, keep_on);
+            led_ctrl(1, led_green, keep_on);
         }
 
         led_signalold = led_signal;
@@ -188,31 +188,31 @@ static void ledShow1()//록폴
             ledSignalPool[i] = ledSignalPool[i] & led_signal[i];
             if (bittest(ledSignalPool[i], 0))
             {
-                led_ctrl(i + 1, red, flicker);
+                led_ctrl(i + 1, led_red, flicker);
             }
             if (bittest(ledSignalPool[i], 1))
             {
-                led_ctrl(i + 1, green, keep_on);
+                led_ctrl(i + 1, led_green, keep_on);
             }
             if (bittest(ledSignalPool[i], 2))
             {
-                led_ctrl(i + 1, green, breath);
+                led_ctrl(i + 1, led_green, breath);
             }
             if (bittest(ledSignalPool[i], 3))
             {
-                led_ctrl(i + 1, green, flicker);
+                led_ctrl(i + 1, led_green, flicker);
             }
             if (bittest(ledSignalPool[i], 4))
             {
-                led_ctrl(i + 1, blue, keep_on);
+                led_ctrl(i + 1, led_blue, keep_on);
             }
             if (bittest(ledSignalPool[i], 5))
             {
-                led_ctrl(i + 1, green, keep_on);
+                led_ctrl(i + 1, led_green, keep_on);
             }
             if (bittest(ledSignalPool[i], 6))
             {
-                led_ctrl(i + 1, red, keep_on);
+                led_ctrl(i + 1, led_red, keep_on);
             }
             led_signalold[i] = led_signal[i];
         }
@@ -316,30 +316,30 @@ static void ledShow(int j)
         switch (led_state)
         {
         case State_green_breath:
-            led_ctrl(i+1, green, breath);
+            led_ctrl(i+1, led_green, breath);
             break;
         case State_green_keep_on:
-            led_ctrl(i+1, green, keep_on);
+            led_ctrl(i+1, led_green, keep_on);
             break;
         case State_green_flicker:
-            led_ctrl(i+1, green, flicker);
+            led_ctrl(i+1, led_green, flicker);
             break;
         case State_blue_keep_on:
-            led_ctrl(i+1, blue, keep_on);
+            led_ctrl(i+1, led_blue, keep_on);
             break;
         case State_red_blue_replace:
-            led_ctrl(1, blue, keep_on);
-            led_ctrl(2, blue, keep_on);
+            led_ctrl(1, led_blue, keep_on);
+            led_ctrl(2, led_blue, keep_on);
             vTaskDelay(500);
-            led_ctrl(1, red, keep_on);
-            led_ctrl(2, red, keep_on);
+            led_ctrl(1, led_red, keep_on);
+            led_ctrl(2, led_red, keep_on);
             vTaskDelay(400);
             break;
         case State_red_flicker:
-            led_ctrl(i+1, red, flicker);
+            led_ctrl(i+1, led_red, flicker);
             break;
         case State_red_keep_on:
-            led_ctrl(i+1, red, keep_on);
+            led_ctrl(i+1, led_red, keep_on);
             break;
         }
     }

@@ -4,18 +4,7 @@
 #include "bsp_define.h"
 #include "bsp.h"
 unsigned char pca9554_1 = 0, pca9554_2 = 0;
-extern void Delay_ms(unsigned long long);
-uint8_t test;
-void delay_us(uint32_t nus)
-{
-//    uint16_t i, j;
-//    j = 90 * nus;
-//    for(i = 0; i < j; i++)
-//    {
-//        ;
-//    }
-    bsp_DelayUS(nus);
-}
+
 void IIC_Init(void)
 {
     GPIO_InitTypeDef GPIO_Initure;

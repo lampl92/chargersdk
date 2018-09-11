@@ -114,7 +114,7 @@ void LCD_WriteReg(uint16_t LCD_Reg, uint16_t LCD_RegValue);
 uint16_t LCD_ReadReg(uint16_t LCD_Reg);
 void LCD_WriteRAM_Prepare(void);
 void LCD_WriteRAM(uint16_t RGB_Code);
-void LCD_SSD_BackLightSet(uint8_t pwm);							//SSD1963 背光控制
+void LCD_SSD_BackLightSet(uint8_t light_pwm);							//SSD1963 背光控制
 void LCD_Scan_Dir(uint8_t dir);									//设置屏扫描方向
 void LCD_Display_Dir(uint8_t dir);								//设置屏幕显示方向
 void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height);	//设置窗口

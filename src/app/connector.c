@@ -351,14 +351,14 @@ static ErrorCode_t GetCPState(void *pvCON)
     {
         pCP_err_cont = &cp1_err_cont;
         pCCRx = &(TIM2->CCR1);
-        pCON->status.dCPVolt = Sys_samp.DC.CP1; 
+        pCON->status.dCPVolt = get_CP1Volt(); 
     }
     else if (ucCONID == 1)
     {
         pCP_err_cont = &cp2_err_cont;
         pCCRx = &(TIM4->CCR2);
 
-        pCON->status.dCPVolt = Sys_samp.DC.CP2; 
+        pCON->status.dCPVolt = get_CP2Volt(); 
     }
     
     if ((pCON->status.dCPVolt < 12.8f) && (pCON->status.dCPVolt > 11.2f))

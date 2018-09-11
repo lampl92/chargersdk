@@ -8,7 +8,18 @@
 #include "task.h"
 #include "evse_globals.h"
 #include "taskcreate.h"
-float frequency_test;
+
+#define ia_k       0.02197265
+#define va_k       0.22056//0.38?????÷??????????·?????×è300??1
+#define leakage_current_k   0.073242
+#define temper_k   100
+#define CP1_k      0.0032
+#define CP2_k      0.0032//14.1/3??·???±???
+
+#define lock_timer      20
+
+static double vref;
+static uint32_t CD4067_sum, leakage_current_sum;
 samp Sys_samp;
 void user_pwm_relay2_setvalue(uint16_t value);
 void user_pwm_relay1_setvalue(uint16_t value);
@@ -357,99 +368,73 @@ float get_dc_massage(uint8_t DC_channel)
         return -1;
     }
 }
-void get_CP1(void)
+void calc_CP1(void)
 {
-    unsigned short i;
-    float dma_cp1_sum = 0;
-    for (i = 0; i < samp_dma; i++)
+    double sum = 0, avg;
+    for (int i = 0; i < samp_dma; i++)
     {
-        dma_cp1_sum += AD_samp_dma[i].CP1;
+        sum += AD_samp_dma[i].CP1;
     }
-    dma_cp1_sum = dma_cp1_sum / samp_dma;
-    Sys_samp.DC.CP1 = dma_cp1_sum * CP1_k + 0.2;
-    //return Sys_samp.DC.CP1;
+    avg = sum / samp_dma;
+    Sys_samp.DC.CP1 = avg * CP1_k + 0.2;
 }
 
-double get_CP2(void)
+void calc_CP2(void)
 {
-    unsigned short i;
-    float dma_cp2_sum = 0;
-    for (i = 0; i < samp_dma; i++)
+    double sum = 0, avg;
+    for (int i = 0; i < samp_dma; i++)
     {
-        dma_cp2_sum += AD_samp_dma[i].CP2;
+        sum += AD_samp_dma[i].CP2;
     }
-    dma_cp2_sum = dma_cp2_sum / samp_dma;
-     Sys_samp.DC.CP2 = dma_cp2_sum * CP2_k + 0.2;
+    avg = sum / samp_dma;
+    Sys_samp.DC.CP2 = avg * CP2_k + 0.2;
 }
-
-void Delay_ms(unsigned long long time)
+double get_CP1Volt(void)
 {
-    //unsigned int x, y;
-   // x = time * 1000;
-   // for(; x > 0; x--)
-    //    for(y = 180; y > 0; y--);
-    vTaskDelay(time);
+    return Sys_samp.DC.CP1;
 }
-void Delay_us(unsigned long long time)
+double get_CP2Volt(void)
 {
-    unsigned int y;
-    for (y = 190; y > 0; y--)
-        ;
+    return Sys_samp.DC.CP2;
 }
 void Close_gun_1(void)
 {
     A_KEY_ON;
     B_KEY_OFF;
-    Delay_ms(lock_timer);
+    vTaskDelay(lock_timer);
     A_KEY_OFF;
 }
 void Open_gun_1(void)
 {
     A_KEY_OFF;
     B_KEY_ON;
-    Delay_ms(lock_timer);
+    vTaskDelay(lock_timer);
     B_KEY_OFF;
 }
 void Close_gun_2(void)
 {
     A_KEY_ON;
-    Delay_ms(10);
+    vTaskDelay(10);
     B_KEY_ON;
-    Delay_ms(lock_timer);
+    vTaskDelay(lock_timer);
     A_KEY_OFF;
 }
 void Open_gun_2(void)
 {
     A_KEY_OFF;
-    Delay_ms(10);
+    vTaskDelay(10);
     B_KEY_ON;
-    Delay_ms(lock_timer);
+    vTaskDelay(lock_timer);
     B_KEY_OFF;
 }
 
 void Power_out_l_pwm_ctrl(void)
 {
     RELAY2_KEEP;
-  /*  if(pwm_ms%2==0)
-    {
-        POWER_L_ON;
-    }
-    else
-    {
-        POWER_L_OFF;
-    }*/
 }
 void Power_out_n_pwm_ctrl(void)
 {
     RELAY1_KEEP;
-   /* if(pwm_ms%2==0)
-    {
-        POWER_N_ON;
-    }
-    else
-    {
-        POWER_N_OFF;
-    }*/
 }
 
 void POWER_N_CLOSE(void)

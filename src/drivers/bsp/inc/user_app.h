@@ -74,12 +74,6 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define PWM2_535   TIM_SetTIM4Compare1(465)
 #define PWM2_0   TIM_SetTIM4Compare1(1000)
 
-#define write_chip1 0x40 //0100 0000
-#define read_chip1 0x41 //0100 0001
-
-#define write_chip2 0x42 //0100 0010
-#define read_chip2 0x43 //0100 0011
-
 #define TEMP_N_OUT  0X00 //板卡输出N
 #define TEMP_L_OUT  0X01 //    L
 #define TEMP_N_IN   0X02 //市电输入N
@@ -90,28 +84,8 @@ extern void TIM_SetTIM2Compare1(unsigned int compare);
 #define TEMP_GUN2_NEGATIVE  0X07
 #define VREF_1v5            0X0F
 
-#define keep_off 0
-#define keep_on  1
-#define breath   2
-#define flicker  3
-
-#define red      0
-#define green    1
-#define blue     2
-
-
-
-#define	AXISDATA_REG	0x28
-#define lock_timer      20
 #define samp_sum    124
 #define samp_dma    2
-#define ia_k       0.02197265
-#define va_k       0.22056//0.38?????÷??????????·?????×è300??1
-#define leakage_current_k   0.073242
-#define temper_k   100
-#define CP1_k      0.0032
-#define CP2_k      0.0032//14.1/3??·???±???
-#define electricity_meter_num 4
 #define TIMER_MAX 1 //不能写成0
 typedef struct
 {
@@ -159,30 +133,6 @@ typedef struct
     unsigned short CP2;
 } AD_samp[samp_dma];
 AD_samp AD_samp_dma;
-typedef struct
-{
-    struct
-    {
-        uint8_t flag_va;
-        uint8_t flag_ia;
-        uint8_t flag_power;
-        uint8_t flag_electric_energy_l;
-        uint8_t flag_electric_energy_h;
-        uint8_t flag_frequency;
-        uint8_t flag_erro;
-    }flag;
-    struct
-    {
-        float  massage_va;
-        float  massage_ia;
-        float massage_power;
-        float massage_electric_energy;
-        float massage_electric_energy_l;
-        float massage_electric_energy_h;
-        float massage_frequency;
-    }massage;
-} electricity_meter[electricity_meter_num];
-electricity_meter  Electricity_meter;
 
 typedef struct
 {
@@ -208,27 +158,17 @@ typedef struct
     uint8_t buzzer;
 } IO_chip2;
 IO_chip2 Chip2;
-typedef struct
-{
-    unsigned char pwm1;
-    unsigned char pwm2;
-} flag;
-flag sys_flag;
 void IIC_Init(void);
-//double get_CP1(void);
-void get_CP1(void);
-double get_CP2(void);
-double get_va(void);
+void calc_CP1(void);
+void calc_CP2(void);
+double get_CP1Volt(void);
+double get_CP2Volt(void);
 float get_dc_massage(uint8_t DC_channel);
 void write_pca9554_1(void);
-void Delay_ms(unsigned long long time);
 void PCA9554_init(void);
 void Gun_test(void);
 void Power_out_n_pwm_ctrl(void);
 void Power_out_l_pwm_ctrl(void);
-void WFI_SET(void);     //????WFI????
-void INTX_DISABLE(void);//??±??ù??????
-void INTX_ENABLE(void); //?????ù??????
 void MX_GPIO_Init(void);
 void MX_DMA_Init(void);
 void MX_ADC1_Init(void);
@@ -244,17 +184,9 @@ void Close_gun_1(void);
 void Open_gun_1(void);
 void Close_gun_2(void);
 void Open_gun_2(void);
-void get_samp_point(void);//ÓÃÊ±30¦ÌS
 void Buzzer_control(uint8_t state);
 uint8_t Get_State_relay(uint32_t relay_id);
-uint8_t flag_rs485[255];
 uint8_t flag_pwm_out_n, flag_pwm_out_l, flag_gun_Close, flag_gun_Open, flag_power_out_l, flag_power_out_n;
-uint16_t num_cp1, num_cp2;
-double vref, va;
-uint8_t RS485_RX_MODBUS_CNT;
-uint32_t CD4067_sum, leakage_current_sum, va_samp_sum, ia_samp_sum, CP2_sum, CP1_sum, CP1_sum_sys, CP2_sum_sys;
-uint8_t   pwm_samp_timer, pwm_samp_flag,pwm_samp_timer_cp2, pwm_samp_flag_cp2;
-extern samp Sys_samp;
 
 double curr2duty(double rate_curr);
 void curr2pwm(double rate_curr, uint8_t con_id);
