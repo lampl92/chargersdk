@@ -188,17 +188,17 @@ void Get_EVSESN(int contype, int total_con)
 {
     int i;
     uint8_t offset = 0;
-    char mac[12 + 1] = { 0 };
+    char mac[10 + 1] = { 0 };
     
     g_strEVSESN[offset++] =  '0' + contype;
     g_strEVSESN[offset++] =  '0' + total_con;
     
-    HexToStr(&g_ucNandUID[2], mac, 6);
-    for (i = 0; i < 2; i++)
+    HexToStr(&g_ucNandUID[3], mac, 5);
+    for (i = 0; i < 4; i++)
     {
         g_strEVSESN[offset++] = '0';
     }
-    for (i = 0; i < 12; i++)
+    for (i = 0; i < 10; i++)
     {
         g_strEVSESN[offset++] = mac[i];
     }

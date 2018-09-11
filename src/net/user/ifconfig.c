@@ -15,15 +15,17 @@ ifconfig_t ifconfig;
 void ifconfig_get(void)
 {
     MacAddr macaddr;
+    
     cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucAdapterSel), "%s", jnNetAdapter);
     cfg_get_uint8(pathNetCfg, &(ifconfig.info.ucDHCPEnable), "%s", jnNetDHCP);
     cfg_get_string(pathNetCfg, ifconfig.info.strHostName, "%s", jnNetHostName);
     if (g_ucNandUID[0] || g_ucNandUID[1] || g_ucNandUID[2] || g_ucNandUID[3] ||
         g_ucNandUID[4] || g_ucNandUID[5] || g_ucNandUID[6] || g_ucNandUID[7])
     {
-        for (int i = 0; i < 6; i++)
+        macaddr.b[0] = 0;//bit40±ØÐëÎªÅ¼Êý
+        for (int i = 0; i < 5; i++)
         {
-            macaddr.b[i] = g_ucNandUID[i + 2];
+            macaddr.b[i + 1] = g_ucNandUID[i + 3];
         }
         macAddrToString(&macaddr, ifconfig.info.strMAC);
     }
@@ -42,9 +44,5 @@ void ifconfig_init(void)
 {
     uint8_t tmp = 1;
     memset(&ifconfig, 0, sizeof(ifconfig_t));
-//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetDHCP);
-//    tmp = 2;
-//    cfg_set_uint8(pathNetCfg, &tmp, "%s", jnNetAdapter);
     ifconfig_get();
-    
 }
