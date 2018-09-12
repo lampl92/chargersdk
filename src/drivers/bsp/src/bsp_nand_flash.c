@@ -72,7 +72,7 @@
 */
 
 /* 定义NAND Flash的物理地址。这个是由硬件决定的 */
-#define Bank3_NAND_ADDR    0xC0000000
+#define Bank3_NAND_ADDR    0x80000000
 #define Bank_NAND_ADDR     Bank3_NAND_ADDR
 
 /* 定义操作NAND Flash用到3个宏 */

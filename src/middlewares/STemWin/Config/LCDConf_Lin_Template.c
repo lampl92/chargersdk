@@ -44,8 +44,8 @@
 //最终确定最佳的缓冲区大小,这里默认设置最大分辨率为1024*600，颜色格式为8888，
 //那么每层所需要的缓冲区就是1024*600*4=2457600=0X258000,注意mlloc.h和malloc.c
 //中的外部SDRAM内存管理池地址和大小也需要做修改！！！！
-#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0x80300000)     //第一层缓冲区
-#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0x80300000)     //第二层缓冲区
+#define LCD_LAYER0_FRAME_BUFFER  ((uint32_t)0x00300000)     //第一层缓冲区
+#define LCD_LAYER1_FRAME_BUFFER  ((uint32_t)0x00300000)     //第二层缓冲区
 
 
 #define DEFINEDMA2D_COLORCONVERSION(PFIX, PIXELFORMAT)                                                             \

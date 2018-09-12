@@ -13,7 +13,7 @@ MEMORY
 }
 
 _estack = 0x20030000;
-_app_start = 0x80000000;
+_app_start = 0x00000000;
 
 SECTIONS
 {

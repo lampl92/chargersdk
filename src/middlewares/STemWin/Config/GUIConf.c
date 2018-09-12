@@ -85,7 +85,7 @@ void GUI_X_Config(void) {
   // 32 bit aligned memory area
   //
 
-  static U32 *aMemory = (U32 *)(0x80600000);//0xC0300000~0xC0AFFFFF
+  static U32 *aMemory = (U32 *)(0x00600000);//0xC0300000~0xC0AFFFFF
   //
   // Assign memory to emWin
   //

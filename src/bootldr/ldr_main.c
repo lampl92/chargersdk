@@ -17,7 +17,8 @@
 
 int main(void)
 {
-    SYSCFG->MEMRMP = SYSCFG->MEMRMP | SYSCFG_MEMRMP_SWP_FMC_0; 
+//    SYSCFG->MEMRMP = SYSCFG->MEMRMP | SYSCFG_MEMRMP_SWP_FMC_0; 
+    SYSCFG->MEMRMP = SYSCFG->MEMRMP | SYSCFG_MEMRMP_MEM_MODE_2; 
     //SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
     /**
      * 关闭全局中断(除了NMI和HardFault), 在移植文件port.c中的
