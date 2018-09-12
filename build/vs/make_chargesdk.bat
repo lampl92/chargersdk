@@ -19,5 +19,6 @@ set folder3="%maj%.%min%.%patch%"
 for /f "delims=" %%t in ('%crc32sum% -r %source%') do set _crc32=%%t
 set crc32=%_crc32:~34,8%
 md .\Release\chargesdk\%folder1%\%folder2%\%maj%.%min%.%patch%\upgrade
+copy /y ..\..\nand\template\flist.json .\Release\chargesdk\%folder1%\%folder2%\%folder3%
 copy /y %source% .\Release\chargesdk\%folder1%\%folder2%\%folder3%\upgrade\new_fw_%crc32%
 copy /y %source% .\Release\chargesdk.bin
