@@ -478,8 +478,6 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
                 pCON->order.ucStartType = 5;//Remote无卡
                 
                 pCON->appoint.status = 1;
-
-                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
             }
             else if(pbuff[13] == 2)
             {
@@ -488,7 +486,6 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
                 if(pCON->order.ullOrderSN == ntohll(ullOrderSN.ullVal) || dummyordersn)//checkordersn可以通过cli设置，防止发生异常时，APP无法停止
                 {
                     *pctrl = pbuff[13];
-                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                 }
                 else //订单号不相等
                 {

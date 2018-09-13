@@ -466,8 +466,10 @@ void vTaskEVSERemote(void *pvParameters)
                         if (pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff == 1)
                         {
                             if ((pCON->status.ulSignalState & defSignalCON_State_Standby) == defSignalCON_State_Standby &&
-                                pRFIDDev->state == STATE_RFID_NOID)
+                                pRFIDDev->state == STATE_RFID_NOID &&
+                                pCON->order.statOrder == STATE_ORDER_IDLE)
                             {
+                                xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                                 pCON->order.statOrder = STATE_ORDER_WAITSTART;//状态处理见taskdata.c文件
                                 pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_WAIT_START;
                                 break;
@@ -480,6 +482,7 @@ void vTaskEVSERemote(void *pvParameters)
                         }
                         else if (pCON->order.statRemoteProc.rmt_ctrl.ctrl_onoff == 2)
                         {
+                            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRemoteStop);
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_WAIT_STOP;
                             break;
                         }
