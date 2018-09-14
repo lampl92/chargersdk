@@ -5033,6 +5033,9 @@
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h">
       <Filter>Header files\hmi</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\app\mem_addr.h">
+      <Filter>Source files\app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a">

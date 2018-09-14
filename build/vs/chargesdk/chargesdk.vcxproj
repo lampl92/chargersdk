@@ -496,6 +496,7 @@
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol.h" />
     <ClInclude Include="..\..\..\src\app\libEcharge\ech_protocol_proc.h" />
     <ClInclude Include="..\..\..\src\app\line.h" />
+    <ClInclude Include="..\..\..\src\app\mem_addr.h" />
     <ClInclude Include="..\..\..\src\app\order.h" />
     <ClInclude Include="..\..\..\src\app\stm32f4xx_it.h" />
     <ClInclude Include="..\..\..\src\app\stringName.h" />

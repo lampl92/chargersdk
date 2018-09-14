@@ -1,6 +1,7 @@
 #ifndef _LCD_H
 #define _LCD_H
 #include "includes.h"
+#include "mem_addr.h"
 //////////////////////////////////////////////////////////////////////////////////
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F429开发板
@@ -53,7 +54,7 @@ extern DMA2D_HandleTypeDef DMA2D_Handler;   //DMA2D句柄
 //定义默认背景层颜色
 #define LTDC_BACKLAYERCOLOR			0X00000000
 //LCD帧缓冲区首地址,这里定义在SDRAM里面.
-#define LCD_FRAME_BUF_ADDR			((uint32_t)(0XC0000000))
+#define LCD_FRAME_BUF_ADDR			((uint32_t)(MADDR_LTDC_FRAMEBUFFER))
 
 void LTDC_Switch(uint8_t sw);					//LTDC开关
 void LTDC_Layer_Switch(uint8_t layerx,uint8_t sw);	//层开关

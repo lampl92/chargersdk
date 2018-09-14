@@ -3,11 +3,10 @@
 #include "ltdc.h"
 #include "lcddrv.h"
 #include "GUI.h"
+#include "mem_addr.h"
 
 LTDC_HandleTypeDef  LTDC_Handler;	    //LTDC句柄
 DMA2D_HandleTypeDef DMA2D_Handler; 	    //DMA2D句柄
-
-extern u32 *aMemory;// = (U32 *)(0xC0300000);//0xC0300000~0xC0AFFFFF
 
 u32 *ltdc_framebuf[2];					//LTDC LCD帧缓存数组指针,必须指向对应大小的内存区域
 _ltdc_dev lcdltdc;						//管理LCD LTDC的重要参数
@@ -370,11 +369,11 @@ void LTDC_Init(void)
 	lcddev.height=lcdltdc.pheight;
 
 #if LCD_PIXFORMAT==LCD_PIXFORMAT_ARGB8888||LCD_PIXFORMAT==LCD_PIXFORMAT_RGB888
-	ltdc_framebuf[0]=(u32*)(0xc0000000);//ltdc_lcd_framebuf;
+    ltdc_framebuf[0] = (u32*)(MADDR_LTDC_FRAMEBUF); //ltdc_lcd_framebuf;
 	lcdltdc.pixsize=4;				//每个像素占4个字节
 #else
     lcdltdc.pixsize=2;				//每个像素占2个字节
-	ltdc_framebuf[0]=(u32*)(0xc0000000);//ltdc_lcd_framebuf;
+	ltdc_framebuf[0] = (u32*)(MADDR_LTDC_FRAMEBUF0); //ltdc_lcd_framebuf;
 #endif
     //LTDC配置
     LTDC_Handler.Instance=LTDC;

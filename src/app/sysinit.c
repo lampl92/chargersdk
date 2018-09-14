@@ -11,10 +11,11 @@
 #include "ifconfig.h"
 #include "interface_network.h"
 #include "utils.h"
+#include "mem_addr.h"
 
 #if configAPPLICATION_ALLOCATED_HEAP == 1
-//uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(0XC0B00000)));//used by heap_4.c
-uint8_t *ucHeap = (uint8_t *)(0XC1500000);//used by heap_4.c
+//uint8_t ucHeap[ configTOTAL_HEAP_SIZE ] __attribute__ ((at(MADDR_HEAP_4)));//used by heap_4.c
+uint8_t *ucHeap = (uint8_t *)(MADDR_HEAP_4); //used by heap_4.c
 #endif
 
 Sysconf_t   xSysconf;//存放系统初始化参数
