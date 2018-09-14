@@ -23,7 +23,10 @@ uint32_t ring_buffer_len(const ring_buffer_s *rb);
 void ring_buffer_free(ring_buffer_s *rb);
 ring_buffer_s *ring_uint8_init(uint32_t size);
 ring_buffer_s *ring_double_init(uint32_t size);
+ring_buffer_s *ring_uint16_init(uint32_t size);
 uint32_t ring_double_put(ring_buffer_s *rb, void *buffer, uint32_t len);
 uint32_t ring_double_get(ring_buffer_s *rb, void *buffer, uint32_t len);
+uint32_t ring_uint16_put(ring_buffer_s *rb, void *buffer, uint32_t len);
+uint32_t ring_uint16_get(ring_buffer_s *rb, void *buffer, uint32_t len);
 
 #endif
