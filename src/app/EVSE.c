@@ -640,6 +640,8 @@ void EVSEinit(void)
     char key[] = "0123456789abcder";
     uint8_t tmp = 2;
     double dtmp = 41;
+    
+    Peripheral_Start();
     pEVSE = EVSECreate();
 #if 0
 //    tmp = 2;

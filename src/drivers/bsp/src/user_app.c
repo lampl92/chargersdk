@@ -366,36 +366,38 @@ float get_dc_massage(uint8_t DC_channel)
     }
 }
 #include "ring_buffer.h"
-#define RB_CP_SIZE  8
+#define RB_CP_SIZE  16
 static ring_buffer_s *rb_cp1;
 static ring_buffer_s *rb_cp2;
 void init_cp_rb(void)
 {
-    rb_cp1 = ring_double_init(RB_CP_SIZE);
+    rb_cp1 = ring_uint16_init(RB_CP_SIZE);
+    rb_cp2 = ring_uint16_init(RB_CP_SIZE);
 }
 void calc_CP1(void)
 {
-    double sum = 0, avg_samp, avg_calc;
-    double sum_double[1];
     for (int i = 0; i < samp_dma; i++)
     {
-        sum += AD_samp_dma[i].CP1;
+        if (AD_samp_dma[i].CP1 < 1000)
+        {
+            continue;
+        }
+        ring_uint16_put(rb_cp1, &AD_samp_dma[i].CP1, 1);
     }
-    avg_samp = sum / samp_dma;
-    sum_double[0] = avg_samp * CP1_k + 0.2;
-    ring_double_put(rb_cp1, sum_double, 1);
-    
-    double sum1 = 0;
-    ring_double_get(rb_cp1, sum_double, 1);
+    uint16_t sum_cp = 0, cp_dummy = 0;
+    double avg_samp;
+    ring_uint16_get(rb_cp1, &cp_dummy, 1);
     for (int i = 0; i < RB_CP_SIZE; i++)
     {
-        sum1 += *((double*)rb_cp1->buffer + i);
+        sum_cp += *((uint16_t*)rb_cp1->buffer + i);
     }
-    Sys_samp.DC.CP1 = sum1 / RB_CP_SIZE;
+    avg_samp = sum_cp / RB_CP_SIZE;
+    Sys_samp.DC.CP1 = avg_samp * CP1_k + 0.2;
 }
 
 void calc_CP2(void)
 {
+#if 0
     double sum = 0, avg;
     for (int i = 0; i < samp_dma; i++)
     {
@@ -403,6 +405,25 @@ void calc_CP2(void)
     }
     avg = sum / samp_dma;
     Sys_samp.DC.CP2 = avg * CP2_k + 0.2;
+#else
+    for (int i = 0; i < samp_dma; i++)
+    {
+        if (AD_samp_dma[i].CP2 < 1000)
+        {
+            continue;
+        }
+        ring_uint16_put(rb_cp2, &AD_samp_dma[i].CP2, 1);
+    }
+    uint16_t sum_cp = 0, cp_dummy = 0;
+    double avg_samp;
+    ring_uint16_get(rb_cp2, &cp_dummy, 1);
+    for (int i = 0; i < RB_CP_SIZE; i++)
+    {
+        sum_cp += *((uint16_t*)rb_cp2->buffer + i);
+    }
+    avg_samp = sum_cp / RB_CP_SIZE;
+    Sys_samp.DC.CP2 = avg_samp * CP2_k + 0.2;
+#endif
 }
 double get_CP1Volt(void)
 {
