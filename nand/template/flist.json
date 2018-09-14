@@ -1,6 +1,6 @@
 {
     "ftp": {
-        "server": "124.207.112.70",
+        "server": "s.dpcpower.com",
         "port": 21,
         "user": "dpcpower",
         "pass": "dpcpower"
