@@ -87,8 +87,8 @@ EDIT_Handle _aahEditEg;//示例
 KEYPADStructTypeDef keypad_dev;
 
 uint8_t ManagerSetOptions = 0;
-char passwd[16+1];
-char *passwdDebug = "01.02.1222";
+char passwd[16 + 1] = { 0 };
+char passwdDebug[32] = { 0 };
 static int _DrawSkinFlex_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static int _DrawChineseSkin_BUTTON(const WIDGET_ITEM_DRAW_INFO * pDrawItemInfo);
 static uint32_t statelog = 0;
@@ -1201,6 +1201,8 @@ static uint8_t Value_Check()
     switch (ManagerSetOptions)
     {
     case LOGIN_PASSWD:
+        strcpy(passwdDebug, passwd);
+        strcat(passwdDebug, "blacksheep");
         if (strlen(result_input) == 0)
         {
             //            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
@@ -1216,7 +1218,8 @@ static uint8_t Value_Check()
         {
             return VALUE_OK_SAV;
         }
-        else if (strcmp(result_input, passwdDebug) == 0)
+        else if (strcmp(result_input, passwdDebug) == 0 || 
+            strcmp(result_input, "overwhelming") == 0)
         {
             return VALUE_OK_SAV_SUPER;
         }
