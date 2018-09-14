@@ -365,15 +365,33 @@ float get_dc_massage(uint8_t DC_channel)
         return -1;
     }
 }
+#include "ring_buffer.h"
+#define RB_CP_SIZE  8
+static ring_buffer_s *rb_cp1;
+static ring_buffer_s *rb_cp2;
+void init_cp_rb(void)
+{
+    rb_cp1 = ring_double_init(RB_CP_SIZE);
+}
 void calc_CP1(void)
 {
-    double sum = 0, avg;
+    double sum = 0, avg_samp, avg_calc;
+    double sum_double[1];
     for (int i = 0; i < samp_dma; i++)
     {
         sum += AD_samp_dma[i].CP1;
     }
-    avg = sum / samp_dma;
-    Sys_samp.DC.CP1 = avg * CP1_k + 0.2;
+    avg_samp = sum / samp_dma;
+    sum_double[0] = avg_samp * CP1_k + 0.2;
+    ring_double_put(rb_cp1, sum_double, 1);
+    
+    double sum1 = 0;
+    ring_double_get(rb_cp1, sum_double, 1);
+    for (int i = 0; i < RB_CP_SIZE; i++)
+    {
+        sum1 += *((double*)rb_cp1->buffer + i);
+    }
+    Sys_samp.DC.CP1 = sum1 / RB_CP_SIZE;
 }
 
 void calc_CP2(void)
@@ -475,13 +493,7 @@ void user_pwm_relay1_setvalue(uint16_t value)
 }
 void user_pwm_relay2_setvalue(uint16_t value)
 {
-    // TIM_OC_InitTypeDef sConfigOC;
-    //sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    // sConfigOC.Pulse = value;
-    //  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    // sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    // HAL_TIM_PWM_ConfigChannel(&htim8, &sConfigOC, TIM_CHANNEL_3);
-    //  HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
+
     TIM8->CCR3 = value;
 }
 void Peripheral_Init(void)
@@ -499,6 +511,10 @@ void Peripheral_Init(void)
     MX_TIM5_Init(); //ÅäºÏA/D²ÉÑù¶¨Ê±Æ÷´¥·¢Ê±¼ä100¦ÌS
     MX_TIM8_Init();
     Lis2dh12_init();
+}
+void Peripheral_Start(void)
+{
+    init_cp_rb();
     DMA_START();
     PWM1_ON;
     PWM2_ON;
@@ -523,7 +539,6 @@ void Peripheral_Init(void)
     //         Get_Electricity_meter_massage_frequency();
     //Close_gun_1();
 }
-
 TIM_HandleTypeDef htim2;
 extern DMA_HandleTypeDef hdma_adc1;
 

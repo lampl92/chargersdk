@@ -176,6 +176,7 @@ void TIM_SetTIM2Compare1(unsigned int);
 void TIM2_PWM_Init(unsigned int, unsigned int);
 void DMA_START(void);
 void Peripheral_Init(void);
+void Peripheral_Start(void);
 void POWER_L_CLOSE(void);
 void POWER_N_CLOSE(void);
 void POWER_L_OPEN(void);
