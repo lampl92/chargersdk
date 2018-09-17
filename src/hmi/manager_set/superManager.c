@@ -77,7 +77,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateTest[] = {
     { BUTTON_CreateIndirect, "gunB_start", ID_BUTTON_22, 435, 23, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunB_end", ID_BUTTON_23, 635, 23, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "restart", ID_BUTTON_24, 35, 119, 130, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "test5", ID_BUTTON_25, 235, 119, 130, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "pswdReset", ID_BUTTON_25, 235, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test6", ID_BUTTON_26, 435, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test7", ID_BUTTON_27, 635, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test8", ID_BUTTON_28, 35, 215, 130, 50, 0, 0x0, 0 },
@@ -308,7 +308,10 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-
+                cfg_set_string(pathSysCfg, "888888", "%s", jnSysVersion);
+                extern char passwd[16+1];
+                memset(passwd, '\0', sizeof(passwd));
+                strcpy(passwd, "888888");
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
