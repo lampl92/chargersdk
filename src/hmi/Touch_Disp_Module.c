@@ -166,7 +166,7 @@ int getSignalIntensity()
     }
     else
     {
-        if ((pModem->status.ucSignalQuality > 0 && pModem->status.ucSignalQuality <= 5) || pModem->status.ucSignalQuality == 99)
+        if (pModem->status.ucSignalQuality > 0 && pModem->status.ucSignalQuality <= 5)
         {
             return 1;
         }
