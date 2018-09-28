@@ -1,5 +1,5 @@
-#ifndef EVSE_VERSION_02_09_0914H
-#define EVSE_VERSION_02_09_0914H
+#ifndef EVSE_VERSION_02_10_0928H
+#define EVSE_VERSION_02_10_0928H
 
 //                   ↑   ↑  ↑
 //                   |   |  |
@@ -7,8 +7,8 @@
 
 
     #define EVSE_MAJOR          "02"              //主版本,两位, 对应生产用程序ABCD版本
-    #define EVSE_MINOR          "09"              //副版本,两位, 对应PDM A1,A2版本
-    #define EVSE_PATCH          "09141"           //补丁版本,四位, 目前用作构建日期, 月日表示,
+    #define EVSE_MINOR          "10"              //副版本,两位, 对应PDM A1,A2版本
+    #define EVSE_PATCH          "09281"           //补丁版本,四位, 目前用作构建日期, 月日表示,
 	
 	
     #define EVSE_TARGET         "S1639-1"         //项目号,订单号,整改号
