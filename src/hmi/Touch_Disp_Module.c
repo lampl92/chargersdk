@@ -166,19 +166,19 @@ int getSignalIntensity()
     }
     else
     {
-        if ((pModem->status.ucSignalQuality > 0 && pModem->status.ucSignalQuality < 6) || pModem->status.ucSignalQuality == 99)
+        if ((pModem->status.ucSignalQuality > 0 && pModem->status.ucSignalQuality <= 5) || pModem->status.ucSignalQuality == 99)
         {
             return 1;
         }
-        else if (pModem->status.ucSignalQuality > 5 && pModem->status.ucSignalQuality < 12)
+        else if (pModem->status.ucSignalQuality > 5 && pModem->status.ucSignalQuality <= 11)
         {
             return 2;
         }
-        else if (pModem->status.ucSignalQuality > 11 && pModem->status.ucSignalQuality < 18)
+        else if (pModem->status.ucSignalQuality > 11 && pModem->status.ucSignalQuality <= 17)
         {
             return 3;
         }
-        else if (pModem->status.ucSignalQuality > 17 && pModem->status.ucSignalQuality < 24)
+        else if (pModem->status.ucSignalQuality > 17 && pModem->status.ucSignalQuality <= 23)
         {
             return 4;
         }
