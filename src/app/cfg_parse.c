@@ -407,6 +407,13 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
     }
     yaffs_stat(path, &st);
     fsize = st.st_size;
+    if (fsize == 0)//预防fsize为0导致程序错误
+    {
+        yaffs_close(fd);
+        yaffs_unlink(path);
+        NVIC_SystemReset();
+        //Goodbye!!!
+    }
     rbuff = (char *)malloc(fsize * sizeof(char));
     if (rbuff == NULL)
     {
