@@ -194,7 +194,50 @@ ErrorCode_t GetOrderBySN(char *path, uint64_t ullOrderSN, OrderData_t *pOrder)
     cJSON_Delete(jsParent);
     return errcode;
 }
+
+ErrorCode_t GetOrderByNoPay(char *path, OrderData_t *pOrder, int *pIndex)
+{
+    cJSON *jsParent, *jsChild;
+    ErrorCode_t errcode;
+    uint32_t ulMaxItem;
+    int i;
     
+    errcode = ERR_NO;
+    jsParent = GetCfgObj(path, &errcode);
+    if (jsParent == NULL)
+    {
+        return errcode;
+    }
+    ulMaxItem  = cJSON_GetArraySize(jsParent);
+    
+    for (i = 0; i < ulMaxItem; i++)
+    {
+        jsChild = cJSON_GetArrayItem(jsParent, i);
+        if (jsChild == NULL)
+        {
+            errcode = ERR_FILE_PARSE;
+            break;
+        }
+        errcode = GetOrderData(jsChild, pOrder);
+        if (errcode != ERR_NO)
+        {
+            break;
+        }
+        if (pOrder->ucPayStatus == 0)
+        {
+            *pIndex = i;
+            errcode = ERR_NO;
+            break;
+        }
+        else
+        {
+            continue;
+        }
+    }
+    cJSON_Delete(jsParent);
+    return errcode;
+}
+
 ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
 {
     cJSON *jsParent;
