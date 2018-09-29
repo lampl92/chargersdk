@@ -18,6 +18,7 @@
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
 cJSON *jsEVSELogObj;
+cJSON *jsEVSEOrderObj;
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -45,7 +46,8 @@ void vTaskEVSEData(void *pvParameters)
             ;//你看, 你设置的ulSignalCONAlarmOld_CON 数组小了
     }
     jsEVSELogObj = GetCfgObj(pathEVSELog, &errcode);
-    if (jsEVSELogObj == NULL)
+    jsEVSEOrderObj = GetCfgObj(pathOrder, &errcode);
+    if (jsEVSELogObj == NULL || jsEVSEOrderObj == NULL)
     {
         while (1)
         {
@@ -334,7 +336,7 @@ void vTaskEVSEData(void *pvParameters)
                 }
                 break;
             case STATE_ORDER_STORE:
-                AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
+                AddOrderCfg(jsEVSEOrderObj, &(pCON->order), pechProto); //存储订单
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;

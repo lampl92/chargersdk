@@ -20,13 +20,12 @@
 
 #include "evse_debug.h"
 
-/** @todo (rgw#1#): 如果状态时Charging，那么Remote的状态如果是No或者是err超过5分钟，则判断系统断网，应该停止充电 */
-
 //#define DEBUG_NO_TASKREMOTE
 
 RemoteState_t remotestat;
 
 extern TaskHandle_t xHandleTaskRemoteCmdProc;
+extern cJSON *jsEVSEOrderObj;
 
 void taskremote_reset(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t flag_set)
 {
@@ -125,7 +124,7 @@ void taskremote_req_order(EVSE_t *pEVSE, echProtocol_t *pProto)
     RemoteIF_RecvReqOrder(pEVSE, pProto, &ullOrderSN, &res);
     if (res == 1)
     {
-        errcode = GetOrderBySN(pathOrder, ullOrderSN, &order);
+        errcode = GetOrderBySN(jsEVSEOrderObj, ullOrderSN, &order);
         if (errcode == ERR_NO && order.ullOrderSN == ullOrderSN)
         {
             RemoteIF_SendReqOrder(pEVSE, pProto, &order);
@@ -370,7 +369,7 @@ void vTaskEVSERemote(void *pvParameters)
                             if (network_res == 1)
                             {
                                 pCON->OrderTmp.order.ucPayStatus = 1;
-                                AddOrderCfg(pathOrder, &(pCON->OrderTmp.order), pechProto);
+                                AddOrderCfg(jsEVSEOrderObj, &(pCON->OrderTmp.order), pechProto);
                                 RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                                 pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
                             }

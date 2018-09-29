@@ -1,3 +1,9 @@
+/**
+ * @file    D:\source\repos\chargersdk\src\app\cfg_order.c.
+ *
+ * @brief   Configuration order class
+ */
+
 #include "stm32f4xx.h"
 #include "bsp.h"
 #include "interface.h"
@@ -11,7 +17,18 @@
 #include "factorycfg.h"
 #include "libEcharge/ech_globals.h"
 #include <string.h>
-//程序中的Order枪号从0开始，文件中的枪号从1开始
+
+/**
+ * @fn  static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   程序中的Order枪号从0开始，文件中的枪号从1开始
+ *
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  Null if it fails, else the new new order configuration.
+ */
+
 static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
 {
     cJSON *jsNewOrderCfgObj;
@@ -64,33 +81,51 @@ static cJSON *CreateNewOrderCfg(OrderData_t *pOrder, echProtocol_t *pProto)
     return jsNewOrderCfgObj;
 }
 
-ErrorCode_t  AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
+/**
+ * @fn  ErrorCode_t AddOrderCfg(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   Adds an order configuration
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
+
+ErrorCode_t  AddOrderCfg(cJSON *jsOrderArray, OrderData_t *pOrder, echProtocol_t *pProto)
 {
-    cJSON *jsParent;
-    cJSON *jsChild;
+    cJSON *jsOrder;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
-    jsParent = GetCfgObj(path, &errcode);
-    if (jsParent == NULL)
-    {
-        return errcode;
-    }
-    ulMaxItem  = cJSON_GetArraySize(jsParent);
+
+    ulMaxItem  = cJSON_GetArraySize(jsOrderArray);
     
     if (ulMaxItem > defCfgOrderMaxItem)
     {
         for (i = 0; i < defCfgOrderRemoveOldItem; i++)
         {
-            cJSON_DeleteItemFromArray(jsParent, i);
+            cJSON_DeleteItemFromArray(jsOrderArray, i);
         }
     }
-    jsChild = CreateNewOrderCfg(pOrder, pProto);
-    cJSON_AddItemToArray(jsParent, jsChild);
-    errcode = SetCfgObj(path, jsParent, 0);
+    jsOrder = CreateNewOrderCfg(pOrder, pProto);
+    cJSON_AddItemToArray(jsOrderArray, jsOrder);
     
     return errcode;
 }
+
+/**
+ * @fn  ErrorCode_t AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
+ *
+ * @brief   Adds an order temporary
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ * @param [in,out]  pProto  If non-null, the prototype.
+ *
+ * @return  An ErrorCode_t.
+ */
 
 ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
 {
@@ -102,10 +137,30 @@ ErrorCode_t  AddOrderTmp(char *path, OrderData_t *pOrder, echProtocol_t *pProto)
     
     return errcode;
 }
+
+/**
+ * @fn  void RemoveOrderTmp(char *path)
+ *
+ * @brief   Removes the order temporary described by path
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ */
+
 void RemoveOrderTmp(char *path)
 {
     yaffs_unlink(path);
 }
+
+/**
+ * @fn  ErrorCode_t GetOrderData(cJSON *jsObj, OrderData_t *pOrder)
+ *
+ * @brief   Gets order data
+ *
+ * @param [in,out]  jsObj   If non-null, the js object.
+ * @param [in,out]  pOrder  If non-null, the order.
+ *
+ * @return  The order data.
+ */
 
 ErrorCode_t GetOrderData(cJSON *jsObj, OrderData_t *pOrder)
 {
@@ -153,30 +208,39 @@ ErrorCode_t GetOrderData(cJSON *jsObj, OrderData_t *pOrder)
     
     return errcode;
 }
-ErrorCode_t GetOrderBySN(char *path, uint64_t ullOrderSN, OrderData_t *pOrder)
+
+/**
+ * @fn  ErrorCode_t GetOrderBySN(char *path, uint64_t ullOrderSN, OrderData_t *pOrder)
+ *
+ * @brief   Gets order by serial number
+ *
+ * @param [in,out]  path        If non-null, full pathname of the file.
+ * @param           ullOrderSN  The ull order serial number.
+ * @param [in,out]  pOrder      If non-null, the order.
+ *
+ * @return  The order by serial number.
+ */
+
+ErrorCode_t GetOrderBySN(cJSON *jsOrderArray, uint64_t ullOrderSN, OrderData_t *pOrder)
 {
-    cJSON *jsParent, *jsChild;
+    cJSON *jsOrder;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
     
     errcode = ERR_NO;
-    jsParent = GetCfgObj(path, &errcode);
-    if (jsParent == NULL)
-    {
-        return errcode;
-    }
-    ulMaxItem  = cJSON_GetArraySize(jsParent);
+
+    ulMaxItem  = cJSON_GetArraySize(jsOrderArray);
     
     for (i = 0; i < ulMaxItem; i++)
     {
-        jsChild = cJSON_GetArrayItem(jsParent, i);
-        if (jsChild == NULL)
+        jsOrder = cJSON_GetArrayItem(jsOrderArray, i);
+        if (jsOrder == NULL)
         {
             errcode = ERR_FILE_PARSE;
             break;
         }
-        errcode = GetOrderData(jsChild, pOrder);
+        errcode = GetOrderData(jsOrder, pOrder);
         if (errcode != ERR_NO)
         {
             break;
@@ -191,41 +255,49 @@ ErrorCode_t GetOrderBySN(char *path, uint64_t ullOrderSN, OrderData_t *pOrder)
             continue;
         }
     }
-    cJSON_Delete(jsParent);
+
     return errcode;
 }
 
-ErrorCode_t GetOrderByNoPay(char *path, OrderData_t *pOrder, int *pIndex)
+/**
+ * @fn  ErrorCode_t GetOrderByNoPay(cJSON *jsOrderArray, OrderData_t *pOrder)
+ *
+ * @brief   Gets order by no pay
+ *
+ * @param [in,out]  jsOrderArray    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder          If non-null, the order.
+ *
+ * @return  The order by no pay.
+ *
+ * ### param [in,out]   pIndex  返回order的位置.
+ */
+
+ErrorCode_t GetOrderByPayStatus(cJSON *jsOrderArray, uint8_t status, OrderData_t *pOrder)
 {
-    cJSON *jsParent, *jsChild;
+    cJSON *jsOrder;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
     
     errcode = ERR_NO;
-    jsParent = GetCfgObj(path, &errcode);
-    if (jsParent == NULL)
-    {
-        return errcode;
-    }
-    ulMaxItem  = cJSON_GetArraySize(jsParent);
+
+    ulMaxItem  = cJSON_GetArraySize(jsOrderArray);
     
     for (i = 0; i < ulMaxItem; i++)
     {
-        jsChild = cJSON_GetArrayItem(jsParent, i);
-        if (jsChild == NULL)
+        jsOrder = cJSON_GetArrayItem(jsOrderArray, i);
+        if (jsOrder == NULL)
         {
             errcode = ERR_FILE_PARSE;
             break;
         }
-        errcode = GetOrderData(jsChild, pOrder);
+        errcode = GetOrderData(jsOrder, pOrder);
         if (errcode != ERR_NO)
         {
             break;
         }
-        if (pOrder->ucPayStatus == 0)
+        if (pOrder->ucPayStatus == status)
         {
-            *pIndex = i;
             errcode = ERR_NO;
             break;
         }
@@ -234,9 +306,58 @@ ErrorCode_t GetOrderByNoPay(char *path, OrderData_t *pOrder, int *pIndex)
             continue;
         }
     }
-    cJSON_Delete(jsParent);
+
     return errcode;
 }
+
+ErrorCode_t SetOrderPaid(cJSON *jsOrderArray, uint64_t ullOrderSN)
+{
+    cJSON *jsOrder;
+    OrderData_t *pOrder;
+    ErrorCode_t errcode;
+    uint32_t ulMaxItem;
+    int i;
+    
+    ulMaxItem  = cJSON_GetArraySize(jsOrderArray);
+    
+    for (i = 0; i < ulMaxItem; i++)
+    {
+        jsOrder = cJSON_GetArrayItem(jsOrderArray, i);
+        if (jsOrder == NULL)
+        {
+            errcode = ERR_FILE_PARSE;
+            break;
+        }
+        errcode = GetOrderData(jsOrder, pOrder);
+        if (errcode != ERR_NO)
+        {
+            break;
+        }
+        if (pOrder->ullOrderSN == ullOrderSN)
+        {
+            uint8_t paid = 1;
+            cfgobj_set_uint8(jsOrder, &paid, jnOrderPayStatus);
+            errcode = ERR_NO;
+            break;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    return errcode;
+}
+/**
+ * @fn  ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
+ *
+ * @brief   Gets order temporary
+ *
+ * @param [in,out]  path    If non-null, full pathname of the file.
+ * @param [in,out]  pOrder  If non-null, the order.
+ *
+ * @return  The order temporary.
+ */
 
 ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
 {
@@ -258,6 +379,18 @@ ErrorCode_t GetOrderTmp(char *path, OrderData_t *pOrder)
     
     return errcode;
 }
+
+/**
+ * @fn  int testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
+ *
+ * @brief   Tests search order configuration
+ *
+ * @param [in,out]  path        If non-null, full pathname of the file.
+ * @param           time_start  The time start.
+ * @param           time_end    The time end.
+ *
+ * @return  An int.
+ */
 
 int  testSearchOrderCfg(char *path, time_t time_start, time_t time_end)
 {
