@@ -193,6 +193,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
 **********************************************************************
 */
 extern cJSON *jsEVSELogObj;
+extern cJSON *jsEVSEOrderObj;
 int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
 {
     cJSON *jsParent;
@@ -363,7 +364,7 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
         }
     else if (1 == log_type)
     {
-        jsParent = GetCfgObj(pathOrder, &errcode);
+        jsParent = jsEVSEOrderObj;
         if (jsParent == NULL)
         {
             return errcode;
@@ -371,7 +372,6 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
         ulMaxItem  = cJSON_GetArraySize(jsParent);
         if (ulMaxItem == 0)
         {
-            cJSON_Delete(jsParent);
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
             return 0;
@@ -553,7 +553,6 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
         }
-        cJSON_Delete(jsParent);
     }
 
 
