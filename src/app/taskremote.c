@@ -23,6 +23,7 @@
 //#define DEBUG_NO_TASKREMOTE
 
 RemoteState_t remotestat;
+static statRemoteOrder_e order_nopay_stat;
 
 extern TaskHandle_t xHandleTaskRemoteCmdProc;
 extern cJSON *jsEVSEOrderObj;
@@ -265,6 +266,7 @@ void vTaskEVSERemote(void *pvParameters)
     ulTotalCON = pListCON->Total;
     uxBits = 0;
     remotestat = REMOTE_NO;//REMOTE_REGEDITED;//
+    order_nopay_stat = REMOTEOrder_IDLE;
     errcode = ERR_NO;
     network_res = 0;
     login_try_cnt = 0;
@@ -299,7 +301,6 @@ void vTaskEVSERemote(void *pvParameters)
                 for (i = 0; i < ulTotalCON; i++)
                 {
                     pCON = CONGetHandle(i);
-                    pCON->OrderTmp.ucCheckOrderTmp = 1;
                 }
                 last_heart_stamp = time(NULL);    //防止重连时心跳检测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
@@ -327,79 +328,63 @@ void vTaskEVSERemote(void *pvParameters)
                 remotestat = REMOTE_OFFLINE;
                 break;
             }
-            /*********上传未处理的订单**************/
-#if 1
-            for (i = 0; i < ulTotalCON; i++)
+
+            /*********上传未结算的订单**************/
+            OrderData_t OrderNoPay;
+            switch (order_nopay_stat)
             {
-                pCON = CONGetHandle(i);
-                if (pCON->OrderTmp.ucCheckOrderTmp == 1)
+            case REMOTEOrder_IDLE:
+                if (time(NULL) % 60 == 0)
                 {
-                    if (pCON->state != STATE_CON_CHARGING && 
-                        pCON->order.statRemoteProc.order.stat == REMOTEOrder_IDLE)//只有在处理订单idle时，才进行临时订单检查
+                    order_nopay_stat = REMOTEOrder_WaitOrder;
+                }
+                break;
+            case REMOTEOrder_WaitOrder:
+                errcode = GetOrderByPayStatus(jsEVSEOrderObj, 0, &OrderNoPay);
+                if (errcode == ERR_NO)
+                {
+                    order_nopay_stat = REMOTEOrder_Send;
+                }
+                else
+                {
+                    order_nopay_stat = REMOTEOrder_IDLE;
+                }
+                break;
+            case REMOTEOrder_Send:
+                printf_safe("未支付订单发送 %016lld\n", OrderNoPay.ullOrderSN);
+                RemoteIF_SendOrder(pEVSE, pechProto, &OrderNoPay);
+                order_nopay_stat = REMOTEOrder_WaitRecv;
+                break;
+            case REMOTEOrder_WaitRecv:
+                errcode = RemoteIF_RecvOrder(pEVSE, pechProto, &OrderNoPay, &network_res);
+                if (network_res == 1)
+                {
+                    OrderNoPay.ucPayStatus = 1;
+                    SetOrderPaid(jsEVSEOrderObj, OrderNoPay.ullOrderSN);
+                    order_nopay_stat = REMOTEOrder_WaitOrder;
+                    break;
+                }
+                else if (network_res == 0)
+                {
+                    if (errcode == ERR_REMOTE_ORDERSN || errcode == ERR_REMOTE_PARAM)//服务器不接受该订单号
                     {
-                        switch (pCON->OrderTmp.order.statRemoteProc.order.stat)
-                        {
-                        case REMOTEOrder_IDLE:
-                            errcode = GetOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->OrderTmp.order));
-                            if (errcode == ERR_FILE_NO)
-                            {
-                                //无订单临时文件,太好了
-                                printf_safe("无订单临时文件,太好了\n");
-                                pCON->OrderTmp.ucCheckOrderTmp = 0;
-                                continue;
-                            }
-                            else if (errcode == ERR_NO)
-                            {
-                                //当前枪有订单临时文件
-                                printf_safe("stat %d, 枪%d有订单临时文件\n", pCON->order.statRemoteProc.order.stat,pCON->info.ucCONID);
-                                pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_Send;
-                            }
-                            else//解析错误
-                            {
-                                RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-                            }
-                            break;
-                        case REMOTEOrder_Send:
-                            printf_safe("CON%d,临时订单发送\n", pCON->info.ucCONID);
-                            RemoteIF_SendOrder(pEVSE, pechProto, &(pCON->OrderTmp.order));
-                            pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_WaitRecv;
-                            break;
-                        case REMOTEOrder_WaitRecv:
-                            errcode = RemoteIF_RecvOrder(pEVSE, pechProto, &(pCON->OrderTmp.order), &network_res);
-                            if (network_res == 1)
-                            {
-                                pCON->OrderTmp.order.ucPayStatus = 1;
-                                AddOrderCfg(jsEVSEOrderObj, &(pCON->OrderTmp.order), pechProto);
-                                RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-                                pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
-                            }
-                            else if (network_res == 0)
-                            {
-                                if (errcode == ERR_REMOTE_ORDERSN || errcode == ERR_REMOTE_PARAM)//服务器不接受该订单号
-                                {
-                                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
-                                    pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
-                                    break;
-                                }
-                                if(errcode == ERR_REMOTE_TIMEOUT)
-                                {
-                                    pCON->OrderTmp.order.statRemoteProc.order.stat = REMOTEOrder_IDLE;
-                                    remotestat = REMOTE_ERROR;
-                                    break;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                        }//switch stat
+                        OrderNoPay.ucPayStatus = 3;//未知
+                        SetOrderPaid(jsEVSEOrderObj, OrderNoPay.ullOrderSN);
+                        order_nopay_stat = REMOTEOrder_WaitOrder;
+                        break;
                     }
-                    else//如果不是充电中下次循环过来就不检查了
+                    if (errcode == ERR_REMOTE_TIMEOUT)
                     {
-                        pCON->OrderTmp.ucCheckOrderTmp = 0;
+                        order_nopay_stat = REMOTEOrder_IDLE;
+                        remotestat = REMOTE_ERROR;
+                        break;
                     }
                 }
-            }//for id
-#endif
+                break;
+            default:
+                break;
+            }
+
             /************ 心跳 ***************/
             uxBits = xEventGroupWaitBits(xHandleEventTimerCBNotify,
                                          defEventBitTimerCBHeartbeat,
@@ -888,6 +873,7 @@ void vTaskEVSERemote(void *pvParameters)
             xTimerStop(xHandleTimerRemoteHeartbeat, 100);
             xTimerStop(xHandleTimerRemoteStatus, 100);
             remotestat = REMOTE_RECONNECT;
+            order_nopay_stat = REMOTEOrder_IDLE;
             xEventGroupSetBits(xHandleEventRemote, defEventBitRemoteError);
             printf_safe("remote state error ,remote state -> reconnect!!\n");
             break;

@@ -172,6 +172,7 @@
 #define defEventBitTimerCBHeartbeat         BIT_8
 #define defEventBitTimerCBStatus            BIT_9
 #define defEventBitTimerCBStoreLog          BIT_10
+#define defEventBitTimerCBStoreOrder        BIT_11
 
 /*pProto->pCMD[i]->xHandleEventCmd*/
 #define defEventBitProtoCmdDataTimeout      BIT_1

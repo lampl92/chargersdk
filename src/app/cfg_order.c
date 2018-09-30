@@ -112,6 +112,8 @@ ErrorCode_t  AddOrderCfg(cJSON *jsOrderArray, OrderData_t *pOrder, echProtocol_t
     jsOrder = CreateNewOrderCfg(pOrder, pProto);
     cJSON_AddItemToArray(jsOrderArray, jsOrder);
     
+    xTimerReset(xHandleTimerStoreOrder, 0);
+    
     return errcode;
 }
 
@@ -279,7 +281,7 @@ ErrorCode_t GetOrderByPayStatus(cJSON *jsOrderArray, uint8_t status, OrderData_t
     uint32_t ulMaxItem;
     int i;
     
-    errcode = ERR_NO;
+    errcode = ERR_OTHER;
 
     ulMaxItem  = cJSON_GetArraySize(jsOrderArray);
     
@@ -346,6 +348,8 @@ ErrorCode_t SetOrderPaid(cJSON *jsOrderArray, uint64_t ullOrderSN)
         }
     }
 
+    xTimerReset(xHandleTimerStoreOrder, 0);
+    
     return errcode;
 }
 /**

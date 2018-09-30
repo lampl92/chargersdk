@@ -47,7 +47,6 @@ typedef enum _statRemoteOrder_e
 
 typedef struct
 {
-    uint8_t ucCheckOrderTmp;
     statRemoteOrder_e stat;
 }RemoteOrderStatus_t;
 
