@@ -317,29 +317,39 @@ void vTaskEVSEData(void *pvParameters)
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
-                if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                if (pCON->order.ucCardStatus == 0)//普通用户
                 {
-                    printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
+                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
+                    if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                    {
+                        printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
+                        pCON->order.ucPayStatus = 1;
+                        pCON->order.statOrder = STATE_ORDER_STORE;
+                        break;
+                    }
+                    else
+                    {
+                        if (time(NULL) - pCON->order.tStopTime > 60)//如果协议未返回TimeOut事件，则强制TimeOut
+                        {
+                            printf_safe("CON%d Order TimeOut force.....................\n", pCON->info.ucCONID);
+                            pCON->order.statOrder = STATE_ORDER_STORE;
+                            break;
+                        }
+                        uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
+                        if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
+                        {
+                            printf_safe("CON%d Order TimeOut 3times.....................\n", pCON->info.ucCONID);
+                            pCON->order.statOrder = STATE_ORDER_STORE;
+                            break;
+                        }
+                    }
+                }
+                else if(pCON->order.ucCardStatus == 1)//白名单用户
+                {
+                    printf_safe("CON%d WhiteList Order OK.....................\n", pCON->info.ucCONID);
                     pCON->order.ucPayStatus = 1;
                     pCON->order.statOrder = STATE_ORDER_STORE;
                     break;
-                }
-                else
-                {
-                    if (time(NULL) - pCON->order.tStopTime > 60)//如果协议未返回TimeOut事件，则强制TimeOut
-                    {
-                        printf_safe("CON%d Order TimeOut force.....................\n", pCON->info.ucCONID);
-                        pCON->order.statOrder = STATE_ORDER_STORE;
-                        break;
-                    }
-                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
-                    if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
-                    {
-                        printf_safe("CON%d Order TimeOut 3times.....................\n", pCON->info.ucCONID);
-                        pCON->order.statOrder = STATE_ORDER_STORE;
-                        break;
-                    }
                 }
                 break;
             case STATE_ORDER_STORE:
