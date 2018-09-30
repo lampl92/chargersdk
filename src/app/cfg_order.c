@@ -300,7 +300,6 @@ ErrorCode_t GetOrderByPayStatus(cJSON *jsOrderArray, uint8_t status, OrderData_t
         }
         if (pOrder->ucPayStatus == status)
         {
-            errcode = ERR_NO;
             break;
         }
         else
@@ -309,13 +308,21 @@ ErrorCode_t GetOrderByPayStatus(cJSON *jsOrderArray, uint8_t status, OrderData_t
         }
     }
 
+    if (i < ulMaxItem)
+    {
+        errcode = ERR_NO;
+    }
+    else
+    {
+        errcode = ERR_OTHER;
+    }
     return errcode;
 }
 
 ErrorCode_t SetOrderPaid(cJSON *jsOrderArray, uint64_t ullOrderSN)
 {
     cJSON *jsOrder;
-    OrderData_t *pOrder;
+    OrderData_t Order;
     ErrorCode_t errcode;
     uint32_t ulMaxItem;
     int i;
@@ -330,12 +337,12 @@ ErrorCode_t SetOrderPaid(cJSON *jsOrderArray, uint64_t ullOrderSN)
             errcode = ERR_FILE_PARSE;
             break;
         }
-        errcode = GetOrderData(jsOrder, pOrder);
+        errcode = GetOrderData(jsOrder, &Order);
         if (errcode != ERR_NO)
         {
             break;
         }
-        if (pOrder->ullOrderSN == ullOrderSN)
+        if (Order.ullOrderSN == ullOrderSN)
         {
             uint8_t paid = 1;
             cfgobj_set_uint8(jsOrder, &paid, jnOrderPayStatus);
