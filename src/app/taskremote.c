@@ -262,6 +262,7 @@ void vTaskEVSERemote(void *pvParameters)
     int network_res;
     uint32_t login_try_cnt;
     time_t last_heart_stamp;
+    OrderData_t OrderNoPay;
 
     ulTotalCON = pListCON->Total;
     uxBits = 0;
@@ -304,6 +305,7 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 last_heart_stamp = time(NULL);    //防止重连时心跳检测还是上次丢失的时间
                 remotestat = REMOTE_LOGINED;
+                order_nopay_stat = REMOTEOrder_WaitOrder;//上线后立即检测一次未支付订单.
                 xEventGroupSetBits(xHandleEventTimerCBNotify, defEventBitTimerCBHeartbeat);
 #if DEBUG_SMTP
                 smtpClientTest();
@@ -330,11 +332,10 @@ void vTaskEVSERemote(void *pvParameters)
             }
 
             /*********上传未结算的订单**************/
-            OrderData_t OrderNoPay;
             switch (order_nopay_stat)
             {
             case REMOTEOrder_IDLE:
-                if (time(NULL) % 60 == 0)
+                if (time(NULL) % 600 == 0)//每10分钟,检测一次未支付订单
                 {
                     order_nopay_stat = REMOTEOrder_WaitOrder;
                 }
@@ -351,7 +352,7 @@ void vTaskEVSERemote(void *pvParameters)
                 }
                 break;
             case REMOTEOrder_Send:
-                printf_safe("未支付订单发送 %016lld\n", OrderNoPay.ullOrderSN);
+                printf_safe("枪%d发送未完成订单. SN:%016ld\n", OrderNoPay.ucCONID, OrderNoPay.ullOrderSN);//如果只打印OrderNoPay.ullOrderSN会乱码,十分灵异
                 RemoteIF_SendOrder(pEVSE, pechProto, &OrderNoPay);
                 order_nopay_stat = REMOTEOrder_WaitRecv;
                 break;
