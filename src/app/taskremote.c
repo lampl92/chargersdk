@@ -368,7 +368,7 @@ void vTaskEVSERemote(void *pvParameters)
                 {
                     if (errcode == ERR_REMOTE_ORDERSN || errcode == ERR_REMOTE_PARAM)//服务器不接受该订单号
                     {
-                        OrderNoPay.ucPayStatus = 3;//未知
+                        OrderNoPay.ucPayStatus = 3;//异常
                         SetOrderPaid(jsEVSEOrderObj, OrderNoPay.ullOrderSN);
                         order_nopay_stat = REMOTEOrder_WaitOrder;
                         break;
