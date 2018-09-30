@@ -326,7 +326,7 @@ void cli_evseorder_fnt(int argc, char **argv)
                 printf_safe("启动方式:\t网络\n");
             }
             //ullOrderSN; //交易流水号
-            printf_safe("交易流水号:\t%:.0lf\n", (double)(pCON->order.ullOrderSN));
+            printf_safe("交易流水号:\t%ld\n", pCON->order.ullOrderSN);
             //dLimitFee;                      //充电截至金额
             printf_safe("充电截止金额:\t%.2lf\n", pCON->order.dLimitFee);
             ts = localtime(& pCON->order.tStartTime);
