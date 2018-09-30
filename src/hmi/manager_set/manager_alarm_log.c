@@ -476,8 +476,7 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             LISTVIEW_SetItemText(hItem, 5, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
-            //            printf_safe("StopType\t%d\n", jsItem->valueint);
-                        switch(jsItem->valueint)
+            switch(jsItem->valueint)
             {
             case defOrderStopType_RFID:
                 LISTVIEW_SetItemText(hItem, 6, i, "刷卡结束");
@@ -539,9 +538,13 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "未支付");
             }
-            else
+            else if (jsItem->valueint == 1)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "已支付");
+            }
+            else
+            {
+                LISTVIEW_SetItemText(hItem, 11, i, "异常");
             }
             i++;
         }
