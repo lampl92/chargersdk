@@ -701,10 +701,6 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     //当前枪有订单临时文件
                     printf_safe("枪%d有订单临时文件 SN:%016ld\n", pCON->info.ucCONID, pCON->OrderTmp.order.ullOrderSN);
-                    if (pCON->OrderTmp.order.ucCardStatus == 1)//白名单卡直接按已支付存储
-                    {
-                        pCON->OrderTmp.order.ucPayStatus = 1;
-                    }
                     AddOrderCfg(jsEVSEOrderObj, &(pCON->OrderTmp.order), pechProto);
                     RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                 }
