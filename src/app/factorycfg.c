@@ -17,8 +17,8 @@ const char *strEVSECfg =
     \"Lng\":116.275833,\n \
     \"Lat\":39.831944,\n \
     \"ServiceFeeType\":1,\n \
-    \"ServiceFee\":1,\n \
-    \"DefSegFee\":1.2,\n \
+    \"ServiceFee\":0.8,\n \
+    \"DefSegFee\":1.0,\n \
     \"CONArray\":[\n \
         {\n \
             \"ID\":0,\n \
