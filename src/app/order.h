@@ -107,43 +107,43 @@ typedef struct _ChargePeriodStatus
  */
 typedef struct _OrderData
 {
-    OrderState_t    statOrder;  //记录订单状态
+    OrderState_t statOrder;       //记录订单状态
     OrderSegState_e statOrderSeg; //记录订单时间段状态
-    uint8_t pos;//在时段中的位置，用于与now获得的pos进行对比
+    uint8_t pos;                  //在时段中的位置，用于与now获得的pos进行对比
 
-    char strCardID[defCardIDLength + 1];//卡号//在taskrfid中赋值
-    uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
-    uint8_t ucCardStatus;      //0 普通用户, 1 白名单用户, 2 黑名单用户
-    double  dBalance;           //余额 
-    uint8_t ucCONID;            //
+    char strCardID[defCardIDLength + 1]; //卡号//在taskrfid中赋值
+    uint8_t ucAccountStatus;             //帐户状态 1：注册卡 2:欠费 0：未注册卡
+    uint8_t ucCardStatus;                //0 普通用户, 1 白名单用户, 2 黑名单用户
+    double dBalance;                     //余额
+    uint8_t ucCONID;                     //
     //创建时
     uint64_t ullOrderSN; //交易流水号
-//    char strOrderSN[defOrderSNLength + 1]; //交易流水号
+                         //    char strOrderSN[defOrderSNLength + 1]; //交易流水号
 
-    time_t  tStartTime;         //启动充电时间 
-    uint8_t ucStartType;        //4 有卡 5 无卡 
-    double  dLimitFee;          //充电截至金额         在远程启动和界面启动时赋值
-    uint32_t ulLimitTime;       //充电最大时间         
-    double dLimitEnergy;         //充电最大电量
-    double  dStartEnergy;        //
+    time_t tStartTime;    //启动充电时间
+    uint8_t ucStartType;  //4 有卡 5 无卡
+    double dLimitFee;     //充电截至金额         在远程启动和界面启动时赋值
+    uint32_t ulLimitTime; //充电最大时间
+    double dLimitEnergy;  //充电最大电量
+    double dStartEnergy;  //
     //充电过程
-    double  dTotalEnergy;        //总电量
-    double  dTotalEnergyFee;     //总电费
-    double  dTotalServFee;   //总服务费
-    double  dTotalFee;          //总费用
-    ChargePeriodStatus_t chargeSegStatus[defOrderSegMax][defOrderPeriodMax];     //[0][0]尖第一时段 [1][0]峰第一时段 [2][1]平第二时段  过程信息
-    double dSegTotalEnergy[defOrderSegMax];   //分段总电量
-    double dSegTotalEnergyFee[defOrderSegMax];//分段总电费
-    double dSegTotalServFee[defOrderSegMax]; //分段总服务费
-    uint32_t ulSegTotalTime[defOrderSegMax];    //分段总充电时间
+    double dTotalEnergy;                                                     //总电量
+    double dTotalEnergyFee;                                                  //总电费
+    double dTotalServFee;                                                    //总服务费
+    double dTotalFee;                                                        //总费用
+    ChargePeriodStatus_t chargeSegStatus[defOrderSegMax][defOrderPeriodMax]; //[0][0]尖第一时段 [1][0]峰第一时段 [2][1]平第二时段  过程信息
+    double dSegTotalEnergy[defOrderSegMax];                                  //分段总电量
+    double dSegTotalEnergyFee[defOrderSegMax];                               //分段总电费
+    double dSegTotalServFee[defOrderSegMax];                                 //分段总服务费
+    uint32_t ulSegTotalTime[defOrderSegMax];                                 //分段总充电时间
 
     //停止时
-    uint8_t         ucPayType;  //支付方式
-    uint8_t         ucPayStatus;//结算状态 0:未结算  1:已结算
-    uint8_t         ucStopType; //停止类型
-    time_t          tStopTime;  //停止时间 
+    uint8_t ucPayType;   //支付方式
+    uint8_t ucPayStatus; //结算状态 0:未结算  1:已结算
+    uint8_t ucStopType;  //停止类型
+    time_t tStopTime;    //停止时间
 
-	statRemote_t statRemoteProc;
+    statRemote_t statRemoteProc;
 }OrderData_t;
 
 typedef struct _OrderTmpData
@@ -156,10 +156,10 @@ typedef struct _OrderTmpData
 
 typedef struct _UserChargeCondition
 {
-    uint8_t ucCONID;            //
-    double  dLimitFee;          //充电截至金额
-    uint32_t ulLimitTime;       //充电最大时间       
-    double dLimitEnergy;         //充电最大电量
+    uint8_t ucCONID;      //
+    double dLimitFee;     //充电截至金额
+    uint32_t ulLimitTime; //充电最大时间
+    double dLimitEnergy;  //充电最大电量
     int HMItimeout;       //HMI超时
     char strPwd[7];
 }UserChargeCondition_t;
