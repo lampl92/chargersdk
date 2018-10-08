@@ -118,7 +118,6 @@ typedef struct _OrderData
     uint8_t ucCONID;                     //
     //创建时
     uint64_t ullOrderSN; //交易流水号
-                         //    char strOrderSN[defOrderSNLength + 1]; //交易流水号
 
     time_t tStartTime;    //启动充电时间
     uint8_t ucStartType;  //4 有卡 5 无卡

@@ -19,7 +19,7 @@
  * @return uint8_t 1：在时间段内， 0：不在时间段内
  *
  */
-static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
+static uint8_t IsTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
 {
     struct tm *ts;
     ts = localtime(&now);
@@ -41,14 +41,14 @@ static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
  * @return uint8_t  1：在时间段中  0：不在时间段中
  *
  */
-static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
+static uint8_t IsSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
 {
     int i;
     uint8_t isInclude = 0;
 
     for(i = 0; i < SegTime.ucPeriodCont; i++)
     {
-        isInclude = JudgeTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
+        isInclude = IsTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
         if(isInclude == 1)
         {
             *ppos = (uint8_t)i;
@@ -71,7 +71,7 @@ OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
     int i;
     for (i = 0; i < defOrderSegMax; i++)
     {
-        if(JudgeSegInclude(now, pProto->info.SegTime[i], ppos) == 1)
+        if(IsSegInclude(now, pProto->info.SegTime[i], ppos) == 1)
         {
             return (OrderSegState_e)i;
         }
