@@ -84,11 +84,13 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[1], "%s", jnProtoEnergyFee_peak);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[2], "%s", jnProtoEnergyFee_shoulder);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegEnergyFee[3], "%s", jnProtoEnergyFee_off_peak);
+    pProto->info.dSegEnergyFee[4] = pEVSE->info.dDefSegFee;
     
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[0], "%s", jnProtoServFee_sharp);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[1], "%s", jnProtoServFee_peak);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[2], "%s", jnProtoServFee_shoulder);
     cfgobj_get_double(jsCfgObj, &pProto->info.dSegServFee[3], "%s", jnProtoServFee_off_peak);
+    pProto->info.dSegServFee[4] = pEVSE->info.dServiceFee;
 
     /*获取尖峰平谷时间段*/
     cfgobj_get_period(jsCfgObj, &pProto->info.SegTime[0], jnProtoSegTime_sharp);
