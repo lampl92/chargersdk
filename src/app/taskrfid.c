@@ -171,6 +171,16 @@ static int canChargeOrNot()
             {
                 errcode = RemoteIF_RecvCardStart(pechProto, ECH_CMDID_CARD_START_PWD, pRFIDDev, &ucVaild, &res);
             }
+#if EVSE_USING_NET
+            while (pEVSE->status.ulTimeUpdated == 0)//如果联网了, 但是没有更新时间, 则最多等待30s.
+            {
+                if (time(NULL) % 30 == 0)
+                {
+                    return 0;
+                }
+                vTaskDelay(100);
+            }
+#endif
         }
         else //如果没有联网，则直接返回。
         {
@@ -238,12 +248,6 @@ void vTaskEVSERFID(void *pvParameters)
     }
 #if EVSE_USING_GUI
     while (pEVSE->status.ulPicOK == 0)
-    {
-        vTaskDelay(100);
-    }
-#endif
-#if EVSE_USING_NET
-    while (pEVSE->status.ulTimeUpdated == 0)
     {
         vTaskDelay(100);
     }

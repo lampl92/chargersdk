@@ -1233,7 +1233,7 @@ CON_t *CONCreate(uint8_t ucCONID )
     OrderInit(&(pCON->order));
     //OrderTmp init
     OrderInit(&(pCON->OrderTmp.order));
-    pCON->OrderTmp.ucCheckOrderTmp = 0;
+    pCON->OrderTmp.ucCheckOrderTmp = 1;//上电时检查临时订单.
     sprintf(pCON->OrderTmp.strOrderTmpPath, "%sOrderCON%d.tmp", pathSystemDir, pCON->info.ucCONID);
     pCON->OrderTmp.xHandleTimerOrderTmp = xTimerCreate("TimerOrderTmp",
                                                     defOrderTmpCyc,

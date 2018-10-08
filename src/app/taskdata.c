@@ -18,6 +18,7 @@
 
 extern ErrorCode_t makeOrder(CON_t *pCON);
 cJSON *jsEVSELogObj;
+cJSON *jsEVSEOrderObj;
 void vTaskEVSEData(void *pvParameters)
 {
     CON_t *pCON = NULL;
@@ -45,7 +46,8 @@ void vTaskEVSEData(void *pvParameters)
             ;//你看, 你设置的ulSignalCONAlarmOld_CON 数组小了
     }
     jsEVSELogObj = GetCfgObj(pathEVSELog, &errcode);
-    if (jsEVSELogObj == NULL)
+    jsEVSEOrderObj = GetCfgObj(pathOrder, &errcode);
+    if (jsEVSELogObj == NULL || jsEVSEOrderObj == NULL)
     {
         while (1)
         {
@@ -186,6 +188,7 @@ void vTaskEVSEData(void *pvParameters)
                 //5. 结束充电
                 makeOrder(pCON);
 	            xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeOK);
+                xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut);//防止上次结束订单是因为超时60s强制结束后又产生了TimeOut
                 /************ make user happy, but boss and i are not happy :( ************/
                 if (pCON->order.ucStartType == defOrderStartType_Card)
                 {
@@ -314,27 +317,44 @@ void vTaskEVSEData(void *pvParameters)
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
-                if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                if (pCON->order.ucCardStatus == 0)//普通用户
                 {
-                    printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
+                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
+                    if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
+                    {
+                        printf_safe("CON%d Order OK.....................\n", pCON->info.ucCONID);
+                        pCON->order.ucPayStatus = 1;
+                        pCON->order.statOrder = STATE_ORDER_STORE;
+                        break;
+                    }
+                    else
+                    {
+                        if (time(NULL) - pCON->order.tStopTime > 60)//如果协议未返回TimeOut事件，则强制TimeOut
+                        {
+                            printf_safe("CON%d Order TimeOut force.....................\n", pCON->info.ucCONID);
+                            pCON->order.statOrder = STATE_ORDER_STORE;
+                            break;
+                        }
+                        uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
+                        if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
+                        {
+                            printf_safe("CON%d Order TimeOut 3times.....................\n", pCON->info.ucCONID);
+                            pCON->order.statOrder = STATE_ORDER_STORE;
+                            break;
+                        }
+                    }
+                }
+                else if(pCON->order.ucCardStatus == 1)//白名单用户
+                {
+                    printf_safe("CON%d WhiteList Order OK.....................\n", pCON->info.ucCONID);
                     pCON->order.ucPayStatus = 1;
-                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                     pCON->order.statOrder = STATE_ORDER_STORE;
                     break;
                 }
-                else
-                {
-                    uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrder_RemoteOrderTimeOut, pdTRUE, pdTRUE, 0);
-                    if ((uxBitsData & defEventBitOrder_RemoteOrderTimeOut) == defEventBitOrder_RemoteOrderTimeOut)
-                    {
-                        printf_safe("CON%d Order TimeOut.....................\n", pCON->info.ucCONID);
-                        pCON->order.statOrder = STATE_ORDER_STORE;
-                    }
-                }
                 break;
             case STATE_ORDER_STORE:
-                AddOrderCfg(pathOrder, &(pCON->order), pechProto); //存储订单
+                AddOrderCfg(jsEVSEOrderObj, &(pCON->order), pechProto); //存储订单
+                RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
                 xEventGroupClearBits(pCON->status.xHandleEventOrder, defEventBitOrderMakeFinish);
                 pCON->order.statOrder = STATE_ORDER_HOLD;
                 break;
@@ -664,13 +684,46 @@ void vTaskEVSEData(void *pvParameters)
         }//if (ulSignalPoolXor != 0)
         ulSignalEVSEFaultOld = pEVSE->status.ulSignalFault;   //别忘了给old赋值, 要不下次进来没法检测差异哦 :)
         
-        /////////////////存储EVSELog/////////////////////
+        /////////////////处理断电产生的临时订单文件/////////////////////
+        for(i = 0 ; i < ulTotalCON ; i++)
+        {
+            pCON = CONGetHandle(i);
+            if (pCON->OrderTmp.ucCheckOrderTmp == 1)//上电时初始化为1, 进行临时订单检查
+            {
+                errcode = GetOrderTmp(pCON->OrderTmp.strOrderTmpPath, &(pCON->OrderTmp.order));
+                if (errcode == ERR_FILE_NO)
+                {
+                    //无订单临时文件,太好了
+                    pCON->OrderTmp.ucCheckOrderTmp = 0;
+                    continue;
+                }
+                else if (errcode == ERR_NO)
+                {
+                    //当前枪有订单临时文件
+                    printf_safe("枪%d有订单临时文件 SN:%016ld\n", pCON->info.ucCONID, pCON->OrderTmp.order.ullOrderSN);
+                    AddOrderCfg(jsEVSEOrderObj, &(pCON->OrderTmp.order), pechProto);
+                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                }
+                else//解析错误
+                {
+                    RemoveOrderTmp(pCON->OrderTmp.strOrderTmpPath);
+                }
+            }
+        }
+        
+        /////////////////定时存储EVSELog、Order/////////////////////
         uxBitsData = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBStoreLog, pdTRUE, pdTRUE, 0);
         if ((uxBitsData & defEventBitTimerCBStoreLog) == defEventBitTimerCBStoreLog)
         {
             SetCfgObj(pathEVSELog, jsEVSELogObj, 0x5555);
+            printf_safe("日志定时存储...OK\n");
         }
-        
+        uxBitsData = xEventGroupWaitBits(xHandleEventTimerCBNotify, defEventBitTimerCBStoreOrder, pdTRUE, pdTRUE, 0);
+        if ((uxBitsData & defEventBitTimerCBStoreOrder) == defEventBitTimerCBStoreOrder)
+        {
+            SetCfgObj(pathOrder, jsEVSEOrderObj, 0x5555);
+            printf_safe("订单定时存储...OK\n");
+        }
         
 #endif //if 1
         

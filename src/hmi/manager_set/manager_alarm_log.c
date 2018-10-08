@@ -193,6 +193,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateList[] =
 **********************************************************************
 */
 extern cJSON *jsEVSELogObj;
+extern cJSON *jsEVSEOrderObj;
 int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
 {
     cJSON *jsParent;
@@ -363,7 +364,7 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
         }
     else if (1 == log_type)
     {
-        jsParent = GetCfgObj(pathOrder, &errcode);
+        jsParent = jsEVSEOrderObj;
         if (jsParent == NULL)
         {
             return errcode;
@@ -371,7 +372,6 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
         ulMaxItem  = cJSON_GetArraySize(jsParent);
         if (ulMaxItem == 0)
         {
-            cJSON_Delete(jsParent);
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
             return 0;
@@ -476,8 +476,7 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             LISTVIEW_SetItemText(hItem, 5, i, buf);
 
             jsItem = cJSON_GetObjectItem(jsChild, jnOrderStopType);
-            //            printf_safe("StopType\t%d\n", jsItem->valueint);
-                        switch(jsItem->valueint)
+            switch(jsItem->valueint)
             {
             case defOrderStopType_RFID:
                 LISTVIEW_SetItemText(hItem, 6, i, "刷卡结束");
@@ -539,9 +538,13 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "未支付");
             }
-            else
+            else if (jsItem->valueint == 1)
             {
                 LISTVIEW_SetItemText(hItem, 11, i, "已支付");
+            }
+            else
+            {
+                LISTVIEW_SetItemText(hItem, 11, i, "异常");
             }
             i++;
         }
@@ -550,7 +553,6 @@ int  Data_Flush(uint8_t log_type, WM_HWIN hItem)
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, 0, "没有记录");
         }
-        cJSON_Delete(jsParent);
     }
 
 

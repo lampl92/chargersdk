@@ -25,6 +25,7 @@
 #define defTIMERID_RemoteStatus     9
 #define defTIMERID_RemoteRTData     10
 #define defTIMERID_StoreLog         11
+#define defTIMERID_StoreOrder       12
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
@@ -71,6 +72,7 @@ extern TimerHandle_t xHandleTimerRemoteStatus;
 extern TimerHandle_t xHandleTimerRemoteRTData;
 extern TimerHandle_t xHandleTimerRFID;
 extern TimerHandle_t xHandleTimerStoreLog;
+extern TimerHandle_t xHandleTimerStoreOrder;
 
 extern QueueHandle_t xHandleQueueRfidPkg;
 extern QueueHandle_t xHandleQueueUserChargeCondition;
