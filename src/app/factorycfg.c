@@ -7,7 +7,7 @@
 */
 #include "stm32f4xx.h"
 
-const char *strEVSECfg = 
+const char *strEVSECfg =
 "{\
     \"EVSESN\":\"0102030405060708\",\n \
     \"EVSEID\":\"1234567890012001\",\n \
@@ -58,7 +58,7 @@ const char *strProtoCfg =
     \"ServerPort\": 6999,\n \
     \"UserName\": \"dpcpower\",\n \
     \"UserPwd\": \"dpcpowerpass\",\n \
-    \"Key\": \"0123456789abcdeg\",\n \
+    \"Key\": \"1234567890abcdef\",\n \
     \"NewKey\": \"\",\n \
     \"NewKeyChangeTime\": 2147483647,\n \
     \"OptSN\": 0,\n \
@@ -167,8 +167,7 @@ const char *strSysCfg =
     \"USE_RFID\": 1,\n \
     \"USE_GUI\":1\n \
 }\n";
-    
-    
+
 //Adapter   1:以太网  2: 2G  3: 3G  4: 4G 5: WIFI
 //DHCP   1:使能  0:禁止
 const char *strNetCfg =
@@ -183,7 +182,7 @@ const char *strNetCfg =
     \"DNS1\":\"192.168.1.1\",\n \
     \"DNS2\":\"0.0.0.0\"\n \
 }\n";
-     
+
 const char *strMeterCfg =
 "{\n \
     \"meter2\":\n \
@@ -211,8 +210,18 @@ const char *strMeterCfg =
         \"freq_addr\": -1\n \
     }\n \
 }\n";
-const char *strWhiteListCfg ="[]\n";
-const char *strBlackListCfg ="[]\n";
-    
-const char *strOrderCfg ="[]\n";
-const char *strLogCfg ="[]\n";
+const char *strWhiteListCfg =
+"[\n\
+    0000000161346941,\n\
+    0000000167080797,\n\
+    0000000165376301,\n\
+    0000000165780301,\n\
+    0000000167012653,\n\
+    0000000166878221,\n\
+    0000000160682285,\n\
+    0000000162431645\n\
+]\n";
+const char *strBlackListCfg = "[]\n";
+
+const char *strOrderCfg = "[]\n";
+const char *strLogCfg = "[]\n";
