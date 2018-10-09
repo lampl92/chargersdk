@@ -83,62 +83,62 @@ typedef struct _echProtoStatus
 
 
 /*命令字RecvCMDID*/
-#define ECH_CMDID_REGISTER    0 //注册登陆
-#define ECH_CMDID_HEARTBEAT   1 //心跳
-#define ECH_CMDID_RESET       2 //重启
-#define ECH_CMDID_STATUS      3 //状态
-#define ECH_CMDID_REMOTE_CTRL 4 //无卡启停
-#define ECH_CMDID_RTDATA      5 //实时数据
-#define ECH_CMDID_ORDER       6 //交易记录
-#define ECH_CMDID_SET_SUCC    7 //设置成功
-#define ECH_CMDID_SET_FAIL    8 //设置失败
+#define ECH_CMDID_REGISTER       0  //注册登陆
+#define ECH_CMDID_HEARTBEAT      1  //心跳
+#define ECH_CMDID_RESET          2  //重启
+#define ECH_CMDID_STATUS         3  //状态
+#define ECH_CMDID_REMOTE_CTRL    4  //无卡启停
+#define ECH_CMDID_RTDATA         5  //实时数据
+#define ECH_CMDID_ORDER          6  //交易记录
+#define ECH_CMDID_SET_SUCC       7  //设置成功
+#define ECH_CMDID_SET_FAIL       8  //设置失败
 #define ECH_CMDID_SET_ENERGYFEE  9  //平台下发电价设置
-#define ECH_CMDID_SET_SERVFEE   10 //平台下发服务费设置
-#define ECH_CMDID_SET_CYC       11 //平台下发状态上报时间间隔
-#define ECH_CMDID_SET_TIMESEG   12 //平台下发尖峰平谷时间段设置
-#define ECH_CMDID_SET_KEY       13 //平台下发密钥变更
-#define ECH_CMDID_REQ_ENERGYFEE 14 //平台查询充电桩当前电费
-#define ECH_CMDID_REQ_SERVFEE   15 //平台查询充电桩当前服务费
-#define ECH_CMDID_REQ_CYC       16 //平台查询上报时间间隔
-#define ECH_CMDID_REQ_TIMESEG   17 //平台查询尖峰平谷时间段
-#define ECH_CMDID_REQ_KEY       18 //平台查询密钥信息
-#define ECH_CMDID_REQ_SOFTVER   19 //平台查询软件版本号
-#define ECH_CMDID_SET_QR        20 //平台设置枪口互联互通二维码
-#define ECH_CMDID_REQ_QR        21 //平台查询枪口互联互通二维码
-#define ECH_CMDID_SET_USRPASS   22 //平台下发用户名密码
-#define ECH_CMDID_SET_BLACK     23 //平台下发黑名单卡号
-#define ECH_CMDID_SET_WHITE     24 //平台下发白名单卡号
-#define ECH_CMDID_REQ_BLACK     25 //平台查询黑名单卡号
-#define ECH_CMDID_REQ_WHITE     26 //平台查询白名单卡号
-#define ECH_CMDID_ADD_BNW       27 //平台新增黑白名单 BNW = Black and White
-#define ECH_CMDID_DEL_BNW       28 //平台删除黑白名单
+#define ECH_CMDID_SET_SERVFEE    10 //平台下发服务费设置
+#define ECH_CMDID_SET_CYC        11 //平台下发状态上报时间间隔
+#define ECH_CMDID_SET_TIMESEG    12 //平台下发尖峰平谷时间段设置
+#define ECH_CMDID_SET_KEY        13 //平台下发密钥变更
+#define ECH_CMDID_REQ_ENERGYFEE  14 //平台查询充电桩当前电费
+#define ECH_CMDID_REQ_SERVFEE    15 //平台查询充电桩当前服务费
+#define ECH_CMDID_REQ_CYC        16 //平台查询上报时间间隔
+#define ECH_CMDID_REQ_TIMESEG    17 //平台查询尖峰平谷时间段
+#define ECH_CMDID_REQ_KEY        18 //平台查询密钥信息
+#define ECH_CMDID_REQ_SOFTVER    19 //平台查询软件版本号
+#define ECH_CMDID_SET_QR         20 //平台设置枪口互联互通二维码
+#define ECH_CMDID_REQ_QR         21 //平台查询枪口互联互通二维码
+#define ECH_CMDID_SET_USRPASS    22 //平台下发用户名密码
+#define ECH_CMDID_SET_BLACK      23 //平台下发黑名单卡号
+#define ECH_CMDID_SET_WHITE      24 //平台下发白名单卡号
+#define ECH_CMDID_REQ_BLACK      25 //平台查询黑名单卡号
+#define ECH_CMDID_REQ_WHITE      26 //平台查询白名单卡号
+#define ECH_CMDID_ADD_BNW        27 //平台新增黑白名单 BNW = Black andWhite
+#define ECH_CMDID_DEL_BNW        28 //平台删除黑白名单
 #define ECH_CMDID_CARD_START     29 //充电桩请求有卡启动充电
 #define ECH_CMDID_CARD_START_PWD 30 //充电桩带密码请求有卡启动充电
 #define ECH_CMDID_CARD_START_RES 31 //充电桩上报有卡充电启动结果
 #define ECH_CMDID_CARD_STOP_RES  32 //充电桩上报有卡充电停止充电
 #define ECH_CMDID_CARD_RTDATA    33 //充电桩上报有卡实时充电数据
 //---运维监控
-#define ECH_CMDID_UP_FAULT      34 //充电桩上报故障信息
-#define ECH_CMDID_UP_WARNING    35 //充电桩上报告警与保护信息
+#define ECH_CMDID_UP_FAULT       34 //充电桩上报故障信息
+#define ECH_CMDID_UP_WARNING     35 //充电桩上报告警与保护信息
 //---远程升级
-#define ECH_CMDID_SET_OTA       36 //平台下发软件升级命令
-#define ECH_CMDID_REQ_OTA_DW    37 //平台查询软件下载是否成功
-#define ECH_CMDID_OTA_START     38 //充电桩上报进入升级状态
-#define ECH_CMDID_OTA_RESULT    39 //充电桩上报升级结果
+#define ECH_CMDID_SET_OTA        36 //平台下发软件升级命令
+#define ECH_CMDID_REQ_OTA_DW     37 //平台查询软件下载是否成功
+#define ECH_CMDID_OTA_START      38 //充电桩上报进入升级状态
+#define ECH_CMDID_OTA_RESULT     39 //充电桩上报升级结果
 
 //---紧急停止
 #define ECH_CMDID_EMERGENCY_STOP 40 //平台下发紧急停止充电
 
 //---功率设置
-#define ECH_CMDID_SET_POWER      41  //平台下发功率设置
-#define ECH_CMDID_REQ_POWER      42  //平台查询功率设置
+#define ECH_CMDID_SET_POWER      41 //平台下发功率设置
+#define ECH_CMDID_REQ_POWER      42 //平台查询功率设置
 
 //---预约
-#define ECH_CMDID_SET_APPOINT    43  //平台下发预约设置
-#define ECH_CMDID_REQ_APPOINT    44  //平台查询预约设置
+#define ECH_CMDID_SET_APPOINT    43 //平台下发预约设置
+#define ECH_CMDID_REQ_APPOINT    44 //平台查询预约设置
 
-#define ECH_CMDID_REQ_ORDER   45//查询交易记录
-#define ECH_CMDID_REQ_ICCID   46//查询SIM卡ICCID
+#define ECH_CMDID_REQ_ORDER      45//查询交易记录
+#define ECH_CMDID_REQ_ICCID      46//查询SIM卡ICCID
 
 /*命令个数*/
 #define ECH_CMD_MAX              47
