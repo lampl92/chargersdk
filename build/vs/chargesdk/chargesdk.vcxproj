@@ -27,6 +27,7 @@
   </PropertyGroup>
   <PropertyGroup Label="VisualGDBPackageDefinitions">
     <ToolchainID>com.visualgdb.arm-eabi</ToolchainID>
+    <ToolchainVersion>7.2.0/8.0.1/r3</ToolchainVersion>
     <BSP_ID>com.visualgdb.bsp.in-place</BSP_ID>
     <BSP_VERSION>1.0</BSP_VERSION>
   </PropertyGroup>
@@ -58,7 +59,7 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\hmi\qrencode\inc;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\net\mbedTLS\include;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\unzip101e;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\unzip101e;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(BSP_ROOT)stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -327,8 +328,6 @@
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_events.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\ftp\ftp_server_misc.c" />
     <ClCompile Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\smtp\smtp_client.c" />
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\mbedtls_aes.c" />
-    <ClCompile Include="..\..\..\src\net\mbedTLS\library\platform.c" />
     <ClCompile Include="..\..\..\src\net\user\ifconfig.c" />
     <ClCompile Include="..\..\..\src\net\user\interface_ftpclient.c" />
     <ClCompile Include="..\..\..\src\net\user\interface_ftpserver.c" />
@@ -656,7 +655,6 @@
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_wwdg.h" />
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32_assert_template.h" />
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h" />
-    <ClInclude Include="..\..\..\src\hmi\dimen_barcode\qrdecode.h" />
     <ClInclude Include="..\..\..\src\hmi\GUI_backstage.h" />
     <ClInclude Include="..\..\..\src\hmi\HMI_Start.h" />
     <ClInclude Include="..\..\..\src\hmi\keyboard.h" />
@@ -666,16 +664,6 @@
     <ClInclude Include="..\..\..\src\hmi\lcd\touch.h" />
     <ClInclude Include="..\..\..\src\hmi\pyinput.h" />
     <ClInclude Include="..\..\..\src\hmi\pymb.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\bitstream.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\mask.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\mmask.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\mqrspec.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\qrencode.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\qrinput.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\qrspec.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\QR_Encode.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\rscode.h" />
-    <ClInclude Include="..\..\..\src\hmi\qrencode\inc\split.h" />
     <ClInclude Include="..\..\..\src\hmi\skin.h" />
     <ClInclude Include="..\..\..\src\hmi\skinposition.h" />
     <ClInclude Include="..\..\..\src\hmi\touchtimer.h" />
@@ -902,75 +890,6 @@
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_server_misc.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl\tls_signature.h" />
     <ClInclude Include="..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp\drivers\uart\stm32f4x9_uart_driver.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aes.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\aesni.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\arc4.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\asn1.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\asn1write.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\base64.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\bignum.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\blowfish.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\bn_mul.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\camellia.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ccm.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\certs.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\check_config.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\cipher.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\cipher_internal.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\cmac.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\compat-1.3.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\config.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ctr_drbg.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\debug.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\des.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\dhm.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ecdh.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ecdsa.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ecjpake.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ecp.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\entropy.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\entropy_poll.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\error.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\gcm.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\havege.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\hmac_drbg.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\md.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\md2.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\md4.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\md5.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\md_internal.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\memory_buffer_alloc.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\net.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\net_sockets.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\oid.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\padlock.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pem.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pk.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pkcs11.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pkcs12.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pkcs5.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\pk_internal.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\platform.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\platform_time.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ripemd160.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\rsa.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\sha1.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\sha256.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\sha512.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl_cache.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl_ciphersuites.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl_cookie.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl_internal.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\ssl_ticket.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\threading.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\timing.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\version.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509_crl.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509_crt.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\x509_csr.h" />
-    <ClInclude Include="..\..\..\src\net\mbedTLS\include\mbedtls\xtea.h" />
     <ClInclude Include="..\..\..\src\net\user\ifconfig.h" />
     <ClInclude Include="..\..\..\src\net\user\interface_ftpclient.h" />
     <ClInclude Include="..\..\..\src\net\user\interface_ftpserver.h" />

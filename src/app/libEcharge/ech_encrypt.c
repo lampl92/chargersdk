@@ -1,4 +1,5 @@
-#include "mbedtls/aes.h"
+#include "cipher_mode/cbc.h"
+#include "cipher/aes.h"
 
 /** @brief aes cbc 加密
  *
@@ -14,7 +15,7 @@ int ech_aes_encrypt(char *input, int inputSize, const char *key, char *output)
     unsigned char iv[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
     char temp[1024] = { 0 };
     int pendLen;
-    mbedtls_aes_context aes_ctx;
+    AesContext aes_ctx;
     
     memcpy(temp, input, inputSize);
     if (inputSize % 16 == 0)
@@ -27,8 +28,8 @@ int ech_aes_encrypt(char *input, int inputSize, const char *key, char *output)
         memset(temp + inputSize, pendLen, pendLen);
     }
     
-    mbedtls_aes_setkey_enc(&aes_ctx, key, 128);
-    mbedtls_aes_crypt_cbc(&aes_ctx, MBEDTLS_AES_ENCRYPT, inputSize + pendLen, iv, temp, output);
+    aesInit(&aes_ctx, key, 16);
+    cbcEncrypt(&aesCipherAlgo, &aes_ctx, iv, temp, output, inputSize + pendLen);
 
     return inputSize + pendLen;
 }
@@ -44,8 +45,8 @@ int ech_aes_encrypt(char *input, int inputSize, const char *key, char *output)
 void ech_aes_decrypt(char *input, int inputSize, const char *key, char *output)
 {
     unsigned char iv[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; 
-    mbedtls_aes_context aes_ctx;
+    AesContext aes_ctx;
     
-    mbedtls_aes_setkey_dec(&aes_ctx, key, 128);
-    mbedtls_aes_crypt_cbc(&aes_ctx, MBEDTLS_AES_DECRYPT, inputSize, iv, input, output);
+    aesInit(&aes_ctx, key, 16);
+    cbcDecrypt(&aesCipherAlgo, &aes_ctx, iv, input, output, inputSize);
 }
