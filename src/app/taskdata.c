@@ -403,6 +403,8 @@ void vTaskEVSEData(void *pvParameters)
 
             cfg_set_string(pathProtoCfg, pechProto->info.strNewKey, "%s", jnProtoKey);
             cfg_set_uint32(pathProtoCfg, &max_time, "%s", jnProtoNewKeyChangeTime);
+            extern RemoteState_t remotestat;
+            remotestat = REMOTE_OFFLINE;
         }
         /********** 预约状态 **************/
         /* 0：未知 1：无预约 2：已预约 3：预约失败*/
