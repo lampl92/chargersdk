@@ -69,6 +69,7 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
     int i;
     int res;
     uint8_t flag_set;
+    ErrorCode_t errcode;
 
     res = 0;
     flag_set = 0;
@@ -102,7 +103,18 @@ void taskremote_set(EVSE_t *pEVSE, echProtocol_t *pProto)
 
     /******* end 充电过程中不允许设置************/
 
-    RemoteIF_RecvSetKey(pEVSE, pProto, &res);
+    errcode = RemoteIF_RecvSetUsrPass(pEVSE, pProto, &res);
+    if (errcode == ERR_NO)
+    {
+        remotestat = REMOTE_OFFLINE;
+        return;//后面的命令会在上线后再进行处理
+    }
+    errcode = RemoteIF_RecvSetKey(pEVSE, pProto, &res);
+    if (errcode == ERR_NO)
+    {
+        //会在taskdata中进行更新密钥，并进行重新登录。
+        return;
+    }
     for (i = 0; i < pEVSE->info.ucTotalCON; i++)
     {
         pCON = CONGetHandle(i);

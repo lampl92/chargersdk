@@ -1173,6 +1173,81 @@ ErrorCode_t RemoteIF_RecvSetQR(EVSE_t *pEVSE, echProtocol_t *pProto, uint8_t fla
     return errcode;
 }
 
+ErrorCode_t RemoteIF_RecvSetUsrPass(EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal)
+{
+    uint8_t pbuff[1024] = { 0 };
+    uint32_t len;
+    ErrorCode_t set_errcode_usr;
+    ErrorCode_t set_errcode_pass;
+    ErrorCode_t errcode;
+    char strTmpUsr[8 + 1] = { 0 };
+    char strTmpPass[12 + 1] = { 0 };
+    int i;
+    uint8_t ucOffset = 0;
+
+    errcode = RemoteRecvHandle(pProto, ECH_CMDID_SET_USRPASS, pbuff, &len);
+    switch (errcode)
+    {
+    case ERR_REMOTE_NODATA:
+        *psiRetVal = 0;
+        break;
+    case ERR_NO:
+        *psiRetVal = 1;
+        //pbuff[0...3] 操作ID
+        //pbuff[4...11] 用户名
+        ucOffset = 4;
+        for (i = 0; i < 8; i++)
+        {
+            strTmpUsr[i] = pbuff[ucOffset++];
+        }
+        set_errcode_usr = cfg_set_string(pathProtoCfg, strTmpUsr, "%s", jnProtoUserName);
+        if (set_errcode_usr == ERR_NO)
+        {
+            //pbuff[12...23] 密码
+            for(i = 0 ; i < 12 ; i++)
+            {
+                strTmpPass[i] = pbuff[ucOffset++];
+            }
+            set_errcode_pass = cfg_set_string(pathProtoCfg, strTmpPass, "%s", jnProtoUserPwd);
+            //密码设置异常时还原用户名
+            if (set_errcode_pass != ERR_NO)
+            {
+                cfg_set_string(pathProtoCfg, pProto->info.strUserName, "%s", jnProtoUserName);
+            }
+        }
+        else
+        {
+            //用户名设置异常
+        }
+
+        if (set_errcode_usr == ERR_NO &&
+           set_errcode_pass == ERR_NO)
+        {
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_SUCC]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_NO;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_SUCC, 0, 1);
+        }
+        else
+        {
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[0] = pbuff[0];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[1] = pbuff[1];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[2] = pbuff[2];
+            pProto->pCMD[ECH_CMDID_SET_FAIL]->ucRecvdOptData[3] = pbuff[3];
+            errcode = ERR_FILE_RW;
+            pProto->sendCommand(pProto, pEVSE, NULL, ECH_CMDID_SET_FAIL, 0, 1);
+        }
+        break;
+    default:
+        *psiRetVal = 0;
+        break;
+    }
+
+    return errcode;
+}
+
 ErrorCode_t RemoteIF_RecvSetBnWList(uint16_t usCmdID, EVSE_t *pEVSE, echProtocol_t *pProto, int *psiRetVal )
 {
     uint8_t pbuff[1024] = {0};

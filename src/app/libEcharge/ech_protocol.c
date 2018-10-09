@@ -2879,6 +2879,7 @@ echProtocol_t *EchProtocolCreate(void)
     pProto->pCMD[ECH_CMDID_REQ_SOFTVER]    = EchCMDCreate(34,  33,  30, makeCmdReqSoftVer,   analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_QR]         = EchCMDCreate(0,   35,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_QR]         = EchCMDCreate(37,  36,  30, makeCmdReqQR,        analyCmdCommon);
+    pProto->pCMD[ECH_CMDID_SET_USRPASS]    = EchCMDCreate(0,   38,  30, NULL,                analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_BLACK]      = EchCMDCreate(98,  97,  30, makeCmdSetBlackRes,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_SET_WHITE]      = EchCMDCreate(100, 99,  30, makeCmdSetWhiteRes,  analyCmdCommon);
     pProto->pCMD[ECH_CMDID_REQ_BLACK]      = EchCMDCreate(102, 101, 30, makeCmdReqBlack,     analyCmdCommon);
