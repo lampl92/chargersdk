@@ -16,11 +16,26 @@ void cli_hello_fnt(int argc, char **argv)
     printf_safe("APB2 = SYSCLK / DIV2 = %dMHz\n", SystemCoreClock / 1000000 / 2);
     //testBnWList();
     //eth_main();
+#if 0
+#include "libEcharge/ech_encrypt.h"
+#include "evse_globals.h"
+    char plain[20] = "hello world";
+    char plain_dec[20] = { 0};
+    char plain_en[64] = { 0 };
+    int p_l;
+    int clock1 = clock();
     for (i = 0; i < 100000; i++)
     {
-        //printTime(time(NULL));
+        p_l = ech_aes_encrypt(plain,
+            strlen(plain),
+            pechProto->info.strKey,
+            (char *)plain_en);
         //test_cfg_set(i);
+        ech_aes_decrypt((char *)plain_en, p_l, pechProto->info.strKey, (char *)plain_dec);
+        //printf_safe("%d,%s\n", i, plain_dec);
     }
+    printf_safe("time = %.2f s", (clock() - clock1)/1000.0);
+#endif
     //test_cfg_get();
 #if 0
     CON_t *pCON;
