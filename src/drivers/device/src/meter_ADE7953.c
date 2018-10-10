@@ -16,13 +16,17 @@ static int meter_module_get_all(void *pvmeter, int dev_addr)
     
     return 0; //内部模块在meterinit中初始化
 }
-
+static void meter_reset_hard(void *pvmeter)
+{
+    //
+}
 int meter_ADE7953_init(meter_s *meter)
 {
     //ADE7953 初始化代码
     get_ade7953();
     //代码end
     meter->get_all = meter_module_get_all;
+    meter->reset_hard = meter_reset_hard;
 
     return 0;
 }

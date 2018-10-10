@@ -40,7 +40,7 @@ typedef struct _meter
     meter_config_s config;
     meter_status_s status;
     int (*get_all)(void *meter, int dev_addr);
-    
+    void(*reset_hard)(void *meter);
 }meter_s;
 
 meter_s *meter_create(meter_config_s *config);

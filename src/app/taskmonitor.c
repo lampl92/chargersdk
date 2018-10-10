@@ -71,6 +71,7 @@ void vTaskMonitor_ChData(void *pvParameters)
                     {
                         pCON->tmp.meterTryTime = 0;
                         pCON->status.ulSignalFault |= defSignalCON_Fault_Meter;
+                        meter->reset_hard(meter);
                     }
                 }
                 vTaskDelay(100);

@@ -84,7 +84,14 @@ static int meter_p3_get_all(void *pvmeter, int addr)
     
     return 0;
 }
-
+#include "modbus-private.h"
+static void meter_reset_hard(void *pvmeter)
+{
+    meter_s *meter = (meter_s *)pvmeter;
+    
+    meter->mb->backend->close(meter->mb);
+    meter->mb->backend->connect(meter->mb);
+}
 static int modbus_config(meter_s *meter, meter_config_s *config)
 {
     int res;
@@ -141,6 +148,6 @@ int meter_acrel_init(meter_s *meter)
     {
         meter->get_all = meter_p3_get_all;
     }
-    
+    meter->reset_hard = meter_reset_hard;
     return 0;
 }
