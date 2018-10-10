@@ -11,10 +11,11 @@
 #define ID_CHECKBOX_1 (GUI_ID_USER + 0x13)
 #define ID_CHECKBOX_2 (GUI_ID_USER + 0x14)
 #define ID_CHECKBOX_3 (GUI_ID_USER + 0x15)
-#define ID_TEXT_0 (GUI_ID_USER + 0x16)
+#define ID_TEXT_1 (GUI_ID_USER + 0x16)
 #define ID_IMAGE_0 (GUI_ID_USER + 0x17)
 #define ID_IMAGE_2 (GUI_ID_USER + 0x19)
 #define ID_BUTTON_14 (GUI_ID_USER + 0x20)
+#define ID_TEXT_0 (GUI_ID_USER + 0x21)
 #define ID_Timerstateflash 1
 
 static WM_HTIMER _timerstateflash;
@@ -28,7 +29,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Select-Window", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "selectpatternback", ID_IMAGE_0, 0, 0, 800, 480, 0, 0, 0 },
 //    { IMAGE_CreateIndirect, "yuandufen", ID_IMAGE_2, 630, 75, 30, 30, 0, 0, 0 },
-    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_0, 415, 107, 223, 36, TEXT_CF_RIGHT, 0x0, 0 },
+    { TEXT_CreateIndirect, "cardId", ID_TEXT_0, 417, 7, 240, 30, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "inputInfo", ID_TEXT_1, 415, 107, 223, 36, TEXT_CF_RIGHT, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxfull", ID_CHECKBOX_0, Checkboxfullx, Checkboxfully, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxtime", ID_CHECKBOX_1, Checkboxtimex, Checkboxtimey, 249, 74, 0, 0x0, 0 },
     { CHECKBOX_CreateIndirect, "Checkboxmoney", ID_CHECKBOX_2, Checkboxmonex, Checkboxmoney, 249, 74, 0, 0x0, 0 },
@@ -174,9 +176,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
-        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg36e, 0xFF08263F, "");
-        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), 0xFF08263F);
-        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg36e);
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), Temprfid_pkg.strCardID);
+        
+        Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg36e, 0xFF08263F, "");
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), 0xFF08263F);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &fontwryhcg36e);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0);
         CHECKBOX_SetSkin(hItem, SKIN_checkboxfull);
@@ -209,8 +215,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 WM_HideWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
-                //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strNumber);
+                //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_RED, strNumber);
+                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strNumber);
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
@@ -232,8 +238,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
-                //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strNumber);
+                //Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_RED, strNumber);
+                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strNumber);
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
@@ -251,8 +257,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
-               // Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strNumber);
+               // Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_RED, strNumber);
+                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strNumber);
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_0), \
@@ -270,8 +276,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             case WM_NOTIFICATION_CLICKED:
                 WM_ShowWindow(HwinKeyboard);
                 memset(strNumber, '\0', sizeof(strNumber));
-               // Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &SIF24_Font, GUI_RED, strNumber);
-                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), strNumber);
+               // Text_Show(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), &SIF24_Font, GUI_RED, strNumber);
+                TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), strNumber);
                 RADIO(WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_3), \
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_1),\
                     WM_GetDialogItem(pMsg->hWin, ID_CHECKBOX_2), \
@@ -387,7 +393,7 @@ static void _cbDialog1(WM_MESSAGE * pMsg) {
                 else
                 {
                     MakeStrNumber(getbutton(skbID));
-                    Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_0), &fontwryhcg36e, 0xFF08263F, strNumber);
+                    Text_Show(WM_GetDialogItem(WM_GetParent(pMsg->hWin), ID_TEXT_1), &fontwryhcg36e, 0xFF08263F, strNumber);
                 }
                 break;
             }
