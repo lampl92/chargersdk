@@ -6,6 +6,7 @@
 #include "DIALOG.h"
 
 #define ID_WINDOW_0 (GUI_ID_USER + 0x00)
+#define ID_TEXT_0 (GUI_ID_USER + 0x01)
 //#define ID_BUTTON_2 (GUI_ID_USER + 0x0A)
 
 #define ID_Timerstateflash    1
@@ -14,6 +15,7 @@ static WM_HTIMER _timerstateflash;
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "CardInfoPage", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "cardId", ID_TEXT_0, 417, 7, 240, 30, 0, 0x0, 0 },
 //    { BUTTON_CreateIndirect, "testButton", ID_BUTTON_2, 680, 40, 120, 400, 0, 0x0, 0 },
 };
 
@@ -24,6 +26,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), Temprfid_pkg.strCardID);
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
 //        BUTTON_SetSkin(hItem, SKIN_buttontest);
         break;
