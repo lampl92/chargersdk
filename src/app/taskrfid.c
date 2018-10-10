@@ -355,6 +355,7 @@ void vTaskEVSERFID(void *pvParameters)
                 pRFIDDev->state = STATE_RFID_TIMEOUT;
                 break;
             }
+            break;
         case STATE_RFID_PWD:
             resCanChargeOrNot = canChargeOrNot();
             if (resCanChargeOrNot == 3 || resCanChargeOrNot == 2)
