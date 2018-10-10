@@ -164,25 +164,25 @@ int getSignalIntensity()
     {
         return 0;
     }
-    else
-    {
-        if (pModem->status.ucSignalQuality > 0 && pModem->status.ucSignalQuality <= 5)
+    else //参考规则：http://m2msupport.net/m2msupport/atcsq-signal-quality/
+    {   
+        if (pModem->status.ucSignalQuality >= 1 && pModem->status.ucSignalQuality <= 5)
         {
             return 1;
         }
-        else if (pModem->status.ucSignalQuality > 5 && pModem->status.ucSignalQuality <= 11)
+        else if (pModem->status.ucSignalQuality >= 6 && pModem->status.ucSignalQuality <= 9)
         {
             return 2;
         }
-        else if (pModem->status.ucSignalQuality > 11 && pModem->status.ucSignalQuality <= 17)
+        else if (pModem->status.ucSignalQuality >= 10 && pModem->status.ucSignalQuality <= 14)
         {
             return 3;
         }
-        else if (pModem->status.ucSignalQuality > 17 && pModem->status.ucSignalQuality <= 23)
+        else if (pModem->status.ucSignalQuality >= 15 && pModem->status.ucSignalQuality <= 19)
         {
             return 4;
         }
-        else if (pModem->status.ucSignalQuality > 23 && pModem->status.ucSignalQuality <= 31)
+        else if (pModem->status.ucSignalQuality >= 20 && pModem->status.ucSignalQuality <= 31)
         {
             return 5;
         }
