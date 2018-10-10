@@ -84,6 +84,7 @@ extern void *_app_start[];
 
 void Jump_To_APP(void)
 {
+    uart_close(cli_huart);//关闭初始化的设备
     asm("cpsid i");
     asm("ldr sp, =_estack");
     ((void(*)())_app_start[1])();
