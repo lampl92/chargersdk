@@ -234,6 +234,7 @@ int uart_close(int handle)
     ring_buffer_free(uart_driver[handle].rb);
     osMutexDelete(uart_driver[handle].lock);
     HAL_UART_DeInit(&(uart_driver[handle].UARTx_Handler));
+    __HAL_UART_DISABLE(&(uart_driver[handle].UARTx_Handler));
 
     return 0;
 }
@@ -464,18 +465,43 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     }
 }
 
-#define LL_UART_IRQHandler(x)                                                                               \
-    do                                                                                                      \
-    {                                                                                                       \
-        if (LL_USART_IsActiveFlag_ORE(uart_driver[x - 1].UARTx_Handler.Instance) == 1)                      \
-            LL_USART_ClearFlag_ORE(uart_driver[x - 1].UARTx_Handler.Instance);                              \
-        if (LL_USART_IsActiveFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance) == 1)                     \
-        {                                                                                                   \
-            LL_USART_ClearFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance);                             \
-            uart_driver[x - 1].rbuff[0] = LL_USART_ReceiveData8(uart_driver[x - 1].UARTx_Handler.Instance); \
-            ring_buffer_put(uart_driver[x - 1].rb, (uint8_t *)uart_driver[x - 1].rbuff, 1);                 \
-        }                                                                                                   \
-    } while (0);
+static void LL_UART_IRQHandler(int x)
+{  
+    if (LL_USART_IsActiveFlag_ORE(USART1) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(USART1);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(USART2) == 1)
+    {
+        LL_USART_ClearFlag_ORE(USART2);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(USART3) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(USART3);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(UART4) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(UART4);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(UART5) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(UART5);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(USART6) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(USART6);                              
+    }
+    if (LL_USART_IsActiveFlag_ORE(UART7) == 1)   
+    {
+        LL_USART_ClearFlag_ORE(UART7);                              
+    }
+    if (LL_USART_IsActiveFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance) == 1)                     
+    {                                                                                                   
+        LL_USART_ClearFlag_RXNE(uart_driver[x - 1].UARTx_Handler.Instance);                             
+        uart_driver[x - 1].rbuff[0] = LL_USART_ReceiveData8(uart_driver[x - 1].UARTx_Handler.Instance); 
+        ring_buffer_put(uart_driver[x - 1].rb, (uint8_t *)uart_driver[x - 1].rbuff, 1);                 
+    }                                                                                                   
+}
 void USART1_IRQHandler(void)
 {
     LL_UART_IRQHandler(1);
