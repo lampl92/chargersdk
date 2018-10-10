@@ -342,7 +342,7 @@ ErrorCode_t SetOrderPaid(cJSON *jsOrderArray, uint64_t ullOrderSN)
         {
             break;
         }
-        if (Order.ullOrderSN == ullOrderSN)
+        if (Order.ullOrderSN == ullOrderSN && Order.ucPayStatus != 1)
         {
             uint8_t paid = 1;
             cfgobj_set_uint8(jsOrder, &paid, jnOrderPayStatus);
